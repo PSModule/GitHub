@@ -1,4 +1,5 @@
-﻿
+﻿# GitHub.Core
+
 $GHAPIBaseURI = 'https://api.github.com'
 
 function Get-GitHubContext {
