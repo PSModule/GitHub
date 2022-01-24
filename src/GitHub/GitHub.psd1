@@ -51,43 +51,148 @@
     # ProcessorArchitecture = ''
 
     # Modules that must be imported into the global environment prior to importing this module
-    RequiredModules   = @(
-        @{ModuleName = 'GitHub.Actions'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.Activity'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.Apps'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.Billing'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.Checks'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.CodeScanning'; ModuleVersion = '0.0.1'; }
-        @{ModuleName = 'GitHub.CodesOfConduct'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.Codespaces'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.Core'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.Dependabot'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.Emojis'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.EnterpriseAdmin'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.Gists'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.Git'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.GitIgnore'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.Interactions'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.Issues'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.Licenses'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.Markdown'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.Meta'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.Migrations'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.OAuthAuthorizations'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.Orgs'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.Packages'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.Projects'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.Pulls'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.RateLimit'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.Reactions'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.Repos'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.SCIM'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.Search'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.SecretScanning'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.ServerStatistics'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.Teams'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.Users'; ModuleVersion = '0.0.1'; }
-    )
+    # RequiredModules   = @(
+    #     @{
+    #         ModuleName      = 'GitHub.Actions'
+    #         RequiredVersion = '0.0.1'
+    #     },
+    #     @{
+    #         ModuleName      = 'GitHub.Activity'
+    #         RequiredVersion = '0.0.1'
+    #     },
+    #     @{
+    #         ModuleName      = 'GitHub.Apps'
+    #         RequiredVersion = '0.0.1'
+    #     },
+    #     @{
+    #         ModuleName      = 'GitHub.Billing'
+    #         RequiredVersion = '0.0.1'
+    #     },
+    #     @{
+    #         ModuleName      = 'GitHub.Checks'
+    #         RequiredVersion = '0.0.1'
+    #     },
+    #     @{
+    #         ModuleName      = 'GitHub.CodeScanning'
+    #         RequiredVersion = '0.0.1'
+    #     }
+    #     @{
+    #         ModuleName      = 'GitHub.CodesOfConduct'
+    #         RequiredVersion = '0.0.1'
+    #     },
+    #     @{
+    #         ModuleName      = 'GitHub.Codespaces'
+    #         RequiredVersion = '0.0.1'
+    #     },
+    #     @{
+    #         ModuleName      = 'GitHub.Core'
+    #         RequiredVersion = '0.0.1'
+    #     },
+    #     @{
+    #         ModuleName      = 'GitHub.Dependabot'
+    #         RequiredVersion = '0.0.1'
+    #     },
+    #     @{
+    #         ModuleName      = 'GitHub.Emojis'
+    #         RequiredVersion = '0.0.1'
+    #     },
+    #     @{
+    #         ModuleName      = 'GitHub.EnterpriseAdmin'
+    #         RequiredVersion = '0.0.1'
+    #     },
+    #     @{
+    #         ModuleName      = 'GitHub.Gists'
+    #         RequiredVersion = '0.0.1'
+    #     },
+    #     @{
+    #         ModuleName      = 'GitHub.Git'
+    #         RequiredVersion = '0.0.1'
+    #     },
+    #     @{
+    #         ModuleName      = 'GitHub.GitIgnore'
+    #         RequiredVersion = '0.0.1'
+    #     },
+    #     @{
+    #         ModuleName      = 'GitHub.Interactions'
+    #         RequiredVersion = '0.0.1'
+    #     },
+    #     @{
+    #         ModuleName      = 'GitHub.Issues'
+    #         RequiredVersion = '0.0.1'
+    #     },
+    #     @{
+    #         ModuleName      = 'GitHub.Licenses'
+    #         RequiredVersion = '0.0.1'
+    #     },
+    #     @{
+    #         ModuleName      = 'GitHub.Markdown'
+    #         RequiredVersion = '0.0.1'
+    #     },
+    #     @{
+    #         ModuleName      = 'GitHub.Meta'
+    #         RequiredVersion = '0.0.1'
+    #     },
+    #     @{
+    #         ModuleName      = 'GitHub.Migrations'
+    #         RequiredVersion = '0.0.1'
+    #     },
+    #     @{
+    #         ModuleName      = 'GitHub.OAuthAuthorizations'
+    #         RequiredVersion = '0.0.1'
+    #     },
+    #     @{
+    #         ModuleName      = 'GitHub.Orgs'
+    #         RequiredVersion = '0.0.1'
+    #     },
+    #     @{
+    #         ModuleName      = 'GitHub.Packages'
+    #         RequiredVersion = '0.0.1'
+    #     },
+    #     @{
+    #         ModuleName      = 'GitHub.Projects'
+    #         RequiredVersion = '0.0.1'
+    #     },
+    #     @{
+    #         ModuleName      = 'GitHub.Pulls'
+    #         RequiredVersion = '0.0.1'
+    #     },
+    #     @{
+    #         ModuleName      = 'GitHub.RateLimit'
+    #         RequiredVersion = '0.0.1'
+    #     },
+    #     @{
+    #         ModuleName      = 'GitHub.Reactions'
+    #         RequiredVersion = '0.0.1'
+    #     },
+    #     @{
+    #         ModuleName      = 'GitHub.Repos'
+    #         RequiredVersion = '0.0.1'
+    #     },
+    #     @{
+    #         ModuleName      = 'GitHub.SCIM'
+    #         RequiredVersion = '0.0.1'
+    #     },
+    #     @{
+    #         ModuleName      = 'GitHub.Search'
+    #         RequiredVersion = '0.0.1'
+    #     },
+    #     @{
+    #         ModuleName      = 'GitHub.SecretScanning'
+    #         RequiredVersion = '0.0.1'
+    #     },
+    #     @{
+    #         ModuleName      = 'GitHub.ServerStatistics'
+    #         RequiredVersion = '0.0.1'
+    #     },
+    #     @{
+    #         ModuleName      = 'GitHub.Teams'
+    #         RequiredVersion = '0.0.1'
+    #     },
+    #     @{
+    #         ModuleName      = 'GitHub.Users'
+    #         RequiredVersion = '0.0.1'
+    #     }
+    # )
 
     # Assemblies that must be loaded prior to importing this module
     # RequiredAssemblies = @()
