@@ -9,7 +9,7 @@
 @{
 
     # Script module or binary module file associated with this manifest.
-    # RootModule = ''
+    RootModule        = 'GitHub.psm1'
 
     # Version number of this module.
     ModuleVersion     = '0.0.1'
@@ -33,7 +33,7 @@
     Description       = 'PowerShell Module for GitHub'
 
     # Minimum version of the PowerShell engine required by this module
-    # PowerShellVersion = ''
+    PowerShellVersion = '7.1'
 
     # Name of the PowerShell host required by this module
     # PowerShellHostName = ''
@@ -53,12 +53,40 @@
     # Modules that must be imported into the global environment prior to importing this module
     RequiredModules   = @(
         @{ModuleName = 'GitHub.Actions'; ModuleVersion = '0.0.1'; },
-        @{ModuleName = 'GitHub.Actions'; ModuleVersion = '0.0.1'; },
         @{ModuleName = 'GitHub.Activity'; ModuleVersion = '0.0.1'; },
         @{ModuleName = 'GitHub.Apps'; ModuleVersion = '0.0.1'; },
         @{ModuleName = 'GitHub.Billing'; ModuleVersion = '0.0.1'; },
         @{ModuleName = 'GitHub.Checks'; ModuleVersion = '0.0.1'; },
         @{ModuleName = 'GitHub.CodeScanning'; ModuleVersion = '0.0.1'; }
+        @{ModuleName = 'GitHub.CodesOfConduct'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.Codespaces'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.Core'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.Dependabot'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.Emojis'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.EnterpriseAdmin'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.Gists'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.Git'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.GitIgnore'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.Interactions'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.Issues'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.Licenses'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.Markdown'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.Meta'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.Migrations'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.OAuthAuthorizations'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.Orgs'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.Packages'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.Projects'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.Pulls'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.RateLimit'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.Reactions'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.Repos'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.SCIM'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.Search'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.SecretScanning'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.ServerStatistics'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.Teams'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.Users'; ModuleVersion = '0.0.1'; }
     )
 
     # Assemblies that must be loaded prior to importing this module
