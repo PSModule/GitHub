@@ -30,7 +30,7 @@
     Copyright         = '(c) Marius Storhaug. All rights reserved.'
 
     # Description of the functionality provided by this module
-    Description = 'PowerShell Module for GitHub'
+    Description       = 'PowerShell Module for GitHub'
 
     # Minimum version of the PowerShell engine required by this module
     # PowerShellVersion = ''
@@ -51,7 +51,15 @@
     # ProcessorArchitecture = ''
 
     # Modules that must be imported into the global environment prior to importing this module
-    # RequiredModules = @()
+    RequiredModules   = @(
+        @{ModuleName = 'GitHub.Actions'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.Actions'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.Activity'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.Apps'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.Billing'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.Checks'; ModuleVersion = '0.0.1'; },
+        @{ModuleName = 'GitHub.CodeScanning'; ModuleVersion = '0.0.1'; }
+    )
 
     # Assemblies that must be loaded prior to importing this module
     # RequiredAssemblies = @()
@@ -95,10 +103,10 @@
         PSData = @{
 
             # Tags applied to this module. These help with module discovery in online galleries.
-            Tags       = 'GitHub'
+            Tags       = 'GitHub', 'PowerShell', 'pwsh'
 
             # A URL to the license for this module.
-            # LicenseUri = ''
+            LicenseUri = 'https://github.com/MariusStorhaug/GitHub/blob/main/LICENSE.md'
 
             # A URL to the main website for this project.
             ProjectUri = 'https://github.com/MariusStorhaug/GitHub'
