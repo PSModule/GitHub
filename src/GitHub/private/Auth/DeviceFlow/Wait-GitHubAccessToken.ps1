@@ -1,5 +1,4 @@
-﻿
-function Wait-GitHubAccessToken {
+﻿function Wait-GitHubAccessToken {
     <#
         .SYNOPSIS
         Waits for the GitHub Device Flow to complete.
@@ -48,7 +47,7 @@ function Wait-GitHubAccessToken {
     )
 
     do {
-        if ($Refresh) {
+        if ($RefreshToken) {
             $response = Request-GitHubAccessToken -ClientID $ClientID -RefreshToken $RefreshToken
         } else {
             $response = Request-GitHubAccessToken -ClientID $ClientID -DeviceCode $DeviceCode

@@ -26,28 +26,30 @@
         [string] $Scope = 'All'
     )
 
+    Write-Verbose "Resetting GitHub configuration for scope '$Scope'..."
     switch ($Scope) {
         'App' {
-            $script:Config.App = $script:ConfigTemplate.App
+            $script:Config.App = [App]::new()
         }
         'App.API' {
-            $script:Config.App.API = $script:ConfigTemplate.App.API
+            $script:Config.App.API = [API]::new()
         }
         'App.Defaults' {
-            $script:Config.App.Defaults = $script:ConfigTemplate.App.Defaults
+            $script:Config.App.Defaults = [AppDefaults]::new()
         }
         'User' {
-            $script:Config.User = $script:ConfigTemplate.User
+            $script:Config.User = [User]::new()
         }
         'User.Auth' {
-            $script:Config.User.Auth = $script:ConfigTemplate.User.Auth
+            $script:Config.User.Auth = [Auth]::new()
         }
         'User.Defaults' {
-            $script:Config.User.Defaults = $script:ConfigTemplate.User.Defaults
+            $script:Config.User.Defaults = [UserDefaults]::new()
         }
         'All' {
-            $script:Config = $script:ConfigTemplate
+            $script:Config = [Config]::new()
         }
     }
+
     Save-GitHubConfig
 }

@@ -1,6 +1,6 @@
 ﻿function Check-GitHubAccessToken {
 
-    [DateTime]$accessTokenExirationDate = $script:ConfigTemplate.User.Auth.AccessToken.ExpirationDate
+    [DateTime]$accessTokenExirationDate = $script:Config.User.Auth.AccessToken.ExpirationDate
     $accessTokenValid = $accessTokenExirationDate -gt (Get-Date)
 
     if (-not $accessTokenValid) {

@@ -6,14 +6,19 @@ Get-SecretVault | Unregister-SecretVault
 Get-SecretVault
 Get-Module -Name GitHub -ListAvailable
 Install-Module -Name GitHub -Verbose -Force -AllowPrerelease
+
+Import-Module -Name 'C:\Repos\GitHub\PSModule\Modules\GitHub\src\GitHub\GitHub.psm1' -Verbose -Force
+
 Import-Module -Name GitHub -Verbose
 Clear-Host
 Get-Command -Module GitHub
 Get-Variable | Where-Object -Property Module -ne $null | Select-Object Name, Module, ModuleName
 Connect-GitHubAccount
-Get-GitHubConfig | ConvertTo-Json -Depth 100
+Get-GitHubConfig -Refresh | ConvertTo-Json -Depth 100
+Restore-GitHubConfig -Verbose
 Get-GitHubContext
 
 Connect-GitHubAccount -Refresh -Verbose
 
 Disconnect-GitHubAccount -Verbose
+Reset-GitHubConfig -Verbose

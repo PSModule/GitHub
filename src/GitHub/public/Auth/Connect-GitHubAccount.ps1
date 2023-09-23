@@ -119,7 +119,6 @@
     }
 
     Save-GitHubConfig
-
     Write-Host '✓ ' -ForegroundColor Green -NoNewline
     Write-Host "Logged in to GitHub!"
 }
