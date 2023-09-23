@@ -28,8 +28,8 @@ $moduleFiles = $foldersToProcess | Get-ChildItem -Include '*.ps1' -Recurse -File
 $functions = $moduleFiles.BaseName
 $Param = @{
     Function = $functions
-    Variable = '*'
-    Cmdlet   = '*'
+    Variable = ''
+    Cmdlet   = ''
     Alias    = '*'
 }
 
