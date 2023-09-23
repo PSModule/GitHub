@@ -20,17 +20,30 @@ LONG DESCRIPTION
     | Secret           | pscustomobject | {Name}                             |                               |
     | Secret.Name      | string         | 'Config'                           | The name of the secret.       |
 
-
     Name: Config
     Path: \classes\Data\Config.ps1
 
-    | Name            | Type              | Static Value            | Description              |
-    | --------------- | ----------------- | ------------------------ | ------------------------ |
-    | App             | pscustomobject    | {API, Defaults}          |                          |
-    | App.API         | pscustomobject    | {BaseURI, Version}       |                          |
-    | App.API.BaseURI | string            | 'https://api.github.com' | The GitHub API Base URI. |
-    | App.API.Version | string            | '2022-11-28'             | The GitHub API version.  |
-    | App.Defaults    | pscustomobject    | {}                       |                          |
+    | Name                                    | Type              | Static Value                                        | Description                       |
+    | --------------------------------------- | ----------------- | --------------------------------------------------- | --------------------------------- |
+    | App                                     | pscustomobject    | {API, Defaults}                                     |                                   |
+    | App.API                                 | pscustomobject    | {BaseURI, Version}                                  |                                   |
+    | App.API.BaseURI                         | string            | 'https://api.github.com'                            | The GitHub API Base URI.          |
+    | App.API.Version                         | string            | '2022-11-28'                                        | The GitHub API version.           |
+    | App.Defaults                            | pscustomobject    | {}                                                  |                                   |
+    | User                                    | pscustomobject    | {Auth, Defaults}                                    |                                   |
+    | User.Auth                               | pscustomobject    | {AccessToken, ClientID, Mode, RefreshToken, Scope}  |                                   |
+    | User.Auth.AccessToken                   | pscustomobject    | {Value, ExpirationDate}                             | The access token.                 |
+    | User.Auth.AccessToken.Value             | string            | ''                                                  | The access token value.           |
+    | User.Auth.AccessToken.ExpirationDate    | datetime          | [datetime]::MinValue                                | The access token expiration date. |
+    | User.Auth.ClientID                      | string            | ''                                                  | The client ID.                    |
+    | User.Auth.Mode                          | string            | ''                                                  | The authentication mode.          |
+    | User.Auth.RefreshToken                  | pscustomobject    | {Value, ExpirationDate}                             | The refresh token.                |
+    | User.Auth.RefreshToken.Value            | string            | ''                                                  | The refresh token value.          |
+    | User.Auth.RefreshToken.ExpirationDate   | datetime          | [datetime]::MinValue                                | The refresh token expiration date.|
+    | User.Auth.Scope                         | string            | ''                                                  | The scope.                        |
+    | User.Defaults                           | pscustomobject    | {Owner, Repo}                                       |                                   |
+    | User.Defaults.Owner                     | string            | ''                                                  | The default owner.                |
+    | User.Defaults.Repo                      | string            | ''                                                  | The default repository.           |
 
     Functions provided in the module:
 

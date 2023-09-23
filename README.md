@@ -26,11 +26,34 @@ To dive into the world of GitHub automation with PowerShell, follow these steps:
 
 1. **Installation**: Download and install the GitHub PowerShell module from the provided link or the PowerShell Gallery.
 
-2. **Authentication**: Authenticate using your GitHub credentials or access tokens to begin executing commands.
+    ```powershell
+    Install-Module -Name GitHub -Force -AllowClobber
+    ```
 
-3. **Command Exploration**: Familiarize yourself with the available cmdlets using the module's comprehensive documentation or inline help.
+1. **Authentication**: Authenticate using your GitHub credentials or access tokens to begin executing commands.
 
-4. **Sample Scripts**: Check out sample scripts and usage patterns to jumpstart your automation tasks on GitHub.
+Logging in using device flow:
+```powershell
+Connect-GitHubAccount
+
+Please visit: https://github.com/login/device
+and enter code: ABCD-1234
+Successfully authenticated!
+```
+
+Logging in using PAT token:
+```powershell
+>_ Connect-GitHubAccount -AccessToken 'ghp_abcdefghklmnopqrstuvwxyz123456789123'
+>_
+```
+
+2. **Command Exploration**: Familiarize yourself with the available cmdlets using the module's comprehensive documentation or inline help.
+
+    ```powershell
+    Get-Command -Module GitHub
+    ```
+
+3. **Sample Scripts**: Check out sample scripts and usage patterns to jumpstart your automation tasks on GitHub.
 
 ## More Information & Resources
 

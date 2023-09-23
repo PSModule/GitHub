@@ -20,12 +20,13 @@
     [OutputType([void])]
     [CmdletBinding()]
     param(
+        # Reset the GitHub configuration for a specific scope.
         [Parameter()]
-        [ValidateSet('App', 'App.API', 'App.Defaults', 'All')]
+        [ValidateSet('App', 'App.API', 'App.Defaults', 'User', 'User.Auth', 'User.Defaults', 'All')]
         [string] $Scope = 'All'
     )
 
-    switch($Scope) {
+    switch ($Scope) {
         'App' {
             $script:Config.App = $script:ConfigTemplate.App
         }
@@ -34,6 +35,15 @@
         }
         'App.Defaults' {
             $script:Config.App.Defaults = $script:ConfigTemplate.App.Defaults
+        }
+        'User' {
+            $script:Config.User = $script:ConfigTemplate.User
+        }
+        'User.Auth' {
+            $script:Config.User.Auth = $script:ConfigTemplate.User.Auth
+        }
+        'User.Defaults' {
+            $script:Config.User.Defaults = $script:ConfigTemplate.User.Defaults
         }
         'All' {
             $script:Config = $script:ConfigTemplateDefaults
