@@ -29,25 +29,25 @@
     Write-Verbose "Resetting GitHub configuration for scope '$Scope'..."
     switch ($Scope) {
         'App' {
-            $script:Config.App = $script:ConfigTemplate.App | Copy-Object
+            $script:Config.App = $script:ConfigTemplate.App.PSObject.Copy()
         }
         'App.API' {
-            $script:Config.App.API = $script:ConfigTemplate.App.API | Copy-Object
+            $script:Config.App.API = $script:ConfigTemplate.App.API.PSObject.Copy()
         }
         'App.Defaults' {
-            $script:Config.App.Defaults = $script:ConfigTemplate.App.Defaults | Copy-Object
+            $script:Config.App.Defaults = $script:ConfigTemplate.App.Defaults.PSObject.Copy()
         }
         'User' {
-            $script:Config.User = $script:ConfigTemplate.User | Copy-Object
+            $script:Config.User = $script:ConfigTemplate.User.PSObject.Copy()
         }
         'User.Auth' {
-            $script:Config.User.Auth = $script:ConfigTemplate.User.Auth | Copy-Object
+            $script:Config.User.Auth = $script:ConfigTemplate.User.Auth.PSObject.Copy()
         }
         'User.Defaults' {
-            $script:Config.User.Defaults = $script:ConfigTemplate.User.Defaults | Copy-Object
+            $script:Config.User.Defaults = $script:ConfigTemplate.User.Defaults.PSObject.Copy()
         }
         'All' {
-            $script:Config = $script:ConfigTemplate | Copy-Object
+            $script:Config = $script:ConfigTemplate.PSObject.Copy()
         }
     }
 

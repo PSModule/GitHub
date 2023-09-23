@@ -93,7 +93,11 @@
             if ([string]::IsNullOrEmpty($Scope) -and ($Mode -eq 'OAuthApp')) {
                 $Scope = 'gist read:org repo workflow'
             }
-            Reset-GitHubConfig -Scope 'User.Auth'
+            if ($script:Config.PSObject.Properties.Name -contains 'App') {
+                Reset-GitHubConfig -Scope 'User.Auth'
+            } else {
+                Reset-GitHubConfig -Scope 'All'
+            }
             $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -Scope $Scope
             $script:Config.User.Auth.Mode = $Mode
             $script:Config.User.Auth.ClientID = $clientID
