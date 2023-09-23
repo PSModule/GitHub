@@ -8,7 +8,7 @@ Write-Verbose "[$scriptName] Importing subcomponents"
 Write-Verbose "[$scriptName] - [data] - Processing folder"
 $dataFolder = (Join-Path $PSScriptRoot 'data')
 Write-Verbose "[$scriptName] - [data] - [$dataFolder]"
-Get-ChildItem -Path (Join-Path $PSScriptRoot 'data') -Recurse -File -Force | ForEach-Object {
+Get-ChildItem -Path "$dataFolder" -Recurse -File -Force | ForEach-Object {
     Write-Verbose "[$scriptName] - [data] - [$($_.Name)]"
     New-Variable -Name $_.BaseName -Value (Import-PowerShellDataFile -Path $_.FullName) -Force
     Write-Verbose "[$scriptName] - [data] - [$($_.Name)] - Done"
