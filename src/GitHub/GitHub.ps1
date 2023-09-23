@@ -1,4 +1,4 @@
-﻿$script:Config = [Config]::new()
+﻿$script:Config = $script:ConfigTemplate | Copy-Object
 Initialize-SecretVault -Name $script:SecretVault.Name -Type $script:SecretVault.Type
 Restore-GitHubConfig
 

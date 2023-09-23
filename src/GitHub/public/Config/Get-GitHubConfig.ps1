@@ -18,7 +18,7 @@
         Refreshes the current GitHub configuration from the configuration store beofre returning it.
     #>
     [Alias('Get-GHConfig')]
-    [OutputType([Config])]
+    [OutputType([PSCustomObject])]
     [CmdletBinding()]
     param (
         # Refresh the configuration from the configuration store before returning it.
