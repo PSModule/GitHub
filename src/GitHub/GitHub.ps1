@@ -1,6 +1,6 @@
 ﻿Write-Verbose "Initializing GitHub module..." -Verbose
 
-$script:Config = $script:ConfigTemplate.PSObject.Copy()
+$script:Config = $script:ConfigTemplate | ConvertTo-Json -Depth 100 | ConvertFrom-Json
 Initialize-SecretVault -Name $script:SecretVault.Name -Type $script:SecretVault.Type
 Restore-GitHubConfig
 

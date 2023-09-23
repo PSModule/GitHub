@@ -29,25 +29,25 @@
     Write-Verbose "Resetting GitHub configuration for scope '$Scope'..."
     switch ($Scope) {
         'App' {
-            $script:Config.App = $script:ConfigTemplate.App.PSObject.Copy()
+            $script:Config.App = $script:ConfigTemplate.App | ConvertTo-Json -Depth 100 | ConvertFrom-Json
         }
         'App.API' {
-            $script:Config.App.API = $script:ConfigTemplate.App.API.PSObject.Copy()
+            $script:Config.App.API = $script:ConfigTemplate.App.API | ConvertTo-Json -Depth 100 | ConvertFrom-Json
         }
         'App.Defaults' {
-            $script:Config.App.Defaults = $script:ConfigTemplate.App.Defaults.PSObject.Copy()
+            $script:Config.App.Defaults = $script:ConfigTemplate.App.Defaults | ConvertTo-Json -Depth 100 | ConvertFrom-Json
         }
         'User' {
-            $script:Config.User = $script:ConfigTemplate.User.PSObject.Copy()
+            $script:Config.User = $script:ConfigTemplate.User | ConvertTo-Json -Depth 100 | ConvertFrom-Json
         }
         'User.Auth' {
-            $script:Config.User.Auth = $script:ConfigTemplate.User.Auth.PSObject.Copy()
+            $script:Config.User.Auth = $script:ConfigTemplate.User.Auth | ConvertTo-Json -Depth 100 | ConvertFrom-Json
         }
         'User.Defaults' {
-            $script:Config.User.Defaults = $script:ConfigTemplate.User.Defaults.PSObject.Copy()
+            $script:Config.User.Defaults = $script:ConfigTemplate.User.Defaults | ConvertTo-Json -Depth 100 | ConvertFrom-Json
         }
         'All' {
-            $script:Config = $script:ConfigTemplate.PSObject.Copy()
+            $script:Config = $script:ConfigTemplate | ConvertTo-Json -Depth 100 | ConvertFrom-Json
         }
     }
 
