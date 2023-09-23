@@ -4,33 +4,36 @@ param()
 $scriptName = $MyInvocation.MyCommand.Name
 
 Write-Verbose "[$scriptName] Importing subcomponents"
-
-Join-Path $PSScriptRoot 'Data' | Get-ChildItem -Recurse -File -Force | ForEach-Object {
-    Write-Verbose "[$scriptName] - [$PSScriptRoot] - [Data] - Done"
+Write-Verbose "[$scriptName] - [Data] - Processing folder"
+Get-ChildItem -Path (Join-Path $PSScriptRoot 'Data') -Recurse -File -Force | ForEach-Object {
+    Write-Verbose "[$scriptName] - [Data] - [$($_.Name)]"
     New-Variable -Name $_.BaseName -Value (Import-PowerShellDataFile -Path $_.FullName) -Force
+    Write-Verbose "[$scriptName] - [Data] - [$($_.Name)] - Done"
 }
 
 # Import everything in these folders
 $folders = 'init', 'classes', 'private', 'public'
 foreach ($folder in $folders) {
-    Write-Verbose "[$scriptName] - Processing folder [$folder]"
+    Write-Verbose "[$scriptName] - [$folder] - Processing folder"
     $folderPath = Join-Path -Path $PSScriptRoot -ChildPath $folder
-    Write-Verbose "[$scriptName] - [$folderPath]"
     if (Test-Path -Path $folderPath) {
-        Write-Verbose "[$scriptName] - [$folderPath] - Getting all files"
         $files = Get-ChildItem -Path $folderPath -Include '*.ps1', '*.psm1' -Recurse
         foreach ($file in $files) {
-            Write-Verbose "[$scriptName] - [$folderPath] - [$($file.Name)] - Importing"
-            Import-Module $file
-            Write-Verbose "[$scriptName] - [$folderPath] - [$($file.Name)] - Done"
+            Write-Verbose "[$scriptName] - [$folder] - [$($file.Name)] - Importing"
+            Import-Module $file -Verbose:$false
+            Write-Verbose "[$scriptName] - [$folder] - [$($file.Name)] - Done"
         }
     }
+    Write-Verbose "[$scriptName] - [$folder] - Done"
 }
 
-$PSScriptRoot | Get-ChildItem -Path $folderPath -Include '*.ps1' | ForEach-Object {
-    Write-Verbose "[$scriptName] - [$PSScriptRoot] - [$(_.Name)] - Done"
-    Import-Module $_.FullName
+Write-Verbose "[$scriptName] - [Root] - Processing folder"
+Get-ChildItem -Path $PSScriptRoot -Filter '*.ps1' | ForEach-Object {
+    Write-Verbose "[$scriptName] - [Root] - [$($_.Name)] - Importing"
+    Import-Module $_ -Verbose:$false
+    Write-Verbose "[$scriptName] - [Root] - [$($_.Name)] - Done"
 }
+Write-Verbose "[$scriptName] - [Root] - Done"
 
 $foldersToProcess = Get-ChildItem -Path $PSScriptRoot -Directory | Where-Object -Property Name -In $folders
 $moduleFiles = $foldersToProcess | Get-ChildItem -Include '*.ps1' -Recurse -File -Force

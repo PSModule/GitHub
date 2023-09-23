@@ -7,6 +7,7 @@ Get-SecretVault
 Get-Module -Name GitHub -ListAvailable
 Install-Module -Name GitHub -Verbose -Force -AllowPrerelease
 
+$VerbosePreference = 'Continue'
 Import-Module -Name 'C:\Repos\GitHub\PSModule\Modules\GitHub\src\GitHub\GitHub.psm1' -Verbose -Force
 
 Import-Module -Name GitHub -Verbose
