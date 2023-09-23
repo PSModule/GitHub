@@ -1,26 +1,35 @@
 [Cmdletbinding()]
 param()
 
-$sciptName = $MyInvocation.MyCommand.Name
+$scriptName = $MyInvocation.MyCommand.Name
 
-Write-Verbose "[$sciptName] Importing subcomponents"
-$folders = 'classes', 'private', 'public'
+Write-Verbose "[$scriptName] Importing subcomponents"
+
+Join-Path $PSScriptRoot 'Data' | Get-ChildItem -Recurse -File -Force | ForEach-Object {
+    Write-Verbose "[$scriptName] - [$PSScriptRoot] - [Data] - Done"
+    New-Variable -Name $_.BaseName -Value (Import-PowerShellDataFile -Path $_.FullName) -Force
+}
+
 # Import everything in these folders
+$folders = 'init', 'classes', 'private', 'public'
 foreach ($folder in $folders) {
-    Write-Verbose "[$sciptName] - Processing folder [$folder]"
+    Write-Verbose "[$scriptName] - Processing folder [$folder]"
     $folderPath = Join-Path -Path $PSScriptRoot -ChildPath $folder
-    Write-Verbose "[$sciptName] - [$folderPath]"
+    Write-Verbose "[$scriptName] - [$folderPath]"
     if (Test-Path -Path $folderPath) {
-        Write-Verbose "[$sciptName] - [$folderPath] - Getting all files"
-        $files = $null
+        Write-Verbose "[$scriptName] - [$folderPath] - Getting all files"
         $files = Get-ChildItem -Path $folderPath -Include '*.ps1', '*.psm1' -Recurse
-        # dot source each file
         foreach ($file in $files) {
-            Write-Verbose "[$sciptName] - [$folderPath] - [$($file.Name)] - Importing"
+            Write-Verbose "[$scriptName] - [$folderPath] - [$($file.Name)] - Importing"
             Import-Module $file
-            Write-Verbose "[$sciptName] - [$folderPath] - [$($file.Name)] - Done"
+            Write-Verbose "[$scriptName] - [$folderPath] - [$($file.Name)] - Done"
         }
     }
+}
+
+$PSScriptRoot | Get-ChildItem -Path $folderPath -Include '*.ps1' | ForEach-Object {
+    Write-Verbose "[$scriptName] - [$PSScriptRoot] - [$(_.Name)] - Done"
+    Import-Module $_.FullName
 }
 
 $foldersToProcess = Get-ChildItem -Path $PSScriptRoot -Directory | Where-Object -Property Name -In $folders

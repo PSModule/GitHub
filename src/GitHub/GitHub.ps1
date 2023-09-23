@@ -1,8 +1,4 @@
 ﻿$script:Config = [Config]::new()
-
-Join-Path $PSScriptRoot 'Data' | Get-ChildItem -Recurse -File -Force | ForEach-Object {
-    New-Variable -Name $_.BaseName -Value (Import-PowerShellDataFile -Path $_.FullName) -Force -Scope Script
-}
 Initialize-SecretVault -Name $script:SecretVault.Name -Type $script:SecretVault.Type
 Restore-GitHubConfig
 
