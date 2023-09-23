@@ -93,8 +93,10 @@
             if ([string]::IsNullOrEmpty($Scope) -and ($Mode -eq 'OAuthApp')) {
                 $Scope = 'gist read:org repo workflow'
             }
+            Reset-GitHubConfig -Scope 'User.Auth'
             $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -Scope $Scope
             $script:Config.User.Auth.Mode = $Mode
+            $script:Config.User.Auth.ClientID = $clientID
         }
         'PAT' {
             Write-Verbose 'Logging in using personal access token...'
