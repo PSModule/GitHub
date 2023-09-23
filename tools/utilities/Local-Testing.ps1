@@ -6,6 +6,7 @@ Get-SecretVault | Unregister-SecretVault
 Get-SecretVault
 Get-Module -Name GitHub -ListAvailable
 Install-Module -Name GitHub -Verbose -Force -AllowPrerelease
+Import-Module -Name GitHub -Verbose
 Clear-Host
 Get-Command -Module GitHub
 Get-Variable | Where-Object -Property Module -ne $null | Select-Object Name, Module, ModuleName

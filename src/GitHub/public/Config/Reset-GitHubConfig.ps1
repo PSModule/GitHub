@@ -46,7 +46,7 @@
             $script:Config.User.Defaults = $script:ConfigTemplate.User.Defaults
         }
         'All' {
-            $script:Config = $script:ConfigTemplateDefaults
+            $script:Config = $script:ConfigTemplate
         }
     }
     Save-GitHubConfig
