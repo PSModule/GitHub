@@ -1,0 +1,16 @@
+TOPIC
+    about_Auth
+
+SHORT DESCRIPTION
+
+LONG DESCRIPTION
+
+EXAMPLES
+
+KEYWORDS
+    GitHub
+    PowerShell
+    SecretManagement
+    SecretStore
+
+SEE ALSO

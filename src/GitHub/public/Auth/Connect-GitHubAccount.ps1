@@ -13,23 +13,36 @@
         the app will be able to make API calls with a new access token.
 
         .EXAMPLE
-        Connect-GitHubAccount -Owner 'MyOrg' -Repo 'MyRepo' -AccessToken 'ghp_####'
-
-        Connects to GitHub using a personal access token and sets the Owner and Repo default variables.
-
-        .EXAMPLE
-        Connect-GitHubAccount -Owner 'MyOrg' -Repo 'MyRepo'
-
-        Sets the Owner and Repo default variables.
-
-        .EXAMPLE
         Connect-GitHubAccount
 
-        Connects to GitHub using a device code login.
+        Connects to GitHub using a device flow login.
+
+        .EXAMPLE
+        Connect-GitHubAccount -AccessToken 'ghp_####'
+
+        Connects to GitHub using a personal access token (PAT).
+
+        .EXAMPLE
+        Connect-GitHubAccount -Refresh
+
+        Refreshes the access token.
+
+        .EXAMPLE
+        Connect-GitHubAccount -Mode 'OAuthApp' -Scope 'gist read:org repo workflow'
+
+        Connects to GitHub using a device flow login and sets the scope of the access token.
 
         .NOTES
         https://docs.github.com/en/rest/overview/other-authentication-methods#authenticating-for-saml-sso
     #>
+    [Alias('Connect-GHAccount')]
+    [Alias('Connect-GitHub')]
+    [Alias('Connect-GH')]
+    [Alias('Login-GitHubAccount')]
+    [Alias('Login-GHAccount')]
+    [Alias('Login-GitHub')]
+    [Alias('Login-GH')]
+    [OutputType([void])]
     [CmdletBinding(DefaultParameterSetName = 'DeviceFlow')]
     param (
         # Choose between authentication methods, either OAuthApp or GitHubApp.
@@ -104,7 +117,6 @@
 
     Save-GitHubConfig
 
-    $user = Get-GitHubUser
     Write-Host '✓ ' -ForegroundColor Green -NoNewline
-    Write-Host "Logged in as $($user.name) (@$($user.login))!"
+    Write-Host "Logged in to GitHub!"
 }
