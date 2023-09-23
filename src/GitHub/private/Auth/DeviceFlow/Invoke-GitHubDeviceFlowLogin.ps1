@@ -31,14 +31,14 @@
         [Parameter()]
         [string] $Scope,
 
-        # Refresh the access token.
+        # The refresh token to use for re-authentication.
         [Parameter()]
-        [switch] $Refresh
+        [switch] $RefreshToken
     )
 
     do {
-        if ($Refresh) {
-            $tokenResponse = Wait-GitHubAccessToken -ClientID $ClientID -Refresh
+        if ($RefreshToken) {
+            $tokenResponse = Wait-GitHubAccessToken -ClientID $ClientID -RefreshToken $RefreshToken
         } else {
             $deviceCodeResponse = Request-GitHubDeviceCode -ClientID $ClientID -Scope $Scope
 

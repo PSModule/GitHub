@@ -8,9 +8,9 @@ Get-Module -Name GitHub -ListAvailable
 Install-Module -Name GitHub -Verbose -Force -AllowPrerelease
 Clear-Host
 Get-Command -Module GitHub
-Get-Variable | Select-Object Name, Module, ModuleName
+Get-Variable | Where-Object -Property Module -ne $null | Select-Object Name, Module, ModuleName
 Connect-GitHubAccount
-Get-GitHubConfig
+Get-GitHubConfig | ConvertTo-Json -Depth 100
 Get-GitHubContext
 
 Connect-GitHubAccount -Refresh -Verbose

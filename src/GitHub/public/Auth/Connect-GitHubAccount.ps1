@@ -81,17 +81,18 @@
         $vault = Get-SecretVault | Where-Object -Property ModuleName -EQ $script:SecretVault.Type
     }
 
+    $clientID = $script:App.$Mode.ClientID
+
     switch ($PSCmdlet.ParameterSetName) {
         'Refresh' {
             Write-Verbose 'Refreshing access token...'
-            $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -Refresh
+            $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -RefreshToken $script:Config.User.Auth.RefreshToken.Value
         }
         'DeviceFlow' {
             Write-Verbose 'Logging in using device flow...'
             if ([string]::IsNullOrEmpty($Scope) -and ($Mode -eq 'OAuthApp')) {
                 $Scope = 'gist read:org repo workflow'
             }
-            $clientID = $script:App.$Mode.ClientID
             $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -Scope $Scope
             $script:Config.User.Auth.Mode = $Mode
         }
