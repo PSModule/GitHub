@@ -51,7 +51,11 @@ function Initialize-SecretVault {
                 Reset-SecretStore @vaultParameters
             }
         }
+    }
 
+    $secretStore = Get-SecretVault | Where-Object { $_.Name -eq $Name }
+    $secretStoreExists = $secretStore.count -ne 0
+    if (-not $secretStoreExists) {
         $secretVault = @{
             Name         = $Name
             ModuleName   = $Type
