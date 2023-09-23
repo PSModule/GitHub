@@ -81,7 +81,7 @@
         $vault = Get-SecretVault | Where-Object -Property ModuleName -EQ $script:SecretVault.Type
     }
 
-    $clientID = $script:App.$Mode.ClientID
+    $clientID = $script:Auth.$Mode.ClientID
 
     switch ($PSCmdlet.ParameterSetName) {
         'Refresh' {
@@ -120,5 +120,5 @@
 
     Save-GitHubConfig
     Write-Host '✓ ' -ForegroundColor Green -NoNewline
-    Write-Host "Logged in to GitHub!"
+    Write-Host 'Logged in to GitHub!'
 }

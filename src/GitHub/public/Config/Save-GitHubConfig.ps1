@@ -20,5 +20,5 @@ function Save-GitHubConfig {
     param()
 
     $configJson = $script:Config | ConvertTo-Json -Depth 100
-    Set-Secret -Name $script:Secret.Name -Secret $configJson -Vault $script:SecretVault.Name
+    Set-Secret -Name $script:SecretVault.Secret.Name -Secret $configJson -Vault $script:SecretVault.Name
 }

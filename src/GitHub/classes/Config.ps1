@@ -33,6 +33,7 @@ Class UserDefaults {
         $this.Repo = ''
     }
 }
+
 Class User {
     [Auth] $Auth
     [UserDefaults] $Defaults
