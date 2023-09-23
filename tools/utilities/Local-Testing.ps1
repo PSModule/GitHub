@@ -15,6 +15,7 @@ Clear-Host
 Get-Command -Module GitHub
 Get-Variable | Where-Object -Property Module -ne $null | Select-Object Name, Module, ModuleName
 Connect-GitHubAccount
+Get-GitHubConfig | ConvertTo-Json -Depth 100
 Get-GitHubConfig -Refresh | ConvertTo-Json -Depth 100
 Restore-GitHubConfig -Verbose
 Get-GitHubContext

@@ -1,5 +1,5 @@
 ﻿function Copy-Object {
-    [OutputType([object])]
+    [OutputType([pscustomobject])]
     [CmdletBinding()]
     param (
         [Parameter(
