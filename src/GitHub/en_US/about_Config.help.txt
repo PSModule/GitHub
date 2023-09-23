@@ -10,15 +10,15 @@ LONG DESCRIPTION
     using the provided cmdlets.
 
     Name: SecretVault
-    Path: \classes\Data\SecretVault.ps1
+    Path: \classes\Data\SecretVault.psd1
 
-    | Name             | Type           | Default Value                      | Description                   |
-    | ---------------  | -------------- | ---------------------------------- | ----------------------------- |
-    | SecretVault      | pscustomobject | {Name, Type}                       |                               |
-    | SecretVault.Name | string         | 'GitHub'                           | The name of the secret vault. |
-    | SecretVault.Type | string         | 'Microsoft.PowerShell.SecretStore' | The type of the secret vault. |
-    | Secret           | pscustomobject | {Name}                             |                               |
-    | Secret.Name      | string         | 'Config'                           | The name of the secret.       |
+    | Name                         | Type           | Default Value                      | Description                   |
+    | ---------------------------- | -------------- | ---------------------------------- | ----------------------------- |
+    | SecretVault                  | pscustomobject | {Name, Type, Secret}               |                               |
+    | SecretVault.Name             | string         | 'GitHub'                           | The name of the secret vault. |
+    | SecretVault.Type             | string         | 'Microsoft.PowerShell.SecretStore' | The type of the secret vault. |
+    | SecretVault.Secret           | pscustomobject | {Name}                             |                               |
+    | SecretVault.Secret.Name      | string         | 'Config'                           | The name of the secret.       |
 
     Name: Config
     Path: \classes\Data\Config.ps1
