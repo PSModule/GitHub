@@ -1,0 +1,36 @@
+name: Module [GitHub]
+
+on:
+  push:
+    branches:
+      - '*'
+    paths:
+      - .github/workflows/Module.GitHub.yml
+      - src/GitHub/**
+  workflow_dispatch:
+
+jobs:
+  BuildModule:
+    name: Build Module
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }} # Used for GitHub CLI authentication
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Build Module
+        uses: PSModule/Build-Module@main
+        with:
+          Verbose: true
+
+      - name: Test Module
+        uses: PSModule/Test-Module@main
+        with:
+          Verbose: true
+
+      - name: Release Module
+        uses: PSModule/Release-Module@main
+        with:
+          APIKey: ${{ secrets.APIKEY }}
+          Verbose: true
