@@ -1,4 +1,6 @@
-﻿$script:Config = $script:ConfigTemplate | Copy-Object
+﻿Write-Verbose "Initializing GitHub module..." -Verbose
+
+$script:Config = $script:ConfigTemplate | Copy-Object
 Initialize-SecretVault -Name $script:SecretVault.Name -Type $script:SecretVault.Type
 Restore-GitHubConfig
 
