@@ -26,8 +26,8 @@
     [CmdletBinding()]
     param ()
 
-    Reset-GitHubConfig -All
+    Reset-GitHubConfig -Scope 'All'
 
-    Write-Host "✓ " -ForegroundColor Green -NoNewline
-    Write-Host "Logged out of GitHub!"
+    Write-Host '✓ ' -ForegroundColor Green -NoNewline
+    Write-Host 'Logged out of GitHub!'
 }
