@@ -1,1 +1,3 @@
-﻿Write-Verbose 'Initializing GitHub module...' -Verbose
+﻿$scriptFilePath = $MyInvocation.MyCommand.Path
+
+Write-Verbose "[$scriptFilePath] - Initializing GitHub module..." -Verbose

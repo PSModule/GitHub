@@ -1,1 +1,3 @@
-﻿Write-Verbose 'Loading prereqs...' -Verbose
+﻿$scriptFilePath = $MyInvocation.MyCommand.Path
+
+Write-Verbose "[$scriptFilePath] - Loading prereqs..." -Verbose
