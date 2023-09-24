@@ -36,44 +36,35 @@
         'Accept'               = $Accept
     }
 
-    # Remove null or empty headers
-    $headers.GetEnumerator() | ForEach-Object {
-        if ([string]::IsNullOrEmpty($_.Value)) {
-            $headers.Remove($_.Key)
-        }
+    # Filter out null or empty headers
+    $headers = $headers.GetEnumerator() | Where-Object { -not [string]::IsNullOrEmpty($_.Value) } | ForEach-Object {
+        @{ $_.Key = $_.Value }
     }
 
-    if (-not [string]::IsNullOrEmpty($AccessToken)) {
-        switch -Regex ($AccessToken) {
-            '^ghp_' {
-                $authorization = "token $AccessToken"  # Classic tokens
-                break
-            }
-            '^github_pat_' {
-                $authorization = "token $AccessToken"  # Fine-grained PAT
-                break
-            }
-            '^ghu_' {
-                $authorization = "Bearer $AccessToken" # GitHubApp access token
-                break
-            }
-            '^gho_' {
-                $authorization = "Bearer $AccessToken" # OAuth app access token
-                break
-            }
-            default {
-                $tokenPrefix = $AccessToken.Substring(0, $AccessToken.LastIndexOf('_') + 1)
-                $errorMessage = "Unexpected AccessToken format: $tokenPrefix*"
+    switch -Regex ($AccessToken) {
+        '^ghp_|^github_pat_' {
+            $authorization = "token $AccessToken"
+            break
+        }
+        '^ghu_|^gho_' {
+            $authorization = "Bearer $AccessToken"
+            break
+        }
+        default {
+            if (-not [string]::IsNullOrEmpty($AccessToken)) {
+                $tokenPrefix = $AccessToken -replace '_.*$', '_*'
+                $errorMessage = "Unexpected AccessToken format: $tokenPrefix"
                 Write-Error $errorMessage
                 throw $errorMessage
             }
         }
+    }
 
+    if ($null -ne $authorization) {
         $headers['Authorization'] = $authorization
     }
 
-    # Avoid replacing 'https://' slashes while ensuring correct URL formation
-    $URI = "$ApiBaseUri".TrimEnd('/') + "/$ApiEndpoint".TrimStart('/')
+    $URI = ("$ApiBaseUri/" -replace '/$', '') + ("/$ApiEndpoint" -replace '^/', '')
 
     $APICall = @{
         Uri     = $URI
@@ -81,20 +72,18 @@
         Headers = $Headers
     }
 
-    # Set body depending on the type of Body (string or hashtable)
-    if ($Body -is [string]) {
-        $APICall['Body'] = $Body
-    } elseif ($Body -is [hashtable]) {
-        $APICall['Body'] = ($Body | ConvertTo-Json -Depth 100)
+    if ($Body) {
+        if ($Body -is [string]) {
+            $APICall['Body'] = $Body
+        } else {
+            $APICall['Body'] = $Body | ConvertTo-Json -Depth 100
+        }
     }
 
     try {
-        Write-Verbose ($APICall.GetEnumerator() | Out-String)
-
         if ($UseWebRequest) {
             return Invoke-WebRequest @APICall
         }
-
         Invoke-RestMethod @APICall
     } catch {
         $errorMessage = "Error calling GitHub Api: $($_.Exception.Message)"
