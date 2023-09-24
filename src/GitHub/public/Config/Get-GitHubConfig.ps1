@@ -22,6 +22,12 @@
         [switch] $AsPlainText
     )
     $prefix = $script:SecretVault.Prefix
-    $Name = "$prefix$Name"
-    Get-Secret -Name $Name -Vault $script:SecretVault.Name -AsPlainText:$AsPlainText
+    if ($Name) {
+        $Name = "$prefix$Name"
+        Get-Secret -Name $Name -Vault $script:SecretVault.Name -AsPlainText:$AsPlainText
+    } else {
+        Get-SecretInfo | Where-Object Name -like "$prefix*" | ForEach-Object {
+            Get-Secret -Name $_.Name -Vault $script:SecretVault.Name -AsPlainText:$AsPlainText
+        }
+    }
 }

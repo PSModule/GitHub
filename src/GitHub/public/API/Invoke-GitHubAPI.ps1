@@ -81,7 +81,7 @@
             throw $errorMessage
         }
     }
-    $headers['Authorization'] = $authorization
+    $headers.Authorization = $authorization
 
     $URI = ("$ApiBaseUri/" -replace '/$', '') + ("/$ApiEndpoint" -replace '^/', '')
 
@@ -93,9 +93,9 @@
 
     if ($Body) {
         if ($Body -is [string]) {
-            $APICall['Body'] = $Body
+            $APICall.Body = $Body
         } else {
-            $APICall['Body'] = $Body | ConvertTo-Json -Depth 100
+            $APICall.Body = $Body | ConvertTo-Json -Depth 100
         }
     }
 
