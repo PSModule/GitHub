@@ -1,21 +1,18 @@
 ﻿function Invoke-GitHubAPI {
-    [CmdletBinding(DefaultParameterSetName = 'Body')]
+    [CmdletBinding()]
     param (
         [Parameter()]
         [ValidateSet('GET', 'POST', 'PATCH', 'DELETE', 'PUT')]
         [String] $Method = 'GET',
 
         [Parameter()]
-        [string] $ApiBaseUri = $script:Config.App.API.BaseURI,
+        [string] $ApiBaseUri = $script:Config.App.Api.BaseURI,
 
         [Parameter(Mandatory)]
         [string] $ApiEndpoint,
 
-        [Parameter(ParameterSetName = 'Body')]
-        [hashtable] $Body,
-
-        [Parameter(ParameterSetName = 'Data')]
-        [string] $Data,
+        [Parameter()]
+        [Object] $Body,
 
         [Parameter()]
         [string] $Accept,
@@ -27,7 +24,7 @@
         [string] $ContentType = 'application/vnd.github+json',
 
         [Parameter()]
-        [string] $Version = $script:Config.App.API.Version,
+        [string] $Version = $script:Config.App.Api.Version,
 
         [Parameter()]
         [switch] $UseWebRequest
@@ -59,7 +56,8 @@
         $headers['Authorization'] = $authorization
     }
 
-    $URI = "$ApiBaseUri/$($ApiEndpoint.TrimStart('/'))"
+    # Avoid replacing 'https://' slashes while ensuring correct URL formation
+    $URI = "$ApiBaseUri".TrimEnd('/') + "/$ApiEndpoint".TrimStart('/')
 
     $APICall = @{
         Uri     = $URI
@@ -67,11 +65,11 @@
         Headers = $Headers
     }
 
-    # Set body from either Body or Data parameter
-    if ($PSBoundParameters.ContainsKey('Body')) {
+    # Set body depending on the type of Body (string or hashtable)
+    if ($Body -is [string]) {
+        $APICall['Body'] = $Body
+    } elseif ($Body -is [hashtable]) {
         $APICall['Body'] = ($Body | ConvertTo-Json -Depth 100)
-    } elseif ($PSBoundParameters.ContainsKey('Data')) {
-        $APICall['Body'] = $Data
     }
 
     try {
@@ -83,7 +81,7 @@
 
         Invoke-RestMethod @APICall
     } catch {
-        $errorMessage = "Error calling GitHub API: $($_.Exception.Message)"
+        $errorMessage = "Error calling GitHub Api: $($_.Exception.Message)"
         Write-Error $errorMessage
         throw $_
     }
