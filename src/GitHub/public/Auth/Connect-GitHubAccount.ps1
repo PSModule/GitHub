@@ -104,15 +104,28 @@
                 }
             }
             Reset-GitHubConfig -Scope 'Auth'
-            $settings = @{
-                AccessToken                = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
-                AccessTokenExpirationDate  = (Get-Date).AddSeconds($tokenResponse.expires_in)
-                RefreshToken               = ConvertTo-SecureString -AsPlainText $tokenResponse.refresh_token
-                RefreshTokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.refresh_token_expires_in)
-                Scope                      = $tokenResponse.scope
-                AuthType                   = $AuthType
-                AccessTokenType            = $tokenResponse.access_token -replace '_.*$', '_*'
-                DeviceFlowType             = $Mode
+            switch ($Mode) {
+                'GitHubApp' {
+                    $settings = @{
+                        AccessToken                = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
+                        AccessTokenExpirationDate  = (Get-Date).AddSeconds($tokenResponse.expires_in)
+                        RefreshToken               = ConvertTo-SecureString -AsPlainText $tokenResponse.refresh_token
+                        RefreshTokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.refresh_token_expires_in)
+                        Scope                      = $tokenResponse.scope
+                        AuthType                   = $AuthType
+                        AccessTokenType            = $tokenResponse.access_token -replace '_.*$', '_*'
+                        DeviceFlowType             = $Mode
+                    }
+                }
+                'OAuthApp' {
+                    $settings = @{
+                        AccessToken                = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
+                        Scope                      = $tokenResponse.scope
+                        AuthType                   = $AuthType
+                        AccessTokenType            = $tokenResponse.access_token -replace '_.*$', '_*'
+                        DeviceFlowType             = $Mode
+                    }
+                }
             }
             Set-GitHubConfig @settings
             break
