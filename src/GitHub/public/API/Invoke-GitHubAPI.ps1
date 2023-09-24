@@ -46,7 +46,7 @@
 
         # The secure token used for authentication in the GitHub API. It should be stored as a SecureString to ensure it's kept safe in memory.
         [Parameter()]
-        [SecureString] $SecureToken = $script:Config.User.Auth.AccessToken.Value,
+        [SecureString] $AccessToken = $script:Config.User.Auth.AccessToken.Value,
 
         # The 'Content-Type' header for the API request. The default is 'application/vnd.github+json'.
         [Parameter()]
@@ -56,11 +56,6 @@
         [Parameter()]
         [string] $Version = $script:Config.App.Api.Version
     )
-
-    # Decrypting the secure token
-    $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($SecureToken)
-    $AccessToken = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
-    [System.Runtime.InteropServices.Marshal]::ZeroFreeBSTR($BSTR)  # Clear out the plain text from memory
 
     $headers = @{
         'Content-Type'         = $ContentType
@@ -73,22 +68,24 @@
         @{ $_.Key = $_.Value }
     }
 
-    if (-not [string]::IsNullOrEmpty($AccessToken)) {
-        switch -Regex ($AccessToken) {
-            '^ghp_|^github_pat_' {
-                $authorization = "token $AccessToken"
-            }
-            '^ghu_|^gho_' {
-                $authorization = "Bearer $AccessToken"
-            }
+    # Authorization handling
+    $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($AccessToken)
+    try {
+        $AccessTokenAsPlainText = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
+
+        $authorization = switch -Regex ($AccessTokenAsPlainText) {
+            '^ghp_|^github_pat_' { "token $AccessTokenAsPlainText" }
+            '^ghu_|^gho_' { "Bearer $AccessTokenAsPlainText" }
             default {
-                $tokenPrefix = $AccessToken -replace '_.*$', '_*'
+                $tokenPrefix = $AccessTokenAsPlainText -replace '_.*$', '_*'
                 $errorMessage = "Unexpected AccessToken format: $tokenPrefix"
                 Write-Error $errorMessage
                 throw $errorMessage
             }
         }
         $headers['Authorization'] = $authorization
+    } finally {
+        [System.Runtime.InteropServices.Marshal]::ZeroFreeBSTR($BSTR)
     }
 
     $URI = ("$ApiBaseUri/" -replace '/$', '') + ("/$ApiEndpoint" -replace '^/', '')
