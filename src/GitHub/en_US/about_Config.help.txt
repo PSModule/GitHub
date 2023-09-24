@@ -93,9 +93,9 @@ EXAMPLES
 
     -------------------------- EXAMPLE 4 --------------------------
 
-    Reset-GitHubConfig -Scope 'App.API'
+    Reset-GitHubConfig -Scope Auth
 
-    This command resets the 'App.API' section of the GitHub configuration to its default values.
+    This command resets the Auth related settings of the GitHub configuration to its default values.
 
     -------------------------- EXAMPLE 5 --------------------------
 

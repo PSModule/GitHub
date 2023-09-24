@@ -10,17 +10,22 @@
         Set-GitHubConfig -APIBaseURI 'https://api.github.com' -APIVersion '2022-11-28'
 
         Sets the App.API scope of the GitHub configuration.
+
+        .EXAMPLE
+        Set-GitHubConfig -Name 'MyFavouriteRepo' -Value 'https://github.com/PSModule/GitHub'
+
+        Sets a item called 'MyFavouriteRepo' in the GitHub configuration.
     #>
     [Alias('Set-GHConfig')]
     [CmdletBinding()]
     param (
         # Set the API Base URI.
         [Parameter()]
-        [string] $APIBaseURI,
+        [string] $ApiBaseUri,
 
         # Set the GitHub API Version.
         [Parameter()]
-        [string] $APIVersion,
+        [string] $ApiVersion,
 
         # Set the default for the Owner parameter.
         [Parameter()]
@@ -28,21 +33,32 @@
 
         # Set the default for the Repo parameter.
         [Parameter()]
-        [string] $Repo
+        [string] $Repo,
+
+        # Choose a custom name to set.
+        [Parameter()]
+        [string] $Name,
+
+        # Choose a custom value to set.
+        [Parameter()]
+        [string] $Value = ''
     )
 
     switch ($PSBoundParameters.Keys) {
-        'APIBaseURI' {
-            $script:Config.App.API.BaseURI = $APIBaseURI
+        'ApiBaseUri' {
+            $script:Config.ApiBaseUri = $ApiBaseUri
         }
-        'APIVersion' {
-            $script:Config.App.API.Version = $APIVersion
+        'ApiVersion' {
+            $script:Config.ApiVersion = $ApiVersion
         }
         'Owner' {
-            $script:Config.User.Defaults.Owner = $Owner
+            $script:Config.Owner = $Owner
         }
         'Repo' {
-            $script:Config.User.Defaults.Repo = $Repo
+            $script:Config.Repo = $Repo
+        }
+        'Name' {
+            $script:Config.$Name = $Value
         }
     }
     Save-GitHubConfig

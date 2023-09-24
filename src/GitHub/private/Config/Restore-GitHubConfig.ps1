@@ -21,11 +21,13 @@ function Restore-GitHubConfig {
     [CmdletBinding()]
     param()
 
-    $vault = Get-SecretVault -Name $script:SecretVault.Name
-    $vaultExists = $vault.count -eq 1
-    if ($vaultExists) {
+    $secretVault = Get-SecretVault | Where-Object -Property ModuleName -EQ $script:SecretVault.Type
+
+    if ($SecretVault) {
+        Write-Verbose "Restoring configuration from [$($script:SecretVault.Name)]."
         $secretExists = Get-SecretInfo -Name $script:SecretVault.Secret.Name -Vault $script:SecretVault.Name
         if ($secretExists) {
+            Write-Verbose "Configuration restored from [$($script:SecretVault.Name)]."
             $script:Config = Get-Secret -Name $script:SecretVault.Secret.Name -AsPlainText -Vault $script:SecretVault.Name | ConvertFrom-Json
         } else {
             Write-Verbose "Unable to restore configuration."

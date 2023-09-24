@@ -38,7 +38,7 @@
             Mandatory,
             ParameterSetName = 'RefreshToken'
         )]
-        [string] $RefreshToken,
+        [securestring] $RefreshToken,
 
         # The interval to wait between polling for the token.
         [Parameter()]

@@ -35,16 +35,20 @@
             Mandatory,
             ParameterSetName = 'RefreshToken'
         )]
-        [string] $RefreshToken
+        [securestring] $RefreshToken
     )
 
     $body = @{
         'client_id' = $ClientID
     }
 
+    $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($RefreshToken)
+    $RefreshTokenAsPlainText = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
+    [System.Runtime.InteropServices.Marshal]::ZeroFreeBSTR($BSTR)
+
     if ($PSBoundParameters.ContainsKey('RefreshToken')) {
         $body += @{
-            'refresh_token' = $RefreshToken
+            'refresh_token' = $RefreshTokenAsPlainText
             'grant_type'    = 'refresh_token'
         }
     }

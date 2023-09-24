@@ -30,7 +30,7 @@
 
         # The base URI for the GitHub API. This is usually 'https://api.github.com', but can be adjusted if necessary.
         [Parameter()]
-        [string] $ApiBaseUri = $script:Config.App.Api.BaseUri,
+        [string] $ApiBaseUri = $script:Config.ApiBaseUri,
 
         # The specific endpoint for the API call, e.g., '/repos/user/repo/pulls'.
         [Parameter(Mandatory)]
@@ -46,7 +46,7 @@
 
         # The secure token used for authentication in the GitHub API. It should be stored as a SecureString to ensure it's kept safe in memory.
         [Parameter()]
-        [SecureString] $AccessToken = $script:Config.User.Auth.AccessToken.Value,
+        [SecureString] $AccessToken = $script:Config.AccessToken,
 
         # The 'Content-Type' header for the API request. The default is 'application/vnd.github+json'.
         [Parameter()]
