@@ -57,6 +57,8 @@
         [string] $Version = $script:Config.App.Api.Version
     )
 
+    $functionName = $MyInvocation.MyCommand.Name
+
     $headers = @{
         'Content-Type'         = $ContentType
         'X-GitHub-Api-Version' = $Version
@@ -105,12 +107,31 @@
     }
 
     try {
-        Invoke-RestMethod @APICall
+        $allResults = @()
+        do {
+            Invoke-RestMethod @APICall
+
+            $allResults += $response
+
+            # Check for pagination links
+            $nextLink = ($response.Headers.Link -split ',') | Where-Object {
+                $_ -like '*rel="next"*'
+            } | ForEach-Object {
+                # Extract the URL for the next page
+        ($_ -split '<|>')[1]
+            }
+
+            if ($nextLink) {
+                $APICall.Uri = $nextLink
+            }
+
+        } while ($nextLink)
+        $allResults
     } catch [System.Net.WebException] {
-        Write-Error "[Invoke-GitHubAPI] - WebException - $($_.Exception.Message)"
+        Write-Error "[$functionName] - WebException - $($_.Exception.Message)"
         throw $_
     } catch {
-        Write-Error "[Invoke-GitHubAPI] - GeneralException - $($_.Exception.Message)"
+        Write-Error "[$functionName] - GeneralException - $($_.Exception.Message)"
         throw $_
     }
 }
