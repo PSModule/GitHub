@@ -45,11 +45,27 @@
 
     if (-not [string]::IsNullOrEmpty($AccessToken)) {
         switch -Regex ($AccessToken) {
-            '^gh[pou]_' {
-                $authorization = "token $AccessToken"
+            '^ghp_' {
+                $authorization = "token $AccessToken"  # Classic tokens
+                break
+            }
+            '^github_pat_' {
+                $authorization = "token $AccessToken"  # Fine-grained PAT
+                break
             }
             '^ghu_' {
                 $authorization = "Bearer $AccessToken" # GitHubApp access token
+                break
+            }
+            '^gho_' {
+                $authorization = "Bearer $AccessToken" # OAuth app access token
+                break
+            }
+            default {
+                $tokenPrefix = $AccessToken.Substring(0, $AccessToken.LastIndexOf('_') + 1)
+                $errorMessage = "Unexpected AccessToken format: $tokenPrefix*"
+                Write-Error $errorMessage
+                throw $errorMessage
             }
         }
 
