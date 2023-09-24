@@ -6,10 +6,10 @@
         [String] $Method = 'GET',
 
         [Parameter()]
-        [string] $APIBaseURI = $script:Config.App.API.BaseURI,
+        [string] $ApiBaseUri = $script:Config.App.API.BaseURI,
 
         [Parameter(Mandatory)]
-        [string] $APIEndpoint,
+        [string] $ApiEndpoint,
 
         [Parameter(ParameterSetName = 'Body')]
         [hashtable] $Body,
@@ -33,48 +33,33 @@
         [switch] $UseWebRequest
     )
 
-    $headers = @{}
-
-    if (-not [string]::IsNullOrEmpty($ContentType)) {
-        $headers += @{
-            'Content-Type' = $ContentType
-        }
+    $headers = @{
+        'Content-Type'         = $ContentType
+        'X-GitHub-Api-Version' = $Version
+        'Accept'               = $Accept
     }
 
-    if (-not [string]::IsNullOrEmpty($Version)) {
-        $headers += @{
-            'X-GitHub-Api-Version' = $Version
-        }
-    }
-
-    if (-not [string]::IsNullOrEmpty($Accept)) {
-        $headers += @{
-            'Accept' = $Accept
+    # Remove null or empty headers
+    $headers.GetEnumerator() | ForEach-Object {
+        if ([string]::IsNullOrEmpty($_.Value)) {
+            $headers.Remove($_.Key)
         }
     }
 
     if (-not [string]::IsNullOrEmpty($AccessToken)) {
         switch -Regex ($AccessToken) {
-            '^ghp_' {
-                $authorization = "token $AccessToken"  # Classic tokens
-            }
-            '^github_pat_' {
-                $authorization = "token $AccessToken"  # Fine-grained PAT
+            '^gh[pou]_' {
+                $authorization = "token $AccessToken"
             }
             '^ghu_' {
                 $authorization = "Bearer $AccessToken" # GitHubApp access token
             }
-            '^gho_' {
-                $authorization = "Bearer $AccessToken" # OAuth app access token
-            }
         }
 
-        $headers += @{
-            Authorization = $authorization
-        }
+        $headers['Authorization'] = $authorization
     }
 
-    $URI = "$APIBaseURI$($APIEndpoint.Replace('\', '/').Replace('//', '/'))"
+    $URI = "$ApiBaseUri/$($ApiEndpoint.TrimStart('/'))"
 
     $APICall = @{
         Uri     = $URI
@@ -82,16 +67,11 @@
         Headers = $Headers
     }
 
+    # Set body from either Body or Data parameter
     if ($PSBoundParameters.ContainsKey('Body')) {
-        $APICall += @{
-            Body = ($Body | ConvertTo-Json -Depth 100)
-        }
-    }
-
-    if ($PSBoundParameters.ContainsKey('Data')) {
-        $APICall += @{
-            Body = $Data
-        }
+        $APICall['Body'] = ($Body | ConvertTo-Json -Depth 100)
+    } elseif ($PSBoundParameters.ContainsKey('Data')) {
+        $APICall['Body'] = $Data
     }
 
     try {
@@ -103,7 +83,8 @@
 
         Invoke-RestMethod @APICall
     } catch {
-        Write-Error $_
+        $errorMessage = "Error calling GitHub API: $($_.Exception.Message)"
+        Write-Error $errorMessage
         throw $_
     }
 }
