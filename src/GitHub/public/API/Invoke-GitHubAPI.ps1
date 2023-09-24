@@ -23,10 +23,7 @@
         [string] $ContentType = 'application/vnd.github+json',
 
         [Parameter()]
-        [string] $Version = $script:Config.App.Api.Version,
-
-        [Parameter()]
-        [switch] $UseWebRequest
+        [string] $Version = $script:Config.App.Api.Version
     )
 
     # Decrypting the secure token
@@ -80,15 +77,7 @@
     }
 
     try {
-        if ($UseWebrequest) {
-            $response = Invoke-WebRequest @APICall
-            $outputObject = [PSCustomObject]@{
-                Data              = $response.Content | ConvertFrom-Json
-                WebRequestDetails = $response
-            }
-            return $outputObject
-        }
-        return Invoke-RestMethod @APICall
+        Invoke-RestMethod @APICall
     } catch [System.Net.WebException] {
         Write-Error "[Invoke-GitHubAPI] - WebException - $($_.Exception.Message)"
         throw $_
