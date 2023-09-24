@@ -2,15 +2,33 @@ TOPIC
     about_Auth
 
 SHORT DESCRIPTION
+    Describes the authentication methods provided in the PowerShell module for interacting with GitHub's REST API.
 
 LONG DESCRIPTION
+    This module provides several functions to manage authentication for GitHub's REST API. There are primarily two ways to authenticate:
+
+    1. GitHub Device Flow: This method involves a user being prompted to visit a specific URL on GitHub and enter a code that's provided by the module. Once the user enters the code on the GitHub website, the module retrieves the necessary access tokens to make authenticated API requests.
+
+    2. Personal Access Token: The user can also provide a Personal Access Token (PAT) to authenticate. This PAT gives the module the ability to interact with the API on behalf of the user.
+
+    The module also provides a way to refresh the access token and to disconnect or logout from the GitHub account.
 
 EXAMPLES
+    Example 1:
+        Connect-GitHubAccount -AccessToken 'ghp_####'
+        Connects to GitHub using a personal access token (PAT).
+
+    Example 3:
+        Disconnect-GitHubAccount
+        Disconnects from GitHub and removes the current GitHub configuration.
 
 KEYWORDS
-    GitHub
-    PowerShell
-    SecretManagement
-    SecretStore
+    GitHub, Authentication, Device Flow, Personal Access Token, PowerShell, REST API
 
 SEE ALSO
+    For more information on the Device Flow visit:
+    - https://docs.github.com/en/apps/creating-github-apps/writing-code-for-a-github-app/building-a-cli-with-a-github-app
+
+    For information about scopes and other authentication methods on GitHub:
+    - https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps
+    - https://docs.github.com/en/rest/overview/other-authentication-methods#authenticating-for-saml-sso
