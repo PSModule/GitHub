@@ -23,13 +23,14 @@ function Initialize-SecretVault {
     [CmdletBinding()]
     param (
         # The name of the secret vault.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [string] $Name,
 
         # The type of the secret vault.
         [Parameter()]
+        [ValidateSet('Microsoft.PowerShell.SecretStore')]
         [Alias('ModuleName')]
-        [string] $Type
+        [string] $Type = 'Microsoft.PowerShell.SecretStore'
     )
 
     $functionName = $MyInvocation.MyCommand.Name
@@ -52,6 +53,7 @@ function Initialize-SecretVault {
                 Reset-SecretStore @vaultParameters
             }
         }
+        Write-Verbose "[$functionName] - [$Type] - Done"
     } else {
         Write-Verbose "[$functionName] - [$Type] - already registered"
     }
@@ -62,10 +64,11 @@ function Initialize-SecretVault {
         $secretVault = @{
             Name         = $Name
             ModuleName   = $Type
-            DefaultVault = true
+            DefaultVault = $true
             Description  = 'SecretStore'
         }
         Register-SecretVault @secretVault
+        Write-Verbose "[$functionName] - [$Name] - Done"
     } else {
         Write-Verbose "[$functionName] - [$Name] - already registered"
     }
