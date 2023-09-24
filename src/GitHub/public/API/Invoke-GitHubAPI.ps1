@@ -109,16 +109,23 @@
     try {
         $allResults = @()
         do {
-            Invoke-RestMethod @APICall
+            $response = Invoke-RestMethod @APICall
 
-            $allResults += $response
+            # Parse Data
+            if ($response -is [System.Array]) {
+                $allResults += $response
+            } elseif ($response) {
+                $response.PSObject.Properties | Where-Object {
+                    $_.Name -notin @('incomplete_results', 'repository_selection', 'total_count')
+                } | ForEach-Object {
+                    $allResults += $_.Value
+                }
+            }
 
-            # Check for pagination links
-            $nextLink = ($response.Headers.Link -split ',') | Where-Object {
-                $_ -like '*rel="next"*'
-            } | ForEach-Object {
-                # Extract the URL for the next page
-        ($_ -split '<|>')[1]
+            # Extract next page's URL from Link header if exists
+            $nextLink = $null
+            if ($response.Headers.Link -match '<(?<url>[^>]+)>;\s*rel="next"') {
+                $nextLink = $matches['url']
             }
 
             if ($nextLink) {
@@ -126,7 +133,9 @@
             }
 
         } while ($nextLink)
-        $allResults
+
+        return $allResults
+
     } catch [System.Net.WebException] {
         Write-Error "[$functionName] - WebException - $($_.Exception.Message)"
         throw $_
