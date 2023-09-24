@@ -30,31 +30,31 @@
     switch ($Scope) {
         'Auth' {
             $Settings = @{
-                AccessTokenType = ''
-                AccessToken = ''
-                AccessTokenExpirationDate = [datetime]::MinValue
-                DeviceFlowType = ''
-                RefreshToken = ''
+                AccessToken                = [securestring]::new()
+                AccessTokenExpirationDate  = [datetime]::MinValue
+                AccessTokenType            = ''
+                AuthType                   = ''
+                DeviceFlowType             = ''
+                RefreshToken               = [securestring]::new()
                 RefreshTokenExpirationDate = [datetime]::MinValue
-                Scope = ''
-                AuthType = ''
+                Scope                      = ''
             }
         }
         'All' {
             $Settings = @{
-                AccessToken = ''
-                AccessTokenExpirationDate = [datetime]::MinValue
-                AccessTokenType = ''
-                ApiBaseUri = 'https://api.github.com'
-                ApiVersion = '2022-11-28'
-                AuthType = ''
-                DeviceFlowType = ''
-                Owner = ''
-                RefreshToken = ''
+                AccessToken                = [securestring]::new()
+                AccessTokenExpirationDate  = [datetime]::MinValue
+                AccessTokenType            = ''
+                ApiBaseUri                 = 'https://api.github.com'
+                ApiVersion                 = '2022-11-28'
+                AuthType                   = ''
+                DeviceFlowType             = ''
+                Owner                      = ''
+                RefreshToken               = [securestring]::new()
                 RefreshTokenExpirationDate = [datetime]::MinValue
-                Repo = ''
-                Scope = ''
-                UserName = ''
+                Repo                       = ''
+                Scope                      = ''
+                UserName                   = ''
             }
         }
     }
