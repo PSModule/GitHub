@@ -9,13 +9,13 @@
     User = [pscustomobject]@{                           # $script:ConfigTemplate.User
         Auth     = [pscustomobject]@{                   # $script:ConfigTemplate.User.Auth
             AccessToken  = [pscustomobject]@{           # $script:ConfigTemplate.User.Auth.AccessToken
-                Value          = ''                     # $script:ConfigTemplate.User.Auth.AccessToken.Value
+                Value          = [securestring]::new()  # $script:ConfigTemplate.User.Auth.AccessToken.Value
                 ExpirationDate = [datetime]::MinValue   # $script:ConfigTemplate.User.Auth.AccessToken.ExpirationDate
             }
             ClientID     = ''                           # $script:ConfigTemplate.User.Auth.ClientID
             Mode         = ''                           # $script:ConfigTemplate.User.Auth.Mode
             RefreshToken = [pscustomobject]@{
-                Value          = ''                     # $script:ConfigTemplate.User.Auth.RefreshToken.Value
+                Value          = [securestring]::new()  # $script:ConfigTemplate.User.Auth.RefreshToken.Value
                 ExpirationDate = [datetime]::MinValue   # $script:ConfigTemplate.User.Auth.RefreshToken.ExpirationDate
             }
             Scope        = ''                           # $script:ConfigTemplate.User.Auth.Scope
