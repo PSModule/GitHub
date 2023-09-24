@@ -73,11 +73,11 @@
         'DeviceFlow' {
             Write-Verbose 'Logging in using device flow...'
             $clientID = $script:Auth.$Mode.ClientID
-            if ($Mode -ne (Get-GitHubConfig -Name DeviceFlowType)) {
+            if ($Mode -ne (Get-GitHubConfig -Name DeviceFlowType -AsPlainText -ea SilentlyContinue)) {
                 Write-Verbose "Using $Mode authentication..."
                 $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -Scope $Scope
             } else {
-                $accessTokenValidity = (Get-GitHubConfig -Name 'AccessTokenExpirationDate') - (Get-Date)
+                $accessTokenValidity = [datetime](Get-GitHubConfig -Name 'AccessTokenExpirationDate' -AsPlainText) - (Get-Date)
                 $accessTokenIsValid = $accessTokenValidity.Seconds -gt 0
                 $accessTokenValidityText = "$($accessTokenValidity.Hours):$($accessTokenValidity.Minutes):$($accessTokenValidity.Seconds)"
                 if ($accessTokenIsValid) {
@@ -91,7 +91,7 @@
                         $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -RefreshToken (Get-GitHubConfig -Name RefreshToken)
                     }
                 } else {
-                    $refreshTokenValidity = (Get-GitHubConfig -Name 'RefreshTokenExpirationDate') - (Get-Date)
+                    $refreshTokenValidity = [datetime](Get-GitHubConfig -Name 'RefreshTokenExpirationDate' -AsPlainText) - (Get-Date)
                     $refreshTokenIsValid = $refreshTokenValidity.Seconds -gt 0
                     if ($refreshTokenIsValid) {
                         Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline

@@ -30,7 +30,7 @@
 
         # The base URI for the GitHub API. This is usually 'https://api.github.com', but can be adjusted if necessary.
         [Parameter()]
-        [string] $ApiBaseUri = (Get-GitHubConfig -Name ApiBaseUri),
+        [string] $ApiBaseUri = (Get-GitHubConfig -Name ApiBaseUri -AsPlainText),
 
         # The specific endpoint for the API call, e.g., '/repos/user/repo/pulls'.
         [Parameter(Mandatory)]
@@ -54,7 +54,7 @@
 
         # The GitHub API version to be used. By default, it pulls from a configuration script variable.
         [Parameter()]
-        [string] $Version = (Get-GitHubConfig -Name ApiVersion)
+        [string] $Version = (Get-GitHubConfig -Name ApiVersion -AsPlainText)
     )
 
     $functionName = $MyInvocation.MyCommand.Name
