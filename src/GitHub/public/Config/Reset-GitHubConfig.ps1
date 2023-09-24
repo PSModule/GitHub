@@ -20,24 +20,36 @@
     [OutputType([void])]
     [CmdletBinding()]
     param(
+        # Reset the GitHub configuration for a specific scope.
         [Parameter()]
-        [ValidateSet('App', 'App.API', 'App.Defaults', 'All')]
+        [ValidateSet('App', 'App.API', 'App.Defaults', 'User', 'User.Auth', 'User.Defaults', 'All')]
         [string] $Scope = 'All'
     )
 
-    switch($Scope) {
+    Write-Verbose "Resetting GitHub configuration for scope '$Scope'..."
+    switch ($Scope) {
         'App' {
-            $script:Config.App = $script:ConfigTemplate.App
+            $script:Config.App = $script:ConfigTemplate.App | ConvertTo-Json -Depth 100 | ConvertFrom-Json
         }
         'App.API' {
-            $script:Config.App.API = $script:ConfigTemplate.App.API
+            $script:Config.App.API = $script:ConfigTemplate.App.API | ConvertTo-Json -Depth 100 | ConvertFrom-Json
         }
         'App.Defaults' {
-            $script:Config.App.Defaults = $script:ConfigTemplate.App.Defaults
+            $script:Config.App.Defaults = $script:ConfigTemplate.App.Defaults | ConvertTo-Json -Depth 100 | ConvertFrom-Json
+        }
+        'User' {
+            $script:Config.User = $script:ConfigTemplate.User | ConvertTo-Json -Depth 100 | ConvertFrom-Json
+        }
+        'User.Auth' {
+            $script:Config.User.Auth = $script:ConfigTemplate.User.Auth | ConvertTo-Json -Depth 100 | ConvertFrom-Json
+        }
+        'User.Defaults' {
+            $script:Config.User.Defaults = $script:ConfigTemplate.User.Defaults | ConvertTo-Json -Depth 100 | ConvertFrom-Json
         }
         'All' {
-            $script:Config = $script:ConfigTemplateDefaults
+            $script:Config = $script:ConfigTemplate | ConvertTo-Json -Depth 100 | ConvertFrom-Json
         }
     }
+
     Save-GitHubConfig
 }

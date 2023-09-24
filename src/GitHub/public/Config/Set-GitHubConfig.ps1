@@ -20,16 +20,29 @@
 
         # Set the GitHub API Version.
         [Parameter()]
-        [string] $APIVersion
+        [string] $APIVersion,
+
+        # Set the default for the Owner parameter.
+        [Parameter()]
+        [string] $Owner,
+
+        # Set the default for the Repo parameter.
+        [Parameter()]
+        [string] $Repo
     )
 
     switch ($PSBoundParameters.Keys) {
         'APIBaseURI' {
-            $script:ConfigTemplate.App.API.BaseURI = $APIBaseURI
+            $script:Config.App.API.BaseURI = $APIBaseURI
         }
-
         'APIVersion' {
-            $script:ConfigTemplate.App.API.Version = $APIVersion
+            $script:Config.App.API.Version = $APIVersion
+        }
+        'Owner' {
+            $script:Config.User.Defaults.Owner = $Owner
+        }
+        'Repo' {
+            $script:Config.User.Defaults.Repo = $Repo
         }
     }
     Save-GitHubConfig

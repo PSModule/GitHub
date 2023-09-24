@@ -24,15 +24,15 @@ function Restore-GitHubConfig {
     $vault = Get-SecretVault -Name $script:SecretVault.Name
     $vaultExists = $vault.count -eq 1
     if ($vaultExists) {
-        $secretExists = Get-SecretInfo -Name $script:Secret.Name -Vault $script:SecretVault.Name
+        $secretExists = Get-SecretInfo -Name $script:SecretVault.Secret.Name -Vault $script:SecretVault.Name
         if ($secretExists) {
-            $script:Config = Get-Secret -Name $script:Secret.Name -AsPlainText -Vault $script:SecretVault.Name | ConvertFrom-Json
+            $script:Config = Get-Secret -Name $script:SecretVault.Secret.Name -AsPlainText -Vault $script:SecretVault.Name | ConvertFrom-Json
         } else {
-            Write-Warning "Unable to restore configuration."
-            Write-Warning "The secret [$($script:Secret.Name)] does not exist in the vault [$($script:SecretVault.Name)]."
+            Write-Verbose "Unable to restore configuration."
+            Write-Verbose "The secret [$($script:SecretVault.Secret.Name)] does not exist in the vault [$($script:SecretVault.Name)]."
         }
     } else {
-        Write-Warning "Unable to restore configuration."
-        Write-Warning "The vault [$($script:SecretVault.Name)] does not exist."
+        Write-Verbose "Unable to restore configuration."
+        Write-Verbose "The vault [$($script:SecretVault.Name)] does not exist."
     }
 }

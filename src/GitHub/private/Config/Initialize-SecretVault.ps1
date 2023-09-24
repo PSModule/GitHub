@@ -33,9 +33,9 @@ function Initialize-SecretVault {
 
     $secretVault = Get-SecretVault | Where-Object { $_.ModuleName -eq $Type }
     $secretVaultExists = $secretVault.count -ne 0
-    Write-Verbose "A $Name exists: $secretVaultExists"
+    Write-Verbose "[$Name] - exists - [$secretVaultExists]"
     if (-not $secretVaultExists) {
-        Write-Verbose "Registering [$Name]"
+        Write-Verbose "[$Name] - Registering"
 
         switch ($Type) {
             'Microsoft.PowerShell.SecretStore' {
