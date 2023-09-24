@@ -14,12 +14,14 @@
 
     #>
     [Alias('Get-GHConfig')]
-    [OutputType([PSCustomObject])]
+    [Alias('GGHC')]
+    [OutputType([object])]
     [CmdletBinding()]
     param (
-        $Name
+        [string] $Name,
+        [switch] $AsPlainText
     )
-
-    Restore-GitHubConfig
-    $script:Config
+    $prefix = $script:SecretVault.Prefix
+    $Name = "$prefix$Name"
+    Get-Secret -Name $Name -Vault $script:SecretVault.Name -AsPlainText:$AsPlainText
 }

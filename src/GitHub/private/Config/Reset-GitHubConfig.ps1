@@ -29,18 +29,34 @@
     Write-Verbose "Resetting GitHub configuration for scope '$Scope'..."
     switch ($Scope) {
         'Auth' {
-            $script:Config.AccessTokenType = ''
-            $script:Config.AccessToken = [securestring]::new()
-            $script:Config.AccessTokenExpirationDate = [datetime]::MinValue
-            $script:Config.DeviceFlowType = ''
-            $script:Config.RefreshToken = [securestring]::new()
-            $script:Config.RefreshTokenExpirationDate = [datetime]::MinValue
-            $script:Config.Scope = ''
-            $script:Config.AuthType = ''
+            $Settings = @{
+                AccessTokenType = ''
+                AccessToken = ''
+                AccessTokenExpirationDate = [datetime]::MinValue
+                DeviceFlowType = ''
+                RefreshToken = ''
+                RefreshTokenExpirationDate = [datetime]::MinValue
+                Scope = ''
+                AuthType = ''
+            }
         }
         'All' {
-            $script:Config = $script:ConfigTemplate | ConvertTo-Json -Depth 100 | ConvertFrom-Json -AsHashtable
+            $Settings = @{
+                AccessToken = ''
+                AccessTokenExpirationDate = [datetime]::MinValue
+                AccessTokenType = ''
+                ApiBaseUri = 'https://api.github.com'
+                ApiVersion = '2022-11-28'
+                AuthType = ''
+                DeviceFlowType = ''
+                Owner = ''
+                RefreshToken = ''
+                RefreshTokenExpirationDate = [datetime]::MinValue
+                Repo = ''
+                Scope = ''
+                UserName = ''
+            }
         }
     }
-    Save-GitHubConfig
+    Set-GitHubConfig @Settings
 }

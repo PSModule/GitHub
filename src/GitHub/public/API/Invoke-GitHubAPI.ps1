@@ -30,7 +30,7 @@
 
         # The base URI for the GitHub API. This is usually 'https://api.github.com', but can be adjusted if necessary.
         [Parameter()]
-        [string] $ApiBaseUri = $script:Config.ApiBaseUri,
+        [string] $ApiBaseUri = (Get-GitHubConfig -Name ApiBaseUri),
 
         # The specific endpoint for the API call, e.g., '/repos/user/repo/pulls'.
         [Parameter(Mandatory)]
@@ -46,7 +46,7 @@
 
         # The secure token used for authentication in the GitHub API. It should be stored as a SecureString to ensure it's kept safe in memory.
         [Parameter()]
-        [SecureString] $AccessToken = $script:Config.AccessToken,
+        [SecureString] $AccessToken = (Get-GitHubConfig -Name AccessToken),
 
         # The 'Content-Type' header for the API request. The default is 'application/vnd.github+json'.
         [Parameter()]
@@ -54,7 +54,7 @@
 
         # The GitHub API version to be used. By default, it pulls from a configuration script variable.
         [Parameter()]
-        [string] $Version = $script:Config.App.Api.Version
+        [string] $Version = (Get-GitHubConfig -Name ApiVersion)
     )
 
     $functionName = $MyInvocation.MyCommand.Name
