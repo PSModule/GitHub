@@ -4,10 +4,12 @@ Get-Module -Name GitHub -ListAvailable | Uninstall-Module -Force -AllVersions
 Get-SecretVault | Unregister-SecretVault
 
 Get-SecretVault
+Get-SecretInfo
 Get-Module -Name GitHub -ListAvailable
 Install-Module -Name GitHub -Verbose -Force -AllowPrerelease
 
 $VerbosePreference = 'Continue'
+$env:PSModulePath += ';C:\Repos\GitHub\PSModule\Modules\GitHub\outputs'
 Import-Module -Name 'C:\Repos\GitHub\PSModule\Modules\GitHub\src\GitHub\GitHub.psm1' -Verbose -Force
 
 Import-Module -Name GitHub -Verbose
@@ -17,7 +19,6 @@ Get-Variable | Where-Object -Property Module -ne $null | Select-Object Name, Mod
 Connect-GitHubAccount
 Get-GitHubConfig | ConvertTo-Json -Depth 100
 Get-GitHubConfig -Refresh | ConvertTo-Json -Depth 100
-Restore-GitHubConfig -Verbose
 Get-GitHubContext
 
 Connect-GitHubAccount -Refresh -Verbose
