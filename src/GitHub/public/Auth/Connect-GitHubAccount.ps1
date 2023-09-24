@@ -103,7 +103,7 @@
                     }
                 }
             }
-            Reset-GitHubConfig -Auth
+            Reset-GitHubConfig -Scope 'Auth'
             $script:Config.DeviceFlowType = $Mode
             $script:AuthType = $AuthType
             $script:AccessTokenType = $tokenResponse.access_token -replace '_.*$', '_*'
@@ -115,7 +115,7 @@
         }
         'PAT' {
             Write-Verbose 'Logging in using personal access token...'
-            Reset-GitHubConfig -Auth
+            Reset-GitHubConfig -Scope 'Auth'
             $script:Config.AuthType = $AuthType
             Write-Host '! ' -ForegroundColor DarkYellow -NoNewline
             $script:Config.AccessToken = Read-Host -Prompt 'Enter your personal access token' -AsSecureString
@@ -129,7 +129,7 @@
         }
         'sPAT' {
             Write-Verbose 'Logging in using system access token...'
-            Reset-GitHubConfig -Auth
+            Reset-GitHubConfig -Scope 'Auth'
             $script:AuthType = 'sPAT'
             $script:Config.AccessToken = ConvertTo-SecureString -AsPlainText $envVar.Value
             $prefix = $envVar.Value -replace '_.*$', '_*'
