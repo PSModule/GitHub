@@ -107,18 +107,19 @@
     }
 
     try {
-        $allResults = @()
         do {
             $response = Invoke-RestMethod @APICall
 
             # Parse Data
             if ($response -is [System.Array]) {
-                $allResults += $response
+                $response | ForEach-Object {
+                    Write-Output $_
+                }
             } elseif ($response) {
                 $response.PSObject.Properties | Where-Object {
                     $_.Name -notin @('incomplete_results', 'repository_selection', 'total_count')
                 } | ForEach-Object {
-                    $allResults += $_.Value
+                    Write-Output $_.Value
                 }
             }
 
@@ -133,8 +134,6 @@
             }
 
         } while ($nextLink)
-
-        return $allResults
 
     } catch [System.Net.WebException] {
         Write-Error "[$functionName] - WebException - $($_.Exception.Message)"
