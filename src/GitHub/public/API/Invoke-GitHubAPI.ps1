@@ -2,8 +2,7 @@
     [CmdletBinding()]
     param (
         [Parameter()]
-        [ValidateSet('GET', 'POST', 'PATCH', 'DELETE', 'PUT')]
-        [String] $Method = 'GET',
+        [Microsoft.PowerShell.Commands.WebRequestMethod] $Method = 'GET',
 
         [Parameter()]
         [string] $ApiBaseUri = $script:Config.App.Api.BaseUri,
@@ -18,7 +17,7 @@
         [string] $Accept,
 
         [Parameter()]
-        [string] $AccessToken = $script:Config.User.Auth.AccessToken.Value,
+        [SecureString] $SecureToken = $script:Config.User.Auth.AccessToken.Value,
 
         [Parameter()]
         [string] $ContentType = 'application/vnd.github+json',
@@ -29,6 +28,11 @@
         [Parameter()]
         [switch] $UseWebRequest
     )
+
+    # Decrypting the secure token
+    $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($SecureToken)
+    $AccessToken = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
+    [System.Runtime.InteropServices.Marshal]::ZeroFreeBSTR($BSTR)  # Clear out the plain text from memory
 
     $headers = @{
         'Content-Type'         = $ContentType
@@ -76,13 +80,20 @@
     }
 
     try {
-        if ($UseWebRequest) {
-            return Invoke-WebRequest @APICall
+        if ($UseWebrequest) {
+            $response = Invoke-WebRequest @APICall
+            $outputObject = [PSCustomObject]@{
+                Data              = $response.Content | ConvertFrom-Json
+                WebRequestDetails = $response
+            }
+            return $outputObject
         }
-        Invoke-RestMethod @APICall
+        return Invoke-RestMethod @APICall
+    } catch [System.Net.WebException] {
+        Write-Error "[Invoke-GitHubAPI] - WebException - $($_.Exception.Message)"
+        throw $_
     } catch {
-        $errorMessage = "Error calling GitHub Api: $($_.Exception.Message)"
-        Write-Error $errorMessage
+        Write-Error "[Invoke-GitHubAPI] - GeneralException - $($_.Exception.Message)"
         throw $_
     }
 }
