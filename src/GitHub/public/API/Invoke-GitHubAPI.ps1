@@ -59,21 +59,28 @@
 
     $functionName = $MyInvocation.MyCommand.Name
 
-    $headers = @{
-        'Content-Type'         = $ContentType
-        'X-GitHub-Api-Version' = $Version
-        'Accept'               = $Accept
+    $headers = @{}
+
+    if (-not [string]::IsNullOrEmpty($ContentType)) {
+        $headers.'Content-Type' = $ContentType
     }
 
-    # Filter out null or empty headers
-    $headers = $headers.GetEnumerator() | Where-Object { -not [string]::IsNullOrEmpty($_.Value) } | ForEach-Object {
-        @{ $_.Key = $_.Value }
+    if (-not [string]::IsNullOrEmpty($Accept)) {
+        $headers.Accept = $Accept
+    }
+
+    if (-not [string]::IsNullOrEmpty($Version)) {
+        $headers.'X-GitHub-Api-Version' = $Version
     }
 
     $AccessTokenAsPlainText = ConvertFrom-SecureString $AccessToken -AsPlainText
-    $authorization = switch -Regex ($AccessTokenAsPlainText) {
-        '^ghp_|^github_pat_' { "token $AccessTokenAsPlainText" }
-        '^ghu_|^gho_' { "Bearer $AccessTokenAsPlainText" }
+    switch -Regex ($AccessTokenAsPlainText) {
+        '^ghp_|^github_pat_' {
+            $headers.authorization = "token $AccessTokenAsPlainText"
+        }
+        '^ghu_|^gho_' {
+            $headers.authorization = "Bearer $AccessTokenAsPlainText"
+        }
         default {
             $tokenPrefix = $AccessTokenAsPlainText -replace '_.*$', '_*'
             $errorMessage = "Unexpected AccessToken format: $tokenPrefix"
@@ -81,7 +88,6 @@
             throw $errorMessage
         }
     }
-    $headers.Authorization = $authorization
 
     $URI = ("$ApiBaseUri/" -replace '/$', '') + ("/$ApiEndpoint" -replace '^/', '')
 
