@@ -23,12 +23,11 @@ function Initialize-SecretVault {
     [CmdletBinding()]
     param (
         # The name of the secret vault.
-        [Parameter(Mandatory)]
-        [string] $Name,
+        [Parameter()]
+        [string] $Name = 'SecretStore',
 
         # The type of the secret vault.
         [Parameter()]
-        [ValidateSet('Microsoft.PowerShell.SecretStore')]
         [Alias('ModuleName')]
         [string] $Type = 'Microsoft.PowerShell.SecretStore'
     )
