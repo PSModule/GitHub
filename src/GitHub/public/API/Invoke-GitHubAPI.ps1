@@ -6,7 +6,7 @@
         [String] $Method = 'GET',
 
         [Parameter()]
-        [string] $ApiBaseUri = $script:Config.App.Api.BaseURI,
+        [string] $ApiBaseUri = $script:Config.App.Api.BaseUri,
 
         [Parameter(Mandatory)]
         [string] $ApiEndpoint,
@@ -41,26 +41,21 @@
         @{ $_.Key = $_.Value }
     }
 
-    switch -Regex ($AccessToken) {
-        '^ghp_|^github_pat_' {
-            $authorization = "token $AccessToken"
-            break
-        }
-        '^ghu_|^gho_' {
-            $authorization = "Bearer $AccessToken"
-            break
-        }
-        default {
-            if (-not [string]::IsNullOrEmpty($AccessToken)) {
+    if (-not [string]::IsNullOrEmpty($AccessToken)) {
+        switch -Regex ($AccessToken) {
+            '^ghp_|^github_pat_' {
+                $authorization = "token $AccessToken"
+            }
+            '^ghu_|^gho_' {
+                $authorization = "Bearer $AccessToken"
+            }
+            default {
                 $tokenPrefix = $AccessToken -replace '_.*$', '_*'
                 $errorMessage = "Unexpected AccessToken format: $tokenPrefix"
                 Write-Error $errorMessage
                 throw $errorMessage
             }
         }
-    }
-
-    if ($null -ne $authorization) {
         $headers['Authorization'] = $authorization
     }
 
