@@ -70,25 +70,18 @@
         @{ $_.Key = $_.Value }
     }
 
-    # Authorization handling
-    $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($AccessToken)
-    try {
-        $AccessTokenAsPlainText = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
-
-        $authorization = switch -Regex ($AccessTokenAsPlainText) {
-            '^ghp_|^github_pat_' { "token $AccessTokenAsPlainText" }
-            '^ghu_|^gho_' { "Bearer $AccessTokenAsPlainText" }
-            default {
-                $tokenPrefix = $AccessTokenAsPlainText -replace '_.*$', '_*'
-                $errorMessage = "Unexpected AccessToken format: $tokenPrefix"
-                Write-Error $errorMessage
-                throw $errorMessage
-            }
+    $AccessTokenAsPlainText = ConvertFrom-SecureString $AccessToken -AsPlainText
+    $authorization = switch -Regex ($AccessTokenAsPlainText) {
+        '^ghp_|^github_pat_' { "token $AccessTokenAsPlainText" }
+        '^ghu_|^gho_' { "Bearer $AccessTokenAsPlainText" }
+        default {
+            $tokenPrefix = $AccessTokenAsPlainText -replace '_.*$', '_*'
+            $errorMessage = "Unexpected AccessToken format: $tokenPrefix"
+            Write-Error $errorMessage
+            throw $errorMessage
         }
-        $headers['Authorization'] = $authorization
-    } finally {
-        [System.Runtime.InteropServices.Marshal]::ZeroFreeBSTR($BSTR)
     }
+    $headers['Authorization'] = $authorization
 
     $URI = ("$ApiBaseUri/" -replace '/$', '') + ("/$ApiEndpoint" -replace '^/', '')
 

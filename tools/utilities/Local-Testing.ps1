@@ -16,11 +16,9 @@ Import-Module -Name GitHub -Verbose
 Clear-Host
 Get-Command -Module GitHub
 Get-Variable | Where-Object -Property Module -NE $null | Select-Object Name, Module, ModuleName
-Connect-GitHubAccount
+Connect-GitHubAccount -Mode OAuthApp
 Get-GitHubConfig -Name AccessToken -AsPlainText
 Get-GitHubConfig -Name AccessTokenExpirationDate -AsPlainText
 Get-GitHubConfig -Name RefreshToken -AsPlainText
 Get-GitHubConfig -Name RefreshTokenExpirationDate -AsPlainText
-
 Disconnect-GitHubAccount -Verbose
-Reset-GitHubConfig -Verbose
