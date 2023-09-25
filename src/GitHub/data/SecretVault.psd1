@@ -1,7 +1,5 @@
 ﻿@{
-    Name   = 'GitHub'                           # $script:SecretVault.Name
+    Name   = 'SecretStore'                      # $script:SecretVault.Name
     Type   = 'Microsoft.PowerShell.SecretStore' # $script:SecretVault.Type
-    Secret = @{
-        Name = 'Config'                           # $script:SecretVault.Secret.Name
-    }
+    Prefix = 'GHPS_'                            # $script:SecretVault.Prefix
 }

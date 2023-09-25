@@ -33,7 +33,7 @@
 
         # The refresh token to use for re-authentication.
         [Parameter()]
-        [string] $RefreshToken
+        [securestring] $RefreshToken
     )
 
     do {

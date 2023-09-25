@@ -16,26 +16,27 @@ function Initialize-SecretVault {
     Initializes a secret vault named 'SecretStore' using the 'Microsoft.PowerShell.SecretStore' module.
 
     .NOTES
-    For more information aobut secret vaults, see https://learn.microsoft.com/en-us/powershell/utility-modules/secretmanagement/overview?view=ps-modules
+    For more information about secret vaults, see https://learn.microsoft.com/en-us/powershell/utility-modules/secretmanagement/overview?view=ps-modules
     #>
+
     [OutputType([void])]
     [CmdletBinding()]
     param (
         # The name of the secret vault.
         [Parameter()]
-        [string] $Name,
+        [string] $Name = 'SecretStore',
 
         # The type of the secret vault.
         [Parameter()]
         [Alias('ModuleName')]
-        [string] $Type
+        [string] $Type = 'Microsoft.PowerShell.SecretStore'
     )
 
-    $secretVault = Get-SecretVault | Where-Object { $_.ModuleName -eq $Type }
-    $secretVaultExists = $secretVault.count -ne 0
-    Write-Verbose "[$Name] - exists - [$secretVaultExists]"
-    if (-not $secretVaultExists) {
-        Write-Verbose "[$Name] - Registering"
+    $functionName = $MyInvocation.MyCommand.Name
+
+    $vault = Get-SecretVault | Where-Object { $_.ModuleName -eq $Type }
+    if (-not $vault) {
+        Write-Verbose "[$functionName] - [$Type] - Registering"
 
         switch ($Type) {
             'Microsoft.PowerShell.SecretStore' {
@@ -51,11 +52,14 @@ function Initialize-SecretVault {
                 Reset-SecretStore @vaultParameters
             }
         }
+        Write-Verbose "[$functionName] - [$Type] - Done"
+    } else {
+        Write-Verbose "[$functionName] - [$Type] - already registered"
     }
 
     $secretStore = Get-SecretVault | Where-Object { $_.Name -eq $Name }
-    $secretStoreExists = $secretStore.count -ne 0
-    if (-not $secretStoreExists) {
+    if (-not $secretStore) {
+        Write-Verbose "[$functionName] - [$Name] - Registering"
         $secretVault = @{
             Name         = $Name
             ModuleName   = $Type
@@ -63,5 +67,8 @@ function Initialize-SecretVault {
             Description  = 'SecretStore'
         }
         Register-SecretVault @secretVault
+        Write-Verbose "[$functionName] - [$Name] - Done"
+    } else {
+        Write-Verbose "[$functionName] - [$Name] - already registered"
     }
 }

@@ -1,14 +1,12 @@
-﻿Write-Verbose "Initializing GitHub module..." -Verbose
+﻿$scriptFilePath = $MyInvocation.MyCommand.Path
 
-$script:Config = $script:ConfigTemplate | ConvertTo-Json -Depth 100 | ConvertFrom-Json
+Write-Verbose "[$scriptFilePath] - Initializing GitHub module..." -Verbose
+
 Initialize-SecretVault -Name $script:SecretVault.Name -Type $script:SecretVault.Type
-Restore-GitHubConfig
 
-if (-not [string]::IsNullOrEmpty($env:GH_TOKEN)) {
-    Write-Verbose 'Logging on using GH_TOKEN'
-    Connect-GitHubAccount -AccessToken $env:GH_TOKEN
-}
-if (-not [string]::IsNullOrEmpty($env:GITHUB_TOKEN)) {
-    Write-Verbose 'Logging on using GITHUB_TOKEN'
-    Connect-GitHubAccount -AccessToken $env:GITHUB_TOKEN
+# Autologon if a token is present in environment variables
+$envVar = Get-ChildItem -Path 'Env:' | Where-Object Name -In 'GH_TOKEN', 'GITHUB_TOKEN' | Select-Object -First 1
+$envVarPresent = $envVar.count -gt 0
+if ($envVarPresent) {
+    Connect-GitHubAccount
 }

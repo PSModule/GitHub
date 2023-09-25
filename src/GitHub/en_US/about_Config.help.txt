@@ -53,8 +53,6 @@ FUNCTIONS
 
     - Get-GitHubConfig: Fetches the current module configuration.
     - Reset-GitHubConfig: Resets all or specific sections to its default values.
-    - Restore-GitHubConfig: Restores the configuration from the secret vault.
-    - Save-GitHubConfig: Saves the current configuration to the secret vault.
     - Set-GitHubConfig: Allows setting specific elements of the configuration.
 
 CONFIGURATION
@@ -87,21 +85,10 @@ EXAMPLES
 
     -------------------------- EXAMPLE 3 --------------------------
 
-    Restore-GitHubConfig
+    Reset-GitHubConfig -Scope Auth
 
-    This command restores the GitHub configuration from the secret vault.
+    This command resets the Auth related settings of the GitHub configuration to its default values.
 
-    -------------------------- EXAMPLE 4 --------------------------
-
-    Reset-GitHubConfig -Scope 'App.API'
-
-    This command resets the 'App.API' section of the GitHub configuration to its default values.
-
-    -------------------------- EXAMPLE 5 --------------------------
-
-    Save-GitHubConfig
-
-    This command saves the current GitHub configuration to the secret vault.
 
 KEYWORDS
 

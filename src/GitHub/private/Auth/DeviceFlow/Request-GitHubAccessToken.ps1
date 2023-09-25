@@ -35,7 +35,7 @@
             Mandatory,
             ParameterSetName = 'RefreshToken'
         )]
-        [string] $RefreshToken
+        [securestring] $RefreshToken
     )
 
     $body = @{
@@ -44,7 +44,7 @@
 
     if ($PSBoundParameters.ContainsKey('RefreshToken')) {
         $body += @{
-            'refresh_token' = $RefreshToken
+            'refresh_token' = (ConvertFrom-SecureString $RefreshToken -AsPlainText)
             'grant_type'    = 'refresh_token'
         }
     }
@@ -67,6 +67,8 @@
         Write-Verbose ($RESTParams.GetEnumerator() | Out-String)
 
         $tokenResponse = Invoke-RestMethod @RESTParams -Verbose:$false
+
+        Write-Verbose ($tokenResponse | ConvertTo-Json | Out-String)
         return $tokenResponse
     } catch {
         Write-Error $_
