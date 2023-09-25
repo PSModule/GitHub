@@ -1,6 +1,4 @@
-﻿#Requires -Modules GitHub
-
-function Get-GitHubMeta {
+﻿function Get-GitHubMeta {
     <#
         .SYNOPSIS
         Get GitHub meta information.

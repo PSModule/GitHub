@@ -1,6 +1,4 @@
-﻿#Requires -Modules GitHub
-
-function Get-GitHubOctocat {
+﻿function Get-GitHubOctocat {
     <#
         .SYNOPSIS
         Get Octocat.

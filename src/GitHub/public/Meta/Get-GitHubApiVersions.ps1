@@ -1,6 +1,4 @@
-﻿#Requires -Modules GitHub
-
-function Get-GitHubApiVersions {
+﻿function Get-GitHubApiVersions {
     <#
         .SYNOPSIS
         Get all API versions.

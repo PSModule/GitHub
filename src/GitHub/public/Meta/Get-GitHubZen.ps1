@@ -1,6 +1,4 @@
-﻿#Requires -Modules GitHub
-
-function Get-GitHubZen {
+﻿function Get-GitHubZen {
     <#
     .SYNOPSIS
     Get the Zen of GitHub.

@@ -1,6 +1,4 @@
-﻿#Requires -Modules GitHub
-
-function Get-GitHubRoot {
+﻿function Get-GitHubRoot {
     <#
         .SYNOPSIS
         GitHub API Root.
