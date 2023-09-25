@@ -68,29 +68,11 @@
     $functionName = $MyInvocation.MyCommand.Name
 
     $headers = @{
-
         Accept                 = $Accept
         'X-GitHub-Api-Version' = $Version
     }
 
     ($headers.GetEnumerator() | Where-Object { -not $_.Value }) | ForEach-Object { $headers.Remove($_.Name) }
-
-    $AccessTokenAsPlainText = ConvertFrom-SecureString $AccessToken -AsPlainText
-    # Swap out this by using the -Authentication Bearer -Token $AccessToken
-    switch -Regex ($AccessTokenAsPlainText) {
-        '^ghp_|^github_pat_' {
-            $headers.authorization = "Bearer $AccessTokenAsPlainText"
-        }
-        '^ghu_|^gho_' {
-            $headers.authorization = "Bearer $AccessTokenAsPlainText"
-        }
-        default {
-            $tokenPrefix = $AccessTokenAsPlainText -replace '_.*$', '_*'
-            $errorMessage = "Unexpected AccessToken format: $tokenPrefix"
-            Write-Error $errorMessage
-            throw $errorMessage
-        }
-    }
 
     $URI = ("$ApiBaseUri/" -replace '/$', '') + ("/$ApiEndpoint" -replace '^/', '')
 
@@ -98,6 +80,8 @@
         Uri                     = $URI
         Method                  = $Method
         Headers                 = $Headers
+        Authentication          = 'Bearer'
+        Token                   = $AccessToken
         ContentType             = $ContentType
         HttpVersion             = $HttpVersion
         FollowRelLink           = $FollowRelLink
@@ -114,14 +98,9 @@
     }
 
     try {
-
         Invoke-RestMethod @APICall | Write-Output
-
-        Write-Verbose ($ResponseHeaders | ConvertTo-Json -Depth 100)
         Write-Verbose ($StatusCode | ConvertTo-Json -Depth 100)
-
-
-
+        Write-Verbose ($ResponseHeaders | ConvertTo-Json -Depth 100)
     } catch [System.Net.WebException] {
         Write-Error "[$functionName] - WebException - $($_.Exception.Message)"
         throw $_
