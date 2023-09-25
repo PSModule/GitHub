@@ -7,7 +7,7 @@ Write-Verbose "[$scriptName] - Importing module"
 #region - Importing data files
 Write-Verbose "[$scriptName] - [data] - Processing folder"
 $dataFolder = Join-Path $PSScriptRoot 'data'
-Get-ChildItem -Path $dataFolder -Recurse -Force -Include '*.psd1' | ForEach-Object {
+Get-ChildItem -Path $dataFolder -Recurse -Force -Include '*.psd1' -ErrorAction SilentlyContinue | ForEach-Object {
     Write-Verbose "[$scriptName] - [data] - [$($_.Name)] - Importing data file"
     New-Variable -Name $_.BaseName -Value (Import-PowerShellDataFile -Path $_.FullName) -Force
     Write-Verbose "[$scriptName] - [data] - [$($_.Name)] - Done"
