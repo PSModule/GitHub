@@ -95,18 +95,15 @@
     $URI = ("$ApiBaseUri/" -replace '/$', '') + ("/$ApiEndpoint" -replace '^/', '')
 
     $APICall = @{
-        Uri                = $URI
-        Method             = $Method
-        Headers            = $Headers
-        ContentType        = $ContentType
-        HttpVersion        = $HttpVersion
-        FollowRelLink      = $FollowRelLink
-        SessionVariable    = 'Session'
-        StatusCodeVariable = 'StatusCode'
+        Uri                     = $URI
+        Method                  = $Method
+        Headers                 = $Headers
+        ContentType             = $ContentType
+        HttpVersion             = $HttpVersion
+        FollowRelLink           = $FollowRelLink
+        StatusCodeVariable      = 'StatusCode'
         ResponseHeadersVariable = 'ResponseHeaders'
     }
-
-
 
     if ($Body) {
         if ($Body -is [string]) {
@@ -119,6 +116,11 @@
     try {
 
         Invoke-RestMethod @APICall | Write-Output
+
+        Write-Verbose ($ResponseHeaders | ConvertTo-Json -Depth 100)
+        Write-Verbose ($StatusCode | ConvertTo-Json -Depth 100)
+
+
 
     } catch [System.Net.WebException] {
         Write-Error "[$functionName] - WebException - $($_.Exception.Message)"

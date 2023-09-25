@@ -39,7 +39,7 @@
     }
 
     $inputObject = @{
-        APIEndpoint = "/octocat?s=$query"
+        APIEndpoint = "/octocat"
         Method      = 'GET'
         Body        = $body
     }
