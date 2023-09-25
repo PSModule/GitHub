@@ -11,7 +11,7 @@
         Method      = 'GET'
     }
 
-    $response = Invoke-GitHubAPI @InputObject -AccessToken $null
+    $response = Invoke-GitHubAPI @InputObject
 
     $response
 }

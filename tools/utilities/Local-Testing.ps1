@@ -24,4 +24,5 @@ Get-GitHubConfig -Name RefreshToken -AsPlainText
 Get-GitHubConfig -Name RefreshTokenExpirationDate -AsPlainText
 Get-GitHubConfig -Name ApiBaseUri -AsPlainText
 Invoke-GitHubAPI -Method Get -ApiEndpoint /
+Get-GitHubMeta
 Disconnect-GitHubAccount -Verbose
