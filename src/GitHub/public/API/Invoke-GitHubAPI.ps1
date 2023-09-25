@@ -112,14 +112,15 @@
             # Parse Data
             if ($response -is [System.Array]) {
                 $response | ForEach-Object {
-                    Write-Output $_
+                    $_
                 }
             } elseif ($response) {
-                $response.PSObject.Properties | Where-Object {
-                    $_.Name -notin @('incomplete_results', 'repository_selection', 'total_count')
-                } | ForEach-Object {
-                    Write-Output $_.Value
-                }
+                $_
+                # $response.PSObject.Properties | Where-Object {
+                #     $_.Name -notin @('incomplete_results', 'repository_selection', 'total_count')
+                # } | ForEach-Object {
+                #     Write-Output $_.Value
+                # }
             }
 
             # Extract next page's URL from Link header if exists

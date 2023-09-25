@@ -109,21 +109,25 @@
                     $settings = @{
                         AccessToken                = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
                         AccessTokenExpirationDate  = (Get-Date).AddSeconds($tokenResponse.expires_in)
+                        AccessTokenType            = $tokenResponse.access_token -replace '_.*$', '_*'
+                        ApiBaseUri                 = 'https://api.github.com'
+                        ApiVersion                 = '2022-11-28'
+                        AuthType                   = $AuthType
+                        DeviceFlowType             = $Mode
                         RefreshToken               = ConvertTo-SecureString -AsPlainText $tokenResponse.refresh_token
                         RefreshTokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.refresh_token_expires_in)
                         Scope                      = $tokenResponse.scope
-                        AuthType                   = $AuthType
-                        AccessTokenType            = $tokenResponse.access_token -replace '_.*$', '_*'
-                        DeviceFlowType             = $Mode
                     }
                 }
                 'OAuthApp' {
                     $settings = @{
-                        AccessToken                = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
-                        Scope                      = $tokenResponse.scope
-                        AuthType                   = $AuthType
-                        AccessTokenType            = $tokenResponse.access_token -replace '_.*$', '_*'
-                        DeviceFlowType             = $Mode
+                        AccessToken     = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
+                        AccessTokenType = $tokenResponse.access_token -replace '_.*$', '_*'
+                        ApiBaseUri      = 'https://api.github.com'
+                        ApiVersion      = '2022-11-28'
+                        AuthType        = $AuthType
+                        DeviceFlowType  = $Mode
+                        Scope           = $tokenResponse.scope
                     }
                 }
             }
@@ -141,9 +145,11 @@
                 Write-Host "Unexpected access token format: $prefix"
             }
             $settings = @{
-                AuthType        = $AuthType
                 AccessToken     = $accessToken
                 AccessTokenType = $prefix
+                ApiBaseUri      = 'https://api.github.com'
+                ApiVersion      = '2022-11-28'
+                AuthType        = $AuthType
             }
             Set-GitHubConfig @settings
             break
@@ -153,9 +159,11 @@
             Reset-GitHubConfig -Scope 'Auth'
             $prefix = $envVar.Value -replace '_.*$', '_*'
             $settings = @{
-                AuthType        = 'sPAT'
                 AccessToken     = ConvertTo-SecureString -AsPlainText $envVar.Value
                 AccessTokenType = $prefix
+                ApiBaseUri      = 'https://api.github.com'
+                ApiVersion      = '2022-11-28'
+                AuthType        = 'sPAT'
             }
             Set-GitHubConfig @settings
         }
