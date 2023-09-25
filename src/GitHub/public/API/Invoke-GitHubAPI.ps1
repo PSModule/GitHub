@@ -105,23 +105,16 @@
         }
     }
 
+    Write-Verbose "[$functionName] - API call: "
+    Write-Verbose ($APICall | ConvertTo-Json -Depth 100)
+
     try {
         do {
             $response = Invoke-RestMethod @APICall
 
-            # Parse Data
-            if ($response -is [System.Array]) {
-                $response | ForEach-Object {
-                    $_
-                }
-            } elseif ($response) {
-                $_
-                # $response.PSObject.Properties | Where-Object {
-                #     $_.Name -notin @('incomplete_results', 'repository_selection', 'total_count')
-                # } | ForEach-Object {
-                #     Write-Output $_.Value
-                # }
-            }
+            $response
+            Write-Verbose "[$functionName] - Response: "
+            Write-Verbose ($response | ConvertTo-Json -Depth 100)
 
             # Extract next page's URL from Link header if exists
             $nextLink = $null
