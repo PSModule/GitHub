@@ -82,6 +82,10 @@
 
     $prefix = $script:SecretVault.Prefix
 
+    #All timestamps return in UTC time, ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ
+    #Also: use Set-Secret -NAme ... -Value ... -Metadata @{Type = 'DateTime'} to set a datetime value
+    # https://learn.microsoft.com/en-us/powershell/utility-modules/secretmanagement/how-to/manage-secretstore?view=ps-modules#adding-metadata
+
     switch ($PSBoundParameters.Keys) {
         'AccessToken' {
             Set-Secret -Name "$prefix`AccessToken" -SecureStringSecret $AccessToken -Vault $script:SecretVault.Name

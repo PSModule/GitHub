@@ -138,14 +138,15 @@
             Write-Verbose 'Logging in using personal access token...'
             Reset-GitHubConfig -Scope 'Auth'
             Write-Host '! ' -ForegroundColor DarkYellow -NoNewline
-            $accessToken = Read-Host -Prompt 'Enter your personal access token' -AsSecureString
-            $prefix = (ConvertFrom-SecureString $accessToken -AsPlainText) -replace '_.*$', '_*'
+            Start-Process 'https://github.com/settings/tokens'
+            $accessTokenValue = Read-Host -Prompt 'Enter your personal access token' -AsSecureString
+            $prefix = (ConvertFrom-SecureString $accessTokenValue -AsPlainText) -replace '_.*$', '_*'
             if ($prefix -notmatch '^ghp_|^github_pat_') {
                 Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
                 Write-Host "Unexpected access token format: $prefix"
             }
             $settings = @{
-                AccessToken     = $accessToken
+                AccessToken     = $accessTokenValue
                 AccessTokenType = $prefix
                 ApiBaseUri      = 'https://api.github.com'
                 ApiVersion      = '2022-11-28'

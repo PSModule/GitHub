@@ -44,6 +44,14 @@
         [Parameter()]
         [string] $Accept,
 
+        # Specifies the HTTP version used for the request.
+        [Parameter()]
+        $HttpVersion = '2.0',
+
+        # Support Pagination Relation Links per RFC5988.
+        [Parameter()]
+        $FollowRelLink = $true,
+
         # The secure token used for authentication in the GitHub API. It should be stored as a SecureString to ensure it's kept safe in memory.
         [Parameter()]
         [SecureString] $AccessToken = (Get-GitHubConfig -Name AccessToken),
@@ -59,24 +67,19 @@
 
     $functionName = $MyInvocation.MyCommand.Name
 
-    $headers = @{}
+    $headers = @{
 
-    if (-not [string]::IsNullOrEmpty($ContentType)) {
-        $headers.'Content-Type' = $ContentType
+        Accept                 = $Accept
+        'X-GitHub-Api-Version' = $Version
     }
 
-    if (-not [string]::IsNullOrEmpty($Accept)) {
-        $headers.Accept = $Accept
-    }
-
-    if (-not [string]::IsNullOrEmpty($Version)) {
-        $headers.'X-GitHub-Api-Version' = $Version
-    }
+    ($headers.GetEnumerator() | Where-Object { -not $_.Value }) | ForEach-Object { $headers.Remove($_.Name) }
 
     $AccessTokenAsPlainText = ConvertFrom-SecureString $AccessToken -AsPlainText
+    # Swap out this by using the -Authentication Bearer -Token $AccessToken
     switch -Regex ($AccessTokenAsPlainText) {
         '^ghp_|^github_pat_' {
-            $headers.authorization = "token $AccessTokenAsPlainText"
+            $headers.authorization = "Bearer $AccessTokenAsPlainText"
         }
         '^ghu_|^gho_' {
             $headers.authorization = "Bearer $AccessTokenAsPlainText"
@@ -92,10 +95,18 @@
     $URI = ("$ApiBaseUri/" -replace '/$', '') + ("/$ApiEndpoint" -replace '^/', '')
 
     $APICall = @{
-        Uri     = $URI
-        Method  = $Method
-        Headers = $Headers
+        Uri                = $URI
+        Method             = $Method
+        Headers            = $Headers
+        ContentType        = $ContentType
+        HttpVersion        = $HttpVersion
+        FollowRelLink      = $FollowRelLink
+        SessionVariable    = 'Session'
+        StatusCodeVariable = 'StatusCode'
+        ResponseHeadersVariable = 'ResponseHeaders'
     }
+
+
 
     if ($Body) {
         if ($Body -is [string]) {
@@ -105,29 +116,9 @@
         }
     }
 
-    # Write-Verbose "[$functionName] - API call: "
-    # Write-Verbose ($APICall | ConvertTo-Json -Depth 100)
-
     try {
-        do {
-            $response = Invoke-RestMethod @APICall
 
-            $response
-
-            # Write-Verbose "[$functionName] - Response: "
-            # Write-Verbose ($response | ConvertTo-Json -Depth 100)
-
-            # Extract next page's URL from Link header if exists
-            $nextLink = $null
-            if ($response.Headers.Link -match '<(?<url>[^>]+)>;\s*rel="next"') {
-                $nextLink = $matches['url']
-            }
-
-            if ($nextLink) {
-                $APICall.Uri = $nextLink
-            }
-
-        } while ($nextLink)
+        Invoke-RestMethod @APICall | Write-Output
 
     } catch [System.Net.WebException] {
         Write-Error "[$functionName] - WebException - $($_.Exception.Message)"

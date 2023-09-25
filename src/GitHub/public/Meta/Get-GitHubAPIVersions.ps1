@@ -1,31 +1,29 @@
-﻿<#
-    .NOTES
-    https://docs.github.com/en/rest/meta/meta?apiVersion=2022-11-28#get-all-api-versions
-#>
-function Get-GitHubApiVersions {
+﻿function Get-GitHubApiVersions {
     <#
-    .SYNOPSIS
-    Get all supported GitHub API versions.
+        .SYNOPSIS
+        Get all supported GitHub API versions.
 
-    .DESCRIPTION
-    Long description
+        .DESCRIPTION
+        Get all supported GitHub API versions.
 
-    .EXAMPLE
-    An example
+        .EXAMPLE
+        Get-GitHubApiVersions
 
-    .NOTES
-    General notes
+        Get all supported GitHub API versions.
+
+        .NOTES
+        https://docs.github.com/en/rest/meta/meta?apiVersion=2022-11-28#get-all-api-versions
     #>
     [OutputType([string[]])]
     [CmdletBinding()]
     param ()
 
-    $InputObject = @{
-        APIEndpoint = '/versions'
+    $inputObject = @{
+        ApiEndpoint = '/versions'
         Method      = 'GET'
     }
 
-    $response = Invoke-GitHubAPI @InputObject
+    $response = Invoke-GitHubAPI @inputObject
 
     $response
 }
