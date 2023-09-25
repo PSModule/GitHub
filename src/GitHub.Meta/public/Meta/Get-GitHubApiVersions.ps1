@@ -1,7 +1,9 @@
-﻿function Get-GitHubApiVersions {
+﻿#Requires -Modules GitHub
+
+function Get-GitHubApiVersions {
     <#
         .SYNOPSIS
-        Get all supported GitHub API versions.
+        Get all API versions.
 
         .DESCRIPTION
         Get all supported GitHub API versions.
@@ -12,7 +14,7 @@
         Get all supported GitHub API versions.
 
         .NOTES
-        https://docs.github.com/en/rest/meta/meta?apiVersion=2022-11-28#get-all-api-versions
+        https://docs.github.com/rest/meta/meta#get-all-api-versions
     #>
     [OutputType([string[]])]
     [CmdletBinding()]

@@ -1,10 +1,12 @@
-﻿function Get-GitHubOctocat {
+﻿#Requires -Modules GitHub
+
+function Get-GitHubOctocat {
     <#
         .SYNOPSIS
-        Get the octocat as ASCII art
+        Get Octocat.
 
         .DESCRIPTION
-        Get the octocat as ASCII art
+        Get the octocat as ASCII art.
 
         .EXAMPLE
         Get-GitHubOctocat
@@ -17,7 +19,7 @@
         Get the octocat as ASCII art with a custom saying
 
         .NOTES
-        https://docs.github.com/en/rest/meta/meta?apiVersion=2022-11-28#get-octocat
+        https://docs.github.com/rest/meta/meta#get-octocat
     #>
     [OutputType([string])]
     [CmdletBinding()]
@@ -32,7 +34,6 @@
 
     # $query = [System.Web.HttpUtility]::UrlEncode($S)
     # $query = [System.Uri]::EscapeDataString($S)
-
 
     $body = @{
         s = $S
