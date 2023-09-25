@@ -105,16 +105,17 @@
         }
     }
 
-    Write-Verbose "[$functionName] - API call: "
-    Write-Verbose ($APICall | ConvertTo-Json -Depth 100)
+    # Write-Verbose "[$functionName] - API call: "
+    # Write-Verbose ($APICall | ConvertTo-Json -Depth 100)
 
     try {
         do {
             $response = Invoke-RestMethod @APICall
 
             $response
-            Write-Verbose "[$functionName] - Response: "
-            Write-Verbose ($response | ConvertTo-Json -Depth 100)
+
+            # Write-Verbose "[$functionName] - Response: "
+            # Write-Verbose ($response | ConvertTo-Json -Depth 100)
 
             # Extract next page's URL from Link header if exists
             $nextLink = $null
