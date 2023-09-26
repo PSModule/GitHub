@@ -72,7 +72,7 @@
         'X-GitHub-Api-Version' = $Version
     }
 
-    ($headers.GetEnumerator() | Where-Object { -not $_.Value }) | ForEach-Object { $headers.Remove($_.Name) }
+    Remove-EmptyHashTableEntries -Hashtable $headers
 
     $URI = ("$ApiBaseUri/" -replace '/$', '') + ("/$ApiEndpoint" -replace '^/', '')
 
@@ -88,6 +88,7 @@
         StatusCodeVariable      = 'StatusCode'
         ResponseHeadersVariable = 'ResponseHeaders'
     }
+    Remove-EmptyHashTableEntries -Hashtable $APICall
 
     if ($Body) {
         if ($Body -is [string]) {
