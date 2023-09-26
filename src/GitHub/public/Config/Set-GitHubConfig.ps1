@@ -86,8 +86,12 @@
     $acessTokenSecretInfo = Get-SecretInfo @accessTokenGetParam
     $currentAccessTokenMetadata = $acessTokenSecretInfo.Metadata
 
-    $accessTokenMetadata = @{}
-    Join-HashTable -Main $accessTokenMetadata -Overrides $PSBoundParameters
+    [hashtable]$accessTokenMetadata = $PSBoundParameters.Keys | ForEach-Object {
+        @{
+            Name  = $_
+            Value = $PSBoundParameters[$_]
+        }
+    }
     if (-not $Force) {
         Remove-EmptyHashTableEntries -Hashtable $accessTokenMetadata
     }
@@ -118,8 +122,12 @@
     $acessTokenSecretInfo = Get-SecretInfo @refreshTokenGetParam
     $currentRefreshTokenMetadata = $acessTokenSecretInfo.Metadata
 
-    $refreshTokenMetadata = @{}
-    Join-HashTable -Main $refreshTokenMetadata -Overrides $PSBoundParameters
+    [hashtable]$refreshTokenMetadata = $PSBoundParameters.Keys | ForEach-Object {
+        @{
+            Name  = $_
+            Value = $PSBoundParameters[$_]
+        }
+    }
     if (-not $Force) {
         Remove-EmptyHashTableEntries -Hashtable $refreshTokenMetadata
     }
