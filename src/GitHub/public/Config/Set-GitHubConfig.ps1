@@ -71,63 +71,74 @@
         [Parameter()]
         [string] $UserName,
 
-        # Choose a custom name to set.
+        # Force the setting of the configuration item.
         [Parameter()]
-        [string] $Name,
-
-        # Choose a custom value to set.
-        [Parameter()]
-        [string] $Value = ''
+        [switch] $Force
     )
 
     $prefix = $script:SecretVault.Prefix
 
-    #All timestamps return in UTC time, ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ
-    #Also: use Set-Secret -NAme ... -Value ... -Metadata @{Type = 'DateTime'} to set a datetime value
-    # https://learn.microsoft.com/en-us/powershell/utility-modules/secretmanagement/how-to/manage-secretstore?view=ps-modules#adding-metadata
+    #region AccessToken
+    $accessTokenGetParam = @{
+        Name  = "$prefix`AccessToken"
+        Vault = $script:SecretVault.Name
+    }
+    $acessTokenSecretInfo = Get-SecretInfo @accessTokenGetParam
+    $currentAccessTokenMetadata = $acessTokenSecretInfo.Metadata
 
-    switch ($PSBoundParameters.Keys) {
-        'AccessToken' {
-            Set-Secret -Name "$prefix`AccessToken" -SecureStringSecret $AccessToken -Vault $script:SecretVault.Name
-        }
-        'AccessTokenExpirationDate' {
-            Set-Secret -Name "$prefix`AccessTokenExpirationDate" -Secret $AccessTokenExpirationDate.ToString() -Vault $script:SecretVault.Name
-        }
-        'AccessTokenType' {
-            Set-Secret -Name "$prefix`AccessTokenType" -Secret $AccessTokenType -Vault $script:SecretVault.Name
-        }
-        'ApiBaseUri' {
-            Set-Secret -Name "$prefix`ApiBaseUri" -Secret $ApiBaseUri -Vault $script:SecretVault.Name
-        }
-        'ApiVersion' {
-            Set-Secret -Name "$prefix`ApiVersion" -Secret $ApiVersion -Vault $script:SecretVault.Name
-        }
-        'AuthType' {
-            Set-Secret -Name "$prefix`AuthType" -Secret $AuthType -Vault $script:SecretVault.Name
-        }
-        'DeviceFlowType' {
-            Set-Secret -Name "$prefix`DeviceFlowType" -Secret $DeviceFlowType -Vault $script:SecretVault.Name
-        }
-        'Owner' {
-            Set-Secret -Name "$prefix`Owner" -Secret $Owner -Vault $script:SecretVault.Name
-        }
-        'RefreshToken' {
-            Set-Secret -Name "$prefix`RefreshToken" -SecureStringSecret $RefreshToken -Vault $script:SecretVault.Name
-        }
-        'RefreshTokenExpirationDate' {
-            Set-Secret -Name "$prefix`RefreshTokenExpirationDate" -Secret $RefreshTokenExpirationDate.ToString() -Vault $script:SecretVault.Name
-        }
-        'Repo' {
-            Set-Secret -Name "$prefix`Repo" -Secret $Repo -Vault $script:SecretVault.Name
-        }
-        'Scope' {
-            Set-Secret -Name "$prefix`Scope" -Secret $Scope -Vault $script:SecretVault.Name
-        }
-        'UserName' {
-            Set-Secret -Name "$prefix`UserName" -Secret $UserName -Vault $script:SecretVault.Name
-        }
-        'Name' {
-            Set-Secret -Name "$prefix$Name" -Secret $Value -Vault $script:SecretVault.Name
+    $accessTokenMetadata = @{}
+    Join-HashTable -Main $accessTokenMetadata -Overrides $PSBoundParameters
+    if (-not $Force) {
+        Remove-EmptyHashTableEntries -Hashtable $accessTokenMetadata
+    }
+
+    'AccessToken', 'RefreshToken', 'RefreshTokenExpirationDate', 'Force' | ForEach-Object {
+        if ($accessTokenMetadata.ContainsKey($_)) {
+            $accessTokenMetadata.Remove($_)
         }
     }
+
+    Join-HashTable -Main $currentAccessTokenMetadata -Overrides $accessTokenMetadata
+
+    $accessTokenSetParam = @{
+        Name               = "$prefix`AccessToken"
+        Vault              = $script:SecretVault.Name
+        SecureStringSecret = $AccessToken
+        Metadata           = $secretInfo.Metadata
+    }
+    Remove-EmptyHashTableEntries -Hashtable $accessTokenSetParam
+    Set-SecretInfo @accessTokenSetParam
+    #endregion AccessToken
+
+    #region RefreshToken
+    $refreshTokenGetParam = @{
+        Name  = "$prefix`RefreshToken"
+        Vault = $script:SecretVault.Name
+    }
+    $acessTokenSecretInfo = Get-SecretInfo @refreshTokenGetParam
+    $currentRefreshTokenMetadata = $acessTokenSecretInfo.Metadata
+
+    $refreshTokenMetadata = @{}
+    Join-HashTable -Main $refreshTokenMetadata -Overrides $PSBoundParameters
+    if (-not $Force) {
+        Remove-EmptyHashTableEntries -Hashtable $refreshTokenMetadata
+    }
+
+    'AccessToken', 'RefreshToken', 'AccessTokenExpirationDate', 'Force' | ForEach-Object {
+        if ($refreshTokenMetadata.ContainsKey($_)) {
+            $refreshTokenMetadata.Remove($_)
+        }
+    }
+
+    Join-HashTable -Main $currentRefreshTokenMetadata -DestinationHashTable $refreshTokenMetadata
+
+    $refreshTokenSetParam = @{
+        Name               = "$prefix`RefreshToken"
+        Vault              = $script:SecretVault.Name
+        SecureStringSecret = $RefreshToken
+        Metadata           = $secretInfo.Metadata
+    }
+    Remove-EmptyHashTableEntries -Hashtable $refreshTokenSetParam
+    Set-SecretInfo @refreshTokenSetParam
+    #endregion RefreshToken
 }

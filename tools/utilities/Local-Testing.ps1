@@ -1,6 +1,6 @@
 ﻿#####
-Get-Module -Name GitHub -ListAvailable | Remove-Module -Force
-Get-Module -Name GitHub -ListAvailable | Uninstall-Module -Force -AllVersions
+Get-Module -Name GitHub* -ListAvailable | Remove-Module -Force
+Get-Module -Name GitHub* -ListAvailable | Uninstall-Module -Force -AllVersions
 Get-SecretVault | Unregister-SecretVault
 
 Get-SecretVault
