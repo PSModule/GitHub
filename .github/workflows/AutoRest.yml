@@ -1,0 +1,39 @@
+name: AutoRest - GitHub API
+
+on:
+  push:
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: pwsh
+
+jobs:
+  Build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install AutoRest
+        run: |
+          npm install -g autorest
+          npm install -g @autorest/modelerfour
+
+      - name: Download GitHub OpenAPI spec
+        run: |
+          curl -L https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json -o api.github.com.json
+
+      - name: Generate PowerShell files
+        run: |
+          autorest --input-file=api.github.com.json --output-folder=generated --use=@autorest/modelerfour --powershell
+          # --powershell.azure-arm --powershell.no-namespace
+
+      - run: |
+          date > generated.txt
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "generated"
+          git push
