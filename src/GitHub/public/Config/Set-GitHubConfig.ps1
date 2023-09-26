@@ -119,8 +119,8 @@
         Name  = "$prefix`RefreshToken"
         Vault = $script:SecretVault.Name
     }
-    $acessTokenSecretInfo = Get-SecretInfo @refreshTokenGetParam
-    $currentRefreshTokenMetadata = $acessTokenSecretInfo.Metadata
+    $refreshTokenSecretInfo = Get-SecretInfo @refreshTokenGetParam
+    $currentRefreshTokenMetadata = $refreshTokenSecretInfo.Metadata
 
     [hashtable]$refreshTokenMetadata = $PSBoundParameters.Keys | ForEach-Object {
         @{
