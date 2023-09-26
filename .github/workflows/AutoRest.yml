@@ -26,6 +26,7 @@ jobs:
 
       - name: Generate PowerShell files
         run: |
+          New-Item -ItemType Directory -Force -Path generated
           autorest --input-file=api.github.com.json --output-folder=generated --powershell
 
       - run: |
