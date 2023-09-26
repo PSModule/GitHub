@@ -19,7 +19,6 @@ jobs:
       - name: Install AutoRest
         run: |
           npm install -g autorest
-          npm install -g @autorest/modelerfour
 
       - name: Download GitHub OpenAPI spec
         run: |
@@ -28,7 +27,6 @@ jobs:
       - name: Generate PowerShell files
         run: |
           autorest --input-file=api.github.com.json --output-folder=generated --powershell
-          # --powershell.azure-arm --powershell.no-namespace--use=@autorest/modelerfour
 
       - run: |
           date > generated.txt
