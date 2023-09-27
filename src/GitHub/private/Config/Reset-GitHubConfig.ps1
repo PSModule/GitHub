@@ -58,5 +58,5 @@
             }
         }
     }
-    Set-GitHubConfig @Settings -Force
+    Set-GitHubConfig @Settings
 }
