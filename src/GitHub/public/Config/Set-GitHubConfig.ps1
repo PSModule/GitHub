@@ -165,7 +165,7 @@
             Vault    = $script:SecretVault.Name
             Metadata = $newSecretMetadata
         }
-        Set-SecretInfo @secretSetInfoParam -Verbose
+        Set-SecretInfo @secretSetInfoParam
     }
     #endregion AccessToken
 }

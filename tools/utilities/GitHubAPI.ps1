@@ -15,3 +15,6 @@ $Response = Invoke-RestMethod -Uri $APIDocURI -Method Get
 
 
 $Response.paths.'/meta'.get
+
+
+$Response.paths.'/user'.get

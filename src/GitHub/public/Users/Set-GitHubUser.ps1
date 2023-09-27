@@ -77,7 +77,7 @@
 
     $inputObject
 
-    $response = Invoke-GitHubAPI @inputObject -Verbose
+    $response = Invoke-GitHubAPI @inputObject
 
     $response
 }
