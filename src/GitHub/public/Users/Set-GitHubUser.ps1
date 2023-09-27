@@ -75,8 +75,6 @@
         Method      = 'PATCH'
     }
 
-    $inputObject
-
     $response = Invoke-GitHubAPI @inputObject
 
     $response
