@@ -17,12 +17,12 @@
     [CmdletBinding()]
     param ()
 
-    $InputObject = @{
+    $inputObject = @{
         APIEndpoint = '/zen'
         Method      = 'GET'
     }
 
-    $Response = Invoke-GitHubAPI @InputObject
+    $response = Invoke-GitHubAPI @inputObject
 
-    $Response
+    $response
 }

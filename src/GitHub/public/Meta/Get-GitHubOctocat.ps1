@@ -27,7 +27,7 @@
         [Alias('Say')]
         [Alias('Saying')]
         [string]
-        $S = "The glass is never half empty. Its just twice as big as it needs to be."
+        $S = 'The glass is never half empty. Its just twice as big as it needs to be.'
     )
 
     # $query = [System.Web.HttpUtility]::UrlEncode($S)
@@ -38,7 +38,7 @@
     }
 
     $inputObject = @{
-        APIEndpoint = "/octocat"
+        APIEndpoint = '/octocat'
         Method      = 'GET'
         Body        = $body
     }
