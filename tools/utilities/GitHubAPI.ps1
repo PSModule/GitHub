@@ -2,19 +2,19 @@ $APIDocURI = 'https://raw.githubusercontent.com/github/rest-api-description/main
 $Bundled = '/descriptions/api.github.com/api.github.com.json'
 $Dereferenced = 'descriptions/api.github.com/dereferenced/api.github.com.deref.json'
 $APIDocURI = $APIDocURI + $Bundled
-$Response = Invoke-RestMethod -Uri $APIDocURI -Method Get
+$response = Invoke-RestMethod -Uri $APIDocURI -Method Get
 
-# $Response.info          # API name = GitHub REST API
-# $Response.openapi       # Spec version = 3.0.3
-# $Response.servers       # API URL = api.github.com
-# $Response.externalDocs  # API docs URL = docs.github.com/rest
-# $Response.components    # Type specs
-# $Response.paths         # API endpoints
-# $Response.tags          # API categories
-# $Response.'x-webhooks'  # Webhooks/event docs
-
-
-$Response.paths.'/meta'.get
+# $response.info          # API name = GitHub REST API
+# $response.openapi       # Spec version = 3.0.3
+# $response.servers       # API URL = api.github.com
+# $response.externalDocs  # API docs URL = docs.github.com/rest
+# $response.components    # Type specs
+# $response.paths         # API endpoints
+# $response.tags          # API categories
+# $response.'x-webhooks'  # Webhooks/event docs
 
 
-$Response.paths.'/user'.get
+$response.paths.'/meta'.get
+
+
+$response.paths.'/user'.get

@@ -118,7 +118,7 @@
     try {
         Invoke-RestMethod @APICall | Write-Output
         Write-Verbose ($StatusCode | ConvertTo-Json -Depth 100)
-        Write-Verbose ($ResponseHeaders | ConvertTo-Json -Depth 100)
+        Write-Verbose ($responseHeaders | ConvertTo-Json -Depth 100)
     } catch [System.Net.WebException] {
         Write-Error "[$functionName] - WebException - $($_.Exception.Message)"
         throw $_

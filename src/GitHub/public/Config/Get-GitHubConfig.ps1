@@ -18,6 +18,21 @@
     param (
         # Choose a configuration name to get.
         [Parameter()]
+        [ValidateSet(
+            'AccessToken',
+            'AccessTokenExpirationDate',
+            'AccessTokenType',
+            'ApiBaseUri',
+            'ApiVersion',
+            'AuthType',
+            'DeviceFlowType',
+            'Owner',
+            'RefreshToken',
+            'RefreshTokenExpirationDate',
+            'Repo',
+            'Scope',
+            'UserName'
+        )]
         [string] $Name
     )
 
