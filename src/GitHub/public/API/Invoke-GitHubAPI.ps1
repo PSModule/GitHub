@@ -42,7 +42,7 @@
 
         # The 'Accept' header for the API request. If not provided, the default will be used by GitHub's API.
         [Parameter()]
-        [string] $Accept,
+        [string] $Accept = 'application/vnd.github+json',
 
         # Specifies the HTTP version used for the request.
         [Parameter()]
