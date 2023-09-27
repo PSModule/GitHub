@@ -22,7 +22,6 @@
     )
 
     $prefix = $script:SecretVault.Prefix
-    $AccessTokenData = Get-SecretInfo -Name "$prefix`RefreshToken"
 
     switch($Name) {
         'AccessToken' {
@@ -36,6 +35,7 @@
             $RefreshTokenData.Metadata | ConvertFrom-HashTable | ConvertTo-HashTable | Select-Object -ExpandProperty $Name
         }
         default {
+            $AccessTokenData = Get-SecretInfo -Name "$prefix`AccessToken"
             $AccessTokenData.Metadata | ConvertFrom-HashTable | ConvertTo-HashTable | Select-Object -ExpandProperty $Name
         }
     }
