@@ -1,33 +1,42 @@
 ﻿function Get-GitHubConfig {
     <#
         .SYNOPSIS
-        Get the current GitHub configuration.
+        Get configuration value.
 
         .DESCRIPTION
-        Get the current GitHub configuration.
-        The configuration is first loaded from the configuration file.
+        Get a named configuration value from the GitHub configuration file.
 
         .EXAMPLE
-        Get-GitHubConfig
+        Get-GitHubConfig -Name ApiBaseUri
 
-        Returns the current GitHub configuration.
-
+        Get the current GitHub configuration for the ApiBaseUri.
     #>
     [Alias('Get-GHConfig')]
     [Alias('GGHC')]
     [OutputType([object])]
     [CmdletBinding()]
     param (
-        [string] $Name,
-        [switch] $AsPlainText
+        # Choose a configuration name to get.
+        [Parameter()]
+        [string] $Name
     )
+
     $prefix = $script:SecretVault.Prefix
-    if ($Name) {
-        $Name = "$prefix$Name"
-        Get-Secret -Name $Name -Vault $script:SecretVault.Name -AsPlainText:$AsPlainText
-    } else {
-        Get-SecretInfo | Where-Object Name -like "$prefix*" | ForEach-Object {
-            Get-Secret -Name $_.Name -Vault $script:SecretVault.Name -AsPlainText:$AsPlainText
+
+    switch($Name) {
+        'AccessToken' {
+            Get-Secret -Name "$prefix`AccessToken"
+        }
+        'RefreshToken' {
+            Get-Secret -Name "$prefix`RefreshToken"
+        }
+        'RefreshTokenExpirationDate' {
+            $RefreshTokenData = Get-SecretInfo -Name "$prefix`RefreshToken"
+            $RefreshTokenData.Metadata | ConvertFrom-HashTable | ConvertTo-HashTable | Select-Object -ExpandProperty $Name
+        }
+        default {
+            $AccessTokenData = Get-SecretInfo -Name "$prefix`AccessToken"
+            $AccessTokenData.Metadata | ConvertFrom-HashTable | ConvertTo-HashTable | Select-Object -ExpandProperty $Name
         }
     }
 }

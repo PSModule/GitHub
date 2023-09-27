@@ -21,11 +21,11 @@
     param (
         # Set the access token type.
         [Parameter()]
-        [string] $AccessTokenType = '',
+        [string] $AccessTokenType,
 
         # Set the access token.
         [Parameter()]
-        [securestring] $AccessToken = '',
+        [securestring] $AccessToken,
 
         # Set the access token expiration date.
         [Parameter()]
@@ -69,65 +69,103 @@
 
         # Set the GitHub username.
         [Parameter()]
-        [string] $UserName,
-
-        # Choose a custom name to set.
-        [Parameter()]
-        [string] $Name,
-
-        # Choose a custom value to set.
-        [Parameter()]
-        [string] $Value = ''
+        [string] $UserName
     )
 
     $prefix = $script:SecretVault.Prefix
 
-    #All timestamps return in UTC time, ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ
-    #Also: use Set-Secret -NAme ... -Value ... -Metadata @{Type = 'DateTime'} to set a datetime value
-    # https://learn.microsoft.com/en-us/powershell/utility-modules/secretmanagement/how-to/manage-secretstore?view=ps-modules#adding-metadata
+    #region AccessToken
+    $secretName = "$prefix`AccessToken"
+    $removeKeys = 'AccessToken', 'RefreshToken', 'RefreshTokenExpirationDate'
+    $keepTypes = 'String', 'Int', 'DateTime'
 
-    switch ($PSBoundParameters.Keys) {
-        'AccessToken' {
-            Set-Secret -Name "$prefix`AccessToken" -SecureStringSecret $AccessToken -Vault $script:SecretVault.Name
+    # Get existing metadata if it exists
+    $newSecretMetadata = @{}
+    if (Get-SecretInfo -Name $secretName) {
+        $secretGetInfoParam = @{
+            Name  = $secretName
+            Vault = $script:SecretVault.Name
         }
-        'AccessTokenExpirationDate' {
-            Set-Secret -Name "$prefix`AccessTokenExpirationDate" -Secret $AccessTokenExpirationDate.ToString() -Vault $script:SecretVault.Name
-        }
-        'AccessTokenType' {
-            Set-Secret -Name "$prefix`AccessTokenType" -Secret $AccessTokenType -Vault $script:SecretVault.Name
-        }
-        'ApiBaseUri' {
-            Set-Secret -Name "$prefix`ApiBaseUri" -Secret $ApiBaseUri -Vault $script:SecretVault.Name
-        }
-        'ApiVersion' {
-            Set-Secret -Name "$prefix`ApiVersion" -Secret $ApiVersion -Vault $script:SecretVault.Name
-        }
-        'AuthType' {
-            Set-Secret -Name "$prefix`AuthType" -Secret $AuthType -Vault $script:SecretVault.Name
-        }
-        'DeviceFlowType' {
-            Set-Secret -Name "$prefix`DeviceFlowType" -Secret $DeviceFlowType -Vault $script:SecretVault.Name
-        }
-        'Owner' {
-            Set-Secret -Name "$prefix`Owner" -Secret $Owner -Vault $script:SecretVault.Name
-        }
-        'RefreshToken' {
-            Set-Secret -Name "$prefix`RefreshToken" -SecureStringSecret $RefreshToken -Vault $script:SecretVault.Name
-        }
-        'RefreshTokenExpirationDate' {
-            Set-Secret -Name "$prefix`RefreshTokenExpirationDate" -Secret $RefreshTokenExpirationDate.ToString() -Vault $script:SecretVault.Name
-        }
-        'Repo' {
-            Set-Secret -Name "$prefix`Repo" -Secret $Repo -Vault $script:SecretVault.Name
-        }
-        'Scope' {
-            Set-Secret -Name "$prefix`Scope" -Secret $Scope -Vault $script:SecretVault.Name
-        }
-        'UserName' {
-            Set-Secret -Name "$prefix`UserName" -Secret $UserName -Vault $script:SecretVault.Name
-        }
-        'Name' {
-            Set-Secret -Name "$prefix$Name" -Secret $Value -Vault $script:SecretVault.Name
-        }
+        $secretInfo = Get-SecretInfo @secretGetInfoParam
+        Write-Verbose "$secretName - secretInfo : $($secretInfo | Out-String)"
+        $secretMetadata = $secretInfo.Metadata | ConvertFrom-HashTable | ConvertTo-HashTable
+        $newSecretMetadata = Join-Hashtable -Main $newSecretMetadata -Overrides $secretMetadata
     }
+
+    # Get metadata updates from parameters and clean up unwanted data
+    $updateSecretMetadata = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable
+    Write-Verbose "updateSecretMetadata : $($updateSecretMetadata | Out-String)"
+    Write-Verbose "updateSecretMetadataType : $($updateSecretMetadata.GetType())"
+    Remove-HashTableEntries -Hashtable $updateSecretMetadata -KeepTypes $keepTypes -RemoveNames $removeKeys
+    Write-Verbose "updateSecretMetadata : $($updateSecretMetadata | Out-String)"
+
+    $newSecretMetadata = Join-HashTable -Main $newSecretMetadata -Overrides $updateSecretMetadata
+    Write-Verbose "newSecretMetadata : $($newSecretMetadata | Out-String)"
+    Write-Verbose "newSecretMetadataType : $($newSecretMetadata.GetType())"
+
+    if ($AccessToken) {
+        $accessTokenSetParam = @{
+            Name               = $secretName
+            Vault              = $script:SecretVault.Name
+            SecureStringSecret = $AccessToken
+        }
+        Set-Secret @accessTokenSetParam
+    }
+
+    if (Get-SecretInfo -Name $secretName) {
+        $secretSetInfoParam = @{
+            Name     = $secretName
+            Vault    = $script:SecretVault.Name
+            Metadata = $newSecretMetadata
+        }
+        Set-SecretInfo @secretSetInfoParam
+    }
+    #endregion AccessToken
+
+    #region RefreshToken
+    $secretName = "$prefix`RefreshToken"
+    $removeKeys = 'AccessToken', 'RefreshToken', 'AccessTokenExpirationDate'
+
+    # Get existing metadata if it exists
+    $newSecretMetadata = @{}
+    if (Get-SecretInfo -Name $secretName) {
+        $secretGetInfoParam = @{
+            Name  = $secretName
+            Vault = $script:SecretVault.Name
+        }
+        $secretInfo = Get-SecretInfo @secretGetInfoParam
+        Write-Verbose "$secretName - secretInfo : $($secretInfo | Out-String)"
+        $secretMetadata = $secretInfo.Metadata | ConvertFrom-HashTable | ConvertTo-HashTable
+        $newSecretMetadata = Join-Hashtable -Main $newSecretMetadata -Overrides $secretMetadata
+    }
+
+    # Get metadata updates from parameters and clean up unwanted data
+    $updateSecretMetadata = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable
+    Write-Verbose "updateSecretMetadata : $($updateSecretMetadata | Out-String)"
+    Write-Verbose "updateSecretMetadataType : $($updateSecretMetadata.GetType())"
+    Remove-HashTableEntries -Hashtable $updateSecretMetadata -KeepTypes $keepTypes -RemoveNames $removeKeys
+    Write-Verbose "updateSecretMetadata : $($updateSecretMetadata | Out-String)"
+
+    $newSecretMetadata = Join-HashTable -Main $newSecretMetadata -Overrides $updateSecretMetadata
+    Write-Verbose "newSecretMetadata : $($newSecretMetadata | Out-String)"
+    Write-Verbose "newSecretMetadataType : $($newSecretMetadata.GetType())"
+
+    if ($RefreshToken) {
+        $refreshTokenSetParam = @{
+            Name               = $secretName
+            Vault              = $script:SecretVault.Name
+            SecureStringSecret = $RefreshToken
+        }
+        Set-Secret @refreshTokenSetParam
+    }
+
+    if (Get-SecretInfo -Name $secretName) {
+        $secretSetInfoParam = @{
+            Name     = $secretName
+            Vault    = $script:SecretVault.Name
+            Metadata = $newSecretMetadata
+        }
+        Set-SecretInfo @secretSetInfoParam -Verbose
+    }
+    #endregion AccessToken
 }
