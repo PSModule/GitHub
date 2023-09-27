@@ -73,11 +73,11 @@
         'DeviceFlow' {
             Write-Verbose 'Logging in using device flow...'
             $clientID = $script:Auth.$Mode.ClientID
-            if ($Mode -ne (Get-GitHubConfig -Name DeviceFlowType -AsPlainText -ea SilentlyContinue)) {
+            if ($Mode -ne (Get-GitHubConfig -Name DeviceFlowType -ErrorAction SilentlyContinue)) {
                 Write-Verbose "Using $Mode authentication..."
                 $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -Scope $Scope
             } else {
-                $accessTokenValidity = [datetime](Get-GitHubConfig -Name 'AccessTokenExpirationDate' -AsPlainText) - (Get-Date)
+                $accessTokenValidity = [datetime](Get-GitHubConfig -Name 'AccessTokenExpirationDate') - (Get-Date)
                 $accessTokenIsValid = $accessTokenValidity.Seconds -gt 0
                 $accessTokenValidityText = "$($accessTokenValidity.Hours):$($accessTokenValidity.Minutes):$($accessTokenValidity.Seconds)"
                 if ($accessTokenIsValid) {
@@ -91,7 +91,7 @@
                         $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -RefreshToken (Get-GitHubConfig -Name RefreshToken)
                     }
                 } else {
-                    $refreshTokenValidity = [datetime](Get-GitHubConfig -Name 'RefreshTokenExpirationDate' -AsPlainText) - (Get-Date)
+                    $refreshTokenValidity = [datetime](Get-GitHubConfig -Name 'RefreshTokenExpirationDate') - (Get-Date)
                     $refreshTokenIsValid = $refreshTokenValidity.Seconds -gt 0
                     if ($refreshTokenIsValid) {
                         Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
@@ -140,14 +140,14 @@
             Write-Host '! ' -ForegroundColor DarkYellow -NoNewline
             Start-Process 'https://github.com/settings/tokens'
             $accessTokenValue = Read-Host -Prompt 'Enter your personal access token' -AsSecureString
-            $prefix = (ConvertFrom-SecureString $accessTokenValue -AsPlainText) -replace '_.*$', '_*'
-            if ($prefix -notmatch '^ghp_|^github_pat_') {
+            $accessTokenType = (ConvertFrom-SecureString $accessTokenValue -AsPlainText) -replace '_.*$', '_*'
+            if ($accessTokenType -notmatch '^ghp_|^github_pat_') {
                 Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
-                Write-Host "Unexpected access token format: $prefix"
+                Write-Host "Unexpected access token format: $accessTokenType"
             }
             $settings = @{
                 AccessToken     = $accessTokenValue
-                AccessTokenType = $prefix
+                AccessTokenType = $accessTokenType
                 ApiBaseUri      = 'https://api.github.com'
                 ApiVersion      = '2022-11-28'
                 AuthType        = $AuthType

@@ -19,11 +19,11 @@ Get-Variable | Where-Object -Property Module -NE $null | Select-Object Name, Mod
 Connect-GitHubAccount
 Connect-GitHubAccount -Mode OAuthApp
 Connect-GitHubAccount -AccessToken
-Get-GitHubConfig -Name AccessToken -AsPlainText
-Get-GitHubConfig -Name AccessTokenExpirationDate -AsPlainText
-Get-GitHubConfig -Name RefreshToken -AsPlainText
-Get-GitHubConfig -Name RefreshTokenExpirationDate -AsPlainText
-Get-GitHubConfig -Name ApiBaseUri -AsPlainText
+Get-GitHubConfig -Name AccessToken
+Get-GitHubConfig -Name AccessTokenExpirationDate
+Get-GitHubConfig -Name RefreshToken
+Get-GitHubConfig -Name RefreshTokenExpirationDate
+Get-GitHubConfig -Name ApiBaseUri
 Invoke-GitHubAPI -Method Get -ApiEndpoint /
 Get-GitHubMeta
 Get-GitHubOctocat -S 'Hello, World!'

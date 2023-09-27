@@ -6,7 +6,12 @@
         [hashtable] $Main,
         [hashtable] $Overrides
     )
-    $Overrides.Keys | ForEach-Object {
-        $Main.$_ = $Overrides.$_
+    $hashtable = @{}
+    $Main.Keys | ForEach-Object {
+        $hashtable[$_] = $Main[$_]
     }
+    $Overrides.Keys | ForEach-Object {
+        $hashtable[$_] = $Overrides[$_]
+    }
+    $hashtable
 }
