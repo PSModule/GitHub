@@ -100,8 +100,8 @@
     Write-Verbose "updateSecretMetadata : $($updateSecretMetadata | Out-String)"
 
     $newSecretMetadata = Join-HashTable -Main $newSecretMetadata -Overrides $updateSecretMetadata
-    Write-Verbose "acessTokenSecretMetadata : $($newSecretMetadata | Out-String)"
-    Write-Verbose "acessTokenSecretMetadataType : $($newSecretMetadata.GetType())"
+    Write-Verbose "newSecretMetadata : $($newSecretMetadata | Out-String)"
+    Write-Verbose "newSecretMetadataType : $($newSecretMetadata.GetType())"
 
     if ($AccessToken) {
         $accessTokenSetParam = @{
@@ -147,16 +147,16 @@
     Write-Verbose "updateSecretMetadata : $($updateSecretMetadata | Out-String)"
 
     $newSecretMetadata = Join-HashTable -Main $newSecretMetadata -Overrides $updateSecretMetadata
-    Write-Verbose "acessTokenSecretMetadata : $($newSecretMetadata | Out-String)"
-    Write-Verbose "acessTokenSecretMetadataType : $($newSecretMetadata.GetType())"
+    Write-Verbose "newSecretMetadata : $($newSecretMetadata | Out-String)"
+    Write-Verbose "newSecretMetadataType : $($newSecretMetadata.GetType())"
 
     if ($RefreshToken) {
-        $accessTokenSetParam = @{
+        $refreshTokenSetParam = @{
             Name               = $secretName
             Vault              = $script:SecretVault.Name
-            SecureStringSecret = $AccessToken
+            SecureStringSecret = $RefreshToken
         }
-        Set-Secret @accessTokenSetParam
+        Set-Secret @refreshTokenSetParam
     }
 
     if (Get-SecretInfo -Name $secretName) {
