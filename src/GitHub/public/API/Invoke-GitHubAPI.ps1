@@ -76,12 +76,29 @@
 
     $URI = ("$ApiBaseUri/" -replace '/$', '') + ("/$ApiEndpoint" -replace '^/', '')
 
+    $AccessTokenAsPlainText = ConvertFrom-SecureString $AccessToken -AsPlainText
+    # Swap out this by using the -Authentication Bearer -Token $AccessToken
+    switch -Regex ($AccessTokenAsPlainText) {
+        '^ghp_|^github_pat_' {
+            $headers.authorization = "token $AccessTokenAsPlainText"
+        }
+        '^ghu_|^gho_' {
+            $headers.authorization = "Bearer $AccessTokenAsPlainText"
+        }
+        default {
+            $tokenPrefix = $AccessTokenAsPlainText -replace '_.*$', '_*'
+            $errorMessage = "Unexpected AccessToken format: $tokenPrefix"
+            Write-Error $errorMessage
+            throw $errorMessage
+        }
+    }
+
     $APICall = @{
         Uri                     = $URI
         Method                  = $Method
         Headers                 = $Headers
-        Authentication          = 'Bearer'
-        Token                   = $AccessToken
+        # Authentication          = 'Bearer'
+        # Token                   = $AccessToken
         ContentType             = $ContentType
         HttpVersion             = $HttpVersion
         FollowRelLink           = $FollowRelLink
