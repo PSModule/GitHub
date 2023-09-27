@@ -39,16 +39,10 @@
         [int] $PageSize = 100
     )
 
-    $processedPages = 0
-    $workflows = @()
-    do {
-        $processedPages++
-        $inputObject = @{
-            Method      = 'GET'
-            APIEndpoint = "/repos/$Owner/$Repo/actions/workflows?per_page=$PageSize&page=$processedPages"
-        }
-        $response = Invoke-GitHubAPI @inputObject
-        $workflows += $response.workflows | Where-Object name -Match $name | Where-Object id -Match $id
-    } while ($workflows.count -ne $response.total_count)
-    $workflows
+    $inputObject = @{
+        Method      = 'GET'
+        APIEndpoint = "/repos/$Owner/$Repo/actions/workflows?per_page=$PageSize"
+    }
+    $response = Invoke-GitHubAPI @inputObject
+    $response
 }
