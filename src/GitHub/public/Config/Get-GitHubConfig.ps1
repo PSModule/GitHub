@@ -33,10 +33,10 @@
         }
         'RefreshTokenExpirationDate' {
             $RefreshTokenData = Get-SecretInfo -Name "$prefix`RefreshToken"
-            $RefreshTokenData.Metadata.$Name
+            $RefreshTokenData.Metadata | ConvertFrom-HashTable | ConvertTo-HashTable | Select-Object -ExpandProperty $Name
         }
         default {
-            $AccessTokenData.Metadata.$Name
+            $AccessTokenData.Metadata | ConvertFrom-HashTable | ConvertTo-HashTable | Select-Object -ExpandProperty $Name
         }
     }
 }

@@ -9,8 +9,8 @@ Get-Module -Name GitHub -ListAvailable
 $VerbosePreference = 'Continue'
 
 Install-Module -Name GitHub -Verbose -Force -AllowPrerelease
-$env:PSModulePath += ';C:\Repos\GitHub\PSModule\Modules\GitHub\outputs'
-Import-Module -Name 'C:\Repos\GitHub\PSModule\Modules\GitHub\src\GitHub\GitHub.psm1' -Verbose -Force
+# $env:PSModulePath += ';C:\Repos\GitHub\PSModule\Modules\GitHub\outputs'
+# Import-Module -Name 'C:\Repos\GitHub\PSModule\Modules\GitHub\src\GitHub\GitHub.psm1' -Verbose -Force
 
 Import-Module -Name GitHub -Verbose
 Clear-Host
