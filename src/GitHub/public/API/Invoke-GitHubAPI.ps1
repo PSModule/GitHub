@@ -105,9 +105,19 @@
         StatusCodeVariable      = 'StatusCode'
         ResponseHeadersVariable = 'ResponseHeaders'
     }
-    Remove-HashTableEntries -Hashtable $APICall -NullOrEmptyValues
+    $APICall | Remove-HashTableEntries -NullOrEmptyValues
 
     if ($Body) {
+        $Body | Remove-HashTableEntries -NullOrEmptyValues
+
+        # Use body to create the query string for GET requests
+        if ($Method -eq 'GET') {
+            $queryParams = ($Body.GetEnumerator() |
+            ForEach-Object { "$([System.Web.HttpUtility]::UrlEncode($_.Key))=$([System.Web.HttpUtility]::UrlEncode($_.Value))" }) -join '&'
+            if ($queryParams) {
+                $APICall.Uri = $APICall.Uri + '?' + $queryParams
+            }
+        }
         if ($Body -is [string]) {
             $APICall.Body = $Body
         } else {
