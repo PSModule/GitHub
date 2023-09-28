@@ -1,5 +1,3 @@
-# GitHub Powershell Module
-
 # GitHub PowerShell
 
 The **GitHub PowerShell** module serves as a convenient API wrapper around [GitHub's REST API](https://docs.github.com/en/rest), making the functionalities and data available on GitHub accessible through PowerShell commands. This module is tailored for developers, administrators, and GitHub enthusiasts who are familiar with PowerShell and want to integrate or manage their GitHub repositories seamlessly.
