@@ -129,14 +129,10 @@
         Invoke-RestMethod @APICall | Write-Output
         Write-Verbose ($StatusCode | ConvertTo-Json -Depth 100)
         Write-Verbose ($responseHeaders | ConvertTo-Json -Depth 100)
-    } catch [System.Net.WebException] {
-        Write-Error "[$functionName] - WebException - $($_.Exception.Message)"
-        throw $_
     } catch {
-        Write-Error "[$functionName] - GeneralException - $_"
+        Write-Error "[$functionName] - Status code - [$StatusCode]"
         $err = $_ | ConvertFrom-Json -Depth 10
         Write-Error "[$functionName] - $($err.Message)"
         Write-Error "[$functionName] - For more info please see: [$($err.documentation_url)]"
-        throw $_
     }
 }
