@@ -62,7 +62,15 @@
             Mandatory,
             ParameterSetName = 'PAT'
         )]
-        [switch] $AccessToken
+        [switch] $AccessToken,
+
+        # Set the default owner to use in commands.
+        [Parameter()]
+        [string] $Owner,
+
+        # Set the default repository to use in commands.
+        [Parameter()]
+        [string] $Repo
     )
 
     $envVar = Get-ChildItem -Path 'Env:' | Where-Object Name -In 'GH_TOKEN', 'GITHUB_TOKEN' | Select-Object -First 1
@@ -172,4 +180,13 @@
 
     Write-Host '✓ ' -ForegroundColor Green -NoNewline
     Write-Host 'Logged in to GitHub!'
+
+    if ($Owner) {
+        Set-GitHubConfig -Owner $Owner
+    }
+
+    if ($Repo) {
+        Set-GitHubConfig -Repo $Repo
+    }
+
 }

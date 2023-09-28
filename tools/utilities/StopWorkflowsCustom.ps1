@@ -5,6 +5,8 @@ $Repo = 'ResourceModules'
 Install-Module -Name GitHub -Force -AllowClobber
 Connect-GitHubAccount -Owner $Owner -Repo $Repo -Verbose
 
+Set-GitHubConfig -Owner $Owner -Repo $Repo -Verbose
+Get-GitHubConfig
 Get-GitHubWorkflow -Verbose
 
 # Disable all workflows

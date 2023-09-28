@@ -8,7 +8,7 @@ Get-SecretInfo
 Get-Module -Name GitHub -ListAvailable
 $VerbosePreference = 'Continue'
 
-Install-Module -Name GitHub -Verbose -Force -AllowPrerelease
+Install-Module -Name GitHub -Force -Verbose -AllowPrerelease
 # $env:PSModulePath += ';C:\Repos\GitHub\PSModule\Modules\GitHub\outputs'
 # Import-Module -Name 'C:\Repos\GitHub\PSModule\Modules\GitHub\src\GitHub\GitHub.psm1' -Verbose -Force
 
