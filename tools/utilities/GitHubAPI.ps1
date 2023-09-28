@@ -13,8 +13,18 @@ $response = Invoke-RestMethod -Uri $APIDocURI -Method Get
 # $response.tags          # API categories
 # $response.'x-webhooks'  # Webhooks/event docs
 
+$path = '/users/{username}/hovercard'
+$response.paths.$path.get.tags | clip                            # -> Namespace/foldername
+$response.paths.$path.get.operationId | clip                      # -> FunctionName
+$response.paths.$path.get.summary | clip                          # -> Synopsis
+$response.paths.$path.get.description | clip                      # -> Description
+$response.paths.$path.get.externalDocs.url | clip                 # -> Notes
+$response.paths.$path.get.'x-github'.category | clip              # -> Namespace/foldername
+$response.paths.$path.get.'x-github'.subcategory | clip           # -> Namespace/foldername
+$response.paths.$path.get.'x-github'.enabledForGitHubApps | clip  # -> Note + Warning if running as GitHub App
+$response.paths.$path.get.'x-github'.githubCloudOnly | clip       # -> Note
+$response.paths.$path.get.parameters                              # -> Parameter list
+$response.paths.$path.get.responses.'200'.content.'application/json'.schema        # -> OutputType qualifyer
+$response.paths.$path.get.responses.'200'.content.'application/json'.schema.items  # -> OutputType
+$response.paths.$path.get
 
-$response.paths.'/meta'.get
-
-
-$response.paths.'/user'.get
