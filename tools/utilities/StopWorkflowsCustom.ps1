@@ -1,6 +1,9 @@
 ﻿$Owner = 'MariusStorhaug'
 $Repo = 'ResourceModules'
 
+$Owner = 'PSModule'
+$Repo = 'GitHub'
+
 
 Install-Module -Name GitHub -Force -AllowClobber
 Connect-GitHubAccount -Owner $Owner -Repo $Repo -Verbose
