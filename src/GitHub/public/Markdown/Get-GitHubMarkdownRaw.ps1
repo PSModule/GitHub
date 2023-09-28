@@ -6,20 +6,16 @@
     [CmdletBinding()]
     param (
         [Parameter()]
-        [switch] $Text,
-
-        [Parameter()]
-        [string] $Context
+        [switch] $Text
     )
 
     $inputObject = @{
         APIEndpoint = '/markdown/raw'
         ContentType = 'text/plain'
-        Data        = $Text
+        Body        = $Text
         Method      = 'POST'
     }
 
-    $response = Invoke-GitHubAPI @inputObject
+    Invoke-GitHubAPI @inputObject
 
-    $response
 }

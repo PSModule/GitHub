@@ -9,11 +9,10 @@
     )
 
     $inputObject = @{
-        Method      = 'GET'
         APIEndpoint = "/repos/$Owner/$Repo/branches"
+        Method      = 'GET'
     }
 
-    $response = Invoke-GitHubAPI @inputObject
+    Invoke-GitHubAPI @inputObject
 
-    $response
 }

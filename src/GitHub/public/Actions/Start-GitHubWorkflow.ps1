@@ -1,25 +1,23 @@
-﻿
+﻿function Start-GitHubWorkflow {
+    <#
+        .SYNOPSIS
+        Start a workflow run using the workflow's ID.
 
-<#
-    .SYNOPSIS
-    Start a workflow run using the workflow's ID.
+        .DESCRIPTION
+        Start a workflow run using the workflow's ID.
 
-    .DESCRIPTION
-    Start a workflow run using the workflow's ID.
+        .EXAMPLE
+        Get-GitHubWorkflow | Where-Object name -NotLike '.*' | Start-GitHubWorkflow -Inputs @{
+            staticValidation = $true
+            deploymentValidation = $false
+            removeDeployment = $true
+            prerelease = $false
+        }
 
-    .EXAMPLE
-    Get-GitHubWorkflow | Where-Object name -NotLike '.*' | Start-GitHubWorkflow -Inputs @{
-        staticValidation = $true
-        deploymentValidation = $false
-        removeDeployment = $true
-        prerelease = $false
-    }
-
-    .NOTES
-    # API Reference
-    # https://docs.github.com/en/free-pro-team@latest/rest/actions/workflows?apiVersion=2022-11-28#create-a-workflow-dispatch-event
-#>
-function Start-GitHubWorkflow {
+        .NOTES
+        # API Reference
+        # https://docs.github.com/en/free-pro-team@latest/rest/actions/workflows?apiVersion=2022-11-28#create-a-workflow-dispatch-event
+    #>
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -49,17 +47,19 @@ function Start-GitHubWorkflow {
 
     process {
 
-        $inputObject = @{
-            Method      = 'POST'
-            APIEndpoint = "/repos/$Owner/$Repo/actions/workflows/$ID/dispatches"
-            Body        = @{
-                ref    = $Ref
-                inputs = $Inputs
-            }
+        $body = @{
+            ref    = $Ref
+            inputs = $Inputs
         }
-        $response = Invoke-GitHubAPI @inputObject
 
-        $response
+        $inputObject = @{
+            APIEndpoint = "/repos/$Owner/$Repo/actions/workflows/$ID/dispatches"
+            Method      = 'POST'
+            Body        = $body
+        }
+
+        Invoke-GitHubAPI @inputObject
+
     }
 
     end {}

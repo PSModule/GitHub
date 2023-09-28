@@ -1,4 +1,26 @@
 ﻿function Stop-GitHubWorkflowRun {
+    <#
+        .SYNOPSIS
+        Short description
+
+        .DESCRIPTION
+        Long description
+
+        .PARAMETER Owner
+        Parameter description
+
+        .PARAMETER Repo
+        Parameter description
+
+        .PARAMETER ID
+        Parameter description
+
+        .EXAMPLE
+        An example
+
+        .NOTES
+        https://docs.github.com/en/rest/reference/actions#cancel-a-workflow-run
+    #>
     [CmdletBinding()]
     [alias('Cancel-GitHubWorkflowRun')]
     param (
@@ -19,15 +41,14 @@
     begin {}
 
     process {
-        # API Reference
-        # https://docs.github.com/en/rest/reference/actions#cancel-a-workflow-run
+
         $inputObject = @{
             Method      = 'POST'
             APIEndpoint = "/repos/$Owner/$Repo/actions/runs/$ID/cancel"
         }
-        $response = Invoke-GitHubAPI @inputObject
 
-        $response
+        Invoke-GitHubAPI @inputObject
+
     }
 
     end {}

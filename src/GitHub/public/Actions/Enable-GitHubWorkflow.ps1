@@ -22,13 +22,12 @@
 
     process {
         $inputObject = @{
-            Method      = 'PUT'
             APIEndpoint = "/repos/$Owner/$Repo/actions/workflows/$ID/enable"
+            Method      = 'PUT'
         }
 
-        $response = Invoke-GitHubAPI @inputObject
+        Invoke-GitHubAPI @inputObject
 
-        $response
     }
 
     end {}

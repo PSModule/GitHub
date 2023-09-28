@@ -1,7 +1,8 @@
 ﻿Function Get-GitHubWorkflowRun {
     <#
         .NOTES
-        https://docs.github.com/en/rest/reference/actions#list-workflow-runs-for-a-repository
+        https://docs.github.com/en/rest/actions/workflow-runs?apiVersion=2022-11-28#list-workflow-runs-for-a-workflow
+        https://docs.github.com/en/rest/actions/workflow-runs?apiVersion=2022-11-28#list-workflow-runs-for-a-repository
     #>
     [CmdletBinding()]
     param (
@@ -18,26 +19,37 @@
         [string] $ID,
 
         [Parameter()]
-        [int] $PageSize = 100
+        [int] $PerPage = 100
     )
 
-    $processedPages = 0
-    $workflowRuns = @()
-    do {
-        $processedPages++
-        $inputObject = @{
-            Method      = 'GET'
-            APIEndpoint = "/repos/$Owner/$Repo/actions/runs?per_page=$PageSize&page=$processedPages"
+    begin {}
+
+    process {
+
+        $body = @{
+            per_page = $PerPage
         }
-        $response = Invoke-GitHubAPI @inputObject
-        $workflowRuns += $response.workflows | Where-Object name -Match $name | Where-Object id -Match $id
-    } until ($workflowRuns.count -eq $response.total_count)
-    $workflowRuns
 
+        if ($Name) {
+            $ID = (Get-GitHubWorkflow -Owner $Owner -Repo $Repo -Name $Name).id
+        }
 
-    do {
-        $WorkflowRuns = $response.workflow_runs
-        $Results += $WorkflowRuns
-    } while ($WorkflowRuns.count -eq 100)
-    return $Results | Where-Object Name -Match $Name | Where-Object workflow_id -Match $ID
+        if ($ID) {
+            $Uri = "/repos/$Owner/$Repo/actions/workflows/$ID/runs"
+        } else {
+            $Uri = "/repos/$Owner/$Repo/actions/runs"
+        }
+
+        $inputObject = @{
+            APIEndpoint = $Uri
+            Method      = 'GET'
+            Body        = $body
+        }
+
+        Invoke-GitHubAPI @inputObject
+
+    }
+
+    end {}
+
 }

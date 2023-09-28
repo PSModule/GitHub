@@ -17,7 +17,6 @@ function Get-GitHubRepoTeam {
         APIEndpoint = "/repos/$Owner/$Repo/teams"
     }
 
-    $response = Invoke-GitHubAPI @inputObject
+    Invoke-GitHubAPI @inputObject
 
-    $response
 }

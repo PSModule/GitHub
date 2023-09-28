@@ -1,25 +1,25 @@
 ﻿function Get-GitHubWorkflow {
     <#
-    .SYNOPSIS
-    Lists the workflows in a repository.
+        .SYNOPSIS
+        Lists the workflows in a repository.
 
-    .DESCRIPTION
-    Anyone with read access to the repository can use this endpoint.
-    If the repository is private you must use an access token with the repo scope.
-    GitHub Apps must have the actions:read permission to use this endpoint.
+        .DESCRIPTION
+        Anyone with read access to the repository can use this endpoint.
+        If the repository is private you must use an access token with the repo scope.
+        GitHub Apps must have the actions:read permission to use this endpoint.
 
-    .EXAMPLE
-    Get-GitHubWorkflow -Owner 'octocat' -Repo 'hello-world'
+        .EXAMPLE
+        Get-GitHubWorkflow -Owner 'octocat' -Repo 'hello-world'
 
-    Gets all workflows in the 'octocat/hello-world' repository.
+        Gets all workflows in the 'octocat/hello-world' repository.
 
-    .EXAMPLE
-    Get-GitHubWorkflow -Owner 'octocat' -Repo 'hello-world' -Name 'hello-world.yml'
+        .EXAMPLE
+        Get-GitHubWorkflow -Owner 'octocat' -Repo 'hello-world' -Name 'hello-world.yml'
 
-    Gets the 'hello-world.yml' workflow in the 'octocat/hello-world' repository.
+        Gets the 'hello-world.yml' workflow in the 'octocat/hello-world' repository.
 
-    .NOTES
-    https://docs.github.com/en/rest/actions/workflows?apiVersion=2022-11-28#list-repository-workflows
+        .NOTES
+        https://docs.github.com/en/rest/actions/workflows?apiVersion=2022-11-28#list-repository-workflows
     #>
     [CmdletBinding(DefaultParameterSetName = 'ByName')]
     param (
@@ -36,13 +36,24 @@
         [string] $ID,
 
         [Parameter()]
-        [int] $PageSize = 100
+        [int] $PerPage = 100
     )
 
-    $inputObject = @{
-        Method      = 'GET'
-        APIEndpoint = "/repos/$Owner/$Repo/actions/workflows?per_page=$PageSize"
+    begin {}
+
+    process {
+
+        $body = @{
+            per_page = $PerPage
+        }
+
+        $inputObject = @{
+            APIEndpoint = "/repos/$Owner/$Repo/actions/workflows"
+            Method      = 'GET'
+            Body        = $body
+        }
+
+        Invoke-GitHubAPI @inputObject
+
     }
-    $response = Invoke-GitHubAPI @inputObject
-    $response
 }

@@ -17,14 +17,14 @@
     begin {}
 
     process {
+
         $inputObject = @{
             APIEndpoint = "repos/$Owner/$Repo/actions/runs/$ID"
             Method      = 'DELETE'
         }
 
-        $response = Invoke-GitHubAPI @inputObject
+        Invoke-GitHubAPI @inputObject
 
-        $response
     }
 
     end {}

@@ -1,6 +1,26 @@
-﻿# API Reference
-# https://docs.github.com/en/rest/reference/actions#re-run-a-workflow
-function Start-GitHubWorkflowReRun {
+﻿function Start-GitHubWorkflowReRun {
+    <#
+        .SYNOPSIS
+        Short description
+
+        .DESCRIPTION
+        Long description
+
+        .PARAMETER Owner
+        Parameter description
+
+        .PARAMETER Repo
+        Parameter description
+
+        .PARAMETER ID
+        Parameter description
+
+        .EXAMPLE
+        An example
+
+        .NOTES
+        https://docs.github.com/en/rest/reference/actions#re-run-a-workflow
+    #>
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -20,13 +40,14 @@ function Start-GitHubWorkflowReRun {
     begin {}
 
     process {
+
         $inputObject = @{
             Method      = 'POST'
             APIEndpoint = "/repos/$Owner/$Repo/actions/runs/$ID/rerun"
         }
-        $response = Invoke-GitHubAPI @inputObject
 
-        return $response
+        Invoke-GitHubAPI @inputObject
+
     }
 
     end {}

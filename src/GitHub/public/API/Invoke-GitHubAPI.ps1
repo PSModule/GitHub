@@ -1,27 +1,27 @@
 ﻿function Invoke-GitHubAPI {
     <#
-    .SYNOPSIS
-    Calls the GitHub API using the provided parameters.
+        .SYNOPSIS
+        Calls the GitHub API using the provided parameters.
 
-    .DESCRIPTION
-    This function is a wrapper around Invoke-RestMethod tailored for calling GitHub's API.
-    It automatically handles the endpoint URI construction, headers, and token authentication.
+        .DESCRIPTION
+        This function is a wrapper around Invoke-RestMethod tailored for calling GitHub's API.
+        It automatically handles the endpoint URI construction, headers, and token authentication.
 
-    .EXAMPLE
-    Invoke-GitHubAPI -ApiEndpoint '/repos/user/repo/pulls' -Method GET
+        .EXAMPLE
+        Invoke-GitHubAPI -ApiEndpoint '/repos/user/repo/pulls' -Method GET
 
-    Gets all open pull requests for the specified repository.
+        Gets all open pull requests for the specified repository.
 
-    .EXAMPLE
-    Invoke-GitHubAPI -ApiEndpoint '/repos/user/repo/pulls' -Method GET -Body @{ state = 'open' }
+        .EXAMPLE
+        Invoke-GitHubAPI -ApiEndpoint '/repos/user/repo/pulls' -Method GET -Body @{ state = 'open' }
 
-    Gets all open pull requests for the specified repository, filtered by the 'state' parameter.
+        Gets all open pull requests for the specified repository, filtered by the 'state' parameter.
 
-    .EXAMPLE
-    Invoke-GitHubAPI -ApiEndpoint '/repos/user/repo/pulls' -Method GET -Body @{ state = 'open' } -Accept 'application/vnd.github.v3+json'
+        .EXAMPLE
+        Invoke-GitHubAPI -ApiEndpoint '/repos/user/repo/pulls' -Method GET -Body @{ state = 'open' } -Accept 'application/vnd.github.v3+json'
 
-    Gets all open pull requests for the specified repository, filtered by the 'state' parameter, and using the specified 'Accept' header.
-#>
+        Gets all open pull requests for the specified repository, filtered by the 'state' parameter, and using the specified 'Accept' header.
+    #>
     [CmdletBinding()]
     param (
         # The HTTP method to be used for the API request. It can be one of the following: GET, POST, PUT, DELETE, or PATCH.
@@ -46,11 +46,11 @@
 
         # Specifies the HTTP version used for the request.
         [Parameter()]
-        $HttpVersion = '2.0',
+        [version] $HttpVersion = '2.0',
 
         # Support Pagination Relation Links per RFC5988.
         [Parameter()]
-        $FollowRelLink = $true,
+        [bool] $FollowRelLink = $true,
 
         # The secure token used for authentication in the GitHub API. It should be stored as a SecureString to ensure it's kept safe in memory.
         [Parameter()]

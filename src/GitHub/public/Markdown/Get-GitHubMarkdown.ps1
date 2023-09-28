@@ -16,17 +16,18 @@
         [string] $Context
     )
 
-    $inputObject = @{
-        APIEndpoint = '/markdown'
-        Body        = @{
-            context = $Context
-            mode    = $Mode
-            text    = $Text
-        }
-        Method      = 'POST'
+    $body = @{
+        context = $Context
+        mode    = $Mode
+        text    = $Text
     }
 
-    $response = Invoke-GitHubAPI @inputObject
+    $inputObject = @{
+        APIEndpoint = '/markdown'
+        Method      = 'POST'
+        Body        = $body
+    }
 
-    $response
+    Invoke-GitHubAPI @inputObject
+
 }

@@ -33,7 +33,5 @@ $VerbosePreference = 'SIlentlyContinue'
 
 $str = '2023-10-27 17:43:40 UTC'
 $format = "yyyy-MM-dd HH:mm:ss 'UTC'"
-
 $date = [datetime]::ParseExact($str, $format, $null)
-
 $date

@@ -23,7 +23,6 @@
         Method      = 'GET'
     }
 
-    $response = Invoke-GitHubAPI @inputObject
+    Invoke-GitHubAPI @inputObject
 
-    $response
 }

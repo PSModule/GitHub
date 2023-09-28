@@ -22,19 +22,20 @@
     begin {}
 
     process {
-        $inputObject = @{
-            APIEndpoint = "/repos/$Owner/$Repo/environments/$Name"
-            Body        = @{
-                owner            = $Owner
-                repo             = $Repo
-                environment_name = $Name
-            }
-            Method      = 'PUT'
+        $body = @{
+            owner            = $Owner
+            repo             = $Repo
+            environment_name = $Name
         }
 
-        $response = Invoke-GitHubAPI @inputObject
+        $inputObject = @{
+            APIEndpoint = "/repos/$Owner/$Repo/environments/$Name"
+            Method      = 'PUT'
+            Body        = $body
+        }
 
-        $response
+        Invoke-GitHubAPI @inputObject
+
     }
 
     end {}

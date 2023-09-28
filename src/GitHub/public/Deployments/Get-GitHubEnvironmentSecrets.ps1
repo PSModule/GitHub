@@ -1,4 +1,26 @@
 ﻿function Get-GitHubEnvironmentSecrets {
+    <#
+    .SYNOPSIS
+    Get GitHub environment secrets
+
+    .DESCRIPTION
+    Long description
+
+    .PARAMETER Owner
+    Parameter description
+
+    .PARAMETER Repo
+    Parameter description
+
+    .PARAMETER EnvironmentName
+    Parameter description
+
+    .EXAMPLE
+    An example
+
+    .NOTES
+    https://docs.github.com/en/rest/reference/repos#get-all-environments
+    #>
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -19,19 +41,13 @@
 
     process {
         $RepoID = (Get-GitHubRepo).id
-        #/repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}
-        #/repositories/{repository_id}/environments/{environment_name}/secrets
-        # API Reference
-        # https://docs.github.com/en/rest/reference/repos#get-all-environments
 
         $inputObject = @{
             APIEndpoint = "/repositories/$RepoID/environments/$EnvironmentName/secrets"
             Method      = 'GET'
         }
 
-        $response = Invoke-GitHubAPI @inputObject
-
-        $response
+        Invoke-GitHubAPI @inputObject
     }
 
     end {}
