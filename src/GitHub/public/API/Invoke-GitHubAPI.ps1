@@ -133,7 +133,10 @@
         Write-Error "[$functionName] - WebException - $($_.Exception.Message)"
         throw $_
     } catch {
-        Write-Error "[$functionName] - GeneralException - $($_.Exception.Message)"
+        Write-Error "[$functionName] - GeneralException - $_"
+        $err = $_ | ConvertFrom-Json -Depth 10
+        Write-Error "[$functionName] - $($err.Message)"
+        Write-Error "[$functionName] - For more info please see: [$($err.documentation_url)]"
         throw $_
     }
 }
