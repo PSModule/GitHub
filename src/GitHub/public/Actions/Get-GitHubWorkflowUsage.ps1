@@ -47,7 +47,7 @@
             APIEndpoint = "/repos/$Owner/$Repo/actions/workflows/$ID/timing"
         }
 
-        Invoke-GitHubAPI @inputObject
+        Invoke-GitHubAPI @inputObject | Select-Object -ExpandProperty billable | Write-Output
 
     }
 

@@ -51,7 +51,7 @@ Get-GitHubWorkflow | Enable-GitHubWorkflow
 Get-GitHubWorkflow | Select-Object Name, state
 
 Get-GitHubWorkflow | Select-Object Name | Sort-Object Name -Unique
-
+Get-GitHubWorkflow | Get-GitHubWorkflowUsage
 (Get-GitHubWorkflow | Get-GitHubWorkflowRun).count
 Get-GitHubWorkflowRun | Cancel-GitHubWorkflowRun
 Get-GitHubWorkflowRun | Remove-GitHubWorkflowRun
