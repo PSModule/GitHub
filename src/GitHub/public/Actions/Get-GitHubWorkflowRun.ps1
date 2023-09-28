@@ -4,7 +4,7 @@
         https://docs.github.com/en/rest/actions/workflow-runs?apiVersion=2022-11-28#list-workflow-runs-for-a-workflow
         https://docs.github.com/en/rest/actions/workflow-runs?apiVersion=2022-11-28#list-workflow-runs-for-a-repository
     #>
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'Repo')]
     param (
         [Parameter()]
         [string] $Owner = (Get-GitHubConfig -Name Owner),
