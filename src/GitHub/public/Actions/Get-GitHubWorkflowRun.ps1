@@ -46,7 +46,7 @@
             Body        = $body
         }
 
-        Invoke-GitHubAPI @inputObject
+        Invoke-GitHubAPI @inputObject | Select-Object -ExpandProperty workflow_runs | Write-Output
 
     }
 
