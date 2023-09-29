@@ -70,7 +70,7 @@
         [int] $PerPage = 30
     )
 
-    switch ($Cmdlet.ParameterSetName) {
+    switch ($PSCmdlet.ParameterSetName) {
         '__DefaultSet' {
             Get-GitHubMyOrganization -PerPage $PerPage
         }
