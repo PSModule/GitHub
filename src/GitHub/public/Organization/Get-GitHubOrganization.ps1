@@ -1,35 +1,87 @@
-﻿function Set-GitHubOrganization {
+﻿function Get-GitHubOrganization {
     <#
         .SYNOPSIS
-        Get an organization
+        List organization
 
         .DESCRIPTION
-        To see many of the organization response values, you need to be an authenticated organization owner with the `admin:org` scope. When the value of `two_factor_requirement_enabled` is `true`, the organization requires all members, billing managers, and outside collaborators to enable [two-factor authentication](https://docs.github.com/articles/securing-your-account-with-two-factor-authentication-2fa/).
-
-        GitHub Apps with the `Organization plan` permission can use this endpoint to retrieve information about an organization's GitHub plan. See "[Authenticating with GitHub Apps](https://docs.github.com/apps/building-github-apps/authenticating-with-github-apps/)" for details. For an example response, see 'Response with GitHub plan information' below."
+        List organizations for the authenticated user - if no parameters are provided.
+        List organizations for a user - if a username is provided.
+        Lists all organizations, in the order that they were created on GitHub - if '-All' is provided.
+        Get an organization - if a organization name is provided.
 
         .EXAMPLE
-        Get-GitHubOrganization -OrganizationName 'github'
+        Get-GitHubOrganization
 
-        Get the 'GitHub' organization
+        List organizations for the authenticated user.
+
+        .EXAMPLE
+        Get-GitHubOrganization -Username 'octocat'
+
+        List public organizations for the user 'octocat'.
+
+        .EXAMPLE
+        Get-GitHubOrganization -All -Since 142951047
+
+        List organizations, starting with PSModule.
+
+        .EXAMPLE
+        Get-GitHubOrganization -Name 'PSModule'
+
+        Get the organization 'PSModule'.
 
         .NOTES
-        https://docs.github.com/rest/orgs/orgs#get-an-organization
+        https://docs.github.com/rest/orgs/orgs#list-organizations-for-the-authenticated-user
     #>
     [OutputType([pscustomobject])]
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = '__DefaultSet')]
     param (
         # The organization name. The name is not case sensitive.
-        [Parameter(Mandatory)]
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'NamedOrg'
+        )]
         [Alias('org')]
-        [string] $OrganizationName
+        [Alias('name')]
+        [string] $OrganizationName,
+
+        # The handle for the GitHub user account.
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'NamedUser'
+        )]
+        [Alias('username')]
+        [string] $Username,
+
+        # List all organizations. Use '-Since' to start at a specific organization id.
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'AllOrg'
+        )]
+        [switch] $All,
+
+        # A organization ID. Only return organizations with an ID greater than this ID.
+        [Parameter(ParameterSetName = 'AllOrg')]
+        [int] $Since = 0,
+
+        # The number of results per page (max 100).
+        [Parameter(ParameterSetName = 'AllOrg')]
+        [Parameter(ParameterSetName = 'UserOrg')]
+        [Parameter(ParameterSetName = '__DefaultSet')]
+        [int] $PerPage = 30
     )
 
-    $inputObject = @{
-        APIEndpoint = "/orgs/$OrganizationName"
-        Method      = 'GET'
+    switch ($Cmdlet.ParameterSetName) {
+        '__DefaultSet' {
+            Get-GitHubMyOrganization -PerPage $PerPage
+        }
+        'NamedOrg' {
+            Get-GitHubOrganizationByName -OrganizationName $OrganizationName
+        }
+        'NamedUser' {
+            Get-GitHubOrganizationByUser -Username $Username
+        }
+        'AllOrg' {
+            Get-GitHubAllOrganization -Since $Since -PerPage $PerPage
+        }
     }
-
-    Invoke-GitHubAPI @inputObject
-
 }

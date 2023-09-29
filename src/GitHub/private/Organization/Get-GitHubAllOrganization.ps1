@@ -1,4 +1,4 @@
-﻿function Get-GitHubOrganizationList {
+﻿function Get-GitHubAllOrganization {
     <#
         .SYNOPSIS
         List organizations
@@ -9,7 +9,7 @@
         **Note:** Pagination is powered exclusively by the `since` parameter. Use the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers) to get the URL for the next page of organizations.
 
         .EXAMPLE
-        Get-GitHubOrganizationList -Since 142951047
+        Get-GitHubAllOrganization -Since 142951047
 
         List organizations, starting with PSModule
 
@@ -23,7 +23,7 @@
         # A organization ID. Only return organizations with an ID greater than this ID.
         [Parameter()]
         [int] $Since = 0,
-        
+
         # The number of results per page (max 100).
         [Parameter()]
         [int] $PerPage = 30
