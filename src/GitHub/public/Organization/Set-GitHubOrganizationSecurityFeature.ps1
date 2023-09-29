@@ -57,7 +57,7 @@
 
     $inputObject = @{
         APIEndpoint = "/orgs/$OrganizationName/$SecurityProduct/$Enablement"
-        Method      = 'PATCH'
+        Method      = 'POST'
         Body        = $body
     }
 
