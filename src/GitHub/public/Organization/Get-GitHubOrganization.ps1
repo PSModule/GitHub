@@ -72,7 +72,7 @@
 
     switch ($PSCmdlet.ParameterSetName) {
         '__DefaultSet' {
-            Get-GitHubMyOrganization -PerPage $PerPage
+            Get-GitHubMyOrganization -PerPage $PerPage | Get-GitHubOrganizationByName
         }
         'NamedOrg' {
             Get-GitHubOrganizationByName -OrganizationName $OrganizationName
