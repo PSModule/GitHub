@@ -62,7 +62,7 @@
 
         # The GitHub API version to be used. By default, it pulls from a configuration script variable.
         [Parameter()]
-        [string] $Version = (Get-GitHubConfig -Name ApiVersion)
+        [string] $Version = (Get-GitHubConfig -Name ApiVersion),
 
         # Declares the state of a resource by passing all parameters/body properties to Invoke-RestMethod, even if empty
         [Parameter()]
