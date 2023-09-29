@@ -1,4 +1,4 @@
-﻿function Get-GitHubOrganization {
+﻿function Set-GitHubOrganization {
     <#
         .SYNOPSIS
         Get an organization
@@ -21,6 +21,7 @@
     param (
         # The organization name. The name is not case sensitive.
         [Parameter(Mandatory)]
+        [Alias('org')]
         [string] $OrganizationName
     )
 
