@@ -24,7 +24,7 @@
         [int] $Since = 0,
         # The number of results per page (max 100).
         [Parameter()]
-        [int] $PerPage = 100
+        [int] $PerPage = 30
     )
 
     $body = @{

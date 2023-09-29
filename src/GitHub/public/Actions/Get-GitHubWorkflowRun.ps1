@@ -19,7 +19,7 @@
         [string] $ID,
 
         [Parameter()]
-        [int] $PerPage = 100
+        [int] $PerPage = 30
     )
 
     begin {}
