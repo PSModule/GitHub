@@ -36,7 +36,6 @@
         [Alias('org')]
         [Alias('owner')]
         [Alias('login')]
-        [Alias('name')]
         [string] $OrganizationName,
 
         # Billing email address. This address is not publicized.
