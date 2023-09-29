@@ -21,7 +21,6 @@
     param (
         # The handle for the GitHub user account.
         [Parameter(Mandatory)]
-        [Alias('username')]
         [string] $Username,
 
         # The number of results per page (max 100).

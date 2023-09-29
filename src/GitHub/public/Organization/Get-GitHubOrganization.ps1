@@ -41,6 +41,7 @@
             ParameterSetName = 'NamedOrg'
         )]
         [Alias('org')]
+        [Alias('owner')]
         [Alias('name')]
         [string] $OrganizationName,
 
@@ -49,7 +50,6 @@
             Mandatory,
             ParameterSetName = 'NamedUser'
         )]
-        [Alias('username')]
         [string] $Username,
 
         # List all organizations. Use '-Since' to start at a specific organization id.
