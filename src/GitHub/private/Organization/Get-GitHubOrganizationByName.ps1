@@ -32,11 +32,19 @@
         [string] $OrganizationName
     )
 
-    $inputObject = @{
-        APIEndpoint = "/orgs/$OrganizationName"
-        Method      = 'GET'
+    begin {}
+
+    process {
+
+        $inputObject = @{
+            APIEndpoint = "/orgs/$OrganizationName"
+            Method      = 'GET'
+        }
+
+        Invoke-GitHubAPI @inputObject
+
     }
 
-    Invoke-GitHubAPI @inputObject
+    end {}
 
 }

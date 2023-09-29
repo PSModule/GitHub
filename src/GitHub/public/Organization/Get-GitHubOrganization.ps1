@@ -78,7 +78,7 @@
             Get-GitHubOrganizationByName -OrganizationName $OrganizationName
         }
         'NamedUser' {
-            Get-GitHubOrganizationByUser -Username $Username
+            Get-GitHubUserOrganization -Username $Username
         }
         'AllOrg' {
             Get-GitHubAllOrganization -Since $Since -PerPage $PerPage

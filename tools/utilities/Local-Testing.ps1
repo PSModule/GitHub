@@ -13,17 +13,14 @@ Install-Module -Name GitHub -Force -Verbose -AllowPrerelease
 # Import-Module -Name 'C:\Repos\GitHub\PSModule\Modules\GitHub\src\GitHub\GitHub.psm1' -Verbose -Force
 
 Import-Module -Name GitHub -Verbose
-Clear-Host
 Get-Command -Module GitHub
-Get-Variable | Where-Object -Property Module -NE $null | Select-Object Name, Module, ModuleName
+Clear-Host
 Connect-GitHubAccount
 Connect-GitHubAccount -Mode OAuthApp
 Connect-GitHubAccount -AccessToken
+Get-GitHubConfig
 Get-GitHubConfig -Name AccessToken
-Get-GitHubConfig -Name AccessTokenExpirationDate
 Get-GitHubConfig -Name RefreshToken
-Get-GitHubConfig -Name RefreshTokenExpirationDate
-Get-GitHubConfig -Name ApiBaseUri
 Invoke-GitHubAPI -Method Get -ApiEndpoint /user
 Get-GitHubMeta
 Get-GitHubOctocat -S 'Hello, World!'
