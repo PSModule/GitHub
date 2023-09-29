@@ -18,10 +18,29 @@
     param (
         # Choose a configuration name to get.
         [Parameter()]
+        [ValidateSet(
+            'AccessToken',
+            'AccessTokenExpirationDate',
+            'AccessTokenType',
+            'ApiBaseUri',
+            'ApiVersion',
+            'AuthType',
+            'DeviceFlowType',
+            'Owner',
+            'RefreshToken',
+            'RefreshTokenExpirationDate',
+            'Repo',
+            'Scope',
+            'UserName'
+        )]
         [string] $Name
     )
 
     $prefix = $script:SecretVault.Prefix
+
+    $RefreshTokenData = (Get-SecretInfo -Name "$prefix`RefreshToken").Metadata | ConvertFrom-HashTable | ConvertTo-HashTable
+    $AccessTokenData = (Get-SecretInfo -Name "$prefix`AccessToken").Metadata | ConvertFrom-HashTable | ConvertTo-HashTable
+    $metadata = Join-Hashtable -Main $RefreshTokenData -Overrides $AccessTokenData
 
     switch($Name) {
         'AccessToken' {
@@ -30,13 +49,12 @@
         'RefreshToken' {
             Get-Secret -Name "$prefix`RefreshToken"
         }
-        'RefreshTokenExpirationDate' {
-            $RefreshTokenData = Get-SecretInfo -Name "$prefix`RefreshToken"
-            $RefreshTokenData.Metadata | ConvertFrom-HashTable | ConvertTo-HashTable | Select-Object -ExpandProperty $Name
-        }
         default {
-            $AccessTokenData = Get-SecretInfo -Name "$prefix`AccessToken"
-            $AccessTokenData.Metadata | ConvertFrom-HashTable | ConvertTo-HashTable | Select-Object -ExpandProperty $Name
+            if ($Name) {
+                $metadata.$Name
+            } else {
+                $metadata
+            }
         }
     }
 }

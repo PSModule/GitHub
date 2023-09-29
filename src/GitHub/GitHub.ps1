@@ -1,6 +1,6 @@
 ﻿$scriptFilePath = $MyInvocation.MyCommand.Path
 
-Write-Verbose "[$scriptFilePath] - Initializing GitHub module..." -Verbose
+Write-Verbose "[$scriptFilePath] - Initializing GitHub module..."
 
 Initialize-SecretVault -Name $script:SecretVault.Name -Type $script:SecretVault.Type
 

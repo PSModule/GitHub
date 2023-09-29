@@ -3,7 +3,7 @@
     Author      = 'Marius Storhaug'
 
     # Version number of this module
-    ModuleVersion = '0.0.1'
+    ModuleVersion = '0.1.1'
 
     # Description of the functionality provided by this module
     Description   = 'GitHub PowerShell Module'

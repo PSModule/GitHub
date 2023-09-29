@@ -27,23 +27,19 @@
         [Alias('Say')]
         [Alias('Saying')]
         [string]
-        $S = "The glass is never half empty. Its just twice as big as it needs to be."
+        $S
     )
-
-    # $query = [System.Web.HttpUtility]::UrlEncode($S)
-    # $query = [System.Uri]::EscapeDataString($S)
 
     $body = @{
         s = $S
     }
 
     $inputObject = @{
-        APIEndpoint = "/octocat"
+        APIEndpoint = '/octocat'
         Method      = 'GET'
         Body        = $body
     }
 
-    $response = Invoke-GitHubAPI @inputObject
+    Invoke-GitHubAPI @inputObject
 
-    $response
 }

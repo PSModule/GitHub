@@ -8,7 +8,7 @@ Get-SecretInfo
 Get-Module -Name GitHub -ListAvailable
 $VerbosePreference = 'Continue'
 
-Install-Module -Name GitHub -Verbose -Force -AllowPrerelease
+Install-Module -Name GitHub -Force -Verbose -AllowPrerelease
 # $env:PSModulePath += ';C:\Repos\GitHub\PSModule\Modules\GitHub\outputs'
 # Import-Module -Name 'C:\Repos\GitHub\PSModule\Modules\GitHub\src\GitHub\GitHub.psm1' -Verbose -Force
 
@@ -24,8 +24,14 @@ Get-GitHubConfig -Name AccessTokenExpirationDate
 Get-GitHubConfig -Name RefreshToken
 Get-GitHubConfig -Name RefreshTokenExpirationDate
 Get-GitHubConfig -Name ApiBaseUri
-Invoke-GitHubAPI -Method Get -ApiEndpoint /
+Invoke-GitHubAPI -Method Get -ApiEndpoint /user
 Get-GitHubMeta
 Get-GitHubOctocat -S 'Hello, World!'
 Disconnect-GitHubAccount -Verbose
 $VerbosePreference = 'SIlentlyContinue'
+
+
+$str = '2023-10-27 17:43:40 UTC'
+$format = "yyyy-MM-dd HH:mm:ss 'UTC'"
+$date = [datetime]::ParseExact($str, $format, $null)
+$date
