@@ -63,6 +63,10 @@
         # The GitHub API version to be used. By default, it pulls from a configuration script variable.
         [Parameter()]
         [string] $Version = (Get-GitHubConfig -Name ApiVersion)
+
+        # Declares the state of a resource by passing all parameters/body properties to Invoke-RestMethod, even if empty
+        [Parameter()]
+        [switch] $Declare
     )
 
     $functionName = $MyInvocation.MyCommand.Name
@@ -108,7 +112,10 @@
     $APICall | Remove-HashTableEntries -NullOrEmptyValues
 
     if ($Body) {
-        $Body | Remove-HashTableEntries -NullOrEmptyValues
+
+        if (-not $Declare) {
+            $Body | Remove-HashTableEntries -NullOrEmptyValues
+        }
 
         # Use body to create the query string for GET requests
         if ($Method -eq 'GET') {
