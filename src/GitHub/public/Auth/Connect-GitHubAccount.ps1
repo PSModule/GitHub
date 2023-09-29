@@ -89,7 +89,7 @@
                 $accessTokenIsValid = $accessTokenValidity.Seconds -gt 0
                 $accessTokenValidityText = "$($accessTokenValidity.Hours):$($accessTokenValidity.Minutes):$($accessTokenValidity.Seconds)"
                 if ($accessTokenIsValid) {
-                    if ($accessTokenValidity -gt 4) {
+                    if ($accessTokenValidity.TotalHours -gt 4) {
                         Write-Host '✓ ' -ForegroundColor Green -NoNewline
                         Write-Host "Access token is still valid for $accessTokenValidityText ..."
                         return
