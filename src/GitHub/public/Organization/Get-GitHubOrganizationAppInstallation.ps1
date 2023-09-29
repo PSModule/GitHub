@@ -21,6 +21,7 @@
         # The organization name. The name is not case sensitive.
         [Parameter(Mandatory)]
         [Alias('org')]
+        [Alias('name')]
         [string] $OrganizationName,
 
         # The number of results per page (max 100).
