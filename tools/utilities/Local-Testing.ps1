@@ -37,5 +37,7 @@ $date = [datetime]::ParseExact($str, $format, $null)
 $date
 
 
+Get-GitHubOrganization
+Get-GitHubOrganization -OrganizationName 'PowerShell'
 
-Get-GitHubOrganization -OrganizationName 'github'
+Get-GitHubOrganizationAppInstallation -OrganizationName 'PowerShell'
