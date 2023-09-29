@@ -27,6 +27,8 @@
         # The organization name. The name is not case sensitive.
         [Parameter(Mandatory)]
         [Alias('org')]
+        [Alias('owner')]
+        [Alias('login')]
         [Alias('name')]
         [string] $OrganizationName,
 
@@ -39,7 +41,6 @@
         # The action to take.
         # enable_all means to enable the specified security feature for all repositories in the organization. disable_all means to disable the specified security feature for all repositories in the organization.
         [Parameter(Mandatory)]
-        [Alias('enablement')]
         [ValidateSet('enable_all', 'disable_all')]
         [string] $Enablement,
 

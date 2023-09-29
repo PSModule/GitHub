@@ -21,6 +21,8 @@
         # The organization name. The name is not case sensitive.
         [Parameter(Mandatory)]
         [Alias('org')]
+        [Alias('owner')]
+        [Alias('login')]
         [Alias('name')]
         [string] $OrganizationName,
 
@@ -34,6 +36,6 @@
         Method      = 'GET'
     }
 
-    Invoke-GitHubAPI @inputObject
+    Invoke-GitHubAPI @inputObject | Select-Object -ExpandProperty 'installations' | Write-Output
 
 }

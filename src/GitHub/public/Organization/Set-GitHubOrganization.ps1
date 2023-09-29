@@ -34,6 +34,9 @@
         # The organization name. The name is not case sensitive.
         [Parameter(Mandatory)]
         [Alias('org')]
+        [Alias('owner')]
+        [Alias('login')]
+        [Alias('name')]
         [string] $OrganizationName,
 
         # Billing email address. This address is not publicized.
@@ -43,12 +46,10 @@
 
         # The company name.
         [Parameter()]
-        [Alias('company')]
         [string] $Company,
 
         # The publicly visible email address.
         [Parameter()]
-        [Alias('email')]
         [string] $Email,
 
         # The Twitter username of the company.
@@ -58,17 +59,14 @@
 
         # The location.
         [Parameter()]
-        [Alias('location')]
         [string] $Location,
 
         # The shorthand name of the company.
         [Parameter()]
-        [Alias('name')]
         [string] $Name,
 
         # The description of the company.
         [Parameter()]
-        [Alias('description')]
         [string] $Description,
 
         # Whether an organization can use organization projects.
@@ -140,7 +138,6 @@
 
         # Path to the organization's blog.
         [Parameter()]
-        [Alias('blog')]
         [string] $Blog,
 
         # Whether GitHub Advanced Security is automatically enabled for new repositories.

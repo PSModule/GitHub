@@ -37,4 +37,4 @@ $date
 Get-GitHubOrganization
 Get-GitHubOrganization -OrganizationName 'PowerShell'
 
-Get-GitHubOrganizationAppInstallation -OrganizationName 'PowerShell'
+Get-GitHubOrganizationAppInstallation -OrganizationName 'PSModule' | Select-Object -ExpandProperty installations

@@ -23,6 +23,9 @@
         # The organization name. The name is not case sensitive.
         [Parameter(Mandatory)]
         [Alias('org')]
+        [Alias('owner')]
+        [Alias('login')]
+        [Alias('name')]
         [string] $OrganizationName
     )
 
