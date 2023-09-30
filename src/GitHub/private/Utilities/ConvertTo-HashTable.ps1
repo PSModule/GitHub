@@ -42,5 +42,10 @@
         )]
         [object]$InputObject
     )
-    $InputObject | ConvertTo-Json -Depth 100 | ConvertFrom-Json -AsHashtable
+    [hashtable]$hashtable = @{}
+
+    foreach ($item in $InputObject.PSObject.Properties) {
+        $hashtable[$($item.Name)] = $item.Value
+    }
+    $hashtable
 }

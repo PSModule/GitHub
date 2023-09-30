@@ -63,7 +63,7 @@
         [string] $Bio
     )
 
-    $body = $PSBoundParameters.GetEnumerator() | ConvertFrom-HashTable | ConvertTo-HashTable
+    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable
 
     $inputObject = @{
         APIEndpoint = '/user'

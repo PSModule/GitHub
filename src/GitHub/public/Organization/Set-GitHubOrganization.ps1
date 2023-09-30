@@ -196,7 +196,7 @@
         [string] $SecretScanningPushProtectionCustomLink
     )
 
-    $body = $PSBoundParameters.GetEnumerator() | ConvertFrom-HashTable | ConvertTo-HashTable
+    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable
     Remove-HashTableEntries -Hashtable $body -RemoveNames 'OrganizationName'
 
     $inputObject = @{

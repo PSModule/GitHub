@@ -25,7 +25,7 @@ Invoke-GitHubAPI -Method Get -ApiEndpoint /user
 Get-GitHubMeta
 Get-GitHubOctocat -S 'Hello World'
 Disconnect-GitHubAccount -Verbose
-$VerbosePreference = 'SIlentlyContinue'
+$VerbosePreference = 'SilentlyContinue'
 
 
 $str = '2023-10-27 17:43:40 UTC'
@@ -45,3 +45,10 @@ Set-GitHubOrganization -OrganizationName 'PSModule' -Blog '' #-> Does not work.
 Set-GitHubOrganization -OrganizationName 'PSModule' -Blog ' '
 
 Set-GitHubOrganization -OrganizationName 'PSModule' -Company 'PSModule' -DefaultRepositoryPermission read
+
+Get-GitHubUser
+Set-GitHubUser -Name 'MariusStorhaug' -Company 'PSModule'
+Set-GitHubUser -Name 'MariusStorhaug' -Company '@DNBBank'
+Set-GitHubUser -Name 'MariusStorhaug' -Company ' '
+Set-GitHubUser -Name 'MariusStorhaug' -Hireable $true
+
