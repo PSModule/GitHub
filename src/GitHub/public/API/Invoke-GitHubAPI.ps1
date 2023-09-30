@@ -133,9 +133,14 @@
     }
 
     try {
-        Invoke-RestMethod @APICall | Write-Output
-        Write-Verbose ($StatusCode | ConvertTo-Json -Depth 100)
-        Write-Verbose ($responseHeaders | ConvertTo-Json -Depth 100)
+        Invoke-RestMethod @APICall | ForEach-Object {
+            # Add the StatusCode and ResponseHeaders to the output
+            $_ | Add-Member -MemberType NoteProperty -Name StatusCode -Value $StatusCode -PassThru
+            $_ | Add-Member -MemberType NoteProperty -Name ResponseHeaders -Value $ResponseHeaders -PassThru
+        } | Write-Output
+
+        Write-Verbose ($StatusCode | Format-List | Out-String)
+        Write-Verbose ($responseHeaders | Format-List | Out-String)
     } catch {
         Write-Error "[$functionName] - Status code - [$StatusCode]"
         $err = $_ | ConvertFrom-Json -Depth 10
