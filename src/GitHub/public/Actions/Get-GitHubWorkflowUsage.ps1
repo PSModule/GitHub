@@ -1,4 +1,4 @@
-﻿Function Get-GitHubWorkflowUsage {
+﻿filter Get-GitHubWorkflowUsage {
     <#
         .SYNOPSIS
         Short description
@@ -38,18 +38,11 @@
         [string[]] $ID
     )
 
-    begin {}
-
-    process {
-
-        $inputObject = @{
-            Method      = 'GET'
-            APIEndpoint = "/repos/$Owner/$Repo/actions/workflows/$ID/timing"
-        }
-
-        (Invoke-GitHubAPI @inputObject).Response.billable
-
+    $inputObject = @{
+        Method      = 'GET'
+        APIEndpoint = "/repos/$Owner/$Repo/actions/workflows/$ID/timing"
     }
 
-    end {}
+    (Invoke-GitHubAPI @inputObject).Response.billable
+
 }

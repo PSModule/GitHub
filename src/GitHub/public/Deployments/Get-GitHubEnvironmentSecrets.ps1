@@ -1,4 +1,4 @@
-﻿function Get-GitHubEnvironmentSecrets {
+﻿filter Get-GitHubEnvironmentSecrets {
     <#
     .SYNOPSIS
     Get GitHub environment secrets
@@ -29,26 +29,21 @@
         [Parameter()]
         [string] $Repo = (Get-GitHubConfig -Name Repo),
 
-        [Alias('name')]
         [Parameter(
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
+        [Alias('name')]
         [string] $EnvironmentName
     )
 
-    begin {}
+    $RepoID = (Get-GitHubRepo).id
 
-    process {
-        $RepoID = (Get-GitHubRepo).id
-
-        $inputObject = @{
-            APIEndpoint = "/repositories/$RepoID/environments/$EnvironmentName/secrets"
-            Method      = 'GET'
-        }
-
-        (Invoke-GitHubAPI @inputObject).Response
+    $inputObject = @{
+        APIEndpoint = "/repositories/$RepoID/environments/$EnvironmentName/secrets"
+        Method      = 'GET'
     }
 
-    end {}
+    (Invoke-GitHubAPI @inputObject).Response
+
 }

@@ -1,4 +1,4 @@
-﻿function Get-GitHubOrganizationByName {
+﻿filter Get-GitHubOrganizationByName {
     <#
         .SYNOPSIS
         Get an organization
@@ -31,19 +31,12 @@
         [string] $OrganizationName
     )
 
-    begin {}
 
-    process {
-
-        $inputObject = @{
-            APIEndpoint = "/orgs/$OrganizationName"
-            Method      = 'GET'
-        }
-
-        Invoke-GitHubAPI @inputObject
-
+    $inputObject = @{
+        APIEndpoint = "/orgs/$OrganizationName"
+        Method      = 'GET'
     }
 
-    end {}
+    (Invoke-GitHubAPI @inputObject).Response
 
 }

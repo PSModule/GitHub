@@ -1,4 +1,4 @@
-﻿function Get-GitHubZen {
+﻿filter Get-GitHubZen {
     <#
     .SYNOPSIS
     Get the Zen of GitHub.

@@ -1,4 +1,4 @@
-﻿function Get-GitHubOrganizationBlockedUser {
+﻿filter Get-GitHubOrganizationBlockedUser {
     <#
         .SYNOPSIS
         List users blocked by an organization
@@ -22,7 +22,6 @@
         [Alias('org')]
         [Alias('owner')]
         [Alias('login')]
-        [Alias('name')]
         [string] $OrganizationName,
 
         # The number of results per page (max 100).

@@ -1,4 +1,4 @@
-﻿function Get-GitHubRepoBranch {
+﻿filter Get-GitHubRepoBranch {
     [CmdletBinding()]
     param (
         [Parameter()]

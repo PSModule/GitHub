@@ -1,4 +1,4 @@
-﻿function Stop-GitHubWorkflowRun {
+﻿filter Stop-GitHubWorkflowRun {
     <#
         .SYNOPSIS
         Short description
@@ -38,18 +38,12 @@
         [string] $ID
     )
 
-    begin {}
 
-    process {
-
-        $inputObject = @{
-            Method      = 'POST'
-            APIEndpoint = "/repos/$Owner/$Repo/actions/runs/$ID/cancel"
-        }
-
-        (Invoke-GitHubAPI @inputObject).Response
-
+    $inputObject = @{
+        Method      = 'POST'
+        APIEndpoint = "/repos/$Owner/$Repo/actions/runs/$ID/cancel"
     }
 
-    end {}
+    (Invoke-GitHubAPI @inputObject).Response
+
 }

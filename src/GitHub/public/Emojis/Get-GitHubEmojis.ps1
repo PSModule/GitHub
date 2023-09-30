@@ -1,4 +1,4 @@
-﻿function Get-GitHubEmojis {
+﻿filter Get-GitHubEmojis {
     <#
         .NOTES
         https://docs.github.com/en/rest/reference/emojis#get-emojis

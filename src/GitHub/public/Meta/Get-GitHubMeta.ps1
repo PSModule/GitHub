@@ -1,4 +1,4 @@
-﻿function Get-GitHubMeta {
+﻿filter Get-GitHubMeta {
     <#
         .SYNOPSIS
         Get GitHub meta information.

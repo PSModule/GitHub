@@ -1,4 +1,4 @@
-﻿function Get-GitHubAllOrganization {
+﻿filter Get-GitHubAllOrganization {
     <#
         .SYNOPSIS
         List organizations
@@ -40,6 +40,6 @@
         Body        = $body
     }
 
-    Invoke-GitHubAPI @inputObject
+    (Invoke-GitHubAPI @inputObject).Response
 
 }

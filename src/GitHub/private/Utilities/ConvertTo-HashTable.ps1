@@ -1,4 +1,4 @@
-﻿function ConvertTo-HashTable {
+﻿filter ConvertTo-HashTable {
     <#
         .SYNOPSIS
         Converts an object to a hashtable
@@ -27,7 +27,7 @@
             "b": 2,
             "c": 3
         }
-        
+
         Converts the object to a hashtable and then to JSON.
         Using the alias 'ConvertTo-Dictionary' instead of 'ConvertTo-HashTable'.
     #>

@@ -1,4 +1,4 @@
-﻿function Join-Object {
+﻿filter Join-Object {
     <#
         .SYNOPSIS
         Merges two or more objects into a single object

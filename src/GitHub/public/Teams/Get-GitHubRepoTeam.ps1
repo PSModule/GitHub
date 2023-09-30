@@ -1,4 +1,4 @@
-function Get-GitHubRepoTeam {
+filter Get-GitHubRepoTeam {
     <#
         .NOTES
         https://docs.github.com/en/rest/reference/repos#get-a-repository

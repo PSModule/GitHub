@@ -1,4 +1,4 @@
-﻿function Update-GitHubEnvironment {
+﻿filter Update-GitHubEnvironment {
     <#
         .NOTES
         https://docs.github.com/en/rest/reference/repos#create-or-update-an-environment
@@ -19,24 +19,18 @@
         [string] $Name
     )
 
-    begin {}
-
-    process {
-        $body = @{
-            owner            = $Owner
-            repo             = $Repo
-            environment_name = $Name
-        }
-
-        $inputObject = @{
-            APIEndpoint = "/repos/$Owner/$Repo/environments/$Name"
-            Method      = 'PUT'
-            Body        = $body
-        }
-
-        (Invoke-GitHubAPI @inputObject).Response
-
+    $body = @{
+        owner            = $Owner
+        repo             = $Repo
+        environment_name = $Name
     }
 
-    end {}
+    $inputObject = @{
+        APIEndpoint = "/repos/$Owner/$Repo/environments/$Name"
+        Method      = 'PUT'
+        Body        = $body
+    }
+
+    (Invoke-GitHubAPI @inputObject).Response
+
 }

@@ -1,4 +1,4 @@
-﻿Function Enable-GitHubWorkflow {
+﻿filter Enable-GitHubWorkflow {
     <#
         .NOTES
         https://docs.github.com/en/rest/reference/actions#enable-a-workflow
@@ -18,17 +18,11 @@
         [string[]] $ID
     )
 
-    begin {}
-
-    process {
-        $inputObject = @{
-            APIEndpoint = "/repos/$Owner/$Repo/actions/workflows/$ID/enable"
-            Method      = 'PUT'
-        }
-
-        Invoke-GitHubAPI @inputObject | Out-Null
-
+    $inputObject = @{
+        APIEndpoint = "/repos/$Owner/$Repo/actions/workflows/$ID/enable"
+        Method      = 'PUT'
     }
 
-    end {}
+    Invoke-GitHubAPI @inputObject | Out-Null
+
 }

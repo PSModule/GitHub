@@ -1,4 +1,4 @@
-﻿function Start-GitHubWorkflow {
+﻿filter Start-GitHubWorkflow {
     <#
         .SYNOPSIS
         Start a workflow run using the workflow's ID.
@@ -43,24 +43,17 @@
         [hashtable] $Inputs = @{}
     )
 
-    begin {}
-
-    process {
-
-        $body = @{
-            ref    = $Ref
-            inputs = $Inputs
-        }
-
-        $inputObject = @{
-            APIEndpoint = "/repos/$Owner/$Repo/actions/workflows/$ID/dispatches"
-            Method      = 'POST'
-            Body        = $body
-        }
-
-        (Invoke-GitHubAPI @inputObject).Response
-
+    $body = @{
+        ref    = $Ref
+        inputs = $Inputs
     }
 
-    end {}
+    $inputObject = @{
+        APIEndpoint = "/repos/$Owner/$Repo/actions/workflows/$ID/dispatches"
+        Method      = 'POST'
+        Body        = $body
+    }
+
+    (Invoke-GitHubAPI @inputObject).Response
+
 }

@@ -1,4 +1,4 @@
-﻿function Set-GitHubOrganization {
+﻿filter Set-GitHubOrganization {
     <#
         .SYNOPSIS
         Update an organization
@@ -32,162 +32,166 @@
     [CmdletBinding()]
     param (
         # The organization name. The name is not case sensitive.
-        [Parameter(Mandatory)]
+        [Parameter(
+            Mandatory,
+            ValueFromPipeline,
+            ValueFromPipelineByPropertyName
+        )]
         [Alias('org')]
         [Alias('owner')]
         [Alias('login')]
         [string] $OrganizationName,
 
         # Billing email address. This address is not publicized.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('billing_email')]
         [string] $BillingEmail,
 
         # The company name.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string] $Company,
 
         # The publicly visible email address.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string] $Email,
 
         # The Twitter username of the company.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('twitter_username')]
         [string] $TwitterUsername,
 
         # The location.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string] $Location,
 
         # The shorthand name of the company.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string] $Name,
 
         # The description of the company.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string] $Description,
 
         # Whether an organization can use organization projects.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('has_organization_projects')]
         [bool] $HasOrganizationProjects,
 
         # Whether repositories that belong to the organization can use repository projects.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('has_repository_projects')]
         [bool] $HasRepositoryProjects,
 
         # Default permission level members have for organization repositories.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('default_repository_permission')]
         [ValidateSet('read', 'write', 'admin', 'none')]
         [string] $DefaultRepositoryPermission,
 
         # Whether of non-admin organization members can create repositories. Note: A parameter can override this parameter. See members_allowed_repository_creation_type in this table for details.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('members_can_create_repositories')]
         [bool] $MembersCanCreateRepositories = $true,
 
         # Whether organization members can create internal repositories, which are visible to all enterprise members. You can only allow members to create internal repositories if your organization is associated with an enterprise account using GitHub Enterprise Cloud or GitHub Enterprise Server 2.20+. For more information, see "Restricting repository creation in your organization" in the GitHub Help documentation.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('members_can_create_internal_repositories')]
         [bool] $MembersCanCreateInternalRepositories,
 
         # Whether organization members can create private repositories, which are visible to organization members with permission. For more information, see "Restricting repository creation in your organization" in the GitHub Help documentation.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('members_can_create_private_repositories')]
         [bool] $MembersCanCreatePrivateRepositories,
 
         # Whether organization members can create public repositories, which are visible to anyone. For more information, see "Restricting repository creation in your organization" in the GitHub Help documentation.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('members_can_create_public_repositories')]
         [bool] $MembersCanCreatePublicRepositories,
 
         # Specifies which types of repositories non-admin organization members can create. private is only available to repositories that are part of an organization on GitHub Enterprise Cloud. Note: This parameter is deprecated and will be removed in the future. Its return value ignores internal repositories. Using this parameter overrides values set in members_can_create_repositories. See the parameter deprecation notice in the operation description for details.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('members_allowed_repository_creation_type')]
         [ValidateSet('all', 'private', 'none')]
         [string] $MembersAllowedRepositoryCreationType,
 
         # Whether organization members can create GitHub Pages sites. Existing published sites will not be impacted.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('members_can_create_pages')]
         [bool] $MembersCanCreatePages = $true,
 
         # Whether organization members can create public GitHub Pages sites. Existing published sites will not be impacted.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('members_can_create_public_pages')]
         [bool] $MembersCanCreatePublicPages = $true,
 
         # Whether organization members can create private GitHub Pages sites. Existing published sites will not be impacted.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('members_can_create_private_pages')]
         [bool] $MembersCanCreatePrivatePages = $true,
 
         # Whether organization members can fork private organization repositories.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('members_can_fork_private_repositories')]
         [bool] $MembersCanForkPrivateRepositories = $false,
 
         # Whether contributors to organization repositories are required to sign off on commits they make through GitHub's web interface.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('web_commit_signoff_required')]
         [bool] $WebCommitSignoffRequired = $false,
 
         # Path to the organization's blog.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string] $Blog,
 
         # Whether GitHub Advanced Security is automatically enabled for new repositories.
         # To use this parameter, you must have admin permissions for the repository or be an owner or security manager for the organization that owns the repository. For more information, see "Managing security managers in your organization."
         # You can check which security and analysis features are currently enabled by using a GET /orgs/{org} request.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('advanced_security_enabled_for_new_repositories')]
         [bool] $AdvancedSecurityEnabledForNewRepositories = $false,
 
         # Whether Dependabot alerts is automatically enabled for new repositories.
         # To use this parameter, you must have admin permissions for the repository or be an owner or security manager for the organization that owns the repository. For more information, see "Managing security managers in your organization."
         # You can check which security and analysis features are currently enabled by using a GET /orgs/{org} request.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('dependabot_alerts_enabled_for_new_repositories')]
         [bool] $DependabotAlertsEnabledForNewRepositories = $false,
 
         # Whether Dependabot security updates is automatically enabled for new repositories.
         # To use this parameter, you must have admin permissions for the repository or be an owner or security manager for the organization that owns the repository. For more information, see "Managing security managers in your organization."
         # You can check which security and analysis features are currently enabled by using a GET /orgs/{org} request.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('dependabot_security_updates_enabled_for_new_repositories')]
         [bool] $DependabotSecurityUpdatesEnabledForNewRepositories = $false,
 
         # Whether dependency graph is automatically enabled for new repositories.
         # To use this parameter, you must have admin permissions for the repository or be an owner or security manager for the organization that owns the repository. For more information, see "Managing security managers in your organization."
         # You can check which security and analysis features are currently enabled by using a GET /orgs/{org} request.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('dependency_graph_enabled_for_new_repositories')]
         [bool] $DependencyGraphEnabledForNewRepositories = $false,
 
         # Whether secret scanning is automatically enabled for new repositories.
         # To use this parameter, you must have admin permissions for the repository or be an owner or security manager for the organization that owns the repository. For more information, see "Managing security managers in your organization."
         # You can check which security and analysis features are currently enabled by using a GET /orgs/{org} request.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('secret_scanning_enabled_for_new_repositories')]
         [bool] $SecretScanningEnabledForNewRepositories = $false,
 
         # Whether secret scanning push protection is automatically enabled for new repositories.
         # To use this parameter, you must have admin permissions for the repository or be an owner or security manager for the organization that owns the repository. For more information, see "Managing security managers in your organization."
         # You can check which security and analysis features are currently enabled by using a GET /orgs/{org} request.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('secret_scanning_push_protection_enabled_for_new_repositories')]
         [bool] $SecretScanningPushProtectionEnabledForNewRepositories = $false,
 
         # Whether a custom link is shown to contributors who are blocked from pushing a secret by push protection.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('secret_scanning_push_protection_custom_link_enabled')]
         [bool] $SecretScanningPushProtectionCustomLinkEnabled = $false,
 
         # If secret_scanning_push_protection_custom_link_enabled is true, the URL that will be displayed to contributors who are blocked from pushing a secret.
-        [Parameter()]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('secret_scanning_push_protection_custom_link')]
         [string] $SecretScanningPushProtectionCustomLink
     )

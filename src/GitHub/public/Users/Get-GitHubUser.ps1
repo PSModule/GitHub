@@ -1,4 +1,4 @@
-﻿function Get-GitHubUser {
+﻿filter Get-GitHubUser {
     <#
         .SYNOPSIS
         Get the authenticated user

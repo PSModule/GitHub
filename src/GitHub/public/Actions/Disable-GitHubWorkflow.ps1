@@ -1,4 +1,4 @@
-﻿Function Disable-GitHubWorkflow {
+﻿filter Disable-GitHubWorkflow {
     <#
         .NOTES
         https://docs.github.com/en/rest/reference/actions#disable-a-workflow
@@ -18,17 +18,11 @@
         [string[]] $ID
     )
 
-    begin {}
-
-    process {
-        $inputObject = @{
-            APIEndpoint = "/repos/$Owner/$Repo/actions/workflows/$ID/disable"
-            Method      = 'PUT'
-        }
-
-        Invoke-GitHubAPI @inputObject | Out-Null
-
+    $inputObject = @{
+        APIEndpoint = "/repos/$Owner/$Repo/actions/workflows/$ID/disable"
+        Method      = 'PUT'
     }
 
-    end {}
+    Invoke-GitHubAPI @inputObject | Out-Null
+
 }

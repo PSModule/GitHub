@@ -1,4 +1,4 @@
-﻿function Set-GitHubUser {
+﻿filter Set-GitHubUser {
     <#
         .SYNOPSIS
         Update the authenticated user

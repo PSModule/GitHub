@@ -1,4 +1,4 @@
-﻿function Get-GitHubEnvironment {
+﻿filter Get-GitHubEnvironment {
     <#
         .SYNOPSIS
         Get GitHub environment
@@ -27,18 +27,11 @@
         [string] $Repo = (Get-GitHubConfig -Name Repo)
     )
 
-    begin {}
-
-    process {
-
-        $inputObject = @{
-            APIEndpoint = "/repos/$Owner/$Repo/environments"
-            Method      = 'GET'
-        }
-
-        (Invoke-GitHubAPI @inputObject).Response
-
+    $inputObject = @{
+        APIEndpoint = "/repos/$Owner/$Repo/environments"
+        Method      = 'GET'
     }
 
-    end {}
+    (Invoke-GitHubAPI @inputObject).Response
+
 }

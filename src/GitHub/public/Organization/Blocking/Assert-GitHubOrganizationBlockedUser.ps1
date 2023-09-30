@@ -1,4 +1,4 @@
-﻿function Assert-GitHubOrganizationBlockedUser {
+﻿filter Assert-GitHubOrganizationBlockedUser {
     <#
         .SYNOPSIS
         Check if a user is blocked by an organization
@@ -20,14 +20,21 @@
     [CmdletBinding()]
     param (
         # The organization name. The name is not case sensitive.
-        [Parameter(Mandatory)]
+        [Parameter(
+            Mandatory,
+            ValueFromPipeline,
+            ValueFromPipelineByPropertyName
+        )]
         [Alias('org')]
         [Alias('owner')]
         [Alias('login')]
         [string] $OrganizationName,
 
         # The handle for the GitHub user account.
-        [Parameter(Mandatory)]
+        [Parameter(
+            Mandatory,
+            ValueFromPipelineByPropertyName
+        )]
         [string] $Username
     )
 

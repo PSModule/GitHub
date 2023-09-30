@@ -1,4 +1,4 @@
-﻿function Get-GitHubWorkflow {
+﻿filter Get-GitHubWorkflow {
     <#
         .SYNOPSIS
         Lists the workflows in a repository.
@@ -39,24 +39,17 @@
         [int] $PerPage = 30
     )
 
-    begin {}
 
-    process {
-
-        $body = @{
-            per_page = $PerPage
-        }
-
-        $inputObject = @{
-            APIEndpoint = "/repos/$Owner/$Repo/actions/workflows"
-            Method      = 'GET'
-            Body        = $body
-        }
-
-        (Invoke-GitHubAPI @inputObject).Response.workflows
-
+    $body = @{
+        per_page = $PerPage
     }
 
-    end {}
+    $inputObject = @{
+        APIEndpoint = "/repos/$Owner/$Repo/actions/workflows"
+        Method      = 'GET'
+        Body        = $body
+    }
+
+    (Invoke-GitHubAPI @inputObject).Response.workflows
 
 }

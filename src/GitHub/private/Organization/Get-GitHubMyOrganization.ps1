@@ -1,4 +1,4 @@
-﻿function Get-GitHubMyOrganization {
+﻿filter Get-GitHubMyOrganization {
     <#
         .SYNOPSIS
         List organizations for the authenticated user
@@ -36,6 +36,6 @@
         Body        = $body
     }
 
-    Invoke-GitHubAPI @inputObject
+    (Invoke-GitHubAPI @inputObject).Response
 
 }

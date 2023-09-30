@@ -1,4 +1,4 @@
-﻿function ConvertTo-QueryString {
+﻿filter ConvertTo-QueryString {
     <#
         .SYNOPSIS
         Convert an object to a query string

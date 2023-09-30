@@ -1,4 +1,4 @@
-﻿function Invoke-GitHubAPI {
+﻿filter Invoke-GitHubAPI {
     <#
         .SYNOPSIS
         Calls the GitHub API using the provided parameters.
@@ -132,7 +132,7 @@
     }
 
     try {
-        (Invoke-RestMethod @APICall) | ForEach-Object {
+        (Invoke-RestMethod @APICall -ErrorAction SilentlyContinue) | ForEach-Object {
             $statusCode = $APICallStatusCode | ConvertTo-Json -Depth 100 | ConvertFrom-Json
             $responseHeaders = $APICallResponseHeaders | ConvertTo-Json -Depth 100 | ConvertFrom-Json
             [pscustomobject]@{
@@ -143,12 +143,12 @@
         }
     } catch {
         Write-Error "[$functionName] - Status code - [$APICallStatusCode]"
-        $err = $_ | ConvertFrom-Json -Depth 10
-        Write-Error "[$functionName] - $($err.Message)"
-        Write-Error "[$functionName] - For more info please see: [$($err.documentation_url)]"
-        $APICallResponseHeaders.PSObject.Properties | ForEach-Object {
-            Write-Error "[$functionName] - $($_.Key): $($_.Value)"
-        }
-        return 1
+        # $err = $_ | ConvertFrom-Json -Depth 10
+        # Write-Error "[$functionName] - $($err.Message)"
+        # Write-Error "[$functionName] - For more info please see: [$($err.documentation_url)]"
+        # $APICallResponseHeaders.PSObject.Properties | ForEach-Object {
+        #     Write-Error "[$functionName] - $($_.Key): $($_.Value)"
+        # }
+        # return 1
     }
 }

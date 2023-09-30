@@ -1,4 +1,4 @@
-﻿function ConvertFrom-HashTable {
+﻿filter ConvertFrom-HashTable {
     <#
         .SYNOPSIS
         Converts a hashtable to a pscustomobject

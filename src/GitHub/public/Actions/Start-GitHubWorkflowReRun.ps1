@@ -1,4 +1,4 @@
-﻿function Start-GitHubWorkflowReRun {
+﻿filter Start-GitHubWorkflowReRun {
     <#
         .SYNOPSIS
         Short description
@@ -37,18 +37,11 @@
         [string] $ID
     )
 
-    begin {}
-
-    process {
-
-        $inputObject = @{
-            Method      = 'POST'
-            APIEndpoint = "/repos/$Owner/$Repo/actions/runs/$ID/rerun"
-        }
-
-        (Invoke-GitHubAPI @inputObject).Response
-
+    $inputObject = @{
+        Method      = 'POST'
+        APIEndpoint = "/repos/$Owner/$Repo/actions/runs/$ID/rerun"
     }
 
-    end {}
+    (Invoke-GitHubAPI @inputObject).Response
+
 }

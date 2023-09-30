@@ -1,4 +1,4 @@
-﻿function Remove-GitHubOrganization {
+﻿filter Remove-GitHubOrganization {
     <#
         .SYNOPSIS
         Delete an organization
@@ -21,11 +21,14 @@
     [CmdletBinding()]
     param (
         # The organization name. The name is not case sensitive.
-        [Parameter(Mandatory)]
+        [Parameter(
+            Mandatory,
+            ValueFromPipeline,
+            ValueFromPipelineByPropertyName
+        )]
         [Alias('org')]
         [Alias('owner')]
         [Alias('login')]
-        [Alias('name')]
         [string] $OrganizationName
     )
 

@@ -1,4 +1,4 @@
-﻿function Get-GitHubRoot {
+﻿filter Get-GitHubRoot {
     <#
         .SYNOPSIS
         GitHub API Root.

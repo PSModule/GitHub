@@ -1,4 +1,4 @@
-﻿function Get-GitHubUserOrganization {
+﻿filter Get-GitHubUserOrganization {
     <#
         .SYNOPSIS
         List organizations for a user
@@ -38,6 +38,6 @@
         Body        = $body
     }
 
-    Invoke-GitHubAPI @inputObject
+    (Invoke-GitHubAPI @inputObject).Response
 
 }

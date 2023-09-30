@@ -1,4 +1,4 @@
-﻿function Get-GitHubOctocat {
+﻿filter Get-GitHubOctocat {
     <#
         .SYNOPSIS
         Get Octocat.
@@ -26,8 +26,7 @@
         [Parameter()]
         [Alias('Say')]
         [Alias('Saying')]
-        [string]
-        $S
+        [string] $S
     )
 
     $body = @{

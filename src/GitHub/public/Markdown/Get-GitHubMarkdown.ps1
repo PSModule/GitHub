@@ -1,11 +1,15 @@
-﻿function Get-GitHubMarkdown {
+﻿filter Get-GitHubMarkdown {
     <#
         .NOTES
         https://docs.github.com/en/rest/reference/meta#github-api-root
     #>
     [CmdletBinding()]
     param (
-        [Parameter()]
+        [Parameter(
+            Mandatory,
+            ValueFromPipeline,
+            ValueFromPipelineByPropertyName
+        )]
         [switch] $Text,
 
         [Parameter()]

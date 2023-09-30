@@ -1,4 +1,4 @@
-﻿function Get-GitHubOrganization {
+﻿filter Get-GitHubOrganization {
     <#
         .SYNOPSIS
         List organization
@@ -38,7 +38,8 @@
         # The organization name. The name is not case sensitive.
         [Parameter(
             Mandatory,
-            ParameterSetName = 'NamedOrg'
+            ParameterSetName = 'NamedOrg',
+            ValueFromPipelineByPropertyName
         )]
         [Alias('login')]
         [Alias('org')]
@@ -48,7 +49,8 @@
         # The handle for the GitHub user account.
         [Parameter(
             Mandatory,
-            ParameterSetName = 'NamedUser'
+            ParameterSetName = 'NamedUser',
+            ValueFromPipelineByPropertyName
         )]
         [string] $Username,
 

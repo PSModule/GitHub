@@ -1,4 +1,4 @@
-﻿function Set-GitHubOrganizationSecurityFeature {
+﻿filter Set-GitHubOrganizationSecurityFeature {
     <#
         .SYNOPSIS
         Enable or disable a security feature for an organization
@@ -29,7 +29,6 @@
         [Alias('org')]
         [Alias('owner')]
         [Alias('login')]
-        [Alias('name')]
         [string] $OrganizationName,
 
         # The security feature to enable or disable.

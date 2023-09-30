@@ -1,4 +1,4 @@
-﻿function Get-GitHubUserList {
+﻿filter Get-GitHubUserList {
     <#
         .SYNOPSIS
         List users

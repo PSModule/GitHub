@@ -1,4 +1,4 @@
-﻿function Get-GitHubOrganizationAppInstallation {
+﻿filter Get-GitHubOrganizationAppInstallation {
     <#
         .SYNOPSIS
         List app installations for an organization
@@ -19,11 +19,14 @@
     [CmdletBinding()]
     param (
         # The organization name. The name is not case sensitive.
-        [Parameter(Mandatory)]
+        [Parameter(
+            Mandatory,
+            ValueFromPipeline,
+            ValueFromPipelineByPropertyName
+        )]
         [Alias('org')]
         [Alias('owner')]
         [Alias('login')]
-        [Alias('name')]
         [string] $OrganizationName,
 
         # The number of results per page (max 100).
