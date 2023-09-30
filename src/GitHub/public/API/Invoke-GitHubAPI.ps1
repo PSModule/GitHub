@@ -135,9 +135,11 @@
         (Invoke-RestMethod @APICall) | ForEach-Object {
             $statusCode = $APICallStatusCode | ConvertTo-Json -Depth 100 | ConvertFrom-Json
             $responseHeaders = $APICallResponseHeaders | ConvertTo-Json -Depth 100 | ConvertFrom-Json
-            $_ | Add-Member -NotePropertyName StatusCode -NotePropertyValue $statusCode -Force
-            $_ | Add-Member -NotePropertyName ResponseHeaders -NotePropertyValue $responseHeaders -Force
-            $_ | Write-Output
+            [pscustomobject]@{
+                Response = $_
+                StatusCode = $statusCode
+                ResponseHeaders = $responseHeaders
+            }
         }
     } catch {
         Write-Error "[$functionName] - Status code - [$APICallStatusCode]"

@@ -75,6 +75,6 @@
         Method      = 'PATCH'
     }
 
-    Invoke-GitHubAPI @inputObject
+    (Invoke-GitHubAPI @inputObject).Response
 
 }

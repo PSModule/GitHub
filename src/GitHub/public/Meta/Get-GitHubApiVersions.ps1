@@ -23,6 +23,6 @@
         Method      = 'GET'
     }
 
-    Invoke-GitHubAPI @inputObject
+    (Invoke-GitHubAPI @inputObject).Response
 
 }

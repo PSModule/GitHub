@@ -46,7 +46,7 @@
             Body        = $body
         }
 
-        (Invoke-GitHubAPI @inputObject).workflow_runs
+        (Invoke-GitHubAPI @inputObject).Response.workflow_runs
 
     }
 

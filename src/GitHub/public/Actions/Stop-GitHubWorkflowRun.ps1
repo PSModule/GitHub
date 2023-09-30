@@ -47,7 +47,7 @@
             APIEndpoint = "/repos/$Owner/$Repo/actions/runs/$ID/cancel"
         }
 
-        Invoke-GitHubAPI @inputObject
+        (Invoke-GitHubAPI @inputObject).Response
 
     }
 

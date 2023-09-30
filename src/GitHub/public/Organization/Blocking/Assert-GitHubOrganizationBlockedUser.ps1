@@ -24,7 +24,6 @@
         [Alias('org')]
         [Alias('owner')]
         [Alias('login')]
-        [Alias('name')]
         [string] $OrganizationName,
 
         # The handle for the GitHub user account.
@@ -37,6 +36,13 @@
         Method      = 'GET'
     }
 
-    Invoke-GitHubAPI @inputObject -Verbose
+    $statusCode = (Invoke-GitHubAPI @inputObject).SatusCode
 
+    if ($statusCode -eq 204) {
+        return $true
+    } elseif ($statusCode -eq 404) {
+        return $false
+    } else {
+        throw "Unexpected status code: $statusCode"
+    }
 }

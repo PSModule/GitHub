@@ -16,6 +16,6 @@
         Method      = 'POST'
     }
 
-    Invoke-GitHubAPI @inputObject
+    (Invoke-GitHubAPI @inputObject).Response
 
 }

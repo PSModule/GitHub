@@ -47,7 +47,7 @@
             APIEndpoint = "/repos/$Owner/$Repo/actions/workflows/$ID/timing"
         }
 
-        (Invoke-GitHubAPI @inputObject).billable
+        (Invoke-GitHubAPI @inputObject).Response.billable
 
     }
 

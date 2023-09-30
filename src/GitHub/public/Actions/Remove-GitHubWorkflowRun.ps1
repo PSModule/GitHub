@@ -23,7 +23,7 @@
             Method      = 'DELETE'
         }
 
-        Invoke-GitHubAPI @inputObject
+        (Invoke-GitHubAPI @inputObject).Response
 
     }
 

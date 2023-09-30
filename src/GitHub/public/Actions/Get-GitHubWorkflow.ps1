@@ -53,7 +53,10 @@
             Body        = $body
         }
 
-        (Invoke-GitHubAPI @inputObject).workflows
+        (Invoke-GitHubAPI @inputObject).Response.workflows
 
     }
+
+    end {}
+
 }

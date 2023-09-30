@@ -41,6 +41,6 @@
         Body        = $body
     }
 
-    (Invoke-GitHubAPI @inputObject).installations
+    (Invoke-GitHubAPI @inputObject).Response.installations
 
 }

@@ -46,7 +46,7 @@
             APIEndpoint = "/repos/$Owner/$Repo/actions/runs/$ID/rerun"
         }
 
-        Invoke-GitHubAPI @inputObject
+        (Invoke-GitHubAPI @inputObject).Response
 
     }
 

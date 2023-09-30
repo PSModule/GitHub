@@ -38,6 +38,6 @@
         Body        = $body
     }
 
-    Invoke-GitHubAPI @inputObject
+    (Invoke-GitHubAPI @inputObject).Response
 
 }
