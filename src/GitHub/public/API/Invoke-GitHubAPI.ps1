@@ -106,8 +106,8 @@
         ContentType             = $ContentType
         HttpVersion             = $HttpVersion
         FollowRelLink           = $FollowRelLink
-        StatusCodeVariable      = 'StatusCode'
-        ResponseHeadersVariable = 'ResponseHeaders'
+        StatusCodeVariable      = 'APICallStatusCode'
+        ResponseHeadersVariable = 'APICallResponseHeaders'
     }
     $APICall | Remove-HashTableEntries -NullOrEmptyValues
 
@@ -119,12 +119,11 @@
 
         # Use body to create the query string for GET requests
         if ($Method -eq 'GET') {
-            $queryParams = ($Body.GetEnumerator() |
-            ForEach-Object { "$([System.Web.HttpUtility]::UrlEncode($_.Key))=$([System.Web.HttpUtility]::UrlEncode($_.Value))" }) -join '&'
-            if ($queryParams) {
-                $APICall.Uri = $APICall.Uri + '?' + $queryParams
-            }
+            $queryString = $Body = ConvertTo-QueryString
+            $APICall.Uri = $APICall.Uri + $queryString
         }
+
+        # Use body to create the form data
         if ($Body -is [string]) {
             $APICall.Body = $Body
         } else {
@@ -134,13 +133,15 @@
 
     try {
         Invoke-RestMethod @APICall | ForEach-Object {
-            # Add the StatusCode and ResponseHeaders to the output
-            $_ | Add-Member -MemberType NoteProperty -Name StatusCode -Value $StatusCode -PassThru
-            $_ | Add-Member -MemberType NoteProperty -Name ResponseHeaders -Value $ResponseHeaders -PassThru
+            $APICallResponseHeaders = $APICallResponseHeaders | ConvertTo-Json -Depth 100 | ConvertFrom-Json
+            $_ | Add-Member -MemberType NoteProperty -Name ResponseHeaders -Value $APICallResponseHeaders -Force
+
+            $APICallStatusCode = $APICallStatusCode | ConvertTo-Json -Depth 100 | ConvertFrom-Json
+            $_ | Add-Member -MemberType NoteProperty -Name StatusCode -Value $APICallStatusCode -Force
+
+            $_
         } | Write-Output
 
-        Write-Verbose ($StatusCode | Format-List | Out-String)
-        Write-Verbose ($responseHeaders | Format-List | Out-String)
     } catch {
         Write-Error "[$functionName] - Status code - [$StatusCode]"
         $err = $_ | ConvertFrom-Json -Depth 10
