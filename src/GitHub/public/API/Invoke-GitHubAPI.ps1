@@ -132,25 +132,13 @@
     }
 
     try {
-        Invoke-RestMethod @APICall | Write-Output
-        #  | ForEach-Object {
-        #     $APICallStatusCode
-        #     $APICallResponseHeaders
-        #     # $APICallStatusCode = $APICallStatusCode | ConvertTo-Json -Depth 100 | ConvertFrom-Json
-        #     # $APICallResponseHeaders = $APICallResponseHeaders | ConvertTo-Json -Depth 100 | ConvertFrom-Json
-
-        #     # Write-Verbose "[$functionName] - Status code - [$APICallStatusCode]"
-        #     # Write-Verbose "[$functionName] - Response headers:"
-        #     # $APICallResponseHeaders.PSObject.Properties | ForEach-Object {
-        #     #     Write-Verbose "[$functionName] - $($_.Key): $($_.Value)"
-        #     # }
-
-        #     # (@{
-        #     #     StatusCode      = $APICallStatusCode
-        #     #     ResponseHeaders = $APICallResponseHeaders
-        #     # } + ($_ | ConvertTo-HashTable) | ConvertFrom-HashTable)
-        #     $_
-        # }
+        (Invoke-RestMethod @APICall) | ForEach-Object {
+            $statusCode = $APICallStatusCode | ConvertTo-Json -Depth 100 | ConvertFrom-Json
+            $responseHeaders = $APICallResponseHeaders | ConvertTo-Json -Depth 100 | ConvertFrom-Json
+            $_ | Add-Member -NotePropertyName StatusCode -NotePropertyValue $statusCode -Force
+            $_ | Add-Member -NotePropertyName ResponseHeaders -NotePropertyValue $responseHeaders -Force
+            $_ | Write-Output
+        }
     } catch {
         Write-Error "[$functionName] - Status code - [$APICallStatusCode]"
         $err = $_ | ConvertFrom-Json -Depth 10
