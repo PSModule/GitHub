@@ -41,6 +41,6 @@
         Body        = $body
     }
 
-    Invoke-GitHubAPI @inputObject | Select-Object -ExpandProperty 'installations' | Write-Output
+    Invoke-GitHubAPI @inputObject | Select-Object -ExpandProperty 'installations'
 
 }

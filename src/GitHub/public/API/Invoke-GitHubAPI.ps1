@@ -140,12 +140,15 @@
             $_ | Add-Member -MemberType NoteProperty -Name StatusCode -Value $APICallStatusCode -Force
 
             $_
-        } | Write-Output
-
+        }
     } catch {
-        Write-Error "[$functionName] - Status code - [$StatusCode]"
+        Write-Error "[$functionName] - Status code - [$APICallStatusCode]"
         $err = $_ | ConvertFrom-Json -Depth 10
         Write-Error "[$functionName] - $($err.Message)"
         Write-Error "[$functionName] - For more info please see: [$($err.documentation_url)]"
+        $APICallResponseHeaders.GetEnumerator() | ForEach-Object {
+            Write-Error "[$functionName] - $($_.Key): $($_.Value)"
+        }
+        return 1
     }
 }
