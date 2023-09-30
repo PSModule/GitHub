@@ -90,5 +90,3 @@
 
     $hashtable | ConvertFrom-HashTable
 }
-
-Join-Object -Main $object -Overrides $hashtable

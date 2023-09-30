@@ -89,7 +89,7 @@
         $secretInfo = Get-SecretInfo @secretGetInfoParam
         Write-Verbose "$secretName - secretInfo : $($secretInfo | Out-String)"
         $secretMetadata = $secretInfo.Metadata | ConvertFrom-HashTable | ConvertTo-HashTable
-        $newSecretMetadata = Join-Hashtable -Main $newSecretMetadata -Overrides $secretMetadata
+        $newSecretMetadata = Join-Object -Main $newSecretMetadata -Overrides $secretMetadata -AsHashtable
     }
 
     # Get metadata updates from parameters and clean up unwanted data
@@ -99,7 +99,7 @@
     Remove-HashTableEntries -Hashtable $updateSecretMetadata -KeepTypes $keepTypes -RemoveNames $removeKeys
     Write-Verbose "updateSecretMetadata : $($updateSecretMetadata | Out-String)"
 
-    $newSecretMetadata = Join-HashTable -Main $newSecretMetadata -Overrides $updateSecretMetadata
+    $newSecretMetadata = Join-Object -Main $newSecretMetadata -Overrides $updateSecretMetadata -AsHashtable
     Write-Verbose "newSecretMetadata : $($newSecretMetadata | Out-String)"
     Write-Verbose "newSecretMetadataType : $($newSecretMetadata.GetType())"
 
@@ -136,7 +136,7 @@
         $secretInfo = Get-SecretInfo @secretGetInfoParam
         Write-Verbose "$secretName - secretInfo : $($secretInfo | Out-String)"
         $secretMetadata = $secretInfo.Metadata | ConvertFrom-HashTable | ConvertTo-HashTable
-        $newSecretMetadata = Join-Hashtable -Main $newSecretMetadata -Overrides $secretMetadata
+        $newSecretMetadata = Join-Object -Main $newSecretMetadata -Overrides $secretMetadata -AsHashtable
     }
 
     # Get metadata updates from parameters and clean up unwanted data
@@ -146,7 +146,7 @@
     Remove-HashTableEntries -Hashtable $updateSecretMetadata -KeepTypes $keepTypes -RemoveNames $removeKeys
     Write-Verbose "updateSecretMetadata : $($updateSecretMetadata | Out-String)"
 
-    $newSecretMetadata = Join-HashTable -Main $newSecretMetadata -Overrides $updateSecretMetadata
+    $newSecretMetadata = Join-Object -Main $newSecretMetadata -Overrides $updateSecretMetadata -AsHashtable
     Write-Verbose "newSecretMetadata : $($newSecretMetadata | Out-String)"
     Write-Verbose "newSecretMetadataType : $($newSecretMetadata.GetType())"
 
