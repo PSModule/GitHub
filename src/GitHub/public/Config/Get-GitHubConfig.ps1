@@ -54,6 +54,7 @@
                 $metadata.$Name
             } else {
                 $metadata
+                # TODO: Fix sorting
             }
         }
     }
