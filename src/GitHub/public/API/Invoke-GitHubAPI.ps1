@@ -110,6 +110,8 @@
         ResponseHeadersVariable = 'APICallResponseHeaders'
     }
     $APICall | Remove-HashTableEntries -NullOrEmptyValues
+    $APICallStatusCode = $null
+    $APICallResponseHeaders = $null
 
     if ($Body) {
 
@@ -119,7 +121,7 @@
 
         # Use body to create the query string for GET requests
         if ($Method -eq 'GET') {
-            $queryString = $Body = ConvertTo-QueryString
+            $queryString = $Body | ConvertTo-QueryString
             $APICall.Uri = $APICall.Uri + $queryString
         }
 
@@ -133,20 +135,26 @@
 
     try {
         Invoke-RestMethod @APICall | ForEach-Object {
-            $APICallResponseHeaders = $APICallResponseHeaders | ConvertTo-Json -Depth 100 | ConvertFrom-Json
-            $_ | Add-Member -MemberType NoteProperty -Name ResponseHeaders -Value $APICallResponseHeaders -Force
-
             $APICallStatusCode = $APICallStatusCode | ConvertTo-Json -Depth 100 | ConvertFrom-Json
-            $_ | Add-Member -MemberType NoteProperty -Name StatusCode -Value $APICallStatusCode -Force
+            $APICallResponseHeaders = $APICallResponseHeaders | ConvertTo-Json -Depth 100 | ConvertFrom-Json
 
-            $_
+            Write-Verbose "[$functionName] - Status code - [$APICallStatusCode]"
+            Write-Verbose "[$functionName] - Response headers:"
+            $APICallResponseHeaders.PSObject.Properties | ForEach-Object {
+                Write-Verbose "[$functionName] - $($_.Key): $($_.Value)"
+            }
+
+            (@{
+                StatusCode      = $APICallStatusCode
+                ResponseHeaders = $APICallResponseHeaders
+            } + ($_ | ConvertTo-HashTable) | ConvertFrom-HashTable)
         }
     } catch {
         Write-Error "[$functionName] - Status code - [$APICallStatusCode]"
         $err = $_ | ConvertFrom-Json -Depth 10
         Write-Error "[$functionName] - $($err.Message)"
         Write-Error "[$functionName] - For more info please see: [$($err.documentation_url)]"
-        $APICallResponseHeaders.GetEnumerator() | ForEach-Object {
+        $APICallResponseHeaders.PSObject.Properties | ForEach-Object {
             Write-Error "[$functionName] - $($_.Key): $($_.Value)"
         }
         return 1
