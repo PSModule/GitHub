@@ -87,7 +87,7 @@
             } else {
                 $accessTokenValidity = [datetime](Get-GitHubConfig -Name 'AccessTokenExpirationDate') - (Get-Date)
                 $accessTokenIsValid = $accessTokenValidity.Seconds -gt 0
-                $accessTokenValidityText = "$([string]($accessTokenValidity.Hours).PadLeft(2,'0')):$([string]($accessTokenValidity.Minutes).PadLeft(2,'0')):$([string]($accessTokenValidity.Seconds).PadLeft(2,'0'))"
+                $accessTokenValidityText = "$(([string]$accessTokenValidity.Hours).PadLeft(2,'0')):$(([string]$accessTokenValidity.Minutes).PadLeft(2,'0')):$(([string]$accessTokenValidity.Seconds).PadLeft(2,'0'))"
                 if ($accessTokenIsValid) {
                     if ($accessTokenValidity.TotalHours -gt 4) {
                         Write-Host '✓ ' -ForegroundColor Green -NoNewline
