@@ -40,10 +40,9 @@
             Mandatory,
             ParameterSetName = 'NamedOrg'
         )]
+        [Alias('login')]
         [Alias('org')]
         [Alias('owner')]
-        [Alias('login')]
-        [Alias('name')]
         [string] $OrganizationName,
 
         # The handle for the GitHub user account.
