@@ -124,11 +124,11 @@
         }
 
         # Use body to create the form data
-        # if ($Body -is [string]) {
+        if ($Body -is [string]) {
             $APICall.Body = $Body
-        # } else {
-        #     $APICall.Body = $Body | ConvertTo-Json -Depth 100
-        # }
+        } else {
+            $APICall.Body = $Body | ConvertTo-Json -Depth 100
+        }
     }
 
     try {
