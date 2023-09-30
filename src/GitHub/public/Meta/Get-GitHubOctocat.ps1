@@ -12,7 +12,7 @@
         Get the octocat as ASCII art
 
         .EXAMPLE
-        Get-GitHubOctocat -S 'The glass is never half empty. It's just twice as big as it needs to be.'
+        Get-GitHubOctocat -S "Hello world"
 
         Get the octocat as ASCII art with a custom saying
 
