@@ -31,9 +31,14 @@
         [int] $PerPage = 30
     )
 
+    $body = @{
+        per_page = $PerPage
+    }
+
     $inputObject = @{
         APIEndpoint = "/orgs/$OrganizationName/installations"
         Method      = 'GET'
+        Body        = $body
     }
 
     Invoke-GitHubAPI @inputObject | Select-Object -ExpandProperty 'installations' | Write-Output
