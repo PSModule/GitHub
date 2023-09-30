@@ -196,37 +196,8 @@
         [string] $SecretScanningPushProtectionCustomLink
     )
 
-    $body = @{
-        billing_email                                                = $BillingEmail
-        company                                                      = $Company
-        email                                                        = $Email
-        twitter_username                                             = $TwitterUsername
-        location                                                     = $Location
-        name                                                         = $Name
-        description                                                  = $Description
-        has_organization_projects                                    = $HasOrganizationProjects
-        has_repository_projects                                      = $HasRepositoryProjects
-        default_repository_permission                                = $DefaultRepositoryPermission
-        members_can_create_repositories                              = $MembersCanCreateRepositories
-        members_can_create_internal_repositories                     = $MembersCanCreateInternalRepositories
-        members_can_create_private_repositories                      = $MembersCanCreatePrivateRepositories
-        members_can_create_public_repositories                       = $MembersCanCreatePublicRepositories
-        members_allowed_repository_creation_type                     = $MembersAllowedRepositoryCreationType
-        members_can_create_pages                                     = $MembersCanCreatePages
-        members_can_create_public_pages                              = $MembersCanCreatePublicPages
-        members_can_create_private_pages                             = $MembersCanCreatePrivatePages
-        members_can_fork_private_repositories                        = $MembersCanForkPrivateRepositories
-        web_commit_signoff_required                                  = $WebCommitSignoffRequired
-        blog                                                         = $Blog
-        advanced_security_enabled_for_new_repositories               = $AdvancedSecurityEnabledForNewRepositories
-        dependabot_alerts_enabled_for_new_repositories               = $DependabotAlertsEnabledForNewRepositories
-        dependabot_security_updates_enabled_for_new_repositories     = $DependabotSecurityUpdatesEnabledForNewRepositories
-        dependency_graph_enabled_for_new_repositories                = $DependencyGraphEnabledForNewRepositories
-        secret_scanning_enabled_for_new_repositories                 = $SecretScanningEnabledForNewRepositories
-        secret_scanning_push_protection_enabled_for_new_repositories = $SecretScanningPushProtectionEnabledForNewRepositories
-        secret_scanning_push_protection_custom_link_enabled          = $SecretScanningPushProtectionCustomLinkEnabled
-        secret_scanning_push_protection_custom_link                  = $SecretScanningPushProtectionCustomLink
-    }
+    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable
+    Remove-HashTableEntries -Hashtable $body -RemoveNames 'OrganizationName'
 
     $inputObject = @{
         APIEndpoint = "/orgs/$OrganizationName"

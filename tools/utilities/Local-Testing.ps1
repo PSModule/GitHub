@@ -41,7 +41,7 @@ Get-GitHubOrganization -OrganizationName 'PSModule'
 Get-GitHubOrganizationAppInstallation -OrganizationName 'PSModule'
 
 Set-GitHubOrganization -OrganizationName 'PSModule' -Blog 'https://www.psmodule.io'
-Set-GitHubOrganization -OrganizationName 'PSModule' -Blog ''
+# Set-GitHubOrganization -OrganizationName 'PSModule' -Blog '' -> Does not work.
 Set-GitHubOrganization -OrganizationName 'PSModule' -Blog ' '
 
 Set-GitHubOrganization -OrganizationName 'PSModule' -Company 'PSModule' -DefaultRepositoryPermission read

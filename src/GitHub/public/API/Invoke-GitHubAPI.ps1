@@ -113,10 +113,6 @@
 
     if ($Body) {
 
-        if (-not $Declare) {
-            $Body | Remove-HashTableEntries -NullOrEmptyValues
-        }
-
         # Use body to create the query string for GET requests
         if ($Method -eq 'GET') {
             $queryString = $Body | ConvertTo-QueryString
@@ -131,7 +127,8 @@
         }
     }
 
-    try {
+    # try {
+    #     (Invoke-RestMethod @APICall) | ForEach-Object {
         (Invoke-RestMethod @APICall -ErrorAction SilentlyContinue) | ForEach-Object {
             $statusCode = $APICallStatusCode | ConvertTo-Json -Depth 100 | ConvertFrom-Json
             $responseHeaders = $APICallResponseHeaders | ConvertTo-Json -Depth 100 | ConvertFrom-Json
@@ -141,14 +138,14 @@
                 ResponseHeaders = $responseHeaders
             }
         }
-    } catch {
-        Write-Error "[$functionName] - Status code - [$APICallStatusCode]"
-        # $err = $_ | ConvertFrom-Json -Depth 10
-        # Write-Error "[$functionName] - $($err.Message)"
-        # Write-Error "[$functionName] - For more info please see: [$($err.documentation_url)]"
-        # $APICallResponseHeaders.PSObject.Properties | ForEach-Object {
-        #     Write-Error "[$functionName] - $($_.Key): $($_.Value)"
-        # }
-        # return 1
-    }
+    # } catch {
+    #     Write-Error "[$functionName] - Status code - [$APICallStatusCode]"
+    #     $err = $_ | ConvertFrom-Json -Depth 10
+    #     Write-Error "[$functionName] - $($err.Message)"
+    #     Write-Error "[$functionName] - For more info please see: [$($err.documentation_url)]"
+    #     $APICallResponseHeaders.PSObject.Properties | ForEach-Object {
+    #         Write-Error "[$functionName] - $($_.Key): $($_.Value)"
+    #     }
+    #     return 1
+    # }
 }
