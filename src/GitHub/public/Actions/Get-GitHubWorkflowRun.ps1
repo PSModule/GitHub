@@ -46,7 +46,7 @@
             Body        = $body
         }
 
-        Invoke-GitHubAPI @inputObject | Select-Object -ExpandProperty workflow_runs
+        (Invoke-GitHubAPI @inputObject).workflow_runs
 
     }
 

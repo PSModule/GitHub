@@ -110,8 +110,6 @@
         ResponseHeadersVariable = 'APICallResponseHeaders'
     }
     $APICall | Remove-HashTableEntries -NullOrEmptyValues
-    $APICallStatusCode = $null
-    $APICallResponseHeaders = $null
 
     if ($Body) {
 

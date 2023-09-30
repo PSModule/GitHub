@@ -41,6 +41,6 @@
         Body        = $body
     }
 
-    Invoke-GitHubAPI @inputObject | Select-Object -ExpandProperty 'installations'
+    (Invoke-GitHubAPI @inputObject).installations
 
 }
