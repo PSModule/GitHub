@@ -53,7 +53,7 @@
             if ($Name) {
                 $metadata.$Name
             } else {
-                $metadata | Sort-Object -Property Name
+                $metadata.GetEnumerator() | Sort-Object -Property Name
             }
         }
     }
