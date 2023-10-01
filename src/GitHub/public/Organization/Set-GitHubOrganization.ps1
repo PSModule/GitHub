@@ -196,7 +196,7 @@
         [string] $SecretScanningPushProtectionCustomLink
     )
 
-    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable
+    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
     Remove-HashTableEntries -Hashtable $body -RemoveNames 'OrganizationName'
 
     $inputObject = @{
