@@ -44,13 +44,23 @@
 
         # The casing style of the hashtable keys.
         [Parameter()]
-        [ValidateSet('PascalCase', 'CamelCase', 'LowerCase', 'UpperCase')]
+        [ValidateSet(
+            'lowercase',
+            'UPPERCASE',
+            'Title Case',
+            'PascalCase',
+            'camelCase',
+            'kebab-case',
+            'UPPER-KEBAB-CASE',
+            'snake_case',
+            'UPPER_SNAKE_CASE'
+        )]
         [string]$NameCasingStyle
     )
     [hashtable]$hashtable = @{}
 
     foreach ($item in $InputObject.PSObject.Properties) {
-        $name = $NameCasingStyle ? ($item.Name | Convert-StringCasingStyle -Style $NameCasingStyle) : $item.Name
+        $name = $NameCasingStyle ? ($item.Name | Convert-StringCasingStyle -To $NameCasingStyle) : $item.Name
         $hashtable[$name] = $item.Value
     }
     $hashtable

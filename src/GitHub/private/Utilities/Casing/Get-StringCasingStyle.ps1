@@ -19,7 +19,7 @@
         .EXAMPLE
         'Testtesttest' | Get-StringCasingStyle
 
-        Titlecase
+        Sentencecase
 
         .EXAMPLE
         'TestTestTest' | Get-StringCasingStyle
@@ -64,6 +64,7 @@
             Mandatory,
             ValueFromPipeline
         )]
+        [ValidateNotNullOrEmpty()]
         [string] $Text
     )
 
@@ -72,20 +73,20 @@
     } elseif ([regex]::Match($Text, '^[A-Z][A-Z0-9]*$').Success) {
         'UPPERCASE'
     } elseif ([regex]::Match($Text, '^[A-Z][a-z0-9]*$').Success) {
-        'Wordcase'
-    } elseif ([regex]::Match($Text, '^([A-Z][a-zA-Z0-9]*)(\s+[A-Z][a-zA-Z0-9]*)*$').Success) {
+        'Sentencecase'
+    } elseif ([regex]::Match($Text, '^([A-Z][a-z]*)(\s+[A-Z][a-z]*)+$').Success) {
         'Title Case'
-    } elseif ([regex]::Match($Text, '^[A-Z][a-z0-9]*((?:[A-Z][a-z0-9]+)+)$').Success) {
+    } elseif ([regex]::Match($Text, '^[A-Z][a-z0-9]*([A-Z][a-z0-9]*)+$').Success) {
         'PascalCase'
-    } elseif ([regex]::Match($Text, '^[a-z][a-z0-9]*[A-Z][a-z0-9]*((?:[A-Z][a-z0-9]*)+)$').Success) {
+    } elseif ([regex]::Match($Text, '^[a-z][a-z0-9]*([A-Z][a-z0-9]*)+$').Success) {
         'camelCase'
-    } elseif ([regex]::Match($Text, '^[a-z][a-z0-9]*-[a-z0-9]+((?:-[a-z0-9]+)+)$').Success) {
+    } elseif ([regex]::Match($Text, '^[a-z][a-z0-9]*(-[a-z0-9]+)+$').Success) {
         'kebab-case'
-    } elseif ([regex]::Match($Text, '^[A-Z][A-Z0-9]*-[A-Z0-9]+((?:-[A-Z0-9]+)+)$').Success) {
+    } elseif ([regex]::Match($Text, '^[A-Z][A-Z0-9]*(-[A-Z0-9]+)+$').Success) {
         'UPPER-KEBAB-CASE'
-    } elseif ([regex]::Match($Text, '^[a-z][a-z0-9]*_[a-z0-9]+((?:_[a-z0-9]+)+)$').Success) {
+    } elseif ([regex]::Match($Text, '^[a-z][a-z0-9]*(_[a-z0-9]+)+$').Success) {
         'snake_case'
-    } elseif ([regex]::Match($Text, '^[A-Z][A-Z0-9]*_[A-Z0-9]+((?:_[A-Z0-9]+)+)$').Success) {
+    } elseif ([regex]::Match($Text, '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)+$').Success) {
         'UPPER_SNAKE_CASE'
     } else {
         'Unknown'
