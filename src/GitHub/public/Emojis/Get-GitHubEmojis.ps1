@@ -1,7 +1,7 @@
 ﻿filter Get-GitHubEmojis {
     <#
         .NOTES
-        https://docs.github.com/en/rest/reference/emojis#get-emojis
+        https://docs.github.com/rest/reference/emojis#get-emojis
     #>
     [CmdletBinding()]
     param (

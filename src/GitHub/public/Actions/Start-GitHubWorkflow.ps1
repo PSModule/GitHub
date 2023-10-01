@@ -16,7 +16,7 @@
 
         .NOTES
         # API Reference
-        # https://docs.github.com/en/free-pro-team@latest/rest/actions/workflows?apiVersion=2022-11-28#create-a-workflow-dispatch-event
+        # https://docs.github.com/free-pro-team@latest/rest/actions/workflows?apiVersion=2022-11-28#create-a-workflow-dispatch-event
     #>
     [CmdletBinding()]
     param (

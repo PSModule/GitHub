@@ -19,7 +19,7 @@
     An example
 
     .NOTES
-    https://docs.github.com/en/rest/reference/repos#get-all-environments
+    https://docs.github.com/rest/reference/repos#get-all-environments
     #>
     [CmdletBinding()]
     param (

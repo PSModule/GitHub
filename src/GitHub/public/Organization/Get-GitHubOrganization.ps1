@@ -30,7 +30,7 @@
         Get the organization 'PSModule'.
 
         .NOTES
-        https://docs.github.com/rest/orgs/orgs#list-organizations-for-the-authenticated-user
+        https://docs.github.com/rest/orgs/orgs
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding(DefaultParameterSetName = '__DefaultSet')]

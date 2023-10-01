@@ -1,7 +1,7 @@
 ﻿filter Get-GitHubMarkdown {
     <#
         .NOTES
-        https://docs.github.com/en/rest/reference/meta#github-api-root
+        https://docs.github.com/rest/reference/meta#github-api-root
     #>
     [CmdletBinding()]
     param (

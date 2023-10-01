@@ -21,7 +21,7 @@ $response.paths.psobject.Properties | Select-Object `
     @{n = 'PUT'; e = { (($_.value.psobject.Properties.Name) -contains 'PUT') } }, `
     @{n = 'PATCH'; e = { (($_.value.psobject.Properties.Name) -contains 'PATCH') } } | format-table
 
-$path = '/orgs/{org}/blocks/{username}'
+$path = '/users/{username}'
 $method = 'get'
 $response.paths.$path.$method
 $response.paths.$path.$method.tags | clip                             # -> Namespace/foldername

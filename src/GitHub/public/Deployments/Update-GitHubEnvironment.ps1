@@ -1,7 +1,7 @@
 ﻿filter Update-GitHubEnvironment {
     <#
         .NOTES
-        https://docs.github.com/en/rest/reference/repos#create-or-update-an-environment
+        https://docs.github.com/rest/reference/repos#create-or-update-an-environment
     #>
     [CmdletBinding()]
     param (

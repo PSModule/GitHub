@@ -24,7 +24,7 @@
         Get a list of users, starting with the user 'MariusStorhaug'.
 
         .NOTES
-        https://docs.github.com/en/rest/users/users
+        https://docs.github.com/rest/users/users
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding(DefaultParameterSetName = '__DefaultSet')]

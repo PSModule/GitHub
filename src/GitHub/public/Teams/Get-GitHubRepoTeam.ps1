@@ -1,7 +1,7 @@
 filter Get-GitHubRepoTeam {
     <#
         .NOTES
-        https://docs.github.com/en/rest/reference/repos#get-a-repository
+        https://docs.github.com/rest/reference/repos#get-a-repository
     #>
     [CmdletBinding()]
     param (

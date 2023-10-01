@@ -19,7 +19,7 @@
         An example
 
         .NOTES
-        https://docs.github.com/en/rest/reference/actions#re-run-a-workflow
+        https://docs.github.com/rest/reference/actions#re-run-a-workflow
     #>
     [CmdletBinding()]
     param (

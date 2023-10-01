@@ -19,7 +19,7 @@
         An example
 
         .NOTES
-        https://docs.github.com/en/rest/reference/actions#cancel-a-workflow-run
+        https://docs.github.com/rest/reference/actions#cancel-a-workflow-run
     #>
     [CmdletBinding()]
     [alias('Cancel-GitHubWorkflowRun')]
