@@ -1,4 +1,4 @@
-﻿function Get-GitHubUserList {
+﻿filter Get-GitHubAllUser {
     <#
         .SYNOPSIS
         List users
@@ -9,9 +9,9 @@
         Note: Pagination is powered exclusively by the `since` parameter. Use the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers) to get the URL for the next page of users.
 
         .EXAMPLE
-        Get-GitHubUserList -Since 17722253
+        Get-GitHubAllUser -Since 17722253
 
-        Get the authenticated user
+        Get a list of users, starting with the user 'MariusStorhaug'.
 
         .NOTES
         https://docs.github.com/rest/users/users#list-users
@@ -22,15 +22,13 @@
         # A user ID. Only return users with an ID greater than this ID.
         [Parameter()]
         [int] $Since = 0,
+
         # The number of results per page (max 100).
         [Parameter()]
-        [int] $PerPage = 100
+        [int] $PerPage = 30
     )
 
-    $body = @{
-        since    = $Since
-        per_page = $PerPage
-    }
+    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
 
     $inputObject = @{
         APIEndpoint = "/users"
@@ -38,6 +36,6 @@
         Body        = $body
     }
 
-    Invoke-GitHubAPI @inputObject
+    (Invoke-GitHubAPI @inputObject).Response
 
 }

@@ -18,7 +18,7 @@
         if ($pos -ge $menuItems.length) { $pos = $menuItems.length - 1 }
         Invoke-DrawMenu $menuItems $pos $menuTitel
     }
-    Write-Output $($menuItems[$pos])
+    $($menuItems[$pos])
 }
 
 

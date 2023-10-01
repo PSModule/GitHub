@@ -1,4 +1,4 @@
-﻿function Get-GitHubWorkflow {
+﻿filter Get-GitHubWorkflow {
     <#
         .SYNOPSIS
         Lists the workflows in a repository.
@@ -19,7 +19,7 @@
         Gets the 'hello-world.yml' workflow in the 'octocat/hello-world' repository.
 
         .NOTES
-        https://docs.github.com/en/rest/actions/workflows?apiVersion=2022-11-28#list-repository-workflows
+        https://docs.github.com/rest/actions/workflows?apiVersion=2022-11-28#list-repository-workflows
     #>
     [CmdletBinding(DefaultParameterSetName = 'ByName')]
     param (
@@ -36,24 +36,20 @@
         [string] $ID,
 
         [Parameter()]
-        [int] $PerPage = 100
+        [int] $PerPage = 30
     )
 
-    begin {}
 
-    process {
-
-        $body = @{
-            per_page = $PerPage
-        }
-
-        $inputObject = @{
-            APIEndpoint = "/repos/$Owner/$Repo/actions/workflows"
-            Method      = 'GET'
-            Body        = $body
-        }
-
-        Invoke-GitHubAPI @inputObject | Select-Object -ExpandProperty workflows | Write-Output
-
+    $body = @{
+        per_page = $PerPage
     }
+
+    $inputObject = @{
+        APIEndpoint = "/repos/$Owner/$Repo/actions/workflows"
+        Method      = 'GET'
+        Body        = $body
+    }
+
+    (Invoke-GitHubAPI @inputObject).Response.workflows
+
 }

@@ -1,4 +1,4 @@
-﻿function Get-GitHubOctocat {
+﻿filter Get-GitHubOctocat {
     <#
         .SYNOPSIS
         Get Octocat.
@@ -12,7 +12,7 @@
         Get the octocat as ASCII art
 
         .EXAMPLE
-        Get-GitHubOctocat -S 'The glass is never half empty. It's just twice as big as it needs to be.'
+        Get-GitHubOctocat -S "Hello world"
 
         Get the octocat as ASCII art with a custom saying
 
@@ -26,8 +26,7 @@
         [Parameter()]
         [Alias('Say')]
         [Alias('Saying')]
-        [string]
-        $S
+        [string] $S
     )
 
     $body = @{
@@ -40,6 +39,6 @@
         Body        = $body
     }
 
-    Invoke-GitHubAPI @inputObject
+    (Invoke-GitHubAPI @inputObject).Response
 
 }

@@ -21,19 +21,21 @@ $response.paths.psobject.Properties | Select-Object `
     @{n = 'PUT'; e = { (($_.value.psobject.Properties.Name) -contains 'PUT') } }, `
     @{n = 'PATCH'; e = { (($_.value.psobject.Properties.Name) -contains 'PATCH') } } | format-table
 
-$path = '/users/{username}/hovercard'
-$response.paths.$path.get.tags | clip                             # -> Namespace/foldername
-$response.paths.$path.get.operationId | clip                      # -> FunctionName
-$response.paths.$path.get.summary | clip                          # -> Synopsis
-$response.paths.$path.get.description | clip                      # -> Description
-$response.paths.$path.get.externalDocs.url | clip                 # -> Notes
-$response.paths.$path.get.'x-github'.category | clip              # -> Namespace/foldername
-$response.paths.$path.get.'x-github'.subcategory | clip           # -> Namespace/foldername
-$response.paths.$path.get.'x-github'.enabledForGitHubApps | clip  # -> Note + Warning if running as GitHub App
-$response.paths.$path.get.'x-github'.githubCloudOnly | clip       # -> Note
-$response.paths.$path.get.parameters                              # -> Parameter list
-$response.paths.$path.get.responses.'200'.content.'application/json'.schema        # -> OutputType qualifyer
-$response.paths.$path.get.responses.'200'.content.'application/json'.schema.items  # -> OutputType
-$response.paths.$path.get
-
-
+$path = '/user/blocks/{username}'
+$method = 'get'
+$response.paths.$path.$method
+$response.paths.$path.$method.tags | clip                             # -> Namespace/foldername
+$response.paths.$path.$method.operationId | clip                      # -> FunctionName
+$response.paths.$path.$method.summary | clip                          # -> Synopsis
+$response.paths.$path.$method.description | clip                      # -> Description
+$response.paths.$path.$method.externalDocs.url | clip                 # -> Notes
+$response.paths.$path.$method.'x-github'.category | clip              # -> Namespace/foldername
+$response.paths.$path.$method.'x-github'.subcategory | clip           # -> Namespace/foldername
+$response.paths.$path.$method.'x-github'.enabledForGitHubApps | clip  # -> Note + Warning if running as GitHub App
+$response.paths.$path.$method.'x-github'.githubCloudOnly | clip       # -> Note
+$response.paths.$path.$method.parameters                              # -> Parameter list
+$response.paths.$path.$method.parameters.'$ref'                       # -> Parameter list
+$response.components.parameters.username                              # -> Parameter list ?
+$response.paths.$path.$method.responses                               # -> Could be used to decide error handling within the function
+$response.paths.$path.$method.responses.'200'.content.'application/json'.schema        # -> OutputType qualifyer
+$response.paths.$path.$method.responses.'200'.content.'application/json'.schema.items  # -> OutputType

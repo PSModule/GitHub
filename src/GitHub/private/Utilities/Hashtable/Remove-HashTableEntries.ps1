@@ -1,4 +1,4 @@
-﻿function Remove-HashtableEntries {
+﻿filter Remove-HashtableEntries {
     [OutputType([void])]
     [CmdletBinding()]
     param (
@@ -7,14 +7,19 @@
             ValueFromPipeline
         )]
         [hashtable] $Hashtable,
+
         [Parameter()]
         [switch] $NullOrEmptyValues,
+
         [Parameter()]
         [string[]] $RemoveTypes,
+
         [Parameter()]
         [string[]] $RemoveNames,
+
         [Parameter()]
         [string[]] $KeepTypes,
+
         [Parameter()]
         [string[]] $KeepNames
 

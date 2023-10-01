@@ -40,7 +40,7 @@
 
     $RefreshTokenData = (Get-SecretInfo -Name "$prefix`RefreshToken").Metadata | ConvertFrom-HashTable | ConvertTo-HashTable
     $AccessTokenData = (Get-SecretInfo -Name "$prefix`AccessToken").Metadata | ConvertFrom-HashTable | ConvertTo-HashTable
-    $metadata = Join-Hashtable -Main $RefreshTokenData -Overrides $AccessTokenData
+    $metadata = Join-Object -Main $RefreshTokenData -Overrides $AccessTokenData -AsHashtable
 
     switch($Name) {
         'AccessToken' {
@@ -54,6 +54,7 @@
                 $metadata.$Name
             } else {
                 $metadata
+                # TODO: Fix sorting
             }
         }
     }

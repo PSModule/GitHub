@@ -1,4 +1,4 @@
-﻿function Get-GitHubApiVersions {
+﻿filter Get-GitHubApiVersions {
     <#
         .SYNOPSIS
         Get all API versions.
@@ -23,6 +23,6 @@
         Method      = 'GET'
     }
 
-    Invoke-GitHubAPI @inputObject
+    (Invoke-GitHubAPI @inputObject).Response
 
 }

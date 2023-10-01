@@ -1,4 +1,4 @@
-﻿function Invoke-GitHubAPI {
+﻿filter Invoke-GitHubAPI {
     <#
         .SYNOPSIS
         Calls the GitHub API using the provided parameters.
@@ -42,7 +42,7 @@
 
         # The 'Accept' header for the API request. If not provided, the default will be used by GitHub's API.
         [Parameter()]
-        [string] $Accept = 'application/vnd.github+json',
+        [string] $Accept = 'application/vnd.github+json; charset=utf-8',
 
         # Specifies the HTTP version used for the request.
         [Parameter()]
@@ -58,11 +58,15 @@
 
         # The 'Content-Type' header for the API request. The default is 'application/vnd.github+json'.
         [Parameter()]
-        [string] $ContentType = 'application/vnd.github+json',
+        [string] $ContentType = 'application/vnd.github+json; charset=utf-8',
 
         # The GitHub API version to be used. By default, it pulls from a configuration script variable.
         [Parameter()]
-        [string] $Version = (Get-GitHubConfig -Name ApiVersion)
+        [string] $Version = (Get-GitHubConfig -Name ApiVersion),
+
+        # Declares the state of a resource by passing all parameters/body properties to Invoke-RestMethod, even if empty
+        [Parameter()]
+        [switch] $Declare
     )
 
     $functionName = $MyInvocation.MyCommand.Name
@@ -102,22 +106,20 @@
         ContentType             = $ContentType
         HttpVersion             = $HttpVersion
         FollowRelLink           = $FollowRelLink
-        StatusCodeVariable      = 'StatusCode'
-        ResponseHeadersVariable = 'ResponseHeaders'
+        StatusCodeVariable      = 'APICallStatusCode'
+        ResponseHeadersVariable = 'APICallResponseHeaders'
     }
     $APICall | Remove-HashTableEntries -NullOrEmptyValues
 
     if ($Body) {
-        $Body | Remove-HashTableEntries -NullOrEmptyValues
 
         # Use body to create the query string for GET requests
         if ($Method -eq 'GET') {
-            $queryParams = ($Body.GetEnumerator() |
-            ForEach-Object { "$([System.Web.HttpUtility]::UrlEncode($_.Key))=$([System.Web.HttpUtility]::UrlEncode($_.Value))" }) -join '&'
-            if ($queryParams) {
-                $APICall.Uri = $APICall.Uri + '?' + $queryParams
-            }
+            $queryString = $Body | ConvertTo-QueryString
+            $APICall.Uri = $APICall.Uri + $queryString
         }
+
+        # Use body to create the form data
         if ($Body -is [string]) {
             $APICall.Body = $Body
         } else {
@@ -125,14 +127,14 @@
         }
     }
 
-    try {
-        Invoke-RestMethod @APICall | Write-Output
-        Write-Verbose ($StatusCode | ConvertTo-Json -Depth 100)
-        Write-Verbose ($responseHeaders | ConvertTo-Json -Depth 100)
-    } catch {
-        Write-Error "[$functionName] - Status code - [$StatusCode]"
-        $err = $_ | ConvertFrom-Json -Depth 10
-        Write-Error "[$functionName] - $($err.Message)"
-        Write-Error "[$functionName] - For more info please see: [$($err.documentation_url)]"
+    Invoke-RestMethod @APICall | ForEach-Object {
+        $statusCode = $APICallStatusCode | ConvertTo-Json -Depth 100 | ConvertFrom-Json
+        $responseHeaders = $APICallResponseHeaders | ConvertTo-Json -Depth 100 | ConvertFrom-Json
+        [pscustomobject]@{
+            Request         = $APICall
+            Response        = $_
+            StatusCode      = $statusCode
+            ResponseHeaders = $responseHeaders
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿function Get-GitHubRoot {
+﻿filter Get-GitHubRoot {
     <#
         .SYNOPSIS
         GitHub API Root.
@@ -22,6 +22,6 @@
         Method      = 'GET'
     }
 
-    Invoke-GitHubAPI @inputObject
+    (Invoke-GitHubAPI @inputObject).Response
 
 }

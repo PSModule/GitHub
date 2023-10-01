@@ -1,4 +1,4 @@
-﻿function Remove-GitHubWorkflowRun {
+﻿filter Remove-GitHubWorkflowRun {
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -14,18 +14,11 @@
         [string] $ID
     )
 
-    begin {}
-
-    process {
-
-        $inputObject = @{
-            APIEndpoint = "repos/$Owner/$Repo/actions/runs/$ID"
-            Method      = 'DELETE'
-        }
-
-        Invoke-GitHubAPI @inputObject
-
+    $inputObject = @{
+        APIEndpoint = "repos/$Owner/$Repo/actions/runs/$ID"
+        Method      = 'DELETE'
     }
 
-    end {}
+    (Invoke-GitHubAPI @inputObject).Response
+
 }

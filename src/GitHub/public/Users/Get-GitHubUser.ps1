@@ -1,30 +1,67 @@
-﻿function Get-GitHubUser {
+﻿filter Get-GitHubUser {
     <#
         .SYNOPSIS
-        Get the authenticated user
+        List user(s)
 
         .DESCRIPTION
-        If the authenticated user is authenticated with an OAuth token with the `user` scope, then the response lists public and private profile information.
-        If the authenticated user is authenticated through OAuth without the `user` scope, then the response lists only public profile information.
+        Get the authenticated user - if no parameters are provided.
+        Get a given user - if a username is provided.
+        Lists all users, in the order that they signed up on GitHub - if '-All' is provided.
 
         .EXAMPLE
         Get-GitHubUser
 
-        Get the authenticated user
+        Get the authenticated user.
+
+        .EXAMPLE
+        Get-GitHubUser -Username 'octocat'
+
+        Get the 'octocat' user.
+
+        .EXAMPLE
+        Get-GitHubUser -All -Since 17722253
+
+        Get a list of users, starting with the user 'MariusStorhaug'.
 
         .NOTES
-        https://docs.github.com/rest/users/users#get-the-authenticated-user
+        https://docs.github.com/rest/users/users
     #>
     [OutputType([pscustomobject])]
-    [Alias('Get-GitHubContext')]
-    [CmdletBinding()]
-    param ()
+    [CmdletBinding(DefaultParameterSetName = '__DefaultSet')]
+    param (
+        # The handle for the GitHub user account.
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'NamedUser',
+            ValueFromPipelineByPropertyName
+        )]
+        [string] $Username,
 
-    $inputObject = @{
-        APIEndpoint = '/user'
-        Method      = 'GET'
+        # List all users. Use '-Since' to start at a specific user id.
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'AllUsers'
+        )]
+        [switch] $All,
+
+        # A user ID. Only return users with an ID greater than this ID.
+        [Parameter(ParameterSetName = 'AllUsers')]
+        [int] $Since = 0,
+
+        # The number of results per page (max 100).
+        [Parameter(ParameterSetName = 'AllUsers')]
+        [int] $PerPage = 30
+    )
+
+    switch ($PSCmdlet.ParameterSetName) {
+        '__DefaultSet' {
+            Get-GitHubMyUser
+        }
+        'NamedUser' {
+            Get-GitHubUserByName -Username $Username
+        }
+        'AllUsers' {
+            Get-GitHubAllUsers -Since $Since -PerPage $PerPage
+        }
     }
-
-    Invoke-GitHubAPI @inputObject
-
 }

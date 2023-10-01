@@ -1,7 +1,7 @@
-function Get-GitHubRepoTeam {
+filter Get-GitHubRepoTeam {
     <#
         .NOTES
-        https://docs.github.com/en/rest/reference/repos#get-a-repository
+        https://docs.github.com/rest/reference/repos#get-a-repository
     #>
     [CmdletBinding()]
     param (
@@ -17,6 +17,6 @@ function Get-GitHubRepoTeam {
         APIEndpoint = "/repos/$Owner/$Repo/teams"
     }
 
-    Invoke-GitHubAPI @inputObject
+    (Invoke-GitHubAPI @inputObject).Response
 
 }

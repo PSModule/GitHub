@@ -1,4 +1,4 @@
-﻿function Get-GitHubEnvironmentSecrets {
+﻿filter Get-GitHubEnvironmentSecrets {
     <#
     .SYNOPSIS
     Get GitHub environment secrets
@@ -19,7 +19,7 @@
     An example
 
     .NOTES
-    https://docs.github.com/en/rest/reference/repos#get-all-environments
+    https://docs.github.com/rest/reference/repos#get-all-environments
     #>
     [CmdletBinding()]
     param (
@@ -29,26 +29,21 @@
         [Parameter()]
         [string] $Repo = (Get-GitHubConfig -Name Repo),
 
-        [Alias('name')]
         [Parameter(
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
+        [Alias('name')]
         [string] $EnvironmentName
     )
 
-    begin {}
+    $RepoID = (Get-GitHubRepo).id
 
-    process {
-        $RepoID = (Get-GitHubRepo).id
-
-        $inputObject = @{
-            APIEndpoint = "/repositories/$RepoID/environments/$EnvironmentName/secrets"
-            Method      = 'GET'
-        }
-
-        Invoke-GitHubAPI @inputObject
+    $inputObject = @{
+        APIEndpoint = "/repositories/$RepoID/environments/$EnvironmentName/secrets"
+        Method      = 'GET'
     }
 
-    end {}
+    (Invoke-GitHubAPI @inputObject).Response
+
 }

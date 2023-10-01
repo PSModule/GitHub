@@ -1,4 +1,4 @@
-﻿Function Get-GitHubWorkflowUsage {
+﻿filter Get-GitHubWorkflowUsage {
     <#
         .SYNOPSIS
         Short description
@@ -19,7 +19,7 @@
         An example
 
         .NOTES
-        https://docs.github.com/en/rest/reference/actions#get-workflow-usage
+        https://docs.github.com/rest/reference/actions#get-workflow-usage
     #>
     [CmdletBinding(
         DefaultParameterSetName = 'ByName'
@@ -38,18 +38,11 @@
         [string[]] $ID
     )
 
-    begin {}
-
-    process {
-
-        $inputObject = @{
-            Method      = 'GET'
-            APIEndpoint = "/repos/$Owner/$Repo/actions/workflows/$ID/timing"
-        }
-
-        Invoke-GitHubAPI @inputObject | Select-Object -ExpandProperty billable | Write-Output
-
+    $inputObject = @{
+        Method      = 'GET'
+        APIEndpoint = "/repos/$Owner/$Repo/actions/workflows/$ID/timing"
     }
 
-    end {}
+    (Invoke-GitHubAPI @inputObject).Response.billable
+
 }

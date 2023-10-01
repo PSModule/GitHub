@@ -1,4 +1,4 @@
-﻿function Get-GitHubUserCard {
+﻿filter Get-GitHubUserCard {
     <#
         .SYNOPSIS
         Get contextual information for a user
@@ -22,7 +22,11 @@
     [OutputType([pscustomobject])]
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory)]
+        [Parameter(
+            Mandatory,
+            ValueFromPipeline,
+            ValueFromPipelineByPropertyName
+        )]
         [string] $Username,
         [Parameter()]
         [ValidateSet('organization', 'repository', 'issue', 'pull_request')]
@@ -42,6 +46,6 @@
         Body        = $body
     }
 
-    Invoke-GitHubAPI @inputObject
+    (Invoke-GitHubAPI @inputObject).Response
 
 }

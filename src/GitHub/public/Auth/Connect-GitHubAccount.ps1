@@ -31,7 +31,7 @@
         Connects to GitHub using a device flow login and sets the scope of the access token.
 
         .NOTES
-        https://docs.github.com/en/rest/overview/other-authentication-methods#authenticating-for-saml-sso
+        https://docs.github.com/rest/overview/other-authentication-methods#authenticating-for-saml-sso
     #>
     [Alias('Connect-GHAccount')]
     [Alias('Connect-GitHub')]
@@ -45,7 +45,7 @@
     param (
         # Choose between authentication methods, either OAuthApp or GitHubApp.
         # For more info about the types of authentication visit:
-        # https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/differences-between-github-apps-and-oauth-apps
+        # https://docs.github.com/apps/oauth-apps/building-oauth-apps/differences-between-github-apps-and-oauth-apps
         [Parameter(ParameterSetName = 'DeviceFlow')]
         [ValidateSet('OAuthApp', 'GitHubApp')]
         [string] $Mode = 'GitHubApp',
@@ -53,7 +53,7 @@
         # The scope of the access token, when using OAuth authentication.
         # Provide the list of scopes as space-separated values.
         # For more information on scopes visit:
-        # https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps
+        # https://docs.github.com/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps
         [Parameter(ParameterSetName = 'DeviceFlow')]
         [string] $Scope = 'gist read:org repo workflow',
 
@@ -87,9 +87,12 @@
             } else {
                 $accessTokenValidity = [datetime](Get-GitHubConfig -Name 'AccessTokenExpirationDate') - (Get-Date)
                 $accessTokenIsValid = $accessTokenValidity.Seconds -gt 0
-                $accessTokenValidityText = "$($accessTokenValidity.Hours):$($accessTokenValidity.Minutes):$($accessTokenValidity.Seconds)"
+                $hours = $accessTokenValidity.Hours.ToString().PadLeft(2, '0')
+                $minutes = $accessTokenValidity.Minutes.ToString().PadLeft(2, '0')
+                $seconds = $accessTokenValidity.Seconds.ToString().PadLeft(2, '0')
+                $accessTokenValidityText = "$hours`:$minutes`:$seconds"
                 if ($accessTokenIsValid) {
-                    if ($accessTokenValidity -gt 4) {
+                    if ($accessTokenValidity.TotalHours -gt 4) {
                         Write-Host '✓ ' -ForegroundColor Green -NoNewline
                         Write-Host "Access token is still valid for $accessTokenValidityText ..."
                         return

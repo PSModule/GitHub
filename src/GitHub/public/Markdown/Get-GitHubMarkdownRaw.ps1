@@ -1,12 +1,12 @@
-﻿function Get-GitHubMarkdownRaw {
+﻿filter Get-GitHubMarkdownRaw {
     <#
         .NOTES
-        https://docs.github.com/en/rest/reference/meta#github-api-root
+        https://docs.github.com/rest/reference/meta#github-api-root
     #>
     [CmdletBinding()]
     param (
         [Parameter()]
-        [switch] $Text
+        [string] $Text
     )
 
     $inputObject = @{
@@ -16,6 +16,6 @@
         Method      = 'POST'
     }
 
-    Invoke-GitHubAPI @inputObject
+    (Invoke-GitHubAPI @inputObject).Response
 
 }

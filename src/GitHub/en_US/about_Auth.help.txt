@@ -38,8 +38,8 @@ KEYWORDS
 
 SEE ALSO
     For more information on the Device Flow visit:
-    - https://docs.github.com/en/apps/creating-github-apps/writing-code-for-a-github-app/building-a-cli-with-a-github-app
+    - https://docs.github.com/apps/creating-github-apps/writing-code-for-a-github-app/building-a-cli-with-a-github-app
 
     For information about scopes and other authentication methods on GitHub:
-    - https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps
-    - https://docs.github.com/en/rest/overview/other-authentication-methods#authenticating-for-saml-sso
+    - https://docs.github.com/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps
+    - https://docs.github.com/rest/overview/other-authentication-methods#authenticating-for-saml-sso

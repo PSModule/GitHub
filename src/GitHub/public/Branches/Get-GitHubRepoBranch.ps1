@@ -1,4 +1,4 @@
-﻿function Get-GitHubRepoBranch {
+﻿filter Get-GitHubRepoBranch {
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -13,6 +13,6 @@
         Method      = 'GET'
     }
 
-    Invoke-GitHubAPI @inputObject
+    (Invoke-GitHubAPI @inputObject).Response
 
 }

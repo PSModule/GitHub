@@ -1,4 +1,4 @@
-﻿function Get-GitHubMeta {
+﻿filter Get-GitHubMeta {
     <#
         .SYNOPSIS
         Get GitHub meta information.
@@ -29,6 +29,6 @@
         Method      = 'GET'
     }
 
-    Invoke-GitHubAPI @inputObject
+    (Invoke-GitHubAPI @inputObject).Response
 
 }

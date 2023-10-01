@@ -1,4 +1,4 @@
-﻿function Set-GitHubUser {
+﻿filter Set-GitHubUser {
     <#
         .SYNOPSIS
         Update the authenticated user
@@ -63,11 +63,7 @@
         [string] $Bio
     )
 
-    $body = @{}
-
-    $PSBoundParameters.GetEnumerator() | ForEach-Object {
-        $body.($_.Key) = $_.Value
-    }
+    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
 
     $inputObject = @{
         APIEndpoint = '/user'
@@ -75,6 +71,6 @@
         Method      = 'PATCH'
     }
 
-    Invoke-GitHubAPI @inputObject
+    (Invoke-GitHubAPI @inputObject).Response
 
 }
