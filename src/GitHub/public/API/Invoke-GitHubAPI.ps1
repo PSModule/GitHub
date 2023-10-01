@@ -63,8 +63,11 @@
         # The GitHub API version to be used. By default, it pulls from a configuration script variable.
         [Parameter()]
         [string] $Version = (Get-GitHubConfig -Name ApiVersion)
-
     )
+
+    if (Test-GitHubAccessTokenRefreshRequired) {
+        Connect-GitHubAccount -Silent
+    }
 
     $functionName = $MyInvocation.MyCommand.Name
 
