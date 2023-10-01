@@ -16,6 +16,7 @@ Import-Module -Name GitHub -Verbose
 Get-Command -Module GitHub
 Clear-Host
 Connect-GitHubAccount
+Connect-GitHubAccount -Owner 'MariusStorhaug' -Repo 'ResourceModules'
 Connect-GitHubAccount -Mode OAuthApp
 Connect-GitHubAccount -AccessToken
 Get-GitHubConfig
