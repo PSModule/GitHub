@@ -53,8 +53,7 @@
             if ($Name) {
                 $metadata.$Name
             } else {
-                $metadata
-                # TODO: Fix sorting
+                $metadata | Sort-Object -Property Name
             }
         }
     }
