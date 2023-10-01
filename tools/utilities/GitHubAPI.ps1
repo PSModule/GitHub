@@ -21,7 +21,7 @@ $response.paths.psobject.Properties | Select-Object `
     @{n = 'PUT'; e = { (($_.value.psobject.Properties.Name) -contains 'PUT') } }, `
     @{n = 'PATCH'; e = { (($_.value.psobject.Properties.Name) -contains 'PATCH') } } | format-table
 
-$path = '/users/{username}'
+$path = '/user/blocks/{username}'
 $method = 'get'
 $response.paths.$path.$method
 $response.paths.$path.$method.tags | clip                             # -> Namespace/foldername
@@ -35,5 +35,7 @@ $response.paths.$path.$method.'x-github'.enabledForGitHubApps | clip  # -> Note 
 $response.paths.$path.$method.'x-github'.githubCloudOnly | clip       # -> Note
 $response.paths.$path.$method.parameters                              # -> Parameter list
 $response.paths.$path.$method.parameters.'$ref'                       # -> Parameter list
+$response.components.parameters.username                              # -> Parameter list ?
+$response.paths.$path.$method.responses                               # -> Could be used to decide error handling within the function
 $response.paths.$path.$method.responses.'200'.content.'application/json'.schema        # -> OutputType qualifyer
 $response.paths.$path.$method.responses.'200'.content.'application/json'.schema.items  # -> OutputType
