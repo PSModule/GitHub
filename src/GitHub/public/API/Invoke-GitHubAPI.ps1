@@ -42,7 +42,7 @@
 
         # The 'Accept' header for the API request. If not provided, the default will be used by GitHub's API.
         [Parameter()]
-        [string] $Accept = 'application/vnd.github+json',
+        [string] $Accept = 'application/vnd.github+json; charset=utf-8',
 
         # Specifies the HTTP version used for the request.
         [Parameter()]
@@ -58,7 +58,7 @@
 
         # The 'Content-Type' header for the API request. The default is 'application/vnd.github+json'.
         [Parameter()]
-        [string] $ContentType = 'application/vnd.github+json',
+        [string] $ContentType = 'application/vnd.github+json; charset=utf-8',
 
         # The GitHub API version to be used. By default, it pulls from a configuration script variable.
         [Parameter()]
@@ -133,6 +133,7 @@
             $statusCode = $APICallStatusCode | ConvertTo-Json -Depth 100 | ConvertFrom-Json
             $responseHeaders = $APICallResponseHeaders | ConvertTo-Json -Depth 100 | ConvertFrom-Json
             [pscustomobject]@{
+                Request = $APICall
                 Response = $_
                 StatusCode = $statusCode
                 ResponseHeaders = $responseHeaders

@@ -41,13 +41,11 @@ Get-GitHubOrganization -OrganizationName 'PSModule'
 Get-GitHubOrganizationAppInstallation -OrganizationName 'PSModule'
 
 Set-GitHubOrganization -OrganizationName 'PSModule' -Blog 'https://www.psmodule.io'
-Set-GitHubOrganization -OrganizationName 'PSModule' -Blog '' #-> Does not work.
-Set-GitHubOrganization -OrganizationName 'PSModule' -Blog ' '
+Set-GitHubOrganization -OrganizationName 'PSModule' -Blog ''
 
+Set-GitHubOrganization -OrganizationName 'PSModule' -Company 'PSModule123' -DefaultRepositoryPermission admin
 Set-GitHubOrganization -OrganizationName 'PSModule' -Company 'PSModule' -DefaultRepositoryPermission read
 
-Get-GitHubUser
-Set-GitHubUser -Name 'MariusStorhaug' -Company 'PSModule'
-Set-GitHubUser -Name 'MariusStorhaug' -Company '@DNBBank'
+Set-GitHubUser -Name 'Marius Storhaug' -Company '@DNBBank' -Email 'marstor@hotmail.com' -Blog 'https://www.github.com/MariusStorhaug' -TwitterUsername MariusStorhaug -Location 'Norway' -Hireable $false -Bio 'DevOps Engineer at DNB Bank. I ❤️ PowerShell and automation.'
 Set-GitHubUser -Name 'MariusStorhaug' -Company ' '
 Set-GitHubUser -Name 'MariusStorhaug' -Hireable $true
