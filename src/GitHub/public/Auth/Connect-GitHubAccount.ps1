@@ -73,9 +73,10 @@
         [string] $Repo
     )
 
-    $envVar = Get-ChildItem -Path 'Env:' | Where-Object Name -In 'GH_TOKEN', 'GITHUB_TOKEN' | Select-Object -First 1
-    $envVarPresent = $envVar.count -gt 0
-    $AuthType = $envVarPresent ? 'sPAT' : $PSCmdlet.ParameterSetName
+    $envVars = Get-ChildItem -Path 'Env:'
+    $systemToken = $envVars | Where-Object Name -In 'GH_TOKEN', 'GITHUB_TOKEN' | Select-Object -First 1
+    $systemTokenPresent = $systemToken.count -gt 0
+    $AuthType = $systemTokenPresent ? 'sPAT' : $PSCmdlet.ParameterSetName
 
     switch ($AuthType) {
         'DeviceFlow' {
@@ -169,9 +170,9 @@
         'sPAT' {
             Write-Verbose 'Logging in using system access token...'
             Reset-GitHubConfig -Scope 'Auth'
-            $prefix = $envVar.Value -replace '_.*$', '_*'
+            $prefix = $systemToken.Value -replace '_.*$', '_*'
             $settings = @{
-                AccessToken     = ConvertTo-SecureString -AsPlainText $envVar.Value
+                AccessToken     = ConvertTo-SecureString -AsPlainText $systemToken.Value
                 AccessTokenType = $prefix
                 ApiBaseUri      = 'https://api.github.com'
                 ApiVersion      = '2022-11-28'
@@ -181,18 +182,29 @@
         }
     }
 
-    $user = Get-GitHubUser
-    Set-GitHubConfig -UserName $user.login
+    if ($AuthType -ne 'sPAT') {
+        $user = Get-GitHubUser
+        Set-GitHubConfig -UserName $user.login
+    }
 
     Write-Host '✓ ' -ForegroundColor Green -NoNewline
     Write-Host "Logged in as $($user.login)!"
 
+
+    $systemRepo = $envVars | Where-Object Name -EQ 'GITHUB_REPOSITORY'
+    $systemRepoPresent = $systemRepo.count -gt 0
+
     if ($Owner) {
         Set-GitHubConfig -Owner $Owner
+    } elseif ($systemRepoPresent) {
+        $owner = $systemRepo.Value.Split('/')[0]
+        Set-GitHubConfig -Owner $owner
     }
 
     if ($Repo) {
         Set-GitHubConfig -Repo $Repo
+    } elseif ($systemRepoPresent) {
+        $repo = $systemRepo.Value.Split('/')[-1]
+        Set-GitHubConfig -Repo $repo
     }
-
 }
