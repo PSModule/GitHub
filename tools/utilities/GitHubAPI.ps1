@@ -15,11 +15,11 @@ $response.'x-webhooks'  # Webhooks/event docs
 
 $response.paths.psobject.Properties | Select-Object `
     Name, `
-    @{n = 'Get'; e = { (($_.value.psobject.Properties.Name) -contains 'Get') } }, `
-    @{n = 'Post'; e = { (($_.value.psobject.Properties.Name) -contains 'Post') } }, `
-    @{n = 'Delete'; e = { (($_.value.psobject.Properties.Name) -contains 'Delete') } }, `
-    @{n = 'PUT'; e = { (($_.value.psobject.Properties.Name) -contains 'PUT') } }, `
-    @{n = 'PATCH'; e = { (($_.value.psobject.Properties.Name) -contains 'PATCH') } } | format-table
+@{n = 'Get'; e = { (($_.value.psobject.Properties.Name) -contains 'Get') } }, `
+@{n = 'Post'; e = { (($_.value.psobject.Properties.Name) -contains 'Post') } }, `
+@{n = 'Delete'; e = { (($_.value.psobject.Properties.Name) -contains 'Delete') } }, `
+@{n = 'PUT'; e = { (($_.value.psobject.Properties.Name) -contains 'PUT') } }, `
+@{n = 'PATCH'; e = { (($_.value.psobject.Properties.Name) -contains 'PATCH') } } | Format-Table
 
 $path = '/user/blocks/{username}'
 $method = 'get'
@@ -39,3 +39,17 @@ $response.components.parameters.username                              # -> Param
 $response.paths.$path.$method.responses                               # -> Could be used to decide error handling within the function
 $response.paths.$path.$method.responses.'200'.content.'application/json'.schema        # -> OutputType qualifyer
 $response.paths.$path.$method.responses.'200'.content.'application/json'.schema.items  # -> OutputType
+
+
+$response.components.schemas.PSobject.Properties | ForEach-Object {
+    [pscustomobject]@{
+        Name = $_.Name
+        Title = $_.Value.title
+        Type = $_.Value.type
+        Properties = $_.Value.properties
+        Required = $_.Value.required
+    }
+}
+
+
+$response.components.schemas.'issue-comment' | ConvertTo-Json
