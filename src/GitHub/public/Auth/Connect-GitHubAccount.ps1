@@ -70,7 +70,11 @@
 
         # Set the default repository to use in commands.
         [Parameter()]
-        [string] $Repo
+        [string] $Repo,
+
+        # Suppresses the output of the function.
+        [Parameter()]
+        [switch] $Silent
     )
 
     $envVars = Get-ChildItem -Path 'Env:'
@@ -93,21 +97,27 @@
                 $seconds = $accessTokenValidity.Seconds.ToString().PadLeft(2, '0')
                 $accessTokenValidityText = "$hours`:$minutes`:$seconds"
                 if ($accessTokenIsValid) {
-                    if ($accessTokenValidity.TotalHours -gt 4) {
-                        Write-Host '✓ ' -ForegroundColor Green -NoNewline
-                        Write-Host "Access token is still valid for $accessTokenValidityText ..."
+                    if ($accessTokenValidity.TotalHours -gt $script:Auth.AccessTokenGracePeriodInHours) {
+                        if (-not $Silent) {
+                            Write-Host '✓ ' -ForegroundColor Green -NoNewline
+                            Write-Host "Access token is still valid for $accessTokenValidityText ..."
+                        }
                         break
                     } else {
-                        Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
-                        Write-Host "Access token remaining validity $accessTokenValidityText. Refreshing access token..."
+                        if (-not $Silent) {
+                            Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
+                            Write-Host "Access token remaining validity $accessTokenValidityText. Refreshing access token..."
+                        }
                         $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -RefreshToken (Get-GitHubConfig -Name RefreshToken)
                     }
                 } else {
                     $refreshTokenValidity = [datetime](Get-GitHubConfig -Name 'RefreshTokenExpirationDate') - (Get-Date)
                     $refreshTokenIsValid = $refreshTokenValidity.Seconds -gt 0
                     if ($refreshTokenIsValid) {
-                        Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
-                        Write-Verbose 'Access token expired. Refreshing access token...'
+                        if (-not $Silent) {
+                            Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
+                            Write-Host 'Access token expired. Refreshing access token...'
+                        }
                         $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -RefreshToken (Get-GitHubConfig -Name RefreshToken)
                     } else {
                         Write-Verbose "Using $Mode authentication..."
@@ -154,8 +164,8 @@
             $accessTokenValue = Read-Host -Prompt 'Enter your personal access token' -AsSecureString
             $accessTokenType = (ConvertFrom-SecureString $accessTokenValue -AsPlainText) -replace '_.*$', '_*'
             if ($accessTokenType -notmatch '^ghp_|^github_pat_') {
-                Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
-                Write-Host "Unexpected access token format: $accessTokenType"
+                Write-Warning '⚠ ' -ForegroundColor Yellow -NoNewline
+                Write-Warning "Unexpected access token format: $accessTokenType"
             }
             $settings = @{
                 AccessToken     = $accessTokenValue
@@ -190,9 +200,10 @@
         $username = 'system'
     }
 
-    Write-Host '✓ ' -ForegroundColor Green -NoNewline
-    Write-Host "Logged in as $username!"
-
+    if (-not $Silent) {
+        Write-Host '✓ ' -ForegroundColor Green -NoNewline
+        Write-Host "Logged in as $username!"
+    }
 
     $systemRepo = $envVars | Where-Object Name -EQ 'GITHUB_REPOSITORY'
     $systemRepoPresent = $systemRepo.count -gt 0
