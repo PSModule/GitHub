@@ -95,7 +95,7 @@
                     if ($accessTokenValidity.TotalHours -gt 4) {
                         Write-Host '✓ ' -ForegroundColor Green -NoNewline
                         Write-Host "Access token is still valid for $accessTokenValidityText ..."
-                        return
+                        break
                     } else {
                         Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
                         Write-Host "Access token remaining validity $accessTokenValidityText. Refreshing access token..."
@@ -181,8 +181,11 @@
         }
     }
 
+    $user = Get-GitHubUser
+    Set-GitHubConfig -UserName $user.login
+
     Write-Host '✓ ' -ForegroundColor Green -NoNewline
-    Write-Host 'Logged in to GitHub!'
+    Write-Host "Logged in as $($user.login)!"
 
     if ($Owner) {
         Set-GitHubConfig -Owner $Owner
