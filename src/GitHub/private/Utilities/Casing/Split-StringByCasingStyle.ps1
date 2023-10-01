@@ -78,7 +78,7 @@
             'snake_case',
             'UPPER_SNAKE_CASE'
         )]
-        [string] $By,
+        [string] $By
     )
 
     $styles = $PSBoundParameters | Where-Object { $_.Value -eq $true } | Select-Object -ExpandProperty Name
