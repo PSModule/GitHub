@@ -184,11 +184,14 @@
 
     if ($AuthType -ne 'sPAT') {
         $user = Get-GitHubUser
-        Set-GitHubConfig -UserName $user.login
+        $username = $user.login
+        Set-GitHubConfig -UserName $username
+    } else {
+        $username = 'system'
     }
 
     Write-Host '✓ ' -ForegroundColor Green -NoNewline
-    Write-Host "Logged in as $($user.login)!"
+    Write-Host "Logged in as $username!"
 
 
     $systemRepo = $envVars | Where-Object Name -EQ 'GITHUB_REPOSITORY'
