@@ -43,7 +43,7 @@
         Method      = 'GET'
     }
 
-    $statusCode = (Invoke-GitHubAPI @inputObject).SatusCode
+    $statusCode = (Invoke-GitHubAPI @inputObject -ErrorAction SilentlyContinue).StatusCode
 
     if ($statusCode -eq 204) {
         return $true
