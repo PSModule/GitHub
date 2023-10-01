@@ -51,4 +51,3 @@ Set-GitHubUser -Name 'MariusStorhaug' -Company 'PSModule'
 Set-GitHubUser -Name 'MariusStorhaug' -Company '@DNBBank'
 Set-GitHubUser -Name 'MariusStorhaug' -Company ' '
 Set-GitHubUser -Name 'MariusStorhaug' -Hireable $true
-

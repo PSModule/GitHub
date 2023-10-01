@@ -38,6 +38,7 @@
             'lowercase',
             'UPPERCASE',
             'Title Case',
+            'Sentencecase',
             'PascalCase',
             'camelCase',
             'kebab-case',
@@ -57,7 +58,7 @@
         'lowercase' { ($words -join '').toLower() }
         'UPPERCASE' { ($words -join '').toUpper() }
         'Title Case' { ($words | ForEach-Object { $_.Substring(0, 1).ToUpper() + $_.Substring(1).ToLower() }) -join ' ' }
-        'Wordcase' { $words -join '' | ForEach-Object { $_.Substring(0, 1).ToUpper() + $_.Substring(1).ToLower() } }
+        'Sentencecase' { $words -join '' | ForEach-Object { $_.Substring(0, 1).ToUpper() + $_.Substring(1).ToLower() } }
         'kebab-case' { ($words -join '-').ToLower() }
         'snake_case' { ($words -join '_').ToLower() }
         'PascalCase' { ($words | ForEach-Object { $_.Substring(0, 1).ToUpper() + $_.Substring(1).ToLower() }) -join '' }

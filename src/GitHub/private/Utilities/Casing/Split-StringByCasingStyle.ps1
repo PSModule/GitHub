@@ -57,17 +57,19 @@
     [OutputType([string[]])]
     [CmdletBinding()]
     param (
+        # The string to split
         [Parameter(
             Mandatory,
             ValueFromPipeline
         )]
         [string] $Text,
 
+        # The casing style to split the string by
         [Parameter()]
         [ValidateSet(
             'lowercase',
             'UPPERCASE',
-            'Wordcase',
+            'Sentencecase',
             'Title Case',
             'PascalCase',
             'camelCase',
@@ -77,9 +79,6 @@
             'UPPER_SNAKE_CASE'
         )]
         [string] $By,
-
-        [Parameter()]
-        [switch] $ToLowerCase
     )
 
     $styles = $PSBoundParameters | Where-Object { $_.Value -eq $true } | Select-Object -ExpandProperty Name
