@@ -67,6 +67,7 @@
 
     if (Test-GitHubAccessTokenRefreshRequired) {
         Connect-GitHubAccount -Silent
+        $AccessToken = (Get-GitHubConfig -Name AccessToken)
     }
 
     $functionName = $MyInvocation.MyCommand.Name
