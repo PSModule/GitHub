@@ -43,13 +43,13 @@
         Method      = 'GET'
     }
 
-    $statusCode = (Invoke-GitHubAPI @inputObject -ErrorAction SilentlyContinue).StatusCode
-
-    if ($statusCode -eq 204) {
-        return $true
-    } elseif ($statusCode -eq 404) {
-        return $false
-    } else {
-        throw "Unexpected status code: $statusCode"
+    try {
+        (Invoke-GitHubAPI @inputObject).StatusCode -eq 204
+    } catch {
+        if ($_.Exception.Response.StatusCode.Value__ -eq 404) {
+            return $false
+        } else {
+            throw $_
+        }
     }
 }

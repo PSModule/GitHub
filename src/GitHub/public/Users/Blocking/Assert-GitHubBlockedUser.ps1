@@ -27,6 +27,14 @@
         Body        = $body
     }
 
-    (Invoke-GitHubAPI @inputObject).Response
+    try {
+        (Invoke-GitHubAPI @inputObject).StatusCode -eq 204
+    } catch {
+        if ($_.Exception.Response.StatusCode.Value__ -eq 404) {
+            return $false
+        } else {
+            throw $_
+        }
+    }
 
 }
