@@ -40,12 +40,18 @@
             Mandatory,
             ValueFromPipeline
         )]
-        [object]$InputObject
+        [object]$InputObject,
+
+        # The casing style of the hashtable keys.
+        [Parameter()]
+        [ValidateSet('PascalCase', 'CamelCase', 'LowerCase', 'UpperCase')]
+        [string]$NameCasingStyle
     )
     [hashtable]$hashtable = @{}
 
     foreach ($item in $InputObject.PSObject.Properties) {
-        $hashtable[$($item.Name)] = $item.Value
+        $name = $NameCasingStyle ? ($item.Name | Convert-StringCasingStyle -Style $NameCasingStyle) : $item.Name
+        $hashtable[$name] = $item.Value
     }
     $hashtable
 }
