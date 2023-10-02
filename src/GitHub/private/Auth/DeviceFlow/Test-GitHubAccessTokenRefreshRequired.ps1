@@ -14,15 +14,16 @@
     [CmdletBinding()]
     param()
 
-    $tokenExpirationDate = Get-GitHubConfig -Name 'AccessTokenExpirationDate' -ErrorAction SilentlyContinue
-    if (-not $tokenExpirationDate) {
+    $tokenType = Get-GitHubConfig -Name 'AccessTokenType' -ErrorAction SilentlyContinue
+    if ($tokenType -ne 'ghu_*') {
+        Write-Verbose "The access token is not a user token. No need to refresh."
         return $false
     }
-    $currentDateTime = Get-Date
 
-    # Calulate the remaining time in hours
-    $remainindDuration = [datetime]$tokenExpirationDate - $currentDateTime
+    $tokenExpirationDate = Get-GitHubConfig -Name 'AccessTokenExpirationDate' -ErrorAction SilentlyContinue
+    $currentDateTime = Get-Date
+    $remainingDuration = [datetime]$tokenExpirationDate - $currentDateTime
 
     # If the remaining time is less that $script:Auth.AccessTokenGracePeriodInHours then the token should be refreshed
-    $remainindDuration.TotalHours -lt $script:Auth.AccessTokenGracePeriodInHours
+    $remainingDuration.TotalHours -lt $script:Auth.AccessTokenGracePeriodInHours
 }
