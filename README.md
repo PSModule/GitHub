@@ -47,7 +47,6 @@ to read more about GitHub Apps.
 
 ```powershell
 Connect-GitHubAccount
-
 ! We added the code to your clipboard: [AB55-FA2E]
 Press Enter to open github.com in your browser...:  #-> Press enter and paste the code in the browser window
 ✓ Logged in as octocat!
