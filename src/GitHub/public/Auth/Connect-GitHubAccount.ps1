@@ -62,18 +62,26 @@
             Mandatory,
             ParameterSetName = 'PAT'
         )]
+        [Alias('Token')]
+        [Alias('PAT')]
         [switch] $AccessToken,
 
         # Set the default owner to use in commands.
         [Parameter()]
+        [Alias('Organization')]
+        [Alias('Org')]
         [string] $Owner,
 
         # Set the default repository to use in commands.
         [Parameter()]
+        [Alias('Repository')]
         [string] $Repo,
 
         # Suppresses the output of the function.
         [Parameter()]
+        [Alias('Quiet')]
+        [Alias('q')]
+        [Alias('s')]
         [switch] $Silent
     )
 
