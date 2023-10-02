@@ -22,22 +22,25 @@ The **GitHub PowerShell** module serves as a convenient API wrapper around [GitH
 
 To dive into the world of GitHub automation with PowerShell, follow these steps:
 
-1. **Installation**: Download and install the GitHub PowerShell module from the provided link or the PowerShell Gallery.
+### Installing the module
+
+Download and install the GitHub PowerShell module from the PowerShell Gallery with the following command:
 
     ```powershell
     Install-Module -Name GitHub -Force -AllowClobber
     ```
 
-1. **Authentication**: Authenticate using your GitHub credentials or access tokens to begin executing commands.
-  Tokens and other configuration details are stored encrypted on the system using the PowerShell modules
-  [SecretManagement and SecretStore Overview](https://learn.microsoft.com/en-us/powershell/utility-modules/secretmanagement/overview?view=ps-modules),
-  for more info on the implementation, see the section on [storing configuration](#storing-configuration).
+### Logging on
+Authenticate using your GitHub credentials or access tokens to begin executing commands. Tokens and other
+configuration details are stored encrypted on the system using the PowerShell modules [SecretManagement and SecretStore Overview](https://learn.microsoft.com/en-us/powershell/utility-modules/secretmanagement/overview?view=ps-modules),
+for more info on the implementation, see the section on [storing configuration](#storing-configuration).
 
-  - **Device flow**: This is the recommended method for authentication due to access tokens being short lived.
+  - **Device flow**:
+    This is the recommended method for authentication due to access tokens being short lived.
     It opens a browser window and prompts you to log in to GitHub. Once you log in, you will be provided with
-    a code that you need to paste into the PowerShell console. It uses a GitHub App to authenticate, which is
-    more secure than using a personal access token. The GitHub App is only granted access to the repositories
-    you add it to. Visit the [GitHub Apps documentation](https://docs.github.com/en/developers/apps/about-apps)
+    a code that you need to paste into the PowerShell console. The command already puts the code in your clipboard.
+    It uses a GitHub App to authenticate, which is more secure than using a personal access token. The GitHub App
+    is only granted access to the repositories you add it to. Visit the [GitHub Apps documentation](https://docs.github.com/en/developers/apps/about-apps)
     to read more about GitHub Apps.
 
     ```powershell
@@ -45,11 +48,11 @@ To dive into the world of GitHub automation with PowerShell, follow these steps:
 
     ! We added the code to your clipboard: [AB55-FA2E]
     Press Enter to open github.com in your browser...:  #-> Press enter and paste the code in the browser window
-    ✓ Logged in as MariusStorhaug!
+    ✓ Logged in as octocat!
     ```
 
     After this you will need to install the GitHub App on the repos you want to manage. You can do this by visiting the
-    [PowerShell for GitHub](https://github.com/apps/powershell-for-github) App page.
+    [PowerShell for GitHub](https://github.com/apps/powershell-for-github) app page.
 
     > Info: We will be looking to include this as a check in the module in the future. So it becomes a part of the regular sign in process.
 
@@ -57,14 +60,14 @@ To dive into the world of GitHub automation with PowerShell, follow these steps:
     Install-GitHubApp -Owner 'PSModule' -Repo 'GitHub'
     ``` -->
 
-    Consecutive runs of the `Connect-GitHubAccount` will not require you to paste the code again, unless you revoke the token,
-    it expires or you change the type of authentication you want to use. Instead, the module will use the refresh token to get
-    a new access token if the refresh token is expired.
+    Consecutive runs of the `Connect-GitHubAccount` will not require you to paste the code again unless you revoke the token
+    or you change the type of authentication you want to use. Instead, it checks the remaining duration of the access token and
+    uses the refresh token to get a new access token if its less than 4 hours remaining.
 
     ```powershell
     Connect-GitHubAccount
     ✓ Access token is still valid for 05:30:41 ...
-    ✓ Logged in as MariusStorhaug!
+    ✓ Logged in as octocat!
     ```
 
     This is also happening automatically when you run a command that requires authentication. The validity of the token is checked before the command is executed.
@@ -79,7 +82,7 @@ To dive into the world of GitHub automation with PowerShell, follow these steps:
 
     ! We added the code to your clipboard: [AB55-FA2E]
     Press Enter to open github.com in your browser...:
-    ✓ Logged in as MariusStorhaug!
+    ✓ Logged in as octocat!
     ```
 
   - **Personal access token**: This is the least secure method of authentication, but it is also the simplest.
@@ -89,7 +92,7 @@ To dive into the world of GitHub automation with PowerShell, follow these steps:
     ```powershell
     Connect-GitHubAccount -AccessToken
     ! Enter your personal access token: ****************************************
-    ✓ Logged in as MariusStorhaug!
+    ✓ Logged in as octocat!
     ```
 
   - **System Access Token**: The module also detects the presence of a system access token and uses that if it is present.
@@ -101,13 +104,13 @@ To dive into the world of GitHub automation with PowerShell, follow these steps:
     ✓ Logged in as system!
     ```
 
-2. **Command Exploration**: Familiarize yourself with the available cmdlets using the module's comprehensive documentation or inline help.
+1. **Command Exploration**: Familiarize yourself with the available cmdlets using the module's comprehensive documentation or inline help.
 
     ```powershell
     Get-Command -Module GitHub
     ```
 
-3. **Sample Scripts**: Check out sample scripts and usage patterns to jumpstart your automation tasks on GitHub.
+2. **Sample Scripts**: Check out sample scripts and usage patterns to jumpstart your automation tasks on GitHub.
 
 ## More Information & Resources
 
