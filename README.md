@@ -20,38 +20,105 @@ The **GitHub PowerShell** module serves as a convenient API wrapper around [GitH
 
 ## Getting Started with GitHub PowerShell
 
-To dive into the world of GitHub automation with PowerShell, follow these steps:
+To dive into the world of GitHub automation with PowerShell, follow the sections below.
 
-1. **Installation**: Download and install the GitHub PowerShell module from the provided link or the PowerShell Gallery.
+### Installing the module
 
-    ```powershell
-    Install-Module -Name GitHub -Force -AllowClobber
-    ```
+Download and install the GitHub PowerShell module from the PowerShell Gallery with the following command:
 
-1. **Authentication**: Authenticate using your GitHub credentials or access tokens to begin executing commands.
+```powershell
+Install-Module -Name GitHub -Force -AllowClobber
+```
 
-Logging in using device flow:
+### Logging on
+
+Authenticate using your GitHub credentials or access tokens to begin executing commands. Tokens and other
+configuration details are stored encrypted on the system using the PowerShell modules [SecretManagement and SecretStore Overview](https://learn.microsoft.com/en-us/powershell/utility-modules/secretmanagement/overview?view=ps-modules),
+for more info on the implementation, see the section on [storing configuration](#storing-configuration).
+
+#### Device flow
+
+This is the recommended method for authentication due to access tokens being short lived.
+It opens a browser window and prompts you to log in to GitHub. Once you log in, you will be provided with
+a code that you need to paste into the PowerShell console. The command already puts the code in your clipboard.
+It uses a GitHub App to authenticate, which is more secure than using a personal access token. The GitHub App
+is only granted access to the repositories you add it to. Visit the [GitHub Apps documentation](https://docs.github.com/en/developers/apps/about-apps)
+to read more about GitHub Apps.
+
 ```powershell
 Connect-GitHubAccount
-
-Please visit: https://github.com/login/device
-and enter code: ABCD-1234
-Successfully authenticated!
+! We added the code to your clipboard: [AB55-FA2E]
+Press Enter to open github.com in your browser...:  #-> Press enter and paste the code in the browser window
+✓ Logged in as octocat!
 ```
 
-Logging in using PAT token:
+After this you will need to install the GitHub App on the repos you want to manage. You can do this by visiting the
+[PowerShell for GitHub](https://github.com/apps/powershell-for-github) app page.
+
+> Info: We will be looking to include this as a check in the module in the future. So it becomes a part of the regular sign in process.
+
+<!-- ```powershell
+Install-GitHubApp -Owner 'PSModule' -Repo 'GitHub'
+``` -->
+
+Consecutive runs of the `Connect-GitHubAccount` will not require you to paste the code again unless you revoke the token
+or you change the type of authentication you want to use. Instead, it checks the remaining duration of the access token and
+uses the refresh token to get a new access token if its less than 4 hours remaining.
+
 ```powershell
->_ Connect-GitHubAccount -AccessToken 'ghp_abcdefghklmnopqrstuvwxyz123456789123'
->_
+Connect-GitHubAccount
+✓ Access token is still valid for 05:30:41 ...
+✓ Logged in as octocat!
 ```
 
-2. **Command Exploration**: Familiarize yourself with the available cmdlets using the module's comprehensive documentation or inline help.
+This is also happening automatically when you run a command that requires authentication. The validity of the token is checked before the command is executed.
+If it is no longer valid, the token is refreshed and the command is executed.
 
-    ```powershell
-    Get-Command -Module GitHub
-    ```
+#### Device Flow with OAuth app
 
-3. **Sample Scripts**: Check out sample scripts and usage patterns to jumpstart your automation tasks on GitHub.
+This uses the same flow as above, but instead of using the GitHub App, it uses an OAuth app with long lived tokens.
+During the signing you can also authorize the app to access your private repositories.
+Visit the [OAuth apps documentation](https://docs.github.com/en/developers/apps/about-apps) to read more about OAuth apps on GitHub.
+
+```powershell
+Connect-GitHubAccount -Mode OAuth
+
+! We added the code to your clipboard: [AB55-FA2E]
+Press Enter to open github.com in your browser...:
+✓ Logged in as octocat!
+```
+
+#### Personal access token
+This is the least secure method of authentication, but it is also the simplest. Running the `Connect-GitHubAccount` command
+with the `-AccessToken` parameter will send you to the GitHub website where you can create a new personal access token.
+Give it the access you need and paste it into the terminal.
+
+```powershell
+Connect-GitHubAccount -AccessToken
+! Enter your personal access token: ****************************************
+✓ Logged in as octocat!
+```
+
+#### System Access Token
+The module also detects the presence of a system access token and uses that if it is present.
+This is useful if you are running the module in a CI/CD pipeline or in a scheduled task.
+The function looks for the `GH_TOKEN` and `GITHUB_TOKEN` environment variables (in order).
+
+```powershell
+Connect-GitHubAccount
+✓ Logged in as system!
+```
+
+### Command Exploration
+Familiarize yourself with the available cmdlets using the module's comprehensive documentation or inline help.
+
+```powershell
+Get-Command -Module GitHub
+```
+
+### Sample Scripts
+
+To be added: Sample scripts demonstrating the module's capabilities.
 
 ## More Information & Resources
 
@@ -85,7 +152,6 @@ For a detailed understanding of the framework, [read more about PSModule here](h
 - [Generic HTTP Status Codes (MDN)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
 
 ### Tools Planned for Development:
-- [Microsoft.PowerShell.SecretManagement](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.secretmanagement/?view=ps-modules)
 - [Azure AutoRest (OpenAPI Specification Code Generator)](https://github.com/Azure/autorest)
 
 ### Inspiration Behind the Project:
@@ -95,7 +161,6 @@ For a detailed understanding of the framework, [read more about PSModule here](h
 - [libsodium NuGet Package](https://www.nuget.org/packages/Sodium.Core/)
 
 ### Authentication and Login:
-- [SecretManagement and SecretStore Overview](https://learn.microsoft.com/en-us/powershell/utility-modules/secretmanagement/overview?view=ps-modules)
 - [PowerShell for GitHub on GitHub Marketplace](https://github.com/apps/powershell-for-github)
 - [Building a CLI with a GitHub App](https://docs.github.com/en/apps/creating-github-apps/writing-code-for-a-github-app/building-a-cli-with-a-github-app)
 
