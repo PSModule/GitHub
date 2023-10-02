@@ -20,97 +20,106 @@ The **GitHub PowerShell** module serves as a convenient API wrapper around [GitH
 
 ## Getting Started with GitHub PowerShell
 
-To dive into the world of GitHub automation with PowerShell, follow these steps:
+To dive into the world of GitHub automation with PowerShell, follow the sections below.
 
 ### Installing the module
 
 Download and install the GitHub PowerShell module from the PowerShell Gallery with the following command:
 
-    ```powershell
-    Install-Module -Name GitHub -Force -AllowClobber
-    ```
+```powershell
+Install-Module -Name GitHub -Force -AllowClobber
+```
 
 ### Logging on
+
 Authenticate using your GitHub credentials or access tokens to begin executing commands. Tokens and other
 configuration details are stored encrypted on the system using the PowerShell modules [SecretManagement and SecretStore Overview](https://learn.microsoft.com/en-us/powershell/utility-modules/secretmanagement/overview?view=ps-modules),
 for more info on the implementation, see the section on [storing configuration](#storing-configuration).
 
-  - **Device flow**:
-    This is the recommended method for authentication due to access tokens being short lived.
-    It opens a browser window and prompts you to log in to GitHub. Once you log in, you will be provided with
-    a code that you need to paste into the PowerShell console. The command already puts the code in your clipboard.
-    It uses a GitHub App to authenticate, which is more secure than using a personal access token. The GitHub App
-    is only granted access to the repositories you add it to. Visit the [GitHub Apps documentation](https://docs.github.com/en/developers/apps/about-apps)
-    to read more about GitHub Apps.
+#### Device flow
 
-    ```powershell
-    Connect-GitHubAccount
+This is the recommended method for authentication due to access tokens being short lived.
+It opens a browser window and prompts you to log in to GitHub. Once you log in, you will be provided with
+a code that you need to paste into the PowerShell console. The command already puts the code in your clipboard.
+It uses a GitHub App to authenticate, which is more secure than using a personal access token. The GitHub App
+is only granted access to the repositories you add it to. Visit the [GitHub Apps documentation](https://docs.github.com/en/developers/apps/about-apps)
+to read more about GitHub Apps.
 
-    ! We added the code to your clipboard: [AB55-FA2E]
-    Press Enter to open github.com in your browser...:  #-> Press enter and paste the code in the browser window
-    ✓ Logged in as octocat!
-    ```
+```powershell
+Connect-GitHubAccount
 
-    After this you will need to install the GitHub App on the repos you want to manage. You can do this by visiting the
-    [PowerShell for GitHub](https://github.com/apps/powershell-for-github) app page.
+! We added the code to your clipboard: [AB55-FA2E]
+Press Enter to open github.com in your browser...:  #-> Press enter and paste the code in the browser window
+✓ Logged in as octocat!
+```
 
-    > Info: We will be looking to include this as a check in the module in the future. So it becomes a part of the regular sign in process.
+After this you will need to install the GitHub App on the repos you want to manage. You can do this by visiting the
+[PowerShell for GitHub](https://github.com/apps/powershell-for-github) app page.
 
-    <!-- ```powershell
-    Install-GitHubApp -Owner 'PSModule' -Repo 'GitHub'
-    ``` -->
+> Info: We will be looking to include this as a check in the module in the future. So it becomes a part of the regular sign in process.
 
-    Consecutive runs of the `Connect-GitHubAccount` will not require you to paste the code again unless you revoke the token
-    or you change the type of authentication you want to use. Instead, it checks the remaining duration of the access token and
-    uses the refresh token to get a new access token if its less than 4 hours remaining.
+<!-- ```powershell
+Install-GitHubApp -Owner 'PSModule' -Repo 'GitHub'
+``` -->
 
-    ```powershell
-    Connect-GitHubAccount
-    ✓ Access token is still valid for 05:30:41 ...
-    ✓ Logged in as octocat!
-    ```
+Consecutive runs of the `Connect-GitHubAccount` will not require you to paste the code again unless you revoke the token
+or you change the type of authentication you want to use. Instead, it checks the remaining duration of the access token and
+uses the refresh token to get a new access token if its less than 4 hours remaining.
 
-    This is also happening automatically when you run a command that requires authentication. The validity of the token is checked before the command is executed.
-    If it is no longer valid, the token is refreshed and the command is executed.
+```powershell
+Connect-GitHubAccount
+✓ Access token is still valid for 05:30:41 ...
+✓ Logged in as octocat!
+```
 
-  - **Device Flow with OAuth app**: This uses the same flow as above, but instead of using the GitHub App, it uses an OAuth app with long lived tokens.
-    During the signing you can also authorize the app to access your private repositories.
-    Visit the [OAuth apps documentation](https://docs.github.com/en/developers/apps/about-apps) to read more about OAuth apps on GitHub.
+This is also happening automatically when you run a command that requires authentication. The validity of the token is checked before the command is executed.
+If it is no longer valid, the token is refreshed and the command is executed.
 
-    ```powershell
-    Connect-GitHubAccount -Mode OAuth
+#### Device Flow with OAuth app
 
-    ! We added the code to your clipboard: [AB55-FA2E]
-    Press Enter to open github.com in your browser...:
-    ✓ Logged in as octocat!
-    ```
+This uses the same flow as above, but instead of using the GitHub App, it uses an OAuth app with long lived tokens.
+During the signing you can also authorize the app to access your private repositories.
+Visit the [OAuth apps documentation](https://docs.github.com/en/developers/apps/about-apps) to read more about OAuth apps on GitHub.
 
-  - **Personal access token**: This is the least secure method of authentication, but it is also the simplest.
-    Running the `Connect-GitHubAccount` command with the `-AccessToken` parameter will send you to the GitHub
-    website where you can create a new personal access token. Give it the access you need and paste it into the terminal.
+```powershell
+Connect-GitHubAccount -Mode OAuth
 
-    ```powershell
-    Connect-GitHubAccount -AccessToken
-    ! Enter your personal access token: ****************************************
-    ✓ Logged in as octocat!
-    ```
+! We added the code to your clipboard: [AB55-FA2E]
+Press Enter to open github.com in your browser...:
+✓ Logged in as octocat!
+```
 
-  - **System Access Token**: The module also detects the presence of a system access token and uses that if it is present.
-    This is useful if you are running the module in a CI/CD pipeline or in a scheduled task.
-    The function looks for the `GH_TOKEN` and `GITHUB_TOKEN` environment variables (in order).
+#### Personal access token
+This is the least secure method of authentication, but it is also the simplest. Running the `Connect-GitHubAccount` command
+with the `-AccessToken` parameter will send you to the GitHub website where you can create a new personal access token.
+Give it the access you need and paste it into the terminal.
 
-    ```powershell
-    Connect-GitHubAccount
-    ✓ Logged in as system!
-    ```
+```powershell
+Connect-GitHubAccount -AccessToken
+! Enter your personal access token: ****************************************
+✓ Logged in as octocat!
+```
 
-1. **Command Exploration**: Familiarize yourself with the available cmdlets using the module's comprehensive documentation or inline help.
+#### System Access Token
+The module also detects the presence of a system access token and uses that if it is present.
+This is useful if you are running the module in a CI/CD pipeline or in a scheduled task.
+The function looks for the `GH_TOKEN` and `GITHUB_TOKEN` environment variables (in order).
 
-    ```powershell
-    Get-Command -Module GitHub
-    ```
+```powershell
+Connect-GitHubAccount
+✓ Logged in as system!
+```
 
-2. **Sample Scripts**: Check out sample scripts and usage patterns to jumpstart your automation tasks on GitHub.
+### Command Exploration
+Familiarize yourself with the available cmdlets using the module's comprehensive documentation or inline help.
+
+```powershell
+Get-Command -Module GitHub
+```
+
+### Sample Scripts
+
+To be added: Sample scripts demonstrating the module's capabilities.
 
 ## More Information & Resources
 
