@@ -21,8 +21,8 @@ $response.paths.psobject.Properties | Select-Object `
 @{n = 'PUT'; e = { (($_.value.psobject.Properties.Name) -contains 'PUT') } }, `
 @{n = 'PATCH'; e = { (($_.value.psobject.Properties.Name) -contains 'PATCH') } } | Format-Table
 
-$path = '/user/blocks/{username}'
-$method = 'get'
+$path = '/user/social_accounts'
+$method = 'delete'
 $response.paths.$path.$method
 $response.paths.$path.$method.tags | clip                             # -> Namespace/foldername
 $response.paths.$path.$method.operationId | clip                      # -> FunctionName

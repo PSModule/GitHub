@@ -12,6 +12,7 @@ Get-Module -Name GitHub -ListAvailable
 $VerbosePreference = 'Continue'
 
 Install-Module -Name GitHub -Force -Verbose -AllowPrerelease
+Get-Module -Name GitHub -ListAvailable
 # $env:PSModulePath += ';C:\Repos\GitHub\PSModule\Modules\GitHub\outputs'
 # Import-Module -Name 'C:\Repos\GitHub\PSModule\Modules\GitHub\src\GitHub\GitHub.psm1' -Verbose -Force
 
@@ -50,6 +51,8 @@ Set-GitHubOrganization -OrganizationName 'PSModule' -Blog ''
 Set-GitHubOrganization -OrganizationName 'PSModule' -Company 'PSModule123' -DefaultRepositoryPermission admin
 Set-GitHubOrganization -OrganizationName 'PSModule' -Company 'PSModule' -DefaultRepositoryPermission read
 
+
+Get-GitHubUser
 Set-GitHubUser -Name 'Marius Storhaug' -Company '@DNBBank' -Email 'marstor@hotmail.com' -Blog 'https://www.github.com/MariusStorhaug' -TwitterUsername MariusStorhaug -Location 'Norway' -Hireable $false -Bio 'DevOps Engineer at DNB Bank. I ❤️ PowerShell and automation.'
 Set-GitHubUser -Name 'MariusStorhaug' -Company ' '
 Set-GitHubUser -Name 'MariusStorhaug' -Hireable $true
