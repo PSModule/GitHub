@@ -30,7 +30,6 @@
         [string] $Username
     )
 
-
     $inputObject = @{
         APIEndpoint = "/users/$Username"
         Method      = 'GET'
