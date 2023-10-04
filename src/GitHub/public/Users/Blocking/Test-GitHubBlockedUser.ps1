@@ -18,6 +18,15 @@
     [OutputType([bool])]
     [CmdletBinding()]
     param (
+        # The handle for the GitHub user account.
+        [Parameter(
+            Mandatory,
+            ValueFromPipeline,
+            ValueFromPipelineByPropertyName
+        )]
+        [Alias('login')]
+        [string] $Username,
+
         # The number of results per page (max 100).
         [Parameter()]
         [int] $PerPage = 30
@@ -26,7 +35,7 @@
     $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
 
     $inputObject = @{
-        APIEndpoint = "/user/blocks"
+        APIEndpoint = "/user/blocks/$Username"
         Method      = 'GET'
         Body        = $body
     }
