@@ -1,4 +1,4 @@
-﻿filter Test-GitHubOrganizationBlockedUser {
+﻿filter Test-GitHubBlockedUserByOrganization {
     <#
         .SYNOPSIS
         Check if a user is blocked by an organization
@@ -7,7 +7,7 @@
         Returns a 204 if the given user is blocked by the given organization. Returns a 404 if the organization is not blocking the user, or if the user account has been identified as spam by GitHub.
 
         .EXAMPLE
-        Test-GitHubOrganizationBlockedUser -OrganizationName 'PSModule' -Username 'octocat'
+        Test-GitHubBlockedUserByOrganization -OrganizationName 'PSModule' -Username 'octocat'
 
         Checks if the user `octocat` is blocked by the organization `PSModule`.
         Returns true if the user is blocked, false if not.
@@ -16,8 +16,6 @@
         https://docs.github.com/rest/orgs/blocking#check-if-a-user-is-blocked-by-an-organization
     #>
     [OutputType([bool])]
-    [Alias('Is-GitHubOrganizationBlockedUser')]
-    [Alias('Check-GitHubOrganizationBlockedUser')]
     [CmdletBinding()]
     param (
         # The organization name. The name is not case sensitive.
