@@ -24,6 +24,8 @@
     [OutputType([pscustomobject])]
     [CmdletBinding()]
     param(
+        # Gets a summary of the status page, including a status indicator, component statuses, unresolved incidents, and any upcoming or in-progress scheduled maintenances.
+        [Parameter()]
         [switch] $Summary
     )
 
