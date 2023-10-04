@@ -15,7 +15,7 @@
         .NOTES
         https://docs.github.com/rest/orgs/blocking#check-if-a-user-is-blocked-by-an-organization
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([bool])]
     [Alias('Is-GitHubOrganizationBlockedUser')]
     [Alias('Check-GitHubOrganizationBlockedUser')]
     [CmdletBinding()]

@@ -39,7 +39,7 @@ $date = [datetime]::ParseExact($str, $format, $null)
 $date
 
 
-Get-GitHubOrganization
+Get-GitHubOrganization | Select-Object Name, login, id
 Get-GitHubOrganization -OrganizationName 'PowerShell'
 Get-GitHubOrganization -OrganizationName 'PSModule'
 
@@ -48,11 +48,18 @@ Get-GitHubOrganizationAppInstallation -OrganizationName 'PSModule'
 Set-GitHubOrganization -OrganizationName 'PSModule' -Blog 'https://www.psmodule.io'
 Set-GitHubOrganization -OrganizationName 'PSModule' -Blog ''
 
-Set-GitHubOrganization -OrganizationName 'PSModule' -Company 'PSModule123' -DefaultRepositoryPermission admin
-Set-GitHubOrganization -OrganizationName 'PSModule' -Company 'PSModule' -DefaultRepositoryPermission read
-
+Set-GitHubOrganization -OrganizationName 'PSModule' -Company 'PSModule123' -DefaultRepositoryPermission admin | Select-Object name, company, default_repository_permission
+Set-GitHubOrganization -OrganizationName 'PSModule' -Company 'PSModule' -DefaultRepositoryPermission read | Select-Object name, company, default_repository_permission
 
 Get-GitHubUser
-Set-GitHubUser -Name 'Marius Storhaug' -Company '@DNBBank' -Email 'marstor@hotmail.com' -Blog 'https://www.github.com/MariusStorhaug' -TwitterUsername MariusStorhaug -Location 'Norway' -Hireable $false -Bio 'DevOps Engineer at DNB Bank. I ❤️ PowerShell and automation.'
-Set-GitHubUser -Name 'MariusStorhaug' -Company ' '
-Set-GitHubUser -Name 'MariusStorhaug' -Hireable $true
+Get-GitHubUser | Select-Object Name, login, id, company, blog, twitter_username, location, hireable, bio
+
+$user = Get-GitHubUser
+$user.social_accounts
+
+Set-GitHubUser -Company '@DNBBank' -Email 'marstor@hotmail.com' -Blog 'https://www.github.com/MariusStorhaug' -TwitterUsername MariusStorhaug -Location 'Norway' -Hireable $false -Bio 'DevOps Engineer at DNB Bank. I ❤️ PowerShell and automation.'
+Set-GitHubUser -Company ' '
+Set-GitHubUser -Hireable $true | Select-Object login, hireable
+Set-GitHubUser -Hireable $false | Select-Object login, hireable
+
+Add-GitHubUserSocials -AccountUrls 'https://www.github.com/MariusStorhaug'
