@@ -1,32 +1,47 @@
 ﻿filter Get-GitHubBlockedUser {
     <#
         .SYNOPSIS
-        List users blocked by the authenticated user
+        List blocked users.
 
         .DESCRIPTION
-        List the users you've blocked on your personal account.
+        List the users that are blocked on your personal account or a given organization.
 
         .EXAMPLE
+        Get-GitHubBlockedUser
+
+        Returns a list of users blocked by the authenticated user.
+
+        .EXAMPLE
+        Get-GitHubBlockedUser -OrganizationName 'github'
+
+        Lists all users blocked by the organization `github`.
 
         .NOTES
         https://docs.github.com/rest/users/blocking#list-users-blocked-by-the-authenticated-user
+        https://docs.github.com/rest/orgs/blocking#list-users-blocked-by-an-organization
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]
     param (
+        # The organization name. The name is not case sensitive.
+        [Parameter(
+            ValueFromPipeline,
+            ValueFromPipelineByPropertyName
+        )]
+        [Alias('org')]
+        [Alias('owner')]
+        [Alias('login')]
+        [string] $OrganizationName,
+
         # The number of results per page (max 100).
         [Parameter()]
         [int] $PerPage = 30
     )
 
-    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-
-    $inputObject = @{
-        APIEndpoint = "/user/blocks"
-        Method      = 'GET'
-        Body        = $body
+    if ($OrganizationName) {
+        Get-GitHubBlockedUserByOrganization -OrganizationName $OrganizationName -PerPage $PerPage
+    } else {
+        Get-GitHubBlockedUserByUser -PerPage $PerPage
     }
-
-    (Invoke-GitHubAPI @inputObject).Response
 
 }

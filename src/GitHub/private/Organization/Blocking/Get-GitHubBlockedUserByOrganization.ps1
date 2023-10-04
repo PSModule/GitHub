@@ -1,4 +1,4 @@
-﻿filter Get-GitHubOrganizationBlockedUser {
+﻿filter Get-GitHubBlockedUserByOrganization {
     <#
         .SYNOPSIS
         List users blocked by an organization
@@ -7,7 +7,7 @@
         List the users blocked by an organization.
 
         .EXAMPLE
-        Get-GitHubOrganizationBlockedUser -OrganizationName 'github'
+        Get-GitHubBlockedUserByOrganization -OrganizationName 'github'
 
         Lists all users blocked by the organization `github`.
 

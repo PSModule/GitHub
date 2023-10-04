@@ -55,10 +55,16 @@
 
     switch ($PSCmdlet.ParameterSetName) {
         '__DefaultSet' {
-            Get-GitHubMyUser
+            $user = Get-GitHubMyUser
+            $social_accounts = Get-GitHubMyUserSocials
+            $user | Add-Member -MemberType NoteProperty -Name 'social_accounts' -Value $social_accounts -Force
+            $user
         }
         'NamedUser' {
-            Get-GitHubUserByName -Username $Username
+            $user = Get-GitHubUserByName -Username $Username
+            $social_accounts = Get-GitHubUserSocialsByName -Username $Username
+            $user | Add-Member -MemberType NoteProperty -Name 'social_accounts' -Value $social_accounts -Force
+            $user
         }
         'AllUsers' {
             Get-GitHubAllUsers -Since $Since -PerPage $PerPage
