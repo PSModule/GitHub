@@ -25,10 +25,19 @@
     param (
         # The handle for the GitHub user account.
         [Parameter(
+            Mandatory,
             ValueFromPipeline,
-            ValueFromPipelineByPropertyName
+            ValueFromPipelineByPropertyName,
+            ParameterSetName = 'Username'
         )]
         [string] $Username,
+
+        # The ID of the GPG key.
+        [Parameter(
+            ParameterSetName = 'Me'
+        )]
+        [Alias('gpg_key_id')]
+        [string] $ID,
 
         # The number of results per page (max 100).
         [Parameter()]
@@ -38,7 +47,10 @@
     if ($Username) {
         Get-GitHubUserGpgKeyForUser -Username $Username -PerPage $PerPage
     } else {
-        Get-GitHubUserMyGpgKey -PerPage $PerPage
+        if ($ID) {
+            Get-GitHubUserMyGpgKeyById -ID $ID
+        } else {
+            Get-GitHubUserMyGpgKey -PerPage $PerPage
+        }
     }
-
 }
