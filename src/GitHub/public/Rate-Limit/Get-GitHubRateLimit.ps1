@@ -35,7 +35,6 @@
     $inputObject = @{
         APIEndpoint = "/rate_limit"
         Method      = 'GET'
-        Body        = $body
     }
 
     (Invoke-GitHubAPI @inputObject).Response.Resources
