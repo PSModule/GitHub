@@ -68,3 +68,10 @@ Add-GitHubUserEmail -Emails 'octocat@psmodule.io'
 Remove-GitHubUserEmail -Emails 'octocat@psmodule.io'
 
 Get-ChildItem -Path 'C:\Repos\GitHub\PSModule\Modules\GitHub\src\GitHub\private\Utilities' -File -Recurse -Force | Select-Object -ExpandProperty FullName | ForEach-Object { $null = . $_ }
+
+
+$Release = New-GitHubRelease -Owner PSModule -Repo Demo -TagName 'v1.0.0' -Name 'v1.0.0' -Body 'This is the first release of the Demo repository.' -Draft
+Get-GitHubRelease -Owner PSModule -Repo Demo -ID $Release.id
+Get-GitHubRelease -Owner PSModule -Repo Demo -
+$Release
+

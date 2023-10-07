@@ -59,7 +59,7 @@
             Mandatory,
             ParameterSetName = 'Tag'
         )]
-        [switch] $Tag,
+        [string] $Tag,
 
         # The unique identifier of the release.
         [Parameter(
