@@ -1,23 +1,17 @@
-﻿filter Get-GitHubUserFollowing {
+﻿filter Get-GitHubUserFollowingUser {
     <#
         .SYNOPSIS
-        List the people a user or the authenticated user follows
+        List the people a user follows
 
         .DESCRIPTION
-        Lists the people who a user or the authenticated user follows.
+        Lists the people who the specified user follows.
 
         .EXAMPLE
-        Get-GitHubUserFollowing
-
-        Gets all people the authenticated user follows.
-
-        .EXAMPLE
-        Get-GitHubUserFollowing -Username 'octocat'
+        Get-GitHubUserFollowingUser -Username 'octocat'
 
         Gets all people that 'octocat' follows.
 
         .NOTES
-        https://docs.github.com/rest/users/followers#list-the-people-the-authenticated-user-follows
         https://docs.github.com/rest/users/followers#list-the-people-a-user-follows
 
     #>
@@ -26,6 +20,7 @@
     param (
         # The handle for the GitHub user account.
         [Parameter(
+            Mandatory,
             ValueFromPipeline,
             ValueFromPipelineByPropertyName
         )]
@@ -37,10 +32,15 @@
         [int] $PerPage = 30
     )
 
-    if ($Username) {
-        Get-GitHubUserFollowingUser -Username $Username -PerPage $PerPage
-    } else {
-        Get-GitHubUserFollowingMe -PerPage $PerPage
+    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
+    Remove-HashtableEntries -Hashtable $body -RemoveNames 'username'
+
+    $inputObject = @{
+        APIEndpoint = "/users/$Username/following"
+        Method      = 'GET'
+        Body        = $body
     }
+
+    (Invoke-GitHubAPI @inputObject).Response
 
 }
