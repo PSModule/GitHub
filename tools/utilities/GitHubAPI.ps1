@@ -21,8 +21,8 @@ $response = Invoke-RestMethod -Uri $APIDocURI -Method Get
 # @{n = 'PUT'; e = { (($_.value.psobject.Properties.Name) -contains 'PUT') } }, `
 # @{n = 'PATCH'; e = { (($_.value.psobject.Properties.Name) -contains 'PATCH') } } | Format-Table
 
-$path = '/user/email/visibility'
-$method = 'patch'
+$path = '/users/{username}/following/{target_user}'
+$method = 'GET'
 $response.paths.$path.$method
 $response.paths.$path.$method.tags | clip                             # -> Namespace/foldername
 $response.paths.$path.$method.operationId | clip                      # -> FunctionName
@@ -39,7 +39,6 @@ $response.components.parameters.username                              # -> Param
 $response.paths.$path.$method.responses                               # -> Could be used to decide error handling within the function
 $response.paths.$path.$method.responses.'200'.content.'application/json'.schema        # -> OutputType qualifyer
 $response.paths.$path.$method.responses.'200'.content.'application/json'.schema.items  # -> OutputType
-
 
 $response.components.schemas.PSobject.Properties | ForEach-Object {
     [pscustomobject]@{
