@@ -1,16 +1,20 @@
 ﻿filter Get-GitHubUserGpgKey {
     <#
         .SYNOPSIS
-        List GPG keys for the authenticated user
+        List GPG keys for a given user or the authenticated user
 
         .DESCRIPTION
-        Lists the current user's GPG keys.
-        Requires that you are authenticated via Basic Auth or via OAuth with at least `read:gpg_key` [scope](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+        Lists a given user's or the current user's GPG keys.
 
         .EXAMPLE
         Get-GitHubUserGpgKey
 
         Gets all GPG keys for the authenticated user.
+
+        .EXAMPLE
+        Get-GitHubUserGpgKey -Username 'octocat'
+
+        Gets all GPG keys for the 'octocat' user.
 
         .NOTES
         https://docs.github.com/rest/users/gpg-keys#list-gpg-keys-for-the-authenticated-user
@@ -19,19 +23,22 @@
     [OutputType([pscustomobject])]
     [CmdletBinding()]
     param (
+        # The handle for the GitHub user account.
+        [Parameter(
+            ValueFromPipeline,
+            ValueFromPipelineByPropertyName
+        )]
+        [string] $Username,
+
         # The number of results per page (max 100).
         [Parameter()]
         [int] $PerPage = 30
     )
 
-    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-
-    $inputObject = @{
-        APIEndpoint = '/user/gpg_keys'
-        Method      = 'GET'
-        Body        = $body
+    if ($Username) {
+        Get-GitHubUserGpgKeyForUser -Username $Username -PerPage $PerPage
+    } else {
+        Get-GitHubUserMyGpgKey -PerPage $PerPage
     }
-
-    (Invoke-GitHubAPI @inputObject).Response
 
 }
