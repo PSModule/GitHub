@@ -22,18 +22,24 @@
 
         Gets all open pull requests for the specified repository, filtered by the 'state' parameter, and using the specified 'Accept' header.
     #>
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'ApiEndpoint')]
     param (
         # The HTTP method to be used for the API request. It can be one of the following: GET, POST, PUT, DELETE, or PATCH.
         [Parameter()]
         [Microsoft.PowerShell.Commands.WebRequestMethod] $Method = 'GET',
 
         # The base URI for the GitHub API. This is usually 'https://api.github.com', but can be adjusted if necessary.
-        [Parameter()]
+        [Parameter(
+            ParameterSetName = 'ApiEndpoint'
+        )]
+        )]
         [string] $ApiBaseUri = (Get-GitHubConfig -Name ApiBaseUri),
 
         # The specific endpoint for the API call, e.g., '/repos/user/repo/pulls'.
-        [Parameter(Mandatory)]
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'ApiEndpoint'
+        )]
         [string] $ApiEndpoint,
 
         # The body of the API request. This can be a hashtable or a string. If a hashtable is provided, it will be converted to JSON.
@@ -59,6 +65,13 @@
         # The file path to be used for the API response. This is used for downloading files.
         [Parameter()]
         [string] $DownloadFilePath,
+
+        # The full URI for the API request. This is used for custom API calls.
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'Uri'
+        )]
+        [string] $URI,
 
         # The secure token used for authentication in the GitHub API. It should be stored as a SecureString to ensure it's kept safe in memory.
         [Parameter()]
@@ -87,7 +100,9 @@
 
     Remove-HashTableEntries -Hashtable $headers -NullOrEmptyValues
 
-    $URI = ("$ApiBaseUri/" -replace '/$', '') + ("/$ApiEndpoint" -replace '^/', '')
+    if (-not $URI) {
+        $URI = ("$ApiBaseUri/" -replace '/$', '') + ("/$ApiEndpoint" -replace '^/', '')
+    }
 
     # $AccessTokenAsPlainText = ConvertFrom-SecureString $AccessToken -AsPlainText
     # # Swap out this by using the -Authentication Bearer -Token $AccessToken
@@ -124,15 +139,11 @@
     $APICall | Remove-HashTableEntries -NullOrEmptyValues
 
     if ($Body) {
-
         # Use body to create the query string for GET requests
-        if ($Method -eq 'GET') {
+        if (($Method -eq 'GET') -or (-not [string]::IsNullOrEmpty($UploadFilePath))) {
             $queryString = $Body | ConvertTo-QueryString
             $APICall.Uri = $APICall.Uri + $queryString
-        }
-
-        # Use body to create the form data
-        if ($Body -is [string]) {
+        } elseif ($Body -is [string]) { # Use body to create the form data
             $APICall.Body = $Body
         } else {
             $APICall.Body = $Body | ConvertTo-Json -Depth 100
