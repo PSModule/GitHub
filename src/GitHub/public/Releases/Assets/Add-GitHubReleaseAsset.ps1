@@ -63,7 +63,7 @@
         # The path to the asset file.
         [Parameter(Mandatory)]
         [alias('fullname')]
-        [int] $FilePath
+        [string] $FilePath
     )
 
     # If name is not provided, use the file name
@@ -109,10 +109,12 @@
 
     Remove-HashtableEntries -Hashtable $body -NullOrEmptyValues
 
+    $release = Get-GitHubRelease -Owner $Owner -Repo $Repo -ID $ID
+    $uploadURI = $release.upload_url -replace '{\?name,label}', "?name=$($Name)&label=$($Label)"
+
     $inputObject = @{
-        APIEndpoint    = "/repos/$Owner/$Repo/releases/$ID/assets"
+        URI            = $uploadURI
         Method         = 'POST'
-        Body           = $body
         ContentType    = $ContentType
         UploadFilePath = $FilePath
     }
