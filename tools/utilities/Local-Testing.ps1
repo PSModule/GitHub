@@ -38,7 +38,6 @@ $format = "yyyy-MM-dd HH:mm:ss 'UTC'"
 $date = [datetime]::ParseExact($str, $format, $null)
 $date
 
-
 Get-GitHubOrganization | Select-Object Name, login, id
 Get-GitHubOrganization -OrganizationName 'PowerShell'
 Get-GitHubOrganization -OrganizationName 'PSModule'
@@ -63,3 +62,7 @@ Set-GitHubUser -Hireable $true | Select-Object login, hireable
 Set-GitHubUser -Hireable $false | Select-Object login, hireable
 
 Add-GitHubUserSocials -AccountUrls 'https://www.github.com/MariusStorhaug'
+
+Get-GitHubUserEmail
+Add-GitHubUserEmail -Emails 'octocat@psmodule.io'
+Remove-GitHubUserEmail -Emails 'octocat@psmodule.io'
