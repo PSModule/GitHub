@@ -5,14 +5,21 @@
 
         .DESCRIPTION
         Lists all of your email addresses, and specifies which one is visible to the public. This endpoint is accessible with the `user:email` scope.
+        Specifying '-Public' will return only the publicly visible email address, which you can set with the [Set primary email visibility for the authenticated user](https://docs.github.com/rest/users/emails#set-primary-email-visibility-for-the-authenticated-user) endpoint.
 
         .EXAMPLE
         Get-GitHubUserEmail
 
         Gets all email addresses for the authenticated user.
 
+        .EXAMPLE
+        Get-GitHubUserEmail -Public
+
+        Gets the publicly visible email address for the authenticated user.
+
         .NOTES
         https://docs.github.com/rest/users/emails#list-email-addresses-for-the-authenticated-user
+        https://docs.github.com/en/rest/users/emails#list-public-email-addresses-for-the-authenticated-user
 
     #>
     [OutputType([pscustomobject])]
@@ -20,17 +27,16 @@
     param (
         # The number of results per page (max 100).
         [Parameter()]
-        [int] $PerPage = 30
+        [int] $PerPage = 30,
+
+        [Parameter()]
+        [switch] $Public
     )
 
-    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-
-    $inputObject = @{
-        APIEndpoint = "/user/emails"
-        Method      = 'GET'
-        Body        = $body
+    if ($Public) {
+        Get-GitHubUserPublicEmail -PerPage $PerPage
+    } else {
+        Get-GitHubUserAllEmail -PerPage $PerPage
     }
-
-    (Invoke-GitHubAPI @inputObject).Response
 
 }
