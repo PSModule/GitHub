@@ -52,6 +52,14 @@
         [Parameter()]
         [bool] $FollowRelLink = $true,
 
+        # The file path to be used for the API request. This is used for uploading files.
+        [Parameter()]
+        [string] $UploadFilePath,
+
+        # The file path to be used for the API response. This is used for downloading files.
+        [Parameter()]
+        [string] $DownloadFilePath,
+
         # The secure token used for authentication in the GitHub API. It should be stored as a SecureString to ensure it's kept safe in memory.
         [Parameter()]
         [SecureString] $AccessToken = (Get-GitHubConfig -Name AccessToken),
@@ -109,6 +117,8 @@
         FollowRelLink           = $FollowRelLink
         StatusCodeVariable      = 'APICallStatusCode'
         ResponseHeadersVariable = 'APICallResponseHeaders'
+        InFile                  = $UploadFilePath
+        OutFile                 = $DownloadFilePath
     }
 
     $APICall | Remove-HashTableEntries -NullOrEmptyValues
