@@ -64,3 +64,5 @@ Set-GitHubUser -Hireable $false | Select-Object login, hireable
 Add-GitHubUserSocials -AccountUrls 'https://www.github.com/MariusStorhaug'
 
 Get-GitHubUserEmail
+Add-GitHubUserEmail -Emails 'octocat@psmodule.io'
+Remove-GitHubUserEmail -Emails 'octocat@psmodule.io'
