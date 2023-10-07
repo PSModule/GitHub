@@ -40,7 +40,7 @@
         # API Default: the repository's default branch.
         [Parameter()]
         [Alias('target_commitish')]
-        [string] $TargetCommitish,
+        [string] $TargetCommitish = 'main',
 
         # The name of the release.
         [Parameter()]

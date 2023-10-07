@@ -29,6 +29,7 @@
         [Parameter(
             Mandatory
         )]
+        [Alias('tag_name')]
         [string] $Tag
     )
 

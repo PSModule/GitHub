@@ -27,14 +27,12 @@
         [string] $Repo = (Get-GitHubConfig -Name Repo),
 
         # The unique identifier of the release.
-        [Parameter(
-            Mandatory
-        )]
+        [Parameter(Mandatory)]
         [Alias('release_id')]
         [string] $ID,
 
         # The name of the tag.
-        [Parameter(Mandatory)]
+        [Parameter()]
         [Alias('tag_name')]
         [string] $TagName,
 
