@@ -1,4 +1,4 @@
-﻿filter Test-GitHubUserFollowing {
+﻿filter Test-GitHubUserFollowedByMe {
     <#
         .SYNOPSIS
         Check if a person is followed by the authenticated user
@@ -8,7 +8,7 @@
         Returns a 404 if the user is not followed by the authenticated user.
 
         .EXAMPLE
-        Test-GitHubUserFollowing -Username 'octocat'
+        Test-GitHubUserFollowedByMe -Username 'octocat'
 
         Checks if the authenticated user follows the user 'octocat'.
 

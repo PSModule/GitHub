@@ -1,15 +1,20 @@
 ﻿filter Get-GitHubUserFollowers {
     <#
         .SYNOPSIS
-        List followers of the authenticated user
+        List followers of a given user or the authenticated user
 
         .DESCRIPTION
-        Lists the people following the authenticated user.
+        Lists the people following a given user or the authenticated user.
 
         .EXAMPLE
         Get-GitHubUserFollowers
 
         Gets all followers of the authenticated user.
+
+        .EXAMPLE
+        Get-GitHubUserFollowers -Username 'octocat'
+
+        Gets all followers of the user 'octocat'.
 
         .NOTES
         https://docs.github.com/rest/users/followers#list-followers-of-the-authenticated-user
