@@ -1,15 +1,22 @@
 ﻿filter Get-GitHubUserKey {
     <#
         .SYNOPSIS
-        List GPG keys for a given user or the authenticated user
+        List public SSH keys for a given user or the authenticated user.
 
         .DESCRIPTION
-        Lists a given user's or the current user's GPG keys.
+        Lists a given user's or the current user's public SSH keys.
+        For the authenticated users keys, it requires that you are authenticated via Basic Auth or via OAuth with at least `read:public_key` [scope](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+        Keys from a given user are accessible by anyone.
 
         .EXAMPLE
         Get-GitHubUserKey
 
         Gets all GPG keys for the authenticated user.
+
+        .EXAMPLE
+        Get-GitHubUserKey -ID '1234567'
+
+        Gets the public SSH key with the ID '1234567' for the authenticated user.
 
         .EXAMPLE
         Get-GitHubUserKey -Username 'octocat'
