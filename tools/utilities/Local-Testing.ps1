@@ -66,3 +66,5 @@ Add-GitHubUserSocials -AccountUrls 'https://www.github.com/MariusStorhaug'
 Get-GitHubUserEmail
 Add-GitHubUserEmail -Emails 'octocat@psmodule.io'
 Remove-GitHubUserEmail -Emails 'octocat@psmodule.io'
+
+Get-ChildItem -Path 'C:\Repos\GitHub\PSModule\Modules\GitHub\src\GitHub\private\Utilities' -File -Recurse -Force | Select-Object -ExpandProperty FullName | ForEach-Object { $null = . $_ }
