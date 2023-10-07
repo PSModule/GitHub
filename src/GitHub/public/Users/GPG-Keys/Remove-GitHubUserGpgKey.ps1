@@ -32,6 +32,6 @@
         Method      = 'DELETE'
     }
 
-    (Invoke-GitHubAPI @inputObject).Response
+    $null = (Invoke-GitHubAPI @inputObject).Response
 
 }
