@@ -1,4 +1,4 @@
-﻿filter Get-GitHubUserFollowers {
+﻿filter Get-GitHubUserMyFollowers {
     <#
         .SYNOPSIS
         List followers of the authenticated user
@@ -7,7 +7,7 @@
         Lists the people following the authenticated user.
 
         .EXAMPLE
-        Get-GitHubUserFollowers
+        Get-GitHubUserMyFollowers
 
         Gets all followers of the authenticated user.
 
@@ -18,23 +18,19 @@
     [OutputType([pscustomobject])]
     [CmdletBinding()]
     param (
-        # The handle for the GitHub user account.
-        [Parameter(
-            ValueFromPipeline,
-            ValueFromPipelineByPropertyName
-        )]
-        [Alias('login')]
-        [string] $Username,
-
         # The number of results per page (max 100).
         [Parameter()]
         [int] $PerPage = 30
     )
 
-    if ($Username) {
-        Get-GitHubUserFollowersOfUser -Username $Username -PerPage $PerPage
-    } else {
-        Get-GitHubUserMyFollowers -PerPage $PerPage
+    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
+
+    $inputObject = @{
+        APIEndpoint = '/user/followers'
+        Method      = 'GET'
+        Body        = $body
     }
+
+    (Invoke-GitHubAPI @inputObject).Response
 
 }
