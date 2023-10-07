@@ -12,6 +12,11 @@
         Gets all GPG keys for the authenticated user.
 
         .EXAMPLE
+        Get-GitHubUserGpgKey -ID '1234567'
+
+        Gets the GPG key with ID '1234567' for the authenticated user.
+
+        .EXAMPLE
         Get-GitHubUserGpgKey -Username 'octocat'
 
         Gets all GPG keys for the 'octocat' user.
