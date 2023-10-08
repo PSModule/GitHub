@@ -95,3 +95,20 @@ Get-GitHubRepositoryListByUser -Username 'octocat' -Sort 'created' -Direction 'a
 Get-GitHubRepositoryListByOrg -Owner 'PSModule' | Select-Object full_name, id, visibility, created_at
 Get-GitHubRepositoryListByOrg -Owner 'PSModule' -type 'public' | Select-Object full_name, id, visibility, created_at
 Get-GitHubRepositoryListByOrg -Owner 'PSModule' -Sort 'created' -Direction 'asc' | Select-Object full_name, id, visibility, created_at
+
+
+Get-GitHubRepository
+Get-GitHubRepository -Type owner | Select-Object full_name, id, visibility, forks
+
+Get-GitHubRepository -Owner 'PSModule' -Repo 'Demo' | Select-Object full_name, id, visibility, forks
+Get-GitHubRepository -Owner 'Azure' -Repo 'ResourceModules' | Select-Object full_name, id, visibility, forks
+
+Get-GitHubRepository -Verbose | Select-Object full_name, id, visibility, forks
+
+Get-GitHubRepository -Username 'octocat' | Select-Object full_name, id, visibility, forks
+Get-GitHubRepository -Username 'octocat' -Type 'member' | Select-Object full_name, id, visibility, forks
+Get-GitHubRepository -Username 'octocat' -Sort 'created' -Direction 'asc' | Select-Object full_name, id, visibility, created_at
+
+Get-GitHubRepository -Owner 'PSModule' | Select-Object full_name, id, visibility, created_at
+Get-GitHubRepository -Owner 'PSModule' -type 'public' | Select-Object full_name, id, visibility, created_at
+Get-GitHubRepository -Owner 'PSModule' -Sort 'created' -Direction 'asc' | Select-Object full_name, id, visibility, created_at

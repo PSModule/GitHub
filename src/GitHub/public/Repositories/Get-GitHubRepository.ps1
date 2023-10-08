@@ -11,6 +11,9 @@
     If an Owner and Repo parameters are specified, the specified repository is returned.
     If the Owner and Repo parameters are specified, the specified repository is returned.
 
+    .PARAMETER Type
+    Specifies the types of repositories you want returned.
+
     .EXAMPLE
     An example
 
@@ -21,7 +24,7 @@
     param (
         #Limit results to repositories with the specified visibility.
         [Parameter(ParameterSetName = 'MyRepos_Aff-Vis')]
-        [validateSet('all', 'public', 'private')]
+        [ValidateSet('all', 'public', 'private')]
         [string] $Visibility = 'all',
 
         # Comma-separated list of values. Can include:
@@ -30,7 +33,7 @@
         # - organization_member: Repositories that the user has access to through being a member of an organization. This includes every repository on every team that the user is on.
         # Default: owner, collaborator, organization_member
         [Parameter(ParameterSetName = 'MyRepos_Aff-Vis')]
-        [validateset('owner', 'collaborator', 'organization_member')]
+        [ValidateSet('owner', 'collaborator', 'organization_member')]
         [string[]] $Affiliation = @('owner', 'collaborator', 'organization_member'),
 
         # A repository ID. Only return repositories with an ID greater than this ID.
@@ -66,19 +69,12 @@
         [Alias('login')]
         [string] $Username,
 
-        # Specifies the types of repositories you want returned.
-        [Parameter(ParameterSetName = 'MyRepos_Type')]
-        [Parameter(ParameterSetName = 'ListByOrg')]
-        [Parameter(ParameterSetName = 'ListByUser')]
-        [validateSet('all', 'public', 'private', 'forks', 'sources', 'member')]
-        [string] $Type = 'all',
-
         # The property to sort the results by.
         [Parameter(ParameterSetName = 'MyRepos_Type')]
         [Parameter(ParameterSetName = 'MyRepos_Aff-Vis')]
         [Parameter(ParameterSetName = 'ListByOrg')]
         [Parameter(ParameterSetName = 'ListByUser')]
-        [validateSet('created', 'updated', 'pushed', 'full_name')]
+        [ValidateSet('created', 'updated', 'pushed', 'full_name')]
         [string] $Sort = 'created',
 
         # The order to sort by.
@@ -86,7 +82,7 @@
         [Parameter(ParameterSetName = 'MyRepos')]
         [Parameter(ParameterSetName = 'ListByOrg')]
         [Parameter(ParameterSetName = 'ListByUser')]
-        [validateSet('asc', 'desc')]
+        [ValidateSet('asc', 'desc')]
         [string] $Direction,
 
         # The number of results per page (max 100).
@@ -97,69 +93,110 @@
 
     )
 
-    switch ($PSCmdlet.ParameterSetName) {
-        'MyRepos_Type' {
-            $params = @{
-                Type      = $Type
-                Sort      = $Sort
-                Direction = $Direction
-                PerPage   = $PerPage
-                Since     = $Since
-                Before    = $Before
+    DynamicParam {
+        $runtimeDefinedParameterDictionary = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary
+        $attributeCollection = New-Object System.Collections.ObjectModel.Collection[System.Attribute]
+
+        $parameterName = 'Type'
+        $parameterAttribute = New-Object System.Management.Automation.ParameterAttribute
+        $parameterAttribute.Mandatory = $false
+
+        switch ($PSCmdlet.ParameterSetName) {
+            'MyRepos_Type' {
+                $parameterAttribute.ParameterSetName = 'MyRepos_Type'
             }
-            Remove-HashTableEntries -Hashtable $params -NullOrEmptyValues
-            Get-GitHubMyRepositories @params
-        }
-        'MyRepos_Aff-Vis' {
-            $params = @{
-                Visibility  = $Visibility
-                Affiliation = $Affiliation
-                Sort        = $Sort
-                Direction   = $Direction
-                PerPage     = $PerPage
-                Since       = $Since
-                Before      = $Before
+            'ListByOrg' {
+                $parameterAttribute.ParameterSetName = 'ListByOrg'
             }
-            Remove-HashTableEntries -Hashtable $params -NullOrEmptyValues
-            Get-GitHubMyRepositories @params
-        }
-        'ByName' {
-            $params = @{
-                Owner = $Owner
-                Repo  = $Repo
+            'ListByUser' {
+                $parameterAttribute.ParameterSetName = 'ListByUser'
             }
-            Remove-HashTableEntries -Hashtable $params -NullOrEmptyValues
-            Get-GitHubRepositoryByName @params
         }
-        'ListByID' {
-            $params = @{
-                Since = $SinceID
+        $attributeCollection.Add($parameterAttribute)
+
+        switch ($PSCmdlet.ParameterSetName) {
+            'MyRepos_Type' {
+                $parameterValidateSet = 'all', 'owner', 'public', 'private', 'member'
             }
-            Remove-HashTableEntries -Hashtable $params -NullOrEmptyValues
-            Get-GitHubRepositoryListByID @params
-        }
-        'ListByOrg' {
-            $params = @{
-                Owner     = $Owner
-                Type      = $Type
-                Sort      = $Sort
-                Direction = $Direction
-                PerPage   = $PerPage
+            'ListByOrg' {
+                $parameterValidateSet = 'all', 'public', 'private', 'forks', 'sources', 'member'
             }
-            Remove-HashTableEntries -Hashtable $params -NullOrEmptyValues
-            Get-GitHubRepositoryListByOrg @params
-        }
-        'ListByUser' {
-            $params = @{
-                Username  = $Username
-                Type      = $Type
-                Sort      = $Sort
-                Direction = $Direction
-                PerPage   = $PerPage
+            'ListByUser' {
+                $parameterValidateSet = 'all', 'owner', 'member'
             }
-            Remove-HashTableEntries -Hashtable $params -NullOrEmptyValues
-            Get-GitHubRepositoryListByUser @params
         }
+        $validateSetAttribute = New-Object System.Management.Automation.ValidateSetAttribute($parameterValidateSet)
+        $attributeCollection.Add($validateSetAttribute)
+
+        $runtimeDefinedParameter = New-Object System.Management.Automation.RuntimeDefinedParameter($parameterName, [string], $attributeCollection)
+        $runtimeDefinedParameterDictionary.Add($parameterName, $runtimeDefinedParameter)
+        return $runtimeDefinedParameterDictionary
     }
 
+    Process {
+        switch ($PSCmdlet.ParameterSetName) {
+            'MyRepos_Type' {
+                $params = @{
+                    Type      = $Type
+                    Sort      = $Sort
+                    Direction = $Direction
+                    PerPage   = $PerPage
+                    Since     = $Since
+                    Before    = $Before
+                }
+                Remove-HashTableEntries -Hashtable $params -NullOrEmptyValues
+                Get-GitHubMyRepositories @params
+            }
+            'MyRepos_Aff-Vis' {
+                $params = @{
+                    Visibility  = $Visibility
+                    Affiliation = $Affiliation
+                    Sort        = $Sort
+                    Direction   = $Direction
+                    PerPage     = $PerPage
+                    Since       = $Since
+                    Before      = $Before
+                }
+                Remove-HashTableEntries -Hashtable $params -NullOrEmptyValues
+                Get-GitHubMyRepositories @params
+            }
+            'ByName' {
+                $params = @{
+                    Owner = $Owner
+                    Repo  = $Repo
+                }
+                Remove-HashTableEntries -Hashtable $params -NullOrEmptyValues
+                Get-GitHubRepositoryByName @params
+            }
+            'ListByID' {
+                $params = @{
+                    Since = $SinceID
+                }
+                Remove-HashTableEntries -Hashtable $params -NullOrEmptyValues
+                Get-GitHubRepositoryListByID @params
+            }
+            'ListByOrg' {
+                $params = @{
+                    Owner     = $Owner
+                    Type      = $Type
+                    Sort      = $Sort
+                    Direction = $Direction
+                    PerPage   = $PerPage
+                }
+                Remove-HashTableEntries -Hashtable $params -NullOrEmptyValues
+                Get-GitHubRepositoryListByOrg @params
+            }
+            'ListByUser' {
+                $params = @{
+                    Username  = $Username
+                    Type      = $Type
+                    Sort      = $Sort
+                    Direction = $Direction
+                    PerPage   = $PerPage
+                }
+                Remove-HashTableEntries -Hashtable $params -NullOrEmptyValues
+                Get-GitHubRepositoryListByUser @params
+            }
+        }
+    }
 }
