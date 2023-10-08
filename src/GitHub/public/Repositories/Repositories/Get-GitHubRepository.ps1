@@ -1,24 +1,51 @@
 ﻿filter Get-GitHubRepository {
     <#
-    .SYNOPSIS
-    Gets a specific repository or list of repositories.
+        .SYNOPSIS
+        Gets a specific repository or list of repositories.
 
-    .DESCRIPTION
-    Gets a specific repository or list of repositories based on parameter sets.
-    If no parameters are specified, the authenticated user's repositories are returned.
-    If a Username parameter is specified, the specified user's public repositories are returned.
-    If the SinceId parameter is specified, the repositories with an ID greater than the specified ID are returned.
-    If an Owner and Repo parameters are specified, the specified repository is returned.
-    If the Owner and Repo parameters are specified, the specified repository is returned.
+        .DESCRIPTION
+        Gets a specific repository or list of repositories based on parameter sets.
+        If no parameters are specified, the authenticated user's repositories are returned.
+        If a Username parameter is specified, the specified user's public repositories are returned.
+        If the SinceId parameter is specified, the repositories with an ID greater than the specified ID are returned.
+        If an Owner and Repo parameters are specified, the specified repository is returned.
+        If the Owner and Repo parameters are specified, the specified repository is returned.
 
-    .PARAMETER Type
-    Specifies the types of repositories you want returned.
+        .PARAMETER Type
+        Specifies the types of repositories you want returned.
 
-    .EXAMPLE
-    An example
+        .EXAMPLE
+        Get-GitHubRepository
 
-    .NOTES
-    General notes
+        Gets the repositories for the authenticated user.
+
+        .EXAMPLE
+        Get-GitHubRepository -Type 'owner'
+
+        Gets the repositories owned by the authenticated user.
+
+        .EXAMPLE
+        Get-GitHubRepository -Username 'octocat'
+
+        Gets the repositories for the specified user.
+
+        .EXAMPLE
+        Get-GitHubRepository -SinceID 123456789
+
+        Gets the repositories with an ID equals and greater than 123456789.
+
+        .EXAMPLE
+        Get-GitHubRepository -Owner 'github' -Repo 'octocat'
+
+        Gets the specified repository.
+
+        .NOTES
+        https://docs.github.com/rest/repos/repos#list-repositories-for-the-authenticated-user
+        https://docs.github.com/rest/repos/repos#get-a-repository
+        https://docs.github.com/rest/repos/repos#list-public-repositories
+        https://docs.github.com/rest/repos/repos#list-organization-repositories
+        https://docs.github.com/rest/repos/repos#list-repositories-for-a-user
+
     #>
     [CmdletBinding(DefaultParameterSetName = 'MyRepos_Type')]
     param (
@@ -142,7 +169,7 @@
 
     Process {
         $Type = $PSBoundParameters['Type']
-        
+
         switch ($PSCmdlet.ParameterSetName) {
             'MyRepos_Type' {
                 $params = @{
