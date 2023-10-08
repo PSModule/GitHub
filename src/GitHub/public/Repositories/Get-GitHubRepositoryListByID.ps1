@@ -27,10 +27,13 @@
     )
 
     $PSCmdlet.MyInvocation.MyCommand.Parameters.GetEnumerator() | ForEach-Object {
+        Write-Verbose "Parameter: [$($_.Key)] = [$($_.Value)]"
         $paramDefaultValue = Get-Variable -Name $_.Key -ValueOnly -ErrorAction SilentlyContinue
         if (-not $PSBoundParameters.ContainsKey($_.Key) -and ($null -ne $paramDefaultValue)) {
+            Write-Verbose "Parameter: [$($_.Key)] = [$($_.Value)] - Adding default value"
             $PSBoundParameters[$_.Key] = $paramDefaultValue
         }
+        Write-Verbose " - $($PSBoundParameters[$_.Key])"
     }
 
     $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
