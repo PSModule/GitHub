@@ -73,7 +73,7 @@
 
     # If label is not provided, use the file name
     if (!$Label) {
-        $Label = (Get-Item $FilePath).BaseName
+        $Label = (Get-Item $FilePath).Name
     }
 
     # If content type is not provided, use the file extension
