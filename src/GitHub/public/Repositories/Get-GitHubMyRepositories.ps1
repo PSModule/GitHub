@@ -44,7 +44,7 @@
         https://docs.github.com/rest/repos/repos#list-repositories-for-the-authenticated-user
 
     #>
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'type')]
     param (
 
         #Limit results to repositories with the specified visibility.

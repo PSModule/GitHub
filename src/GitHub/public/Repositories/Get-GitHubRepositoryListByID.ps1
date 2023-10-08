@@ -33,6 +33,11 @@
         Method      = 'GET'
     }
 
-    (Invoke-GitHubAPI @inputObject).Response
+    Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Write-Verbose $_.Request
+        Write-Output $_.Response
+        Write-Verbose $_.StatusCode
+        Write-Verbose $_.ResponseHeaders
+    }
 
 }
