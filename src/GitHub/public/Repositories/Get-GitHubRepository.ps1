@@ -56,7 +56,10 @@
         [string] $Owner = (Get-GitHubConfig -Name Owner),
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'ByName'
+        )]
         [string] $Repo = (Get-GitHubConfig -Name Repo),
 
         # The handle for the GitHub user account.
@@ -97,43 +100,49 @@
         $runtimeDefinedParameterDictionary = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary
         $attributeCollection = New-Object System.Collections.ObjectModel.Collection[System.Attribute]
 
-        $parameterName = 'Type'
-        $parameterAttribute = New-Object System.Management.Automation.ParameterAttribute
-        $parameterAttribute.Mandatory = $false
+        if ($PSCmdlet.ParameterSetName -in 'MyRepos_Type', 'ListByOrg', 'ListByUser') {
+            $parameterName = 'Type'
+            $parameterAttribute = New-Object System.Management.Automation.ParameterAttribute
 
-        switch ($PSCmdlet.ParameterSetName) {
-            'MyRepos_Type' {
-                $parameterAttribute.ParameterSetName = 'MyRepos_Type'
+            switch ($PSCmdlet.ParameterSetName) {
+                'MyRepos_Type' {
+                    $parameterAttribute.Mandatory = $false
+                    $parameterAttribute.ParameterSetName = 'MyRepos_Type'
+                }
+                'ListByOrg' {
+                    $parameterAttribute.Mandatory = $false
+                    $parameterAttribute.ParameterSetName = 'ListByOrg'
+                }
+                'ListByUser' {
+                    $parameterAttribute.Mandatory = $false
+                    $parameterAttribute.ParameterSetName = 'ListByUser'
+                }
             }
-            'ListByOrg' {
-                $parameterAttribute.ParameterSetName = 'ListByOrg'
+            $attributeCollection.Add($parameterAttribute)
+
+            switch ($PSCmdlet.ParameterSetName) {
+                'MyRepos_Type' {
+                    $parameterValidateSet = 'all', 'owner', 'public', 'private', 'member'
+                }
+                'ListByOrg' {
+                    $parameterValidateSet = 'all', 'public', 'private', 'forks', 'sources', 'member'
+                }
+                'ListByUser' {
+                    $parameterValidateSet = 'all', 'owner', 'member'
+                }
             }
-            'ListByUser' {
-                $parameterAttribute.ParameterSetName = 'ListByUser'
-            }
+            $validateSetAttribute = New-Object System.Management.Automation.ValidateSetAttribute($parameterValidateSet)
+            $attributeCollection.Add($validateSetAttribute)
+
+            $runtimeDefinedParameter = New-Object System.Management.Automation.RuntimeDefinedParameter($parameterName, [string], $attributeCollection)
+            $runtimeDefinedParameterDictionary.Add($parameterName, $runtimeDefinedParameter)
         }
-        $attributeCollection.Add($parameterAttribute)
-
-        switch ($PSCmdlet.ParameterSetName) {
-            'MyRepos_Type' {
-                $parameterValidateSet = 'all', 'owner', 'public', 'private', 'member'
-            }
-            'ListByOrg' {
-                $parameterValidateSet = 'all', 'public', 'private', 'forks', 'sources', 'member'
-            }
-            'ListByUser' {
-                $parameterValidateSet = 'all', 'owner', 'member'
-            }
-        }
-        $validateSetAttribute = New-Object System.Management.Automation.ValidateSetAttribute($parameterValidateSet)
-        $attributeCollection.Add($validateSetAttribute)
-
-        $runtimeDefinedParameter = New-Object System.Management.Automation.RuntimeDefinedParameter($parameterName, [string], $attributeCollection)
-        $runtimeDefinedParameterDictionary.Add($parameterName, $runtimeDefinedParameter)
         return $runtimeDefinedParameterDictionary
     }
 
     Process {
+        $Type = $PSBoundParameters['Type']
+        
         switch ($PSCmdlet.ParameterSetName) {
             'MyRepos_Type' {
                 $params = @{

@@ -39,8 +39,8 @@
 
         # Specifies the types of repositories you want returned.
         [Parameter()]
-        [validateSet('all', 'public', 'private', 'forks', 'sources', 'member')]
-        [string] $type = 'all',
+        [validateSet('all', 'owner', 'member')]
+        [string] $Type = 'all',
 
         # The property to sort the results by.
         [Parameter()]
@@ -57,6 +57,13 @@
         [Parameter()]
         [int] $PerPage = 30
     )
+
+    $PSCmdlet.MyInvocation.MyCommand.Parameters.GetEnumerator() | ForEach-Object {
+        $paramDefaultValue = Get-Variable -Name $_.Key -ValueOnly -ErrorAction SilentlyContinue
+        if (-not $PSBoundParameters.ContainsKey($_.Key) -and ($null -ne $paramDefaultValue)) {
+            $PSBoundParameters[$_.Key] = $paramDefaultValue
+        }
+    }
 
     $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
     Remove-HashtableEntries -Hashtable $body -RemoveNames 'Username'

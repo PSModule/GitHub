@@ -96,6 +96,12 @@
         [datetime] $Before
     )
 
+    $PSCmdlet.MyInvocation.MyCommand.Parameters.GetEnumerator() | ForEach-Object {
+        $paramDefaultValue = Get-Variable -Name $_.Key -ValueOnly -ErrorAction SilentlyContinue
+        if (-not $PSBoundParameters.ContainsKey($_.Key) -and ($null -ne $paramDefaultValue)) {
+            $PSBoundParameters[$_.Key] = $paramDefaultValue
+        }
+    }
 
     $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
     Remove-HashtableEntries -Hashtable $body -RemoveNames 'Affiliation', 'Since', 'Before'
