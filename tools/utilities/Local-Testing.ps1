@@ -95,6 +95,35 @@ Get-GitHubRepository -Username 'octocat' -Type 'member' | Select-Object full_nam
 Get-GitHubRepository -Username 'octocat' -Sort 'created' -Direction 'asc' | Select-Object full_name, id, visibility, created_at
 
 Get-GitHubRepository -Owner 'PSModule' | Select-Object full_name, id, visibility, created_at
-Get-GitHubRepository -Owner 'PSModule' -type 'public' | Select-Object full_name, id, visibility, created_at
+Get-GitHubRepository -Owner 'PSModule' -Type 'public' | Select-Object full_name, id, visibility, created_at
 Get-GitHubRepository -Owner 'PSModule' -Sort 'created' -Direction 'asc' | Select-Object full_name, id, visibility, created_at
 
+$params = @{
+    Verbose                  = $true
+    Owner                    = 'PSModule'
+    Name                     = 'Hello-world'
+    # Description              = 'This is a test repo.'
+    # Homepage                 = 'https://github.com'
+    # Visibility               = 'public'
+    # HasIssues                = $true
+    # HasProjects              = $true
+    # HasWiki                  = $true
+    # HasDownloads             = $true
+    # IsTemplate               = $true
+    # TeamID      = 12345679
+    # AutoInit                 = $true
+    # GitignoreTemplate        = 'VisualStudio'
+    # LicenseTemplate          = 'mit'
+    # AllowSquashMerge         = $true
+    # SquashMergeCommitTitle   = 'PR_TITLE'
+    # SquashMergeCommitMessage = 'PR_BODY'
+    # AllowMergeCommit         = $true
+    # MergeCommitTitle         = 'PR_TITLE'
+    # MergeCommitMessage       = 'PR_BODY'
+    # AllowRebaseMerge         = $true
+    # AllowAutoMerge           = $true
+    # DeleteBranchOnMerge      = $true
+}
+New-GitHubRepositoryOrg @params
+
+Remove-GitHubRepository -Owner PSModule -Repo 'Hello-world' -Verbose
