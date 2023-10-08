@@ -120,7 +120,7 @@
 
         # Specifies the dynamic parameter dictionary.
         [Parameter()]
-        [System.Management.Automation.RuntimeDefinedParameterDictionary] $dynamicParamDictionary
+        [System.Management.Automation.RuntimeDefinedParameterDictionary] $ParamDictionary
     )
 
     $attributeCollection = New-Object System.Collections.ObjectModel.Collection[System.Attribute]
@@ -201,6 +201,6 @@
     }
 
     $runtimeDefinedParameter = New-Object System.Management.Automation.RuntimeDefinedParameter($Name, $Type, $attributeCollection)
-    $dynamicParamDictionary.Add($Name, $runtimeDefinedParameter)
+    $ParamDictionary.Add($Name, $runtimeDefinedParameter)
 
 }

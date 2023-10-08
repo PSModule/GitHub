@@ -33,6 +33,12 @@
         }
         New-GitHubRepositoryOrg @params
 
+        .PARAMETER GitignoreTemplate
+        Desired language or platform .gitignore template to apply. Use the name of the template without the extension. For example, "Haskell".
+
+        .PARAMETER LicenseTemplate
+        Choose an open source license template that best suits your needs, and then use the license keyword as the license_template string. For example, "mit" or "mpl-2.0".
+
         .NOTES
         https://docs.github.com/rest/repos/repos#create-an-organization-repository
 
@@ -98,16 +104,6 @@
         [Alias('auto_init')]
         [switch] $AutoInit,
 
-        # Desired language or platform .gitignore template to apply. Use the name of the template without the extension. For example, "Haskell".
-        [Parameter()]
-        [Alias('gitignore_template')]
-        [string] $GitignoreTemplate,
-
-        # Choose an open source license template that best suits your needs, and then use the license keyword as the license_template string. For example, "mit" or "mpl-2.0".
-        [Parameter()]
-        [Alias('license_template')]
-        [string] $LicenseTemplate,
-
         # Either true to allow squash-merging pull requests, or false to prevent squash-merging.
         [Parameter()]
         [Alias('allow_squash_merge')]
@@ -168,47 +164,72 @@
         [string] $MergeCommitMessage
     )
 
-    $PSCmdlet.MyInvocation.MyCommand.Parameters.GetEnumerator() | ForEach-Object {
-        $paramName = $_.Key
-        $paramDefaultValue = Get-Variable -Name $paramName -ValueOnly -ErrorAction SilentlyContinue
-        $providedValue = $PSBoundParameters[$paramName]
-        Write-Verbose "[$paramName]"
-        Write-Verbose "  - Default:  [$paramDefaultValue]"
-        Write-Verbose "  - Provided: [$providedValue]"
-        if (-not $PSBoundParameters.ContainsKey($paramName) -and ($null -ne $paramDefaultValue)) {
-            Write-Verbose "  - Using default value"
-            $PSBoundParameters[$paramName] = $paramDefaultValue
-        } else {
-            Write-Verbose "  - Using provided value"
+    DynamicParam {
+        $ParamDictionary = New-ParamDictionary
+        
+        $dynParam = @{
+            Name            = 'Gitignore'
+            Alias           = 'gitignore_template'
+            Type            = [string]
+            ValidateSet     = Get-GitHubGitignoreList
+            ParamDictionary = $ParamDictionary
+        }
+        New-DynamicParam @dynParam
+
+        $dynParam2 = @{
+            Name            = 'License'
+            Alias           = 'license_template'
+            Type            = [string]
+            ValidateSet     = Get-GitHubLicenseList
+            ParamDictionary = $ParamDictionary
+        }
+        New-DynamicParam @dynParam2
+
+        return $ParamDictionary
+    }
+
+    Process {
+        $PSCmdlet.MyInvocation.MyCommand.Parameters.GetEnumerator() | ForEach-Object {
+            $paramName = $_.Key
+            $paramDefaultValue = Get-Variable -Name $paramName -ValueOnly -ErrorAction SilentlyContinue
+            $providedValue = $PSBoundParameters[$paramName]
+            Write-Verbose "[$paramName]"
+            Write-Verbose "  - Default:  [$paramDefaultValue]"
+            Write-Verbose "  - Provided: [$providedValue]"
+            if (-not $PSBoundParameters.ContainsKey($paramName) -and ($null -ne $paramDefaultValue)) {
+                Write-Verbose '  - Using default value'
+                $PSBoundParameters[$paramName] = $paramDefaultValue
+            } else {
+                Write-Verbose '  - Using provided value'
+            }
+        }
+
+        $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
+        Remove-HashtableEntries -Hashtable $body -RemoveNames 'Owner' -RemoveTypes 'SwitchParameter'
+
+        $body['private'] = $Visibility -eq 'private'
+        $body['has_issues'] = $HasIssues.IsPresent ? $HasIssues : $false
+        $body['has_wiki'] = $HasWiki.IsPresent ? $HasWiki : $false
+        $body['has_projects'] = $HasProjects.IsPresent ? $HasProjects : $false
+        $body['has_downloads'] = $HasDownloads.IsPresent ? $HasDownloads : $false
+        $body['is_template'] = $IsTemplate.IsPresent ? $IsTemplate : $false
+        $body['auto_init'] = $AutoInit.IsPresent ? $AutoInit : $false
+        $body['allow_squash_merge'] = $AllowSquashMerge.IsPresent ? $AllowSquashMerge : $false
+        $body['allow_merge_commit'] = $AllowMergeCommit.IsPresent ? $AllowMergeCommit : $false
+        $body['allow_rebase_merge'] = $AllowRebaseMerge.IsPresent ? $AllowRebaseMerge : $false
+        $body['allow_auto_merge'] = $AllowAutoMerge.IsPresent ? $AllowAutoMerge : $false
+        $body['delete_branch_on_merge'] = $DeleteBranchOnMerge.IsPresent ? $DeleteBranchOnMerge : $false
+
+        Remove-HashtableEntries -Hashtable $body -NullOrEmptyValues
+
+        $inputObject = @{
+            APIEndpoint = "/orgs/$Owner/repos"
+            Method      = 'POST'
+            Body        = $body
+        }
+
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
-
-    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-    Remove-HashtableEntries -Hashtable $body -RemoveNames 'Owner' -RemoveTypes 'SwitchParameter'
-
-    $body['private'] = $Visibility -eq 'private'
-    $body['has_issues'] = $HasIssues.IsPresent ? $HasIssues : $false
-    $body['has_wiki'] = $HasWiki.IsPresent ? $HasWiki : $false
-    $body['has_projects'] = $HasProjects.IsPresent ? $HasProjects : $false
-    $body['has_downloads'] = $HasDownloads.IsPresent ? $HasDownloads : $false
-    $body['is_template'] = $IsTemplate.IsPresent ? $IsTemplate : $false
-    $body['auto_init'] = $AutoInit.IsPresent ? $AutoInit : $false
-    $body['allow_squash_merge'] = $AllowSquashMerge.IsPresent ? $AllowSquashMerge : $false
-    $body['allow_merge_commit'] = $AllowMergeCommit.IsPresent ? $AllowMergeCommit : $false
-    $body['allow_rebase_merge'] = $AllowRebaseMerge.IsPresent ? $AllowRebaseMerge : $false
-    $body['allow_auto_merge'] = $AllowAutoMerge.IsPresent ? $AllowAutoMerge : $false
-    $body['delete_branch_on_merge'] = $DeleteBranchOnMerge.IsPresent ? $DeleteBranchOnMerge : $false
-
-    Remove-HashtableEntries -Hashtable $body -NullOrEmptyValues
-
-    $inputObject = @{
-        APIEndpoint = "/orgs/$Owner/repos"
-        Method      = 'POST'
-        Body        = $body
-    }
-
-    Invoke-GitHubAPI @inputObject | ForEach-Object {
-        Write-Output $_.Response
-    }
-
 }
