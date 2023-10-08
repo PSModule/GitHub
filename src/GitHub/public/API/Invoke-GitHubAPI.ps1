@@ -152,6 +152,11 @@
     Invoke-RestMethod @APICall | ForEach-Object {
         $statusCode = $APICallStatusCode | ConvertTo-Json -Depth 100 | ConvertFrom-Json
         $responseHeaders = $APICallResponseHeaders | ConvertTo-Json -Depth 100 | ConvertFrom-Json
+
+        Write-Verbose "Request: $($APICall | Out-String)"
+        Write-Verbose "StatusCode: $($statusCode | Out-String)"
+        Write-Verbose "ResponseHeaders: $($responseHeaders | Out-String)"
+
         [pscustomobject]@{
             Request         = $APICall
             Response        = $_

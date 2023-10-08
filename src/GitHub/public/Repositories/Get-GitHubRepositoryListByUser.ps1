@@ -69,8 +69,5 @@
 
     Invoke-GitHubAPI @inputObject | ForEach-Object {
         Write-Output $_.Response
-        Write-Verbose "Request: $($_.Request | ConvertFrom-Json | Out-String)"
-        Write-Verbose "StatusCode: $($_.StatusCode)"
-        Write-Verbose "ResponseHeaders: $($_.ResponseHeaders | ConvertFrom-Json | Out-String)"
     }
 }
