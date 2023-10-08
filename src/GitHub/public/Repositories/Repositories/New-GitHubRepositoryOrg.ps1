@@ -57,14 +57,10 @@
         [ValidateNotNullOrEmpty()]
         [uri] $Homepage,
 
-        # Whether the repository is private.
-        [Parameter()]
-        [switch] $Private,
-
         #The visibility of the repository.
         [Parameter()]
         [ValidateSet('public', 'private')]
-        [string] $Visibility,
+        [string] $Visibility = 'public',
 
         # Either true to enable issues for this repository or false to disable them.
         [Parameter()]
@@ -95,7 +91,7 @@
         # The id of the team that will be granted access to this repository. This is only valid when creating a repository in an organization.
         [Parameter()]
         [Alias('team_id')]
-        [int] $TeamID,
+        [int] $TeamId,
 
         # Pass true to create an initial commit with empty README.
         [Parameter()]
@@ -173,14 +169,37 @@
     )
 
     $PSCmdlet.MyInvocation.MyCommand.Parameters.GetEnumerator() | ForEach-Object {
-        $paramDefaultValue = Get-Variable -Name $_.Key -ValueOnly -ErrorAction SilentlyContinue
-        if (-not $PSBoundParameters.ContainsKey($_.Key) -and ($null -ne $paramDefaultValue)) {
-            $PSBoundParameters[$_.Key] = $paramDefaultValue
+        $paramName = $_.Key
+        $paramDefaultValue = Get-Variable -Name $paramName -ValueOnly -ErrorAction SilentlyContinue
+        $providedValue = $PSBoundParameters[$paramName]
+        Write-Verbose "[$paramName]"
+        Write-Verbose "  - Default:  [$paramDefaultValue]"
+        Write-Verbose "  - Provided: [$providedValue]"
+        if (-not $PSBoundParameters.ContainsKey($paramName) -and ($null -ne $paramDefaultValue)) {
+            Write-Verbose "  - Using default value"
+            $PSBoundParameters[$paramName] = $paramDefaultValue
+        } else {
+            Write-Verbose "  - Using provided value"
         }
     }
 
     $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-    Remove-HashtableEntries -Hashtable $body -RemoveNames 'Owner'
+    Remove-HashtableEntries -Hashtable $body -RemoveNames 'Owner' -RemoveTypes 'SwitchParameter'
+
+    $body['private'] = $Visibility -eq 'private'
+    $body['has_issues'] = $HasIssues.IsPresent ? $HasIssues : $false
+    $body['has_wiki'] = $HasWiki.IsPresent ? $HasWiki : $false
+    $body['has_projects'] = $HasProjects.IsPresent ? $HasProjects : $false
+    $body['has_downloads'] = $HasDownloads.IsPresent ? $HasDownloads : $false
+    $body['is_template'] = $IsTemplate.IsPresent ? $IsTemplate : $false
+    $body['auto_init'] = $AutoInit.IsPresent ? $AutoInit : $false
+    $body['allow_squash_merge'] = $AllowSquashMerge.IsPresent ? $AllowSquashMerge : $false
+    $body['allow_merge_commit'] = $AllowMergeCommit.IsPresent ? $AllowMergeCommit : $false
+    $body['allow_rebase_merge'] = $AllowRebaseMerge.IsPresent ? $AllowRebaseMerge : $false
+    $body['allow_auto_merge'] = $AllowAutoMerge.IsPresent ? $AllowAutoMerge : $false
+    $body['delete_branch_on_merge'] = $DeleteBranchOnMerge.IsPresent ? $DeleteBranchOnMerge : $false
+
+    Remove-HashtableEntries -Hashtable $body -NullOrEmptyValues
 
     $inputObject = @{
         APIEndpoint = "/orgs/$Owner/repos"
