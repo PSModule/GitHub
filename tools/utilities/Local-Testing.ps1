@@ -80,3 +80,17 @@ $Release = Get-GitHubRelease -Owner PSModule -Repo Demo -Latest
 Add-GitHubReleaseAsset -Owner PSModule -Repo Demo -ID $Release.id -FilePath 'C:\Repos\GitHub\PSModule\Modules\GitHub\tools\utilities\Local-Testing.ps1'
 
 Get-GitHubReleaseAsset -Owner PSModule -Repo Demo -ReleaseID $Release.id
+
+
+Get-GitHubRepositoryListByUser -Username 'octocat' | Select full_name, id, visibility, forks
+
+Get-GitHubRepositoryListByUser -Username 'octocat' -Type 'member' | Select full_name, id, visibility, forks
+
+Get-GitHubRepositoryListByUser -Username 'octocat' -Sort 'created' -Direction 'asc'  | Select full_name, id, visibility, created_at
+
+Get-GitHubRepositoryListByOrg -Owner 'PSModule'  | Select full_name, id, visibility, created_at
+
+Get-GitHubRepositoryListByOrg -Owner 'PSModule' -Type 'public'  | Select full_name, id, visibility, created_at
+
+Get-GitHubRepositoryListByOrg -Owner 'PSModule' -Sort 'created' -Direction 'asc'  | Select full_name, id, visibility, created_at
+

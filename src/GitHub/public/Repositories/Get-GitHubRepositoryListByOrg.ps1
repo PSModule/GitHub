@@ -59,7 +59,7 @@
     Remove-HashtableEntries -Hashtable $body -RemoveNames 'Owner'
 
     $inputObject = @{
-        APIEndpoint = "/repos/$Owner/repos"
+        APIEndpoint = "/orgs/$Owner/repos"
         Method      = 'GET'
         Body        = $body
     }
