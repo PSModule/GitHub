@@ -81,7 +81,7 @@ Add-GitHubReleaseAsset -Owner PSModule -Repo Demo -ID $Release.id -FilePath 'C:\
 
 Get-GitHubReleaseAsset -Owner PSModule -Repo Demo -ReleaseID $Release.id
 
-Get-GitHubMyRepositories -Affiliation owner, collaborator -Verbose | Select-Object full_name, id, visibility, forks
+Get-GitHubMyRepositories -Type owner | Select-Object full_name, id, visibility, forks
 
 Get-GitHubRepositoryByName -Owner 'PSModule' -Repo 'Demo' | Select-Object full_name, id, visibility, forks
 Get-GitHubRepositoryByName -Owner 'Azure' -Repo 'ResourceModules' | Select-Object full_name, id, visibility, forks

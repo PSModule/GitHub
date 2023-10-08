@@ -69,7 +69,7 @@
         [Parameter(
             ParameterSetName = 'Type'
         )]
-        [ValidateSet('all', 'public', 'private', 'forks', 'sources', 'member')]
+        [ValidateSet('all', 'owner', 'public', 'private', 'member')]
         [string] $Type = 'all',
 
         # The property to sort the results by.
@@ -98,15 +98,15 @@
 
 
     $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-    Remove-HashtableEntries -Hashtable $body -RemoveNames 'Affiliation', 'Since', 'Before' -RemoveTypes 'SwitchParameters'
+    Remove-HashtableEntries -Hashtable $body -RemoveNames 'Affiliation', 'Since', 'Before'
 
-    if ($Affiliation) {
+    if ($PSBoundParameters.ContainsKey('Affiliation')) {
         $body['affiliation'] = $Affiliation -join ','
     }
-    if ($Since) {
+    if ($PSBoundParameters.ContainsKey('Since')) {
         $body['since'] = $Since.ToString('yyyy-MM-ddTHH:mm:ssZ')
     }
-    if ($Before) {
+    if ($PSBoundParameters.ContainsKey('Before')) {
         $body['before'] = $Before.ToString('yyyy-MM-ddTHH:mm:ssZ')
     }
 
