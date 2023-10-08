@@ -34,10 +34,10 @@
     }
 
     Invoke-GitHubAPI @inputObject | ForEach-Object {
-        Write-Verbose $_.Request
         Write-Output $_.Response
-        Write-Verbose $_.StatusCode
-        Write-Verbose $_.ResponseHeaders
+        Write-Verbose "Request: $($_.Request | ConvertFrom-Json | Out-String)"
+        Write-Verbose "StatusCode: $($_.StatusCode)"
+        Write-Verbose "ResponseHeaders: $($_.ResponseHeaders | ConvertFrom-Json | Out-String)"
     }
 
 }

@@ -44,7 +44,7 @@
         https://docs.github.com/rest/repos/repos#list-repositories-for-the-authenticated-user
 
     #>
-    [CmdletBinding(DefaultParameterSetName = 'type')]
+    [CmdletBinding(DefaultParameterSetName = 'Type')]
     param (
 
         #Limit results to repositories with the specified visibility.
@@ -52,7 +52,7 @@
             ParameterSetName = 'Aff-Vis'
         )]
         [validateSet('all', 'public', 'private')]
-        [string] $Visibility = 'all',
+        [string] $Visibility,
 
         # Comma-separated list of values. Can include:
         # - owner: Repositories that are owned by the authenticated user.
@@ -96,20 +96,29 @@
         [datetime] $Before
     )
 
-    $Affiliation = $Affiliation -join ','
-
-    # This is a timestamp in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.
-    $Since = $Since.ToString('yyyy-MM-ddTHH:mm:ssZ')
-    $Before = $Before.ToString('yyyy-MM-ddTHH:mm:ssZ')
+    if ($Affiliation) {
+        $Affiliation = $Affiliation -join ','
+    }
+    if ($Since) {
+        $Since = $Since.ToString('yyyy-MM-ddTHH:mm:ssZ')
+    }
+    if ($Before) {
+        $Before = $Before.ToString('yyyy-MM-ddTHH:mm:ssZ')
+    }
 
     $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
     Remove-HashtableEntries -Hashtable $body -RemoveNames 'Owner'
 
     $inputObject = @{
-        APIEndpoint = "/user/repos"
+        APIEndpoint = '/user/repos'
         Method      = 'GET'
     }
 
-    (Invoke-GitHubAPI @inputObject).Response
+    Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Write-Output $_.Response
+        Write-Verbose "Request: $($_.Request | ConvertFrom-Json | Out-String)"
+        Write-Verbose "StatusCode: $($_.StatusCode)"
+        Write-Verbose "ResponseHeaders: $($_.ResponseHeaders | ConvertFrom-Json | Out-String)"
+    }
 
 }
