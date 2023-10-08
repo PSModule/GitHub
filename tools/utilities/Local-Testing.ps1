@@ -86,7 +86,7 @@ Get-GitHubMyRepositories | Select-Object full_name, id, visibility, forks
 Get-GitHubRepositoryByName -Owner 'PSModule' -Repo 'Demo' | Select-Object full_name, id, visibility, forks
 Get-GitHubRepositoryByName -Owner 'Azure' -Repo 'ResourceModules' | Select-Object full_name, id, visibility, forks
 
-Get-GitHubRepositoryListByID | Select-Object full_name, id, visibility, forks
+Get-GitHubRepositoryListByID -Verbose | Select-Object full_name, id, visibility, forks
 
 Get-GitHubRepositoryListByUser -Username 'octocat' | Select-Object full_name, id, visibility, forks
 Get-GitHubRepositoryListByUser -Username 'octocat' -type 'member' | Select-Object full_name, id, visibility, forks

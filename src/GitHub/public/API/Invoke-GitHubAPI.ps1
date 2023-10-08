@@ -142,7 +142,8 @@
         if ($Method -eq 'GET') {
             $queryString = $Body | ConvertTo-QueryString
             $APICall.Uri = $APICall.Uri + $queryString
-        } elseif ($Body -is [string]) { # Use body to create the form data
+        } elseif ($Body -is [string]) {
+            # Use body to create the form data
             $APICall.Body = $Body
         } else {
             $APICall.Body = $Body | ConvertTo-Json -Depth 100
@@ -153,9 +154,13 @@
         $statusCode = $APICallStatusCode | ConvertTo-Json -Depth 100 | ConvertFrom-Json
         $responseHeaders = $APICallResponseHeaders | ConvertTo-Json -Depth 100 | ConvertFrom-Json
 
-        Write-Verbose "Request: $($APICall | Out-String)"
-        Write-Verbose "StatusCode: $($statusCode | Out-String)"
-        Write-Verbose "ResponseHeaders: $($responseHeaders | Out-String)"
+        Write-Verbose '----------------------------------'
+        Write-Verbose "StatusCode: $statusCode"
+        Write-Verbose '----------------------------------'
+        Write-Verbose "Request: $($APICall | ConvertFrom-HashTable | Format-List | Out-String)"
+        Write-Verbose '----------------------------------'
+        Write-Verbose "ResponseHeaders: $($responseHeaders | Format-List | Out-String)"
+        Write-Verbose '----------------------------------'
 
         [pscustomobject]@{
             Request         = $APICall
