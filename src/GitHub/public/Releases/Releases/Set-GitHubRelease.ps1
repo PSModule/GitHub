@@ -27,14 +27,12 @@
         [string] $Repo = (Get-GitHubConfig -Name Repo),
 
         # The unique identifier of the release.
-        [Parameter(
-            Mandatory
-        )]
+        [Parameter(Mandatory)]
         [Alias('release_id')]
         [string] $ID,
 
         # The name of the tag.
-        [Parameter(Mandatory)]
+        [Parameter()]
         [Alias('tag_name')]
         [string] $TagName,
 
@@ -78,10 +76,9 @@
     $requestBody = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
     Remove-HashtableEntries -Hashtable $requestBody -RemoveNames 'Owner', 'Repo', 'Draft', 'Prerelease'
     $requestBody =  Join-Object -AsHashtable -Main $requestBody -Overrides @{
-        draft                  = $Draft.IsPresent
-        prerelease             = $Prerelease.IsPresent
+        draft                  = $Draft.IsPresent ? $Draft : $false
+        prerelease             = $Prerelease.IsPresent ? $Prerelease : $false
     }
-    Remove-HashtableEntries -Hashtable $requestBody -NullOrEmptyValues
 
     $inputObject = @{
         APIEndpoint = "/repos/$Owner/$Repo/releases/$ID"

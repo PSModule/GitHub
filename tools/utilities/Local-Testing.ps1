@@ -68,3 +68,13 @@ Add-GitHubUserEmail -Emails 'octocat@psmodule.io'
 Remove-GitHubUserEmail -Emails 'octocat@psmodule.io'
 
 Get-ChildItem -Path 'C:\Repos\GitHub\PSModule\Modules\GitHub\src\GitHub\private\Utilities' -File -Recurse -Force | Select-Object -ExpandProperty FullName | ForEach-Object { $null = . $_ }
+
+
+$Release = New-GitHubRelease -Owner PSModule -Repo Demo -TagName 'v1.0.0' -Name 'v1.0.0' -Draft -TargetCommitish 'main' -Body 'test release'
+Get-GitHubRelease -Owner PSModule -Repo Demo
+Get-GitHubRelease -Owner PSModule -Repo Demo -ID $Release.id
+Set-GitHubRelease -Owner PSModule -Repo Demo -ID $Release.id
+Get-GitHubRelease -Owner PSModule -Repo Demo -Latest
+Get-GitHubRelease -Owner PSModule -Repo Demo -Tag 'v1.0.0'
+$Release = Get-GitHubRelease -Owner PSModule -Repo Demo -Latest
+Add-GitHubReleaseAsset -Owner PSModule -Repo Demo -ID $Release.id -FilePath 'C:\Repos\GitHub\PSModule\Modules\GitHub\tools\utilities\Local-Testing.ps1'
