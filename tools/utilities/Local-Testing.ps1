@@ -78,3 +78,5 @@ Get-GitHubRelease -Owner PSModule -Repo Demo -Latest
 Get-GitHubRelease -Owner PSModule -Repo Demo -Tag 'v1.0.0'
 $Release = Get-GitHubRelease -Owner PSModule -Repo Demo -Latest
 Add-GitHubReleaseAsset -Owner PSModule -Repo Demo -ID $Release.id -FilePath 'C:\Repos\GitHub\PSModule\Modules\GitHub\tools\utilities\Local-Testing.ps1'
+
+Get-GitHubReleaseAsset -Owner PSModule -Repo Demo -ReleaseID $Release.id
