@@ -32,7 +32,6 @@
         [Parameter(
             ParameterSetName = 'ApiEndpoint'
         )]
-        )]
         [string] $ApiBaseUri = (Get-GitHubConfig -Name ApiBaseUri),
 
         # The specific endpoint for the API call, e.g., '/repos/user/repo/pulls'.
