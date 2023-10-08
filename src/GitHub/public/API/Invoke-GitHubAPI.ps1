@@ -150,23 +150,37 @@
         }
     }
 
-    Invoke-RestMethod @APICall | ForEach-Object {
-        $statusCode = $APICallStatusCode | ConvertTo-Json -Depth 100 | ConvertFrom-Json
-        $responseHeaders = $APICallResponseHeaders | ConvertTo-Json -Depth 100 | ConvertFrom-Json
+    try {
+        Invoke-RestMethod @APICall | ForEach-Object {
+            $statusCode = $APICallStatusCode | ConvertTo-Json -Depth 100 | ConvertFrom-Json
+            $responseHeaders = $APICallResponseHeaders | ConvertTo-Json -Depth 100 | ConvertFrom-Json
 
-        Write-Verbose '----------------------------------'
-        Write-Verbose "StatusCode: $statusCode"
-        Write-Verbose '----------------------------------'
-        Write-Verbose "Request: $($APICall | ConvertFrom-HashTable | Format-List | Out-String)"
-        Write-Verbose '----------------------------------'
-        Write-Verbose "ResponseHeaders: $($responseHeaders | Format-List | Out-String)"
-        Write-Verbose '----------------------------------'
+            Write-Verbose '----------------------------------'
+            Write-Verbose "StatusCode: $statusCode"
+            Write-Verbose '----------------------------------'
+            Write-Verbose "Request:"
+            $APICall | ConvertFrom-HashTable | Format-List | Out-String -Stream | Write-Verbose
+            Write-Verbose '----------------------------------'
+            Write-Verbose "ResponseHeaders:"
+            $responseHeaders | Format-List | Out-String -Stream | Write-Verbose
+            Write-Verbose '----------------------------------'
 
-        [pscustomobject]@{
-            Request         = $APICall
-            Response        = $_
-            StatusCode      = $statusCode
-            ResponseHeaders = $responseHeaders
+            [pscustomobject]@{
+                Request         = $APICall
+                Response        = $_
+                StatusCode      = $statusCode
+                ResponseHeaders = $responseHeaders
+            }
         }
+    } catch {
+        Write-Error "Request:"
+        $APICall | ConvertFrom-HashTable | Format-List | Out-String -Stream | Write-Error
+
+        Write-Error "Message:"
+        $_.Exception.Message | ConvertFrom-HashTable | Format-List | Out-String -Stream | Write-Error
+
+        Write-Error "Response:"
+        $_.Exception.Response | ConvertFrom-HashTable | Format-List | Out-String -Stream | Write-Error
+        throw $errorMessage
     }
 }
