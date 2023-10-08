@@ -81,7 +81,7 @@ Add-GitHubReleaseAsset -Owner PSModule -Repo Demo -ID $Release.id -FilePath 'C:\
 
 Get-GitHubReleaseAsset -Owner PSModule -Repo Demo -ReleaseID $Release.id
 
-Get-GitHubMyRepositories | Select-Object full_name, id, visibility, forks
+Get-GitHubMyRepositories -Affiliation owner, collaborator -Verbose | Select-Object full_name, id, visibility, forks
 
 Get-GitHubRepositoryByName -Owner 'PSModule' -Repo 'Demo' | Select-Object full_name, id, visibility, forks
 Get-GitHubRepositoryByName -Owner 'Azure' -Repo 'ResourceModules' | Select-Object full_name, id, visibility, forks
@@ -95,6 +95,3 @@ Get-GitHubRepositoryListByUser -Username 'octocat' -Sort 'created' -Direction 'a
 Get-GitHubRepositoryListByOrg -Owner 'PSModule' | Select-Object full_name, id, visibility, created_at
 Get-GitHubRepositoryListByOrg -Owner 'PSModule' -type 'public' | Select-Object full_name, id, visibility, created_at
 Get-GitHubRepositoryListByOrg -Owner 'PSModule' -Sort 'created' -Direction 'asc' | Select-Object full_name, id, visibility, created_at
-
-
-

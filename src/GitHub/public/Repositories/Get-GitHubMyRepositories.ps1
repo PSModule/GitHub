@@ -47,12 +47,12 @@
     [CmdletBinding(DefaultParameterSetName = 'Type')]
     param (
 
-        #Limit results to repositories with the specified visibility.
+        # Limit results to repositories with the specified visibility.
         [Parameter(
             ParameterSetName = 'Aff-Vis'
         )]
-        [validateSet('all', 'public', 'private')]
-        [string] $Visibility,
+        [ValidateSet('all', 'public', 'private')]
+        [string] $Visibility = 'all',
 
         # Comma-separated list of values. Can include:
         # - owner: Repositories that are owned by the authenticated user.
@@ -62,25 +62,25 @@
         [Parameter(
             ParameterSetName = 'Aff-Vis'
         )]
-        [validateset('owner', 'collaborator', 'organization_member')]
+        [ValidateSet('owner', 'collaborator', 'organization_member')]
         [string[]] $Affiliation = @('owner', 'collaborator', 'organization_member'),
 
         # Specifies the types of repositories you want returned.
         [Parameter(
             ParameterSetName = 'Type'
         )]
-        [validateSet('all', 'public', 'private', 'forks', 'sources', 'member')]
+        [ValidateSet('all', 'public', 'private', 'forks', 'sources', 'member')]
         [string] $Type = 'all',
 
         # The property to sort the results by.
         [Parameter()]
-        [validateSet('created', 'updated', 'pushed', 'full_name')]
+        [ValidateSet('created', 'updated', 'pushed', 'full_name')]
         [string] $Sort = 'created',
 
         # The order to sort by.
         # Default: asc when using full_name, otherwise desc.
         [Parameter()]
-        [validateSet('asc', 'desc')]
+        [ValidateSet('asc', 'desc')]
         [string] $Direction,
 
         # The number of results per page (max 100).
@@ -96,22 +96,24 @@
         [datetime] $Before
     )
 
-    if ($Affiliation) {
-        $Affiliation = $Affiliation -join ','
-    }
-    if ($Since) {
-        $Since = $Since.ToString('yyyy-MM-ddTHH:mm:ssZ')
-    }
-    if ($Before) {
-        $Before = $Before.ToString('yyyy-MM-ddTHH:mm:ssZ')
-    }
 
     $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-    Remove-HashtableEntries -Hashtable $body -RemoveNames 'Owner'
+    Remove-HashtableEntries -Hashtable $body -RemoveNames 'Affiliation', 'Since', 'Before' -RemoveTypes 'SwitchParameters'
+
+    if ($Affiliation) {
+        $body['affiliation'] = $Affiliation -join ','
+    }
+    if ($Since) {
+        $body['since'] = $Since.ToString('yyyy-MM-ddTHH:mm:ssZ')
+    }
+    if ($Before) {
+        $body['before'] = $Before.ToString('yyyy-MM-ddTHH:mm:ssZ')
+    }
 
     $inputObject = @{
         APIEndpoint = '/user/repos'
         Method      = 'GET'
+        body        = $body
     }
 
     Invoke-GitHubAPI @inputObject | ForEach-Object {
