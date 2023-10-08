@@ -138,8 +138,8 @@
     $APICall | Remove-HashTableEntries -NullOrEmptyValues
 
     if ($Body) {
-        # Use body to create the query string for GET requests
-        if (($Method -eq 'GET') -or (-not [string]::IsNullOrEmpty($UploadFilePath))) {
+        # Use body to create the query string for certain situations
+        if ($Method -eq 'GET') {
             $queryString = $Body | ConvertTo-QueryString
             $APICall.Uri = $APICall.Uri + $queryString
         } elseif ($Body -is [string]) { # Use body to create the form data
