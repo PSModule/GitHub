@@ -32,7 +32,10 @@
         [string] $Repo = (Get-GitHubConfig -Name Repo),
 
         # The unique identifier of the asset.
-        [Parameter(Mandatory)]
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'ID'
+        )]
         [Alias('asset_id')]
         [string] $ID,
 
