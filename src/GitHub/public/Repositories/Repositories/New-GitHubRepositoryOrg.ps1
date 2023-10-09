@@ -166,9 +166,9 @@
 
     DynamicParam {
         $ParamDictionary = New-ParamDictionary
-        
+
         $dynParam = @{
-            Name            = 'Gitignore'
+            Name            = 'GitignoreTemplate'
             Alias           = 'gitignore_template'
             Type            = [string]
             ValidateSet     = Get-GitHubGitignoreList
@@ -177,10 +177,10 @@
         New-DynamicParam @dynParam
 
         $dynParam2 = @{
-            Name            = 'License'
+            Name            = 'LicenseTemplate'
             Alias           = 'license_template'
             Type            = [string]
-            ValidateSet     = Get-GitHubLicenseList
+            ValidateSet     = Get-GitHubLicenseList | Select-Object -ExpandProperty Name
             ParamDictionary = $ParamDictionary
         }
         New-DynamicParam @dynParam2
@@ -188,7 +188,13 @@
         return $ParamDictionary
     }
 
+    begin {
+        $GitignoreTemplate = $PSBoundParameters['GitignoreTemplate']
+        $LicenseTemplate = $PSBoundParameters['LicenseTemplate']
+    }
+
     Process {
+
         $PSCmdlet.MyInvocation.MyCommand.Parameters.GetEnumerator() | ForEach-Object {
             $paramName = $_.Key
             $paramDefaultValue = Get-Variable -Name $paramName -ValueOnly -ErrorAction SilentlyContinue
