@@ -26,24 +26,19 @@ filter Get-GitHubGitignore {
     param ()
 
     DynamicParam {
-        $runtimeDefinedParameterDictionary = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary
-        $attributeCollection = New-Object System.Collections.ObjectModel.Collection[System.Attribute]
+        $ParamDictionary = New-ParamDictionary
 
-        $parameterName = 'Name'
-        $parameterType = [string]
-        $parameterAttribute = New-Object System.Management.Automation.ParameterAttribute
-        $parameterAttribute.ParameterSetName = 'Name'
-        $parameterAttribute.Mandatory = $true
-        $attributeCollection.Add($parameterAttribute)
+        $dynParam = @{
+            Name             = 'Name'
+            ParameterSetName = 'Name'
+            Type             = [string]
+            Mandatory        = $true
+            ValidateSet      = Get-GitHubGitignoreList
+            ParamDictionary  = $ParamDictionary
+        }
+        New-DynamicParam @dynParam
 
-        $parameterValidateSet = Get-GitHubGitignoreList
-        $validateSetAttribute = New-Object System.Management.Automation.ValidateSetAttribute($parameterValidateSet)
-        $attributeCollection.Add($validateSetAttribute)
-
-        $runtimeDefinedParameter = New-Object System.Management.Automation.RuntimeDefinedParameter($parameterName, $parameterType, $attributeCollection)
-        $runtimeDefinedParameterDictionary.Add($parameterName, $runtimeDefinedParameter)
-
-        return $runtimeDefinedParameterDictionary
+        return $ParamDictionary
     }
 
     Process {
