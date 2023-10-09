@@ -32,13 +32,15 @@ filter Get-GitHubRepositoryLicense {
     Process {
         $inputObject = @{
             APIEndpoint = "/repos/$Owner/$Repo/license"
-            Accept      = 'application/vnd.github.raw+json'
+            Accept      = 'application/vnd.github+json'
             Method      = 'GET'
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            $Response = $_.Response
+            $rawContent =  [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($Response.content))
+            $Response | Add-Member -NotePropertyName 'raw_content' -NotePropertyValue $rawContent -Force
+            $Response
         }
-
     }
 }
