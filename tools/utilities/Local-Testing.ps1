@@ -110,7 +110,7 @@ $params = @{
     HasWiki                  = $true
     HasDownloads             = $true
     IsTemplate               = $true
-    # TeamID      = 12345679
+    # TeamID                   = 12345679
     AutoInit                 = $true
     # GitignoreTemplate        = 'VisualStudio'
     # LicenseTemplate          = 'MIT'
@@ -124,6 +124,6 @@ $params = @{
     AllowAutoMerge           = $true
     DeleteBranchOnMerge      = $true
 }
-New-GitHubRepositoryOrg @params -GitignoreTemplate Fortran -LicenseTemplate 'MIT License'
+New-GitHubRepositoryOrg @params -GitignoreTemplate VisualStudio -LicenseTemplate mit
 
 Remove-GitHubRepository -Owner PSModule -Repo 'Hello-world' -Verbose
