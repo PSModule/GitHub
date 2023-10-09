@@ -124,47 +124,34 @@
     )
 
     DynamicParam {
-        $runtimeDefinedParameterDictionary = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary
-        $attributeCollection = New-Object System.Collections.ObjectModel.Collection[System.Attribute]
+        $ParamDictionary = New-ParamDictionary
 
         if ($PSCmdlet.ParameterSetName -in 'MyRepos_Type', 'ListByOrg', 'ListByUser') {
-            $parameterName = 'Type'
-            $parameterAttribute = New-Object System.Management.Automation.ParameterAttribute
 
             switch ($PSCmdlet.ParameterSetName) {
                 'MyRepos_Type' {
-                    $parameterAttribute.Mandatory = $false
-                    $parameterAttribute.ParameterSetName = 'MyRepos_Type'
+                    $ValidateSet = 'all', 'owner', 'public', 'private', 'member'
                 }
                 'ListByOrg' {
-                    $parameterAttribute.Mandatory = $false
-                    $parameterAttribute.ParameterSetName = 'ListByOrg'
+                    $ValidateSet = 'all', 'public', 'private', 'forks', 'sources', 'member'
                 }
                 'ListByUser' {
-                    $parameterAttribute.Mandatory = $false
-                    $parameterAttribute.ParameterSetName = 'ListByUser'
+                    $ValidateSet = 'all', 'owner', 'member'
                 }
             }
-            $attributeCollection.Add($parameterAttribute)
 
-            switch ($PSCmdlet.ParameterSetName) {
-                'MyRepos_Type' {
-                    $parameterValidateSet = 'all', 'owner', 'public', 'private', 'member'
-                }
-                'ListByOrg' {
-                    $parameterValidateSet = 'all', 'public', 'private', 'forks', 'sources', 'member'
-                }
-                'ListByUser' {
-                    $parameterValidateSet = 'all', 'owner', 'member'
-                }
+            $dynParam = @{
+                Name             = 'Type'
+                ParameterSetName = $PSCmdlet.ParameterSetName
+                Type             = [string]
+                Mandatory        = $false
+                ValidateSet      = $ValidateSet
+                ParamDictionary  = $ParamDictionary
             }
-            $validateSetAttribute = New-Object System.Management.Automation.ValidateSetAttribute($parameterValidateSet)
-            $attributeCollection.Add($validateSetAttribute)
-
-            $runtimeDefinedParameter = New-Object System.Management.Automation.RuntimeDefinedParameter($parameterName, [string], $attributeCollection)
-            $runtimeDefinedParameterDictionary.Add($parameterName, $runtimeDefinedParameter)
+            New-DynamicParam @dynParam
         }
-        return $runtimeDefinedParameterDictionary
+        
+        return $ParamDictionary
     }
 
     Process {
