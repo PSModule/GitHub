@@ -29,10 +29,14 @@
     }
 
     process {
+        $Param1 = $PSBoundParameters['Param1']
+        $Param2 = $PSBoundParameters['Param2']
+        $Param3 = $PSBoundParameters['Param3']
+
         Write-Host "Param1: $Param1"
         Write-Host "Param2: $Param2"
         Write-Host "Param3: $Param3"
     }
 }
 
-Test-DynParam -Param1 A -Param2 cmd -Param3 PerfLogs
+Test-DynParam -Param1 A -Param3 PerfLogs

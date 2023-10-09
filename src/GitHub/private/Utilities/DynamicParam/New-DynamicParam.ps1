@@ -26,10 +26,6 @@
         [Parameter()]
         [string[]] $Alias,
 
-        # Specifies the default value of the parameter.
-        [Parameter()]
-        $DefaultValue = $null,
-
         # Specifies the data type of the parameter.
         [Parameter()]
         [type] $Type,
@@ -146,11 +142,6 @@
             $aliasAttribute = New-Object System.Management.Automation.AliasAttribute($_)
             $attributeCollection.Add($aliasAttribute)
         }
-    }
-
-    if ($PSBoundParameters.ContainsKey('DefaultValue')) {
-        $commentAttribute = New-Object System.Management.Automation.PSDefaultValueAttribute($DefaultValue)
-        $attributeCollection.Add($commentAttribute)
     }
 
     # $Comment

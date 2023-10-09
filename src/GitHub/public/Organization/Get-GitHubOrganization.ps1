@@ -69,6 +69,7 @@
         [Parameter(ParameterSetName = 'AllOrg')]
         [Parameter(ParameterSetName = 'UserOrg')]
         [Parameter(ParameterSetName = '__DefaultSet')]
+        [ValidateRange(1, 100)]
         [int] $PerPage = 30
     )
 

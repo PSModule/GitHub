@@ -119,6 +119,7 @@
         [Parameter(ParameterSetName = 'MyRepos')]
         [Parameter(ParameterSetName = 'ListByOrg')]
         [Parameter(ParameterSetName = 'ListByUser')]
+        [ValidateRange(1, 100)]
         [int] $PerPage = 30
 
     )
@@ -150,7 +151,7 @@
             }
             New-DynamicParam @dynParam
         }
-        
+
         return $ParamDictionary
     }
 
