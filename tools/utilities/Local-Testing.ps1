@@ -156,3 +156,6 @@ $params = @{
 New-GitHubRepositoryUser @params -GitignoreTemplate VisualStudio -LicenseTemplate gpl-3.0
 
 Remove-GitHubRepository -Owner MariusStorhaug -Repo 'Hello-world' -Verbose
+
+
+Get-GitHubRepositoryTopic -Owner 'PSModule' -Repo 'GitHub'

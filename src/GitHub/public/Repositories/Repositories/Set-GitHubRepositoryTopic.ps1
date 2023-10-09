@@ -25,12 +25,14 @@
 
         # The number of results per page (max 100).
         [Parameter()]
-        [Alias('names')]
-        [string[]] $Topics = @()
+        [Alias('Topics')]
+        [string[]] $Names = @()
     )
 
     $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-    Remove-HashtableEntries -Hashtable $body -RemoveNames 'Owner','Repo' -RemoveTypes 'SwitchParameter'
+    Remove-HashtableEntries -Hashtable $body -RemoveNames 'Owner', 'Repo' -RemoveTypes 'SwitchParameter'
+
+    $body.names = $body.names | ForEach-Object { $_.ToLower() }
 
     $inputObject = @{
         APIEndpoint = "/repos/$Owner/$Repo/topics"
@@ -39,6 +41,6 @@
     }
 
     Invoke-GitHubAPI @inputObject | ForEach-Object {
-        Write-Output $_.Response
+        Write-Output $_.Response.names
     }
 }
