@@ -180,7 +180,7 @@
             Name            = 'LicenseTemplate'
             Alias           = 'license_template'
             Type            = [string]
-            ValidateSet     = Get-GitHubLicenseList | Select-Object -ExpandProperty Name
+            ValidateSet     = Get-GitHubLicenseList | Select-Object -ExpandProperty key
             ParamDictionary = $ParamDictionary
         }
         New-DynamicParam @dynParam2

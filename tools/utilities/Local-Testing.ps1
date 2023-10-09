@@ -112,8 +112,8 @@ $params = @{
     IsTemplate               = $true
     # TeamID      = 12345679
     AutoInit                 = $true
-    GitignoreTemplate        = 'VisualStudio'
-    LicenseTemplate          = 'MIT'
+    # GitignoreTemplate        = 'VisualStudio'
+    # LicenseTemplate          = 'MIT'
     AllowSquashMerge         = $true
     SquashMergeCommitTitle   = 'PR_TITLE'
     SquashMergeCommitMessage = 'PR_BODY'
@@ -124,6 +124,6 @@ $params = @{
     AllowAutoMerge           = $true
     DeleteBranchOnMerge      = $true
 }
-New-GitHubRepositoryOrg @params
+New-GitHubRepositoryOrg @params -GitignoreTemplate Fortran -LicenseTemplate 'MIT License'
 
 Remove-GitHubRepository -Owner PSModule -Repo 'Hello-world' -Verbose
