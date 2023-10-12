@@ -11,6 +11,7 @@ Get-SecretInfo
 Get-Module -Name GitHub -ListAvailable
 $VerbosePreference = 'Continue'
 
+Find-Module -Name GitHub
 Install-Module -Name GitHub -Force -Verbose -AllowPrerelease
 Get-Module -Name GitHub -ListAvailable
 # $env:PSModulePath += ';C:\Repos\GitHub\PSModule\Modules\GitHub\outputs'
@@ -125,8 +126,8 @@ $params = @{
     DeleteBranchOnMerge      = $true
 }
 New-GitHubRepositoryOrg @params -GitignoreTemplate VisualStudio -LicenseTemplate mit
-
 Remove-GitHubRepository -Owner PSModule -Repo 'Hello-world' -Verbose
+
 
 $params = @{
     Verbose                  = $true
@@ -154,7 +155,6 @@ $params = @{
     DeleteBranchOnMerge      = $true
 }
 New-GitHubRepositoryUser @params -GitignoreTemplate VisualStudio -LicenseTemplate gpl-3.0
-
 Remove-GitHubRepository -Owner MariusStorhaug -Repo 'Hello-world' -Verbose
 
 
