@@ -1,4 +1,4 @@
-﻿function Menu {
+﻿function Invoke-Menu {
     ## Generate a small "DOS-like" menu.
     ## Choose a menuitem using up and down arrows, select by pressing ENTER
     param (
