@@ -11,12 +11,13 @@
 
         This will test if the GitHub access token should be refreshed.
     #>
+    [OutputType([bool])]
     [CmdletBinding()]
     param()
 
     $tokenType = Get-GitHubConfig -Name 'AccessTokenType' -ErrorAction SilentlyContinue
     if ($tokenType -ne 'ghu_*') {
-        Write-Verbose "The access token is not a user token. No need to refresh."
+        Write-Verbose 'The access token is not a user token. No need to refresh.'
         return $false
     }
 
