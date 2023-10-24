@@ -48,7 +48,7 @@
         [Parameter()]
         [string[]] $KeepNames
     )
-    
+
     if ($NullOrEmptyValues) {
         Write-Verbose 'Remove keys with null or empty values'
         ($Hashtable.GetEnumerator() | Where-Object { -not $_.Value }) | ForEach-Object {
