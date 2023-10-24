@@ -1,0 +1,13 @@
+name: Process-PSModule
+
+on:
+  push:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+
+jobs:
+  Process-PSModule:
+    uses: PSModule/Actions/.github/workflows/Process-PSModule.yml@main
+    secrets: inherit
