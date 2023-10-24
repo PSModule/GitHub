@@ -1,29 +1,54 @@
 ﻿filter Remove-HashtableEntries {
+    <#
+        .SYNOPSIS
+        Remove entries from a hashtable.
+
+        .DESCRIPTION
+        Remove different types of entries from a hashtable.
+
+        .EXAMPLE
+        $Hashtable = @{
+            'Key1' = 'Value1'
+            'Key2' = 'Value2'
+            'Key3' = $null
+            'Key4' = 'Value4'
+            'Key5' = ''
+        }
+        $Hashtable | Remove-HashtableEntries -NullOrEmptyValues
+
+        Remove keys with null or empty values
+    #>
     [OutputType([void])]
     [CmdletBinding()]
     param (
+        # The hashtable to remove entries from.
         [Parameter(
             Mandatory,
             ValueFromPipeline
         )]
         [hashtable] $Hashtable,
 
+        # Remove keys with null or empty values.
         [Parameter()]
         [switch] $NullOrEmptyValues,
 
+        # Remove keys of type.
         [Parameter()]
         [string[]] $RemoveTypes,
 
+        # Remove keys with a given name.
         [Parameter()]
         [string[]] $RemoveNames,
 
+        # Remove keys NOT of type.
         [Parameter()]
         [string[]] $KeepTypes,
 
+        # Remove keys NOT with a given name.
         [Parameter()]
         [string[]] $KeepNames
-
     )
+    
     if ($NullOrEmptyValues) {
         Write-Verbose 'Remove keys with null or empty values'
         ($Hashtable.GetEnumerator() | Where-Object { -not $_.Value }) | ForEach-Object {
