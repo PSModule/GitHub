@@ -34,6 +34,7 @@
 
     #>
     [CmdletBinding(DefaultParameterSetName = 'All')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'Latest', Justification = 'Required for parameter set')]
     param (
         # The account owner of the repository. The name is not case sensitive.
         [Parameter()]
