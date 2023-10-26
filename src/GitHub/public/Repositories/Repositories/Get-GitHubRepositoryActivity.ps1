@@ -4,7 +4,8 @@
         List repository activities
 
         .DESCRIPTION
-        Lists a detailed history of changes to a repository, such as pushes, merges, force pushes, and branch changes, and associates these changes with commits and users.
+        Lists a detailed history of changes to a repository, such as pushes, merges, force pushes, and branch changes,
+        and associates these changes with commits and users.
 
         For more information about viewing repository activity,
         see "[Viewing activity and data for your repository](https://docs.github.com/repositories/viewing-activity-and-data-for-your-repository)."
@@ -31,7 +32,13 @@
         Get-GitHubRepositoryActivity -Owner 'PSModule' -Repo 'GitHub' -Actor 'octocat'
 
         .EXAMPLE
-        Get-GitHubRepositoryActivity -Owner 'PSModule' -Repo 'GitHub' -TimePeriod 'day' | Select-Object -Property @{n='actor';e={$_.actor.login}},activity_type,ref,timestamp
+        $params = @{
+            Owner       = 'PSModule'
+            Repo        = 'GitHub'
+            TimePeriod  = 'day'
+        }
+        Get-GitHubRepositoryActivity @params |
+            Select-Object -Property @{n='actor';e={$_.actor.login}},activity_type,ref,timestamp
 
         Gets the activity for the past 24 hours and selects the actor, activity type, ref, and timestamp.
 
@@ -83,7 +90,8 @@
         [string] $Actor,
 
         # The time period to filter by.
-        # For example,day will filter for activity that occurred in the past 24 hours, and week will filter for activity that occurred in the past 7 days (168 hours).
+        # For example,day will filter for activity that occurred in the past 24 hours,
+        # and week will filter for activity that occurred in the past 7 days (168 hours).
         [Parameter()]
         [ValidateSet('day', 'week', 'month', 'quarter', 'year')]
         [Alias('time_period')]

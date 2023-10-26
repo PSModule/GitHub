@@ -57,7 +57,8 @@
         # Comma-separated list of values. Can include:
         # - owner: Repositories that are owned by the authenticated user.
         # - collaborator: Repositories that the user has been added to as a collaborator.
-        # - organization_member: Repositories that the user has access to through being a member of an organization. This includes every repository on every team that the user is on.
+        # - organization_member: Repositories that the user has access to through being a member of an organization.
+        #   This includes every repository on every team that the user is on.
         # Default: owner, collaborator, organization_member
         [Parameter(ParameterSetName = 'MyRepos_Aff-Vis')]
         [ValidateSet('owner', 'collaborator', 'organization_member')]

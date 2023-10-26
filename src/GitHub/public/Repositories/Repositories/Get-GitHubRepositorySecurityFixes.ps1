@@ -4,7 +4,9 @@
         Check if automated security fixes are enabled for a repository
 
         .DESCRIPTION
-        Shows whether automated security fixes are enabled, disabled or paused for a repository. The authenticated user must have admin read access to the repository. For more information, see "[Configuring automated security fixes](https://docs.github.com/articles/configuring-automated-security-fixes)".
+        Shows whether automated security fixes are enabled, disabled or paused for a repository.
+        The authenticated user must have admin read access to the repository. For more information, see
+        "[Configuring automated security fixes](https://docs.github.com/articles/configuring-automated-security-fixes)".
 
         .EXAMPLE
         Get-GitHubRepositorySecurityFixes -Owner 'PSModule' -Repo 'GitHub'
@@ -28,7 +30,7 @@
     )
 
     $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-    Remove-HashtableEntries -Hashtable $body -RemoveNames 'Owner','Repo' -RemoveTypes 'SwitchParameter'
+    Remove-HashtableEntries -Hashtable $body -RemoveNames 'Owner', 'Repo' -RemoveTypes 'SwitchParameter'
 
     $inputObject = @{
         APIEndpoint = "/repos/$Owner/$Repo/automated-security-fixes"

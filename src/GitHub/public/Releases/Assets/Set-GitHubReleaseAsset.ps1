@@ -9,7 +9,8 @@
         .EXAMPLE
         Set-GitHubReleaseAsset -Owner 'octocat' -Repo 'hello-world' -ID '1234567' -Name 'new_asset_name' -Label 'new_asset_label'
 
-        Updates the release asset with the ID '1234567' for the repository 'octocat/hello-world' with the new name 'new_asset_name' and label 'new_asset_label'.
+        Updates the release asset with the ID '1234567' for the repository 'octocat/hello-world' with the new name 'new_asset_name' and
+        label 'new_asset_label'.
 
         .NOTES
         https://docs.github.com/rest/releases/assets#update-a-release-asset
@@ -46,7 +47,7 @@
     )
 
     $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-    Remove-HashtableEntries -Hashtable $body -RemoveNames 'Owner', 'Repo','ID'
+    Remove-HashtableEntries -Hashtable $body -RemoveNames 'Owner', 'Repo', 'ID'
 
     $inputObject = @{
         APIEndpoint = "/repos/$Owner/$Repo/releases/assets/$ID"

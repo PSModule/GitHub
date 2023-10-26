@@ -29,6 +29,7 @@
 
     #>
     [CmdletBinding()]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     param (
         # The account owner of the repository. The name is not case sensitive.
         [Parameter()]
