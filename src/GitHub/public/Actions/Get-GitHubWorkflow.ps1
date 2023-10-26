@@ -29,12 +29,6 @@
         [Parameter()]
         [string] $Repo = (Get-GitHubConfig -Name Repo),
 
-        [Parameter(ParameterSetName = 'ByName')]
-        [string] $Name,
-
-        [Parameter(ParameterSetName = 'ByID')]
-        [string] $ID,
-
         # The number of results per page (max 100).
         [Parameter()]
         [ValidateRange(1, 100)]
