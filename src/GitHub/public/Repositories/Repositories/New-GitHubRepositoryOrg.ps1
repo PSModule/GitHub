@@ -39,13 +39,25 @@
         Desired language or platform .gitignore template to apply. Use the name of the template without the extension. For example, "Haskell".
 
         .PARAMETER LicenseTemplate
-        Choose an open source license template that best suits your needs, and then use the license keyword as the license_template string. For example, "mit" or "mpl-2.0".
+        Choose an open source license template that best suits your needs, and then use the license keyword as the license_template string.
+        For example, "mit" or "mpl-2.0".
 
         .NOTES
         https://docs.github.com/rest/repos/repos#create-an-organization-repository
 
     #>
-    [CmdletBinding()]
+    [OutputType([pscustomobject])]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSUseDeclaredVarsMoreThanAssignments',
+        'GitignoreTemplate',
+        Justification = 'Parameter is used in dynamic parameter validation.'
+    )]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSUseDeclaredVarsMoreThanAssignments',
+        'LicenseTemplate',
+        Justification = 'Parameter is used in dynamic parameter validation.'
+    )]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         # The account owner of the repository. The name is not case sensitive.
         [Parameter()]
@@ -76,7 +88,8 @@
         [switch] $HasIssues,
 
         # Either true to enable projects for this repository or false to disable them.
-        # Note: If you're creating a repository in an organization that has disabled repository projects, the default is false, and if you pass true, the API returns an error.
+        # Note: If you're creating a repository in an organization that has disabled repository projects, the default is false,
+        # and if you pass true, the API returns an error.
         [Parameter()]
         [Alias('has_projects')]
         [switch] $HasProjects,
@@ -126,7 +139,8 @@
         [Alias('allow_auto_merge')]
         [switch] $AllowAutoMerge,
 
-        # Either true to allow automatically deleting head branches when pull requests are merged, or false to prevent automatic deletion. The authenticated user must be an organization owner to set this property to true.
+        # Either true to allow automatically deleting head branches when pull requests are merged, or false to prevent automatic deletion.
+        # The authenticated user must be an organization owner to set this property to true.
         [Parameter()]
         [Alias('delete_branch_on_merge')]
         [switch] $DeleteBranchOnMerge,
@@ -196,7 +210,6 @@
     }
 
     Process {
-
         $PSCmdlet.MyInvocation.MyCommand.Parameters.GetEnumerator() | ForEach-Object {
             $paramName = $_.Key
             $paramDefaultValue = Get-Variable -Name $paramName -ValueOnly -ErrorAction SilentlyContinue
@@ -236,8 +249,10 @@
             Body        = $body
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+        if ($PSCmdlet.ShouldProcess("Repository in organization $Owner", "Create")) {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
+            }
         }
     }
 }
