@@ -27,6 +27,11 @@
         https://docs.github.com/rest/users/users
     #>
     [OutputType([pscustomobject])]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSReviewUnusedParameter',
+        'All',
+        Justification = 'Parameter is used in dynamic parameter validation.'
+    )]
     [CmdletBinding(DefaultParameterSetName = '__DefaultSet')]
     param (
         # The handle for the GitHub user account.
