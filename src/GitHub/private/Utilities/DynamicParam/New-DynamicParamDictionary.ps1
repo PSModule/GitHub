@@ -11,6 +11,7 @@
 
         Returns a new RuntimeDefinedParameterDictionary
     #>
+    [OutputType([System.Management.Automation.RuntimeDefinedParameterDictionary])]
     [CmdletBinding()]
     param()
 
