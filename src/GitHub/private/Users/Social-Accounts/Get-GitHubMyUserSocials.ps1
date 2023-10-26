@@ -15,6 +15,7 @@
         https://docs.github.com/rest/users/social-accounts#list-social-accounts-for-the-authenticated-user
     #>
     [OutputType([pscustomobject])]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Private function, not exposed to user.')]
     [CmdletBinding()]
     param (
         # The number of results per page (max 100).

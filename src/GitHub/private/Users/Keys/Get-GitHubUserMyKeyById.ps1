@@ -5,7 +5,8 @@
 
         .DESCRIPTION
         View extended details for a single public SSH key.
-        Requires that you are authenticated via Basic Auth or via OAuth with at least `read:public_key` [scope](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+        Requires that you are authenticated via Basic Auth or via OAuth with at least `read:public_key`
+        [scope](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
 
         .EXAMPLE
         Get-GitHubUserMyKeyById -ID '1234567'

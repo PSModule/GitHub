@@ -4,8 +4,9 @@
         List SSH signing keys for the authenticated user
 
         .DESCRIPTION
-        Lists the SSH signing keys for the authenticated user's GitHub account.
-        You must authenticate with Basic Authentication, or you must authenticate with OAuth with at least `read:ssh_signing_key` scope. For more information, see "[Understanding scopes for OAuth apps](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/)."
+        Lists the SSH signing keys for the authenticated user's GitHub account. You must authenticate with
+        Basic Authentication, or you must authenticate with OAuth with at least `read:ssh_signing_key` scope. For more information, see
+        "[Understanding scopes for OAuth apps](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/)."
 
         .EXAMPLE
         Get-GitHubUserMySigningKey

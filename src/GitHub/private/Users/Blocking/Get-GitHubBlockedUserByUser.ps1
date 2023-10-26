@@ -26,7 +26,7 @@
     $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
 
     $inputObject = @{
-        APIEndpoint = "/user/blocks"
+        APIEndpoint = '/user/blocks'
         Method      = 'GET'
         Body        = $body
     }

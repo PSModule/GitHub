@@ -4,7 +4,8 @@
         Block a user from an organization
 
         .DESCRIPTION
-        Blocks the given user on behalf of the specified organization and returns a 204. If the organization cannot block the given user a 422 is returned.
+        Blocks the given user on behalf of the specified organization and returns a 204.
+        If the organization cannot block the given user a 422 is returned.
 
         .EXAMPLE
         Block-GitHubUserByOrganization -OrganizationName 'github' -Username 'octocat'

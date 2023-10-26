@@ -5,8 +5,8 @@
 
         .DESCRIPTION
         Lists repositories that the authenticated user has explicit permission (`:read`, `:write`, or `:admin`) to access.
-        The authenticated user has explicit permission to access repositories they own, repositories where they are a collaborator,
-        and repositories that they can access through an organization membership.
+        The authenticated user has explicit permission to access repositories they own, repositories where
+        they are a collaborator, and repositories that they can access through an organization membership.
 
         .EXAMPLE
         Get-GitHubMyRepositories
@@ -19,11 +19,21 @@
         Gets the private repositories for the authenticated user.
 
         .EXAMPLE
-        Get-GitHubMyRepositories -Visibility 'public' -Affiliation 'owner','collaborator' -Sort 'created' -Direction 'asc' -PerPage 100 -Since (Get-Date).AddYears(-5) -Before (Get-Date).AddDays(-1)
+        $param = @{
+            Visibility = 'public'
+            Affiliation = 'owner','collaborator'
+            Sort = 'created'
+            Direction = 'asc'
+            PerPage = 100
+            Since = (Get-Date).AddYears(-5)
+            Before = (Get-Date).AddDays(-1)
+        }
+        Get-GitHubMyRepositories @param
 
-        Gets the public repositories for the authenticated user that are owned by the authenticated user or that the authenticated user has been added to as a collaborator.
-        The results are sorted by creation date in ascending order and the results are limited to 100 repositories.
-        The results are limited to repositories created between 5 years ago and 1 day ago.
+        Gets the public repositories for the authenticated user that are owned by the authenticated user
+        or that the authenticated user has been added to as a collaborator. The results are sorted by
+        creation date in ascending order and the results are limited to 100 repositories. The results
+        are limited to repositories created between 5 years ago and 1 day ago.
 
         .EXAMPLE
         Get-GitHubMyRepositories -Type 'forks'
@@ -45,8 +55,8 @@
 
     #>
     [CmdletBinding(DefaultParameterSetName = 'Type')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Private function, not exposed to user.')]
     param (
-
         # Limit results to repositories with the specified visibility.
         [Parameter(
             ParameterSetName = 'Aff-Vis'
@@ -57,7 +67,8 @@
         # Comma-separated list of values. Can include:
         # - owner: Repositories that are owned by the authenticated user.
         # - collaborator: Repositories that the user has been added to as a collaborator.
-        # - organization_member: Repositories that the user has access to through being a member of an organization. This includes every repository on every team that the user is on.
+        # - organization_member: Repositories that the user has access to through being a member of an organization.
+        #   This includes every repository on every team that the user is on.
         # Default: owner, collaborator, organization_member
         [Parameter(
             ParameterSetName = 'Aff-Vis'

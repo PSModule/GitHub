@@ -16,6 +16,7 @@
 
     #>
     [OutputType([pscustomobject])]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Private function, not exposed to user.')]
     [CmdletBinding()]
     param (
         # The number of results per page (max 100).

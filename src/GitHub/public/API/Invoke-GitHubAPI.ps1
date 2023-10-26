@@ -90,8 +90,6 @@
         $AccessToken = (Get-GitHubConfig -Name AccessToken)
     }
 
-    $functionName = $MyInvocation.MyCommand.Name
-
     $headers = @{
         Accept                 = $Accept
         'X-GitHub-Api-Version' = $Version
@@ -158,10 +156,10 @@
             Write-Verbose '----------------------------------'
             Write-Verbose "StatusCode: $statusCode"
             Write-Verbose '----------------------------------'
-            Write-Verbose "Request:"
+            Write-Verbose 'Request:'
             $APICall | ConvertFrom-HashTable | Format-List | Out-String -Stream | Write-Verbose
             Write-Verbose '----------------------------------'
-            Write-Verbose "ResponseHeaders:"
+            Write-Verbose 'ResponseHeaders:'
             $responseHeaders | Format-List | Out-String -Stream | Write-Verbose
             Write-Verbose '----------------------------------'
 
@@ -173,13 +171,13 @@
             }
         }
     } catch {
-        Write-Error "Request:"
+        Write-Error 'Request:'
         $APICall | ConvertFrom-HashTable | Format-List | Out-String -Stream | Write-Error
 
-        Write-Error "Message:"
+        Write-Error 'Message:'
         $_.Exception.Message | ConvertFrom-HashTable | Format-List | Out-String -Stream | Write-Error
 
-        Write-Error "Response:"
+        Write-Error 'Response:'
         $_.Exception.Response | ConvertFrom-HashTable | Format-List | Out-String -Stream | Write-Error
         throw $errorMessage
     }

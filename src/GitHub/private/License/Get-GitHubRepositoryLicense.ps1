@@ -38,7 +38,7 @@ filter Get-GitHubRepositoryLicense {
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             $Response = $_.Response
-            $rawContent =  [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($Response.content))
+            $rawContent = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($Response.content))
             $Response | Add-Member -NotePropertyName 'raw_content' -NotePropertyValue $rawContent -Force
             $Response
         }

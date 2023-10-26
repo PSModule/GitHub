@@ -4,21 +4,21 @@
 
 function Initialize-SecretVault {
     <#
-    .SYNOPSIS
-    Initialize a secret vault.
+        .SYNOPSIS
+        Initialize a secret vault.
 
-    .DESCRIPTION
-    Initialize a secret vault. If the vault does not exist, it will be created.
+        .DESCRIPTION
+        Initialize a secret vault. If the vault does not exist, it will be created.
 
-    .EXAMPLE
-    Initialize-SecretVault -Name 'SecretStore' -Type 'Microsoft.PowerShell.SecretStore'
+        .EXAMPLE
+        Initialize-SecretVault -Name 'SecretStore' -Type 'Microsoft.PowerShell.SecretStore'
 
-    Initializes a secret vault named 'SecretStore' using the 'Microsoft.PowerShell.SecretStore' module.
+        Initializes a secret vault named 'SecretStore' using the 'Microsoft.PowerShell.SecretStore' module.
 
-    .NOTES
-    For more information about secret vaults, see https://learn.microsoft.com/en-us/powershell/utility-modules/secretmanagement/overview?view=ps-modules
+        .NOTES
+        For more information about secret vaults, see
+        https://learn.microsoft.com/en-us/powershell/utility-modules/secretmanagement/overview?view=ps-modules
     #>
-
     [OutputType([void])]
     [CmdletBinding()]
     param (

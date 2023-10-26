@@ -18,6 +18,7 @@
         https://docs.github.com/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps#device-flow
     #>
     [OutputType([void])]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'Is the CLI part of the module.')]
     [CmdletBinding()]
     param(
         # The Client ID of the GitHub App.

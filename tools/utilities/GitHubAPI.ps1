@@ -42,11 +42,11 @@ $response.paths.$path.$method.responses.'200'.content.'application/json'.schema.
 
 $response.components.schemas.PSobject.Properties | ForEach-Object {
     [pscustomobject]@{
-        Name = $_.Name
-        Title = $_.Value.title
-        Type = $_.Value.type
+        Name       = $_.Name
+        Title      = $_.Value.title
+        Type       = $_.Value.type
         Properties = $_.Value.properties
-        Required = $_.Value.required
+        Required   = $_.Value.required
     }
 }
 
