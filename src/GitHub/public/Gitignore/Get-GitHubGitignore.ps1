@@ -26,19 +26,19 @@ filter Get-GitHubGitignore {
     param ()
 
     DynamicParam {
-        $ParamDictionary = New-ParamDictionary
+        $DynamicParamDictionary = New-DynamicParamDictionary
 
         $dynParam = @{
-            Name             = 'Name'
-            ParameterSetName = 'Name'
-            Type             = [string]
-            Mandatory        = $true
-            ValidateSet      = Get-GitHubGitignoreList
-            ParamDictionary  = $ParamDictionary
+            Name                   = 'Name'
+            ParameterSetName       = 'Name'
+            Type                   = [string]
+            Mandatory              = $true
+            ValidateSet            = Get-GitHubGitignoreList
+            DynamicParamDictionary = $DynamicParamDictionary
         }
         New-DynamicParam @dynParam
 
-        return $ParamDictionary
+        return $DynamicParamDictionary
     }
 
     Process {

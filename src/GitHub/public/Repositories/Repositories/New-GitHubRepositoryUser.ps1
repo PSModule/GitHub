@@ -165,27 +165,27 @@
     )
 
     DynamicParam {
-        $ParamDictionary = New-ParamDictionary
+        $DynamicParamDictionary = New-DynamicParamDictionary
 
         $dynParam = @{
-            Name            = 'GitignoreTemplate'
-            Alias           = 'gitignore_template'
-            Type            = [string]
-            ValidateSet     = Get-GitHubGitignoreList
-            ParamDictionary = $ParamDictionary
+            Name                   = 'GitignoreTemplate'
+            Alias                  = 'gitignore_template'
+            Type                   = [string]
+            ValidateSet            = Get-GitHubGitignoreList
+            DynamicParamDictionary = $DynamicParamDictionary
         }
         New-DynamicParam @dynParam
 
         $dynParam2 = @{
-            Name            = 'LicenseTemplate'
-            Alias           = 'license_template'
-            Type            = [string]
-            ValidateSet     = Get-GitHubLicenseList | Select-Object -ExpandProperty key
-            ParamDictionary = $ParamDictionary
+            Name                   = 'LicenseTemplate'
+            Alias                  = 'license_template'
+            Type                   = [string]
+            ValidateSet            = Get-GitHubLicenseList | Select-Object -ExpandProperty key
+            DynamicParamDictionary = $DynamicParamDictionary
         }
         New-DynamicParam @dynParam2
 
-        return $ParamDictionary
+        return $DynamicParamDictionary
     }
 
     begin {
@@ -229,7 +229,7 @@
         Remove-HashtableEntries -Hashtable $body -NullOrEmptyValues
 
         $inputObject = @{
-            APIEndpoint = "/user/repos"
+            APIEndpoint = '/user/repos'
             Method      = 'POST'
             Body        = $body
         }

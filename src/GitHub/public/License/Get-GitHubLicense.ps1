@@ -44,19 +44,19 @@ filter Get-GitHubLicense {
     )
 
     DynamicParam {
-        $ParamDictionary = New-ParamDictionary
+        $DynamicParamDictionary = New-DynamicParamDictionary
 
         $dynParam = @{
-            Name             = 'Name'
-            ParameterSetName = 'Name'
-            Type             = [string]
-            Mandatory        = $true
-            ValidateSet      = Get-GitHubLicenseList | Select-Object -ExpandProperty Name
-            ParamDictionary  = $ParamDictionary
+            Name                   = 'Name'
+            ParameterSetName       = 'Name'
+            Type                   = [string]
+            Mandatory              = $true
+            ValidateSet            = Get-GitHubLicenseList | Select-Object -ExpandProperty Name
+            DynamicParamDictionary = $DynamicParamDictionary
         }
         New-DynamicParam @dynParam
 
-        return $ParamDictionary
+        return $DynamicParamDictionary
     }
 
     Process {

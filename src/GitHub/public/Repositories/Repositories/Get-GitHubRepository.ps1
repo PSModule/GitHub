@@ -125,7 +125,7 @@
     )
 
     DynamicParam {
-        $ParamDictionary = New-ParamDictionary
+        $DynamicParamDictionary = New-DynamicParamDictionary
 
         if ($PSCmdlet.ParameterSetName -in 'MyRepos_Type', 'ListByOrg', 'ListByUser') {
 
@@ -142,17 +142,17 @@
             }
 
             $dynParam = @{
-                Name             = 'Type'
-                ParameterSetName = $PSCmdlet.ParameterSetName
-                Type             = [string]
-                Mandatory        = $false
-                ValidateSet      = $ValidateSet
-                ParamDictionary  = $ParamDictionary
+                Name                   = 'Type'
+                ParameterSetName       = $PSCmdlet.ParameterSetName
+                Type                   = [string]
+                Mandatory              = $false
+                ValidateSet            = $ValidateSet
+                DynamicParamDictionary = $DynamicParamDictionary
             }
             New-DynamicParam @dynParam
         }
 
-        return $ParamDictionary
+        return $DynamicParamDictionary
     }
 
     Process {
