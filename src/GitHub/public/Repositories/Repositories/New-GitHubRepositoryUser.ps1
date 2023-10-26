@@ -44,7 +44,17 @@
         https://docs.github.com/rest/repos/repos#create-a-repository-for-the-authenticated-user
 
     #>
-    [CmdletBinding()]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSUseDeclaredVarsMoreThanAssignments',
+        'GitignoreTemplate',
+        Justification = 'Parameter is used in dynamic parameter validation.'
+    )]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSUseDeclaredVarsMoreThanAssignments',
+        'LicenseTemplate',
+        Justification = 'Parameter is used in dynamic parameter validation.'
+    )]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         # The name of the repository.
         [Parameter(Mandatory)]
@@ -234,8 +244,10 @@
             Body        = $body
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+        if ($PSCmdlet.ShouldProcess("Repository for user", 'Create')) {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
+            }
         }
     }
 }
