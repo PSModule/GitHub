@@ -36,7 +36,7 @@
     )
 
     $inputObject = @{
-        APIEndpoint = "repos/$Owner/$Repo/actions/runs/$ID"
+        APIEndpoint = "repos/$Owner/$Repo/actions/runs/$RunID"
         Method      = 'DELETE'
     }
 
