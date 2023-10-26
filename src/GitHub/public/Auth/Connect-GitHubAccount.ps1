@@ -41,6 +41,9 @@
     [Alias('Login-GitHub')]
     [Alias('Login-GH')]
     [OutputType([void])]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'AccessToken', Justification = 'Required for parameter set')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'Is the CLI part of the module.')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'Is the CLI part of the module.')]
     [CmdletBinding(DefaultParameterSetName = 'DeviceFlow')]
     param (
         # Choose between authentication methods, either OAuthApp or GitHubApp.
