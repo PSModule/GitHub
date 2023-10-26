@@ -40,7 +40,7 @@
     )
 
     $inputObject = @{
-        APIEndpoint = "/user/blocks/$Username"
+        APIEndpoint = "/orgs/$OrganizationName/blocks/$Username"
         Method      = 'DELETE'
     }
 
