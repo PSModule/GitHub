@@ -14,9 +14,8 @@
 
         .NOTES
         https://docs.github.com/rest/releases/assets#update-a-release-asset
-
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         # The account owner of the repository. The name is not case sensitive.
         [Parameter()]
@@ -55,6 +54,8 @@
         Body        = $requestBody
     }
 
-    (Invoke-GitHubAPI @inputObject).Response
+    if ($PSCmdlet.ShouldProcess("assets for release with ID [$ID] in [$Owner/$Repo]", 'Set')) {
+        (Invoke-GitHubAPI @inputObject).Response
+    }
 
 }
