@@ -18,7 +18,7 @@
         https://docs.github.com/rest/orgs/orgs#delete-an-organization
     #>
     [OutputType([pscustomobject])]
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         # The organization name. The name is not case sensitive.
         [Parameter(
@@ -37,6 +37,8 @@
         Method      = 'DELETE'
     }
 
-    (Invoke-GitHubAPI @inputObject).Response
+    if ($PSCmdlet.ShouldProcess("organization [$OrganizationName]", 'Delete')) {
+        (Invoke-GitHubAPI @inputObject).Response
+    }
 
 }
