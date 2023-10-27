@@ -23,7 +23,7 @@
     [Alias('Logoff-GitHub')]
     [Alias('Logoff-GH')]
     [OutputType([void])]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingRemove', '', Justification = 'Is the CLI part of the module.')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'Is the CLI part of the module.')]
     [CmdletBinding()]
     param ()
 
