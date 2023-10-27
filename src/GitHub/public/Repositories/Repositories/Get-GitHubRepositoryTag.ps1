@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryTags {
+﻿filter Get-GitHubRepositoryTag {
     <#
         .SYNOPSIS
         List repository tags
@@ -7,7 +7,7 @@
         List repository tags
 
         .EXAMPLE
-        Get-GitHubRepositoryTags -Owner 'PSModule' -Repo 'GitHub'
+        Get-GitHubRepositoryTag -Owner 'PSModule' -Repo 'GitHub'
 
         Gets all tags of the GitHub repository.
 
@@ -16,6 +16,7 @@
 
     #>
     [CmdletBinding()]
+    [Alias('Get-GitHubRepositoryTags')]
     param (
         # The account owner of the repository. The name is not case sensitive.
         [Parameter()]
