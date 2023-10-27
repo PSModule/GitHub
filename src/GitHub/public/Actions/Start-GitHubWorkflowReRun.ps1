@@ -1,34 +1,28 @@
 ﻿filter Start-GitHubWorkflowReRun {
     <#
         .SYNOPSIS
-        Short description
+        Re-run a workflow
 
         .DESCRIPTION
-        Long description
-
-        .PARAMETER Owner
-        Parameter description
-
-        .PARAMETER Repo
-        Parameter description
-
-        .PARAMETER ID
-        Parameter description
+        Re-runs your workflow run using its `run_id`. You can also specify a branch or tag name to re-run a workflow run from a branch
 
         .EXAMPLE
-        An example
+        Start-GitHubWorkflowReRun -Owner 'octocat' -Repo 'Hello-World' -ID 123456789
 
         .NOTES
         https://docs.github.com/rest/reference/actions#re-run-a-workflow
     #>
     [CmdletBinding()]
     param (
+        # The account owner of the repository. The name is not case sensitive.
         [Parameter()]
         [string] $Owner = (Get-GitHubConfig -Name Owner),
 
+        # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter()]
         [string] $Repo = (Get-GitHubConfig -Name Repo),
 
+        # The unique identifier of the workflow run.
         [Alias('workflow_id')]
         [Parameter(
             Mandatory,
@@ -42,6 +36,8 @@
         APIEndpoint = "/repos/$Owner/$Repo/actions/runs/$ID/rerun"
     }
 
-    (Invoke-GitHubAPI @inputObject).Response
+    if ($PSCmdlet.ShouldProcess("workflow with ID [$ID] in [$Owner/$Repo]", 'Re-run')) {
+        (Invoke-GitHubAPI @inputObject).Response
+    }
 
 }
