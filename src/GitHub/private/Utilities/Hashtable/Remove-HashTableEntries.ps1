@@ -19,6 +19,11 @@
         Remove keys with null or empty values
     #>
     [OutputType([void])]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSUseShouldProcessForStateChangingFunctions',
+        '',
+        Justification = 'Function does not change state.'
+    )]
     [CmdletBinding()]
     param (
         # The hashtable to remove entries from.

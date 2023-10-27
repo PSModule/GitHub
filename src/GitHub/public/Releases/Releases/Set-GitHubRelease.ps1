@@ -16,7 +16,7 @@
 
     #>
     [OutputType([pscustomobject])]
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         # The account owner of the repository. The name is not case sensitive.
         [Parameter()]
@@ -86,6 +86,8 @@
         Body        = $requestBody
     }
 
-    (Invoke-GitHubAPI @inputObject).Response
+    if ($PSCmdlet.ShouldProcess("release with ID [$ID] in [$Owner/$Repo]", "Update")) {
+        (Invoke-GitHubAPI @inputObject).Response
+    }
 
 }
