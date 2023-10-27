@@ -16,7 +16,7 @@
 
     #>
     [OutputType([pscustomobject])]
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         # Email addresses associated with the GitHub user account.
         [Parameter(
@@ -35,6 +35,8 @@
         Body        = $body
     }
 
-    $null = (Invoke-GitHubAPI @inputObject).Response
+    if ($PSCmdlet.ShouldProcess("Email addresses [$($Emails -join ', ')]", "Delete")) {
+        $null = (Invoke-GitHubAPI @inputObject).Response
+    }
 
 }
