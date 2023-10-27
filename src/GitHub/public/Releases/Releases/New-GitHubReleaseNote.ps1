@@ -1,4 +1,4 @@
-﻿filter New-GitHubReleaseNotes {
+﻿filter New-GitHubReleaseNote {
     <#
         .SYNOPSIS
         List releases
@@ -14,7 +14,7 @@
             Repo                  = 'hello-world'
             TagName               = 'v1.0.0'
         }
-        New-GitHubReleaseNotes @params
+        New-GitHubReleaseNote @params
 
         Creates a new release notes draft for the repository 'hello-world' owned by 'octocat' with the tag name 'v1.0.0'.
         In this example the tag 'v1.0.0' has to exist in the repository.
@@ -27,7 +27,7 @@
             TagName               = 'v1.0.0'
             TargetCommitish       = 'main'
         }
-        New-GitHubReleaseNotes @params
+        New-GitHubReleaseNote @params
 
         Creates a new release notes draft for the repository 'hello-world' owned by 'octocat' with the tag name 'v1.0.0'.
         In this example the tag 'v1.0.0' has to exist in the repository.
@@ -42,7 +42,7 @@
             PreviousTagName       = 'v0.9.2'
             ConfigurationFilePath = '.github/custom_release_config.yml'
         }
-        New-GitHubReleaseNotes @params
+        New-GitHubReleaseNote @params
 
         Creates a new release notes draft for the repository 'hello-world' owned by 'octocat' with the tag name 'v1.0.0'.
         The release notes will be based on the changes between the tags 'v0.9.2' and 'v1.0.0' and generated based on the
@@ -54,6 +54,7 @@
     #>
     [OutputType([pscustomobject])]
     [Alias('Generate-GitHubReleaseNotes')]
+    [Alias('New-GitHubReleaseNotes')]
     [CmdletBinding(SupportsShouldProcess)]
     param (
         # The account owner of the repository. The name is not case sensitive.
