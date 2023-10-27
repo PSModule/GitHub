@@ -1,4 +1,4 @@
-﻿function Get-GitHubStatusIncidents {
+﻿function Get-GitHubStatusIncident {
     <#
         .SYNOPSIS
         Gets the status of GitHub incidents
@@ -12,12 +12,12 @@
         Impact: None (black), Minor (yellow), Major (orange), or Critical (red)
 
         .EXAMPLE
-        Get-GitHubStatusIncidents
+        Get-GitHubStatusIncident
 
         Gets the status of GitHub incidents
 
         .EXAMPLE
-        Get-GitHubStatusIncidents -Unresolved
+        Get-GitHubStatusIncident -Unresolved
 
         Gets the status of GitHub incidents that are unresolved
 
@@ -25,6 +25,7 @@
         https://www.githubstatus.com/api#incidents
     #>
     [OutputType([pscustomobject[]])]
+    [Alias('Get-GitHubStatusIncidents')]
     [CmdletBinding()]
     param(
         # Gets the status of GitHub incidents that are unresolved
