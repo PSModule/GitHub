@@ -28,7 +28,7 @@
     #>
     [OutputType([void])]
     [Alias('Update-GitHubUser')]
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         # The new name of the user.
         [Parameter()]
@@ -71,6 +71,8 @@
         Method      = 'PATCH'
     }
 
-    (Invoke-GitHubAPI @inputObject).Response
+    if ($PSCmdlet.ShouldProcess('authenticated user', 'Set')) {
+        (Invoke-GitHubAPI @inputObject).Response
+    }
 
 }
