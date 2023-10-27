@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryTeams {
+﻿filter Get-GitHubRepositoryTeam {
     <#
         .SYNOPSIS
         List repository teams
@@ -15,7 +15,7 @@
         This endpoint is not compatible with fine-grained personal access tokens.
 
         .EXAMPLE
-        Get-GitHubRepositoryTeams -Owner 'PSModule' -Repo 'GitHub'
+        Get-GitHubRepositoryTeam -Owner 'PSModule' -Repo 'GitHub'
 
         Lists the teams that have access to the specified repository and that are also visible to the authenticated user.
 
@@ -24,6 +24,7 @@
 
     #>
     [CmdletBinding()]
+    [Alias('Get-GitHubRepositoryTeams')]
     param (
         # The account owner of the repository. The name is not case sensitive.
         [Parameter()]
