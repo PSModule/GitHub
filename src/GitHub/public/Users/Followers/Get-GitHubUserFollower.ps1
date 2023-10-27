@@ -1,4 +1,4 @@
-﻿filter Get-GitHubUserFollowers {
+﻿filter Get-GitHubUserFollower {
     <#
         .SYNOPSIS
         List followers of a given user or the authenticated user
@@ -7,12 +7,12 @@
         Lists the people following a given user or the authenticated user.
 
         .EXAMPLE
-        Get-GitHubUserFollowers
+        Get-GitHubUserFollower
 
         Gets all followers of the authenticated user.
 
         .EXAMPLE
-        Get-GitHubUserFollowers -Username 'octocat'
+        Get-GitHubUserFollower -Username 'octocat'
 
         Gets all followers of the user 'octocat'.
 
@@ -21,6 +21,7 @@
 
     #>
     [OutputType([pscustomobject])]
+    [Alias('Get-GitHubUserMyFollowers')]
     [CmdletBinding()]
     param (
         # The handle for the GitHub user account.
