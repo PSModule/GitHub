@@ -16,7 +16,7 @@
         .NOTES
         https://docs.github.com/rest/actions/workflow-runs#delete-a-workflow-run
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         # The account owner of the repository. The name is not case sensitive.
         [Parameter()]
@@ -40,6 +40,8 @@
         Method      = 'DELETE'
     }
 
-    (Invoke-GitHubAPI @inputObject).Response
+    if ($PSCmdlet.ShouldProcess("workflow run with ID [$RunID] in [$Owner/$Repo]", "Delete")) {
+        (Invoke-GitHubAPI @inputObject).Response
+    }
 
 }
