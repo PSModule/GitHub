@@ -102,12 +102,12 @@
     }
 
     $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-    Remove-HashtableEntries -Hashtable $body -RemoveNames 'Owner', 'Repo', 'ID', 'FilePath'
+    Remove-HashtableEntry -Hashtable $body -RemoveNames 'Owner', 'Repo', 'ID', 'FilePath'
 
     $body['name'] = $Name
     $body['label'] = $Label
 
-    Remove-HashtableEntries -Hashtable $body -NullOrEmptyValues
+    Remove-HashtableEntry -Hashtable $body -NullOrEmptyValues
 
     $release = Get-GitHubRelease -Owner $Owner -Repo $Repo -ID $ID
     $uploadURI = $release.upload_url -replace '{\?name,label}', "?name=$($Name)&label=$($Label)"

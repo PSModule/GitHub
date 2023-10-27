@@ -221,7 +221,7 @@
         }
 
         $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-        Remove-HashtableEntries -Hashtable $body -RemoveNames 'visibility' -RemoveTypes 'SwitchParameter'
+        Remove-HashtableEntry -Hashtable $body -RemoveNames 'visibility' -RemoveTypes 'SwitchParameter'
 
         $body['private'] = $Visibility -eq 'private'
         $body['has_issues'] = $HasIssues.IsPresent ? $HasIssues : $false
@@ -236,7 +236,7 @@
         $body['allow_auto_merge'] = $AllowAutoMerge.IsPresent ? $AllowAutoMerge : $false
         $body['delete_branch_on_merge'] = $DeleteBranchOnMerge.IsPresent ? $DeleteBranchOnMerge : $false
 
-        Remove-HashtableEntries -Hashtable $body -NullOrEmptyValues
+        Remove-HashtableEntry -Hashtable $body -NullOrEmptyValues
 
         $inputObject = @{
             APIEndpoint = '/user/repos'

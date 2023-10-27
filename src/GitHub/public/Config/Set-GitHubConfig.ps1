@@ -96,7 +96,7 @@
     $updateSecretMetadata = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable
     Write-Verbose "updateSecretMetadata : $($updateSecretMetadata | Out-String)"
     Write-Verbose "updateSecretMetadataType : $($updateSecretMetadata.GetType())"
-    Remove-HashTableEntries -Hashtable $updateSecretMetadata -KeepTypes $keepTypes -RemoveNames $removeKeys
+    Remove-HashtableEntry -Hashtable $updateSecretMetadata -KeepTypes $keepTypes -RemoveNames $removeKeys
     Write-Verbose "updateSecretMetadata : $($updateSecretMetadata | Out-String)"
 
     $newSecretMetadata = Join-Object -Main $newSecretMetadata -Overrides $updateSecretMetadata -AsHashtable
@@ -147,7 +147,7 @@
     $updateSecretMetadata = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable
     Write-Verbose "updateSecretMetadata : $($updateSecretMetadata | Out-String)"
     Write-Verbose "updateSecretMetadataType : $($updateSecretMetadata.GetType())"
-    Remove-HashTableEntries -Hashtable $updateSecretMetadata -KeepTypes $keepTypes -RemoveNames $removeKeys
+    Remove-HashtableEntry -Hashtable $updateSecretMetadata -KeepTypes $keepTypes -RemoveNames $removeKeys
     Write-Verbose "updateSecretMetadata : $($updateSecretMetadata | Out-String)"
 
     $newSecretMetadata = Join-Object -Main $newSecretMetadata -Overrides $updateSecretMetadata -AsHashtable

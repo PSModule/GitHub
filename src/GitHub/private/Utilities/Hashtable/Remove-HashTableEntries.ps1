@@ -1,4 +1,4 @@
-﻿filter Remove-HashtableEntries {
+﻿filter Remove-HashtableEntry {
     <#
         .SYNOPSIS
         Remove entries from a hashtable.
@@ -14,7 +14,7 @@
             'Key4' = 'Value4'
             'Key5' = ''
         }
-        $Hashtable | Remove-HashtableEntries -NullOrEmptyValues
+        $Hashtable | Remove-HashtableEntry -NullOrEmptyValues
 
         Remove keys with null or empty values
     #>

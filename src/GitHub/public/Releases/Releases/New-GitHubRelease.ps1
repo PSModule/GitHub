@@ -79,13 +79,13 @@
     )
 
     $requestBody = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-    Remove-HashtableEntries -Hashtable $requestBody -RemoveNames 'Owner', 'Repo', 'GenerateReleaseNotes', 'Draft', 'Prerelease'
+    Remove-HashtableEntry -Hashtable $requestBody -RemoveNames 'Owner', 'Repo', 'GenerateReleaseNotes', 'Draft', 'Prerelease'
     $requestBody = Join-Object -AsHashtable -Main $requestBody -Overrides @{
         generate_release_notes = $GenerateReleaseNotes.IsPresent
         draft                  = $Draft.IsPresent
         prerelease             = $Prerelease.IsPresent
     }
-    Remove-HashtableEntries -Hashtable $requestBody -NullOrEmptyValues
+    Remove-HashtableEntry -Hashtable $requestBody -NullOrEmptyValues
 
     $inputObject = @{
         APIEndpoint = "/repos/$Owner/$Repo/releases"

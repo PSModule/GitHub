@@ -169,7 +169,7 @@
                     Since     = $Since
                     Before    = $Before
                 }
-                Remove-HashTableEntries -Hashtable $params -NullOrEmptyValues
+                Remove-HashtableEntry -Hashtable $params -NullOrEmptyValues
                 Get-GitHubMyRepositories @params
             }
             'MyRepos_Aff-Vis' {
@@ -182,7 +182,7 @@
                     Since       = $Since
                     Before      = $Before
                 }
-                Remove-HashTableEntries -Hashtable $params -NullOrEmptyValues
+                Remove-HashtableEntry -Hashtable $params -NullOrEmptyValues
                 Get-GitHubMyRepositories @params
             }
             'ByName' {
@@ -190,14 +190,14 @@
                     Owner = $Owner
                     Repo  = $Repo
                 }
-                Remove-HashTableEntries -Hashtable $params -NullOrEmptyValues
+                Remove-HashtableEntry -Hashtable $params -NullOrEmptyValues
                 Get-GitHubRepositoryByName @params
             }
             'ListByID' {
                 $params = @{
                     Since = $SinceID
                 }
-                Remove-HashTableEntries -Hashtable $params -NullOrEmptyValues
+                Remove-HashtableEntry -Hashtable $params -NullOrEmptyValues
                 Get-GitHubRepositoryListByID @params
             }
             'ListByOrg' {
@@ -208,7 +208,7 @@
                     Direction = $Direction
                     PerPage   = $PerPage
                 }
-                Remove-HashTableEntries -Hashtable $params -NullOrEmptyValues
+                Remove-HashtableEntry -Hashtable $params -NullOrEmptyValues
                 Get-GitHubRepositoryListByOrg @params
             }
             'ListByUser' {
@@ -219,7 +219,7 @@
                     Direction = $Direction
                     PerPage   = $PerPage
                 }
-                Remove-HashTableEntries -Hashtable $params -NullOrEmptyValues
+                Remove-HashtableEntry -Hashtable $params -NullOrEmptyValues
                 Get-GitHubRepositoryListByUser @params
             }
         }

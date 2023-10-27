@@ -34,7 +34,7 @@
     )
 
     $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-    Remove-HashtableEntries -Hashtable $body -RemoveNames 'username'
+    Remove-HashtableEntry -Hashtable $body -RemoveNames 'username'
 
     $inputObject = @{
         APIEndpoint = "/users/$Username/following"

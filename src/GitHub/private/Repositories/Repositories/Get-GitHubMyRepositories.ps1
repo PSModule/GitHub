@@ -119,7 +119,7 @@
     }
 
     $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-    Remove-HashtableEntries -Hashtable $body -RemoveNames 'Affiliation', 'Since', 'Before'
+    Remove-HashtableEntry -Hashtable $body -RemoveNames 'Affiliation', 'Since', 'Before'
 
     if ($PSBoundParameters.ContainsKey('Affiliation')) {
         $body['affiliation'] = $Affiliation -join ','

@@ -219,7 +219,7 @@
     )
 
     $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-    Remove-HashTableEntries -Hashtable $body -RemoveNames 'organization_name'
+    Remove-HashtableEntry -Hashtable $body -RemoveNames 'organization_name'
 
     $inputObject = @{
         APIEndpoint = "/orgs/$OrganizationName"

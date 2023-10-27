@@ -95,7 +95,7 @@
         'X-GitHub-Api-Version' = $Version
     }
 
-    Remove-HashTableEntries -Hashtable $headers -NullOrEmptyValues
+    Remove-HashtableEntry -Hashtable $headers -NullOrEmptyValues
 
     if (-not $URI) {
         $URI = ("$ApiBaseUri/" -replace '/$', '') + ("/$ApiEndpoint" -replace '^/', '')
@@ -133,7 +133,7 @@
         OutFile                 = $DownloadFilePath
     }
 
-    $APICall | Remove-HashTableEntries -NullOrEmptyValues
+    $APICall | Remove-HashtableEntry -NullOrEmptyValues
 
     if ($Body) {
         # Use body to create the query string for certain situations
