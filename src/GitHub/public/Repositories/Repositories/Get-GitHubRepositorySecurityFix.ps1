@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositorySecurityFixes {
+﻿filter Get-GitHubRepositorySecurityFix {
     <#
         .SYNOPSIS
         Check if automated security fixes are enabled for a repository
@@ -9,7 +9,7 @@
         "[Configuring automated security fixes](https://docs.github.com/articles/configuring-automated-security-fixes)".
 
         .EXAMPLE
-        Get-GitHubRepositorySecurityFixes -Owner 'PSModule' -Repo 'GitHub'
+        Get-GitHubRepositorySecurityFix -Owner 'PSModule' -Repo 'GitHub'
 
         Gets the automated security fixes status for the GitHub repository.
 
@@ -18,6 +18,7 @@
 
     #>
     [CmdletBinding()]
+    [Alias('Get-GitHubRepoSecurityFixes')]
     param (
         # The account owner of the repository. The name is not case sensitive.
         [Parameter()]
