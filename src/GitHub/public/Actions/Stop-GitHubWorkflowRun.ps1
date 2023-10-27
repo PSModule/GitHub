@@ -37,7 +37,7 @@
         APIEndpoint = "/repos/$Owner/$Repo/actions/runs/$ID/cancel"
     }
 
-    if ($PSCmdlet.ShouldProcess("workflow run with ID [$ID] in [$Owner/$Repo]", "Cancel/Stop")) {
+    if ($PSCmdlet.ShouldProcess("workflow run with ID [$ID] in [$Owner/$Repo]", 'Cancel/Stop')) {
         (Invoke-GitHubAPI @inputObject).Response
     }
 
