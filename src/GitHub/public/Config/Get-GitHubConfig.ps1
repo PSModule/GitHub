@@ -42,7 +42,7 @@
     $AccessTokenData = (Get-SecretInfo -Name "$prefix`AccessToken").Metadata | ConvertFrom-HashTable | ConvertTo-HashTable
     $metadata = Join-Object -Main $RefreshTokenData -Overrides $AccessTokenData -AsHashtable
 
-    switch($Name) {
+    switch ($Name) {
         'AccessToken' {
             Get-Secret -Name "$prefix`AccessToken"
         }

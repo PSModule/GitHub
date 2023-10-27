@@ -30,7 +30,7 @@
     )
 
     $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-    Remove-HashtableEntry -Hashtable $body -RemoveNames 'Owner','Repo' -RemoveTypes 'SwitchParameter'
+    Remove-HashtableEntry -Hashtable $body -RemoveNames 'Owner', 'Repo' -RemoveTypes 'SwitchParameter'
 
     $inputObject = @{
         APIEndpoint = "/repos/$Owner/$Repo/topics"
