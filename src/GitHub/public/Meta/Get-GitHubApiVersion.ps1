@@ -1,4 +1,4 @@
-﻿filter Get-GitHubApiVersions {
+﻿filter Get-GitHubApiVersion {
     <#
         .SYNOPSIS
         Get all API versions.
@@ -7,7 +7,7 @@
         Get all supported GitHub API versions.
 
         .EXAMPLE
-        Get-GitHubApiVersions
+        Get-GitHubApiVersion
 
         Get all supported GitHub API versions.
 
