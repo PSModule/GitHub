@@ -1,4 +1,4 @@
-﻿function Get-GitHubStatusComponents {
+﻿function Get-GitHubStatusComponent {
     <#
         .SYNOPSIS
         Gets the status of GitHub components
@@ -7,7 +7,7 @@
         Get the components for the page. Each component is listed along with its status - one of operational, degraded_performance, partial_outage, or major_outage.
 
         .EXAMPLE
-        Get-GitHubStatusComponents
+        Get-GitHubStatusComponent
 
         Gets the status of GitHub components
 
@@ -15,6 +15,7 @@
         https://www.githubstatus.com/api#components
     #>
     [OutputType([pscustomobject[]])]
+    [Alias('Get-GitHubStatusComponents')]
     [CmdletBinding()]
     param()
 
