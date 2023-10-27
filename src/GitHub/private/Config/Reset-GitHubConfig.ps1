@@ -58,7 +58,7 @@
             }
         }
     }
-    if ($PSCmdlet.ShouldProcess("Module config", "Reset")) {
+    if ($PSCmdlet.ShouldProcess('Module config', 'Reset')) {
         Set-GitHubConfig @Settings
     }
 }

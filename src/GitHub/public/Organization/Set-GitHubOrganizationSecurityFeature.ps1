@@ -22,7 +22,8 @@
         https://docs.github.com/rest/orgs/orgs#enable-or-disable-a-security-feature-for-an-organization
     #>
     [OutputType([pscustomobject])]
-    [CmdletBinding()]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Long link in notes.')]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         # The organization name. The name is not case sensitive.
         [Parameter(Mandatory)]
@@ -34,19 +35,37 @@
         # The security feature to enable or disable.
         [Parameter(Mandatory)]
         [Alias('security_product')]
-        [ValidateSet('dependency_graph', 'dependabot_alerts', 'dependabot_security_updates', 'advanced_security', 'code_scanning_default_setup', 'secret_scanning', 'secret_scanning_push_protection')]
+        [ValidateSet(
+            'dependency_graph',
+            'dependabot_alerts',
+            'dependabot_security_updates',
+            'advanced_security',
+            'code_scanning_default_setup',
+            'secret_scanning',
+            'secret_scanning_push_protection'
+        )]
         [string] $SecurityProduct,
 
         # The action to take.
-        # enable_all means to enable the specified security feature for all repositories in the organization. disable_all means to disable the specified security feature for all repositories in the organization.
+        # enable_all means to enable the specified security feature for all repositories in the organization. disable_all
+        # means to disable the specified security feature for all repositories in the organization.
         [Parameter(Mandatory)]
-        [ValidateSet('enable_all', 'disable_all')]
+        [ValidateSet(
+            'enable_all',
+            'disable_all'
+        )]
         [string] $Enablement,
 
-        # CodeQL query suite to be used. If you specify the query_suite parameter, the default setup will be configured with this query suite only on all repositories that didn't have default setup already configured. It will not change the query suite on repositories that already have default setup configured. If you don't specify any query_suite in your request, the preferred query suite of the organization will be applied.
+        # CodeQL query suite to be used. If you specify the query_suite parameter, the default setup will be configured with
+        # this query suite only on all repositories that didn't have default setup already configured. It will not change the
+        # query suite on repositories that already have default setup configured. If you don't specify any query_suite in your
+        # request, the preferred query suite of the organization will be applied.
         [Parameter()]
         [Alias('query_suite')]
-        [ValidateSet('default', 'extended')]
+        [ValidateSet(
+            'default',
+            'extended'
+        )]
         [string] $QuerySuite
     )
 
@@ -60,6 +79,8 @@
         Body        = $body
     }
 
-    (Invoke-GitHubAPI @inputObject).Response
+    if ($PSCmdlet.ShouldProcess("security feature [$SecurityProduct] on organization [$OrganizationName]", "Set")) {
+        (Invoke-GitHubAPI @inputObject).Response
+    }
 
 }
