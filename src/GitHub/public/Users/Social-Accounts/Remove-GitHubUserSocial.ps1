@@ -1,4 +1,4 @@
-﻿filter Remove-GitHubUserSocials {
+﻿filter Remove-GitHubUserSocial {
     <#
         .SYNOPSIS
         Delete social accounts for the authenticated user
@@ -10,12 +10,13 @@
         Parameter description
 
         .EXAMPLE
-        Remove-GitHubUserSocials -AccountUrls 'https://twitter.com/MyTwitterAccount'
+        Remove-GitHubUserSocial -AccountUrls 'https://twitter.com/MyTwitterAccount'
 
         .NOTES
         https://docs.github.com/rest/users/social-accounts#delete-social-accounts-for-the-authenticated-user
     #>
     [OutputType([void])]
+    [Alias('Remove-GitHubUserSocials')]
     [CmdletBinding(SupportsShouldProcess)]
     param (
         # Full URLs for the social media profiles to add.
@@ -32,7 +33,7 @@
         Method      = 'DELETE'
     }
 
-    if ($PSCmdlet.ShouldProcess("Social accounts [$($AccountUrls -join ', ')]", "Delete")) {
+    if ($PSCmdlet.ShouldProcess("Social accounts [$($AccountUrls -join ', ')]", 'Delete')) {
         $null = (Invoke-GitHubAPI @inputObject).Response
     }
 

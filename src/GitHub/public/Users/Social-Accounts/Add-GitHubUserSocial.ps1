@@ -1,4 +1,4 @@
-﻿filter Add-GitHubUserSocials {
+﻿filter Add-GitHubUserSocial {
     <#
         .SYNOPSIS
         Add social accounts for the authenticated user
@@ -7,7 +7,7 @@
         Add one or more social accounts to the authenticated user's profile. This endpoint is accessible with the `user` scope.
 
         .EXAMPLE
-        Add-GitHubUserSocials -AccountUrls 'https://twitter.com/MyTwitterAccount', 'https://www.linkedin.com/company/MyCompany'
+        Add-GitHubUserSocial -AccountUrls 'https://twitter.com/MyTwitterAccount', 'https://www.linkedin.com/company/MyCompany'
 
         Adds the Twitter and LinkedIn accounts to the authenticated user's profile.
 
@@ -15,6 +15,7 @@
         https://docs.github.com/rest/users/social-accounts#add-social-accounts-for-the-authenticated-user
     #>
     [OutputType([void])]
+    [Alias('Add-GitHubUserSocials')]
     [CmdletBinding()]
     param (
         # Full URLs for the social media profiles to add.
