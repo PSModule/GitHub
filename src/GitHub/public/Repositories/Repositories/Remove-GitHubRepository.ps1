@@ -16,9 +16,8 @@
 
         .NOTES
         https://docs.github.com/rest/repos/repos#delete-a-repository
-
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
@@ -36,8 +35,10 @@
         Method      = 'DELETE'
     }
 
-    Invoke-GitHubAPI @inputObject | ForEach-Object {
-        Write-Output $_.Response
+    if ($PSCmdlet.ShouldProcess("repo [$Owner/$Repo]", "Delete")) {
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
+        }
     }
 
 }
