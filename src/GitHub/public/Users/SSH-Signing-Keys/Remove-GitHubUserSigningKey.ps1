@@ -34,7 +34,7 @@
         Method      = 'DELETE'
     }
 
-    if ($PSCmdlet.ShouldProcess("SSH signing key with ID [$ID]", "Delete")) {
+    if ($PSCmdlet.ShouldProcess("SSH signing key with ID [$ID]", 'Delete')) {
         $null = (Invoke-GitHubAPI @inputObject).Response
     }
 

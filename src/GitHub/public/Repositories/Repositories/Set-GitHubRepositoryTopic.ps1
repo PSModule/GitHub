@@ -42,7 +42,7 @@
         Body        = $body
     }
 
-    if ($PSCmdlet.ShouldProcess("topics for repo [$Owner/$Repo]", "Set")) {
+    if ($PSCmdlet.ShouldProcess("topics for repo [$Owner/$Repo]", 'Set')) {
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             Write-Output $_.Response.names
         }

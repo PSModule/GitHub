@@ -33,7 +33,7 @@
         Method      = 'DELETE'
     }
 
-    if ($PSCmdlet.ShouldProcess("GPG key with ID [$ID]", "Delete")) {
+    if ($PSCmdlet.ShouldProcess("GPG key with ID [$ID]", 'Delete')) {
         $null = (Invoke-GitHubAPI @inputObject).Response
     }
 

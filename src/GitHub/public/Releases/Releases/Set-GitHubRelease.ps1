@@ -16,6 +16,7 @@
 
     #>
     [OutputType([pscustomobject])]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [CmdletBinding(SupportsShouldProcess)]
     param (
         # The account owner of the repository. The name is not case sensitive.
@@ -66,7 +67,9 @@
         [Alias('discussion_category_name')]
         [string] $DiscussionCategoryName,
 
-        # Specifies whether this release should be set as the latest release for the repository. Drafts and prereleases cannot be set as latest. Defaults to true for newly published releases. legacy specifies that the latest release should be determined based on the release creation date and higher semantic version.
+        # Specifies whether this release should be set as the latest release for the repository. Drafts and prereleases cannot be set as latest.
+        # Defaults to true for newly published releases. legacy specifies that the latest release should be determined based on the release creation
+        # date and higher semantic version.
         [Parameter()]
         [Alias('make_latest')]
         [ValidateSet('true', 'false', 'legacy')]
@@ -86,7 +89,7 @@
         Body        = $requestBody
     }
 
-    if ($PSCmdlet.ShouldProcess("release with ID [$ID] in [$Owner/$Repo]", "Update")) {
+    if ($PSCmdlet.ShouldProcess("release with ID [$ID] in [$Owner/$Repo]", 'Update')) {
         (Invoke-GitHubAPI @inputObject).Response
     }
 

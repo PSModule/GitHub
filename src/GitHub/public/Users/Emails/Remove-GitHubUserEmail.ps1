@@ -30,12 +30,12 @@
     $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
 
     $inputObject = @{
-        APIEndpoint = "/user/emails"
+        APIEndpoint = '/user/emails'
         Method      = 'DELETE'
         Body        = $body
     }
 
-    if ($PSCmdlet.ShouldProcess("Email addresses [$($Emails -join ', ')]", "Delete")) {
+    if ($PSCmdlet.ShouldProcess("Email addresses [$($Emails -join ', ')]", 'Delete')) {
         $null = (Invoke-GitHubAPI @inputObject).Response
     }
 

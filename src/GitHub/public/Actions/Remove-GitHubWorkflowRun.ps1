@@ -40,7 +40,7 @@
         Method      = 'DELETE'
     }
 
-    if ($PSCmdlet.ShouldProcess("workflow run with ID [$RunID] in [$Owner/$Repo]", "Delete")) {
+    if ($PSCmdlet.ShouldProcess("workflow run with ID [$RunID] in [$Owner/$Repo]", 'Delete')) {
         (Invoke-GitHubAPI @inputObject).Response
     }
 

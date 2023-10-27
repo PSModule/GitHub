@@ -33,7 +33,7 @@
         Method      = 'DELETE'
     }
 
-    if ($PSCmdlet.ShouldProcess("User [$Username]", "Unfollow")) {
+    if ($PSCmdlet.ShouldProcess("User [$Username]", 'Unfollow')) {
         $null = (Invoke-GitHubAPI @inputObject).Response
     }
 

@@ -59,7 +59,7 @@
         Body        = $body
     }
 
-    if ($PSCmdlet.ShouldProcess("workflow with ID [$ID] in [$Owner/$Repo]", "Start")) {
+    if ($PSCmdlet.ShouldProcess("workflow with ID [$ID] in [$Owner/$Repo]", 'Start')) {
         (Invoke-GitHubAPI @inputObject).Response
     }
 

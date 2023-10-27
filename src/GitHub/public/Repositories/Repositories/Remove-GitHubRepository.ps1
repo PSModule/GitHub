@@ -35,7 +35,7 @@
         Method      = 'DELETE'
     }
 
-    if ($PSCmdlet.ShouldProcess("repo [$Owner/$Repo]", "Delete")) {
+    if ($PSCmdlet.ShouldProcess("repo [$Owner/$Repo]", 'Delete')) {
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             Write-Output $_.Response
         }

@@ -33,7 +33,7 @@
     $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
 
     $inputObject = @{
-        APIEndpoint = "/user/emails"
+        APIEndpoint = '/user/emails'
         Method      = 'POST'
         Body        = $body
     }

@@ -79,7 +79,7 @@
         Body        = $body
     }
 
-    if ($PSCmdlet.ShouldProcess("security feature [$SecurityProduct] on organization [$OrganizationName]", "Set")) {
+    if ($PSCmdlet.ShouldProcess("security feature [$SecurityProduct] on organization [$OrganizationName]", 'Set')) {
         (Invoke-GitHubAPI @inputObject).Response
     }
 

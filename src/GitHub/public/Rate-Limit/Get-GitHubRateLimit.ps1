@@ -6,7 +6,8 @@
         .DESCRIPTION
         **Note:** Accessing this endpoint does not count against your REST API rate limit.
 
-        Some categories of endpoints have custom rate limits that are separate from the rate limit governing the other REST API endpoints. For this reason, the API response categorizes your rate limit. Under `resources`, you'll see objects relating to different categories:
+        Some categories of endpoints have custom rate limits that are separate from the rate limit governing the other REST API endpoints.
+        For this reason, the API response categorizes your rate limit. Under `resources`, you'll see objects relating to different categories:
         * The `core` object provides your rate limit status for all non-search-related resources in the REST API.
         * The `search` object provides your rate limit status for the REST API for searching (excluding code searches). For more information, see "[Search](https://docs.github.com/rest/search)."
         * The `code_search` object provides your rate limit status for the REST API for searching code. For more information, see "[Search code](https://docs.github.com/rest/search/search#search-code)."
@@ -17,7 +18,8 @@
         * The `actions_runner_registration` object provides your rate limit status for registering self-hosted runners in GitHub Actions. For more information, see "[Self-hosted runners](https://docs.github.com/rest/actions/self-hosted-runners)."
         * The `source_import` object is no longer in use for any API endpoints, and it will be removed in the next API version. For more information about API versions, see "[API Versions](https://docs.github.com/rest/overview/api-versions)."
 
-        **Note:** The `rate` object is deprecated. If you're writing new API client code or updating existing code, you should use the `core` object instead of the `rate` object. The `core` object contains the same information that is present in the `rate` object.
+        **Note:** The `rate` object is deprecated. If you're writing new API client code or updating existing code, you should use the `core` object
+        instead of the `rate` object. The `core` object contains the same information that is present in the `rate` object.
 
         .EXAMPLE
         Get-GitHubRateLimit
@@ -29,11 +31,12 @@
 
     #>
     [OutputType([pscustomobject])]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [CmdletBinding()]
     param ()
 
     $inputObject = @{
-        APIEndpoint = "/rate_limit"
+        APIEndpoint = '/rate_limit'
         Method      = 'GET'
     }
 

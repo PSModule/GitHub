@@ -244,7 +244,7 @@
             Body        = $body
         }
 
-        if ($PSCmdlet.ShouldProcess("Repository for user", 'Create')) {
+        if ($PSCmdlet.ShouldProcess('Repository for user', 'Create')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }

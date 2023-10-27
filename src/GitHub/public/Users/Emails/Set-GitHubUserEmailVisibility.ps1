@@ -36,12 +36,12 @@
     $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
 
     $inputObject = @{
-        APIEndpoint = "/user/email/visibility"
+        APIEndpoint = '/user/email/visibility'
         Method      = 'PATCH'
         Body        = $body
     }
 
-    if ($PSCmdlet.ShouldProcess("Email visibility [$Visibility]", "Set")) {
+    if ($PSCmdlet.ShouldProcess("Email visibility [$Visibility]", 'Set')) {
         $null = (Invoke-GitHubAPI @inputObject).Response
     }
 

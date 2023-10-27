@@ -39,7 +39,7 @@
         Method      = 'DELETE'
     }
 
-    if ($PSCmdlet.ShouldProcess("Release with ID [$ID] in [$Owner/$Repo]", "Delete")) {
+    if ($PSCmdlet.ShouldProcess("Release with ID [$ID] in [$Owner/$Repo]", 'Delete')) {
         (Invoke-GitHubAPI @inputObject).Response
     }
 
