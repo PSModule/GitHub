@@ -12,7 +12,7 @@
         .NOTES
         https://docs.github.com/rest/reference/actions#re-run-a-workflow
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         # The account owner of the repository. The name is not case sensitive.
         [Parameter()]
