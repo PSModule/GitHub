@@ -35,7 +35,7 @@ Get-GitHubRepoTeams
 
 (Get-GitHubWorkflow).count
 
-Get-GitHubWorkflow | Select-Object -first 1 -Property *
+Get-GitHubWorkflow | Select-Object -First 1 -Property *
 
 Get-GitHubWorkflow | Select-Object Name, state
 Get-GitHubWorkflow | Where-Object state -NE disabled_manually | Disable-GitHubWorkflow
@@ -58,12 +58,12 @@ Get-GitHubWorkflowRun | Remove-GitHubWorkflowRun
 
 Get-GitHubWorkflowRun | Select-Object -Property name, display_title, created_at, run_started_at, updated_at, @{name = 'duration'; expression = { $_.updated_at - $_.run_started_at } }, @{name = 'wait_duration'; expression = { $_.updated_at - $_.created_at } } | Format-Table -AutoSize
 
-Get-GitHubWorkflowRun | Where-Object run_started_at -le (Get-Date).AddDays(-1) | Remove-GitHubWorkflowRun
+Get-GitHubWorkflowRun | Where-Object run_started_at -LE (Get-Date).AddDays(-1) | Remove-GitHubWorkflowRun
 
 
 Get-GitHubWorkflow | Where-Object name -NotLike '.*' | Start-GitHubWorkflow -Inputs @{
-    staticValidation = $true
+    staticValidation     = $true
     deploymentValidation = $false
-    removeDeployment = $true
-    prerelease = $false
+    removeDeployment     = $true
+    prerelease           = $false
 }
