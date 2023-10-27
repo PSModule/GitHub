@@ -5,7 +5,8 @@
 
         .DESCRIPTION
         Removes a public SSH key from the authenticated user's GitHub account.
-        Requires that you are authenticated via Basic Auth or via OAuth with at least `admin:public_key` [scope](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+        Requires that you are authenticated via Basic Auth or via OAuth with at least `admin:public_key`
+        [scope](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
 
         .EXAMPLE
         Remove-GitHubUserKey -ID '1234567'
@@ -17,7 +18,7 @@
 
     #>
     [OutputType([pscustomobject])]
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         # The unique identifier of the key.
         [Parameter(
@@ -32,6 +33,8 @@
         Method      = 'DELETE'
     }
 
-    $null = (Invoke-GitHubAPI @inputObject).Response
+    if ($PSCmdlet.ShouldProcess("Key with ID [$ID]", "Delete")) {
+        $null = (Invoke-GitHubAPI @inputObject).Response
+    }
 
 }

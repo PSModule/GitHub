@@ -16,7 +16,7 @@
         https://docs.github.com/rest/users/social-accounts#delete-social-accounts-for-the-authenticated-user
     #>
     [OutputType([void])]
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         # Full URLs for the social media profiles to add.
         [Parameter(Mandatory)]
@@ -32,6 +32,8 @@
         Method      = 'DELETE'
     }
 
-    (Invoke-GitHubAPI @inputObject).Response
+    if ($PSCmdlet.ShouldProcess("Social accounts [$($AccountUrls -join ', ')]", "Delete")) {
+        $null = (Invoke-GitHubAPI @inputObject).Response
+    }
 
 }
