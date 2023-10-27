@@ -1,13 +1,15 @@
-﻿filter Disable-GitHubRepositorySecurityFixes {
+﻿filter Disable-GitHubRepositorySecurityFix {
     <#
         .SYNOPSIS
         Disable automated security fixes
 
         .DESCRIPTION
-        Disables automated security fixes for a repository. The authenticated user must have admin access to the repository. For more information, see "[Configuring automated security fixes](https://docs.github.com/articles/configuring-automated-security-fixes)".
+        Disables automated security fixes for a repository. The authenticated user must have admin access to the repository.
+        For more information, see
+        "[Configuring automated security fixes](https://docs.github.com/articles/configuring-automated-security-fixes)".
 
         .EXAMPLE
-        Disable-GitHubRepositorySecurityFixes -Owner 'PSModule' -Repo 'GitHub'
+        Disable-GitHubRepositorySecurityFix -Owner 'PSModule' -Repo 'GitHub'
 
         Disables automated security fixes for the repository.
 
@@ -16,6 +18,7 @@
 
     #>
     [CmdletBinding()]
+    [Alias('Disable-GitHubRepositorySecurityFixes')]
     param (
         # The account owner of the repository. The name is not case sensitive.
         [Parameter()]
