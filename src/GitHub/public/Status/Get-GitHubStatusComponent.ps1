@@ -4,7 +4,8 @@
         Gets the status of GitHub components
 
         .DESCRIPTION
-        Get the components for the page. Each component is listed along with its status - one of operational, degraded_performance, partial_outage, or major_outage.
+        Get the components for the page. Each component is listed along with its status - one of operational,
+        degraded_performance, partial_outage, or major_outage.
 
         .EXAMPLE
         Get-GitHubStatusComponent

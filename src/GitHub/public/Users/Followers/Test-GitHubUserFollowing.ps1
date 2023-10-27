@@ -1,4 +1,4 @@
-﻿filter Test-GitHubUserFollows {
+﻿filter Test-GitHubUserFollowing {
     <#
         .SYNOPSIS
         Check if a given user or the authenticated user follows a person
@@ -8,13 +8,13 @@
         Returns a 404 if the user is not followed by a given user or the authenticated user.
 
         .EXAMPLE
-        Test-GitHubUserFollows -Follows 'octocat'
-        Test-GitHubUserFollows 'octocat'
+        Test-GitHubUserFollowing -Follows 'octocat'
+        Test-GitHubUserFollowing 'octocat'
 
         Checks if the authenticated user follows the user 'octocat'.
 
         .EXAMPLE
-        Test-GitHubUserFollows -Username 'octocat' -Follows 'ratstallion'
+        Test-GitHubUserFollowing -Username 'octocat' -Follows 'ratstallion'
 
         Checks if the user 'octocat' follows the user 'ratstallion'.
 
@@ -24,6 +24,7 @@
 
     #>
     [OutputType([bool])]
+    [Alias('Test-GitHubUserFollows')]
     [CmdletBinding()]
     param (
         # The handle for the GitHub user account we want to check if is being followed.
