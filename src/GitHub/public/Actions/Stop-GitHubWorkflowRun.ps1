@@ -1,27 +1,20 @@
 ﻿filter Stop-GitHubWorkflowRun {
     <#
         .SYNOPSIS
-        Short description
+        Cancel a workflow run
 
         .DESCRIPTION
-        Long description
-
-        .PARAMETER Owner
-        Parameter description
-
-        .PARAMETER Repo
-        Parameter description
-
-        .PARAMETER ID
-        Parameter description
+        Cancels a workflow run using its `run_id`. You can use this endpoint to cancel a workflow run that is in progress or waiting
 
         .EXAMPLE
-        An example
+        Stop-GitHubWorkflowRun -Owner 'octocat' -Repo 'Hello-World' -ID 123456789
+
+        Cancels the workflow run with the ID 123456789 from the 'Hello-World' repository owned by 'octocat'
 
         .NOTES
         https://docs.github.com/rest/reference/actions#cancel-a-workflow-run
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     [alias('Cancel-GitHubWorkflowRun')]
     param (
         [Parameter()]
@@ -44,6 +37,8 @@
         APIEndpoint = "/repos/$Owner/$Repo/actions/runs/$ID/cancel"
     }
 
-    (Invoke-GitHubAPI @inputObject).Response
+    if ($PSCmdlet.ShouldProcess("workflow run with ID [$ID] in [$Owner/$Repo]", "Cancel/Stop")) {
+        (Invoke-GitHubAPI @inputObject).Response
+    }
 
 }
