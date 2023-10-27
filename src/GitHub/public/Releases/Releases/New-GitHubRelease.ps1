@@ -21,7 +21,7 @@
     #>
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         # The account owner of the repository. The name is not case sensitive.
         [Parameter()]
@@ -93,6 +93,8 @@
         Body        = $requestBody
     }
 
-    (Invoke-GitHubAPI @inputObject).Response
+    if ($PSCmdlet.ShouldProcess("$Owner/$Repo", 'Create a release')) {
+        (Invoke-GitHubAPI @inputObject).Response
+    }
 
 }

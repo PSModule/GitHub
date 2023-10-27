@@ -12,6 +12,10 @@
         Returns a new RuntimeDefinedParameterDictionary
     #>
     [OutputType([System.Management.Automation.RuntimeDefinedParameterDictionary])]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSUseShouldProcessForStateChangingFunctions', '',
+        Justification = 'Function does not change state.'
+    )]
     [CmdletBinding()]
     param()
 

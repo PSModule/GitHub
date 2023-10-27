@@ -54,7 +54,7 @@
     #>
     [OutputType([pscustomobject])]
     [Alias('Generate-GitHubReleaseNotes')]
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         # The account owner of the repository. The name is not case sensitive.
         [Parameter()]
@@ -101,6 +101,8 @@
         Body        = $body
     }
 
-    (Invoke-GitHubAPI @inputObject).Response
+    if ($PSCmdlet.ShouldProcess("$Owner/$Repo", 'Create release notes')) {
+        (Invoke-GitHubAPI @inputObject).Response
+    }
 
 }
