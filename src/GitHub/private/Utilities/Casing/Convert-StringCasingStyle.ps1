@@ -62,7 +62,9 @@
         'kebab-case' { ($words -join '-').ToLower() }
         'snake_case' { ($words -join '_').ToLower() }
         'PascalCase' { ($words | ForEach-Object { $_.Substring(0, 1).ToUpper() + $_.Substring(1).ToLower() }) -join '' }
-        'camelCase' { $words[0].toLower() + (($words | Select-Object -Skip 1 | ForEach-Object { $_.Substring(0, 1).ToUpper() + $_.Substring(1) }) -join '') }
+        'camelCase' {
+            $words[0].toLower() + (($words | Select-Object -Skip 1 | ForEach-Object { $_.Substring(0, 1).ToUpper() + $_.Substring(1) }) -join '')
+        }
         'UPPER_SNAKE_CASE' { ($words -join '_').toUpper() }
         'UPPER-KEBAB-CASE' { ($words -join '-').toUpper() }
     }
