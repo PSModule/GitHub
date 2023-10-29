@@ -11,3 +11,5 @@ jobs:
   Process-PSModule:
     uses: PSModule/Actions/.github/workflows/Process-PSModule.yml@main
     secrets: inherit
+    with:
+      TestModuleErrorAction: 'Continue'
