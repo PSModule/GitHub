@@ -19,7 +19,6 @@ filter Get-GitHubLicenseByName {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSAvoidLongLines', '',
         Scope = 'function',
-        Target = 'Get-GitHubLicenseByName',
         Justification = 'Contains a long link.'
     )]
     [CmdletBinding()]
