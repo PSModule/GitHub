@@ -236,7 +236,7 @@
         $repo = $systemRepo.Value.Split('/')[-1]
         Set-GitHubConfig -Repo $repo
     }
-    
+
     Remove-Variable -Name tokenResponse -ErrorAction SilentlyContinue
     Remove-Variable -Name settings -ErrorAction SilentlyContinue
     [System.GC]::Collect()
