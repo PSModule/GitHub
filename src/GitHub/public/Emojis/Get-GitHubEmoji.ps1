@@ -32,7 +32,9 @@
         Method      = 'GET'
     }
 
-    $response = (Invoke-GitHubAPI @inputObject).Response
+    $response = Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Write-Output $_.Response
+    }
 
     if (Test-Path -Path $Destination) {
         $response.PSObject.Properties | ForEach-Object -Parallel {

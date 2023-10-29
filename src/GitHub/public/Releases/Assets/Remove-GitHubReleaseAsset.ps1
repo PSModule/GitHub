@@ -37,7 +37,9 @@
     }
 
     if ($PSCmdlet.ShouldProcess("Asset with ID [$ID] in [$Owner/$Repo]", 'Delete')) {
-        (Invoke-GitHubAPI @inputObject).Response
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
+        }
     }
 
 }

@@ -80,7 +80,9 @@
     }
 
     if ($PSCmdlet.ShouldProcess("security feature [$SecurityProduct] on organization [$OrganizationName]", 'Set')) {
-        (Invoke-GitHubAPI @inputObject).Response
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
+        }
     }
 
 }

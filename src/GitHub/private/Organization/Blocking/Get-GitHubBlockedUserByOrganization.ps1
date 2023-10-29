@@ -40,6 +40,7 @@
         Body        = $body
     }
 
-    (Invoke-GitHubAPI @inputObject).Response
-
+    Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Write-Output $_.Response
+    }
 }

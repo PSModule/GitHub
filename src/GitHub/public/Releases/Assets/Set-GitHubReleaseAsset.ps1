@@ -55,7 +55,9 @@
     }
 
     if ($PSCmdlet.ShouldProcess("assets for release with ID [$ID] in [$Owner/$Repo]", 'Set')) {
-        (Invoke-GitHubAPI @inputObject).Response
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
+        }
     }
 
 }

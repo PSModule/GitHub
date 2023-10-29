@@ -72,7 +72,9 @@
     }
 
     if ($PSCmdlet.ShouldProcess('authenticated user', 'Set')) {
-        (Invoke-GitHubAPI @inputObject).Response
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Write-Output $_.Response
+    }
     }
 
 }

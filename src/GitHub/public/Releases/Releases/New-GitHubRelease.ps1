@@ -94,7 +94,9 @@
     }
 
     if ($PSCmdlet.ShouldProcess("$Owner/$Repo", 'Create a release')) {
-        (Invoke-GitHubAPI @inputObject).Response
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
+        }
     }
 
 }

@@ -17,6 +17,8 @@ filter Get-GitHubRepoTeam {
         APIEndpoint = "/repos/$Owner/$Repo/teams"
     }
 
-    (Invoke-GitHubAPI @inputObject).Response
+    Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Write-Output $_.Response
+    }
 
 }

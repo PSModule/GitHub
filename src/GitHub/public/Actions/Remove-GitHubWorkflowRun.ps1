@@ -41,7 +41,9 @@
     }
 
     if ($PSCmdlet.ShouldProcess("workflow run with ID [$RunID] in [$Owner/$Repo]", 'Delete')) {
-        (Invoke-GitHubAPI @inputObject).Response
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
+        }
     }
 
 }

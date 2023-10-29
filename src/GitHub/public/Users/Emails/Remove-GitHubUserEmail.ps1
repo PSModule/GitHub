@@ -36,7 +36,9 @@
     }
 
     if ($PSCmdlet.ShouldProcess("Email addresses [$($Emails -join ', ')]", 'Delete')) {
-        $null = (Invoke-GitHubAPI @inputObject).Response
+        $null = Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
+        }
     }
 
 }

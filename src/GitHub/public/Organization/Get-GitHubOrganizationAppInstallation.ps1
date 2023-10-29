@@ -46,6 +46,8 @@
         Body        = $body
     }
 
-    (Invoke-GitHubAPI @inputObject).Response.installations
+    Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Write-Output $_.Response.installations
+    }
 
 }

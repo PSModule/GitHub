@@ -38,7 +38,9 @@
     }
 
     if ($PSCmdlet.ShouldProcess("workflow run with ID [$ID] in [$Owner/$Repo]", 'Cancel/Stop')) {
-        (Invoke-GitHubAPI @inputObject).Response
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
+        }
     }
 
 }

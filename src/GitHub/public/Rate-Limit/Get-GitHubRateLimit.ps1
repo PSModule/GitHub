@@ -40,6 +40,8 @@
         Method      = 'GET'
     }
 
-    (Invoke-GitHubAPI @inputObject).Response.Resources
+    Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Write-Output $_.Response.Resources
+    }
 
 }

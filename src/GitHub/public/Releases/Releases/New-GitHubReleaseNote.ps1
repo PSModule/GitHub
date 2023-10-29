@@ -103,7 +103,9 @@
     }
 
     if ($PSCmdlet.ShouldProcess("$Owner/$Repo", 'Create release notes')) {
-        (Invoke-GitHubAPI @inputObject).Response
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
+        }
     }
 
 }

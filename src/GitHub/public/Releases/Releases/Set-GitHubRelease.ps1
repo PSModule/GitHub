@@ -90,7 +90,9 @@
     }
 
     if ($PSCmdlet.ShouldProcess("release with ID [$ID] in [$Owner/$Repo]", 'Update')) {
-        (Invoke-GitHubAPI @inputObject).Response
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
+        }
     }
 
 }

@@ -34,7 +34,9 @@
     }
 
     if ($PSCmdlet.ShouldProcess("Key with ID [$ID]", 'Delete')) {
-        $null = (Invoke-GitHubAPI @inputObject).Response
+        $null = Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
+        }
     }
 
 }

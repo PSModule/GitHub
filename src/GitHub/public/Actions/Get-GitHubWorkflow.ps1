@@ -46,6 +46,8 @@
         Body        = $body
     }
 
-    (Invoke-GitHubAPI @inputObject).Response.workflows
+    Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Write-Output $_.Response.workflows
+    }
 
 }

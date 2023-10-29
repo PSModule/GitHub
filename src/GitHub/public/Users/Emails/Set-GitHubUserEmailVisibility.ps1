@@ -42,7 +42,9 @@
     }
 
     if ($PSCmdlet.ShouldProcess("Email visibility [$Visibility]", 'Set')) {
-        $null = (Invoke-GitHubAPI @inputObject).Response
+        $null = Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
+        }
     }
 
 }
