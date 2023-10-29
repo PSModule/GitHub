@@ -16,11 +16,7 @@ filter Get-GitHubLicenseByName {
         https://docs.github.com/rest/licenses/licenses#get-a-license
 
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-        'PSAvoidLongLines', '',
-        Scope = 'function',
-        Justification = 'Contains a long link.'
-    )]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [CmdletBinding()]
     param (
         # The license keyword, license name, or license SPDX ID. For example, mit or mpl-2.0.
