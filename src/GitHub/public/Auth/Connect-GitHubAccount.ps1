@@ -92,158 +92,153 @@
         [switch] $Silent
     )
 
-    process {
-        $envVars = Get-ChildItem -Path 'Env:'
-        $systemToken = $envVars | Where-Object Name -In 'GH_TOKEN', 'GITHUB_TOKEN' | Select-Object -First 1
-        $systemTokenPresent = $systemToken.count -gt 0
-        $AuthType = $systemTokenPresent ? 'sPAT' : $PSCmdlet.ParameterSetName
+    $envVars = Get-ChildItem -Path 'Env:'
+    $systemToken = $envVars | Where-Object Name -In 'GH_TOKEN', 'GITHUB_TOKEN' | Select-Object -First 1
+    $systemTokenPresent = $systemToken.count -gt 0
+    $AuthType = $systemTokenPresent ? 'sPAT' : $PSCmdlet.ParameterSetName
 
-        switch ($AuthType) {
-            'DeviceFlow' {
-                Write-Verbose 'Logging in using device flow...'
-                $clientID = $script:Auth.$Mode.ClientID
-                if ($Mode -ne (Get-GitHubConfig -Name DeviceFlowType -ErrorAction SilentlyContinue)) {
-                    Write-Verbose "Using $Mode authentication..."
-                    $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -Scope $Scope
-                } else {
-                    $accessTokenValidity = [datetime](Get-GitHubConfig -Name 'AccessTokenExpirationDate') - (Get-Date)
-                    $accessTokenIsValid = $accessTokenValidity.Seconds -gt 0
-                    $hours = $accessTokenValidity.Hours.ToString().PadLeft(2, '0')
-                    $minutes = $accessTokenValidity.Minutes.ToString().PadLeft(2, '0')
-                    $seconds = $accessTokenValidity.Seconds.ToString().PadLeft(2, '0')
-                    $accessTokenValidityText = "$hours`:$minutes`:$seconds"
-                    if ($accessTokenIsValid) {
-                        if ($accessTokenValidity.TotalHours -gt $script:Auth.AccessTokenGracePeriodInHours) {
-                            if (-not $Silent) {
-                                Write-Host '✓ ' -ForegroundColor Green -NoNewline
-                                Write-Host "Access token is still valid for $accessTokenValidityText ..."
-                            }
-                            break
-                        } else {
-                            if (-not $Silent) {
-                                Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
-                                Write-Host "Access token remaining validity $accessTokenValidityText. Refreshing access token..."
-                            }
-                            $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -RefreshToken (Get-GitHubConfig -Name RefreshToken)
+    switch ($AuthType) {
+        'DeviceFlow' {
+            Write-Verbose 'Logging in using device flow...'
+            $clientID = $script:Auth.$Mode.ClientID
+            if ($Mode -ne (Get-GitHubConfig -Name DeviceFlowType -ErrorAction SilentlyContinue)) {
+                Write-Verbose "Using $Mode authentication..."
+                $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -Scope $Scope
+            } else {
+                $accessTokenValidity = [datetime](Get-GitHubConfig -Name 'AccessTokenExpirationDate') - (Get-Date)
+                $accessTokenIsValid = $accessTokenValidity.Seconds -gt 0
+                $hours = $accessTokenValidity.Hours.ToString().PadLeft(2, '0')
+                $minutes = $accessTokenValidity.Minutes.ToString().PadLeft(2, '0')
+                $seconds = $accessTokenValidity.Seconds.ToString().PadLeft(2, '0')
+                $accessTokenValidityText = "$hours`:$minutes`:$seconds"
+                if ($accessTokenIsValid) {
+                    if ($accessTokenValidity.TotalHours -gt $script:Auth.AccessTokenGracePeriodInHours) {
+                        if (-not $Silent) {
+                            Write-Host '✓ ' -ForegroundColor Green -NoNewline
+                            Write-Host "Access token is still valid for $accessTokenValidityText ..."
                         }
+                        break
                     } else {
-                        $refreshTokenValidity = [datetime](Get-GitHubConfig -Name 'RefreshTokenExpirationDate') - (Get-Date)
-                        $refreshTokenIsValid = $refreshTokenValidity.Seconds -gt 0
-                        if ($refreshTokenIsValid) {
-                            if (-not $Silent) {
-                                Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
-                                Write-Host 'Access token expired. Refreshing access token...'
-                            }
-                            $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -RefreshToken (Get-GitHubConfig -Name RefreshToken)
-                        } else {
-                            Write-Verbose "Using $Mode authentication..."
-                            $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -Scope $Scope
+                        if (-not $Silent) {
+                            Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
+                            Write-Host "Access token remaining validity $accessTokenValidityText. Refreshing access token..."
                         }
+                        $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -RefreshToken (Get-GitHubConfig -Name RefreshToken)
+                    }
+                } else {
+                    $refreshTokenValidity = [datetime](Get-GitHubConfig -Name 'RefreshTokenExpirationDate') - (Get-Date)
+                    $refreshTokenIsValid = $refreshTokenValidity.Seconds -gt 0
+                    if ($refreshTokenIsValid) {
+                        if (-not $Silent) {
+                            Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
+                            Write-Host 'Access token expired. Refreshing access token...'
+                        }
+                        $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -RefreshToken (Get-GitHubConfig -Name RefreshToken)
+                    } else {
+                        Write-Verbose "Using $Mode authentication..."
+                        $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -Scope $Scope
                     }
                 }
-                Reset-GitHubConfig -Scope 'Auth'
-                switch ($Mode) {
-                    'GitHubApp' {
-                        $settings = @{
-                            AccessToken                = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
-                            AccessTokenExpirationDate  = (Get-Date).AddSeconds($tokenResponse.expires_in)
-                            AccessTokenType            = $tokenResponse.access_token -replace '_.*$', '_*'
-                            ApiBaseUri                 = 'https://api.github.com'
-                            ApiVersion                 = '2022-11-28'
-                            AuthType                   = $AuthType
-                            DeviceFlowType             = $Mode
-                            RefreshToken               = ConvertTo-SecureString -AsPlainText $tokenResponse.refresh_token
-                            RefreshTokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.refresh_token_expires_in)
-                            Scope                      = $tokenResponse.scope
-                        }
-                    }
-                    'OAuthApp' {
-                        $settings = @{
-                            AccessToken     = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
-                            AccessTokenType = $tokenResponse.access_token -replace '_.*$', '_*'
-                            ApiBaseUri      = 'https://api.github.com'
-                            ApiVersion      = '2022-11-28'
-                            AuthType        = $AuthType
-                            DeviceFlowType  = $Mode
-                            Scope           = $tokenResponse.scope
-                        }
+            }
+            Reset-GitHubConfig -Scope 'Auth'
+            switch ($Mode) {
+                'GitHubApp' {
+                    $settings = @{
+                        AccessToken                = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
+                        AccessTokenExpirationDate  = (Get-Date).AddSeconds($tokenResponse.expires_in)
+                        AccessTokenType            = $tokenResponse.access_token -replace '_.*$', '_*'
+                        ApiBaseUri                 = 'https://api.github.com'
+                        ApiVersion                 = '2022-11-28'
+                        AuthType                   = $AuthType
+                        DeviceFlowType             = $Mode
+                        RefreshToken               = ConvertTo-SecureString -AsPlainText $tokenResponse.refresh_token
+                        RefreshTokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.refresh_token_expires_in)
+                        Scope                      = $tokenResponse.scope
                     }
                 }
-                Set-GitHubConfig @settings
-                break
-            }
-            'PAT' {
-                Write-Verbose 'Logging in using personal access token...'
-                Reset-GitHubConfig -Scope 'Auth'
-                Write-Host '! ' -ForegroundColor DarkYellow -NoNewline
-                Start-Process 'https://github.com/settings/tokens'
-                $accessTokenValue = Read-Host -Prompt 'Enter your personal access token' -AsSecureString
-                $accessTokenType = (ConvertFrom-SecureString $accessTokenValue -AsPlainText) -replace '_.*$', '_*'
-                if ($accessTokenType -notmatch '^ghp_|^github_pat_') {
-                    Write-Warning '⚠ ' -ForegroundColor Yellow -NoNewline
-                    Write-Warning "Unexpected access token format: $accessTokenType"
+                'OAuthApp' {
+                    $settings = @{
+                        AccessToken     = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
+                        AccessTokenType = $tokenResponse.access_token -replace '_.*$', '_*'
+                        ApiBaseUri      = 'https://api.github.com'
+                        ApiVersion      = '2022-11-28'
+                        AuthType        = $AuthType
+                        DeviceFlowType  = $Mode
+                        Scope           = $tokenResponse.scope
+                    }
                 }
-                $settings = @{
-                    AccessToken     = $accessTokenValue
-                    AccessTokenType = $accessTokenType
-                    ApiBaseUri      = 'https://api.github.com'
-                    ApiVersion      = '2022-11-28'
-                    AuthType        = $AuthType
-                }
-                Set-GitHubConfig @settings
-                break
             }
-            'sPAT' {
-                Write-Verbose 'Logging in using system access token...'
-                Reset-GitHubConfig -Scope 'Auth'
-                $prefix = $systemToken.Value -replace '_.*$', '_*'
-                $settings = @{
-                    AccessToken     = ConvertTo-SecureString -AsPlainText $systemToken.Value
-                    AccessTokenType = $prefix
-                    ApiBaseUri      = 'https://api.github.com'
-                    ApiVersion      = '2022-11-28'
-                    AuthType        = 'sPAT'
-                }
-                Set-GitHubConfig @settings
+            Set-GitHubConfig @settings
+            break
+        }
+        'PAT' {
+            Write-Verbose 'Logging in using personal access token...'
+            Reset-GitHubConfig -Scope 'Auth'
+            Write-Host '! ' -ForegroundColor DarkYellow -NoNewline
+            Start-Process 'https://github.com/settings/tokens'
+            $accessTokenValue = Read-Host -Prompt 'Enter your personal access token' -AsSecureString
+            $accessTokenType = (ConvertFrom-SecureString $accessTokenValue -AsPlainText) -replace '_.*$', '_*'
+            if ($accessTokenType -notmatch '^ghp_|^github_pat_') {
+                Write-Warning '⚠ ' -ForegroundColor Yellow -NoNewline
+                Write-Warning "Unexpected access token format: $accessTokenType"
             }
+            $settings = @{
+                AccessToken     = $accessTokenValue
+                AccessTokenType = $accessTokenType
+                ApiBaseUri      = 'https://api.github.com'
+                ApiVersion      = '2022-11-28'
+                AuthType        = $AuthType
+            }
+            Set-GitHubConfig @settings
+            break
         }
-
-        if ($AuthType -ne 'sPAT') {
-            $user = Get-GitHubUser
-            $username = $user.login
-            Set-GitHubConfig -UserName $username
-        } else {
-            $username = 'system'
-        }
-
-        if (-not $Silent) {
-            Write-Host '✓ ' -ForegroundColor Green -NoNewline
-            Write-Host "Logged in as $username!"
-        }
-
-        $systemRepo = $envVars | Where-Object Name -EQ 'GITHUB_REPOSITORY'
-        $systemRepoPresent = $systemRepo.count -gt 0
-
-        if ($Owner) {
-            Set-GitHubConfig -Owner $Owner
-        } elseif ($systemRepoPresent) {
-            $owner = $systemRepo.Value.Split('/')[0]
-            Set-GitHubConfig -Owner $owner
-        }
-
-        if ($Repo) {
-            Set-GitHubConfig -Repo $Repo
-        } elseif ($systemRepoPresent) {
-            $repo = $systemRepo.Value.Split('/')[-1]
-            Set-GitHubConfig -Repo $repo
+        'sPAT' {
+            Write-Verbose 'Logging in using system access token...'
+            Reset-GitHubConfig -Scope 'Auth'
+            $prefix = $systemToken.Value -replace '_.*$', '_*'
+            $settings = @{
+                AccessToken     = ConvertTo-SecureString -AsPlainText $systemToken.Value
+                AccessTokenType = $prefix
+                ApiBaseUri      = 'https://api.github.com'
+                ApiVersion      = '2022-11-28'
+                AuthType        = 'sPAT'
+            }
+            Set-GitHubConfig @settings
         }
     }
 
-    # Using clean to make sure we remove the access token in plain text from memory.
-    #Requires -Version 7.3
-    clean {
-        Remove-Variable -Name tokenResponse -ErrorAction SilentlyContinue
-        Remove-Variable -Name settings -ErrorAction SilentlyContinue
-        [System.GC]::Collect()
+    if ($AuthType -ne 'sPAT') {
+        $user = Get-GitHubUser
+        $username = $user.login
+        Set-GitHubConfig -UserName $username
+    } else {
+        $username = 'system'
     }
+
+    if (-not $Silent) {
+        Write-Host '✓ ' -ForegroundColor Green -NoNewline
+        Write-Host "Logged in as $username!"
+    }
+
+    $systemRepo = $envVars | Where-Object Name -EQ 'GITHUB_REPOSITORY'
+    $systemRepoPresent = $systemRepo.count -gt 0
+
+    if ($Owner) {
+        Set-GitHubConfig -Owner $Owner
+    } elseif ($systemRepoPresent) {
+        $owner = $systemRepo.Value.Split('/')[0]
+        Set-GitHubConfig -Owner $owner
+    }
+
+    if ($Repo) {
+        Set-GitHubConfig -Repo $Repo
+    } elseif ($systemRepoPresent) {
+        $repo = $systemRepo.Value.Split('/')[-1]
+        Set-GitHubConfig -Repo $repo
+    }
+    
+    Remove-Variable -Name tokenResponse -ErrorAction SilentlyContinue
+    Remove-Variable -Name settings -ErrorAction SilentlyContinue
+    [System.GC]::Collect()
+
 }
