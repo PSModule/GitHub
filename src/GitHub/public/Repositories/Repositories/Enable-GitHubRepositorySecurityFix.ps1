@@ -17,7 +17,7 @@
         https://docs.github.com/rest/repos/repos#enable-automated-security-fixes
 
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     [Alias('Enable-GitHubRepositorySecurityFixes')]
     param (
         # The account owner of the repository. The name is not case sensitive.
@@ -30,31 +30,14 @@
         [string] $Repo = (Get-GitHubConfig -Name Repo)
     )
 
-    $PSCmdlet.MyInvocation.MyCommand.Parameters.GetEnumerator() | ForEach-Object {
-        $paramName = $_.Key
-        $paramDefaultValue = Get-Variable -Name $paramName -ValueOnly -ErrorAction SilentlyContinue
-        $providedValue = $PSBoundParameters[$paramName]
-        Write-Verbose "[$paramName]"
-        Write-Verbose "  - Default:  [$paramDefaultValue]"
-        Write-Verbose "  - Provided: [$providedValue]"
-        if (-not $PSBoundParameters.ContainsKey($paramName) -and ($null -ne $paramDefaultValue)) {
-            Write-Verbose '  - Using default value'
-            $PSBoundParameters[$paramName] = $paramDefaultValue
-        } else {
-            Write-Verbose '  - Using provided value'
-        }
-    }
-
-    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-    Remove-HashtableEntry -Hashtable $body -RemoveNames 'Owner', 'Repo' -RemoveTypes 'SwitchParameter'
-
     $inputObject = @{
         APIEndpoint = "/repos/$Owner/$Repo/automated-security-fixes"
         Method      = 'PUT'
-        Body        = $body
     }
 
-    Invoke-GitHubAPI @inputObject | ForEach-Object {
-        Write-Output $_.Response.names
+    if ($PSCmdlet.ShouldProcess("Security Fixes for [$Owner/$Repo]", 'Enable')) {
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
+        }
     }
 }
