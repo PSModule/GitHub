@@ -4,9 +4,7 @@
         Disable automated security fixes
 
         .DESCRIPTION
-        Disables automated security fixes for a repository. The authenticated user must have admin access to the repository.
-        For more information, see
-        "[Configuring automated security fixes](https://docs.github.com/articles/configuring-automated-security-fixes)".
+        Disables automated security fixes for a repository. The authenticated user must have admin access to the repository. For more information, see "[Configuring automated security fixes](https://docs.github.com/articles/configuring-automated-security-fixes)".
 
         .EXAMPLE
         Disable-GitHubRepositorySecurityFix -Owner 'PSModule' -Repo 'GitHub'
