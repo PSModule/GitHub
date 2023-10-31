@@ -1,10 +1,10 @@
-﻿filter New-GitHubRepositoryOrg {
+﻿filter New-GitHubRepository {
     <#
         .SYNOPSIS
-        Create an organization repository
+        Create a repository for a user or an organization.
 
         .DESCRIPTION
-        Creates a new repository in the specified organization. The authenticated user must be a member of the organization.
+        Creates a new repository for a user or in a specified organization.
 
         **OAuth scope requirements**
 
@@ -12,6 +12,29 @@
 
         * `public_repo` scope or `repo` scope to create a public repository. Note: For GitHub AE, use `repo` scope to create an internal repository.
         * `repo` scope to create a private repository
+
+
+        .EXAMPLE
+        $params = @{
+            Name                     = 'Hello-World'
+            Description              = 'This is your first repository'
+            Homepage                 = 'https://github.com'
+            HasIssues                = $true
+            HasProjects              = $true
+            HasWiki                  = $true
+            HasDiscussions           = $true
+            HasDownloads             = $true
+            IsTemplate               = $true
+            AutoInit                 = $true
+            AllowSquashMerge         = $true
+            AllowAutoMerge           = $true
+            DeleteBranchOnMerge      = $true
+            SquashMergeCommitTitle   = 'PR_TITLE'
+            SquashMergeCommitMessage = 'PR_BODY'
+        }
+        New-GitHubRepositoryUser @params
+
+        Creates a new public repository named "Hello-World" owned by the authenticated user.
 
         .EXAMPLE
         $params = @{
@@ -43,6 +66,7 @@
         For example, "mit" or "mpl-2.0".
 
         .NOTES
+        https://docs.github.com/rest/repos/repos#create-a-repository-for-the-authenticated-user
         https://docs.github.com/rest/repos/repos#create-an-organization-repository
 
     #>
@@ -60,7 +84,7 @@
     [CmdletBinding(SupportsShouldProcess)]
     param (
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter()]
+        [Parameter(ParameterSetName = 'org')]
         [Alias('org')]
         [string] $Owner = (Get-GitHubConfig -Name Owner),
 
@@ -82,29 +106,32 @@
         [ValidateSet('public', 'private')]
         [string] $Visibility = 'public',
 
-        # Either true to enable issues for this repository or false to disable them.
+        # Whether issues are enabled.
         [Parameter()]
         [Alias('has_issues')]
         [switch] $HasIssues,
 
-        # Either true to enable projects for this repository or false to disable them.
-        # Note: If you're creating a repository in an organization that has disabled repository projects, the default is false,
-        # and if you pass true, the API returns an error.
+        # Whether projects are enabled.
         [Parameter()]
         [Alias('has_projects')]
         [switch] $HasProjects,
 
-        # Either true to enable the wiki for this repository or false to disable it.
+        # Whether the wiki is enabled.
         [Parameter()]
         [Alias('has_wiki')]
         [switch] $HasWiki,
+
+        # Whether discussions are enabled.
+        [Parameter(ParameterSetName = 'user')]
+        [Alias('has_discussions')]
+        [switch] $HasDiscussions,
 
         # Whether downloads are enabled.
         [Parameter()]
         [Alias('has_downloads')]
         [switch] $HasDownloads,
 
-        # Either true to make this repo available as a template repository or false to prevent it.
+        # Whether this repository acts as a template that can be used to generate new repositories.
         [Parameter()]
         [Alias('is_template')]
         [switch] $IsTemplate,
@@ -119,28 +146,27 @@
         [Alias('auto_init')]
         [switch] $AutoInit,
 
-        # Either true to allow squash-merging pull requests, or false to prevent squash-merging.
+        # Whether to allow squash merges for pull requests.
         [Parameter()]
         [Alias('allow_squash_merge')]
         [switch] $AllowSquashMerge,
 
-        # Either true to allow merging pull requests with a merge commit, or false to prevent merging pull requests with merge commits.
+        # Whether to allow merge commits for pull requests.
         [Parameter()]
         [Alias('allow_merge_commit')]
         [switch] $AllowMergeCommit,
 
-        # Either true to allow rebase-merging pull requests, or false to prevent rebase-merging.
+        # Whether to allow rebase merges for pull requests.
         [Parameter()]
         [Alias('allow_rebase_merge')]
         [switch] $AllowRebaseMerge,
 
-        # Either true to allow auto-merge on pull requests, or false to disallow auto-merge.
+        # Whether to allow Auto-merge to be used on pull requests.
         [Parameter()]
         [Alias('allow_auto_merge')]
         [switch] $AllowAutoMerge,
 
-        # Either true to allow automatically deleting head branches when pull requests are merged, or false to prevent automatic deletion.
-        # The authenticated user must be an organization owner to set this property to true.
+        # Whether to delete head branches when pull requests are merged
         [Parameter()]
         [Alias('delete_branch_on_merge')]
         [switch] $DeleteBranchOnMerge,
@@ -210,48 +236,40 @@
     }
 
     Process {
-        $PSCmdlet.MyInvocation.MyCommand.Parameters.GetEnumerator() | ForEach-Object {
-            $paramName = $_.Key
-            $paramDefaultValue = Get-Variable -Name $paramName -ValueOnly -ErrorAction SilentlyContinue
-            $providedValue = $PSBoundParameters[$paramName]
-            Write-Verbose "[$paramName]"
-            Write-Verbose "  - Default:  [$paramDefaultValue]"
-            Write-Verbose "  - Provided: [$providedValue]"
-            if (-not $PSBoundParameters.ContainsKey($paramName) -and ($null -ne $paramDefaultValue)) {
-                Write-Verbose '  - Using default value'
-                $PSBoundParameters[$paramName] = $paramDefaultValue
-            } else {
-                Write-Verbose '  - Using provided value'
+        $params = @{
+            Owner                    = $Owner
+            Name                     = $Name
+            Description              = $Description
+            Homepage                 = $Homepage
+            Visibility               = $Visibility
+            HasIssues                = $HasIssues
+            HasProjects              = $HasProjects
+            HasWiki                  = $HasWiki
+            HasDiscussions           = $HasDiscussions
+            HasDownloads             = $HasDownloads
+            IsTemplate               = $IsTemplate
+            TeamId                   = $TeamId
+            AutoInit                 = $AutoInit
+            AllowSquashMerge         = $AllowSquashMerge
+            AllowMergeCommit         = $AllowMergeCommit
+            AllowRebaseMerge         = $AllowRebaseMerge
+            AllowAutoMerge           = $AllowAutoMerge
+            DeleteBranchOnMerge      = $DeleteBranchOnMerge
+            SquashMergeCommitTitle   = $SquashMergeCommitTitle
+            SquashMergeCommitMessage = $SquashMergeCommitMessage
+            MergeCommitTitle         = $MergeCommitTitle
+            MergeCommitMessage       = $MergeCommitMessage
+            GitignoreTemplate        = $GitignoreTemplate
+            LicenseTemplate          = $LicenseTemplate
+        }
+        Remove-HashtableEntry -Hashtable $params -NullOrEmptyValues
+
+        switch ($PSCmdlet.ParameterSetName) {
+            'user' {
+                New-GitHubRepositoryUser @params
             }
-        }
-
-        $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-        Remove-HashtableEntry -Hashtable $body -RemoveNames 'Owner' -RemoveTypes 'SwitchParameter'
-
-        $body['private'] = $Visibility -eq 'private'
-        $body['has_issues'] = $HasIssues.IsPresent ? $HasIssues : $false
-        $body['has_wiki'] = $HasWiki.IsPresent ? $HasWiki : $false
-        $body['has_projects'] = $HasProjects.IsPresent ? $HasProjects : $false
-        $body['has_downloads'] = $HasDownloads.IsPresent ? $HasDownloads : $false
-        $body['is_template'] = $IsTemplate.IsPresent ? $IsTemplate : $false
-        $body['auto_init'] = $AutoInit.IsPresent ? $AutoInit : $false
-        $body['allow_squash_merge'] = $AllowSquashMerge.IsPresent ? $AllowSquashMerge : $false
-        $body['allow_merge_commit'] = $AllowMergeCommit.IsPresent ? $AllowMergeCommit : $false
-        $body['allow_rebase_merge'] = $AllowRebaseMerge.IsPresent ? $AllowRebaseMerge : $false
-        $body['allow_auto_merge'] = $AllowAutoMerge.IsPresent ? $AllowAutoMerge : $false
-        $body['delete_branch_on_merge'] = $DeleteBranchOnMerge.IsPresent ? $DeleteBranchOnMerge : $false
-
-        Remove-HashtableEntry -Hashtable $body -NullOrEmptyValues
-
-        $inputObject = @{
-            APIEndpoint = "/orgs/$Owner/repos"
-            Method      = 'POST'
-            Body        = $body
-        }
-
-        if ($PSCmdlet.ShouldProcess("Repository in organization $Owner", 'Create')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
+            'org' {
+                New-GitHubRepositoryOrg @params
             }
         }
     }

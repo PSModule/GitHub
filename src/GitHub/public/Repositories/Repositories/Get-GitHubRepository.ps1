@@ -156,9 +156,11 @@
         return $DynamicParamDictionary
     }
 
-    Process {
+    Begin {
         $Type = $PSBoundParameters['Type']
+    }
 
+    Process {
         switch ($PSCmdlet.ParameterSetName) {
             'MyRepos_Type' {
                 $params = @{
