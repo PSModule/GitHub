@@ -71,16 +71,6 @@
 
     #>
     [OutputType([pscustomobject])]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-        'PSUseDeclaredVarsMoreThanAssignments',
-        'GitignoreTemplate',
-        Justification = 'Parameter is used in dynamic parameter validation.'
-    )]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-        'PSUseDeclaredVarsMoreThanAssignments',
-        'LicenseTemplate',
-        Justification = 'Parameter is used in dynamic parameter validation.'
-    )]
     [CmdletBinding(SupportsShouldProcess)]
     param (
         # The account owner of the repository. The name is not case sensitive.
