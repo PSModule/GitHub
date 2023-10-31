@@ -32,7 +32,7 @@
             SquashMergeCommitTitle   = 'PR_TITLE'
             SquashMergeCommitMessage = 'PR_BODY'
         }
-        New-GitHubRepositoryUser @params
+        New-GitHubRepository @params
 
         Creates a new public repository named "Hello-World" owned by the authenticated user.
 
@@ -54,7 +54,7 @@
             SquashMergeCommitTitle   = 'PR_TITLE'
             SquashMergeCommitMessage = 'PR_BODY'
         }
-        New-GitHubRepositoryOrg @params
+        New-GitHubRepository @params
 
         Creates a new public repository named "Hello-World" owned by the organization "PSModule".
 
