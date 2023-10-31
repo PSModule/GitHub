@@ -58,6 +58,24 @@
 
         Creates a new public repository named "Hello-World" owned by the organization "PSModule".
 
+        .EXAMPLE
+        $params = @{
+            TemplateOwner      = 'GitHub'
+            TemplateRepo       = 'octocat'
+            Owner              = 'PSModule'
+            Name               = 'MyNewRepo'
+            IncludeAllBranches = $true
+            Description        = 'My new repo'
+            Private            = $true
+        }
+        New-GitHubRepository @params
+
+        Creates a new private repository named `MyNewRepo` from the `octocat` template repository owned by `GitHub`.
+
+        .NOTES
+        https://docs.github.com/rest/repos/repos#create-a-repository-using-a-template
+
+
         .PARAMETER GitignoreTemplate
         Desired language or platform .gitignore template to apply. Use the name of the template without the extension. For example, "Haskell".
 
@@ -71,7 +89,10 @@
 
     #>
     [OutputType([pscustomobject])]
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(
+        SupportsShouldProcess,
+        DefaultParameterSetName = 'user'
+    )]
     param (
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(ParameterSetName = 'org')]
@@ -82,12 +103,35 @@
         [Parameter(Mandatory)]
         [string] $Name,
 
-        # A short description of the repository.
+        # The account owner of the template repository. The name is not case sensitive.
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'template'
+        )]
+        [Alias('template_owner')]
+        [string] $TemplateOwner,
+
+        # The name of the template repository without the .git extension. The name is not case sensitive.
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'template'
+        )]
+        [Alias('template_repo')]
+        [string] $TemplateRepo,
+
+        # A short description of the new repository.
         [Parameter()]
         [string] $Description,
 
+        # Set to true to include the directory structure and files from all branches in the template repository,
+        # and not just the default branch.
+        [Parameter(ParameterSetName = 'template')]
+        [Alias('include_all_branches')]
+        [switch] $IncludeAllBranches,
+
         # A URL with more information about the repository.
-        [Parameter()]
+        [Parameter(ParameterSetName = 'user')]
+        [Parameter(ParameterSetName = 'org')]
         [ValidateNotNullOrEmpty()]
         [uri] $Homepage,
 
@@ -97,17 +141,20 @@
         [string] $Visibility = 'public',
 
         # Whether issues are enabled.
-        [Parameter()]
+        [Parameter(ParameterSetName = 'user')]
+        [Parameter(ParameterSetName = 'org')]
         [Alias('has_issues')]
         [switch] $HasIssues,
 
         # Whether projects are enabled.
-        [Parameter()]
+        [Parameter(ParameterSetName = 'user')]
+        [Parameter(ParameterSetName = 'org')]
         [Alias('has_projects')]
         [switch] $HasProjects,
 
         # Whether the wiki is enabled.
-        [Parameter()]
+        [Parameter(ParameterSetName = 'user')]
+        [Parameter(ParameterSetName = 'org')]
         [Alias('has_wiki')]
         [switch] $HasWiki,
 
@@ -117,54 +164,64 @@
         [switch] $HasDiscussions,
 
         # Whether downloads are enabled.
-        [Parameter()]
+        [Parameter(ParameterSetName = 'user')]
+        [Parameter(ParameterSetName = 'org')]
         [Alias('has_downloads')]
         [switch] $HasDownloads,
 
         # Whether this repository acts as a template that can be used to generate new repositories.
-        [Parameter()]
+        [Parameter(ParameterSetName = 'user')]
+        [Parameter(ParameterSetName = 'org')]
         [Alias('is_template')]
         [switch] $IsTemplate,
 
         # The id of the team that will be granted access to this repository. This is only valid when creating a repository in an organization.
-        [Parameter()]
+        [Parameter(ParameterSetName = 'user')]
+        [Parameter(ParameterSetName = 'org')]
         [Alias('team_id')]
         [int] $TeamId,
 
         # Pass true to create an initial commit with empty README.
-        [Parameter()]
+        [Parameter(ParameterSetName = 'user')]
+        [Parameter(ParameterSetName = 'org')]
         [Alias('auto_init')]
         [switch] $AutoInit,
 
         # Whether to allow squash merges for pull requests.
-        [Parameter()]
+        [Parameter(ParameterSetName = 'user')]
+        [Parameter(ParameterSetName = 'org')]
         [Alias('allow_squash_merge')]
         [switch] $AllowSquashMerge,
 
         # Whether to allow merge commits for pull requests.
-        [Parameter()]
+        [Parameter(ParameterSetName = 'user')]
+        [Parameter(ParameterSetName = 'org')]
         [Alias('allow_merge_commit')]
         [switch] $AllowMergeCommit,
 
         # Whether to allow rebase merges for pull requests.
-        [Parameter()]
+        [Parameter(ParameterSetName = 'user')]
+        [Parameter(ParameterSetName = 'org')]
         [Alias('allow_rebase_merge')]
         [switch] $AllowRebaseMerge,
 
         # Whether to allow Auto-merge to be used on pull requests.
-        [Parameter()]
+        [Parameter(ParameterSetName = 'user')]
+        [Parameter(ParameterSetName = 'org')]
         [Alias('allow_auto_merge')]
         [switch] $AllowAutoMerge,
 
         # Whether to delete head branches when pull requests are merged
-        [Parameter()]
+        [Parameter(ParameterSetName = 'user')]
+        [Parameter(ParameterSetName = 'org')]
         [Alias('delete_branch_on_merge')]
         [switch] $DeleteBranchOnMerge,
 
         # The default value for a squash merge commit title:
         #   - PR_TITLE - default to the pull request's title.
         #   - COMMIT_OR_PR_TITLE - default to the commit's title (if only one commit) or the pull request's title (when more than one commit).
-        [Parameter()]
+        [Parameter(ParameterSetName = 'user')]
+        [Parameter(ParameterSetName = 'org')]
         [ValidateSet('PR_TITLE', 'COMMIT_OR_PR_TITLE')]
         [Alias('squash_merge_commit_title')]
         [string] $SquashMergeCommitTitle,
@@ -173,7 +230,8 @@
         #   - PR_BODY - default to the pull request's body.
         #   - COMMIT_MESSAGES - default to the branch's commit messages.
         #   - BLANK - default to a blank commit message.
-        [Parameter()]
+        [Parameter(ParameterSetName = 'user')]
+        [Parameter(ParameterSetName = 'org')]
         [ValidateSet('PR_BODY', 'COMMIT_MESSAGES', 'BLANK')]
         [Alias('squash_merge_commit_message')]
         [string] $SquashMergeCommitMessage,
@@ -181,7 +239,8 @@
         # The default value for a merge commit title.
         #   - PR_TITLE - default to the pull request's title.
         #   - MERGE_MESSAGE - default to the classic title for a merge message (e.g.,Merge pull request #123 from branch-name).
-        [Parameter()]
+        [Parameter(ParameterSetName = 'user')]
+        [Parameter(ParameterSetName = 'org')]
         [ValidateSet('PR_TITLE', 'MERGE_MESSAGE')]
         [Alias('merge_commit_title')]
         [string] $MergeCommitTitle,
@@ -190,7 +249,8 @@
         #   - PR_BODY - default to the pull request's body.
         #   - PR_TITLE - default to the pull request's title.
         #   - BLANK - default to a blank commit message.
-        [Parameter()]
+        [Parameter(ParameterSetName = 'user')]
+        [Parameter(ParameterSetName = 'org')]
         [ValidateSet('PR_BODY', 'PR_TITLE', 'BLANK')]
         [Alias('merge_commit_message')]
         [string] $MergeCommitMessage
@@ -263,6 +323,21 @@
             'org' {
                 if ($PSCmdlet.ShouldProcess("repository for organization [$Owner/$Repo]", 'Create')) {
                     New-GitHubRepositoryOrg @params
+                }
+            }
+            'template' {
+                if ($PSCmdlet.ShouldProcess("repository from template [$Owner/$Repo]", 'Create')) {
+                    $params = @{
+                        TemplateOwner      = $TemplateOwner
+                        TemplateRepo       = $TemplateRepo
+                        Owner              = $Owner
+                        Name               = $Name
+                        IncludeAllBranches = $IncludeAllBranches
+                        Description        = $Description
+                        Private            = $Visibility -eq 'private'
+                    }
+                    Remove-HashtableEntry -Hashtable $params -NullOrEmptyValues
+                    New-GitHubRepositoryFromTemplate @params
                 }
             }
         }
