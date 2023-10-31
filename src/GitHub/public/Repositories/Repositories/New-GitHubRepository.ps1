@@ -266,10 +266,14 @@
 
         switch ($PSCmdlet.ParameterSetName) {
             'user' {
-                New-GitHubRepositoryUser @params
+                if ($PSCmdlet.ShouldProcess("repository for user [$repo]", 'Create')) {
+                    New-GitHubRepositoryUser @params
+                }
             }
             'org' {
-                New-GitHubRepositoryOrg @params
+                if ($PSCmdlet.ShouldProcess("repository for organization [$Owner/$Repo]", 'Create')) {
+                    New-GitHubRepositoryOrg @params
+                }
             }
         }
     }
