@@ -153,6 +153,7 @@
             $statusCode = $APICallStatusCode | ConvertTo-Json -Depth 100 | ConvertFrom-Json
             $responseHeaders = $APICallResponseHeaders | ConvertTo-Json -Depth 100 | ConvertFrom-Json
             $verboseMessage = @"
+
 ----------------------------------
 StatusCode:
 $statusCode
@@ -163,6 +164,7 @@ $($APICall | ConvertFrom-HashTable | Format-List | Out-String)
 ResponseHeaders:
 $($responseHeaders | Format-List | Out-String)
 ----------------------------------
+
 "@
             Write-Verbose $verboseMessage
             [pscustomobject]@{
@@ -175,6 +177,7 @@ $($responseHeaders | Format-List | Out-String)
     } catch {
         $failure = $_
         $errorResult = @"
+
 ----------------------------------
 Request:
 $($APICall | ConvertFrom-HashTable | Format-List | Out-String -Stream)
@@ -185,6 +188,7 @@ $($failure.Exception.Message | ConvertFrom-HashTable | Format-List | Out-String 
 Response:
 $($failure.Exception.Response | ConvertFrom-HashTable | Format-List | Out-String -Stream)
 ----------------------------------
+
 "@
         throw $errorResult
     }
