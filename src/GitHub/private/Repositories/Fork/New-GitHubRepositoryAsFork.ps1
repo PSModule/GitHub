@@ -81,7 +81,7 @@
     }
 
     $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-    Remove-HashtableEntry -Hashtable $body -RemoveNames 'TemplateOwner', 'TemplateRepo' -RemoveTypes 'SwitchParameter'
+    Remove-HashtableEntry -Hashtable $body -RemoveNames 'ForkOwner', 'ForkRepo' -RemoveTypes 'SwitchParameter'
 
     $inputObject = @{
         APIEndpoint = "/repos/$ForkOwner/$ForkRepo/forks"
