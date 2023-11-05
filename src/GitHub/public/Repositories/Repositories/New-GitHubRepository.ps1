@@ -326,33 +326,35 @@
     }
 
     Process {
-        $params = @{
-            Owner                    = $Owner
-            Name                     = $Name
-            Description              = $Description
-            Homepage                 = $Homepage
-            Visibility               = $Visibility
-            HasIssues                = $HasIssues
-            HasProjects              = $HasProjects
-            HasWiki                  = $HasWiki
-            HasDiscussions           = $HasDiscussions
-            HasDownloads             = $HasDownloads
-            IsTemplate               = $IsTemplate
-            TeamId                   = $TeamId
-            AutoInit                 = $AutoInit
-            AllowSquashMerge         = $AllowSquashMerge
-            AllowMergeCommit         = $AllowMergeCommit
-            AllowRebaseMerge         = $AllowRebaseMerge
-            AllowAutoMerge           = $AllowAutoMerge
-            DeleteBranchOnMerge      = $DeleteBranchOnMerge
-            SquashMergeCommitTitle   = $SquashMergeCommitTitle
-            SquashMergeCommitMessage = $SquashMergeCommitMessage
-            MergeCommitTitle         = $MergeCommitTitle
-            MergeCommitMessage       = $MergeCommitMessage
-            GitignoreTemplate        = $GitignoreTemplate
-            LicenseTemplate          = $LicenseTemplate
+        if ($PSCmdlet.ParameterSetName -in 'user', 'org') {
+            $params = @{
+                Owner                    = $Owner
+                Name                     = $Name
+                Description              = $Description
+                Homepage                 = $Homepage
+                Visibility               = $Visibility
+                HasIssues                = $HasIssues
+                HasProjects              = $HasProjects
+                HasWiki                  = $HasWiki
+                HasDiscussions           = $HasDiscussions
+                HasDownloads             = $HasDownloads
+                IsTemplate               = $IsTemplate
+                TeamId                   = $TeamId
+                AutoInit                 = $AutoInit
+                AllowSquashMerge         = $AllowSquashMerge
+                AllowMergeCommit         = $AllowMergeCommit
+                AllowRebaseMerge         = $AllowRebaseMerge
+                AllowAutoMerge           = $AllowAutoMerge
+                DeleteBranchOnMerge      = $DeleteBranchOnMerge
+                SquashMergeCommitTitle   = $SquashMergeCommitTitle
+                SquashMergeCommitMessage = $SquashMergeCommitMessage
+                MergeCommitTitle         = $MergeCommitTitle
+                MergeCommitMessage       = $MergeCommitMessage
+                GitignoreTemplate        = $GitignoreTemplate
+                LicenseTemplate          = $LicenseTemplate
+            }
+            Remove-HashtableEntry -Hashtable $params -NullOrEmptyValues
         }
-        Remove-HashtableEntry -Hashtable $params -NullOrEmptyValues
 
         switch ($PSCmdlet.ParameterSetName) {
             'user' {
@@ -385,7 +387,7 @@
                     $params = @{
                         ForkOwner         = $ForkOwner
                         ForkRepo          = $ForkRepo
-                        Owner             = $Owner
+                        Organization      = $Owner
                         Name              = $Name
                         DefaultBranchOnly = $DefaultBranchOnly
                     }
