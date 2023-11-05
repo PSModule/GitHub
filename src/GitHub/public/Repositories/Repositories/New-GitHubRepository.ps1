@@ -115,6 +115,7 @@
 
         # The name of the repository.
         [Parameter(Mandatory)]
+        [Parameter(ParameterSetName = 'fork')]
         [string] $Name,
 
         # The account owner of the template repository. The name is not case sensitive.
