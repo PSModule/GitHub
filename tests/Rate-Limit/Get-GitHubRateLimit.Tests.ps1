@@ -4,6 +4,6 @@
     }
 
     It 'Can be called with no parameters' {
-        { Get-GitHubRateLimit } | Should -Not -Throw
+        Get-GitHubRateLimit | Should -Not -Throw
     }
 }
