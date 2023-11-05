@@ -5,7 +5,7 @@
 
     Context 'Parameter Set: sPAT' {
         It 'Can be called with no parameters' {
-            { Connect-GitHubAccount -Verbose } | Should -Not -Throw
+            { Connect-GitHubAccount } | Should -Not -Throw
         }
     }
 }
