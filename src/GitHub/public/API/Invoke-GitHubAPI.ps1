@@ -173,16 +173,17 @@ $($responseHeaders | Format-List | Out-String)
             }
         }
     } catch {
+        $failure = $_
         $errorResult = @"
 ----------------------------------
 Request:
 $($APICall | ConvertFrom-HashTable | Format-List | Out-String -Stream)
 ----------------------------------
 Message:
-$($_.Exception.Message | ConvertFrom-HashTable | Format-List | Out-String -Stream)
+$($failure.Exception.Message | ConvertFrom-HashTable | Format-List | Out-String -Stream)
 ----------------------------------
 Response:
-$($_.Exception.Response | ConvertFrom-HashTable | Format-List | Out-String -Stream)
+$($failure.Exception.Response | ConvertFrom-HashTable | Format-List | Out-String -Stream)
 ----------------------------------
 "@
         throw $errorResult
