@@ -4,8 +4,8 @@
     }
 
     It 'Can be called with no parameters' {
-        Get-Command Invoke-RestMethod
-        Get-Help Invoke-RestMethod -Full
+        Write-Verbose (Get-Command Invoke-RestMethod | Out-String)
+        Write-Verbose (Get-Help Invoke-RestMethod -Full | Out-String)
         Get-GitHubRateLimit | Should -Not -Throw
     }
 }
