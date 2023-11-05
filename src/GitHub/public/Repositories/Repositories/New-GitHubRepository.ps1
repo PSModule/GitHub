@@ -72,6 +72,19 @@
 
         Creates a new private repository named `MyNewRepo` from the `octocat` template repository owned by `GitHub`.
 
+        .EXAMPLE
+        $params = @{
+            ForkOwner         = 'octocat'
+            ForkRepo          = 'Hello-World'
+            Owner             = 'PSModule'
+            Name              = 'MyNewRepo'
+            DefaultBranchOnly = $true
+        }
+        New-GitHubRepository @params
+
+        Creates a new repository named `MyNewRepo` as a fork of `Hello-World` owned by `octocat`.
+        Only the default branch will be forked.
+
         .NOTES
         https://docs.github.com/rest/repos/repos#create-a-repository-using-a-template
 
@@ -96,6 +109,7 @@
     param (
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(ParameterSetName = 'org')]
+        [Parameter(ParameterSetName = 'fork')]
         [Alias('org')]
         [string] $Owner = (Get-GitHubConfig -Name Owner),
 
@@ -119,8 +133,29 @@
         [Alias('template_repo')]
         [string] $TemplateRepo,
 
+        # The account owner of the repository. The name is not case sensitive.
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'fork'
+        )]
+        [string] $ForkOwner,
+
+        # The name of the repository without the .git extension. The name is not case sensitive.
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'fork'
+        )]
+        [string] $ForkRepo,
+
+        # When forking from an existing repository, fork with only the default branch.
+        [Parameter(ParameterSetName = 'fork')]
+        [Alias('default_branch_only')]
+        [switch] $DefaultBranchOnly,
+
         # A short description of the new repository.
-        [Parameter()]
+        [Parameter(ParameterSetName = 'user')]
+        [Parameter(ParameterSetName = 'org')]
+        [Parameter(ParameterSetName = 'template')]
         [string] $Description,
 
         # Set to true to include the directory structure and files from all branches in the template repository,
@@ -136,7 +171,9 @@
         [uri] $Homepage,
 
         # The visibility of the repository.
-        [Parameter()]
+        [Parameter(ParameterSetName = 'user')]
+        [Parameter(ParameterSetName = 'org')]
+        [Parameter(ParameterSetName = 'template')]
         [ValidateSet('public', 'private')]
         [string] $Visibility = 'public',
 
@@ -316,17 +353,17 @@
 
         switch ($PSCmdlet.ParameterSetName) {
             'user' {
-                if ($PSCmdlet.ShouldProcess("repository for user [$repo]", 'Create')) {
+                if ($PSCmdlet.ShouldProcess("repository for user [$Name]", 'Create')) {
                     New-GitHubRepositoryUser @params
                 }
             }
             'org' {
-                if ($PSCmdlet.ShouldProcess("repository for organization [$Owner/$Repo]", 'Create')) {
+                if ($PSCmdlet.ShouldProcess("repository for organization [$Owner/$Name]", 'Create')) {
                     New-GitHubRepositoryOrg @params
                 }
             }
             'template' {
-                if ($PSCmdlet.ShouldProcess("repository from template [$Owner/$Repo]", 'Create')) {
+                if ($PSCmdlet.ShouldProcess("repository [$Owner/$Name] from template [$TemplateOwner/$TemplateRepo]", 'Create')) {
                     $params = @{
                         TemplateOwner      = $TemplateOwner
                         TemplateRepo       = $TemplateRepo
@@ -338,6 +375,19 @@
                     }
                     Remove-HashtableEntry -Hashtable $params -NullOrEmptyValues
                     New-GitHubRepositoryFromTemplate @params
+                }
+            }
+            'fork' {
+                if ($PSCmdlet.ShouldProcess("repository [$Owner/$Name] as fork from [$ForkOwner/$ForkRepo]", 'Create')) {
+                    $params = @{
+                        ForkOwner         = $ForkOwner
+                        ForkRepo          = $ForkRepo
+                        Owner             = $Owner
+                        Name              = $Name
+                        DefaultBranchOnly = $DefaultBranchOnly
+                    }
+                    Remove-HashtableEntry -Hashtable $params -NullOrEmptyValues
+                    New-GitHubRepositoryAsFork @params
                 }
             }
         }
