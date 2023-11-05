@@ -152,17 +152,19 @@
         Invoke-RestMethod @APICall | ForEach-Object {
             $statusCode = $APICallStatusCode | ConvertTo-Json -Depth 100 | ConvertFrom-Json
             $responseHeaders = $APICallResponseHeaders | ConvertTo-Json -Depth 100 | ConvertFrom-Json
-            Write-Verbose @"
+            $verboseMessage = @"
 ----------------------------------
-StatusCode: $statusCode
+StatusCode:
+$statusCode
 ----------------------------------
 Request:
-$($APICall | ConvertFrom-HashTable | Format-List | Out-String -Stream)
-'----------------------------------'
-Write-Verbose 'ResponseHeaders:'
-$($responseHeaders | Format-List | Out-String -Stream)
-Write-Verbose '----------------------------------'
+$($APICall | ConvertFrom-HashTable | Format-List | Out-String)
+----------------------------------
+ResponseHeaders:
+$($responseHeaders | Format-List | Out-String)
+----------------------------------
 "@
+            Write-Verbose $verboseMessage
             [pscustomobject]@{
                 Request         = $APICall
                 Response        = $_
@@ -171,16 +173,18 @@ Write-Verbose '----------------------------------'
             }
         }
     } catch {
-        Write-Error @"
+        $errorResult = @"
+----------------------------------
 Request:
 $($APICall | ConvertFrom-HashTable | Format-List | Out-String -Stream)
-
+----------------------------------
 Message:
 $($_.Exception.Message | ConvertFrom-HashTable | Format-List | Out-String -Stream)
-
+----------------------------------
 Response:
 $($_.Exception.Response | ConvertFrom-HashTable | Format-List | Out-String -Stream)
+----------------------------------
 "@
-        throw $error.Message
+        throw $errorResult
     }
 }
