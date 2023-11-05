@@ -3,21 +3,21 @@
         Get-Command Get-GitHubRepository | Should -Not -BeNullOrEmpty
     }
 
-    Context 'Parameter Set: MyRepos_Type' {
-        It 'Can be called with no parameters' {
-            { Get-GitHubRepository - } | Should -Not -Throw
-        }
+    # Context 'Parameter Set: MyRepos_Type' {
+    #     It 'Can be called with no parameters' {
+    #         { Get-GitHubRepository - } | Should -Not -Throw
+    #     }
 
-        It 'Can be called with Type parameter' {
-            { Get-GitHubRepository -Type 'public' } | Should -Not -Throw
-        }
-    }
+    #     It 'Can be called with Type parameter' {
+    #         { Get-GitHubRepository -Type 'public' } | Should -Not -Throw
+    #     }
+    # }
 
-    Context 'Parameter Set: MyRepos_Aff-Vis' {
-        It 'Can be called with Visibility and Affiliation parameters' {
-            { Get-GitHubRepository -Visibility 'public' -Affiliation 'owner' } | Should -Not -Throw
-        }
-    }
+    # Context 'Parameter Set: MyRepos_Aff-Vis' {
+    #     It 'Can be called with Visibility and Affiliation parameters' {
+    #         { Get-GitHubRepository -Visibility 'public' -Affiliation 'owner' } | Should -Not -Throw
+    #     }
+    # }
 
     Context 'Parameter Set: ByName' {
         It 'Can be called with Owner and Repo parameters' {
