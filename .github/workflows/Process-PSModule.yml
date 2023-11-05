@@ -7,9 +7,6 @@ on:
 concurrency:
   group: ${{ github.workflow }}
 
-env:
-  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 jobs:
   Process-PSModule:
     uses: PSModule/Actions/.github/workflows/Process-PSModule.yml@main
