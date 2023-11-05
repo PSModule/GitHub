@@ -87,6 +87,8 @@
     $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
     Remove-HashtableEntry -Hashtable $body -RemoveNames 'ForkOwner', 'ForkRepo' -RemoveTypes 'SwitchParameter'
 
+    $body['default_branch_only'] = $DefaultBranchOnly -eq $true
+
     $inputObject = @{
         APIEndpoint = "/repos/$ForkOwner/$ForkRepo/forks"
         Method      = 'POST'
