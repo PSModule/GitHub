@@ -51,7 +51,7 @@
 
         # Specifies the HTTP version used for the request.
         [Parameter()]
-        [version] $HttpVersion = 2.0,
+        [version] $HttpVersion = '2.0',
 
         # Support Pagination Relation Links per RFC5988.
         [Parameter()]
