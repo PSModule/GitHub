@@ -385,8 +385,8 @@
             'fork' {
                 if ($PSCmdlet.ShouldProcess("repository [$Owner/$Name] as fork from [$ForkOwner/$ForkRepo]", 'Create')) {
                     $params = @{
-                        ForkOwner         = $ForkOwner
-                        ForkRepo          = $ForkRepo
+                        Owner             = $ForkOwner
+                        Repo              = $ForkRepo
                         Organization      = $Owner
                         Name              = $Name
                         DefaultBranchOnly = $DefaultBranchOnly

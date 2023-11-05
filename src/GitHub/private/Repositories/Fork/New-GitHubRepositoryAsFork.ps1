@@ -42,13 +42,11 @@
     param (
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [Alias('owner')]
-        [string] $ForkOwner,
+        [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [Alias('repo')]
-        [string] $ForkRepo,
+        [string] $Repo,
 
         # The organization or person who will own the new repository.
         # To create a new repository in an organization, the authenticated user must be a member of the specified organization.
