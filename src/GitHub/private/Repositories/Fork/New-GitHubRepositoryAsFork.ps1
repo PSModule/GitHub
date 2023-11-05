@@ -65,6 +65,10 @@
         [switch] $DefaultBranchOnly
     )
 
+    if ([string]::IsNullorEmpty($Name)) {
+        $Name = $ForkRepo
+    }
+
     $PSCmdlet.MyInvocation.MyCommand.Parameters.GetEnumerator() | ForEach-Object {
         $paramName = $_.Key
         $paramDefaultValue = Get-Variable -Name $paramName -ValueOnly -ErrorAction SilentlyContinue
