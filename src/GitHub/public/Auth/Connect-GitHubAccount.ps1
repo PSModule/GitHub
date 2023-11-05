@@ -95,8 +95,9 @@
     $envVars = Get-ChildItem -Path 'Env:'
     $systemToken = $envVars | Where-Object Name -In 'GH_TOKEN', 'GITHUB_TOKEN' | Select-Object -First 1
     $systemTokenPresent = $systemToken.count -gt 0
+    Write-Verbose "System token present: [$systemTokenPresent]"
     $AuthType = $systemTokenPresent ? 'sPAT' : $PSCmdlet.ParameterSetName
-
+    WRite-Verbose "AuthType: [$AuthType]"
     switch ($AuthType) {
         'DeviceFlow' {
             Write-Verbose 'Logging in using device flow...'
