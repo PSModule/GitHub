@@ -48,14 +48,12 @@
         default {
             $RefreshTokenSecretInfo = Get-SecretInfo -Name "$prefix`RefreshToken"
             if ($null -ne $RefreshTokenSecretInfo.Metadata) {
-                $RefreshTokenMetadata = $RefreshTokenSecretInfo.Metadata |
-                    Select-Object -ExpandProperty Metadata | ConvertFrom-HashTable | ConvertTo-HashTable
+                $RefreshTokenMetadata = $RefreshTokenSecretInfo.Metadata | ConvertFrom-HashTable | ConvertTo-HashTable
             }
 
             $AccessTokenSecretInfo = Get-SecretInfo -Name "$prefix`AccessToken"
             if ($null -ne $AccessTokenSecretInfo.Metadata) {
-                $AccessTokenMetadata = $AccessTokenSecretInfo.Metadata |
-                    Select-Object -ExpandProperty Metadata | ConvertFrom-HashTable | ConvertTo-HashTable
+                $AccessTokenMetadata = $AccessTokenSecretInfo.Metadata | ConvertFrom-HashTable | ConvertTo-HashTable
             }
             $metadata = Join-Object -Main $RefreshTokenMetadata -Overrides $AccessTokenMetadata -AsHashtable
 
