@@ -152,17 +152,17 @@
         Invoke-RestMethod @APICall | ForEach-Object {
             $statusCode = $APICallStatusCode | ConvertTo-Json -Depth 100 | ConvertFrom-Json
             $responseHeaders = $APICallResponseHeaders | ConvertTo-Json -Depth 100 | ConvertFrom-Json
-
-            Write-Verbose '----------------------------------'
-            Write-Verbose "StatusCode: $statusCode"
-            Write-Verbose '----------------------------------'
-            Write-Verbose 'Request:'
-            $APICall | ConvertFrom-HashTable | Format-List | Out-String -Stream | Write-Verbose
-            Write-Verbose '----------------------------------'
-            Write-Verbose 'ResponseHeaders:'
-            $responseHeaders | Format-List | Out-String -Stream | Write-Verbose
-            Write-Verbose '----------------------------------'
-
+            Write-Verbose @"
+----------------------------------
+StatusCode: $statusCode
+----------------------------------
+Request:
+$($APICall | ConvertFrom-HashTable | Format-List | Out-String -Stream)
+'----------------------------------'
+Write-Verbose 'ResponseHeaders:'
+$($responseHeaders | Format-List | Out-String -Stream)
+Write-Verbose '----------------------------------'
+"@
             [pscustomobject]@{
                 Request         = $APICall
                 Response        = $_
@@ -171,14 +171,16 @@
             }
         }
     } catch {
-        Write-Error 'Request:'
-        $APICall | ConvertFrom-HashTable | Format-List | Out-String -Stream | Write-Error
+        Write-Error @"
+Request:
+$($APICall | ConvertFrom-HashTable | Format-List | Out-String -Stream)
 
-        Write-Error 'Message:'
-        $_.Exception.Message | ConvertFrom-HashTable | Format-List | Out-String -Stream | Write-Error
+Message:
+$($_.Exception.Message | ConvertFrom-HashTable | Format-List | Out-String -Stream)
 
-        Write-Error 'Response:'
-        $_.Exception.Response | ConvertFrom-HashTable | Format-List | Out-String -Stream | Write-Error
-        throw $errorMessage
+Response:
+$($_.Exception.Response | ConvertFrom-HashTable | Format-List | Out-String -Stream)
+"@
+        throw $error.Message
     }
 }
