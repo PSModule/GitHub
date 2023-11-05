@@ -56,7 +56,7 @@
 
     if ($NullOrEmptyValues) {
         Write-Verbose 'Remove keys with null or empty values'
-        ($Hashtable.GetEnumerator() | Where-Object { -not $_.Value }) | ForEach-Object {
+        ($Hashtable.GetEnumerator() | Where-Object { [string]::IsNullOrEmpty($_.Value) }) | ForEach-Object {
             Write-Verbose " - [$($_.Name)] - Value: [$($_.Value)] - Remove"
             $Hashtable.Remove($_.Name)
         }
