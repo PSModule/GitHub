@@ -93,7 +93,10 @@
     )
 
     $envVars = Get-ChildItem -Path 'Env:'
+    Write-Verbose "Environment variables:"
+    Write-Verbose ($envVars | Format-Table -AutoSize)
     $systemToken = $envVars | Where-Object Name -In 'GH_TOKEN', 'GITHUB_TOKEN' | Select-Object -First 1
+    Write-Verbose "System token: [$systemToken]"
     $systemTokenPresent = $systemToken.count -gt 0
     Write-Verbose "System token present: [$systemTokenPresent]"
     $AuthType = $systemTokenPresent ? 'sPAT' : $PSCmdlet.ParameterSetName
