@@ -38,8 +38,10 @@
 
     $prefix = $script:SecretVault.Prefix
 
-    $RefreshTokenData = (Get-SecretInfo -Name "$prefix`RefreshToken").Metadata | ConvertFrom-HashTable | ConvertTo-HashTable
-    $AccessTokenData = (Get-SecretInfo -Name "$prefix`AccessToken").Metadata | ConvertFrom-HashTable | ConvertTo-HashTable
+    $RefreshTokenData = Get-SecretInfo -Name "$prefix`RefreshToken" |
+        Select-Object -ExpandProperty Metadata | ConvertFrom-HashTable | ConvertTo-HashTable
+    $AccessTokenData = Get-SecretInfo -Name "$prefix`AccessToken" |
+        Select-Object -ExpandProperty Metadata | ConvertFrom-HashTable | ConvertTo-HashTable
     $metadata = Join-Object -Main $RefreshTokenData -Overrides $AccessTokenData -AsHashtable
 
     switch ($Name) {
