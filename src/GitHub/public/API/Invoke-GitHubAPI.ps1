@@ -180,13 +180,13 @@ $($responseHeaders | Format-List | Out-String)
 
 ----------------------------------
 Request:
-$($APICall | ConvertFrom-HashTable | Format-List | Out-String -Stream)
+$($APICall | ConvertFrom-HashTable | Format-List | Out-String)
 ----------------------------------
 Message:
-$($failure.Exception.Message | ConvertFrom-HashTable | Format-List | Out-String -Stream)
+$($failure.Exception.Message | ConvertFrom-HashTable | Format-List | Out-String)
 ----------------------------------
 Response:
-$($failure.Exception.Response | ConvertFrom-HashTable | Format-List | Out-String -Stream)
+$($failure.Exception.Response | ConvertFrom-HashTable | Format-List | Out-String)
 ----------------------------------
 
 "@
