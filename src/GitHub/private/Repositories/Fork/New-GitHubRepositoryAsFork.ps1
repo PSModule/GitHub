@@ -88,12 +88,12 @@
     $body['default_branch_only'] = $DefaultBranchOnly -eq $true
 
     $inputObject = @{
-        APIEndpoint = "/repos/$ForkOwner/$ForkRepo/forks"
+        APIEndpoint = "/repos/$Owner/$Repo/forks"
         Method      = 'POST'
         Body        = $body
     }
 
-    if ($PSCmdlet.ShouldProcess("Repository [$Owner/$Name] as fork of [$ForkOwner/$ForkRepo]", 'Create')) {
+    if ($PSCmdlet.ShouldProcess("Repository [$Organization/$Name] as fork of [$Owner/$Repo]", 'Create')) {
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             Write-Output $_.Response
         }
