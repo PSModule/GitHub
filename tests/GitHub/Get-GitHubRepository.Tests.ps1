@@ -5,11 +5,11 @@
 
     Context 'Parameter Set: MyRepos_Type' {
         It 'Can be called with no parameters' {
-            { Get-GitHubRepository } | Should -Not -Throw
+            { Get-GitHubRepository - } | Should -Not -Throw
         }
 
         It 'Can be called with Type parameter' {
-            { Get-GitHubRepository -Type 'owner' } | Should -Not -Throw
+            { Get-GitHubRepository -Type 'public' } | Should -Not -Throw
         }
     }
 
