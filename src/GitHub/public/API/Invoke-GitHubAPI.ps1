@@ -166,7 +166,7 @@ Request:
 $($APICall | ConvertFrom-HashTable | Format-List | Out-String)
 ----------------------------------
 ResponseHeaders:
-$($responseHeaders | Format-List | Out-String)
+$($responseHeaders.PSObject.Properties | Foreach-Object { $_ | Format-List | Out-String })
 ----------------------------------
 
 "@
@@ -182,20 +182,19 @@ $($responseHeaders | Format-List | Out-String)
         $failure = $_
         $errorResult = @"
 
-----------------------------------
+----------------------------------`n`r
 Request:
 $($APICall | ConvertFrom-HashTable | Format-List | Out-String)
-----------------------------------
+----------------------------------`n`r
 Message:
 $($failure.Exception.Message | ConvertFrom-HashTable | Format-List | Out-String)
-----------------------------------
+----------------------------------`n`r
 Response:
-$($failure.Exception.Response | Format-List | Out-String)
 $($failure.Exception.Response | ConvertFrom-HashTable | Format-List | Out-String)
-$($failure.Exception.Response | ConvertTo-Json -Depth 10 | Out-String)
-----------------------------------
+----------------------------------`n`r
 
 "@
-        throw $errorResult
+        $errorResult.Split([System.Environment]::NewLine) | ForEach-Object { Write-Error $_ }
+        throw $failure.Exception.Message
     }
 }
