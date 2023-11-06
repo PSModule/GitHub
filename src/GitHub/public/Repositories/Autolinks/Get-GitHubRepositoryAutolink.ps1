@@ -13,6 +13,11 @@
 
         Gets all autolinks for the repository 'Hello-World' owned by 'octocat'.
 
+        .EXAMPLE
+        Get-GitHubRepositoryAutolink -Owner 'octocat' -Repo 'Hello-World' -Id 1
+
+        Gets the autolink with the id 1 for the repository 'Hello-World' owned by 'octocat'.
+
         .NOTES
         https://docs.github.com/rest/repos/autolinks#list-all-autolinks-of-a-repository
 
