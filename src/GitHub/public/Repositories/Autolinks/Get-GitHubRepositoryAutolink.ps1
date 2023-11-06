@@ -18,7 +18,7 @@
 
     #>
     [Alias('Get-GitHubRepositoryAutolinks')]
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'Default')]
     param (
         # The account owner of the repository. The name is not case sensitive.
         [Parameter()]
