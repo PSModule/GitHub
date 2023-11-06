@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryAutolink {
+﻿filter Get-GitHubRepositoryAutolinkList {
     <#
         .SYNOPSIS
         List all autolinks of a repository
@@ -9,7 +9,7 @@
         Information about autolinks are only available to repository administrators.
 
         .EXAMPLE
-        Get-GitHubRepositoryAutolink -Owner 'octocat' -Repo 'Hello-World'
+        Get-GitHubRepositoryAutolinkList -Owner 'octocat' -Repo 'Hello-World'
 
         Gets all autolinks for the repository 'Hello-World' owned by 'octocat'.
 
@@ -17,7 +17,6 @@
         https://docs.github.com/rest/repos/autolinks#list-all-autolinks-of-a-repository
 
     #>
-    [Alias('Get-GitHubRepositoryAutolinks')]
     [CmdletBinding()]
     param (
         # The account owner of the repository. The name is not case sensitive.
@@ -27,24 +26,15 @@
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter()]
-        [string] $Repo = (Get-GitHubConfig -Name Repo),
-
-        # The unique identifier of the autolink.
-        [Parameter(
-            Mandatory,
-            ParameterSetName = 'ById'
-        )]
-        [Alias('autolink_id')]
-        [Alias('Id')]
-        [int] $AutolinkId
+        [string] $Repo = (Get-GitHubConfig -Name Repo)
     )
 
-    switch ($PSCmdlet.ParameterSetName) {
-        'ById' {
-            Get-GitHubRepositoryAutolinkById -Owner $Owner -Repo $Repo -Id $AutolinkId
-        }
-        default {
-            Get-GitHubRepositoryAutolinkList -Owner $Owner -Repo $Repo
-        }
+    $inputObject = @{
+        APIEndpoint = "/repos/$Owner/$Repo/autolinks"
+        Method      = 'GET'
+    }
+
+    Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Write-Output $_.Response
     }
 }
