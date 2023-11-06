@@ -31,8 +31,7 @@
         [ValidateSet('newest', 'oldest', 'stargazers', 'watchers')]
         [string] $Sort = 'newest',
 
-        # The number of results per page (max 100).
-        # Default: 30
+        # The number of results per page.
         [Parameter()]
         [ValidateRange(1, 100)]
         [Alias('per_page')]

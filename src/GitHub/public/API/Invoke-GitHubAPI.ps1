@@ -190,7 +190,9 @@ Message:
 $($failure.Exception.Message | ConvertFrom-HashTable | Format-List | Out-String)
 ----------------------------------
 Response:
+$($failure.Exception.Response | Format-List | Out-String)
 $($failure.Exception.Response | ConvertFrom-HashTable | Format-List | Out-String)
+$($failure.Exception.Response | ConvertTo-Json -Depth 10 | Out-String)
 ----------------------------------
 
 "@
