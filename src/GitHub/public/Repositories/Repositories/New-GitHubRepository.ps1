@@ -383,6 +383,9 @@
                 }
             }
             'fork' {
+                if ([string]::IsNullorEmpty($Name)) {
+                    $Name = $ForkRepo
+                }
                 if ($PSCmdlet.ShouldProcess("repository [$Owner/$Name] as fork from [$ForkOwner/$ForkRepo]", 'Create')) {
                     $params = @{
                         Owner             = $ForkOwner
