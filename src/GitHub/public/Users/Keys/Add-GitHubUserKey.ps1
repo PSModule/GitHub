@@ -5,7 +5,8 @@
 
         .DESCRIPTION
         Adds a public SSH key to the authenticated user's GitHub account.
-        Requires that you are authenticated via Basic Auth, or OAuth with at least `write:public_key` [scope](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+        Requires that you are authenticated via Basic Auth, or OAuth with at least `write:public_key`
+        [scope](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
 
         .EXAMPLE
         Add-GitHubUserKey -Title 'ssh-rsa AAAAB3NzaC1yc2EAAA' -Key '2Sg8iYjAxxmI2LvUXpJjkYrMxURPc8r+dB7TJyvv1234'
@@ -39,11 +40,13 @@
     $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
 
     $inputObject = @{
-        APIEndpoint = "/user/keys"
+        APIEndpoint = '/user/keys'
         Method      = 'POST'
         Body        = $body
     }
 
-    (Invoke-GitHubAPI @inputObject).Response
+    Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Write-Output $_.Response
+    }
 
 }

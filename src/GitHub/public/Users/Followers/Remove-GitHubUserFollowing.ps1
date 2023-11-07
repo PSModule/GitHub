@@ -17,7 +17,7 @@
     #>
     [OutputType([pscustomobject])]
     [Alias('Unfollow-GitHubUser')]
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         # The handle for the GitHub user account.
         [Parameter(
@@ -33,6 +33,10 @@
         Method      = 'DELETE'
     }
 
-    $null = (Invoke-GitHubAPI @inputObject).Response
+    if ($PSCmdlet.ShouldProcess("User [$Username]", 'Unfollow')) {
+        $null = Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
+        }
+    }
 
 }

@@ -5,7 +5,9 @@
 
         .DESCRIPTION
         Deletes an SSH signing key from the authenticated user's GitHub account.
-        You must authenticate with Basic Authentication, or you must authenticate with OAuth with at least `admin:ssh_signing_key` scope. For more information, see "[Understanding scopes for OAuth apps](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/)."
+        You must authenticate with Basic Authentication, or you must authenticate with OAuth with at least
+        `admin:ssh_signing_key` scope. For more information, see
+        "[Understanding scopes for OAuth apps](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/)."
 
         .EXAMPLE
         Remove-GitHubUserSigningKey -ID '1234567'
@@ -17,7 +19,7 @@
 
     #>
     [OutputType([pscustomobject])]
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         # The unique identifier of the SSH signing key.
         [Parameter(
@@ -32,6 +34,10 @@
         Method      = 'DELETE'
     }
 
-    $null = (Invoke-GitHubAPI @inputObject).Response
+    if ($PSCmdlet.ShouldProcess("SSH signing key with ID [$ID]", 'Delete')) {
+        $null = Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
+        }
+    }
 
 }

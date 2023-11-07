@@ -18,7 +18,7 @@
     #>
     [Alias('Reset-GHConfig')]
     [OutputType([void])]
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         # Reset the GitHub configuration for a specific scope.
         [Parameter()]
@@ -58,5 +58,7 @@
             }
         }
     }
-    Set-GitHubConfig @Settings
+    if ($PSCmdlet.ShouldProcess('Module config', 'Reset')) {
+        Set-GitHubConfig @Settings
+    }
 }

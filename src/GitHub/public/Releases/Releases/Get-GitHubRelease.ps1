@@ -34,6 +34,7 @@
 
     #>
     [CmdletBinding(DefaultParameterSetName = 'All')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'Latest', Justification = 'Required for parameter set')]
     param (
         # The account owner of the repository. The name is not case sensitive.
         [Parameter()]
@@ -45,6 +46,7 @@
 
         # The number of results per page (max 100).
         [Parameter(ParameterSetName = 'All')]
+        [ValidateRange(1, 100)]
         [int] $PerPage = 30,
 
         # Get the latest release only

@@ -5,7 +5,8 @@
 
         .DESCRIPTION
         Lists the current user's GPG keys.
-        Requires that you are authenticated via Basic Auth or via OAuth with at least `read:gpg_key` [scope](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+        Requires that you are authenticated via Basic Auth or via OAuth with at least `read:gpg_key`
+        [scope](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
 
         .EXAMPLE
         Get-GitHubUserMyGpgKey
@@ -21,6 +22,7 @@
     param (
         # The number of results per page (max 100).
         [Parameter()]
+        [ValidateRange(1, 100)]
         [int] $PerPage = 30
     )
 
@@ -32,6 +34,8 @@
         Body        = $body
     }
 
-    (Invoke-GitHubAPI @inputObject).Response
+    Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Write-Output $_.Response
+    }
 
 }

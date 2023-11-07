@@ -46,6 +46,7 @@
 
         # The number of results per page (max 100).
         [Parameter()]
+        [ValidateRange(1, 100)]
         [int] $PerPage = 30
     )
 

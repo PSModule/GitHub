@@ -18,7 +18,9 @@
         [Parameter(ParameterSetName = 'ByID')]
         [string] $ID,
 
+        # The number of results per page (max 100).
         [Parameter()]
+        [ValidateRange(1, 100)]
         [int] $PerPage = 30
     )
 
@@ -42,6 +44,8 @@
         Body        = $body
     }
 
-    (Invoke-GitHubAPI @inputObject).Response.workflow_runs
+    Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Write-Output $_.Response.workflow_runs
+    }
 
 }

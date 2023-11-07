@@ -4,7 +4,9 @@
         Merges two or more objects into a single object
 
         .DESCRIPTION
-        Merges two or more objects into a single object. The first object is the main object, and the remaining objects are overrides. The overrides are applied in order, so the last object in the list will override any previous values.
+        Merges two or more objects into a single object.
+        The first object is the main object, and the remaining objects are overrides.
+        The overrides are applied in order, so the last object in the list will override any previous values.
 
         .EXAMPLE
         $main = [pscustomobject]@{a = 1; b = 2; c = 3}
@@ -16,7 +18,8 @@
         - - - - -
         7 8 3 6 9
 
-        Merges the three objects into a single object. The values from the last object override the values from the previous objects.
+        Merges the three objects into a single object.
+        The values from the last object override the values from the previous objects.
 
         .EXAMPLE
         $main = @{a = 1;b = 2}
@@ -29,7 +32,8 @@
         b                              2
         c                              4
 
-        Merges the two hashtables into a single hashtable. The values from the last hashtable override the values from the previous hashtables.
+        Merges the two hashtables into a single hashtable.
+        The values from the last hashtable override the values from the previous hashtables.
         Using the alias 'Merge-Object' instead of 'Join-Object'.
 
         .EXAMPLE

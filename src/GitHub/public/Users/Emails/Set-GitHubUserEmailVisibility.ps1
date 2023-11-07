@@ -21,7 +21,7 @@
 
     #>
     [OutputType([pscustomobject])]
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         # Denotes whether an email is publicly visible.
         [Parameter(
@@ -36,11 +36,15 @@
     $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
 
     $inputObject = @{
-        APIEndpoint = "/user/email/visibility"
+        APIEndpoint = '/user/email/visibility'
         Method      = 'PATCH'
         Body        = $body
     }
 
-    (Invoke-GitHubAPI @inputObject).Response
+    if ($PSCmdlet.ShouldProcess("Email visibility [$Visibility]", 'Set')) {
+        $null = Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
+        }
+    }
 
 }

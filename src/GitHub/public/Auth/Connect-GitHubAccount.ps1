@@ -41,6 +41,13 @@
     [Alias('Login-GitHub')]
     [Alias('Login-GH')]
     [OutputType([void])]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'AccessToken', Justification = 'Required for parameter set')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'Is the CLI part of the module.')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSAvoidUsingConvertToSecureStringWithPlainText',
+        '',
+        Justification = 'The tokens are recieved as clear text. Mitigating exposure by removing variables and performing garbage collection.'
+    )]
     [CmdletBinding(DefaultParameterSetName = 'DeviceFlow')]
     param (
         # Choose between authentication methods, either OAuthApp or GitHubApp.
@@ -86,10 +93,14 @@
     )
 
     $envVars = Get-ChildItem -Path 'Env:'
+    Write-Verbose "Environment variables:"
+    Write-Verbose ($envVars | Format-Table -AutoSize | Out-String)
     $systemToken = $envVars | Where-Object Name -In 'GH_TOKEN', 'GITHUB_TOKEN' | Select-Object -First 1
+    Write-Verbose "System token: [$systemToken]"
     $systemTokenPresent = $systemToken.count -gt 0
+    Write-Verbose "System token present: [$systemTokenPresent]"
     $AuthType = $systemTokenPresent ? 'sPAT' : $PSCmdlet.ParameterSetName
-
+    WRite-Verbose "AuthType: [$AuthType]"
     switch ($AuthType) {
         'DeviceFlow' {
             Write-Verbose 'Logging in using device flow...'
@@ -229,4 +240,9 @@
         $repo = $systemRepo.Value.Split('/')[-1]
         Set-GitHubConfig -Repo $repo
     }
+
+    Remove-Variable -Name tokenResponse -ErrorAction SilentlyContinue
+    Remove-Variable -Name settings -ErrorAction SilentlyContinue
+    [System.GC]::Collect()
+
 }

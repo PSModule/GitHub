@@ -39,9 +39,13 @@
     }
 
     $parameters = if ($AsURLEncoded) {
-        ($InputObject.GetEnumerator() | ForEach-Object { "$([System.Web.HttpUtility]::UrlEncode($_.Key))=$([System.Web.HttpUtility]::UrlEncode($_.Value))" }) -join '&'
+        ($InputObject.GetEnumerator() | ForEach-Object {
+            "$([System.Web.HttpUtility]::UrlEncode($_.Key))=$([System.Web.HttpUtility]::UrlEncode($_.Value))"
+        }) -join '&'
     } else {
-        ($InputObject.GetEnumerator() | ForEach-Object { "$([System.Uri]::EscapeDataString($_.Key))=$([System.Uri]::EscapeDataString($_.Value))" }) -join '&'
+        ($InputObject.GetEnumerator() | ForEach-Object {
+            "$([System.Uri]::EscapeDataString($_.Key))=$([System.Uri]::EscapeDataString($_.Value))"
+        }) -join '&'
     }
 
     if ($parameters) {

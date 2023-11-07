@@ -11,6 +11,7 @@ Get-SecretInfo
 Get-Module -Name GitHub -ListAvailable
 $VerbosePreference = 'Continue'
 
+Find-Module -Name GitHub
 Install-Module -Name GitHub -Force -Verbose -AllowPrerelease
 Get-Module -Name GitHub -ListAvailable
 # $env:PSModulePath += ';C:\Repos\GitHub\PSModule\Modules\GitHub\outputs'
@@ -80,3 +81,81 @@ $Release = Get-GitHubRelease -Owner PSModule -Repo Demo -Latest
 Add-GitHubReleaseAsset -Owner PSModule -Repo Demo -ID $Release.id -FilePath 'C:\Repos\GitHub\PSModule\Modules\GitHub\tools\utilities\Local-Testing.ps1'
 
 Get-GitHubReleaseAsset -Owner PSModule -Repo Demo -ReleaseID $Release.id
+
+Get-GitHubRepository | Select-Object full_name, id, visibility, created_at
+Get-GitHubRepository -Type owner | Select-Object full_name, id, visibility, created_at
+Get-GitHubRepository -Type private -Sort pushed | Select-Object full_name, id, visibility, created_at
+
+Get-GitHubRepository -Owner 'PSModule' -Repo 'Demo' | Select-Object full_name, id, visibility, created_at
+Get-GitHubRepository -Owner 'Azure' -Repo 'ResourceModules' | Select-Object full_name, id, visibility, created_at
+
+Get-GitHubRepository -SinceID 702104693 -Verbose | Select-Object full_name, id, visibility, created_at
+
+Get-GitHubRepository -Username 'octocat' -Type all | Select-Object full_name, id, visibility, created_at
+Get-GitHubRepository -Username 'octocat' -Type 'member' | Select-Object full_name, id, visibility, created_at
+Get-GitHubRepository -Username 'octocat' -Sort 'created' -Direction 'asc' | Select-Object full_name, id, visibility, created_at
+
+Get-GitHubRepository -Owner 'PSModule' | Select-Object full_name, id, visibility, created_at
+Get-GitHubRepository -Owner 'PSModule' -Type 'public' | Select-Object full_name, id, visibility, created_at
+Get-GitHubRepository -Owner 'PSModule' -Sort 'created' -Direction 'asc' | Select-Object full_name, id, visibility, created_at
+
+$params = @{
+    Verbose                  = $true
+    Owner                    = 'PSModule'
+    Name                     = 'Hello-world'
+    Description              = 'This is a test repo.'
+    Homepage                 = 'https://github.com'
+    Visibility               = 'public'
+    HasIssues                = $true
+    HasProjects              = $true
+    HasWiki                  = $true
+    HasDownloads             = $true
+    IsTemplate               = $true
+    # TeamID                   = 12345679
+    AutoInit                 = $true
+    # GitignoreTemplate        = 'VisualStudio'
+    # LicenseTemplate          = 'MIT'
+    AllowSquashMerge         = $true
+    SquashMergeCommitTitle   = 'PR_TITLE'
+    SquashMergeCommitMessage = 'PR_BODY'
+    AllowMergeCommit         = $true
+    MergeCommitTitle         = 'PR_TITLE'
+    MergeCommitMessage       = 'PR_BODY'
+    AllowRebaseMerge         = $true
+    AllowAutoMerge           = $true
+    DeleteBranchOnMerge      = $true
+}
+New-GitHubRepositoryOrg @params -GitignoreTemplate VisualStudio -LicenseTemplate mit
+Remove-GitHubRepository -Owner PSModule -Repo 'Hello-world' -Verbose
+
+
+$params = @{
+    Verbose                  = $true
+    Name                     = 'Hello-world'
+    Description              = 'This is a test repo.'
+    Homepage                 = 'https://github.com'
+    Visibility               = 'public'
+    HasIssues                = $true
+    HasProjects              = $true
+    HasWiki                  = $true
+    HasDownloads             = $true
+    IsTemplate               = $true
+    # TeamID                   = 12345679
+    AutoInit                 = $true
+    # GitignoreTemplate        = 'VisualStudio'
+    # LicenseTemplate          = 'MIT'
+    AllowSquashMerge         = $true
+    SquashMergeCommitTitle   = 'PR_TITLE'
+    SquashMergeCommitMessage = 'PR_BODY'
+    AllowMergeCommit         = $true
+    MergeCommitTitle         = 'PR_TITLE'
+    MergeCommitMessage       = 'PR_BODY'
+    AllowRebaseMerge         = $true
+    AllowAutoMerge           = $true
+    DeleteBranchOnMerge      = $true
+}
+New-GitHubRepositoryUser @params -GitignoreTemplate VisualStudio -LicenseTemplate gpl-3.0
+Remove-GitHubRepository -Owner MariusStorhaug -Repo 'Hello-world' -Verbose
+
+
+Get-GitHubRepositoryTopic -Owner 'PSModule' -Repo 'GitHub'

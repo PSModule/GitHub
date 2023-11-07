@@ -16,7 +16,8 @@
 
     #>
     [OutputType([pscustomobject])]
-    [CmdletBinding()]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         # The account owner of the repository. The name is not case sensitive.
         [Parameter()]
@@ -66,7 +67,9 @@
         [Alias('discussion_category_name')]
         [string] $DiscussionCategoryName,
 
-        # Specifies whether this release should be set as the latest release for the repository. Drafts and prereleases cannot be set as latest. Defaults to true for newly published releases. legacy specifies that the latest release should be determined based on the release creation date and higher semantic version.
+        # Specifies whether this release should be set as the latest release for the repository. Drafts and prereleases cannot be set as latest.
+        # Defaults to true for newly published releases. legacy specifies that the latest release should be determined based on the release creation
+        # date and higher semantic version.
         [Parameter()]
         [Alias('make_latest')]
         [ValidateSet('true', 'false', 'legacy')]
@@ -74,10 +77,10 @@
     )
 
     $requestBody = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-    Remove-HashtableEntries -Hashtable $requestBody -RemoveNames 'Owner', 'Repo', 'Draft', 'Prerelease'
-    $requestBody =  Join-Object -AsHashtable -Main $requestBody -Overrides @{
-        draft                  = $Draft.IsPresent ? $Draft : $false
-        prerelease             = $Prerelease.IsPresent ? $Prerelease : $false
+    Remove-HashtableEntry -Hashtable $requestBody -RemoveNames 'Owner', 'Repo', 'Draft', 'Prerelease'
+    $requestBody = Join-Object -AsHashtable -Main $requestBody -Overrides @{
+        draft      = $Draft.IsPresent ? $Draft : $false
+        prerelease = $Prerelease.IsPresent ? $Prerelease : $false
     }
 
     $inputObject = @{
@@ -86,6 +89,10 @@
         Body        = $requestBody
     }
 
-    (Invoke-GitHubAPI @inputObject).Response
+    if ($PSCmdlet.ShouldProcess("release with ID [$ID] in [$Owner/$Repo]", 'Update')) {
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
+        }
+    }
 
 }

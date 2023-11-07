@@ -4,7 +4,9 @@
         Check if a user is blocked by the authenticated user
 
         .DESCRIPTION
-        Returns a 204 if the given user is blocked by the authenticated user. Returns a 404 if the given user is not blocked by the authenticated user, or if the given user account has been identified as spam by GitHub.
+        Returns a 204 if the given user is blocked by the authenticated user.
+        Returns a 404 if the given user is not blocked by the authenticated user,
+        or if the given user account has been identified as spam by GitHub.
 
         .EXAMPLE
         Test-GitHubBlockedUserByUser -Username 'octocat'
@@ -29,6 +31,7 @@
 
         # The number of results per page (max 100).
         [Parameter()]
+        [ValidateRange(1, 100)]
         [int] $PerPage = 30
     )
 

@@ -4,7 +4,8 @@
         Check if a user is blocked by an organization
 
         .DESCRIPTION
-        Returns a 204 if the given user is blocked by the given organization. Returns a 404 if the organization is not blocking the user, or if the user account has been identified as spam by GitHub.
+        Returns a 204 if the given user is blocked by the given organization.
+        Returns a 404 if the organization is not blocking the user, or if the user account has been identified as spam by GitHub.
 
         .EXAMPLE
         Test-GitHubBlockedUserByOrganization -OrganizationName 'PSModule' -Username 'octocat'

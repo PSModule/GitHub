@@ -6,7 +6,9 @@
         .DESCRIPTION
         Lists all users, in the order that they signed up on GitHub. This list includes personal user accounts and organization accounts.
 
-        Note: Pagination is powered exclusively by the `since` parameter. Use the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers) to get the URL for the next page of users.
+        Note: Pagination is powered exclusively by the `since` parameter. Use the
+        [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers)
+        to get the URL for the next page of users.
 
         .EXAMPLE
         Get-GitHubAllUser -Since 17722253
@@ -25,17 +27,20 @@
 
         # The number of results per page (max 100).
         [Parameter()]
+        [ValidateRange(1, 100)]
         [int] $PerPage = 30
     )
 
     $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
 
     $inputObject = @{
-        APIEndpoint = "/users"
+        APIEndpoint = '/users'
         Method      = 'GET'
         Body        = $body
     }
 
-    (Invoke-GitHubAPI @inputObject).Response
+    Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Write-Output $_.Response
+    }
 
 }

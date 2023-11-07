@@ -4,7 +4,8 @@
         List email addresses for the authenticated user
 
         .DESCRIPTION
-        Lists all of your email addresses, and specifies which one is visible to the public. This endpoint is accessible with the `user:email` scope.
+        Lists all of your email addresses, and specifies which one is visible to the public.
+        This endpoint is accessible with the `user:email` scope.
 
         .EXAMPLE
         Get-GitHubUserAllEmail
@@ -20,17 +21,20 @@
     param (
         # The number of results per page (max 100).
         [Parameter()]
+        [ValidateRange(1, 100)]
         [int] $PerPage = 30
     )
 
     $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
 
     $inputObject = @{
-        APIEndpoint = "/user/emails"
+        APIEndpoint = '/user/emails'
         Method      = 'GET'
         Body        = $body
     }
 
-    (Invoke-GitHubAPI @inputObject).Response
+    Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Write-Output $_.Response
+    }
 
 }

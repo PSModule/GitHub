@@ -35,6 +35,8 @@
         Method      = 'PUT'
     }
 
-    $null = (Invoke-GitHubAPI @inputObject).Response
+    $null = Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Write-Output $_.Response
+    }
 
 }

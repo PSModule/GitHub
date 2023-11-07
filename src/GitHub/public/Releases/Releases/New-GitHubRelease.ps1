@@ -20,7 +20,8 @@
 
     #>
     [OutputType([pscustomobject])]
-    [CmdletBinding()]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         # The account owner of the repository. The name is not case sensitive.
         [Parameter()]
@@ -78,13 +79,13 @@
     )
 
     $requestBody = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-    Remove-HashtableEntries -Hashtable $requestBody -RemoveNames 'Owner', 'Repo', 'GenerateReleaseNotes', 'Draft', 'Prerelease'
-    $requestBody =  Join-Object -AsHashtable -Main $requestBody -Overrides @{
+    Remove-HashtableEntry -Hashtable $requestBody -RemoveNames 'Owner', 'Repo', 'GenerateReleaseNotes', 'Draft', 'Prerelease'
+    $requestBody = Join-Object -AsHashtable -Main $requestBody -Overrides @{
         generate_release_notes = $GenerateReleaseNotes.IsPresent
         draft                  = $Draft.IsPresent
         prerelease             = $Prerelease.IsPresent
     }
-    Remove-HashtableEntries -Hashtable $requestBody -NullOrEmptyValues
+    Remove-HashtableEntry -Hashtable $requestBody -NullOrEmptyValues
 
     $inputObject = @{
         APIEndpoint = "/repos/$Owner/$Repo/releases"
@@ -92,6 +93,10 @@
         Body        = $requestBody
     }
 
-    (Invoke-GitHubAPI @inputObject).Response
+    if ($PSCmdlet.ShouldProcess("$Owner/$Repo", 'Create a release')) {
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
+        }
+    }
 
 }

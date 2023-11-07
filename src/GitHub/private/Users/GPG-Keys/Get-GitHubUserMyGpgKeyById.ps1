@@ -5,7 +5,8 @@
 
         .DESCRIPTION
         View extended details for a single GPG key.
-        Requires that you are authenticated via Basic Auth or via OAuth with at least `read:gpg_key` [scope](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+        Requires that you are authenticated via Basic Auth or via OAuth with at least `read:gpg_key`
+        [scope](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
 
         .EXAMPLE
         Get-GitHubUserMyGpgKeyById -ID '1234567'
@@ -32,6 +33,8 @@
         Method      = 'GET'
     }
 
-    (Invoke-GitHubAPI @inputObject).Response
+    Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Write-Output $_.Response
+    }
 
 }

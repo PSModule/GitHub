@@ -89,6 +89,7 @@ Press Enter to open github.com in your browser...:
 ```
 
 #### Personal access token
+
 This is the least secure method of authentication, but it is also the simplest. Running the `Connect-GitHubAccount` command
 with the `-AccessToken` parameter will send you to the GitHub website where you can create a new personal access token.
 Give it the access you need and paste it into the terminal.
@@ -100,6 +101,7 @@ Connect-GitHubAccount -AccessToken
 ```
 
 #### System Access Token
+
 The module also detects the presence of a system access token and uses that if it is present.
 This is useful if you are running the module in a CI/CD pipeline or in a scheduled task.
 The function looks for the `GH_TOKEN` and `GITHUB_TOKEN` environment variables (in order).
@@ -110,6 +112,7 @@ Connect-GitHubAccount
 ```
 
 ### Command Exploration
+
 Familiarize yourself with the available cmdlets using the module's comprehensive documentation or inline help.
 
 ```powershell
@@ -144,25 +147,31 @@ For a detailed understanding of the framework, [read more about PSModule here](h
 ## References
 
 ### Official GitHub Resources:
+
 - [REST API Description](https://github.com/github/rest-api-description)
 - [GitHub CLI Manual](https://cli.github.com/manual/)
 - [GitHub Platform Samples](https://github.com/github/platform-samples)
 
 ### General Web References:
+
 - [Generic HTTP Status Codes (MDN)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
 
 ### Tools Planned for Development:
+
 - [Azure AutoRest (OpenAPI Specification Code Generator)](https://github.com/Azure/autorest)
 
 ### Inspiration Behind the Project:
+
 - [Microsoft's PowerShellForGitHub](https://github.com/microsoft/PowerShellForGitHub)
 - [PSGitHub by pcgeek86](https://github.com/pcgeek86/PSGitHub)
 - [PSSodium by TylerLeonhardt](https://github.com/TylerLeonhardt/PSSodium)
 - [libsodium NuGet Package](https://www.nuget.org/packages/Sodium.Core/)
 
 ### Authentication and Login:
+
 - [PowerShell for GitHub on GitHub Marketplace](https://github.com/apps/powershell-for-github)
 - [Building a CLI with a GitHub App](https://docs.github.com/en/apps/creating-github-apps/writing-code-for-a-github-app/building-a-cli-with-a-github-app)
 
 ### Module Configuration and Environment:
+
 - [GH Environment for GitHub CLI](https://cli.github.com/manual/gh_help_environment)

@@ -29,11 +29,12 @@
 
         # The number of results per page (max 100).
         [Parameter()]
+        [ValidateRange(1, 100)]
         [int] $PerPage = 30
     )
 
     $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-    Remove-HashtableEntries -Hashtable $body -RemoveNames 'username'
+    Remove-HashtableEntry -Hashtable $body -RemoveNames 'username'
 
     $inputObject = @{
         APIEndpoint = "/users/$Username/following"
@@ -41,6 +42,8 @@
         Body        = $body
     }
 
-    (Invoke-GitHubAPI @inputObject).Response
+    Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Write-Output $_.Response
+    }
 
 }

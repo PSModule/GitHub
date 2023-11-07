@@ -8,7 +8,11 @@
 
         **OAuth scope requirements**
 
-        This only lists organizations that your authorization allows you to operate on in some way (e.g., you can list teams with `read:org` scope, you can publicize your organization membership with `user` scope, etc.). Therefore, this API requires at least `user` or `read:org` scope. OAuth requests with insufficient scope receive a `403 Forbidden` response.
+        This only lists organizations that your authorization allows you to operate on
+        in some way (e.g., you can list teams with `read:org` scope, you can publicize your
+        organization membership with `user` scope, etc.). Therefore, this API requires at
+        least `user` or `read:org` scope. OAuth requests with insufficient scope receive a
+        `403 Forbidden` response.
 
         .EXAMPLE
         Get-GitHubMyOrganization
@@ -23,6 +27,7 @@
     param (
         # The number of results per page (max 100).
         [Parameter()]
+        [ValidateRange(1, 100)]
         [int] $PerPage = 30
     )
 
@@ -36,6 +41,7 @@
         Body        = $body
     }
 
-    (Invoke-GitHubAPI @inputObject).Response
-
+    Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Write-Output $_.Response
+    }
 }

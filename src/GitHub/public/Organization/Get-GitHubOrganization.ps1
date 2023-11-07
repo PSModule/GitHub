@@ -34,6 +34,7 @@
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding(DefaultParameterSetName = '__DefaultSet')]
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'All', Justification = 'Required for parameter set')]
     param (
         # The organization name. The name is not case sensitive.
         [Parameter(
@@ -69,6 +70,7 @@
         [Parameter(ParameterSetName = 'AllOrg')]
         [Parameter(ParameterSetName = 'UserOrg')]
         [Parameter(ParameterSetName = '__DefaultSet')]
+        [ValidateRange(1, 100)]
         [int] $PerPage = 30
     )
 

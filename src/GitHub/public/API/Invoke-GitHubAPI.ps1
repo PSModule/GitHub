@@ -90,14 +90,12 @@
         $AccessToken = (Get-GitHubConfig -Name AccessToken)
     }
 
-    $functionName = $MyInvocation.MyCommand.Name
-
     $headers = @{
         Accept                 = $Accept
         'X-GitHub-Api-Version' = $Version
     }
 
-    Remove-HashTableEntries -Hashtable $headers -NullOrEmptyValues
+    Remove-HashtableEntry -Hashtable $headers -NullOrEmptyValues
 
     if (-not $URI) {
         $URI = ("$ApiBaseUri/" -replace '/$', '') + ("/$ApiEndpoint" -replace '^/', '')
@@ -127,7 +125,6 @@
         Authentication          = 'Bearer'
         Token                   = $AccessToken
         ContentType             = $ContentType
-        HttpVersion             = $HttpVersion
         FollowRelLink           = $FollowRelLink
         StatusCodeVariable      = 'APICallStatusCode'
         ResponseHeadersVariable = 'APICallResponseHeaders'
@@ -135,28 +132,69 @@
         OutFile                 = $DownloadFilePath
     }
 
-    $APICall | Remove-HashTableEntries -NullOrEmptyValues
+    #If PSversion is higher than 7.1 use HttpVersion
+    if ($PSVersionTable.PSVersion -ge [version]'7.3') {
+        $APICall['HttpVersion'] = $HttpVersion
+    }
+
+    $APICall | Remove-HashtableEntry -NullOrEmptyValues
 
     if ($Body) {
         # Use body to create the query string for certain situations
         if ($Method -eq 'GET') {
             $queryString = $Body | ConvertTo-QueryString
             $APICall.Uri = $APICall.Uri + $queryString
-        } elseif ($Body -is [string]) { # Use body to create the form data
+        } elseif ($Body -is [string]) {
+            # Use body to create the form data
             $APICall.Body = $Body
         } else {
             $APICall.Body = $Body | ConvertTo-Json -Depth 100
         }
     }
 
-    Invoke-RestMethod @APICall | ForEach-Object {
-        $statusCode = $APICallStatusCode | ConvertTo-Json -Depth 100 | ConvertFrom-Json
-        $responseHeaders = $APICallResponseHeaders | ConvertTo-Json -Depth 100 | ConvertFrom-Json
-        [pscustomobject]@{
-            Request         = $APICall
-            Response        = $_
-            StatusCode      = $statusCode
-            ResponseHeaders = $responseHeaders
+    try {
+        Invoke-RestMethod @APICall | ForEach-Object {
+            $statusCode = $APICallStatusCode | ConvertTo-Json -Depth 100 | ConvertFrom-Json
+            $responseHeaders = $APICallResponseHeaders | ConvertTo-Json -Depth 100 | ConvertFrom-Json
+            $verboseMessage = @"
+
+----------------------------------
+StatusCode:
+$statusCode
+----------------------------------
+Request:
+$($APICall | ConvertFrom-HashTable | Format-List | Out-String)
+----------------------------------
+ResponseHeaders:
+$($responseHeaders.PSObject.Properties | Foreach-Object { $_ | Format-List | Out-String })
+----------------------------------
+
+"@
+            Write-Verbose $verboseMessage
+            [pscustomobject]@{
+                Request         = $APICall
+                Response        = $_
+                StatusCode      = $statusCode
+                ResponseHeaders = $responseHeaders
+            }
         }
+    } catch {
+        $failure = $_
+        $errorResult = @"
+
+----------------------------------`n`r
+Request:
+$($APICall | ConvertFrom-HashTable | Format-List | Out-String)
+----------------------------------`n`r
+Message:
+$($failure.Exception.Message | ConvertFrom-HashTable | Format-List | Out-String)
+----------------------------------`n`r
+Response:
+$($failure.Exception.Response | ConvertFrom-HashTable | Format-List | Out-String)
+----------------------------------`n`r
+
+"@
+        $errorResult.Split([System.Environment]::NewLine) | ForEach-Object { Write-Error $_ }
+        throw $failure.Exception.Message
     }
 }

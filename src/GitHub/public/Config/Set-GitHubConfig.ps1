@@ -17,7 +17,7 @@
         Sets a item called 'MyFavouriteRepo' in the GitHub configuration.
     #>
     [Alias('Set-GHConfig')]
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         # Set the access token type.
         [Parameter()]
@@ -96,7 +96,7 @@
     $updateSecretMetadata = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable
     Write-Verbose "updateSecretMetadata : $($updateSecretMetadata | Out-String)"
     Write-Verbose "updateSecretMetadataType : $($updateSecretMetadata.GetType())"
-    Remove-HashTableEntries -Hashtable $updateSecretMetadata -KeepTypes $keepTypes -RemoveNames $removeKeys
+    Remove-HashtableEntry -Hashtable $updateSecretMetadata -KeepTypes $keepTypes -RemoveNames $removeKeys
     Write-Verbose "updateSecretMetadata : $($updateSecretMetadata | Out-String)"
 
     $newSecretMetadata = Join-Object -Main $newSecretMetadata -Overrides $updateSecretMetadata -AsHashtable
@@ -109,7 +109,9 @@
             Vault              = $script:SecretVault.Name
             SecureStringSecret = $AccessToken
         }
-        Set-Secret @accessTokenSetParam
+        if ($PSCmdlet.ShouldProcess("secret [$secretName] in secret vault [$($script:SecretVault.Name)]", 'Set')) {
+            Set-Secret @accessTokenSetParam
+        }
     }
 
     if (Get-SecretInfo -Name $secretName) {
@@ -118,7 +120,9 @@
             Vault    = $script:SecretVault.Name
             Metadata = $newSecretMetadata
         }
-        Set-SecretInfo @secretSetInfoParam
+        if ($PSCmdlet.ShouldProcess("secret [$secretName] in secret vault [$($script:SecretVault.Name)]", 'Set')) {
+            Set-SecretInfo @secretSetInfoParam
+        }
     }
     #endregion AccessToken
 
@@ -143,7 +147,7 @@
     $updateSecretMetadata = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable
     Write-Verbose "updateSecretMetadata : $($updateSecretMetadata | Out-String)"
     Write-Verbose "updateSecretMetadataType : $($updateSecretMetadata.GetType())"
-    Remove-HashTableEntries -Hashtable $updateSecretMetadata -KeepTypes $keepTypes -RemoveNames $removeKeys
+    Remove-HashtableEntry -Hashtable $updateSecretMetadata -KeepTypes $keepTypes -RemoveNames $removeKeys
     Write-Verbose "updateSecretMetadata : $($updateSecretMetadata | Out-String)"
 
     $newSecretMetadata = Join-Object -Main $newSecretMetadata -Overrides $updateSecretMetadata -AsHashtable
@@ -156,7 +160,9 @@
             Vault              = $script:SecretVault.Name
             SecureStringSecret = $RefreshToken
         }
-        Set-Secret @refreshTokenSetParam
+        if ($PSCmdlet.ShouldProcess("secret [$secretName] in secret vault [$($script:SecretVault.Name)]", 'Set')) {
+            Set-Secret @refreshTokenSetParam
+        }
     }
 
     if (Get-SecretInfo -Name $secretName) {
@@ -165,7 +171,9 @@
             Vault    = $script:SecretVault.Name
             Metadata = $newSecretMetadata
         }
-        Set-SecretInfo @secretSetInfoParam
+        if ($PSCmdlet.ShouldProcess("secret [$secretName] in secret vault [$($script:SecretVault.Name)]", 'Set')) {
+            Set-SecretInfo @secretSetInfoParam
+        }
     }
     #endregion AccessToken
 }

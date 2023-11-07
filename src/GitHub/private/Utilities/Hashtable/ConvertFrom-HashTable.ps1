@@ -38,7 +38,8 @@
             Mandatory,
             ValueFromPipeline
         )]
-        [object]$InputObject
+        [AllowNull()]
+        [object] $InputObject
     )
     $InputObject | ConvertTo-Json -Depth 100 | ConvertFrom-Json
 }

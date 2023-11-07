@@ -41,7 +41,6 @@
         )]
         [Alias('org')]
         [Alias('owner')]
-        [Alias('login')]
         [string] $OrganizationName
     )
 

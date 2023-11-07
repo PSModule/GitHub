@@ -5,7 +5,8 @@
 
         .DESCRIPTION
         Lists all of your email addresses, and specifies which one is visible to the public. This endpoint is accessible with the `user:email` scope.
-        Specifying '-Public' will return only the publicly visible email address, which you can set with the [Set primary email visibility for the authenticated user](https://docs.github.com/rest/users/emails#set-primary-email-visibility-for-the-authenticated-user) endpoint.
+        Specifying '-Public' will return only the publicly visible email address, which you can set with the [Set primary email visibility for the
+        authenticated user](https://docs.github.com/rest/users/emails#set-primary-email-visibility-for-the-authenticated-user) endpoint.
 
         .EXAMPLE
         Get-GitHubUserEmail
@@ -27,6 +28,7 @@
     param (
         # The number of results per page (max 100).
         [Parameter()]
+        [ValidateRange(1, 100)]
         [int] $PerPage = 30,
 
         [Parameter()]

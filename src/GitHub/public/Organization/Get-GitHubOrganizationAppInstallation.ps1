@@ -4,7 +4,8 @@
         List app installations for an organization
 
         .DESCRIPTION
-        Lists all GitHub Apps in an organization. The installation count includes all GitHub Apps installed on repositories in the organization. You must be an organization owner with `admin:read` scope to use this endpoint.
+        Lists all GitHub Apps in an organization. The installation count includes all GitHub Apps installed on repositories in the organization.
+        You must be an organization owner with `admin:read` scope to use this endpoint.
 
         .EXAMPLE
         Get-GitHubOrganizationAppInstallation -OrganizationName 'github'
@@ -31,6 +32,7 @@
 
         # The number of results per page (max 100).
         [Parameter()]
+        [ValidateRange(1, 100)]
         [int] $PerPage = 30
     )
 
@@ -44,6 +46,8 @@
         Body        = $body
     }
 
-    (Invoke-GitHubAPI @inputObject).Response.installations
+    Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Write-Output $_.Response.installations
+    }
 
 }

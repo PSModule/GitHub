@@ -5,7 +5,8 @@
 
         .DESCRIPTION
         Removes a GPG key from the authenticated user's GitHub account.
-        Requires that you are authenticated via Basic Auth or via OAuth with at least `admin:gpg_key` [scope](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+        Requires that you are authenticated via Basic Auth or via OAuth with at least `admin:gpg_key`
+        [scope](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
 
         .EXAMPLE
         Remove-GitHubUserGpgKey -ID '1234567'
@@ -17,7 +18,7 @@
 
     #>
     [OutputType([pscustomobject])]
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         # The ID of the GPG key.
         [Parameter(
@@ -32,6 +33,10 @@
         Method      = 'DELETE'
     }
 
-    $null = (Invoke-GitHubAPI @inputObject).Response
+    if ($PSCmdlet.ShouldProcess("GPG key with ID [$ID]", 'Delete')) {
+        $null = Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
+        }
+    }
 
 }
