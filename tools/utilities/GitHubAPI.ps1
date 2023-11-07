@@ -21,8 +21,8 @@ $response = Invoke-RestMethod -Uri $APIDocURI -Method Get
 # @{n = 'PUT'; e = { (($_.value.psobject.Properties.Name) -contains 'PUT') } }, `
 # @{n = 'PATCH'; e = { (($_.value.psobject.Properties.Name) -contains 'PATCH') } } | Format-Table
 
-$path = '/repos/{owner}/{repo}/properties/values'
-$method = 'get'
+$path = '/repos/{owner}/{repo}/tags/protection/{tag_protection_id}'
+$method = 'delete'
 $response.paths.$path.$method
 $response.paths.$path.$method.tags | clip                             # -> Namespace/foldername
 $response.paths.$path.$method.operationId | clip                      # -> FunctionName
@@ -42,11 +42,11 @@ $response.paths.$path.$method.responses.'200'.content.'application/json'.schema.
 
 $response.components.schemas.PSobject.Properties | ForEach-Object {
     [pscustomobject]@{
-        Name       = $_.Name
-        Title      = $_.Value.title
-        Type       = $_.Value.type
+        Name ame
+        Titlee.title
+        Typelype
         Properties = $_.Value.properties
-        Required   = $_.Value.required
+        Requiredlue.required
     }
 }
 
