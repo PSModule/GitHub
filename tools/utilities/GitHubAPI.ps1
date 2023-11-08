@@ -21,8 +21,8 @@ $response = Invoke-RestMethod -Uri $APIDocURI -Method Get
 # @{n = 'PUT'; e = { (($_.value.psobject.Properties.Name) -contains 'PUT') } }, `
 # @{n = 'PATCH'; e = { (($_.value.psobject.Properties.Name) -contains 'PATCH') } } | Format-Table
 
-$path = '/repos/{owner}/{repo}/tags/protection/{tag_protection_id}'
-$method = 'delete'
+$path = '/repos/{owner}/{repo}/rulesets/rule-suites/{rule_suite_id}'
+$method = 'get'
 $response.paths.$path.$method
 $response.paths.$path.$method.tags | clip                             # -> Namespace/foldername
 $response.paths.$path.$method.operationId | clip                      # -> FunctionName
