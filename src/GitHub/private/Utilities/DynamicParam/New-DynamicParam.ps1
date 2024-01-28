@@ -7,7 +7,29 @@
         Creates a new dynamic parameter for a function.
 
         .EXAMPLE
-        An example
+        DynamicParam {
+            $DynamicParamDictionary = New-DynamicParamDictionary
+
+            $dynParam = @{
+                Name                   = 'GitignoreTemplate'
+                Alias                  = 'gitignore_template'
+                Type                   = [string]
+                ValidateSet            = Get-GitHubGitignoreList
+                DynamicParamDictionary = $DynamicParamDictionary
+            }
+            New-DynamicParam @dynParam
+
+            $dynParam2 = @{
+                Name                   = 'LicenseTemplate'
+                Alias                  = 'license_template'
+                Type                   = [string]
+                ValidateSet            = Get-GitHubLicenseList | Select-Object -ExpandProperty key
+                DynamicParamDictionary = $DynamicParamDictionary
+            }
+            New-DynamicParam @dynParam2
+
+            return $DynamicParamDictionary
+        }
 
         .NOTES
         https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_functions_advanced_parameters?view=powershell-7.3#psdefaultvalue-attribute-arguments
@@ -147,7 +169,7 @@
         }
     }
 
-    # $Comment
+    # TODO: Add ability to add a param doc/comment
 
     if ($PSBoundParameters.ContainsKey('ValidateSet')) {
         $validateSetAttribute = New-Object System.Management.Automation.ValidateSetAttribute($ValidateSet)
