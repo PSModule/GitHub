@@ -9,5 +9,5 @@ concurrency:
 
 jobs:
   Process-PSModule:
-    uses: PSModule/Actions/.github/workflows/Process-PSModule.yml@main
+    uses: PSModule/Process-PSModule/.github/workflows/workflow.yml@main
     secrets: inherit
