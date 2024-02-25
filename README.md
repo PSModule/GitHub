@@ -166,6 +166,9 @@ For a detailed understanding of the framework, [read more about PSModule here](h
 - [PSGitHub by pcgeek86](https://github.com/pcgeek86/PSGitHub)
 - [PSSodium by TylerLeonhardt](https://github.com/TylerLeonhardt/PSSodium)
 - [libsodium NuGet Package](https://www.nuget.org/packages/Sodium.Core/)
+- [GitHubActions by ebekker](https://github.com/ebekker/pwsh-github-action-tools)
+- [powershell-devops by smokedlinq](https://github.com/smokedlinq/powershell-devops)
+- [GitHubActionsToolkit by hugoalh-studio](https://github.com/hugoalh-studio/ghactions-toolkit-powershell)
 
 ### Authentication and Login:
 
