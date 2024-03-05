@@ -21,7 +21,7 @@
             ProjectUri = 'https://github.com/PSModule/GitHub'
 
             # A URL to an icon representing this module.
-            IconUri    = 'https://raw.githubusercontent.com/PSModule/GitHub/main/media/icon.png'
+            IconUri    = 'https://raw.githubusercontent.com/PSModule/GitHub/main/icon/icon.png'
         }
     }
 }
