@@ -1,5 +1,5 @@
 ﻿@{
-    ModuleVersion = '0.3.0'
+    ModuleVersion = '0.0.1'
     Description   = 'GitHub PowerShell Module'
     PrivateData   = @{
         PSData = @{
@@ -13,3 +13,4 @@
         }
     }
 }
+
