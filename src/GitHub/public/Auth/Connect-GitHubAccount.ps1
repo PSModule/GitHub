@@ -19,6 +19,12 @@
         If the user has already logged in, the access token will be refreshed.
 
         .EXAMPLE
+        $env:GH_TOKEN = 'ghx_1234567890'
+        Connect-GitHubAccount
+
+        Connects to GitHub using the access token from environment variable, assuming unattended mode.
+
+        .EXAMPLE
         Connect-GitHubAccount -AccessToken
         ! Enter your personal access token: *************
 
@@ -93,14 +99,14 @@
     )
 
     $envVars = Get-ChildItem -Path 'Env:'
-    Write-Verbose "Environment variables:"
+    Write-Verbose 'Environment variables:'
     Write-Verbose ($envVars | Format-Table -AutoSize | Out-String)
-    $systemToken = $envVars | Where-Object Name -In 'GH_TOKEN', 'GITHUB_TOKEN' | Select-Object -First 1
-    Write-Verbose "System token: [$systemToken]"
-    $systemTokenPresent = $systemToken.count -gt 0
-    Write-Verbose "System token present: [$systemTokenPresent]"
-    $AuthType = $systemTokenPresent ? 'sPAT' : $PSCmdlet.ParameterSetName
-    WRite-Verbose "AuthType: [$AuthType]"
+    $gitHubToken = $envVars | Where-Object Name -In 'GH_TOKEN', 'GITHUB_TOKEN' | Select-Object -First 1
+    Write-Verbose "GitHub token: [$gitHubToken]"
+    $gitHubTokenPresent = $gitHubToken.count -gt 0
+    Write-Verbose "GitHub token present: [$gitHubTokenPresent]"
+    $AuthType = $gitHubTokenPresent ? 'sPAT' : $PSCmdlet.ParameterSetName
+    Write-Verbose "AuthType: [$AuthType]"
     switch ($AuthType) {
         'DeviceFlow' {
             Write-Verbose 'Logging in using device flow...'
@@ -197,11 +203,11 @@
             break
         }
         'sPAT' {
-            Write-Verbose 'Logging in using system access token...'
+            Write-Verbose 'Logging in using GitHub access token...'
             Reset-GitHubConfig -Scope 'Auth'
-            $prefix = $systemToken.Value -replace '_.*$', '_*'
+            $prefix = $gitHubToken.Value -replace '_.*$', '_*'
             $settings = @{
-                AccessToken     = ConvertTo-SecureString -AsPlainText $systemToken.Value
+                AccessToken     = ConvertTo-SecureString -AsPlainText $gitHubToken.Value
                 AccessTokenType = $prefix
                 ApiBaseUri      = 'https://api.github.com'
                 ApiVersion      = '2022-11-28'

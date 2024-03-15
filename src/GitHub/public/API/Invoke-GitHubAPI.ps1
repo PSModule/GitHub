@@ -101,23 +101,6 @@
         $URI = ("$ApiBaseUri/" -replace '/$', '') + ("/$ApiEndpoint" -replace '^/', '')
     }
 
-    # $AccessTokenAsPlainText = ConvertFrom-SecureString $AccessToken -AsPlainText
-    # # Swap out this by using the -Authentication Bearer -Token $AccessToken
-    # switch -Regex ($AccessTokenAsPlainText) {
-    #     '^ghp_|^github_pat_' {
-    #         $headers.authorization = "token $AccessTokenAsPlainText"
-    #     }
-    #     '^ghu_|^gho_' {
-    #         $headers.authorization = "Bearer $AccessTokenAsPlainText"
-    #     }
-    #     default {
-    #         $tokenPrefix = $AccessTokenAsPlainText -replace '_.*$', '_*'
-    #         $errorMessage = "Unexpected AccessToken format: $tokenPrefix"
-    #         Write-Error $errorMessage
-    #         throw $errorMessage
-    #     }
-    # }
-
     $APICall = @{
         Uri                     = $URI
         Method                  = $Method
@@ -166,7 +149,7 @@ Request:
 $($APICall | ConvertFrom-HashTable | Format-List | Out-String)
 ----------------------------------
 ResponseHeaders:
-$($responseHeaders.PSObject.Properties | Foreach-Object { $_ | Format-List | Out-String })
+$($responseHeaders.PSObject.Properties | ForEach-Object { $_ | Format-List | Out-String })
 ----------------------------------
 
 "@
