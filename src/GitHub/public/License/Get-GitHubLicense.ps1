@@ -1,3 +1,5 @@
+#Requires -Modules DynamicParams
+
 filter Get-GitHubLicense {
     <#
         .SYNOPSIS

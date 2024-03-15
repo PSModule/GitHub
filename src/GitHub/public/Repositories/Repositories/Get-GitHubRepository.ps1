@@ -1,4 +1,6 @@
-﻿filter Get-GitHubRepository {
+﻿#Requires -Modules DynamicParams
+
+filter Get-GitHubRepository {
     <#
         .SYNOPSIS
         Gets a specific repository or list of repositories.

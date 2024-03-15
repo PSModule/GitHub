@@ -1,4 +1,6 @@
-﻿filter New-GitHubRepository {
+﻿#Requires -Modules DynamicParams
+
+filter New-GitHubRepository {
     <#
         .SYNOPSIS
         Create a repository for a user or an organization.
