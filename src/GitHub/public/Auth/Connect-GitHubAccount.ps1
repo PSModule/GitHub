@@ -183,8 +183,8 @@
             $accessTokenValue = Read-Host -Prompt 'Enter your personal access token' -AsSecureString
             $accessTokenType = (ConvertFrom-SecureString $accessTokenValue -AsPlainText) -replace '_.*$', '_*'
             if ($accessTokenType -notmatch '^ghp_|^github_pat_') {
-                Write-Warning '⚠ ' -ForegroundColor Yellow -NoNewline
-                Write-Warning "Unexpected access token format: $accessTokenType"
+                Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
+                Write-Host "Unexpected access token format: $accessTokenType"
             }
             $settings = @{
                 AccessToken     = $accessTokenValue
