@@ -1,4 +1,6 @@
-﻿filter New-GitHubRepositoryUser {
+﻿#Requires -Modules DynamicParams
+
+filter New-GitHubRepositoryUser {
     <#
         .SYNOPSIS
         Create a repository for the authenticated user

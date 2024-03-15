@@ -1,4 +1,6 @@
-﻿filter New-GitHubRepositoryOrg {
+﻿#Requires -Modules DynamicParams
+
+filter New-GitHubRepositoryOrg {
     <#
         .SYNOPSIS
         Create an organization repository
