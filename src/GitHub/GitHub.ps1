@@ -1,8 +1,8 @@
 ﻿$scriptFilePath = $MyInvocation.MyCommand.Path
 
-Write-Verbose "[$scriptFilePath] - Initializing GitHub module..."
+Write-Verbose "[$scriptFilePath] - Initializing GitHub PowerShell module..."
 
-Initialize-SecretVault -Name $script:SecretVault.Name -Type $script:SecretVault.Type
+Initialize-Store -Name 'GitHubPowerShell' -SecretVaultName $script:Config.Name -SecretVaultType $script:Config.Type
 
 # Autologon if a token is present in environment variables
 $envVar = Get-ChildItem -Path 'Env:' | Where-Object Name -In 'GH_TOKEN', 'GITHUB_TOKEN' | Select-Object -First 1

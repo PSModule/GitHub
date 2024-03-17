@@ -1,4 +1,6 @@
-﻿function Get-GitHubConfig {
+﻿#Requires -Modules Store
+
+function Get-GitHubConfig {
     <#
         .SYNOPSIS
         Get configuration value.
@@ -40,28 +42,13 @@
 
     switch ($Name) {
         'AccessToken' {
-            Get-Secret -Name "$prefix`AccessToken"
+            Get-StoreConfig -Name "$prefix`AccessToken"
         }
         'RefreshToken' {
-            Get-Secret -Name "$prefix`RefreshToken"
+            Get-StoreConfig -Name "$prefix`RefreshToken"
         }
         default {
-            $RefreshTokenSecretInfo = Get-SecretInfo -Name "$prefix`RefreshToken"
-            if ($null -ne $RefreshTokenSecretInfo.Metadata) {
-                $RefreshTokenMetadata = $RefreshTokenSecretInfo.Metadata | ConvertFrom-HashTable | ConvertTo-HashTable
-            }
-
-            $AccessTokenSecretInfo = Get-SecretInfo -Name "$prefix`AccessToken"
-            if ($null -ne $AccessTokenSecretInfo.Metadata) {
-                $AccessTokenMetadata = $AccessTokenSecretInfo.Metadata | ConvertFrom-HashTable | ConvertTo-HashTable
-            }
-            $metadata = Join-Object -Main $RefreshTokenMetadata -Overrides $AccessTokenMetadata -AsHashtable
-
-            if ($Name) {
-                $metadata.$Name
-            } else {
-                $metadata.GetEnumerator() | Sort-Object -Property Name
-            }
+            Get-StoreConfig -Name $Name
         }
     }
 }

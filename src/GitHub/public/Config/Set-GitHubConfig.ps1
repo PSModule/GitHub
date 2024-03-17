@@ -1,4 +1,6 @@
-﻿function Set-GitHubConfig {
+﻿#Requires -Modules Store
+
+function Set-GitHubConfig {
     <#
         .SYNOPSIS
         Set the GitHub configuration.
@@ -72,108 +74,33 @@
         [string] $UserName
     )
 
-    $prefix = $script:SecretVault.Prefix
+    $prefix = $script:Config.Prefix
 
-    #region AccessToken
-    $secretName = "$prefix`AccessToken"
-    $removeKeys = 'AccessToken', 'RefreshToken', 'RefreshTokenExpirationDate'
-    $keepTypes = 'String', 'Int', 'DateTime'
-
-    # Get existing metadata if it exists
-    $newSecretMetadata = @{}
-    if (Get-SecretInfo -Name $secretName) {
-        $secretGetInfoParam = @{
-            Name  = $secretName
-            Vault = $script:SecretVault.Name
-        }
-        $secretInfo = Get-SecretInfo @secretGetInfoParam
-        Write-Verbose "$secretName - secretInfo : $($secretInfo | Out-String)"
-        $secretMetadata = $secretInfo.Metadata | ConvertFrom-HashTable | ConvertTo-HashTable
-        $newSecretMetadata = Join-Object -Main $newSecretMetadata -Overrides $secretMetadata -AsHashtable
+    $Settings = @{
+        AccessToken                = $AccessToken
+        AccessTokenExpirationDate  = $AccessTokenExpirationDate
+        AccessTokenType            = $AccessTokenType
+        ApiBaseUri                 = $ApiBaseUri
+        ApiVersion                 = $ApiVersion
+        AuthType                   = $AuthType
+        DeviceFlowType             = $DeviceFlowType
+        Owner                      = $Owner
+        RefreshToken               = $RefreshToken
+        RefreshTokenExpirationDate = $RefreshTokenExpirationDate
+        Repo                       = $Repo
+        Scope                      = $Scope
+        UserName                   = $UserName
     }
 
-    # Get metadata updates from parameters and clean up unwanted data
-    $updateSecretMetadata = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable
-    Write-Verbose "updateSecretMetadata : $($updateSecretMetadata | Out-String)"
-    Write-Verbose "updateSecretMetadataType : $($updateSecretMetadata.GetType())"
-    Remove-HashtableEntry -Hashtable $updateSecretMetadata -KeepTypes $keepTypes -RemoveNames $removeKeys
-    Write-Verbose "updateSecretMetadata : $($updateSecretMetadata | Out-String)"
-
-    $newSecretMetadata = Join-Object -Main $newSecretMetadata -Overrides $updateSecretMetadata -AsHashtable
-    Write-Verbose "newSecretMetadata : $($newSecretMetadata | Out-String)"
-    Write-Verbose "newSecretMetadataType : $($newSecretMetadata.GetType())"
-
-    if ($AccessToken) {
-        $accessTokenSetParam = @{
-            Name               = $secretName
-            Vault              = $script:SecretVault.Name
-            SecureStringSecret = $AccessToken
-        }
-        if ($PSCmdlet.ShouldProcess("secret [$secretName] in secret vault [$($script:SecretVault.Name)]", 'Set')) {
-            Set-Secret @accessTokenSetParam
+    foreach ($key in $Settings.Keys) {
+        if ($null -ne $Settings[$key]) {
+            if ($PSCmdlet.ShouldProcess("Setting $key", "Setting $key to $Settings[$key]")) {
+                if ($key -eq 'AccessToken' -or $key -eq 'RefreshToken') {
+                    Set-StoreConfig -Name "$prefix`$key" -Value $Settings[$key]
+                } else {
+                    Set-StoreConfig -Name $key -Value $Settings[$key]
+                }
+            }
         }
     }
-
-    if (Get-SecretInfo -Name $secretName) {
-        $secretSetInfoParam = @{
-            Name     = $secretName
-            Vault    = $script:SecretVault.Name
-            Metadata = $newSecretMetadata
-        }
-        if ($PSCmdlet.ShouldProcess("secret [$secretName] in secret vault [$($script:SecretVault.Name)]", 'Set')) {
-            Set-SecretInfo @secretSetInfoParam
-        }
-    }
-    #endregion AccessToken
-
-    #region RefreshToken
-    $secretName = "$prefix`RefreshToken"
-    $removeKeys = 'AccessToken', 'RefreshToken', 'AccessTokenExpirationDate'
-
-    # Get existing metadata if it exists
-    $newSecretMetadata = @{}
-    if (Get-SecretInfo -Name $secretName) {
-        $secretGetInfoParam = @{
-            Name  = $secretName
-            Vault = $script:SecretVault.Name
-        }
-        $secretInfo = Get-SecretInfo @secretGetInfoParam
-        Write-Verbose "$secretName - secretInfo : $($secretInfo | Out-String)"
-        $secretMetadata = $secretInfo.Metadata | ConvertFrom-HashTable | ConvertTo-HashTable
-        $newSecretMetadata = Join-Object -Main $newSecretMetadata -Overrides $secretMetadata -AsHashtable
-    }
-
-    # Get metadata updates from parameters and clean up unwanted data
-    $updateSecretMetadata = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable
-    Write-Verbose "updateSecretMetadata : $($updateSecretMetadata | Out-String)"
-    Write-Verbose "updateSecretMetadataType : $($updateSecretMetadata.GetType())"
-    Remove-HashtableEntry -Hashtable $updateSecretMetadata -KeepTypes $keepTypes -RemoveNames $removeKeys
-    Write-Verbose "updateSecretMetadata : $($updateSecretMetadata | Out-String)"
-
-    $newSecretMetadata = Join-Object -Main $newSecretMetadata -Overrides $updateSecretMetadata -AsHashtable
-    Write-Verbose "newSecretMetadata : $($newSecretMetadata | Out-String)"
-    Write-Verbose "newSecretMetadataType : $($newSecretMetadata.GetType())"
-
-    if ($RefreshToken) {
-        $refreshTokenSetParam = @{
-            Name               = $secretName
-            Vault              = $script:SecretVault.Name
-            SecureStringSecret = $RefreshToken
-        }
-        if ($PSCmdlet.ShouldProcess("secret [$secretName] in secret vault [$($script:SecretVault.Name)]", 'Set')) {
-            Set-Secret @refreshTokenSetParam
-        }
-    }
-
-    if (Get-SecretInfo -Name $secretName) {
-        $secretSetInfoParam = @{
-            Name     = $secretName
-            Vault    = $script:SecretVault.Name
-            Metadata = $newSecretMetadata
-        }
-        if ($PSCmdlet.ShouldProcess("secret [$secretName] in secret vault [$($script:SecretVault.Name)]", 'Set')) {
-            Set-SecretInfo @secretSetInfoParam
-        }
-    }
-    #endregion AccessToken
 }
