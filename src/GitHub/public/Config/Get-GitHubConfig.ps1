@@ -32,6 +32,8 @@ function Get-GitHubConfig {
             'RefreshToken',
             'RefreshTokenExpirationDate',
             'Repo',
+            'SecretVaultName',
+            'SecretVaultType',
             'Scope',
             'UserName'
         )]

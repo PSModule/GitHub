@@ -65,6 +65,14 @@ function Set-GitHubConfig {
         [Parameter()]
         [string] $Repo,
 
+        # Set the secret vault name.
+        [Parameter()]
+        [string] $SecretVaultName,
+
+        # Set the secret vault type.
+        [Parameter()]
+        [string] $SecretVaultType,
+
         # Set the scope.
         [Parameter()]
         [string] $Scope,
@@ -88,6 +96,8 @@ function Set-GitHubConfig {
         "$prefix`RefreshToken"     = $RefreshToken
         RefreshTokenExpirationDate = $RefreshTokenExpirationDate
         Repo                       = $Repo
+        SecretVaultName            = $SecretVaultName
+        SecretVaultType            = $SecretVaultType
         Scope                      = $Scope
         UserName                   = $UserName
     }
