@@ -38,7 +38,7 @@ function Get-GitHubConfig {
         [string] $Name
     )
 
-    $prefix = $script:SecretVault.Prefix
+    $prefix = $script:Config.Prefix
 
     switch -Regex ($Name) {
         '^AccessToken$|^RefreshToken$' {
