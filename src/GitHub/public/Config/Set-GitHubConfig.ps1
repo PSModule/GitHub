@@ -77,7 +77,7 @@ function Set-GitHubConfig {
     $prefix = $script:Config.Prefix
 
     $Settings = @{
-        AccessToken                = $AccessToken
+        "$prefix`AccessToken"      = $AccessToken
         AccessTokenExpirationDate  = $AccessTokenExpirationDate
         AccessTokenType            = $AccessTokenType
         ApiBaseUri                 = $ApiBaseUri
@@ -85,7 +85,7 @@ function Set-GitHubConfig {
         AuthType                   = $AuthType
         DeviceFlowType             = $DeviceFlowType
         Owner                      = $Owner
-        RefreshToken               = $RefreshToken
+        "$prefix`RefreshToken"     = $RefreshToken
         RefreshTokenExpirationDate = $RefreshTokenExpirationDate
         Repo                       = $Repo
         Scope                      = $Scope
@@ -95,11 +95,7 @@ function Set-GitHubConfig {
     foreach ($key in $Settings.Keys) {
         if ($null -ne $Settings[$key]) {
             if ($PSCmdlet.ShouldProcess("Setting $key", "Setting $key to $Settings[$key]")) {
-                if ($key -eq 'AccessToken' -or $key -eq 'RefreshToken') {
-                    Set-StoreConfig -Name "$prefix`$key" -Value $Settings[$key]
-                } else {
-                    Set-StoreConfig -Name $key -Value $Settings[$key]
-                }
+                Set-StoreConfig -Name $key -Value $Settings[$key]
             }
         }
     }
