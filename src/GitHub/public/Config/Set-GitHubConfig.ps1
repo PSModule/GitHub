@@ -92,12 +92,12 @@ function Set-GitHubConfig {
         UserName                   = $UserName
     }
 
+    $Settings | Remove-HashtableEntry -NullOrEmptyValues
+
     foreach ($key in $Settings.Keys) {
-        if (($null -ne $Settings[$key]) -or (-not [string]::IsNullOrEmpty($Settings[$key]))) {
-            if ($PSCmdlet.ShouldProcess("Setting $key", "Setting $key to $($Settings[$key])")) {
-                Write-Verbose "Setting $key to $($Settings[$key])"
-                Set-StoreConfig -Name $key -Value $Settings[$key]
-            }
+        if ($PSCmdlet.ShouldProcess("Setting $key", "Setting $key to $($Settings[$key])")) {
+            Write-Verbose "Setting $key to $($Settings[$key])"
+            Set-StoreConfig -Name $key -Value $Settings[$key]
         }
     }
 }
