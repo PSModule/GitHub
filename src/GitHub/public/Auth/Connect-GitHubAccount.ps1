@@ -111,7 +111,7 @@
         'DeviceFlow' {
             Write-Verbose 'Logging in using device flow...'
             $clientID = $script:Auth.$Mode.ClientID
-            if ($Mode -ne (Get-GitHubConfig -Name DeviceFlowType -ErrorAction SilentlyContinue)) {
+            if ($Mode -ne (Get-GitHubConfig -Name 'DeviceFlowType' -ErrorAction SilentlyContinue)) {
                 Write-Verbose "Using $Mode authentication..."
                 $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -Scope $Scope
             } else {
@@ -133,7 +133,7 @@
                             Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
                             Write-Host "Access token remaining validity $accessTokenValidityText. Refreshing access token..."
                         }
-                        $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -RefreshToken (Get-GitHubConfig -Name RefreshToken)
+                        $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -RefreshToken (Get-GitHubConfig -Name 'RefreshToken')
                     }
                 } else {
                     $refreshTokenValidity = [datetime](Get-GitHubConfig -Name 'RefreshTokenExpirationDate') - (Get-Date)
@@ -143,7 +143,7 @@
                             Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
                             Write-Host 'Access token expired. Refreshing access token...'
                         }
-                        $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -RefreshToken (Get-GitHubConfig -Name RefreshToken)
+                        $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -RefreshToken (Get-GitHubConfig -Name 'RefreshToken')
                     } else {
                         Write-Verbose "Using $Mode authentication..."
                         $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -Scope $Scope
