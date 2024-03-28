@@ -1,4 +1,11 @@
-﻿Describe 'Get-GitHubRepository' {
+﻿[CmdletBinding()]
+Param(
+    # Path to the module to test.
+    [Parameter()]
+    [string] $Path
+)
+
+Describe 'Get-GitHubRepository' {
     It 'Function exists' {
         Get-Command Get-GitHubRepository | Should -Not -BeNullOrEmpty
     }

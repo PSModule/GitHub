@@ -1,4 +1,11 @@
-﻿Describe 'Get-GitHubStatusIncident' {
+﻿[CmdletBinding()]
+Param(
+    # Path to the module to test.
+    [Parameter()]
+    [string] $Path
+)
+
+Describe 'Get-GitHubStatusIncident' {
     It 'Function exists' {
         Get-Command Get-GitHubStatusIncident | Should -Not -BeNullOrEmpty
     }

@@ -1,4 +1,11 @@
-﻿Describe 'Disconnect-GitHubAccount' {
+﻿[CmdletBinding()]
+Param(
+    # Path to the module to test.
+    [Parameter()]
+    [string] $Path
+)
+
+Describe 'Disconnect-GitHubAccount' {
     It 'Function exists' {
         Get-Command Disconnect-GitHubAccount | Should -Not -BeNullOrEmpty
     }

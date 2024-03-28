@@ -1,4 +1,11 @@
-﻿Describe 'Get-GitHubScheduledMaintenance' {
+﻿[CmdletBinding()]
+Param(
+    # Path to the module to test.
+    [Parameter()]
+    [string] $Path
+)
+
+Describe 'Get-GitHubScheduledMaintenance' {
     It 'Function exists' {
         Get-Command Get-GitHubScheduledMaintenance | Should -Not -BeNullOrEmpty
     }

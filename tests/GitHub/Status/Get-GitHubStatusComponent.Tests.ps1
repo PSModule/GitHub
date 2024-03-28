@@ -1,4 +1,11 @@
-﻿Describe 'Get-GitHubStatusComponent' {
+﻿[CmdletBinding()]
+Param(
+    # Path to the module to test.
+    [Parameter()]
+    [string] $Path
+)
+
+Describe 'Get-GitHubStatusComponent' {
     It 'Function exists' {
         Get-Command Get-GitHubStatusComponent | Should -Not -BeNullOrEmpty
     }
