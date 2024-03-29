@@ -5,6 +5,8 @@ Param(
     [string] $Path
 )
 
+Write-Verbose "Path to the module: [$Path]" -Verbose
+
 Describe 'Disconnect-GitHubAccount' {
     It 'Function exists' {
         Get-Command Disconnect-GitHubAccount | Should -Not -BeNullOrEmpty

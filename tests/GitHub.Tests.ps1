@@ -5,6 +5,8 @@ Param(
     [string] $Path
 )
 
+Write-Verbose "Path to the module: [$Path]" -Verbose
+
 Describe 'GitHub' {
     Context 'Module' {
         It 'The module should be available' {

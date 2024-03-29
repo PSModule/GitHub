@@ -5,6 +5,8 @@ Param(
     [string] $Path
 )
 
+Write-Verbose "Path to the module: [$Path]" -Verbose
+
 Describe 'Get-GitHubRateLimit' {
     It 'Function exists' {
         Get-Command Get-GitHubRateLimit | Should -Not -BeNullOrEmpty

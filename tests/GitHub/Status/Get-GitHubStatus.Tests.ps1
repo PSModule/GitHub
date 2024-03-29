@@ -5,6 +5,8 @@ Param(
     [string] $Path
 )
 
+Write-Verbose "Path to the module: [$Path]" -Verbose
+
 Describe 'Get-GitHubStatus' {
     It 'Function exists' {
         Get-Command Get-GitHubStatus | Should -Not -BeNullOrEmpty
