@@ -1,7 +1,7 @@
 ﻿filter Get-GitHubRepositoryRuleSuite {
     <#
         .SYNOPSIS
-        List repository rule suites or a rule suite by id.
+        List repository rule suites or a rule suite by ID.
 
         .DESCRIPTION
         Lists suites of rule evaluations at the repository level.
@@ -24,7 +24,7 @@
         .EXAMPLE
         Get-GitHubRepositoryRuleSuite -Owner 'octocat' -Repo 'hello-world' -RuleSuiteId 123456789
 
-        Gets information about a suite of rule evaluations with id 123456789 from within the octocat/hello-world repository.
+        Gets information about a suite of rule evaluations with ID 123456789 from within the octocat/hello-world repository.
 
         .NOTES
         https://docs.github.com/rest/repos/rule-suites#list-repository-rule-suites

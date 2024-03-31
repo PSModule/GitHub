@@ -26,7 +26,7 @@
         .EXAMPLE
         Get-GitHubRelease -Owner 'octocat' -Repo 'hello-world' -ID '1234567'
 
-        Gets the release with the id '1234567' for the repository 'hello-world' owned by 'octocat'.
+        Gets the release with the ID '1234567' for the repository 'hello-world' owned by 'octocat'.
 
         .NOTES
         https://docs.github.com/rest/releases/releases#list-releases
@@ -67,7 +67,7 @@
         # The unique identifier of the release.
         [Parameter(
             Mandatory,
-            ParameterSetName = 'Id'
+            ParameterSetName = 'ID'
         )]
         [Alias('release_id')]
         [string] $ID
@@ -77,7 +77,7 @@
         'All' { Get-GitHubReleaseAll -Owner $Owner -Repo $Repo -PerPage $PerPage }
         'Latest' { Get-GitHubReleaseLatest -Owner $Owner -Repo $Repo }
         'Tag' { Get-GitHubReleaseByTagName -Owner $Owner -Repo $Repo -Tag $Tag }
-        'Id' { Get-GitHubReleaseByID -Owner $Owner -Repo $Repo -ID $ID }
+        'ID' { Get-GitHubReleaseByID -Owner $Owner -Repo $Repo -ID $ID }
     }
 
 }

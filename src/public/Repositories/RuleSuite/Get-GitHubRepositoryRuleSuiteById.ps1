@@ -10,7 +10,7 @@
         .EXAMPLE
         Get-GitHubRepositoryRuleSuiteById -Owner 'octocat' -Repo 'hello-world' -RuleSuiteId 123456789
 
-        Gets information about a suite of rule evaluations with id 123456789 from within the octocat/hello-world repository.
+        Gets information about a suite of rule evaluations with ID 123456789 from within the octocat/hello-world repository.
 
         .NOTES
         https://docs.github.com/rest/repos/rule-suites#get-a-repository-rule-suite

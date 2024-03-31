@@ -42,7 +42,7 @@
         )]
         [string] $Username,
 
-        # List all users. Use '-Since' to start at a specific user id.
+        # List all users. Use '-Since' to start at a specific user ID.
         [Parameter(
             Mandatory,
             ParameterSetName = 'AllUsers'

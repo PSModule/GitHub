@@ -14,24 +14,24 @@
         profile and member privileges.
 
         .EXAMPLE
-        Set-GitHubOrganization -OrganizationName 'github' -Blog 'https://github.blog'
+        Set-GitHubOrganization -OrganizationName 'GitHub' -Blog 'https://github.blog'
 
-        Sets the blog URL for the organization 'github' to 'https://github.blog'.
+        Sets the blog URL for the organization 'GitHub' to 'https://github.blog'.
 
         .EXAMPLE
         $param = @{
-            OrganizationName = 'github'
+            OrganizationName = 'GitHub'
             MembersCanCreatePublicRepositories = $true
             MembersCanCreatePrivateRepositories = $true
             MembersCanCreateInternalRepositories = $true
         }
         Set-GitHubOrganization @param
 
-        Sets the repository creation permissions for the organization 'github' to allow all members to create public, private,
+        Sets the repository creation permissions for the organization 'GitHub' to allow all members to create public, private,
         and internal repositories.
 
         .NOTES
-        https://docs.github.com/rest/orgs/orgs#update-an-organization
+        [Update an organization](https://docs.github.com/rest/orgs/orgs#update-an-organization)
 
     #>
     [OutputType([pscustomobject])]

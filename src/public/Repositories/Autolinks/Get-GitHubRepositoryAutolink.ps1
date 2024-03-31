@@ -14,9 +14,9 @@
         Gets all autolinks for the repository 'Hello-World' owned by 'octocat'.
 
         .EXAMPLE
-        Get-GitHubRepositoryAutolink -Owner 'octocat' -Repo 'Hello-World' -Id 1
+        Get-GitHubRepositoryAutolink -Owner 'octocat' -Repo 'Hello-World' -ID 1
 
-        Gets the autolink with the id 1 for the repository 'Hello-World' owned by 'octocat'.
+        Gets the autolink with the ID 1 for the repository 'Hello-World' owned by 'octocat'.
 
         .NOTES
         https://docs.github.com/rest/repos/autolinks#list-all-autolinks-of-a-repository
@@ -40,13 +40,13 @@
             ParameterSetName = 'ById'
         )]
         [Alias('autolink_id')]
-        [Alias('Id')]
+        [Alias('ID')]
         [int] $AutolinkId
     )
 
     switch ($PSCmdlet.ParameterSetName) {
         'ById' {
-            Get-GitHubRepositoryAutolinkById -Owner $Owner -Repo $Repo -Id $AutolinkId
+            Get-GitHubRepositoryAutolinkById -Owner $Owner -Repo $Repo -ID $AutolinkId
         }
         default {
             Get-GitHubRepositoryAutolinkList -Owner $Owner -Repo $Repo

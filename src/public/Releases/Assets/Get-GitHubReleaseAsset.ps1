@@ -4,8 +4,8 @@
         List release assets based on a release ID or asset ID
 
         .DESCRIPTION
-        If an asset id is provided, the asset is returned.
-        If a release id is provided, all assets for the release are returned.
+        If an asset ID is provided, the asset is returned.
+        If a release ID is provided, all assets for the release are returned.
 
         .EXAMPLE
         Get-GitHubReleaseAsset -Owner 'octocat' -Repo 'hello-world' -ID '1234567'

@@ -10,7 +10,7 @@
         .EXAMPLE
         Get-GitHubReleaseById -Owner 'octocat' -Repo 'hello-world' -ID '1234567'
 
-        Gets the release with the id '1234567' for the repository 'hello-world' owned by 'octocat'.
+        Gets the release with the ID '1234567' for the repository 'hello-world' owned by 'octocat'.
 
         .NOTES
         https://docs.github.com/rest/releases/releases#get-a-release

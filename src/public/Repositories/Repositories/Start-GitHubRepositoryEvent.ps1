@@ -37,7 +37,7 @@
         Starts a repository event with the name `on-demand-test` and a `client_payload` that includes `unit` and `integration`.
 
         .NOTES
-        https://docs.github.com/rest/repos/repos#create-a-repository-dispatch-event
+        [Create a repository dispatch event](https://docs.github.com/rest/repos/repos#create-a-repository-dispatch-event)
 
     #>
     [CmdletBinding(SupportsShouldProcess)]

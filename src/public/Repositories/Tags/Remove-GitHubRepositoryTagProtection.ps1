@@ -10,7 +10,7 @@
         .EXAMPLE
         Remove-GitHubRepositoryTagProtection -Owner 'octocat' -Repo 'hello-world' -TagProtectionId 1
 
-        Deletes the tag protection state with the id 1 for the 'hello-world' repository.
+        Deletes the tag protection state with the ID 1 for the 'hello-world' repository.
 
         .NOTES
         https://docs.github.com/rest/repos/tags#delete-a-tag-protection-state-for-a-repository

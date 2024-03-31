@@ -55,7 +55,7 @@
         )]
         [string] $Username,
 
-        # List all organizations. Use '-Since' to start at a specific organization id.
+        # List all organizations. Use '-Since' to start at a specific organization ID.
         [Parameter(
             Mandatory,
             ParameterSetName = 'AllOrg'

@@ -31,7 +31,7 @@
         # The unique identifier of the autolink.
         [Parameter(Mandatory)]
         [Alias('autolink_id')]
-        [Alias('Id')]
+        [Alias('ID')]
         [int] $AutolinkId
     )
 

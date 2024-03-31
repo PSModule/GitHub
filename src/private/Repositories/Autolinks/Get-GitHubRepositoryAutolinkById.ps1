@@ -9,9 +9,9 @@
         Information about autolinks are only available to repository administrators.
 
         .EXAMPLE
-        Get-GitHubRepositoryAutolinkById -Owner 'octocat' -Repo 'Hello-World' -Id 1
+        Get-GitHubRepositoryAutolinkById -Owner 'octocat' -Repo 'Hello-World' -ID 1
 
-        Gets the autolink with the id 1 for the repository 'Hello-World' owned by 'octocat'.
+        Gets the autolink with the ID 1 for the repository 'Hello-World' owned by 'octocat'.
 
         .NOTES
         https://docs.github.com/rest/repos/autolinks#get-an-autolink-reference-of-a-repository
@@ -31,7 +31,7 @@
         # The unique identifier of the autolink.
         [Parameter(Mandatory)]
         [Alias('autolink_id')]
-        [Alias('Id')]
+        [Alias('ID')]
         [int] $AutolinkId
     )
 

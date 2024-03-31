@@ -111,7 +111,7 @@ filter New-GitHubRepositoryOrg {
         [Alias('is_template')]
         [switch] $IsTemplate,
 
-        # The id of the team that will be granted access to this repository. This is only valid when creating a repository in an organization.
+        # The ID of the team that will be granted access to this repository. This is only valid when creating a repository in an organization.
         [Parameter()]
         [Alias('team_id')]
         [int] $TeamId,

@@ -60,7 +60,7 @@
         [Alias('release_id')]
         [string] $ID,
 
-        #The file name of the asset.
+        #The name of the file asset.
         [Parameter()]
         [string] $Name,
 
@@ -78,12 +78,12 @@
         [string] $FilePath
     )
 
-    # If name is not provided, use the file name
+    # If name is not provided, use the name of the file
     if (!$Name) {
         $Name = (Get-Item $FilePath).Name
     }
 
-    # If label is not provided, use the file name
+    # If label is not provided, use the name of the file
     if (!$Label) {
         $Label = (Get-Item $FilePath).Name
     }

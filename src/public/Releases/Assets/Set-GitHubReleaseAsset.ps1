@@ -30,7 +30,7 @@
         [Alias('asset_id')]
         [string] $ID,
 
-        #The file name of the asset.
+        #The name of the file asset.
         [Parameter()]
         [string] $Name,
 
