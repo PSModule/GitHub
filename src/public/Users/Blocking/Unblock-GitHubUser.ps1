@@ -13,9 +13,9 @@
         Returns $true if successful.
 
         .EXAMPLE
-        Unblock-GitHubUser -OrganizationName 'github' -Username 'octocat'
+        Unblock-GitHubUser -OrganizationName 'GitHub' -Username 'octocat'
 
-        Unblocks the user 'octocat' from the organization 'github'.
+        Unblocks the user 'octocat' from the organization 'GitHub'.
         Returns $true if successful.
 
         .NOTES
