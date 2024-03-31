@@ -11,14 +11,14 @@ $GHToken = 'ABC123'
 
 $GHAPIBaseURI = 'https://api.github.com'
 
-Function Get-GHActionRuns {
+Function Get-GHActionRun {
     [CmdletBinding()]
     param ()
 
     # API Reference
     # https://docs.github.com/en/rest/reference/actions#list-workflow-runs-for-a-repository
     $APICall = @{
-        Uri     = "$GHRepoURI/repos/$GHOwner/$GHRepo/actions/runs"
+        Uri     = "$GHAPIBaseURI/repos/$GHOwner/$GHRepo/actions/runs"
         Headers = @{
             Authorization  = "token $GHToken"
             'Content-Type' = 'application/json'
