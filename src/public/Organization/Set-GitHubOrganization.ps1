@@ -16,7 +16,7 @@
         .EXAMPLE
         Set-GitHubOrganization -OrganizationName 'GitHub' -Blog 'https://github.blog'
 
-        Sets the blog URL for the organization 'GitHub' to 'https://github.blog'.
+        Sets the blog URL for the organization 'GitHub' to '<https://github.blog>'.
 
         .EXAMPLE
         $param = @{

@@ -28,7 +28,7 @@
         [Parameter()]
         [Microsoft.PowerShell.Commands.WebRequestMethod] $Method = 'GET',
 
-        # The base URI for the GitHub API. This is usually 'https://api.github.com', but can be adjusted if necessary.
+        # The base URI for the GitHub API. This is usually `https://api.github.com`, but can be adjusted if necessary.
         [Parameter(
             ParameterSetName = 'ApiEndpoint'
         )]
