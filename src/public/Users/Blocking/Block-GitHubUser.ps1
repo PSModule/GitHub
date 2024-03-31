@@ -20,8 +20,8 @@
         Returns $true if successful, $false if not.
 
         .NOTES
-        https://docs.github.com/rest/users/blocking#block-a-user
-        https://docs.github.com/rest/orgs/blocking#block-a-user-from-an-organization
+        [Block a user](https://docs.github.com/rest/users/blocking#block-a-user)
+        [Block a user from an organization](https://docs.github.com/rest/orgs/blocking#block-a-user-from-an-organization)
     #>
     [OutputType([bool])]
     [CmdletBinding()]

@@ -12,7 +12,7 @@
         Adds the Twitter and LinkedIn accounts to the authenticated user's profile.
 
         .NOTES
-        https://docs.github.com/rest/users/social-accounts#add-social-accounts-for-the-authenticated-user
+        [Add social accounts for the authenticated user](https://docs.github.com/rest/users/social-accounts#add-social-accounts-for-the-authenticated-user)
     #>
     [OutputType([void])]
     [Alias('Add-GitHubUserSocials')]

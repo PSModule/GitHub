@@ -9,10 +9,10 @@
         .EXAMPLE
         Add-GitHubUserEmail -Emails 'octocat@github.com','firstname.lastname@work.com'
 
-        Adds the email addresses 'octocat@github.com' and 'firstname.lastname@work.com' to the authenticated user's account.
+        Adds the email addresses `octocat@github.com` and `firstname.lastname@work.com` to the authenticated user's account.
 
         .NOTES
-        https://docs.github.com/rest/users/emails#add-an-email-address-for-the-authenticated-user
+        [Add an email address for the authenticated user](https://docs.github.com/rest/users/emails#add-an-email-address-for-the-authenticated-user)
 
     #>
     [OutputType([pscustomobject])]

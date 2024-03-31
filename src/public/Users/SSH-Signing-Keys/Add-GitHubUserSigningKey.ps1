@@ -15,7 +15,7 @@
         Creates a new SSH signing key for the authenticated user's GitHub account.
 
         .NOTES
-        https://docs.github.com/rest/users/ssh-signing-keys#create-a-ssh-signing-key-for-the-authenticated-user
+        [Create a SSH signing key for the authenticated user](https://docs.github.com/rest/users/ssh-signing-keys#create-a-ssh-signing-key-for-the-authenticated-user)
 
     #>
     [OutputType([pscustomobject])]

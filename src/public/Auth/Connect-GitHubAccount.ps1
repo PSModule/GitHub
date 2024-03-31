@@ -8,7 +8,7 @@
 
         For device flow / device code login:
         PowerShell requests device and user verification codes and gets the authorization URL where you will enter the user verification code.
-        In GitHub you will be asked to enter a user verification code at https://github.com/login/device.
+        In GitHub you will be asked to enter a user verification code at <https://github.com/login/device>.
         PowerShell will keep polling GitHub for the user authentication status. Once you have authorized the device,
         the app will be able to make API calls with a new access token.
 
@@ -37,7 +37,7 @@
         Connects to GitHub using a device flow login and sets the scope of the access token.
 
         .NOTES
-        https://docs.github.com/rest/overview/other-authentication-methods#authenticating-for-saml-sso
+        [Authenticating to the REST API](https://docs.github.com/rest/overview/other-authentication-methods#authenticating-for-saml-sso)
     #>
     [Alias('Connect-GHAccount')]
     [Alias('Connect-GitHub')]
@@ -47,18 +47,19 @@
     [Alias('Login-GitHub')]
     [Alias('Login-GH')]
     [OutputType([void])]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'AccessToken', Justification = 'Required for parameter set')]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'Is the CLI part of the module.')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-        'PSAvoidUsingConvertToSecureStringWithPlainText',
-        '',
+        'PSReviewUnusedParameter', 'AccessToken', Justification = 'Required for parameter set')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSAvoidUsingWriteHost', '', Justification = 'Is the CLI part of the module.')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSAvoidUsingConvertToSecureStringWithPlainText', '',
         Justification = 'The tokens are recieved as clear text. Mitigating exposure by removing variables and performing garbage collection.'
     )]
     [CmdletBinding(DefaultParameterSetName = 'DeviceFlow')]
     param (
         # Choose between authentication methods, either OAuthApp or GitHubApp.
         # For more info about the types of authentication visit:
-        # https://docs.github.com/apps/oauth-apps/building-oauth-apps/differences-between-github-apps-and-oauth-apps
+        # [Differences between GitHub Apps and OAuth apps](https://docs.github.com/apps/oauth-apps/building-oauth-apps/differences-between-github-apps-and-oauth-apps)
         [Parameter(ParameterSetName = 'DeviceFlow')]
         [ValidateSet('OAuthApp', 'GitHubApp')]
         [string] $Mode = 'GitHubApp',
@@ -66,7 +67,7 @@
         # The scope of the access token, when using OAuth authentication.
         # Provide the list of scopes as space-separated values.
         # For more information on scopes visit:
-        # https://docs.github.com/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps
+        # [Scopes for OAuth apps](https://docs.github.com/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps)
         [Parameter(ParameterSetName = 'DeviceFlow')]
         [string] $Scope = 'gist read:org repo workflow',
 

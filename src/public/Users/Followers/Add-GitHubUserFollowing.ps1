@@ -14,7 +14,7 @@
         Follows the user with the username 'octocat'.
 
         .NOTES
-        https://docs.github.com/rest/users/followers#follow-a-user
+        [Follow a user](https://docs.github.com/rest/users/followers#follow-a-user)
 
     #>
     [OutputType([pscustomobject])]

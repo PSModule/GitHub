@@ -20,7 +20,7 @@
         Adds a GPG key to the authenticated user's GitHub account.
 
         .NOTES
-        https://docs.github.com/rest/users/gpg-keys#create-a-gpg-key-for-the-authenticated-user
+        [Create a GPG key for the authenticated user](https://docs.github.com/rest/users/gpg-keys#create-a-gpg-key-for-the-authenticated-user)
 
     #>
     [OutputType([pscustomobject])]

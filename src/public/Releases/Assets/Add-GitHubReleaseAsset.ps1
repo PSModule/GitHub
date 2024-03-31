@@ -42,7 +42,7 @@
         Gets the release assets for the release with the ID '1234567' for the repository 'octocat/hello-world'.
 
         .NOTES
-        https://docs.github.com/rest/releases/assets#upload-a-release-asset
+        [Upload a release asset](https://docs.github.com/rest/releases/assets#upload-a-release-asset)
 
     #>
     [CmdletBinding()]

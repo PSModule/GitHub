@@ -14,7 +14,7 @@
         Adds a new public SSH key to the authenticated user's GitHub account.
 
         .NOTES
-        https://docs.github.com/rest/users/keys#create-a-public-ssh-key-for-the-authenticated-user
+        [Create a public SSH key for the authenticated user](https://docs.github.com/rest/users/keys#create-a-public-ssh-key-for-the-authenticated-user)
 
     #>
     [OutputType([pscustomobject])]
