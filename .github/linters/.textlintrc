@@ -3,6 +3,7 @@
     "comments": true
   },
   "rules": {
-    "terminology": false
+    "Global": true,
+    "English": true
   }
 }
