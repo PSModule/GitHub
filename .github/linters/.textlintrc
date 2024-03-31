@@ -3,8 +3,11 @@
         "comments": true
     },
     "rules": {
-        "common-misspellings": {
-            "ignore": []
+        "terminology": {
+            "defaultTerms": true,
+            "exclude": [
+                "repo"
+            ]
         }
     }
 }
