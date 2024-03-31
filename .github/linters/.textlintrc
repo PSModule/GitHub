@@ -1,9 +1,15 @@
 {
-  "filters": {
-    "comments": true
-  },
-  "rules": {
-    "Global": true,
-    "English": true
-  }
+    "filters": {
+        "comments": true
+    },
+    "rules": {
+        "spelling": {
+            "language": "en",
+            "skipPatterns": [
+                "JavaScript"
+            ],
+            "wordDefinitionRegexp": "/[\\w']+/g",
+            "suggestCorrections": true
+        }
+    }
 }
