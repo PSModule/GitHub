@@ -19,7 +19,7 @@
         If the user has already logged in, the access token will be refreshed.
 
         .EXAMPLE
-        $env:GH_TOKEN = 'ghx_1234567890' #gitleaks:allow
+        $env:GH_TOKEN = '***'
         Connect-GitHubAccount
 
         Connects to GitHub using the access token from environment variable, assuming unattended mode.
