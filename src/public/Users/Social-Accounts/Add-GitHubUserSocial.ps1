@@ -16,6 +16,7 @@
     #>
     [OutputType([void])]
     [Alias('Add-GitHubUserSocials')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Long links for documentation.')]
     [CmdletBinding()]
     param (
         # Full URLs for the social media profiles to add.

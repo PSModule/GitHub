@@ -18,6 +18,7 @@
         [Create a SSH signing key for the authenticated user](https://docs.github.com/rest/users/ssh-signing-keys#create-a-ssh-signing-key-for-the-authenticated-user)
 
     #>
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Long links for documentation.')]
     [OutputType([pscustomobject])]
     [CmdletBinding()]
     param (

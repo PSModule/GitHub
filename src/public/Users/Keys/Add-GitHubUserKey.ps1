@@ -18,6 +18,7 @@
 
     #>
     [OutputType([pscustomobject])]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Long links for documentation.')]
     [CmdletBinding()]
     param (
         # A descriptive name for the new key.
