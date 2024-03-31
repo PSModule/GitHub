@@ -20,7 +20,7 @@
         Returns meta information about GitHub, including a list of GitHub's IP addresses.
 
         .NOTES
-        https://docs.github.com/rest/meta/meta#get-apiname-meta-information
+        [Get GitHub meta information](https://docs.github.com/rest/meta/meta#get-apiname-meta-information)
     #>
     [OutputType([object])]
     [CmdletBinding()]

@@ -29,8 +29,8 @@
         Gets the release with the ID '1234567' for the repository 'hello-world' owned by 'octocat'.
 
         .NOTES
-        https://docs.github.com/rest/releases/releases#list-releases
-        https://docs.github.com/rest/releases/releases#get-the-latest-release
+        [List releases](https://docs.github.com/rest/releases/releases#list-releases)
+        [Get the latest release](https://docs.github.com/rest/releases/releases#get-the-latest-release)
 
     #>
     [CmdletBinding(DefaultParameterSetName = 'All')]

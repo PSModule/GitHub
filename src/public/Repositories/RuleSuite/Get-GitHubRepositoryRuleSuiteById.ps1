@@ -13,8 +13,7 @@
         Gets information about a suite of rule evaluations with ID 123456789 from within the octocat/hello-world repository.
 
         .NOTES
-        https://docs.github.com/rest/repos/rule-suites#get-a-repository-rule-suite
-
+        [Get a repository rule suite](https://docs.github.com/rest/repos/rule-suites#get-a-repository-rule-suite)
     #>
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Long links')]

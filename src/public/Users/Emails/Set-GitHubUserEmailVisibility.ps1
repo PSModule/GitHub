@@ -17,7 +17,7 @@
         Sets the visibility for your primary email addresses to private.
 
         .NOTES
-        https://docs.github.com/rest/users/emails#set-primary-email-visibility-for-the-authenticated-user
+        [Set primary email visibility for the authenticated user](https://docs.github.com/rest/users/emails#set-primary-email-visibility-for-the-authenticated-user)
 
     #>
     [OutputType([pscustomobject])]

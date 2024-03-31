@@ -13,7 +13,7 @@
         label 'new_asset_label'.
 
         .NOTES
-        https://docs.github.com/rest/releases/assets#update-a-release-asset
+        [Update a release asset](https://docs.github.com/rest/releases/assets#update-a-release-asset)
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param (

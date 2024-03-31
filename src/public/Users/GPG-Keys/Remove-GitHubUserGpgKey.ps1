@@ -14,7 +14,7 @@
         Gets the GPG key with ID '1234567' for the authenticated user.
 
         .NOTES
-        https://docs.github.com/rest/users/gpg-keys#delete-a-gpg-key-for-the-authenticated-user
+        [Delete a GPG key for the authenticated user](https://docs.github.com/rest/users/gpg-keys#delete-a-gpg-key-for-the-authenticated-user)
 
     #>
     [OutputType([pscustomobject])]

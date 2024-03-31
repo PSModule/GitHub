@@ -14,7 +14,7 @@
         Gets the tag protection states of the 'hello-world' repository.
 
         .NOTES
-        https://docs.github.com/rest/repos/tags#list-tag-protection-states-for-a-repository
+        [List tag protection states for a repository](https://docs.github.com/rest/repos/tags#list-tag-protection-states-for-a-repository)
 
     #>
     [OutputType([pscustomobject])]

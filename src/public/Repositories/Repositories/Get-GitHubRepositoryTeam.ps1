@@ -20,7 +20,7 @@
         Lists the teams that have access to the specified repository and that are also visible to the authenticated user.
 
         .NOTES
-        https://docs.github.com/rest/repos/repos#list-repository-teams
+        [List repository teams](https://docs.github.com/rest/repos/repos#list-repository-teams)
 
     #>
     [CmdletBinding()]

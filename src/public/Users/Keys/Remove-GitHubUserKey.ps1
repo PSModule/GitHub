@@ -14,7 +14,7 @@
         Deletes the public SSH key with ID '1234567' from the authenticated user's GitHub account.
 
         .NOTES
-        https://docs.github.com/rest/users/keys#delete-a-public-ssh-key-for-the-authenticated-user
+        [Delete a public SSH key for the authenticated user](https://docs.github.com/rest/users/keys#delete-a-public-ssh-key-for-the-authenticated-user)
 
     #>
     [OutputType([pscustomobject])]

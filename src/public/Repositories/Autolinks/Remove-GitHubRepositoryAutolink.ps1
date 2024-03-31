@@ -14,7 +14,7 @@
         Deletes the autolink with ID 1 for the repository 'Hello-World' owned by 'octocat'.
 
         .NOTES
-        https://docs.github.com/rest/repos/autolinks#delete-an-autolink-reference-from-a-repository
+        [Delete an autolink reference from a repository](https://docs.github.com/rest/repos/autolinks#delete-an-autolink-reference-from-a-repository)
 
     #>
     [OutputType([pscustomobject])]

@@ -13,7 +13,7 @@
         Gets all GitHub Apps in the organization `github`.
 
         .NOTES
-        https://docs.github.com/rest/orgs/orgs#list-app-installations-for-an-organization
+        [List app installations for an organization](https://docs.github.com/rest/orgs/orgs#list-app-installations-for-an-organization)
 
     #>
     [OutputType([pscustomobject])]

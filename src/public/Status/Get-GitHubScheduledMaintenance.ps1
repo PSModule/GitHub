@@ -29,7 +29,7 @@
         Get a list of any upcoming maintenances.
 
         .NOTES
-        https://www.githubstatus.com/api#scheduled-maintenances
+        [Scheduled maintenances](https://www.githubstatus.com/api#scheduled-maintenances)
     #>
     param(
         # Get a list of any active maintenances.

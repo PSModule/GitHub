@@ -12,7 +12,7 @@
         Get all supported GitHub API versions.
 
         .NOTES
-        https://docs.github.com/rest/meta/meta#get-all-api-versions
+        [Get all API versions](https://docs.github.com/rest/meta/meta#get-all-api-versions)
     #>
     [OutputType([string[]])]
     [CmdletBinding()]

@@ -14,7 +14,7 @@
         Gets the automated security fixes status for the GitHub repository.
 
         .NOTES
-        https://docs.github.com/rest/repos/repos#check-if-automated-security-fixes-are-enabled-for-a-repository
+        [Check if automated security fixes are enabled for a repository](https://docs.github.com/rest/repos/repos#check-if-automated-security-fixes-are-enabled-for-a-repository)
 
     #>
     [CmdletBinding()]

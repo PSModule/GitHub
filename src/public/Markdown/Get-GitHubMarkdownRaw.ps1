@@ -1,7 +1,7 @@
 ﻿filter Get-GitHubMarkdownRaw {
     <#
         .NOTES
-        https://docs.github.com/rest/reference/meta#github-api-root
+        [Render a Markdown document in raw mode](https://docs.github.com/rest/reference/meta#github-api-root)
     #>
     [CmdletBinding()]
     param (
@@ -19,5 +19,4 @@
     Invoke-GitHubAPI @inputObject | ForEach-Object {
         Write-Output $_.Response
     }
-
 }

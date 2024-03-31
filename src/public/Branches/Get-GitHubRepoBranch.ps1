@@ -12,7 +12,7 @@
         Gets all the branches from the 'Hello-World' repository owned by 'octocat'
 
         .NOTES
-        https://docs.github.com/rest/branches/branches#list-branches
+        [List branches](https://docs.github.com/rest/branches/branches#list-branches)
     #>
     [CmdletBinding()]
     param (

@@ -19,8 +19,8 @@
         Returns $true if successful.
 
         .NOTES
-        https://docs.github.com/rest/users/blocking#unblock-a-user
-        https://docs.github.com/rest/orgs/blocking#unblock-a-user-from-an-organization
+        [Unblock a user](https://docs.github.com/rest/users/blocking#unblock-a-user)
+        [Unblock a user from an organization](https://docs.github.com/rest/orgs/blocking#unblock-a-user-from-an-organization)
     #>
     [OutputType([bool])]
     [CmdletBinding()]

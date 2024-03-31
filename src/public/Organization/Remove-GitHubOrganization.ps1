@@ -15,7 +15,7 @@
         Deletes the organization 'github' and all its repositories.
 
         .NOTES
-        https://docs.github.com/rest/orgs/orgs#delete-an-organization
+        [Delete an organization](https://docs.github.com/rest/orgs/orgs#delete-an-organization)
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding(SupportsShouldProcess)]

@@ -21,7 +21,7 @@
         Gets a list of rule suites for the main branch of the hello-world repository owned by octocat.
 
         .NOTES
-        https://docs.github.com/rest/repos/rule-suites#list-repository-rule-suites
+        [List repository rule suites](https://docs.github.com/rest/repos/rule-suites#list-repository-rule-suites)
 
     #>
     [OutputType([pscustomobject])]

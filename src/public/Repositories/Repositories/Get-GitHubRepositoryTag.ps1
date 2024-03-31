@@ -12,7 +12,7 @@
         Gets all tags of the GitHub repository.
 
         .NOTES
-        https://docs.github.com/rest/repos/repos#list-repository-tags
+        [List repository tags](https://docs.github.com/rest/repos/repos#list-repository-tags)
 
     #>
     [CmdletBinding()]

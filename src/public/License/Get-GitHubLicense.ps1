@@ -29,9 +29,9 @@ filter Get-GitHubLicense {
         The license keyword, license name, or license SPDX ID. For example, mit or mpl-2.0.
 
         .NOTES
-        https://docs.github.com/rest/licenses/licenses#get-a-license
-        https://docs.github.com/rest/licenses/licenses#get-all-commonly-used-licenses
-        https://docs.github.com/rest/licenses/licenses#get-the-license-for-a-repository
+        [Get a license](https://docs.github.com/rest/licenses/licenses#get-a-license)
+        [Get all commonly used licenses](https://docs.github.com/rest/licenses/licenses#get-all-commonly-used-licenses)
+        [Get the license for a repository](https://docs.github.com/rest/licenses/licenses#get-the-license-for-a-repository)
 
     #>
     [CmdletBinding(DefaultParameterSetName = 'List')]

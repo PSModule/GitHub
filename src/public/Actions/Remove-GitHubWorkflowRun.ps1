@@ -14,7 +14,7 @@
         Deletes the workflow run with the ID 123456789 from the 'Hello-World' repository owned by 'octocat'
 
         .NOTES
-        https://docs.github.com/rest/actions/workflow-runs#delete-a-workflow-run
+        [Delete a workflow run](https://docs.github.com/rest/actions/workflow-runs#delete-a-workflow-run)
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param (

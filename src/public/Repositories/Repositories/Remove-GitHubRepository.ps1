@@ -15,7 +15,7 @@
         Deletes the repository `Hello-World` in the `PSModule` organization.
 
         .NOTES
-        https://docs.github.com/rest/repos/repos#delete-a-repository
+        [Delete a repository](https://docs.github.com/rest/repos/repos#delete-a-repository)
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param (

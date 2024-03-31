@@ -12,7 +12,7 @@
         List forks of the 'Hello-World' repository owned by 'octocat'.
 
         .NOTES
-        https://docs.github.com/rest/repos/forks#list-forks
+        [List forks](https://docs.github.com/rest/repos/forks#list-forks)
 
     #>
     [CmdletBinding()]

@@ -17,8 +17,7 @@
         Gets all followers of the user 'octocat'.
 
         .NOTES
-        https://docs.github.com/rest/users/followers#list-followers-of-the-authenticated-user
-
+        [List followers of the authenticated user](https://docs.github.com/rest/users/followers#list-followers-of-the-authenticated-user)
     #>
     [OutputType([pscustomobject])]
     [Alias('Get-GitHubUserMyFollowers')]

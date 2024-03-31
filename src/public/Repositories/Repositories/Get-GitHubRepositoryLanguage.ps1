@@ -13,7 +13,7 @@
         Gets the languages for the 'hello-world' repository owned by 'octocat'.
 
         .NOTES
-        https://docs.github.com/rest/repos/repos#list-repository-languages
+        [List repository languages](https://docs.github.com/rest/repos/repos#list-repository-languages)
 
     #>
     [CmdletBinding()]

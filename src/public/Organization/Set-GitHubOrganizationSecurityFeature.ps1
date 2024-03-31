@@ -19,7 +19,7 @@
         Enable the dependency graph for all repositories in the organization `github`.
 
         .NOTES
-        https://docs.github.com/rest/orgs/orgs#enable-or-disable-a-security-feature-for-an-organization
+        [Enable or disable a security feature for an organization](https://docs.github.com/rest/orgs/orgs#enable-or-disable-a-security-feature-for-an-organization)
     #>
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Long link in notes.')]

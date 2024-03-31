@@ -12,7 +12,7 @@
         Deletes the release asset with the ID '1234567' for the repository 'octocat/hello-world'.
 
         .NOTES
-        https://docs.github.com/rest/releases/assets#delete-a-release-asset
+        [Delete a release asset](https://docs.github.com/rest/releases/assets#delete-a-release-asset)
 
     #>
     [CmdletBinding(SupportsShouldProcess)]

@@ -19,7 +19,7 @@
         .EXAMPLE
 
         .NOTES
-        https://docs.github.com/rest/users/users#get-contextual-information-for-a-user
+        [Get contextual information for a user](https://docs.github.com/rest/users/users#get-contextual-information-for-a-user)
 
     #>
     [OutputType([pscustomobject])]

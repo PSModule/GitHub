@@ -17,7 +17,7 @@
         Gets all contributors to the GitHub repository.
 
         .NOTES
-        https://docs.github.com/rest/repos/repos#list-repository-contributors
+        [List repository contributors](https://docs.github.com/rest/repos/repos#list-repository-contributors)
 
     #>
     [CmdletBinding()]

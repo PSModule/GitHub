@@ -24,7 +24,7 @@
         Update the authenticated user's hiring availability to 'true' and their biography to 'I love programming'
 
         .NOTES
-        https://docs.github.com/rest/users/users#update-the-authenticated-user
+        [Update the authenticated user](https://docs.github.com/rest/users/users#update-the-authenticated-user)
     #>
     [OutputType([void])]
     [Alias('Update-GitHubUser')]

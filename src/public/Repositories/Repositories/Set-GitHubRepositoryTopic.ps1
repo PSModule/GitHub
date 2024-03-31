@@ -12,7 +12,7 @@
         Replaces all topics for the repository 'octocat/hello-world' with the topics 'octocat', 'octo', 'octocat/hello-world'.
 
         .NOTES
-        https://docs.github.com/rest/repos/repos#replace-all-repository-topics
+        [Replace all repository topics](https://docs.github.com/rest/repos/repos#replace-all-repository-topics)
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param (

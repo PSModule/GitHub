@@ -46,7 +46,7 @@
         Get-GitHubRepositoryActivity -Owner 'PSModule' -Repo 'GitHub' -ActivityType 'push','force_push'
 
         .NOTES
-        https://docs.github.com/rest/repos/repos#list-repository-activities
+        [List repository activities](https://docs.github.com/rest/repos/repos#list-repository-activities)
 
     #>
     [CmdletBinding()]

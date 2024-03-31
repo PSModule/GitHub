@@ -20,8 +20,8 @@
         Returns true if the user is blocked, false if not.
 
         .NOTES
-        https://docs.github.com/rest/users/blocking#check-if-a-user-is-blocked-by-the-authenticated-user
-        https://docs.github.com/rest/orgs/blocking#check-if-a-user-is-blocked-by-an-organization
+        [Check if a user is blocked by the authenticated user](https://docs.github.com/rest/users/blocking#check-if-a-user-is-blocked-by-the-authenticated-user)
+        [Check if a user is blocked by an organization](https://docs.github.com/rest/orgs/blocking#check-if-a-user-is-blocked-by-an-organization)
     #>
     [OutputType([bool])]
     [CmdletBinding()]

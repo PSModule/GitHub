@@ -12,8 +12,7 @@
         Unfollows the user with the username 'octocat'.
 
         .NOTES
-        https://docs.github.com/rest/users/followers#unfollow-a-user
-
+        [Unfollow a user](https://docs.github.com/rest/users/followers#unfollow-a-user)
     #>
     [OutputType([pscustomobject])]
     [Alias('Unfollow-GitHubUser')]

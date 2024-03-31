@@ -12,8 +12,7 @@
         Updates the release with the ID '1234567' for the repository 'octocat/hello-world' with the body 'Release notes'.
 
         .NOTES
-        https://docs.github.com/rest/releases/releases#update-a-release
-
+        [Update a release](https://docs.github.com/rest/releases/releases#update-a-release)
     #>
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]

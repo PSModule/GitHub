@@ -21,8 +21,7 @@
         Update-GitHubRepository @params
 
         .NOTES
-        https://docs.github.com/rest/repos/repos#update-a-repository
-
+        [Update a repository](https://docs.github.com/rest/repos/repos#update-a-repository)
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param (

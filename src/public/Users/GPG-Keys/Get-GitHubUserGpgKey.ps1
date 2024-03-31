@@ -22,7 +22,7 @@
         Gets all GPG keys for the 'octocat' user.
 
         .NOTES
-        https://docs.github.com/rest/users/gpg-keys#list-gpg-keys-for-the-authenticated-user
+        [List GPG keys for the authenticated user](https://docs.github.com/rest/users/gpg-keys#list-gpg-keys-for-the-authenticated-user)
 
     #>
     [OutputType([pscustomobject])]

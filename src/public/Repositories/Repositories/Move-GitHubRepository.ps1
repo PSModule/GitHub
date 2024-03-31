@@ -17,7 +17,7 @@
         Moves the GitHub repository to the PSModule organization and renames it to GitHub.
 
         .NOTES
-        https://docs.github.com/rest/repos/repos#transfer-a-repository
+        [Transfer a repository](https://docs.github.com/rest/repos/repos#transfer-a-repository)
 
     #>
     [CmdletBinding()]

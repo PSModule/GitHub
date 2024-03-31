@@ -14,7 +14,7 @@
         Enables automated security fixes for the repository.
 
         .NOTES
-        https://docs.github.com/rest/repos/repos#enable-automated-security-fixes
+        [Enable automated security fixes](https://docs.github.com/rest/repos/repos#enable-automated-security-fixes)
 
     #>
     [CmdletBinding(SupportsShouldProcess)]

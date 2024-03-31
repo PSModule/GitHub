@@ -19,7 +19,7 @@
         An example
 
         .NOTES
-        https://docs.github.com/rest/reference/actions#get-workflow-usage
+        [Get workflow usage](https://docs.github.com/en/rest/actions/workflows#get-workflow-usage)
     #>
     [CmdletBinding(
         DefaultParameterSetName = 'ByName'

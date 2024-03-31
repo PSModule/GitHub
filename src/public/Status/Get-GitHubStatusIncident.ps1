@@ -22,7 +22,7 @@
         Gets the status of GitHub incidents that are unresolved
 
         .NOTES
-        https://www.githubstatus.com/api#incidents
+        [Incidents](https://www.githubstatus.com/api#incidents)
     #>
     [OutputType([pscustomobject[]])]
     [Alias('Get-GitHubStatusIncidents')]

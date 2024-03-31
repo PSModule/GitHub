@@ -13,7 +13,7 @@
         Gets all custom property values that are set for the 'hello-world' repository.
 
         .NOTES
-        https://docs.github.com/rest/repos/custom-properties#get-all-custom-property-values-for-a-repository
+        [Get all custom property values for a repository](https://docs.github.com/rest/repos/custom-properties#get-all-custom-property-values-for-a-repository)
 
     #>
     [OutputType([pscustomobject])]

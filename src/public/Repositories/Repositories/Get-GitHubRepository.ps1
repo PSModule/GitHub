@@ -42,12 +42,11 @@ filter Get-GitHubRepository {
         Gets the specified repository.
 
         .NOTES
-        https://docs.github.com/rest/repos/repos#list-repositories-for-the-authenticated-user
-        https://docs.github.com/rest/repos/repos#get-a-repository
-        https://docs.github.com/rest/repos/repos#list-public-repositories
-        https://docs.github.com/rest/repos/repos#list-organization-repositories
-        https://docs.github.com/rest/repos/repos#list-repositories-for-a-user
-
+        [List repositories for the authenticated user](https://docs.github.com/rest/repos/repos#list-repositories-for-the-authenticated-user)
+        [Get a repository](https://docs.github.com/rest/repos/repos#get-a-repository)
+        [List public repositories](https://docs.github.com/rest/repos/repos#list-public-repositories)
+        [List organization repositories](https://docs.github.com/rest/repos/repos#list-organization-repositories)
+        [List repositories for a user](https://docs.github.com/rest/repos/repos#list-repositories-for-a-user)
     #>
     [CmdletBinding(DefaultParameterSetName = 'MyRepos_Type')]
     param (

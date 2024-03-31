@@ -22,8 +22,8 @@
         and any upcoming or in-progress scheduled maintenances.
 
         .NOTES
-        https://www.githubstatus.com/api#summary
-        https://www.githubstatus.com/api#status
+        [Summary](https://www.githubstatus.com/api#summary)
+        [Status](https://www.githubstatus.com/api#status)
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]

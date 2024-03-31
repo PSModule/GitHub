@@ -13,7 +13,7 @@
         Gets the status of GitHub components
 
         .NOTES
-        https://www.githubstatus.com/api#components
+        [Components](https://www.githubstatus.com/api#components)
     #>
     [OutputType([pscustomobject[]])]
     [Alias('Get-GitHubStatusComponents')]

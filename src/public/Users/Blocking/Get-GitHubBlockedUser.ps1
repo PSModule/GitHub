@@ -17,8 +17,8 @@
         Lists all users blocked by the organization `github`.
 
         .NOTES
-        https://docs.github.com/rest/users/blocking#list-users-blocked-by-the-authenticated-user
-        https://docs.github.com/rest/orgs/blocking#list-users-blocked-by-an-organization
+        [List users blocked by the authenticated user](https://docs.github.com/rest/users/blocking#list-users-blocked-by-the-authenticated-user)
+        [List users blocked by an organization](https://docs.github.com/rest/orgs/blocking#list-users-blocked-by-an-organization)
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]

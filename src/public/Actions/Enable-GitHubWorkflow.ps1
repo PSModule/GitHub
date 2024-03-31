@@ -1,7 +1,7 @@
 ﻿filter Enable-GitHubWorkflow {
     <#
         .NOTES
-        https://docs.github.com/rest/reference/actions#enable-a-workflow
+        [Enable a workflow](https://docs.github.com/en/rest/actions/workflows#enable-a-workflow)
     #>
     [CmdletBinding()]
     param (

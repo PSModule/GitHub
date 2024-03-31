@@ -17,7 +17,7 @@
         Get the octocat as ASCII art with a custom saying
 
         .NOTES
-        https://docs.github.com/rest/meta/meta#get-octocat
+        [Get Octocat](https://docs.github.com/rest/meta/meta#get-octocat)
     #>
     [OutputType([string])]
     [CmdletBinding()]

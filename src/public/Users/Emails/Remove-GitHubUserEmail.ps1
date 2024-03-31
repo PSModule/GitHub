@@ -12,7 +12,7 @@
         Removes the email addresses 'octocat@github.com' and 'firstname.lastname@work.com' from the authenticated user's account.
 
         .NOTES
-        https://docs.github.com/rest/users/emails#delete-an-email-address-for-the-authenticated-user
+        [Delete an email address for the authenticated user](https://docs.github.com/rest/users/emails#delete-an-email-address-for-the-authenticated-user)
 
     #>
     [OutputType([pscustomobject])]

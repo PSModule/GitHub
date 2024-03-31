@@ -13,7 +13,7 @@
         when the prefix GH- is found in an issue, pull request, or commit.
 
         .NOTES
-        https://docs.github.com/rest/repos/autolinks#create-an-autolink-reference-for-a-repository
+        [Create an autolink reference for a repository](https://docs.github.com/rest/repos/autolinks#create-an-autolink-reference-for-a-repository)
 
     #>
     [OutputType([pscustomobject])]

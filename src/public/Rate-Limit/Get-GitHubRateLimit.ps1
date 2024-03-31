@@ -27,7 +27,7 @@
         Gets the rate limit status for the authenticated user.
 
         .NOTES
-        https://docs.github.com/rest/rate-limit/rate-limit#get-rate-limit-status-for-the-authenticated-user
+        [Get rate limit status for the authenticated user](https://docs.github.com/rest/rate-limit/rate-limit#get-rate-limit-status-for-the-authenticated-user)
 
     #>
     [OutputType([pscustomobject])]

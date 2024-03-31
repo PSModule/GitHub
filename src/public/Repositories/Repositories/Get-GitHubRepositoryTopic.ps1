@@ -9,7 +9,7 @@
         .EXAMPLE
 
         .NOTES
-        https://docs.github.com/rest/repos/repos#get-all-repository-topics
+        [Get all repository topics](https://docs.github.com/rest/repos/repos#get-all-repository-topics)
 
     #>
     [CmdletBinding()]

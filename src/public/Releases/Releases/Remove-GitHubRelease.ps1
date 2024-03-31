@@ -12,7 +12,7 @@
         Deletes the release with the ID '1234567' for the repository 'octocat/hello-world'.
 
         .NOTES
-        https://docs.github.com/rest/releases/releases#delete-a-release
+        [Delete a release](https://docs.github.com/rest/releases/releases#delete-a-release)
 
     #>
     [OutputType([pscustomobject])]

@@ -20,8 +20,8 @@ filter Get-GitHubGitignore {
         Get a gitignore template for VisualStudio
 
         .NOTES
-        https://docs.github.com/rest/gitignore/gitignore#get-a-gitignore-template
-        https://docs.github.com/rest/gitignore/gitignore#get-all-gitignore-templates
+        [Get a gitignore template](https://docs.github.com/rest/gitignore/gitignore#get-a-gitignore-template)
+        [Get all gitignore templates](https://docs.github.com/rest/gitignore/gitignore#get-all-gitignore-templates)
 
     #>
     [CmdletBinding(DefaultParameterSetName = 'List')]

@@ -12,7 +12,7 @@
         Returns a list of users blocked by the authenticated user.
 
         .NOTES
-        https://docs.github.com/rest/users/blocking#list-users-blocked-by-the-authenticated-user
+        [List users blocked by the authenticated user](https://docs.github.com/rest/users/blocking#list-users-blocked-by-the-authenticated-user)
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]

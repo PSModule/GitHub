@@ -17,8 +17,8 @@
         Gets all people that 'octocat' follows.
 
         .NOTES
-        https://docs.github.com/rest/users/followers#list-the-people-the-authenticated-user-follows
-        https://docs.github.com/rest/users/followers#list-the-people-a-user-follows
+        [List the people the authenticated user follows](https://docs.github.com/rest/users/followers#list-the-people-the-authenticated-user-follows)
+        [List the people a user follows](https://docs.github.com/rest/users/followers#list-the-people-a-user-follows)
 
     #>
     [OutputType([pscustomobject])]

@@ -15,7 +15,7 @@
         Gets the CODEOWNERS errors for the repository.
 
         .NOTES
-        https://docs.github.com/rest/repos/repos#list-codeowners-errors
+        [List CODEOWNERS errors](https://docs.github.com/rest/repos/repos#list-codeowners-errors)
 
     #>
     [CmdletBinding()]

@@ -16,7 +16,7 @@
         Creates a release for the repository 'octocat/hello-world' with the tag 'v1.0.0' and the target commitish 'main'.
 
         .NOTES
-        https://docs.github.com/rest/releases/releases#create-a-release
+        [Create a release](https://docs.github.com/rest/releases/releases#create-a-release)
 
     #>
     [OutputType([pscustomobject])]

@@ -99,8 +99,8 @@ filter New-GitHubRepository {
         For example, "mit" or "mpl-2.0".
 
         .NOTES
-        https://docs.github.com/rest/repos/repos#create-a-repository-for-the-authenticated-user
-        https://docs.github.com/rest/repos/repos#create-an-organization-repository
+        [Create a repository for the authenticated user](https://docs.github.com/rest/repos/repos#create-a-repository-for-the-authenticated-user)
+        [Create an organization repository](https://docs.github.com/rest/repos/repos#create-an-organization-repository)
 
     #>
     [OutputType([pscustomobject])]

@@ -18,7 +18,7 @@
         Gets the release assets for the release with the ID '7654321' for the repository 'octocat/hello-world'.
 
         .NOTES
-        https://docs.github.com/rest/releases/assets#get-a-release-asset
+        [Get a release asset](https://docs.github.com/rest/releases/assets#get-a-release-asset)
 
     #>
     [CmdletBinding()]

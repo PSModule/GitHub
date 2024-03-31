@@ -15,7 +15,7 @@
         Removes the SSH signing key with the ID of `1234567` from the authenticated user's GitHub account.
 
         .NOTES
-        https://docs.github.com/rest/users/ssh-signing-keys#delete-an-ssh-signing-key-for-the-authenticated-user
+        [Delete an SSH signing key for the authenticated user](https://docs.github.com/rest/users/ssh-signing-keys#delete-an-ssh-signing-key-for-the-authenticated-user)
 
     #>
     [OutputType([pscustomobject])]

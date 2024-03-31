@@ -12,7 +12,7 @@
         Get the root endpoint for the GitHub API.
 
         .NOTES
-        https://docs.github.com/rest/meta/meta#github-api-root
+        [GitHub API Root](https://docs.github.com/rest/meta/meta#github-api-root)
     #>
     [CmdletBinding()]
     param ()

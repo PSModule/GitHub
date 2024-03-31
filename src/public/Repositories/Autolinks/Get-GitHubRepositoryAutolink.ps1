@@ -19,7 +19,7 @@
         Gets the autolink with the ID 1 for the repository 'Hello-World' owned by 'octocat'.
 
         .NOTES
-        https://docs.github.com/rest/repos/autolinks#list-all-autolinks-of-a-repository
+        [Get all autolinks of a repository](https://docs.github.com/rest/repos/autolinks#list-all-autolinks-of-a-repository)
 
     #>
     [Alias('Get-GitHubRepositoryAutolinks')]

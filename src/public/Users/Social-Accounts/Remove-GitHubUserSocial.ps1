@@ -13,7 +13,7 @@
         Remove-GitHubUserSocial -AccountUrls 'https://twitter.com/MyTwitterAccount'
 
         .NOTES
-        https://docs.github.com/rest/users/social-accounts#delete-social-accounts-for-the-authenticated-user
+        [Delete social accounts for the authenticated user](https://docs.github.com/rest/users/social-accounts#delete-social-accounts-for-the-authenticated-user)
     #>
     [OutputType([void])]
     [Alias('Remove-GitHubUserSocials')]

@@ -13,8 +13,7 @@
         Creates a tag protection state for the 'hello-world' repository with the pattern 'v1.*'.
 
         .NOTES
-        https://docs.github.com/rest/repos/tags#create-a-tag-protection-state-for-a-repository
-
+        [Create a tag protection state for a repository](https://docs.github.com/rest/repos/tags#create-a-tag-protection-state-for-a-repository)
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding(SupportsShouldProcess)]

@@ -18,7 +18,7 @@
         Downloads all the emojis available to use on GitHub to the specified destination.
 
         .NOTES
-        https://docs.github.com/rest/reference/emojis#get-emojis
+        [Get emojis](https://docs.github.com/rest/reference/emojis#get-emojis)
     #>
     [CmdletBinding()]
     param (

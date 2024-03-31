@@ -4,9 +4,9 @@
         List releases
 
         .DESCRIPTION
-        This returns a list of releases, which does not include regular Git tags that have not been associated with a release.
-        To get a list of Git tags, use the [Repository Tags API](https://docs.github.com/rest/repos/repos#list-repository-tags).
-        Information about published releases are available to everyone. Only users with push access will receive listings for draft releases.
+        Generate a name and body describing a [release](https://docs.github.com/en/rest/releases/releases#get-a-release). The body content will be markdown formatted and contain information like
+        the changes since last release and users who contributed. The generated release notes are not saved anywhere. They are
+        intended to be generated and used when creating a new release.
 
         .EXAMPLE
         $params = @{
@@ -32,7 +32,6 @@
         Creates a new release notes draft for the repository 'hello-world' owned by 'octocat' with the tag name 'v1.0.0'.
         In this example the tag 'v1.0.0' has to exist in the repository.
 
-
         .EXAMPLE
         $params = @{
             Owner                 = 'octocat'
@@ -49,7 +48,7 @@
         configuration file located in the repository at '.github/custom_release_config.yml'.
 
         .NOTES
-        https://docs.github.com/rest/releases/releases#list-releases
+        [Generate release notes content for a release](https://docs.github.com/rest/releases/releases#list-releases)
 
     #>
     [OutputType([pscustomobject])]
