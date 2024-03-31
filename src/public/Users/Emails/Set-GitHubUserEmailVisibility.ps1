@@ -21,6 +21,7 @@
 
     #>
     [OutputType([pscustomobject])]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [CmdletBinding(SupportsShouldProcess)]
     param (
         # Denotes whether an email is publicly visible.

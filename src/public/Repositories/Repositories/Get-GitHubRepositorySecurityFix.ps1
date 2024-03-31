@@ -17,8 +17,9 @@
         [Check if automated security fixes are enabled for a repository](https://docs.github.com/rest/repos/repos#check-if-automated-security-fixes-are-enabled-for-a-repository)
 
     #>
-    [CmdletBinding()]
     [Alias('Get-GitHubRepoSecurityFixes')]
+    [CmdletBinding()]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     param (
         # The account owner of the repository. The name is not case sensitive.
         [Parameter()]

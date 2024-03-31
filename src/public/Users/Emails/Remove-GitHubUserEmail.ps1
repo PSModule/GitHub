@@ -16,6 +16,7 @@
 
     #>
     [OutputType([pscustomobject])]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [CmdletBinding(SupportsShouldProcess)]
     param (
         # Email addresses associated with the GitHub user account.

@@ -5,6 +5,7 @@
         [List workflow runs for a repository](https://docs.github.com/rest/actions/workflow-runs?apiVersion=2022-11-28#list-workflow-runs-for-a-repository)
     #>
     [CmdletBinding(DefaultParameterSetName = 'Repo')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     param (
         [Parameter()]
         [string] $Owner = (Get-GitHubConfig -Name Owner),

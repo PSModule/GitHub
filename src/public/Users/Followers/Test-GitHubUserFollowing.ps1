@@ -24,6 +24,7 @@
 
     #>
     [OutputType([bool])]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [Alias('Test-GitHubUserFollows')]
     [CmdletBinding()]
     param (

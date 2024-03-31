@@ -16,6 +16,7 @@
         [Delete social accounts for the authenticated user](https://docs.github.com/rest/users/social-accounts#delete-social-accounts-for-the-authenticated-user)
     #>
     [OutputType([void])]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [Alias('Remove-GitHubUserSocials')]
     [CmdletBinding(SupportsShouldProcess)]
     param (
