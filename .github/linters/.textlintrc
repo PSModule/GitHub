@@ -10,6 +10,17 @@
             ],
             "wordDefinitionRegexp": "/[\\w']+/g",
             "suggestCorrections": true
+        },
+        "abbr-within-parentheses": true,
+        "rousseau": {
+            "showLevels": [
+                "suggestion",
+                "warning",
+                "error"
+            ]
+        },
+        "common-misspellings": {
+            "ignore": []
         }
     }
 }
