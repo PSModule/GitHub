@@ -9,7 +9,7 @@
         .EXAMPLE
         New-GitHubRepositoryAutolink -Owner 'octocat' -Repo 'Hello-World' -KeyPrefix 'GH-' -UrlTemplate 'https://www.example.com/issue/<num>'
 
-        Creates an autolink for the repository 'Hello-World' owned by 'octocat' that links to 'https://www.example.com/issue/123>
+        Creates an autolink for the repository 'Hello-World' owned by 'octocat' that links to <https://www.example.com/issue/123>
         when the prefix 'GH-' is found in an issue, pull request, or commit.
 
         .NOTES
