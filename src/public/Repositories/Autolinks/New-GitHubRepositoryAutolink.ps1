@@ -9,8 +9,8 @@
         .EXAMPLE
         New-GitHubRepositoryAutolink -Owner 'octocat' -Repo 'Hello-World' -KeyPrefix 'GH-' -UrlTemplate 'https://www.example.com/issue/<num>'
 
-        Creates an autolink for the repository 'Hello-World' owned by 'octocat' that links to <'https://www.example.com/issue/<num>'>
-        when the prefix GH- is found in an issue, pull request, or commit.
+        Creates an autolink for the repository 'Hello-World' owned by 'octocat' that links to 'https://www.example.com/issue/123>
+        when the prefix 'GH-' is found in an issue, pull request, or commit.
 
         .NOTES
         [Create an autolink reference for a repository](https://docs.github.com/rest/repos/autolinks#create-an-autolink-reference-for-a-repository)
