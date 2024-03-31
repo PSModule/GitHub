@@ -48,6 +48,8 @@
     [Alias('Login-GH')]
     [OutputType([void])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSAvoidLongLines', '', Justification = 'Long links for documentation.')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSReviewUnusedParameter', 'AccessToken', Justification = 'Required for parameter set')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSAvoidUsingWriteHost', '', Justification = 'Is the CLI part of the module.')]
