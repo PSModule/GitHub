@@ -14,9 +14,9 @@
         Returns $true if successful, $false if not.
 
         .EXAMPLE
-        Block-GitHubUser -OrganizationName 'github' -Username 'octocat'
+        Block-GitHubUser -OrganizationName 'GitHub' -Username 'octocat'
 
-        Blocks the user 'octocat' from the organization 'github'.
+        Blocks the user 'octocat' from the organization 'GitHub'.
         Returns $true if successful, $false if not.
 
         .NOTES

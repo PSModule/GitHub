@@ -105,10 +105,8 @@
                 ],
                 "Ajax",
                 "API",
-                [
-                    "API['’]?s",
-                    "APIs"
-                ],
+                "APIs",
+                "API's",
                 [
                     "(?<!\\.)css\\b",
                     "CSS"
@@ -420,10 +418,6 @@
                 [
                     "client ?side",
                     "client-side"
-                ],
-                [
-                    "command ?line",
-                    "command-line"
                 ],
                 [
                     "end ?to ?end",
