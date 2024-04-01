@@ -4,7 +4,7 @@ The **GitHub PowerShell** module serves as a convenient API wrapper around [GitH
 
 **GitHub PowerShell** is built with the community in mind and targets individuals who prefer script-based solutions and want to automate various tasks on GitHub without resorting to a full-fledged development approach.
 
-## Features & Benefits of GitHub PowerShell:
+## Features & Benefits of GitHub PowerShell
 
 - **Comprehensive Access**: Harness the power of GitHub's REST API from your PowerShell console, providing you with capabilities to manage repositories, issues, pull requests, and more.
 
@@ -34,7 +34,7 @@ Install-Module -Name GitHub -Force -AllowClobber
 
 Authenticate using your GitHub credentials or access tokens to begin executing commands. Tokens and other
 configuration details are stored encrypted on the system using the PowerShell modules [SecretManagement and SecretStore Overview](https://learn.microsoft.com/en-us/powershell/utility-modules/secretmanagement/overview?view=ps-modules),
-for more info on the implementation, see the section on [storing configuration](#storing-configuration).
+for more info on the implementation, see the section on storing configuration.
 
 #### Device flow
 
@@ -91,7 +91,7 @@ Press Enter to open github.com in your browser...:
 #### Personal access token
 
 This is the least secure method of authentication, but it is also the simplest. Running the `Connect-GitHubAccount` command
-with the `-AccessToken` parameter will send you to the GitHub website where you can create a new personal access token.
+with the `-AccessToken` parameter will send you to the GitHub site where you can create a new personal access token.
 Give it the access you need and paste it into the terminal.
 
 ```powershell
@@ -146,21 +146,21 @@ For a detailed understanding of the framework, [read more about PSModule here](h
 
 ## References
 
-### Official GitHub Resources:
+### Official GitHub Resources
 
 - [REST API Description](https://github.com/github/rest-api-description)
 - [GitHub CLI Manual](https://cli.github.com/manual/)
 - [GitHub Platform Samples](https://github.com/github/platform-samples)
 
-### General Web References:
+### General Web References
 
 - [Generic HTTP Status Codes (MDN)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
 
-### Tools Planned for Development:
+### Tools Planned for Development
 
 - [Azure AutoRest (OpenAPI Specification Code Generator)](https://github.com/Azure/autorest)
 
-### Inspiration Behind the Project:
+### Inspiration Behind the Project
 
 - [Microsoft's PowerShellForGitHub](https://github.com/microsoft/PowerShellForGitHub)
 - [PSGitHub by pcgeek86](https://github.com/pcgeek86/PSGitHub)
@@ -170,11 +170,11 @@ For a detailed understanding of the framework, [read more about PSModule here](h
 - [powershell-devops by smokedlinq](https://github.com/smokedlinq/powershell-devops)
 - [GitHubActionsToolkit by hugoalh-studio](https://github.com/hugoalh-studio/ghactions-toolkit-powershell)
 
-### Authentication and Login:
+### Authentication and Login
 
 - [PowerShell for GitHub on GitHub Marketplace](https://github.com/apps/powershell-for-github)
 - [Building a CLI with a GitHub App](https://docs.github.com/en/apps/creating-github-apps/writing-code-for-a-github-app/building-a-cli-with-a-github-app)
 
-### Module Configuration and Environment:
+### Module Configuration and Environment
 
 - [GH Environment for GitHub CLI](https://cli.github.com/manual/gh_help_environment)

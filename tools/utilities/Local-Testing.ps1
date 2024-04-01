@@ -39,7 +39,7 @@ $format = "yyyy-MM-dd HH:mm:ss 'UTC'"
 $date = [datetime]::ParseExact($str, $format, $null)
 $date
 
-Get-GitHubOrganization | Select-Object Name, login, id
+Get-GitHubOrganization | Select-Object Name, login, ID
 Get-GitHubOrganization -OrganizationName 'PowerShell'
 Get-GitHubOrganization -OrganizationName 'PSModule'
 
@@ -52,7 +52,7 @@ Set-GitHubOrganization -OrganizationName 'PSModule' -Company 'PSModule123' -Defa
 Set-GitHubOrganization -OrganizationName 'PSModule' -Company 'PSModule' -DefaultRepositoryPermission read | Select-Object name, company, default_repository_permission
 
 Get-GitHubUser
-Get-GitHubUser | Select-Object Name, login, id, company, blog, twitter_username, location, hireable, bio
+Get-GitHubUser | Select-Object Name, login, ID, company, blog, twitter_username, location, hireable, bio
 
 $user = Get-GitHubUser
 $user.social_accounts
@@ -73,31 +73,31 @@ Get-ChildItem -Path 'C:\Repos\GitHub\PSModule\Modules\GitHub\src\GitHub\private\
 
 $Release = New-GitHubRelease -Owner PSModule -Repo Demo -TagName 'v1.0.0' -Name 'v1.0.0' -Draft -TargetCommitish 'main' -Body 'test release'
 Get-GitHubRelease -Owner PSModule -Repo Demo
-Get-GitHubRelease -Owner PSModule -Repo Demo -ID $Release.id
-Set-GitHubRelease -Owner PSModule -Repo Demo -ID $Release.id
+Get-GitHubRelease -Owner PSModule -Repo Demo -ID $Release.ID
+Set-GitHubRelease -Owner PSModule -Repo Demo -ID $Release.ID
 Get-GitHubRelease -Owner PSModule -Repo Demo -Latest
 Get-GitHubRelease -Owner PSModule -Repo Demo -Tag 'v1.0.0'
 $Release = Get-GitHubRelease -Owner PSModule -Repo Demo -Latest
-Add-GitHubReleaseAsset -Owner PSModule -Repo Demo -ID $Release.id -FilePath 'C:\Repos\GitHub\PSModule\Modules\GitHub\tools\utilities\Local-Testing.ps1'
+Add-GitHubReleaseAsset -Owner PSModule -Repo Demo -ID $Release.ID -FilePath 'C:\Repos\GitHub\PSModule\Modules\GitHub\tools\utilities\Local-Testing.ps1'
 
-Get-GitHubReleaseAsset -Owner PSModule -Repo Demo -ReleaseID $Release.id
+Get-GitHubReleaseAsset -Owner PSModule -Repo Demo -ReleaseID $Release.ID
 
-Get-GitHubRepository | Select-Object full_name, id, visibility, created_at
-Get-GitHubRepository -Type owner | Select-Object full_name, id, visibility, created_at
-Get-GitHubRepository -Type private -Sort pushed | Select-Object full_name, id, visibility, created_at
+Get-GitHubRepository | Select-Object full_name, ID, visibility, created_at
+Get-GitHubRepository -Type owner | Select-Object full_name, ID, visibility, created_at
+Get-GitHubRepository -Type private -Sort pushed | Select-Object full_name, ID, visibility, created_at
 
-Get-GitHubRepository -Owner 'PSModule' -Repo 'Demo' | Select-Object full_name, id, visibility, created_at
-Get-GitHubRepository -Owner 'Azure' -Repo 'ResourceModules' | Select-Object full_name, id, visibility, created_at
+Get-GitHubRepository -Owner 'PSModule' -Repo 'Demo' | Select-Object full_name, ID, visibility, created_at
+Get-GitHubRepository -Owner 'Azure' -Repo 'ResourceModules' | Select-Object full_name, ID, visibility, created_at
 
-Get-GitHubRepository -SinceID 702104693 -Verbose | Select-Object full_name, id, visibility, created_at
+Get-GitHubRepository -SinceID 702104693 -Verbose | Select-Object full_name, ID, visibility, created_at
 
-Get-GitHubRepository -Username 'octocat' -Type all | Select-Object full_name, id, visibility, created_at
-Get-GitHubRepository -Username 'octocat' -Type 'member' | Select-Object full_name, id, visibility, created_at
-Get-GitHubRepository -Username 'octocat' -Sort 'created' -Direction 'asc' | Select-Object full_name, id, visibility, created_at
+Get-GitHubRepository -Username 'octocat' -Type all | Select-Object full_name, ID, visibility, created_at
+Get-GitHubRepository -Username 'octocat' -Type 'member' | Select-Object full_name, ID, visibility, created_at
+Get-GitHubRepository -Username 'octocat' -Sort 'created' -Direction 'asc' | Select-Object full_name, ID, visibility, created_at
 
-Get-GitHubRepository -Owner 'PSModule' | Select-Object full_name, id, visibility, created_at
-Get-GitHubRepository -Owner 'PSModule' -Type 'public' | Select-Object full_name, id, visibility, created_at
-Get-GitHubRepository -Owner 'PSModule' -Sort 'created' -Direction 'asc' | Select-Object full_name, id, visibility, created_at
+Get-GitHubRepository -Owner 'PSModule' | Select-Object full_name, ID, visibility, created_at
+Get-GitHubRepository -Owner 'PSModule' -Type 'public' | Select-Object full_name, ID, visibility, created_at
+Get-GitHubRepository -Owner 'PSModule' -Sort 'created' -Direction 'asc' | Select-Object full_name, ID, visibility, created_at
 
 $params = @{
     Verbose                  = $true

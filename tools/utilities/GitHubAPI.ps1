@@ -1,6 +1,6 @@
 $APIDocURI = 'https://raw.githubusercontent.com/github/rest-api-description/main'
 $Bundled = '/descriptions/api.github.com/api.github.com.json'
-$Dereferenced = 'descriptions/api.github.com/dereferenced/api.github.com.deref.json'
+# $Dereferenced = 'descriptions/api.github.com/dereferenced/api.github.com.deref.json'
 $APIDocURI = $APIDocURI + $Bundled
 $response = Invoke-RestMethod -Uri $APIDocURI -Method Get
 
@@ -39,16 +39,5 @@ $response.components.parameters.username                              # -> Param
 $response.paths.$path.$method.responses                               # -> Could be used to decide error handling within the function
 $response.paths.$path.$method.responses.'200'.content.'application/json'.schema        # -> OutputType qualifyer
 $response.paths.$path.$method.responses.'200'.content.'application/json'.schema.items  # -> OutputType
-
-$response.components.schemas.PSobject.Properties | ForEach-Object {
-    [pscustomobject]@{
-        Name ame
-        Titlee.title
-        Typelype
-        Properties = $_.Value.properties
-        Requiredlue.required
-    }
-}
-
 
 $response.components.schemas.'issue-comment' | ConvertTo-Json
