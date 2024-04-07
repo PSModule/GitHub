@@ -1,7 +1,7 @@
 # Coverage
 
 | Summary | Value |
-| --- | --- |
+| --- | ---: |
 | Total functions | 931 |
 | Covered functions | 139 |
 | Missing functions | 792 |
