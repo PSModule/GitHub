@@ -620,4 +620,3 @@
 | /users/{username}/subscriptions                                                                                 |                    | :x:                |                    |                    |                    |
 | /versions                                                                                                       |                    | :white_check_mark: |                    |                    |                    |
 | /zen                                                                                                            |                    | :white_check_mark: |                    |                    |                    |
-

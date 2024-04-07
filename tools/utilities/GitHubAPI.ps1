@@ -62,10 +62,10 @@ function Find-APIMethod {
     $methodPattern = "Method\s*=\s*'$method'"
     Get-ChildItem -Path $SearchDirectory -Recurse -Filter *.ps1 | ForEach-Object {
         $filePath = $_.FullName
-        $matches = Select-String -Path $filePath -Pattern $pathPattern -AllMatches
-        if ($matches.Count -gt 0) {
+        $stringMatches = Select-String -Path $filePath -Pattern $pathPattern -AllMatches
+        if ($stringMatches.Count -gt 0) {
             $putMatches = Select-String -Path $filePath -Pattern $methodPattern -AllMatches
-            foreach ($match in $matches) {
+            foreach ($match in $stringMatches) {
                 foreach ($putMatch in $putMatches) {
                     Write-Verbose "Match found in file: $filePath"
                     Write-Verbose "API Endpoint: $($match.Matches.Value) near line $($match.LineNumber)"
