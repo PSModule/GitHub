@@ -29,7 +29,7 @@ filter Get-GitHubRepositoryLicense {
         [string] $Repo = (Get-GitHubConfig -Name Repo)
     )
 
-    Process {
+    process {
         $inputObject = @{
             APIEndpoint = "/repos/$Owner/$Repo/license"
             Accept      = 'application/vnd.github+json'

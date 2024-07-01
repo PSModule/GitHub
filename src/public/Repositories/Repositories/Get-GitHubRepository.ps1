@@ -126,7 +126,7 @@ filter Get-GitHubRepository {
 
     )
 
-    DynamicParam {
+    dynamicparam {
         $DynamicParamDictionary = New-DynamicParamDictionary
 
         if ($PSCmdlet.ParameterSetName -in 'MyRepos_Type', 'ListByOrg', 'ListByUser') {
@@ -157,11 +157,11 @@ filter Get-GitHubRepository {
         return $DynamicParamDictionary
     }
 
-    Begin {
+    begin {
         $Type = $PSBoundParameters['Type']
     }
 
-    Process {
+    process {
         switch ($PSCmdlet.ParameterSetName) {
             'MyRepos_Type' {
                 $params = @{

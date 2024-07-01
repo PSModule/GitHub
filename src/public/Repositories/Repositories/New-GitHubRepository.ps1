@@ -298,7 +298,7 @@ filter New-GitHubRepository {
         [string] $MergeCommitMessage
     )
 
-    DynamicParam {
+    dynamicparam {
         $DynamicParamDictionary = New-DynamicParamDictionary
 
         $dynParam = @{
@@ -327,7 +327,7 @@ filter New-GitHubRepository {
         $LicenseTemplate = $PSBoundParameters['LicenseTemplate']
     }
 
-    Process {
+    process {
         if ($PSCmdlet.ParameterSetName -in 'user', 'org') {
             $params = @{
                 Owner                    = $Owner

@@ -23,7 +23,7 @@ filter Get-GitHubGitignoreByName {
         [string] $Name
     )
 
-    Process {
+    process {
         $inputObject = @{
             APIEndpoint = "/gitignore/templates/$Name"
             Accept      = 'application/vnd.github.raw+json'

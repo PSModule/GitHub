@@ -176,7 +176,7 @@ filter New-GitHubRepositoryUser {
         [string] $MergeCommitMessage
     )
 
-    DynamicParam {
+    dynamicparam {
         $DynamicParamDictionary = New-DynamicParamDictionary
 
         $dynParam = @{
@@ -205,7 +205,7 @@ filter New-GitHubRepositoryUser {
         $LicenseTemplate = $PSBoundParameters['LicenseTemplate']
     }
 
-    Process {
+    process {
 
         $PSCmdlet.MyInvocation.MyCommand.Parameters.GetEnumerator() | ForEach-Object {
             $paramName = $_.Key
