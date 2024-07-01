@@ -23,6 +23,5 @@
         Method      = 'PUT'
     }
 
-    Invoke-GitHubAPI @inputObject | Out-Null
-
+    $null = Invoke-GitHubAPI @inputObject
 }
