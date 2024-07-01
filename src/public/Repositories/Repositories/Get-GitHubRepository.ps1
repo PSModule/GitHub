@@ -157,7 +157,7 @@ filter Get-GitHubRepository {
         return $DynamicParamDictionary
     }
 
-    Begin {
+    begin {
         $Type = $PSBoundParameters['Type']
     }
 
