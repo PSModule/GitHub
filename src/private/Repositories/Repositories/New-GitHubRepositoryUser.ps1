@@ -176,7 +176,7 @@ filter New-GitHubRepositoryUser {
         [string] $MergeCommitMessage
     )
 
-    DynamicParam {
+    dynamicparam {
         $DynamicParamDictionary = New-DynamicParamDictionary
 
         $dynParam = @{

@@ -182,7 +182,7 @@ filter New-GitHubRepositoryOrg {
         [string] $MergeCommitMessage
     )
 
-    DynamicParam {
+    dynamicparam {
         $DynamicParamDictionary = New-DynamicParamDictionary
 
         $dynParam = @{

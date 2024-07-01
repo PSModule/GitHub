@@ -45,7 +45,7 @@ filter Get-GitHubLicense {
         [string] $Repo = (Get-GitHubConfig -Name Repo)
     )
 
-    DynamicParam {
+    dynamicparam {
         $DynamicParamDictionary = New-DynamicParamDictionary
 
         $dynParam = @{
