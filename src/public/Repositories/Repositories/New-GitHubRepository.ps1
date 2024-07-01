@@ -327,7 +327,7 @@ filter New-GitHubRepository {
         $LicenseTemplate = $PSBoundParameters['LicenseTemplate']
     }
 
-    Process {
+    process {
         if ($PSCmdlet.ParameterSetName -in 'user', 'org') {
             $params = @{
                 Owner                    = $Owner

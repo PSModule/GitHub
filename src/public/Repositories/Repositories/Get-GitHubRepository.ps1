@@ -161,7 +161,7 @@ filter Get-GitHubRepository {
         $Type = $PSBoundParameters['Type']
     }
 
-    Process {
+    process {
         switch ($PSCmdlet.ParameterSetName) {
             'MyRepos_Type' {
                 $params = @{

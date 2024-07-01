@@ -211,7 +211,7 @@ filter New-GitHubRepositoryOrg {
         $LicenseTemplate = $PSBoundParameters['LicenseTemplate']
     }
 
-    Process {
+    process {
         $PSCmdlet.MyInvocation.MyCommand.Parameters.GetEnumerator() | ForEach-Object {
             $paramName = $_.Key
             $paramDefaultValue = Get-Variable -Name $paramName -ValueOnly -ErrorAction SilentlyContinue
