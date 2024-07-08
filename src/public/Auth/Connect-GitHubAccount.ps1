@@ -102,7 +102,7 @@
     Write-Verbose "GitHub token: [$gitHubToken]"
     $gitHubTokenPresent = $gitHubToken.count -gt 0
     Write-Verbose "GitHub token present: [$gitHubTokenPresent]"
-    $AuthType = $gitHubTokenPresent ? 'sPAT' : $PSCmdlet.ParameterSetName
+    $AuthType = if ($gitHubTokenPresent) { 'sPAT' } else { $PSCmdlet.ParameterSetName }
     Write-Verbose "AuthType: [$AuthType]"
     switch ($AuthType) {
         'DeviceFlow' {

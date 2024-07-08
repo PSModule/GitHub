@@ -231,17 +231,17 @@ filter New-GitHubRepositoryOrg {
         Remove-HashtableEntry -Hashtable $body -RemoveNames 'Owner' -RemoveTypes 'SwitchParameter'
 
         $body['private'] = $Visibility -eq 'private'
-        $body['has_issues'] = $HasIssues.IsPresent ? $HasIssues : $false
-        $body['has_wiki'] = $HasWiki.IsPresent ? $HasWiki : $false
-        $body['has_projects'] = $HasProjects.IsPresent ? $HasProjects : $false
-        $body['has_downloads'] = $HasDownloads.IsPresent ? $HasDownloads : $false
-        $body['is_template'] = $IsTemplate.IsPresent ? $IsTemplate : $false
-        $body['auto_init'] = $AutoInit.IsPresent ? $AutoInit : $false
-        $body['allow_squash_merge'] = $AllowSquashMerge.IsPresent ? $AllowSquashMerge : $false
-        $body['allow_merge_commit'] = $AllowMergeCommit.IsPresent ? $AllowMergeCommit : $false
-        $body['allow_rebase_merge'] = $AllowRebaseMerge.IsPresent ? $AllowRebaseMerge : $false
-        $body['allow_auto_merge'] = $AllowAutoMerge.IsPresent ? $AllowAutoMerge : $false
-        $body['delete_branch_on_merge'] = $DeleteBranchOnMerge.IsPresent ? $DeleteBranchOnMerge : $false
+        $body['has_issues'] = if ($HasIssues.IsPresent) { $HasIssues } else { $false }
+        $body['has_wiki'] = if ($HasWiki.IsPresent) { $HasWiki } else { $false }
+        $body['has_projects'] = if ($HasProjects.IsPresent) { $HasProjects } else { $false }
+        $body['has_downloads'] = if ($HasDownloads.IsPresent) { $HasDownloads } else { $false }
+        $body['is_template'] = if ($IsTemplate.IsPresent) { $IsTemplate } else { $false }
+        $body['auto_init'] = if ($AutoInit.IsPresent) { $AutoInit } else { $false }
+        $body['allow_squash_merge'] = if ($AllowSquashMerge.IsPresent) { $AllowSquashMerge } else { $false }
+        $body['allow_merge_commit'] = if ($AllowMergeCommit.IsPresent) { $AllowMergeCommit } else { $false }
+        $body['allow_rebase_merge'] = if ($AllowRebaseMerge.IsPresent) { $AllowRebaseMerge } else { $false }
+        $body['allow_auto_merge'] = if ($AllowAutoMerge.IsPresent) { $AllowAutoMerge } else { $false }
+        $body['delete_branch_on_merge'] = if ($DeleteBranchOnMerge.IsPresent) { $DeleteBranchOnMerge } else { $false }
 
         Remove-HashtableEntry -Hashtable $body -NullOrEmptyValues
 
