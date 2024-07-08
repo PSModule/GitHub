@@ -26,7 +26,7 @@ filter Get-GitHubLicenseByName {
         [string] $Name
     )
 
-    Process {
+    process {
         $inputObject = @{
             APIEndpoint = "/licenses/$Name"
             Accept      = 'application/vnd.github+json'

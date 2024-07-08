@@ -60,7 +60,7 @@
     [hashtable]$hashtable = @{}
 
     foreach ($item in $InputObject.PSObject.Properties) {
-        $name = $NameCasingStyle ? ($item.Name | Convert-StringCasingStyle -To $NameCasingStyle) : $item.Name
+        $name = if ($NameCasingStyle) { ($item.Name | Convert-StringCasingStyle -To $NameCasingStyle) } else { $item.Name }
         $hashtable[$name] = $item.Value
     }
     $hashtable

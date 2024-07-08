@@ -78,8 +78,8 @@
     $requestBody = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
     Remove-HashtableEntry -Hashtable $requestBody -RemoveNames 'Owner', 'Repo', 'Draft', 'Prerelease'
     $requestBody = Join-Object -AsHashtable -Main $requestBody -Overrides @{
-        draft      = $Draft.IsPresent ? $Draft : $false
-        prerelease = $Prerelease.IsPresent ? $Prerelease : $false
+        draft      = if ($Draft.IsPresent) { $Draft } else { $false }
+        prerelease = if ($Prerelease.IsPresent) { $Prerelease } else { $false }
     }
 
     $inputObject = @{

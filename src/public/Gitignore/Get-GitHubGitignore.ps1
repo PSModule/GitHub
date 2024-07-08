@@ -27,7 +27,7 @@ filter Get-GitHubGitignore {
     [CmdletBinding(DefaultParameterSetName = 'List')]
     param ()
 
-    DynamicParam {
+    dynamicparam {
         $DynamicParamDictionary = New-DynamicParamDictionary
 
         $dynParam = @{
@@ -43,7 +43,7 @@ filter Get-GitHubGitignore {
         return $DynamicParamDictionary
     }
 
-    Process {
+    process {
         $Name = $PSBoundParameters['Name']
         switch ($PSCmdlet.ParameterSetName) {
             'List' {

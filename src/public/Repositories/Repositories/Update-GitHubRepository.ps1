@@ -184,28 +184,34 @@
         merge_commit_title              = $MergeCommitTitle
         merge_commit_message            = $MergeCommitMessage
 
-        advanced_security               = $EnableAdvancedSecurity.IsPresent ? @{
-            status = $EnableAdvancedSecurity ? 'enabled' : 'disabled'
-        } : $null
-        secret_scanning                 = $EnableSecretScanning.IsPresent ? @{
-            status = $EnableSecretScanning ? 'enabled' : 'disabled'
-        } : $null
-        secret_scanning_push_protection = $EnableSecretScanningPushProtection.IsPresent ? @{
-            status = $EnableSecretScanningPushProtection ? 'enabled' : 'disabled'
-        } : $null
-        has_issues                      = $HasIssues.IsPresent ? $HasIssues : $null
-        has_projects                    = $HasProjects.IsPresent ? $HasProjects : $null
-        has_wiki                        = $HasWiki.IsPresent ? $HasWiki : $null
-        is_template                     = $IsTemplate.IsPresent ? $IsTemplate : $null
-        allow_squash_merge              = $AllowSquashMerge.IsPresent ? $AllowSquashMerge : $null
-        allow_merge_commit              = $AllowMergeCommit.IsPresent ? $AllowMergeCommit : $null
-        allow_rebase_merge              = $AllowRebaseMerge.IsPresent ? $AllowRebaseMerge : $null
-        allow_auto_merge                = $AllowAutoMerge.IsPresent ? $AllowAutoMerge : $null
-        allow_update_branch             = $AllowUpdateMerge.IsPresent ? $AllowUpdateMerge : $null
-        delete_branch_on_merge          = $DeleteBranchOnMerge.IsPresent ? $DeleteBranchOnMerge : $null
-        archived                        = $Archived.IsPresent ? $Archived : $null
-        allow_forking                   = $AllowForking.IsPresent ? $AllowForking : $null
-        web_commit_signoff_required     = $WebCommitSignoffRequired.IsPresent ? $WebCommitSignoffRequired : $null
+        advanced_security               = if ($EnableAdvancedSecurity.IsPresent) {
+            @{
+                status = if ($EnableAdvancedSecurity) { 'enabled' } else { 'disabled' }
+            }
+        } else { $null }
+        secret_scanning                 = if ($EnableSecretScanning.IsPresent) {
+            @{
+                status = if ($EnableSecretScanning) { 'enabled' } else { 'disabled' }
+            }
+        } else { $null }
+        secret_scanning_push_protection = if ($EnableSecretScanningPushProtection.IsPresent) {
+            @{
+                status = if ($EnableSecretScanningPushProtection) { 'enabled' } else { 'disabled' }
+            }
+        } else { $null }
+        has_issues                      = if ($HasIssues.IsPresent) { $HasIssues } else { $null }
+        has_projects                    = if ($HasProjects.IsPresent) { $HasProjects } else { $null }
+        has_wiki                        = if ($HasWiki.IsPresent) { $HasWiki } else { $null }
+        is_template                     = if ($IsTemplate.IsPresent) { $IsTemplate } else { $null }
+        allow_squash_merge              = if ($AllowSquashMerge.IsPresent) { $AllowSquashMerge } else { $null }
+        allow_merge_commit              = if ($AllowMergeCommit.IsPresent) { $AllowMergeCommit } else { $null }
+        allow_rebase_merge              = if ($AllowRebaseMerge.IsPresent) { $AllowRebaseMerge } else { $null }
+        allow_auto_merge                = if ($AllowAutoMerge.IsPresent) { $AllowAutoMerge } else { $null }
+        allow_update_branch             = if ($AllowUpdateMerge.IsPresent) { $AllowUpdateMerge } else { $null }
+        delete_branch_on_merge          = if ($DeleteBranchOnMerge.IsPresent) { $DeleteBranchOnMerge } else { $null }
+        archived                        = if ($Archived.IsPresent) { $Archived } else { $null }
+        allow_forking                   = if ($AllowForking.IsPresent) { $AllowForking } else { $null }
+        web_commit_signoff_required     = if ($WebCommitSignoffRequired.IsPresent) { $WebCommitSignoffRequired } else { $null }
     }
 
     Remove-HashtableEntry -Hashtable $body -NullOrEmptyValues
