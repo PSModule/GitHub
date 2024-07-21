@@ -97,3 +97,5 @@ $($paths | New-MDTable)
 
 "@
 $coverageContent | Out-File -FilePath '.\Coverage.md'
+Get-Content -Path '.\Coverage.md' | foreach { Write-Verbose $_ -Verbose }
+
