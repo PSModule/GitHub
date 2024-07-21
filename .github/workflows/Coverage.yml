@@ -1,4 +1,6 @@
-name: Nightly run
+name: Update coverage report
+
+run-name: "Update coverage report"
 
 on:
   workflow_dispatch:
@@ -14,13 +16,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Checkout GitHub API spec
-        uses: actions/checkout@v4
-        with:
-          repository: github/rest-api-description
-          path: rest-api-description
-
       - name: Update coverage report
         shell: pwsh
         run: |
-          Get-ChildItem -Path . -recurse | Select-Object -ExpandProperty FullName | Sort-Object
+          . ".\scripts\coverage.ps1"
