@@ -13,6 +13,14 @@ jobs:
   Update-Coverage:
     runs-on: ubuntu-latest
     steps:
+      - name: Authenticate GitHub App
+        id: auth
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          # owner: ${{ github.repository_owner }}
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -20,3 +28,8 @@ jobs:
         shell: pwsh
         run: |
           . ".\scripts\coverage.ps1"
+
+      - name: Commit changes
+        shell: pwsh
+        run: |
+          git config --global user.email "
