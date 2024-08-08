@@ -31,8 +31,11 @@
     )]
     [CmdletBinding()]
     param(
+        # The name of the log group
         [Parameter(Mandatory)]
         [string] $Name,
+
+        # The script block to execute
         [Parameter(Mandatory)]
         [scriptblock] $ScriptBlock
     )

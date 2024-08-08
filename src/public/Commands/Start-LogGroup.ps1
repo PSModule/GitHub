@@ -22,6 +22,7 @@
     )]
     [CmdletBinding()]
     param(
+        # The name of the log group
         [Parameter(Mandatory)]
         [string] $Name
     )
