@@ -23,7 +23,7 @@ Describe 'Commands' {
     It "LogGroup 'MyGroup' should not throw" {
         {
             LogGroup 'MyGroup' {
-                Get-GitHubRepository
+                Get-ChildItem env: | Select-Object Name, Value | Format-Table -AutoSize
             }
         } | Should -Not -Throw
     }
