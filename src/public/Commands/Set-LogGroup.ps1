@@ -44,7 +44,3 @@
     Invoke-Command -ScriptBlock $ScriptBlock
     Stop-LogGroup
 }
-
-LogGroup 'MyGroup' {
-    Get-Process
-}
