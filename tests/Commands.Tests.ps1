@@ -23,7 +23,7 @@ Describe 'Commands' {
     It "LogGroup 'MyGroup' should not throw" {
         {
             LogGroup 'MyGroup' {
-                Write-Host 'Hello, World!'
+                Get-GitHubRepository
             }
         } | Should -Not -Throw
     }
