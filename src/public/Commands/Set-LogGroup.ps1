@@ -41,6 +41,10 @@
     )
 
     Start-LogGroup $Name
-    Write-Output $ScriptBlock.Invoke()
+    Invoke-Command -ScriptBlock $ScriptBlock
     Stop-LogGroup
+}
+
+LogGroup 'MyGroup' {
+    Get-Process
 }
