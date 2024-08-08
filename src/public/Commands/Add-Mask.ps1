@@ -25,7 +25,7 @@ filter Add-Mask {
     #>
     [Alias('Mask')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-        'PSAvoidLongLines', '',
+        'PSAvoidLongLines', '', Scope = 'Function',
         Justification = 'Long documentation URL'
     )]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
