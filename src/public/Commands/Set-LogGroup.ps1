@@ -25,7 +25,6 @@
         [GitHub - Grouping log lines](https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#grouping-log-lines)
     #>
     [Alias('LogGroup')]
-    [Alias('Group')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSUseShouldProcessForStateChangingFunctions', '', Scope = 'Function',
         Justification = 'Does not change state'
