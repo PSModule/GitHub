@@ -40,7 +40,7 @@
         [scriptblock] $ScriptBlock
     )
 
-    Start-LogGroup $Name
+    Start-LogGroup -Name $Name
     Invoke-Command -ScriptBlock $ScriptBlock
     Stop-LogGroup
 }
