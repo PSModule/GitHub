@@ -1,5 +1,4 @@
-﻿
-filter Add-Mask {
+﻿filter Add-Mask {
     <#
         .SYNOPSIS
         Mask a value in GitHub Actions
