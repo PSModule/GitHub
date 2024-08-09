@@ -10,6 +10,8 @@ permissions:
   issues: write
   pull-requests: write
   statuses: write
+  pages: write
+  id-token: write
 
 jobs:
   Process-PSModule:
