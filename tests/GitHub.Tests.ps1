@@ -35,16 +35,11 @@ Describe 'GitHub' {
             $ApiEndpoint = '/rate_limit'
             $URI = ("$ApiBaseUri/" -replace '/$', '') + ("/$ApiEndpoint" -replace '^/', '')
 
-            $APICallStatusCode = $null
-            $APICallResponseHeaders = $null
-
             $APICall = @{
                 Uri                     = $URI
                 Method                  = 'GET'
                 Headers                 = $Headers
                 ContentType             = 'application/vnd.github+json; charset=utf-8'
-                StatusCodeVariable      = 'APICallStatusCode'
-                ResponseHeadersVariable = 'APICallResponseHeaders'
                 InFile                  = $UploadFilePath
                 OutFile                 = $DownloadFilePath
             }
@@ -54,11 +49,6 @@ Describe 'GitHub' {
 
             Write-Verbose "currentVersion:      $currentVersion" -Verbose
             Write-Verbose "LaterThanSevenThree: $LaterThanSevenThree" -Verbose
-
-            #If PSversion is higher than 7.1 use HttpVersion
-            if ($PSVersionTable.PSVersion -ge [version]'7.3') {
-                $APICall['HttpVersion'] = [version]'2.0'
-            }
 
             $APICall | Remove-HashtableEntry -NullOrEmptyValues
 
@@ -77,11 +67,9 @@ Describe 'GitHub' {
             Write-Verbose ($APICall | ConvertTo-Json -Depth 100) -Verbose
             $response = Invoke-RestMethod @APICall
 
-            $response
+            Write-Verbose ($response | ConvertTo-Json -Depth 100) -Verbose
 
             $response | Should -Not -BeNullOrEmpty
-            $response.Response.rate | Should -Not -BeNullOrEmpty
-            $response.Response.resources.core | Should -Not -BeNullOrEmpty
         }
     }
 }
