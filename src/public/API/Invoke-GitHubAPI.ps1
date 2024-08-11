@@ -101,31 +101,27 @@
         $URI = ("$ApiBaseUri/" -replace '/$', '') + ("/$ApiEndpoint" -replace '^/', '')
     }
 
-    try {
-        $APICall = @{
-            Uri                     = $URI
-            Method                  = $Method
-            Headers                 = $Headers
-            Authentication          = 'Bearer'
-            Token                   = $AccessToken
-            ContentType             = $ContentType
-            FollowRelLink           = $FollowRelLink
-            StatusCodeVariable      = 'APICallStatusCode'
-            ResponseHeadersVariable = 'APICallResponseHeaders'
-            InFile                  = $UploadFilePath
-            OutFile                 = $DownloadFilePath
-        }
-
-        #If PSversion is higher than 7.1 use HttpVersion
-        if ($PSVersionTable.PSVersion -ge [version]'7.3') {
-            $APICall['HttpVersion'] = $HttpVersion
-        }
-
-        $APICall | Remove-HashtableEntry -NullOrEmptyValues
-    } catch {
-        Write-Error $_
-        exit 1
+    $APICall = @{
+        Uri                     = $URI
+        Method                  = $Method
+        Headers                 = $Headers
+        Authentication          = 'Bearer'
+        Token                   = $AccessToken
+        ContentType             = $ContentType
+        FollowRelLink           = $FollowRelLink
+        StatusCodeVariable      = 'APICallStatusCode'
+        ResponseHeadersVariable = 'APICallResponseHeaders'
+        InFile                  = $UploadFilePath
+        OutFile                 = $DownloadFilePath
     }
+
+    #If PSversion is higher than 7.1 use HttpVersion
+    if ($PSVersionTable.PSVersion -ge [version]'7.3') {
+        $APICall['HttpVersion'] = $HttpVersion
+    }
+
+    $APICall | Remove-HashtableEntry -NullOrEmptyValues
+
     if ($Body) {
         # Use body to create the query string for certain situations
         if ($Method -eq 'GET') {
