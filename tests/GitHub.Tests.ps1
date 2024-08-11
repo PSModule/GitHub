@@ -30,6 +30,9 @@ Describe 'GitHub' {
 
             $URI = ("$ApiBaseUri/" -replace '/$', '') + ("/$ApiEndpoint" -replace '^/', '')
 
+            $APICallStatusCode = $null
+            $APICallResponseHeaders = $null
+
             $APICall = @{
                 Uri                     = $URI
                 Method                  = $Method
