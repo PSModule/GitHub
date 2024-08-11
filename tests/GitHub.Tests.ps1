@@ -36,12 +36,12 @@ Describe 'GitHub' {
             $URI = ("$ApiBaseUri/" -replace '/$', '') + ("/$ApiEndpoint" -replace '^/', '')
 
             $APICall = @{
-                Uri                     = $URI
-                Method                  = 'GET'
-                Headers                 = $Headers
-                ContentType             = 'application/vnd.github+json; charset=utf-8'
-                InFile                  = $UploadFilePath
-                OutFile                 = $DownloadFilePath
+                Uri         = $URI
+                Method      = 'GET'
+                Headers     = $Headers
+                ContentType = 'application/vnd.github+json; charset=utf-8'
+                InFile      = $UploadFilePath
+                OutFile     = $DownloadFilePath
             }
 
             $currentVersion = $PSVersionTable.PSVersion
