@@ -23,6 +23,12 @@ Describe 'GitHub' {
                 'X-GitHub-Api-Version' = Get-GitHubConfig -Name ApiVersion
             }
 
+            $AccessToken = Get-GitHubConfig -Name AccessToken
+            if ($AccessToken) {
+                $Token = $AccessToken | ConvertFrom-SecureString -AsPlainText
+                $headers['Authorization'] = "Bearer $Token"
+            }
+
             Remove-HashtableEntry -Hashtable $headers -NullOrEmptyValues
 
             $ApiBaseUri = Get-GitHubConfig -Name ApiBaseUri
@@ -36,10 +42,7 @@ Describe 'GitHub' {
                 Uri                     = $URI
                 Method                  = 'GET'
                 Headers                 = $Headers
-                Authentication          = 'Bearer'
-                Token                   = Get-GitHubConfig -Name AccessToken
                 ContentType             = 'application/vnd.github+json; charset=utf-8'
-                FollowRelLink           = $true
                 StatusCodeVariable      = 'APICallStatusCode'
                 ResponseHeadersVariable = 'APICallResponseHeaders'
                 InFile                  = $UploadFilePath
