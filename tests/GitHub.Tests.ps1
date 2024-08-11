@@ -18,16 +18,15 @@ Describe 'GitHub' {
         }
 
         It 'Can be called directly to get ratelimits' {
-            $ApiBaseUri = Get-GitHubConfig -Name ApiBaseUri
-            $ApiEndpoint = '/rate_limit'
-            $Method = 'GET'
             $headers = @{
-                Accept                 = $Accept
-                'X-GitHub-Api-Version' = $Version
+                Accept                 = 'application/vnd.github+json; charset=utf-8'
+                'X-GitHub-Api-Version' = Get-GitHubConfig -Name ApiVersion
             }
 
             Remove-HashtableEntry -Hashtable $headers -NullOrEmptyValues
 
+            $ApiBaseUri = Get-GitHubConfig -Name ApiBaseUri
+            $ApiEndpoint = '/rate_limit'
             $URI = ("$ApiBaseUri/" -replace '/$', '') + ("/$ApiEndpoint" -replace '^/', '')
 
             $APICallStatusCode = $null
@@ -35,12 +34,12 @@ Describe 'GitHub' {
 
             $APICall = @{
                 Uri                     = $URI
-                Method                  = $Method
+                Method                  = 'GET'
                 Headers                 = $Headers
                 Authentication          = 'Bearer'
-                Token                   = $AccessToken
-                ContentType             = $ContentType
-                FollowRelLink           = $FollowRelLink
+                Token                   = Get-GitHubConfig -Name AccessToken
+                ContentType             = 'application/vnd.github+json; charset=utf-8'
+                FollowRelLink           = $true
                 StatusCodeVariable      = 'APICallStatusCode'
                 ResponseHeadersVariable = 'APICallResponseHeaders'
                 InFile                  = $UploadFilePath
@@ -55,7 +54,7 @@ Describe 'GitHub' {
 
             #If PSversion is higher than 7.1 use HttpVersion
             if ($PSVersionTable.PSVersion -ge [version]'7.3') {
-                $APICall['HttpVersion'] = $HttpVersion
+                $APICall['HttpVersion'] = [version]'2.0'
             }
 
             $APICall | Remove-HashtableEntry -NullOrEmptyValues
