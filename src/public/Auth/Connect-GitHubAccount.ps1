@@ -151,21 +151,21 @@
             switch ($Mode) {
                 'GitHubApp' {
                     $settings = @{
-                        AccessToken                = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
+                        AccessToken                = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token -Force
                         AccessTokenExpirationDate  = (Get-Date).AddSeconds($tokenResponse.expires_in)
                         AccessTokenType            = $tokenResponse.access_token -replace '_.*$', '_*'
                         ApiBaseUri                 = 'https://api.github.com'
                         ApiVersion                 = '2022-11-28'
                         AuthType                   = $AuthType
                         DeviceFlowType             = $Mode
-                        RefreshToken               = ConvertTo-SecureString -AsPlainText $tokenResponse.refresh_token
+                        RefreshToken               = ConvertTo-SecureString -AsPlainText $tokenResponse.refresh_token -Force
                         RefreshTokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.refresh_token_expires_in)
                         Scope                      = $tokenResponse.scope
                     }
                 }
                 'OAuthApp' {
                     $settings = @{
-                        AccessToken     = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
+                        AccessToken     = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token -Force
                         AccessTokenType = $tokenResponse.access_token -replace '_.*$', '_*'
                         ApiBaseUri      = 'https://api.github.com'
                         ApiVersion      = '2022-11-28'
@@ -204,7 +204,7 @@
             Reset-GitHubConfig -Scope 'Auth'
             $prefix = $gitHubToken.Value -replace '_.*$', '_*'
             $settings = @{
-                AccessToken     = ConvertTo-SecureString -AsPlainText $gitHubToken.Value
+                AccessToken     = ConvertTo-SecureString -AsPlainText $gitHubToken.Value -Force
                 AccessTokenType = $prefix
                 ApiBaseUri      = 'https://api.github.com'
                 ApiVersion      = '2022-11-28'
