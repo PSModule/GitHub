@@ -18,14 +18,59 @@ Describe 'GitHub' {
         }
 
         It 'Can be called directly to get ratelimits' {
-            $inputObject = @{
-                APIEndpoint = '/rate_limit'
-                Method      = 'GET'
+            $ApiBaseUri = Get-GitHubConfig -Name ApiBaseUri
+            $ApiEndpoint = '/rate_limit'
+            $Method = 'GET'
+            $headers = @{
+                Accept                 = $Accept
+                'X-GitHub-Api-Version' = $Version
             }
 
-            $response = Invoke-GitHubAPI @inputObject -Verbose
+            Remove-HashtableEntry -Hashtable $headers -NullOrEmptyValues
 
-            $response
+            $URI = ("$ApiBaseUri/" -replace '/$', '') + ("/$ApiEndpoint" -replace '^/', '')
+
+            $APICall = @{
+                Uri                     = $URI
+                Method                  = $Method
+                Headers                 = $Headers
+                Authentication          = 'Bearer'
+                Token                   = $AccessToken
+                ContentType             = $ContentType
+                FollowRelLink           = $FollowRelLink
+                StatusCodeVariable      = 'APICallStatusCode'
+                ResponseHeadersVariable = 'APICallResponseHeaders'
+                InFile                  = $UploadFilePath
+                OutFile                 = $DownloadFilePath
+            }
+
+            $currentVersion = $PSVersionTable.PSVersion
+            $LaterThanSevenThree = $currentVersion -ge [version]'7.3'
+
+            Write-Verbose "currentVersion:      $currentVersion" -Verbose
+            Write-Verbose "LaterThanSevenThree: $LaterThanSevenThree" -Verbose
+
+            #If PSversion is higher than 7.1 use HttpVersion
+            if ($PSVersionTable.PSVersion -ge [version]'7.3') {
+                $APICall['HttpVersion'] = $HttpVersion
+            }
+
+            $APICall | Remove-HashtableEntry -NullOrEmptyValues
+
+            if ($Body) {
+                # Use body to create the query string for certain situations
+                if ($Method -eq 'GET') {
+                    $queryString = $Body | ConvertTo-QueryString
+                    $APICall.Uri = $APICall.Uri + $queryString
+                } elseif ($Body -is [string]) {
+                    # Use body to create the form data
+                    $APICall.Body = $Body
+                } else {
+                    $APICall.Body = $Body | ConvertTo-Json -Depth 100
+                }
+            }
+
+            Invoke-RestMethod @APICall
 
             $response | Should -Not -BeNullOrEmpty
             $response.Response.rate | Should -Not -BeNullOrEmpty
