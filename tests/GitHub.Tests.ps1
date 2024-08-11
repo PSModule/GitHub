@@ -23,10 +23,13 @@ Describe 'GitHub' {
                 'X-GitHub-Api-Version' = Get-GitHubConfig -Name ApiVersion
             }
 
+            $encryptedString = $AccessToken | ConvertFrom-SecureString
+            $secureStringRecovered = $encryptedString | ConvertTo-SecureString
+            $token = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureStringRecovered))
+
             $AccessToken = Get-GitHubConfig -Name AccessToken
             if ($AccessToken) {
-                $Token = $AccessToken | ConvertFrom-SecureString -AsPlainText
-                $headers['Authorization'] = "Bearer $Token"
+                $headers['Authorization'] = "Bearer $token"
             }
 
             Remove-HashtableEntry -Hashtable $headers -NullOrEmptyValues
