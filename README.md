@@ -178,3 +178,39 @@ For a detailed understanding of the framework, [read more about PSModule here](h
 ### Module Configuration and Environment
 
 - [GH Environment for GitHub CLI](https://cli.github.com/manual/gh_help_environment)
+
+### Usecases
+
+Where should it work?
+
+- Locally as a CLI (native companion on repo level, context aware)
+- On a workflow (CI/CD) via a GitHub Action (native companion in a action)
+- On other powershell compatible automation environments (FunctionApp, Azure Automation, etc)
+
+#### Operations - Where PowerShell shines
+
+You might have multiple environments you support, so should understand profiles/accounts.
+
+Compare with:
+- GH Cli
+- GitHub Desktop
+- GitHub Web portal
+- Other GitHub PowerShell modules
+
+#### Native companion on the GitHub Runner
+
+Lets you run GitHub Workflow commands.
+Lets you use the GitHub API and either an application, user token or a GitHub Action token
+
+#### Automation
+
+Let it log on as a an application or user, and do things on your behalf.
+
+#### Management
+
+Manage resources in GitHub programmatically. HAve a separate way to declare and manage resources in GitHub.
+
+Compare with:
+- Terraform
+- Pulumi
+- Octokit
