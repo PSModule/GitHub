@@ -101,6 +101,7 @@
         $URI = ("$ApiBaseUri/" -replace '/$', '') + ("/$ApiEndpoint" -replace '^/', '')
     }
 
+    try {
     $APICall = @{
         Uri                     = $URI
         Method                  = $Method
@@ -121,7 +122,10 @@
     }
 
     $APICall | Remove-HashtableEntry -NullOrEmptyValues
-
+    } catch {
+        Write-Error $_
+        exit 1
+    }
     if ($Body) {
         # Use body to create the query string for certain situations
         if ($Method -eq 'GET') {
