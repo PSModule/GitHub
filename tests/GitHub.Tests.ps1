@@ -44,12 +44,6 @@ Describe 'GitHub' {
                 OutFile     = $DownloadFilePath
             }
 
-            $currentVersion = $PSVersionTable.PSVersion
-            $LaterThanSevenThree = $currentVersion -ge [version]'7.3'
-
-            Write-Verbose "currentVersion:      $currentVersion" -Verbose
-            Write-Verbose "LaterThanSevenThree: $LaterThanSevenThree" -Verbose
-
             $APICall | Remove-HashtableEntry -NullOrEmptyValues
 
             if ($Body) {
