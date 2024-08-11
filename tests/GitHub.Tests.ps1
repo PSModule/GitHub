@@ -7,6 +7,10 @@ Param(
 
 Write-Verbose "Path to the module: [$Path]" -Verbose
 
+BeforeAll {
+    Connect-GitHub
+}
+
 Describe 'GitHub' {
     Context 'Private function: Remove-HashtableEntry' {
         It 'Remove-HashtableEntry -Hashtable $headers -NullOrEmptyValues' {
