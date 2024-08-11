@@ -185,7 +185,7 @@ Where should it work?
 
 - Locally as a CLI (native companion on repo level, context aware)
 - On a workflow (CI/CD) via a GitHub Action (native companion in a action)
-- On other powershell compatible automation environments (FunctionApp, Azure Automation, etc)
+- On other PowerShell compatible automation environments (FunctionApp, Azure Automation, etc)
 
 #### Operations - Where PowerShell shines
 
