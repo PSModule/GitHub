@@ -22,13 +22,10 @@ Describe 'GitHub' {
                 APIEndpoint = '/rate_limit'
                 Method      = 'GET'
             }
-            
-            try {
-                $response = Invoke-GitHubAPI @inputObject
-            } catch {
-                Get-PSCallStack -Verbose
-                Write-Verbose ($_.Exception.Message) -Verbose
-            }
+
+            $response = Invoke-GitHubAPI @inputObject -Verbose
+
+            $response
 
             $response | Should -Not -BeNullOrEmpty
             $response.Response.rate | Should -Not -BeNullOrEmpty
