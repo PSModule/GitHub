@@ -23,11 +23,11 @@ Describe 'GitHub' {
                 'X-GitHub-Api-Version' = Get-GitHubConfig -Name ApiVersion
             }
 
+            $AccessToken = Get-GitHubConfig -Name AccessToken
             $encryptedString = $AccessToken | ConvertFrom-SecureString
             $secureStringRecovered = $encryptedString | ConvertTo-SecureString
             $token = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureStringRecovered))
 
-            $AccessToken = Get-GitHubConfig -Name AccessToken
             if ($AccessToken) {
                 $headers['Authorization'] = "Bearer $token"
             }
