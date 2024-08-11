@@ -71,8 +71,10 @@ Describe 'GitHub' {
                     $APICall.Body = $Body | ConvertTo-Json -Depth 100
                 }
             }
+            Write-Verbose ($APICall | ConvertTo-Json -Depth 100) -Verbose
+            $response = Invoke-RestMethod @APICall
 
-            Invoke-RestMethod @APICall
+            $response
 
             $response | Should -Not -BeNullOrEmpty
             $response.Response.rate | Should -Not -BeNullOrEmpty
