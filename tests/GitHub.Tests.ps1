@@ -18,18 +18,14 @@ Describe 'GitHub' {
         }
 
         It 'Can be called directly to get ratelimits' {
-            $headers = @{
-                Accept                 = 'application/vnd.github+json; charset=utf-8'
-                'X-GitHub-Api-Version' = Get-GitHubConfig -Name ApiVersion
-            }
-
             $AccessToken = Get-GitHubConfig -Name AccessToken
             $encryptedString = $AccessToken | ConvertFrom-SecureString
             $secureStringRecovered = $encryptedString | ConvertTo-SecureString
             $token = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureStringRecovered))
-
-            if ($AccessToken) {
-                $headers['Authorization'] = "Bearer $token"
+            $headers = @{
+                Accept                 = 'application/vnd.github+json; charset=utf-8'
+                'X-GitHub-Api-Version' = Get-GitHubConfig -Name ApiVersion
+                'Authorization'        = "Bearer $token"
             }
 
             Remove-HashtableEntry -Hashtable $headers -NullOrEmptyValues
@@ -62,7 +58,7 @@ Describe 'GitHub' {
                 }
             }
             Write-Verbose ($APICall | ConvertTo-Json -Depth 100) -Verbose
-            $response = Invoke-RestMethod @APICall
+            $response = Invoke-WebRequest @APICall
 
             Write-Verbose ($response | ConvertTo-Json -Depth 100) -Verbose
 
