@@ -1,22 +1,22 @@
 # GitHub PowerShell
 
-The **GitHub PowerShell** module serves as a convenient API wrapper around [GitHub's REST API](https://docs.github.com/en/rest), making the functionalities and data available on GitHub accessible through PowerShell commands. This module is tailored for developers, administrators, and GitHub enthusiasts who are familiar with PowerShell and want to integrate or manage their GitHub repositories seamlessly.
+The module serves as a wrapper around [GitHub's REST API](https://docs.github.com/en/rest), making the functionalities and data available on GitHub
+accessible through PowerShell functions and classes. This module is tailored for developers, administrators, and GitHub enthusiasts who are familiar
+with PowerShell and want to integrate or manage GitHub seamlessly.
 
-**GitHub PowerShell** is built with the community in mind and targets individuals who prefer script-based solutions and want to automate various tasks on GitHub without resorting to a full-fledged development approach.
+## Desired supported scenarios
 
-## Features & Benefits of GitHub PowerShell
+- Support operators of personal repos, organization repos, and enterprise repos. -> Similar to the GitHub CLI, but with more commands.
+- Help operators that have multiple account and is a member of multiple organizations/enterprises. -> Similar to the GitHub CLI.
+- A context aware module that knows what environment you are working in, both locally and in GitHub Actions. -> Similar to the Octokit.
+- Built to be a native companion with GitHub Actions with Workflow commands that you can use. -> Similar to the Octokit and github-scripts
+- A module that can be used in other PowerShell compatible automation environments, like FunctionApps. -> Similar to the Octokit.
+- A way to deploy, declare and manage resources in GitHub programmatically. -> Similar to Terraform and Pulumi.
 
-- **Comprehensive Access**: Harness the power of GitHub's REST API from your PowerShell console, providing you with capabilities to manage repositories, issues, pull requests, and more.
+## Supported platforms
 
-- **Support for PowerShell Versions**: This module is tested and compatible with both PowerShell 7 and Windows PowerShell 5.1 ensuring wide accessibility.
-
-- **Cross-Platform**: Whether you're on Windows, macOS, or Linux, GitHub PowerShell has you covered.
-
-- **Modern Authentication**: Integrate seamlessly with GitHub's authentication methods, including personal access tokens and OAuth, for secure script execution.
-
-- **Active Development and Community Support**: As with the open-source spirit of GitHub, this module invites contributors for constant improvement and evolution. Regular updates ensure that the module remains in sync with any changes to the GitHub REST API.
-
-- **Intuitive Command Design**: Commands are structured logically, ensuring that even new users can get started quickly without a steep learning curve.
+As the module is built with the goal to support modern operators (assumed to use a newer OS), GitHub Actions and FunctionApps, the module
+will **only support the latest LTS version of PowerShell on Windows, macOS, and Linux**.
 
 ## Getting Started with GitHub PowerShell
 
@@ -56,10 +56,6 @@ After this you will need to install the GitHub App on the repos you want to mana
 [PowerShell for GitHub](https://github.com/apps/powershell-for-github) app page.
 
 > Info: We will be looking to include this as a check in the module in the future. So it becomes a part of the regular sign in process.
-
-<!-- ```powershell
-Install-GitHubApp -Owner 'PSModule' -Repo 'GitHub'
-``` -->
 
 Consecutive runs of the `Connect-GitHubAccount` will not require you to paste the code again unless you revoke the token
 or you change the type of authentication you want to use. Instead, it checks the remaining duration of the access token and
@@ -119,31 +115,6 @@ Familiarize yourself with the available cmdlets using the module's comprehensive
 Get-Command -Module GitHub
 ```
 
-### Sample Scripts
-
-To be added: Sample scripts demonstrating the module's capabilities.
-
-## More Information & Resources
-
-- If you're new to PowerShell or GitHub's REST API, consider checking out the provided beginner guides for both.
-
-- Explore detailed cmdlet documentation, tutorials, and community-contributed scripts to enhance your GitHub PowerShell experience.
-
-- Join the community discussions, provide feedback, or contribute to the module's development on the repository's issues and pull requests sections.
-
-Embrace the efficiency and power of scripting with **GitHub PowerShell** – Your gateway to GitHub automation and integration.
-
-## PowerShell Module Development and Release Framework
-
-We utilize the **[PSModule framework](https://github.com/PSModule/)** to streamline our module development and release process.
-
-- **New-Module**: Quickly set up a consistent module structure that fits with the framework.
-- **Build-Module**: Construct the project for deployment to the [PowerShell Gallery](https://www.powershellgallery.com/) and publish documentation for [GitHub Pages](https://pages.github.com/).
-- **Test-Module**: Run comprehensive tests ensuring module quality.
-- **Release-Module**: Handle versioning, create repository releases, and publish to the PowerShell Gallery and GitHub Pages.
-
-For a detailed understanding of the framework, [read more about PSModule here](https://github.com/PSModule/).
-
 ## References
 
 ### Official GitHub Resources
@@ -151,14 +122,13 @@ For a detailed understanding of the framework, [read more about PSModule here](h
 - [REST API Description](https://github.com/github/rest-api-description)
 - [GitHub CLI Manual](https://cli.github.com/manual/)
 - [GitHub Platform Samples](https://github.com/github/platform-samples)
+- [Octokit](https://github.com/octokit) [rest.js API docs](https://octokit.github.io/rest.js/v20) - GitHub API clients for different languages.
+- [actions/toolkit](https://github.com/actions/toolkit) - GitHub Actions Toolkit for JavaScript and TypeScript.
+- [actions/github-script](https://github.com/actions/github-script) - GitHub Action for running ts/js octokit scripts.
 
 ### General Web References
 
 - [Generic HTTP Status Codes (MDN)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
-
-### Tools Planned for Development
-
-- [Azure AutoRest (OpenAPI Specification Code Generator)](https://github.com/Azure/autorest)
 
 ### Inspiration Behind the Project
 
