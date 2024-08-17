@@ -35,9 +35,10 @@ function Get-GitHubConfig {
             'SecretVaultName',
             'SecretVaultType',
             'Scope',
-            'UserName'
+            'UserName',
+            'All'
         )]
-        [string] $Name
+        [string] $Name = 'All'
     )
 
     $prefix = $script:Config.Prefix
@@ -45,6 +46,9 @@ function Get-GitHubConfig {
     switch -Regex ($Name) {
         '^AccessToken$|^RefreshToken$' {
             Get-StoreConfig -Name "$prefix$Name"
+        }
+        '^All$' {
+            Get-StoreConfig
         }
         default {
             Get-StoreConfig -Name $Name

@@ -14,14 +14,14 @@
     [CmdletBinding()]
     param ()
 
-    Write-Warning 'Detected running on a GitHub Actions runner, preparing environment...'
+    Write-Verbose 'Detected running on a GitHub Actions runner, preparing environment...'
     $env:GITHUB_REPOSITORY_NAME = $env:GITHUB_REPOSITORY -replace '.+/'
     Set-GitHubEnv -Name 'GITHUB_REPOSITORY_NAME' -Value $env:GITHUB_REPOSITORY_NAME
 
     # Autologon if a token is present in environment variables
-    $envVar = Get-ChildItem -Path 'Env:' | Where-Object Name -In 'GH_TOKEN', 'GITHUB_TOKEN' | Select-Object -First 1
-    $envVarPresent = $envVar.count -gt 0
-    if ($envVarPresent) {
+    $tokenVar = Get-ChildItem -Path 'Env:' | Where-Object Name -In 'GH_TOKEN', 'GITHUB_TOKEN' | Select-Object -First 1
+    $tokenVarPresent = $tokenVar.count -gt 0 -and -not [string]::IsNullOrEmpty($tokenVar)
+    if ($tokenVarPresent) {
         Connect-GitHubAccount -Repo $env:GITHUB_REPOSITORY_NAME -Owner $env:GITHUB_REPOSITORY_OWNER
     }
 }

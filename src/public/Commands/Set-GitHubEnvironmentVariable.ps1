@@ -26,6 +26,6 @@
         [AllowNull()]
         [string] $Value
     )
-    Write-Verbose (@{ $Name = $Value } | Format-Table -Wrap -AutoSize | Out-String)
+    Write-Verbose "[$Name] = [$Value]"
     "$Name=$Value" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 }

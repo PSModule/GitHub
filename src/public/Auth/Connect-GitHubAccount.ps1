@@ -96,12 +96,12 @@
     )
 
     $envVars = Get-ChildItem -Path 'Env:'
-    Write-Verbose 'Environment variables:'
-    Write-Verbose ($envVars | Format-Table -AutoSize | Out-String)
+    Write-Debug 'Environment variables:'
+    Write-Debug ($envVars | Format-Table -AutoSize | Out-String)
     $gitHubToken = $envVars | Where-Object Name -In 'GH_TOKEN', 'GITHUB_TOKEN' | Select-Object -First 1
-    Write-Verbose "GitHub token: [$gitHubToken]"
-    $gitHubTokenPresent = $gitHubToken.count -gt 0
-    Write-Verbose "GitHub token present: [$gitHubTokenPresent]"
+    Write-Debug "GitHub token: [$gitHubToken]"
+    $gitHubTokenPresent = $gitHubToken.count -gt 0 -and -not [string]::IsNullOrEmpty($gitHubToken)
+    Write-Debug "GitHub token present: [$gitHubTokenPresent]"
     $AuthType = if ($gitHubTokenPresent) { 'sPAT' } else { $PSCmdlet.ParameterSetName }
     Write-Verbose "AuthType: [$AuthType]"
     switch ($AuthType) {
@@ -227,21 +227,12 @@
         Write-Host "Logged in as $username!"
     }
 
-    $systemRepo = $envVars | Where-Object Name -EQ 'GITHUB_REPOSITORY'
-    $systemRepoPresent = $systemRepo.count -gt 0
-
     if ($Owner) {
         Set-GitHubConfig -Owner $Owner
-    } elseif ($systemRepoPresent) {
-        $owner = $systemRepo.Value.Split('/')[0]
-        Set-GitHubConfig -Owner $owner
     }
 
     if ($Repo) {
         Set-GitHubConfig -Repo $Repo
-    } elseif ($systemRepoPresent) {
-        $repo = $systemRepo.Value.Split('/')[-1]
-        Set-GitHubConfig -Repo $repo
     }
 
     Remove-Variable -Name tokenResponse -ErrorAction SilentlyContinue
