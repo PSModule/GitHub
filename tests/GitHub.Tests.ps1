@@ -31,7 +31,7 @@ Describe 'GitHub' {
             { Get-GitHubConfig -Name ApiBaseUri } | Should -Not -Throw
         }
         It 'Can be called without a parameter' {
-            Write-Verbose (Get-GitHubConfig) -Verbose
+            Write-Verbose (Get-GitHubConfig | Out-String) -Verbose
             { Get-GitHubConfig } | Should -Not -Throw
         }
     }
