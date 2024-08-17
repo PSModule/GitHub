@@ -20,7 +20,7 @@
 
     # Autologon if a token is present in environment variables
     $tokenVar = Get-ChildItem -Path 'Env:' | Where-Object Name -In 'GH_TOKEN', 'GITHUB_TOKEN' | Select-Object -First 1
-    $tokenVarPresent = $tokenVar.count -gt 0 && $tokenVar -ne ''
+    $tokenVarPresent = $tokenVar.count -gt 0 -and -not [string]::IsNullOrEmpty($tokenVar)
     if ($tokenVarPresent) {
         Connect-GitHubAccount -Repo $env:GITHUB_REPOSITORY_NAME -Owner $env:GITHUB_REPOSITORY_OWNER
     }

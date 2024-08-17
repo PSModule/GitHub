@@ -100,7 +100,7 @@
     Write-Debug ($envVars | Format-Table -AutoSize | Out-String)
     $gitHubToken = $envVars | Where-Object Name -In 'GH_TOKEN', 'GITHUB_TOKEN' | Select-Object -First 1
     Write-Debug "GitHub token: [$gitHubToken]"
-    $gitHubTokenPresent = $gitHubToken.count -gt 0 && $gitHubToken -ne ''
+    $gitHubTokenPresent = $gitHubToken.count -gt 0 -and -not [string]::IsNullOrEmpty($gitHubToken)
     Write-Debug "GitHub token present: [$gitHubTokenPresent]"
     $AuthType = if ($gitHubTokenPresent) { 'sPAT' } else { $PSCmdlet.ParameterSetName }
     Write-Verbose "AuthType: [$AuthType]"
