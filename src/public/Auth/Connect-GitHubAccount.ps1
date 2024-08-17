@@ -96,12 +96,12 @@
     )
 
     $envVars = Get-ChildItem -Path 'Env:'
-    Write-Verbose 'Environment variables:'
-    Write-Verbose ($envVars | Format-Table -AutoSize | Out-String)
+    Write-Debug 'Environment variables:'
+    Write-Debug ($envVars | Format-Table -AutoSize | Out-String)
     $gitHubToken = $envVars | Where-Object Name -In 'GH_TOKEN', 'GITHUB_TOKEN' | Select-Object -First 1
-    Write-Verbose "GitHub token: [$gitHubToken]"
+    Write-Debug "GitHub token: [$gitHubToken]"
     $gitHubTokenPresent = $gitHubToken.count -gt 0
-    Write-Verbose "GitHub token present: [$gitHubTokenPresent]"
+    Write-DeBug "GitHub token present: [$gitHubTokenPresent]"
     $AuthType = if ($gitHubTokenPresent) { 'sPAT' } else { $PSCmdlet.ParameterSetName }
     Write-Verbose "AuthType: [$AuthType]"
     switch ($AuthType) {
