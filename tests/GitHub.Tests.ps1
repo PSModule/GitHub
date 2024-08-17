@@ -27,6 +27,7 @@ Describe 'GitHub' {
         }
 
         It 'Can be called directly to get the ApiBaseUri' {
+            Write-Verbose (Get-GitHubConfig -Name ApiBaseUri) -Verbose
             { Get-GitHubConfig -Name ApiBaseUri } | Should -Not -Throw
         }
         It 'Can be called without a parameter' {
