@@ -98,7 +98,7 @@
     $envVars = Get-ChildItem -Path 'Env:'
     Write-Debug 'Environment variables:'
     Write-Debug ($envVars | Format-Table -AutoSize | Out-String)
-    $gitHubToken = $envVars | Where-Object Name -In 'GH_TOKEN', 'GITHUB_TOKEN' | Select-Object -First 1
+    $gitHubToken = $envVars | Where-Object Name -In 'GH_TOKEN', 'GITHUB_TOKEN' | Select-Object -First 1 -ExpandProperty Value
     Write-Debug "GitHub token: [$gitHubToken]"
     $gitHubTokenPresent = $gitHubToken.count -gt 0 -and -not [string]::IsNullOrEmpty($gitHubToken)
     Write-Debug "GitHub token present: [$gitHubTokenPresent]"
@@ -202,9 +202,9 @@
         'sPAT' {
             Write-Verbose 'Logging in using GitHub access token...'
             Reset-GitHubConfig -Scope 'Auth'
-            $prefix = $gitHubToken.Value -replace '_.*$', '_*'
+            $prefix = $gitHubToken -replace '_.*$', '_*'
             $settings = @{
-                AccessToken     = ConvertTo-SecureString -AsPlainText $gitHubToken.Value
+                AccessToken     = ConvertTo-SecureString -AsPlainText $gitHubToken
                 AccessTokenType = $prefix
                 ApiBaseUri      = 'https://api.github.com'
                 ApiVersion      = '2022-11-28'
