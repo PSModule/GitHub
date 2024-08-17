@@ -202,9 +202,9 @@
         'sPAT' {
             Write-Verbose 'Logging in using GitHub access token...'
             Reset-GitHubConfig -Scope 'Auth'
-            $prefix = $gitHubToken.Value -replace '_.*$', '_*'
+            $prefix = $gitHubToken -replace '_.*$', '_*'
             $settings = @{
-                AccessToken     = ConvertTo-SecureString -AsPlainText $gitHubToken.Value
+                AccessToken     = ConvertTo-SecureString -AsPlainText $gitHubToken
                 AccessTokenType = $prefix
                 ApiBaseUri      = 'https://api.github.com'
                 ApiVersion      = '2022-11-28'
