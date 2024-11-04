@@ -87,6 +87,15 @@
         [Alias('Repository')]
         [string] $Repo,
 
+        # API host used for API requests.
+        [Parameter()]
+        [Alias('BaseURL')]
+        [string] $ApiBaseUri = 'https://api.github.com',
+
+        # API version used for API requests.
+        [Parameter()]
+        [string] $ApiVersion = '2022-11-28',
+
         # Suppresses the output of the function.
         [Parameter()]
         [Alias('Quiet')]
@@ -154,8 +163,8 @@
                         AccessToken                = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
                         AccessTokenExpirationDate  = (Get-Date).AddSeconds($tokenResponse.expires_in)
                         AccessTokenType            = $tokenResponse.access_token -replace '_.*$', '_*'
-                        ApiBaseUri                 = 'https://api.github.com'
-                        ApiVersion                 = '2022-11-28'
+                        ApiBaseUri                 = $ApiBaseUri
+                        ApiVersion                 = $ApiVersion
                         AuthType                   = $AuthType
                         DeviceFlowType             = $Mode
                         RefreshToken               = ConvertTo-SecureString -AsPlainText $tokenResponse.refresh_token
@@ -167,8 +176,8 @@
                     $settings = @{
                         AccessToken     = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
                         AccessTokenType = $tokenResponse.access_token -replace '_.*$', '_*'
-                        ApiBaseUri      = 'https://api.github.com'
-                        ApiVersion      = '2022-11-28'
+                        ApiBaseUri      = $ApiBaseUri
+                        ApiVersion      = $ApiVersion
                         AuthType        = $AuthType
                         DeviceFlowType  = $Mode
                         Scope           = $tokenResponse.scope
@@ -192,8 +201,8 @@
             $settings = @{
                 AccessToken     = $accessTokenValue
                 AccessTokenType = $accessTokenType
-                ApiBaseUri      = 'https://api.github.com'
-                ApiVersion      = '2022-11-28'
+                ApiBaseUri      = $ApiBaseUri
+                ApiVersion      = $ApiVersion
                 AuthType        = $AuthType
             }
             Set-GitHubConfig @settings
@@ -206,8 +215,8 @@
             $settings = @{
                 AccessToken     = ConvertTo-SecureString -AsPlainText $gitHubToken
                 AccessTokenType = $prefix
-                ApiBaseUri      = 'https://api.github.com'
-                ApiVersion      = '2022-11-28'
+                ApiBaseUri      = $ApiBaseUri
+                ApiVersion      = $ApiVersion
                 AuthType        = 'sPAT'
             }
             Set-GitHubConfig @settings
