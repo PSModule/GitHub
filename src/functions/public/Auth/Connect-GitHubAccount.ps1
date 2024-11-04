@@ -226,7 +226,7 @@
             Set-GitHubConfig @settings
             break
         }
-        'JWT' {
+        'App' {
             Write-Verbose 'Logging in using a GitHub App...'
             Reset-GitHubConfig -Scope 'Auth'
             $jwt = Get-GitHubAppJWT -ClientID $ClientID -PrivateKey $PrivateKey
@@ -255,7 +255,7 @@
     }
 
     switch ($AuthType) {
-        'JWT' {
+        'App' {
             $app = Get-GitHubApp
             $username = $app.slug
         }
