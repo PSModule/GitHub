@@ -13,7 +13,7 @@
     #>
     [CmdletBinding()]
     param(
-        # The enterprise slug or id.
+        # The enterprise slug or ID.
         [Parameter(Mandatory)]
         [string] $Enterprise,
 
