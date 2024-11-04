@@ -18,7 +18,7 @@
         Get the authenticated app.
 
         .NOTES
-        [Get the authenticated app](https://docs.github.com/rest/apps/apps#get-the-authenticated-app)
+        [Get the authenticated app | GitHub Docs](https://docs.github.com/rest/apps/apps#get-the-authenticated-app)
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]
