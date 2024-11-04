@@ -1,32 +1,3 @@
-function Get-GitHubAppJWT {
-    [CmdletBinding()]
-    param (
-        [Parameter(Mandatory)]
-        [string] $ClientID,
-
-        [Parameter(Mandatory)]
-        [string] $PrivateKey
-    )
-
-    $header = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes((ConvertTo-Json -InputObject @{
-                    alg = 'RS256'
-                    typ = 'JWT'
-                }))).TrimEnd('=').Replace('+', '-').Replace('/', '_');
-
-    $payload = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes((ConvertTo-Json -InputObject @{
-                    iat = [System.DateTimeOffset]::UtcNow.AddSeconds(-10).ToUnixTimeSeconds()
-                    exp = [System.DateTimeOffset]::UtcNow.AddMinutes(10).ToUnixTimeSeconds()
-                    iss = $ClientID
-                }))).TrimEnd('=').Replace('+', '-').Replace('/', '_');
-
-    $rsa = [System.Security.Cryptography.RSA]::Create()
-    $rsa.ImportFromPem($PrivateKey)
-
-    $signature = [Convert]::ToBase64String($rsa.SignData([System.Text.Encoding]::UTF8.GetBytes("$header.$payload"), [System.Security.Cryptography.HashAlgorithmName]::SHA256, [System.Security.Cryptography.RSASignaturePadding]::Pkcs1)).TrimEnd('=').Replace('+', '-').Replace('/', '_')
-    $jwt = "$header.$payload.$signature"
-    $jwt
-}
-
 function Get-GitHubEnterpriseOrganizations {
     [CmdletBinding()]
     param(

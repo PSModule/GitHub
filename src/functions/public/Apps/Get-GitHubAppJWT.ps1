@@ -65,28 +65,42 @@ function Get-GitHubAppJSONWebToken {
             throw "The private key path [$PrivateKeyFilePath] does not exist."
         }
 
-        $PrivateKeyFilePath = Join-Path -Path $env:TEMP -ChildPath 'private_key.pem'
         $PrivateKey = Get-Content -Path $PrivateKeyFilePath -Raw
     }
 
-    $header = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes((ConvertTo-Json -InputObject @{
+    $header = [Convert]::ToBase64String(
+        [System.Text.Encoding]::UTF8.GetBytes(
+            (
+                ConvertTo-Json -InputObject @{
                     alg = 'RS256'
                     typ = 'JWT'
-                }))).TrimEnd('=').Replace('+', '-').Replace('/', '_')
+                }
+            )
+        )
+    ).TrimEnd('=').Replace('+', '-').Replace('/', '_')
 
-    $payload = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes((ConvertTo-Json -InputObject @{
+    $payload = [Convert]::ToBase64String(
+        [System.Text.Encoding]::UTF8.GetBytes(
+            (
+                ConvertTo-Json -InputObject @{
                     iat = [System.DateTimeOffset]::UtcNow.AddSeconds(-10).ToUnixTimeSeconds()
                     exp = [System.DateTimeOffset]::UtcNow.AddMinutes(10).ToUnixTimeSeconds()
                     iss = $ClientId
-                }))).TrimEnd('=').Replace('+', '-').Replace('/', '_')
+                }
+            )
+        )
+    ).TrimEnd('=').Replace('+', '-').Replace('/', '_')
 
     $rsa = [System.Security.Cryptography.RSA]::Create()
     $rsa.ImportFromPem($PrivateKey)
 
-    $signature = [Convert]::ToBase64String($rsa.SignData(
+    $signature = [Convert]::ToBase64String(
+        $rsa.SignData(
             [System.Text.Encoding]::UTF8.GetBytes("$header.$payload"),
             [System.Security.Cryptography.HashAlgorithmName]::SHA256,
-            [System.Security.Cryptography.RSASignaturePadding]::Pkcs1)).TrimEnd('=').Replace('+', '-').Replace('/', '_')
+            [System.Security.Cryptography.RSASignaturePadding]::Pkcs1
+        )
+    ).TrimEnd('=').Replace('+', '-').Replace('/', '_')
     $jwt = "$header.$payload.$signature"
     $jwt
 }
