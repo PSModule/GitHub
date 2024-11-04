@@ -87,6 +87,15 @@
         [Alias('Repository')]
         [string] $Repo,
 
+        # API host used for API requests.
+        [Parameter()]
+        [Alias('BaseURL')]
+        [string] $ApiBaseUri = 'https://api.github.com',
+
+        # API version used for API requests.
+        [Parameter()]
+        [string] $ApiVersion = '2022-11-28',
+
         # Suppresses the output of the function.
         [Parameter()]
         [Alias('Quiet')]
@@ -96,12 +105,12 @@
     )
 
     $envVars = Get-ChildItem -Path 'Env:'
-    Write-Verbose 'Environment variables:'
-    Write-Verbose ($envVars | Format-Table -AutoSize | Out-String)
-    $gitHubToken = $envVars | Where-Object Name -In 'GH_TOKEN', 'GITHUB_TOKEN' | Select-Object -First 1
-    Write-Verbose "GitHub token: [$gitHubToken]"
-    $gitHubTokenPresent = $gitHubToken.count -gt 0
-    Write-Verbose "GitHub token present: [$gitHubTokenPresent]"
+    Write-Debug 'Environment variables:'
+    Write-Debug ($envVars | Format-Table -AutoSize | Out-String)
+    $gitHubToken = $envVars | Where-Object Name -In 'GH_TOKEN', 'GITHUB_TOKEN' | Select-Object -First 1 -ExpandProperty Value
+    Write-Debug "GitHub token: [$gitHubToken]"
+    $gitHubTokenPresent = $gitHubToken.count -gt 0 -and -not [string]::IsNullOrEmpty($gitHubToken)
+    Write-Debug "GitHub token present: [$gitHubTokenPresent]"
     $AuthType = if ($gitHubTokenPresent) { 'sPAT' } else { $PSCmdlet.ParameterSetName }
     Write-Verbose "AuthType: [$AuthType]"
     switch ($AuthType) {
@@ -154,8 +163,8 @@
                         AccessToken                = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
                         AccessTokenExpirationDate  = (Get-Date).AddSeconds($tokenResponse.expires_in)
                         AccessTokenType            = $tokenResponse.access_token -replace '_.*$', '_*'
-                        ApiBaseUri                 = 'https://api.github.com'
-                        ApiVersion                 = '2022-11-28'
+                        ApiBaseUri                 = $ApiBaseUri
+                        ApiVersion                 = $ApiVersion
                         AuthType                   = $AuthType
                         DeviceFlowType             = $Mode
                         RefreshToken               = ConvertTo-SecureString -AsPlainText $tokenResponse.refresh_token
@@ -167,8 +176,8 @@
                     $settings = @{
                         AccessToken     = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
                         AccessTokenType = $tokenResponse.access_token -replace '_.*$', '_*'
-                        ApiBaseUri      = 'https://api.github.com'
-                        ApiVersion      = '2022-11-28'
+                        ApiBaseUri      = $ApiBaseUri
+                        ApiVersion      = $ApiVersion
                         AuthType        = $AuthType
                         DeviceFlowType  = $Mode
                         Scope           = $tokenResponse.scope
@@ -192,8 +201,8 @@
             $settings = @{
                 AccessToken     = $accessTokenValue
                 AccessTokenType = $accessTokenType
-                ApiBaseUri      = 'https://api.github.com'
-                ApiVersion      = '2022-11-28'
+                ApiBaseUri      = $ApiBaseUri
+                ApiVersion      = $ApiVersion
                 AuthType        = $AuthType
             }
             Set-GitHubConfig @settings
@@ -202,12 +211,12 @@
         'sPAT' {
             Write-Verbose 'Logging in using GitHub access token...'
             Reset-GitHubConfig -Scope 'Auth'
-            $prefix = $gitHubToken.Value -replace '_.*$', '_*'
+            $prefix = $gitHubToken -replace '_.*$', '_*'
             $settings = @{
-                AccessToken     = ConvertTo-SecureString -AsPlainText $gitHubToken.Value
+                AccessToken     = ConvertTo-SecureString -AsPlainText $gitHubToken
                 AccessTokenType = $prefix
-                ApiBaseUri      = 'https://api.github.com'
-                ApiVersion      = '2022-11-28'
+                ApiBaseUri      = $ApiBaseUri
+                ApiVersion      = $ApiVersion
                 AuthType        = 'sPAT'
             }
             Set-GitHubConfig @settings
@@ -227,21 +236,12 @@
         Write-Host "Logged in as $username!"
     }
 
-    $systemRepo = $envVars | Where-Object Name -EQ 'GITHUB_REPOSITORY'
-    $systemRepoPresent = $systemRepo.count -gt 0
-
     if ($Owner) {
         Set-GitHubConfig -Owner $Owner
-    } elseif ($systemRepoPresent) {
-        $owner = $systemRepo.Value.Split('/')[0]
-        Set-GitHubConfig -Owner $owner
     }
 
     if ($Repo) {
         Set-GitHubConfig -Repo $Repo
-    } elseif ($systemRepoPresent) {
-        $repo = $systemRepo.Value.Split('/')[-1]
-        Set-GitHubConfig -Repo $repo
     }
 
     Remove-Variable -Name tokenResponse -ErrorAction SilentlyContinue
