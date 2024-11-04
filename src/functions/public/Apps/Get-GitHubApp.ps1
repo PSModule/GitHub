@@ -22,7 +22,7 @@
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]
-    param ()
+    param()
 
     $inputObject = @{
         APIEndpoint = '/app'
