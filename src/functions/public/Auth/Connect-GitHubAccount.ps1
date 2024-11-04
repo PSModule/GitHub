@@ -85,7 +85,7 @@
             Mandatory,
             ParameterSetName = 'App'
         )]
-        [guid] $ClientID,
+        [string] $ClientID,
 
         # The private key for the GitHub App.
         [Parameter(
