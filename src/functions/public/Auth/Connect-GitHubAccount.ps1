@@ -1,10 +1,14 @@
 ﻿function Connect-GitHubAccount {
     <#
         .SYNOPSIS
-        Connects to GitHub using a personal access token or device code login.
+        Connects to GitHub.
 
         .DESCRIPTION
-        Connects to GitHub using a personal access token or device code login.
+        Connects to GitHub using one of the following logon methods:
+        - a personal access token
+        - device code login (interactive user login)
+        - a system access token (for GitHub Actions)
+        - a GitHub App using JWT or installation access token
 
         For device flow / device code login:
         PowerShell requests device and user verification codes and gets the authorization URL where you will enter the user verification code.
@@ -75,6 +79,20 @@
         [Alias('Token')]
         [Alias('PAT')]
         [switch] $AccessToken,
+
+        # The client ID for the GitHub App.
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'App'
+        )]
+        [guid] $ClientID,
+
+        # The private key for the GitHub App.
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'App'
+        )]
+        [string] $PrivateKey,
 
         # Set the default owner to use in commands.
         [Parameter()]
@@ -208,6 +226,19 @@
             Set-GitHubConfig @settings
             break
         }
+        'JWT' {
+            Write-Verbose 'Logging in using a GitHub App...'
+            Reset-GitHubConfig -Scope 'Auth'
+            $jwt = Get-GitHubAppJWT -ClientID $ClientID -PrivateKey $PrivateKey
+            $settings = @{
+                AccessToken     = ConvertTo-SecureString -AsPlainText $jwt
+                AccessTokenType = 'JWT'
+                ApiBaseUri      = $ApiBaseUri
+                ApiVersion      = $ApiVersion
+                AuthType        = $AuthType
+            }
+            Set-GitHubConfig @settings
+        }
         'sPAT' {
             Write-Verbose 'Logging in using GitHub access token...'
             Reset-GitHubConfig -Scope 'Auth'
@@ -223,12 +254,18 @@
         }
     }
 
-    if ($AuthType -ne 'sPAT') {
-        $user = Get-GitHubUser
-        $username = $user.login
-        Set-GitHubConfig -UserName $username
-    } else {
-        $username = 'system'
+    switch ($AuthType) {
+        'JWT' {
+            $app = Get-GitHubApp
+            $username = $app.slug
+        }
+        'sPAT' {
+            $username = 'system'
+        }
+        default {
+            $user = Get-GitHubUser
+            $username = $user.login
+        }
     }
 
     if (-not $Silent) {
