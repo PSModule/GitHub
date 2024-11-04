@@ -1,4 +1,4 @@
-function Get-GitHubEnterpriseOrganizations {
+function Get-GitHubEnterpriseOrganization {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory)]
@@ -47,7 +47,8 @@ query(`$enterpriseSlug: String!, `$first: Int = 100, `$after: String) {
     function Invoke-GraphQLQuery {
         param (
             [string]$query,
-            [hashtable]$variables
+            [hashtable]$variables,
+            [string]$URL
         )
 
         $body = @{
@@ -61,10 +62,10 @@ query(`$enterpriseSlug: String!, `$first: Int = 100, `$after: String) {
 
     # Loop through pages to retrieve all organizations
     do {
-        $response = Invoke-GraphQLQuery -query $query -variables $variables
+        $response = Invoke-GraphQLQuery -query $query -variables $variables -URL $URL
         # Check for errors
         if ($response.errors) {
-            Write-Host "Error: $($response.errors[0].message)"
+            Write-Error "Error: $($response.errors[0].message)"
             break
         }
 
@@ -84,7 +85,7 @@ query(`$enterpriseSlug: String!, `$first: Int = 100, `$after: String) {
 
 }
 
-function Get-GitHubAppInstallations {
+function Get-GitHubAppInstallation {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory)]
