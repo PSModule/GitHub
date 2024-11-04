@@ -12,7 +12,7 @@ function Get-GitHubAppJSONWebToken {
         Generates a JSON Web Token (JWT) for a GitHub App using the specified client ID and private key file path.
 
         .EXAMPLE
-        Get-GitHubAppJWT -ClientId 'Iv987654321' -PrivateKey '-----BEGIN RSA PRIVATE KEY----- EXAMPLE -----END RSA PRIVATE KEY-----'
+        Get-GitHubAppJWT -ClientId 'Iv987654321' -PrivateKey 'EXAMPLE'
 
         Generates a JSON Web Token (JWT) for a GitHub App using the specified client ID and private key.
 
