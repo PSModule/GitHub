@@ -85,26 +85,6 @@ query(`$enterpriseSlug: String!, `$first: Int = 100, `$after: String) {
 
 }
 
-function Get-GitHubAppInstallation {
-    [CmdletBinding()]
-    param (
-        [Parameter(Mandatory)]
-        [string] $Token,
-
-        [Parameter()]
-        $BaseURL = $env:GITHUB_API_URL
-    )
-
-    $result = Invoke-RestMethod -Method Get -Uri "$BaseURL/app/installations" -Headers @{
-        'Authorization' = "Bearer $token"
-        'Accept'        = 'application/vnd.github+json'
-    } -FollowRelLink
-
-    $result | ForEach-Object {
-        Write-Output $_
-    }
-}
-
 function Get-GitHubAppInstallationAccessToken {
     [CmdletBinding()]
     param (

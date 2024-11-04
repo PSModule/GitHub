@@ -12,7 +12,7 @@
         Initializes the runner environment for the GitHub module
     #>
     [CmdletBinding()]
-    param ()
+    param()
 
     Write-Verbose 'Detected running on a GitHub Actions runner, preparing environment...'
     $env:GITHUB_REPOSITORY_NAME = $env:GITHUB_REPOSITORY -replace '.+/'
