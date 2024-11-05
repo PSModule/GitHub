@@ -3,7 +3,7 @@
 ###
 
 # When you connect, a context is saved.
-# Variables, stored under "Contexts" on the existing config.json. 
+# Variables, stored under "Contexts" on the existing config.json.
 # Secrets, names are stored in the variables.
 # Context = [
 #     {
@@ -45,7 +45,7 @@ Connect-GitHub -Token ***********
 
 ###
 ### ADVANCED CONNECTING
-### 
+###
 
 # Bring you own GitHub App
 Set-GitHubAuthApp -ClientID ''
