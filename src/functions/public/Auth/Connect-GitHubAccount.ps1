@@ -116,7 +116,7 @@
 
         # The host to connect to.
         [Parameter()]
-        [uri] $Host = 'github.com',
+        [uri] $HostName = 'github.com',
 
         # Suppresses the output of the function.
         [Parameter()]

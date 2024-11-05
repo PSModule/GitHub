@@ -7,7 +7,7 @@
         Request a GitHub Device Code.
 
         .EXAMPLE
-        Request-GitHubDeviceCode -ClientID $ClientID -Mode $Mode
+        Request-GitHubDeviceCode -ClientID $ClientID -Mode $Mode -HostName 'github.com'
 
         This will request a GitHub Device Code.
 
@@ -31,7 +31,7 @@
 
         # The host to connect to.
         [Parameter(Mandatory)]
-        [string] $Host
+        [string] $HostName
     )
 
     $headers = @{
@@ -44,7 +44,7 @@
     }
 
     $RESTParams = @{
-        Uri     = "https://$Host/login/device/code"
+        Uri     = "https://$HostName/login/device/code"
         Method  = 'POST'
         Body    = $body
         Headers = $headers

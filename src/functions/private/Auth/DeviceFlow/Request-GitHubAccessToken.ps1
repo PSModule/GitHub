@@ -8,7 +8,7 @@
         This will poll the GitHub API until the user has entered the code.
 
         .EXAMPLE
-        Request-GitHubAccessToken -DeviceCode $deviceCode -ClientID $ClientID
+        Request-GitHubAccessToken -DeviceCode $deviceCode -ClientID $ClientID -HostName 'github.com'
 
         This will poll the GitHub API until the user has entered the code.
 
@@ -39,7 +39,7 @@
 
         # The host to connect to.
         [Parameter(Mandatory)]
-        [string] $Host
+        [string] $HostName
     )
 
     $body = @{
@@ -61,7 +61,7 @@
     }
 
     $RESTParams = @{
-        Uri     = "https://$Host/login/oauth/access_token"
+        Uri     = "https://$HostName/login/oauth/access_token"
         Method  = 'POST'
         Body    = $body
         Headers = @{ 'Accept' = 'application/json' }
