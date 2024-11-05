@@ -55,7 +55,7 @@
             Write-Host '! ' -ForegroundColor DarkYellow -NoNewline
             Write-Host "We added the code to your clipboard: [$userCode]"
             $userCode | Set-Clipboard
-            Read-Host 'Press Enter to open github.com in your browser...'
+            Read-Host "Press Enter to open $HostName in your browser..."
             Start-Process $verificationUri
 
             $tokenResponse = Wait-GitHubAccessToken -DeviceCode $deviceCode -ClientID $ClientID -Interval $interval -HostName $HostName
