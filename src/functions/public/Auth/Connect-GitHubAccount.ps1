@@ -211,7 +211,7 @@
             Write-Verbose 'Logging in using personal access token...'
             Reset-GitHubConfig -Scope 'Auth'
             Write-Host '! ' -ForegroundColor DarkYellow -NoNewline
-            Start-Process 'https://github.com/settings/tokens'
+            Start-Process "https://$HostName/settings/tokens"
             $accessTokenValue = Read-Host -Prompt 'Enter your personal access token' -AsSecureString
             $accessTokenType = (ConvertFrom-SecureString $accessTokenValue -AsPlainText) -replace '_.*$', '_*'
             if ($accessTokenType -notmatch '^ghp_|^github_pat_') {
@@ -229,7 +229,7 @@
             break
         }
         'App' {
-            Write-Verbose 'Logging in using a GitHub App...'
+            Write-Verbose 'Logging in as a GitHub App...'
             Reset-GitHubConfig -Scope 'Auth'
             $jwt = Get-GitHubAppJWT -ClientID $ClientID -PrivateKey $PrivateKey
             $settings = @{
