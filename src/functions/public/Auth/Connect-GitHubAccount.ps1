@@ -114,6 +114,10 @@
         [Parameter()]
         [string] $ApiVersion = '2022-11-28',
 
+        # The host to connect to.
+        [Parameter()]
+        [uri] $Host = 'github.com',
+
         # Suppresses the output of the function.
         [Parameter()]
         [Alias('Quiet')]

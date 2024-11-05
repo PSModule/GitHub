@@ -35,7 +35,11 @@
             Mandatory,
             ParameterSetName = 'RefreshToken'
         )]
-        [securestring] $RefreshToken
+        [securestring] $RefreshToken,
+
+        # The host to connect to.
+        [Parameter(Mandatory)]
+        [string] $Host
     )
 
     $body = @{
@@ -57,7 +61,7 @@
     }
 
     $RESTParams = @{
-        Uri     = 'https://github.com/login/oauth/access_token'
+        Uri     = "https://$Host/login/oauth/access_token"
         Method  = 'POST'
         Body    = $body
         Headers = @{ 'Accept' = 'application/json' }
