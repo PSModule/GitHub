@@ -7,7 +7,7 @@
         Request a GitHub Device Code.
 
         .EXAMPLE
-        Request-GitHubDeviceCode -ClientID $ClientID -Mode $Mode
+        Request-GitHubDeviceCode -ClientID $ClientID -Mode $Mode -HostName 'github.com'
 
         This will request a GitHub Device Code.
 
@@ -27,7 +27,11 @@
         # For more information on scopes visit:
         # https://docs.github.com/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps
         [Parameter()]
-        [string] $Scope = 'gist, read:org, repo, workflow'
+        [string] $Scope = 'gist, read:org, repo, workflow',
+
+        # The host to connect to.
+        [Parameter(Mandatory)]
+        [string] $HostName
     )
 
     $headers = @{
@@ -40,7 +44,7 @@
     }
 
     $RESTParams = @{
-        Uri     = 'https://github.com/login/device/code'
+        Uri     = "https://$HostName/login/device/code"
         Method  = 'POST'
         Body    = $body
         Headers = $headers

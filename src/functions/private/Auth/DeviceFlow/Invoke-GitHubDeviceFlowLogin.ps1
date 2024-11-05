@@ -32,6 +32,10 @@
         [Parameter()]
         [string] $Scope,
 
+        # The host to connect to.
+        [Parameter(Mandatory)]
+        [string] $HostName,
+
         # The refresh token to use for re-authentication.
         [Parameter()]
         [securestring] $RefreshToken
@@ -39,9 +43,9 @@
 
     do {
         if ($RefreshToken) {
-            $tokenResponse = Wait-GitHubAccessToken -ClientID $ClientID -RefreshToken $RefreshToken
+            $tokenResponse = Wait-GitHubAccessToken -ClientID $ClientID -RefreshToken $RefreshToken -HostName $HostName
         } else {
-            $deviceCodeResponse = Request-GitHubDeviceCode -ClientID $ClientID -Scope $Scope
+            $deviceCodeResponse = Request-GitHubDeviceCode -ClientID $ClientID -Scope $Scope -HostName $HostName
 
             $deviceCode = $deviceCodeResponse.device_code
             $interval = $deviceCodeResponse.interval
@@ -54,7 +58,7 @@
             Read-Host 'Press Enter to open github.com in your browser...'
             Start-Process $verificationUri
 
-            $tokenResponse = Wait-GitHubAccessToken -DeviceCode $deviceCode -ClientID $ClientID -Interval $interval
+            $tokenResponse = Wait-GitHubAccessToken -DeviceCode $deviceCode -ClientID $ClientID -Interval $interval -HostName $HostName
         }
     } while ($tokenResponse.error)
     $tokenResponse

@@ -105,14 +105,14 @@
         [Alias('Repository')]
         [string] $Repo,
 
-        # API host used for API requests.
-        [Parameter()]
-        [Alias('BaseURL')]
-        [string] $ApiBaseUri = 'https://api.github.com',
-
         # API version used for API requests.
         [Parameter()]
         [string] $ApiVersion = '2022-11-28',
+
+        # The host to connect to.
+        [Parameter()]
+        [Alias('Host')]
+        [uri] $HostName = 'github.com',
 
         # Suppresses the output of the function.
         [Parameter()]
@@ -121,6 +121,8 @@
         [Alias('s')]
         [switch] $Silent
     )
+
+    $ApiBaseUri = "https://api.$HostName"
 
     $envVars = Get-ChildItem -Path 'Env:'
     Write-Debug 'Environment variables:'
@@ -137,7 +139,7 @@
             $clientID = $script:Auth.$Mode.ClientID
             if ($Mode -ne (Get-GitHubConfig -Name 'DeviceFlowType' -ErrorAction SilentlyContinue)) {
                 Write-Verbose "Using $Mode authentication..."
-                $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -Scope $Scope
+                $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -Scope $Scope -HostName $HostName
             } else {
                 $accessTokenValidity = [datetime](Get-GitHubConfig -Name 'AccessTokenExpirationDate') - (Get-Date)
                 $accessTokenIsValid = $accessTokenValidity.Seconds -gt 0
@@ -157,7 +159,7 @@
                             Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
                             Write-Host "Access token remaining validity $accessTokenValidityText. Refreshing access token..."
                         }
-                        $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -RefreshToken (Get-GitHubConfig -Name 'RefreshToken')
+                        $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -RefreshToken (Get-GitHubConfig -Name 'RefreshToken') -HostName $HostName
                     }
                 } else {
                     $refreshTokenValidity = [datetime](Get-GitHubConfig -Name 'RefreshTokenExpirationDate') - (Get-Date)
@@ -167,10 +169,10 @@
                             Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
                             Write-Host 'Access token expired. Refreshing access token...'
                         }
-                        $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -RefreshToken (Get-GitHubConfig -Name 'RefreshToken')
+                        $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -RefreshToken (Get-GitHubConfig -Name 'RefreshToken') -HostName $HostName
                     } else {
                         Write-Verbose "Using $Mode authentication..."
-                        $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -Scope $Scope
+                        $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -Scope $Scope -HostName $HostName
                     }
                 }
             }

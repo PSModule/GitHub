@@ -40,17 +40,20 @@
         )]
         [securestring] $RefreshToken,
 
+        # The host to connect to.
+        [Parameter(Mandatory)]
+        [string] $HostName,
+
         # The interval to wait between polling for the token.
         [Parameter()]
         [int] $Interval = 5
-
     )
 
     do {
         if ($RefreshToken) {
-            $response = Request-GitHubAccessToken -ClientID $ClientID -RefreshToken $RefreshToken
+            $response = Request-GitHubAccessToken -ClientID $ClientID -RefreshToken $RefreshToken -HostName $HostName
         } else {
-            $response = Request-GitHubAccessToken -ClientID $ClientID -DeviceCode $DeviceCode
+            $response = Request-GitHubAccessToken -ClientID $ClientID -DeviceCode $DeviceCode -HostName $HostName
         }
         if ($response.error) {
             switch ($response.error) {
