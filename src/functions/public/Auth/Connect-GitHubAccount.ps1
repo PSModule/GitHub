@@ -109,9 +109,11 @@
         [Parameter()]
         [string] $ApiVersion = '2022-11-28',
 
-        # The host to connect to.
+        # The host to connect to. Can use $env:GITHUB_SERVER_URL to set the host, as the protocol is removed automatically.
+        # Example: github.com, github.enterprise.com, msx.ghe.com
         [Parameter()]
         [Alias('Host')]
+        [Alias('Server')]
         [uri] $HostName = 'github.com',
 
         # Suppresses the output of the function.
@@ -122,6 +124,7 @@
         [switch] $Silent
     )
 
+    $HostName = $HostName.Host
     $ApiBaseUri = "https://api.$HostName"
 
     $envVars = Get-ChildItem -Path 'Env:'
