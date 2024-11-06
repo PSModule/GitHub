@@ -23,7 +23,6 @@
     $tokenVar = Get-ChildItem -Path 'Env:' | Where-Object Name -In 'GH_TOKEN', 'GITHUB_TOKEN' | Select-Object -First 1 -ExpandProperty Value
     $tokenVarPresent = $tokenVar.count -gt 0 -and -not [string]::IsNullOrEmpty($tokenVar)
     if ($tokenVarPresent) {
-        $HostName = $env:GITHUB_SERVER_URL -replace '^https?://'
-        Connect-GitHubAccount -Repo $env:GITHUB_REPOSITORY_NAME -Owner $env:GITHUB_REPOSITORY_OWNER -Host $HostName
+        Connect-GitHubAccount -Repo $env:GITHUB_REPOSITORY_NAME -Owner $env:GITHUB_REPOSITORY_OWNER -Server $env:GITHUB_SERVER_URL
     }
 }
