@@ -275,7 +275,6 @@
             $username = $app.slug
         }
         'IAT' {
-            Get-GitHubApp
             $username = 'system'
         }
         default {
