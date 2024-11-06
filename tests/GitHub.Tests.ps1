@@ -1,8 +1,7 @@
-﻿BeforeAll {
-    Connect-GitHub
-}
-
-Describe 'GitHub' {
+﻿Describe 'GitHub' {
+    Context 'Connect-GitHub' {
+        { Connect-GitHub } | Should -Not -Throw
+    }
     Context 'Invoke-GitHubAPI' {
         It 'Invoke-GitHubAPI function exists' {
             Get-Command Invoke-GitHubAPI | Should -Not -BeNullOrEmpty
@@ -27,5 +26,27 @@ Describe 'GitHub' {
             Write-Verbose ($config.Variables | Format-List | Out-String) -Verbose
             { Get-GitHubConfig } | Should -Not -Throw
         }
+    }
+}
+
+Describe 'Commands' {
+    It "Start-LogGroup 'MyGroup' should not throw" {
+        {
+            Start-LogGroup 'MyGroup'
+        } | Should -Not -Throw
+    }
+
+    It 'Stop-LogGroup should not throw' {
+        {
+            Stop-LogGroup
+        } | Should -Not -Throw
+    }
+
+    It "LogGroup 'MyGroup' should not throw" {
+        {
+            LogGroup 'MyGroup' {
+                Get-ChildItem env: | Select-Object Name, Value | Format-Table -AutoSize
+            }
+        } | Should -Not -Throw
     }
 }
