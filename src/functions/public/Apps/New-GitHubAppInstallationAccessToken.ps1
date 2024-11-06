@@ -1,4 +1,4 @@
-﻿filter Get-GitHubAppInstallationAccessToken {
+﻿filter New-GitHubAppInstallationAccessToken {
     <#
         .SYNOPSIS
         Create an installation access token for an app
@@ -28,13 +28,23 @@
         to access this endpoint.
 
         .EXAMPLE
-        Get-GitHubAppInstallationAccessToken -InstallationID 12345678
+        New-GitHubAppInstallationAccessToken -InstallationID 12345678
 
-        Gets an installation access token for the installation with the ID `12345678`.
+        Creates an installation access token for the installation with the ID `12345678`.
+
+        .EXAMPLE
+        Connect-GitHub -ClientID $ClientID -PrivateKey $PrivateKey -Verbose
+        Get-GitHubAppInstallation | New-GitHubAppInstallationAccessToken
+
+        Gets the GitHub App installations and creates an installation access token for each installation.
 
         .NOTES
         [Create an installation access token for an app](https://docs.github.com/rest/apps/apps#create-an-installation-access-token-for-an-app)
     #>
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSUseShouldProcessForStateChangingFunctions', '',
+        Justification = 'No state is changed.'
+    )]
     [CmdletBinding()]
     param (
         # The unique identifier of the installation.
@@ -45,7 +55,7 @@
             ValueFromPipelineByPropertyName
         )]
         [Alias('ID')]
-        [string] $InstallationID
+        [int] $InstallationID
     )
 
     $inputObject = @{
