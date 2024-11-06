@@ -107,7 +107,7 @@ Connect-GitHubAccount
 
 #### Using a GitHub App
 
-If you are using a GitHub App, you can use the `Connect-GitHubApp` command to authenticate using the client id and private key.
+If you are using a GitHub App, you can use the `Connect-GitHubApp` command to authenticate using the client ID and private key.
 
 ```powershell
 Connect-GitHubApp -ClientId 'lv123456789' -PrivateKey '-----BEGIN PRIVATE KEY----- ... -----END PRIVATE KEY-----'
