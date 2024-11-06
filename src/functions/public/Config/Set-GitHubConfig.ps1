@@ -51,6 +51,7 @@ function Set-GitHubConfig {
 
         # Set the client ID.
         [AllowNull()]
+        [AllowEmptyString()]
         [string] $ClientID,
 
         # Set the device flow type.
