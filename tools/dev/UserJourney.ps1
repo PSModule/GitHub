@@ -2,26 +2,6 @@
 ### CONNECTING
 ###
 
-# When you connect, a context is saved.
-# Variables, stored under "Contexts" on the existing config.json.
-# Secrets, names are stored in the variables.
-# Context = [
-#     {
-#         name: "github.com/MariusStorhaug"
-#         id: 1
-#         host: "github.com"
-#         default: true
-#         type: UAT
-#     },
-#     {
-#         name: "dnb.ghe.com/Marius-Storhaug"
-#         id: 2
-#         host: "dnb.ghe.com"
-#         default: false
-#         type: UAT
-#     }
-# ]
-
 # Connect to GitHub interactively using GitHub App and Device Flow (User Access Token, UAT)
 Connect-GitHub (-Host github.com) (-ClientID '<client_id>')
 
@@ -43,26 +23,36 @@ Connect-GitHub -ClientID '<client_id>' -PrivateKey '<private_key>'
 # Connect to GitHub programatically (GitHub App Installation Access Token)
 Connect-GitHub -Token ***********
 
+
 ###
-### ADVANCED CONNECTING
+### Contexts / Profiles
 ###
 
-# Bring you own GitHub App
-Set-GitHubAuthApp -ClientID ''
-Check-GitHubAuthApp
-Connect-GitHub
+# When you connect, a context is saved.
+# Variables, stored under "Contexts" on the existing config.json.
+# Secrets, names are stored in the variables.
+# Context = [
+#     {
+#         name: "github.com/MariusStorhaug"
+#         id: 1
+#         host: "github.com"
+#         default: true
+#         type: UAT
+#     },
+#     {
+#         name: "dnb.ghe.com/Marius-Storhaug"
+#         id: 2
+#         host: "dnb.ghe.com"
+#         default: false
+#         type: UAT
+#     }
+# ]
+Get-GitHubContext # List all contexts -> Get-GitHubConfig?
+Get-GitHubContext -Context 'name' # Returns a specific context, autocomplete the name.
 
+Set-GitHubContext -Context 'name' # Take a name dynamically from Get-GitHubContext? Autocomplete the name
 
-
-
-
-# What about profiles?
-Get-GitHubContext # List all contexts
-Get-GitHubContext -Context 'name' # Returns a specific context
-
-Set-GitHubContext -Context 'name' # Take a name? Autocomplete the name
-
-Disconnect-GitHub -Context 'name'
+Disconnect-GitHub -Context 'name' # Removes the context variables and secrets
 
 
 # Calling specific functions with context or an ad-hoc token?
