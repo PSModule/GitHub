@@ -131,6 +131,16 @@ Connect-GitHubAccount -Host 'https://msx.ghe.com'
 ✓ Logged in as octocat!
 ```
 
+#### Using a different GitHub App for issuing User access tokens
+
+Instead of using our default GitHub App, you can use a different GitHub App to issue user access tokens.
+You can use the `-ClientID` parameters to specify the app you want to use.
+
+```powershell
+Connect-GitHubAccount -Host 'https://msx.ghe.com' -ClientID 'lv123456789'
+✓ Logged in as octocat!
+```
+
 ### Command Exploration
 
 Familiarize yourself with the available cmdlets using the module's comprehensive documentation or inline help.
