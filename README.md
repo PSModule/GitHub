@@ -27,14 +27,12 @@ To dive into the world of GitHub automation with PowerShell, follow the sections
 Download and install the GitHub PowerShell module from the PowerShell Gallery with the following command:
 
 ```powershell
-Install-Module -Name GitHub -Force -AllowClobber
+Install-PSResource -Name GitHub -Repository PSGallery -TrustRepository
 ```
 
 ### Logging on
 
-Authenticate using your GitHub credentials or access tokens to begin executing commands. Tokens and other
-configuration details are stored encrypted on the system using the PowerShell modules [SecretManagement and SecretStore Overview](https://learn.microsoft.com/en-us/powershell/utility-modules/secretmanagement/overview?view=ps-modules),
-for more info on the implementation, see the section on storing configuration.
+Authenticate using your GitHub credentials or access tokens to begin executing commands. The module supports multiple authentication methods.
 
 #### Device flow
 
@@ -105,6 +103,32 @@ The function looks for the `GH_TOKEN` and `GITHUB_TOKEN` environment variables (
 ```powershell
 Connect-GitHubAccount
 ✓ Logged in as system!
+```
+
+#### Using a GitHub App
+
+If you are using a GitHub App, you can use the `Connect-GitHubApp` command to authenticate using the cliend id and private key.
+
+```powershell
+Connect-GitHubApp -ClientId 'lv123456789' -PrivateKey '-----BEGIN PRIVATE KEY----- ... -----END PRIVATE KEY-----'
+✓ Logged in as my-github-app!
+```
+
+#### Using a different host
+
+If you are using GitHub Enterprise, you can use the `-Host` parameter to specify the host you want to connect to.
+This can be used in combination with all the other authentication methods.
+
+```powershell
+Connect-GitHubAccount -Host 'https://github.local'
+✓ Logged in as octocat!
+```
+
+Or you might be using GitHub Enterprise Cloud with Data Residency.
+
+```powershell
+Connect-GitHubAccount -Host 'https://msx.ghe.com'
+✓ Logged in as octocat!
 ```
 
 ### Command Exploration
