@@ -258,7 +258,6 @@
                         ApiBaseUri      = $ApiBaseUri
                         ApiVersion      = $ApiVersion
                         AuthType        = 'IAT'
-                        ClientID        = $ClientID
                         HostName        = $HostName
                     }
                     Set-GitHubConfig @settings
