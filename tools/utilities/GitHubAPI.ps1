@@ -105,6 +105,10 @@ $response.paths.PSObject.Properties | ForEach-Object {
     $paths.Add($object)
 }
 $paths | New-MDTable | clip
+
+# Output the context of $paths to a markdown table and into the Coverage.md file
+$paths | New-MDTable | Out-File -FilePath '.\Coverage.md'
+
 "Available functions: $functions"
 "Covered functions:   $coveredFunctions"
 "Missing function:    $($functions - $coveredFunctions)"

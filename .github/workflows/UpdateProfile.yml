@@ -1,0 +1,75 @@
+name: Update profile
+
+on:
+  push:
+    branches:
+      - main
+
+defaults:
+  run:
+    shell: pwsh
+
+jobs:
+  update_readme:
+    name: Update Profile README
+    runs-on: ubuntu-latest
+    steps:
+      - name: Authenticate GitHub App
+        id: auth
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ steps.auth.outputs.token }}
+
+      - name: Get GitHub App ID
+        id: app
+        env:
+          GH_TOKEN: ${{ steps.auth.outputs.token }}
+        run: |
+          $app = gh api "/users/${{ steps.auth.outputs.app-slug }}[bot]" | ConvertFrom-Json
+          Write-Verbose ($app | Format-List | Out-String) -Verbose
+          "id=$($app.id)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          "name=$($app.login)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+      - name: Update README
+        env:
+          GH_TOKEN: ${{ steps.auth.outputs.token }}
+        run: |
+          . ".\scripts\UpdateReadme.ps1"
+
+      - name: Configure Git
+        run: |
+          git config --global user.name '${{ steps.app.outputs.name }}'
+          git config --global user.email '${{ steps.app.outputs.id }}+${{ steps.app.outputs.name }}@users.noreply.github.com>'
+
+      - name: Push changes
+        env:
+          GH_TOKEN: ${{ steps.auth.outputs.token }}
+        run: |
+          $changedFiles = git diff --name-only
+          $hasChanges = $null -ne $changedFiles
+          "hasChanges=$hasChanges" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+          if (-not $hasChanges) {
+            Write-Host 'No automated changes detected'
+            return
+          }
+
+          git add .
+          Write-Host '::group::Changed files [$($changedFiles.Count)]'
+          $changedFiles | ForEach-Object { Write-Host $_ }
+          Write-Host '::endgroup::'
+          git commit -m "Auto-generated changes"
+          git push
+
+      - name: Trigger publish
+        env:
+          GH_TOKEN: ${{ steps.auth.outputs.token }}
+        run: |
+          gh workflow run --repo psmodule/${{ github.repository_owner }}.github.io Publish-Docs.yml
