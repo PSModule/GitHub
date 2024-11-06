@@ -55,12 +55,12 @@
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'AccessToken', Justification = 'Required for parameter set')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'Is the CLI part of the module.')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText', '', Justification = 'The tokens are recieved as clear text. Mitigating exposure by removing variables and performing garbage collection.')]
-    [CmdletBinding(DefaultParameterSetName = 'DeviceFlow')]
+    [CmdletBinding(DefaultParameterSetName = 'UAT')]
     param (
         # Choose between authentication methods, either OAuthApp or GitHubApp.
         # For more info about the types of authentication visit:
         # [Differences between GitHub Apps and OAuth apps](https://docs.github.com/apps/oauth-apps/building-oauth-apps/differences-between-github-apps-and-oauth-apps)
-        [Parameter(ParameterSetName = 'DeviceFlow')]
+        [Parameter(ParameterSetName = 'UAT')]
         [ValidateSet('OAuthApp', 'GitHubApp')]
         [string] $Mode = 'GitHubApp',
 
@@ -68,7 +68,7 @@
         # Provide the list of scopes as space-separated values.
         # For more information on scopes visit:
         # [Scopes for OAuth apps](https://docs.github.com/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps)
-        [Parameter(ParameterSetName = 'DeviceFlow')]
+        [Parameter(ParameterSetName = 'UAT')]
         [string] $Scope = 'gist read:org repo workflow',
 
         # The personal access token to use for authentication.
@@ -85,6 +85,7 @@
             Mandatory,
             ParameterSetName = 'App'
         )]
+        [Parameter(ParameterSetName = 'UAT')]
         [string] $ClientID,
 
         # The private key for the GitHub App.
@@ -137,12 +138,12 @@
     $AuthType = if ($gitHubTokenPresent) { 'sPAT' } else { $PSCmdlet.ParameterSetName }
     Write-Verbose "AuthType: [$AuthType]"
     switch ($AuthType) {
-        'DeviceFlow' {
+        'UAT' {
             Write-Verbose 'Logging in using device flow...'
-            $clientID = $script:Auth.$Mode.ClientID
+            $authClientID = $ClientID ?? $script:Auth.$Mode.ClientID
             if ($Mode -ne (Get-GitHubConfig -Name 'DeviceFlowType' -ErrorAction SilentlyContinue)) {
                 Write-Verbose "Using $Mode authentication..."
-                $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -Scope $Scope -HostName $HostName
+                $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $authClientID -Scope $Scope -HostName $HostName
             } else {
                 $accessTokenValidity = [datetime](Get-GitHubConfig -Name 'AccessTokenExpirationDate') - (Get-Date)
                 $accessTokenIsValid = $accessTokenValidity.Seconds -gt 0
@@ -162,7 +163,7 @@
                             Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
                             Write-Host "Access token remaining validity $accessTokenValidityText. Refreshing access token..."
                         }
-                        $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -RefreshToken (Get-GitHubConfig -Name 'RefreshToken') -HostName $HostName
+                        $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $authClientID -RefreshToken (Get-GitHubConfig -Name 'RefreshToken') -HostName $HostName
                     }
                 } else {
                     $refreshTokenValidity = [datetime](Get-GitHubConfig -Name 'RefreshTokenExpirationDate') - (Get-Date)
@@ -172,10 +173,10 @@
                             Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
                             Write-Host 'Access token expired. Refreshing access token...'
                         }
-                        $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -RefreshToken (Get-GitHubConfig -Name 'RefreshToken') -HostName $HostName
+                        $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $authClientID -RefreshToken (Get-GitHubConfig -Name 'RefreshToken') -HostName $HostName
                     } else {
                         Write-Verbose "Using $Mode authentication..."
-                        $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $clientID -Scope $Scope -HostName $HostName
+                        $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $authClientID -Scope $Scope -HostName $HostName
                     }
                 }
             }
