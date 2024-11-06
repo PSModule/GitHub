@@ -42,5 +42,4 @@
             Write-Output $_.Response
         }
     }
-
 }

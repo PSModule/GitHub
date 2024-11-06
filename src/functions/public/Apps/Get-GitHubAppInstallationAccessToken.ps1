@@ -1,4 +1,4 @@
-﻿function Get-GitHubAppInstallationAccessToken {
+﻿filter Get-GitHubAppInstallationAccessToken {
     <#
         .SYNOPSIS
         Create an installation access token for an app
@@ -39,7 +39,12 @@
     param (
         # The unique identifier of the installation.
         # Example: '12345678'
-        [Parameter(Mandatory)]
+        [Parameter(
+            Mandatory,
+            ValueFromPipeline,
+            ValueFromPipelineByPropertyName
+        )]
+        [Alias('ID')]
         [string] $InstallationID
     )
 
