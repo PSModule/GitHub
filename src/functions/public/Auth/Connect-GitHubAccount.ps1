@@ -79,7 +79,6 @@
         [Alias('Token')]
         [Alias('PAT')]
         [switch] $AccessToken,
-        
 
         # The client ID for the GitHub App to use for authentication.
         [Parameter(ParameterSetName = 'UAT')]
