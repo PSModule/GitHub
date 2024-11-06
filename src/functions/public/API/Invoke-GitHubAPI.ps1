@@ -136,6 +136,8 @@
     }
 
     try {
+        Write-Verbose "Calling GitHub API with the following parameters:"
+        Write-Verbose ($APICall | ConvertFrom-HashTable | Format-List | Out-String)
         Invoke-RestMethod @APICall | ForEach-Object {
             $statusCode = $APICallStatusCode | ConvertTo-Json -Depth 100 | ConvertFrom-Json
             $responseHeaders = $APICallResponseHeaders | ConvertTo-Json -Depth 100 | ConvertFrom-Json

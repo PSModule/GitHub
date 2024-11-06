@@ -33,8 +33,11 @@
                 AccessToken                = [securestring]::new()
                 AccessTokenExpirationDate  = [datetime]::MinValue
                 AccessTokenType            = ''
+                AuthClientID               = $null
                 AuthType                   = ''
+                ClientID                   = ''
                 DeviceFlowType             = ''
+                HostName                   = ''
                 RefreshToken               = [securestring]::new()
                 RefreshTokenExpirationDate = [datetime]::MinValue
                 Scope                      = ''
@@ -47,8 +50,11 @@
                 AccessTokenType            = ''
                 ApiBaseUri                 = 'https://api.github.com'
                 ApiVersion                 = '2022-11-28'
+                AuthClientID               = $null
                 AuthType                   = ''
+                ClientID                   = ''
                 DeviceFlowType             = ''
+                HostName                   = ''
                 Owner                      = ''
                 RefreshToken               = [securestring]::new()
                 RefreshTokenExpirationDate = [datetime]::MinValue

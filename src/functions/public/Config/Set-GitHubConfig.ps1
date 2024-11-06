@@ -41,13 +41,23 @@ function Set-GitHubConfig {
         [Parameter()]
         [string] $ApiVersion,
 
+        # Set the authentication client ID.
+        [Parameter()]
+        [string] $AuthClientID,
+
         # Set the authentication type.
         [Parameter()]
         [string] $AuthType,
 
+        # Set the client ID.
+        [string] $ClientID,
+
         # Set the device flow type.
         [Parameter()]
         [string] $DeviceFlowType,
+
+        # Set the API hostname.
+        [string] $HostName,
 
         # Set the default for the Owner parameter.
         [Parameter()]
@@ -90,15 +100,18 @@ function Set-GitHubConfig {
         AccessTokenType            = $AccessTokenType
         ApiBaseUri                 = $ApiBaseUri
         ApiVersion                 = $ApiVersion
+        AuthClientID               = $AuthClientID
         AuthType                   = $AuthType
+        ClientID                   = $ClientID
         DeviceFlowType             = $DeviceFlowType
+        HostName                   = $HostName
         Owner                      = $Owner
         "$prefix`RefreshToken"     = $RefreshToken
         RefreshTokenExpirationDate = $RefreshTokenExpirationDate
         Repo                       = $Repo
+        Scope                      = $Scope
         SecretVaultName            = $SecretVaultName
         SecretVaultType            = $SecretVaultType
-        Scope                      = $Scope
         UserName                   = $UserName
     }
 

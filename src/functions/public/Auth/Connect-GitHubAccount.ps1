@@ -80,15 +80,15 @@
         [Alias('PAT')]
         [switch] $AccessToken,
 
-        # The client ID for the GitHub App.
+        # The client ID for the GitHub App to use for authentication.
+        [Parameter(ParameterSetName = 'UAT')]
         [Parameter(
             Mandatory,
             ParameterSetName = 'App'
         )]
-        [Parameter(ParameterSetName = 'UAT')]
         [string] $ClientID,
 
-        # The private key for the GitHub App.
+        # The private key for the GitHub App when authenticating as a GitHub App.
         [Parameter(
             Mandatory,
             ParameterSetName = 'App'
@@ -135,12 +135,12 @@
     Write-Debug "GitHub token: [$gitHubToken]"
     $gitHubTokenPresent = $gitHubToken.count -gt 0 -and -not [string]::IsNullOrEmpty($gitHubToken)
     Write-Debug "GitHub token present: [$gitHubTokenPresent]"
-    $AuthType = if ($gitHubTokenPresent) { 'sPAT' } else { $PSCmdlet.ParameterSetName }
+    $AuthType = if ($gitHubTokenPresent) { 'IAT' } else { $PSCmdlet.ParameterSetName }
     Write-Verbose "AuthType: [$AuthType]"
     switch ($AuthType) {
         'UAT' {
             Write-Verbose 'Logging in using device flow...'
-            $authClientID = $ClientID ?? $script:Auth.$Mode.ClientID
+            $authClientID = $ClientID ?? (Get-GitHubConfig -Name 'AuthClientID') ?? $script:Auth.$Mode.ClientID
             if ($Mode -ne (Get-GitHubConfig -Name 'DeviceFlowType' -ErrorAction SilentlyContinue)) {
                 Write-Verbose "Using $Mode authentication..."
                 $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $authClientID -Scope $Scope -HostName $HostName
@@ -189,8 +189,10 @@
                         AccessTokenType            = $tokenResponse.access_token -replace '_.*$', '_*'
                         ApiBaseUri                 = $ApiBaseUri
                         ApiVersion                 = $ApiVersion
+                        AuthClientID               = $authClientID
                         AuthType                   = $AuthType
                         DeviceFlowType             = $Mode
+                        HostName                   = $HostName
                         RefreshToken               = ConvertTo-SecureString -AsPlainText $tokenResponse.refresh_token
                         RefreshTokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.refresh_token_expires_in)
                         Scope                      = $tokenResponse.scope
@@ -202,8 +204,10 @@
                         AccessTokenType = $tokenResponse.access_token -replace '_.*$', '_*'
                         ApiBaseUri      = $ApiBaseUri
                         ApiVersion      = $ApiVersion
+                        AuthClientID    = $authClientID
                         AuthType        = $AuthType
                         DeviceFlowType  = $Mode
+                        HostName        = $HostName
                         Scope           = $tokenResponse.scope
                     }
                 }
@@ -228,6 +232,7 @@
                 ApiBaseUri      = $ApiBaseUri
                 ApiVersion      = $ApiVersion
                 AuthType        = $AuthType
+                HostName        = $HostName
             }
             Set-GitHubConfig @settings
             break
@@ -235,17 +240,19 @@
         'App' {
             Write-Verbose 'Logging in as a GitHub App...'
             Reset-GitHubConfig -Scope 'Auth'
-            $jwt = Get-GitHubAppJWT -ClientID $ClientID -PrivateKey $PrivateKey
+            $jwt = Get-GitHubAppJWT -ClientId $ClientID -PrivateKey $PrivateKey
             $settings = @{
                 AccessToken     = ConvertTo-SecureString -AsPlainText $jwt
                 AccessTokenType = 'JWT'
                 ApiBaseUri      = $ApiBaseUri
                 ApiVersion      = $ApiVersion
                 AuthType        = $AuthType
+                ClientID        = $ClientID
+                HostName        = $HostName
             }
             Set-GitHubConfig @settings
         }
-        'sPAT' {
+        'IAT' {
             Write-Verbose 'Logging in using GitHub access token...'
             Reset-GitHubConfig -Scope 'Auth'
             $prefix = $gitHubToken -replace '_.*$', '_*'
@@ -254,7 +261,9 @@
                 AccessTokenType = $prefix
                 ApiBaseUri      = $ApiBaseUri
                 ApiVersion      = $ApiVersion
-                AuthType        = 'sPAT'
+                AuthType        = 'IAT'
+                ClientID        = $ClientID
+                HostName        = $HostName
             }
             Set-GitHubConfig @settings
         }
@@ -265,7 +274,7 @@
             $app = Get-GitHubApp
             $username = $app.slug
         }
-        'sPAT' {
+        'IAT' {
             $username = 'system'
         }
         default {

@@ -21,22 +21,25 @@ function Get-GitHubConfig {
         # Choose a configuration name to get.
         [Parameter()]
         [ValidateSet(
+            'All',
             'AccessToken',
             'AccessTokenExpirationDate',
             'AccessTokenType',
             'ApiBaseUri',
             'ApiVersion',
+            'AuthClientID',
             'AuthType',
+            'ClientID',
             'DeviceFlowType',
+            'HostName',
             'Owner',
             'RefreshToken',
             'RefreshTokenExpirationDate',
             'Repo',
+            'Scope',
             'SecretVaultName',
             'SecretVaultType',
-            'Scope',
-            'UserName',
-            'All'
+            'UserName'
         )]
         [string] $Name = 'All'
     )
