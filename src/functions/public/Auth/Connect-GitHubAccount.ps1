@@ -114,7 +114,7 @@
         [Parameter()]
         [Alias('Host')]
         [Alias('Server')]
-        [uri] $HostName = 'github.com',
+        [string] $HostName = 'github.com',
 
         # Suppresses the output of the function.
         [Parameter()]
@@ -124,7 +124,7 @@
         [switch] $Silent
     )
 
-    $HostName = $HostName.Host
+    $HostName = $HostName -replace '^https?://'
     $ApiBaseUri = "https://api.$HostName"
 
     $envVars = Get-ChildItem -Path 'Env:'
