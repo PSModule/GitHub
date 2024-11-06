@@ -29,6 +29,7 @@ function Get-GitHubConfig {
             'ApiVersion',
             'AuthClientID',
             'AuthType',
+            'ClientID',
             'DeviceFlowType',
             'HostName',
             'Owner',

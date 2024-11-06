@@ -35,6 +35,7 @@
                 AccessTokenType            = ''
                 AuthClientID               = $null
                 AuthType                   = ''
+                ClientID                   = ''
                 DeviceFlowType             = ''
                 HostName                   = ''
                 RefreshToken               = [securestring]::new()
@@ -51,6 +52,7 @@
                 ApiVersion                 = '2022-11-28'
                 AuthClientID               = $null
                 AuthType                   = ''
+                ClientID                   = ''
                 DeviceFlowType             = ''
                 HostName                   = ''
                 Owner                      = ''
