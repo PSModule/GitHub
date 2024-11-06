@@ -71,14 +71,16 @@
         [Parameter(ParameterSetName = 'UAT')]
         [string] $Scope = 'gist read:org repo workflow',
 
-        # The personal access token to use for authentication.
+        # An access token to use for authentication.
         [Parameter(
             Mandatory,
-            ParameterSetName = 'PAT'
+            ParameterSetName = 'Token'
         )]
+        [AllowNull()]
         [Alias('Token')]
         [Alias('PAT')]
-        [switch] $AccessToken,
+        [Alias('IAT')]
+        [string] $AccessToken,
 
         # The client ID for the GitHub App to use for authentication.
         [Parameter(ParameterSetName = 'UAT')]
@@ -128,14 +130,7 @@
     $HostName = $HostName -replace '^https?://'
     $ApiBaseUri = "https://api.$HostName"
 
-    $envVars = Get-ChildItem -Path 'Env:'
-    Write-Debug 'Environment variables:'
-    Write-Debug ($envVars | Format-Table -AutoSize | Out-String)
-    $gitHubToken = $envVars | Where-Object Name -In 'GH_TOKEN', 'GITHUB_TOKEN' | Select-Object -First 1 -ExpandProperty Value
-    Write-Debug "GitHub token: [$gitHubToken]"
-    $gitHubTokenPresent = $gitHubToken.count -gt 0 -and -not [string]::IsNullOrEmpty($gitHubToken)
-    Write-Debug "GitHub token present: [$gitHubTokenPresent]"
-    $AuthType = if ($gitHubTokenPresent) { 'IAT' } else { $PSCmdlet.ParameterSetName }
+    $AuthType = $PSCmdlet.ParameterSetName
     Write-Verbose "AuthType: [$AuthType]"
     switch ($AuthType) {
         'UAT' {
@@ -213,29 +208,8 @@
                 }
             }
             Set-GitHubConfig @settings
-            break
-        }
-        'PAT' {
-            Write-Verbose 'Logging in using personal access token...'
-            Reset-GitHubConfig -Scope 'Auth'
-            Write-Host '! ' -ForegroundColor DarkYellow -NoNewline
-            Start-Process "https://$HostName/settings/tokens"
-            $accessTokenValue = Read-Host -Prompt 'Enter your personal access token' -AsSecureString
-            $accessTokenType = (ConvertFrom-SecureString $accessTokenValue -AsPlainText) -replace '_.*$', '_*'
-            if ($accessTokenType -notmatch '^ghp_|^github_pat_') {
-                Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
-                Write-Host "Unexpected access token format: $accessTokenType"
-            }
-            $settings = @{
-                AccessToken     = $accessTokenValue
-                AccessTokenType = $accessTokenType
-                ApiBaseUri      = $ApiBaseUri
-                ApiVersion      = $ApiVersion
-                AuthType        = $AuthType
-                HostName        = $HostName
-            }
-            Set-GitHubConfig @settings
-            break
+            $user = Get-GitHubUser
+            $username = $user.login
         }
         'App' {
             Write-Verbose 'Logging in as a GitHub App...'
@@ -251,35 +225,51 @@
                 HostName        = $HostName
             }
             Set-GitHubConfig @settings
-        }
-        'IAT' {
-            Write-Verbose 'Logging in using GitHub access token...'
-            Reset-GitHubConfig -Scope 'Auth'
-            $prefix = $gitHubToken -replace '_.*$', '_*'
-            $settings = @{
-                AccessToken     = ConvertTo-SecureString -AsPlainText $gitHubToken
-                AccessTokenType = $prefix
-                ApiBaseUri      = $ApiBaseUri
-                ApiVersion      = $ApiVersion
-                AuthType        = 'IAT'
-                ClientID        = $ClientID
-                HostName        = $HostName
-            }
-            Set-GitHubConfig @settings
-        }
-    }
-
-    switch ($AuthType) {
-        'App' {
             $app = Get-GitHubApp
             $username = $app.slug
         }
-        'IAT' {
-            $username = 'system'
-        }
-        default {
-            $user = Get-GitHubUser
-            $username = $user.login
+        'Token' {
+            if ([string]::IsNullOrEmpty($AccessToken)) {
+                Write-Verbose 'Logging in using personal access token...'
+                Write-Host '! ' -ForegroundColor DarkYellow -NoNewline
+                Start-Process "https://$HostName/settings/tokens"
+                $accessTokenValue = Read-Host -Prompt 'Enter your personal access token' -AsSecureString
+                $AccessToken = ConvertFrom-SecureString $accessTokenValue -AsPlainText
+            }
+            $accessTokenType = $AccessToken -replace '_.*$', '_*'
+            switch -Regex ($accessTokenType) {
+                '^ghp_|^github_pat_' {
+                    Reset-GitHubConfig -Scope 'Auth'
+                    $settings = @{
+                        AccessToken     = $accessTokenValue
+                        AccessTokenType = $accessTokenType
+                        ApiBaseUri      = $ApiBaseUri
+                        ApiVersion      = $ApiVersion
+                        AuthType        = 'PAT'
+                        HostName        = $HostName
+                    }
+                    Set-GitHubConfig @settings
+                }
+                '^ghs_' {
+                    Write-Verbose 'Logging in using GitHub access token...'
+                    Reset-GitHubConfig -Scope 'Auth'
+                    $settings = @{
+                        AccessToken     = ConvertTo-SecureString -AsPlainText $AccessToken
+                        AccessTokenType = $accessTokenType
+                        ApiBaseUri      = $ApiBaseUri
+                        ApiVersion      = $ApiVersion
+                        AuthType        = 'IAT'
+                        ClientID        = $ClientID
+                        HostName        = $HostName
+                    }
+                    Set-GitHubConfig @settings
+                    $username = 'system'
+                }
+                default {
+                    Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
+                    Write-Host "Unexpected access token format: $accessTokenType"
+                }
+            }
         }
     }
 
