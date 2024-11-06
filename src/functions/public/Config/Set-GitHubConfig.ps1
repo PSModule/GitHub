@@ -56,7 +56,7 @@ function Set-GitHubConfig {
         [Parameter()]
         [string] $DeviceFlowType,
 
-        # Set the host name.
+        # Set the API hostname.
         [string] $HostName,
 
         # Set the default for the Owner parameter.
