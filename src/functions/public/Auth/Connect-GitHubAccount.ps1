@@ -135,9 +135,9 @@
         # First assume interactive logon
         $AuthType = $PSCmdlet.ParameterSetName
 
-        Write-Verbose "Running on GitHub Actions: [$env:GITHUB_ACTION]"
+        Write-Verbose "Running on GitHub Actions: [$env:GITHUB_ACTIONS]"
 
-        if ($env:GITHUB_ACTION -eq 'true') {
+        if ($env:GITHUB_ACTIONS -eq 'true') {
             # Autologon if a token is present in environment variables
             $gitHubToken = $env:GH_TOKEN ?? $env:GITHUB_TOKEN
             $gitHubTokenPresent = $gitHubToken.count -gt 0 -and -not [string]::IsNullOrEmpty($gitHubToken)
