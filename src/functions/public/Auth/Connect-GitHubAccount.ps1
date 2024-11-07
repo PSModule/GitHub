@@ -137,8 +137,8 @@
 
         Write-Verbose "Running on GitHub Actions: [$env:GITHUB_ACTIONS]"
 
-        if ($env:GITHUB_ACTIONS -eq 'true') {
-            # Autologon if a token is present in environment variables
+        # Autologon if running on GitHub Actions and no access token is provided
+        if ($env:GITHUB_ACTIONS -eq 'true' -and [string]::IsNullOrEmpty($AccessToken)) {
             $gitHubToken = $env:GH_TOKEN ?? $env:GITHUB_TOKEN
             $gitHubTokenPresent = $gitHubToken.count -gt 0 -and -not [string]::IsNullOrEmpty($gitHubToken)
             Write-Debug "GitHub token present: [$gitHubTokenPresent]"
