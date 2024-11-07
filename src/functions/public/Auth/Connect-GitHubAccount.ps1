@@ -70,7 +70,10 @@
         [Parameter(ParameterSetName = 'UAT')]
         [string] $Scope = 'gist read:org repo workflow',
 
-        # An access token to use for authentication.
+        # An access token to use for authentication. If left enpty, the user will be prompted to enter the token.
+        # Supports both personal access tokens and GitHub App installation access tokens.
+        # Example: 'ghp_1234567890abcdef'
+        # Example: 'ghs_1234567890abcdef'
         [Parameter(
             Mandatory,
             ParameterSetName = 'Token'
@@ -100,12 +103,12 @@
         [Parameter()]
         [Alias('Organization')]
         [Alias('Org')]
-        [string] $Owner,
+        [string] $Owner = $env:GITHUB_REPOSITORY_OWNER,
 
         # Set the default repository to use in commands.
         [Parameter()]
         [Alias('Repository')]
-        [string] $Repo,
+        [string] $Repo = $env:GITHUB_REPOSITORY_NAME,
 
         # API version used for API requests.
         [Parameter()]
@@ -116,7 +119,7 @@
         [Parameter()]
         [Alias('Host')]
         [Alias('Server')]
-        [string] $HostName = 'github.com',
+        [string] $HostName = $env:GITHUB_SERVER_URL ?? 'github.com',
 
         # Suppresses the output of the function.
         [Parameter()]
@@ -129,7 +132,19 @@
         $HostName = $HostName -replace '^https?://'
         $ApiBaseUri = "https://api.$HostName"
 
+        # First assume interactive logon
         $AuthType = $PSCmdlet.ParameterSetName
+
+        if ($AuthType -ne 'Token' -and $env:GITHUB_ACTION -eq 'true') {
+            # Autologon if a token is present in environment variables
+            $gitHubToken = $env:GH_TOKEN ?? $env:GITHUB_TOKEN
+            $gitHubTokenPresent = $gitHubToken.count -gt 0 -and -not [string]::IsNullOrEmpty($gitHubToken)
+            Write-Debug "GitHub token present: [$gitHubTokenPresent]"
+            if ($gitHubTokenPresent) {
+                $AccessToken = $gitHubToken
+            }
+        }
+
         Write-Verbose "AuthType: [$AuthType]"
         switch ($AuthType) {
             'UAT' {
