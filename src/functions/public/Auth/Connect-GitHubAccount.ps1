@@ -157,8 +157,8 @@
                 Write-Verbose "Default ClientID:  [$($script:Auth.$Mode.ClientID)]"
                 $authClientID = $ClientID ?? (Get-GitHubConfig -Name 'AuthClientID') ?? $script:Auth.$Mode.ClientID
                 Write-Verbose "Selected ClientID: [$authClientID]"
-                Write-Verbose "Using $Mode authentication..."
                 if ($Mode -ne (Get-GitHubConfig -Name 'DeviceFlowType' -ErrorAction SilentlyContinue)) {
+                    Write-Verbose "Using $Mode authentication..."
                     $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $authClientID -Scope $Scope -HostName $HostName
                 } else {
                     $accessTokenValidity = [datetime](Get-GitHubConfig -Name 'AccessTokenExpirationDate') - (Get-Date)
