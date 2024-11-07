@@ -18,11 +18,10 @@
     $env:GITHUB_REPOSITORY_NAME = $env:GITHUB_REPOSITORY -replace '.+/'
     Set-GitHubEnv -Name 'GITHUB_REPOSITORY_NAME' -Value $env:GITHUB_REPOSITORY_NAME
 
-    # Autologon if a token is present in environment variables
-    Write-Verbose (Get-ChildItem -Path 'Env:' | Where-Object Name -In 'GH_TOKEN', 'GITHUB_TOKEN' | Out-String)
-    $tokenVar = Get-ChildItem -Path 'Env:' | Where-Object Name -In 'GH_TOKEN', 'GITHUB_TOKEN' | Select-Object -First 1 -ExpandProperty Value
-    $tokenVarPresent = $tokenVar.count -gt 0 -and -not [string]::IsNullOrEmpty($tokenVar)
-    if ($tokenVarPresent) {
-        Connect-GitHubAccount -Repo $env:GITHUB_REPOSITORY_NAME -Owner $env:GITHUB_REPOSITORY_OWNER -Server $env:GITHUB_SERVER_URL
+    $params = @{
+        Owner  = $env:GITHUB_REPOSITORY_OWNER
+        Repo   = $env:GITHUB_REPOSITORY_NAME
+        Server = $env:GITHUB_SERVER_URL
     }
+    Connect-GitHubAccount @params
 }
