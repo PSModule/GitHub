@@ -152,7 +152,16 @@
         switch ($AuthType) {
             'UAT' {
                 Write-Verbose 'Logging in using device flow...'
-                $authClientID = $ClientID ?? (Get-GitHubConfig -Name 'AuthClientID') ?? $script:Auth.$Mode.ClientID
+                if (-not [string]::IsNullOrEmpty($ClientID)) {
+                    Write-Verbose "Using provided ClientID: [$ClientID]"
+                    $authClientID = $ClientID
+                } elseif (-not [string]::IsNullOrEmpty($(Get-GitHubConfig -Name 'AuthClientID'))) {
+                    Write-Verbose "Reusing previously stored ClientID:   [$(Get-GitHubConfig -Name 'AuthClientID')]"
+                    $authClientID = Get-GitHubConfig -Name 'AuthClientID'
+                } else {
+                    Write-Verbose "Using default ClientID:  [$($script:Auth.$Mode.ClientID)]"
+                    $authClientID = $script:Auth.$Mode.ClientID
+                }
                 if ($Mode -ne (Get-GitHubConfig -Name 'DeviceFlowType' -ErrorAction SilentlyContinue)) {
                     Write-Verbose "Using $Mode authentication..."
                     $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $authClientID -Scope $Scope -HostName $HostName
