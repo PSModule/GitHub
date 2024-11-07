@@ -141,6 +141,7 @@
             $gitHubTokenPresent = $gitHubToken.count -gt 0 -and -not [string]::IsNullOrEmpty($gitHubToken)
             Write-Debug "GitHub token present: [$gitHubTokenPresent]"
             if ($gitHubTokenPresent) {
+                $AuthType = 'Token'
                 $AccessToken = $gitHubToken
             }
         }
