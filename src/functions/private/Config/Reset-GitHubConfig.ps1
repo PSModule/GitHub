@@ -33,7 +33,7 @@
                 AccessToken                = [securestring]::new()
                 AccessTokenExpirationDate  = [datetime]::MinValue
                 AccessTokenType            = ''
-                AuthClientID               = $null
+                AuthClientID               = ''
                 AuthType                   = ''
                 ClientID                   = ''
                 DeviceFlowType             = ''
@@ -50,7 +50,7 @@
                 AccessTokenType            = ''
                 ApiBaseUri                 = 'https://api.github.com'
                 ApiVersion                 = '2022-11-28'
-                AuthClientID               = $null
+                AuthClientID               = ''
                 AuthType                   = ''
                 ClientID                   = ''
                 DeviceFlowType             = ''

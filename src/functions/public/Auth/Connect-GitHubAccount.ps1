@@ -201,10 +201,9 @@
                         }
                     }
                 }
-                Reset-GitHubConfig -Scope 'Auth'
-                switch ($Mode) {
+                $settings = switch ($Mode) {
                     'GitHubApp' {
-                        $settings = @{
+                        @{
                             AccessToken                = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
                             AccessTokenExpirationDate  = (Get-Date).AddSeconds($tokenResponse.expires_in)
                             AccessTokenType            = $tokenResponse.access_token -replace '_.*$', '_*'
@@ -220,7 +219,7 @@
                         }
                     }
                     'OAuthApp' {
-                        $settings = @{
+                        @{
                             AccessToken     = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
                             AccessTokenType = $tokenResponse.access_token -replace '_.*$', '_*'
                             ApiBaseUri      = $ApiBaseUri
@@ -231,8 +230,18 @@
                             HostName        = $HostName
                             Scope           = $tokenResponse.scope
                         }
+                        Write-Verbose ($settings | Format-List | Out-String)
+                        Set-GitHubConfig @settings
+                        $user = Get-GitHubUser
+                        $username = $user.login
+                    }
+                    default {
+                        Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
+                        Write-Host "Unexpected authentication mode: $Mode"
                     }
                 }
+                Write-Verbose ($settings | Format-List | Out-String)
+                Reset-GitHubConfig -Scope 'Auth'
                 Set-GitHubConfig @settings
                 $user = Get-GitHubUser
                 $username = $user.login
@@ -310,11 +319,11 @@
         if ($Repo) {
             Set-GitHubConfig -Repo $Repo
         }
-
+    } catch {
+        throw $_
+    } finally {
         Remove-Variable -Name tokenResponse -ErrorAction SilentlyContinue
         Remove-Variable -Name settings -ErrorAction SilentlyContinue
         [System.GC]::Collect()
-    } catch {
-        throw $_
     }
 }

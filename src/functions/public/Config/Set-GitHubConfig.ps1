@@ -50,8 +50,7 @@ function Set-GitHubConfig {
         [string] $AuthType,
 
         # Set the client ID.
-        [AllowNull()]
-        [AllowEmptyString()]
+        [Parameter()]
         [string] $ClientID,
 
         # Set the device flow type.
@@ -59,6 +58,7 @@ function Set-GitHubConfig {
         [string] $DeviceFlowType,
 
         # Set the API hostname.
+        [Parameter()]
         [string] $HostName,
 
         # Set the default for the Owner parameter.
@@ -120,8 +120,8 @@ function Set-GitHubConfig {
     $Settings | Remove-HashtableEntry -NullOrEmptyValues
 
     foreach ($key in $Settings.Keys) {
-        if ($PSCmdlet.ShouldProcess("Setting $key", "Setting $key to $($Settings[$key])")) {
-            Write-Verbose "Setting $key to $($Settings[$key])"
+        if ($PSCmdlet.ShouldProcess("Setting [$key]", "to [$($Settings[$key])]")) {
+            Write-Verbose "Setting [$key] to [$($Settings[$key])]"
             Set-StoreConfig -Name $key -Value $Settings[$key]
         }
     }
