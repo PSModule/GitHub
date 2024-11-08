@@ -120,8 +120,8 @@ function Set-GitHubConfig {
     $Settings | Remove-HashtableEntry -NullOrEmptyValues
 
     foreach ($key in $Settings.Keys) {
-        if ($PSCmdlet.ShouldProcess("Setting $key", "Setting $key to $($Settings[$key])")) {
-            Write-Verbose "Setting $key to $($Settings[$key])"
+        if ($PSCmdlet.ShouldProcess("Setting [$key]", "to [$($Settings[$key])]")) {
+            Write-Verbose "Setting [$key] to [$($Settings[$key])]"
             Set-StoreConfig -Name $key -Value $Settings[$key]
         }
     }
