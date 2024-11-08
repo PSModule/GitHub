@@ -50,8 +50,7 @@ function Set-GitHubConfig {
         [string] $AuthType,
 
         # Set the client ID.
-        [AllowNull()]
-        [AllowEmptyString()]
+        [Parameter()]
         [string] $ClientID,
 
         # Set the device flow type.
@@ -59,6 +58,7 @@ function Set-GitHubConfig {
         [string] $DeviceFlowType,
 
         # Set the API hostname.
+        [Parameter()]
         [string] $HostName,
 
         # Set the default for the Owner parameter.
