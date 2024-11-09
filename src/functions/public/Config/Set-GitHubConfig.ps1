@@ -1,4 +1,4 @@
-﻿#Requires -Modules Store
+﻿#Requires -Modules @{ ModuleName = 'Store'; ModuleVersion = '0.3.0' }
 
 function Set-GitHubConfig {
     <#
@@ -122,7 +122,7 @@ function Set-GitHubConfig {
     foreach ($key in $Settings.Keys) {
         if ($PSCmdlet.ShouldProcess("Setting [$key]", "to [$($Settings[$key])]")) {
             Write-Verbose "Setting [$key] to [$($Settings[$key])]"
-            Set-StoreConfig -Name $key -Value $Settings[$key]
+            Set-StoreConfig -Name $key -Value $Settings[$key] -Store $script:Config.Name
         }
     }
 }

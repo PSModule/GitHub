@@ -1,4 +1,4 @@
-﻿#Requires -Modules Store
+﻿#Requires -Modules @{ ModuleName = 'Store'; ModuleVersion = '0.3.0' }
 
 function Get-GitHubConfig {
     <#
@@ -48,13 +48,13 @@ function Get-GitHubConfig {
 
     switch -Regex ($Name) {
         '^AccessToken$|^RefreshToken$' {
-            Get-StoreConfig -Name "$prefix$Name"
+            Get-StoreConfig -Name "$prefix$Name" -Store $script:Config.Name
         }
         '^All$' {
-            Get-StoreConfig
+            Get-Store -Store $script:Config.Name
         }
         default {
-            Get-StoreConfig -Name $Name
+            Get-StoreConfig -Name $Name -Store $script:Config.Name
         }
     }
 }
