@@ -309,7 +309,7 @@
 
         if (-not $Silent) {
             Write-Host '✓ ' -ForegroundColor Green -NoNewline
-            Write-Host "Logged in as $username!"
+            Write-Host "Logged in as $(Get-GitHubConfig -Name Name)!"
         }
     } catch {
         throw $_

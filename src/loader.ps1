@@ -9,6 +9,6 @@ $storeParams = @{
 }
 Set-Store @storeParams
 
-# if ($env:GITHUB_ACTIONS -eq 'true') {
-#     Initialize-RunnerEnvironment
-# }
+if ($env:GITHUB_ACTIONS -eq 'true') {
+    Initialize-RunnerEnvironment
+}
