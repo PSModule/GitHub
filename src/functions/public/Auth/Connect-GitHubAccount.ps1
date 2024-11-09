@@ -285,7 +285,7 @@
                 }
             }
         }
-        Write-Verbose ($context | Format-List | Out-String)
+        Write-Verbose ($context | Format-Table | Out-String)
         Set-GitHubContext @context
         # try {
         #     $username = switch ($context['AuthType']) {
@@ -312,8 +312,9 @@
         # } catch {}
 
         if (-not $Silent) {
+            $name = $(Get-GitHubConfig -Name Name)
             Write-Host '✓ ' -ForegroundColor Green -NoNewline
-            Write-Host "Logged in as $(Get-GitHubConfig -Name Name)!"
+            Write-Host "Logged in as $name!"
         }
     } catch {
         throw $_
