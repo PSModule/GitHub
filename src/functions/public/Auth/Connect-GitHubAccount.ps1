@@ -214,19 +214,19 @@
                 switch ($Mode) {
                     'GitHubApp' {
                         $context += @{
-                            Secret                     = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
+                            Secret                     = $tokenResponse.access_token
                             SecretExpirationDate       = (Get-Date).AddSeconds($tokenResponse.expires_in)
                             SecretType                 = $tokenResponse.access_token -replace '_.*$', '_*'
                             AuthClientID               = $authClientID
                             DeviceFlowType             = $Mode
-                            RefreshToken               = ConvertTo-SecureString -AsPlainText $tokenResponse.refresh_token
+                            RefreshToken               = $tokenResponse.refresh_token
                             RefreshTokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.refresh_token_expires_in)
                             Scope                      = $tokenResponse.scope
                         }
                     }
                     'OAuthApp' {
                         $context += @{
-                            Secret         = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
+                            Secret         = $tokenResponse.access_token
                             SecretType     = $tokenResponse.access_token -replace '_.*$', '_*'
                             AuthClientID   = $authClientID
                             DeviceFlowType = $Mode
@@ -243,7 +243,7 @@
             'App' {
                 Write-Verbose 'Logging in as a GitHub App...'
                 $context += @{
-                    Secret     = ConvertTo-SecureString -AsPlainText $PrivateKey
+                    Secret     = $PrivateKey
                     SecretType = 'JWT'
                     ClientID   = $ClientID
                 }
@@ -268,7 +268,7 @@
                     '^ghs_' {
                         Write-Verbose 'Logging in using an installation access token...'
                         $context += @{
-                            Secret     = ConvertTo-SecureString -AsPlainText $AccessToken
+                            Secret     = $AccessToken
                             SecretType = $SecretType
                         }
                         $context['Name'] = 'system'
