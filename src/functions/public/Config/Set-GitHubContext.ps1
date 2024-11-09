@@ -75,8 +75,7 @@
                 RefreshTokenExpirationDate = $RefreshTokenExpirationDate
             }
         }
-
-        Set-Store -Name $storeName -Secret $Secret -Variables @{
+        $variables = @{
             Name                 = $Name
             ID                   = $ID
             HostName             = $HostName
@@ -91,9 +90,10 @@
             Owner                = $Owner
             Repo                 = $Repo
             Scope                = $Scope
-            SecretVaultName      = $SecretVaultName
-            SecretVaultType      = $SecretVaultType
-            UserName             = $UserName
         }
+
+        $variables | Remove-HashtableEntry -NullOrEmptyValues
+
+        Set-Store -Name $storeName -Secret $Secret -Variables $variables
     }
 }
