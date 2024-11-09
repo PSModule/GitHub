@@ -15,13 +15,13 @@
     [CmdletBinding()]
     param()
 
-    $tokenType = Get-GitHubConfig -Name 'AccessTokenType' -ErrorAction SilentlyContinue
+    $tokenType = Get-GitHubConfig -Name 'SecretType' -ErrorAction SilentlyContinue
     if ($tokenType -ne 'ghu_*') {
         Write-Verbose 'The access token is not a user token. No need to refresh.'
         return $false
     }
 
-    $tokenExpirationDate = Get-GitHubConfig -Name 'AccessTokenExpirationDate' -ErrorAction SilentlyContinue
+    $tokenExpirationDate = Get-GitHubConfig -Name 'SecretExpirationDate' -ErrorAction SilentlyContinue
     $currentDateTime = Get-Date
     $remainingDuration = [datetime]$tokenExpirationDate - $currentDateTime
 
