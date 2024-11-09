@@ -10,11 +10,11 @@
         [string] $ID,
 
         # Set the access token type.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [string] $SecretType,
 
         # Set the access token.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [securestring] $Secret,
 
         # Set the expiration date of the contexts secret.
@@ -22,11 +22,11 @@
         [datetime] $SecretExpirationDate,
 
         # Set the API Base URI.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [string] $ApiBaseUri,
 
         # Set the GitHub API Version.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [string] $ApiVersion,
 
         # Set the authentication client ID.
@@ -34,7 +34,7 @@
         [string] $ClientID,
 
         # Set the authentication type.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [string] $AuthType,
 
         # Set the device flow type.
@@ -66,8 +66,7 @@
         [string] $Scope
     )
 
-    $storeName = $Script:Config.Name
-    # $storeName = $Script:Config.Name, $HostName, $Name -join '/'
+    $storeName = $Script:Config.Name, $HostName, $Name -join '/'
 
     if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
 

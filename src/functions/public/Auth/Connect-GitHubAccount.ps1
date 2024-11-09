@@ -149,6 +149,7 @@
         }
 
         $context = @{
+            Name       = 'default'
             ApiBaseUri = $ApiBaseUri
             ApiVersion = $ApiVersion
             HostName   = $HostName
