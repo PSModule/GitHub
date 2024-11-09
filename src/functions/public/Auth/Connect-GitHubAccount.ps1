@@ -79,6 +79,7 @@
             ParameterSetName = 'Token'
         )]
         [AllowNull()]
+        [AllowEmptyString()]
         [Alias('Token')]
         [Alias('PAT')]
         [Alias('IAT')]
