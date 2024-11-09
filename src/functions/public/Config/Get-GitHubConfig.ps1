@@ -27,5 +27,5 @@ function Get-GitHubConfig {
         return Get-GitHubContext
     }
 
-    Get-StoreConfig -Name $Name -Store $script:Config.Name -AsPlainText
+    Get-StoreConfig -Name $Name -Store $script:Config.Name
 }
