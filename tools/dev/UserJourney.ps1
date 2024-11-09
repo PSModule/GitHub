@@ -6,7 +6,7 @@
 Connect-GitHub (-Host github.com) (-ClientID '<client_id>')
 
 # Log on to a specific instance of GitHub (enterprise)
-Connect-GitHub -Host 'dnb.ghe.com'
+Connect-GitHub -Host 'msx.ghe.com'
 
 # Connect to GitHub interactively using OAuth App and Device Flow (should not use this, should we even support it?)
 Connect-GitHub -Mode 'OAuthApp' -Scope 'gist read:org repo workflow'
@@ -31,22 +31,30 @@ Connect-GitHub -Token ***********
 # When you connect, a context is saved.
 # Variables, stored under "Contexts" on the existing config.json.
 # Secrets, names are stored in the variables.
-# Context = [
-#     {
-#         name: "github.com/MariusStorhaug"
-#         id: 1
-#         host: "github.com"
-#         default: true
-#         type: UAT
-#     },
-#     {
-#         name: "dnb.ghe.com/Marius-Storhaug"
-#         id: 2
-#         host: "dnb.ghe.com"
-#         default: false
-#         type: UAT
-#     }
-# ]
+<#
+$Config = @{
+    ConfigFilePath = 'C:\Repos\GitHub\PSModule\src\functions\private\Config\config.json'
+
+    Contexts       = @(
+        @{
+            Name         = 'github.com/MariusStorhaug'
+            Host         = 'github.com'
+            Default      = $true
+            Type         = 'UAT'
+            Organization = 'PSModule'
+            Repository   = 'GitHub'
+        },
+        @{
+            Name    = 'msx.ghe.com/Marius-Storhaug'
+            Host    = 'msx.ghe.com'
+            Default = $false
+            Type    = 'UAT'
+        }
+    )
+}
+$Config
+#>
+
 Get-GitHubContext # List all contexts -> Get-GitHubConfig?
 Get-GitHubContext -Context 'name' # Returns a specific context, autocomplete the name.
 
@@ -56,4 +64,4 @@ Disconnect-GitHub -Context 'name' # Removes the context variables and secrets
 
 
 # Calling specific functions with context or an ad-hoc token?
-Get-GitHubRepository -Context 'dnb.ghe.com/MariusStorhaug'
+Get-GitHubRepository -Context 'msx.ghe.com/MariusStorhaug'

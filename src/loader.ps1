@@ -2,7 +2,12 @@
 
 Write-Verbose "[$scriptFilePath] - Initializing GitHub PowerShell module..."
 
-Initialize-Store -Name 'GitHubPowerShell' -SecretVaultName $script:Config.Name -SecretVaultType $script:Config.Type
+### This is the store config for this module
+$storeParams = @{
+    Name      = $script:Config.Name
+    Variables = @{}
+}
+Set-Store @storeParams
 
 if ($env:GITHUB_ACTIONS -eq 'true') {
     Initialize-RunnerEnvironment
