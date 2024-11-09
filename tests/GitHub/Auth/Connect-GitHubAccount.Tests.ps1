@@ -3,13 +3,13 @@
         Get-Command Connect-GitHubAccount | Should -Not -BeNullOrEmpty
     }
 
-    Context 'Parameter Set: IAT' {
-        It 'Can be called with GITHUB_TOKEN' {
-            { Connect-GitHubAccount -Token $env:GITHUB_TOKEN } | Should -Not -Throw
+    Context 'Parameter Set: autologon IAT' {
+        It 'Can be called with without parameters' {
+            { Connect-GitHubAccount } | Should -Not -Throw
         }
 
-        It 'Can be called with GITHUB_TOKEN - a second time' {
-            { Connect-GitHubAccount -Token $env:GITHUB_TOKEN } | Should -Not -Throw
+        It 'Can be called with without parameters - a second time' {
+            { Connect-GitHubAccount } | Should -Not -Throw
         }
     }
 }

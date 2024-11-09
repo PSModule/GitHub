@@ -8,6 +8,6 @@
     }
 
     It 'Can reconnect after disconnecting' {
-        { Connect-GitHubAccount -Token $env:GITHUB_TOKEN } | Should -Not -Throw
+        { Connect-GitHubAccount } | Should -Not -Throw
     }
 }
