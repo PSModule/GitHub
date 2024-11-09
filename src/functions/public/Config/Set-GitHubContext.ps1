@@ -44,7 +44,7 @@
 
         # Set the authentication client ID.
         [Parameter()]
-        [string] $ClientID,
+        [string] $AuthClientID,
 
         # Set the authentication type.
         [Parameter(Mandatory)]
