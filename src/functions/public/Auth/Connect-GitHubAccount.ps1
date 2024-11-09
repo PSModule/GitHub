@@ -283,10 +283,26 @@
         }
         Write-Verbose ($context | Format-List | Out-String)
         Set-GitHubContext @context
-        # $app = Get-GitHubApp
-        # $username = $app.slug
-        # $user = Get-GitHubUser
-        # $username = $user.login
+        try {
+            $username = switch ($context['AuthType']) {
+                'PAT' {
+                    $user = Get-GitHubUser
+                    $username = $user.login
+                }
+                'UAT' {
+                    $user = Get-GitHubUser
+                    $username = $user.login
+                }
+                'IAT' {
+                    'installation'
+                }
+                'App' {
+                    $app = Get-GitHubApp
+                    $app.slug
+                }
+            }
+            Set-GithubConfig -Name 'Name' -Value $username
+        } catch {}
 
         if (-not $Silent) {
             Write-Host '✓ ' -ForegroundColor Green -NoNewline

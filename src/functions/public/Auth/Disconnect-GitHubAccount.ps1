@@ -27,7 +27,7 @@
     [CmdletBinding()]
     param ()
 
-    Reset-GitHubConfig -Scope 'All'
+    Remove-Store -Name $script:Config.Name
 
     Write-Host '✓ ' -ForegroundColor Green -NoNewline
     Write-Host 'Logged out of GitHub!'
