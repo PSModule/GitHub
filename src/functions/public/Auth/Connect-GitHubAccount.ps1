@@ -166,10 +166,10 @@
                     Write-Verbose "Using provided ClientID: [$ClientID]"
                     $authClientID = $ClientID
                 } elseif (-not [string]::IsNullOrEmpty($(Get-GitHubConfig -Name 'AuthClientID'))) {
-                    Write-Verbose "Reusing previously stored ClientID:   [$(Get-GitHubConfig -Name 'AuthClientID')]"
+                    Write-Verbose "Reusing previously stored ClientID: [$(Get-GitHubConfig -Name 'AuthClientID')]"
                     $authClientID = Get-GitHubConfig -Name 'AuthClientID'
                 } else {
-                    Write-Verbose "Using default ClientID:  [$($script:Auth.$Mode.ClientID)]"
+                    Write-Verbose "Using default ClientID: [$($script:Auth.$Mode.ClientID)]"
                     $authClientID = $script:Auth.$Mode.ClientID
                 }
                 if ($Mode -ne (Get-GitHubConfig -Name 'DeviceFlowType' -ErrorAction SilentlyContinue)) {
