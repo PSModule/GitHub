@@ -79,12 +79,14 @@ function Get-GitHubAppJSONWebToken {
         )
     ).TrimEnd('=').Replace('+', '-').Replace('/', '_')
 
+    $iat = [System.DateTimeOffset]::UtcNow.AddSeconds(-10).ToUnixTimeSeconds()
+    $exp = [System.DateTimeOffset]::UtcNow.AddMinutes(10).ToUnixTimeSeconds()
     $payload = [Convert]::ToBase64String(
         [System.Text.Encoding]::UTF8.GetBytes(
             (
                 ConvertTo-Json -InputObject @{
-                    iat = [System.DateTimeOffset]::UtcNow.AddSeconds(-10).ToUnixTimeSeconds()
-                    exp = [System.DateTimeOffset]::UtcNow.AddMinutes(10).ToUnixTimeSeconds()
+                    iat = $iat
+                    exp = $exp
                     iss = $ClientId
                 }
             )
@@ -102,5 +104,10 @@ function Get-GitHubAppJSONWebToken {
         )
     ).TrimEnd('=').Replace('+', '-').Replace('/', '_')
     $jwt = "$header.$payload.$signature"
-    $jwt
+    [pscustomobject]@{
+        Token     = $jwt
+        IssuedAt  = $iat
+        ExpiresAt = $exp
+        Issuer    = $ClientId
+    }
 }

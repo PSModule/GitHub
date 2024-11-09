@@ -20,41 +20,14 @@ function Get-GitHubConfig {
     param (
         # Choose a configuration name to get.
         [Parameter()]
-        [ValidateSet(
-            'All',
-            'AccessToken',
-            'AccessTokenExpirationDate',
-            'AccessTokenType',
-            'ApiBaseUri',
-            'ApiVersion',
-            'AuthClientID',
-            'AuthType',
-            'ClientID',
-            'DeviceFlowType',
-            'HostName',
-            'Owner',
-            'RefreshToken',
-            'RefreshTokenExpirationDate',
-            'Repo',
-            'Scope',
-            'SecretVaultName',
-            'SecretVaultType',
-            'UserName'
-        )]
-        [string] $Name = 'All'
+        [string] $Name
     )
 
     $prefix = $script:Config.Prefix
 
-    switch -Regex ($Name) {
-        '^AccessToken$|^RefreshToken$' {
-            Get-StoreConfig -Name "$prefix$Name" -Store $script:Config.Name
-        }
-        '^All$' {
-            Get-Store -Store $script:Config.Name
-        }
-        default {
-            Get-StoreConfig -Name $Name -Store $script:Config.Name
-        }
+    if (-not $Name) {
+        Get-Store -Store $script:Config.Name
+    } else {
+        Get-StoreConfig -Name "$prefix$Name" -Store $script:Config.Name
     }
 }
