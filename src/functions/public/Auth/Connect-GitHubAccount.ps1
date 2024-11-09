@@ -133,7 +133,7 @@
         $ApiBaseUri = "https://api.$HostName"
 
         # First assume interactive logon
-        $AuthType = $PSCmdlet.ParameterSetName
+        $authType = $PSCmdlet.ParameterSetName
 
         Write-Verbose "Running on GitHub Actions: [$env:GITHUB_ACTIONS]"
 
@@ -143,7 +143,7 @@
             $gitHubTokenPresent = $gitHubToken.count -gt 0 -and -not [string]::IsNullOrEmpty($gitHubToken)
             Write-Debug "GitHub token present: [$gitHubTokenPresent]"
             if ($gitHubTokenPresent) {
-                $AuthType = 'Token'
+                $authType = 'Token'
                 $AccessToken = $gitHubToken
             }
         }
@@ -152,16 +152,13 @@
             ApiBaseUri = $ApiBaseUri
             ApiVersion = $ApiVersion
             HostName   = $HostName
-            AuthType   = $authType # 'UAT', 'PAT', 'IAT', 'APP'
+            AuthType   = $authType
             Owner      = $Owner
             Repo       = $Repo
-            # Secret     = $tokenResponse.access_token
-            # SecretType = $AccessTokenType # 'UAT', 'PAT classic' 'PAT modern', 'PEM', 'IAT'
-            # id         = 'MariusStorhaug' # username/slug, clientid
         }
 
-        Write-Verbose "AuthType: [$AuthType]"
-        switch ($AuthType) {
+        Write-Verbose "AuthType: [$authType]"
+        switch ($authType) {
             'UAT' {
                 Write-Verbose 'Logging in using device flow...'
                 if (-not [string]::IsNullOrEmpty($ClientID)) {
@@ -247,7 +244,7 @@
                 $context += @{
                     Secret     = ConvertTo-SecureString -AsPlainText $PrivateKey
                     SecretType = 'JWT'
-                    AuthType   = $AuthType
+                    AuthType   = $authType
                     ClientID   = $ClientID
                 }
             }
@@ -262,7 +259,7 @@
                 $secretType = $AccessToken -replace '_.*$', '_*'
                 switch -Regex ($secretType) {
                     '^ghp_|^github_pat_' {
-                        $context += @{
+                        Merge-Object $context @{
                             Secret     = $accessTokenValue
                             SecretType = $secretType
                             AuthType   = 'PAT'

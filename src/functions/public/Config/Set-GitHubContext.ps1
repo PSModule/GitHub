@@ -1,5 +1,5 @@
 ﻿function Set-GitHubContext {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         # The name of the context.
         [Parameter(Mandatory)]
@@ -65,38 +65,37 @@
         [string] $Scope
     )
 
-    $Settings = @{
-        "$prefix`AccessToken"      = $AccessToken
-        AccessTokenExpirationDate  = $AccessTokenExpirationDate
-        AccessTokenType            = $AccessTokenType
-        ApiBaseUri                 = $ApiBaseUri
-        ApiVersion                 = $ApiVersion
-        AuthClientID               = $AuthClientID
-        AuthType                   = $AuthType
-        ClientID                   = $ClientID
-        DeviceFlowType             = $DeviceFlowType
-        HostName                   = $HostName
-        Owner                      = $Owner
-        "$prefix`RefreshToken"     = $RefreshToken
-        RefreshTokenExpirationDate = $RefreshTokenExpirationDate
-        Repo                       = $Repo
-        Scope                      = $Scope
-        SecretVaultName            = $SecretVaultName
-        SecretVaultType            = $SecretVaultType
-        UserName                   = $UserName
-    }
+    $storeName = $Script:Config.Name
+    # $storeName = $Script:Config.Name, $HostName, $Name -join '/'
 
-    $storeName = $Script:Config.Name, $HostName, $Name -join '/'
-    Set-Store -Name "$storeName/AccessToken" -Variables @{
-        AccessTokenExpirationDate = (Get-Date).AddDays(1)
-    }
-    Set-Store -Name "$storeName/RefreshToken" -Variables @{
-        AccessTokenExpirationDate = (Get-Date).AddDays(1)
-    }
-    Set-Store -Name $storeName -Variables @{
-        Name             = $Name
-        HostName         = $HostName
-        AccessTokenName  = "$storeName/AccessToken"
-        RefreshTokenName = "$storeName/RefreshToken"
+    if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
+
+        if ($RefreshToken) {
+            Set-Store -Name "$storeName/RefreshName" -Secret $RefreshToken -Variables @{
+                RefreshTokenExpirationDate = $RefreshTokenExpirationDate
+            }
+        }
+
+        Set-Store -Name $storeName -Secret $Secret -Variables @{
+            Name                       = $Name
+            ID                         = $ID
+            HostName                   = $HostName
+            AccessTokenExpirationDate  = $AccessTokenExpirationDate
+            AccessTokenType            = $AccessTokenType
+            ApiBaseUri                 = $ApiBaseUri
+            ApiVersion                 = $ApiVersion
+            AuthClientID               = $AuthClientID
+            AuthType                   = $AuthType
+            ClientID                   = $ClientID
+            DeviceFlowType             = $DeviceFlowType
+            Owner                      = $Owner
+            "$prefix`RefreshToken"     = $RefreshToken
+            RefreshTokenExpirationDate = $RefreshTokenExpirationDate
+            Repo                       = $Repo
+            Scope                      = $Scope
+            SecretVaultName            = $SecretVaultName
+            SecretVaultType            = $SecretVaultType
+            UserName                   = $UserName
+        }
     }
 }
