@@ -138,14 +138,13 @@
         $authType = $PSCmdlet.ParameterSetName
 
         # If running on GitHub Actions and no access token is provided, use the GitHub token.
-        Write-Verbose "GitHub Actions: [$($env:GITHUB_ACTIONS -eq 'true')] (GitHubActions: [$env:GITHUB_ACTIONS])"
-        Write-Verbose "Token provided: [$([string]::IsNullOrEmpty($Token))] (Token: [$Token])"
-        Write-Verbose "GitHub_Token provided: [$env:GITHUB_TOKEN]"
-        if ($env:GITHUB_ACTIONS -eq 'true' -and [string]::IsNullOrEmpty($Token)) {
+        if ($env:GITHUB_ACTIONS -eq 'true') {
+            $tokenNotProvided = [string]::IsNullOrEmpty($Token)
             $gitHubToken = $env:GH_TOKEN ?? $env:GITHUB_TOKEN
-            $gitHubTokenPresent = [string]::IsNullOrEmpty($gitHubToken)
-            Write-Verbose "GitHub token present: [$gitHubTokenPresent]"
-            if ($gitHubTokenPresent) {
+            $gitHubTokenPresent = -not [string]::IsNullOrEmpty($gitHubToken)
+            Write-Verbose "Token not provided:    [$tokenNotProvided]"
+            Write-Verbose "GitHub token present:  [$gitHubTokenPresent]"
+            if ($tokenNotProvided -and $gitHubTokenPresent) {
                 $authType = 'Token'
                 $Token = $gitHubToken
             }
