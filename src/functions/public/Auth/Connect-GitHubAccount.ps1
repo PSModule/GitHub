@@ -70,20 +70,23 @@
         [Parameter(ParameterSetName = 'UAT')]
         [string] $Scope = 'gist read:org repo workflow',
 
-        # An access token to use for authentication. If left enpty, the user will be prompted to enter the token.
-        # Supports both personal access tokens and GitHub App installation access tokens.
+
+        # The user will be prompted to enter the token.
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'PAT'
+        )]
+        [switch] $UseAccessToken,
+
+        # An access token to use for authentication.
+        # Supports both personal access tokens (PAT) and GitHub App installation access tokens (IAT).
         # Example: 'ghp_1234567890abcdef'
         # Example: 'ghs_1234567890abcdef'
         [Parameter(
             Mandatory,
             ParameterSetName = 'Token'
         )]
-        [AllowNull()]
-        [AllowEmptyString()]
-        [Alias('Token')]
-        [Alias('PAT')]
-        [Alias('IAT')]
-        [string] $AccessToken,
+        [string] $Token,
 
         # The client ID for the GitHub App to use for authentication.
         [Parameter(ParameterSetName = 'UAT')]
@@ -132,22 +135,7 @@
     try {
         $HostName = $HostName -replace '^https?://'
         $ApiBaseUri = "https://api.$HostName"
-
-        # First assume interactive logon
         $authType = $PSCmdlet.ParameterSetName
-
-        Write-Verbose "Running on GitHub Actions: [$env:GITHUB_ACTIONS]"
-
-        # Autologon if running on GitHub Actions and no access token is provided
-        if ($env:GITHUB_ACTIONS -eq 'true' -and [string]::IsNullOrEmpty($AccessToken)) {
-            $gitHubToken = $env:GH_TOKEN ?? $env:GITHUB_TOKEN
-            $gitHubTokenPresent = $gitHubToken.count -gt 0 -and -not [string]::IsNullOrEmpty($gitHubToken)
-            Write-Debug "GitHub token present: [$gitHubTokenPresent]"
-            if ($gitHubTokenPresent) {
-                $authType = 'Token'
-                $AccessToken = $gitHubToken
-            }
-        }
 
         $context = @{
             Name       = 'default'
@@ -249,19 +237,24 @@
                     ClientID   = $ClientID
                 }
             }
-            'Token' {
-                if ([string]::IsNullOrEmpty($AccessToken)) {
-                    Write-Verbose 'Logging in using personal access token...'
-                    Write-Host '! ' -ForegroundColor DarkYellow -NoNewline
-                    Start-Process "https://$HostName/settings/tokens"
-                    $accessTokenValue = Read-Host -Prompt 'Enter your personal access token' -AsSecureString
-                    $AccessToken = ConvertFrom-SecureString $accessTokenValue -AsPlainText
+            'PAT' {
+                Write-Verbose 'Logging in using personal access token...'
+                Write-Host '! ' -ForegroundColor DarkYellow -NoNewline
+                Start-Process "https://$HostName/settings/tokens"
+                $accessTokenValue = Read-Host -Prompt 'Enter your personal access token' -AsSecureString
+                $Token = ConvertFrom-SecureString $accessTokenValue -AsPlainText
+                $secretType = $Token -replace '_.*$', '_*'
+                $context += @{
+                    Secret     = $Token
+                    SecretType = $secretType
                 }
-                $secretType = $AccessToken -replace '_.*$', '_*'
+            }
+            'Token' {
+                $secretType = $Token -replace '_.*$', '_*'
                 switch -Regex ($secretType) {
                     '^ghp_|^github_pat_' {
                         $context += @{
-                            Secret     = $accessTokenValue
+                            Secret     = $Token
                             SecretType = $secretType
                         }
                         $context['AuthType'] = 'PAT'
@@ -269,15 +262,11 @@
                     '^ghs_' {
                         Write-Verbose 'Logging in using an installation access token...'
                         $context += @{
-                            Secret     = ConvertTo-SecureString -AsPlainText $AccessToken
-                            SecretType = $SecretType
+                            Secret     = ConvertTo-SecureString -AsPlainText $Token
+                            SecretType = $secretType
                         }
                         $context['Name'] = 'system'
                         $context['AuthType'] = 'IAT'
-                    }
-                    default {
-                        Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
-                        Write-Host "Unexpected access token format: $accessTokenType"
                     }
                 }
             }
