@@ -18,7 +18,6 @@
         https://docs.github.com/rest/users/users#get-the-authenticated-user
     #>
     [OutputType([pscustomobject])]
-    [Alias('Get-GitHubContext')]
     [CmdletBinding()]
     param ()
 
