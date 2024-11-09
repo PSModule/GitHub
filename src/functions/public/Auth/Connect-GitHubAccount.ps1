@@ -70,19 +70,23 @@
         [Parameter(ParameterSetName = 'UAT')]
         [string] $Scope = 'gist read:org repo workflow',
 
-        # An access token to use for authentication. If left enpty, the user will be prompted to enter the token.
-        # Supports both personal access tokens and GitHub App installation access tokens.
+
+        # The user will be prompted to enter the token.
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'PAT'
+        )]
+        [switch] $UseAccessToken,
+
+        # An access token to use for authentication.
+        # Supports both personal access tokens (PAT) and GitHub App installation access tokens (IAT).
         # Example: 'ghp_1234567890abcdef'
         # Example: 'ghs_1234567890abcdef'
         [Parameter(
             Mandatory,
             ParameterSetName = 'Token'
         )]
-        [AllowNull()]
-        [Alias('Token')]
-        [Alias('PAT')]
-        [Alias('IAT')]
-        [string] $AccessToken,
+        [string] $Token,
 
         # The client ID for the GitHub App to use for authentication.
         [Parameter(ParameterSetName = 'UAT')]
@@ -131,25 +135,20 @@
     try {
         $HostName = $HostName -replace '^https?://'
         $ApiBaseUri = "https://api.$HostName"
+        $authType = $PSCmdlet.ParameterSetName
 
-        # First assume interactive logon
-        $AuthType = $PSCmdlet.ParameterSetName
-
-        Write-Verbose "Running on GitHub Actions: [$env:GITHUB_ACTIONS]"
-
-        # Autologon if running on GitHub Actions and no access token is provided
-        if ($env:GITHUB_ACTIONS -eq 'true' -and [string]::IsNullOrEmpty($AccessToken)) {
-            $gitHubToken = $env:GH_TOKEN ?? $env:GITHUB_TOKEN
-            $gitHubTokenPresent = $gitHubToken.count -gt 0 -and -not [string]::IsNullOrEmpty($gitHubToken)
-            Write-Debug "GitHub token present: [$gitHubTokenPresent]"
-            if ($gitHubTokenPresent) {
-                $AuthType = 'Token'
-                $AccessToken = $gitHubToken
-            }
+        $context = @{
+            Name       = 'default'
+            ApiBaseUri = $ApiBaseUri
+            ApiVersion = $ApiVersion
+            HostName   = $HostName
+            AuthType   = $authType
+            Owner      = $Owner
+            Repo       = $Repo
         }
 
-        Write-Verbose "AuthType: [$AuthType]"
-        switch ($AuthType) {
+        Write-Verbose "AuthType: [$authType]"
+        switch ($authType) {
             'UAT' {
                 Write-Verbose 'Logging in using device flow...'
                 if (-not [string]::IsNullOrEmpty($ClientID)) {
@@ -166,7 +165,7 @@
                     Write-Verbose "Using $Mode authentication..."
                     $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $authClientID -Scope $Scope -HostName $HostName
                 } else {
-                    $accessTokenValidity = [datetime](Get-GitHubConfig -Name 'AccessTokenExpirationDate') - (Get-Date)
+                    $accessTokenValidity = [datetime](Get-GitHubConfig -Name 'SecretExpirationDate') - (Get-Date)
                     $accessTokenIsValid = $accessTokenValidity.Seconds -gt 0
                     $hours = $accessTokenValidity.Hours.ToString().PadLeft(2, '0')
                     $minutes = $accessTokenValidity.Minutes.ToString().PadLeft(2, '0')
@@ -201,129 +200,113 @@
                         }
                     }
                 }
-                $settings = switch ($Mode) {
+                switch ($Mode) {
                     'GitHubApp' {
-                        @{
-                            AccessToken                = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
-                            AccessTokenExpirationDate  = (Get-Date).AddSeconds($tokenResponse.expires_in)
-                            AccessTokenType            = $tokenResponse.access_token -replace '_.*$', '_*'
-                            ApiBaseUri                 = $ApiBaseUri
-                            ApiVersion                 = $ApiVersion
+                        $context += @{
+                            Secret                     = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
+                            SecretExpirationDate       = (Get-Date).AddSeconds($tokenResponse.expires_in)
+                            SecretType                 = $tokenResponse.access_token -replace '_.*$', '_*'
                             AuthClientID               = $authClientID
-                            AuthType                   = $AuthType
                             DeviceFlowType             = $Mode
-                            HostName                   = $HostName
                             RefreshToken               = ConvertTo-SecureString -AsPlainText $tokenResponse.refresh_token
                             RefreshTokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.refresh_token_expires_in)
                             Scope                      = $tokenResponse.scope
                         }
                     }
                     'OAuthApp' {
-                        @{
-                            AccessToken     = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
-                            AccessTokenType = $tokenResponse.access_token -replace '_.*$', '_*'
-                            ApiBaseUri      = $ApiBaseUri
-                            ApiVersion      = $ApiVersion
-                            AuthClientID    = $authClientID
-                            AuthType        = $AuthType
-                            DeviceFlowType  = $Mode
-                            HostName        = $HostName
-                            Scope           = $tokenResponse.scope
+                        $context += @{
+                            Secret         = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
+                            SecretType     = $tokenResponse.access_token -replace '_.*$', '_*'
+                            AuthClientID   = $authClientID
+                            DeviceFlowType = $Mode
+                            Scope          = $tokenResponse.scope
                         }
-                        Write-Verbose ($settings | Format-List | Out-String)
-                        Set-GitHubConfig @settings
-                        $user = Get-GitHubUser
-                        $username = $user.login
                     }
                     default {
                         Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
                         Write-Host "Unexpected authentication mode: $Mode"
+                        return
                     }
                 }
-                Write-Verbose ($settings | Format-List | Out-String)
-                Reset-GitHubConfig -Scope 'Auth'
-                Set-GitHubConfig @settings
-                $user = Get-GitHubUser
-                $username = $user.login
             }
             'App' {
                 Write-Verbose 'Logging in as a GitHub App...'
-                Reset-GitHubConfig -Scope 'Auth'
-                $jwt = Get-GitHubAppJWT -ClientId $ClientID -PrivateKey $PrivateKey
-                $settings = @{
-                    AccessToken     = ConvertTo-SecureString -AsPlainText $jwt
-                    AccessTokenType = 'JWT'
-                    ApiBaseUri      = $ApiBaseUri
-                    ApiVersion      = $ApiVersion
-                    AuthType        = $AuthType
-                    ClientID        = $ClientID
-                    HostName        = $HostName
+                $context += @{
+                    Secret     = ConvertTo-SecureString -AsPlainText $PrivateKey
+                    SecretType = 'JWT'
+                    ClientID   = $ClientID
                 }
-                Set-GitHubConfig @settings
-                $app = Get-GitHubApp
-                $username = $app.slug
+            }
+            'PAT' {
+                Write-Debug "UseAccessToken is set to [$UseAccessToken]. Using provided access token..."
+                Write-Verbose 'Logging in using personal access token...'
+                Write-Host '! ' -ForegroundColor DarkYellow -NoNewline
+                Start-Process "https://$HostName/settings/tokens"
+                $accessTokenValue = Read-Host -Prompt 'Enter your personal access token' -AsSecureString
+                $Token = ConvertFrom-SecureString $accessTokenValue -AsPlainText
+                $secretType = $Token -replace '_.*$', '_*'
+                $context += @{
+                    Secret     = $Token
+                    SecretType = $secretType
+                }
             }
             'Token' {
-                if ([string]::IsNullOrEmpty($AccessToken)) {
-                    Write-Verbose 'Logging in using personal access token...'
-                    Write-Host '! ' -ForegroundColor DarkYellow -NoNewline
-                    Start-Process "https://$HostName/settings/tokens"
-                    $accessTokenValue = Read-Host -Prompt 'Enter your personal access token' -AsSecureString
-                    $AccessToken = ConvertFrom-SecureString $accessTokenValue -AsPlainText
-                }
-                $accessTokenType = $AccessToken -replace '_.*$', '_*'
-                switch -Regex ($accessTokenType) {
+                $secretType = $Token -replace '_.*$', '_*'
+                switch -Regex ($secretType) {
                     '^ghp_|^github_pat_' {
-                        Reset-GitHubConfig -Scope 'Auth'
-                        $settings = @{
-                            AccessToken     = $accessTokenValue
-                            AccessTokenType = $accessTokenType
-                            ApiBaseUri      = $ApiBaseUri
-                            ApiVersion      = $ApiVersion
-                            AuthType        = 'PAT'
-                            HostName        = $HostName
+                        $context += @{
+                            Secret     = $Token
+                            SecretType = $secretType
                         }
-                        Set-GitHubConfig @settings
+                        $context['AuthType'] = 'PAT'
                     }
                     '^ghs_' {
-                        Write-Verbose 'Logging in using GitHub access token...'
-                        Reset-GitHubConfig -Scope 'Auth'
-                        $settings = @{
-                            AccessToken     = ConvertTo-SecureString -AsPlainText $AccessToken
-                            AccessTokenType = $accessTokenType
-                            ApiBaseUri      = $ApiBaseUri
-                            ApiVersion      = $ApiVersion
-                            AuthType        = 'IAT'
-                            HostName        = $HostName
+                        Write-Verbose 'Logging in using an installation access token...'
+                        $context += @{
+                            Secret     = ConvertTo-SecureString -AsPlainText $Token
+                            SecretType = $secretType
                         }
-                        Set-GitHubConfig @settings
-                        $username = 'system'
-                    }
-                    default {
-                        Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
-                        Write-Host "Unexpected access token format: $accessTokenType"
+                        $context['Name'] = 'system'
+                        $context['AuthType'] = 'IAT'
                     }
                 }
             }
         }
+        Write-Verbose ($context | Format-List | Out-String)
+        Set-GitHubContext @context
+        # try {
+        #     $username = switch ($context['AuthType']) {
+        #         'PAT' {
+        #             $user = Get-GitHubUser
+        #             $username = $user.login
+        #         }
+        #         'UAT' {
+        #             $user = Get-GitHubUser
+        #             $username = $user.login
+        #         }
+        #         'IAT' {
+        #             'installation'
+        #         }
+        #         'App' {
+        #             $app = Get-GitHubApp
+        #             $app.slug
+        #         }
+        #         default {
+        #             'unknown'
+        #         }
+        #     }
+        #     Set-GithubConfig -Name 'Name' -Value $username
+        # } catch {}
 
         if (-not $Silent) {
             Write-Host '✓ ' -ForegroundColor Green -NoNewline
-            Write-Host "Logged in as $username!"
-        }
-
-        if ($Owner) {
-            Set-GitHubConfig -Owner $Owner
-        }
-
-        if ($Repo) {
-            Set-GitHubConfig -Repo $Repo
+            Write-Host "Logged in as $(Get-GitHubConfig -Name Name)!"
         }
     } catch {
         throw $_
     } finally {
         Remove-Variable -Name tokenResponse -ErrorAction SilentlyContinue
-        Remove-Variable -Name settings -ErrorAction SilentlyContinue
+        Remove-Variable -Name context -ErrorAction SilentlyContinue
         [System.GC]::Collect()
     }
 }

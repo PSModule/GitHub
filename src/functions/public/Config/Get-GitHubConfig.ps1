@@ -1,5 +1,4 @@
-﻿#Requires -Modules @{ ModuleName='Store'; ModuleVersion='0.2.2' }
-
+#Requires -Modules @{ ModuleName = 'Store'; ModuleVersion = '0.3.1' }
 
 function Get-GitHubConfig {
     <#
@@ -21,41 +20,12 @@ function Get-GitHubConfig {
     param (
         # Choose a configuration name to get.
         [Parameter()]
-        [ValidateSet(
-            'All',
-            'AccessToken',
-            'AccessTokenExpirationDate',
-            'AccessTokenType',
-            'ApiBaseUri',
-            'ApiVersion',
-            'AuthClientID',
-            'AuthType',
-            'ClientID',
-            'DeviceFlowType',
-            'HostName',
-            'Owner',
-            'RefreshToken',
-            'RefreshTokenExpirationDate',
-            'Repo',
-            'Scope',
-            'SecretVaultName',
-            'SecretVaultType',
-            'UserName'
-        )]
-        [string] $Name = 'All'
+        [string] $Name
     )
 
-    $prefix = $script:Config.Prefix
-
-    switch -Regex ($Name) {
-        '^AccessToken$|^RefreshToken$' {
-            Get-StoreConfig -Name "$prefix$Name"
-        }
-        '^All$' {
-            Get-StoreConfig
-        }
-        default {
-            Get-StoreConfig -Name $Name
-        }
+    if (-not $Name) {
+        return Get-GitHubContext
     }
+
+    Get-StoreConfig -Name $Name -Store $script:Config.Name
 }
