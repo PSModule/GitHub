@@ -1,4 +1,4 @@
-﻿#Requires -Modules Store
+﻿#Requires -Modules @{ModuleName='Store';ModuleVersion='0.2.2'}
 
 function Set-GitHubConfig {
     <#
