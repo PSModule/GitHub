@@ -175,7 +175,7 @@
                     Write-Verbose "Using $Mode authentication..."
                     $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $authClientID -Scope $Scope -HostName $HostName
                 } else {
-                    $accessTokenValidity = [datetime](Get-GitHubConfig -Name 'AccessTokenExpirationDate') - (Get-Date)
+                    $accessTokenValidity = [datetime](Get-GitHubConfig -Name 'SecretExpirationDate') - (Get-Date)
                     $accessTokenIsValid = $accessTokenValidity.Seconds -gt 0
                     $hours = $accessTokenValidity.Hours.ToString().PadLeft(2, '0')
                     $minutes = $accessTokenValidity.Minutes.ToString().PadLeft(2, '0')
@@ -214,7 +214,7 @@
                     'GitHubApp' {
                         $context += @{
                             Secret                     = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
-                            AccessTokenExpirationDate  = (Get-Date).AddSeconds($tokenResponse.expires_in)
+                            SecretExpirationDate       = (Get-Date).AddSeconds($tokenResponse.expires_in)
                             SecretType                 = $tokenResponse.access_token -replace '_.*$', '_*'
                             AuthClientID               = $authClientID
                             DeviceFlowType             = $Mode

@@ -5,20 +5,21 @@
         [Parameter(Mandatory)]
         [string] $Name,
 
+        # The id of the context.
         [Parameter()]
         [string] $ID,
 
         # Set the access token type.
         [Parameter()]
-        [string] $AccessTokenType,
+        [string] $SecretType,
 
         # Set the access token.
         [Parameter()]
         [securestring] $Secret,
 
-        # Set the access token expiration date.
+        # Set the expiration date of the contexts secret.
         [Parameter()]
-        [datetime] $AccessTokenExpirationDate,
+        [datetime] $SecretExpirationDate,
 
         # Set the API Base URI.
         [Parameter()]
@@ -71,31 +72,29 @@
     if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
 
         if ($RefreshToken) {
-            Set-Store -Name "$storeName/RefreshName" -Secret $RefreshToken -Variables @{
+            Set-Store -Name "$storeName/RefreshToken" -Secret $RefreshToken -Variables @{
                 RefreshTokenExpirationDate = $RefreshTokenExpirationDate
             }
         }
 
         Set-Store -Name $storeName -Secret $Secret -Variables @{
-            Name                       = $Name
-            ID                         = $ID
-            HostName                   = $HostName
-            AccessTokenExpirationDate  = $AccessTokenExpirationDate
-            AccessTokenType            = $AccessTokenType
-            ApiBaseUri                 = $ApiBaseUri
-            ApiVersion                 = $ApiVersion
-            AuthClientID               = $AuthClientID
-            AuthType                   = $AuthType
-            ClientID                   = $ClientID
-            DeviceFlowType             = $DeviceFlowType
-            Owner                      = $Owner
-            "$prefix`RefreshToken"     = $RefreshToken
-            RefreshTokenExpirationDate = $RefreshTokenExpirationDate
-            Repo                       = $Repo
-            Scope                      = $Scope
-            SecretVaultName            = $SecretVaultName
-            SecretVaultType            = $SecretVaultType
-            UserName                   = $UserName
+            Name                 = $Name
+            ID                   = $ID
+            HostName             = $HostName
+            SecretExpirationDate = $SecretExpirationDate
+            SecretType           = $SecretType
+            ApiBaseUri           = $ApiBaseUri
+            ApiVersion           = $ApiVersion
+            AuthClientID         = $AuthClientID
+            AuthType             = $AuthType
+            ClientID             = $ClientID
+            DeviceFlowType       = $DeviceFlowType
+            Owner                = $Owner
+            Repo                 = $Repo
+            Scope                = $Scope
+            SecretVaultName      = $SecretVaultName
+            SecretVaultType      = $SecretVaultType
+            UserName             = $UserName
         }
     }
 }
