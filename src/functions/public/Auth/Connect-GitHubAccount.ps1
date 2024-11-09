@@ -268,10 +268,10 @@
                     '^ghs_' {
                         Write-Verbose 'Logging in using an installation access token...'
                         $context += @{
-                            ID         = 'system'
                             Secret     = ConvertTo-SecureString -AsPlainText $AccessToken
                             SecretType = $SecretType
                         }
+                        $context['Name'] = 'system'
                         $context['AuthType'] = 'IAT'
                     }
                     default {
@@ -283,26 +283,29 @@
         }
         Write-Verbose ($context | Format-List | Out-String)
         Set-GitHubContext @context
-        try {
-            $username = switch ($context['AuthType']) {
-                'PAT' {
-                    $user = Get-GitHubUser
-                    $username = $user.login
-                }
-                'UAT' {
-                    $user = Get-GitHubUser
-                    $username = $user.login
-                }
-                'IAT' {
-                    'installation'
-                }
-                'App' {
-                    $app = Get-GitHubApp
-                    $app.slug
-                }
-            }
-            Set-GithubConfig -Name 'Name' -Value $username
-        } catch {}
+        # try {
+        #     $username = switch ($context['AuthType']) {
+        #         'PAT' {
+        #             $user = Get-GitHubUser
+        #             $username = $user.login
+        #         }
+        #         'UAT' {
+        #             $user = Get-GitHubUser
+        #             $username = $user.login
+        #         }
+        #         'IAT' {
+        #             'installation'
+        #         }
+        #         'App' {
+        #             $app = Get-GitHubApp
+        #             $app.slug
+        #         }
+        #         default {
+        #             'unknown'
+        #         }
+        #     }
+        #     Set-GithubConfig -Name 'Name' -Value $username
+        # } catch {}
 
         if (-not $Silent) {
             Write-Host '✓ ' -ForegroundColor Green -NoNewline
