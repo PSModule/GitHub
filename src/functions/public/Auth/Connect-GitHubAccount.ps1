@@ -144,7 +144,7 @@
         if ($env:GITHUB_ACTIONS -eq 'true' -and [string]::IsNullOrEmpty($Token)) {
             $gitHubToken = $env:GH_TOKEN ?? $env:GITHUB_TOKEN
             $gitHubTokenPresent = [string]::IsNullOrEmpty($gitHubToken)
-            Write-Debug "GitHub token present: [$gitHubTokenPresent]"
+            Write-Verbose "GitHub token present: [$gitHubTokenPresent]"
             if ($gitHubTokenPresent) {
                 $authType = 'Token'
                 $Token = $gitHubToken
