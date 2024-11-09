@@ -244,7 +244,6 @@
                 $context += @{
                     Secret     = ConvertTo-SecureString -AsPlainText $PrivateKey
                     SecretType = 'JWT'
-                    AuthType   = $authType
                     ClientID   = $ClientID
                 }
             }
@@ -259,11 +258,11 @@
                 $secretType = $AccessToken -replace '_.*$', '_*'
                 switch -Regex ($secretType) {
                     '^ghp_|^github_pat_' {
-                        Merge-Object $context @{
+                        $context += @{
                             Secret     = $accessTokenValue
                             SecretType = $secretType
-                            AuthType   = 'PAT'
                         }
+                        $context['AuthType'] = 'PAT'
                     }
                     '^ghs_' {
                         Write-Verbose 'Logging in using an installation access token...'
@@ -271,8 +270,8 @@
                             ID         = 'system'
                             Secret     = ConvertTo-SecureString -AsPlainText $AccessToken
                             SecretType = $SecretType
-                            AuthType   = 'IAT'
                         }
+                        $context['AuthType'] = 'IAT'
                     }
                     default {
                         Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
@@ -281,12 +280,12 @@
                 }
             }
         }
-        Write-Verbose ($settings | Format-List | Out-String)
+        Write-Verbose ($context | Format-List | Out-String)
         Set-GitHubContext @context
-        $app = Get-GitHubApp
-        $username = $app.slug
-        $user = Get-GitHubUser
-        $username = $user.login
+        # $app = Get-GitHubApp
+        # $username = $app.slug
+        # $user = Get-GitHubUser
+        # $username = $user.login
 
         if (-not $Silent) {
             Write-Host '✓ ' -ForegroundColor Green -NoNewline
