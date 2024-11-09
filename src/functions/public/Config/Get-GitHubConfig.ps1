@@ -23,11 +23,9 @@ function Get-GitHubConfig {
         [string] $Name
     )
 
-    $prefix = $script:Config.Prefix
-
     if (-not $Name) {
-        Get-Store -Store $script:Config.Name
-    } else {
-        Get-StoreConfig -Name "$Name" -Store $script:Config.Name
+        return Get-GitHubContext
     }
+
+    Get-StoreConfig -Name $Name -Store $script:Config.Name -AsPlainText
 }
