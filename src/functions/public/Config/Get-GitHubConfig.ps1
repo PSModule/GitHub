@@ -28,6 +28,6 @@ function Get-GitHubConfig {
     if (-not $Name) {
         Get-Store -Store $script:Config.Name
     } else {
-        Get-StoreConfig -Name "$prefix$Name" -Store $script:Config.Name
+        Get-StoreConfig -Name "$Name" -Store $script:Config.Name
     }
 }

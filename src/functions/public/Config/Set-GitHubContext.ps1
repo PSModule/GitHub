@@ -66,7 +66,8 @@
         [string] $Scope
     )
 
-    $storeName = $Script:Config.Name, $HostName, $Name -join '/'
+    $storeName = $Script:Config.Name
+    # $storeName = $Script:Config.Name, $HostName, $Name -join '/'
 
     if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
 
