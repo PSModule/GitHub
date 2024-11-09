@@ -1,4 +1,6 @@
-﻿function Set-GitHubContext {
+﻿#Requires -Modules @{ ModuleName = 'Store'; ModuleVersion = '0.3.1' }
+
+function Set-GitHubContext {
     <#
         .SYNOPSIS
         Short description
