@@ -5,7 +5,7 @@
 
     Context 'Parameter Set: sPAT' {
         It 'Can be called with no parameters' {
-            { Connect-GitHubAccount } | Should -Not -Throw
+            { Connect-GitHubAccount -Token $env:GITHUB_TOKEN } | Should -Not -Throw
         }
     }
 }

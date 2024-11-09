@@ -1,6 +1,6 @@
 ﻿Describe 'GitHub' {
     Context 'Connect-GitHub' {
-        { Connect-GitHub } | Should -Not -Throw
+        { Connect-GitHub -Token $env:GITHUB_TOKEN } | Should -Not -Throw
     }
     Context 'Invoke-GitHubAPI' {
         It 'Invoke-GitHubAPI function exists' {
