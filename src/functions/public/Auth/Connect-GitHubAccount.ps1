@@ -137,6 +137,19 @@
         $ApiBaseUri = "https://api.$HostName"
         $authType = $PSCmdlet.ParameterSetName
 
+        # If running on GitHub Actions and no access token is provided, use the GitHub token.
+        if ($env:GITHUB_ACTIONS -eq 'true') {
+            $tokenNotProvided = [string]::IsNullOrEmpty($Token)
+            $gitHubToken = $env:GH_TOKEN ?? $env:GITHUB_TOKEN
+            $gitHubTokenPresent = -not [string]::IsNullOrEmpty($gitHubToken)
+            Write-Verbose "Token not provided:    [$tokenNotProvided]"
+            Write-Verbose "GitHub token present:  [$gitHubTokenPresent]"
+            if ($tokenNotProvided -and $gitHubTokenPresent) {
+                $authType = 'Token'
+                $Token = $gitHubToken
+            }
+        }
+
         $context = @{
             Name       = 'default'
             ApiBaseUri = $ApiBaseUri
@@ -155,10 +168,10 @@
                     Write-Verbose "Using provided ClientID: [$ClientID]"
                     $authClientID = $ClientID
                 } elseif (-not [string]::IsNullOrEmpty($(Get-GitHubConfig -Name 'AuthClientID'))) {
-                    Write-Verbose "Reusing previously stored ClientID:   [$(Get-GitHubConfig -Name 'AuthClientID')]"
+                    Write-Verbose "Reusing previously stored ClientID: [$(Get-GitHubConfig -Name 'AuthClientID')]"
                     $authClientID = Get-GitHubConfig -Name 'AuthClientID'
                 } else {
-                    Write-Verbose "Using default ClientID:  [$($script:Auth.$Mode.ClientID)]"
+                    Write-Verbose "Using default ClientID: [$($script:Auth.$Mode.ClientID)]"
                     $authClientID = $script:Auth.$Mode.ClientID
                 }
                 if ($Mode -ne (Get-GitHubConfig -Name 'DeviceFlowType' -ErrorAction SilentlyContinue)) {
@@ -272,7 +285,7 @@
                 }
             }
         }
-        Write-Verbose ($context | Format-List | Out-String)
+        Write-Verbose ($context | Format-Table | Out-String)
         Set-GitHubContext @context
         # try {
         #     $username = switch ($context['AuthType']) {
@@ -299,8 +312,9 @@
         # } catch {}
 
         if (-not $Silent) {
+            $name = $(Get-GitHubConfig -Name Name)
             Write-Host '✓ ' -ForegroundColor Green -NoNewline
-            Write-Host "Logged in as $(Get-GitHubConfig -Name Name)!"
+            Write-Host "Logged in as $name!"
         }
     } catch {
         throw $_

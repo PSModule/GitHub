@@ -1,5 +1,5 @@
 ﻿BeforeAll {
-    Connect-GitHub -Token $env:GITHUB_TOKEN
+    Connect-GitHub
 }
 
 Describe 'GitHub' {
