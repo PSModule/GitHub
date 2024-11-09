@@ -238,6 +238,7 @@
                 }
             }
             'PAT' {
+                Write-Debug "UseAccessToken is set to [$UseAccessToken]. Using provided access token..."
                 Write-Verbose 'Logging in using personal access token...'
                 Write-Host '! ' -ForegroundColor DarkYellow -NoNewline
                 Start-Process "https://$HostName/settings/tokens"
