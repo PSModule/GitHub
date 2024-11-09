@@ -18,7 +18,7 @@
         [Parameter(Mandatory)]
         [string] $Name,
 
-        # The id of the context.
+        # The ID of the context.
         [Parameter()]
         [string] $ID,
 
