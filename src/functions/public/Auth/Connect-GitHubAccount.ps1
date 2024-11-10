@@ -294,19 +294,11 @@
         Write-Verbose ($context | Format-Table | Out-String)
         Set-GitHubContext @context
         try {
-            switch ($context['AuthType']) {
-                'PAT' {
-                    $user = Get-GitHubUser
-                    $context['Name'] = $user.login
-                    $context['ID'] = $user.id
-                }
-                'UAT' {
-                    $user = Get-GitHubUser
-                    $context['Name'] = $user.login
-                    $context['ID'] = $user.id
-                }
-                'IAT' {
-                    $context['Name'] = 'installation'
+            switch -Regex ($context['AuthType']) {
+                'PAT|UAT|IAT' {
+                    $viewer = Get-GitHubViewer
+                    $context['Name'] = $viewer.name
+                    $context['ID'] = $viewer.id
                 }
                 'App' {
                     $app = Get-GitHubApp
@@ -315,6 +307,7 @@
                 }
                 default {
                     $context['Name'] = 'unknown'
+                    $context['ID'] = 'unknown'
                 }
             }
             Set-GitHubContext @context
