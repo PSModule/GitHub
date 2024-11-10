@@ -23,15 +23,19 @@ function Set-GitHubConfig {
     param (
         # Set the access token type.
         [Parameter()]
-        [string] $AccessTokenType,
+        [string] $SecretType,
+
+        # The ID of the context.
+        [Parameter()]
+        [string] $ID,
 
         # Set the access token.
         [Parameter()]
-        [securestring] $AccessToken,
+        [securestring] $Secret,
 
         # Set the access token expiration date.
         [Parameter()]
-        [datetime] $AccessTokenExpirationDate,
+        [datetime] $SecretExpirationDate,
 
         # Set the API Base URI.
         [Parameter()]
@@ -77,52 +81,50 @@ function Set-GitHubConfig {
         [Parameter()]
         [string] $Repo,
 
-        # Set the secret vault name.
-        [Parameter()]
-        [string] $SecretVaultName,
-
-        # Set the secret vault type.
-        [Parameter()]
-        [string] $SecretVaultType,
-
         # Set the scope.
         [Parameter()]
         [string] $Scope,
 
         # Set the GitHub username.
         [Parameter()]
-        [string] $UserName
+        [string] $Name
     )
 
-    $prefix = $script:Config.Prefix
+    $storeName = $Script:Config.Name
 
-    $Settings = @{
-        "$prefix`AccessToken"      = $AccessToken
-        AccessTokenExpirationDate  = $AccessTokenExpirationDate
-        AccessTokenType            = $AccessTokenType
-        ApiBaseUri                 = $ApiBaseUri
-        ApiVersion                 = $ApiVersion
-        AuthClientID               = $AuthClientID
-        AuthType                   = $AuthType
-        ClientID                   = $ClientID
-        DeviceFlowType             = $DeviceFlowType
-        HostName                   = $HostName
-        Owner                      = $Owner
-        "$prefix`RefreshToken"     = $RefreshToken
-        RefreshTokenExpirationDate = $RefreshTokenExpirationDate
-        Repo                       = $Repo
-        Scope                      = $Scope
-        SecretVaultName            = $SecretVaultName
-        SecretVaultType            = $SecretVaultType
-        UserName                   = $UserName
-    }
+    if ($PSCmdlet.ShouldProcess('Config', 'Set')) {
 
-    $Settings | Remove-HashtableEntry -NullOrEmptyValues
+        if ($RefreshToken) {
+            Set-Store -Name "$storeName/RefreshToken" -Secret $RefreshToken -Variables @{
+                RefreshTokenExpirationDate = $RefreshTokenExpirationDate
+            }
+        }
 
-    foreach ($key in $Settings.Keys) {
-        if ($PSCmdlet.ShouldProcess("Setting [$key]", "to [$($Settings[$key])]")) {
-            Write-Verbose "Setting [$key] to [$($Settings[$key])]"
-            Set-StoreConfig -Name $key -Value $Settings[$key] -Store $script:Config.Name
+        $variables = @{
+            ApiBaseUri           = $ApiBaseUri
+            ApiVersion           = $ApiVersion
+            AuthClientID         = $AuthClientID
+            AuthType             = $AuthType
+            ClientID             = $ClientID
+            DeviceFlowType       = $DeviceFlowType
+            HostName             = $HostName
+            ID                   = $ID
+            Name                 = $Name
+            Owner                = $Owner
+            Repo                 = $Repo
+            Scope                = $Scope
+            Secret               = $Secret
+            SecretExpirationDate = $SecretExpirationDate
+            SecretType           = $SecretType
+        }
+
+        $variables | Remove-HashtableEntry -NullOrEmptyValues
+
+        foreach ($key in $variables.Keys) {
+            if ($PSCmdlet.ShouldProcess("Setting [$key]", "to [$($variables[$key])]")) {
+                Write-Verbose "Setting [$key] to [$($variables[$key])]"
+                Set-StoreConfig -Name $key -Value $variables[$key] -Store $script:Config.Name
+            }
         }
     }
 }

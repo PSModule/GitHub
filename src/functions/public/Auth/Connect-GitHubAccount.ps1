@@ -292,29 +292,34 @@
         }
         Write-Verbose ($context | Format-Table | Out-String)
         Set-GitHubContext @context
-        # try {
-        #     $username = switch ($context['AuthType']) {
-        #         'PAT' {
-        #             $user = Get-GitHubUser
-        #             $username = $user.login
-        #         }
-        #         'UAT' {
-        #             $user = Get-GitHubUser
-        #             $username = $user.login
-        #         }
-        #         'IAT' {
-        #             'installation'
-        #         }
-        #         'App' {
-        #             $app = Get-GitHubApp
-        #             $app.slug
-        #         }
-        #         default {
-        #             'unknown'
-        #         }
-        #     }
-        #     Set-GithubConfig -Name 'Name' -Value $username
-        # } catch {}
+        try {
+            $username = switch ($context['AuthType']) {
+                'PAT' {
+                    $user = Get-GitHubUser
+                    $username = $user.login
+                }
+                'UAT' {
+                    $user = Get-GitHubUser
+                    $username = $user.login
+                }
+                'IAT' {
+                    'installation'
+                }
+                'App' {
+                    $app = Get-GitHubApp
+                    $app.slug
+                }
+                default {
+                    'unknown'
+                }
+            }
+            $context = Get-GitHubContext
+            $context['Name'] = $username
+            Set-GitHubContext @context
+        } catch {
+            Write-Verbose ($_ | Out-String)
+            Write-Verbose 'Failed to set the user name'
+        }
 
         if (-not $Silent) {
             $name = $(Get-GitHubConfig -Name Name)
