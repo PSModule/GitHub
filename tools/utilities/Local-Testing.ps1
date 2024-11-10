@@ -23,7 +23,7 @@ Clear-Host
 Connect-GitHubAccount
 Connect-GitHubAccount -Owner 'MariusStorhaug' -Repo 'ResourceModules'
 Connect-GitHubAccount -Mode OAuthApp
-Connect-GitHubAccount -AccessToken
+Connect-GitHubAccount -UseAccessToken
 Get-GitHubConfig
 Get-GitHubConfig -Name AccessToken
 Get-GitHubConfig -Name RefreshToken

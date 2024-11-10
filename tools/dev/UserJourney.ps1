@@ -12,7 +12,7 @@ Connect-GitHub -Host 'msx.ghe.com'
 Connect-GitHub -Mode 'OAuthApp' -Scope 'gist read:org repo workflow'
 
 # Connect to GitHub interactively using less desired PAT flow
-Connect-GitHub -AccessToken
+Connect-GitHub -UseAccessToken
 
 # Connect to GitHub programatically (GitHub Actions)
 Connect-GitHub # Looks for the GITHUB_TOKEN variable
