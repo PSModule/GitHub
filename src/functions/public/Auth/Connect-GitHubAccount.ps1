@@ -266,14 +266,14 @@
             'Token' {
                 $secretType = $Token -replace '_[^_]+$'
                 switch -Regex ($secretType) {
-                    '^ghp_|^github_pat_' {
+                    'ghp|github_pat' {
                         $context += @{
                             Secret     = ConvertTo-SecureString -AsPlainText $Token
                             SecretType = $secretType
                         }
                         $context['AuthType'] = 'PAT'
                     }
-                    '^ghs_' {
+                    'ghs' {
                         Write-Verbose 'Logging in using an installation access token...'
                         $context += @{
                             Secret     = ConvertTo-SecureString -AsPlainText $Token
