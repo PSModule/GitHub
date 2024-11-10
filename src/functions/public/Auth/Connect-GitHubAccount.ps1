@@ -29,7 +29,7 @@
         Connects to GitHub using the access token from environment variable, assuming unattended mode.
 
         .EXAMPLE
-        Connect-GitHubAccount -AccessToken
+        Connect-GitHubAccount -UseAccessToken
         ! Enter your personal access token: *************
 
         User gets prompted for the access token and stores it in the secret store.
@@ -218,7 +218,7 @@
                         $context += @{
                             Secret                     = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
                             SecretExpirationDate       = (Get-Date).AddSeconds($tokenResponse.expires_in)
-                            SecretType                 = $tokenResponse.access_token -replace '_.*$', '_*'
+                            SecretType                 = $tokenResponse.access_token -replace '_[^_]+$'
                             AuthClientID               = $authClientID
                             DeviceFlowType             = $Mode
                             RefreshToken               = ConvertTo-SecureString -AsPlainText $tokenResponse.refresh_token
@@ -229,7 +229,7 @@
                     'OAuthApp' {
                         $context += @{
                             Secret         = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
-                            SecretType     = $tokenResponse.access_token -replace '_.*$', '_*'
+                            SecretType     = $tokenResponse.access_token -replace '_[^_]+$'
                             AuthClientID   = $authClientID
                             DeviceFlowType = $Mode
                             Scope          = $tokenResponse.scope
@@ -257,14 +257,14 @@
                 Start-Process "https://$HostName/settings/tokens"
                 $accessTokenValue = Read-Host -Prompt 'Enter your personal access token' -AsSecureString
                 $Token = ConvertFrom-SecureString $accessTokenValue -AsPlainText
-                $secretType = $Token -replace '_.*$', '_*'
+                $secretType = $Token -replace '_[^_]+$'
                 $context += @{
                     Secret     = ConvertTo-SecureString -AsPlainText $Token
                     SecretType = $secretType
                 }
             }
             'Token' {
-                $secretType = $Token -replace '_.*$', '_*'
+                $secretType = $Token -replace '_[^_]+$'
                 switch -Regex ($secretType) {
                     '^ghp_|^github_pat_' {
                         $context += @{
