@@ -28,6 +28,10 @@ function Set-GitHubContext {
         [Parameter(Mandatory)]
         [string] $SecretType,
 
+        # Set the client ID.
+        [Parameter()]
+        [string] $ClientID,
+
         # Set the access token.
         [Parameter(Mandatory)]
         [securestring] $Secret,
