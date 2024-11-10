@@ -282,6 +282,11 @@
                         $context['Name'] = 'system'
                         $context['AuthType'] = 'IAT'
                     }
+                    default {
+                        Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
+                        Write-Host "Unexpected token type: $secretType"
+                        throw "Unexpected token type: $secretType"
+                    }
                 }
             }
         }
