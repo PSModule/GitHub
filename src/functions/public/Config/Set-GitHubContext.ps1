@@ -20,9 +20,13 @@ function Set-GitHubContext {
         [Parameter(Mandatory)]
         [string] $Name,
 
-        # The ID of the context.
+        # The Node ID of the context.
         [Parameter()]
-        [string] $ID,
+        [string] $NodeID,
+
+        # The Database ID of the context.
+        [Parameter()]
+        [string] $DatabaseID,
 
         # Set the access token type.
         [Parameter(Mandatory)]
@@ -103,7 +107,8 @@ function Set-GitHubContext {
             ClientID             = $ClientID             # Client ID for GitHub Apps
             DeviceFlowType       = $DeviceFlowType       # GitHubApp / OAuthApp
             HostName             = $HostName             # github.com / msx.ghe.com / github.local
-            ID                   = $ID                   # User ID / app ID
+            NodeID               = $NodeID               # User ID / app ID (GraphQL Node ID)
+            DatabaseID           = $DatabaseID           # Database ID
             Name                 = $Name                 # Username / app slug
             Owner                = $Owner                # Owner name
             Repo                 = $Repo                 # Repo name
