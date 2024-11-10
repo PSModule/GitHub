@@ -313,9 +313,9 @@
                     'unknown'
                 }
             }
-            Set-GithubConfig -Name 'Name' -Value $username
+            Set-GitHubConfig -Name 'Name' -Value $username
         } catch {
-            Write-Verbose "Failed to set the user name"
+            Write-Verbose 'Failed to set the user name'
         }
 
         if (-not $Silent) {
