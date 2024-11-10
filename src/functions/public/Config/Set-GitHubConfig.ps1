@@ -25,9 +25,13 @@ function Set-GitHubConfig {
         [Parameter()]
         [string] $SecretType,
 
-        # The ID of the context.
+        # The Node ID of the context.
         [Parameter()]
-        [string] $ID,
+        [string] $NodeID,
+
+        # The Database ID of the context.
+        [Parameter()]
+        [string] $DatabaseID,
 
         # Set the access token.
         [Parameter()]
@@ -108,7 +112,8 @@ function Set-GitHubConfig {
             ClientID             = $ClientID
             DeviceFlowType       = $DeviceFlowType
             HostName             = $HostName
-            ID                   = $ID
+            NodeID               = $NodeID
+            DatabaseID           = $DatabaseID
             Name                 = $Name
             Owner                = $Owner
             Repo                 = $Repo

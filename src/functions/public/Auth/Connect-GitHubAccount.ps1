@@ -152,7 +152,7 @@
         }
 
         $context = @{
-            Name       = 'default'
+            Name       = 'tmp'
             ApiBaseUri = $ApiBaseUri
             ApiVersion = $ApiVersion
             HostName   = $HostName
@@ -280,7 +280,6 @@
                             Secret     = ConvertTo-SecureString -AsPlainText $Token
                             SecretType = $secretType
                         }
-                        $context['Name'] = 'system'
                         $context['AuthType'] = 'IAT'
                     }
                     default {
@@ -291,30 +290,24 @@
                 }
             }
         }
-        Write-Verbose ($context | Format-Table | Out-String)
-        Set-GitHubContext @context
+        Set-GitHubContext @context # Needed so we can use the next authenticated functions (API calls).
         try {
-            switch ($context['AuthType']) {
-                'PAT' {
-                    $user = Get-GitHubUser
-                    $context['Name'] = $user.login
-                    $context['ID'] = $user.id
-                }
-                'UAT' {
-                    $user = Get-GitHubUser
-                    $context['Name'] = $user.login
-                    $context['ID'] = $user.id
-                }
-                'IAT' {
-                    $context['Name'] = 'installation'
+            switch -Regex ($context['AuthType']) {
+                'PAT|UAT|IAT' {
+                    $viewer = Get-GitHubViewer
+                    $context['Name'] = $viewer.login
+                    $context['NodeID'] = $viewer.id
+                    $context['DatabaseID'] = $viewer.databaseId
                 }
                 'App' {
                     $app = Get-GitHubApp
                     $context['Name'] = $app.slug
-                    $context['ID'] = $app.id
+                    $context['NodeID'] = $app.node_id
+                    $context['DatabaseID'] = $app.id
                 }
                 default {
                     $context['Name'] = 'unknown'
+                    $context['ID'] = 'unknown'
                 }
             }
             Set-GitHubContext @context
@@ -322,6 +315,8 @@
             Write-Verbose ($_ | Out-String)
             Write-Verbose 'Failed to set the user name'
         }
+
+        Write-Verbose ($context | Format-Table | Out-String)
 
         if (-not $Silent) {
             $name = $(Get-GitHubConfig -Name Name)
