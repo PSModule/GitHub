@@ -297,13 +297,15 @@
             switch -Regex ($context['AuthType']) {
                 'PAT|UAT|IAT' {
                     $viewer = Get-GitHubViewer
-                    $context['Name'] = $viewer.name
-                    $context['ID'] = $viewer.id
+                    $context['Name'] = $viewer.login
+                    $context['NodeID'] = $viewer.id
+                    $context['DatabaseID'] = $viewer.databaseId
                 }
                 'App' {
                     $app = Get-GitHubApp
                     $context['Name'] = $app.slug
-                    $context['ID'] = $app.id
+                    $context['NodeID'] = $app.node_id
+                    $context['DatabaseID'] = $app.id
                 }
                 default {
                     $context['Name'] = 'unknown'
