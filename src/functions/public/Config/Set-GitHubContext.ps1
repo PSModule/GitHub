@@ -100,7 +100,7 @@ function Set-GitHubContext {
             ID                   = $ID                   # User ID / app ID
             HostName             = $HostName             # github.com / msx.ghe.com / github.local
             SecretExpirationDate = $SecretExpirationDate # 2024-01-01-00:00:00
-            SecretType           = $SecretType           # ghu / gho / ghp / github_pat / JWT / ghs /
+            SecretType           = $SecretType           # ghu / gho / ghp / github_pat / PEM / ghs /
             AuthType             = $AuthType             # UAT / PAT / App / IAT
             ApiBaseUri           = $ApiBaseUri           # https://api.github.com
             ApiVersion           = $ApiVersion           # 2022-11-28

@@ -246,7 +246,7 @@
                 Write-Verbose 'Logging in as a GitHub App...'
                 $context += @{
                     Secret     = ConvertTo-SecureString -AsPlainText $PrivateKey
-                    SecretType = 'JWT'
+                    SecretType = 'PEM'
                     ClientID   = $ClientID
                 }
             }

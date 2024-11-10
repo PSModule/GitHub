@@ -92,9 +92,10 @@
                 $Token = (Get-GitHubConfig -Name Secret)
             }
         }
-        'JWT' {
+        'PEM' {
             $ClientID = Get-GithubConfig -Name ClientID
-            $Token = Get-GitHubAppJSONWebToken -ClientId $ClientID -PrivateKey $Token
+            $JWT = Get-GitHubAppJSONWebToken -ClientId $ClientID -PrivateKey $Token
+            $Token = $JWT.Token
         }
     }
 
