@@ -74,7 +74,7 @@
 
         # The secure token used for authentication in the GitHub API. It should be stored as a SecureString to ensure it's kept safe in memory.
         [Parameter()]
-        [SecureString] $AccessToken = (Get-GitHubConfig -Name Secret),
+        [SecureString] $Token = (Get-GitHubConfig -Name Secret),
 
         # The 'Content-Type' header for the API request. The default is 'application/vnd.github+json'.
         [Parameter()]
@@ -84,11 +84,20 @@
         [Parameter()]
         [string] $Version = (Get-GitHubConfig -Name ApiVersion)
     )
-
-    if (Test-GitHubAccessTokenRefreshRequired) {
-        Connect-GitHubAccount -Silent
-        $AccessToken = (Get-GitHubConfig -Name Secret)
+    $secretType = (Get-GitHubConfig -Name SecretType)
+    switch ($secretType) {
+        'ghu' {
+            if (Test-GitHubAccessTokenRefreshRequired) {
+                Connect-GitHubAccount -Silent
+                $Token = (Get-GitHubConfig -Name Secret)
+            }
+        }
+        'JWT' {
+            $ClientID = Get-GithubConfig -Name ClientID
+            $Token = Get-GitHubAppJSONWebToken -ClientId $ClientID -PrivateKey $Token
+        }
     }
+
 
     $headers = @{
         Accept                 = $Accept
@@ -106,7 +115,7 @@
         Method                  = $Method
         Headers                 = $Headers
         Authentication          = 'Bearer'
-        Token                   = $AccessToken
+        Token                   = $Token
         ContentType             = $ContentType
         FollowRelLink           = $FollowRelLink
         StatusCodeVariable      = 'APICallStatusCode'

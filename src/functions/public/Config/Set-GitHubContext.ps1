@@ -96,20 +96,20 @@ function Set-GitHubContext {
             }
         }
         $variables = @{
-            Name                 = $Name
-            ID                   = $ID
-            HostName             = $HostName
-            SecretExpirationDate = $SecretExpirationDate
-            SecretType           = $SecretType
-            ApiBaseUri           = $ApiBaseUri
-            ApiVersion           = $ApiVersion
-            AuthClientID         = $AuthClientID
-            AuthType             = $AuthType
-            ClientID             = $ClientID
-            DeviceFlowType       = $DeviceFlowType
-            Owner                = $Owner
-            Repo                 = $Repo
-            Scope                = $Scope
+            Name                 = $Name                 # Username / app slug
+            ID                   = $ID                   # User ID / app ID
+            HostName             = $HostName             # github.com / msx.ghe.com / github.local
+            SecretExpirationDate = $SecretExpirationDate # 2024-01-01-00:00:00
+            SecretType           = $SecretType           # ghu / gho / ghp / github_pat / JWT / ghs /
+            AuthType             = $AuthType             # UAT / PAT / App / IAT
+            ApiBaseUri           = $ApiBaseUri           # https://api.github.com
+            ApiVersion           = $ApiVersion           # 2022-11-28
+            AuthClientID         = $AuthClientID         # Client ID for UAT
+            ClientID             = $ClientID             # Client ID for GitHub Apps
+            DeviceFlowType       = $DeviceFlowType       # GitHubApp / OAuthApp
+            Owner                = $Owner                # Owner name
+            Repo                 = $Repo                 # Repo name
+            Scope                = $Scope                # 'gist read:org repo workflow'
         }
 
         $variables | Remove-HashtableEntry -NullOrEmptyValues
