@@ -152,7 +152,7 @@
         }
 
         $context = @{
-            Name       = 'default'
+            Name       = 'tmp'
             ApiBaseUri = $ApiBaseUri
             ApiVersion = $ApiVersion
             HostName   = $HostName
@@ -280,7 +280,6 @@
                             Secret     = ConvertTo-SecureString -AsPlainText $Token
                             SecretType = $secretType
                         }
-                        $context['Name'] = 'system'
                         $context['AuthType'] = 'IAT'
                     }
                     default {
@@ -291,8 +290,7 @@
                 }
             }
         }
-        Write-Verbose ($context | Format-Table | Out-String)
-        Set-GitHubContext @context
+        Set-GitHubContext @context # Needed so we can use the next authenticated functions (API calls).
         try {
             switch -Regex ($context['AuthType']) {
                 'PAT|UAT|IAT' {
@@ -317,6 +315,8 @@
             Write-Verbose ($_ | Out-String)
             Write-Verbose 'Failed to set the user name'
         }
+
+        Write-Verbose ($context | Format-Table | Out-String)
 
         if (-not $Silent) {
             $name = $(Get-GitHubConfig -Name Name)
