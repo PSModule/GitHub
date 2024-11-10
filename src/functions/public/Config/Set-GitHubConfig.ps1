@@ -91,38 +91,32 @@ function Set-GitHubConfig {
 
         # Set the GitHub username.
         [Parameter()]
-        [string] $UserName
+        [string] $Name
     )
 
-    $prefix = $script:Config.Prefix
-
-    $Settings = @{
-        "$prefix`AccessToken"      = $AccessToken
-        AccessTokenExpirationDate  = $AccessTokenExpirationDate
-        AccessTokenType            = $AccessTokenType
-        ApiBaseUri                 = $ApiBaseUri
-        ApiVersion                 = $ApiVersion
-        AuthClientID               = $AuthClientID
-        AuthType                   = $AuthType
-        ClientID                   = $ClientID
-        DeviceFlowType             = $DeviceFlowType
-        HostName                   = $HostName
-        Owner                      = $Owner
-        "$prefix`RefreshToken"     = $RefreshToken
-        RefreshTokenExpirationDate = $RefreshTokenExpirationDate
-        Repo                       = $Repo
-        Scope                      = $Scope
-        SecretVaultName            = $SecretVaultName
-        SecretVaultType            = $SecretVaultType
-        UserName                   = $UserName
+    $variables = @{
+        AccessTokenType = $AccessTokenType
+        ApiBaseUri      = $ApiBaseUri
+        ApiVersion      = $ApiVersion
+        AuthClientID    = $AuthClientID
+        AuthType        = $AuthType
+        ClientID        = $ClientID
+        DeviceFlowType  = $DeviceFlowType
+        HostName        = $HostName
+        Owner           = $Owner
+        Repo            = $Repo
+        Scope           = $Scope
+        SecretVaultName = $SecretVaultName
+        SecretVaultType = $SecretVaultType
+        Name            = $Name
     }
 
-    $Settings | Remove-HashtableEntry -NullOrEmptyValues
+    $variables | Remove-HashtableEntry -NullOrEmptyValues
 
-    foreach ($key in $Settings.Keys) {
-        if ($PSCmdlet.ShouldProcess("Setting [$key]", "to [$($Settings[$key])]")) {
-            Write-Verbose "Setting [$key] to [$($Settings[$key])]"
-            Set-StoreConfig -Name $key -Value $Settings[$key] -Store $script:Config.Name
+    foreach ($key in $variables.Keys) {
+        if ($PSCmdlet.ShouldProcess("Setting [$key]", "to [$($variables[$key])]")) {
+            Write-Verbose "Setting [$key] to [$($variables[$key])]"
+            Set-StoreConfig -Name $key -Value $variables[$key] -Store $script:Config.Name
         }
     }
 }
