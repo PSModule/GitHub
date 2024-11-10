@@ -293,28 +293,29 @@
         Write-Verbose ($context | Format-Table | Out-String)
         Set-GitHubContext @context
         try {
-            $username = switch ($context['AuthType']) {
+            switch ($context['AuthType']) {
                 'PAT' {
                     $user = Get-GitHubUser
-                    $username = $user.login
+                    $context['Name'] = $user.login
+                    $context['ID'] = $user.id
                 }
                 'UAT' {
                     $user = Get-GitHubUser
-                    $username = $user.login
+                    $context['Name'] = $user.login
+                    $context['ID'] = $user.id
                 }
                 'IAT' {
-                    'installation'
+                    $context['Name'] = 'installation'
                 }
                 'App' {
                     $app = Get-GitHubApp
-                    $app.slug
+                    $context['Name'] = $app.slug
+                    $context['ID'] = $app.id
                 }
                 default {
-                    'unknown'
+                    $context['Name'] = 'unknown'
                 }
             }
-            $context = Get-GitHubContext
-            $context['Name'] = $username
             Set-GitHubContext @context
         } catch {
             Write-Verbose ($_ | Out-String)
