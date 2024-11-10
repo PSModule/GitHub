@@ -259,7 +259,7 @@
                 $Token = ConvertFrom-SecureString $accessTokenValue -AsPlainText
                 $secretType = $Token -replace '_.*$', '_*'
                 $context += @{
-                    Secret     = $Token
+                    Secret     = ConvertTo-SecureString -AsPlainText $Token
                     SecretType = $secretType
                 }
             }
@@ -268,7 +268,7 @@
                 switch -Regex ($secretType) {
                     '^ghp_|^github_pat_' {
                         $context += @{
-                            Secret     = $Token
+                            Secret     = ConvertTo-SecureString -AsPlainText $Token
                             SecretType = $secretType
                         }
                         $context['AuthType'] = 'PAT'
