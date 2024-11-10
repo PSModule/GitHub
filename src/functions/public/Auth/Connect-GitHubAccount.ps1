@@ -136,6 +136,7 @@
         $HostName = $HostName -replace '^https?://'
         $ApiBaseUri = "https://api.$HostName"
         $authType = $PSCmdlet.ParameterSetName
+        $tokenPrefixPattern = '(?<=^(ghu|gho|ghs|github_pat|ghp)).*'
 
         # If running on GitHub Actions and no access token is provided, use the GitHub token.
         if ($env:GITHUB_ACTIONS -eq 'true') {
@@ -218,7 +219,7 @@
                         $context += @{
                             Secret                     = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
                             SecretExpirationDate       = (Get-Date).AddSeconds($tokenResponse.expires_in)
-                            SecretType                 = $tokenResponse.access_token -replace '_[^_]+$'
+                            SecretType                 = $tokenResponse.access_token -replace $tokenPrefixPattern
                             AuthClientID               = $authClientID
                             DeviceFlowType             = $Mode
                             RefreshToken               = ConvertTo-SecureString -AsPlainText $tokenResponse.refresh_token
@@ -229,7 +230,7 @@
                     'OAuthApp' {
                         $context += @{
                             Secret         = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
-                            SecretType     = $tokenResponse.access_token -replace '_[^_]+$'
+                            SecretType     = $tokenResponse.access_token -replace $tokenPrefixPattern
                             AuthClientID   = $authClientID
                             DeviceFlowType = $Mode
                             Scope          = $tokenResponse.scope
@@ -257,14 +258,14 @@
                 Start-Process "https://$HostName/settings/tokens"
                 $accessTokenValue = Read-Host -Prompt 'Enter your personal access token' -AsSecureString
                 $Token = ConvertFrom-SecureString $accessTokenValue -AsPlainText
-                $secretType = $Token -replace '_[^_]+$'
+                $secretType = $Token -replace $tokenPrefixPattern
                 $context += @{
                     Secret     = ConvertTo-SecureString -AsPlainText $Token
                     SecretType = $secretType
                 }
             }
             'Token' {
-                $secretType = $Token -replace '_[^_]+$'
+                $secretType = $Token -replace $tokenPrefixPattern
                 switch -Regex ($secretType) {
                     'ghp|github_pat' {
                         $context += @{
