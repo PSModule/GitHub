@@ -28,6 +28,14 @@ Describe 'GitHub' {
             { Get-GitHubConfig } | Should -Not -Throw
         }
     }
+    Context 'Get-GitHubViewer' {
+        It 'Get-GitHubViewer function exists' {
+            Get-Command Get-GitHubViewer | Should -Not -BeNullOrEmpty
+        }
+        It 'Get-GiTubViewer can be called' {
+            Get-GitHubViewer | Should -Not -BeNullOrEmpty
+        }
+    }
 }
 
 Describe 'Commands' {
