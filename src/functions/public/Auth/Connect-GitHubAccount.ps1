@@ -313,8 +313,11 @@
                     'unknown'
                 }
             }
-            Set-GitHubConfig -Name 'Name' -Value $username
+            $context = Get-GitHubContext
+            $context['Name'] = $username
+            Set-GitHubContext @context
         } catch {
+            Write-Verbose ($_ | Out-String)
             Write-Verbose 'Failed to set the user name'
         }
 
