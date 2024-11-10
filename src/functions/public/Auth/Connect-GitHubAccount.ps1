@@ -78,7 +78,7 @@
         )]
         [switch] $UseAccessToken,
 
-        # An access token to use for authentication.
+        # An access token to use for authentication. Can be both a string or a SecureString.
         # Supports both personal access tokens (PAT) and GitHub App installation access tokens (IAT).
         # Example: 'ghp_1234567890abcdef'
         # Example: 'ghs_1234567890abcdef'
@@ -86,7 +86,7 @@
             Mandatory,
             ParameterSetName = 'Token'
         )]
-        [string] $Token,
+        [object] $Token,
 
         # The client ID for the GitHub App to use for authentication.
         [Parameter(ParameterSetName = 'UAT')]
@@ -133,6 +133,10 @@
         [switch] $Silent
     )
     try {
+        if ($Token -is [System.Security.SecureString]) {
+            $Token = ConvertFrom-SecureString $Token -AsPlainText
+        }
+
         $HostName = $HostName -replace '^https?://'
         $ApiBaseUri = "https://api.$HostName"
         $authType = $PSCmdlet.ParameterSetName
