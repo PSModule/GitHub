@@ -27,6 +27,12 @@ function Get-GitHubAppJSONWebToken {
         '',
         Justification = 'Contains a long link.'
     )]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSAvoidUsingConvertToSecureStringWithPlainText',
+        '',
+        Justification = 'Generated JWT is a plaintext string.'
+    )]
+
     [CmdletBinding(DefaultParameterSetName = 'PrivateKey')]
     [Alias('Get-GitHubAppJWT')]
     [OutputType([string])]
@@ -57,7 +63,7 @@ function Get-GitHubAppJSONWebToken {
             Mandatory,
             ParameterSetName = 'PrivateKey'
         )]
-        [string] $PrivateKey
+        [object] $PrivateKey
     )
 
     if ($PrivateKeyFilePath) {
@@ -66,6 +72,10 @@ function Get-GitHubAppJSONWebToken {
         }
 
         $PrivateKey = Get-Content -Path $PrivateKeyFilePath -Raw
+    }
+
+    if ($PrivateKey -is [securestring]) {
+        $PrivateKey = $PrivateKey | ConvertFrom-SecureString -AsPlainText
     }
 
     $header = [Convert]::ToBase64String(
@@ -105,9 +115,13 @@ function Get-GitHubAppJSONWebToken {
     ).TrimEnd('=').Replace('+', '-').Replace('/', '_')
     $jwt = "$header.$payload.$signature"
     [pscustomobject]@{
-        Token     = $jwt
+        Token     = ConvertTo-SecureString -String $jwt -AsPlainText
         IssuedAt  = $iat
         ExpiresAt = $exp
         Issuer    = $ClientId
     }
+    Remove-Variable -Name jwt -ErrorAction SilentlyContinue
+    Remove-Variable -Name rsa -ErrorAction SilentlyContinue
+    Remove-Variable -Name signature -ErrorAction SilentlyContinue
+    [System.GC]::Collect()
 }
