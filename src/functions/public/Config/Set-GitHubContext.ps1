@@ -89,8 +89,84 @@ function Set-GitHubContext {
         [string] $Scope
     )
 
-    $storeName = $Script:Config.Name
-    # $storeName = $Script:Config.Name, $HostName, $Name -join '/'
+    # Set a temporary context.
+    $variables = @{
+        ApiBaseUri           = $ApiBaseUri           # https://api.github.com
+        ApiVersion           = $ApiVersion           # 2022-11-28
+        AuthClientID         = $AuthClientID         # Client ID for UAT
+        AuthType             = $AuthType             # UAT / PAT / App / IAT
+        ClientID             = $ClientID             # Client ID for GitHub Apps
+        DeviceFlowType       = $DeviceFlowType       # GitHubApp / OAuthApp
+        HostName             = $HostName             # github.com / msx.ghe.com / github.local
+        NodeID               = $NodeID               # User ID / app ID (GraphQL Node ID)
+        DatabaseID           = $DatabaseID           # Database ID
+        Name                 = $Name                 # Username / app slug
+        Owner                = $Owner                # Owner name
+        Repo                 = $Repo                 # Repo name
+        Scope                = $Scope                # 'gist read:org repo workflow'
+        SecretExpirationDate = $SecretExpirationDate # 2024-01-01-00:00:00
+        SecretType           = $SecretType           # ghu / gho / ghp / github_pat / PEM / ghs /
+    }
+
+    $variables | Remove-HashtableEntry -NullOrEmptyValues
+
+    Set-Store -Name "$($Script:Config.Name)/tempContext" -Secret $Secret -Variables $variables
+
+    # Run functions to get info on the temporary context.
+    try {
+        switch -Regex ($variables['AuthType']) {
+            'PAT|UAT|IAT' {
+                $viewer = Get-GitHubViewer -Context 'tempContext'
+                $variables['Name'] = $viewer.login
+                $variables['NodeID'] = $viewer.id
+                $variables['DatabaseID'] = $viewer.databaseId
+            }
+            'App' {
+                $app = Get-GitHubApp -Context 'tempContext'
+                $variables['Name'] = $app.slug
+                $variables['NodeID'] = $app.node_id
+                $variables['DatabaseID'] = $app.id
+            }
+            default {
+                $variables['Name'] = 'unknown'
+                $variables['ID'] = 'unknown'
+            }
+        }
+    } catch {
+        Write-Error 'Failed to get info on the context.'
+        throw ($_ | Out-String)
+    }
+
+    # Set the context to named context.
+    Set-Store -Name "$($Script:Config.Name)/$HostName/$Name" -Secret $Secret -Variables $variables
+
+
+    # Remove the temporary context.
+    Remove-Store -Name "$($Script:Config.Name)/tempContext"
+
+    # IF FIRST, set the context to the default context.
+    # IF DEFAULT is defined, set the context to the default context.
+
+
+
+
+
+
+
+
+
+    Write-Verbose ($context | Format-Table | Out-String)
+
+
+
+
+
+
+
+
+
+
+    $storeName = "$($Script:Config.Name)/$NodeID"
 
     if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
 

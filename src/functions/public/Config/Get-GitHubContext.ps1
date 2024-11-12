@@ -15,7 +15,11 @@ function Get-GitHubContext {
     #>
     [OutputType([object])]
     [CmdletBinding()]
-    param ()
+    param (
+        # The name of the context.
+        [Parameter(Mandatory)]
+        [string] $Name
+    )
 
     Get-Store -Name $script:Config.Name
 }
