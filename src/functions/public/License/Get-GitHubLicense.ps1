@@ -1,4 +1,4 @@
-#Requires -Modules DynamicParams
+#Requires -Modules @{ ModuleName = 'DynamicParams'; ModuleVersion = '1.1.8' }
 
 filter Get-GitHubLicense {
     <#
