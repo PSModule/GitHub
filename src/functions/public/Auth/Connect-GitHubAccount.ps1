@@ -294,36 +294,10 @@
                 }
             }
         }
-        Set-GitHubContext @context # Needed so we can use the next authenticated functions (API calls).
-        try {
-            switch -Regex ($context['AuthType']) {
-                'PAT|UAT|IAT' {
-                    $viewer = Get-GitHubViewer
-                    $context['Name'] = $viewer.login
-                    $context['NodeID'] = $viewer.id
-                    $context['DatabaseID'] = $viewer.databaseId
-                }
-                'App' {
-                    $app = Get-GitHubApp
-                    $context['Name'] = $app.slug
-                    $context['NodeID'] = $app.node_id
-                    $context['DatabaseID'] = $app.id
-                }
-                default {
-                    $context['Name'] = 'unknown'
-                    $context['ID'] = 'unknown'
-                }
-            }
-            Set-GitHubContext @context
-        } catch {
-            Write-Verbose ($_ | Out-String)
-            Write-Verbose 'Failed to set the user name'
-        }
-
-        Write-Verbose ($context | Format-Table | Out-String)
+        $context = Set-GitHubContext @context
 
         if (-not $Silent) {
-            $name = $(Get-GitHubConfig -Name Name)
+            $name = $context.Name
             Write-Host '✓ ' -ForegroundColor Green -NoNewline
             Write-Host "Logged in as $name!"
         }
