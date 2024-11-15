@@ -12,8 +12,7 @@ if ($env:GITHUB_ACTIONS -eq 'true') {
 }
 
 ### This is the context for this module
-$contextParams = @{
+Set-Context @{
     Name           = $script:Config.Name
     DefaultContext = 'null'
 }
-Set-Context @contextParams
