@@ -11,9 +11,8 @@ function Set-GitHubConfig {
         .EXAMPLE
         Set-GitHubConfig -Name DefaultUser -Value 'Octocat'
 
-        Sets the DefaultUser item in the GitHub configuration to 'Octocat'.
+        Sets the value of DefaultUser to 'Octocat' in the GitHub module configuration.
     #>
-    [Alias('Set-GHConfig')]
     [CmdletBinding(SupportsShouldProcess)]
     param (
         # Set the access token type.

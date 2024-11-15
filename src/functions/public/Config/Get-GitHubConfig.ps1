@@ -11,7 +11,7 @@ function Get-GitHubConfig {
         .EXAMPLE
         Get-GitHubConfig -Name DefaultUser
 
-        Get the current GitHub configuration for the DefaultUser.
+        Get the DefaultUser value from the GitHub module configuration.
     #>
     [OutputType([void])]
     [CmdletBinding()]
