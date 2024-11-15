@@ -27,8 +27,10 @@
     [CmdletBinding()]
     param ()
 
-    Remove-Store -Name $script:Config.Name
+    $defaultContext = Get-ContextSetting -Name 'DefaultContext' -Context $script:Config.Name
+    Remove-Context -Name "$($script:Config.Name)/$defaultContext"
+    Set-ContextSetting -Name 'DefaultContext' -Value '' -Context $script:Config.Name
 
     Write-Host '✓ ' -ForegroundColor Green -NoNewline
-    Write-Host 'Logged out of GitHub!'
+    Write-Host "Logged out of GitHub! [$defaultContext]"
 }

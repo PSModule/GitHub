@@ -32,7 +32,7 @@
         [Parameter(
             ParameterSetName = 'ApiEndpoint'
         )]
-        [string] $ApiBaseUri = (Get-GitHubConfig -Name ApiBaseUri),
+        [string] $ApiBaseUri,
 
         # The specific endpoint for the API call, e.g., '/repos/user/repo/pulls'.
         [Parameter(
@@ -74,7 +74,7 @@
 
         # The secure token used for authentication in the GitHub API. It should be stored as a SecureString to ensure it's kept safe in memory.
         [Parameter()]
-        [SecureString] $Token = (Get-GitHubConfig -Name Secret),
+        [SecureString] $Token,
 
         # The 'Content-Type' header for the API request. The default is 'application/vnd.github+json'.
         [Parameter()]
@@ -82,18 +82,31 @@
 
         # The GitHub API version to be used. By default, it pulls from a configuration script variable.
         [Parameter()]
-        [string] $Version = (Get-GitHubConfig -Name ApiVersion)
+        [string] $Version,
+
+        # The context to use for the API call. This is used to retrieve the necessary configuration settings.
+        [Parameter()]
+        [string] $Context = 'DefaultContext'
     )
-    $secretType = (Get-GitHubConfig -Name SecretType)
-    switch ($secretType) {
+
+
+    $ContextName = Get-ContextSetting -Name 'DefaultContext' -Context $script:Config.Name -AsPlainText
+    $contextObject = Get-GitHubContext -Name $ContextName
+
+    $ApiBaseUri = (Get-GitHubConfig -Name 'ApiBaseUri' -Context $Context)
+    $Token = (Get-GitHubConfig -Name 'Token' -Context $Context)
+    $Version = (Get-GitHubConfig -Name 'ApiVersion' -Context $Context)
+
+    $TokenType = (Get-GitHubConfig -Name 'TokenType' -Context $Context)
+    switch ($tokenType) {
         'ghu' {
             if (Test-GitHubAccessTokenRefreshRequired) {
                 Connect-GitHubAccount -Silent
-                $Token = (Get-GitHubConfig -Name Secret)
+                $Token = (Get-GitHubConfig -Name 'Token' -Context $Context)
             }
         }
         'PEM' {
-            $ClientID = Get-GithubConfig -Name ClientID
+            $ClientID = Get-GithubConfig -Name 'ClientID' -Context $Context
             $JWT = Get-GitHubAppJSONWebToken -ClientId $ClientID -PrivateKey $Token
             $Token = $JWT.Token
         }
@@ -146,7 +159,7 @@
     }
 
     try {
-        Write-Verbose "Calling GitHub API with the following parameters:"
+        Write-Verbose 'Calling GitHub API with the following parameters:'
         Write-Verbose ($APICall | ConvertFrom-HashTable | Format-List | Out-String)
         Invoke-RestMethod @APICall | ForEach-Object {
             $statusCode = $APICallStatusCode | ConvertTo-Json -Depth 100 | ConvertFrom-Json

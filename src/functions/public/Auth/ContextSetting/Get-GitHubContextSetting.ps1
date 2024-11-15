@@ -3,20 +3,22 @@
 function Get-GitHubConfig {
     <#
         .SYNOPSIS
-        Get a GitHub module configuration.
+        Get a module configuration value.
 
         .DESCRIPTION
-        Get a GitHub module configuration.
+        Get a named configuration value from the GitHub config.
 
         .EXAMPLE
         Get-GitHubConfig -Name DefaultUser
 
         Get the current GitHub configuration for the DefaultUser.
     #>
-    [OutputType([void])]
+    [Alias('Get-GHConfig')]
+    [Alias('GGHC')]
+    [OutputType([object])]
     [CmdletBinding()]
     param (
-        # The name of the configuration to get.
+        # Choose a configuration name to get.
         [Parameter()]
         [string] $Name
     )

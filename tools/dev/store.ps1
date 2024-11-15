@@ -1,19 +1,19 @@
-﻿Set-Store -Name 'PSModule.Store' -Secret 'qwe' -Metadata @{
+﻿Set-Context -Name 'PSModule.Store' -Secret 'qwe' -Metadata @{
     SecretVaultName = 'SecretStore'
     SecretVaultType = 'Microsoft.PowerShell.SecretStore'
 }
 
-Set-StoreConfig -Name SecretVaultName -Value $null -Store 'PSModule.Store'
+Set-ContextSetting -Name SecretVaultName -Value $null -Context 'PSModule.Store'
 
-Get-StoreConfig -Name SecretVaultName -Store 'PSModule.Store'
+Get-ContextSetting -Name SecretVaultName -Context 'PSModule.Store'
 
-Get-Store -Name 'PSModule.Store'
+Get-Context -Name 'PSModule.Store'
 
 Set-Secret -Name 'PSModule.GitHub' -Secret 'qwe' -Metadata @{
     defaultContext = 'github.com/MariusStorhaug'
 }
 
-Get-Store -Name 'PSModule.GitHub' -AsPlainText
+Get-Context -Name 'PSModule.GitHub' -AsPlainText
 
 Set-Secret -Name 'GitHubPowerShell/github.com/MariusStorhaug' -Secret 'qwe' -Metadata @{
     Username       = 'MariusStorhaug'
