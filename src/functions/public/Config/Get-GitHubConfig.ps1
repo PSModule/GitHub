@@ -22,7 +22,7 @@ function Get-GitHubConfig {
     )
 
     if (-not $Name) {
-        Get-Context -Name $script:Config.Name -AsPlainText
+        return Get-Context -Name $script:Config.Name -AsPlainText
     }
 
     Get-ContextSetting -Name $Name -Context $script:Config.Name -AsPlainText

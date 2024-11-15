@@ -9,12 +9,12 @@ function Set-GitHubContextSetting {
         Set the GitHub configuration. Specific scopes can be set by using the parameters.
 
         .EXAMPLE
-        Set-GitHubConfig -APIBaseURI 'https://api.github.com" -APIVersion '2022-11-28'
+        Set-GitHubContextSetting -APIBaseURI 'https://api.github.com" -APIVersion '2022-11-28'
 
         Sets the App.API scope of the GitHub configuration.
 
         .EXAMPLE
-        Set-GitHubConfig -Name "MyFavouriteRepo" -Value 'https://github.com/PSModule/GitHub'
+        Set-GitHubContextSetting -Name "MyFavouriteRepo" -Value 'https://github.com/PSModule/GitHub'
 
         Sets a item called 'MyFavouriteRepo' in the GitHub configuration.
     #>

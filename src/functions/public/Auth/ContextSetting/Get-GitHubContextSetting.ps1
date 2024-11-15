@@ -1,6 +1,6 @@
 #Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '2.0.0' }
 
-function Get-GitHubConfig {
+function Get-GitHubContextSetting {
     <#
         .SYNOPSIS
         Get a module configuration value.
@@ -9,12 +9,10 @@ function Get-GitHubConfig {
         Get a named configuration value from the GitHub config.
 
         .EXAMPLE
-        Get-GitHubConfig -Name DefaultUser
+        Get-GitHubContextSetting -Name DefaultUser
 
         Get the current GitHub configuration for the DefaultUser.
     #>
-    [Alias('Get-GHConfig')]
-    [Alias('GGHC')]
     [OutputType([object])]
     [CmdletBinding()]
     param (
