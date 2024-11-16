@@ -1,3 +1,4 @@
 ﻿$script:Config = @{
-    Name = 'PSModule.GitHub' # $script:Config.Name
+    Name           = 'PSModule.GitHub' # $script:Config.Name
+    DefaultContext = 'null'
 }

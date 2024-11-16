@@ -96,7 +96,7 @@ Get-GitHubRepository -Context 'msx.ghe.com/MariusStorhaug'
 
 Connect-GitHub -ClientID '<client_id>' -PrivateKey '<private_key>'
 Get-GitHubOrganization
-foreach (org) {
-    Connect-GitHub -Token ***********
-    Get-GitHubRepository
-}
+# foreach (org) {
+#     Connect-GitHub -Token ***********
+#     Get-GitHubRepository
+# }

@@ -35,10 +35,10 @@ function Get-GitHubContext {
         return Get-Context -Name "$($script:Config.Name)/*" -AsPlainText
     }
 
-    if (-not $Name) {
-        $defaultContext = Get-ContextSetting -Name 'DefaultContext' -
-        return Get-Context -Name $script:Config.Name
+    if ($Name) {
+        return Get-Context -Name "$($script:Config.Name)/$Name" -AsPlainText
     }
 
-    Get-Context -Name $script:Config.Name
+    $defaultContext = Get-ContextSetting -Name 'DefaultContext' -Context $script:Config.Name -AsPlainText
+    Get-Context -Name "$($script:Config.Name)/$defaultContext"
 }
