@@ -82,7 +82,7 @@
 
         # The GitHub API version to be used. By default, it pulls from a configuration script variable.
         [Parameter()]
-        [string] $Version,
+        [string] $ApiVersion,
 
         # The context to use for the API call. This is used to retrieve the necessary configuration settings.
         [Parameter()]
@@ -107,12 +107,12 @@
     }
     Write-Verbose "ApiBaseUri: $ApiBaseUri"
 
-    if ([string]::IsNullOrEmpty($Version)) {
+    if ([string]::IsNullOrEmpty($ApiVersion)) {
         Write-Verbose 'Using default API version from context.'
-        Write-Verbose $($contextObj['Version'])
-        $Version = ConvertFrom-SecureString -SecureString $contextObj['Version'] -AsPlainText
+        Write-Verbose $($contextObj['ApiVersion'])
+        $ApiVersion = ConvertFrom-SecureString -SecureString $contextObj['ApiVersion'] -AsPlainText
     }
-    Write-Verbose "Version:    $Version"
+    Write-Verbose "ApiVersion: $ApiVersion"
 
     if ([string]::IsNullOrEmpty($TokenType)) {
         Write-Verbose 'Using default token type from context.'
@@ -145,7 +145,7 @@
 
     $headers = @{
         Accept                 = $Accept
-        'X-GitHub-Api-Version' = $Version
+        'X-GitHub-Api-Version' = $ApiVersion
     }
 
     Remove-HashtableEntry -Hashtable $headers -NullOrEmptyValues
