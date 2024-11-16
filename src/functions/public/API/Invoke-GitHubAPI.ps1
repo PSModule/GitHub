@@ -94,18 +94,38 @@
         Write-Verbose " - $($_.Key): $($_.Value)"
     }
 
-    $context = Get-GitHubContext -Name $Context
-    if (-not $context) {
+    $contextObj = Get-GitHubContext -Name $Context
+    if (-not $contextObj) {
         throw 'Log in using Connect-GitHub before running this command.'
     }
 
-    $ApiBaseUri = $ApiBaseUri ?? ($context['ApiBaseUri'] | ConvertFrom-SecureString -AsPlainText)
+    $ApiBaseUri = if ([string]::IsNullOrEmpty($ApiBaseUri)) {
+        $contextObj['ApiBaseUri'] | ConvertFrom-SecureString -AsPlainText
+    } else {
+        $ApiBaseUri
+    }
     Write-Verbose "ApiBaseUri: $ApiBaseUri"
-    $Version = $Version ?? ($context['ApiVersion'] | ConvertFrom-SecureString -AsPlainText)
+
+    $Version = if ([string]::IsNullOrEmpty($Version)) {
+        $contextObj['Version'] | ConvertFrom-SecureString -AsPlainText
+    } else {
+        $Version
+    }
     Write-Verbose "Version:    $Version"
-    $TokenType = $context['TokenType'] | ConvertFrom-SecureString -AsPlainText
+
+    $TokenType = if ([string]::IsNullOrEmpty($TokenType)) {
+        $contextObj['TokenType'] | ConvertFrom-SecureString -AsPlainText
+    } else {
+        $TokenType
+    }
     Write-Verbose "TokenType:  $TokenType"
-    $Token = $Token ?? $context['Token']
+
+    $Token = if ([string]::IsNullOrEmpty($Token)) {
+        $contextObj['Token']
+    } else {
+        $Token
+    }
+    Write-Verbose "Token:     $Token"
 
     switch ($tokenType) {
         'ghu' {
