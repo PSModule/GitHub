@@ -150,6 +150,8 @@ function Set-GitHubContext {
         Set-Context $context
         Remove-Context -Name $Name
     }
-    Write-Verbose ($(Get-Context -AsPlainText).Name)
+    Get-Context -AsPlainText | ForEach-Object {
+        Write-Verbose $_.Name
+    }
     Get-Context -Name $newName -AsPlainText
 }
