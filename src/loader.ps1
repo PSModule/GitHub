@@ -12,10 +12,10 @@ if ($env:GITHUB_ACTIONS -eq 'true') {
 
 ### This is the context for this module
 # Get current module context
-$context = Get-Context -Name $script:Config.Name -AsPlainText
-
-# Add values from the variables, if the values are not present in the context
-$context['Name'] = $context.Name ?? $script:Config.Name
-
-# Set the context using the values from the variables
-Set-Context @context
+$context = (Get-Context -Name $script:Config.Name -AsPlainText)
+if (-not $context) {
+    Write-Verbose 'No context found, creating a new context...'
+    Set-Context @{
+        Name = $script:Config.Name
+    }
+}
