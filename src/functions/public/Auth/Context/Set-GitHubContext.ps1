@@ -1,4 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '2.0.1' }
+﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '2.0.3' }
 
 function Set-GitHubContext {
     <#
@@ -118,7 +118,7 @@ function Set-GitHubContext {
 
     # Run functions to get info on the temporary context.
     try {
-        Write-Verbose "Getting info on the context."
+        Write-Verbose 'Getting info on the context.'
         switch -Regex ($context['AuthType']) {
             'PAT|UAT|IAT' {
                 $viewer = Get-GitHubViewer -Context $tempContextName
