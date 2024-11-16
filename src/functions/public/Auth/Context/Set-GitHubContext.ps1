@@ -150,5 +150,6 @@ function Set-GitHubContext {
         Set-Context $context
         Remove-Context -Name $Name
     }
+    Write-Verbose (Get-SecretInfo | Out-String)
     Get-Context -Name $newName -AsPlainText
 }
