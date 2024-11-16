@@ -148,6 +148,7 @@ function Set-GitHubContext {
         Set-Context $context
         Write-Verbose (Get-Context -AsPlainText | Out-String)
         Remove-Context -Name "$($script:Config.Name)/$tempContextName"
+        Write-Verbose (Get-Context -AsPlainText | Out-String)
     }
     Get-Context -Name $context['Name'] -AsPlainText
 }
