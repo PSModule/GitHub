@@ -118,6 +118,7 @@ function Set-GitHubContext {
 
     # Run functions to get info on the temporary context.
     try {
+        Write-Verbose "Getting info on the context."
         switch -Regex ($context['AuthType']) {
             'PAT|UAT|IAT' {
                 $viewer = Get-GitHubViewer -Context $tempContextName
@@ -137,6 +138,7 @@ function Set-GitHubContext {
                 throw 'Failed to get info on the context. Unknown logon type.'
             }
         }
+        Write-Verbose $($context['Username'])
     } catch {
         Write-Error $_
         throw 'Failed to get info on the context.'
