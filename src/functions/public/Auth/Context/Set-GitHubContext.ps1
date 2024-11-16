@@ -122,14 +122,16 @@ function Set-GitHubContext {
         switch -Regex ($context['AuthType']) {
             'PAT|UAT|IAT' {
                 $viewer = Get-GitHubViewer -Context $tempContextName
-                $context['Name'] = "$($Script:Config.Name)/$HostName/$($viewer.login)"
+                $newName = "$($Script:Config.Name)/$HostName/$($viewer.login)"
+                $context['Name'] = $newName
                 $context['Username'] = $viewer.login
                 $context['NodeID'] = $viewer.id
                 $context['DatabaseID'] = ($viewer.databaseId).ToString()
             }
             'App' {
                 $app = Get-GitHubApp -Context $tempContextName
-                $context['Name'] = "$($Script:Config.Name)/$HostName/$($app.slug)"
+                $newName = "$($Script:Config.Name)/$HostName/$($app.slug)"
+                $context['Name'] = $newName
                 $context['Username'] = $app.slug
                 $context['NodeID'] = $app.node_id
                 $context['DatabaseID'] = $app.id
@@ -146,9 +148,7 @@ function Set-GitHubContext {
 
     if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
         Set-Context $context
-        Write-Verbose (Get-Context -AsPlainText | Out-String)
         Remove-Context -Name $Name
-        Write-Verbose (Get-Context -AsPlainText | Out-String)
     }
-    Get-Context -Name $context['Name'] -AsPlainText
+    Get-Context -Name $newName -AsPlainText
 }
