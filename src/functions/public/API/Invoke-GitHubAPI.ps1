@@ -100,8 +100,11 @@
     }
 
     $ApiBaseUri = $ApiBaseUri ?? ($context['ApiBaseUri'] | ConvertFrom-SecureString -AsPlainText)
+    Write-Verbose "ApiBaseUri: $ApiBaseUri"
     $Version = $Version ?? ($context['ApiVersion'] | ConvertFrom-SecureString -AsPlainText)
+    Write-Verbose "Version:    $Version"
     $TokenType = $context['TokenType'] | ConvertFrom-SecureString -AsPlainText
+    Write-Verbose "TokenType:  $TokenType"
     $Token = $Token ?? $context['Token']
 
     switch ($tokenType) {
