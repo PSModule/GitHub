@@ -1,5 +1,4 @@
-﻿$moduleInfo = $MyInvocation.MyCommand
-$scriptFilePath = $MyInvocation.MyCommand.Path
+﻿$scriptFilePath = $MyInvocation.MyCommand.Path
 
 
 Write-Verbose "[$scriptFilePath] - Initializing GitHub PowerShell module..."
