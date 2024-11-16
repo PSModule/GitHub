@@ -86,27 +86,28 @@
 
         # The context to use for the API call. This is used to retrieve the necessary configuration settings.
         [Parameter()]
-        [string] $Context = 'DefaultContext'
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
+    $context = Get-GitHubContext -Name $Context
+    if (-not $context) {
+        throw 'Log in using Connect-GitHub before running this command.'
+    }
 
-    $ContextName = Get-ContextSetting -Name 'DefaultContext' -Context $script:Config.Name -AsPlainText
-    $contextObject = Get-GitHubContext -Name $ContextName
-
-    $ApiBaseUri = (Get-GitHubConfig -Name 'ApiBaseUri' -Context $Context)
-    $Token = (Get-GitHubConfig -Name 'Token' -Context $Context)
-    $Version = (Get-GitHubConfig -Name 'ApiVersion' -Context $Context)
-
+    $ApiBaseUri = $ApiBaseUri ?? ($context['ApiBaseUri'] | ConvertFrom-SecureString -AsPlainText)
+    $Version = $Version ?? ($context['ApiVersion'] | ConvertFrom-SecureString -AsPlainText)
     $TokenType = (Get-GitHubConfig -Name 'TokenType' -Context $Context)
+    $Token = $Token ?? $context['Token']
+
     switch ($tokenType) {
         'ghu' {
             if (Test-GitHubAccessTokenRefreshRequired) {
                 Connect-GitHubAccount -Silent
-                $Token = (Get-GitHubConfig -Name 'Token' -Context $Context)
+                $Token = (Get-GitHubContextSetting -Name 'Token' -Context $Context)
             }
         }
         'PEM' {
-            $ClientID = Get-GithubConfig -Name 'ClientID' -Context $Context
+            $ClientID = (Get-GitHubContextSetting -Name 'ClientID' -Context $Context)
             $JWT = Get-GitHubAppJSONWebToken -ClientId $ClientID -PrivateKey $Token
             $Token = $JWT.Token
         }

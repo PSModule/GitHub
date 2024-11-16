@@ -16,7 +16,11 @@
     #>
     [CmdletBinding()]
     param(
-        [string[]] $Fields = @('login', 'id', 'databaseId')
+        # The fields to return.
+        [string[]] $Fields = @('login', 'id', 'databaseId'),
+
+        # Context to run the command in.
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
     $query = @"
@@ -26,6 +30,6 @@ query {
   }
 }
 "@
-    $results = Invoke-GitHubGraphQLQuery -Query $query
+    $results = Invoke-GitHubGraphQLQuery -Query $query -Context $Context
     return $results.data.viewer
 }

@@ -17,10 +17,14 @@
         [string] $Query,
 
         # The variables to pass to the query.
-        [hashtable] $Variables
+        [hashtable] $Variables,
+
+        # The context to run the command in.
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = '/graphql'
         Method      = 'Post'
         Body        = @{
