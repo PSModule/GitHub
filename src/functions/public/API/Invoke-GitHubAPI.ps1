@@ -99,31 +99,31 @@
         throw 'Log in using Connect-GitHub before running this command.'
     }
 
-    $ApiBaseUri = if ([string]::IsNullOrEmpty($ApiBaseUri)) {
-        $contextObj['ApiBaseUri'] | ConvertFrom-SecureString -AsPlainText
-    } else {
-        $ApiBaseUri
+    if ([string]::IsNullOrEmpty($ApiBaseUri)) {
+        Write-Verbose 'Using default API base URI from context.'
+        Write-Verbose $($contextObj['ApiBaseUri'])
+        $ApiBaseUri = ConvertFrom-SecureString -SecureString $contextObj['ApiBaseUri'] -AsPlainText
     }
     Write-Verbose "ApiBaseUri: $ApiBaseUri"
 
-    $Version = if ([string]::IsNullOrEmpty($Version)) {
-        $contextObj['Version'] | ConvertFrom-SecureString -AsPlainText
-    } else {
-        $Version
+    if ([string]::IsNullOrEmpty($Version)) {
+        Write-Verbose 'Using default API version from context.'
+        Write-Verbose $($contextObj['Version'])
+        $Version = ConvertFrom-SecureString -SecureString $contextObj['Version'] -AsPlainText
     }
     Write-Verbose "Version:    $Version"
 
-    $TokenType = if ([string]::IsNullOrEmpty($TokenType)) {
-        $contextObj['TokenType'] | ConvertFrom-SecureString -AsPlainText
-    } else {
-        $TokenType
+    if ([string]::IsNullOrEmpty($TokenType)) {
+        Write-Verbose 'Using default token type from context.'
+        Write-Verbose $($contextObj['TokenType'])
+        $TokenType = ConvertFrom-SecureString -SecureString $contextObj['TokenType'] -AsPlainText
     }
     Write-Verbose "TokenType:  $TokenType"
 
-    $Token = if ([string]::IsNullOrEmpty($Token)) {
-        $contextObj['Token']
-    } else {
-        $Token
+    if ([string]::IsNullOrEmpty($Token)) {
+        Write-Verbose 'Using default token from context.'
+        Write-Verbose $($contextObj['Token'])
+        $Token = $contextObj['Token']
     }
     Write-Verbose "Token:     $Token"
 
