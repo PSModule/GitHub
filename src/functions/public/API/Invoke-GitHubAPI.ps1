@@ -96,7 +96,7 @@
 
     $ApiBaseUri = $ApiBaseUri ?? ($context['ApiBaseUri'] | ConvertFrom-SecureString -AsPlainText)
     $Version = $Version ?? ($context['ApiVersion'] | ConvertFrom-SecureString -AsPlainText)
-    $TokenType = (Get-GitHubConfig -Name 'TokenType' -Context $Context)
+    $TokenType = $context['TokenType'] | ConvertFrom-SecureString -AsPlainText
     $Token = $Token ?? $context['Token']
 
     switch ($tokenType) {
