@@ -89,6 +89,11 @@
         [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
+    Write-Verbose 'Invoking GitHub API...'
+    $PSBoundParameters.GetEnumerator() | ForEach-Object {
+        Write-Verbose " - $($_.Key): $($_.Value)"
+    }
+
     $context = Get-GitHubContext -Name $Context
     if (-not $context) {
         throw 'Log in using Connect-GitHub before running this command.'
