@@ -114,7 +114,7 @@ function Set-GitHubContext {
 
     $context | Remove-HashtableEntry -NullOrEmptyValues
 
-    Set-Context $context
+    Set-Context $context # Not splatting, but actually passing the hashtable.
 
     # Run functions to get info on the temporary context.
     try {
@@ -143,10 +143,7 @@ function Set-GitHubContext {
     }
 
     if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
-        # Set the context to named context.
         Set-Context $context
-
-        # Remove the temporary context.
         Remove-Context -Name $tempContextName
     }
     Get-Context -Name $context['Name'] -AsPlainText
