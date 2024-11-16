@@ -144,7 +144,7 @@ function Set-GitHubContext {
 
     if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
         Set-Context $context
-        Remove-Context -Name $tempContextName
+        Remove-Context -Name "$($script:Config.Name)/$tempContextName"
     }
     Get-Context -Name $context['Name'] -AsPlainText
 }

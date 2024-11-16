@@ -294,7 +294,7 @@
             }
         }
         $context = Set-GitHubContext @context
-        Set-ContextSetting -Name 'DefaultContext' -Value $context['Name'] -Context $script:Config.Name
+        Set-GitHubConfig -Name 'DefaultContext' -Value $context['Name']
         Get-GitHubConfig
         if (-not $Silent) {
             $name = $context.Username
