@@ -125,7 +125,7 @@ function Set-GitHubContext {
                 $context['Name'] = "$($Script:Config.Name)/$HostName/$($viewer.login)"
                 $context['Username'] = $viewer.login
                 $context['NodeID'] = $viewer.id
-                $context['DatabaseID'] = $viewer.databaseId
+                $context['DatabaseID'] = ($viewer.databaseId).ToString()
             }
             'App' {
                 $app = Get-GitHubApp -Context $tempContextName
