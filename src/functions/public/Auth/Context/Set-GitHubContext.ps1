@@ -82,7 +82,11 @@ function Set-GitHubContext {
 
         # Set the scope.
         [Parameter()]
-        [string] $Scope
+        [string] $Scope,
+
+        # Set as the default context.
+        [Parameter()]
+        [switch] $Default
     )
 
     $tempContextName = 'tempContext'
@@ -150,8 +154,7 @@ function Set-GitHubContext {
 
     if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
         Set-Context $context
+        Set-GitHubConfig -Name 'DefaultContext' -Value $context['Name']
         Remove-Context -Name $tempContextFullName
     }
-
-    Get-GithubContext -Name $newName
 }

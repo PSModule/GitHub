@@ -293,8 +293,7 @@
                 }
             }
         }
-        $context = Set-GitHubContext @context
-        Set-GitHubConfig -Name 'DefaultContext' -Value $context['Name']
+        $context = Set-GitHubContext @context -Default
         Get-GitHubConfig
         if (-not $Silent) {
             $name = $context.Username
