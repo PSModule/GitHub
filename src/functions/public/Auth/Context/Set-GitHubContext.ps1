@@ -154,7 +154,9 @@ function Set-GitHubContext {
 
     if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
         Set-Context $context
-        Set-GitHubConfig -Name 'DefaultContext' -Value $context['Name']
         Remove-Context -Name $tempContextFullName
+        if ($Default) {
+            Set-GitHubConfig -Name 'DefaultContext' -Value $context['Name']
+        }
     }
 }

@@ -95,7 +95,7 @@
     }
 
     $contextObj = Get-GitHubContext -Name $Context
-    Write-Verbose ($contextObj | Out-String)
+    Write-Verbose "Using GitHub context: $Context"
     if (-not $contextObj) {
         throw 'Log in using Connect-GitHub before running this command.'
     }

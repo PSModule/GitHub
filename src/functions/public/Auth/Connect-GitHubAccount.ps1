@@ -293,8 +293,8 @@
                 }
             }
         }
-        $context = Set-GitHubContext @context -Default
-        Get-GitHubConfig
+        Set-GitHubContext @context -Default
+        $context = Get-GitHubContext
         if (-not $Silent) {
             $name = $context.Username
             Write-Host '✓ ' -ForegroundColor Green -NoNewline
