@@ -32,12 +32,12 @@ function Get-GitHubContext {
     )
 
     $contexts = if ($ListAvailable) {
-        Get-Context -Name "$($script:Config.Name)/*"
+        Get-Context -Name "$($script:Config.Name)/*" -AsPlainText
     } elseif ($Name) {
-        Get-Context -Name "$($script:Config.Name)/$Name"
+        Get-Context -Name "$($script:Config.Name)/$Name" -AsPlainText
     } else {
         $defaultContext = Get-ContextSetting -Name 'DefaultContext' -Context $script:Config.Name -AsPlainText
-        Get-Context -Name "$($script:Config.Name)/$defaultContext"
+        Get-Context -Name "$($script:Config.Name)/$defaultContext" -AsPlainText
     }
 
     $contexts | ForEach-Object {

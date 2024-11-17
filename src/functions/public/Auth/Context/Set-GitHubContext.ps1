@@ -153,5 +153,5 @@ function Set-GitHubContext {
         Remove-Context -Name $tempContextFullName
     }
 
-    Get-GithubContext -Name $newName -AsPlainText
+    Get-GithubContext -Name $newName
 }
