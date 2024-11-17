@@ -86,7 +86,7 @@ function Set-GitHubContext {
     )
 
     $tempContextName = 'tempContext'
-    $Name = "$($script:Config.Name)/$tempContextName"
+    $tempContextFullName = "$($script:Config.Name)/$tempContextName"
 
     # Set a temporary context.
     $context = @{
@@ -99,7 +99,7 @@ function Set-GitHubContext {
         HostName                   = $HostName                   # github.com / msx.ghe.com / github.local
         NodeID                     = $NodeID                     # User ID / app ID (GraphQL Node ID)
         DatabaseID                 = $DatabaseID                 # Database ID
-        Name                       = $Name                       # HostName/Username or HostName/AppSlug
+        Name                       = $tempContextFullName        # HostName/Username or HostName/AppSlug
         UserName                   = $UserName                   # User name
         Owner                      = $Owner                      # Owner name
         Repo                       = $Repo                       # Repo name
@@ -122,16 +122,18 @@ function Set-GitHubContext {
         switch -Regex ($context['AuthType']) {
             'PAT|UAT|IAT' {
                 $viewer = Get-GitHubViewer -Context $tempContextName
-                $newName = "$($Script:Config.Name)/$HostName/$($viewer.login)"
-                $context['Name'] = $newName
+                $newName = "$HostName/$($viewer.login)"
+                $newFullName = "$($Script:Config.Name)/$newName"
+                $context['Name'] = $newFullName
                 $context['Username'] = $viewer.login
                 $context['NodeID'] = $viewer.id
                 $context['DatabaseID'] = ($viewer.databaseId).ToString()
             }
             'App' {
                 $app = Get-GitHubApp -Context $tempContextName
-                $newName = "$($Script:Config.Name)/$HostName/$($app.slug)"
-                $context['Name'] = $newName
+                $newName = "$HostName/$($app.slug)"
+                $newFullName = "$($Script:Config.Name)/$newName"
+                $context['Name'] = $newFullName
                 $context['Username'] = $app.slug
                 $context['NodeID'] = $app.node_id
                 $context['DatabaseID'] = $app.id
@@ -140,7 +142,7 @@ function Set-GitHubContext {
                 throw 'Failed to get info on the context. Unknown logon type.'
             }
         }
-        Write-Verbose $($context['Username'])
+        Write-Verbose "Found user with username: [$($context['Username'])]"
     } catch {
         Write-Error $_
         throw 'Failed to get info on the context.'
@@ -148,10 +150,8 @@ function Set-GitHubContext {
 
     if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
         Set-Context $context
-        Remove-Context -Name $Name
+        Remove-Context -Name $tempContextFullName
     }
-    Get-Context -AsPlainText | ForEach-Object {
-        Write-Verbose $_.Name
-    }
-    Get-Context -Name $newName -AsPlainText
+
+    Get-GithubContext -Name $newName -AsPlainText
 }
