@@ -48,7 +48,9 @@ function Get-GitHubContext {
         Get-Context -Name $defaultContext -AsPlainText
     }
 
+    Write-Verbose "Found $($contexts.Count) contexts."
     $contexts | ForEach-Object {
+        Write-Verbose "Processing context: $($_['Name'])"
         $_['Name'] = $_['Name'] -replace "$($script:Config.Name)/"
         $_.Token = ConvertTo-SecureString -String $_.Token -AsPlainText
         $_.RefreshToken = ConvertTo-SecureString -String $_.Token -AsPlainText
