@@ -18,7 +18,7 @@ function Get-GitHubContext {
         Justification = 'Encapsulated in a function. Never leaves as a plain text.'
     )]
     [OutputType([object])]
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param (
         # The name of the context.
         [Parameter(
