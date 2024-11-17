@@ -13,6 +13,10 @@ function Get-GitHubContext {
 
         Gets the current GitHub context.
     #>
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSAvoidUsingConvertToSecureStringWithPlainText', '',
+        Justification = 'Encapsulated in a function. Never leaves as a plain text.'
+    )]
     [OutputType([object])]
     [CmdletBinding()]
     param (
@@ -42,6 +46,11 @@ function Get-GitHubContext {
 
     $contexts | ForEach-Object {
         $_['Name'] = $_['Name'] -replace "$($script:Config.Name)/"
-        $_
+        $_.Token = ConvertTo-SecureString -String $_.Token -AsPlainText
+        $_.RefreshToken = ConvertTo-SecureString -String $_.Token -AsPlainText
+        Write-Output $_
     }
+
+    Remove-Variable contexts -ErrorAction SilentlyContinue
+    [System.GC]::Collect()
 }

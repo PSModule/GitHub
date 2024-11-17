@@ -103,21 +103,21 @@
     if ([string]::IsNullOrEmpty($ApiBaseUri)) {
         Write-Verbose 'Using default API base URI from context.'
         Write-Verbose $($contextObj['ApiBaseUri'])
-        $ApiBaseUri = ConvertFrom-SecureString -SecureString $contextObj['ApiBaseUri'] -AsPlainText
+        $ApiBaseUri = $contextObj['ApiBaseUri']
     }
     Write-Verbose "ApiBaseUri: $ApiBaseUri"
 
     if ([string]::IsNullOrEmpty($ApiVersion)) {
         Write-Verbose 'Using default API version from context.'
         Write-Verbose $($contextObj['ApiVersion'])
-        $ApiVersion = ConvertFrom-SecureString -SecureString $contextObj['ApiVersion'] -AsPlainText
+        $ApiVersion = $contextObj['ApiVersion']
     }
     Write-Verbose "ApiVersion: $ApiVersion"
 
     if ([string]::IsNullOrEmpty($TokenType)) {
         Write-Verbose 'Using default token type from context.'
         Write-Verbose $($contextObj['TokenType'])
-        $TokenType = ConvertFrom-SecureString -SecureString $contextObj['TokenType'] -AsPlainText
+        $TokenType = $contextObj['TokenType']
     }
     Write-Verbose "TokenType:  $TokenType"
 
