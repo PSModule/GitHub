@@ -31,14 +31,17 @@ function Get-GitHubContext {
         [switch] $ListAvailable
     )
 
-    if ($ListAvailable) {
-        return Get-Context -Name "$($script:Config.Name)/*"
+    $contexts = if ($ListAvailable) {
+        Get-Context -Name "$($script:Config.Name)/*"
+    } elseif ($Name) {
+        Get-Context -Name "$($script:Config.Name)/$Name"
+    } else {
+        $defaultContext = Get-ContextSetting -Name 'DefaultContext' -Context $script:Config.Name -AsPlainText
+        Get-Context -Name "$($script:Config.Name)/$defaultContext"
     }
 
-    if ($Name) {
-        return Get-Context -Name "$($script:Config.Name)/$Name"
+    $contexts | ForEach-Object {
+        $_['Name'] = $_['Name'] -replace "$($script:Config.Name)/"
+        $_
     }
-
-    $defaultContext = Get-ContextSetting -Name 'DefaultContext' -Context $script:Config.Name -AsPlainText
-    Get-Context -Name "$($script:Config.Name)/$defaultContext"
 }
