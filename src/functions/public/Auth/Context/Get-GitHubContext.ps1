@@ -42,6 +42,9 @@ function Get-GitHubContext {
     } else {
         $defaultContext = Get-ContextSetting -Name 'DefaultContext' -Context $script:Config.Name -AsPlainText
         Write-Verbose "Using the default context: $defaultContext"
+        Get-Context | ForEach-Object {
+            Write-Verbose ($_['Name'])
+        }
         Get-Context -Name $defaultContext -AsPlainText
     }
 
