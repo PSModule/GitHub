@@ -18,19 +18,19 @@ function Get-GitHubContext {
         Justification = 'Encapsulated in a function. Never leaves as a plain text.'
     )]
     [OutputType([object])]
-    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
+    [CmdletBinding(DefaultParameterSetName = 'CurrentContext')]
     param (
         # The name of the context.
         [Parameter(
             Mandatory,
-            ParameterSetName = 'Name'
+            ParameterSetName = 'NamedContext'
         )]
         [string] $Name,
 
         # List all available contexts.
         [Parameter(
             Mandatory,
-            ParameterSetName = 'ListAvailable'
+            ParameterSetName = 'ListAvailableContexts'
         )]
         [switch] $ListAvailable
     )
