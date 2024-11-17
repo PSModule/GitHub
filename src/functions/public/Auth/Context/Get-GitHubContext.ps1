@@ -47,7 +47,7 @@ function Get-GitHubContext {
         Get-Context -AsPlainText | ForEach-Object {
             Write-Verbose ($_['Name'])
         }
-        Get-Context -Name "*$defaultContext*" -AsPlainText
+        Get-Context -AsPlainText | Where-Object { $_['Name'] -eq "$($script:Config.Name)/$defaultContext" }
     }
 
     Write-Verbose "Found $($contexts.Count) contexts."
