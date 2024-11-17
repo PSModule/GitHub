@@ -44,7 +44,7 @@ function Get-GitHubContext {
     } else {
         $defaultContext = Get-GitHubConfig -Name 'DefaultContext'
         Write-Verbose "Using the default context: $defaultContext"
-        Get-Context -AsPlainText -Name ("$($script:Config.Name)/$defaultContext" -replace '([\\\*\?\[\]\.])', '`$1' )
+        Get-Context -AsPlainText | Where-Object { $_['Name'] -eq "$($script:Config.Name)/$defaultContext" }
     }
 
     Write-Verbose "Found $($contexts.Count) contexts."
