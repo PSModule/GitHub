@@ -27,9 +27,9 @@
     [CmdletBinding()]
     param ()
 
-    $defaultContext = Get-ContextSetting -Name 'DefaultContext' -Context $script:Config.Name
+    $defaultContext = Get-GitHubConfig -Name 'DefaultContext'
     Remove-Context -Name "$($script:Config.Name)/$defaultContext"
-    Set-ContextSetting -Name 'DefaultContext' -Value '' -Context $script:Config.Name
+    Remove-GitHubConfig -Name 'DefaultContext'
 
     Write-Host '✓ ' -ForegroundColor Green -NoNewline
     Write-Host "Logged out of GitHub! [$defaultContext]"
