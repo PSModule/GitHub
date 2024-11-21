@@ -1,8 +1,32 @@
-﻿BeforeAll {
-    Connect-GitHub
-}
+﻿Describe 'GitHub' {
+    Context 'Connect-GitHubAccount' {
+        It 'Connect-GitHubAccount function exists' {
+            Get-Command Connect-GitHubAccount | Should -Not -BeNullOrEmpty
+        }
 
-Describe 'GitHub' {
+        It 'Can be called without parameters on GitHub Actions' {
+            { Connect-GitHubAccount } | Should -Not -Throw
+        }
+
+        It 'Can be called with a classic PAT token' {
+            { Connect-GitHubAccount -Token $env:TEST_PAT } | Should -Not -Throw
+        }
+
+        It 'Can be called with a fine-grained PAT token' {
+            { Connect-GitHubAccount -Token $env:TEST_FG_PAT } | Should -Not -Throw
+        }
+
+        It 'Can be called with a GitHub App' {
+            { Connect-GitHubAccount -ClientID $env:TEST_APP_CLIENT_ID -PrivateKey $env:TEST_APP_PRIVATE_KEY } | Should -Not -Throw
+        }
+
+        # It 'Can be called with a GitHub App Installation Access Token' {
+        #     { Connect-GitHubAccount -Token $env:TEST_APP_INSTALLATION_ACCESS_TOKEN } | Should -Not -Throw
+        # }
+    }
+
+
+
     Context 'Invoke-GitHubAPI' {
         It 'Invoke-GitHubAPI function exists' {
             Get-Command Invoke-GitHubAPI | Should -Not -BeNullOrEmpty
