@@ -45,6 +45,7 @@ function Get-GitHubContext {
         $defaultContext = Get-GitHubConfig -Name 'DefaultContext'
         Write-Verbose "Using the default context: $defaultContext"
         Get-Context -ID "$($script:Config.Name)/$defaultContext"
+        Get-SecretInfo
     }
 
     Write-Verbose "Found $($contexts.Count) contexts."
