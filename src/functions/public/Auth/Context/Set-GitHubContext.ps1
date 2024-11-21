@@ -1,4 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '2.0.6' }
+﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '3.0.1' }
 
 function Set-GitHubContext {
     <#
@@ -90,7 +90,7 @@ function Set-GitHubContext {
     )
 
     $tempContextName = 'tempContext'
-    $tempContextFullName = "$($script:Config.Name)/$tempContextName"
+    $tempContextID = "$($script:Config.Name)/$tempContextName"
 
     # Set a temporary context.
     $context = @{
@@ -103,7 +103,7 @@ function Set-GitHubContext {
         HostName                   = $HostName                   # github.com / msx.ghe.com / github.local
         NodeID                     = $NodeID                     # User ID / app ID (GraphQL Node ID)
         DatabaseID                 = $DatabaseID                 # Database ID
-        Name                       = $tempContextFullName        # HostName/Username or HostName/AppSlug
+        ContextID                  = $tempContextName            # HostName/Username or HostName/AppSlug
         UserName                   = $UserName                   # User name
         Owner                      = $Owner                      # Owner name
         Repo                       = $Repo                       # Repo name
@@ -118,7 +118,7 @@ function Set-GitHubContext {
 
     $context | Remove-HashtableEntry -NullOrEmptyValues
 
-    Set-Context $context # Not splatting, but actually passing the hashtable.
+    Set-Context -ID $tempContextID -Context $context
 
     # Run functions to get info on the temporary context.
     try {
@@ -126,17 +126,16 @@ function Set-GitHubContext {
         switch -Regex ($context['AuthType']) {
             'PAT|UAT|IAT' {
                 $viewer = Get-GitHubViewer -Context $tempContextName
-                $newFullName = $viewer.id
-                $context['Name'] = $newFullName
+                $newContextID = "$HostName/$($viewer.login)"
+                $context['ContextID'] = $newContextID
                 $context['Username'] = $viewer.login
                 $context['NodeID'] = $viewer.id
                 $context['DatabaseID'] = ($viewer.databaseId).ToString()
             }
             'App' {
                 $app = Get-GitHubApp -Context $tempContextName
-                $newName = "$HostName/$($app.slug)"
-                $newFullName = $app.node_id
-                $context['Name'] = $newFullName
+                $newContextID = "$HostName/$($app.slug)"
+                $context['ContextID'] = $newContextID
                 $context['Username'] = $app.slug
                 $context['NodeID'] = $app.node_id
                 $context['DatabaseID'] = $app.id
@@ -152,10 +151,10 @@ function Set-GitHubContext {
     }
 
     if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
-        Set-Context $context
-        Remove-Context -Name $tempContextFullName
+        Set-Context -ID "$($script:Config.Name)/$newContextID" -Context $context
+        Remove-Context -ID $tempContextID
         if ($Default) {
-            Set-GitHubConfig -Name 'DefaultContext' -Value $context['Name']
+            Set-GitHubConfig -Name 'DefaultContext' -Value $newContextID
         }
     }
 }

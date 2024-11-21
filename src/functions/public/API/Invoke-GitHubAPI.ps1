@@ -102,29 +102,29 @@
 
     if ([string]::IsNullOrEmpty($ApiBaseUri)) {
         Write-Verbose 'Using default API base URI from context.'
-        Write-Verbose $($contextObj['ApiBaseUri'])
-        $ApiBaseUri = $contextObj['ApiBaseUri']
+        Write-Verbose $($contextObj.ApiBaseUri)
+        $ApiBaseUri = $contextObj.ApiBaseUri
     }
     Write-Verbose "ApiBaseUri: $ApiBaseUri"
 
     if ([string]::IsNullOrEmpty($ApiVersion)) {
         Write-Verbose 'Using default API version from context.'
-        Write-Verbose $($contextObj['ApiVersion'])
-        $ApiVersion = $contextObj['ApiVersion']
+        Write-Verbose $($contextObj.ApiVersion)
+        $ApiVersion = $contextObj.ApiVersion
     }
     Write-Verbose "ApiVersion: $ApiVersion"
 
     if ([string]::IsNullOrEmpty($TokenType)) {
         Write-Verbose 'Using default token type from context.'
-        Write-Verbose $($contextObj['TokenType'])
-        $TokenType = $contextObj['TokenType']
+        Write-Verbose $($contextObj.TokenType)
+        $TokenType = $contextObj.TokenType
     }
     Write-Verbose "TokenType:  $TokenType"
 
     if ([string]::IsNullOrEmpty($Token)) {
         Write-Verbose 'Using default token from context.'
-        Write-Verbose $($contextObj['Token'])
-        $Token = $contextObj['Token']
+        Write-Verbose $($contextObj.Token)
+        $Token = $contextObj.Token
     }
     Write-Verbose "Token:     $Token"
 

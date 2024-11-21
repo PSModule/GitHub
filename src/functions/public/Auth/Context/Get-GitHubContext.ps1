@@ -1,4 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '2.0.6' }
+﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '3.0.1' }
 
 function Get-GitHubContext {
     <#
@@ -37,22 +37,19 @@ function Get-GitHubContext {
 
     $contexts = if ($ListAvailable) {
         Write-Verbose "Listing available contexts. [$($script:Config.Name)/*]"
-        Get-Context -Name "$($script:Config.Name)/*" -AsPlainText
+        Get-Context -ID "$($script:Config.Name)/*"
     } elseif ($Name) {
         Write-Verbose "Listing available contexts. [$($script:Config.Name)/*]"
-        Get-Context -Name "$($script:Config.Name)/$Name" -AsPlainText
+        Get-Context -ID "$($script:Config.Name)/$Name"
     } else {
         $defaultContext = Get-GitHubConfig -Name 'DefaultContext'
         Write-Verbose "Using the default context: $defaultContext"
-        Get-Context -AsPlainText | Where-Object { $_['Name'] -eq "$($script:Config.Name)/$defaultContext" }
+        Get-Context | Where-Object { $_.Name -eq "$defaultContext" }
     }
 
     Write-Verbose "Found $($contexts.Count) contexts."
     $contexts | ForEach-Object {
-        Write-Verbose "Processing context: $($_['Name'])"
-        $_['Name'] = $_['Name'] -replace "$($script:Config.Name)/"
-        $_.Token = ConvertTo-SecureString -String $_.Token -AsPlainText
-        $_.RefreshToken = ConvertTo-SecureString -String $_.Token -AsPlainText
+        Write-Verbose "Processing context: $($_.Name)"
         Write-Output $_
     }
 

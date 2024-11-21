@@ -1,4 +1,4 @@
-#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '2.0.6' }
+#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '3.0.1' }
 
 function Get-GitHubConfig {
     <#
@@ -22,8 +22,8 @@ function Get-GitHubConfig {
     )
 
     if (-not $Name) {
-        return Get-Context -Name $script:Config.Name -AsPlainText
+        return Get-Context -Name $script:Config.Name
     }
 
-    Get-ContextSetting -Name $Name -Context $script:Config.Name -AsPlainText
+    Get-ContextSetting -Name $Name -ID $script:Config.Name
 }

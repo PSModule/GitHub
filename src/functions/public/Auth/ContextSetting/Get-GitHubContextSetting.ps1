@@ -1,4 +1,4 @@
-#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '2.0.6' }
+#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '3.0.1' }
 
 function Get-GitHubContextSetting {
     <#
@@ -15,15 +15,21 @@ function Get-GitHubContextSetting {
     #>
     [OutputType([object])]
     [CmdletBinding()]
-    param (
+    param(
         # Choose a configuration name to get.
         [Parameter()]
-        [string] $Name
+        [string] $Name,
+
+        # The name of the context.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
+    $contextID = "$($script:Config.Name)/$Context"
+
     if (-not $Name) {
-        Get-Context -Name $script:Config.Name -AsPlainText
+        Get-Context -ID $contextID
     }
 
-    Get-ContextSetting -Name $Name -Context $script:Config.Name -AsPlainText
+    Get-ContextSetting -Name $Name -ID $contextID
 }

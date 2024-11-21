@@ -1,4 +1,4 @@
-#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '2.0.6' }
+#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '3.0.1' }
 
 function Remove-GitHubConfig {
     <#
@@ -21,6 +21,6 @@ function Remove-GitHubConfig {
     )
 
     if ($PSCmdlet.ShouldProcess('ContextSetting', 'Remove')) {
-        Set-ContextSetting -Name $Name -Value $null -Context $script:Config.Name
+        Set-ContextSetting -Name $Name -Value $null -ID $script:Config.Name
     }
 }

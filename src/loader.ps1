@@ -11,10 +11,8 @@ if ($env:GITHUB_ACTIONS -eq 'true') {
 
 ### This is the context for this module
 # Get current module context
-$context = (Get-Context -Name $script:Config.Name -AsPlainText)
+$context = (Get-Context -ID $script:Config.Name)
 if (-not $context) {
     Write-Verbose 'No context found, creating a new context...'
-    Set-Context @{
-        Name = $script:Config.Name
-    }
+    Set-Context -ID $script:Config.Name -Context @{ ContextID = 'GitHub' }
 }

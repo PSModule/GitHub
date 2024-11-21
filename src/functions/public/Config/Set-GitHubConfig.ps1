@@ -1,4 +1,4 @@
-#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '2.0.6' }
+#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '3.0.1' }
 
 function Set-GitHubConfig {
     <#
@@ -25,6 +25,6 @@ function Set-GitHubConfig {
     )
 
     if ($PSCmdlet.ShouldProcess('ContextSetting', 'Set')) {
-        Set-ContextSetting -Name $Name -Value $Value -Context $script:Config.Name
+        Set-ContextSetting -Name $Name -Value $Value -ID $script:Config.Name
     }
 }

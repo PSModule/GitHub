@@ -1,4 +1,4 @@
-#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '2.0.6' }
+#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '3.0.1' }
 
 function Set-GitHubContextSetting {
     <#
@@ -83,43 +83,23 @@ function Set-GitHubContextSetting {
 
         # Set the scope.
         [Parameter()]
-        [string] $Scope
+        [string] $Scope,
+
+        # The context name to set the configuration for.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
-    $storeName = $Script:Config.Name
+    $contextID = "$($Script:Config.Name)/$Context"
 
     if ($PSCmdlet.ShouldProcess('Config', 'Set')) {
 
-        if ($RefreshToken) {
-            Set-Context -Name "$storeName/RefreshToken" -Token $RefreshToken -Variables @{
-                RefreshTokenExpirationDate = $RefreshTokenExpirationDate
-            }
-        }
-
-        $variables = @{
-            ApiBaseUri          = $ApiBaseUri
-            ApiVersion          = $ApiVersion
-            AuthClientID        = $AuthClientID
-            AuthType            = $AuthType
-            ClientID            = $ClientID
-            DeviceFlowType      = $DeviceFlowType
-            HostName            = $HostName
-            NodeID              = $NodeID
-            DatabaseID          = $DatabaseID
-            Owner               = $Owner
-            Repo                = $Repo
-            Scope               = $Scope
-            Token               = $Token
-            TokenExpirationDate = $TokenExpirationDate
-            TokenType           = $TokenType
-        }
-
-        $variables | Remove-HashtableEntry -NullOrEmptyValues
-
-        foreach ($key in $variables.Keys) {
-            if ($PSCmdlet.ShouldProcess("Setting [$key]", "to [$($variables[$key])]")) {
-                Write-Verbose "Setting [$key] to [$($variables[$key])]"
-                Set-ContextSetting -Name $key -Value $variables[$key] -Context $script:Config.Name
+        $PSBoundParameters.GetEnumerator() | ForEach-Object {
+            $key = $_.Key
+            $value = $_.Value
+            if ($PSCmdlet.ShouldProcess("Setting [$key]", "to [$value]")) {
+                Write-Verbose "Setting [$key] to [$value]"
+                Set-ContextSetting -Name $key -Value $value -Context $contextID
             }
         }
     }
