@@ -126,8 +126,7 @@ function Set-GitHubContext {
         switch -Regex ($context['AuthType']) {
             'PAT|UAT|IAT' {
                 $viewer = Get-GitHubViewer -Context $tempContextName
-                $newName = "$HostName/$($viewer.login)"
-                $newFullName = "$($Script:Config.Name)/$newName"
+                $newFullName = $viewer.id
                 $context['Name'] = $newFullName
                 $context['Username'] = $viewer.login
                 $context['NodeID'] = $viewer.id
@@ -136,7 +135,7 @@ function Set-GitHubContext {
             'App' {
                 $app = Get-GitHubApp -Context $tempContextName
                 $newName = "$HostName/$($app.slug)"
-                $newFullName = "$($Script:Config.Name)/$newName"
+                $newFullName = $app.node_id
                 $context['Name'] = $newFullName
                 $context['Username'] = $app.slug
                 $context['NodeID'] = $app.node_id
