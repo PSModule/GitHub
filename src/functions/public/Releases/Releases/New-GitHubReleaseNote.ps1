@@ -59,11 +59,11 @@
     param (
         # The account owner of the repository. The name is not case sensitive.
         [Parameter()]
-        [string] $Owner = (Get-GitHubConfig -Name Owner),
+        [string] $Owner = (Get-GitHubContextSetting -Name Owner),
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter()]
-        [string] $Repo = (Get-GitHubConfig -Name Repo),
+        [string] $Repo = (Get-GitHubContextSetting -Name Repo),
 
         # The tag name for the release. This can be an existing tag or a new one.
         [Parameter(Mandatory)]

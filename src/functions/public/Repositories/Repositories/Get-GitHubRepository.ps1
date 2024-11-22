@@ -82,14 +82,14 @@ filter Get-GitHubRepository {
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(ParameterSetName = 'ByName')]
         [Parameter(ParameterSetName = 'ListByOrg')]
-        [string] $Owner = (Get-GitHubConfig -Name Owner),
+        [string] $Owner = (Get-GitHubContextSetting -Name Owner),
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(
             Mandatory,
             ParameterSetName = 'ByName'
         )]
-        [string] $Repo = (Get-GitHubConfig -Name Repo),
+        [string] $Repo = (Get-GitHubContextSetting -Name Repo),
 
         # The handle for the GitHub user account.
         [Parameter(

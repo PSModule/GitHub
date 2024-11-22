@@ -21,11 +21,11 @@
         # The account owner of the repository. The name is not case sensitive.
         [Parameter()]
         [Alias('org')]
-        [string] $Owner = (Get-GitHubConfig -Name Owner),
+        [string] $Owner = (Get-GitHubContextSetting -Name Owner),
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter()]
-        [string] $Repo = (Get-GitHubConfig -Name Repo),
+        [string] $Repo = (Get-GitHubContextSetting -Name Repo),
 
         # An optional glob pattern to match against when enforcing tag protection.
         [Parameter(Mandatory)]

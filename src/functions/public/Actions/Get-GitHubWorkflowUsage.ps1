@@ -26,10 +26,10 @@
     )]
     param (
         [Parameter()]
-        [string] $Owner = (Get-GitHubConfig -Name Owner),
+        [string] $Owner = (Get-GitHubContextSetting -Name Owner),
 
         [Parameter()]
-        [string] $Repo = (Get-GitHubConfig -Name Repo),
+        [string] $Repo = (Get-GitHubContextSetting -Name Repo),
 
         [Parameter(
             Mandatory,
