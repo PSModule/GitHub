@@ -155,7 +155,7 @@ function Set-GitHubContext {
         Set-Context -ID "$($script:Config.Name)/$newContextID" -Context $context
         Remove-Context -ID $tempContextID
         if ($Default) {
-            Set-GitHubConfig -Name 'DefaultContext' -Value $newContextID
+            Set-GitHubDefaultContext -Context $newContextID
         }
     }
 }
