@@ -35,21 +35,17 @@ function Get-GitHubContext {
         [switch] $ListAvailable
     )
 
-    $contexts = if ($ListAvailable) {
-        Write-Verbose "Listing available contexts. [$($script:Config.Name)/*]"
-        Get-Context -ID "$($script:Config.Name)/*"
+    if ($ListAvailable) {
+        $ID = "$($script:Config.Name)/*"
+        Write-Verbose "Getting available contexts for [$ID]"
     } elseif ($Name) {
-        Write-Verbose "Listing available contexts. [$($script:Config.Name)/*]"
-        Get-Context -ID "$($script:Config.Name)/$Name"
+        $ID = "$($script:Config.Name)/$Name"
+        Write-Verbose "Getting available contexts for [$ID]"
     } else {
         $defaultContext = Get-GitHubConfig -Name 'DefaultContext'
-        Write-Verbose "Using the default context: $defaultContext"
-        Get-Context -ID "$($script:Config.Name)/$defaultContext"
+        $ID = "$($script:Config.Name)/$defaultContext"
+        Write-Verbose "Getting the default context: [$ID]"
     }
 
-    Write-Verbose "Found $($contexts.Count) contexts."
-    $contexts | ForEach-Object {
-        Write-Verbose "Processing context: $($_.Name)"
-        Write-Output $_
-    }
+    Get-Context -ID $ID
 }
