@@ -72,12 +72,14 @@
     }
 
     GitHubContext([hashtable]$Properties) {
-        $this.Init($Properties)
-    }
-
-    [void] Init([hashtable]$Properties) {
         foreach ($Property in $Properties.Keys) {
             $this.$Property = $Properties.$Property
+        }
+    }
+
+    GitHubContext([PSCustomObject]$Object) {
+        foreach ($Property in $Object.PSObject.Properties) {
+            $this.$Property.Name = $Property.Value
         }
     }
 }

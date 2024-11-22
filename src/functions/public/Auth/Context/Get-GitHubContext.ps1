@@ -17,7 +17,7 @@ function Get-GitHubContext {
         'PSAvoidUsingConvertToSecureStringWithPlainText', '',
         Justification = 'Encapsulated in a function. Never leaves as a plain text.'
     )]
-    [OutputType([object])]
+    [OutputType([GitHubContext])]
     [CmdletBinding(DefaultParameterSetName = 'CurrentContext')]
     param(
         # The name of the context.
@@ -47,5 +47,5 @@ function Get-GitHubContext {
         Write-Verbose "Getting the default context: [$ID]"
     }
 
-    Get-Context -ID $ID
+    [GitHubContext](Get-Context -ID $ID)
 }
