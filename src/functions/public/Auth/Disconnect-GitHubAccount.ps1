@@ -1,43 +1,53 @@
 ﻿function Disconnect-GitHubAccount {
     <#
         .SYNOPSIS
-        Disconnects from GitHub and removes the current GitHub configuration.
+        Disconnects from GitHub and removes the GitHub context.
 
         .DESCRIPTION
-        Disconnects from GitHub and removes the current GitHub configuration.
+        Disconnects from GitHub and removes the GitHub context.
 
         .EXAMPLE
         Disconnect-GitHubAccount
 
-        Disconnects from GitHub and removes the current GitHub configuration.
+        Disconnects from GitHub and removes the default GitHub context.
+
+        .EXAMPLE
+        Disconnect-GithubAccount -Context 'github.com/Octocat'
+
+        Disconnects from GitHub and removes the context 'github.com/Octocat'.
     #>
-    [Alias('Disconnect-GHAccount')]
-    [Alias('Disconnect-GitHub')]
-    [Alias('Disconnect-GH')]
-    [Alias('Logout-GitHubAccount')]
-    [Alias('Logout-GHAccount')]
-    [Alias('Logout-GitHub')]
-    [Alias('Logout-GH')]
-    [Alias('Logoff-GitHubAccount')]
-    [Alias('Logoff-GHAccount')]
-    [Alias('Logoff-GitHub')]
-    [Alias('Logoff-GH')]
+    [Alias(
+        'Disconnect-GHAccount',
+        'Disconnect-GitHub',
+        'Disconnect-GH',
+        'Logout-GitHubAccount',
+        'Logout-GHAccount',
+        'Logout-GitHub',
+        'Logout-GH',
+        'Logoff-GitHubAccount',
+        'Logoff-GHAccount',
+        'Logoff-GitHub',
+        'Logoff-GH'
+    )]
     [OutputType([void])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'Is the CLI part of the module.')]
     [CmdletBinding()]
     param(
-        $Context
+        # The context to log out of.
+        [Parameter()]
+        [Alias('Name')]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
-    $defaultContext = Get-GitHubConfig -Name 'DefaultContext'
-    Remove-Context -ID "$($script:Config.Name)/$defaultContext"
-    Remove-GitHubConfig -Name 'DefaultContext'
+    $Context = Get-GitHubConfig -Name 'DefaultContext'
+    Remove-Context -ID "$($script:Config.Name)/$Context"
+    Remove-GitHubConfig -Name $Context
 
     Write-Host '✓ ' -ForegroundColor Green -NoNewline
-    Write-Host "Logged out of GitHub! [$defaultContext]"
+    Write-Host "Logged out of GitHub! [$Context]"
 }
 
-Register-ArgumentCompleter -CommandName Disconnect-GitHubAccount -ParameterName ID -ScriptBlock {
+Register-ArgumentCompleter -CommandName Disconnect-GitHubAccount -ParameterName Context -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter
 

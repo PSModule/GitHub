@@ -26,7 +26,7 @@
 
         It 'Can list all contexts' {
             Write-Verbose (Get-GitHubContext -ListAvailable | Out-String) -Verbose
-            (Get-GitHubContext -ListAvailable).Count | Should -Be 4
+            (Get-GitHubContext -ListAvailable).Count | Should -Be 3
         }
 
         # It 'Can be called with a GitHub App Installation Access Token' {
