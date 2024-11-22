@@ -78,8 +78,8 @@
     }
 
     GitHubContext([PSCustomObject]$Object) {
-        foreach ($Property in $Object.PSObject.Properties) {
-            $this.$Property.Name = $Property.Value
+        $Object.PSObject.Properties | ForEach-Object {
+            $this.($_.Name) = $_.Value
         }
     }
 }
