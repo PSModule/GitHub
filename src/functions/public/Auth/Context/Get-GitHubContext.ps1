@@ -1,4 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '3.0.2' }
+﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '3.0.3' }
 
 function Get-GitHubContext {
     <#
@@ -53,7 +53,4 @@ function Get-GitHubContext {
         Write-Verbose "Processing context: $($_.Name)"
         Write-Output $_
     }
-
-    Remove-Variable contexts -ErrorAction SilentlyContinue
-    [System.GC]::Collect()
 }
