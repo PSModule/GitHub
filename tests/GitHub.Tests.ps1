@@ -24,6 +24,11 @@
             Write-Verbose (Get-GitHubContext | Out-String) -Verbose
         }
 
+        It 'Can list all contexts' {
+            Write-Verbose (Get-GitHubContext -ListAvailable | Out-String) -Verbose
+            (Get-GitHubContext -ListAvailable).Count | Should -Be 4
+        }
+
         # It 'Can be called with a GitHub App Installation Access Token' {
         #     { Connect-GitHubAccount -Token $env:TEST_APP_INSTALLATION_ACCESS_TOKEN } | Should -Not -Throw
         # }
