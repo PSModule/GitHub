@@ -13,6 +13,7 @@
     param (
         # The context to set as the default.
         [Parameter(Mandatory)]
+        [Alias('Name')]
         [string] $Context
     )
 

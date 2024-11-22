@@ -1,5 +1,5 @@
 ﻿Describe 'GitHub' {
-    Context 'Connect-GitHubAccount' {
+    Context 'Auth' {
         It 'Connect-GitHubAccount function exists' {
             Get-Command Connect-GitHubAccount | Should -Not -BeNullOrEmpty
         }
@@ -27,6 +27,11 @@
         It 'Can list all contexts' {
             Write-Verbose (Get-GitHubContext -ListAvailable | Out-String) -Verbose
             (Get-GitHubContext -ListAvailable).Count | Should -Be 3
+        }
+
+        It 'Can swap context to another' {
+            { Set-GitHubDefaultContext -Context 'github.com/github-actions[bot]' } | Should -Not -Throw
+            Get-GitHubConfig -Name 'DefaultContext' | Should -Be 'github.com/github-actions[bot]'
         }
 
         # It 'Can be called with a GitHub App Installation Access Token' {
