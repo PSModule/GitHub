@@ -146,6 +146,7 @@ function Set-GitHubContext {
         }
         Write-Verbose "Found user with username: [$($context['Username'])]"
     } catch {
+        Remove-Context -ID $tempContextID
         Write-Error $_
         throw 'Failed to get info on the context.'
     }

@@ -25,7 +25,8 @@ function Get-GitHubContext {
             Mandatory,
             ParameterSetName = 'NamedContext'
         )]
-        [string] $Name,
+        [Alias('Name')]
+        [string] $Context,
 
         # List all available contexts.
         [Parameter(
@@ -38,8 +39,8 @@ function Get-GitHubContext {
     if ($ListAvailable) {
         $ID = "$($script:Config.Name)/*"
         Write-Verbose "Getting available contexts for [$ID]"
-    } elseif ($Name) {
-        $ID = "$($script:Config.Name)/$Name"
+    } elseif ($Context) {
+        $ID = "$($script:Config.Name)/$Context"
         Write-Verbose "Getting available contexts for [$ID]"
     } else {
         $defaultContext = Get-GitHubConfig -Name 'DefaultContext'
@@ -49,5 +50,16 @@ function Get-GitHubContext {
 
     Get-Context -ID $ID | ForEach-Object {
         [GitHubContext]$_
+    }
+}
+
+Register-ArgumentCompleter -CommandName Get-GitHubContext -ParameterName Context -ScriptBlock {
+    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
+    $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter
+
+    $defaultContext = Get-GitHubConfig -Name 'DefaultContext'
+
+    Get-Context -ID "$wordToComplete*" -Verbose:$false | Where-Object { $_.ContextID -ne $defaultContext } | ForEach-Object {
+        [System.Management.Automation.CompletionResult]::new($_.ContextID, $_.ContextID, 'ParameterValue', $_.ContextID)
     }
 }

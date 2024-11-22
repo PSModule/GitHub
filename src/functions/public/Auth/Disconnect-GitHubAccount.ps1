@@ -25,12 +25,23 @@
     [OutputType([void])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'Is the CLI part of the module.')]
     [CmdletBinding()]
-    param ()
+    param(
+        $Context
+    )
 
     $defaultContext = Get-GitHubConfig -Name 'DefaultContext'
-    Remove-Context -Name "$($script:Config.Name)/$defaultContext"
+    Remove-Context -ID "$($script:Config.Name)/$defaultContext"
     Remove-GitHubConfig -Name 'DefaultContext'
 
     Write-Host '✓ ' -ForegroundColor Green -NoNewline
     Write-Host "Logged out of GitHub! [$defaultContext]"
+}
+
+Register-ArgumentCompleter -CommandName Disconnect-GitHubAccount -ParameterName ID -ScriptBlock {
+    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
+    $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter
+
+    Get-Context -ID "$wordToComplete*" -Verbose:$false | ForEach-Object {
+        [System.Management.Automation.CompletionResult]::new($_.ContextID, $_.ContextID, 'ParameterValue', $_.ContextID)
+    }
 }
