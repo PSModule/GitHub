@@ -99,7 +99,7 @@ function Set-GitHubContextSetting {
             $value = $_.Value
             if ($PSCmdlet.ShouldProcess("Setting [$key]", "to [$value]")) {
                 Write-Verbose "Setting [$key] to [$value]"
-                Set-ContextSetting -Name $key -Value $value -Context $contextID
+                Set-ContextSetting -Name $key -Value $value -ID $contextID
             }
         }
     }
