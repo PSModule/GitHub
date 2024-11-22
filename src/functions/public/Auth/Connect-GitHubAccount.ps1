@@ -143,7 +143,7 @@
         $tokenPrefixPattern = '(?<=^(ghu|gho|ghs|github_pat|ghp)).*'
 
         # If running on GitHub Actions and no access token is provided, use the GitHub token.
-        if ($env:GITHUB_ACTIONS -eq 'true') {
+        if (($env:GITHUB_ACTIONS -eq 'true') -and $PSCmdlet.ParameterSetName -ne 'App') {
             $tokenNotProvided = [string]::IsNullOrEmpty($Token)
             $gitHubToken = $env:GH_TOKEN ?? $env:GITHUB_TOKEN
             $gitHubTokenPresent = -not [string]::IsNullOrEmpty($gitHubToken)
