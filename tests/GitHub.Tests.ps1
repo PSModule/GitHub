@@ -6,18 +6,22 @@
 
         It 'Can be called without parameters on GitHub Actions' {
             { Connect-GitHubAccount } | Should -Not -Throw
+            Get-GitHubContext
         }
 
         It 'Can be called with a classic PAT token' {
             { Connect-GitHubAccount -Token $env:TEST_PAT } | Should -Not -Throw
+            Get-GitHubContext
         }
 
         It 'Can be called with a fine-grained PAT token' {
             { Connect-GitHubAccount -Token $env:TEST_FG_PAT } | Should -Not -Throw
+            Get-GitHubContext
         }
 
         It 'Can be called with a GitHub App' {
             { Connect-GitHubAccount -ClientID $env:TEST_APP_CLIENT_ID -PrivateKey $env:TEST_APP_PRIVATE_KEY } | Should -Not -Throw
+            Get-GitHubContext
         }
 
         # It 'Can be called with a GitHub App Installation Access Token' {
