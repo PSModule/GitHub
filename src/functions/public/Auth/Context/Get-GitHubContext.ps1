@@ -47,5 +47,7 @@ function Get-GitHubContext {
         Write-Verbose "Getting the default context: [$ID]"
     }
 
-    [GitHubContext](Get-Context -ID $ID)
+    Get-Context -ID $ID | ForEach-Object {
+        [GitHubContext]$_
+    }
 }
