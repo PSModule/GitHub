@@ -305,8 +305,8 @@
             Write-Host "Logged in as $name!"
         }
     } catch {
-        Write-Error (Get-PSCallStack | Format-Table | Out-String)
         Write-Error $_
+        Write-Error (Get-PSCallStack | Format-Table | Out-String)
         throw 'Failed to connect to GitHub.'
     } finally {
         Remove-Variable -Name tokenResponse -ErrorAction SilentlyContinue
