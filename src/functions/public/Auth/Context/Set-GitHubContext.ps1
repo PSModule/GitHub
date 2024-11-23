@@ -89,79 +89,84 @@ function Set-GitHubContext {
         [switch] $Default
     )
 
-    $commandName = $MyInvocation.MyCommand.Name
-    Write-Verbose "[$commandName] - Start"
-
-    $tempContextName = 'tempContext'
-    $tempContextID = "$($script:Config.Name)/$tempContextName"
-
-    # Set a temporary context.
-    $context = @{
-        ApiBaseUri                 = $ApiBaseUri                 # https://api.github.com
-        ApiVersion                 = $ApiVersion                 # 2022-11-28
-        AuthClientID               = $AuthClientID               # Client ID for UAT
-        AuthType                   = $AuthType                   # UAT / PAT / App / IAT
-        ClientID                   = $ClientID                   # Client ID for GitHub Apps
-        DeviceFlowType             = $DeviceFlowType             # GitHubApp / OAuthApp
-        HostName                   = $HostName                   # github.com / msx.ghe.com / github.local
-        NodeID                     = $NodeID                     # User ID / app ID (GraphQL Node ID)
-        DatabaseID                 = $DatabaseID                 # Database ID
-        ContextID                  = $tempContextName            # HostName/Username or HostName/AppSlug
-        UserName                   = $UserName                   # User name
-        Owner                      = $Owner                      # Owner name
-        Repo                       = $Repo                       # Repo name
-        Scope                      = $Scope                      # 'gist read:org repo workflow'
-        #-----------------------------------------------------------------------------------------
-        TokenType                  = $TokenType                  # ghu / gho / ghp / github_pat / PEM / ghs /
-        Token                      = $Token                      # Access token
-        TokenExpirationDate        = $TokenExpirationDate        # 2024-01-01-00:00:00
-        RefreshToken               = $RefreshToken               # Refresh token
-        RefreshTokenExpirationDate = $RefreshTokenExpirationDate # 2024-01-01-00:00:00
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Verbose "[$commandName] - Start"
     }
 
-    $context | Remove-HashtableEntry -NullOrEmptyValues
+    process {
+        $tempContextName = 'tempContext'
+        $tempContextID = "$($script:Config.Name)/$tempContextName"
 
-    Set-Context -ID $tempContextID -Context $context
-
-    # Run functions to get info on the temporary context.
-    try {
-        Write-Verbose 'Getting info on the context.'
-        switch -Regex ($context['AuthType']) {
-            'PAT|UAT|IAT' {
-                $viewer = Get-GitHubViewer -Context $tempContextName
-                $newContextID = "$HostName/$($viewer.login)"
-                $context['ContextID'] = $newContextID
-                $context['Username'] = $viewer.login
-                $context['NodeID'] = $viewer.id
-                $context['DatabaseID'] = ($viewer.databaseId).ToString()
-            }
-            'App' {
-                $app = Get-GitHubApp -Context $tempContextName
-                $newContextID = "$HostName/$($app.slug)"
-                $context['ContextID'] = $newContextID
-                $context['Username'] = $app.slug
-                $context['NodeID'] = $app.node_id
-                $context['DatabaseID'] = $app.id
-            }
-            default {
-                throw 'Failed to get info on the context. Unknown logon type.'
-            }
-        }
-        Write-Verbose "Found user with username: [$($context['Username'])]"
-
-        if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
-            Set-Context -ID "$($script:Config.Name)/$newContextID" -Context $context
-            if ($Default) {
-                Set-GitHubDefaultContext -Context $newContextID
-            }
+        # Set a temporary context.
+        $context = @{
+            ApiBaseUri                 = $ApiBaseUri                 # https://api.github.com
+            ApiVersion                 = $ApiVersion                 # 2022-11-28
+            AuthClientID               = $AuthClientID               # Client ID for UAT
+            AuthType                   = $AuthType                   # UAT / PAT / App / IAT
+            ClientID                   = $ClientID                   # Client ID for GitHub Apps
+            DeviceFlowType             = $DeviceFlowType             # GitHubApp / OAuthApp
+            HostName                   = $HostName                   # github.com / msx.ghe.com / github.local
+            NodeID                     = $NodeID                     # User ID / app ID (GraphQL Node ID)
+            DatabaseID                 = $DatabaseID                 # Database ID
+            ContextID                  = $tempContextName            # HostName/Username or HostName/AppSlug
+            UserName                   = $UserName                   # User name
+            Owner                      = $Owner                      # Owner name
+            Repo                       = $Repo                       # Repo name
+            Scope                      = $Scope                      # 'gist read:org repo workflow'
+            #-----------------------------------------------------------------------------------------
+            TokenType                  = $TokenType                  # ghu / gho / ghp / github_pat / PEM / ghs /
+            Token                      = $Token                      # Access token
+            TokenExpirationDate        = $TokenExpirationDate        # 2024-01-01-00:00:00
+            RefreshToken               = $RefreshToken               # Refresh token
+            RefreshTokenExpirationDate = $RefreshTokenExpirationDate # 2024-01-01-00:00:00
         }
 
+        $context | Remove-HashtableEntry -NullOrEmptyValues
+
+        Set-Context -ID $tempContextID -Context $context
+
+        # Run functions to get info on the temporary context.
+        try {
+            Write-Verbose 'Getting info on the context.'
+            switch -Regex ($context['AuthType']) {
+                'PAT|UAT|IAT' {
+                    $viewer = Get-GitHubViewer -Context $tempContextName
+                    $newContextID = "$HostName/$($viewer.login)"
+                    $context['ContextID'] = $newContextID
+                    $context['Username'] = $viewer.login
+                    $context['NodeID'] = $viewer.id
+                    $context['DatabaseID'] = ($viewer.databaseId).ToString()
+                }
+                'App' {
+                    $app = Get-GitHubApp -Context $tempContextName
+                    $newContextID = "$HostName/$($app.slug)"
+                    $context['ContextID'] = $newContextID
+                    $context['Username'] = $app.slug
+                    $context['NodeID'] = $app.node_id
+                    $context['DatabaseID'] = $app.id
+                }
+                default {
+                    throw 'Failed to get info on the context. Unknown logon type.'
+                }
+            }
+            Write-Verbose "Found user with username: [$($context['Username'])]"
+
+            if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
+                Write-Verbose "Setting the GitHub context [$newContextID]"
+                Set-Context -ID "$($script:Config.Name)/$newContextID" -Context $context
+                if ($Default) {
+                    Set-GitHubDefaultContext -Context $newContextID
+                }
+            }
+        } catch {
+            throw (Get-Error | Out-String)
+        } finally {
+            Remove-Context -ID $tempContextID
+        }
+    }
+
+    end {
         Write-Verbose "[$commandName] - End"
-
-    } catch {
-        Write-Error 'Failed to get info on the context.'
-        throw $_
-    } finally {
-        Remove-Context -ID $tempContextID
     }
 }
