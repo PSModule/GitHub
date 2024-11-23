@@ -156,7 +156,7 @@ function Set-GitHubContext {
                 Write-Verbose "Setting the GitHub context [$newContextID]"
                 Write-Verbose ($context | Format-Table | Out-String)
                 $context | Remove-HashtableEntry -NullOrEmptyValues
-                Set-Context -ID "$($script:Config.Name)/$newContextID" -Context $context
+                Set-Context -ID "$($script:Config.Name)/$newContextID" -Context [PSCustomObject]$context
                 if ($Default) {
                     Set-GitHubDefaultContext -Context $newContextID
                 }
