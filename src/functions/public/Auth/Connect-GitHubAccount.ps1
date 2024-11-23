@@ -305,6 +305,7 @@
             Write-Host "Logged in as $name!"
         }
     } catch {
+        Write-Error (Get-PSCallStack | Format-Table | Out-String)
         Write-Error $_
         throw 'Failed to connect to GitHub.'
     } finally {
