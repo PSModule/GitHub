@@ -89,6 +89,9 @@ function Set-GitHubContext {
         [switch] $Default
     )
 
+    $commandName = $MyInvocation.MyCommand.Name
+    Write-Verbose "[$commandName] - Start"
+
     $tempContextName = 'tempContext'
     $tempContextID = "$($script:Config.Name)/$tempContextName"
 
@@ -158,4 +161,6 @@ function Set-GitHubContext {
             Set-GitHubDefaultContext -Context $newContextID
         }
     }
+
+    Write-Verbose "[$commandName] - End"
 }

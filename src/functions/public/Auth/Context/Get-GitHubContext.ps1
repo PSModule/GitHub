@@ -36,6 +36,9 @@ function Get-GitHubContext {
         [switch] $ListAvailable
     )
 
+    $commandName = $MyInvocation.MyCommand.Name
+    Write-Verbose "[$commandName] - Start"
+
     if ($ListAvailable) {
         $ID = "$($script:Config.Name)/*"
         Write-Verbose "Getting available contexts for [$ID]"
@@ -55,6 +58,8 @@ function Get-GitHubContext {
     Get-Context -ID $ID | ForEach-Object {
         [GitHubContext]$_
     }
+
+    Write-Verbose "[$commandName] - End"
 }
 
 Register-ArgumentCompleter -CommandName Get-GitHubContext -ParameterName Context -ScriptBlock {

@@ -17,9 +17,14 @@
         [string] $Context
     )
 
+    $commandName = $MyInvocation.MyCommand.Name
+    Write-Verbose "[$commandName] - Start"
+
     if ($PSCmdlet.ShouldProcess("$Context", 'Set default context')) {
         Set-GitHubConfig -Name 'DefaultContext' -Value $Context
     }
+
+    Write-Verbose "[$commandName] - End"
 }
 
 Register-ArgumentCompleter -CommandName Set-GitHubDefaultContext -ParameterName Context -ScriptBlock {

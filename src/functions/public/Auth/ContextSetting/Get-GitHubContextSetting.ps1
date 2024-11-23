@@ -25,6 +25,9 @@ function Get-GitHubContextSetting {
         [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
+    $commandName = $MyInvocation.MyCommand.Name
+    Write-Verbose "[$commandName] - Start"
+
     $contextID = "$($script:Config.Name)/$Context"
 
     if (-not $Name) {
@@ -32,4 +35,6 @@ function Get-GitHubContextSetting {
     }
 
     Get-ContextSetting -Name $Name -ID $contextID
+
+    Write-Verbose "[$commandName] - End"
 }

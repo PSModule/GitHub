@@ -312,5 +312,5 @@
         Remove-Variable -Name context -ErrorAction SilentlyContinue
         [System.GC]::Collect()
     }
-    Write-Verbose "[$commandName] - Start"
+    Write-Verbose "[$commandName] - End"
 }

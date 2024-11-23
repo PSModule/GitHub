@@ -49,7 +49,7 @@
     Write-Host '✓ ' -ForegroundColor Green -NoNewline
     Write-Host "Logged out of GitHub! [$Context]"
 
-    Write-Verbose "[$commandName] - Start"
+    Write-Verbose "[$commandName] - End"
 }
 
 Register-ArgumentCompleter -CommandName Disconnect-GitHubAccount -ParameterName Context -ScriptBlock {

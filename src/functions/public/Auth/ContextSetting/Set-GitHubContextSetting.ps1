@@ -90,6 +90,9 @@ function Set-GitHubContextSetting {
         [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
+    $commandName = $MyInvocation.MyCommand.Name
+    Write-Verbose "[$commandName] - Start"
+
     $contextID = "$($Script:Config.Name)/$Context"
 
     if ($PSCmdlet.ShouldProcess('Config', 'Set')) {
@@ -103,4 +106,6 @@ function Set-GitHubContextSetting {
             }
         }
     }
+
+    Write-Verbose "[$commandName] - End"
 }

@@ -29,9 +29,14 @@ filter Remove-GitHubContext {
         [string] $Context
     )
 
+    $commandName = $MyInvocation.MyCommand.Name
+    Write-Verbose "[$commandName] - Start"
+
     $ID = "$($script:Config.Name)/$Context"
 
     if ($PSCmdlet.ShouldProcess('Remove-Secret', $context.Name)) {
         Remove-Context -ID $ID
     }
+
+    Write-Verbose "[$commandName] - End"
 }
