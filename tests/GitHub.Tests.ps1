@@ -6,10 +6,10 @@
         }
 
         It 'Can connect and disconnect - a second time' {
-            { Connect-GitHubAccount } | Should -Not -Throw
+            Connect-GitHubAccount
             Write-Verbose (Get-GitHubContext | Out-String) -Verbose
             Write-Verbose (Get-GitHubConfig | Out-String) -Verbose
-            { Connect-GitHubAccount } | Should -Not -Throw
+            Connect-GitHubAccount
             Write-Verbose (Get-GitHubContext | Out-String) -Verbose
             Write-Verbose (Get-GitHubConfig | Out-String) -Verbose
             { Disconnect-GitHubAccount } | Should -Not -Throw
