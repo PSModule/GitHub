@@ -1,21 +1,28 @@
 ﻿Describe 'GitHub' {
     Context 'Auth' {
-        It 'Connect-GitHubAccount function exists' {
-            Get-Command Connect-GitHubAccount | Should -Not -BeNullOrEmpty
+        It 'Can connect and disconnect without parameters in GitHubActions' {
+            { Connect-GitHubAccount } | Should -Not -Throw
+            { Disconnect-GitHubAccount } | Should -Not -Throw
         }
 
-        It 'Can be called without parameters on GitHub Actions' {
+        It 'Can connect and disconnect - a second time' {
+            { Connect-GitHubAccount } | Should -Not -Throw
             { Connect-GitHubAccount } | Should -Not -Throw
             Write-Verbose (Get-GitHubContext | Out-String) -Verbose
+            { Disconnect-GitHubAccount } | Should -Not -Throw
         }
 
-        It 'Can be called with a classic PAT token' {
+        It 'Can connect multiple sessions, GITHUB_TOKEN + classic PAT token' {
             { Connect-GitHubAccount -Token $env:TEST_PAT } | Should -Not -Throw
+            { Connect-GitHubAccount } | Should -Not -Throw
+            (Get-GitHubContext).Count | Should -Be 2
+            Get-GitHubConfig -Name 'DefaultContext' | Should -Be 'github.com/github-actions[bot]'
             Write-Verbose (Get-GitHubContext | Out-String) -Verbose
         }
 
-        It 'Can be called with a fine-grained PAT token' {
+        It 'Can reconfigure an existing context to be fine-grained PAT token' {
             { Connect-GitHubAccount -Token $env:TEST_FG_PAT } | Should -Not -Throw
+            (Get-GitHubContext).Count | Should -Be 2
             Write-Verbose (Get-GitHubContext | Out-String) -Verbose
         }
 
@@ -37,11 +44,9 @@
         # It 'Can be called with a GitHub App Installation Access Token' {
         #     { Connect-GitHubAccount -Token $env:TEST_APP_INSTALLATION_ACCESS_TOKEN } | Should -Not -Throw
         # }
-    }
 
-    Context 'Config' {
-        It 'Get-GitHubConfig function exists' {
-            Get-Command Get-GitHubConfig | Should -Not -BeNullOrEmpty
+        It 'Get-GitHubViewer can be called' {
+            Get-GitHubViewer | Should -Not -BeNullOrEmpty
         }
 
         It 'Get-GitHubConfig gets the DefaultContext' {
@@ -55,24 +60,12 @@
             $config.ContextID | Should -Be 'GitHub'
         }
     }
+}
 
-    Context 'API' {
-        It 'Invoke-GitHubAPI function exists' {
-            Get-Command Invoke-GitHubAPI | Should -Not -BeNullOrEmpty
-        }
-
-        It 'Can be called directly to get ratelimits' {
-            { Invoke-GitHubAPI -ApiEndpoint '/rate_limit' -Method GET } | Should -Not -Throw
-        }
-    }
-
-    Context 'Get-GitHubViewer' {
-        It 'Get-GitHubViewer function exists' {
-            Get-Command Get-GitHubViewer | Should -Not -BeNullOrEmpty
-        }
-        It 'Get-GiTubViewer can be called' {
-            Get-GitHubViewer | Should -Not -BeNullOrEmpty
-        }
+Context 'API' {
+    It 'Can be called directly to get ratelimits' {
+        { $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit' } | Should -Not -Throw
+        Write-Verbose ($rateLimit | Format-Table | Out-String) -Verbose
     }
 }
 
