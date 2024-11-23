@@ -154,6 +154,11 @@ function Set-GitHubContext {
 
             if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
                 Write-Verbose "Setting the GitHub context [$newContextID]"
+                Get-GitHubContext -ListAvailable | ForEach-Object {
+                    if ($_.ContextID -eq $newContextID) {
+                        Remove-Context -ID $newContextID
+                    }
+                }
                 Set-Context -ID "$($script:Config.Name)/$newContextID" -Context $context
                 if ($Default) {
                     Set-GitHubDefaultContext -Context $newContextID
