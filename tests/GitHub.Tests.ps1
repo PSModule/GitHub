@@ -64,8 +64,11 @@
 
 Context 'API' {
     It 'Can be called directly to get ratelimits' {
-        { $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit' } | Should -Not -Throw
-        Write-Verbose ($rateLimit | Format-Table | Out-String) -Verbose
+        {
+            $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit'
+            Write-Verbose ($rateLimit | Format-Table | Out-String) -Verbose
+        } | Should -Not -Throw
+
     }
 }
 

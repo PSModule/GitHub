@@ -40,7 +40,7 @@
     )
 
     $Context = Get-GitHubConfig -Name 'DefaultContext'
-    Remove-GitHubContext -ID $Context
+    Remove-GitHubContext -Context $Context
     Remove-GitHubConfig -Name 'DefaultContext'
 
     Write-Host '✓ ' -ForegroundColor Green -NoNewline
