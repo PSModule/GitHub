@@ -40,8 +40,8 @@
     )
 
     $Context = Get-GitHubConfig -Name 'DefaultContext'
-    Remove-Context -ID "$($script:Config.Name)/$Context"
-    Remove-GitHubConfig -Name $Context
+    Remove-GitHubContext -ID $Context
+    Remove-GitHubConfig -Name 'DefaultContext'
 
     Write-Host '✓ ' -ForegroundColor Green -NoNewline
     Write-Host "Logged out of GitHub! [$Context]"
