@@ -160,13 +160,7 @@ function Set-GitHubContext {
                 }
             }
         } catch {
-            $err = [System.Management.Automation.ErrorRecord]::new(
-                $_,
-                'Failed to set the GitHub context.',
-                [System.Management.Automation.ErrorCategory]::NotSpecified,
-                $null
-            )
-            throw $err
+            throw $_
         } finally {
             Remove-Context -ID $tempContextID
         }
