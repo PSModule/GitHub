@@ -1,8 +1,6 @@
 ﻿$scriptFilePath = $MyInvocation.MyCommand.Path
-$moduleName = $MyInvocation.MyCommand.Module.Name
-$moduleVersion = $MyInvocation.MyCommand.Module.Version
 Write-Verbose "Initializing GitHub PowerShell module..."
-Write-Verbose ($MyInvocation | ConvertTo-Json -Depth 5 | Out-String)
+Write-Verbose "Path: $scriptFilePath"
 
 if ($env:GITHUB_ACTIONS -eq 'true') {
     Write-Verbose 'Detected running on a GitHub Actions runner, preparing environment...'
