@@ -1,4 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '3.0.3' }
+﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '3.0.4' }
 
 function Get-GitHubContext {
     <#
