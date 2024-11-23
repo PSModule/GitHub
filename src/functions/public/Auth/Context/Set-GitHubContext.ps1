@@ -160,7 +160,6 @@ function Set-GitHubContext {
                 }
             }
         } catch {
-            Write-Verbose (Get-Error | Out-String)
             throw $_
         } finally {
             Remove-Context -ID $tempContextID
