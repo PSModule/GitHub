@@ -39,12 +39,17 @@
         [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
+    $commandName = $MyInvocation.MyCommand.Name
+    Write-Verbose "[$commandName] - Start"
+
     $Context = Get-GitHubConfig -Name 'DefaultContext'
     Remove-GitHubContext -Context $Context
     Remove-GitHubConfig -Name 'DefaultContext'
 
     Write-Host '✓ ' -ForegroundColor Green -NoNewline
     Write-Host "Logged out of GitHub! [$Context]"
+
+    Write-Verbose "[$commandName] - Start"
 }
 
 Register-ArgumentCompleter -CommandName Disconnect-GitHubAccount -ParameterName Context -ScriptBlock {

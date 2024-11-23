@@ -132,6 +132,10 @@
         [Alias('s')]
         [switch] $Silent
     )
+
+    $commandName = $MyInvocation.MyCommand.Name
+    Write-Verbose "[$commandName] - Start"
+
     try {
         if ($Token -is [System.Security.SecureString]) {
             $Token = ConvertFrom-SecureString $Token -AsPlainText
@@ -308,4 +312,5 @@
         Remove-Variable -Name context -ErrorAction SilentlyContinue
         [System.GC]::Collect()
     }
+    Write-Verbose "[$commandName] - Start"
 }
