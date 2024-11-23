@@ -160,7 +160,7 @@ function Set-GitHubContext {
                 }
             }
         } catch {
-            throw $_
+            throw ($_ | ConvertTo-Json -Depth 3 | Out-String)
         } finally {
             Remove-Context -ID $tempContextID
         }
