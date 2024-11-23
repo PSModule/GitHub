@@ -40,6 +40,7 @@ query {
 
         return $results.data.viewer
     }
+
     end {
         Write-Verbose "[$commandName] - End"
     }

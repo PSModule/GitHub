@@ -20,7 +20,12 @@ function Remove-GitHubConfig {
         [string] $Name
     )
 
+    $commandName = $MyInvocation.MyCommand.Name
+    Write-Verbose "[$commandName] - Start"
+
     if ($PSCmdlet.ShouldProcess('ContextSetting', 'Remove')) {
         Set-ContextSetting -Name $Name -Value $null -ID $script:Config.Name
     }
+
+    Write-Verbose "[$commandName] - End"
 }

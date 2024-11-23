@@ -21,9 +21,20 @@ function Get-GitHubConfig {
         [string] $Name
     )
 
-    if (-not $Name) {
-        return Get-Context -ID $script:Config.Name
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Verbose "[$commandName] - Start"
     }
 
-    Get-ContextSetting -Name $Name -ID $script:Config.Name
+    process {
+        if (-not $Name) {
+            return Get-Context -ID $script:Config.Name
+        }
+
+        Get-ContextSetting -Name $Name -ID $script:Config.Name
+    }
+
+    end {
+        Write-Verbose "[$commandName] - End"
+    }
 }
