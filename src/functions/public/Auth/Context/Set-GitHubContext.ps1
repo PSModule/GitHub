@@ -148,19 +148,20 @@ function Set-GitHubContext {
             }
         }
         Write-Verbose "Found user with username: [$($context['Username'])]"
-    } catch {
-        Remove-Context -ID $tempContextID
-        Write-Error $_
-        throw 'Failed to get info on the context.'
-    }
 
-    if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
-        Set-Context -ID "$($script:Config.Name)/$newContextID" -Context $context
-        Remove-Context -ID $tempContextID
-        if ($Default) {
-            Set-GitHubDefaultContext -Context $newContextID
+        if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
+            Set-Context -ID "$($script:Config.Name)/$newContextID" -Context $context
+            if ($Default) {
+                Set-GitHubDefaultContext -Context $newContextID
+            }
         }
-    }
 
-    Write-Verbose "[$commandName] - End"
+        Write-Verbose "[$commandName] - End"
+
+    } catch {
+        Write-Error 'Failed to get info on the context.'
+        throw $_
+    } finally {
+        Remove-Context -ID $tempContextID
+    }
 }
