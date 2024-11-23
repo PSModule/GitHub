@@ -6,12 +6,13 @@
         }
 
         It 'Can connect and disconnect - a second time' {
-            $DebugPreference = 'Continue'
-            { Connect-GitHubAccount -Debug } | Should -Not -Throw
-            { Connect-GitHubAccount -Debug } | Should -Not -Throw
+            { Connect-GitHubAccount } | Should -Not -Throw
             Write-Verbose (Get-GitHubContext | Out-String) -Verbose
+            Write-Verbose (Get-GitHubConfig | Out-String) -Verbose
+            { Connect-GitHubAccount } | Should -Not -Throw
+            Write-Verbose (Get-GitHubContext | Out-String) -Verbose
+            Write-Verbose (Get-GitHubConfig | Out-String) -Verbose
             { Disconnect-GitHubAccount } | Should -Not -Throw
-            $DebugPreference = 'SilentlyContinue'
         }
 
         It 'Can connect multiple sessions, GITHUB_TOKEN + classic PAT token' {
