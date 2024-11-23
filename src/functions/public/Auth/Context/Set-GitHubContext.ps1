@@ -160,7 +160,8 @@ function Set-GitHubContext {
                 }
             }
         } catch {
-            throw ($_ | Out-String)
+            $err = Get-Error
+            throw ($err | Out-String)
         } finally {
             Remove-Context -ID $tempContextID
         }
