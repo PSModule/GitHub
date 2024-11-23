@@ -17,6 +17,7 @@
 
         It 'Can connect multiple sessions, GITHUB_TOKEN + classic PAT token' {
             { Connect-GitHubAccount -Token $env:TEST_PAT } | Should -Not -Throw
+            { Connect-GitHubAccount -Token $env:TEST_PAT } | Should -Not -Throw
             { Connect-GitHubAccount } | Should -Not -Throw
             (Get-GitHubContext).Count | Should -Be 2
             Get-GitHubConfig -Name 'DefaultContext' | Should -Be 'github.com/github-actions[bot]'
