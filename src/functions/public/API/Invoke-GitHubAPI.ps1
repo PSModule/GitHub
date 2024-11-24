@@ -130,7 +130,7 @@
 
     switch ($tokenType) {
         'ghu' {
-            if (Test-GitHubAccessTokenRefreshRequired) {
+            if (Test-GitHubAccessTokenRefreshRequired -Context $Context) {
                 Connect-GitHubAccount -Silent
                 $Token = (Get-GitHubContextSetting -Name 'Token' -Context $Context)
             }
@@ -141,7 +141,6 @@
             $Token = $JWT.Token
         }
     }
-
 
     $headers = @{
         Accept                 = $Accept
