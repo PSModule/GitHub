@@ -33,7 +33,8 @@ Register-ArgumentCompleter -CommandName Set-GitHubDefaultContext -ParameterName 
 
     $defaultContext = Get-GitHubConfig -Name 'DefaultContext'
 
-    Get-Context -ID "$wordToComplete*" -Verbose:$false | Where-Object { $_.ContextID -ne $defaultContext } | ForEach-Object {
-        [System.Management.Automation.CompletionResult]::new($_.ContextID, $_.ContextID, 'ParameterValue', $_.ContextID)
-    }
+    Get-GitHubContext -ListAvailable | Where-Object { $_.ContextID -like "$wordToComplete*" -and $_.ContextID -ne $defaultContext } -Verbose:$false |
+        ForEach-Object {
+            [System.Management.Automation.CompletionResult]::new($_.ContextID, $_.ContextID, 'ParameterValue', $_.ContextID)
+        }
 }

@@ -109,3 +109,13 @@ function Set-GitHubContextSetting {
 
     Write-Verbose "[$commandName] - End"
 }
+
+Register-ArgumentCompleter -CommandName Get-GitHubContext -ParameterName Context -ScriptBlock {
+    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
+    $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter
+
+    Get-GitHubContext -ListAvailable | Where-Object { $_.ContextID -like "$wordToComplete*" } -Verbose:$false |
+        ForEach-Object {
+            [System.Management.Automation.CompletionResult]::new($_.ContextID, $_.ContextID, 'ParameterValue', $_.ContextID)
+        }
+}
