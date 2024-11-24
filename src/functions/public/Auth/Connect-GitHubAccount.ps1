@@ -299,6 +299,7 @@
         }
         Set-GitHubContext @context -Default
         $context = Get-GitHubContext
+        Write-Verbose ($context | Format-List | Out-String)
         if (-not $Silent) {
             $name = $context.Username
             Write-Host '✓ ' -ForegroundColor Green -NoNewline
