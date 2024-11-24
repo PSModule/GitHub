@@ -26,8 +26,8 @@
 
         It 'Can reconfigure an existing context to be fine-grained PAT token' {
             { Connect-GitHubAccount -Token $env:TEST_FG_PAT } | Should -Not -Throw
-            (Get-GitHubContext).Count | Should -Be 2
-            Write-Verbose (Get-GitHubContext | Out-String) -Verbose
+            (Get-GitHubContext -ListAvailable).Count | Should -Be 2
+            Write-Verbose (Get-GitHubContext -ListAvailable | Out-String) -Verbose
         }
 
         It 'Can be called with a GitHub App' {
