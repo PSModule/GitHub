@@ -1,4 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '3.1.0' }
+﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '3.1.1' }
 
 function Set-GitHubContext {
     <#
@@ -95,7 +95,7 @@ function Set-GitHubContext {
     }
 
     process {
-        $tempContextName = 'tempContext'
+        $tempContextName = "$HostName/tempContext"
         $tempContextID = "$($script:Config.Name)/$tempContextName"
 
         # Set a temporary context.
@@ -109,7 +109,6 @@ function Set-GitHubContext {
             HostName                   = $HostName                   # github.com / msx.ghe.com / github.local
             NodeID                     = $NodeID                     # User ID / app ID (GraphQL Node ID)
             DatabaseID                 = $DatabaseID                 # Database ID
-            ID                         = $tempContextID              # HostName/Username or HostName/AppSlug
             UserName                   = $UserName                   # User name
             Owner                      = $Owner                      # Owner name
             Repo                       = $Repo                       # Repo name
@@ -151,7 +150,7 @@ function Set-GitHubContext {
             Write-Verbose "Found user with username: [$($context['Username'])]"
 
             if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
-                Rename-Context -ID $tempContextID -NewID $newContextID
+                Rename-Context -ID $tempContextID -NewID $newContextID -Force
                 if ($Default) {
                     Set-GitHubDefaultContext -Context $newContextID
                 }

@@ -34,6 +34,7 @@
 
     # The context ID.
     # HostName/Username or HostName/AppSlug
+    # Context:PSModule.Github/github.com/Octocat
     [string] $ID
 
     # The user name.
