@@ -168,6 +168,12 @@
             Repo       = $Repo
         }
 
+        $gitHubConfig = Get-GitHubConfig
+        $defaultContextID = $gitHubConfig.DefaultContext
+        if ($defaultContextID) {
+            $defaultContext = Get-GitHubContext -Context $defaultContextID
+        }
+
         Write-Verbose "AuthType: [$authType]"
         switch ($authType) {
             'UAT' {
@@ -175,18 +181,18 @@
                 if (-not [string]::IsNullOrEmpty($ClientID)) {
                     Write-Verbose "Using provided ClientID: [$ClientID]"
                     $authClientID = $ClientID
-                } elseif (-not [string]::IsNullOrEmpty($(Get-GitHubContextSetting -Name 'AuthClientID'))) {
-                    Write-Verbose "Reusing previously stored ClientID: [$(Get-GitHubContextSetting -Name 'AuthClientID')]"
-                    $authClientID = Get-GitHubContextSetting -Name 'AuthClientID'
+                } elseif (-not [string]::IsNullOrEmpty($($defaultContext.AuthClientID))) {
+                    Write-Verbose "Reusing previously stored ClientID: [$($defaultContext.AuthClientID)]"
+                    $authClientID = $defaultContext.AuthClientID
                 } else {
                     Write-Verbose "Using default ClientID: [$($script:Auth.$Mode.ClientID)]"
                     $authClientID = $script:Auth.$Mode.ClientID
                 }
-                if ($Mode -ne (Get-GitHubContextSetting -Name 'DeviceFlowType' -ErrorAction SilentlyContinue)) {
+                if ($Mode -ne ($defaultContext.DeviceFlowType)) {
                     Write-Verbose "Using $Mode authentication..."
                     $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $authClientID -Scope $Scope -HostName $HostName
                 } else {
-                    $accessTokenValidity = [datetime](Get-GitHubContextSetting -Name 'TokenExpirationDate') - (Get-Date)
+                    $accessTokenValidity = [datetime]($defaultContext.TokenExpirationDate) - (Get-Date)
                     $accessTokenIsValid = $accessTokenValidity.Seconds -gt 0
                     $hours = $accessTokenValidity.Hours.ToString().PadLeft(2, '0')
                     $minutes = $accessTokenValidity.Minutes.ToString().PadLeft(2, '0')
@@ -198,23 +204,23 @@
                                 Write-Host '✓ ' -ForegroundColor Green -NoNewline
                                 Write-Host "Access token is still valid for $accessTokenValidityText ..."
                             }
-                            break
+                            return
                         } else {
                             if (-not $Silent) {
                                 Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
                                 Write-Host "Access token remaining validity $accessTokenValidityText. Refreshing access token..."
                             }
-                            $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $authClientID -RefreshToken (Get-GitHubContextSetting -Name 'RefreshToken') -HostName $HostName
+                            $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $authClientID -RefreshToken ($defaultContext.RefreshToken) -HostName $HostName
                         }
                     } else {
-                        $refreshTokenValidity = [datetime](Get-GitHubContextSetting -Name 'RefreshTokenExpirationDate') - (Get-Date)
+                        $refreshTokenValidity = [datetime]($defaultContext.RefreshTokenExpirationDate) - (Get-Date)
                         $refreshTokenIsValid = $refreshTokenValidity.Seconds -gt 0
                         if ($refreshTokenIsValid) {
                             if (-not $Silent) {
                                 Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
                                 Write-Host 'Access token expired. Refreshing access token...'
                             }
-                            $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $authClientID -RefreshToken (Get-GitHubContextSetting -Name 'RefreshToken') -HostName $HostName
+                            $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $authClientID -RefreshToken ($defaultContext.RefreshToken) -HostName $HostName
                         } else {
                             Write-Verbose "Using $Mode authentication..."
                             $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $authClientID -Scope $Scope -HostName $HostName
