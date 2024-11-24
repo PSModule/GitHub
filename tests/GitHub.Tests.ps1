@@ -62,7 +62,7 @@
             $config = Get-GitHubConfig
             Write-Verbose ($config | Format-Table | Out-String) -Verbose
             { Get-GitHubConfig } | Should -Not -Throw
-            $config.ContextID | Should -Be 'GitHub'
+            $config.ID | Should -Be 'GitHub'
         }
     }
 }

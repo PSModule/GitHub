@@ -114,7 +114,7 @@
                                 <PropertyName>DatabaseID</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>ContextID</PropertyName>
+                                <PropertyName>ID</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>Owner</PropertyName>

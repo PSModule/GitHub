@@ -13,5 +13,5 @@ if ($env:GITHUB_ACTIONS -eq 'true') {
 $context = (Get-Context -ID $script:Config.Name)
 if (-not $context) {
     Write-Verbose 'No context found, creating a new context...'
-    Set-Context -ID $script:Config.Name -Context @{ ContextID = 'GitHub' }
+    Set-Context -ID $script:Config.Name -Context @{ Name = 'GitHub' }
 }

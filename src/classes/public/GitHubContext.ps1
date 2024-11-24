@@ -34,7 +34,7 @@
 
     # The context ID.
     # HostName/Username or HostName/AppSlug
-    [string] $ContextID
+    [string] $ID
 
     # The user name.
     [string] $UserName
@@ -67,8 +67,8 @@
     # 2024-01-01-00:00:00
     [datetime] $RefreshTokenExpirationDate
 
-    GitHubContext([string]$ContextID) {
-        $this.ContextID = $ContextID
+    GitHubContext([string]$ID) {
+        $this.ID = $ID
     }
 
     GitHubContext([hashtable]$Properties) {

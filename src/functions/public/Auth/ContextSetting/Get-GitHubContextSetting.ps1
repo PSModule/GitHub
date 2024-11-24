@@ -28,13 +28,13 @@ function Get-GitHubContextSetting {
     $commandName = $MyInvocation.MyCommand.Name
     Write-Verbose "[$commandName] - Start"
 
-    $contextID = "$($script:Config.Name)/$Context"
+    $ID = "$($script:Config.Name)/$Context"
 
     if (-not $Name) {
-        Get-Context -ID $contextID
+        Get-Context -ID $ID
     }
 
-    Get-ContextSetting -Name $Name -ID $contextID
+    Get-ContextSetting -Name $Name -ID $ID
 
     Write-Verbose "[$commandName] - End"
 }
@@ -43,8 +43,8 @@ Register-ArgumentCompleter -CommandName Get-GitHubContext -ParameterName Context
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter
 
-    Get-GitHubContext -ListAvailable | Where-Object { $_.ContextID -like "$wordToComplete*" } -Verbose:$false |
+    Get-GitHubContext -ListAvailable | Where-Object { $_.ID -like "$wordToComplete*" } -Verbose:$false |
         ForEach-Object {
-            [System.Management.Automation.CompletionResult]::new($_.ContextID, $_.ContextID, 'ParameterValue', $_.ContextID)
+            [System.Management.Automation.CompletionResult]::new($_.ID, $_.ID, 'ParameterValue', $_.ID)
         }
 }

@@ -109,7 +109,7 @@ function Set-GitHubContext {
             HostName                   = $HostName                   # github.com / msx.ghe.com / github.local
             NodeID                     = $NodeID                     # User ID / app ID (GraphQL Node ID)
             DatabaseID                 = $DatabaseID                 # Database ID
-            ContextID                  = $tempContextName            # HostName/Username or HostName/AppSlug
+            ID                         = $tempContextID              # HostName/Username or HostName/AppSlug
             UserName                   = $UserName                   # User name
             Owner                      = $Owner                      # Owner name
             Repo                       = $Repo                       # Repo name
@@ -132,16 +132,14 @@ function Set-GitHubContext {
             switch -Regex ($context['AuthType']) {
                 'PAT|UAT|IAT' {
                     $viewer = Get-GitHubViewer -Context $tempContextName
-                    $newContextID = "$HostName/$($viewer.login)"
-                    $context['ContextID'] = $newContextID
+                    $newContextID = "$($script:Config.Name)/$HostName/$($viewer.login)"
                     $context['Username'] = $viewer.login
                     $context['NodeID'] = $viewer.id
                     $context['DatabaseID'] = ($viewer.databaseId).ToString()
                 }
                 'App' {
                     $app = Get-GitHubApp -Context $tempContextName
-                    $newContextID = "$HostName/$($app.slug)"
-                    $context['ContextID'] = $newContextID
+                    $newContextID = "$($script:Config.Name)/$HostName/$($app.slug)"
                     $context['Username'] = $app.slug
                     $context['NodeID'] = $app.node_id
                     $context['DatabaseID'] = $app.id
@@ -153,11 +151,7 @@ function Set-GitHubContext {
             Write-Verbose "Found user with username: [$($context['Username'])]"
 
             if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
-                Write-Verbose "Setting the GitHub context [$newContextID]"
-                Write-Verbose (Get-SecretInfo | Out-String)
-                Write-Verbose (Get-SecretInfo | Get-Secret -AsPlainText | Out-String)
-                Remove-Context -ID $tempContextID
-                Set-Context -ID "$($script:Config.Name)/$newContextID" -Context $context
+                Rename-Context -ID $tempContextID -NewID $newContextID
                 if ($Default) {
                     Set-GitHubDefaultContext -Context $newContextID
                 }
