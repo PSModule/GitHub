@@ -22,9 +22,13 @@
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]
-    param()
+    param(
+        # The context to run the command in.
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
+    )
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = '/app'
         Method      = 'GET'
     }

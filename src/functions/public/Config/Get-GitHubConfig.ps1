@@ -1,31 +1,40 @@
-#Requires -Modules @{ ModuleName = 'Store'; RequiredVersion = '0.3.1' }
+#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '4.0.0' }
 
 function Get-GitHubConfig {
     <#
         .SYNOPSIS
-        Get configuration value.
+        Get a GitHub module configuration.
 
         .DESCRIPTION
-        Get a named configuration value from the GitHub configuration file.
+        Get a GitHub module configuration.
 
         .EXAMPLE
-        Get-GitHubConfig -Name ApiBaseUri
+        Get-GitHubConfig -Name DefaultUser
 
-        Get the current GitHub configuration for the ApiBaseUri.
+        Get the DefaultUser value from the GitHub module configuration.
     #>
-    [Alias('Get-GHConfig')]
-    [Alias('GGHC')]
-    [OutputType([object])]
+    [OutputType([void])]
     [CmdletBinding()]
     param (
-        # Choose a configuration name to get.
+        # The name of the configuration to get.
         [Parameter()]
         [string] $Name
     )
 
-    if (-not $Name) {
-        return Get-GitHubContext
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Verbose "[$commandName] - Start"
     }
 
-    Get-StoreConfig -Name $Name -Store $script:Config.Name
+    process {
+        if (-not $Name) {
+            return Get-Context -ID $script:Config.Name
+        }
+
+        Get-ContextSetting -Name $Name -ID $script:Config.Name
+    }
+
+    end {
+        Write-Verbose "[$commandName] - End"
+    }
 }

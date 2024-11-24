@@ -22,11 +22,11 @@
         # The account owner of the repository. The name is not case sensitive.
         [Parameter()]
         [Alias('org')]
-        [string] $Owner = (Get-GitHubConfig -Name Owner),
+        [string] $Owner = (Get-GitHubContextSetting -Name Owner),
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter()]
-        [string] $Repo = (Get-GitHubConfig -Name Repo),
+        [string] $Repo = (Get-GitHubContextSetting -Name Repo),
 
         # The unique identifier of the rule suite result. To get this ID, you can use GET /repos/ { owner }/ { repo }/rulesets/rule-suites for repositories and GET /orgs/ { org }/rulesets/rule-suites for organizations.
         [Parameter(Mandatory)]

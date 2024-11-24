@@ -4,8 +4,8 @@
         ApiVersion = $ApiVersion
         HostName   = $HostName
         AuthType   = $authType # 'UAT', 'PAT', 'IAT', 'APP'
-        Secret     = $tokenResponse.access_token
-        SecretType = $AccessTokenType # 'UAT', 'PAT classic' 'PAT modern', 'PEM', 'IAT'
+        Token      = $tokenResponse.access_token
+        TokenType  = $AccessTokenType # 'UAT', 'PAT classic' 'PAT modern', 'PEM', 'IAT'
         id         = 'MariusStorhaug' # username/slug, clientid
     }
     UAT    = @{
@@ -13,7 +13,7 @@
         DeviceFlowType  = $Mode
 
         UATGHA          = @{
-            SecretExpirationDate       = (Get-Date).AddSeconds($tokenResponse.expires_in)
+            TokenExpirationDate        = (Get-Date).AddSeconds($tokenResponse.expires_in)
             RefreshToken               = $tokenResponse.refresh_token
             RefreshTokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.refresh_token_expires_in)
         }
@@ -23,14 +23,14 @@
         }
     }
     PAT    = @{
-        Secret          = $accessTokenValue
+        Token           = $accessTokenValue
         AccessTokenType = $accessTokenType
     }
     APP    = @{
-        Secret = $PEM
+        Token = $PEM
     } # => Generates JWT when used towards an org/user
     IAT    = @{
-        Secret          = $AccessToken
+        Token           = $AccessToken
         AccessTokenType = $accessTokenType
     }
 }

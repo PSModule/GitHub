@@ -33,7 +33,7 @@
     param (
         # The account owner of the repository. The name is not case sensitive.
         [Parameter()]
-        [string] $Owner = (Get-GitHubConfig -Name Owner),
+        [string] $Owner = (Get-GitHubContextSetting -Name Owner),
 
         # Specifies the types of repositories you want returned.
         [Parameter()]

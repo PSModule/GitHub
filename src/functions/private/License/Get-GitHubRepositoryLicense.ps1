@@ -22,25 +22,23 @@ filter Get-GitHubRepositoryLicense {
     param (
         # The account owner of the repository. The name is not case sensitive.
         [Parameter()]
-        [string] $Owner = (Get-GitHubConfig -Name Owner),
+        [string] $Owner = (Get-GitHubContextSetting -Name Owner),
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter()]
-        [string] $Repo = (Get-GitHubConfig -Name Repo)
+        [string] $Repo = (Get-GitHubContextSetting -Name Repo)
     )
 
-    process {
-        $inputObject = @{
-            APIEndpoint = "/repos/$Owner/$Repo/license"
-            Accept      = 'application/vnd.github+json'
-            Method      = 'GET'
-        }
+    $inputObject = @{
+        APIEndpoint = "/repos/$Owner/$Repo/license"
+        Accept      = 'application/vnd.github+json'
+        Method      = 'GET'
+    }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
-            $Response = $_.Response
-            $rawContent = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($Response.content))
-            $Response | Add-Member -NotePropertyName 'raw_content' -NotePropertyValue $rawContent -Force
-            $Response
-        }
+    Invoke-GitHubAPI @inputObject | ForEach-Object {
+        $Response = $_.Response
+        $rawContent = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($Response.content))
+        $Response | Add-Member -NotePropertyName 'raw_content' -NotePropertyValue $rawContent -Force
+        $Response
     }
 }

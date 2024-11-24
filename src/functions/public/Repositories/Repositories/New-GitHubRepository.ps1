@@ -113,7 +113,7 @@ filter New-GitHubRepository {
         [Parameter(ParameterSetName = 'org')]
         [Parameter(ParameterSetName = 'fork')]
         [Alias('org')]
-        [string] $Owner = (Get-GitHubConfig -Name Owner),
+        [string] $Owner = (Get-GitHubContextSetting -Name Owner),
 
         # The name of the repository.
         [Parameter(ParameterSetName = 'fork')]

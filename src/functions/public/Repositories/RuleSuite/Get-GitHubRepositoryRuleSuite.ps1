@@ -37,11 +37,11 @@
         # The account owner of the repository. The name is not case sensitive.
         [Parameter()]
         [Alias('org')]
-        [string] $Owner = (Get-GitHubConfig -Name Owner),
+        [string] $Owner = (Get-GitHubContextSetting -Name Owner),
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter()]
-        [string] $Repo = (Get-GitHubConfig -Name Repo),
+        [string] $Repo = (Get-GitHubContextSetting -Name Repo),
 
         # The name of the ref. Cannot contain wildcard characters.
         # When specified, only rule evaluations triggered for this ref will be returned.

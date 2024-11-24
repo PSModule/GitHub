@@ -1,6 +1,6 @@
 ﻿$scriptFilePath = $MyInvocation.MyCommand.Path
-
-Write-Verbose "[$scriptFilePath] - Initializing GitHub PowerShell module..."
+Write-Verbose "Initializing GitHub PowerShell module..."
+Write-Verbose "Path: $scriptFilePath"
 
 if ($env:GITHUB_ACTIONS -eq 'true') {
     Write-Verbose 'Detected running on a GitHub Actions runner, preparing environment...'
@@ -8,9 +8,10 @@ if ($env:GITHUB_ACTIONS -eq 'true') {
     Set-GitHubEnv -Name 'GITHUB_REPOSITORY_NAME' -Value $env:GITHUB_REPOSITORY_NAME
 }
 
-### This is the store config for this module
-$storeParams = @{
-    Name      = $script:Config.Name
-    Variables = @{}
+### This is the context for this module
+# Get current module context
+$context = (Get-Context -ID $script:Config.Name)
+if (-not $context) {
+    Write-Verbose 'No context found, creating a new context...'
+    Set-Context -ID $script:Config.Name -Context @{ Name = 'GitHub' }
 }
-Set-Store @storeParams
