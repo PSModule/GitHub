@@ -131,14 +131,14 @@ function Set-GitHubContext {
             switch -Regex ($context['AuthType']) {
                 'PAT|UAT|IAT' {
                     $viewer = Get-GitHubViewer -Context $tempContextName
-                    $newContextID = "$($script:Config.Name)/$HostName/$($viewer.login)"
+                    $contextName = "$HostName/$($viewer.login)"
                     $context['Username'] = $viewer.login
                     $context['NodeID'] = $viewer.id
                     $context['DatabaseID'] = ($viewer.databaseId).ToString()
                 }
                 'App' {
                     $app = Get-GitHubApp -Context $tempContextName
-                    $newContextID = "$($script:Config.Name)/$HostName/$($app.slug)"
+                    $contextName = "$HostName/$($app.slug)"
                     $context['Username'] = $app.slug
                     $context['NodeID'] = $app.node_id
                     $context['DatabaseID'] = $app.id
@@ -150,9 +150,9 @@ function Set-GitHubContext {
             Write-Verbose "Found user with username: [$($context['Username'])]"
 
             if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
-                Set-Context -ID $newContextID -Context $context
+                Set-Context -ID "$($script:Config.Name)/$contextName" -Context $context
                 if ($Default) {
-                    Set-GitHubDefaultContext -Context $newContextID
+                    Set-GitHubDefaultContext -Context $contextName
                 }
             }
         } catch {
