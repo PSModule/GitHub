@@ -150,7 +150,7 @@ function Set-GitHubContext {
             Write-Verbose "Found user with username: [$($context['Username'])]"
 
             if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
-                Rename-Context -ID $tempContextID -NewID $newContextID -Force
+                Set-Context -ID $newContextID -Context $context
                 if ($Default) {
                     Set-GitHubDefaultContext -Context $newContextID
                 }
