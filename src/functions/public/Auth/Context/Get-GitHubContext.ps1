@@ -47,8 +47,9 @@ function Get-GitHubContext {
         Write-Verbose "Getting available contexts for [$ID]"
     } else {
         $config = Get-GitHubConfig
-        $ID = $config.DefaultContext
-        if ([string]::IsNullOrEmpty($ID )) {
+        $defaultContext = $config.DefaultContext
+        $ID = "$($script:Config.Name)/$defaultContext"
+        if ([string]::IsNullOrEmpty($ID)) {
             throw "No default GitHub context found. Please run 'Set-GitHubDefaultContext' or 'Connect-GitHub' to configure a GitHub context."
         }
         Write-Verbose "Getting the default context: [$ID]"
