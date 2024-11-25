@@ -12,6 +12,18 @@
         `maintainers`. For more information, see
         "[About teams](https://docs.github.com/github/setting-up-and-managing-organizations-and-teams/about-teams)".
 
+        .EXAMPLE
+        $params = @{
+            Organization = 'github'
+            Name         = 'team-name'
+            Description  = 'A new team'
+            Maintainers  = 'octocat'
+            RepoNames    = 'github/octocat'
+            Privacy      = 'closed'
+            Permission   = 'pull'
+        }
+        New-GitHubTeam @params
+
         .NOTES
         [Create a team](https://docs.github.com/rest/teams/teams#create-a-team)
     #>

@@ -8,7 +8,7 @@
         If you are an organization owner, deleting a parent team will delete all of its child teams as well.
 
         .EXAMPLE
-        An example
+        Remove-GitHubTeam -Organization 'github' -Name 'team-name'
 
         .NOTES
         [Delete a team](https://docs.github.com/en/rest/teams/teams?apiVersion=2022-11-28#delete-a-team)
