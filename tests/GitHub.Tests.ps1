@@ -50,7 +50,9 @@ Describe 'GitHub' {
         }
 
         It 'Can disconnect a specific context' {
+            Write-Verbose ($disconnectableContext | Select-Object *) -Verbose
             $context = $disconnectableContext.HostName + '/' + $disconnectableContext.UserName
+            Write-Verbose $context -Verbose
             { Disconnect-GitHubAccount -Context $context -Silent } | Should -Not -Throw
             (Get-GitHubContext -ListAvailable).Count | Should -Be 2
         }
