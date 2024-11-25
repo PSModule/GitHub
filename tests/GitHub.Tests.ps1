@@ -1,4 +1,11 @@
-﻿Describe 'GitHub' {
+﻿[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+    'PSUseDeclaredVarsMoreThanAssignments', '',
+    Justification = 'Pester grouping syntax: known issue.'
+)]
+[CmdletBinding()]
+param()
+
+Describe 'GitHub' {
     Context 'Auth' {
         It 'Can connect and disconnect without parameters in GitHubActions' {
             { Connect-GitHubAccount } | Should -Not -Throw
@@ -38,6 +45,14 @@
 
         It 'Can list all contexts' {
             Write-Verbose (Get-GitHubContext -ListAvailable | Out-String) -Verbose
+            (Get-GitHubContext -ListAvailable).Count | Should -Be 3
+        }
+
+        It 'Can disconnect a specific context' {
+            { Disconnect-GitHubAccount -Context 'github.com/github-actions[bot]' -Silent } | Should -Not -Throw
+            (Get-GitHubContext -ListAvailable).Count | Should -Be 2
+            Connect-GitHubAccount
+            Connect-GitHubAccount -ClientID $env:TEST_APP_CLIENT_ID -PrivateKey $env:TEST_APP_PRIVATE_KEY
             (Get-GitHubContext -ListAvailable).Count | Should -Be 3
         }
 
