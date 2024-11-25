@@ -1,0 +1,45 @@
+﻿function Remove-GitHubTeam {
+    <#
+        .SYNOPSIS
+        Delete a team
+
+        .DESCRIPTION
+        To delete a team, the authenticated user must be an organization owner or team maintainer.
+        If you are an organization owner, deleting a parent team will delete all of its child teams as well.
+
+        .EXAMPLE
+        An example
+
+        .NOTES
+        General notes
+    #>
+    [OutputType([void])]
+    [CmdletBinding(SupportsShouldProcess)]
+    param (
+        # The organization name. The name is not case sensitive.
+        [Parameter(Mandatory)]
+        [Alias('Org')]
+        [string] $Organization,
+
+        # The slug of the team name.
+        [Parameter(Mandatory)]
+        [Alias('Team', 'TeamName', 'slug', 'team_slug')]
+        [string] $Name,
+
+        # The context to run the command in
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name DefaultContext)
+    )
+
+    $inputObject = @{
+        Context     = $Context
+        Method      = 'Delete'
+        APIEndpoint = "/orgs/$Organization/teams/$Name"
+    }
+
+    if ($PSCmdlet.ShouldProcess("$Organization/$Name", 'Delete')) {
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
+        }
+    }
+}
