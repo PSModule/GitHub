@@ -11,7 +11,7 @@
         An example
 
         .NOTES
-        General notes
+        [Delete a team](https://docs.github.com/en/rest/teams/teams?apiVersion=2022-11-28#delete-a-team)
     #>
     [OutputType([void])]
     [CmdletBinding(SupportsShouldProcess)]

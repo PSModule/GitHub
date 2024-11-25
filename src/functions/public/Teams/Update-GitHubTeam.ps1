@@ -13,7 +13,7 @@
         [Update a team](https://docs.github.com/en/rest/teams/teams?apiVersion=2022-11-28#update-a-team)
     #>
     [OutputType([pscustomobject])]
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         # The organization name. The name is not case sensitive.
         [Parameter(Mandatory)]
@@ -86,7 +86,9 @@
         Body        = $body
     }
 
-    Invoke-GitHubAPI @inputObject | ForEach-Object {
-        Write-Output $_.Response
+    if ($PSCmdlet.ShouldProcess("$Organization/$Name", 'Update')) {
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
+        }
     }
 }

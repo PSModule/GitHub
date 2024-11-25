@@ -20,5 +20,4 @@ filter Get-GitHubRepoTeam {
     Invoke-GitHubAPI @inputObject | ForEach-Object {
         Write-Output $_.Response
     }
-
 }
