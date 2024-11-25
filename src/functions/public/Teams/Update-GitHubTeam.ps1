@@ -7,7 +7,17 @@
         To edit a team, the authenticated user must either be an organization owner or a team maintainer.
 
         .EXAMPLE
-
+        $params = @{
+            Organization        = 'github'
+            Name                = 'team-name'
+            NewName             = 'new-team-name'
+            Description         = 'A new team'
+            Privacy             = 'closed'
+            NotificationSetting = 'notifications_enabled'
+            Permission          = 'pull'
+            ParentTeamID        = 123456
+        }
+        Update-GitHubTeam @params
 
         .NOTES
         [Update a team](https://docs.github.com/en/rest/teams/teams?apiVersion=2022-11-28#update-a-team)
