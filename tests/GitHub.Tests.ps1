@@ -1,4 +1,11 @@
-﻿Describe 'GitHub' {
+﻿[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+    'PSUseDeclaredVarsMoreThanAssignments', '',
+    Justification = 'Pester grouping syntax: known issue.'
+)]
+[CmdletBinding()]
+param()
+
+Describe 'GitHub' {
     Context 'Auth' {
         It 'Can connect and disconnect without parameters in GitHubActions' {
             { Connect-GitHubAccount } | Should -Not -Throw
@@ -26,6 +33,7 @@
 
         It 'Can reconfigure an existing context to be fine-grained PAT token' {
             { Connect-GitHubAccount -Token $env:TEST_FG_PAT } | Should -Not -Throw
+            $disconnectableContext = Get-GitHubContext
             (Get-GitHubContext -ListAvailable).Count | Should -Be 2
             Write-Verbose (Get-GitHubContext -ListAvailable | Out-String) -Verbose
         }
@@ -39,6 +47,12 @@
         It 'Can list all contexts' {
             Write-Verbose (Get-GitHubContext -ListAvailable | Out-String) -Verbose
             (Get-GitHubContext -ListAvailable).Count | Should -Be 3
+        }
+
+        It 'Can disconnect a specific context' {
+            $context = $disconnectableContext.HostName + '/' + $disconnectableContext.UserName
+            { Disconnect-GitHubAccount -Context $context -Silent } | Should -Not -Throw
+            (Get-GitHubContext -ListAvailable).Count | Should -Be 2
         }
 
         It 'Can swap context to another' {
