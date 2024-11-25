@@ -2,7 +2,6 @@
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter
 
-    $defaultContext = Get-GitHubConfig -Name 'DefaultContext'
     $contexts = Get-GitHubContext -ListAvailable -Verbose:$false | Where-Object { "$($_.HostName)/$($_.UserName)" -like "$wordToComplete*" }
 
     $contexts | ForEach-Object {
