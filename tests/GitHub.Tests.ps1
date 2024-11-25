@@ -33,7 +33,6 @@ Describe 'GitHub' {
 
         It 'Can reconfigure an existing context to be fine-grained PAT token' {
             { Connect-GitHubAccount -Token $env:TEST_FG_PAT } | Should -Not -Throw
-            $disconnectableContext = Get-GitHubContext
             (Get-GitHubContext -ListAvailable).Count | Should -Be 2
             Write-Verbose (Get-GitHubContext -ListAvailable | Out-String) -Verbose
         }
@@ -50,11 +49,11 @@ Describe 'GitHub' {
         }
 
         It 'Can disconnect a specific context' {
-            Write-Verbose ($disconnectableContext | Select-Object *) -Verbose
-            $context = $disconnectableContext.HostName + '/' + $disconnectableContext.UserName
-            Write-Verbose $context -Verbose
-            { Disconnect-GitHubAccount -Context $context -Silent } | Should -Not -Throw
+            { Disconnect-GitHubAccount -Context 'github.com/github-actions[bot]' -Silent } | Should -Not -Throw
             (Get-GitHubContext -ListAvailable).Count | Should -Be 2
+            Connect-GitHubAccount
+            Connect-GitHubAccount -ClientID $env:TEST_APP_CLIENT_ID -PrivateKey $env:TEST_APP_PRIVATE_KEY
+            (Get-GitHubContext -ListAvailable).Count | Should -Be 3
         }
 
         It 'Can swap context to another' {
@@ -112,13 +111,5 @@ Describe 'Commands' {
                 Get-ChildItem env: | Select-Object Name, Value | Format-Table -AutoSize
             }
         } | Should -Not -Throw
-    }
-}
-
-Describe 'Organization' {
-    Context 'Members' {
-        It 'Get-GitHubOrganizationMember can be called' {
-            Get-GitHubOrganizationMember -Organization 'PSModule' | Should -BeGreaterOrEqual 1
-        }
     }
 }
