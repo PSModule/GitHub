@@ -36,18 +36,25 @@
         # The context to log out of.
         [Parameter()]
         [Alias('Name')]
-        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext'),
+
+        # Silently disconnects from GitHub.
+        [switch] $Silent
     )
 
     $commandName = $MyInvocation.MyCommand.Name
     Write-Verbose "[$commandName] - Start"
 
-    $Context = Get-GitHubConfig -Name 'DefaultContext'
     Remove-GitHubContext -Context $Context
-    Remove-GitHubConfig -Name 'DefaultContext'
+    $isDefaultContext = $Context -eq (Get-GitHubConfig -Name 'DefaultContext')
+    if ($isDefaultContext) {
+        Remove-GitHubConfig -Name 'DefaultContext'
+    }
 
-    Write-Host '✓ ' -ForegroundColor Green -NoNewline
-    Write-Host "Logged out of GitHub! [$Context]"
+    if (-not $Silent) {
+        Write-Host '✓ ' -ForegroundColor Green -NoNewline
+        Write-Host "Logged out of GitHub! [$Context]"
+    }
 
     Write-Verbose "[$commandName] - End"
 }
