@@ -112,3 +112,11 @@ Describe 'Commands' {
         } | Should -Not -Throw
     }
 }
+
+Describe 'Organization' {
+    Context 'Members' {
+        It 'Get-GitHubOrganizationMember can be called' {
+            Get-GitHubOrganizationMember -Organization 'PSModule' | Should -BeGreaterOrEqual 1
+        }
+    }
+}
