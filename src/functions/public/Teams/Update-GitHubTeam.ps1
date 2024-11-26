@@ -35,10 +35,6 @@
         [Alias('Team', 'TeamName', 'slug', 'team_slug')]
         [string] $Name,
 
-        # The context to run the command in
-        [Parameter()]
-        [string] $Context = (Get-GitHubConfig -Name DefaultContext),
-
         # The new team name.
         [Parameter()]
         [Alias()]
