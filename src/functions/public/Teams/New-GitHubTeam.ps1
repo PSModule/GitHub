@@ -77,7 +77,11 @@
 
         # The ID of a team to set as the parent team.
         [Parameter()]
-        [int] $ParentTeamID
+        [int] $ParentTeamID,
+
+        # The context to run the command in
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name DefaultContext)
     )
 
     $body = @{
