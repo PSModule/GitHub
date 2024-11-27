@@ -22,7 +22,7 @@
         .NOTES
         [Masking a value in a log](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions#masking-a-value-in-a-log)
     #>
-    [Alias('Mask', 'Add-Mask')]
+    [Alias('Mask')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSAvoidLongLines', '', Scope = 'Function',
         Justification = 'Long documentation URL'
