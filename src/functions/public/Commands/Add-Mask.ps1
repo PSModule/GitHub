@@ -1,7 +1,7 @@
 ﻿filter Add-Mask {
     <#
         .SYNOPSIS
-        Mask a value in GitHub Actions
+        Masks a value in a log
 
         .DESCRIPTION
         Masking a value prevents a string or variable from being printed in the log. Each masked word separated by whitespace is
@@ -20,7 +20,7 @@
         Masks the value of $SecretValue1 and $SecretValue2 so that its printed like ***, using the pipeline
 
         .NOTES
-        [Masking a value in a log | GitHub Docs](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions#masking-a-value-in-a-log)
+        [Masking a value in a log](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions#masking-a-value-in-a-log)
     #>
     [Alias('Mask')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
