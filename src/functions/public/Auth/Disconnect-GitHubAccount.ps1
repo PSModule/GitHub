@@ -39,6 +39,7 @@
         [string] $Context = (Get-GitHubConfig -Name 'DefaultContext'),
 
         # Silently disconnects from GitHub.
+        [Parameter()]
         [switch] $Silent
     )
 

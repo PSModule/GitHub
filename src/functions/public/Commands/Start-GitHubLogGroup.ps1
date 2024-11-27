@@ -1,4 +1,4 @@
-﻿function Start-LogGroup {
+﻿function Start-GitHubLogGroup {
     <#
         .SYNOPSIS
         Starts a log group in GitHub Actions
@@ -11,7 +11,6 @@
         .NOTES
         [GitHub - Grouping log lines](https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#grouping-log-lines)
     #>
-    [Alias('New-LogGroup')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSUseShouldProcessForStateChangingFunctions', '', Scope = 'Function',
         Justification = 'Does not change state'
@@ -21,6 +20,7 @@
         Justification = 'Intended for logging in Github Runners which does support Write-Host'
     )]
     [CmdletBinding()]
+    [Alias('Start-LogGroup')]
     param(
         # The name of the log group
         [Parameter(Mandatory)]

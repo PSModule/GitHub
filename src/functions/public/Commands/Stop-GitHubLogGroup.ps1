@@ -1,4 +1,4 @@
-﻿function Stop-LogGroup {
+﻿function Stop-GitHubLogGroup {
     <#
         .SYNOPSIS
         Stops the current log group in GitHub Actions
@@ -11,7 +11,6 @@
         .NOTES
         [GitHub - Grouping log lines](https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#grouping-log-lines)
     #>
-    [Alias('End-LogGroup')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSUseShouldProcessForStateChangingFunctions', '', Scope = 'Function',
         Justification = 'Does not change state'
@@ -21,6 +20,7 @@
         Justification = 'Intended for logging in Github Runners'
     )]
     [CmdletBinding()]
+    [Alias('Stop-LogGroup')]
     param()
 
     Write-Host '::endgroup::'

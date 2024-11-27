@@ -1,4 +1,4 @@
-﻿function Set-LogGroup {
+﻿function Set-GitHubLogGroup {
     <#
         .SYNOPSIS
         Encapsulates commands with a log group in GitHub Actions
@@ -8,7 +8,7 @@
         Allows for colapsing of code in IDE for code that belong together.
 
         .EXAMPLE
-        Set-LogGroup -Name 'MyGroup' -ScriptBlock {
+        Set-GitHubLogGroup -Name 'MyGroup' -ScriptBlock {
             Write-Host 'Hello, World!'
         }
 
@@ -40,7 +40,7 @@
         [scriptblock] $ScriptBlock
     )
 
-    Start-LogGroup -Name $Name
+    Start-GitHubLogGroup -Name $Name
     . $ScriptBlock
-    Stop-LogGroup
+    Stop-GitHubLogGroup
 }
