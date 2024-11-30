@@ -23,12 +23,15 @@ jobs:
         uses: PSModule/GitHub-Script@v1
         with:
           Script: |
-            . ".\scripts\coverage.ps1" -Verbose
+            . ".\scripts\Set-Coverage-Raport.ps1" -Verbose
 
-            $changedFiles = git diff --name-only
-            if (-not $changedFiles) {
-              Write-Host 'No automated changes detected'
-              return
+            LogGroup 'Updated files' {
+              $changedFiles = git diff --name-only
+              $changedFiles
+              # if (-not $changedFiles) {
+              #   Write-Host 'No automated changes detected'
+              #   return
+              # }
             }
 
             git add .
