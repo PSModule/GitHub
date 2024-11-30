@@ -23,7 +23,7 @@ jobs:
         uses: PSModule/GitHub-Script@v1
         with:
           Script: |
-            . ".\scripts\coverage.ps1"
+            . ".\scripts\coverage.ps1" -Verbose
 
             $changedFiles = git diff --name-only
             if (-not $changedFiles) {

@@ -1,4 +1,7 @@
-﻿function Find-APIMethod {
+﻿[CmdletBinding()]
+param()
+
+function Find-APIMethod {
     <#
         .SYNOPSIS
         Find API methods in a directory
