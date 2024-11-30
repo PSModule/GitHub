@@ -4,7 +4,7 @@
         Set the Git configuration for the GitHub context.
 
         .DESCRIPTION
-        Sets the Git configuration for the GitHub context. This command sets the user.name, user.email, and url.<host>.insteadOf git configs.
+        Sets the Git configuration for the GitHub context. This command sets the `user.name`, `user.email`, and `url.<host>.insteadOf` git configs.
 
         .EXAMPLE
         Set-GitHubGitConfig
@@ -45,7 +45,7 @@
     if ($PSCmdlet.ShouldProcess("$Name", 'Set Git configuration')) {
         git config --global user.name "$username"
         git config --global user.email "$id+$username@users.noreply.github.com"
-        git config --global url."https://oauth2:$token@$hostName".insteadOf https://<host>
+        git config --global url."https://oauth2:$token@$hostName".insteadOf https://$hostName
         Write-Verbose "[$commandName] - End"
     }
 }
