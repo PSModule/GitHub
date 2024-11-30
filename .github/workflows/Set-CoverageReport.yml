@@ -35,8 +35,10 @@ jobs:
             }
 
             git add .
-            Write-Host '::group::Changed files [$($changedFiles.Count)]'
-            $changedFiles | ForEach-Object { Write-Host $_ }
-            Write-Host '::endgroup::'
+            
+            LogGroup "Changed files [$($changedFiles.Count)]" {
+              $changedFiles | ForEach-Object { Write-Host $_ }
+            }
+
             git commit -m "Auto-generated changes"
             git push
