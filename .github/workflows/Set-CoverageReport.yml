@@ -23,7 +23,7 @@ jobs:
         uses: PSModule/GitHub-Script@v1
         with:
           Script: |
-            . ".\scripts\Set-Coverage-Raport.ps1" -Verbose
+            . ".\scripts\Set-CoverageReport.ps1" -Verbose
 
             LogGroup 'Updated files' {
               $changedFiles = git diff --name-only
