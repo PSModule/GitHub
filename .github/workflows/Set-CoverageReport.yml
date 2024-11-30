@@ -24,6 +24,7 @@ jobs:
         with:
           Script: |
             . ".\scripts\Set-CoverageReport.ps1" -Verbose
+            git add .
 
             LogGroup 'Updated files' {
               $changedFiles = git diff --name-only
@@ -34,8 +35,7 @@ jobs:
               # }
             }
 
-            git add .
-            
+
             LogGroup "Changed files [$($changedFiles.Count)]" {
               $changedFiles | ForEach-Object { Write-Host $_ }
             }
