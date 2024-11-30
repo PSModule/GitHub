@@ -1,35 +1,39 @@
 name: Update coverage report
 
-run-name: "Update coverage report"
-
 on:
   workflow_dispatch:
   push:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   Update-Coverage:
     runs-on: ubuntu-latest
     steps:
-      - name: Authenticate GitHub App
-        id: auth
-        uses: actions/create-github-app-token@v1
-        with:
-          app-id: ${{ secrets.APP_ID }}
-          private-key: ${{ secrets.APP_PRIVATE_KEY }}
-          # owner: ${{ github.repository_owner }}
-
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Update coverage report
-        shell: pwsh
-        run: |
-          . ".\scripts\coverage.ps1"
+        uses: PSModule/GitHub-Script@v1
+        with:
+          ClientID: ${{ secrets.TEST_APP_CLIENT_ID }}
+          PrivateKey: ${{ secrets.TEST_APP_PRIVATE_KEY }}
+          Script: |
+            . ".\scripts\coverage.ps1"
 
-      - name: Commit changes
-        shell: pwsh
-        run: |
-          git config --global user.email "
+            $changedFiles = git diff --name-only
+            $hasChanges = $null -ne $changedFiles
+            "hasChanges=$hasChanges" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+            if (-not $hasChanges) {
+              Write-Host 'No automated changes detected'
+              return
+            }
+
+            # git add .
+            # Write-Host '::group::Changed files [$($changedFiles.Count)]'
+            # $changedFiles | ForEach-Object { Write-Host $_ }
+            # Write-Host '::endgroup::'
+            # git commit -m "Auto-generated changes"
+            # git push
