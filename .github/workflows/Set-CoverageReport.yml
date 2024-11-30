@@ -3,6 +3,8 @@ name: Update coverage report
 on:
   workflow_dispatch:
   push:
+    branches:
+      - main
 
 permissions:
   contents: write
@@ -17,8 +19,6 @@ jobs:
       - name: Update coverage report
         uses: PSModule/GitHub-Script@v1
         with:
-          ClientID: ${{ secrets.TEST_APP_CLIENT_ID }}
-          PrivateKey: ${{ secrets.TEST_APP_PRIVATE_KEY }}
           Script: |
             . ".\scripts\coverage.ps1"
 
@@ -31,9 +31,9 @@ jobs:
               return
             }
 
-            # git add .
-            # Write-Host '::group::Changed files [$($changedFiles.Count)]'
-            # $changedFiles | ForEach-Object { Write-Host $_ }
-            # Write-Host '::endgroup::'
-            # git commit -m "Auto-generated changes"
-            # git push
+            git add .
+            Write-Host '::group::Changed files [$($changedFiles.Count)]'
+            $changedFiles | ForEach-Object { Write-Host $_ }
+            Write-Host '::endgroup::'
+            git commit -m "Auto-generated changes"
+            git push
