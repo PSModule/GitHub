@@ -7,8 +7,16 @@ on:
 
 permissions:
   contents: read
+  pull-requests: write
+  statuses: write
+
+env:
+  TEST_APP_CLIENT_ID: ${{ secrets.TEST_APP_CLIENT_ID }}
+  TEST_APP_PRIVATE_KEY: ${{ secrets.TEST_APP_PRIVATE_KEY }}
+  TEST_FG_PAT: ${{ secrets.TEST_FG_PAT }}
+  TEST_PAT: ${{ secrets.TEST_PAT }}
 
 jobs:
   Process-PSModule:
-    uses: PSModule/Process-PSModule/.github/workflows/CI.yml@v2
+    uses: PSModule/Process-PSModule/.github/workflows/CI.yml@v3
     secrets: inherit
