@@ -80,6 +80,17 @@ Describe 'GitHub' {
             $config.ID | Should -Be 'PSModule.GitHub'
         }
     }
+    Context 'Git' {
+        It 'Set-GitHubGitConfig sets the Git configuration' {
+            { Set-GitHubGitConfig } | Should -Not -Throw
+            $gitConfig = Get-GitHubGitConfig
+            Write-Verbose ($gitConfig | Format-Table | Out-String) -Verbose
+
+            $gitConfig | Should -Not -BeNullOrEmpty
+            $gitConfig.'user.name' | Should -Not -BeNullOrEmpty
+            $gitConfig.'user.email' | Should -Not -BeNullOrEmpty
+        }
+    }
 }
 
 Context 'API' {

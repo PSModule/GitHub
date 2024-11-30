@@ -1,4 +1,4 @@
-﻿function Set-GitHubContextGitConfig {
+﻿function Set-GitHubGitConfig {
     <#
         .SYNOPSIS
         Set the Git configuration for the GitHub context.
@@ -7,12 +7,12 @@
         Sets the Git configuration for the GitHub context. This command sets the user.name, user.email, and url.<host>.insteadOf git configs.
 
         .EXAMPLE
-        Set-GitHubContextGitConfig
+        Set-GitHubGitConfig
 
         Sets the Git configuration for the default GitHub context.
 
         .EXAMPLE
-        Set-GitHubContextGitConfig -Context 'MyContext'
+        Set-GitHubGitConfig -Context 'MyContext'
 
         Sets the Git configuration for the GitHub context named 'MyContext'.
     #>
@@ -40,20 +40,12 @@
     $username = $contextObj.UserName
     $id = $contextObj.DatabaseID
     $token = $contextObj.Token | ConvertFrom-SecureString -AsPlainText
-    Add-GitHubMask -Value $token
     $hostName = $contextObj.HostName
 
     if ($PSCmdlet.ShouldProcess("$Name", 'Set Git configuration')) {
         git config --global user.name "$username"
         git config --global user.email "$id+$username@users.noreply.github.com"
         git config --global url."https://oauth2:$token@$hostName".insteadOf https://<host>
-        git config --global --list | ForEach-Object {
-            ([pscustomobject]@{
-                Name  = $_.Split('=')[0]
-                Value = $_.Split('=')[1]
-            })
-        }
-
         Write-Verbose "[$commandName] - End"
     }
 }
