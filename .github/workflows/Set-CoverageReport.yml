@@ -2,6 +2,9 @@ name: Update coverage report
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches:
+      - main
   push:
     branches:
       - main
@@ -23,10 +26,7 @@ jobs:
             . ".\scripts\coverage.ps1"
 
             $changedFiles = git diff --name-only
-            $hasChanges = $null -ne $changedFiles
-            "hasChanges=$hasChanges" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-
-            if (-not $hasChanges) {
+            if (-not $changedFiles) {
               Write-Host 'No automated changes detected'
               return
             }
