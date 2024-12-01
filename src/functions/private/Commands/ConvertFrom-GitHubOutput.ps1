@@ -6,15 +6,40 @@
         .DESCRIPTION
         Gets the GitHub output from $env:GITHUB_OUTPUT and creates an object with key-value pairs,
         supporting both single-line and multi-line values, and parsing JSON values.
+
+        .EXAMPLE
+        $content = @'
+        zen=something else
+        result={"MyOutput":"Hello, World!","Status":"Success"}
+        MY_VALUE<<EOF_12a089b9-051e-4c4e-91c9-8e24fc2fbbf6
+        Line1
+        Line2
+        Line3
+        EOF_12a089b9-051e-4c4e-91c9-8e24fc2fbbf6
+        Config={"Nested":{"SubSetting":"SubValue"},"Setting1":"Value1","Setting2":2}
+        Numbers=12345
+        '@
+
+        $content | ConvertFrom-GitHubOutput
+
+        zen      : something else
+        result   : @{MyOutput=Hello, World!; Status=Success}
+        MY_VALUE : Line1
+                Line2
+                Line3
+        Config   : {[Nested, System.Collections.Hashtable], [Setting1, Value1], [Setting2, 2]}
+        Numbers  : 12345
+
+        This will convert the GitHub Actions output syntax to a PowerShell object.
+
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([object])]
     [CmdletBinding()]
     param(
         # The input data to convert
         [Parameter(
-            Mandatory = $true,
-            ValueFromPipeline = $true,
-            ValueFromPipelineByPropertyName = $true
+            Mandatory,
+            ValueFromPipeline
         )]
         [string[]] $InputData
     )
