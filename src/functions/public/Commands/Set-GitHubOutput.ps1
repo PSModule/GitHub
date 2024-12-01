@@ -1,40 +1,44 @@
 ﻿function Set-GitHubOutput {
     <#
-        .SYNOPSIS
-        Set a output variable in GitHub Actions
+    .SYNOPSIS
+        Sets the GitHub output for a given key and value.
 
-        .DESCRIPTION
-        Supports SecureString and multiline strings.
+    .DESCRIPTION
+        This function appends key-value pairs to the GitHub Actions output file specified by $env:GITHUB_OUTPUT.
+        It handles two scenarios:
+        - Normal shell execution: Appends the key-value pair directly.
+        - GitHub composite action via [GitHub-Script](https://github.com/PSModule/GitHub-Script):
+          Accumulates key-value pairs under the 'result' key as a JSON object.
 
-        .EXAMPLE
-        Set-GitHubOutput -Name 'MyOutput' -Value 'Hello, World!'
+    .EXAMPLE
+        Set-GitHubOutput -Name 'id' -Value '123123123'
 
-        Creates a new output variable named 'MyOutput' with the value 'Hello, World!'.
-
-        .NOTES
-        [Setting an output parameter](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions#setting-an-output-parameter)
+    .EXAMPLE
+        Set-GitHubOutput -Name 'result' -Value @{
+            id = '123123123'
+            name = 'test'
+        }
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-        'PSAvoidLongLines', '', Scope = 'Function',
-        Justification = 'Long doc links'
-    )]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-        'PSUseShouldProcessForStateChangingFunctions', '', Scope = 'Function',
-        Justification = 'Does not change system state significantly'
-    )]
-    [OutputType([void])]
-    [Alias('Output')]
-    [CmdletBinding()]
-    param (
-        # Name of the variable
+    [CmdletBinding(SupportsShouldProcess)]
+    param(
+        # The name of the output variable to set.
         [Parameter(Mandatory)]
         [string] $Name,
 
-        # Value of the variable
+        # The value of the output variable to set.
         [Parameter(Mandatory)]
-        [AllowNull()]
-        [object] $Value
+        [object] $Value,
+
+        # The path to the GitHub output file.
+        [Parameter()]
+        [string] $Path = $env:GITHUB_OUTPUT
     )
+
+    if (-not (Test-Path -Path $Path)) {
+        throw "File not found: $Path"
+    }
+
+    $outputs = Get-GithubOutput -Path $Path -AsHashtable
 
     if ($Value -Is [securestring]) {
         $Value = $Value | ConvertFrom-SecureString -AsPlainText -Force
@@ -47,13 +51,22 @@
 
     Write-Verbose "Output: [$Name] = [$Value]"
 
-    $guid = [guid]::NewGuid().Guid
-    $content = @"
-$Name<<$guid
-$Value
-$guid
-"@
-    $content | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+    # If the script is running in a GitHub composite action, accumulate the output under the 'result' key, else append the key-value pair directly.
+    if ($env:PSMODULE_GITHUB_SCRIPT) {
+        if (-not $outputs.result) {
+            $outputs.result = @{
+                $Name = $Value
+            }
+        } else {
+            $outputs.result[$Name] = $Value
+        }
+    } else {
+        $outputs[$Name] = $Value
+    }
 
     Write-Verbose "Output: [$Name] avaiable as `${{ steps.$env:GITHUB_ACTION.outputs.$Name }}'"
+
+    if ($PSCmdlet.ShouldProcess('GitHub Output', 'Set')) {
+        $outputs | ConvertTo-GitHubOutput | Set-Content -Path $Path
+    }
 }

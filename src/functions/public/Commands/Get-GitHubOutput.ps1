@@ -19,16 +19,16 @@
     param(
         # Returns the output as a hashtable.
         [Parameter()]
-        [switch] $AsHashtable
+        [switch] $AsHashtable,
+
+        # The path to the GitHub output file.
+        [Parameter()]
+        [string] $Path = $env:GITHUB_OUTPUT
     )
 
-    if (-not $OutputFile) {
-        throw 'Environment variable GITHUB_OUTPUT is not set.'
+    if (-not (Test-Path -Path $Path)) {
+        throw "File not found: $Path"
     }
 
-    if (-not (Test-Path -Path $env:GITHUB_OUTPUT)) {
-        throw "File not found: $env:GITHUB_OUTPUT"
-    }
-
-    Get-Content -Path $env:GITHUB_OUTPUT | ConvertFrom-GitHubOutput -AsHashtable:$AsHashtable
+    Get-Content -Path $Path | ConvertFrom-GitHubOutput -AsHashtable:$AsHashtable
 }
