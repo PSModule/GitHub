@@ -2,25 +2,6 @@
 
 ## Statistics
 
-<table>
-    <tr>
-        <td>Available functions</td>
-        <td>985</td>
-    </tr>
-    <tr>
-        <td>Covered functions</td>
-        <td>153</td>
-    </tr>
-    <tr>
-        <td>Missing functions</td>
-        <td>832</td>
-    </tr>
-    <tr>
-        <td>Coverage</td>
-        <td>15.53%</td>
-    </tr>
-</table>
-
 ## API Endpoints
 
 | Path                                                                                                                    | DELETE             | GET                | PATCH              | POST               | PUT                |

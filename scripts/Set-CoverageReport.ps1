@@ -110,20 +110,6 @@ LogGroup 'Coverage report' {
     Get-Content -Path 'Coverage.md' | ForEach-Object { Write-Output $_ }
 }
 
-LogGroup 'Get-Files' {
-    Get-ChildItem -Path . -Recurse | Select-Object -ExpandProperty FullName | Sort-Object
-}
-
-LogGroup 'git diff --name-only' {
-    git diff --name-only
-}
-
 git add .
 git commit -m 'Auto-generated changes'
-
-LogGroup 'git diff --name-only' {
-    git diff --name-only
-}
-
-
 git push
