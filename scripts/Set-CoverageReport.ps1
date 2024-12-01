@@ -106,9 +106,7 @@ $($paths | New-MDTable)
     Set-Content -Path 'Coverage.md' -Value $coverageContent
 }
 
-LogGroup 'Coverage report' {
-    Get-Content -Path 'Coverage.md' | ForEach-Object { Write-Output $_ }
-}
+Set-GitHubStepSummary -Summary $coverageContent
 
 git add .
 git commit -m 'Auto-generated changes'
