@@ -114,6 +114,7 @@ LogGroup 'Get-Files' {
     Get-ChildItem -Path . -Recurse | Select-Object -ExpandProperty FullName | Sort-Object
 }
 
+git add .
 $changedFiles = git diff --name-only
 if ($changedFiles.Count -eq 0) {
     Write-Output 'No changes detected'
@@ -124,6 +125,6 @@ LogGroup "Changed files [$($changedFiles.Count)]" {
     $changedFiles | ForEach-Object { Write-Output $_ }
 }
 
-git add .
+
 git commit -m 'Auto-generated changes'
 git push
