@@ -114,9 +114,27 @@ LogGroup 'Get-Files' {
     Get-ChildItem -Path . -Recurse | Select-Object -ExpandProperty FullName | Sort-Object
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 git add .
 git commit -m 'Auto-generated changes'
 
-git diff
+git diff --name-only
 
 git push
