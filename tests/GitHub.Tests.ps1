@@ -80,36 +80,45 @@ Describe 'GitHub' {
             $config.ID | Should -Be 'PSModule.GitHub'
         }
     }
-}
+    Context 'Git' {
+        It 'Set-GitHubGitConfig sets the Git configuration' {
+            { Set-GitHubGitConfig } | Should -Not -Throw
+            $gitConfig = Get-GitHubGitConfig
+            Write-Verbose ($gitConfig | Format-Table | Out-String) -Verbose
 
-Context 'API' {
-    It 'Can be called directly to get ratelimits' {
-        {
-            $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit'
-            Write-Verbose ($rateLimit | Format-Table | Out-String) -Verbose
-        } | Should -Not -Throw
-
+            $gitConfig | Should -Not -BeNullOrEmpty
+            $gitConfig.'user.name' | Should -Not -BeNullOrEmpty
+            $gitConfig.'user.email' | Should -Not -BeNullOrEmpty
+        }
     }
-}
+    Context 'API' {
+        It 'Can be called directly to get ratelimits' {
+            {
+                $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit'
+                Write-Verbose ($rateLimit | Format-Table | Out-String) -Verbose
+            } | Should -Not -Throw
 
-Describe 'Commands' {
-    It "Start-LogGroup 'MyGroup' should not throw" {
-        {
-            Start-LogGroup 'MyGroup'
-        } | Should -Not -Throw
+        }
     }
+    Describe 'Commands' {
+        It "Start-LogGroup 'MyGroup' should not throw" {
+            {
+                Start-LogGroup 'MyGroup'
+            } | Should -Not -Throw
+        }
 
-    It 'Stop-LogGroup should not throw' {
-        {
-            Stop-LogGroup
-        } | Should -Not -Throw
-    }
+        It 'Stop-LogGroup should not throw' {
+            {
+                Stop-LogGroup
+            } | Should -Not -Throw
+        }
 
-    It "LogGroup 'MyGroup' should not throw" {
-        {
-            LogGroup 'MyGroup' {
-                Get-ChildItem env: | Select-Object Name, Value | Format-Table -AutoSize
-            }
-        } | Should -Not -Throw
+        It "LogGroup 'MyGroup' should not throw" {
+            {
+                LogGroup 'MyGroup' {
+                    Get-ChildItem env: | Select-Object Name, Value | Format-Table -AutoSize
+                }
+            } | Should -Not -Throw
+        }
     }
 }
