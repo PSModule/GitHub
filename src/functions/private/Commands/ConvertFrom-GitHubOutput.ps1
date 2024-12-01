@@ -33,7 +33,8 @@
         This will convert the GitHub Actions output syntax to a PowerShell object.
 
     #>
-    [OutputType([object])]
+    [OutputType([pscustomobject])]
+    [OutputType([hashtable])]
     [CmdletBinding()]
     param(
         # The input data to convert
