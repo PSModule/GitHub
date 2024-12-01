@@ -27,4 +27,5 @@
             $outputLines += "$key=$value"
         }
     }
+    $outputLines
 }
