@@ -25,9 +25,13 @@ jobs:
           Script: |
             . ".\scripts\Set-CoverageReport.ps1" -Verbose
 
-            Get-ChildItem -Path . -Recurse | Select-Object -ExpandProperty FullName | Sort-Object
+            LogGroup 'Get-Files' {
+              Get-ChildItem -Path . -Recurse | Select-Object -ExpandProperty FullName | Sort-Object
+            }
 
-            git add .
+            git status
+
+            git diff --name-only
 
             $changedFiles = git diff --name-only
             $hasChanges = $null -ne $changedFiles
@@ -44,5 +48,6 @@ jobs:
             Get-GitHubContext | Format-Table
             Get-GitHubGitConfig | Format-Table
 
+            git add .
             git commit -m "Auto-generated changes"
             git push
