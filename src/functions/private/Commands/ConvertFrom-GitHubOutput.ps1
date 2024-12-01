@@ -91,23 +91,3 @@
         return [PSCustomObject]$result
     }
 }
-
-
-$multiLineString = @'
-zen=Non-blocking is better than blocking.
-result={"MyOutput":"Hello, World!"}
-MY_VALUE<<EOF
-multi
-line
-value
-EOF
-'@ #-split "`n"
-
-$outputs = ConvertFrom-GitHubOutput -InputData $multiLineString
-$outputs | Format-List
-$outputs.result
-
-
-$outputs = $multiLineString | ConvertFrom-GitHubOutput
-$outputs | Format-List
-$outputs.result
