@@ -101,9 +101,9 @@ LogGroup 'Generate coverage report' {
 $($paths | New-MDTable)
 
 "@
-    Set-Content -Path 'Coverage.md' -Value $coverageContent
+    Set-Content -Path 'Coverage2.md' -Value $coverageContent
 }
 
 LogGroup 'Coverage report' {
-    Get-Content -Path 'Coverage.md' | ForEach-Object { Write-Host $_ }
+    Get-Content -Path 'Coverage2.md' | ForEach-Object { Write-Host $_ }
 }
