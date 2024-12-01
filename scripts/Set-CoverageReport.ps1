@@ -115,12 +115,9 @@ LogGroup 'Get-Files' {
 }
 
 $changedFiles = git diff --name-only
-$changedFiles
-$hasChanges = $null -ne $changedFiles
-
-if (-not $hasChanges) {
-    Write-Output 'No change detected'
-    return
+if ($changedFiles.Count -eq 0) {
+    Write-Output 'No changes detected'
+    exit 0
 }
 
 LogGroup "Changed files [$($changedFiles.Count)]" {
