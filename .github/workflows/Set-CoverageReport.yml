@@ -27,6 +27,13 @@ jobs:
           Script: |
             . ".\scripts\Set-CoverageReport.ps1" -Verbose
 
+            if (Test-Path 'Coverage.md') {
+                Write-Host 'Coverage.md exists.'
+            } else {
+                Write-Host 'Coverage.md does not exist.'
+            }
+
+
             LogGroup 'Get-Files' {
               Get-ChildItem -Path . -Recurse | Select-Object -ExpandProperty FullName | Sort-Object
             }
