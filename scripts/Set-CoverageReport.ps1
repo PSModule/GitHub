@@ -26,6 +26,7 @@ function Find-APIMethod {
             $putMatches = Select-String -Path $filePath -Pattern $methodPattern -AllMatches
             foreach ($match in $stringMatches) {
                 foreach ($putMatch in $putMatches) {
+                    Write-Verbose '----------------------------------------'
                     Write-Verbose "Match found in file: $filePath"
                     Write-Verbose "API Endpoint: $($match.Matches.Value) near line $($match.LineNumber)"
                     Write-Verbose "Method: $($putMatch.Matches.Value) near line $($putMatch.LineNumber)"
@@ -104,5 +105,5 @@ $($paths | New-MDTable)
 }
 
 LogGroup 'Coverage report' {
-    Get-Content -Path '.\Coverage.md' | ForEach-Object { Write-Verbose $_ -Verbose }
+    Get-Content -Path '.\Coverage.md' | ForEach-Object { Write-Host $_ }
 }
