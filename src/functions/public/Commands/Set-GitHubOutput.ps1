@@ -11,13 +11,13 @@
         Accumulates key-value pairs under the 'result' key as a JSON object.
 
     .EXAMPLE
-    Set-GitHubOutput -Name 'id' -Value '123123123'
+    Set-GitHubOutput -Name 'ID' -Value '123123123'
 
-    Sets the output variable 'id' to '123123123' in the GitHub Actions output file.
+    Sets the output variable 'ID' to '123123123' in the GitHub Actions output file.
 
     .EXAMPLE
     Set-GitHubOutput -Name 'result' -Value @{
-        id = '123123123'
+        ID   = '123123123'
         name = 'test'
     }
     #>
