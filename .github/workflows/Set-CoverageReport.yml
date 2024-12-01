@@ -32,8 +32,8 @@ jobs:
             $changedFiles = git diff --name-only
             $hasChanges = $null -ne $changedFiles
 
-            if (-not $changedFiles) {
-              Write-Host 'No changes detected'
+            if (-not $hasChanges) {
+              Write-Host 'No change detected'
               return
             }
 
