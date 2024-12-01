@@ -13,6 +13,20 @@
         qwe…             @{"MyOutput":"Hello, World!"} something else
 
         Gets the GitHub output and returns an object with key-value pairs.
+
+        .EXAMPLE
+        Get-GitHubOutput -AsHashtable
+
+        Name                           Value
+        ----                           -----
+        MyArray                        1 2 3
+        MyOutput                       Hello, World!
+        zen                            something else
+        result                         {[thisisatest, a simple value]}
+        mystuff                        {[MyOutput, Hello, World!]}
+        MY_VALUE                       qwe…
+
+        Gets the GitHub output and returns a hashtable.
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]
