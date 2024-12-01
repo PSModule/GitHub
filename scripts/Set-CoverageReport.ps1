@@ -101,7 +101,7 @@ LogGroup 'Generate coverage report' {
 $($paths | New-MDTable)
 
 "@
-    $coverageContent | Out-File -FilePath '.\Coverage.md' -Force
+    Set-Content -Path '.\Coverage.md' -Value $coverageContent
 }
 
 LogGroup 'Coverage report' {
