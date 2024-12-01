@@ -1,4 +1,6 @@
-﻿[CmdletBinding()]
+﻿#Requires -Modules MarkdownPS
+
+[CmdletBinding()]
 param()
 
 function Find-APIMethod {
@@ -105,5 +107,26 @@ $($paths | New-MDTable)
 }
 
 LogGroup 'Coverage report' {
-    Get-Content -Path 'Coverage.md' | ForEach-Object { Write-Host $_ }
+    Get-Content -Path 'Coverage.md' | ForEach-Object { Write-Output $_ }
 }
+
+LogGroup 'Get-Files' {
+    Get-ChildItem -Path . -Recurse | Select-Object -ExpandProperty FullName | Sort-Object
+}
+
+$changedFiles = git diff --name-only
+$changedFiles
+$hasChanges = $null -ne $changedFiles
+
+if (-not $hasChanges) {
+    Write-Output 'No change detected'
+    return
+}
+
+LogGroup "Changed files [$($changedFiles.Count)]" {
+    $changedFiles | ForEach-Object { Write-Output $_ }
+}
+
+git add .
+git commit -m 'Auto-generated changes'
+git push
