@@ -47,13 +47,13 @@
 
     Write-Verbose "Output: [$Name] = [$Value]"
 
-    $Value = $Value.Split([System.Environment]::NewLine)
     $guid = [guid]::NewGuid().Guid
-    "$Name<<$guid" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
-    $Value | ForEach-Object {
-        $_ | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
-    }
-    "$guid" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+    $content = @"
+$Name<<$guid
+$Value
+$guid
+"@
+    $content | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
 
     Write-Verbose "Output: [$Name] avaiable as `${{ steps.$env:GITHUB_ACTION.outputs.$Name }}'"
 }

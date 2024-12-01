@@ -42,13 +42,9 @@
         [switch] $Overwrite
     )
 
-    Write-Verbose "Step summary:"
+    Write-Verbose 'Step summary:'
     Write-Verbose $Summary
 
     $Append = -not $Overwrite
-
-    $Summary = $Summary.Split([System.Environment]::NewLine)
-    $Summary | ForEach-Object {
-        $_ | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append:$Append
-    }
+    $Summary | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append:$Append
 }
