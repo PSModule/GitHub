@@ -54,7 +54,7 @@ LogGroup 'Generate coverage report' {
     $response.paths.PSObject.Properties | ForEach-Object {
         $path = $_.Name
         $object = [pscustomobject]@{
-            Path   = $path
+            Path   = "``$path``"
             DELETE = ''
             GET    = ''
             PATCH  = ''
