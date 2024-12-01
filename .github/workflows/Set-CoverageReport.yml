@@ -29,6 +29,9 @@ jobs:
               Get-ChildItem -Path . -Recurse | Select-Object -ExpandProperty FullName | Sort-Object
             }
 
+            Get-GitHubContext | Format-Table
+            Get-GitHubGitConfig | Format-Table
+
             git status
 
             git diff --name-only
@@ -44,9 +47,6 @@ jobs:
             LogGroup "Changed files [$($changedFiles.Count)]" {
               $changedFiles | ForEach-Object { Write-Host $_ }
             }
-
-            Get-GitHubContext | Format-Table
-            Get-GitHubGitConfig | Format-Table
 
             git add .
             git commit -m "Auto-generated changes"
