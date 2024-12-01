@@ -23,7 +23,7 @@
         throw 'Git is not installed. Please install Git before running this command.'
     }
 
-    git config --global --list | ForEach-Object {
+    git config --local --list | ForEach-Object {
         (
             [pscustomobject]@{
                 Name  = $_.Split('=')[0]

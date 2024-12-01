@@ -1,4 +1,6 @@
-﻿[CmdletBinding()]
+﻿#Requires -Modules MarkdownPS
+
+[CmdletBinding()]
 param()
 
 function Find-APIMethod {
@@ -26,6 +28,7 @@ function Find-APIMethod {
             $putMatches = Select-String -Path $filePath -Pattern $methodPattern -AllMatches
             foreach ($match in $stringMatches) {
                 foreach ($putMatch in $putMatches) {
+                    Write-Verbose '----------------------------------------'
                     Write-Verbose "Match found in file: $filePath"
                     Write-Verbose "API Endpoint: $($match.Matches.Value) near line $($match.LineNumber)"
                     Write-Verbose "Method: $($putMatch.Matches.Value) near line $($putMatch.LineNumber)"
@@ -51,7 +54,7 @@ LogGroup 'Generate coverage report' {
     $response.paths.PSObject.Properties | ForEach-Object {
         $path = $_.Name
         $object = [pscustomobject]@{
-            Path   = $path
+            Path   = "``$path``"
             DELETE = ''
             GET    = ''
             PATCH  = ''
@@ -100,9 +103,11 @@ LogGroup 'Generate coverage report' {
 $($paths | New-MDTable)
 
 "@
-    $coverageContent | Out-File -FilePath '.\Coverage.md'
+    Set-Content -Path 'Coverage.md' -Value $coverageContent
 }
 
-LogGroup 'Coverage report' {
-    Get-Content -Path '.\Coverage.md' | ForEach-Object { Write-Verbose $_ -Verbose }
-}
+Set-GitHubStepSummary -Summary $coverageContent
+
+git add .
+git commit -m 'Auto-generated changes'
+git push
