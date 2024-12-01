@@ -43,9 +43,9 @@
     $hostName = $contextObj.HostName
 
     if ($PSCmdlet.ShouldProcess("$Name", 'Set Git configuration')) {
-        git config --global user.name "$username"
-        git config --global user.email "$id+$username@users.noreply.github.com"
-        git config --global "url.https://oauth2:$token@$hostName.insteadOf" "https://$hostName"
+        git config --local user.name "$username"
+        git config --local user.email "$id+$username@users.noreply.github.com"
+        git config --local "url.https://oauth2:$token@$hostName.insteadOf" "https://$hostName"
         Write-Verbose "[$commandName] - End"
     }
 }
