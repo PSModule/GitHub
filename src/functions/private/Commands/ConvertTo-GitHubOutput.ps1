@@ -1,26 +1,24 @@
 ﻿function ConvertTo-GitHubOutput {
     param (
-        [Parameter(Mandatory = $true)]
-        [PSObject]$InputObject,
-
-        [Parameter(Mandatory = $true)]
-        [string]$FilePath,
-
-        [string]$Delimiter = '----------',
-        [string]$EOFMarker = 'EOF'
+        [Parameter(Mandatory)]
+        [PSObject]$InputObject
     )
 
     $outputLines = @()
-
-    # Add delimiter at the top
-    $outputLines += $Delimiter
 
     foreach ($property in $InputObject.PSObject.Properties) {
         $key = $property.Name
         $value = $property.Value
 
+        # Convert hashtable or PSCustomObject to compressed JSON
+        if ($value -is [hashtable] -or $value -is [PSCustomObject]) {
+            $value = $value | ConvertTo-Json -Compress
+        }
+
         if ($value -is [string] -and $value.Contains("`n")) {
             # Multi-line value
+            $guid = [Guid]::NewGuid().ToString()
+            $EOFMarker = "EOF_$guid"
             $outputLines += "$key<<$EOFMarker"
             $outputLines += $value
             $outputLines += $EOFMarker
@@ -29,10 +27,4 @@
             $outputLines += "$key=$value"
         }
     }
-
-    # Add delimiter at the bottom
-    $outputLines += $Delimiter
-
-    # Write to file
-    $outputLines | Out-File -FilePath $FilePath -Encoding UTF8
 }
