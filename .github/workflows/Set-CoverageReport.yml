@@ -25,6 +25,8 @@ jobs:
           Script: |
             . ".\scripts\Set-CoverageReport.ps1" -Verbose
 
+            Get-ChildItem -Path . -Recurse | Select-Object -ExpandProperty FullName | Sort-Object
+
             git add .
 
             $changedFiles = git diff --name-only
