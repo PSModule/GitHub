@@ -25,6 +25,8 @@ jobs:
           Script: |
             . ".\scripts\Set-CoverageReport.ps1" -Verbose
 
+            git add .
+
             $changedFiles = git diff --name-only
             $hasChanges = $null -ne $changedFiles
 
@@ -40,6 +42,5 @@ jobs:
             Get-GitHubContext | Format-Table
             Get-GitHubGitConfig | Format-Table
 
-            git add .
             git commit -m "Auto-generated changes"
             git push
