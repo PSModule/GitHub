@@ -106,7 +106,7 @@ $($paths | New-MDTable)
     Set-Content -Path 'Coverage.md' -Value $coverageContent
 }
 
-$coverageContent | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8
+Set-GitHubStepSummary -Summary $coverageContent
 
 git add .
 git commit -m 'Auto-generated changes'
