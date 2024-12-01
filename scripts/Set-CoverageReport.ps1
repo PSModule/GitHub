@@ -115,16 +115,5 @@ LogGroup 'Get-Files' {
 }
 
 git add .
-$changedFiles = git diff --name-only
-if ($changedFiles.Count -eq 0) {
-    Write-Output 'No changes detected'
-    exit 0
-}
-
-LogGroup "Changed files [$($changedFiles.Count)]" {
-    $changedFiles | ForEach-Object { Write-Output $_ }
-}
-
-
 git commit -m 'Auto-generated changes'
 git push
