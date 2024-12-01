@@ -116,4 +116,7 @@ LogGroup 'Get-Files' {
 
 git add .
 git commit -m 'Auto-generated changes'
+
+git diff
+
 git push
