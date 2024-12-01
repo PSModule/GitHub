@@ -1,0 +1,45 @@
+name: Update coverage report
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  Update-Coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Update coverage report
+        uses: PSModule/GitHub-Script@v1
+        with:
+          Script: |
+            . ".\scripts\Set-CoverageReport.ps1" -Verbose
+
+            $changedFiles = git diff --name-only
+            $hasChanges = $null -ne $changedFiles
+
+            if (-not $changedFiles) {
+              Write-Host 'No changes detected'
+              return
+            }
+
+            LogGroup "Changed files [$($changedFiles.Count)]" {
+              $changedFiles | ForEach-Object { Write-Host $_ }
+            }
+
+            Get-GitHubContext | Format-Table
+            Get-GitHubGitConfig | Format-Table
+
+            git add .
+            git commit -m "Auto-generated changes"
+            git push
