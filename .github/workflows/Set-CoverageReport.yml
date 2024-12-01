@@ -24,21 +24,22 @@ jobs:
         with:
           Script: |
             . ".\scripts\Set-CoverageReport.ps1" -Verbose
-            git add .
 
-            LogGroup 'Updated files' {
-              $changedFiles = git diff --name-only
-              $changedFiles
-              # if (-not $changedFiles) {
-              #   Write-Host 'No automated changes detected'
-              #   return
-              # }
+            $changedFiles = git diff --name-only
+            $hasChanges = $null -ne $changedFiles
+
+            if (-not $changedFiles) {
+              Write-Host 'No changes detected'
+              return
             }
-
 
             LogGroup "Changed files [$($changedFiles.Count)]" {
               $changedFiles | ForEach-Object { Write-Host $_ }
             }
 
+            Get-GitHubContext | Format-Table
+            Get-GitHubGitConfig | Format-Table
+
+            git add .
             git commit -m "Auto-generated changes"
             git push
