@@ -231,7 +231,7 @@ $($failure.Exception.Response | ConvertFrom-HashTable | Format-List | Out-String
 ----------------------------------`n`r
 
 "@
-        $errorResult.Split([System.Environment]::NewLine) | ForEach-Object { Write-Error $_ }
+        Write-Error $errorResult
         throw $failure.Exception.Message
     }
 }
