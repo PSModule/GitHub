@@ -1,3 +1,10 @@
 ﻿# Install an app on the entire enterprise
-$enterpriseOrgs = Get-GitHubEnterpriseInstallableOrganization -Enterprise 'msx'
-$enterpriseOrgs | Install-GitHubAppOnEnterpriseOrganization -Enterprise 'msn' -Organization $_.login -ClientID '123' -RepositorySelection all
+$appIDs = @(
+    'Iv1.f26b61bc99e69405'
+)
+$orgs = Get-GitHubEnterpriseInstallableOrganization -Enterprise 'dnb'
+foreach ($org in $orgs) {
+    foreach ($appID in $appIDs) {
+        Install-GitHubAppOnEnterpriseOrganization -Enterprise dnb -Organization $org.login -ClientID $appID -RepositorySelection all 
+    }
+}
