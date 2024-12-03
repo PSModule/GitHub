@@ -5,6 +5,6 @@ $appIDs = @(
 $orgs = Get-GitHubEnterpriseInstallableOrganization -Enterprise 'msx'
 foreach ($org in $orgs) {
     foreach ($appID in $appIDs) {
-        Install-GitHubAppOnEnterpriseOrganization -Enterprise msx -Organization $org.login -ClientID $appID -RepositorySelection all 
+        Install-GitHubAppOnEnterpriseOrganization -Enterprise msx -Organization $org.login -ClientID $appID -RepositorySelection all
     }
 }

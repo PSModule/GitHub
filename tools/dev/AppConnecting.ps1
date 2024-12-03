@@ -16,7 +16,7 @@ Get-GitHubOrganization -Name 'psmodule' # -> gets IAT for PSModule and runs API 
 
 
 LogGroup "Connect to org [$env:GITHUB_REPOSITORY_OWNER]" {
-    $org = $env:GITHUB_REPOSITORY_OWNER
+    # $org = $env:GITHUB_REPOSITORY_OWNER
     $appContext = Get-GitHubConfig -Name DefaultContext
     Write-Verbose (Get-GitHubContext | Select-Object *) -Verbose
     $orgInstallations = Get-GitHubAppInstallation | Where-Object { $_.Target_type -eq 'Organization' }
