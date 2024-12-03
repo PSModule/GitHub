@@ -92,7 +92,7 @@
         privacy              = $Privacy
         notification_setting = $NotificationSetting
         permission           = $Permission
-        parent_team_id       = $ParentTeamID
+        parent_team_id       = $ParentTeamID -eq 0 ? $null : $ParentTeamID
     }
 
     $body | Remove-HashtableEntry -NullOrEmptyValues

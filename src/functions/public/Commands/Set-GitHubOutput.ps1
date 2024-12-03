@@ -40,7 +40,7 @@
         throw "File not found: $Path"
     }
 
-    $outputs = Get-GithubOutput -Path $Path -AsHashtable
+    $outputs = Get-GitHubOutput -Path $Path -AsHashtable
 
     if ($Value -Is [securestring]) {
         $Value = $Value | ConvertFrom-SecureString -AsPlainText -Force
