@@ -161,15 +161,9 @@
         Token                   = $Token
         ContentType             = $ContentType
         FollowRelLink           = $FollowRelLink
-        StatusCodeVariable      = 'APICallStatusCode'
-        ResponseHeadersVariable = 'APICallResponseHeaders'
         InFile                  = $UploadFilePath
         OutFile                 = $DownloadFilePath
-    }
-
-    #If PSversion is higher than 7.1 use HttpVersion
-    if ($PSVersionTable.PSVersion -ge [version]'7.3') {
-        $APICall['HttpVersion'] = $HttpVersion
+        HttpVersion             = $HttpVersion
     }
 
     $APICall | Remove-HashtableEntry -NullOrEmptyValues
@@ -188,50 +182,45 @@
     }
 
     try {
-        Write-Verbose 'Calling GitHub API with the following parameters:'
-        Write-Verbose ($APICall | ConvertFrom-HashTable | Format-List | Out-String)
+        Write-Verbose "----------------------------------"
+        Write-Verbose "Request:"
+        $APICall | ConvertFrom-HashTable | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+        Write-Verbose "----------------------------------"
         Invoke-RestMethod @APICall | ForEach-Object {
-            $statusCode = $APICallStatusCode | ConvertTo-Json -Depth 100 | ConvertFrom-Json
-            $responseHeaders = $APICallResponseHeaders | ConvertTo-Json -Depth 100 | ConvertFrom-Json
-            $verboseMessage = @"
-
-----------------------------------
-StatusCode:
-$statusCode
-----------------------------------
-Request:
-$($APICall | ConvertFrom-HashTable | Format-List | Out-String)
-----------------------------------
-ResponseHeaders:
-$($responseHeaders.PSObject.Properties | ForEach-Object { $_ | Format-List | Out-String })
-----------------------------------
-
-"@
-            Write-Verbose $verboseMessage
             [pscustomobject]@{
                 Request         = $APICall
                 Response        = $_
-                StatusCode      = $statusCode
-                ResponseHeaders = $responseHeaders
             }
         }
     } catch {
         $failure = $_
-        $errorResult = @"
+        $headers = @{}
+        foreach ($item in $failure.Exception.Response.Headers) {
+            $headers[$item.Key] = ($item.Value).Trim() -join ", "
+        }
+        $headers = [pscustomobject]$headers
+        # Sort properties by name and display the object
+        $sortedProperties = $headers.PSObject.Properties.Name | Sort-Object
+        $headers = $headers | Select-Object $sortedProperties
 
-----------------------------------`n`r
-Request:
-$($APICall | ConvertFrom-HashTable | Format-List | Out-String)
-----------------------------------`n`r
-Message:
-$($failure.Exception.Message | ConvertFrom-HashTable | Format-List | Out-String)
-----------------------------------`n`r
-Response:
-$($failure.Exception.Response | ConvertFrom-HashTable | Format-List | Out-String)
-----------------------------------`n`r
+        $errordetails = $failure.ErrorDetails | ConvertFrom-Json -AsHashtable
+        $errorResult = [ordered]@{
+            Message     = $errordetails.message
+            Information = $errordetails.documentation_url
+            Status      = $failure.Exception.Message
+            StatusCode  = $errordetails.status
+        }
+        $APICall.HttpVersion = $APICall.HttpVersion.ToString()
+        $APICall.Headers = $APICall.Headers | ConvertTo-Json
+        $APICall.Method = $APICall.Method.ToString()
 
-"@
-        Write-Error $errorResult
+        Write-Error "----------------------------------"
+        Write-Error "Error details:"
+        $errorResult | Format-Table -AutoSize -HideTableHeaders | Out-String -Stream | ForEach-Object { Write-Error $_ }
+        Write-Error "----------------------------------"
+        Write-Debug "Response headers:"
+        $headers | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+        Write-Debug "---------------------------"
         throw $failure.Exception.Message
     }
 }
