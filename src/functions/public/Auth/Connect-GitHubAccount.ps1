@@ -267,11 +267,10 @@
                 }
             }
         }
-        Set-GitHubContext @contextData -Default:(!$NotDefault)
-        $contextData = Get-GitHubContext
-        Write-Verbose ($contextData | Format-List | Out-String)
+        $contextDataReturn = Set-GitHubContext @contextData -Default:(!$NotDefault) -PassThru
+        Write-Verbose ($contextDataReturn | Format-List | Out-String)
         if (-not $Silent) {
-            $name = $contextData.Username
+            $name = $contextDataReturn.Username
             Write-Host '✓ ' -ForegroundColor Green -NoNewline
             Write-Host "Logged in as $name!"
         }
