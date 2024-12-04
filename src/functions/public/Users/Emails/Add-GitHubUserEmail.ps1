@@ -17,7 +17,7 @@
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]
-    param (
+    param(
         # Adds one or more email addresses to your GitHub account.
         # Must contain at least one email address.
         # Note: Alternatively, you can pass a single email address or an array of emails addresses directly,
@@ -27,12 +27,19 @@
             ValueFromPipeline,
             ValueFromPipelineByPropertyName
         )]
-        [string[]] $Emails
+        [string[]] $Emails,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
-    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
+    $body = @{
+        emails = $Emails
+    }
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = '/user/emails'
         Method      = 'POST'
         Body        = $body

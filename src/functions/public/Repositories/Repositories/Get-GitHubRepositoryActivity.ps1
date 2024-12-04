@@ -50,15 +50,15 @@
 
     #>
     [CmdletBinding()]
-    param (
+    param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter()]
         [Alias('org')]
-        [string] $Owner = (Get-GitHubContextSetting -Name Owner),
+        [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter()]
-        [string] $Repo = (Get-GitHubContextSetting -Name Repo),
+        [string] $Repo,
 
         # The direction to sort the results by.
         [Parameter()]
@@ -102,8 +102,28 @@
         [Parameter()]
         [ValidateSet('push', 'force_push', 'branch_creation', 'branch_deletion', 'pr_merge', 'merge_queue_merge')]
         [Alias('activity_type')]
-        [string] $ActivityType
+        [string] $ActivityType,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
+
+    $contextObj = Get-GitHubContext -Context $Context
+    if (-not $contextObj) {
+        throw 'Log in using Connect-GitHub before running this command.'
+    }
+    Write-Debug "Context: [$Context]"
+
+    if ([string]::IsNullOrEmpty($Owner)) {
+        $Owner = $contextObj.Owner
+    }
+    Write-Debug "Owner : [$($contextObj.Owner)]"
+
+    if ([string]::IsNullOrEmpty($Repo)) {
+        $Repo = $contextObj.Repo
+    }
+    Write-Debug "Repo : [$($contextObj.Repo)]"
 
     $PSCmdlet.MyInvocation.MyCommand.Parameters.GetEnumerator() | ForEach-Object {
         $paramName = $_.Key
@@ -124,6 +144,7 @@
     Remove-HashtableEntry -Hashtable $body -RemoveNames 'Owner', 'Repo' -RemoveTypes 'SwitchParameter'
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/repos/$Owner/$Repo/activity"
         Method      = 'GET'
         Body        = $body

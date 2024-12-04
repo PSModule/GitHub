@@ -1,4 +1,4 @@
-filter Get-GitHubLicenseList {
+﻿filter Get-GitHubLicenseList {
     <#
         .SYNOPSIS
         Get all commonly used licenses
@@ -19,7 +19,7 @@ filter Get-GitHubLicenseList {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [OutputType([string[]])]
     [CmdletBinding()]
-    param (
+    param(
         # The context to run the command in.
         [Parameter()]
         [string] $Context

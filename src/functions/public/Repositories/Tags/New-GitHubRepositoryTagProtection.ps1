@@ -17,24 +17,47 @@
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding(SupportsShouldProcess)]
-    param (
+    param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter()]
         [Alias('org')]
-        [string] $Owner = (Get-GitHubContextSetting -Name Owner),
+        [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter()]
-        [string] $Repo = (Get-GitHubContextSetting -Name Repo),
+        [string] $Repo,
 
         # An optional glob pattern to match against when enforcing tag protection.
         [Parameter(Mandatory)]
-        [string] $Pattern
+        [string] $Pattern,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
-    $body['pattern'] = $Pattern
+    $contextObj = Get-GitHubContext -Context $Context
+    if (-not $contextObj) {
+        throw 'Log in using Connect-GitHub before running this command.'
+    }
+    Write-Debug "Context: [$Context]"
+
+    if ([string]::IsNullOrEmpty($Owner)) {
+        $Owner = $contextObj.Owner
+    }
+    Write-Debug "Owner : [$($contextObj.Owner)]"
+
+    if ([string]::IsNullOrEmpty($Repo)) {
+        $Repo = $contextObj.Repo
+    }
+    Write-Debug "Repo : [$($contextObj.Repo)]"
+
+    $body = @{
+        pattern = $Pattern
+    }
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/repos/$Owner/$Repo/tags/protection"
         Method      = 'POST'
         Body        = $body

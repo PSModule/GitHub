@@ -30,7 +30,7 @@
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [CmdletBinding()]
-    param (
+    param(
         # The handle for the GitHub user account.
         [Parameter(
             Mandatory,
@@ -50,16 +50,20 @@
         # The number of results per page (max 100).
         [Parameter()]
         [ValidateRange(1, 100)]
-        [int] $PerPage = 30
+        [int] $PerPage = 30,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
     if ($Username) {
-        Get-GitHubUserSigningKeyForUser -Username $Username -PerPage $PerPage
+        Get-GitHubUserSigningKeyForUser -Username $Username -PerPage $PerPage -Context $Context
     } else {
         if ($ID) {
-            Get-GitHubUserMySigningKeyById -ID $ID
+            Get-GitHubUserMySigningKeyById -ID $ID -Context $Context
         } else {
-            Get-GitHubUserMySigningKey -PerPage $PerPage
+            Get-GitHubUserMySigningKey -PerPage $PerPage -Context $Context
         }
     }
 }

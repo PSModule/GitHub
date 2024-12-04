@@ -57,7 +57,7 @@ filter New-GitHubRepositoryUser {
         Justification = 'Parameter is used in dynamic parameter validation.'
     )]
     [CmdletBinding(SupportsShouldProcess)]
-    param (
+    param(
         # The name of the repository.
         [Parameter(Mandatory)]
         [string] $Name,

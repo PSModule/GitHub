@@ -16,9 +16,14 @@
     #>
     [OutputType([string[]])]
     [CmdletBinding()]
-    param ()
+    param(
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
+    )
 
     $inputObject = @{
+        Context     = $Context
         ApiEndpoint = '/versions'
         Method      = 'GET'
     }

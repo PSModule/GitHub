@@ -25,7 +25,7 @@
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]
-    param (
+    param(
         # A descriptive name for the new key.
         [Parameter(
             Mandatory,
@@ -40,13 +40,20 @@
             ValueFromPipelineByPropertyName
         )]
         [Alias('armored_public_key')]
-        [string] $ArmoredPublicKey
+        [string] $ArmoredPublicKey,
 
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
-    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
+    $body = @{
+        name               = $Name
+        armored_public_key = $ArmoredPublicKey
+    }
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = '/user/gpg_keys'
         Method      = 'POST'
         Body        = $body
@@ -55,5 +62,4 @@
     Invoke-GitHubAPI @inputObject | ForEach-Object {
         Write-Output $_.Response
     }
-
 }

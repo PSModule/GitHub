@@ -18,7 +18,7 @@
     #>
     [OutputType([bool])]
     [CmdletBinding()]
-    param (
+    param(
         # The handle for the GitHub user account.
         [Parameter(
             Mandatory,

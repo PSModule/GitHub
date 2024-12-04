@@ -33,7 +33,7 @@
         Justification = 'Parameter is used in dynamic parameter validation.'
     )]
     [CmdletBinding(DefaultParameterSetName = '__DefaultSet')]
-    param (
+    param(
         # The handle for the GitHub user account.
         [Parameter(
             Mandatory,
@@ -56,24 +56,28 @@
         # The number of results per page (max 100).
         [Parameter(ParameterSetName = 'AllUsers')]
         [ValidateRange(1, 100)]
-        [int] $PerPage = 30
+        [int] $PerPage = 30,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
     switch ($PSCmdlet.ParameterSetName) {
         '__DefaultSet' {
-            $user = Get-GitHubMyUser
-            $social_accounts = Get-GitHubMyUserSocials
+            $user = Get-GitHubMyUser -Context $Context
+            $social_accounts = Get-GitHubMyUserSocials -Context $Context
             $user | Add-Member -MemberType NoteProperty -Name 'social_accounts' -Value $social_accounts -Force
             $user
         }
         'NamedUser' {
-            $user = Get-GitHubUserByName -Username $Username
-            $social_accounts = Get-GitHubUserSocialsByName -Username $Username
+            $user = Get-GitHubUserByName -Username $Username -Context $Context
+            $social_accounts = Get-GitHubUserSocialsByName -Username $Username -Context $Context
             $user | Add-Member -MemberType NoteProperty -Name 'social_accounts' -Value $social_accounts -Force
             $user
         }
         'AllUsers' {
-            Get-GitHubAllUsers -Since $Since -PerPage $PerPage
+            Get-GitHubAllUsers -Since $Since -PerPage $PerPage -Context $Context
         }
     }
 }

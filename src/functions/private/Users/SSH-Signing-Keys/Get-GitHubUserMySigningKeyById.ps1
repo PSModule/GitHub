@@ -20,7 +20,7 @@
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]
-    param (
+    param(
         # The unique identifier of the SSH signing key.
         [Parameter(
             Mandatory

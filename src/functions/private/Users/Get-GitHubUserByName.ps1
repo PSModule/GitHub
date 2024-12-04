@@ -28,7 +28,7 @@
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [CmdletBinding()]
-    param (
+    param(
         # The handle for the GitHub user account.
         [Parameter(
             Mandatory,

@@ -18,7 +18,7 @@
     #>
     [OutputType([bool])]
     [CmdletBinding()]
-    param (
+    param(
         # The organization name. The name is not case sensitive.
         [Parameter(
             Mandatory,

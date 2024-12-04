@@ -27,7 +27,7 @@
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [Alias('Test-GitHubUserFollows')]
     [CmdletBinding()]
-    param (
+    param(
         # The handle for the GitHub user account we want to check if is being followed.
         [Parameter(
             Mandatory,
@@ -41,14 +41,17 @@
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [string] $Username
+        [string] $Username,
 
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
     if ($Username) {
-        Test-GitHubUserFollowedByUser -Username $Username -Follows $Follows
+        Test-GitHubUserFollowedByUser -Username $Username -Follows $Follows -Context $Context
     } else {
-        Test-GitHubUserFollowedByMe -Username $Follows
+        Test-GitHubUserFollowedByMe -Username $Follows -Context $Context
     }
 
 }

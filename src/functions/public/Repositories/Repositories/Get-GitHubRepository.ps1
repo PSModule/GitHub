@@ -49,7 +49,7 @@ filter Get-GitHubRepository {
         [List repositories for a user](https://docs.github.com/rest/repos/repos#list-repositories-for-a-user)
     #>
     [CmdletBinding(DefaultParameterSetName = 'MyRepos_Type')]
-    param (
+    param(
         #Limit results to repositories with the specified visibility.
         [Parameter(ParameterSetName = 'MyRepos_Aff-Vis')]
         [ValidateSet('all', 'public', 'private')]
@@ -82,14 +82,14 @@ filter Get-GitHubRepository {
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(ParameterSetName = 'ByName')]
         [Parameter(ParameterSetName = 'ListByOrg')]
-        [string] $Owner = (Get-GitHubContextSetting -Name Owner),
+        [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(
             Mandatory,
             ParameterSetName = 'ByName'
         )]
-        [string] $Repo = (Get-GitHubContextSetting -Name Repo),
+        [string] $Repo,
 
         # The handle for the GitHub user account.
         [Parameter(
@@ -122,8 +122,11 @@ filter Get-GitHubRepository {
         [Parameter(ParameterSetName = 'ListByOrg')]
         [Parameter(ParameterSetName = 'ListByUser')]
         [ValidateRange(1, 100)]
-        [int] $PerPage = 30
+        [int] $PerPage = 30,
 
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
     dynamicparam {
@@ -159,12 +162,31 @@ filter Get-GitHubRepository {
 
     begin {
         $Type = $PSBoundParameters['Type']
+
+        $contextObj = Get-GitHubContext -Context $Context
+        if (-not $contextObj) {
+            throw 'Log in using Connect-GitHub before running this command.'
+        }
+        Write-Debug "Context: [$Context]"
+
+        if ([string]::IsNullOrEmpty($Owner)) {
+            $Owner = $contextObj.Owner
+        }
+        Write-Debug "Owner : [$($contextObj.Owner)]"
+
+        if ([string]::IsNullOrEmpty($Repo)) {
+            $Repo = $contextObj.Repo
+        }
+        Write-Debug "Repo : [$($contextObj.Repo)]"
     }
 
     process {
+        $params = @{
+            Context = $Context
+        }
         switch ($PSCmdlet.ParameterSetName) {
             'MyRepos_Type' {
-                $params = @{
+                $params += @{
                     Type      = $Type
                     Sort      = $Sort
                     Direction = $Direction
@@ -176,7 +198,7 @@ filter Get-GitHubRepository {
                 Get-GitHubMyRepositories @params
             }
             'MyRepos_Aff-Vis' {
-                $params = @{
+                $params += @{
                     Visibility  = $Visibility
                     Affiliation = $Affiliation
                     Sort        = $Sort
@@ -189,7 +211,7 @@ filter Get-GitHubRepository {
                 Get-GitHubMyRepositories @params
             }
             'ByName' {
-                $params = @{
+                $params += @{
                     Owner = $Owner
                     Repo  = $Repo
                 }
@@ -197,14 +219,14 @@ filter Get-GitHubRepository {
                 Get-GitHubRepositoryByName @params
             }
             'ListByID' {
-                $params = @{
+                $params += @{
                     Since = $SinceID
                 }
                 Remove-HashtableEntry -Hashtable $params -NullOrEmptyValues
                 Get-GitHubRepositoryListByID @params
             }
             'ListByOrg' {
-                $params = @{
+                $params += @{
                     Owner     = $Owner
                     Type      = $Type
                     Sort      = $Sort
@@ -215,7 +237,7 @@ filter Get-GitHubRepository {
                 Get-GitHubRepositoryListByOrg @params
             }
             'ListByUser' {
-                $params = @{
+                $params += @{
                     Username  = $Username
                     Type      = $Type
                     Sort      = $Sort

@@ -20,7 +20,7 @@
     )]
     [OutputType([void])]
     [CmdletBinding()]
-    param (
+    param(
         [string]$Path
     )
 

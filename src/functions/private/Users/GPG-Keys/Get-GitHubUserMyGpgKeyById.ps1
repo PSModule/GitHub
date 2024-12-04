@@ -19,7 +19,7 @@
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]
-    param (
+    param(
         # The ID of the GPG key.
         [Parameter(
             Mandatory

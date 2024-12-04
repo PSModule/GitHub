@@ -1,4 +1,4 @@
-#Requires -Modules @{ ModuleName = 'DynamicParams'; RequiredVersion = '1.1.8' }
+﻿#Requires -Modules @{ ModuleName = 'DynamicParams'; RequiredVersion = '1.1.8' }
 
 filter Get-GitHubGitignore {
     <#
@@ -25,7 +25,11 @@ filter Get-GitHubGitignore {
 
     #>
     [CmdletBinding(DefaultParameterSetName = 'List')]
-    param ()
+    param(
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
+    )
 
     dynamicparam {
         $DynamicParamDictionary = New-DynamicParamDictionary
@@ -47,10 +51,10 @@ filter Get-GitHubGitignore {
         $Name = $PSBoundParameters['Name']
         switch ($PSCmdlet.ParameterSetName) {
             'List' {
-                Get-GitHubGitignoreList
+                Get-GitHubGitignoreList -Context $Context
             }
             'Name' {
-                Get-GitHubGitignoreByName -Name $Name
+                Get-GitHubGitignoreByName -Name $Name -Context $Context
             }
         }
     }

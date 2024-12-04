@@ -1,4 +1,4 @@
-filter Get-GitHubRepositoryLicense {
+﻿filter Get-GitHubRepositoryLicense {
     <#
         .SYNOPSIS
         Get the license for a repository
@@ -19,7 +19,7 @@ filter Get-GitHubRepositoryLicense {
 
     #>
     [CmdletBinding()]
-    param (
+    param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
         [string] $Owner,

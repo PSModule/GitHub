@@ -56,7 +56,7 @@
     #>
     [CmdletBinding(DefaultParameterSetName = 'Type')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Private function, not exposed to user.')]
-    param (
+    param(
         # Limit results to repositories with the specified visibility.
         [Parameter(
             ParameterSetName = 'Aff-Vis'

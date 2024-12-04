@@ -21,7 +21,7 @@
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [CmdletBinding()]
-    param (
+    param(
         # A organization ID. Only return organizations with an ID greater than this ID.
         [Parameter()]
         [int] $Since = 0,

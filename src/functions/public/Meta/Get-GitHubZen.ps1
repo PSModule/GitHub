@@ -15,9 +15,14 @@
         [Get the Zen of GitHub](https://docs.github.com/rest/meta/meta#get-the-zen-of-github)
     #>
     [CmdletBinding()]
-    param ()
+    param(
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
+    )
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = '/zen'
         Method      = 'GET'
     }
@@ -25,5 +30,4 @@
     Invoke-GitHubAPI @inputObject | ForEach-Object {
         Write-Output $_.Response
     }
-
 }

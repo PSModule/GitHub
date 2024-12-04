@@ -23,7 +23,7 @@
     [OutputType([void])]
     [Alias('Set-GitHubEnv')]
     [CmdletBinding()]
-    param (
+    param(
         # Name of the variable
         [Parameter(Mandatory)]
         [string] $Name,

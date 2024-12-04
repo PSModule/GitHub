@@ -10,7 +10,7 @@
         Set-GitHubDefaultContext -Context 'github.com/Octocat'
     #>
     [CmdletBinding(SupportsShouldProcess)]
-    param (
+    param(
         # The context to set as the default.
         [Parameter(Mandatory)]
         [Alias('Name')]

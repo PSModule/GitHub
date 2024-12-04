@@ -24,6 +24,7 @@
     [CmdletBinding()]
     param(
         # The context to run the command in.
+        [Parameter()]
         [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 

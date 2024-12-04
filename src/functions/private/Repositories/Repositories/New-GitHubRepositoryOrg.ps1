@@ -60,7 +60,7 @@ filter New-GitHubRepositoryOrg {
         Justification = 'Parameter is used in dynamic parameter validation.'
     )]
     [CmdletBinding(SupportsShouldProcess)]
-    param (
+    param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
         [Alias('org')]

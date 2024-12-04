@@ -1,4 +1,4 @@
-#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '4.0.0' }
+﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '4.0.0' }
 
 function Set-GitHubConfig {
     <#
@@ -14,7 +14,7 @@ function Set-GitHubConfig {
         Sets the value of DefaultUser to 'Octocat' in the GitHub module configuration.
     #>
     [CmdletBinding(SupportsShouldProcess)]
-    param (
+    param(
         # Set the access token type.
         [Parameter()]
         [string] $Name,

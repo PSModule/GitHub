@@ -25,7 +25,7 @@
         Justification = 'Function does not change state.'
     )]
     [CmdletBinding()]
-    param (
+    param(
         # The hashtable to remove entries from.
         [Parameter(
             Mandatory,

@@ -28,7 +28,7 @@
     )]
     [OutputType([void])]
     [CmdletBinding()]
-    param (
+    param(
         # The unique string to stop the processing of workflow commands
         [Parameter(Mandatory)]
         [string] $String

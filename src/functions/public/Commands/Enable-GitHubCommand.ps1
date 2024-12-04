@@ -27,7 +27,7 @@
     )]
     [OutputType([void])]
     [CmdletBinding()]
-    param (
+    param(
         # The unique string to resume the processing of workflow commands
         [Parameter(Mandatory)]
         [string] $String

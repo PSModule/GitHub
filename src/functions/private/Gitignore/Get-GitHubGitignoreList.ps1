@@ -1,4 +1,4 @@
-filter Get-GitHubGitignoreList {
+﻿filter Get-GitHubGitignoreList {
     <#
         .SYNOPSIS
         Get all gitignore templates
@@ -18,7 +18,7 @@ filter Get-GitHubGitignoreList {
     #>
     [OutputType([string[]])]
     [CmdletBinding()]
-    param (
+    param(
         # The context to run the command in.
         [Parameter()]
         [string] $Context

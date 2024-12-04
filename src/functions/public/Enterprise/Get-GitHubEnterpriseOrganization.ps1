@@ -7,12 +7,16 @@
         Use this function to retrieve the list of organizations in a GitHub Enterprise instance.
 
         .EXAMPLE
-        Get-GitHubEnterpriseOrganization -EnterpriseSlug 'msx'
+        Get-GitHubEnterpriseOrganization -Enterprise 'msx'
     #>
     [CmdletBinding()]
     param(
         [Parameter(Mandatory)]
-        [string] $EnterpriseSlug
+        [string] $Enterprise,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
     # Define GraphQL query
@@ -37,7 +41,7 @@ query(`$enterpriseSlug: String!, `$first: Int = 100, `$after: String) {
 
     # Initialize pagination variables
     $variables = @{
-        'enterpriseSlug' = $EnterpriseSlug
+        'enterpriseSlug' = $Enterprise
         'first'          = 100
         'after'          = $null
     }
@@ -45,7 +49,7 @@ query(`$enterpriseSlug: String!, `$first: Int = 100, `$after: String) {
 
     # Loop through pages to retrieve all organizations
     do {
-        $response = Invoke-GitHubGraphQLQuery -Query $query -Variables $variables
+        $response = Invoke-GitHubGraphQLQuery -Query $query -Variables $variables -Context $Context
         # Check for errors
         if ($response.errors) {
             Write-Error "Error: $($response.errors[0].message)"

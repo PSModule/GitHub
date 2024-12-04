@@ -19,16 +19,23 @@
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [Alias('Remove-GitHubUserSocials')]
     [CmdletBinding(SupportsShouldProcess)]
-    param (
+    param(
         # Full URLs for the social media profiles to add.
         [Parameter(Mandatory)]
         [Alias('account_urls')]
-        [string[]] $AccountUrls
+        [string[]] $AccountUrls,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
-    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
+    $body = @{
+        account_urls = $AccountUrls
+    }
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = '/user/social_accounts'
         Body        = $body
         Method      = 'DELETE'

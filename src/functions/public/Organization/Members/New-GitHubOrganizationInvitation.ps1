@@ -16,7 +16,7 @@
         [Create an organization invitation](https://docs.github.com/rest/orgs/members#list-pending-organization-invitations)
     #>
     [CmdletBinding(SupportsShouldProcess)]
-    param (
+    param(
         # The organization name. The name is not case sensitive.
         [Parameter(Mandatory)]
         [Alias('Org')]

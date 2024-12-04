@@ -19,7 +19,7 @@
 
     #>
     [CmdletBinding()]
-    param (
+    param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
         [string] $Owner,

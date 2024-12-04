@@ -24,7 +24,7 @@
     #>
     [OutputType([string])]
     [CmdletBinding()]
-    param (
+    param(
         # The string to convert
         [Parameter(
             Mandatory,

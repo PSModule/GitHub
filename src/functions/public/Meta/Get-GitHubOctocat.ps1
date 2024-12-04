@@ -21,12 +21,16 @@
     #>
     [OutputType([string])]
     [CmdletBinding()]
-    param (
+    param(
         # The words to show in Octocat's speech bubble
         [Parameter()]
         [Alias('Say')]
         [Alias('Saying')]
-        [string] $S
+        [string] $S,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
     $body = @{
@@ -34,6 +38,7 @@
     }
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = '/octocat'
         Method      = 'GET'
         Body        = $body

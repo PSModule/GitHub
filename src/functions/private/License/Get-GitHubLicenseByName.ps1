@@ -1,4 +1,4 @@
-filter Get-GitHubLicenseByName {
+﻿filter Get-GitHubLicenseByName {
     <#
         .SYNOPSIS
         Get a license
@@ -18,7 +18,7 @@ filter Get-GitHubLicenseByName {
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [CmdletBinding()]
-    param (
+    param(
         # The license keyword, license name, or license SPDX ID. For example, mit or mpl-2.0.
         [Parameter(Mandatory)]
         [Alias('license')]

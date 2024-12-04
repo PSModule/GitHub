@@ -19,7 +19,7 @@
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]
-    param (
+    param(
         # The unique identifier of the key.
         [Parameter(
             Mandatory

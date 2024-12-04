@@ -1,4 +1,4 @@
-filter Get-GitHubGitignoreByName {
+﻿filter Get-GitHubGitignoreByName {
     <#
         .SYNOPSIS
         Get a gitignore template
@@ -17,7 +17,7 @@ filter Get-GitHubGitignoreByName {
 
     #>
     [CmdletBinding()]
-    param (
+    param(
         [Parameter(Mandatory)]
         [string] $Name,
 

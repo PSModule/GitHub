@@ -23,7 +23,7 @@
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [CmdletBinding(SupportsShouldProcess)]
-    param (
+    param(
         # Denotes whether an email is publicly visible.
         [Parameter(
             Mandatory,
@@ -31,12 +31,19 @@
             ValueFromPipelineByPropertyName
         )]
         [ValidateSet('public', 'private')]
-        [string] $Visibility
+        [string] $Visibility,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
-    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
+    $body = @{
+        visibility = $Visibility
+    }
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = '/user/email/visibility'
         Method      = 'PATCH'
         Body        = $body

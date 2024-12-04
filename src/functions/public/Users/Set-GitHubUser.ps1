@@ -29,7 +29,7 @@
     [OutputType([void])]
     [Alias('Update-GitHubUser')]
     [CmdletBinding(SupportsShouldProcess)]
-    param (
+    param(
         # The new name of the user.
         [Parameter()]
         [string] $Name,
@@ -60,15 +60,29 @@
 
         # The new short biography of the user.
         [Parameter()]
-        [string] $Bio
+        [string] $Bio,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
-    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
+    $body = @{
+        name             = $Name
+        email            = $Email
+        blog             = $Blog
+        twitter_username = $TwitterUsername
+        company          = $Company
+        location         = $Location
+        hireable         = $Hireable
+        bio              = $Bio
+    }
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = '/user'
-        Body        = $body
         Method      = 'PATCH'
+        Body        = $body
     }
 
     if ($PSCmdlet.ShouldProcess('authenticated user', 'Set')) {

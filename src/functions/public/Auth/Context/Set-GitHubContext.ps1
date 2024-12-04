@@ -15,7 +15,7 @@ function Set-GitHubContext {
         General notes
     #>
     [CmdletBinding(SupportsShouldProcess)]
-    param (
+    param(
         # The Node ID of the context.
         [Parameter()]
         [string] $NodeID,

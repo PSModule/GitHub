@@ -108,12 +108,12 @@ filter New-GitHubRepository {
         SupportsShouldProcess,
         DefaultParameterSetName = 'user'
     )]
-    param (
+    param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(ParameterSetName = 'org')]
         [Parameter(ParameterSetName = 'fork')]
         [Alias('org')]
-        [string] $Owner = (Get-GitHubContextSetting -Name Owner),
+        [string] $Owner,
 
         # The name of the repository.
         [Parameter(ParameterSetName = 'fork')]
@@ -323,6 +323,18 @@ filter New-GitHubRepository {
     }
 
     begin {
+
+        $contextObj = Get-GitHubContext -Context $Context
+        if (-not $contextObj) {
+            throw 'Log in using Connect-GitHub before running this command.'
+        }
+        Write-Debug "Context: [$Context]"
+
+        if ([string]::IsNullOrEmpty($Owner)) {
+            $Owner = $contextObj.Owner
+        }
+        Write-Debug "Owner : [$($contextObj.Owner)]"
+
         $GitignoreTemplate = $PSBoundParameters['GitignoreTemplate']
         $LicenseTemplate = $PSBoundParameters['LicenseTemplate']
     }
@@ -330,6 +342,7 @@ filter New-GitHubRepository {
     process {
         if ($PSCmdlet.ParameterSetName -in 'user', 'org') {
             $params = @{
+                Context                  = $Context
                 Owner                    = $Owner
                 Name                     = $Name
                 Description              = $Description
@@ -372,6 +385,7 @@ filter New-GitHubRepository {
             'template' {
                 if ($PSCmdlet.ShouldProcess("repository [$Owner/$Name] from template [$TemplateOwner/$TemplateRepo]", 'Create')) {
                     $params = @{
+                        Context            = $Context
                         TemplateOwner      = $TemplateOwner
                         TemplateRepo       = $TemplateRepo
                         Owner              = $Owner
@@ -390,6 +404,7 @@ filter New-GitHubRepository {
                 }
                 if ($PSCmdlet.ShouldProcess("repository [$Owner/$Name] as fork from [$ForkOwner/$ForkRepo]", 'Create')) {
                     $params = @{
+                        Context           = $Context
                         Owner             = $ForkOwner
                         Repo              = $ForkRepo
                         Organization      = $Owner

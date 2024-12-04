@@ -26,20 +26,23 @@
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [CmdletBinding()]
-    param (
+    param(
         # The number of results per page (max 100).
         [Parameter()]
         [ValidateRange(1, 100)]
         [int] $PerPage = 30,
 
         [Parameter()]
-        [switch] $Public
+        [switch] $Public,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
     if ($Public) {
-        Get-GitHubUserPublicEmail -PerPage $PerPage
+        Get-GitHubUserPublicEmail -PerPage $PerPage -Context $Context
     } else {
-        Get-GitHubUserAllEmail -PerPage $PerPage
+        Get-GitHubUserAllEmail -PerPage $PerPage -Context $Context
     }
-
 }

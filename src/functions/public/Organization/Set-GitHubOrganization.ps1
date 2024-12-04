@@ -36,7 +36,7 @@
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding(SupportsShouldProcess)]
-    param (
+    param(
         # The organization name. The name is not case sensitive.
         [Parameter(
             Mandatory,
@@ -215,13 +215,18 @@
         # are blocked from pushing a secret.
         [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('secret_scanning_push_protection_custom_link')]
-        [string] $SecretScanningPushProtectionCustomLink
+        [string] $SecretScanningPushProtectionCustomLink,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
     $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
     Remove-HashtableEntry -Hashtable $body -RemoveNames 'organization_name'
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/orgs/$OrganizationName"
         Method      = 'PATCH'
         Body        = $body

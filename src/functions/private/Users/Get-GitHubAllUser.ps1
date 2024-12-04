@@ -20,7 +20,7 @@
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]
-    param (
+    param(
         # A user ID. Only return users with an ID greater than this ID.
         [Parameter()]
         [int] $Since = 0,

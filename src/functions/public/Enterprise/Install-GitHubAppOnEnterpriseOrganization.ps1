@@ -34,7 +34,11 @@
 
         # The names of the repositories to which the installation will be granted access.
         [Parameter()]
-        [string[]] $Repositories
+        [string[]] $Repositories,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
     $body = @{
@@ -45,6 +49,7 @@
     $body | Remove-HashtableEntry -NullOrEmptyValues
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/enterprises/$Enterprise/apps/organizations/$Organization/installations"
         Method      = 'Post'
         Body        = $body

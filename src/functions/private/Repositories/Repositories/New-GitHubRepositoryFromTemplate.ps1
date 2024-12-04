@@ -37,7 +37,7 @@
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding(SupportsShouldProcess)]
-    param (
+    param(
         # The account owner of the template repository. The name is not case sensitive.
         [Parameter(Mandatory)]
         [Alias('template_owner')]

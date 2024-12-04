@@ -23,7 +23,7 @@
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]
-    param (
+    param(
         # The handle for the GitHub user account.
         [Parameter(
             ValueFromPipeline,
@@ -35,13 +35,16 @@
         # The number of results per page (max 100).
         [Parameter()]
         [ValidateRange(1, 100)]
-        [int] $PerPage = 30
+        [int] $PerPage = 30,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
     if ($Username) {
-        Get-GitHubUserFollowingUser -Username $Username -PerPage $PerPage
+        Get-GitHubUserFollowingUser -Username $Username -PerPage $PerPage -Context $Context
     } else {
-        Get-GitHubUserFollowingMe -PerPage $PerPage
+        Get-GitHubUserFollowingMe -PerPage $PerPage -Context $Context
     }
-
 }
