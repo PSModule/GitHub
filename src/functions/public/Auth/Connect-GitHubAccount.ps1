@@ -130,7 +130,11 @@
         [Alias('Quiet')]
         [Alias('q')]
         [Alias('s')]
-        [switch] $Silent
+        [switch] $Silent,
+
+        # Make the connected context NOT the default context.
+        [Parameter()]
+        [switch] $NotDefault
     )
 
     $commandName = $MyInvocation.MyCommand.Name
@@ -172,7 +176,8 @@
             Repo       = $Repo
         }
 
-        Write-Verbose "AuthType: [$authType]"
+        Write-Verbose ($contextData | Format-Table | Out-String)
+
         switch ($authType) {
             'UAT' {
                 Write-Verbose 'Logging in using device flow...'
@@ -180,8 +185,8 @@
                     Write-Verbose "Using provided ClientID: [$ClientID]"
                     $authClientID = $ClientID
                 } else {
-                    Write-Verbose "Using default ClientID: [$($gitHubConfig."$Mode`ClientID")]"
-                    $authClientID = $($gitHubConfig."$Mode`ClientID")
+                    Write-Verbose "Using default ClientID: [$($gitHubConfig."Default$Mode`ClientID")]"
+                    $authClientID = $($gitHubConfig."Default$Mode`ClientID")
                 }
 
                 Write-Verbose "Using $Mode authentication..."
@@ -263,7 +268,7 @@
                 }
             }
         }
-        Set-GitHubContext @context -Default
+        Set-GitHubContext @contextData -Default:(!$NotDefault)
         $contextData = Get-GitHubContext
         Write-Verbose ($contextData | Format-List | Out-String)
         if (-not $Silent) {
