@@ -11,14 +11,18 @@ if (-not $context) {
 }
 $context = (Get-Context -ID $script:Config.Name)
 
-if (-not $context.GitHubAppClientID) {
-    Set-GitHubConfig -Name GitHubAppClientID -Value $script:Auth.GitHubApp.ClientID
+if (-not $context.DefaultGitHubAppClientID) {
+    Set-GitHubConfig -Name DefaultGitHubAppClientID -Value $script:Auth.GitHubApp.ClientID
 }
-if (-not $context.OAuthAppClientID) {
-    Set-GitHubConfig -Name OAuthAppClientID -Value $script:Auth.OAuthApp.ClientID
+if (-not $context.DefaultOAuthAppClientID) {
+    Set-GitHubConfig -Name DefaultOAuthAppClientID -Value $script:Auth.OAuthApp.ClientID
 }
 if (-not $context.AccessTokenGracePeriodInHours) {
     Set-GitHubConfig -Name AccessTokenGracePeriodInHours -Value $script:Auth.AccessTokenGracePeriodInHours
+}
+if (-not $context.DefaultHostName) {
+    $defaultHostName = $env:GITHUB_SERVER_URL ?? 'github.com'
+    Set-GitHubConfig -Name DefaultHostName -Value $defaultHostName
 }
 
 $script:runEnv = if ($env:GITHUB_ACTIONS -eq 'true') {
