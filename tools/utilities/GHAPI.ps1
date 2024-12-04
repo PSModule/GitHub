@@ -1,4 +1,4 @@
-# API Authorization
+﻿# API Authorization
 # https://docs.github.com/en/rest/overview/other-authentication-methods
 
 
@@ -13,7 +13,7 @@ $GHAPIBaseURI = 'https://api.github.com'
 
 Function Get-GHActionRun {
     [CmdletBinding()]
-    param ()
+    param()
 
     # API Reference
     # https://docs.github.com/en/rest/reference/actions#list-workflow-runs-for-a-repository
