@@ -33,14 +33,16 @@
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'Is the CLI part of the module.')]
     [CmdletBinding()]
     param(
-        # The context to log out of.
-        [Parameter()]
-        [Alias('Name')]
-        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext'),
-
         # Silently disconnects from GitHub.
         [Parameter()]
-        [switch] $Silent
+        [Alias('Quiet')]
+        [Alias('q')]
+        [Alias('s')]
+        [switch] $Silent,
+
+        # The context to log out of.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
     $commandName = $MyInvocation.MyCommand.Name
