@@ -7,12 +7,18 @@ Write-Verbose "Path: $scriptFilePath"
 $context = (Get-Context -ID $script:Config.Name)
 if (-not $context) {
     Write-Verbose 'No context found, creating a new context...'
-    Set-Context -ID $script:Config.Name -Context @{
-        RunEnv                        = $script:runEnv
-        GitHubAppClientID             = $script:Auth.GitHubApp.ClientID
-        OAuthAppClientID              = $script:Auth.OAuthApp.ClientID
-        AccessTokenGracePeriodInHours = $script:Auth.AccessTokenGracePeriodInHours
-    }
+    Set-Context -ID $script:Config.Name -Context @{}
+}
+$context = (Get-Context -ID $script:Config.Name)
+
+if (-not $context.GitHubAppClientID) {
+    Set-GitHubConfig -Name GitHubAppClientID -Value $script:Auth.GitHubApp.ClientID
+}
+if (-not $context.OAuthAppClientID) {
+    Set-GitHubConfig -Name OAuthAppClientID -Value $script:Auth.OAuthApp.ClientID
+}
+if (-not $context.AccessTokenGracePeriodInHours) {
+    Set-GitHubConfig -Name AccessTokenGracePeriodInHours -Value $script:Auth.AccessTokenGracePeriodInHours
 }
 
 $script:runEnv = if ($env:GITHUB_ACTIONS -eq 'true') {
@@ -30,4 +36,3 @@ if ($env:GITHUB_ACTIONS -eq 'true') {
     $env:GITHUB_REPOSITORY_NAME = $env:GITHUB_REPOSITORY -replace '.+/'
     Set-GitHubEnv -Name 'GITHUB_REPOSITORY_NAME' -Value $env:GITHUB_REPOSITORY_NAME
 }
-
