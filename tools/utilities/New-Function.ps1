@@ -25,29 +25,29 @@
 
     begin {
         $commandName = $MyInvocation.MyCommand.Name
-        Write-Verbose "[$commandName] - Start"
-        Write-Verbose 'Begin'
+        Write-Debug "[$commandName] - Start"
+        Write-Debug 'Begin'
     }
 
     process {
         try {
-            Write-Verbose 'Process'
+            Write-Debug 'Process'
             if ($PSCmdlet.ShouldProcess('Target', 'Operation')) {
-                Write-Verbose "Name: $Name"
-                Write-Verbose "Value: $Value"
+                Write-Debug "Name: $Name"
+                Write-Debug "Value: $Value"
             }
         } catch {
-            Write-Verbose "Error: $_"
+            Write-Debug "Error: $_"
         } finally {
-            Write-Verbose 'Finally'
+            Write-Debug 'Finally'
         }
     }
 
     end {
-        Write-Verbose "[$commandName] - End"
+        Write-Debug "[$commandName] - End"
     }
 
     clean {
-        Write-Verbose 'Clean'
+        Write-Debug 'Clean'
     }
 }
