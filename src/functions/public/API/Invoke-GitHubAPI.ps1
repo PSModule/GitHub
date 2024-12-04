@@ -53,10 +53,6 @@
         [Parameter()]
         [version] $HttpVersion = '2.0',
 
-        # Support Pagination Relation Links per RFC5988.
-        [Parameter()]
-        [bool] $FollowRelLink = $true,
-
         # The file path to be used for the API request. This is used for uploading files.
         [Parameter()]
         [string] $UploadFilePath,
@@ -152,7 +148,6 @@
         Authentication = 'Bearer'
         Token          = $Token
         ContentType    = $ContentType
-        FollowRelLink  = $FollowRelLink
         InFile         = $UploadFilePath
         OutFile        = $DownloadFilePath
         HttpVersion    = [string]$HttpVersion
@@ -178,16 +173,39 @@
         Write-Verbose 'Request:'
         $APICall | ConvertFrom-HashTable | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
         Write-Verbose '----------------------------------'
-        Invoke-RestMethod @APICall | ForEach-Object {
-            [pscustomobject]@{
-                Request  = $APICall
-                Response = $_
+        do {
+            # Send the web request
+            $response = Invoke-WebRequest @APICall
+
+            $headers = @{}
+            foreach ($item in $response.Headers.GetEnumerator()) {
+                $headers[$item.Key] = ($item.Value).Trim() -join ', '
             }
-        }
+            $headers = [pscustomobject]$headers
+            # Sort properties by name and display the object
+            $sortedProperties = $headers.PSObject.Properties.Name | Sort-Object
+            $headers = $headers | Select-Object $sortedProperties
+            Write-Verbose '----------------------------------'
+            Write-Verbose 'Response headers:'
+            $headers | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+            Write-Verbose '---------------------------'
+
+            $results = $response.Content | ConvertFrom-Json
+            [pscustomobject]@{
+                Request           = $APICall
+                Response          = $results
+                Headers           = $headers
+                StatusCode        = $response.StatusCode
+                StatusDescription = $response.StatusDescription
+            }
+
+            # Get the next page URL
+            $APICall['Uri'] = $response.RelationLink.next
+        } while ($APICall['Uri'])
     } catch {
         $failure = $_
         $headers = @{}
-        foreach ($item in $failure.Exception.Response.Headers) {
+        foreach ($item in $failure.Exception.Response.Headers.GetEnumerator()) {
             $headers[$item.Key] = ($item.Value).Trim() -join ', '
         }
         $headers = [pscustomobject]$headers
