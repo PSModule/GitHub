@@ -123,7 +123,7 @@
         [Parameter()]
         [Alias('Host')]
         [Alias('Server')]
-        [string] $HostName = $env:GITHUB_SERVER_URL ?? 'github.com',
+        [string] $HostName,
 
         # Suppresses the output of the function.
         [Parameter()]
@@ -141,6 +141,10 @@
             $Token = ConvertFrom-SecureString $Token -AsPlainText
         }
 
+        $gitHubConfig = Get-GitHubConfig
+        if (-not $HostName) {
+            $HostName = $gitHubConfig.DefaultHostName
+        }
         $HostName = $HostName -replace '^https?://'
         $ApiBaseUri = "https://api.$HostName"
         $authType = $PSCmdlet.ParameterSetName
@@ -159,19 +163,13 @@
             }
         }
 
-        $context = @{
+        $contextData = @{
             ApiBaseUri = $ApiBaseUri
             ApiVersion = $ApiVersion
             HostName   = $HostName
             AuthType   = $authType
             Owner      = $Owner
             Repo       = $Repo
-        }
-
-        $gitHubConfig = Get-GitHubConfig
-        $defaultContextID = $gitHubConfig.DefaultContext
-        if ($defaultContextID) {
-            $defaultContext = Get-GitHubContext -Context $defaultContextID
         }
 
         Write-Verbose "AuthType: [$authType]"
@@ -181,55 +179,17 @@
                 if (-not [string]::IsNullOrEmpty($ClientID)) {
                     Write-Verbose "Using provided ClientID: [$ClientID]"
                     $authClientID = $ClientID
-                } elseif (-not [string]::IsNullOrEmpty($($defaultContext.AuthClientID))) {
-                    Write-Verbose "Reusing previously stored ClientID: [$($defaultContext.AuthClientID)]"
-                    $authClientID = $defaultContext.AuthClientID
                 } else {
-                    Write-Verbose "Using default ClientID: [$($script:Auth.$Mode.ClientID)]"
-                    $authClientID = $script:Auth.$Mode.ClientID
+                    Write-Verbose "Using default ClientID: [$($gitHubConfig."$Mode`ClientID")]"
+                    $authClientID = $($gitHubConfig."$Mode`ClientID")
                 }
-                if ($Mode -ne ($defaultContext.DeviceFlowType)) {
-                    Write-Verbose "Using $Mode authentication..."
-                    $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $authClientID -Scope $Scope -HostName $HostName
-                } else {
-                    $accessTokenValidity = [datetime]($defaultContext.TokenExpirationDate) - (Get-Date)
-                    $accessTokenIsValid = $accessTokenValidity.Seconds -gt 0
-                    $hours = $accessTokenValidity.Hours.ToString().PadLeft(2, '0')
-                    $minutes = $accessTokenValidity.Minutes.ToString().PadLeft(2, '0')
-                    $seconds = $accessTokenValidity.Seconds.ToString().PadLeft(2, '0')
-                    $accessTokenValidityText = "$hours`:$minutes`:$seconds"
-                    if ($accessTokenIsValid) {
-                        if ($accessTokenValidity.TotalHours -gt $script:Auth.AccessTokenGracePeriodInHours) {
-                            if (-not $Silent) {
-                                Write-Host '✓ ' -ForegroundColor Green -NoNewline
-                                Write-Host "Access token is still valid for $accessTokenValidityText ..."
-                            }
-                            return
-                        } else {
-                            if (-not $Silent) {
-                                Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
-                                Write-Host "Access token remaining validity $accessTokenValidityText. Refreshing access token..."
-                            }
-                            $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $authClientID -RefreshToken ($defaultContext.RefreshToken) -HostName $HostName
-                        }
-                    } else {
-                        $refreshTokenValidity = [datetime]($defaultContext.RefreshTokenExpirationDate) - (Get-Date)
-                        $refreshTokenIsValid = $refreshTokenValidity.Seconds -gt 0
-                        if ($refreshTokenIsValid) {
-                            if (-not $Silent) {
-                                Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
-                                Write-Host 'Access token expired. Refreshing access token...'
-                            }
-                            $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $authClientID -RefreshToken ($defaultContext.RefreshToken) -HostName $HostName
-                        } else {
-                            Write-Verbose "Using $Mode authentication..."
-                            $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $authClientID -Scope $Scope -HostName $HostName
-                        }
-                    }
-                }
+
+                Write-Verbose "Using $Mode authentication..."
+                $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $authClientID -Scope $Scope -HostName $HostName
+
                 switch ($Mode) {
                     'GitHubApp' {
-                        $context += @{
+                        $contextData += @{
                             Token                      = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
                             TokenExpirationDate        = (Get-Date).AddSeconds($tokenResponse.expires_in)
                             TokenType                  = $tokenResponse.access_token -replace $tokenPrefixPattern
@@ -241,7 +201,7 @@
                         }
                     }
                     'OAuthApp' {
-                        $context += @{
+                        $contextData += @{
                             Token          = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
                             TokenType      = $tokenResponse.access_token -replace $tokenPrefixPattern
                             AuthClientID   = $authClientID
@@ -258,7 +218,7 @@
             }
             'App' {
                 Write-Verbose 'Logging in as a GitHub App...'
-                $context += @{
+                $contextData += @{
                     Token     = ConvertTo-SecureString -AsPlainText $PrivateKey
                     TokenType = 'PEM'
                     ClientID  = $ClientID
@@ -272,7 +232,7 @@
                 $accessTokenValue = Read-Host -Prompt 'Enter your personal access token' -AsSecureString
                 $Token = ConvertFrom-SecureString $accessTokenValue -AsPlainText
                 $tokenType = $Token -replace $tokenPrefixPattern
-                $context += @{
+                $contextData += @{
                     Token     = ConvertTo-SecureString -AsPlainText $Token
                     TokenType = $tokenType
                 }
@@ -281,19 +241,19 @@
                 $tokenType = $Token -replace $tokenPrefixPattern
                 switch -Regex ($tokenType) {
                     'ghp|github_pat' {
-                        $context += @{
+                        $contextData += @{
                             Token     = ConvertTo-SecureString -AsPlainText $Token
                             TokenType = $tokenType
                         }
-                        $context['AuthType'] = 'PAT'
+                        $contextData['AuthType'] = 'PAT'
                     }
                     'ghs' {
                         Write-Verbose 'Logging in using an installation access token...'
-                        $context += @{
+                        $contextData += @{
                             Token     = ConvertTo-SecureString -AsPlainText $Token
                             TokenType = $tokenType
                         }
-                        $context['AuthType'] = 'IAT'
+                        $contextData['AuthType'] = 'IAT'
                     }
                     default {
                         Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
@@ -304,10 +264,10 @@
             }
         }
         Set-GitHubContext @context -Default
-        $context = Get-GitHubContext
-        Write-Verbose ($context | Format-List | Out-String)
+        $contextData = Get-GitHubContext
+        Write-Verbose ($contextData | Format-List | Out-String)
         if (-not $Silent) {
-            $name = $context.Username
+            $name = $contextData.Username
             Write-Host '✓ ' -ForegroundColor Green -NoNewline
             Write-Host "Logged in as $name!"
         }
@@ -318,6 +278,7 @@
     } finally {
         Remove-Variable -Name tokenResponse -ErrorAction SilentlyContinue
         Remove-Variable -Name context -ErrorAction SilentlyContinue
+        Remove-Variable -Name Token -ErrorAction SilentlyContinue
         [System.GC]::Collect()
     }
     Write-Verbose "[$commandName] - End"
