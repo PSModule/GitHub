@@ -93,19 +93,34 @@ function Set-GitHubContextSetting {
     $commandName = $MyInvocation.MyCommand.Name
     Write-Verbose "[$commandName] - Start"
 
-    $contextID = "$($Script:Config.Name)/$Context"
-
-    if ($PSCmdlet.ShouldProcess('Config', 'Set')) {
-
-        $PSBoundParameters.GetEnumerator() | Where-Object { $_.Name -ne 'Context' } | ForEach-Object {
-            $key = $_.Key
-            $value = $_.Value
-            if ($PSCmdlet.ShouldProcess("Setting [$key]", "to [$value]")) {
-                Write-Verbose "Setting [$key] to [$value]"
-                Set-ContextSetting -Name $key -Value $value -ID $contextID
-            }
-        }
+    $params = @{
+        ApiBaseUri                 = $ApiBaseUri                 # https://api.github.com
+        ApiVersion                 = $ApiVersion                 # 2022-11-28
+        AuthClientID               = $AuthClientID               # Client ID for UAT
+        AuthType                   = $AuthType                   # UAT / PAT / App / IAT
+        ClientID                   = $ClientID                   # Client ID for GitHub Apps
+        DeviceFlowType             = $DeviceFlowType             # GitHubApp / OAuthApp
+        HostName                   = $HostName                   # github.com / msx.ghe.com / github.local
+        NodeID                     = $NodeID                     # User ID / app ID (GraphQL Node ID)
+        DatabaseID                 = $DatabaseID                 # Database ID
+        UserName                   = $UserName                   # User name
+        Owner                      = $Owner                      # Owner name
+        Repo                       = $Repo                       # Repo name
+        Scope                      = $Scope                      # 'gist read:org repo workflow'
+        #-----------------------------------------------------------------------------------------
+        TokenType                  = $TokenType                  # ghu / gho / ghp / github_pat / PEM / ghs /
+        Token                      = $Token                      # Access token
+        TokenExpirationDate        = $TokenExpirationDate        # 2024-01-01-00:00:00
+        RefreshToken               = $RefreshToken               # Refresh token
+        RefreshTokenExpirationDate = $RefreshTokenExpirationDate # 2024-01-01-00:00:00
     }
+
+    $params | Remove-HashtableEntry -NullOrEmptyValues
+    $contextID = "$($Script:Config.Name)/$Context"
+    $contextObj = Get-Context -ID $contextID
+    $contextHashtable = $contextObj | ConvertTo-Hashtable
+    $contextHashtable = Join-Object -Main $contextHashtable -Overrides $params -AsHashtable
+    Set-Context -ID $contextID -Context $contextHashtable
 
     Write-Verbose "[$commandName] - End"
 }

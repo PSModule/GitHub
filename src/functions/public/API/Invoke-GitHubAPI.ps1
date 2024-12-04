@@ -86,11 +86,9 @@
     )
 
     Write-Debug 'Invoking GitHub API...'
-    if ($Debug) {
-        Write-Debug 'Parameters:'
-        $PSBoundParameters.GetEnumerator() | ForEach-Object {
-            Write-Debug " - $($_.Key): $($_.Value)"
-        }
+    Write-Debug 'Parameters:'
+    $PSBoundParameters.GetEnumerator() | ForEach-Object {
+        Write-Debug " - $($_.Key): $($_.Value)"
     }
 
     $contextObj = Get-GitHubContext -Context $Context
@@ -172,32 +170,26 @@
     }
 
     try {
-        # Skip entire process if not in debug
-        if ($Debug) {
-            Write-Debug '----------------------------------'
-            Write-Debug 'Request:'
-            $APICall | ConvertFrom-HashTable | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
-            Write-Debug '----------------------------------'
-        }
+        Write-Debug '----------------------------------'
+        Write-Debug 'Request:'
+        $APICall | ConvertFrom-HashTable | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+        Write-Debug '----------------------------------'
         do {
             # Send the web request
             $response = Invoke-WebRequest @APICall
 
-            # Skip entire process if not in debug
-            if ($Debug) {
-                $headers = @{}
-                foreach ($item in $response.Headers.GetEnumerator()) {
-                    $headers[$item.Key] = ($item.Value).Trim() -join ', '
-                }
-                $headers = [pscustomobject]$headers
-                # Sort properties by name and display the object
-                $sortedProperties = $headers.PSObject.Properties.Name | Sort-Object
-                $headers = $headers | Select-Object $sortedProperties
-                Write-Debug '----------------------------------'
-                Write-Debug 'Response headers:'
-                $headers | Out-String -Stream | ForEach-Object { Write-Debug $_ }
-                Write-Debug '---------------------------'
+            $headers = @{}
+            foreach ($item in $response.Headers.GetEnumerator()) {
+                $headers[$item.Key] = ($item.Value).Trim() -join ', '
             }
+            $headers = [pscustomobject]$headers
+            # Sort properties by name and display the object
+            $sortedProperties = $headers.PSObject.Properties.Name | Sort-Object
+            $headers = $headers | Select-Object $sortedProperties
+            Write-Debug '----------------------------------'
+            Write-Debug 'Response headers:'
+            $headers | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+            Write-Debug '---------------------------'
             $results = $response.Content | ConvertFrom-Json
             [pscustomobject]@{
                 Request           = $APICall
