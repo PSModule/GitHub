@@ -17,9 +17,11 @@
     [CmdletBinding()]
     param(
         # The fields to return.
+        [Parameter()]
         [string[]] $Fields = @('login', 'id', 'databaseId'),
 
         # Context to run the command in.
+        [Parameter()]
         [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
