@@ -86,8 +86,11 @@
     )
 
     Write-Debug 'Invoking GitHub API...'
-    $PSBoundParameters.GetEnumerator() | ForEach-Object {
-        Write-Debug " - $($_.Key): $($_.Value)"
+    if ($Debug) {
+        Write-Debug 'Parameters:'
+        $PSBoundParameters.GetEnumerator() | ForEach-Object {
+            Write-Debug " - $($_.Key): $($_.Value)"
+        }
     }
 
     $contextObj = Get-GitHubContext -Context $Context
@@ -119,7 +122,7 @@
     switch ($tokenType) {
         'ghu' {
             if (Test-GitHubAccessTokenRefreshRequired -Context $Context) {
-                Connect-GitHubAccount -Silent
+                Update-GitHubUserAccessToken -Context $Context
                 $Token = (Get-GitHubContextSetting -Name 'Token' -Context $Context)
             }
         }
@@ -169,27 +172,32 @@
     }
 
     try {
-        Write-Verbose '----------------------------------'
-        Write-Verbose 'Request:'
-        $APICall | ConvertFrom-HashTable | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
-        Write-Verbose '----------------------------------'
+        # Skip entire process if not in debug
+        if ($Debug) {
+            Write-Debug '----------------------------------'
+            Write-Debug 'Request:'
+            $APICall | ConvertFrom-HashTable | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+            Write-Debug '----------------------------------'
+        }
         do {
             # Send the web request
             $response = Invoke-WebRequest @APICall
 
-            $headers = @{}
-            foreach ($item in $response.Headers.GetEnumerator()) {
-                $headers[$item.Key] = ($item.Value).Trim() -join ', '
+            # Skip entire process if not in debug
+            if ($Debug) {
+                $headers = @{}
+                foreach ($item in $response.Headers.GetEnumerator()) {
+                    $headers[$item.Key] = ($item.Value).Trim() -join ', '
+                }
+                $headers = [pscustomobject]$headers
+                # Sort properties by name and display the object
+                $sortedProperties = $headers.PSObject.Properties.Name | Sort-Object
+                $headers = $headers | Select-Object $sortedProperties
+                Write-Debug '----------------------------------'
+                Write-Debug 'Response headers:'
+                $headers | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+                Write-Debug '---------------------------'
             }
-            $headers = [pscustomobject]$headers
-            # Sort properties by name and display the object
-            $sortedProperties = $headers.PSObject.Properties.Name | Sort-Object
-            $headers = $headers | Select-Object $sortedProperties
-            Write-Verbose '----------------------------------'
-            Write-Verbose 'Response headers:'
-            $headers | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
-            Write-Verbose '---------------------------'
-
             $results = $response.Content | ConvertFrom-Json
             [pscustomobject]@{
                 Request           = $APICall
