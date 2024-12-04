@@ -97,7 +97,7 @@ function Set-GitHubContextSetting {
 
     if ($PSCmdlet.ShouldProcess('Config', 'Set')) {
 
-        $PSBoundParameters.GetEnumerator() | ForEach-Object {
+        $PSBoundParameters.GetEnumerator() | Where-Object { $_.Name -ne 'Context' } | ForEach-Object {
             $key = $_.Key
             $value = $_.Value
             if ($PSCmdlet.ShouldProcess("Setting [$key]", "to [$value]")) {
