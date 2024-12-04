@@ -16,9 +16,15 @@
     param(
         # The enterprise slug or ID.
         [Parameter(Mandatory)]
-        [string] $Enterprise
+        [string] $Enterprise,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
+
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/enterprises/$Enterprise/apps/installable_organizations"
         Method      = 'GET'
     }

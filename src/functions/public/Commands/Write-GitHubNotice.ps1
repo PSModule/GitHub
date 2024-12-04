@@ -25,7 +25,7 @@
     [OutputType([void])]
     [Alias('Notice')]
     [CmdletBinding()]
-    param (
+    param(
         # Message to write
         [Parameter(Mandatory)]
         [string] $Message,

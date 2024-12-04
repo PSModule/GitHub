@@ -1,4 +1,4 @@
-#Requires -Modules @{ ModuleName = 'DynamicParams'; RequiredVersion = '1.1.8' }
+﻿#Requires -Modules @{ ModuleName = 'DynamicParams'; RequiredVersion = '1.1.8' }
 
 filter Get-GitHubLicense {
     <#
@@ -35,14 +35,18 @@ filter Get-GitHubLicense {
 
     #>
     [CmdletBinding(DefaultParameterSetName = 'List')]
-    param (
+    param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(ParameterSetName = 'Repository')]
-        [string] $Owner = (Get-GitHubContextSetting -Name Owner),
+        [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(ParameterSetName = 'Repository')]
-        [string] $Repo = (Get-GitHubContextSetting -Name Repo)
+        [string] $Repo,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
     dynamicparam {
@@ -61,17 +65,35 @@ filter Get-GitHubLicense {
         return $DynamicParamDictionary
     }
 
+    begin {
+        $contextObj = Get-GitHubContext -Context $Context
+        if (-not $contextObj) {
+            throw 'Log in using Connect-GitHub before running this command.'
+        }
+        Write-Debug "Context: [$Context]"
+
+        if ([string]::IsNullOrEmpty($Owner)) {
+            $Owner = $contextObj.Owner
+        }
+        Write-Debug "Owner : [$($contextObj.Owner)]"
+
+        if ([string]::IsNullOrEmpty($Repo)) {
+            $Repo = $contextObj.Repo
+        }
+        Write-Debug "Repo : [$($contextObj.Repo)]"
+    }
+
     process {
         $Name = $PSBoundParameters['Name']
         switch ($PSCmdlet.ParameterSetName) {
             'List' {
-                Get-GitHubLicenseList
+                Get-GitHubLicenseList -Context $Context
             }
             'Name' {
-                Get-GitHubLicenseByName -Name $Name
+                Get-GitHubLicenseByName -Name $Name -Context $Context
             }
             'Repository' {
-                Get-GitHubRepositoryLicense -Owner $Owner -Repo $Repo
+                Get-GitHubRepositoryLicense -Owner $Owner -Repo $Repo -Context $Context
             }
         }
     }

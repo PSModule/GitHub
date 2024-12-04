@@ -56,7 +56,7 @@
     #>
     [CmdletBinding(DefaultParameterSetName = 'Type')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Private function, not exposed to user.')]
-    param (
+    param(
         # Limit results to repositories with the specified visibility.
         [Parameter(
             ParameterSetName = 'Aff-Vis'
@@ -105,21 +105,19 @@
 
         # Only show repositories updated before the given time.
         [Parameter()]
-        [datetime] $Before
+        [datetime] $Before,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context
     )
 
-    $PSCmdlet.MyInvocation.MyCommand.Parameters.GetEnumerator() | ForEach-Object {
-        Write-Verbose "Parameter: [$($_.Key)] = [$($_.Value)]"
-        $paramDefaultValue = Get-Variable -Name $_.Key -ValueOnly -ErrorAction SilentlyContinue
-        if (-not $PSBoundParameters.ContainsKey($_.Key) -and ($null -ne $paramDefaultValue)) {
-            Write-Verbose "Parameter: [$($_.Key)] = [$($_.Value)] - Adding default value"
-            $PSBoundParameters[$_.Key] = $paramDefaultValue
-        }
-        Write-Verbose " - $($PSBoundParameters[$_.Key])"
+    $body = @{
+        type      = $Type
+        sort      = $Sort
+        direction = $Direction
+        per_page  = $PerPage
     }
-
-    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-    Remove-HashtableEntry -Hashtable $body -RemoveNames 'Affiliation', 'Since', 'Before'
 
     if ($PSBoundParameters.ContainsKey('Affiliation')) {
         $body['affiliation'] = $Affiliation -join ','
@@ -132,6 +130,7 @@
     }
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = '/user/repos'
         Method      = 'GET'
         body        = $body

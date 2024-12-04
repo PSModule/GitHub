@@ -18,7 +18,7 @@
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding(SupportsShouldProcess)]
-    param (
+    param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
         [string] $Owner,
@@ -41,8 +41,28 @@
         # characters A-Z (case insensitive), 0-9, and -. If false, this autolink reference only matches numeric characters.
         [Parameter()]
         [Alias('is_alphanumeric')]
-        [bool] $IsAlphanumeric = $true
+        [bool] $IsAlphanumeric = $true,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
+
+    $contextObj = Get-GitHubContext -Context $Context
+    if (-not $contextObj) {
+        throw 'Log in using Connect-GitHub before running this command.'
+    }
+    Write-Debug "Context: [$Context]"
+
+    if ([string]::IsNullOrEmpty($Owner)) {
+        $Owner = $contextObj.Owner
+    }
+    Write-Debug "Owner : [$($contextObj.Owner)]"
+
+    if ([string]::IsNullOrEmpty($Repo)) {
+        $Repo = $contextObj.Repo
+    }
+    Write-Debug "Repo : [$($contextObj.Repo)]"
 
     $PSCmdlet.MyInvocation.MyCommand.Parameters.GetEnumerator() | ForEach-Object {
         $paramName = $_.Key
@@ -63,6 +83,7 @@
     Remove-HashtableEntry -Hashtable $body -RemoveNames 'Owner', 'Repo' -RemoveTypes 'SwitchParameter'
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/repos/$Owner/$Repo/autolinks"
         Method      = 'POST'
         Body        = $body

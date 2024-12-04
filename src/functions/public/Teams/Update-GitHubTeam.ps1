@@ -24,7 +24,7 @@
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding(SupportsShouldProcess)]
-    param (
+    param(
         # The organization name. The name is not case sensitive.
         [Parameter(Mandatory)]
         [Alias('Org')]
@@ -78,6 +78,17 @@
         [string] $Context = (Get-GitHubConfig -Name DefaultContext)
     )
 
+    $contextObj = Get-GitHubContext -Context $Context
+    if (-not $contextObj) {
+        throw 'Log in using Connect-GitHub before running this command.'
+    }
+    Write-Debug "Context: [$Context]"
+
+    if ([string]::IsNullOrEmpty($Owner)) {
+        $Owner = $contextObj.Owner
+    }
+    Write-Debug "Owner : [$($contextObj.Owner)]"
+
     $body = @{
         name                 = $NewName
         description          = $Description
@@ -86,13 +97,12 @@
         permission           = $Permission
         parent_team_id       = $ParentTeamID
     }
-
     $body | Remove-HashtableEntry -NullOrEmptyValues
 
     $inputObject = @{
         Context     = $Context
-        Method      = 'Patch'
         APIEndpoint = "/orgs/$Organization/teams/$Name"
+        Method      = 'Patch'
         Body        = $body
     }
 

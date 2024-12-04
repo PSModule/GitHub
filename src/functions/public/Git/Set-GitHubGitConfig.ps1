@@ -17,7 +17,7 @@
         Sets the Git configuration for the GitHub context named 'MyContext'.
     #>
     [CmdletBinding(SupportsShouldProcess)]
-    param (
+    param(
         # The context to use for the API call. This is used to retrieve the necessary configuration settings.
         [Parameter()]
         [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')

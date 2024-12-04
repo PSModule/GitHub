@@ -32,7 +32,7 @@
     [OutputType([pscustomobject])]
     [Alias('ConvertFrom-Dictionary')]
     [CmdletBinding()]
-    param (
+    param(
         # The hashtable to be converted. The input takes any type of dictionary. The original dictionary is not modified.
         [Parameter(
             Mandatory,

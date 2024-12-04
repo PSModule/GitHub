@@ -46,7 +46,7 @@
         Justification = 'No state is changed.'
     )]
     [CmdletBinding()]
-    param (
+    param(
         # The unique identifier of the installation.
         # Example: '12345678'
         [Parameter(
@@ -55,10 +55,15 @@
             ValueFromPipelineByPropertyName
         )]
         [Alias('ID')]
-        [int] $InstallationID
+        [int] $InstallationID,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/app/installations/$InstallationID/access_tokens"
         Method      = 'Post'
     }

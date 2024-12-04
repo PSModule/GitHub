@@ -1,4 +1,4 @@
-filter Get-GitHubLicenseByName {
+﻿filter Get-GitHubLicenseByName {
     <#
         .SYNOPSIS
         Get a license
@@ -18,16 +18,20 @@ filter Get-GitHubLicenseByName {
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [CmdletBinding()]
-    param (
+    param(
         # The license keyword, license name, or license SPDX ID. For example, mit or mpl-2.0.
-        [Parameter()]
-        [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory)]
         [Alias('license')]
-        [string] $Name
+        [string] $Name,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context
     )
 
     process {
         $inputObject = @{
+            Context     = $Context
             APIEndpoint = "/licenses/$Name"
             Accept      = 'application/vnd.github+json'
             Method      = 'GET'
@@ -36,6 +40,5 @@ filter Get-GitHubLicenseByName {
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             Write-Output $_.Response
         }
-
     }
 }

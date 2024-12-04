@@ -21,16 +21,21 @@
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [CmdletBinding(SupportsShouldProcess)]
-    param (
+    param(
         # The unique identifier of the SSH signing key.
         [Parameter(
             Mandatory
         )]
         [Alias('ssh_signing_key_id')]
-        [string] $ID
+        [string] $ID,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/user/ssh_signing_keys/$ID"
         Method      = 'DELETE'
     }
@@ -40,5 +45,4 @@
             Write-Output $_.Response
         }
     }
-
 }

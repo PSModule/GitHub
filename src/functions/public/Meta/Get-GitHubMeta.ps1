@@ -24,9 +24,14 @@
     #>
     [OutputType([object])]
     [CmdletBinding()]
-    param ()
+    param(
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
+    )
 
     $inputObject = @{
+        Context     = $Context
         ApiEndpoint = '/meta'
         Method      = 'GET'
     }
@@ -34,5 +39,4 @@
     Invoke-GitHubAPI @inputObject | ForEach-Object {
         Write-Output $_.Response
     }
-
 }

@@ -19,16 +19,21 @@
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding(SupportsShouldProcess)]
-    param (
+    param(
         # The ID of the GPG key.
         [Parameter(
             Mandatory
         )]
         [Alias('gpg_key_id')]
-        [string] $ID
+        [string] $ID,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/user/gpg_keys/$ID"
         Method      = 'DELETE'
     }

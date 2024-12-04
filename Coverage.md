@@ -9,15 +9,15 @@
     </tr>
     <tr>
         <td>Covered functions</td>
-        <td>153</td>
+        <td>155</td>
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>832</td>
+        <td>830</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>15.53%</td>
+        <td>15.74%</td>
     </tr>
 </table>
 
@@ -30,8 +30,8 @@
 | `/advisories/{ghsa_id}`                                                                                                   |                    | :x:                |                    |                    |                    |
 | `/app`                                                                                                                    |                    | :white_check_mark: |                    |                    |                    |
 | `/app-manifests/{code}/conversions`                                                                                       |                    |                    |                    | :x:                |                    |
-| `/app/hook/config`                                                                                                        |                    | :x:                | :x:                |                    |                    |
-| `/app/hook/deliveries`                                                                                                    |                    | :x:                |                    |                    |                    |
+| `/app/hook/config`                                                                                                        |                    | :white_check_mark: | :x:                |                    |                    |
+| `/app/hook/deliveries`                                                                                                    |                    | :white_check_mark: |                    |                    |                    |
 | `/app/hook/deliveries/{delivery_id}`                                                                                      |                    | :x:                |                    |                    |                    |
 | `/app/hook/deliveries/{delivery_id}/attempts`                                                                             |                    |                    |                    | :x:                |                    |
 | `/app/installation-requests`                                                                                              |                    | :x:                |                    |                    |                    |

@@ -16,14 +16,14 @@
         [Update a release asset](https://docs.github.com/rest/releases/assets#update-a-release-asset)
     #>
     [CmdletBinding(SupportsShouldProcess)]
-    param (
+    param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter()]
-        [string] $Owner = (Get-GitHubContextSetting -Name Owner),
+        [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter()]
-        [string] $Repo = (Get-GitHubContextSetting -Name Repo),
+        [string] $Repo,
 
         # The unique identifier of the asset.
         [Parameter(Mandatory)]
@@ -41,14 +41,34 @@
         # State of the release asset.
         [Parameter()]
         [ValidateSet('uploaded', 'open')]
-        [string] $State
+        [string] $State,
 
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
+
+    $contextObj = Get-GitHubContext -Context $Context
+    if (-not $contextObj) {
+        throw 'Log in using Connect-GitHub before running this command.'
+    }
+    Write-Debug "Context: [$Context]"
+
+    if ([string]::IsNullOrEmpty($Owner)) {
+        $Owner = $contextObj.Owner
+    }
+    Write-Debug "Owner : [$($contextObj.Owner)]"
+
+    if ([string]::IsNullOrEmpty($Repo)) {
+        $Repo = $contextObj.Repo
+    }
+    Write-Debug "Repo : [$($contextObj.Repo)]"
 
     $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
     Remove-HashtableEntry -Hashtable $body -RemoveNames 'Owner', 'Repo', 'ID'
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/repos/$Owner/$Repo/releases/assets/$ID"
         Method      = 'PATCH'
         Body        = $requestBody
@@ -59,5 +79,4 @@
             Write-Output $_.Response
         }
     }
-
 }

@@ -20,16 +20,21 @@
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [CmdletBinding(SupportsShouldProcess)]
-    param (
+    param(
         # The unique identifier of the key.
         [Parameter(
             Mandatory
         )]
         [Alias('key_id')]
-        [string] $ID
+        [string] $ID,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/user/keys/$ID"
         Method      = 'DELETE'
     }

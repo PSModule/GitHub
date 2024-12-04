@@ -6,12 +6,12 @@
     #>
     [CmdletBinding(DefaultParameterSetName = 'Repo')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
-    param (
+    param(
         [Parameter()]
-        [string] $Owner = (Get-GitHubContextSetting -Name Owner),
+        [string] $Owner,
 
         [Parameter()]
-        [string] $Repo = (Get-GitHubContextSetting -Name Repo),
+        [string] $Repo,
 
         [Parameter(ParameterSetName = 'ByName')]
         [string] $Name,
@@ -22,8 +22,28 @@
         # The number of results per page (max 100).
         [Parameter()]
         [ValidateRange(1, 100)]
-        [int] $PerPage = 30
+        [int] $PerPage = 30,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
+
+    $contextObj = Get-GitHubContext -Context $Context
+    if (-not $contextObj) {
+        throw 'Log in using Connect-GitHub before running this command.'
+    }
+    Write-Debug "Context: [$Context]"
+
+    if ([string]::IsNullOrEmpty($Owner)) {
+        $Owner = $contextObj.Owner
+    }
+    Write-Debug "Owner : [$($contextObj.Owner)]"
+
+    if ([string]::IsNullOrEmpty($Repo)) {
+        $Repo = $contextObj.Repo
+    }
+    Write-Debug "Repo : [$($contextObj.Repo)]"
 
     $body = @{
         per_page = $PerPage
@@ -40,6 +60,7 @@
     }
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = $Uri
         Method      = 'GET'
         Body        = $body

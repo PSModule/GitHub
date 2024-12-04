@@ -35,7 +35,7 @@
     [OutputType([pscustomobject])]
     [CmdletBinding(DefaultParameterSetName = '__DefaultSet')]
     [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'All', Justification = 'Required for parameter set')]
-    param (
+    param(
         # The organization name. The name is not case sensitive.
         [Parameter(
             Mandatory,
@@ -71,21 +71,25 @@
         [Parameter(ParameterSetName = 'UserOrg')]
         [Parameter(ParameterSetName = '__DefaultSet')]
         [ValidateRange(1, 100)]
-        [int] $PerPage = 30
+        [int] $PerPage = 30,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
     switch ($PSCmdlet.ParameterSetName) {
         '__DefaultSet' {
-            Get-GitHubMyOrganization -PerPage $PerPage | Get-GitHubOrganizationByName
+            Get-GitHubMyOrganization -PerPage $PerPage -Context $Context | Get-GitHubOrganizationByName -Context $Context
         }
         'NamedOrg' {
-            Get-GitHubOrganizationByName -OrganizationName $OrganizationName
+            Get-GitHubOrganizationByName -OrganizationName $OrganizationName -Context $Context
         }
         'NamedUser' {
-            Get-GitHubUserOrganization -Username $Username
+            Get-GitHubUserOrganization -Username $Username -Context $Context
         }
         'AllOrg' {
-            Get-GitHubAllOrganization -Since $Since -PerPage $PerPage
+            Get-GitHubAllOrganization -Since $Since -PerPage $PerPage -Context $Context
         }
     }
 }

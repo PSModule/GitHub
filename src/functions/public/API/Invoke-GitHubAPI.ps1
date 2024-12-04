@@ -23,7 +23,7 @@
         Gets all open pull requests for the specified repository, filtered by the 'state' parameter, and using the specified 'Accept' header.
     #>
     [CmdletBinding(DefaultParameterSetName = 'ApiEndpoint')]
-    param (
+    param(
         # The HTTP method to be used for the API request. It can be one of the following: GET, POST, PUT, DELETE, or PATCH.
         [Parameter()]
         [Microsoft.PowerShell.Commands.WebRequestMethod] $Method = 'GET',
@@ -89,44 +89,36 @@
         [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
-    Write-Verbose 'Invoking GitHub API...'
+    Write-Debug 'Invoking GitHub API...'
     $PSBoundParameters.GetEnumerator() | ForEach-Object {
-        Write-Verbose " - $($_.Key): $($_.Value)"
+        Write-Debug " - $($_.Key): $($_.Value)"
     }
 
-    $contextObj = Get-GitHubContext -Name $Context
-    Write-Verbose "Using GitHub context: $Context"
+    $contextObj = Get-GitHubContext -Context $Context
     if (-not $contextObj) {
         throw 'Log in using Connect-GitHub before running this command.'
     }
+    Write-Debug "Context: [$Context]"
 
     if ([string]::IsNullOrEmpty($ApiBaseUri)) {
-        Write-Verbose 'Using default API base URI from context.'
-        Write-Verbose $($contextObj.ApiBaseUri)
         $ApiBaseUri = $contextObj.ApiBaseUri
     }
-    Write-Verbose "ApiBaseUri: $ApiBaseUri"
+    Write-Debug "ApiBaseUri : [$($contextObj.ApiBaseUri)]"
 
     if ([string]::IsNullOrEmpty($ApiVersion)) {
-        Write-Verbose 'Using default API version from context.'
-        Write-Verbose $($contextObj.ApiVersion)
         $ApiVersion = $contextObj.ApiVersion
     }
-    Write-Verbose "ApiVersion: $ApiVersion"
+    Write-Debug "ApiVersion : [$($contextObj.ApiVersion)]"
 
     if ([string]::IsNullOrEmpty($TokenType)) {
-        Write-Verbose 'Using default token type from context.'
-        Write-Verbose $($contextObj.TokenType)
         $TokenType = $contextObj.TokenType
     }
-    Write-Verbose "TokenType:  $TokenType"
+    Write-Debug "TokenType : [$($contextObj.TokenType)]"
 
     if ([string]::IsNullOrEmpty($Token)) {
-        Write-Verbose 'Using default token from context.'
-        Write-Verbose $($contextObj.Token)
         $Token = $contextObj.Token
     }
-    Write-Verbose "Token:     $Token"
+    Write-Debug "Token : [$($contextObj.Token)]"
 
     switch ($tokenType) {
         'ghu' {
@@ -154,16 +146,16 @@
     }
 
     $APICall = @{
-        Uri                     = $URI
-        Method                  = $Method
-        Headers                 = $Headers
-        Authentication          = 'Bearer'
-        Token                   = $Token
-        ContentType             = $ContentType
-        FollowRelLink           = $FollowRelLink
-        InFile                  = $UploadFilePath
-        OutFile                 = $DownloadFilePath
-        HttpVersion             = $HttpVersion
+        Uri            = $URI
+        Method         = [string]$Method
+        Headers        = $Headers
+        Authentication = 'Bearer'
+        Token          = $Token
+        ContentType    = $ContentType
+        FollowRelLink  = $FollowRelLink
+        InFile         = $UploadFilePath
+        OutFile        = $DownloadFilePath
+        HttpVersion    = [string]$HttpVersion
     }
 
     $APICall | Remove-HashtableEntry -NullOrEmptyValues
@@ -182,21 +174,21 @@
     }
 
     try {
-        Write-Verbose "----------------------------------"
-        Write-Verbose "Request:"
+        Write-Verbose '----------------------------------'
+        Write-Verbose 'Request:'
         $APICall | ConvertFrom-HashTable | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
-        Write-Verbose "----------------------------------"
+        Write-Verbose '----------------------------------'
         Invoke-RestMethod @APICall | ForEach-Object {
             [pscustomobject]@{
-                Request         = $APICall
-                Response        = $_
+                Request  = $APICall
+                Response = $_
             }
         }
     } catch {
         $failure = $_
         $headers = @{}
         foreach ($item in $failure.Exception.Response.Headers) {
-            $headers[$item.Key] = ($item.Value).Trim() -join ", "
+            $headers[$item.Key] = ($item.Value).Trim() -join ', '
         }
         $headers = [pscustomobject]$headers
         # Sort properties by name and display the object
@@ -214,13 +206,13 @@
         $APICall.Headers = $APICall.Headers | ConvertTo-Json
         $APICall.Method = $APICall.Method.ToString()
 
-        Write-Error "----------------------------------"
-        Write-Error "Error details:"
+        Write-Error '----------------------------------'
+        Write-Error 'Error details:'
         $errorResult | Format-Table -AutoSize -HideTableHeaders | Out-String -Stream | ForEach-Object { Write-Error $_ }
-        Write-Error "----------------------------------"
-        Write-Debug "Response headers:"
+        Write-Error '----------------------------------'
+        Write-Debug 'Response headers:'
         $headers | Out-String -Stream | ForEach-Object { Write-Debug $_ }
-        Write-Debug "---------------------------"
+        Write-Debug '---------------------------'
         throw $failure.Exception.Message
     }
 }

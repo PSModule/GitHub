@@ -33,9 +33,14 @@
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [CmdletBinding()]
-    param ()
+    param(
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
+    )
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = '/rate_limit'
         Method      = 'GET'
     }

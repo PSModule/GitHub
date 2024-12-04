@@ -35,14 +35,14 @@
     #>
     [CmdletBinding(DefaultParameterSetName = 'All')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'Latest', Justification = 'Required for parameter set')]
-    param (
+    param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter()]
-        [string] $Owner = (Get-GitHubContextSetting -Name Owner),
+        [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter()]
-        [string] $Repo = (Get-GitHubContextSetting -Name Repo),
+        [string] $Repo,
 
         # The number of results per page (max 100).
         [Parameter(ParameterSetName = 'All')]
@@ -70,14 +70,42 @@
             ParameterSetName = 'ID'
         )]
         [Alias('release_id')]
-        [string] $ID
+        [string] $ID,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
+    $contextObj = Get-GitHubContext -Context $Context
+    if (-not $contextObj) {
+        throw 'Log in using Connect-GitHub before running this command.'
+    }
+    Write-Debug "Context: [$Context]"
+
+    if ([string]::IsNullOrEmpty($Owner)) {
+        $Owner = $contextObj.Owner
+    }
+    Write-Debug "Owner : [$($contextObj.Owner)]"
+
+    if ([string]::IsNullOrEmpty($Repo)) {
+        $Repo = $contextObj.Repo
+    }
+    Write-Debug "Repo : [$($contextObj.Repo)]"
+
     switch ($PSCmdlet.ParameterSetName) {
-        'All' { Get-GitHubReleaseAll -Owner $Owner -Repo $Repo -PerPage $PerPage }
-        'Latest' { Get-GitHubReleaseLatest -Owner $Owner -Repo $Repo }
-        'Tag' { Get-GitHubReleaseByTagName -Owner $Owner -Repo $Repo -Tag $Tag }
-        'ID' { Get-GitHubReleaseByID -Owner $Owner -Repo $Repo -ID $ID }
+        'All' {
+            Get-GitHubReleaseAll -Owner $Owner -Repo $Repo -PerPage $PerPage -Context $Context
+        }
+        'Latest' {
+            Get-GitHubReleaseLatest -Owner $Owner -Repo $Repo -Context $Context
+        }
+        'Tag' {
+            Get-GitHubReleaseByTagName -Owner $Owner -Repo $Repo -Tag $Tag -Context $Context
+        }
+        'ID' {
+            Get-GitHubReleaseByID -Owner $Owner -Repo $Repo -ID $ID -Context $Context
+        }
     }
 
 }

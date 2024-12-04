@@ -22,7 +22,7 @@
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]
-    param (
+    param(
         # The organization name. The name is not case sensitive.
         [Parameter(
             ValueFromPipeline,
@@ -36,13 +36,17 @@
         # The number of results per page (max 100).
         [Parameter()]
         [ValidateRange(1, 100)]
-        [int] $PerPage = 30
+        [int] $PerPage = 30,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
     if ($OrganizationName) {
-        Get-GitHubBlockedUserByOrganization -OrganizationName $OrganizationName -PerPage $PerPage
+        Get-GitHubBlockedUserByOrganization -OrganizationName $OrganizationName -PerPage $PerPage -Context $Context
     } else {
-        Get-GitHubBlockedUserByUser -PerPage $PerPage
+        Get-GitHubBlockedUserByUser -PerPage $PerPage -Context $Context
     }
 
 }

@@ -18,7 +18,7 @@
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]
-    param (
+    param(
         # The organization name. The name is not case sensitive.
         [Parameter(
             Mandatory,
@@ -33,7 +33,11 @@
         # The number of results per page (max 100).
         [Parameter()]
         [ValidateRange(1, 100)]
-        [int] $PerPage = 30
+        [int] $PerPage = 30,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
     $body = @{
@@ -41,6 +45,7 @@
     }
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/orgs/$OrganizationName/installations"
         Method      = 'GET'
         Body        = $body

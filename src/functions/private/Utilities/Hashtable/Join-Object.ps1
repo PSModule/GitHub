@@ -53,7 +53,7 @@
     [OutputType(ParameterSetName = 'AsHashTable', [hashtable])]
     [Alias('Merge-Object')]
     [CmdletBinding(DefaultParameterSetName = '__DefaultSet')]
-    param (
+    param(
         # The main object to merge into. This object will be cloned, so the original object will not be modified.
         [Parameter(
             Mandatory,

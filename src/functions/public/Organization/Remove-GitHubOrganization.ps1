@@ -19,7 +19,7 @@
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding(SupportsShouldProcess)]
-    param (
+    param(
         # The organization name. The name is not case sensitive.
         [Parameter(
             Mandatory,
@@ -29,10 +29,15 @@
         [Alias('org')]
         [Alias('owner')]
         [Alias('login')]
-        [string] $OrganizationName
+        [string] $OrganizationName,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/orgs/$OrganizationName"
         Method      = 'DELETE'
     }

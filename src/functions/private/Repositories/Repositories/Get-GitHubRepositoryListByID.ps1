@@ -22,25 +22,22 @@
 
     #>
     [CmdletBinding()]
-    param (
+    param(
         # A repository ID. Only return repositories with an ID greater than this ID.
         [Parameter()]
-        [int] $Since = 0
+        [int] $Since = 0,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context
     )
 
-    $PSCmdlet.MyInvocation.MyCommand.Parameters.GetEnumerator() | ForEach-Object {
-        Write-Verbose "Parameter: [$($_.Key)] = [$($_.Value)]"
-        $paramDefaultValue = Get-Variable -Name $_.Key -ValueOnly -ErrorAction SilentlyContinue
-        if (-not $PSBoundParameters.ContainsKey($_.Key) -and ($null -ne $paramDefaultValue)) {
-            Write-Verbose "Parameter: [$($_.Key)] = [$($_.Value)] - Adding default value"
-            $PSBoundParameters[$_.Key] = $paramDefaultValue
-        }
-        Write-Verbose " - $($PSBoundParameters[$_.Key])"
+    $body = @{
+        since = $Since
     }
 
-    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = '/repositories'
         Method      = 'GET'
         Body        = $body

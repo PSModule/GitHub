@@ -25,7 +25,7 @@
     #>
     [OutputType([bool])]
     [CmdletBinding()]
-    param (
+    param(
         # The handle for the GitHub user account.
         [Parameter(
             Mandatory,
@@ -42,13 +42,16 @@
         )]
         [Alias('org')]
         [Alias('owner')]
-        [string] $OrganizationName
+        [string] $OrganizationName,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
     if ($OrganizationName) {
-        Block-GitHubUserByOrganization -OrganizationName $OrganizationName -Username $Username
+        Block-GitHubUserByOrganization -OrganizationName $OrganizationName -Username $Username -Context $Context
     } else {
-        Block-GitHubUserByUser -Username $Username
+        Block-GitHubUserByUser -Username $Username -Context $Context
     }
-
 }

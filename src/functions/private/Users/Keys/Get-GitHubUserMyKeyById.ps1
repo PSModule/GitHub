@@ -19,16 +19,21 @@
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]
-    param (
+    param(
         # The unique identifier of the key.
         [Parameter(
             Mandatory
         )]
         [Alias('key_id')]
-        [string] $ID
+        [string] $ID,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context
     )
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/user/keys/$ID"
         Method      = 'GET'
     }

@@ -21,7 +21,7 @@
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Long links for documentation.')]
     [OutputType([pscustomobject])]
     [CmdletBinding()]
-    param (
+    param(
         # A descriptive name for the new key.
         [Parameter(
             ValueFromPipeline,
@@ -36,13 +36,20 @@
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [string] $Key
+        [string] $Key,
 
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
-    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
+    $body = @{
+        title = $Title
+        key   = $Key
+    }
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = '/user/ssh_signing_keys'
         Method      = 'POST'
         Body        = $body

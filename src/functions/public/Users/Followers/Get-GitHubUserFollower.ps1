@@ -22,7 +22,7 @@
     [OutputType([pscustomobject])]
     [Alias('Get-GitHubUserMyFollowers')]
     [CmdletBinding()]
-    param (
+    param(
         # The handle for the GitHub user account.
         [Parameter(
             ValueFromPipeline,
@@ -34,13 +34,16 @@
         # The number of results per page (max 100).
         [Parameter()]
         [ValidateRange(1, 100)]
-        [int] $PerPage = 30
+        [int] $PerPage = 30,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
     if ($Username) {
-        Get-GitHubUserFollowersOfUser -Username $Username -PerPage $PerPage
+        Get-GitHubUserFollowersOfUser -Username $Username -PerPage $PerPage -Context $Context
     } else {
-        Get-GitHubUserMyFollowers -PerPage $PerPage
+        Get-GitHubUserMyFollowers -PerPage $PerPage -Context $Context
     }
-
 }

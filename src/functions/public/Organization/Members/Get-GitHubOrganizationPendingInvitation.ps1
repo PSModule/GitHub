@@ -13,7 +13,7 @@
         [List pending organization invitations](https://docs.github.com/rest/orgs/members#list-pending-organization-invitations)
     #>
     [CmdletBinding()]
-    param (
+    param(
         # The organization name. The name is not case sensitive.
         [Parameter(Mandatory)]
         [Alias('Org')]

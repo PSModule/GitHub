@@ -1,4 +1,4 @@
-#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '4.0.0' }
+﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '4.0.0' }
 
 function Get-GitHubConfig {
     <#
@@ -15,7 +15,7 @@ function Get-GitHubConfig {
     #>
     [OutputType([void])]
     [CmdletBinding()]
-    param (
+    param(
         # The name of the configuration to get.
         [Parameter()]
         [string] $Name

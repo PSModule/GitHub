@@ -9,17 +9,23 @@
         You must use a [JWT](https://docs.github.com/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app)
         to access this endpoint.
 
-
         .EXAMPLE
-        An example
+        Get-GitHubAppInstallation
+
+        List installations for the authenticated app.
 
         .NOTES
         [List installations for the authenticated app](https://docs.github.com/rest/apps/apps#list-installations-for-the-authenticated-app)
     #>
     [CmdletBinding()]
-    param()
+    param(
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
+    )
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = '/app/installations'
         Method      = 'GET'
     }

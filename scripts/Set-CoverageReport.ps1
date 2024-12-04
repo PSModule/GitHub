@@ -8,7 +8,7 @@ function Find-APIMethod {
         .SYNOPSIS
         Find API methods in a directory
     #>
-    param (
+    param(
         [Parameter(Mandatory)]
         [string] $SearchDirectory,
 

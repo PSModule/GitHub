@@ -24,18 +24,24 @@
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]
-    param (
+    param(
         [Parameter(
             Mandatory,
             ValueFromPipeline,
             ValueFromPipelineByPropertyName
         )]
         [string] $Username,
+
         [Parameter()]
         [ValidateSet('organization', 'repository', 'issue', 'pull_request')]
         [string] $SubjectType,
+
         [Parameter()]
-        [int] $SubjectID = ''
+        [int] $SubjectID = '',
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
     $body = @{
@@ -44,6 +50,7 @@
     }
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/users/$Username/hovercard"
         Method      = 'GET'
         Body        = $body

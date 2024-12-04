@@ -30,7 +30,7 @@
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]
-    param (
+    param(
         # The handle for the GitHub user account.
         [Parameter(
             Mandatory,
@@ -50,16 +50,20 @@
         # The number of results per page (max 100).
         [Parameter()]
         [ValidateRange(1, 100)]
-        [int] $PerPage = 30
+        [int] $PerPage = 30,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
     if ($Username) {
-        Get-GitHubUserKeyForUser -Username $Username -PerPage $PerPage
+        Get-GitHubUserKeyForUser -Username $Username -PerPage $PerPage -Context $Context
     } else {
         if ($ID) {
-            Get-GitHubUserMyKeyById -ID $ID
+            Get-GitHubUserMyKeyById -ID $ID -Context $Context
         } else {
-            Get-GitHubUserMyKey -PerPage $PerPage
+            Get-GitHubUserMyKey -PerPage $PerPage -Context $Context
         }
     }
 }

@@ -18,7 +18,7 @@
     #>
     [OutputType([bool])]
     [CmdletBinding()]
-    param (
+    param(
         # The organization name. The name is not case sensitive.
         [Parameter(
             Mandatory,
@@ -35,10 +35,15 @@
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [string] $Username
+        [string] $Username,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context
     )
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/orgs/$OrganizationName/blocks/$Username"
         Method      = 'GET'
     }

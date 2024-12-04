@@ -21,13 +21,18 @@
         [Get emojis](https://docs.github.com/rest/reference/emojis#get-emojis)
     #>
     [CmdletBinding()]
-    param (
+    param(
         # The path to the directory where the emojis will be downloaded.
         [Parameter()]
-        [string] $Destination
+        [string] $Destination,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = '/emojis'
         Method      = 'GET'
     }
@@ -37,7 +42,7 @@
     }
 
     if (Test-Path -Path $Destination) {
-        $response.PSObject.Properties | ForEach-Object -Parallel {
+        $response.PSObject.Properties | ForEach-Object -ThrottleLimit ([System.Environment]::ProcessorCount) -Parallel {
             Invoke-WebRequest -Uri $_.Value -OutFile "$using:Destination/$($_.Name).png"
         }
     } else {

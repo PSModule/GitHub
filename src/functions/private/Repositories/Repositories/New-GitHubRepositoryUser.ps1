@@ -57,7 +57,7 @@ filter New-GitHubRepositoryUser {
         Justification = 'Parameter is used in dynamic parameter validation.'
     )]
     [CmdletBinding(SupportsShouldProcess)]
-    param (
+    param(
         # The name of the repository.
         [Parameter(Mandatory)]
         [string] $Name,
@@ -173,7 +173,11 @@ filter New-GitHubRepositoryUser {
         [Parameter()]
         [ValidateSet('PR_BODY', 'PR_TITLE', 'BLANK')]
         [Alias('merge_commit_message')]
-        [string] $MergeCommitMessage
+        [string] $MergeCommitMessage,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context
     )
 
     dynamicparam {
@@ -241,6 +245,7 @@ filter New-GitHubRepositoryUser {
         Remove-HashtableEntry -Hashtable $body -NullOrEmptyValues
 
         $inputObject = @{
+            Context     = $Context
             APIEndpoint = '/user/repos'
             Method      = 'POST'
             Body        = $body

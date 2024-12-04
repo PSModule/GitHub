@@ -39,7 +39,7 @@
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding(SupportsShouldProcess)]
-    param (
+    param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
         [string] $Owner,
@@ -50,8 +50,8 @@
 
         # The organization or person who will own the new repository.
         # To create a new repository in an organization, the authenticated user must be a member of the specified organization.
-        [Parameter()]
-        [string] $Organization = (Get-GitHubConfig -Name Owner),
+        [Parameter(Mandatory)]
+        [string] $Organization,
 
         # The name of the new repository.
         [Parameter()]
@@ -60,34 +60,23 @@
         # When forking from an existing repository, fork with only the default branch.
         [Parameter()]
         [Alias('default_branch_only')]
-        [switch] $DefaultBranchOnly
+        [switch] $DefaultBranchOnly,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context
     )
 
     if ([string]::IsNullorEmpty($Name)) {
-        $Name = $ForkRepo
+        $Name = $Repo
     }
-
-    $PSCmdlet.MyInvocation.MyCommand.Parameters.GetEnumerator() | ForEach-Object {
-        $paramName = $_.Key
-        $paramDefaultValue = Get-Variable -Name $paramName -ValueOnly -ErrorAction SilentlyContinue
-        $providedValue = $PSBoundParameters[$paramName]
-        Write-Verbose "[$paramName]"
-        Write-Verbose "  - Default:  [$paramDefaultValue]"
-        Write-Verbose "  - Provided: [$providedValue]"
-        if (-not $PSBoundParameters.ContainsKey($paramName) -and ($null -ne $paramDefaultValue)) {
-            Write-Verbose '  - Using default value'
-            $PSBoundParameters[$paramName] = $paramDefaultValue
-        } else {
-            Write-Verbose '  - Using provided value'
-        }
+    $body = @{
+        organization        = $Organization
+        name                = $Name
+        default_branch_only = $DefaultBranchOnly
     }
-
-    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-    Remove-HashtableEntry -Hashtable $body -RemoveNames 'Owner', 'Repo' -RemoveTypes 'SwitchParameter'
-
-    $body['default_branch_only'] = $DefaultBranchOnly
-
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/repos/$Owner/$Repo/forks"
         Method      = 'POST'
         Body        = $body

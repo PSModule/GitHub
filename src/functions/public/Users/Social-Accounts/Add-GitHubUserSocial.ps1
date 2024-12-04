@@ -18,16 +18,23 @@
     [Alias('Add-GitHubUserSocials')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Long links for documentation.')]
     [CmdletBinding()]
-    param (
+    param(
         # Full URLs for the social media profiles to add.
         [Parameter(Mandatory)]
         [Alias('account_urls')]
-        [string[]] $AccountUrls
+        [string[]] $AccountUrls,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
-    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
+    $body = @{
+        account_urls = $AccountUrls
+    }
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = '/user/social_accounts'
         Body        = $body
         Method      = 'POST'

@@ -18,19 +18,26 @@
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [CmdletBinding(SupportsShouldProcess)]
-    param (
+    param(
         # Email addresses associated with the GitHub user account.
         [Parameter(
             Mandatory,
             ValueFromPipeline,
             ValueFromPipelineByPropertyName
         )]
-        [string[]] $Emails
+        [string[]] $Emails,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
-    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
+    $body = @{
+        emails = $Emails
+    }
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = '/user/emails'
         Method      = 'DELETE'
         Body        = $body

@@ -84,6 +84,17 @@
         [string] $Context = (Get-GitHubConfig -Name DefaultContext)
     )
 
+    $contextObj = Get-GitHubContext -Context $Context
+    if (-not $contextObj) {
+        throw 'Log in using Connect-GitHub before running this command.'
+    }
+    Write-Debug "Context: [$Context]"
+
+    if ([string]::IsNullOrEmpty($Owner)) {
+        $Owner = $contextObj.Owner
+    }
+    Write-Debug "Owner : [$($contextObj.Owner)]"
+
     $body = @{
         name                 = $Name
         description          = $Description
@@ -94,14 +105,13 @@
         permission           = $Permission
         parent_team_id       = $ParentTeamID -eq 0 ? $null : $ParentTeamID
     }
-
     $body | Remove-HashtableEntry -NullOrEmptyValues
 
     $inputObject = @{
         Context     = $Context
+        APIEndpoint = "/orgs/$Organization/teams"
         Method      = 'POST'
         Body        = $body
-        APIEndpoint = "/orgs/$Organization/teams"
     }
 
     if ($PSCmdlet.ShouldProcess("'$Name' in '$Organization'", 'Create team')) {

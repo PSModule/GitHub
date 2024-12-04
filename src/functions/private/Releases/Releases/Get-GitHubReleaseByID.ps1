@@ -17,24 +17,27 @@
 
     #>
     [CmdletBinding()]
-    param (
+    param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter()]
-        [string] $Owner = (Get-GitHubContextSetting -Name Owner),
+        [Parameter(Mandatory)]
+        [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo = (Get-GitHubContextSetting -Name Repo),
+        [Parameter(Mandatory)]
+        [string] $Repo,
 
         # The unique identifier of the release.
-        [Parameter(
-            Mandatory
-        )]
+        [Parameter(Mandatory)]
         [Alias('release_id')]
-        [string] $ID
+        [string] $ID,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context
     )
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/repos/$Owner/$Repo/releases/$ID"
         Method      = 'GET'
     }

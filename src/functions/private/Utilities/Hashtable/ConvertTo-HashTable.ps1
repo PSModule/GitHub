@@ -34,7 +34,7 @@
     [OutputType([hashtable])]
     [Alias('ConvertTo-Dictionary')]
     [CmdletBinding()]
-    param (
+    param(
         # The object to be converted. The input takes any type of object. The original object is not modified.
         [Parameter(
             Mandatory,

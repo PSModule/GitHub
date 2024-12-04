@@ -58,7 +58,7 @@
     #>
     [OutputType([string])]
     [CmdletBinding()]
-    param (
+    param(
         # The string to check the casing style of
         [Parameter(
             Mandatory,

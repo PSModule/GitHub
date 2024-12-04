@@ -32,7 +32,7 @@
     [OutputType([void])]
     [Alias('Summary')]
     [CmdletBinding()]
-    param (
+    param(
         # Summary of the step
         [Parameter(Mandatory)]
         [AllowNull()]

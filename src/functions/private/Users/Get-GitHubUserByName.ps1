@@ -28,7 +28,7 @@
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [CmdletBinding()]
-    param (
+    param(
         # The handle for the GitHub user account.
         [Parameter(
             Mandatory,
@@ -36,10 +36,15 @@
             ValueFromPipelineByPropertyName
         )]
         [Alias('login')]
-        [string] $Username
+        [string] $Username,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context
     )
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/users/$Username"
         Method      = 'GET'
     }

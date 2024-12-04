@@ -20,17 +20,22 @@
     [OutputType([pscustomobject])]
     [Alias('Follow-GitHubUser')]
     [CmdletBinding()]
-    param (
+    param(
         # The handle for the GitHub user account.
         [Parameter(
             Mandatory,
             ValueFromPipeline,
             ValueFromPipelineByPropertyName
         )]
-        [string] $Username
+        [string] $Username,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/user/following/$Username"
         Method      = 'PUT'
     }

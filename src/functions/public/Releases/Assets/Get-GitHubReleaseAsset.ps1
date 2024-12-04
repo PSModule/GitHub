@@ -22,14 +22,14 @@
 
     #>
     [CmdletBinding()]
-    param (
+    param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter()]
-        [string] $Owner = (Get-GitHubContextSetting -Name Owner),
+        [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter()]
-        [string] $Repo = (Get-GitHubContextSetting -Name Repo),
+        [string] $Repo,
 
         # The unique identifier of the asset.
         [Parameter(
@@ -45,14 +45,34 @@
             ParameterSetName = 'ReleaseID'
         )]
         [Alias('release_id')]
-        [string] $ReleaseID
+        [string] $ReleaseID,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
+    $contextObj = Get-GitHubContext -Context $Context
+    if (-not $contextObj) {
+        throw 'Log in using Connect-GitHub before running this command.'
+    }
+    Write-Debug "Context: [$Context]"
+
+    if ([string]::IsNullOrEmpty($Owner)) {
+        $Owner = $contextObj.Owner
+    }
+    Write-Debug "Owner : [$($contextObj.Owner)]"
+
+    if ([string]::IsNullOrEmpty($Repo)) {
+        $Repo = $contextObj.Repo
+    }
+    Write-Debug "Repo : [$($contextObj.Repo)]"
+
     if ($ReleaseID) {
-        Get-GitHubReleaseAssetByReleaseID -Owner $Owner -Repo $Repo -ReleaseID $ReleaseID
+        Get-GitHubReleaseAssetByReleaseID -Owner $Owner -Repo $Repo -ReleaseID $ReleaseID -Context $Context
     }
     if ($ID) {
-        Get-GitHubReleaseAssetByID -Owner $Owner -Repo $Repo -ID $ID
+        Get-GitHubReleaseAssetByID -Owner $Owner -Repo $Repo -ID $ID -Context $Context
     }
 
 }

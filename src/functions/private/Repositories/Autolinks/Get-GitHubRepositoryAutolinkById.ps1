@@ -18,24 +18,29 @@
 
     #>
     [CmdletBinding()]
-    param (
+    param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [Alias('org')]
-        [string] $Owner = (Get-GitHubContextSetting -Name Owner),
+        [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo = (Get-GitHubContextSetting -Name Repo),
+        [Parameter(Mandatory)]
+        [string] $Repo,
 
         # The unique identifier of the autolink.
         [Parameter(Mandatory)]
         [Alias('autolink_id')]
         [Alias('ID')]
-        [int] $AutolinkId
+        [int] $AutolinkId,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context
     )
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/repos/$Owner/$Repo/autolinks/$AutolinkId"
         Method      = 'GET'
     }

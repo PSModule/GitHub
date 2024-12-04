@@ -21,7 +21,7 @@ $response = Invoke-RestMethod -Uri $APIDocURI -Method Get
 # @{n = 'PUT'; e = { (($_.value.psobject.Properties.Name) -contains 'PUT') } }, `
 # @{n = 'PATCH'; e = { (($_.value.psobject.Properties.Name) -contains 'PATCH') } } | Format-Table
 
-$path = '/orgs/{org}/teams'
+$path = '/app/hook/deliveries'
 $method = 'get'
 $response.paths.$path.$method
 $response.paths.$path.$method.tags | clip                             # -> Namespace/foldername
@@ -41,75 +41,3 @@ $response.paths.$path.$method.responses.'200'.content.'application/json'.schema 
 $response.paths.$path.$method.responses.'200'.content.'application/json'.schema.items  # -> OutputType
 
 $response.components.schemas.'issue-comment' | ConvertTo-Json
-
-function Find-APIMethod {
-    <#
-        .SYNOPSIS
-        Find API methods in a directory
-    #>
-    param (
-        [Parameter(Mandatory)]
-        [string] $SearchDirectory,
-
-        [Parameter(Mandatory)]
-        [string] $Method,
-
-        [Parameter(Mandatory)]
-        [string] $Path
-    )
-
-    $pathPattern = $Path -replace '\{[^}]+\}', '.+'
-    $methodPattern = "Method\s*=\s*'$method'"
-    Get-ChildItem -Path $SearchDirectory -Recurse -Filter *.ps1 | ForEach-Object {
-        $filePath = $_.FullName
-        $stringMatches = Select-String -Path $filePath -Pattern $pathPattern -AllMatches
-        if ($stringMatches.Count -gt 0) {
-            $putMatches = Select-String -Path $filePath -Pattern $methodPattern -AllMatches
-            foreach ($match in $stringMatches) {
-                foreach ($putMatch in $putMatches) {
-                    Write-Verbose "Match found in file: $filePath"
-                    Write-Verbose "API Endpoint: $($match.Matches.Value) near line $($match.LineNumber)"
-                    Write-Verbose "Method: $($putMatch.Matches.Value) near line $($putMatch.LineNumber)"
-                    return $true
-                }
-            }
-        }
-    }
-    return $false
-}
-
-# Get a list of all
-$functions = 0
-$coveredFunctions = 0
-$paths = [System.Collections.Generic.List[pscustomobject]]::new()
-$SearchDirectory = 'C:\Repos\GitHub\PSModule\Module\GitHub\src'
-$response.paths.PSObject.Properties | ForEach-Object {
-    $path = $_.Name
-    $object = [pscustomobject]@{
-        Path   = $path
-        DELETE = ''
-        GET    = ''
-        PATCH  = ''
-        POST   = ''
-        PUT    = ''
-    }
-    $_.Value.psobject.Properties.Name | ForEach-Object {
-        $method = $_.ToUpper()
-        $found = Find-APIMethod -SearchDirectory $SearchDirectory -Method $method -Path $path
-        $object.$method = $found -contains $true ? ':white_check_mark:' : ':x:'
-        if ($found) {
-            $coveredFunctions++
-        }
-        $functions++
-    }
-    $paths.Add($object)
-}
-$paths | New-MDTable | clip
-
-# Output the context of $paths to a markdown table and into the Coverage.md file
-$paths | New-MDTable | Out-File -FilePath '.\Coverage.md'
-
-"Available functions: $functions"
-"Covered functions:   $coveredFunctions"
-"Missing function:    $($functions - $coveredFunctions)"
-"Coverage:            $([math]::Round(($coveredFunctions / $functions) * 100, 2))%"

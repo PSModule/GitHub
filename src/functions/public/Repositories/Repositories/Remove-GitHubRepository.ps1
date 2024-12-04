@@ -18,7 +18,7 @@
         [Delete a repository](https://docs.github.com/rest/repos/repos#delete-a-repository)
     #>
     [CmdletBinding(SupportsShouldProcess)]
-    param (
+    param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
         [Alias('org')]
@@ -27,10 +27,15 @@
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [string] $Repo
+        [string] $Repo,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/repos/$Owner/$Repo"
         Method      = 'DELETE'
     }
@@ -40,5 +45,4 @@
             Write-Output $_.Response
         }
     }
-
 }

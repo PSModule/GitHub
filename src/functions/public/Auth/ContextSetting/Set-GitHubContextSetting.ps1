@@ -1,4 +1,4 @@
-#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '4.0.0' }
+﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '4.0.0' }
 
 function Set-GitHubContextSetting {
     <#
@@ -20,7 +20,7 @@ function Set-GitHubContextSetting {
     #>
     [Alias('Set-GHConfig')]
     [CmdletBinding(SupportsShouldProcess)]
-    param (
+    param(
         # Set the access token type.
         [Parameter()]
         [string] $TokenType,

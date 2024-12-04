@@ -15,7 +15,7 @@
     #>
     [OutputType([void])]
     [CmdletBinding(SupportsShouldProcess)]
-    param (
+    param(
         # The organization name. The name is not case sensitive.
         [Parameter(Mandatory)]
         [Alias('Org')]
@@ -30,6 +30,17 @@
         [Parameter()]
         [string] $Context = (Get-GitHubConfig -Name DefaultContext)
     )
+
+    $contextObj = Get-GitHubContext -Context $Context
+    if (-not $contextObj) {
+        throw 'Log in using Connect-GitHub before running this command.'
+    }
+    Write-Debug "Context: [$Context]"
+
+    if ([string]::IsNullOrEmpty($Owner)) {
+        $Owner = $contextObj.Owner
+    }
+    Write-Debug "Owner : [$($contextObj.Owner)]"
 
     $inputObject = @{
         Context     = $Context

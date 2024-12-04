@@ -20,7 +20,7 @@
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Long links for documentation.')]
     [CmdletBinding()]
-    param (
+    param(
         # A descriptive name for the new key.
         [Parameter(
             ValueFromPipeline,
@@ -34,13 +34,20 @@
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [string] $Key
+        [string] $Key,
 
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
-    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
+    $body = @{
+        title = $Title
+        key   = $Key
+    }
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = '/user/keys'
         Method      = 'POST'
         Body        = $body

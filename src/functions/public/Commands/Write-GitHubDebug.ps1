@@ -29,7 +29,7 @@
     [OutputType([void])]
     [Alias('Debug')]
     [CmdletBinding()]
-    param (
+    param(
         # Message to write
         [Parameter(Mandatory)]
         [string] $Message

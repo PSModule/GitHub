@@ -26,7 +26,7 @@
     [OutputType([bool])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [CmdletBinding()]
-    param (
+    param(
         # The handle for the GitHub user account.
         [Parameter(
             Mandatory,
@@ -48,13 +48,17 @@
         # The number of results per page (max 100).
         [Parameter()]
         [ValidateRange(1, 100)]
-        [int] $PerPage = 30
+        [int] $PerPage = 30,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
     if ($OrganizationName) {
-        Test-GitHubBlockedUserByOrganization -OrganizationName $OrganizationName -Username $Username -PerPage $PerPage
+        Test-GitHubBlockedUserByOrganization -OrganizationName $OrganizationName -Username $Username -PerPage $PerPage -Context $Context
     } else {
-        Test-GitHubBlockedUserByUser -Username $Username -PerPage $PerPage
+        Test-GitHubBlockedUserByUser -Username $Username -PerPage $PerPage -Context $Context
     }
 
 }

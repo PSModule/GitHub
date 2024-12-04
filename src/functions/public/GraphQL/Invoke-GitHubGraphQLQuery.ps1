@@ -12,7 +12,7 @@
         .NOTES
         [GitHub GraphQL API documentation](https://docs.github.com/graphql)
     #>
-    param (
+    param(
         # The GraphQL query to execute.
         [string] $Query,
 
@@ -20,6 +20,7 @@
         [hashtable] $Variables,
 
         # The context to run the command in.
+        [Parameter()]
         [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 

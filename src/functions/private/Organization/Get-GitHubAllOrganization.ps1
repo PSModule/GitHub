@@ -21,7 +21,7 @@
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [CmdletBinding()]
-    param (
+    param(
         # A organization ID. Only return organizations with an ID greater than this ID.
         [Parameter()]
         [int] $Since = 0,
@@ -29,7 +29,11 @@
         # The number of results per page (max 100).
         [Parameter()]
         [ValidateRange(1, 100)]
-        [int] $PerPage = 30
+        [int] $PerPage = 30,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context
     )
 
     $body = @{
@@ -38,6 +42,7 @@
     }
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = '/organizations'
         Method      = 'GET'
         Body        = $body

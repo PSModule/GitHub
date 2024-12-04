@@ -24,7 +24,7 @@
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Long link in notes.')]
     [CmdletBinding(SupportsShouldProcess)]
-    param (
+    param(
         # The organization name. The name is not case sensitive.
         [Parameter(Mandatory)]
         [Alias('org')]
@@ -66,7 +66,11 @@
             'default',
             'extended'
         )]
-        [string] $QuerySuite
+        [string] $QuerySuite,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
     $body = @{
@@ -74,6 +78,7 @@
     }
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/orgs/$OrganizationName/$SecurityProduct/$Enablement"
         Method      = 'POST'
         Body        = $body
