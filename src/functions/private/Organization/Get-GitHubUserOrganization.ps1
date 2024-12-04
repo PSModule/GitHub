@@ -30,7 +30,11 @@
         # The number of results per page (max 100).
         [Parameter()]
         [ValidateRange(1, 100)]
-        [int] $PerPage = 30
+        [int] $PerPage = 30,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context
     )
 
     $body = @{
@@ -38,6 +42,7 @@
     }
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/users/$Username/orgs"
         Method      = 'GET'
         Body        = $body

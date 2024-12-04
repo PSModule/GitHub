@@ -34,11 +34,16 @@
         [Alias('login')]
         [Alias('org')]
         [Alias('owner')]
-        [string] $OrganizationName
+        [string] $OrganizationName,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context
     )
 
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/orgs/$OrganizationName"
         Method      = 'GET'
     }

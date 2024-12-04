@@ -50,9 +50,9 @@
 
         # The organization or person who will own the new repository.
         # To create a new repository in an organization, the authenticated user must be a member of the specified organization.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [Alias('org')]
-        [string] $Owner = (Get-GitHubContextSetting -Name Owner),
+        [string] $Owner,
 
         # The name of the new repository.
         [Parameter(Mandatory)]
@@ -70,28 +70,23 @@
 
         # Either true to create a new private repository or false to create a new public one.
         [Parameter()]
-        [switch] $Private
+        [switch] $Private,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context
     )
 
-    $PSCmdlet.MyInvocation.MyCommand.Parameters.GetEnumerator() | ForEach-Object {
-        $paramName = $_.Key
-        $paramDefaultValue = Get-Variable -Name $paramName -ValueOnly -ErrorAction SilentlyContinue
-        $providedValue = $PSBoundParameters[$paramName]
-        Write-Verbose "[$paramName]"
-        Write-Verbose "  - Default:  [$paramDefaultValue]"
-        Write-Verbose "  - Provided: [$providedValue]"
-        if (-not $PSBoundParameters.ContainsKey($paramName) -and ($null -ne $paramDefaultValue)) {
-            Write-Verbose '  - Using default value'
-            $PSBoundParameters[$paramName] = $paramDefaultValue
-        } else {
-            Write-Verbose '  - Using provided value'
-        }
+    $body = @{
+        owner                = $Owner
+        name                 = $Name
+        description          = $Description
+        include_all_branches = $IncludeAllBranches
+        private              = $Private
     }
 
-    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-    Remove-HashtableEntry -Hashtable $body -RemoveNames 'TemplateOwner', 'TemplateRepo' -RemoveTypes 'SwitchParameter'
-
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/repos/$TemplateOwner/$TemplateRepo/generate"
         Method      = 'POST'
         Body        = $body

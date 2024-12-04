@@ -19,9 +19,14 @@
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]
-    param ()
+    param(
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context
+    )
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = '/user'
         Method      = 'GET'
     }

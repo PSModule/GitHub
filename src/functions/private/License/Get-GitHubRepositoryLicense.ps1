@@ -21,15 +21,20 @@ filter Get-GitHubRepositoryLicense {
     [CmdletBinding()]
     param (
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter()]
-        [string] $Owner = (Get-GitHubContextSetting -Name Owner),
+        [Parameter(Mandatory)]
+        [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
+        [Parameter(Mandatory)]
+        [string] $Repo,
+
+        # The context to run the command in.
         [Parameter()]
-        [string] $Repo = (Get-GitHubContextSetting -Name Repo)
+        [string] $Context
     )
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/repos/$Owner/$Repo/license"
         Accept      = 'application/vnd.github+json'
         Method      = 'GET'

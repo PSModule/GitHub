@@ -28,12 +28,20 @@
         # The number of results per page (max 100).
         [Parameter()]
         [ValidateRange(1, 100)]
-        [int] $PerPage = 30
+        [int] $PerPage = 30,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context
     )
 
-    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
+    $body = @{
+        since    = $Since
+        per_page = $PerPage
+    }
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = '/users'
         Method      = 'GET'
         Body        = $body

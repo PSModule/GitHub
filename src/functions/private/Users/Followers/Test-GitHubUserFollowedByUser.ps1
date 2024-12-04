@@ -30,10 +30,15 @@
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [string] $Follows
+        [string] $Follows,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context
     )
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/users/$Username/following/$Follows"
         Method      = 'GET'
     }

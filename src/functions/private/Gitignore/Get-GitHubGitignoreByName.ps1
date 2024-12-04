@@ -18,13 +18,17 @@ filter Get-GitHubGitignoreByName {
     #>
     [CmdletBinding()]
     param (
+        [Parameter(Mandatory)]
+        [string] $Name,
+
+        # The context to run the command in.
         [Parameter()]
-        [ValidateNotNullOrEmpty()]
-        [string] $Name
+        [string] $Context
     )
 
     process {
         $inputObject = @{
+            Context     = $Context
             APIEndpoint = "/gitignore/templates/$Name"
             Accept      = 'application/vnd.github.raw+json'
             Method      = 'GET'

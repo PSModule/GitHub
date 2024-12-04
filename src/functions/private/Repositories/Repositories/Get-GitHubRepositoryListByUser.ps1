@@ -56,23 +56,22 @@
         # The number of results per page (max 100).
         [Parameter()]
         [ValidateRange(1, 100)]
-        [int] $PerPage = 30
+        [int] $PerPage = 30,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context
     )
 
-    $PSCmdlet.MyInvocation.MyCommand.Parameters.GetEnumerator() | ForEach-Object {
-        Write-Verbose "Parameter: [$($_.Key)] = [$($_.Value)]"
-        $paramDefaultValue = Get-Variable -Name $_.Key -ValueOnly -ErrorAction SilentlyContinue
-        if (-not $PSBoundParameters.ContainsKey($_.Key) -and ($null -ne $paramDefaultValue)) {
-            Write-Verbose "Parameter: [$($_.Key)] = [$($_.Value)] - Adding default value"
-            $PSBoundParameters[$_.Key] = $paramDefaultValue
-        }
-        Write-Verbose " - $($PSBoundParameters[$_.Key])"
+    $body = @{
+        sort      = $Sort
+        type      = $Type
+        direction = $Direction
+        per_page  = $PerPage
     }
 
-    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-    Remove-HashtableEntry -Hashtable $body -RemoveNames 'Username'
-
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/users/$Username/repos"
         Method      = 'GET'
         Body        = $body

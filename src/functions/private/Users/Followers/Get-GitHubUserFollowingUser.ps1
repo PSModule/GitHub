@@ -30,13 +30,19 @@
         # The number of results per page (max 100).
         [Parameter()]
         [ValidateRange(1, 100)]
-        [int] $PerPage = 30
+        [int] $PerPage = 30,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context
     )
 
-    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-    Remove-HashtableEntry -Hashtable $body -RemoveNames 'username'
+    $body = @{
+        per_page = $PerPage
+    }
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/users/$Username/following"
         Method      = 'GET'
         Body        = $body

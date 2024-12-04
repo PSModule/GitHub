@@ -21,20 +21,25 @@
     [CmdletBinding()]
     param (
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter()]
-        [string] $Owner = (Get-GitHubContextSetting -Name Owner),
+        [Parameter(Mandatory)]
+        [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo = (Get-GitHubContextSetting -Name Repo),
+        [Parameter(Mandatory)]
+        [string] $Repo,
 
         # The unique identifier of the asset.
         [Parameter(Mandatory)]
         [Alias('asset_id')]
-        [string] $ID
+        [string] $ID,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context
     )
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/repos/$Owner/$Repo/releases/assets/$ID"
         Method      = 'GET'
     }

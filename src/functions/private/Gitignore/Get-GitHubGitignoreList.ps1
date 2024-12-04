@@ -18,9 +18,14 @@ filter Get-GitHubGitignoreList {
     #>
     [OutputType([string[]])]
     [CmdletBinding()]
-    param ()
+    param (
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context
+    )
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = '/gitignore/templates'
         Method      = 'GET'
     }
@@ -28,5 +33,4 @@ filter Get-GitHubGitignoreList {
     Invoke-GitHubAPI @inputObject | ForEach-Object {
         Write-Output $_.Response
     }
-
 }

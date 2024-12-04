@@ -26,10 +26,15 @@
             Mandatory
         )]
         [Alias('ssh_signing_key_id')]
-        [string] $ID
+        [string] $ID,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context
     )
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/user/ssh_signing_keys/$ID"
         Method      = 'GET'
     }

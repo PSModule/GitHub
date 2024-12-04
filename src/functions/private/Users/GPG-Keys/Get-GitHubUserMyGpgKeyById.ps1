@@ -25,10 +25,15 @@
             Mandatory
         )]
         [Alias('gpg_key_id')]
-        [string] $ID
+        [string] $ID,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context
     )
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/user/gpg_keys/$ID"
         Method      = 'GET'
     }

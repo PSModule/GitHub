@@ -36,11 +36,15 @@
             ValueFromPipeline,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('login')]
-        [string] $Username
+        [string] $Username,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context
     )
 
     $inputObject = @{
+        Context     = $Context
         APIEndpoint = "/orgs/$OrganizationName/blocks/$Username"
         Method      = 'PUT'
     }

@@ -62,9 +62,9 @@ filter New-GitHubRepositoryOrg {
     [CmdletBinding(SupportsShouldProcess)]
     param (
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [Alias('org')]
-        [string] $Owner = (Get-GitHubContextSetting -Name Owner),
+        [string] $Owner,
 
         # The name of the repository.
         [Parameter(Mandatory)]
@@ -179,7 +179,11 @@ filter New-GitHubRepositoryOrg {
         [Parameter()]
         [ValidateSet('PR_BODY', 'PR_TITLE', 'BLANK')]
         [Alias('merge_commit_message')]
-        [string] $MergeCommitMessage
+        [string] $MergeCommitMessage,
+
+        # The context to run the command in.
+        [Parameter()]
+        [string] $Context
     )
 
     dynamicparam {
@@ -246,6 +250,7 @@ filter New-GitHubRepositoryOrg {
         Remove-HashtableEntry -Hashtable $body -NullOrEmptyValues
 
         $inputObject = @{
+            Context     = $Context
             APIEndpoint = "/orgs/$Owner/repos"
             Method      = 'POST'
             Body        = $body
