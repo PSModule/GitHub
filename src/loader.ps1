@@ -25,15 +25,16 @@ if (-not $context.DefaultHostName) {
     Set-GitHubConfig -Name DefaultHostName -Value $defaultHostName
 }
 
-$script:runEnv = if ($env:GITHUB_ACTIONS -eq 'true') {
-    'GHA'
-} elseif (-not [string]::IsNullOrEmpty($env:WEBSITE_PLATFORM_VERSION)) {
-    'AFA'
-} else {
-    'Local'
+if (-not $context.RunEnv) {
+    $script:runEnv = if ($env:GITHUB_ACTIONS -eq 'true') {
+        'GHA'
+    } elseif (-not [string]::IsNullOrEmpty($env:WEBSITE_PLATFORM_VERSION)) {
+        'AFA'
+    } else {
+        'Local'
+    }
+    Set-GitHubConfig -Name 'RunEnv' -Value $script:runEnv
 }
-
-Set-GitHubConfig -Name 'RunEnv' -Value $script:runEnv
 
 if ($env:GITHUB_ACTIONS -eq 'true') {
     Write-Verbose 'Detected running on a GitHub Actions runner, preparing environment...'

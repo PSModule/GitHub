@@ -152,7 +152,6 @@
         $HostName = $HostName -replace '^https?://'
         $ApiBaseUri = "https://api.$HostName"
         $authType = $PSCmdlet.ParameterSetName
-        $tokenPrefixPattern = '(?<=^(ghu|gho|ghs|github_pat|ghp)).*'
 
         # If running on GitHub Actions and no access token is provided, use the GitHub token.
         if (($env:GITHUB_ACTIONS -eq 'true') -and $PSCmdlet.ParameterSetName -ne 'App') {
@@ -197,7 +196,7 @@
                         $contextData += @{
                             Token                      = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
                             TokenExpirationDate        = (Get-Date).AddSeconds($tokenResponse.expires_in)
-                            TokenType                  = $tokenResponse.access_token -replace $tokenPrefixPattern
+                            TokenType                  = $tokenResponse.access_token -replace $script:Auth.TokenPrefixPattern
                             AuthClientID               = $authClientID
                             DeviceFlowType             = $Mode
                             RefreshToken               = ConvertTo-SecureString -AsPlainText $tokenResponse.refresh_token
@@ -208,7 +207,7 @@
                     'OAuthApp' {
                         $contextData += @{
                             Token          = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
-                            TokenType      = $tokenResponse.access_token -replace $tokenPrefixPattern
+                            TokenType      = $tokenResponse.access_token -replace $script:Auth.TokenPrefixPattern
                             AuthClientID   = $authClientID
                             DeviceFlowType = $Mode
                             Scope          = $tokenResponse.scope
@@ -236,14 +235,14 @@
                 Start-Process "https://$HostName/settings/tokens"
                 $accessTokenValue = Read-Host -Prompt 'Enter your personal access token' -AsSecureString
                 $Token = ConvertFrom-SecureString $accessTokenValue -AsPlainText
-                $tokenType = $Token -replace $tokenPrefixPattern
+                $tokenType = $Token -replace $script:Auth.TokenPrefixPattern
                 $contextData += @{
                     Token     = ConvertTo-SecureString -AsPlainText $Token
                     TokenType = $tokenType
                 }
             }
             'Token' {
-                $tokenType = $Token -replace $tokenPrefixPattern
+                $tokenType = $Token -replace $script:Auth.TokenPrefixPattern
                 switch -Regex ($tokenType) {
                     'ghp|github_pat' {
                         $contextData += @{

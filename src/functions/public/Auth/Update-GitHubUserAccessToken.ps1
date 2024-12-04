@@ -26,7 +26,7 @@
     param(
         # The context to run the command in.
         [Parameter()]
-        [GitHubContext] $Context = (Get-GitHubConfig -Name 'DefaultContext')
+        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
     )
 
     $contextObj = Get-GitHubContext -Context $Context
@@ -71,12 +71,12 @@
     $settings = @{
         Token                      = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
         TokenExpirationDate        = (Get-Date).AddSeconds($tokenResponse.expires_in)
-        TokenType                  = $tokenResponse.access_token -replace $tokenPrefixPattern
+        TokenType                  = $tokenResponse.access_token -replace $script:Auth.TokenPrefixPattern
         RefreshToken               = ConvertTo-SecureString -AsPlainText $tokenResponse.refresh_token
         RefreshTokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.refresh_token_expires_in)
     }
 
-    if ($PSCmdlet.ShouldProcess("Access token", "Update/refresh")) {
+    if ($PSCmdlet.ShouldProcess('Access token', 'Update/refresh')) {
         Set-GitHubContextSetting @settings -Context $Context
     }
 }
