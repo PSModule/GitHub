@@ -43,7 +43,8 @@ $response.paths.$path.$method.responses.'200'.content.'application/json'.schema.
 $response.components.schemas.'issue-comment' | ConvertTo-Json
 
 
-function Create-Function {
+function New-Function {
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         [Parameter(Mandatory)]
         [string] $Path,
@@ -89,5 +90,8 @@ function Create-Function {
         )
     }
 "@
+    if ($PSCmdlet.ShouldProcess('Function', 'Create')) {
+        New-Item -Path "src/functions/$folderName/$subFolderName" -Name "$FunctionName.ps1" -ItemType File -Value $template
+    }
 
 }
