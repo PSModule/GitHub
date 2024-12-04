@@ -75,5 +75,8 @@
         RefreshToken               = ConvertTo-SecureString -AsPlainText $tokenResponse.refresh_token
         RefreshTokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.refresh_token_expires_in)
     }
-    Set-GitHubContextSetting @settings -Context $Context
+
+    if ($PSCmdlet.ShouldProcess("Access token", "Update/refresh")) {
+        Set-GitHubContextSetting @settings -Context $Context
+    }
 }
