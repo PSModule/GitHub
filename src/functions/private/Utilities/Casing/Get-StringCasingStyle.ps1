@@ -92,7 +92,7 @@
         'Unknown'
     }
 
-    Write-Verbose "Detected casing style: [$style]"
+    Write-Debug "Detected casing style: [$style]"
     $style
 
 }

@@ -60,14 +60,14 @@
                 'authorization_pending' {
                     # The user has not yet entered the code.
                     # Wait, then poll again.
-                    Write-Verbose $response.error_description
+                    Write-Debug $response.error_description
                     Start-Sleep -Seconds $interval
                     continue
                 }
                 'slow_down' {
                     # The app polled too fast.
                     # Wait for the interval plus 5 seconds, then poll again.
-                    Write-Verbose $response.error_description
+                    Write-Debug $response.error_description
                     Start-Sleep -Seconds ($interval + 5)
                     continue
                 }

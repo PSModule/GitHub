@@ -83,7 +83,7 @@
 
     $styles = $PSBoundParameters | Where-Object { $_.Value -eq $true } | Select-Object -ExpandProperty Name
 
-    Write-Verbose "Splitting string [$Text] by casing style [$($styles -join ', ' )]"
+    Write-Debug "Splitting string [$Text] by casing style [$($styles -join ', ' )]"
     $splitText = switch ($By) {
         'PascalCase' { [regex]::Matches($Text, '([A-Z][a-z]*)').Value; break }
         'camelCase' { [regex]::Matches($Text, '([A-Z][a-z]*)|^[a-z]+').Value; break }
@@ -96,6 +96,6 @@
         }
     }
 
-    Write-Verbose "Result: [$($splitText -join ', ')]"
+    Write-Debug "Result: [$($splitText -join ', ')]"
     $splitText
 }
