@@ -51,7 +51,7 @@
     }
 
     try {
-        Write-Verbose ($RESTParams.GetEnumerator() | Out-String)
+        Write-Debug ($RESTParams.GetEnumerator() | Out-String)
 
         $deviceCodeResponse = Invoke-RestMethod @RESTParams -Verbose:$false
         return $deviceCodeResponse

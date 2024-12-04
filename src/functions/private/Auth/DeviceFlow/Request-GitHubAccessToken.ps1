@@ -68,11 +68,11 @@
     }
 
     try {
-        Write-Verbose ($RESTParams.GetEnumerator() | Out-String)
+        Write-Debug ($RESTParams.GetEnumerator() | Out-String)
 
         $tokenResponse = Invoke-RestMethod @RESTParams -Verbose:$false
 
-        Write-Verbose ($tokenResponse | ConvertTo-Json | Out-String)
+        Write-Debug ($tokenResponse | ConvertTo-Json | Out-String)
         return $tokenResponse
     } catch {
         Write-Error $_

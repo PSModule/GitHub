@@ -215,14 +215,14 @@ filter New-GitHubRepositoryUser {
             $paramName = $_.Key
             $paramDefaultValue = Get-Variable -Name $paramName -ValueOnly -ErrorAction SilentlyContinue
             $providedValue = $PSBoundParameters[$paramName]
-            Write-Verbose "[$paramName]"
-            Write-Verbose "  - Default:  [$paramDefaultValue]"
-            Write-Verbose "  - Provided: [$providedValue]"
+            Write-Debug "[$paramName]"
+            Write-Debug "  - Default:  [$paramDefaultValue]"
+            Write-Debug "  - Provided: [$providedValue]"
             if (-not $PSBoundParameters.ContainsKey($paramName) -and ($null -ne $paramDefaultValue)) {
-                Write-Verbose '  - Using default value'
+                Write-Debug '  - Using default value'
                 $PSBoundParameters[$paramName] = $paramDefaultValue
             } else {
-                Write-Verbose '  - Using provided value'
+                Write-Debug '  - Using provided value'
             }
         }
 
