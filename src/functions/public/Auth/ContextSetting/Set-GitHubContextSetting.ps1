@@ -120,7 +120,9 @@ function Set-GitHubContextSetting {
     $contextObj = Get-Context -ID $contextID
     $contextHashtable = $contextObj | ConvertTo-Hashtable
     $contextHashtable = Join-Object -Main $contextHashtable -Overrides $params -AsHashtable
-    Set-Context -ID $contextID -Context $contextHashtable
+    if ($PSCmdlet.ShouldProcess("settings for [$Contex]", 'Update')) {
+        Set-Context -ID $contextID -Context $contextHashtable
+    }
 
     Write-Verbose "[$commandName] - End"
 }
