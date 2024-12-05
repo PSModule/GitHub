@@ -21,7 +21,7 @@
         [Get the authenticated app | GitHub Docs](https://docs.github.com/rest/apps/apps#get-the-authenticated-app)
     #>
     [OutputType([pscustomobject])]
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(
         # The AppSlug is just the URL-friendly name of a GitHub App.
         # You can find this on the settings page for your GitHub App (e.g., <https://github.com/settings/apps/{app_slug}>).
