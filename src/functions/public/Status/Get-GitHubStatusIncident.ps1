@@ -34,7 +34,8 @@
 
         # The stanmp to use for the API call.
         [Parameter()]
-        [GitHubStamp] $Stamp = 'public'
+        [ValidateSet('public', 'eu')]
+        [string] $Stamp = 'public'
     )
 
     $baseURL = $script:StatusBaseURL[$Stamp]
