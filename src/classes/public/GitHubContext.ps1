@@ -1,4 +1,4 @@
-﻿class GitHubContext : IFormattable {
+﻿class GitHubContext {
     # The API base URI.
     # https://api.github.com
     [string] $ApiBaseUri
