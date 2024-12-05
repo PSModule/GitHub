@@ -14,13 +14,13 @@
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param(
-        # This parameter is mandatory
-        [Parameter(Mandatory)]
-        [string]$Name,
+        # The name of the organization.
+        [Parameter()]
+        [string]$Owner,
 
-        # This parameter is mandatory
-        [Parameter(Mandatory)]
-        [string]$Value,
+        # The name of the organization.
+        [Parameter()]
+        [string]$Repo,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -28,35 +28,45 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-
-    if ([string]::IsNullOrEmpty($Enterprise)) {
-        $Enterprise = $Context.Enterprise
-    }
-    Write-Debug "Enterprise : [$($Context.Enterprise)]"
-
-    if ([string]::IsNullOrEmpty($Owner)) {
-        $Owner = $Context.Owner
-    }
-    Write-Debug "Owner : [$($Context.Owner)]"
-
-    if ([string]::IsNullOrEmpty($Repo)) {
-        $Repo = $Context.Repo
-    }
-    Write-Debug "Repo : [$($Context.Repo)]"
-
     begin {
         $commandName = $MyInvocation.MyCommand.Name
         Write-Debug "[$commandName] - Start"
-        Write-Debug 'Begin'
+
+        $Context = Resolve-GitHubContext -Context $Context
+
+        if ([string]::IsNullOrEmpty($Enterprise)) {
+            $Enterprise = $Context.Enterprise
+        }
+        Write-Debug "Enterprise : [$($Context.Enterprise)]"
+
+        if ([string]::IsNullOrEmpty($Owner)) {
+            $Owner = $Context.Owner
+        }
+        Write-Debug "Owner : [$($Context.Owner)]"
+
+        if ([string]::IsNullOrEmpty($Repo)) {
+            $Repo = $Context.Repo
+        }
+        Write-Debug "Repo : [$($Context.Repo)]"
     }
 
     process {
         try {
-            Write-Debug 'Process'
+            $body = @{
+                per_page = $PerPage
+            }
+
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = "/orgs/$OrganizationName/blocks"
+                Method      = 'GET'
+                Body        = $body
+            }
+
             if ($PSCmdlet.ShouldProcess('Target', 'Operation')) {
-                Write-Debug "Name: $Name"
-                Write-Debug "Value: $Value"
+                Invoke-GitHubAPI @inputObject | ForEach-Object {
+                    Write-Output $_.Response
+                }
             }
         } catch {
             Write-Debug "Error: $_"
