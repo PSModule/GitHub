@@ -40,6 +40,9 @@
     # The user name.
     [string] $UserName
 
+    # The default value for the Enterprise parameter.
+    [string] $Enterprise
+
     # The default value for the Owner parameter.
     [string] $Owner
 

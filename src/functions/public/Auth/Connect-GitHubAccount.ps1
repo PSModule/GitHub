@@ -103,6 +103,10 @@
         )]
         [string] $PrivateKey,
 
+        # The default enterprise to use in commands.
+        [Parameter()]
+        [string] $Enterprise,
+
         # Set the default owner to use in commands.
         [Parameter()]
         [Alias('Organization')]
@@ -171,6 +175,7 @@
             ApiVersion = $ApiVersion
             HostName   = $HostName
             AuthType   = $authType
+            Enterprise = $Enterprise
             Owner      = $Owner
             Repo       = $Repo
         }

@@ -65,6 +65,10 @@ function Set-GitHubContext {
         [Parameter(Mandatory)]
         [string] $HostName,
 
+        # Set the enterprise name for the context.
+        [Parameter()]
+        [string] $Enterprise,
+
         # Set the default for the Owner parameter.
         [Parameter()]
         [string] $Owner,
@@ -115,6 +119,7 @@ function Set-GitHubContext {
             NodeID                     = $NodeID                     # User ID / app ID (GraphQL Node ID)
             DatabaseID                 = $DatabaseID                 # Database ID
             UserName                   = $UserName                   # User name
+            Enterprise                 = $Enterprise                 # Enterprise name
             Owner                      = $Owner                      # Owner name
             Repo                       = $Repo                       # Repo name
             Scope                      = $Scope                      # 'gist read:org repo workflow'
