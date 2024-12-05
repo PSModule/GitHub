@@ -253,16 +253,16 @@
                         $contextData += @{
                             Token     = ConvertTo-SecureString -AsPlainText $Token
                             TokenType = $tokenType
+                            AuthType  = 'PAT'
                         }
-                        $contextData['AuthType'] = 'PAT'
                     }
                     'ghs' {
                         Write-Verbose 'Logging in using an installation access token...'
                         $contextData += @{
                             Token     = ConvertTo-SecureString -AsPlainText $Token
                             TokenType = $tokenType
+                            AuthType  = 'IAT'
                         }
-                        $contextData['AuthType'] = 'IAT'
                     }
                     default {
                         Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
@@ -272,10 +272,10 @@
                 }
             }
         }
-        $contextDataReturn = Set-GitHubContext @contextData -Default:(!$NotDefault) -PassThru
-        Write-Verbose ($contextDataReturn | Format-List | Out-String)
+        $context = Set-GitHubContext @contextData -Default:(!$NotDefault) -PassThru
+        Write-Verbose ($context | Format-List | Out-String)
         if (-not $Silent) {
-            $name = $contextDataReturn.Username
+            $name = $context.Username
             Write-Host '✓ ' -ForegroundColor Green -NoNewline
             Write-Host "Logged in as $name!"
         }
@@ -286,6 +286,7 @@
     } finally {
         Remove-Variable -Name tokenResponse -ErrorAction SilentlyContinue
         Remove-Variable -Name context -ErrorAction SilentlyContinue
+        Remove-Variable -Name contextData -ErrorAction SilentlyContinue
         Remove-Variable -Name Token -ErrorAction SilentlyContinue
         [System.GC]::Collect()
     }
