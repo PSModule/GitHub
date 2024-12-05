@@ -14,7 +14,7 @@
         Returns $true if successful, $false if not.
 
         .EXAMPLE
-        Block-GitHubUser -OrganizationName 'GitHub' -Username 'octocat'
+        Block-GitHubUser -Organization 'GitHub' -Username 'octocat'
 
         Blocks the user 'octocat' from the organization 'GitHub'.
         Returns $true if successful, $false if not.
@@ -42,7 +42,7 @@
         )]
         [Alias('org')]
         [Alias('owner')]
-        [string] $OrganizationName,
+        [string] $Organization,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -53,12 +53,12 @@
     $Context = Resolve-GitHubContext -Context $Context
 
     if ([string]::IsNullOrEmpty($Owner)) {
-        $OrganizationName = $Context.Owner
+        $Organization = $Context.Owner
     }
-    Write-Debug "OrganizationName : [$($Context.Owner)]"
+    Write-Debug "Organization : [$($Context.Owner)]"
 
-    if ($OrganizationName) {
-        Block-GitHubUserByOrganization -OrganizationName $OrganizationName -Username $Username -Context $Context
+    if ($Organization) {
+        Block-GitHubUserByOrganization -Organization $Organization -Username $Username -Context $Context
     } else {
         Block-GitHubUserByUser -Username $Username -Context $Context
     }

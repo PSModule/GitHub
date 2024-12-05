@@ -62,19 +62,34 @@
         [Alias('default_branch_only')]
         [switch] $DefaultBranchOnly,
 
-        # The context to run the command in.
+        # The context to run the command in. Used to get the details for the API call.
+        # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [string] $Context
+        [object] $Context = (Get-GitHubContext)
     )
+
+    $Context = Resolve-GitHubContext -Context $Context
 
     if ([string]::IsNullorEmpty($Name)) {
         $Name = $Repo
     }
+
+    if ([string]::IsNullOrEmpty($Owner)) {
+        $Owner = $Context.Owner
+    }
+    Write-Debug "Owner : [$($Context.Owner)]"
+
+    if ([string]::IsNullOrEmpty($Repo)) {
+        $Repo = $Context.Repo
+    }
+    Write-Debug "Repo : [$($Context.Repo)]"
+
     $body = @{
         organization        = $Organization
         name                = $Name
         default_branch_only = $DefaultBranchOnly
     }
+
     $inputObject = @{
         Context     = $Context
         APIEndpoint = "/repos/$Owner/$Repo/forks"

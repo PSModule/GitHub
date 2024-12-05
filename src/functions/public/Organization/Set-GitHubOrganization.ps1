@@ -14,13 +14,13 @@
         profile and member privileges.
 
         .EXAMPLE
-        Set-GitHubOrganization -OrganizationName 'GitHub' -Blog 'https://github.blog'
+        Set-GitHubOrganization -Organization 'GitHub' -Blog 'https://github.blog'
 
         Sets the blog URL for the organization 'GitHub' to '<https://github.blog>'.
 
         .EXAMPLE
         $param = @{
-            OrganizationName = 'GitHub'
+            Organization = 'GitHub'
             MembersCanCreatePublicRepositories = $true
             MembersCanCreatePrivateRepositories = $true
             MembersCanCreateInternalRepositories = $true
@@ -46,7 +46,7 @@
         [Alias('org')]
         [Alias('owner')]
         [Alias('login')]
-        [string] $OrganizationName,
+        [string] $Organization,
 
         # Billing email address. This address is not publicized.
         [Parameter(ValueFromPipelineByPropertyName)]
@@ -226,21 +226,21 @@
     $Context = Resolve-GitHubContext -Context $Context
 
     if ([string]::IsNullOrEmpty($Owner)) {
-        $OrganizationName = $Context.Owner
+        $Organization = $Context.Owner
     }
-    Write-Debug "OrganizationName : [$($Context.Owner)]"
+    Write-Debug "Organization : [$($Context.Owner)]"
 
     $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
     Remove-HashtableEntry -Hashtable $body -RemoveNames 'organization_name'
 
     $inputObject = @{
         Context     = $Context
-        APIEndpoint = "/orgs/$OrganizationName"
+        APIEndpoint = "/orgs/$Organization"
         Method      = 'PATCH'
         Body        = $body
     }
 
-    if ($PSCmdlet.ShouldProcess("organization [$OrganizationName]", 'Set')) {
+    if ($PSCmdlet.ShouldProcess("organization [$Organization]", 'Set')) {
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             Write-Output $_.Response
         }

@@ -8,7 +8,7 @@
         If the organization cannot block the given user a 422 is returned.
 
         .EXAMPLE
-        Block-GitHubUserByOrganization -OrganizationName 'github' -Username 'octocat'
+        Block-GitHubUserByOrganization -Organization 'github' -Username 'octocat'
 
         Blocks the user 'octocat' from the organization 'github'.
         Returns $true if successful, $false if not.
@@ -28,7 +28,7 @@
         [Alias('org')]
         [Alias('owner')]
         [Alias('login')]
-        [string] $OrganizationName,
+        [string] $Organization,
 
         # The handle for the GitHub user account.
         [Parameter(
@@ -38,14 +38,17 @@
         )]
         [string] $Username,
 
-        # The context to run the command in.
+        # The context to run the command in. Used to get the details for the API call.
+        # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [string] $Context
+        [object] $Context = (Get-GitHubContext)
     )
+
+    $Context = Resolve-GitHubContext -Context $Context
 
     $inputObject = @{
         Context     = $Context
-        APIEndpoint = "/orgs/$OrganizationName/blocks/$Username"
+        APIEndpoint = "/orgs/$Organization/blocks/$Username"
         Method      = 'PUT'
     }
 

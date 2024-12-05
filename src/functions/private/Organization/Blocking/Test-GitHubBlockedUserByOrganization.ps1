@@ -8,7 +8,7 @@
         Returns a 404 if the organization is not blocking the user, or if the user account has been identified as spam by GitHub.
 
         .EXAMPLE
-        Test-GitHubBlockedUserByOrganization -OrganizationName 'PSModule' -Username 'octocat'
+        Test-GitHubBlockedUserByOrganization -Organization 'PSModule' -Username 'octocat'
 
         Checks if the user `octocat` is blocked by the organization `PSModule`.
         Returns true if the user is blocked, false if not.
@@ -28,7 +28,7 @@
         [Alias('org')]
         [Alias('owner')]
         [Alias('login')]
-        [string] $OrganizationName,
+        [string] $Organization,
 
         # The handle for the GitHub user account.
         [Parameter(
@@ -37,14 +37,17 @@
         )]
         [string] $Username,
 
-        # The context to run the command in.
+        # The context to run the command in. Used to get the details for the API call.
+        # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [string] $Context
+        [object] $Context = (Get-GitHubContext)
     )
+
+    $Context = Resolve-GitHubContext -Context $Context
 
     $inputObject = @{
         Context     = $Context
-        APIEndpoint = "/orgs/$OrganizationName/blocks/$Username"
+        APIEndpoint = "/orgs/$Organization/blocks/$Username"
         Method      = 'GET'
     }
 

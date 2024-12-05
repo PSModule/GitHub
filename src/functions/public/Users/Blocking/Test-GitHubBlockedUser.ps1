@@ -14,7 +14,7 @@
         Returns true if the user is blocked, false if not.
 
         .EXAMPLE
-        Test-GitHubBlockedUser -OrganizationName 'github' -Username 'octocat'
+        Test-GitHubBlockedUser -Organization 'github' -Username 'octocat'
 
         Checks if the user `octocat` is blocked by the organization `github`.
         Returns true if the user is blocked, false if not.
@@ -43,7 +43,7 @@
         )]
         [Alias('org')]
         [Alias('owner')]
-        [string] $OrganizationName,
+        [string] $Organization,
 
         # The number of results per page (max 100).
         [Parameter()]
@@ -59,14 +59,13 @@
     $Context = Resolve-GitHubContext -Context $Context
 
     if ([string]::IsNullOrEmpty($Owner)) {
-        $OrganizationName = $Context.Owner
+        $Organization = $Context.Owner
     }
-    Write-Debug "OrganizationName : [$($Context.Owner)]"
+    Write-Debug "Organization : [$($Context.Owner)]"
 
-    if ($OrganizationName) {
-        Test-GitHubBlockedUserByOrganization -OrganizationName $OrganizationName -Username $Username -PerPage $PerPage -Context $Context
+    if ($Organization) {
+        Test-GitHubBlockedUserByOrganization -Organization $Organization -Username $Username -PerPage $PerPage -Context $Context
     } else {
         Test-GitHubBlockedUserByUser -Username $Username -PerPage $PerPage -Context $Context
     }
-
 }

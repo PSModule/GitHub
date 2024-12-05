@@ -21,17 +21,30 @@
     [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(Mandatory)]
+        [Parameter()]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter(Mandatory)]
+        [Parameter()]
         [string] $Repo,
 
-        # The context to run the command in.
+        # The context to run the command in. Used to get the details for the API call.
+        # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [string] $Context
+        [object] $Context = (Get-GitHubContext)
     )
+
+    $Context = Resolve-GitHubContext -Context $Context
+
+    if ([string]::IsNullOrEmpty($Owner)) {
+        $Owner = $Context.Owner
+    }
+    Write-Debug "Owner : [$($Context.Owner)]"
+
+    if ([string]::IsNullOrEmpty($Repo)) {
+        $Repo = $Context.Repo
+    }
+    Write-Debug "Repo : [$($Context.Repo)]"
 
     $inputObject = @{
         Context     = $Context

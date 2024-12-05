@@ -12,7 +12,7 @@
         Returns a list of users blocked by the authenticated user.
 
         .EXAMPLE
-        Get-GitHubBlockedUser -OrganizationName 'github'
+        Get-GitHubBlockedUser -Organization 'github'
 
         Lists all users blocked by the organization `github`.
 
@@ -31,7 +31,7 @@
         [Alias('org')]
         [Alias('owner')]
         [Alias('login')]
-        [string] $OrganizationName,
+        [string] $Organization,
 
         # The number of results per page (max 100).
         [Parameter()]
@@ -47,12 +47,12 @@
     $Context = Resolve-GitHubContext -Context $Context
 
     if ([string]::IsNullOrEmpty($Owner)) {
-        $OrganizationName = $Context.Owner
+        $Organization = $Context.Owner
     }
-    Write-Debug "OrganizationName : [$($Context.Owner)]"
+    Write-Debug "Organization : [$($Context.Owner)]"
 
-    if ($OrganizationName) {
-        Get-GitHubBlockedUserByOrganization -OrganizationName $OrganizationName -PerPage $PerPage -Context $Context
+    if ($Organization) {
+        Get-GitHubBlockedUserByOrganization -Organization $Organization -PerPage $PerPage -Context $Context
     } else {
         Get-GitHubBlockedUserByUser -PerPage $PerPage -Context $Context
     }

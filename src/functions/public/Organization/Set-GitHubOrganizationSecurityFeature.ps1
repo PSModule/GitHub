@@ -14,7 +14,7 @@
         For more information, see "[Managing security managers in your organization](https://docs.github.com/organizations/managing-peoples-access-to-your-organization-with-roles/managing-security-managers-in-your-organization)."
 
         .EXAMPLE
-        Set-GitHubOrganizationSecurityFeature -OrganizationName 'github' -SecurityProduct 'dependency_graph' -Enablement 'enable_all'
+        Set-GitHubOrganizationSecurityFeature -Organization 'github' -SecurityProduct 'dependency_graph' -Enablement 'enable_all'
 
         Enable the dependency graph for all repositories in the organization `github`.
 
@@ -30,7 +30,7 @@
         [Alias('org')]
         [Alias('owner')]
         [Alias('login')]
-        [string] $OrganizationName,
+        [string] $Organization,
 
         # The security feature to enable or disable.
         [Parameter(Mandatory)]
@@ -77,9 +77,9 @@
     $Context = Resolve-GitHubContext -Context $Context
 
     if ([string]::IsNullOrEmpty($Owner)) {
-        $OrganizationName = $Context.Owner
+        $Organization = $Context.Owner
     }
-    Write-Debug "OrganizationName : [$($Context.Owner)]"
+    Write-Debug "Organization : [$($Context.Owner)]"
 
     $body = @{
         query_suite = $QuerySuite
@@ -87,12 +87,12 @@
 
     $inputObject = @{
         Context     = $Context
-        APIEndpoint = "/orgs/$OrganizationName/$SecurityProduct/$Enablement"
+        APIEndpoint = "/orgs/$Organization/$SecurityProduct/$Enablement"
         Method      = 'POST'
         Body        = $body
     }
 
-    if ($PSCmdlet.ShouldProcess("security feature [$SecurityProduct] on organization [$OrganizationName]", 'Set')) {
+    if ($PSCmdlet.ShouldProcess("security feature [$SecurityProduct] on organization [$Organization]", 'Set')) {
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             Write-Output $_.Response
         }

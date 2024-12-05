@@ -13,7 +13,7 @@
         Returns $true if successful.
 
         .EXAMPLE
-        Unblock-GitHubUser -OrganizationName 'GitHub' -Username 'octocat'
+        Unblock-GitHubUser -Organization 'GitHub' -Username 'octocat'
 
         Unblocks the user 'octocat' from the organization 'GitHub'.
         Returns $true if successful.
@@ -41,7 +41,7 @@
         )]
         [Alias('org')]
         [Alias('owner')]
-        [string] $OrganizationName,
+        [string] $Organization,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -52,12 +52,12 @@
     $Context = Resolve-GitHubContext -Context $Context
 
     if ([string]::IsNullOrEmpty($Owner)) {
-        $OrganizationName = $Context.Owner
+        $Organization = $Context.Owner
     }
-    Write-Debug "OrganizationName : [$($Context.Owner)]"
+    Write-Debug "Organization : [$($Context.Owner)]"
 
-    if ($OrganizationName) {
-        Unblock-GitHubUserByOrganization -OrganizationName $OrganizationName -Username $Username -Context $Context
+    if ($Organization) {
+        Unblock-GitHubUserByOrganization -Organization $Organization -Username $Username -Context $Context
     } else {
         Unblock-GitHubUserByUser -Username $Username -Context $Context
     }

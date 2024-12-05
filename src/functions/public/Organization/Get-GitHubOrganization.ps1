@@ -45,7 +45,7 @@
         [Alias('login')]
         [Alias('org')]
         [Alias('owner')]
-        [string] $OrganizationName,
+        [string] $Organization,
 
         # The handle for the GitHub user account.
         [Parameter(
@@ -82,16 +82,16 @@
     $Context = Resolve-GitHubContext -Context $Context
 
     if ([string]::IsNullOrEmpty($Owner)) {
-        $OrganizationName = $Context.Owner
+        $Organization = $Context.Owner
     }
-    Write-Debug "OrganizationName : [$($Context.Owner)]"
+    Write-Debug "Organization : [$($Context.Owner)]"
 
     switch ($PSCmdlet.ParameterSetName) {
         '__DefaultSet' {
             Get-GitHubMyOrganization -PerPage $PerPage -Context $Context | Get-GitHubOrganizationByName -Context $Context
         }
         'NamedOrg' {
-            Get-GitHubOrganizationByName -OrganizationName $OrganizationName -Context $Context
+            Get-GitHubOrganizationByName -Organization $Organization -Context $Context
         }
         'NamedUser' {
             Get-GitHubUserOrganization -Username $Username -Context $Context

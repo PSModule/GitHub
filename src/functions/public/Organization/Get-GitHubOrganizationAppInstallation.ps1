@@ -8,7 +8,7 @@
         You must be an organization owner with `admin:read` scope to use this endpoint.
 
         .EXAMPLE
-        Get-GitHubOrganizationAppInstallation -OrganizationName 'github'
+        Get-GitHubOrganizationAppInstallation -Organization 'github'
 
         Gets all GitHub Apps in the organization `github`.
 
@@ -28,7 +28,7 @@
         [Alias('org')]
         [Alias('owner')]
         [Alias('login')]
-        [string] $OrganizationName,
+        [string] $Organization,
 
         # The number of results per page (max 100).
         [Parameter()]
@@ -44,10 +44,9 @@
     $Context = Resolve-GitHubContext -Context $Context
 
     if ([string]::IsNullOrEmpty($Owner)) {
-        $OrganizationName = $Context.Owner
+        $Organization = $Context.Owner
     }
-    Write-Debug "OrganizationName : [$($Context.Owner)]"
-
+    Write-Debug "Organization : [$($Context.Owner)]"
 
     $body = @{
         per_page = $PerPage
@@ -55,7 +54,7 @@
 
     $inputObject = @{
         Context     = $Context
-        APIEndpoint = "/orgs/$OrganizationName/installations"
+        APIEndpoint = "/orgs/$Organization/installations"
         Method      = 'GET'
         Body        = $body
     }
