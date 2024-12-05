@@ -20,8 +20,30 @@
 
         # This parameter is mandatory
         [Parameter(Mandatory)]
-        [string]$Value
+        [string]$Value,
+
+        # The context to run the command in. Used to get the details for the API call.
+        # Can be either a string or a GitHubContext object.
+        [Parameter()]
+        [object] $Context = (Get-GitHubContext)
     )
+
+    $Context = Resolve-GitHubContext -Context $Context
+
+    if ([string]::IsNullOrEmpty($Enterprise)) {
+        $Enterprise = $Context.Enterprise
+    }
+    Write-Debug "Enterprise : [$($Context.Enterprise)]"
+
+    if ([string]::IsNullOrEmpty($Owner)) {
+        $Owner = $Context.Owner
+    }
+    Write-Debug "Owner : [$($Context.Owner)]"
+
+    if ([string]::IsNullOrEmpty($Repo)) {
+        $Repo = $Context.Repo
+    }
+    Write-Debug "Repo : [$($Context.Repo)]"
 
     begin {
         $commandName = $MyInvocation.MyCommand.Name
