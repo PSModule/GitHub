@@ -24,7 +24,7 @@
     [CmdletBinding()]
     param(
         # The AppSlug is just the URL-friendly name of a GitHub App.
-        # You can find this on the settings page for your GitHub App (e.g., https://github.com/settings/apps/<app_slug>).
+        # You can find this on the settings page for your GitHub App (e.g., <https://github.com/settings/apps/{app_slug}>).
         # Example: 'github-actions'
         [Parameter(
             Mandatory,
