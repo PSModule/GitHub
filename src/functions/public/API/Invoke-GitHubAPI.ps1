@@ -98,11 +98,7 @@
     switch ($TokenType) {
         'ghu' {
             if (Test-GitHubAccessTokenRefreshRequired -Context $Context) {
-                # TODO: Ensure it can pass the context object, and have it update the context object
-                # TODO: Should it return the new context with a -PassThru parameter?
-                # $Context = Update-GitHubUserAccessToken -Context $Context
-                Update-GitHubUserAccessToken -Context $Context
-                $Token = (Get-GitHubContextSetting -Name 'Token' -Context $Context)
+                $Token = Update-GitHubUserAccessToken -Context $Context -PassThru
             }
         }
         'PEM' {

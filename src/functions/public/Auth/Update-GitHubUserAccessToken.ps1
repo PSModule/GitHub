@@ -19,6 +19,7 @@
         .NOTES
         [Refreshing user access tokens](https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/refreshing-user-access-tokens)
     #>
+    [OutputType([securestring])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Long links for documentation.')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'Is the CLI part of the module.')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText', '', Justification = 'The tokens are recieved as clear text. Mitigating exposure by removing variables and performing garbage collection.')]
@@ -27,7 +28,11 @@
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [object] $Context = (Get-GitHubContext)
+        [object] $Context = (Get-GitHubContext),
+
+        # Return the new access token.
+        [Parameter()]
+        [switch] $PassThru
     )
 
     $Context = Resolve-GitHubContext -Context $Context
@@ -79,5 +84,9 @@
 
     if ($PSCmdlet.ShouldProcess('Access token', 'Update/refresh')) {
         Set-GitHubContextSetting @settings -Context $Context
+    }
+
+    if ($PassThru) {
+        $settings['Token']
     }
 }
