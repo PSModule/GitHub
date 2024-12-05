@@ -31,6 +31,7 @@
         .NOTES
         [Scheduled maintenances](https://www.githubstatus.com/api#scheduled-maintenances)
     #>
+    [CmdletBinding()]
     param(
         # Get a list of any active maintenances.
         # This endpoint will only return scheduled maintenances in the In Progress or Verifying state.
@@ -44,7 +45,8 @@
 
         # The stanmp to use for the API call.
         [Parameter()]
-        [GitHubStamp] $Stamp = 'public'
+        [ValidateSet('public', 'eu')]
+        [string] $Stamp = 'public'
     )
 
     $baseURL = $script:StatusBaseURL[$Stamp]
@@ -66,5 +68,4 @@
     $APIURI = "$baseURL/api/v2/scheduled-maintenances.json"
     $response = Invoke-RestMethod -Uri $APIURI -Method Get
     $response.scheduled_maintenances
-
 }
