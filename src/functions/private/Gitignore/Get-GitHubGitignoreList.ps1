@@ -19,18 +19,25 @@
     [OutputType([string[]])]
     [CmdletBinding()]
     param(
-        # The context to run the command in.
+        # The context to run the command in. Used to get the details for the API call.
+        # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [string] $Context
+        [object] $Context = (Get-GitHubContext)
     )
 
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = '/gitignore/templates'
-        Method      = 'GET'
+    begin {
+        $Context = Resolve-GitHubContext -Context $Context
     }
 
-    Invoke-GitHubAPI @inputObject | ForEach-Object {
-        Write-Output $_.Response
+    process {
+        $inputObject = @{
+            Context     = $Context
+            APIEndpoint = '/gitignore/templates'
+            Method      = 'GET'
+        }
+
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
+        }
     }
 }

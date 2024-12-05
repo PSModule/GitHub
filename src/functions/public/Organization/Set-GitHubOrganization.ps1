@@ -217,10 +217,18 @@
         [Alias('secret_scanning_push_protection_custom_link')]
         [string] $SecretScanningPushProtectionCustomLink,
 
-        # The context to run the command in.
+        # The context to run the command in. Used to get the details for the API call.
+        # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
+        [object] $Context = (Get-GitHubContext)
     )
+
+    $Context = Resolve-GitHubContext -Context $Context
+
+    if ([string]::IsNullOrEmpty($Owner)) {
+        $OrganizationName = $Context.Owner
+    }
+    Write-Debug "OrganizationName : [$($Context.Owner)]"
 
     $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
     Remove-HashtableEntry -Hashtable $body -RemoveNames 'organization_name'

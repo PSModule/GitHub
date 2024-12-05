@@ -26,9 +26,10 @@ filter Get-GitHubGitignore {
     #>
     [CmdletBinding(DefaultParameterSetName = 'List')]
     param(
-        # The context to run the command in.
+        # The context to run the command in. Used to get the details for the API call.
+        # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
+        [object] $Context = (Get-GitHubContext)
     )
 
     dynamicparam {
@@ -45,6 +46,10 @@ filter Get-GitHubGitignore {
         New-DynamicParam @dynParam
 
         return $DynamicParamDictionary
+    }
+
+    begin {
+        $Context = Resolve-GitHubContext -Context $Context
     }
 
     process {

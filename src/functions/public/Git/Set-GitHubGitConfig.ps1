@@ -18,10 +18,13 @@
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param(
-        # The context to use for the API call. This is used to retrieve the necessary configuration settings.
+        # The context to run the command in. Used to get the details for the API call.
+        # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
+        [object] $Context = (Get-GitHubContext)
     )
+
+    $Context = Resolve-GitHubContext -Context $Context
 
     $commandName = $MyInvocation.MyCommand.Name
     Write-Verbose "[$commandName] - Start"
@@ -31,16 +34,10 @@
         throw 'Git is not installed. Please install Git before running this command.'
     }
 
-    $contextObj = Get-GitHubContext -Name $Context
-    Write-Verbose "Using GitHub context: $Context"
-    if (-not $contextObj) {
-        throw 'Log in using Connect-GitHub before running this command.'
-    }
-
-    $username = $contextObj.UserName
-    $id = $contextObj.DatabaseID
-    $token = $contextObj.Token | ConvertFrom-SecureString -AsPlainText
-    $hostName = $contextObj.HostName
+    $username = $Context.UserName
+    $id = $Context.DatabaseID
+    $token = $Context.Token | ConvertFrom-SecureString -AsPlainText
+    $hostName = $Context.HostName
 
     if ($PSCmdlet.ShouldProcess("$Name", 'Set Git configuration')) {
         git config --local user.name "$username"

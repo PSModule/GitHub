@@ -36,10 +36,13 @@
         )]
         [string] $Key,
 
-        # The context to run the command in.
+        # The context to run the command in. Used to get the details for the API call.
+        # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
+        [object] $Context = (Get-GitHubContext)
     )
+
+    $Context = Resolve-GitHubContext -Context $Context
 
     $body = @{
         title = $Title
@@ -56,5 +59,4 @@
     Invoke-GitHubAPI @inputObject | ForEach-Object {
         Write-Output $_.Response
     }
-
 }

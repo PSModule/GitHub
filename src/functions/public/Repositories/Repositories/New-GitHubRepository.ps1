@@ -295,9 +295,14 @@ filter New-GitHubRepository {
         [Parameter(ParameterSetName = 'org')]
         [ValidateSet('PR_BODY', 'PR_TITLE', 'BLANK')]
         [Alias('merge_commit_message')]
-        [string] $MergeCommitMessage
-    )
+        [string] $MergeCommitMessage,
 
+        # The context to run the command in. Used to get the details for the API call.
+        # Can be either a string or a GitHubContext object.
+        [Parameter()]
+        [object] $Context = (Get-GitHubContext)
+    )
+    #TODO: Move this to argument completers that are linked to all params with this name.
     dynamicparam {
         $DynamicParamDictionary = New-DynamicParamDictionary
 
@@ -323,17 +328,12 @@ filter New-GitHubRepository {
     }
 
     begin {
-
-        $contextObj = Get-GitHubContext -Context $Context
-        if (-not $contextObj) {
-            throw 'Log in using Connect-GitHub before running this command.'
-        }
-        Write-Debug "Context: [$Context]"
+        $Context = Resolve-GitHubContext -Context $Context
 
         if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $contextObj.Owner
+            $Owner = $Context.Owner
         }
-        Write-Debug "Owner : [$($contextObj.Owner)]"
+        Write-Debug "Owner : [$($Context.Owner)]"
 
         $GitignoreTemplate = $PSBoundParameters['GitignoreTemplate']
         $LicenseTemplate = $PSBoundParameters['LicenseTemplate']
