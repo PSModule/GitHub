@@ -253,16 +253,16 @@
                         $contextData += @{
                             Token     = ConvertTo-SecureString -AsPlainText $Token
                             TokenType = $tokenType
-                            AuthType  = 'PAT'
                         }
+                        $contextData['AuthType'] = 'PAT'
                     }
                     'ghs' {
                         Write-Verbose 'Logging in using an installation access token...'
                         $contextData += @{
                             Token     = ConvertTo-SecureString -AsPlainText $Token
                             TokenType = $tokenType
-                            AuthType  = 'IAT'
                         }
+                        $contextData['AuthType'] = 'IAT'
                     }
                     default {
                         Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
