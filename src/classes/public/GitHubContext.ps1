@@ -1,4 +1,4 @@
-﻿class GitHubContext {
+﻿class GitHubContext : IFormattable {
     # The API base URI.
     # https://api.github.com
     [string] $ApiBaseUri
@@ -36,6 +36,11 @@
     # HostName/Username or HostName/AppSlug
     # Context:PSModule.Github/github.com/Octocat
     [string] $ID
+
+    # The GitHub Context Name.
+    # HostName/Username or HostName/AppSlug
+    # github.com/Octocat
+    [string] $Name
 
     # The user name.
     [string] $UserName
@@ -85,5 +90,9 @@
         $Object.PSObject.Properties | ForEach-Object {
             $this.($_.Name) = $_.Value
         }
+    }
+
+    [string] ToString() {
+        return $this.Name
     }
 }
