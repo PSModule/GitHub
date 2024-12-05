@@ -1,0 +1,4 @@
+﻿enum GitHubStamp {
+    public
+    eu
+}

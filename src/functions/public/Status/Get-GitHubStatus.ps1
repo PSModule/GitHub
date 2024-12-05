@@ -31,18 +31,23 @@
         # Gets a summary of the status page, including a status indicator, component statuses, unresolved incidents,
         # and any upcoming or in-progress scheduled maintenances.
         [Parameter()]
-        [switch] $Summary
+        [switch] $Summary,
+
+        # The stanmp to use for the API call.
+        [Parameter()]
+        [GitHubStamp] $Stamp = 'public'
     )
 
+    $baseURL = $script:StatusBaseURL[$Stamp]
+
     if ($Summary) {
-        $APIURI = 'https://www.githubstatus.com/api/v2/summary.json'
+        $APIURI = "$baseURL/api/v2/summary.json"
         $response = Invoke-RestMethod -Uri $APIURI -Method Get
         $response
         return
     }
 
-    $APIURI = 'https://www.githubstatus.com/api/v2/status.json'
+    $APIURI = "$baseURL/api/v2/status.json"
     $response = Invoke-RestMethod -Uri $APIURI -Method Get
     $response.status
-
 }
