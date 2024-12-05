@@ -56,6 +56,12 @@ Describe 'GitHub' {
             (Get-GitHubContext -ListAvailable).Count | Should -Be 3
         }
 
+        It 'Can get the authenticated GitHubApp' {
+            $app = Get-GitHubApp
+            Write-Verbose ($app | Format-Table | Out-String) -Verbose
+            $app | Should -Not -BeNullOrEmpty
+        }
+
         It 'Can swap context to another' {
             { Set-GitHubDefaultContext -Context 'github.com/github-actions[bot]' } | Should -Not -Throw
             Get-GitHubConfig -Name 'DefaultContext' | Should -Be 'github.com/github-actions[bot]'
