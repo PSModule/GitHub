@@ -52,6 +52,8 @@
     $isDefaultContext = $Context -eq (Get-GitHubConfig -Name 'DefaultContext')
     if ($isDefaultContext) {
         Remove-GitHubConfig -Name 'DefaultContext'
+        Write-Warning 'There is no longer a default context!'
+        Write-Warning "Please set a new default context using 'Set-GitHubDefaultContext -Name <context>'"
     }
 
     if (-not $Silent) {
