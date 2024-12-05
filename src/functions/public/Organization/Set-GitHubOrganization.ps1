@@ -14,13 +14,13 @@
         profile and member privileges.
 
         .EXAMPLE
-        Set-GitHubOrganization -OrganizationName 'GitHub' -Blog 'https://github.blog'
+        Set-GitHubOrganization -Organization 'GitHub' -Blog 'https://github.blog'
 
         Sets the blog URL for the organization 'GitHub' to '<https://github.blog>'.
 
         .EXAMPLE
         $param = @{
-            OrganizationName = 'GitHub'
+            Organization = 'GitHub'
             MembersCanCreatePublicRepositories = $true
             MembersCanCreatePrivateRepositories = $true
             MembersCanCreateInternalRepositories = $true
@@ -46,7 +46,7 @@
         [Alias('org')]
         [Alias('owner')]
         [Alias('login')]
-        [string] $OrganizationName,
+        [string] $Organization,
 
         # Billing email address. This address is not publicized.
         [Parameter(ValueFromPipelineByPropertyName)]
@@ -217,22 +217,30 @@
         [Alias('secret_scanning_push_protection_custom_link')]
         [string] $SecretScanningPushProtectionCustomLink,
 
-        # The context to run the command in.
+        # The context to run the command in. Used to get the details for the API call.
+        # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
+        [object] $Context = (Get-GitHubContext)
     )
+
+    $Context = Resolve-GitHubContext -Context $Context
+
+    if ([string]::IsNullOrEmpty($Owner)) {
+        $Organization = $Context.Owner
+    }
+    Write-Debug "Organization : [$($Context.Owner)]"
 
     $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
     Remove-HashtableEntry -Hashtable $body -RemoveNames 'organization_name'
 
     $inputObject = @{
         Context     = $Context
-        APIEndpoint = "/orgs/$OrganizationName"
+        APIEndpoint = "/orgs/$Organization"
         Method      = 'PATCH'
         Body        = $body
     }
 
-    if ($PSCmdlet.ShouldProcess("organization [$OrganizationName]", 'Set')) {
+    if ($PSCmdlet.ShouldProcess("organization [$Organization]", 'Set')) {
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             Write-Output $_.Response
         }

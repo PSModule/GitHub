@@ -37,8 +37,16 @@
     # Context:PSModule.Github/github.com/Octocat
     [string] $ID
 
+    # The GitHub Context Name.
+    # HostName/Username or HostName/AppSlug
+    # github.com/Octocat
+    [string] $Name
+
     # The user name.
     [string] $UserName
+
+    # The default value for the Enterprise parameter.
+    [string] $Enterprise
 
     # The default value for the Owner parameter.
     [string] $Owner
@@ -82,5 +90,9 @@
         $Object.PSObject.Properties | ForEach-Object {
             $this.($_.Name) = $_.Value
         }
+    }
+
+    [string] ToString() {
+        return $this.Name
     }
 }

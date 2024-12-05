@@ -14,13 +14,16 @@
     [OutputType([bool])]
     [CmdletBinding()]
     param(
+        # The context to run the command in. Used to get the details for the API call.
+        # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
+        [object] $Context = (Get-GitHubContext)
     )
 
-    $contextObj = Get-GitHubContext -Context $Context
+    $Context = Resolve-GitHubContext -Context $Context
+
     $gitHubConfig = Get-GitHubConfig
-    $tokenExpirationDate = $contextObj.TokenExpirationDate
+    $tokenExpirationDate = $Context.TokenExpirationDate
     $currentDateTime = Get-Date
     $remainingDuration = [datetime]$tokenExpirationDate - $currentDateTime
 

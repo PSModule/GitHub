@@ -181,9 +181,10 @@ filter New-GitHubRepositoryOrg {
         [Alias('merge_commit_message')]
         [string] $MergeCommitMessage,
 
-        # The context to run the command in.
+        # The context to run the command in. Used to get the details for the API call.
+        # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [string] $Context
+        [object] $Context = (Get-GitHubContext)
     )
 
     dynamicparam {
@@ -211,8 +212,13 @@ filter New-GitHubRepositoryOrg {
     }
 
     begin {
+        $Context = Resolve-GitHubContext -Context $Context
         $GitignoreTemplate = $PSBoundParameters['GitignoreTemplate']
         $LicenseTemplate = $PSBoundParameters['LicenseTemplate']
+        if ([string]::IsNullOrEmpty($Owner)) {
+            $Owner = $Context.Owner
+        }
+        Write-Debug "Owner : [$($Context.Owner)]"
     }
 
     process {

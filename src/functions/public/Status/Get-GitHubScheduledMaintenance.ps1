@@ -31,6 +31,7 @@
         .NOTES
         [Scheduled maintenances](https://www.githubstatus.com/api#scheduled-maintenances)
     #>
+    [CmdletBinding()]
     param(
         # Get a list of any active maintenances.
         # This endpoint will only return scheduled maintenances in the In Progress or Verifying state.
@@ -40,25 +41,31 @@
         # Get a list of any upcoming maintenances.
         # This endpoint will only return scheduled maintenances still in the Scheduled state.
         [Parameter()]
-        [switch] $Upcoming
+        [switch] $Upcoming,
+
+        # The stanmp to use for the API call.
+        [Parameter()]
+        [ValidateSet('public', 'eu')]
+        [string] $Stamp = 'public'
     )
 
+    $baseURL = $script:StatusBaseURL[$Stamp]
+
     if ($Active) {
-        $APIURI = 'https://www.githubstatus.com/api/v2/scheduled-maintenances/active.json'
+        $APIURI = "$baseURL/api/v2/scheduled-maintenances/active.json"
         $response = Invoke-RestMethod -Uri $APIURI -Method Get
         $response.scheduled_maintenances
         return
     }
 
     if ($Upcoming) {
-        $APIURI = 'https://www.githubstatus.com/api/v2/scheduled-maintenances/upcoming.json'
+        $APIURI = "$baseURL/api/v2/scheduled-maintenances/upcoming.json"
         $response = Invoke-RestMethod -Uri $APIURI -Method Get
         $response.scheduled_maintenances
         return
     }
 
-    $APIURI = 'https://www.githubstatus.com/api/v2/scheduled-maintenances.json'
+    $APIURI = "$baseURL/api/v2/scheduled-maintenances.json"
     $response = Invoke-RestMethod -Uri $APIURI -Method Get
     $response.scheduled_maintenances
-
 }

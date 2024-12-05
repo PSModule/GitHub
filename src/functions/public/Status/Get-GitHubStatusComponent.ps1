@@ -18,9 +18,16 @@
     [OutputType([pscustomobject[]])]
     [Alias('Get-GitHubStatusComponents')]
     [CmdletBinding()]
-    param()
+    param(
+        # The stanmp to use for the API call.
+        [Parameter()]
+        [ValidateSet('public', 'eu')]
+        [string] $Stamp = 'public'
+    )
 
-    $APIURI = 'https://www.githubstatus.com/api/v2/components.json'
+    $baseURL = $script:StatusBaseURL[$Stamp]
+
+    $APIURI = "$baseURL/api/v2/components.json"
     $response = Invoke-RestMethod -Uri $APIURI -Method Get
     $response.components
 }

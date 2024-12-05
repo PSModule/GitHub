@@ -76,26 +76,23 @@
         )]
         [int] $RuleSuiteId,
 
-        # The context to run the command in.
+        # The context to run the command in. Used to get the details for the API call.
+        # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
+        [object] $Context = (Get-GitHubContext)
     )
 
-    $contextObj = Get-GitHubContext -Context $Context
-    if (-not $contextObj) {
-        throw 'Log in using Connect-GitHub before running this command.'
-    }
-    Write-Debug "Context: [$Context]"
+    $Context = Resolve-GitHubContext -Context $Context
 
     if ([string]::IsNullOrEmpty($Owner)) {
-        $Owner = $contextObj.Owner
+        $Owner = $Context.Owner
     }
-    Write-Debug "Owner : [$($contextObj.Owner)]"
+    Write-Debug "Owner : [$($Context.Owner)]"
 
     if ([string]::IsNullOrEmpty($Repo)) {
-        $Repo = $contextObj.Repo
+        $Repo = $Context.Repo
     }
-    Write-Debug "Repo : [$($contextObj.Repo)]"
+    Write-Debug "Repo : [$($Context.Repo)]"
 
     $params = @{
         Context = $Context

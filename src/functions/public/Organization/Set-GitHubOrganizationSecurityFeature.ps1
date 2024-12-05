@@ -14,7 +14,7 @@
         For more information, see "[Managing security managers in your organization](https://docs.github.com/organizations/managing-peoples-access-to-your-organization-with-roles/managing-security-managers-in-your-organization)."
 
         .EXAMPLE
-        Set-GitHubOrganizationSecurityFeature -OrganizationName 'github' -SecurityProduct 'dependency_graph' -Enablement 'enable_all'
+        Set-GitHubOrganizationSecurityFeature -Organization 'github' -SecurityProduct 'dependency_graph' -Enablement 'enable_all'
 
         Enable the dependency graph for all repositories in the organization `github`.
 
@@ -30,7 +30,7 @@
         [Alias('org')]
         [Alias('owner')]
         [Alias('login')]
-        [string] $OrganizationName,
+        [string] $Organization,
 
         # The security feature to enable or disable.
         [Parameter(Mandatory)]
@@ -68,10 +68,18 @@
         )]
         [string] $QuerySuite,
 
-        # The context to run the command in.
+        # The context to run the command in. Used to get the details for the API call.
+        # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
+        [object] $Context = (Get-GitHubContext)
     )
+
+    $Context = Resolve-GitHubContext -Context $Context
+
+    if ([string]::IsNullOrEmpty($Owner)) {
+        $Organization = $Context.Owner
+    }
+    Write-Debug "Organization : [$($Context.Owner)]"
 
     $body = @{
         query_suite = $QuerySuite
@@ -79,15 +87,14 @@
 
     $inputObject = @{
         Context     = $Context
-        APIEndpoint = "/orgs/$OrganizationName/$SecurityProduct/$Enablement"
+        APIEndpoint = "/orgs/$Organization/$SecurityProduct/$Enablement"
         Method      = 'POST'
         Body        = $body
     }
 
-    if ($PSCmdlet.ShouldProcess("security feature [$SecurityProduct] on organization [$OrganizationName]", 'Set')) {
+    if ($PSCmdlet.ShouldProcess("security feature [$SecurityProduct] on organization [$Organization]", 'Set')) {
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             Write-Output $_.Response
         }
     }
-
 }

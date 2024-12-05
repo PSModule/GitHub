@@ -30,18 +30,24 @@
     param(
         # Gets the status of GitHub incidents that are unresolved
         [Parameter()]
-        [switch] $Unresolved
+        [switch] $Unresolved,
+
+        # The stanmp to use for the API call.
+        [Parameter()]
+        [ValidateSet('public', 'eu')]
+        [string] $Stamp = 'public'
     )
 
+    $baseURL = $script:StatusBaseURL[$Stamp]
+
     if ($Unresolved) {
-        $APIURI = 'https://www.githubstatus.com/api/v2/incidents/unresolved.json'
+        $APIURI = "$baseURL/api/v2/incidents/unresolved.json"
         $response = Invoke-RestMethod -Uri $APIURI -Method Get
         $response.incidents
         return
     }
 
-    $APIURI = 'https://www.githubstatus.com/api/v2/incidents.json'
+    $APIURI = "$baseURL/api/v2/incidents.json"
     $response = Invoke-RestMethod -Uri $APIURI -Method Get
     $response.incidents
-
 }

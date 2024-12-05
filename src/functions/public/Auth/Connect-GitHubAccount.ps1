@@ -103,6 +103,10 @@
         )]
         [string] $PrivateKey,
 
+        # The default enterprise to use in commands.
+        [Parameter()]
+        [string] $Enterprise,
+
         # Set the default owner to use in commands.
         [Parameter()]
         [Alias('Organization')]
@@ -171,6 +175,7 @@
             ApiVersion = $ApiVersion
             HostName   = $HostName
             AuthType   = $authType
+            Enterprise = $Enterprise
             Owner      = $Owner
             Repo       = $Repo
         }
@@ -267,10 +272,10 @@
                 }
             }
         }
-        $contextDataReturn = Set-GitHubContext @contextData -Default:(!$NotDefault) -PassThru
-        Write-Verbose ($contextDataReturn | Format-List | Out-String)
+        $context = Set-GitHubContext @contextData -Default:(!$NotDefault) -PassThru
+        Write-Verbose ($context | Format-List | Out-String)
         if (-not $Silent) {
-            $name = $contextDataReturn.Username
+            $name = $context.Username
             Write-Host '✓ ' -ForegroundColor Green -NoNewline
             Write-Host "Logged in as $name!"
         }
@@ -281,6 +286,7 @@
     } finally {
         Remove-Variable -Name tokenResponse -ErrorAction SilentlyContinue
         Remove-Variable -Name context -ErrorAction SilentlyContinue
+        Remove-Variable -Name contextData -ErrorAction SilentlyContinue
         Remove-Variable -Name Token -ErrorAction SilentlyContinue
         [System.GC]::Collect()
     }

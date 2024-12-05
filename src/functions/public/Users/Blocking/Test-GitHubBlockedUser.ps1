@@ -14,7 +14,7 @@
         Returns true if the user is blocked, false if not.
 
         .EXAMPLE
-        Test-GitHubBlockedUser -OrganizationName 'github' -Username 'octocat'
+        Test-GitHubBlockedUser -Organization 'github' -Username 'octocat'
 
         Checks if the user `octocat` is blocked by the organization `github`.
         Returns true if the user is blocked, false if not.
@@ -43,22 +43,29 @@
         )]
         [Alias('org')]
         [Alias('owner')]
-        [string] $OrganizationName,
+        [string] $Organization,
 
         # The number of results per page (max 100).
         [Parameter()]
         [ValidateRange(1, 100)]
         [int] $PerPage = 30,
 
-        # The context to run the command in.
+        # The context to run the command in. Used to get the details for the API call.
+        # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
+        [object] $Context = (Get-GitHubContext)
     )
 
-    if ($OrganizationName) {
-        Test-GitHubBlockedUserByOrganization -OrganizationName $OrganizationName -Username $Username -PerPage $PerPage -Context $Context
+    $Context = Resolve-GitHubContext -Context $Context
+
+    if ([string]::IsNullOrEmpty($Owner)) {
+        $Organization = $Context.Owner
+    }
+    Write-Debug "Organization : [$($Context.Owner)]"
+
+    if ($Organization) {
+        Test-GitHubBlockedUserByOrganization -Organization $Organization -Username $Username -PerPage $PerPage -Context $Context
     } else {
         Test-GitHubBlockedUserByUser -Username $Username -PerPage $PerPage -Context $Context
     }
-
 }

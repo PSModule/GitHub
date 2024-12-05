@@ -10,7 +10,7 @@
         regarding account deletion before using this endpoint.
 
         .EXAMPLE
-        Remove-GitHubOrganization -OrganizationName 'GitHub'
+        Remove-GitHubOrganization -Organization 'GitHub'
 
         Deletes the organization 'GitHub' and all its repositories.
 
@@ -29,20 +29,28 @@
         [Alias('org')]
         [Alias('owner')]
         [Alias('login')]
-        [string] $OrganizationName,
+        [string] $Organization,
 
-        # The context to run the command in.
+        # The context to run the command in. Used to get the details for the API call.
+        # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
+        [object] $Context = (Get-GitHubContext)
     )
+
+    $Context = Resolve-GitHubContext -Context $Context
+
+    if ([string]::IsNullOrEmpty($Owner)) {
+        $Organization = $Context.Owner
+    }
+    Write-Debug "Organization : [$($Context.Owner)]"
 
     $inputObject = @{
         Context     = $Context
-        APIEndpoint = "/orgs/$OrganizationName"
+        APIEndpoint = "/orgs/$Organization"
         Method      = 'DELETE'
     }
 
-    if ($PSCmdlet.ShouldProcess("organization [$OrganizationName]", 'Delete')) {
+    if ($PSCmdlet.ShouldProcess("organization [$Organization]", 'Delete')) {
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             Write-Output $_.Response
         }

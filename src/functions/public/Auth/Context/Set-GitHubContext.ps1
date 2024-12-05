@@ -17,14 +17,6 @@ function Set-GitHubContext {
     [OutputType([GitHubContext])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
-        # The Node ID of the context.
-        [Parameter()]
-        [string] $NodeID,
-
-        # The Database ID of the context.
-        [Parameter()]
-        [string] $DatabaseID,
-
         # Set the access token type.
         [Parameter(Mandatory)]
         [string] $TokenType,
@@ -65,6 +57,10 @@ function Set-GitHubContext {
         [Parameter(Mandatory)]
         [string] $HostName,
 
+        # Set the enterprise name for the context.
+        [Parameter()]
+        [string] $Enterprise,
+
         # Set the default for the Owner parameter.
         [Parameter()]
         [string] $Owner,
@@ -100,10 +96,6 @@ function Set-GitHubContext {
     }
 
     process {
-        $tempContextName = "$HostName/tempContext"
-        $tempContextID = "$($script:Config.Name)/$tempContextName"
-
-        # Set a temporary context.
         $context = @{
             ApiBaseUri                 = $ApiBaseUri                 # https://api.github.com
             ApiVersion                 = $ApiVersion                 # 2022-11-28
@@ -112,9 +104,7 @@ function Set-GitHubContext {
             ClientID                   = $ClientID                   # Client ID for GitHub Apps
             DeviceFlowType             = $DeviceFlowType             # GitHubApp / OAuthApp
             HostName                   = $HostName                   # github.com / msx.ghe.com / github.local
-            NodeID                     = $NodeID                     # User ID / app ID (GraphQL Node ID)
-            DatabaseID                 = $DatabaseID                 # Database ID
-            UserName                   = $UserName                   # User name
+            Enterprise                 = $Enterprise                 # Enterprise name
             Owner                      = $Owner                      # Owner name
             Repo                       = $Repo                       # Repo name
             Scope                      = $Scope                      # 'gist read:org repo workflow'
@@ -127,23 +117,24 @@ function Set-GitHubContext {
         }
 
         $context | Remove-HashtableEntry -NullOrEmptyValues
-
-        Set-Context -ID $tempContextID -Context $context
+        $tempContext = [GitHubContext]$context
 
         # Run functions to get info on the temporary context.
         try {
             Write-Verbose 'Getting info on the context.'
-            switch -Regex ($context['AuthType']) {
+            switch -Regex ($AuthType) {
                 'PAT|UAT|IAT' {
-                    $viewer = Get-GitHubViewer -Context $tempContextName
+                    $viewer = Get-GitHubViewer -Context $tempContext
                     $contextName = "$HostName/$($viewer.login)"
+                    $context['Name'] = $contextName
                     $context['Username'] = $viewer.login
                     $context['NodeID'] = $viewer.id
                     $context['DatabaseID'] = ($viewer.databaseId).ToString()
                 }
                 'App' {
-                    $app = Get-GitHubApp -Context $tempContextName
+                    $app = Get-GitHubApp -Context $tempContext
                     $contextName = "$HostName/$($app.slug)"
+                    $context['Name'] = $contextName
                     $context['Username'] = $app.slug
                     $context['NodeID'] = $app.node_id
                     $context['DatabaseID'] = $app.id
@@ -152,13 +143,13 @@ function Set-GitHubContext {
                     throw 'Failed to get info on the context. Unknown logon type.'
                 }
             }
-            Write-Verbose "Found user with username: [$($context['Username'])]"
+            Write-Verbose "Found user with username: [$contextName]"
 
             if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
                 Set-Context -ID "$($script:Config.Name)/$contextName" -Context $context
                 if ($Default) {
                     Set-GitHubDefaultContext -Context $contextName
-                    if ($context['AuthType'] -eq 'IAT' -and $script:runEnv -eq 'GHA') {
+                    if ($AuthType -eq 'IAT' -and $script:runEnv -eq 'GHA') {
                         Set-GitHubGitConfig -Context $contextName
                     }
                 }
@@ -168,8 +159,6 @@ function Set-GitHubContext {
             }
         } catch {
             throw ($_ -join ';')
-        } finally {
-            Remove-Context -ID $tempContextID
         }
     }
 

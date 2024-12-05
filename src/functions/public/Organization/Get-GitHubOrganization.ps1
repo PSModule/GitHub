@@ -45,7 +45,7 @@
         [Alias('login')]
         [Alias('org')]
         [Alias('owner')]
-        [string] $OrganizationName,
+        [string] $Organization,
 
         # The handle for the GitHub user account.
         [Parameter(
@@ -73,17 +73,25 @@
         [ValidateRange(1, 100)]
         [int] $PerPage = 30,
 
-        # The context to run the command in.
+        # The context to run the command in. Used to get the details for the API call.
+        # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
+        [object] $Context = (Get-GitHubContext)
     )
+
+    $Context = Resolve-GitHubContext -Context $Context
+
+    if ([string]::IsNullOrEmpty($Owner)) {
+        $Organization = $Context.Owner
+    }
+    Write-Debug "Organization : [$($Context.Owner)]"
 
     switch ($PSCmdlet.ParameterSetName) {
         '__DefaultSet' {
             Get-GitHubMyOrganization -PerPage $PerPage -Context $Context | Get-GitHubOrganizationByName -Context $Context
         }
         'NamedOrg' {
-            Get-GitHubOrganizationByName -OrganizationName $OrganizationName -Context $Context
+            Get-GitHubOrganizationByName -Organization $Organization -Context $Context
         }
         'NamedUser' {
             Get-GitHubUserOrganization -Username $Username -Context $Context

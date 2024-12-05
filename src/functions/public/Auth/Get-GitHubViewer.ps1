@@ -20,30 +20,26 @@
         [Parameter()]
         [string[]] $Fields = @('login', 'id', 'databaseId'),
 
-        # Context to run the command in.
+        # The context to run the command in. Used to get the details for the API call.
+        # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
+        [object] $Context = (Get-GitHubContext)
     )
 
-    begin {
-        $commandName = $MyInvocation.MyCommand.Name
-        Write-Verbose "[$commandName] - Start"
-    }
+    $commandName = $MyInvocation.MyCommand.Name
+    Write-Verbose "[$commandName] - Start"
+    $Context = Resolve-GitHubContext -Context $Context
 
-    process {
-        $query = @"
+    $query = @"
 query {
   viewer {
     $($Fields -join "`n")
   }
 }
 "@
-        $results = Invoke-GitHubGraphQLQuery -Query $query -Context $Context
+    $results = Invoke-GitHubGraphQLQuery -Query $query -Context $Context
 
-        return $results.data.viewer
-    }
+    return $results.data.viewer
 
-    end {
-        Write-Verbose "[$commandName] - End"
-    }
+    Write-Verbose "[$commandName] - End"
 }

@@ -38,10 +38,22 @@
         [ValidateRange(1, 100)]
         [int] $PerPage = 30,
 
-        # The context to run the command in.
+        # The context to run the command in. Used to get the details for the API call.
+        # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [string] $Context
+        [object] $Context = (Get-GitHubContext)
     )
+
+    $Context = Resolve-GitHubContext -Context $Context
+    if ([string]::IsNullOrEmpty($Owner)) {
+        $Owner = $Context.Owner
+    }
+    Write-Debug "Owner : [$($Context.Owner)]"
+
+    if ([string]::IsNullOrEmpty($Repo)) {
+        $Repo = $Context.Repo
+    }
+    Write-Debug "Repo : [$($Context.Repo)]"
 
     $body = @{
         per_page = $PerPage

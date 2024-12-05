@@ -15,7 +15,7 @@
         for details. For an example response, see 'Response with GitHub plan information' below."
 
         .EXAMPLE
-        Get-GitHubOrganizationByName -OrganizationName 'github'
+        Get-GitHubOrganizationByName -Organization 'github'
 
         Get the 'GitHub' organization
 
@@ -34,22 +34,23 @@
         [Alias('login')]
         [Alias('org')]
         [Alias('owner')]
-        [string] $OrganizationName,
+        [string] $Organization,
 
-        # The context to run the command in.
+        # The context to run the command in. Used to get the details for the API call.
+        # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [string] $Context
+        [object] $Context = (Get-GitHubContext)
     )
 
+    $Context = Resolve-GitHubContext -Context $Context
 
     $inputObject = @{
         Context     = $Context
-        APIEndpoint = "/orgs/$OrganizationName"
+        APIEndpoint = "/orgs/$Organization"
         Method      = 'GET'
     }
 
     Invoke-GitHubAPI @inputObject | ForEach-Object {
         Write-Output $_.Response
     }
-
 }
