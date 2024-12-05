@@ -68,10 +68,6 @@
         )]
         [string] $URI,
 
-        # The secure token used for authentication in the GitHub API. It should be stored as a SecureString to ensure it's kept safe in memory.
-        [Parameter()]
-        [SecureString] $Token,
-
         # The 'Content-Type' header for the API request. The default is 'application/vnd.github+json'.
         [Parameter()]
         [string] $ContentType = 'application/vnd.github+json; charset=utf-8',
@@ -80,9 +76,10 @@
         [Parameter()]
         [string] $ApiVersion,
 
-        # The context to use for the API call. This is used to retrieve the necessary configuration settings.
+        # The context to run the command in. Used to get the details for the API call.
+        # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [string] $Context = (Get-GitHubConfig -Name 'DefaultContext')
+        [object] $Context = (Get-GitHubContext)
     )
 
     Write-Debug 'Invoking GitHub API...'
@@ -91,35 +88,19 @@
         Write-Debug " - $($_.Key): $($_.Value)"
     }
 
-    $contextObj = Get-GitHubContext -Context $Context
-    if (-not $contextObj) {
-        throw 'Log in using Connect-GitHub before running this command.'
-    }
-    Write-Debug "Context: [$Context]"
-
-    if ([string]::IsNullOrEmpty($ApiBaseUri)) {
-        $ApiBaseUri = $contextObj.ApiBaseUri
-    }
-    Write-Debug "ApiBaseUri : [$($contextObj.ApiBaseUri)]"
-
-    if ([string]::IsNullOrEmpty($ApiVersion)) {
-        $ApiVersion = $contextObj.ApiVersion
-    }
-    Write-Debug "ApiVersion : [$($contextObj.ApiVersion)]"
+    $Context = Resolve-GitHubContext -Context $Context
 
     if ([string]::IsNullOrEmpty($TokenType)) {
-        $TokenType = $contextObj.TokenType
+        $TokenType = $Context.TokenType
     }
-    Write-Debug "TokenType : [$($contextObj.TokenType)]"
+    Write-Debug "TokenType : [$($Context.TokenType)]"
 
-    if ([string]::IsNullOrEmpty($Token)) {
-        $Token = $contextObj.Token
-    }
-    Write-Debug "Token : [$($contextObj.Token)]"
-
-    switch ($tokenType) {
+    switch ($TokenType) {
         'ghu' {
             if (Test-GitHubAccessTokenRefreshRequired -Context $Context) {
+                # TODO: Ensure it can pass the context object, and have it update the context object
+                # TODO: Should it return the new context with a -PassThru parameter?
+                # $Context = Update-GitHubUserAccessToken -Context $Context
                 Update-GitHubUserAccessToken -Context $Context
                 $Token = (Get-GitHubContextSetting -Name 'Token' -Context $Context)
             }
@@ -131,12 +112,31 @@
         }
     }
 
+    if ([string]::IsNullOrEmpty($ApiBaseUri)) {
+        $ApiBaseUri = $Context.ApiBaseUri
+    }
+    Write-Debug "ApiBaseUri : [$($Context.ApiBaseUri)]"
+
+    if ([string]::IsNullOrEmpty($ApiVersion)) {
+        $ApiVersion = $Context.ApiVersion
+    }
+    Write-Debug "ApiVersion : [$($Context.ApiVersion)]"
+
+    if ([string]::IsNullOrEmpty($TokenType)) {
+
+    }
+    Write-Debug "TokenType : [$($Context.TokenType)]"
+
+    if ([string]::IsNullOrEmpty($Token)) {
+        $Token = $Context.Token
+    }
+    Write-Debug "Token : [$($Context.Token)]"
+
     $headers = @{
         Accept                 = $Accept
         'X-GitHub-Api-Version' = $ApiVersion
     }
-
-    Remove-HashtableEntry -Hashtable $headers -NullOrEmptyValues
+    $headers | Remove-HashtableEntry -NullOrEmptyValues
 
     if (-not $URI) {
         $URI = ("$ApiBaseUri/" -replace '/$', '') + ("/$ApiEndpoint" -replace '^/', '')
@@ -153,7 +153,6 @@
         OutFile        = $DownloadFilePath
         HttpVersion    = [string]$HttpVersion
     }
-
     $APICall | Remove-HashtableEntry -NullOrEmptyValues
 
     if ($Body) {
@@ -175,7 +174,6 @@
         $APICall | ConvertFrom-HashTable | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
         Write-Debug '----------------------------------'
         do {
-            # Send the web request
             $response = Invoke-WebRequest @APICall
 
             $headers = @{}
@@ -183,7 +181,6 @@
                 $headers[$item.Key] = ($item.Value).Trim() -join ', '
             }
             $headers = [pscustomobject]$headers
-            # Sort properties by name and display the object
             $sortedProperties = $headers.PSObject.Properties.Name | Sort-Object
             $headers = $headers | Select-Object $sortedProperties
             Write-Debug '----------------------------------'
@@ -198,8 +195,6 @@
                 StatusCode        = $response.StatusCode
                 StatusDescription = $response.StatusDescription
             }
-
-            # Get the next page URL
             $APICall['Uri'] = $response.RelationLink.next
         } while ($APICall['Uri'])
     } catch {
@@ -209,7 +204,6 @@
             $headers[$item.Key] = ($item.Value).Trim() -join ', '
         }
         $headers = [pscustomobject]$headers
-        # Sort properties by name and display the object
         $sortedProperties = $headers.PSObject.Properties.Name | Sort-Object
         $headers = $headers | Select-Object $sortedProperties
 
