@@ -106,8 +106,7 @@
             }
         }
         'PEM' {
-            $ClientID = (Get-GitHubContextSetting -Name 'ClientID' -Context $Context)
-            $JWT = Get-GitHubAppJSONWebToken -ClientId $ClientID -PrivateKey $Token
+            $JWT = Get-GitHubAppJSONWebToken -ClientId $Context.ClientID -PrivateKey $Token
             $Token = $JWT.Token
         }
     }
