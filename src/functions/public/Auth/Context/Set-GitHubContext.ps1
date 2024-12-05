@@ -14,6 +14,7 @@ function Set-GitHubContext {
         .NOTES
         General notes
     #>
+    [OutputType([GitHubContext])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The Node ID of the context.
@@ -86,7 +87,11 @@ function Set-GitHubContext {
 
         # Set as the default context.
         [Parameter()]
-        [switch] $Default
+        [switch] $Default,
+
+        # Pass the context through the pipeline.
+        [Parameter()]
+        [switch] $PassThru
     )
 
     begin {
@@ -156,6 +161,9 @@ function Set-GitHubContext {
                     if ($context['AuthType'] -eq 'IAT' -and $script:runEnv -eq 'GHA') {
                         Set-GitHubGitConfig -Context $contextName
                     }
+                }
+                if ($PassThru) {
+                    Get-GitHubContext -Context $contextName
                 }
             }
         } catch {

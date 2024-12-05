@@ -6,4 +6,5 @@
         ClientID = '7204ae9b0580f2cb8288' # $script:Auth.OAuthApp.ClientID #gitleaks:allow
     }
     AccessTokenGracePeriodInHours = 4
+    TokenPrefixPattern            = '(?<=^(ghu|gho|ghs|github_pat|ghp)).*'
 }
