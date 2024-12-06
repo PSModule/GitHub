@@ -23,7 +23,7 @@
 
         This will return all the parameters and their final value in the grandparent function.
     #>
-    [OutputType([hashtable])]
+    [OutputType([pscustomobject])]
     [CmdletBinding()]
     param(
         # Include common parameters in the output.
@@ -31,14 +31,16 @@
         [switch] $IncludeCommonParameters,
 
         # The function to get the parameters for.
-        # Default is the calling scope (1).
+        # Default is the calling scope (0).
         # Scopes are based on nesting levels:
         # 0 - Current scope
         # 1 - Parent scope
         # 2 - Grandparent scope
         [Parameter()]
-        [string] $Scope = 1
+        [int] $Scope = 0
     )
+
+    $Scope++
 
     $commonParameters = @(
         'ProgressAction', 'Debug', 'ErrorAction', 'ErrorVariable', 'InformationAction', 'InformationVariable',
@@ -69,5 +71,5 @@
         }
     }
 
-    $allParameters
+    [pscustomobject]$allParameters
 }
