@@ -128,3 +128,9 @@ Describe 'GitHub' {
         }
     }
 }
+
+Context 'Fail' {
+    It 'Should fail' {
+        1 | Should -Be 2
+    }
+}
