@@ -73,6 +73,9 @@
     # 2024-01-01-00:00:00
     [datetime] $TokenExpirationDate
 
+    # The installation ID.
+    [int] $InstallationID
+
     # The refresh token.
     [securestring] $RefreshToken
 

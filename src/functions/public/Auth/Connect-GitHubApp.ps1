@@ -96,11 +96,12 @@
             }
         }
 
-        $installations | ForEach-Object -ThrottleLimit [System.Environment]::ProcessorCount -Parallel {
+        $installations | ForEach-Object {
             $installation = $_
-            $contextParams = $defaultContextData.Clone()
+            $contextParams = @{} + $defaultContextData.Clone()
             $token = New-GitHubAppInstallationAccessToken -InstallationID $installation.id
             $contextParams += @{
+                InstallationID      = $installation.id
                 Token               = $token.Token
                 TokenExpirationDate = $token.ExpiresAt
             }
@@ -126,7 +127,6 @@
             Remove-Variable -Name tmpContext -ErrorAction SilentlyContinue
             Remove-Variable -Name token -ErrorAction SilentlyContinue
         }
-
     } catch {
         Write-Error $_
         Write-Error (Get-PSCallStack | Format-Table | Out-String)

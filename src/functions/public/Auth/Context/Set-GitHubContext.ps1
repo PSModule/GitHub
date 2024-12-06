@@ -57,6 +57,9 @@ function Set-GitHubContext {
         [Parameter(Mandatory)]
         [string] $HostName,
 
+        # Set the installation ID.
+        [int] $InstallationID,
+
         # Set the enterprise name for the context.
         [Parameter()]
         [string] $Enterprise,
