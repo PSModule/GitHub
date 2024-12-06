@@ -10,10 +10,7 @@
             <TableControl>
                 <TableHeaders>
                     <TableColumnHeader>
-                        <Label>UserName</Label>
-                    </TableColumnHeader>
-                    <TableColumnHeader>
-                        <Label>HostName</Label>
+                        <Label>Name</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
                         <Label>AuthType</Label>
@@ -24,21 +21,12 @@
                     <TableColumnHeader>
                         <Label>TokenExpirationDate</Label>
                     </TableColumnHeader>
-                    <TableColumnHeader>
-                        <Label>Owner</Label>
-                    </TableColumnHeader>
-                    <TableColumnHeader>
-                        <Label>Repo</Label>
-                    </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
                     <TableRowEntry>
                         <TableColumnItems>
                             <TableColumnItem>
-                                <PropertyName>UserName</PropertyName>
-                            </TableColumnItem>
-                            <TableColumnItem>
-                                <PropertyName>HostName</PropertyName>
+                                <PropertyName>Name</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>AuthType</PropertyName>
@@ -48,12 +36,6 @@
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>TokenExpirationDate</PropertyName>
-                            </TableColumnItem>
-                            <TableColumnItem>
-                                <PropertyName>Owner</PropertyName>
-                            </TableColumnItem>
-                            <TableColumnItem>
-                                <PropertyName>Repo</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
