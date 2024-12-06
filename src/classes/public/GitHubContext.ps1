@@ -42,6 +42,10 @@
     # github.com/Octocat
     [string] $Name
 
+    # The context type
+    # User / App / Installation
+    [string] $Type
+
     # The user name.
     [string] $UserName
 

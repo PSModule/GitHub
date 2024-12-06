@@ -89,23 +89,13 @@
     }
 
     $Context = Resolve-GitHubContext -Context $Context
+    $Token = $Context.Token
+    Write-Debug "Token : [$Token]"
 
     if ([string]::IsNullOrEmpty($TokenType)) {
         $TokenType = $Context.TokenType
     }
     Write-Debug "TokenType : [$($Context.TokenType)]"
-
-    switch ($TokenType) {
-        'ghu' {
-            if (Test-GitHubAccessTokenRefreshRequired -Context $Context) {
-                $Token = Update-GitHubUserAccessToken -Context $Context -PassThru
-            }
-        }
-        'PEM' {
-            $JWT = Get-GitHubAppJSONWebToken -ClientId $Context.ClientID -PrivateKey $Context.Token
-            $Token = $JWT.Token
-        }
-    }
 
     if ([string]::IsNullOrEmpty($ApiBaseUri)) {
         $ApiBaseUri = $Context.ApiBaseUri
@@ -117,15 +107,18 @@
     }
     Write-Debug "ApiVersion : [$($Context.ApiVersion)]"
 
-    if ([string]::IsNullOrEmpty($TokenType)) {
 
+    switch ($TokenType) {
+        'ghu' {
+            if (Test-GitHubAccessTokenRefreshRequired -Context $Context) {
+                $Token = Update-GitHubUserAccessToken -Context $Context -PassThru
+            }
+        }
+        'PEM' {
+            $JWT = Get-GitHubAppJSONWebToken -ClientId $Context.ClientID -PrivateKey $Token
+            $Token = $JWT.Token
+        }
     }
-    Write-Debug "TokenType : [$($Context.TokenType)]"
-
-    if ([string]::IsNullOrEmpty($Token)) {
-        $Token = $Context.Token
-    }
-    Write-Debug "Token : [$($Context.Token)]"
 
     $headers = @{
         Accept                 = $Accept

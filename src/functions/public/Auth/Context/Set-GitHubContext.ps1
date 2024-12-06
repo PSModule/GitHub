@@ -126,10 +126,17 @@ function Set-GitHubContext {
                 'PAT|UAT|IAT' {
                     $viewer = Get-GitHubViewer -Context $tempContext
                     $contextName = "$HostName/$($viewer.login)"
-                    $context['Name'] = $contextName
                     $context['Username'] = $viewer.login
                     $context['NodeID'] = $viewer.id
                     $context['DatabaseID'] = ($viewer.databaseId).ToString()
+                }
+                'PAT|UAT' {
+                    $context['Name'] = $contextName
+                    $context['Type'] = 'User'
+                }
+                'IAT' {
+                    $context['Name'] = "$contextName/$Owner"
+                    $context['Type'] = 'Installation'
                 }
                 'App' {
                     $app = Get-GitHubApp -Context $tempContext
@@ -138,6 +145,7 @@ function Set-GitHubContext {
                     $context['Username'] = $app.slug
                     $context['NodeID'] = $app.node_id
                     $context['DatabaseID'] = $app.id
+                    $context['Type'] = 'App'
                 }
                 default {
                     throw 'Failed to get info on the context. Unknown logon type.'
