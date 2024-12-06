@@ -78,6 +78,7 @@
             ApiBaseUri = $Context.ApiBaseUri
             ApiVersion = $Context.ApiVersion
             HostName   = $Context.HostName
+            ClientID   = $Context.AuthClientID
             AuthType   = 'IAT'
             TokenType  = 'ghs'
         }
