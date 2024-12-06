@@ -1,0 +1,137 @@
+﻿function Connect-GitHubApp {
+    <#
+        .SYNOPSIS
+        Connects to GitHub as a installation using a GitHub App.
+
+        .DESCRIPTION
+        Connects to GitHub using a GitHub App to generate installation access tokens and create contexts for targets.
+
+        Available target types:
+        - User
+        - Organization
+        - Enterprise
+
+        .EXAMPLE
+        Connect-GitHubApp
+
+        Connects to GitHub as all available targets using the logged in GitHub App.
+
+        .EXAMPLE
+        Connect-GitHubApp -User 'octocat'
+
+        Connects to GitHub as the user 'octocat' using the logged in GitHub App.
+
+        .EXAMPLE
+        Connect-GitHubApp -Organization 'psmodule'
+
+        Connects to GitHub as the organization 'psmodule' using the logged in GitHub App.
+
+        .EXAMPLE
+        Connect-GitHubApp -Enterprise 'msx'
+
+        Connects to GitHub as the enterprise 'msx' using the logged in GitHub App.
+
+        .NOTES
+        [Authenticating to the REST API](https://docs.github.com/rest/overview/other-authentication-methods#authenticating-for-saml-sso)
+    #>
+    [OutputType([void])]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'Is the CLI part of the module.')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText', '',
+        Justification = 'The tokens are recieved as clear text. Mitigating exposure by removing variables and performing garbage collection.')]
+    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
+    param(
+        # The user account to connect to.
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'User'
+        )]
+        [string] $User,
+
+        # The organization to connect to.
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'Organization'
+        )]
+        [string] $Organization,
+
+        # The enterprise to connect to.
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'Enterprise'
+        )]
+        [string] $Enterprise,
+
+        # The context to run the command in. Used to get the details for the API call.
+        # Can be either a string or a GitHubContext object.
+        [Parameter()]
+        [object] $Context = (Get-GitHubContext)
+    )
+
+    $commandName = $MyInvocation.MyCommand.Name
+    Write-Verbose "[$commandName] - Start"
+
+    $Context = $Context | Resolve-GitHubContext
+    $Context | Assert-GitHubContext -AuthType 'App'
+
+    try {
+        $contextData = @{
+            ApiBaseUri = $Context.ApiBaseUri
+            ApiVersion = $Context.ApiVersion
+            HostName   = $Context.HostName
+            AuthType   = 'IAT'
+            TokenType  = 'ghs'
+        }
+
+        $installations = Get-GitHubAppInstallation
+        switch ($PSCmdlet.ParameterSetName) {
+            'User' {
+                $installations = $installations | Where-Object { $_.target_type -eq 'User' -and $_.account.login -in $User }
+            }
+            'Organization' {
+                $installations = $installations | Where-Object { $_.target_type -eq 'Organization' -and $_.account.login -in $Organization }
+            }
+            'Enterprise' {
+                $installations = $installations | Where-Object { $_.target_type -eq 'Enterprise' -and $_.account.slug -in $Enterprise }
+            }
+        }
+
+        foreach ($installation in $installations) {
+            $token = New-GitHubAppInstallationAccessToken -InstallationID $installation.id
+            $connectParams += @{
+                Token               = $token.token
+                TokenExpirationDate = ($token.expires_at).ToLocalTime()
+            }
+            switch ($installation.target_type) {
+                'User' {
+                    $connectParams['Owner'] = $installation.account.login
+                }
+                'Organization' {
+                    $connectParams['Owner'] = $installation.account.login
+                }
+                'Enterprise' {
+                    $connectParams['Enterprise'] = $installation.account.slug
+                }
+            }
+        }
+
+        Write-Verbose 'Logging in using an installation access token...'
+        Write-Verbose ($contextData | Format-Table | Out-String)
+        $context = Set-GitHubContext @contextData -PassThru
+        Write-Verbose ($context | Format-List | Out-String)
+        if (-not $Silent) {
+            $name = $context.name
+            Write-Host "Connected $name"
+        }
+    } catch {
+        Write-Error $_
+        Write-Error (Get-PSCallStack | Format-Table | Out-String)
+        throw 'Failed to connect to GitHub using a GitHub App.'
+    } finally {
+        Remove-Variable -Name tokenResponse -ErrorAction SilentlyContinue
+        Remove-Variable -Name context -ErrorAction SilentlyContinue
+        Remove-Variable -Name contextData -ErrorAction SilentlyContinue
+        Remove-Variable -Name Token -ErrorAction SilentlyContinue
+        [System.GC]::Collect()
+    }
+    Write-Verbose "[$commandName] - End"
+}
