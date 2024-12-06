@@ -66,6 +66,16 @@ Describe 'GitHub' {
             $app | Should -Not -BeNullOrEmpty
         }
 
+        It 'Can connect to a GitHub App Installation' {
+            { Connect-GitHubApp -Organization 'PSModule' } | Should -Not -Throw
+            Write-Verbose (Get-GitHubContext | Out-String) -Verbose
+        }
+
+        It 'Can connect to all GitHub App Installations' {
+            { Connect-GitHubApp } | Should -Not -Throw
+            Write-Verbose (Get-GitHubContext | Out-String) -Verbose
+        }
+
         It 'Can swap context to another' {
             { Set-GitHubDefaultContext -Context 'github.com/github-actions/PSModule' } | Should -Not -Throw
             Get-GitHubConfig -Name 'DefaultContext' | Should -Be 'github.com/github-actions/PSModule'
