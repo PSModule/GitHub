@@ -1,4 +1,4 @@
-﻿function Resolve-GitHubContext {
+﻿filter Resolve-GitHubContext {
     <#
         .SYNOPSIS
         Resolves the context into a GitHubContext object.
@@ -22,7 +22,7 @@
     param(
         # The context to resolve into an object. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter()]
+        [Parameter(ValueFromPipeline)]
         [object] $Context = (Get-GitHubContext)
     )
 
@@ -44,5 +44,5 @@
         throw "Context [$contextName] not found. Please provide a valid context or log in using 'Connect-GitHub'."
     }
 
-    return $Context
+    $Context
 }
