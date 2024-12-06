@@ -32,15 +32,11 @@
     begin {
         $commandName = $MyInvocation.MyCommand.Name
         Write-Verbose "[$commandName] - Start"
-        Write-Verbose "Context:"
-        Write-Verbose ($Context | Out-String)
+        Write-Verbose 'Context:'
+        $Context | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
     }
 
     process {
-        if ([string]::IsNullOrEmpty($Context)) {
-            throw "No contexts has been specified. Please provide a context or log in using 'Connect-GitHub'."
-        }
-
         if ($Context -is [string]) {
             $contextName = $Context
             Write-Debug "Getting context: [$contextName]"
@@ -66,7 +62,7 @@
     }
 
     end {
-        Write-Output $Context
         Write-Verbose "[$commandName] - End"
+        Write-Output $Context
     }
 }
