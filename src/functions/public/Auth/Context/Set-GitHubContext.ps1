@@ -125,17 +125,18 @@ function Set-GitHubContext {
             switch -Regex ($AuthType) {
                 'PAT|UAT|IAT' {
                     $viewer = Get-GitHubViewer -Context $tempContext
-                    $context['Username'] = $viewer.login
+                    $login = $viewer.login
+                    $context['Username'] = $login
                     $context['NodeID'] = $viewer.id
                     $context['DatabaseID'] = ($viewer.databaseId).ToString()
                 }
                 'PAT|UAT' {
-                    $contextName = "$HostName/$($viewer.login)"
+                    $contextName = "$HostName/$login"
                     $context['Name'] = $contextName
                     $context['Type'] = 'User'
                 }
                 'IAT' {
-                    $contextName = "$HostName/$($viewer.login)/$Owner" -Replace '\[bot\]'
+                    $contextName = "$HostName/$login/$Owner" -Replace '\[bot\]'
                     $context['Name'] = $contextName
                     $context['Type'] = 'Installation'
                 }
