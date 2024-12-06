@@ -29,10 +29,6 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    if ($Context -is [GitHubContext]) {
-        return $Context
-    }
-
     if ([string]::IsNullOrEmpty($Context)) {
         throw "No contexts has been specified. Please provide a context or log in using 'Connect-GitHub'."
     }
