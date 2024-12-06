@@ -30,7 +30,7 @@ Describe 'GitHub' {
             { Connect-GitHubAccount -Token $env:TEST_PAT } | Should -Not -Throw
             { Connect-GitHubAccount -Token $env:TEST_PAT } | Should -Not -Throw
             { Connect-GitHubAccount } | Should -Not -Throw # Logs on with GitHub Actions' token
-            (Get-GitHubContext -ListAvailable).Count | Should -BeG 2
+            (Get-GitHubContext -ListAvailable).Count | Should -Be 2
             Get-GitHubConfig -Name 'DefaultContext' | Should -Be 'github.com/github-actions/PSModule'
             Write-Verbose (Get-GitHubContext | Out-String) -Verbose
         }
