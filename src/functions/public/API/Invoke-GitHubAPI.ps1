@@ -84,9 +84,8 @@
 
     Write-Debug 'Invoking GitHub API...'
     Write-Debug 'Parameters:'
-    Get-FunctionParameter | ForEach-Object {
-        Write-Debug " - $($_.Key): $($_.Value)"
-    }
+    Get-FunctionParameter | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+    Get-FunctionParameter -Scope 1 | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
 
     $Context = Resolve-GitHubContext -Context $Context
     $Token = $Context.Token
