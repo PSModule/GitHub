@@ -29,34 +29,44 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    if ([string]::IsNullOrEmpty($Context)) {
-        throw "No contexts has been specified. Please provide a context or log in using 'Connect-GitHub'."
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Verbose "[$commandName] - Start"
+        Write-Verbose "Context:"
+        Write-Verbose ($Context | Out-String)
     }
 
-    if ($Context -is [string]) {
-        $contextName = $Context
-        Write-Debug "Getting context: [$contextName]"
-        $Context = Get-GitHubContext -Context $contextName
-    }
+    process {
+        if ([string]::IsNullOrEmpty($Context)) {
+            throw "No contexts has been specified. Please provide a context or log in using 'Connect-GitHub'."
+        }
 
-    if (-not $Context) {
-        throw "Context [$contextName] not found. Please provide a valid context or log in using 'Connect-GitHub'."
-    }
+        if ($Context -is [string]) {
+            $contextName = $Context
+            Write-Debug "Getting context: [$contextName]"
+            $Context = Get-GitHubContext -Context $contextName
+        }
 
-    switch ($Context.Type) {
-        'App' {
-            $availableContexts = Get-GitHubContext -ListAvailable | Where-Object { $_.Type -eq 'Installation' -and $_.ClientID -eq $Context.ClientID }
-            $params = Get-FunctionParameter -Scope 2
-            Write-Verbose "Resolving parameters used in called function"
-            Write-Verbose ($params | Out-String)
-            if ($params.Keys -in 'Owner', 'Organization') {
-                $foundContext = $availableContexts | Where-Object { $_.Type -eq 'Installation' -and $_.Owner -eq $params.Owner }
-                if ($foundContext) {
-                    return $foundContext
+        if (-not $Context) {
+            throw "Context [$contextName] not found. Please provide a valid context or log in using 'Connect-GitHub'."
+        }
+
+        switch ($Context.Type) {
+            'App' {
+                $availableContexts = Get-GitHubContext -ListAvailable |
+                    Where-Object { $_.Type -eq 'Installation' -and $_.ClientID -eq $Context.ClientID }
+                $params = Get-FunctionParameter -Scope 2
+                Write-Verbose 'Resolving parameters used in called function'
+                Write-Verbose ($params | Out-String)
+                if ($params.Keys -in 'Owner', 'Organization') {
+                    $Context = $availableContexts | Where-Object { $_.Owner -eq $params.Owner }
                 }
             }
         }
     }
 
-    $Context
+    end {
+        Write-Output $Context
+        Write-Verbose "[$commandName] - End"
+    }
 }
