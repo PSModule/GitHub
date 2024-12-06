@@ -84,32 +84,18 @@
 
     Write-Debug 'Invoking GitHub API...'
     Write-Debug 'Parameters:'
-    $PSBoundParameters.GetEnumerator() | ForEach-Object {
-        Write-Debug " - $($_.Key): $($_.Value)"
-    }
+    Get-FunctionParameter | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+    Write-Debug 'Parent function parameters:'
+    Get-FunctionParameter -Scope 1 | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
 
     $Context = Resolve-GitHubContext -Context $Context
+    $Token = $Context.Token
+    Write-Debug "Token : [$Token]"
 
     if ([string]::IsNullOrEmpty($TokenType)) {
         $TokenType = $Context.TokenType
     }
     Write-Debug "TokenType : [$($Context.TokenType)]"
-
-    switch ($TokenType) {
-        'ghu' {
-            if (Test-GitHubAccessTokenRefreshRequired -Context $Context) {
-                # TODO: Ensure it can pass the context object, and have it update the context object
-                # TODO: Should it return the new context with a -PassThru parameter?
-                # $Context = Update-GitHubUserAccessToken -Context $Context
-                Update-GitHubUserAccessToken -Context $Context
-                $Token = (Get-GitHubContextSetting -Name 'Token' -Context $Context)
-            }
-        }
-        'PEM' {
-            $JWT = Get-GitHubAppJSONWebToken -ClientId $Context.ClientID -PrivateKey $Context.Token
-            $Token = $JWT.Token
-        }
-    }
 
     if ([string]::IsNullOrEmpty($ApiBaseUri)) {
         $ApiBaseUri = $Context.ApiBaseUri
@@ -121,15 +107,18 @@
     }
     Write-Debug "ApiVersion : [$($Context.ApiVersion)]"
 
-    if ([string]::IsNullOrEmpty($TokenType)) {
 
+    switch ($TokenType) {
+        'ghu' {
+            if (Test-GitHubAccessTokenRefreshRequired -Context $Context) {
+                $Token = Update-GitHubUserAccessToken -Context $Context -PassThru
+            }
+        }
+        'PEM' {
+            $JWT = Get-GitHubAppJSONWebToken -ClientId $Context.ClientID -PrivateKey $Token
+            $Token = $JWT.Token
+        }
     }
-    Write-Debug "TokenType : [$($Context.TokenType)]"
-
-    if ([string]::IsNullOrEmpty($Token)) {
-        $Token = $Context.Token
-    }
-    Write-Debug "Token : [$($Context.Token)]"
 
     $headers = @{
         Accept                 = $Accept

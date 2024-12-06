@@ -7,6 +7,10 @@ param()
 
 Describe 'GitHub' {
     Context 'Auth' {
+        BeforeAll {
+            Disconnect-GitHubAccount -Context 'github.com/github-actions[bot]' -Silent
+        }
+
         It 'Can connect and disconnect without parameters in GitHubActions' {
             { Connect-GitHubAccount } | Should -Not -Throw
             { Disconnect-GitHubAccount } | Should -Not -Throw
@@ -27,7 +31,7 @@ Describe 'GitHub' {
             { Connect-GitHubAccount -Token $env:TEST_PAT } | Should -Not -Throw
             { Connect-GitHubAccount } | Should -Not -Throw # Logs on with GitHub Actions' token
             (Get-GitHubContext -ListAvailable).Count | Should -Be 2
-            Get-GitHubConfig -Name 'DefaultContext' | Should -Be 'github.com/github-actions[bot]'
+            Get-GitHubConfig -Name 'DefaultContext' | Should -Be 'github.com/github-actions/PSModule'
             Write-Verbose (Get-GitHubContext | Out-String) -Verbose
         }
 
@@ -49,7 +53,7 @@ Describe 'GitHub' {
         }
 
         It 'Can disconnect a specific context' {
-            { Disconnect-GitHubAccount -Context 'github.com/github-actions[bot]' -Silent } | Should -Not -Throw
+            { Disconnect-GitHubAccount -Context 'github.com/github-actions/PSModule' -Silent } | Should -Not -Throw
             (Get-GitHubContext -ListAvailable).Count | Should -Be 2
             Connect-GitHubAccount
             Connect-GitHubAccount -ClientID $env:TEST_APP_CLIENT_ID -PrivateKey $env:TEST_APP_PRIVATE_KEY
@@ -62,9 +66,19 @@ Describe 'GitHub' {
             $app | Should -Not -BeNullOrEmpty
         }
 
+        It 'Can connect to a GitHub App Installation' {
+            { Connect-GitHubApp -Organization 'PSModule' } | Should -Not -Throw
+            Write-Verbose (Get-GitHubContext | Out-String) -Verbose
+        }
+
+        It 'Can connect to all GitHub App Installations' {
+            { Connect-GitHubApp } | Should -Not -Throw
+            Write-Verbose (Get-GitHubContext | Out-String) -Verbose
+        }
+
         It 'Can swap context to another' {
-            { Set-GitHubDefaultContext -Context 'github.com/github-actions[bot]' } | Should -Not -Throw
-            Get-GitHubConfig -Name 'DefaultContext' | Should -Be 'github.com/github-actions[bot]'
+            { Set-GitHubDefaultContext -Context 'github.com/github-actions/PSModule' } | Should -Not -Throw
+            Get-GitHubConfig -Name 'DefaultContext' | Should -Be 'github.com/github-actions/PSModule'
         }
 
         # It 'Can be called with a GitHub App Installation Access Token' {

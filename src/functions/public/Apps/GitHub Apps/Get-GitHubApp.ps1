@@ -1,28 +1,38 @@
 ﻿filter Get-GitHubApp {
     <#
         .SYNOPSIS
-        Get the authenticated app
+        Get the authenticated app or a specific app by its slug.
 
         .DESCRIPTION
-        Returns the GitHub App associated with the authentication credentials used. To see how many app installations are associated with this
-        GitHub App, see the `installations_count` in the response. For more details about your app's installations, see the
-        "[List installations for the authenticated app](https://docs.github.com/rest/apps/apps#list-installations-for-the-authenticated-app)"
-        endpoint.
-
-        You must use a [JWT](https://docs.github.com/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app)
-        to access this endpoint.
+        Returns a GitHub App associated with the authentication credentials used or the provided app-slug.
 
         .EXAMPLE
         Get-GitHubApp
 
         Get the authenticated app.
 
+        .EXAMPLE
+        Get-GitHubApp -AppSlug 'github-actions'
+
+        Get the GitHub App with the slug 'github-actions'.
+
         .NOTES
+        [Get an app](https://docs.github.com/en/rest/apps/apps?apiVersion=2022-11-28#get-an-app)
         [Get the authenticated app | GitHub Docs](https://docs.github.com/rest/apps/apps#get-the-authenticated-app)
     #>
     [OutputType([pscustomobject])]
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(
+        # The AppSlug is just the URL-friendly name of a GitHub App.
+        # You can find this on the settings page for your GitHub App (e.g., <https://github.com/settings/apps/{app_slug}>).
+        # Example: 'github-actions'
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'BySlug'
+        )]
+        [Alias('Name')]
+        [string] $AppSlug,
+
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
@@ -31,13 +41,12 @@
 
     $Context = Resolve-GitHubContext -Context $Context
 
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = '/app'
-        Method      = 'GET'
-    }
-
-    Invoke-GitHubAPI @inputObject | ForEach-Object {
-        Write-Output $_.Response
+    switch ($PSCmdlet.ParameterSetName) {
+        'BySlug' {
+            Get-GitHubAppByName -AppSlug $AppSlug -Context $Context
+        }
+        default {
+            Get-GitHubAuthenticatedApp -Context $Context
+        }
     }
 }

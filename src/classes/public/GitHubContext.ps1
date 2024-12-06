@@ -42,6 +42,10 @@
     # github.com/Octocat
     [string] $Name
 
+    # The context type
+    # User / App / Installation
+    [string] $Type
+
     # The user name.
     [string] $UserName
 
@@ -68,6 +72,9 @@
     # The token expiration date.
     # 2024-01-01-00:00:00
     [datetime] $TokenExpirationDate
+
+    # The installation ID.
+    [int] $InstallationID
 
     # The refresh token.
     [securestring] $RefreshToken

@@ -57,6 +57,10 @@ function Set-GitHubContext {
         [Parameter(Mandatory)]
         [string] $HostName,
 
+        # Set the installation ID.
+        [Parameter()]
+        [int] $InstallationID,
+
         # Set the enterprise name for the context.
         [Parameter()]
         [string] $Enterprise,
@@ -102,6 +106,7 @@ function Set-GitHubContext {
             AuthClientID               = $AuthClientID               # Client ID for UAT
             AuthType                   = $AuthType                   # UAT / PAT / App / IAT
             ClientID                   = $ClientID                   # Client ID for GitHub Apps
+            InstallationID             = $InstallationID            # Installation ID
             DeviceFlowType             = $DeviceFlowType             # GitHubApp / OAuthApp
             HostName                   = $HostName                   # github.com / msx.ghe.com / github.local
             Enterprise                 = $Enterprise                 # Enterprise name
@@ -125,11 +130,20 @@ function Set-GitHubContext {
             switch -Regex ($AuthType) {
                 'PAT|UAT|IAT' {
                     $viewer = Get-GitHubViewer -Context $tempContext
-                    $contextName = "$HostName/$($viewer.login)"
-                    $context['Name'] = $contextName
-                    $context['Username'] = $viewer.login
+                    $login = $viewer.login
+                    $context['Username'] = $login
                     $context['NodeID'] = $viewer.id
                     $context['DatabaseID'] = ($viewer.databaseId).ToString()
+                }
+                'PAT|UAT' {
+                    $contextName = "$HostName/$login"
+                    $context['Name'] = $contextName
+                    $context['Type'] = 'User'
+                }
+                'IAT' {
+                    $contextName = "$HostName/$login/$Owner" -Replace '\[bot\]'
+                    $context['Name'] = $contextName
+                    $context['Type'] = 'Installation'
                 }
                 'App' {
                     $app = Get-GitHubApp -Context $tempContext
@@ -138,12 +152,13 @@ function Set-GitHubContext {
                     $context['Username'] = $app.slug
                     $context['NodeID'] = $app.node_id
                     $context['DatabaseID'] = $app.id
+                    $context['Type'] = 'App'
                 }
                 default {
                     throw 'Failed to get info on the context. Unknown logon type.'
                 }
             }
-            Write-Verbose "Found user with username: [$contextName]"
+            Write-Verbose "Found [$($context['Type']) with login: [$contextName]"
 
             if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
                 Set-Context -ID "$($script:Config.Name)/$contextName" -Context $context
