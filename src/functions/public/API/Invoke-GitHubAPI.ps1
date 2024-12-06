@@ -84,7 +84,7 @@
 
     Write-Debug 'Invoking GitHub API...'
     Write-Debug 'Parameters:'
-    $PSBoundParameters.GetEnumerator() | ForEach-Object {
+    Get-FunctionParameter | ForEach-Object {
         Write-Debug " - $($_.Key): $($_.Value)"
     }
 
