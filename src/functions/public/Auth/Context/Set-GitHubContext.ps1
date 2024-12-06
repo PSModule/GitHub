@@ -58,6 +58,7 @@ function Set-GitHubContext {
         [string] $HostName,
 
         # Set the installation ID.
+        [Parameter()]
         [int] $InstallationID,
 
         # Set the enterprise name for the context.
@@ -105,6 +106,7 @@ function Set-GitHubContext {
             AuthClientID               = $AuthClientID               # Client ID for UAT
             AuthType                   = $AuthType                   # UAT / PAT / App / IAT
             ClientID                   = $ClientID                   # Client ID for GitHub Apps
+            InstallationID             = $InstallationID            # Installation ID
             DeviceFlowType             = $DeviceFlowType             # GitHubApp / OAuthApp
             HostName                   = $HostName                   # github.com / msx.ghe.com / github.local
             Enterprise                 = $Enterprise                 # Enterprise name
