@@ -45,6 +45,8 @@
         'PSUseShouldProcessForStateChangingFunctions', '',
         Justification = 'No state is changed.'
     )]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText', '',
+        Justification = 'The tokens are recieved as clear text. Mitigating exposure by removing variables and performing garbage collection.')]
     [CmdletBinding()]
     param(
         # The unique identifier of the installation.
@@ -72,6 +74,11 @@
     }
 
     Invoke-GitHubAPI @inputObject | ForEach-Object {
-        Write-Output $_.Response
+        [pscustomobject]@{
+            Token               = $_.Response.token | ConvertTo-SecureString -AsPlainText -Force
+            ExpiresAt           = $_.Response.expires_at.ToLocalTime()
+            Permissions         = $_.Response.permissions
+            RepositorySelection = $_.Response.repository_selection
+        }
     }
 }

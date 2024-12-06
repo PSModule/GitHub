@@ -74,7 +74,7 @@
     $Context | Assert-GitHubContext -AuthType 'App'
 
     try {
-        $contextData = @{
+        $defaultContextData = @{
             ApiBaseUri = $Context.ApiBaseUri
             ApiVersion = $Context.ApiVersion
             HostName   = $Context.HostName
@@ -96,42 +96,66 @@
         }
 
         foreach ($installation in $installations) {
+            $contextParams = $defaultContextData.Clone()
             $token = New-GitHubAppInstallationAccessToken -InstallationID $installation.id
-            $connectParams += @{
-                Token               = $token.token
-                TokenExpirationDate = ($token.expires_at).ToLocalTime()
+            $contextParams += @{
+                Token               = $token.Token
+                TokenExpirationDate = $token.ExpiresAt
             }
             switch ($installation.target_type) {
                 'User' {
-                    $connectParams['Owner'] = $installation.account.login
+                    $contextParams['Owner'] = $installation.account.login
                 }
                 'Organization' {
-                    $connectParams['Owner'] = $installation.account.login
+                    $contextParams['Owner'] = $installation.account.login
                 }
                 'Enterprise' {
-                    $connectParams['Enterprise'] = $installation.account.slug
+                    $contextParams['Enterprise'] = $installation.account.slug
                 }
             }
+            Write-Verbose 'Logging in using an installation access token...'
+            Write-Verbose ($contextParams | Format-Table | Out-String)
+            $tmpContext = Set-GitHubContext @contextParams -PassThru
+            Write-Verbose ($tmpContext | Format-List | Out-String)
+            if (-not $Silent) {
+                $name = $tmpContext.name
+                Write-Host "Connected $name"
+            }
+            Remove-Variable -Name tmpContext -ErrorAction SilentlyContinue
+            Remove-Variable -Name token -ErrorAction SilentlyContinue
         }
 
-        Write-Verbose 'Logging in using an installation access token...'
-        Write-Verbose ($contextData | Format-Table | Out-String)
-        $context = Set-GitHubContext @contextData -PassThru
-        Write-Verbose ($context | Format-List | Out-String)
-        if (-not $Silent) {
-            $name = $context.name
-            Write-Host "Connected $name"
-        }
     } catch {
         Write-Error $_
         Write-Error (Get-PSCallStack | Format-Table | Out-String)
         throw 'Failed to connect to GitHub using a GitHub App.'
     } finally {
-        Remove-Variable -Name tokenResponse -ErrorAction SilentlyContinue
-        Remove-Variable -Name context -ErrorAction SilentlyContinue
-        Remove-Variable -Name contextData -ErrorAction SilentlyContinue
-        Remove-Variable -Name Token -ErrorAction SilentlyContinue
         [System.GC]::Collect()
     }
     Write-Verbose "[$commandName] - End"
+}
+
+Register-ArgumentCompleter -CommandName Connect-GitHubApp -ParameterName User -ScriptBlock {
+    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
+    $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter
+
+    Get-GitHubAppInstallation | Where-Object { $_.target_type -eq 'User' -and $_.account.login -like "$wordToComplete*" } | ForEach-Object {
+        [System.Management.Automation.CompletionResult]::new($_.account.login, $_.account.login, 'ParameterValue', $_.account.login)
+    }
+}
+Register-ArgumentCompleter -CommandName Connect-GitHubApp -ParameterName Organization -ScriptBlock {
+    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
+    $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter
+
+    Get-GitHubAppInstallation | Where-Object { $_.target_type -eq 'Organization' -and $_.account.login -like "$wordToComplete*" } | ForEach-Object {
+        [System.Management.Automation.CompletionResult]::new($_.account.login, $_.account.login, 'ParameterValue', $_.account.login)
+    }
+}
+Register-ArgumentCompleter -CommandName Connect-GitHubApp -ParameterName Enterprise -ScriptBlock {
+    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
+    $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter
+
+    Get-GitHubAppInstallation | Where-Object { $_.target_type -eq 'Enterprise' -and $_.account.slug -like "$wordToComplete*" } | ForEach-Object {
+        [System.Management.Automation.CompletionResult]::new($_.account.slug, $_.account.slug, 'ParameterValue', $_.account.slug)
+    }
 }

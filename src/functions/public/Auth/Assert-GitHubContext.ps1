@@ -20,16 +20,14 @@
         )]
         [GitHubContext] $Context,
 
-        # The command that is being checked.
-        [Parameter(Mandatory)]
-        [string] $Command,
-
         # The required authtypes for the command.
         [Parameter(Mandatory)]
         [string[]] $AuthType
     )
 
+    $command = (Get-PSCallStack)[1].Command
+
     if ($Context.AuthType -notin $AuthType) {
-        throw "The context '$($Context.Name)' does not match the required AuthTypes [$AuthType] for [$Command]."
+        throw "The context '$($Context.Name)' does not match the required AuthTypes [$AuthType] for [$command]."
     }
 }
