@@ -125,17 +125,18 @@ function Set-GitHubContext {
             switch -Regex ($AuthType) {
                 'PAT|UAT|IAT' {
                     $viewer = Get-GitHubViewer -Context $tempContext
-                    $contextName = "$HostName/$($viewer.login)"
                     $context['Username'] = $viewer.login
                     $context['NodeID'] = $viewer.id
                     $context['DatabaseID'] = ($viewer.databaseId).ToString()
                 }
                 'PAT|UAT' {
+                    $contextName = "$HostName/$($viewer.login)"
                     $context['Name'] = $contextName
                     $context['Type'] = 'User'
                 }
                 'IAT' {
-                    $context['Name'] = "$contextName/$Owner"
+                    $contextName = "$HostName/$($viewer.login)/$Owner" -Replace '\[bot\]'
+                    $context['Name'] = $contextName
                     $context['Type'] = 'Installation'
                 }
                 'App' {
@@ -151,7 +152,7 @@ function Set-GitHubContext {
                     throw 'Failed to get info on the context. Unknown logon type.'
                 }
             }
-            Write-Verbose "Found user with username: [$contextName]"
+            Write-Verbose "Found [$($context['Type']) with login: [$contextName]"
 
             if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
                 Set-Context -ID "$($script:Config.Name)/$contextName" -Context $context
