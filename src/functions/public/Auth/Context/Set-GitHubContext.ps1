@@ -158,7 +158,7 @@ function Set-GitHubContext {
                     throw 'Failed to get info on the context. Unknown logon type.'
                 }
             }
-            Write-Verbose "Found [$($context['Type']) with login: [$contextName]"
+            Write-Verbose "Found [$($context['Type'])] with login: [$contextName]"
 
             if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
                 Set-Context -ID "$($script:Config.Name)/$contextName" -Context $context
