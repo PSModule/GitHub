@@ -1,4 +1,13 @@
-﻿class GitHubContext {
+﻿class GitHubContext : Context {
+    # The GitHub Context Name.
+    # HostName/Username or HostName/AppSlug
+    # github.com/Octocat
+    [string] $Name
+
+    # The API hostname.
+    # github.com / msx.ghe.com / github.local
+    [string] $HostName
+
     # The API base URI.
     # https://api.github.com
     [string] $ApiBaseUri
@@ -7,24 +16,13 @@
     # 2022-11-28
     [string] $ApiVersion
 
-    # The authentication client ID.
-    # Client ID for UAT
-    [string] $AuthClientID
+    # The context type
+    # User / App / Installation
+    [string] $Type
 
     # The authentication type.
     # UAT / PAT / App / IAT
     [string] $AuthType
-
-    # Client ID for GitHub Apps
-    [string] $ClientID
-
-    # The device flow type.
-    # GitHubApp / OAuthApp
-    [string] $DeviceFlowType
-
-    # The API hostname.
-    # github.com / msx.ghe.com / github.local
-    [string] $HostName
 
     # User ID / App ID as GraphQL Node ID
     [string] $NodeID
@@ -32,22 +30,26 @@
     # The Database ID of the context.
     [string] $DatabaseID
 
-    # The context ID.
-    # HostName/Username or HostName/AppSlug
-    # Context:PSModule.Github/github.com/Octocat
-    [string] $ID
-
-    # The GitHub Context Name.
-    # HostName/Username or HostName/AppSlug
-    # github.com/Octocat
-    [string] $Name
-
-    # The context type
-    # User / App / Installation
-    [string] $Type
 
     # The user name.
     [string] $UserName
+
+    # The access token.
+    [securestring] $Token
+
+
+    #--------------------------------------------------
+
+    # The authentication client ID.
+    # Client ID for UAT
+    [string] $AuthClientID
+
+    # Client ID for GitHub Apps
+    [string] $ClientID
+
+    # The device flow type.
+    # GitHubApp / OAuthApp
+    [string] $DeviceFlowType
 
     # The default value for the Enterprise parameter.
     [string] $Enterprise
@@ -66,8 +68,6 @@
     # ghu / gho / ghp / github_pat / PEM / ghs /
     [string] $TokenType
 
-    # The access token.
-    [securestring] $Token
 
     # The token expiration date.
     # 2024-01-01-00:00:00
@@ -83,21 +83,7 @@
     # 2024-01-01-00:00:00
     [datetime] $RefreshTokenExpirationDate
 
-    GitHubContext([string]$ID) {
-        $this.ID = $ID
-    }
-
-    GitHubContext([hashtable]$Properties) {
-        foreach ($Property in $Properties.Keys) {
-            $this.$Property = $Properties.$Property
-        }
-    }
-
-    GitHubContext([PSCustomObject]$Object) {
-        $Object.PSObject.Properties | ForEach-Object {
-            $this.($_.Name) = $_.Value
-        }
-    }
+    GitHubContext() : Base([string]$ID) {}
 
     [string] ToString() {
         return $this.Name

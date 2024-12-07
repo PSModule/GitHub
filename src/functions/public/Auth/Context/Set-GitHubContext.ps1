@@ -1,5 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '4.0.0' }
-
+﻿#TODO: Add help
 function Set-GitHubContext {
     <#
         .SYNOPSIS

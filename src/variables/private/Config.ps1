@@ -1,3 +1,4 @@
 ﻿$script:Config = @{
-    Name = 'PSModule.GitHub' # $script:Config.Name
+    Initialized = $false            # $script:Config.Initialized
+    Name        = 'PSModule.GitHub' # $script:Config.Name
 }

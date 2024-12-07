@@ -1,6 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '4.0.0' }
-
-function Get-GitHubConfig {
+﻿function Get-GitHubConfig {
     <#
         .SYNOPSIS
         Get a GitHub module configuration.
@@ -24,14 +22,15 @@ function Get-GitHubConfig {
     begin {
         $commandName = $MyInvocation.MyCommand.Name
         Write-Verbose "[$commandName] - Start"
+        $moduleContext = Get-Context -ID $script:Config.Name
     }
 
     process {
         if (-not $Name) {
-            return Get-Context -ID $script:Config.Name
+            return $moduleContext
         }
 
-        Get-ContextSetting -Name $Name -ID $script:Config.Name
+        $moduleContext.$Name
     }
 
     end {
