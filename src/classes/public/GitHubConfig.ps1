@@ -1,9 +1,10 @@
 ﻿class GitHubConfig : Context {
-    [string] $DefaultHostName
-    [string] $RunEnv
+    [int] $AccessTokenGracePeriodInHours
+    [string] $DefaultContext
     [string] $DefaultGitHubAppClientID
+    [string] $DefaultHostName
     [string] $DefaultOAuthAppClientID
-    [string] $AccessTokenGracePeriodInHours
+    [string] $RunEnv
 
     GitHubConfig() : Base([string]$ID) {}
 }
