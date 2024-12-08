@@ -37,7 +37,7 @@ function Get-GitHubConfig {
 
     process {
         if (-not $Name) {
-            $script:GitHub.Config
+            return $script:GitHub.Config
         }
 
         $script:GitHub.Config.$Name

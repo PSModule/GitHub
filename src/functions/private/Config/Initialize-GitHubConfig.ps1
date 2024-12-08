@@ -22,7 +22,7 @@
             if (-not $context) {
                 $context = Set-Context -ID $script:GitHub.Config.ID -Context $script:GitHub.Config -PassThru
             }
-            $script:GitHub.Config = $context
+            $script:GitHub.Config = [GitHubConfig]$context
             $script:GitHub.Initialized = $true
         } catch {
             Write-Error $_
