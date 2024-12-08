@@ -1,4 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '4.0.5' }
+﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '5.0.0' }
 
 function Get-GitHubConfig {
     <#
@@ -13,7 +13,7 @@ function Get-GitHubConfig {
 
         Get the DefaultUser value from the GitHub module configuration.
     #>
-    [OutputType([void])]
+    [OutputType([object])]
     [CmdletBinding()]
     param(
         # The name of the configuration to get.
@@ -24,15 +24,23 @@ function Get-GitHubConfig {
     begin {
         $commandName = $MyInvocation.MyCommand.Name
         Write-Verbose "[$commandName] - Start"
-        $moduleContext = Get-Context -ID $script:Config.Name
+        try {
+            if (-not $script:Config.Initialized) {
+                Initialize-GitHubConfig
+                Write-Debug "Connected to context [$($script:Config.Name)]"
+            }
+        } catch {
+            Write-Error $_
+            throw 'Failed to initialize secret vault'
+        }
     }
 
     process {
         if (-not $Name) {
-            return $moduleContext
+            $script:GitHub.Config
         }
 
-        $moduleContext.$Name
+        $script:GitHub.Config.$Name
     }
 
     end {

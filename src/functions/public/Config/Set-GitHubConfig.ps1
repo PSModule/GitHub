@@ -1,4 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '4.0.5' }
+﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '5.0.0' }
 
 function Set-GitHubConfig {
     <#
@@ -24,7 +24,33 @@ function Set-GitHubConfig {
         [string] $Value
     )
 
-    if ($PSCmdlet.ShouldProcess('ContextSetting', 'Set')) {
-        Set-ContextSetting -Name $Name -Value $Value -ID $script:Config.Name
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Verbose "[$commandName] - Start"
+        try {
+            if (-not $script:Config.Initialized) {
+                Initialize-GitHubConfig
+                Write-Debug "Connected to context [$($script:Config.Name)]"
+            }
+        } catch {
+            Write-Error $_
+            throw 'Failed to initialize secret vault'
+        }
+    }
+
+    process {
+        $script:GitHub.Config.$Name = $Value
+        try {
+            if ($PSCmdlet.ShouldProcess('ContextSetting', 'Set')) {
+                Set-Context -ID $script:GitHub.Config.ID -Context $script:GitHub.Config
+            }
+        } catch {
+            Write-Error $_
+            throw 'Failed to set GitHub module configuration.'
+        }
+    }
+
+    end {
+        Write-Verbose "[$commandName] - End"
     }
 }
