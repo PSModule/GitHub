@@ -45,6 +45,7 @@ function Get-GitHubContext {
             Write-Verbose "Getting available contexts for [$ID]"
         }
         'ListAvailableContexts' {
+            Write-Debug "ListAvailable: [$ListAvailable]"
             $ID = "$($script:GitHub.Config.ID)/*"
             Write-Verbose "Getting available contexts for [$ID]"
         }
@@ -60,13 +61,13 @@ function Get-GitHubContext {
     Get-Context -ID $ID | ForEach-Object {
         switch ($_.Type) {
             'User' {
-                [GitHubUserContext]$_
+                [UserGitHubContext]$_
             }
             'App' {
-                [GitHubAppContext]$_
+                [AppGitHubContext]$_
             }
             'Installation' {
-                [GitHubInstallationContext]$_
+                [InstallationGitHubContext]$_
             }
         }
     }

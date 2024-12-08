@@ -13,7 +13,7 @@ function Get-GitHubConfig {
 
         Get the DefaultContext value from the GitHub module configuration.
     #>
-    [OutputType([object])]
+    [OutputType([object], [GitHubConfig])]
     [CmdletBinding()]
     param(
         # The name of the configuration to get.
@@ -37,7 +37,7 @@ function Get-GitHubConfig {
 
     process {
         if (-not $Name) {
-            return $script:GitHub.Config
+            return [GitHubConfig]($script:GitHub.Config)
         }
 
         $script:GitHub.Config.$Name
