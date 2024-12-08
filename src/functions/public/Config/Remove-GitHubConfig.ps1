@@ -29,7 +29,7 @@ function Remove-GitHubConfig {
     process {
         try {
             if ($PSCmdlet.ShouldProcess('ContextSetting', 'Remove')) {
-                $moduleContext.PSObject.Properties.Remove($Name)
+                $moduleContext.$Name = $null
             }
         } catch {
             Write-Error $_
