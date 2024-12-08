@@ -9,9 +9,9 @@ function Get-GitHubConfig {
         Get a GitHub module configuration.
 
         .EXAMPLE
-        Get-GitHubConfig -Name DefaultUser
+        Get-GitHubConfig -Name DefaultContext
 
-        Get the DefaultUser value from the GitHub module configuration.
+        Get the DefaultContext value from the GitHub module configuration.
     #>
     [OutputType([object])]
     [CmdletBinding()]

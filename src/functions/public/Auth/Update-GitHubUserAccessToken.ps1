@@ -36,8 +36,6 @@
     )
 
     $Context = Resolve-GitHubContext -Context $Context
-    $gitHubConfig = Get-GitHubConfig
-
     Write-Verbose "Reusing previously stored ClientID: [$($Context.AuthClientID)]"
     $authClientID = $Context.AuthClientID
     $accessTokenValidity = [datetime]($Context.TokenExpirationDate) - (Get-Date)
@@ -47,7 +45,7 @@
     $seconds = $accessTokenValidity.Seconds.ToString().PadLeft(2, '0')
     $accessTokenValidityText = "$hours`:$minutes`:$seconds"
     if ($accessTokenIsValid) {
-        if ($accessTokenValidity.TotalHours -gt $gitHubConfig.AccessTokenGracePeriodInHours) {
+        if ($accessTokenValidity.TotalHours -gt $script:GitHub.Config.AccessTokenGracePeriodInHours) {
             if (-not $Silent) {
                 Write-Host '✓ ' -ForegroundColor Green -NoNewline
                 Write-Host "Access token is still valid for $accessTokenValidityText ..."

@@ -149,9 +149,8 @@
             $Token = ConvertFrom-SecureString $Token -AsPlainText
         }
 
-        $gitHubConfig = Get-GitHubConfig
         if (-not $HostName) {
-            $HostName = $gitHubConfig.DefaultHostName
+            $HostName = $script:GitHub.Config.HostName
         }
         $HostName = $HostName -replace '^https?://'
         $ApiBaseUri = "https://api.$HostName"
@@ -189,10 +188,22 @@
                     Write-Verbose "Using provided ClientID: [$ClientID]"
                     $authClientID = $ClientID
                 } else {
-                    Write-Verbose "Using default ClientID: [$($gitHubConfig."Default$Mode`ClientID")]"
-                    $authClientID = $($gitHubConfig."Default$Mode`ClientID")
+                    switch ($Mode) {
+                        'GitHubApp' {
+                            Write-Verbose "Using default ClientID: [$($script:GitHub.Config.GitHubAppClientID)']"
+                            $authClientID = $($script:GitHub.Config.GitHubAppClientID)
+                        }
+                        'OAuthApp' {
+                            Write-Verbose "Using default ClientID: [$($script:GitHub.Config.OAuthAppClientID)]"
+                            $authClientID = $($script:GitHub.Config.OAuthAppClientID)
+                        }
+                        default {
+                            Write-Warning '⚠ ' -ForegroundColor Yellow -NoNewline
+                            Write-Warning "Unexpected authentication mode: $Mode"
+                            return
+                        }
+                    }
                 }
-
                 Write-Verbose "Using $Mode authentication..."
                 $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $authClientID -Scope $Scope -HostName $HostName
 

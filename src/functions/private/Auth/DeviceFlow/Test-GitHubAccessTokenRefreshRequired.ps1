@@ -21,11 +21,9 @@
     )
 
     $Context = Resolve-GitHubContext -Context $Context
-
-    $gitHubConfig = Get-GitHubConfig
     $tokenExpirationDate = $Context.TokenExpirationDate
     $currentDateTime = Get-Date
     $remainingDuration = [datetime]$tokenExpirationDate - $currentDateTime
 
-    $remainingDuration.TotalHours -lt $gitHubConfig.AccessTokenGracePeriodInHours
+    $remainingDuration.TotalHours -lt $script:GitHub.Config.AccessTokenGracePeriodInHours
 }
