@@ -2,14 +2,13 @@
 @{
     #CustomRulePath='path\to\CustomRuleModule.psm1'
     #RecurseCustomRulePath='path\of\customrules'
-    #Severity = @(
-    #    'Error'
-    #    'Warning'
-    #)
+    Severity     = @(
+        'Error'
+        'Warning'
+    )
     #IncludeDefaultRules=${true}
     ExcludeRules = @(
         'PSMissingModuleManifestField'
-        'TypeNotFound'
     )
     #IncludeRules = @(
     #    'PSAvoidUsingWriteHost',
