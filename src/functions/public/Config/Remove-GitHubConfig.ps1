@@ -20,18 +20,26 @@ function Remove-GitHubConfig {
         [string] $Name
     )
 
-    $commandName = $MyInvocation.MyCommand.Name
-    Write-Verbose "[$commandName] - Start"
-
-    try {
-        if ($PSCmdlet.ShouldProcess('ContextSetting', 'Remove')) {
-            Remove-ContextSetting -Name $Name -ID $script:Config.Name
-        }
-    } catch {
-        Write-Error $_
-        Write-Error (Get-PSCallStack | Format-Table | Out-String)
-        throw 'Failed to connect to GitHub.'
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Verbose "[$commandName] - Start"
+        $moduleContext = Get-Context -ID $script:Config.Name
     }
 
-    Write-Verbose "[$commandName] - End"
+    process {
+        try {
+            if ($PSCmdlet.ShouldProcess('ContextSetting', 'Remove')) {
+                $moduleContext.PSObject.Properties.Remove($Name)
+            }
+        } catch {
+            Write-Error $_
+            Write-Error (Get-PSCallStack | Format-Table | Out-String)
+            throw 'Failed to connect to GitHub.'
+        }
+        Set-Context -ID $script:Config.Name -Context $moduleContext
+    }
+
+    end {
+        Write-Verbose "[$commandName] - End"
+    }
 }
