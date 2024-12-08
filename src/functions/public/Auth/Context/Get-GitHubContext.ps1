@@ -18,7 +18,7 @@ function Get-GitHubContext {
         Justification = 'Encapsulated in a function. Never leaves as a plain text.'
     )]
     [OutputType([GitHubContext])]
-    [CmdletBinding(DefaultParameterSetName = 'CurrentContext')]
+    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(
         # The name of the context.
         [Parameter(
@@ -39,18 +39,22 @@ function Get-GitHubContext {
     $commandName = $MyInvocation.MyCommand.Name
     Write-Verbose "[$commandName] - Start"
 
-    if ($ListAvailable) {
-        $ID = "$($script:GitHub.Config.ID)/*"
-        Write-Verbose "Getting available contexts for [$ID]"
-    } elseif ($Context) {
-        $ID = "$($script:GitHub.Config.ID)/$Context"
-        Write-Verbose "Getting available contexts for [$ID]"
-    } else {
-        $ID = "$($script:GitHub.Config.ID)/$($script:GitHub.Config.DefaultContext)"
-        if ([string]::IsNullOrEmpty($ID)) {
-            throw "No default GitHub context found. Please run 'Set-GitHubDefaultContext' or 'Connect-GitHub' to configure a GitHub context."
+    switch ($PSCmdlet.ParameterSetName) {
+        'NamedContext' {
+            $ID = "$($script:GitHub.Config.ID)/$Context"
+            Write-Verbose "Getting available contexts for [$ID]"
         }
-        Write-Verbose "Getting the default context: [$ID]"
+        'ListAvailableContexts' {
+            $ID = "$($script:GitHub.Config.ID)/*"
+            Write-Verbose "Getting available contexts for [$ID]"
+        }
+        '__AllParameterSets' {
+            $ID = "$($script:GitHub.Config.ID)/$($script:GitHub.Config.DefaultContext)"
+            if ([string]::IsNullOrEmpty($ID)) {
+                throw "No default GitHub context found. Please run 'Set-GitHubDefaultContext' or 'Connect-GitHub' to configure a GitHub context."
+            }
+            Write-Verbose "Getting the default context: [$ID]"
+        }
     }
 
     Get-Context -ID $ID | ForEach-Object {
