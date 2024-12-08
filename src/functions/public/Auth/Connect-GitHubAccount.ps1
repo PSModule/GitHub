@@ -158,11 +158,11 @@
 
         # If running on GitHub Actions and no access token is provided, use the GitHub token.
         if (($env:GITHUB_ACTIONS -eq 'true') -and $PSCmdlet.ParameterSetName -ne 'App') {
-            $tokenNotProvided = [string]::IsNullOrEmpty($Token)
+            $tokenNotProvided = (-not [string]::IsNullOrEmpty($Token))
             $gitHubToken = $env:GH_TOKEN ?? $env:GITHUB_TOKEN
             $gitHubTokenPresent = -not [string]::IsNullOrEmpty($gitHubToken)
-            Write-Verbose "Token not provided:    [$tokenNotProvided]"
-            Write-Verbose "GitHub token present:  [$gitHubTokenPresent]"
+            Write-Verbose "A token was provided:  [$tokenNotProvided]"
+            Write-Verbose "Detected GitHub token: [$gitHubTokenPresent]"
             if ($tokenNotProvided -and $gitHubTokenPresent) {
                 $authType = 'Token'
                 $Token = $gitHubToken

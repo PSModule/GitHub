@@ -24,25 +24,31 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-
-    $commandName = $MyInvocation.MyCommand.Name
-    Write-Verbose "[$commandName] - Start"
-
-    $gitExists = Get-Command -Name 'git' -ErrorAction SilentlyContinue
-    if (-not $gitExists) {
-        throw 'Git is not installed. Please install Git before running this command.'
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Verbose "[$commandName] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
     }
 
-    $username = $Context.UserName
-    $id = $Context.DatabaseID
-    $token = $Context.Token | ConvertFrom-SecureString -AsPlainText
-    $hostName = $Context.HostName
+    process {
+        $gitExists = Get-Command -Name 'git' -ErrorAction SilentlyContinue
+        if (-not $gitExists) {
+            throw 'Git is not installed. Please install Git before running this command.'
+        }
 
-    if ($PSCmdlet.ShouldProcess("$Name", 'Set Git configuration')) {
-        git config --local user.name "$username"
-        git config --local user.email "$id+$username@users.noreply.github.com"
-        git config --local "url.https://oauth2:$token@$hostName.insteadOf" "https://$hostName"
+        $username = $Context.UserName
+        $id = $Context.DatabaseID
+        $token = $Context.Token | ConvertFrom-SecureString -AsPlainText
+        $hostName = $Context.HostName
+
+        if ($PSCmdlet.ShouldProcess("$Name", 'Set Git configuration')) {
+            git config --local user.name "$username"
+            git config --local user.email "$id+$username@users.noreply.github.com"
+            git config --local "url.https://oauth2:$token@$hostName.insteadOf" "https://$hostName"
+        }
+    }
+
+    end {
         Write-Verbose "[$commandName] - End"
     }
 }

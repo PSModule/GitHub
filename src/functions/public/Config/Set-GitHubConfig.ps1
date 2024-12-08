@@ -39,6 +39,7 @@ function Set-GitHubConfig {
     }
 
     process {
+        Write-Debug "Setting [$Name] to [$Value]"
         $script:GitHub.Config.$Name = $Value
         try {
             if ($PSCmdlet.ShouldProcess('ContextSetting', 'Set')) {
