@@ -64,6 +64,12 @@ function Get-GitHubContext {
             }
         }
 
+        Write-Verbose "All Contexts:"
+        Get-Context | Format-Table | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+
+        Write-Verbose "Specific Contexts:"
+        Get-Context -ID $ID | Format-Table | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+
         Get-Context -ID $ID | ForEach-Object {
             switch ($_.Type) {
                 'User' {
