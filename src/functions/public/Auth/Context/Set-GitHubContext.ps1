@@ -90,6 +90,7 @@ function Set-GitHubContext {
                 }
             }
             Write-Verbose "Found [$($context['Type'])] with login: [$($context['Name'])]"
+            $Context | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
 
             if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
                 Set-Context -ID "$($script:GitHub.Config.ID)/$($context['Name'])" -Context $context
