@@ -49,10 +49,10 @@ function Set-GitHubContext {
 
         # Run functions to get info on the temporary context.
         try {
-            Write-Verbose "Getting info on the context [$AuthType]."
-            switch -Regex ($AuthType) {
+            Write-Verbose "Getting info on the context [$($Context.AuthType)]."
+            switch -Regex ($($Context.AuthType)) {
                 'PAT|UAT|IAT' {
-                    $viewer = Get-GitHubViewer -Context $tempContext
+                    $viewer = Get-GitHubViewer -Context $Context
                     $login = $viewer.login
                     $context += @{
                         Username   = $login
@@ -77,7 +77,7 @@ function Set-GitHubContext {
                     $contextObj = [InstallationGitHubContext]$context
                 }
                 'App' {
-                    $app = Get-GitHubApp -Context $tempContext
+                    $app = Get-GitHubApp -Context $Context
                     $contextName = "$HostName/$($app.slug)"
                     $context += @{
                         Name       = $contextName
@@ -92,18 +92,18 @@ function Set-GitHubContext {
                     throw 'Failed to get info on the context. Unknown logon type.'
                 }
             }
-            Write-Verbose "Found [$($contextObj.Type)] with login: [$contextName]"
+            Write-Verbose "Found [$($contextObj.Type)] with login: [$($contextObj.Name)]"
 
             if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
-                Set-Context -ID "$($script:GitHub.Config.ID)/$contextName" -Context $contextObj
+                Set-Context -ID "$($script:GitHub.Config.ID)/$($contextObj.Name)" -Context $contextObj
                 if ($Default) {
-                    Set-GitHubDefaultContext -Context $contextName
+                    Set-GitHubDefaultContext -Context $($contextObj.Name)
                     if ($AuthType -eq 'IAT' -and $script:GitHub.EnvironmentType -eq 'GHA') {
-                        Set-GitHubGitConfig -Context $contextName
+                        Set-GitHubGitConfig -Context $($contextObj.Name)
                     }
                 }
                 if ($PassThru) {
-                    Get-GitHubContext -Context $contextName
+                    Get-GitHubContext -Context $($contextObj.Name)
                 }
             }
         } catch {
