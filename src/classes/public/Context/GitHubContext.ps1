@@ -49,6 +49,9 @@
     # The default value for the Repo parameter.
     [string] $Repo
 
+    # Simple parameterless constructor
+    GitHubContext() {}
+
     [string] ToString() {
         return $this.Name
     }

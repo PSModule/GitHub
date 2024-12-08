@@ -14,6 +14,6 @@
     # The default OAuth app client ID.
     [string] $OAuthAppClientID
 
-    # Simple constructor that initializes the context ID.
-    GitHubConfig() : Base([string]$ID) {}
+    # Simple parameterless constructor
+    GitHubConfig() {}
 }
