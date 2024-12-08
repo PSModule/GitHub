@@ -28,9 +28,9 @@ function Set-GitHubConfig {
         $commandName = $MyInvocation.MyCommand.Name
         Write-Verbose "[$commandName] - Start"
         try {
-            if (-not $script:Config.Initialized) {
+            if (-not $script:GitHub.Initialized) {
                 Initialize-GitHubConfig
-                Write-Debug "Connected to context [$($script:Config.Name)]"
+                Write-Debug "Connected to context [$($script:GitHub.Config.ID)]"
             }
         } catch {
             Write-Error $_

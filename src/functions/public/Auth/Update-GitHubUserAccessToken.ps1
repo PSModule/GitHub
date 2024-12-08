@@ -76,7 +76,7 @@
     }
     $Context.Token = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
     $Context.TokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.expires_in)
-    $Context.TokenType = $tokenResponse.access_token -replace $script:Auth.TokenPrefixPattern
+    $Context.TokenType = $tokenResponse.access_token -replace $script:GitHub.TokenPrefixPattern
     $Context.RefreshToken = ConvertTo-SecureString -AsPlainText $tokenResponse.refresh_token
     $Context.RefreshTokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.refresh_token_expires_in)
 

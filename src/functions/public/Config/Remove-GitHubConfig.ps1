@@ -23,20 +23,28 @@ function Remove-GitHubConfig {
     begin {
         $commandName = $MyInvocation.MyCommand.Name
         Write-Verbose "[$commandName] - Start"
-        $moduleContext = Get-Context -ID $script:Config.Name
+        try {
+            if (-not $script:GitHub.Initialized) {
+                Initialize-GitHubConfig
+                Write-Debug "Connected to context [$($script:GitHub.Config.ID)]"
+            }
+        } catch {
+            Write-Error $_
+            throw 'Failed to initialize secret vault'
+        }
     }
 
     process {
         try {
             if ($PSCmdlet.ShouldProcess('ContextSetting', 'Remove')) {
-                $moduleContext.$Name = $null
+                $script:GitHub.Config.$Name = $null
             }
         } catch {
             Write-Error $_
             Write-Error (Get-PSCallStack | Format-Table | Out-String)
             throw 'Failed to connect to GitHub.'
         }
-        Set-Context -ID $script:Config.Name -Context $moduleContext
+        Set-Context -ID $script:GitHub.Config.ID -Context $script:GitHub.Config
     }
 
     end {

@@ -23,7 +23,7 @@
                 $context = Set-Context -ID $script:GitHub.Config.ID -Context $script:GitHub.Config -PassThru
             }
             $script:GitHub.Config = $context
-            $script:Config.Initialized = $true
+            $script:GitHub.Initialized = $true
         } catch {
             Write-Error $_
             throw 'Failed to initialize GitHub config'

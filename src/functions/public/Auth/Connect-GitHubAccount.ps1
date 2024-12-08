@@ -201,7 +201,7 @@
                         $contextData += @{
                             Token                      = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
                             TokenExpirationDate        = (Get-Date).AddSeconds($tokenResponse.expires_in)
-                            TokenType                  = $tokenResponse.access_token -replace $script:Auth.TokenPrefixPattern
+                            TokenType                  = $tokenResponse.access_token -replace $script:GitHub.TokenPrefixPattern
                             AuthClientID               = $authClientID
                             DeviceFlowType             = $Mode
                             RefreshToken               = ConvertTo-SecureString -AsPlainText $tokenResponse.refresh_token
@@ -212,7 +212,7 @@
                     'OAuthApp' {
                         $contextData += @{
                             Token          = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
-                            TokenType      = $tokenResponse.access_token -replace $script:Auth.TokenPrefixPattern
+                            TokenType      = $tokenResponse.access_token -replace $script:GitHub.TokenPrefixPattern
                             AuthClientID   = $authClientID
                             DeviceFlowType = $Mode
                             Scope          = $tokenResponse.scope
@@ -240,14 +240,14 @@
                 Start-Process "https://$HostName/settings/tokens"
                 $accessTokenValue = Read-Host -Prompt 'Enter your personal access token' -AsSecureString
                 $Token = ConvertFrom-SecureString $accessTokenValue -AsPlainText
-                $tokenType = $Token -replace $script:Auth.TokenPrefixPattern
+                $tokenType = $Token -replace $script:GitHub.TokenPrefixPattern
                 $contextData += @{
                     Token     = ConvertTo-SecureString -AsPlainText $Token
                     TokenType = $tokenType
                 }
             }
             'Token' {
-                $tokenType = $Token -replace $script:Auth.TokenPrefixPattern
+                $tokenType = $Token -replace $script:GitHub.TokenPrefixPattern
                 switch -Regex ($tokenType) {
                     'ghp|github_pat' {
                         $contextData += @{

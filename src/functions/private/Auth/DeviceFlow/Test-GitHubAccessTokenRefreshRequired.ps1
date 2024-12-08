@@ -27,6 +27,5 @@
     $currentDateTime = Get-Date
     $remainingDuration = [datetime]$tokenExpirationDate - $currentDateTime
 
-    # If the remaining time is less that $script:Auth.AccessTokenGracePeriodInHours then the token should be refreshed
     $remainingDuration.TotalHours -lt $gitHubConfig.AccessTokenGracePeriodInHours
 }

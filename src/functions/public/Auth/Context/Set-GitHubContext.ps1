@@ -162,10 +162,10 @@ function Set-GitHubContext {
             Write-Verbose "Found [$($context['Type'])] with login: [$contextName]"
 
             if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
-                Set-Context -ID "$($script:Config.Name)/$contextName" -Context $context
+                Set-Context -ID "$($script:GitHub.Config.ID)/$contextName" -Context $context
                 if ($Default) {
                     Set-GitHubDefaultContext -Context $contextName
-                    if ($AuthType -eq 'IAT' -and $script:runEnv -eq 'GHA') {
+                    if ($AuthType -eq 'IAT' -and $script:GitHub.EnvironmentType -eq 'GHA') {
                         Set-GitHubGitConfig -Context $contextName
                     }
                 }
