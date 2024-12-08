@@ -27,7 +27,7 @@ function Set-GitHubContext {
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The GitHub context to save in the vault.
-        [GitHubContext] $Context,
+        [hashtable] $Context,
 
         # Set as the default context.
         [Parameter()]
@@ -54,40 +54,48 @@ function Set-GitHubContext {
                 'PAT|UAT|IAT' {
                     $viewer = Get-GitHubViewer -Context $tempContext
                     $login = $viewer.login
-                    $context.Username = $login
-                    $context.NodeID = $viewer.id
-                    $context.DatabaseID = ($viewer.databaseId).ToString()
+                    $context += @{
+                        Username   = $login
+                        NodeID     = $viewer.id
+                        DatabaseID = ($viewer.databaseId).ToString()
+                    }
                 }
                 'PAT|UAT' {
                     $contextName = "$HostName/$login"
-                    $context.Name = $contextName
-                    $context.Type = 'User'
-                    $context = [UserGitHubContext]$context
+                    $context += @{
+                        Name = $contextName
+                        Type = 'User'
+                    }
+                    $contextObj = [UserGitHubContext]$context
                 }
                 'IAT' {
                     $contextName = "$HostName/$login/$Owner" -Replace '\[bot\]'
-                    $context.Name = $contextName
-                    $context.Type = 'Installation'
-                    $context = [InstallationGitHubContext]$context
+                    $context += @{
+                        Name = $contextName
+                        Type = 'Installation'
+                    }
+                    $contextObj = [InstallationGitHubContext]$context
                 }
                 'App' {
                     $app = Get-GitHubApp -Context $tempContext
                     $contextName = "$HostName/$($app.slug)"
-                    $context.Name = $contextName
-                    $context.Username = $app.slug
-                    $context.NodeID = $app.node_id
-                    $context.DatabaseID = $app.id
-                    $context.Type = 'App'
-                    $context = [AppGitHubContext]$context
+                    $context += @{
+                        Name       = $contextName
+                        Username   = $app.slug
+                        NodeID     = $app.node_id
+                        DatabaseID = $app.id
+                        Type       = 'App'
+                    }
+                    $contextObj = [AppGitHubContext]$context
                 }
                 default {
                     throw 'Failed to get info on the context. Unknown logon type.'
                 }
             }
-            Write-Verbose "Found [$($context.Type)] with login: [$contextName]"
+            Write-Verbose "Found [$($contextObj.Type)] with login: [$contextName]"
 
             if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
-                Set-Context -ID "$($script:GitHub.Config.ID)/$contextName" -Context $context
+                Set-Context -ID "$($script:GitHub.Config.ID)/$contextName" -Context $contextObj
                 if ($Default) {
                     Set-GitHubDefaultContext -Context $contextName
                     if ($AuthType -eq 'IAT' -and $script:GitHub.EnvironmentType -eq 'GHA') {

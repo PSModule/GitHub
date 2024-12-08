@@ -169,7 +169,7 @@
             }
         }
 
-        $context = [GitHubContext]@{
+        $context = @{
             ApiBaseUri = $ApiBaseUri
             ApiVersion = $ApiVersion
             HostName   = $HostName
@@ -209,21 +209,25 @@
 
                 switch ($Mode) {
                     'GitHubApp' {
-                        $context.Token = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
-                        $context.TokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.expires_in)
-                        $context.TokenType = $tokenResponse.access_token -replace $script:GitHub.TokenPrefixPattern
-                        $context.AuthClientID = $authClientID
-                        $context.DeviceFlowType = $Mode
-                        $context.RefreshToken = ConvertTo-SecureString -AsPlainText $tokenResponse.refresh_token
-                        $context.RefreshTokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.refresh_token_expires_in)
-                        $context.Scope = $tokenResponse.scope
+                        $context += @{
+                            Token                      = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
+                            TokenExpirationDate        = (Get-Date).AddSeconds($tokenResponse.expires_in)
+                            TokenType                  = $tokenResponse.access_token -replace $script:GitHub.TokenPrefixPattern
+                            AuthClientID               = $authClientID
+                            DeviceFlowType             = $Mode
+                            RefreshToken               = ConvertTo-SecureString -AsPlainText $tokenResponse.refresh_token
+                            RefreshTokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.refresh_token_expires_in)
+                            Scope                      = $tokenResponse.scope
+                        }
                     }
                     'OAuthApp' {
-                        $context.Token = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
-                        $context.TokenType = $tokenResponse.access_token -replace $script:GitHub.TokenPrefixPattern
-                        $context.AuthClientID = $authClientID
-                        $context.DeviceFlowType = $Mode
-                        $context.Scope = $tokenResponse.scope
+                        $context += @{
+                            Token          = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
+                            TokenType      = $tokenResponse.access_token -replace $script:GitHub.TokenPrefixPattern
+                            AuthClientID   = $authClientID
+                            DeviceFlowType = $Mode
+                            Scope          = $tokenResponse.scope
+                        }
                     }
                     default {
                         Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
@@ -234,9 +238,11 @@
             }
             'App' {
                 Write-Verbose 'Logging in as a GitHub App...'
-                $context.Token = ConvertTo-SecureString -AsPlainText $PrivateKey
-                $context.TokenType = 'PEM'
-                $context.ClientID = $ClientID
+                $context += @{
+                    Token     = ConvertTo-SecureString -AsPlainText $PrivateKey
+                    TokenType = 'PEM'
+                    ClientID  = $ClientID
+                }
             }
             'PAT' {
                 Write-Debug "UseAccessToken is set to [$UseAccessToken]. Using provided access token..."
@@ -246,22 +252,28 @@
                 $accessTokenValue = Read-Host -Prompt 'Enter your personal access token' -AsSecureString
                 $Token = ConvertFrom-SecureString $accessTokenValue -AsPlainText
                 $tokenType = $Token -replace $script:GitHub.TokenPrefixPattern
-                $context.Token = ConvertTo-SecureString -AsPlainText $Token
-                $context.TokenType = $tokenType
+                $context += @{
+                    Token     = ConvertTo-SecureString -AsPlainText $Token
+                    TokenType = $tokenType
+                }
             }
             'Token' {
                 $tokenType = $Token -replace $script:GitHub.TokenPrefixPattern
                 switch -Regex ($tokenType) {
                     'ghp|github_pat' {
-                        $context.Token = ConvertTo-SecureString -AsPlainText $Token
-                        $context.TokenType = $tokenType
-                        $context.AuthType = 'PAT'
+                        $context += @{
+                            Token     = ConvertTo-SecureString -AsPlainText $Token
+                            TokenType = $tokenType
+                        }
+                        $context['AuthType'] = 'PAT'
                     }
                     'ghs' {
                         Write-Verbose 'Logging in using an installation access token...'
-                        $context.Token = ConvertTo-SecureString -AsPlainText $Token
-                        $context.TokenType = $tokenType
-                        $context.AuthType = 'IAT'
+                        $context += @{
+                            Token     = ConvertTo-SecureString -AsPlainText $Token
+                            TokenType = $tokenType
+                        }
+                        $context['AuthType'] = 'IAT'
                     }
                     default {
                         Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
@@ -271,10 +283,10 @@
                 }
             }
         }
-        $context = Set-GitHubContext -Context $context -Default:(!$NotDefault) -PassThru
-        Write-Verbose ($context | Format-List | Out-String)
+        $contextObj = Set-GitHubContext -Context $context -Default:(!$NotDefault) -PassThru
+        Write-Verbose ($contextObj | Format-List | Out-String)
         if (-not $Silent) {
-            $name = $context.Username
+            $name = $contextObj.Username
             Write-Host '✓ ' -ForegroundColor Green -NoNewline
             Write-Host "Logged in as $name!"
         }
