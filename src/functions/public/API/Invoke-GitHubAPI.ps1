@@ -82,137 +82,146 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    Write-Debug 'Invoking GitHub API...'
-    Write-Debug 'Parameters:'
-    Get-FunctionParameter | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
-    Write-Debug 'Parent function parameters:'
-    Get-FunctionParameter -Scope 1 | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
-
-    $Context = Resolve-GitHubContext -Context $Context
-    $Token = $Context.Token
-    Write-Debug "Token : [$Token]"
-
-    if ([string]::IsNullOrEmpty($TokenType)) {
-        $TokenType = $Context.TokenType
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Verbose "[$commandName] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Write-Debug 'Invoking GitHub API...'
+        Write-Debug 'Parameters:'
+        Get-FunctionParameter | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+        Write-Debug 'Parent function parameters:'
+        Get-FunctionParameter -Scope 1 | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
     }
-    Write-Debug "TokenType : [$($Context.TokenType)]"
 
-    if ([string]::IsNullOrEmpty($ApiBaseUri)) {
-        $ApiBaseUri = $Context.ApiBaseUri
-    }
-    Write-Debug "ApiBaseUri : [$($Context.ApiBaseUri)]"
+    process {
+        $Token = $Context.Token
+        Write-Debug "Token : [$Token]"
 
-    if ([string]::IsNullOrEmpty($ApiVersion)) {
-        $ApiVersion = $Context.ApiVersion
-    }
-    Write-Debug "ApiVersion : [$($Context.ApiVersion)]"
+        if ([string]::IsNullOrEmpty($TokenType)) {
+            $TokenType = $Context.TokenType
+        }
+        Write-Debug "TokenType : [$($Context.TokenType)]"
 
+        if ([string]::IsNullOrEmpty($ApiBaseUri)) {
+            $ApiBaseUri = $Context.ApiBaseUri
+        }
+        Write-Debug "ApiBaseUri : [$($Context.ApiBaseUri)]"
 
-    switch ($TokenType) {
-        'ghu' {
-            if (Test-GitHubAccessTokenRefreshRequired -Context $Context) {
-                $Token = Update-GitHubUserAccessToken -Context $Context -PassThru
+        if ([string]::IsNullOrEmpty($ApiVersion)) {
+            $ApiVersion = $Context.ApiVersion
+        }
+        Write-Debug "ApiVersion : [$($Context.ApiVersion)]"
+
+        switch ($TokenType) {
+            'ghu' {
+                if (Test-GitHubAccessTokenRefreshRequired -Context $Context) {
+                    $Token = Update-GitHubUserAccessToken -Context $Context -PassThru
+                }
+            }
+            'PEM' {
+                $JWT = Get-GitHubAppJSONWebToken -ClientId $Context.ClientID -PrivateKey $Token
+                $Token = $JWT.Token
             }
         }
-        'PEM' {
-            $JWT = Get-GitHubAppJSONWebToken -ClientId $Context.ClientID -PrivateKey $Token
-            $Token = $JWT.Token
+
+        $headers = @{
+            Accept                 = $Accept
+            'X-GitHub-Api-Version' = $ApiVersion
         }
-    }
+        $headers | Remove-HashtableEntry -NullOrEmptyValues
 
-    $headers = @{
-        Accept                 = $Accept
-        'X-GitHub-Api-Version' = $ApiVersion
-    }
-    $headers | Remove-HashtableEntry -NullOrEmptyValues
-
-    if (-not $URI) {
-        $URI = ("$ApiBaseUri/" -replace '/$', '') + ("/$ApiEndpoint" -replace '^/', '')
-    }
-
-    $APICall = @{
-        Uri            = $URI
-        Method         = [string]$Method
-        Headers        = $Headers
-        Authentication = 'Bearer'
-        Token          = $Token
-        ContentType    = $ContentType
-        InFile         = $UploadFilePath
-        OutFile        = $DownloadFilePath
-        HttpVersion    = [string]$HttpVersion
-    }
-    $APICall | Remove-HashtableEntry -NullOrEmptyValues
-
-    if ($Body) {
-        # Use body to create the query string for certain situations
-        if ($Method -eq 'GET') {
-            $queryString = $Body | ConvertTo-QueryString
-            $APICall.Uri = $APICall.Uri + $queryString
-        } elseif ($Body -is [string]) {
-            # Use body to create the form data
-            $APICall.Body = $Body
-        } else {
-            $APICall.Body = $Body | ConvertTo-Json -Depth 100
+        if (-not $URI) {
+            $URI = ("$ApiBaseUri/" -replace '/$', '') + ("/$ApiEndpoint" -replace '^/', '')
         }
-    }
 
-    try {
-        Write-Debug '----------------------------------'
-        Write-Debug 'Request:'
-        $APICall | ConvertFrom-HashTable | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
-        Write-Debug '----------------------------------'
-        do {
-            $response = Invoke-WebRequest @APICall
+        $APICall = @{
+            Uri            = $URI
+            Method         = [string]$Method
+            Headers        = $Headers
+            Authentication = 'Bearer'
+            Token          = $Token
+            ContentType    = $ContentType
+            InFile         = $UploadFilePath
+            OutFile        = $DownloadFilePath
+            HttpVersion    = [string]$HttpVersion
+        }
+        $APICall | Remove-HashtableEntry -NullOrEmptyValues
 
+        if ($Body) {
+            # Use body to create the query string for certain situations
+            if ($Method -eq 'GET') {
+                $queryString = $Body | ConvertTo-QueryString
+                $APICall.Uri = $APICall.Uri + $queryString
+            } elseif ($Body -is [string]) {
+                # Use body to create the form data
+                $APICall.Body = $Body
+            } else {
+                $APICall.Body = $Body | ConvertTo-Json -Depth 100
+            }
+        }
+
+        try {
+            Write-Debug '----------------------------------'
+            Write-Debug 'Request:'
+            $APICall | ConvertFrom-HashTable | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+            Write-Debug '----------------------------------'
+            do {
+                $response = Invoke-WebRequest @APICall
+
+                $headers = @{}
+                foreach ($item in $response.Headers.GetEnumerator()) {
+                    $headers[$item.Key] = ($item.Value).Trim() -join ', '
+                }
+                $headers = [pscustomobject]$headers
+                $sortedProperties = $headers.PSObject.Properties.Name | Sort-Object
+                $headers = $headers | Select-Object $sortedProperties
+                Write-Debug '----------------------------------'
+                Write-Debug 'Response headers:'
+                $headers | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+                Write-Debug '---------------------------'
+                $results = $response.Content | ConvertFrom-Json
+                [pscustomobject]@{
+                    Request           = $APICall
+                    Response          = $results
+                    Headers           = $headers
+                    StatusCode        = $response.StatusCode
+                    StatusDescription = $response.StatusDescription
+                }
+                $APICall['Uri'] = $response.RelationLink.next
+            } while ($APICall['Uri'])
+        } catch {
+            $failure = $_
             $headers = @{}
-            foreach ($item in $response.Headers.GetEnumerator()) {
+            foreach ($item in $failure.Exception.Response.Headers.GetEnumerator()) {
                 $headers[$item.Key] = ($item.Value).Trim() -join ', '
             }
             $headers = [pscustomobject]$headers
             $sortedProperties = $headers.PSObject.Properties.Name | Sort-Object
             $headers = $headers | Select-Object $sortedProperties
-            Write-Debug '----------------------------------'
+
+            $errordetails = $failure.ErrorDetails | ConvertFrom-Json -AsHashtable
+            $errorResult = [ordered]@{
+                Message     = $errordetails.message
+                Information = $errordetails.documentation_url
+                Status      = $failure.Exception.Message
+                StatusCode  = $errordetails.status
+            }
+            $APICall.HttpVersion = $APICall.HttpVersion.ToString()
+            $APICall.Headers = $APICall.Headers | ConvertTo-Json
+            $APICall.Method = $APICall.Method.ToString()
+
+            Write-Error '----------------------------------'
+            Write-Error 'Error details:'
+            $errorResult | Format-Table -AutoSize -HideTableHeaders | Out-String -Stream | ForEach-Object { Write-Error $_ }
+            Write-Error '----------------------------------'
             Write-Debug 'Response headers:'
             $headers | Out-String -Stream | ForEach-Object { Write-Debug $_ }
             Write-Debug '---------------------------'
-            $results = $response.Content | ConvertFrom-Json
-            [pscustomobject]@{
-                Request           = $APICall
-                Response          = $results
-                Headers           = $headers
-                StatusCode        = $response.StatusCode
-                StatusDescription = $response.StatusDescription
-            }
-            $APICall['Uri'] = $response.RelationLink.next
-        } while ($APICall['Uri'])
-    } catch {
-        $failure = $_
-        $headers = @{}
-        foreach ($item in $failure.Exception.Response.Headers.GetEnumerator()) {
-            $headers[$item.Key] = ($item.Value).Trim() -join ', '
+            throw $failure.Exception.Message
         }
-        $headers = [pscustomobject]$headers
-        $sortedProperties = $headers.PSObject.Properties.Name | Sort-Object
-        $headers = $headers | Select-Object $sortedProperties
+    }
 
-        $errordetails = $failure.ErrorDetails | ConvertFrom-Json -AsHashtable
-        $errorResult = [ordered]@{
-            Message     = $errordetails.message
-            Information = $errordetails.documentation_url
-            Status      = $failure.Exception.Message
-            StatusCode  = $errordetails.status
-        }
-        $APICall.HttpVersion = $APICall.HttpVersion.ToString()
-        $APICall.Headers = $APICall.Headers | ConvertTo-Json
-        $APICall.Method = $APICall.Method.ToString()
-
-        Write-Error '----------------------------------'
-        Write-Error 'Error details:'
-        $errorResult | Format-Table -AutoSize -HideTableHeaders | Out-String -Stream | ForEach-Object { Write-Error $_ }
-        Write-Error '----------------------------------'
-        Write-Debug 'Response headers:'
-        $headers | Out-String -Stream | ForEach-Object { Write-Debug $_ }
-        Write-Debug '---------------------------'
-        throw $failure.Exception.Message
+    end {
+        Write-Verbose "[$commandName] - End"
     }
 }

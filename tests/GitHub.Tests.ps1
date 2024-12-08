@@ -5,12 +5,19 @@
 [CmdletBinding()]
 param()
 
-Describe 'GitHub' {
-    Context 'Auth' {
-        BeforeAll {
-            Disconnect-GitHubAccount -Context 'github.com/github-actions[bot]' -Silent
-        }
+BeforeAll {
+    Get-SecretInfo | Remove-Secret
+}
 
+Describe 'GitHub' {
+    Context 'Config' {
+        It 'Can get the configuration' {
+            $config = Get-GitHubConfig
+            Write-Verbose ($config | Format-Table | Out-String) -Verbose
+            $config | Should -Not -BeNullOrEmpty
+        }
+    }
+    Context 'Auth' {
         It 'Can connect and disconnect without parameters in GitHubActions' {
             { Connect-GitHubAccount } | Should -Not -Throw
             { Disconnect-GitHubAccount } | Should -Not -Throw

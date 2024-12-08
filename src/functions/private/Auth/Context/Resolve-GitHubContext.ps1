@@ -33,13 +33,13 @@
         $commandName = $MyInvocation.MyCommand.Name
         Write-Verbose "[$commandName] - Start"
         Write-Verbose 'Context:'
-        $Context | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+        $Context | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
     }
 
     process {
         if ($Context -is [string]) {
             $contextName = $Context
-            Write-Debug "Getting context: [$contextName]"
+            Write-Verbose "Getting context: [$contextName]"
             $Context = Get-GitHubContext -Context $contextName
         }
 

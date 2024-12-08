@@ -23,7 +23,7 @@
 
         This will return all the parameters and their final value in the grandparent function.
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([pscustomobject], [hashtable])]
     [CmdletBinding()]
     param(
         # Include common parameters in the output.
@@ -37,7 +37,11 @@
         # 1 - Parent scope
         # 2 - Grandparent scope
         [Parameter()]
-        [int] $Scope = 0
+        [int] $Scope = 0,
+
+        # Return the parameters as a hashtable.
+        [Parameter()]
+        [switch] $AsHashtable
     )
 
     $Scope++
@@ -69,6 +73,10 @@
             }
             $allParameters[$paramName] = $defaultValue
         }
+    }
+
+    if ($AsHashtable) {
+        return $allParameters
     }
 
     [pscustomobject]$allParameters

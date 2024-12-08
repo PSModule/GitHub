@@ -1,4 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '4.0.0' }
+﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '5.0.1' }
 
 function Get-GitHubContext {
     <#
@@ -18,7 +18,7 @@ function Get-GitHubContext {
         Justification = 'Encapsulated in a function. Never leaves as a plain text.'
     )]
     [OutputType([GitHubContext])]
-    [CmdletBinding(DefaultParameterSetName = 'CurrentContext')]
+    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(
         # The name of the context.
         [Parameter(
@@ -39,23 +39,37 @@ function Get-GitHubContext {
     $commandName = $MyInvocation.MyCommand.Name
     Write-Verbose "[$commandName] - Start"
 
-    if ($ListAvailable) {
-        $ID = "$($script:Config.Name)/*"
-        Write-Verbose "Getting available contexts for [$ID]"
-    } elseif ($Context) {
-        $ID = "$($script:Config.Name)/$Context"
-        Write-Verbose "Getting available contexts for [$ID]"
-    } else {
-        $defaultContext = Get-GitHubConfig -Name DefaultContext
-        $ID = "$($script:Config.Name)/$defaultContext"
-        if ([string]::IsNullOrEmpty($ID)) {
-            throw "No default GitHub context found. Please run 'Set-GitHubDefaultContext' or 'Connect-GitHub' to configure a GitHub context."
+    switch ($PSCmdlet.ParameterSetName) {
+        'NamedContext' {
+            $ID = "$($script:GitHub.Config.ID)/$Context"
+            Write-Verbose "Getting available contexts for [$ID]"
         }
-        Write-Verbose "Getting the default context: [$ID]"
+        'ListAvailableContexts' {
+            Write-Debug "ListAvailable: [$ListAvailable]"
+            $ID = "$($script:GitHub.Config.ID)/*"
+            Write-Verbose "Getting available contexts for [$ID]"
+        }
+        '__AllParameterSets' {
+            $ID = "$($script:GitHub.Config.ID)/$($script:GitHub.Config.DefaultContext)"
+            if ([string]::IsNullOrEmpty($ID)) {
+                throw "No default GitHub context found. Please run 'Set-GitHubDefaultContext' or 'Connect-GitHub' to configure a GitHub context."
+            }
+            Write-Verbose "Getting the default context: [$ID]"
+        }
     }
 
     Get-Context -ID $ID | ForEach-Object {
-        [GitHubContext]$_
+        switch ($_.Type) {
+            'User' {
+                [UserGitHubContext]$_
+            }
+            'App' {
+                [AppGitHubContext]$_
+            }
+            'Installation' {
+                [InstallationGitHubContext]$_
+            }
+        }
     }
 
     Write-Verbose "[$commandName] - End"

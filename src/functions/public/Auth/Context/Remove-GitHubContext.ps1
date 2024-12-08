@@ -1,4 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '4.0.0' }
+﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '5.0.1' }
 
 filter Remove-GitHubContext {
     <#
@@ -32,7 +32,7 @@ filter Remove-GitHubContext {
     $commandName = $MyInvocation.MyCommand.Name
     Write-Verbose "[$commandName] - Start"
 
-    $ID = "$($script:Config.Name)/$Context"
+    $ID = "$($script:GitHub.Config.ID)/$Context"
 
     if ($PSCmdlet.ShouldProcess('Remove-Secret', $context.Name)) {
         Remove-Context -ID $ID
