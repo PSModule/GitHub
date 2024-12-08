@@ -17,6 +17,9 @@
     # The type of run environment.
     [string] $RunEnv
 
+    # The name of the context.
+    [string] $Name
+
     # Simple constructor that initializes the context ID.
     GitHubConfig() : Base([string]$ID) {}
 }
