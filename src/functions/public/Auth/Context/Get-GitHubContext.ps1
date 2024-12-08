@@ -36,41 +36,50 @@ function Get-GitHubContext {
         [switch] $ListAvailable
     )
 
-    $commandName = $MyInvocation.MyCommand.Name
-    Write-Verbose "[$commandName] - Start"
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Verbose "[$commandName] - Start"
+    }
 
-    switch ($PSCmdlet.ParameterSetName) {
-        'NamedContext' {
-            $ID = "$($script:GitHub.Config.ID)/$Context"
-            Write-Verbose "Getting available contexts for [$ID]"
-        }
-        'ListAvailableContexts' {
-            Write-Debug "ListAvailable: [$ListAvailable]"
-            $ID = "$($script:GitHub.Config.ID)/*"
-            Write-Verbose "Getting available contexts for [$ID]"
-        }
-        '__AllParameterSets' {
-            $ID = "$($script:GitHub.Config.ID)/$($script:GitHub.Config.DefaultContext)"
-            if ([string]::IsNullOrEmpty($ID)) {
-                throw "No default GitHub context found. Please run 'Set-GitHubDefaultContext' or 'Connect-GitHub' to configure a GitHub context."
+    process {
+
+        switch ($PSCmdlet.ParameterSetName) {
+            'NamedContext' {
+                Write-Verbose "NamedContext: [$Context]"
+                $ID = "$($script:GitHub.Config.ID)/$Context"
+                Write-Verbose "Getting available contexts for [$ID]"
             }
-            Write-Verbose "Getting the default context: [$ID]"
+            'ListAvailableContexts' {
+                Write-Verbose "ListAvailable: [$ListAvailable]"
+                $ID = "$($script:GitHub.Config.ID)/*"
+                Write-Verbose "Getting available contexts for [$ID]"
+            }
+            '__AllParameterSets' {
+                Write-Verbose "Getting default context."
+                $ID = "$($script:GitHub.Config.ID)/$($script:GitHub.Config.DefaultContext)"
+                if ([string]::IsNullOrEmpty($ID)) {
+                    throw "No default GitHub context found. Please run 'Set-GitHubDefaultContext' or 'Connect-GitHub' to configure a GitHub context."
+                }
+                Write-Verbose "Getting the default context: [$ID]"
+            }
+        }
+
+        Get-Context -ID $ID | ForEach-Object {
+            switch ($_.Type) {
+                'User' {
+                    [UserGitHubContext]$_
+                }
+                'App' {
+                    [AppGitHubContext]$_
+                }
+                'Installation' {
+                    [InstallationGitHubContext]$_
+                }
+            }
         }
     }
 
-    Get-Context -ID $ID | ForEach-Object {
-        switch ($_.Type) {
-            'User' {
-                [UserGitHubContext]$_
-            }
-            'App' {
-                [AppGitHubContext]$_
-            }
-            'Installation' {
-                [InstallationGitHubContext]$_
-            }
-        }
+    end {
+        Write-Verbose "[$commandName] - End"
     }
-
-    Write-Verbose "[$commandName] - End"
 }
