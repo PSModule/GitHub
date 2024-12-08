@@ -11,7 +11,7 @@ Register-ArgumentCompleter -CommandName Set-GitHubConfig, Get-GitHubConfig, Remo
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter
 
-    ([GitHubConfig]).GetProperties().Name | ForEach-Object {
+    ([GitHubConfig]).GetProperties().Name | Where-Object { $_ -like "$wordToComplete*" } | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_ )
     }
 }
