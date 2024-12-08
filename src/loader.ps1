@@ -35,6 +35,7 @@ if (-not $context.RunEnv) {
     Set-GitHubConfig -Name 'RunEnv' -Value $script:runEnv
 }
 
+
 if ($env:GITHUB_ACTIONS -eq 'true') {
     Write-Verbose 'Detected running on a GitHub Actions runner, preparing environment...'
     $env:GITHUB_REPOSITORY_NAME = $env:GITHUB_REPOSITORY -replace '.+/'
