@@ -6,6 +6,13 @@
 param()
 
 Describe 'GitHub' {
+    Context 'Config' {
+        It 'Can get the configuration' {
+            $config = Get-GitHubConfig
+            Write-Verbose ($config | Format-Table | Out-String) -Verbose
+            $config | Should -Not -BeNullOrEmpty
+        }
+    }
     Context 'Auth' {
         BeforeAll {
             Disconnect-GitHubAccount -Context 'github.com/github-actions[bot]' -Silent
