@@ -22,4 +22,11 @@
 
     # Simple constructor that initializes the context ID.
     GitHubConfig() : Base([string]$ID) {}
+
+    # Creates a context object from a PSCustomObject.
+    GitHubConfig([Context]$Object) {
+        $Object.PSObject.Properties | ForEach-Object {
+            $this.($_.Name) = $_.Value
+        }
+    }
 }
