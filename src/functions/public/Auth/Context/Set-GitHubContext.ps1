@@ -107,7 +107,7 @@ function Set-GitHubContext {
             AuthClientID               = $AuthClientID               # Client ID for UAT
             AuthType                   = $AuthType                   # UAT / PAT / App / IAT
             ClientID                   = $ClientID                   # Client ID for GitHub Apps
-            InstallationID             = $InstallationID            # Installation ID
+            InstallationID             = $InstallationID             # Installation ID
             DeviceFlowType             = $DeviceFlowType             # GitHubApp / OAuthApp
             HostName                   = $HostName                   # github.com / msx.ghe.com / github.local
             Enterprise                 = $Enterprise                 # Enterprise name
@@ -127,7 +127,7 @@ function Set-GitHubContext {
 
         # Run functions to get info on the temporary context.
         try {
-            Write-Verbose 'Getting info on the context.'
+            Write-Verbose "Getting info on the context [$AuthType]."
             switch -Regex ($AuthType) {
                 'PAT|UAT|IAT' {
                     $viewer = Get-GitHubViewer -Context $tempContext
