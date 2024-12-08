@@ -8,7 +8,7 @@
     } else {
         'Local'
     }
-    Config             = [GitHubContext]@{
+    Config             = [GitHubConfig]@{
         ID                            = 'PSModule.GitHub'
         HostName                      = $env:GITHUB_SERVER_URL ?? 'github.com'
         AccessTokenGracePeriodInHours = 4
