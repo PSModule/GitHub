@@ -118,7 +118,7 @@
             }
             Write-Verbose 'Logging in using an installation access token...'
             Write-Verbose ($contextParams | Format-Table | Out-String)
-            $tmpContext = Set-GitHubContext @contextParams -PassThru
+            $tmpContext = Set-GitHubContext -Context [InstallationGitHubContext]$contextParams -PassThru
             Write-Verbose ($tmpContext | Format-List | Out-String)
             if (-not $Silent) {
                 $name = $tmpContext.name
@@ -132,6 +132,9 @@
         Write-Error (Get-PSCallStack | Format-Table | Out-String)
         throw 'Failed to connect to GitHub using a GitHub App.'
     } finally {
+    } clean {
+        Remove-Variable -Name tmpContext -ErrorAction SilentlyContinue
+        Remove-Variable -Name token -ErrorAction SilentlyContinue
         [System.GC]::Collect()
     }
     Write-Verbose "[$commandName] - End"
