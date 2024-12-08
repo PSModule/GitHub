@@ -15,7 +15,7 @@ Describe 'GitHub' {
     }
     Context 'Auth' {
         BeforeAll {
-            Disconnect-GitHubAccount -Context 'github.com/github-actions[bot]' -Silent
+            Get-SecretInfo | Remove-Secret
         }
 
         It 'Can connect and disconnect without parameters in GitHubActions' {
