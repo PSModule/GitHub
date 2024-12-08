@@ -4,10 +4,10 @@ Write-Verbose "Path: $scriptFilePath"
 
 ### This is the context for this module
 # Get current module context
-$context = (Get-Context -ID $script:Config.Name)
+$context = [GitHubConfig](Get-Context -ID $script:Config.Name)
 if (-not $context) {
     Write-Verbose 'No context found, creating a new context...'
-    $context = (Set-Context -ID $script:Config.Name -Context @{})
+    $context = [GitHubConfig](Set-Context -ID $script:Config.Name -Context @{})
 }
 
 if (-not $context.DefaultGitHubAppClientID) {
