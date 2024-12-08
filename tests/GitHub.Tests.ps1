@@ -5,6 +5,10 @@
 [CmdletBinding()]
 param()
 
+BeforeAll {
+    Get-SecretInfo | Remove-Secret
+}
+
 Describe 'GitHub' {
     Context 'Config' {
         It 'Can get the configuration' {
@@ -14,10 +18,6 @@ Describe 'GitHub' {
         }
     }
     Context 'Auth' {
-        BeforeAll {
-            Get-SecretInfo | Remove-Secret
-        }
-
         It 'Can connect and disconnect without parameters in GitHubActions' {
             { Connect-GitHubAccount } | Should -Not -Throw
             { Disconnect-GitHubAccount } | Should -Not -Throw
