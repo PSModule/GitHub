@@ -121,8 +121,8 @@ function Set-GitHubContext {
             RefreshToken               = $RefreshToken               # Refresh token
             RefreshTokenExpirationDate = $RefreshTokenExpirationDate # 2024-01-01-00:00:00
         }
-
-        $context | Remove-HashtableEntry -NullOrEmptyValues
+        Write-Verbose "Context:"
+        $context | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
         $tempContext = [GitHubContext]$context
 
         # Run functions to get info on the temporary context.
