@@ -1,4 +1,6 @@
-﻿function Remove-GitHubConfig {
+﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '4.0.4' }
+
+function Remove-GitHubConfig {
     <#
         .SYNOPSIS
         Remove a GitHub module configuration.

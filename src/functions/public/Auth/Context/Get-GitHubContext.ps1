@@ -1,4 +1,6 @@
-﻿function Get-GitHubContext {
+﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '4.0.4' }
+
+function Get-GitHubContext {
     <#
         .SYNOPSIS
         Get the current GitHub context.

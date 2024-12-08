@@ -1,17 +1,19 @@
-﻿#TODO: Add help
+﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '4.0.4' }
+
 function Set-GitHubContext {
     <#
         .SYNOPSIS
-        Short description
+        Sets the GitHub context and stores it in the context vault.
 
         .DESCRIPTION
-        Long description
+        This function sets the GitHub context and stores it in the context vault.
+        The context is used to authenticate with the GitHub API.
 
         .EXAMPLE
-        An example
+        Set-GitHubContext -TokenType 'ghu' -Token $token -ApiBaseUri 'https://api.github.com' -ApiVersion '2022-11-28' -AuthType 'PAT'
+            -HostName 'github.com' -Scope 'gist read:org repo workflow'
 
-        .NOTES
-        General notes
+        Sets the GitHub context with the specified parameters.
     #>
     [OutputType([GitHubContext])]
     [CmdletBinding(SupportsShouldProcess)]

@@ -1,4 +1,6 @@
-﻿filter Remove-GitHubContext {
+﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '4.0.4' }
+
+filter Remove-GitHubContext {
     <#
         .SYNOPSIS
         Removes a context from the context vault.

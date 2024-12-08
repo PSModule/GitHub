@@ -1,4 +1,6 @@
-﻿function Set-GitHubConfig {
+﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '4.0.4' }
+
+function Set-GitHubConfig {
     <#
         .SYNOPSIS
         Set a GitHub module configuration.
