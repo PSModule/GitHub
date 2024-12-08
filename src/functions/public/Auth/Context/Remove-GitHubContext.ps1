@@ -1,4 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '4.0.5' }
+﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '5.0.0' }
 
 filter Remove-GitHubContext {
     <#
