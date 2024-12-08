@@ -32,7 +32,7 @@ function Set-GitHubContext {
 
         # Set the expiration date of the contexts token.
         [Parameter()]
-        [datetime] $TokenExpirationDate,
+        [datetime] $TokenExpirationDate = [datetime]::MinValue,
 
         # Set the API Base URI.
         [Parameter(Mandatory)]
@@ -76,7 +76,7 @@ function Set-GitHubContext {
 
         # Set the refresh token expiration date.
         [Parameter()]
-        [datetime] $RefreshTokenExpirationDate,
+        [datetime] $RefreshTokenExpirationDate = [datetime]::MinValue,
 
         # Set the default for the Repo parameter.
         [Parameter()]
