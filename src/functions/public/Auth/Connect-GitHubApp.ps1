@@ -84,18 +84,23 @@
         }
 
         $installations = Get-GitHubAppInstallation
+        Write-Verbose "Found [$($installations.Count)] installations."
         switch ($PSCmdlet.ParameterSetName) {
             'User' {
+                Write-Verbose "Filtering installations for user [$User]."
                 $installations = $installations | Where-Object { $_.target_type -eq 'User' -and $_.account.login -in $User }
             }
             'Organization' {
+                Write-Verbose "Filtering installations for organization [$Organization]."
                 $installations = $installations | Where-Object { $_.target_type -eq 'Organization' -and $_.account.login -in $Organization }
             }
             'Enterprise' {
+                Write-Verbose "Filtering installations for enterprise [$Enterprise]."
                 $installations = $installations | Where-Object { $_.target_type -eq 'Enterprise' -and $_.account.slug -in $Enterprise }
             }
         }
 
+        Write-Verbose "Found [$($installations.Count)] installations for the target type."
         $installations | ForEach-Object {
             $installation = $_
             $contextParams = @{} + $defaultContextData.Clone()

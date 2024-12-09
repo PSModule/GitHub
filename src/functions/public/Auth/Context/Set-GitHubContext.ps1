@@ -61,14 +61,14 @@ function Set-GitHubContext {
                     }
                 }
                 'PAT|UAT' {
-                    $ContextName = "$HostName/$login"
+                    $ContextName = "$($Context['HostName'])/$login"
                     $Context += @{
                         Name = $ContextName
                         Type = 'User'
                     }
                 }
                 'IAT' {
-                    $ContextName = "$HostName/$login/$Owner" -Replace '\[bot\]'
+                    $ContextName = "$($Context['HostName'])/$login/$($Context['Owner'])" -Replace '\[bot\]'
                     $Context += @{
                         Name = $ContextName
                         Type = 'Installation'
@@ -76,7 +76,7 @@ function Set-GitHubContext {
                 }
                 'App' {
                     $app = Get-GitHubApp -Context $Context
-                    $ContextName = "$HostName/$($app.slug)"
+                    $ContextName = "$($Context['HostName'])/$($app.slug)"
                     $Context += @{
                         Name       = $ContextName
                         Username   = $app.slug
