@@ -1,5 +1,4 @@
-﻿
-Register-ArgumentCompleter -CommandName Connect-GitHubApp -ParameterName User -ScriptBlock {
+﻿Register-ArgumentCompleter -CommandName Connect-GitHubApp -ParameterName User -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter
 

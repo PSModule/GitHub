@@ -120,4 +120,8 @@ function Get-GitHubAppJSONWebToken {
         ExpiresAt = $exp
         Issuer    = $ClientId
     }
+    Remove-Variable -Name jwt -ErrorAction SilentlyContinue
+    Remove-Variable -Name rsa -ErrorAction SilentlyContinue
+    Remove-Variable -Name signature -ErrorAction SilentlyContinue
+    [System.GC]::Collect()
 }
