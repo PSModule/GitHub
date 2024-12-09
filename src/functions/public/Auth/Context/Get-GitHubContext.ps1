@@ -1,4 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '5.0.1' }
+﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '5.0.3' }
 
 function Get-GitHubContext {
     <#
@@ -39,6 +39,7 @@ function Get-GitHubContext {
     begin {
         $commandName = $MyInvocation.MyCommand.Name
         Write-Verbose "[$commandName] - Start"
+        $null = Get-GitHubConfig
     }
 
     process {

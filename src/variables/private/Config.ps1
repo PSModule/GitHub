@@ -8,7 +8,7 @@
     } else {
         'Local'
     }
-    Config             = [GitHubConfig]@{
+    DefaultConfig      = [GitHubConfig]@{
         ID                            = 'PSModule.GitHub'
         HostName                      = $env:GITHUB_SERVER_URL ?? 'github.com'
         AccessTokenGracePeriodInHours = 4
@@ -16,4 +16,5 @@
         OAuthAppClientID              = '7204ae9b0580f2cb8288'
         DefaultContext                = ''
     }
+    Config             = [GitHubConfig]::new()
 }
