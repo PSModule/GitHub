@@ -55,7 +55,7 @@ function Get-GitHubContext {
                 Write-Verbose "Getting available contexts for [$ID]"
             }
             '__AllParameterSets' {
-                Write-Verbose "Getting default context."
+                Write-Verbose 'Getting default context.'
                 $ID = "$($script:GitHub.Config.ID)/$($script:GitHub.Config.DefaultContext)"
                 if ([string]::IsNullOrEmpty($ID)) {
                     throw "No default GitHub context found. Please run 'Set-GitHubDefaultContext' or 'Connect-GitHub' to configure a GitHub context."
@@ -64,22 +64,17 @@ function Get-GitHubContext {
             }
         }
 
-        Write-Verbose "All Contexts:"
-        Get-Context | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
-
-        Write-Verbose "Specific Contexts:"
-        Get-Context -ID $ID | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
-
         Get-Context -ID $ID | ForEach-Object {
-            switch ($_.Type) {
+            $contextObj = $_
+            switch ($contextObj.Type) {
                 'User' {
-                    [UserGitHubContext]($_)
+                    [UserGitHubContext]$contextObj
                 }
                 'App' {
-                    [AppGitHubContext]($_)
+                    [AppGitHubContext]$contextObj
                 }
                 'Installation' {
-                    [InstallationGitHubContext]($_)
+                    [InstallationGitHubContext]$contextObj
                 }
             }
         }
