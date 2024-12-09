@@ -36,6 +36,10 @@
             throw 'Git is not installed. Please install Git before running this command.'
         }
 
+        Write-Verbose 'Token splatt:'
+        $Context.Token | ConvertFrom-SecureString -AsPlainText | ForEach-Object { Write-Verbose "Token: $_" }
+
+
         $username = $Context.UserName
         $id = $Context.DatabaseID
         Write-Verbose "Context.Token: [$($Context.Token)]"

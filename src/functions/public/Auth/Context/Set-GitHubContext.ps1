@@ -46,6 +46,7 @@ function Set-GitHubContext {
     process {
         Write-Verbose 'Context:'
         $Context | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+        $Context.Token | ConvertFrom-SecureString -AsPlainText | ForEach-Object { Write-Verbose "Token: $_" }
 
         # Run functions to get info on the temporary context.
         try {
@@ -54,31 +55,31 @@ function Set-GitHubContext {
                 'PAT|UAT|IAT' {
                     $viewer = Get-GitHubViewer -Context $Context
                     $login = $viewer.login
-                    $context += @{
+                    $Context += @{
                         Username   = $login
                         NodeID     = $viewer.id
                         DatabaseID = ($viewer.databaseId).ToString()
                     }
                 }
                 'PAT|UAT' {
-                    $contextName = "$HostName/$login"
-                    $context += @{
-                        Name = $contextName
+                    $ContextName = "$HostName/$login"
+                    $Context += @{
+                        Name = $ContextName
                         Type = 'User'
                     }
                 }
                 'IAT' {
-                    $contextName = "$HostName/$login/$Owner" -Replace '\[bot\]'
-                    $context += @{
-                        Name = $contextName
+                    $ContextName = "$HostName/$login/$Owner" -Replace '\[bot\]'
+                    $Context += @{
+                        Name = $ContextName
                         Type = 'Installation'
                     }
                 }
                 'App' {
                     $app = Get-GitHubApp -Context $Context
-                    $contextName = "$HostName/$($app.slug)"
-                    $context += @{
-                        Name       = $contextName
+                    $ContextName = "$HostName/$($app.slug)"
+                    $Context += @{
+                        Name       = $ContextName
                         Username   = $app.slug
                         NodeID     = $app.node_id
                         DatabaseID = $app.id
@@ -89,19 +90,21 @@ function Set-GitHubContext {
                     throw 'Failed to get info on the context. Unknown logon type.'
                 }
             }
-            Write-Verbose "Found [$($context['Type'])] with login: [$($context['Name'])]"
-            $context | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+            Write-Verbose "Found [$($Context['Type'])] with login: [$($Context['Name'])]"
+            $Context | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
 
             if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
-                Set-Context -ID "$($script:GitHub.Config.ID)/$($context['Name'])" -Context $context
+                Set-Context -ID "$($script:GitHub.Config.ID)/$($Context['Name'])" -Context $Context
                 if ($Default) {
-                    Set-GitHubDefaultContext -Context $context['Name']
-                    if ($context['AuthType'] -eq 'IAT' -and $script:GitHub.EnvironmentType -eq 'GHA') {
-                        Set-GitHubGitConfig -Context $context['Name']
+                    Set-GitHubDefaultContext -Context $Context['Name']
+                    if ($Context['AuthType'] -eq 'IAT' -and $script:GitHub.EnvironmentType -eq 'GHA') {
+                        Write-Verbose "Token splatt:"
+                        $Context.Token | ConvertFrom-SecureString -AsPlainText | ForEach-Object { Write-Verbose "Token: $_" }
+                        Set-GitHubGitConfig -Context $Context['Name']
                     }
                 }
                 if ($PassThru) {
-                    Get-GitHubContext -Context $($context['Name'])
+                    Get-GitHubContext -Context $($Context['Name'])
                 }
             }
         } catch {
