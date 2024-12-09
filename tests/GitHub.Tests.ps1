@@ -8,6 +8,7 @@ param()
 BeforeAll {
     Get-SecretInfo | Remove-Secret
     Get-SecretVault | Unregister-SecretVault
+    Import-Module -Name Context -Force
 }
 
 Describe 'GitHub' {
