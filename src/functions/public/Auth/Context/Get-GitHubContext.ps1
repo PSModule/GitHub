@@ -66,6 +66,9 @@ function Get-GitHubContext {
 
         Get-Context -ID $ID | ForEach-Object {
             $contextObj = $_
+            Write-Verbose 'Token splatt:'
+            Write-Verbose ($contextObj.Token | ConvertFrom-SecureString -AsPlainText)
+
             switch ($contextObj.Type) {
                 'User' {
                     [UserGitHubContext]$contextObj
