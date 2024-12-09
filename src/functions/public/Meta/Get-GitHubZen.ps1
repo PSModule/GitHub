@@ -22,15 +22,25 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = '/zen'
-        Method      = 'GET'
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Verbose "[$commandName] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
     }
 
-    Invoke-GitHubAPI @inputObject | ForEach-Object {
-        Write-Output $_.Response
+    process {
+        $inputObject = @{
+            Context     = $Context
+            APIEndpoint = '/zen'
+            Method      = 'GET'
+        }
+
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
+        }
+    }
+
+    end {
+        Write-Verbose "[$commandName] - End"
     }
 }

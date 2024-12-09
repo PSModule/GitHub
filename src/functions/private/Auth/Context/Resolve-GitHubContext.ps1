@@ -32,8 +32,7 @@
     begin {
         $commandName = $MyInvocation.MyCommand.Name
         Write-Verbose "[$commandName] - Start"
-        Write-Verbose 'Context:'
-        $Context | Format-Table | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+        Initialize-GitHubConfig
     }
 
     process {
@@ -44,7 +43,7 @@
         }
 
         if (-not $Context) {
-            throw "Context [$contextName] not found. Please provide a valid context or log in using 'Connect-GitHub'."
+            throw "Please provide a valid context or log in using 'Connect-GitHub'."
         }
 
         # switch ($Context.Type) {
@@ -59,9 +58,6 @@
         #         }
         #     }
         # }
-
-        Write-Verbose 'Resolved Context:'
-        $Context | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
     }
 
     end {

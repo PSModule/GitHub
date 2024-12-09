@@ -34,20 +34,30 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-
-    $body = @{
-        s = $S
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Verbose "[$commandName] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
     }
 
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = '/octocat'
-        Method      = 'GET'
-        Body        = $body
+    process {
+        $body = @{
+            s = $S
+        }
+
+        $inputObject = @{
+            Context     = $Context
+            APIEndpoint = '/octocat'
+            Method      = 'GET'
+            Body        = $body
+        }
+
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
+        }
     }
 
-    Invoke-GitHubAPI @inputObject | ForEach-Object {
-        Write-Output $_.Response
+    end {
+        Write-Verbose "[$commandName] - End"
     }
 }
