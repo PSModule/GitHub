@@ -2,8 +2,6 @@
 Write-Verbose 'Initializing GitHub PowerShell module...'
 Write-Verbose "Path: $scriptFilePath"
 
-Initialize-GitHubConfig
-
 switch ($script:GitHub.EnvironmentType) {
     'GHA' {
         Write-Verbose 'Detected running on a GitHub Actions runner, preparing environment...'

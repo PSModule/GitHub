@@ -35,7 +35,7 @@
             try {
                 $context = [GitHubConfig](Get-Context -ID $script:GitHub.Config.ID)
                 if (-not $context -or $Force) {
-                    Write-Verbose "Loading context from defaults"
+                    Write-Verbose "Loading GitHubConfig from defaults"
                     $context = Set-Context -ID $script:GitHub.DefaultConfig.ID -Context $script:GitHub.DefaultConfig -PassThru
                 }
                 $script:GitHub.Config = [GitHubConfig]$context
