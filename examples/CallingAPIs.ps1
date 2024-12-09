@@ -43,4 +43,5 @@ Invoke-GitHubAPI -ApiEndpoint /zen
 # Most complex example - output is the entire web response
 $context = Get-GitHubContext
 Invoke-WebRequest -Uri "https://api.$($context.HostName)/zen" -Token ($context.Token) -Authentication Bearer
+Invoke-RestMethod -Uri "https://api.$($context.HostName)/octocat" -Token ($context.Token) -Authentication Bearer
 #endregion
