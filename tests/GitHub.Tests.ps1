@@ -81,7 +81,7 @@ Describe 'GitHub' {
 
         It 'Can connect to all GitHub App Installations' {
             { Connect-GitHubApp } | Should -Not -Throw
-            Write-Verbose "Default context:" -Verbose
+            Write-Verbose 'Default context:' -Verbose
             Write-Verbose (Get-GitHubContext | Out-String) -Verbose
             Write-Verbose 'All contexts:' -Verbose
             Write-Verbose (Get-GitHubContext -ListAvailable | Out-String) -Verbose
@@ -109,6 +109,33 @@ Describe 'GitHub' {
             Write-Verbose ($config | Format-Table | Out-String) -Verbose
             { Get-GitHubConfig } | Should -Not -Throw
             $config.ID | Should -Be 'PSModule.GitHub'
+        }
+    }
+    Context 'Meta' {
+        It 'Get-GitHubRoot' {
+            $root = Get-GitHubRoot
+            Write-Verbose ($root | Format-Table | Out-String) -Verbose
+            $root | Should -Not -BeNullOrEmpty
+        }
+        It 'Get-GitHubApiVersion' {
+            $apiVersion = Get-GitHubApiVersion
+            Write-Verbose ($apiVersion | Format-Table | Out-String) -Verbose
+            $apiVersion | Should -Not -BeNullOrEmpty
+        }
+        It 'Get-GitHubMeta' {
+            $meta = Get-GitHubMeta
+            Write-Verbose ($meta | Format-Table | Out-String) -Verbose
+            $meta | Should -Not -BeNullOrEmpty
+        }
+        It 'Get-GitHubOctocat' {
+            $octocat = Get-GitHubOctocat
+            Write-Verbose ($octocat | Format-Table | Out-String) -Verbose
+            $octocat | Should -Not -BeNullOrEmpty
+        }
+        It 'Get-GitHubZen' {
+            $zen = Get-GitHubZen
+            Write-Verbose ($zen | Format-Table | Out-String) -Verbose
+            $zen | Should -Not -BeNullOrEmpty
         }
     }
     Context 'Git' {
