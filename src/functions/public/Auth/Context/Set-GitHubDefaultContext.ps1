@@ -24,8 +24,6 @@
     }
 
     process {
-        Write-Verbose 'Token splatt:'
-        $Context.Token | ConvertFrom-SecureString -AsPlainText | ForEach-Object { Write-Verbose "Token: $_" }
         if ($PSCmdlet.ShouldProcess("$Context", 'Set default context')) {
             Set-GitHubConfig -Name 'DefaultContext' -Value $Context.Name
         }

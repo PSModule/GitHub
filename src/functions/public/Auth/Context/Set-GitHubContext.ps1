@@ -47,9 +47,6 @@ function Set-GitHubContext {
         Write-Verbose 'Context:'
         $Context | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
 
-        Write-Verbose "Token splatt:"
-        Write-Verbose ($Context.Token | ConvertFrom-SecureString -AsPlainText)
-
         # Run functions to get info on the temporary context.
         try {
             Write-Verbose "Getting info on the context [$($Context['AuthType'])]."
@@ -96,16 +93,10 @@ function Set-GitHubContext {
             $Context | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
 
             if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
-                Write-Verbose 'Token splatt:'
-                Write-Verbose ($Context.Token | ConvertFrom-SecureString -AsPlainText)
                 Set-Context -ID "$($script:GitHub.Config.ID)/$($Context['Name'])" -Context $Context
-                Write-Verbose 'Token splatt:'
-                Write-Verbose ($Context.Token | ConvertFrom-SecureString -AsPlainText)
                 if ($Default) {
                     Set-GitHubDefaultContext -Context $Context['Name']
                     if ($Context['AuthType'] -eq 'IAT' -and $script:GitHub.EnvironmentType -eq 'GHA') {
-                        Write-Verbose "Token splatt:"
-                        $Context.Token | ConvertFrom-SecureString -AsPlainText | ForEach-Object { Write-Verbose "Token: $_" }
                         Set-GitHubGitConfig -Context $Context['Name']
                     }
                 }

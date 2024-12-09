@@ -68,8 +68,6 @@ function Get-GitHubContext {
             $contextObj = $_
             Write-Verbose 'Context:'
             $contextObj | Select-Object * | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
-            Write-Verbose 'Token splatt:'
-            Write-Verbose ($contextObj.Token | ConvertFrom-SecureString -AsPlainText)
 
             Write-Verbose "Converting to: [$($contextObj.Type)GitHubContext]"
             switch ($contextObj.Type) {
