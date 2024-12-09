@@ -46,22 +46,28 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $commandName = $MyInvocation.MyCommand.Name
-    Write-Verbose "[$commandName] - Start"
-    $Context = Resolve-GitHubContext -Context $Context
-
-    Remove-GitHubContext -Context $Context
-    $isDefaultContext = $Context.Name -eq $script:GitHub.Config.DefaultContext
-    if ($isDefaultContext) {
-        Remove-GitHubConfig -Name 'DefaultContext'
-        Write-Warning 'There is no longer a default context!'
-        Write-Warning "Please set a new default context using 'Set-GitHubDefaultContext -Name <context>'"
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Verbose "[$commandName] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
     }
 
-    if (-not $Silent) {
-        Write-Host '✓ ' -ForegroundColor Green -NoNewline
-        Write-Host "Logged out of GitHub! [$Context]"
+    process {
+        Remove-GitHubContext -Context $Context
+        $isDefaultContext = $Context.Name -eq $script:GitHub.Config.DefaultContext
+        if ($isDefaultContext) {
+            Remove-GitHubConfig -Name 'DefaultContext'
+            Write-Warning 'There is no longer a default context!'
+            Write-Warning "Please set a new default context using 'Set-GitHubDefaultContext -Name <context>'"
+        }
+
+        if (-not $Silent) {
+            Write-Host '✓ ' -ForegroundColor Green -NoNewline
+            Write-Host "Logged out of GitHub! [$Context]"
+        }
     }
 
-    Write-Verbose "[$commandName] - End"
+    end {
+        Write-Verbose "[$commandName] - End"
+    }
 }

@@ -96,7 +96,7 @@ function Set-GitHubContext {
                 Set-Context -ID "$($script:GitHub.Config.ID)/$($context['Name'])" -Context $context
                 if ($Default) {
                     Set-GitHubDefaultContext -Context $($context['Name'])
-                    if ($AuthType -eq 'IAT' -and $script:GitHub.EnvironmentType -eq 'GHA') {
+                    if ($Context['AuthType'] -eq 'IAT' -and $script:GitHub.EnvironmentType -eq 'GHA') {
                         Set-GitHubGitConfig -Context $($context['Name'])
                     }
                 }

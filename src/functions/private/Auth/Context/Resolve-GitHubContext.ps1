@@ -47,18 +47,18 @@
             throw "Context [$contextName] not found. Please provide a valid context or log in using 'Connect-GitHub'."
         }
 
-        switch ($Context.Type) {
-            'App' {
-                $availableContexts = Get-GitHubContext -ListAvailable |
-                    Where-Object { $_.Type -eq 'Installation' -and $_.ClientID -eq $Context.ClientID }
-                $params = Get-FunctionParameter -Scope 2
-                Write-Verbose 'Resolving parameters used in called function'
-                Write-Verbose ($params | Out-String)
-                if ($params.Keys -in 'Owner', 'Organization') {
-                    $Context = $availableContexts | Where-Object { $_.Owner -eq $params.Owner }
-                }
-            }
-        }
+        # switch ($Context.Type) {
+        #     'App' {
+        #         $availableContexts = Get-GitHubContext -ListAvailable |
+        #             Where-Object { $_.Type -eq 'Installation' -and $_.ClientID -eq $Context.ClientID }
+        #         $params = Get-FunctionParameter -Scope 2
+        #         Write-Verbose 'Resolving parameters used in called function'
+        #         Write-Verbose ($params | Out-String)
+        #         if ($params.Keys -in 'Owner', 'Organization') {
+        #             $Context = $availableContexts | Where-Object { $_.Owner -eq $params.Owner }
+        #         }
+        #     }
+        # }
     }
 
     end {
