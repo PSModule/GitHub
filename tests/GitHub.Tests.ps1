@@ -80,7 +80,10 @@ Describe 'GitHub' {
 
         It 'Can connect to all GitHub App Installations' {
             { Connect-GitHubApp } | Should -Not -Throw
+            Write-Verbose "Default context:" -Verbose
             Write-Verbose (Get-GitHubContext | Out-String) -Verbose
+            Write-Verbose 'All contexts:' -Verbose
+            Write-Verbose (Get-GitHubContext -ListAvailable | Out-String) -Verbose
         }
 
         It 'Can swap context to another' {
