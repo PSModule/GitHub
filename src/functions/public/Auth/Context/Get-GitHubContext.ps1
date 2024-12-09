@@ -71,15 +71,19 @@ function Get-GitHubContext {
             Write-Verbose 'Token splatt:'
             Write-Verbose ($contextObj.Token | ConvertFrom-SecureString -AsPlainText)
 
+            Write-Verbose "Converting to: [$($contextObj.Type)GitHubContext]"
             switch ($contextObj.Type) {
                 'User' {
-                    [UserGitHubContext]$contextObj
+                    [UserGitHubContext]::new($contextObj)
                 }
                 'App' {
-                    [AppGitHubContext]$contextObj
+                    [AppGitHubContext]::new($contextObj)
                 }
                 'Installation' {
-                    [InstallationGitHubContext]$contextObj
+                    [InstallationGitHubContext]::new($contextObj)
+                }
+                default {
+                    throw "Unknown context type: [$($contextObj.Type)]"
                 }
             }
         }
