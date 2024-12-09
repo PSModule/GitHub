@@ -27,15 +27,7 @@ function Set-GitHubConfig {
     begin {
         $commandName = $MyInvocation.MyCommand.Name
         Write-Verbose "[$commandName] - Start"
-        try {
-            if (-not $script:GitHub.Initialized) {
-                Initialize-GitHubConfig
-                Write-Debug "Connected to context [$($script:GitHub.Config.ID)]"
-            }
-        } catch {
-            Write-Error $_
-            throw 'Failed to initialize secret vault'
-        }
+        Initialize-GitHubConfig
     }
 
     process {

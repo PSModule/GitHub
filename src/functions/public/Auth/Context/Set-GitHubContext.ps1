@@ -41,6 +41,7 @@ function Set-GitHubContext {
     begin {
         $commandName = $MyInvocation.MyCommand.Name
         Write-Verbose "[$commandName] - Start"
+        $null = Get-GitHubConfig
     }
 
     process {
