@@ -8,4 +8,18 @@
 
     # The installation ID.
     [int] $InstallationID
+
+    # Creates a context object from a hashtable of key-vaule pairs.
+    InstallationGitHubContext([hashtable]$Properties) {
+        foreach ($Property in $Properties.Keys) {
+            $this.$Property = $Properties.$Property
+        }
+    }
+
+    # Creates a context object from a PSCustomObject.
+    InstallationGitHubContext([PSCustomObject]$Object) {
+        $Object.PSObject.Properties | ForEach-Object {
+            $this.($_.Name) = $_.Value
+        }
+    }
 }

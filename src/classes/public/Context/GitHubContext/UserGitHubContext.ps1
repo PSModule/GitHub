@@ -21,4 +21,18 @@
     # The refresh token expiration date.
     # 2024-01-01-00:00:00
     [datetime] $RefreshTokenExpirationDate
+
+    # Creates a context object from a hashtable of key-vaule pairs.
+    UserGitHubContext([hashtable]$Properties) {
+        foreach ($Property in $Properties.Keys) {
+            $this.$Property = $Properties.$Property
+        }
+    }
+
+    # Creates a context object from a PSCustomObject.
+    UserGitHubContext([PSCustomObject]$Object) {
+        $Object.PSObject.Properties | ForEach-Object {
+            $this.($_.Name) = $_.Value
+        }
+    }
 }
