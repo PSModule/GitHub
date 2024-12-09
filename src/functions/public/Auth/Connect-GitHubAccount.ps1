@@ -294,12 +294,6 @@
         Write-Error $_
         Write-Error (Get-PSCallStack | Format-Table | Out-String)
         throw 'Failed to connect to GitHub.'
-    } finally {
-        Remove-Variable -Name tokenResponse -ErrorAction SilentlyContinue
-        Remove-Variable -Name context -ErrorAction SilentlyContinue
-        Remove-Variable -Name contextData -ErrorAction SilentlyContinue
-        Remove-Variable -Name Token -ErrorAction SilentlyContinue
-        [System.GC]::Collect()
     }
     Write-Verbose "[$commandName] - End"
 }

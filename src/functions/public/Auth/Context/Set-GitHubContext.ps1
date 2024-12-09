@@ -95,9 +95,9 @@ function Set-GitHubContext {
             if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
                 Set-Context -ID "$($script:GitHub.Config.ID)/$($context['Name'])" -Context $context
                 if ($Default) {
-                    Set-GitHubDefaultContext -Context $($context['Name'])
+                    Set-GitHubDefaultContext -Context $context['Name']
                     if ($Context['AuthType'] -eq 'IAT' -and $script:GitHub.EnvironmentType -eq 'GHA') {
-                        Set-GitHubGitConfig -Context $($context['Name'])
+                        Set-GitHubGitConfig -Context $context['Name']
                     }
                 }
                 if ($PassThru) {

@@ -33,7 +33,7 @@
         $commandName = $MyInvocation.MyCommand.Name
         Write-Verbose "[$commandName] - Start"
         Write-Verbose 'Context:'
-        $Context | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+        $Context | Format-Table | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
     }
 
     process {
@@ -59,6 +59,9 @@
         #         }
         #     }
         # }
+
+        Write-Verbose 'Resolved Context:'
+        $Context | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
     }
 
     end {
