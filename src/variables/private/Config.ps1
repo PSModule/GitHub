@@ -1,5 +1,4 @@
 ﻿$script:GitHub = [pscustomobject]@{
-    Initialized        = $false
     TokenPrefixPattern = '(?<=^(ghu|gho|ghs|github_pat|ghp)).*'
     EnvironmentType    = if ($env:GITHUB_ACTIONS -eq 'true') {
         'GHA'

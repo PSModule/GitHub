@@ -179,7 +179,26 @@
                 Write-Debug 'Response headers:'
                 $headers | Out-String -Stream | ForEach-Object { Write-Debug $_ }
                 Write-Debug '---------------------------'
-                $results = $response.Content | ConvertFrom-Json
+                Write-Debug 'Response:'
+                $response | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+                Write-Debug '---------------------------'
+                Write-Debug $headers.'Content-Type'
+                switch -Regex ($headers.'Content-Type') {
+                    'application/json' {
+                        $results = $response.Content | ConvertFrom-Json
+                    }
+                    'application/vnd.github.v3+json' {
+                        $results = $response.Content | ConvertFrom-Json
+                    }
+                    'text/plain' {
+                        $results = $response.Content
+                    }
+                    default {
+                        Write-Warning "Unknown content type: $($headers.'Content-Type')"
+                        Write-Warning 'Please report this issue!'
+                        $results = $response.Content
+                    }
+                }
                 [pscustomobject]@{
                     Request           = $APICall
                     Response          = $results
