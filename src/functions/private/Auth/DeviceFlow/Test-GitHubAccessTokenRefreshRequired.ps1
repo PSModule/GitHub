@@ -21,12 +21,9 @@
     )
 
     $Context = Resolve-GitHubContext -Context $Context
-
-    $gitHubConfig = Get-GitHubConfig
     $tokenExpirationDate = $Context.TokenExpirationDate
     $currentDateTime = Get-Date
     $remainingDuration = [datetime]$tokenExpirationDate - $currentDateTime
 
-    # If the remaining time is less that $script:Auth.AccessTokenGracePeriodInHours then the token should be refreshed
-    $remainingDuration.TotalHours -lt $gitHubConfig.AccessTokenGracePeriodInHours
+    $remainingDuration.TotalHours -lt $script:GitHub.Config.AccessTokenGracePeriodInHours
 }

@@ -1,89 +1,33 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '4.0.0' }
+﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '5.0.1' }
 
 function Set-GitHubContext {
     <#
         .SYNOPSIS
-        Short description
+        Sets the GitHub context and stores it in the context vault.
 
         .DESCRIPTION
-        Long description
+        This function sets the GitHub context and stores it in the context vault.
+        The context is used to authenticate with the GitHub API.
 
         .EXAMPLE
-        An example
+        $context = @{
+            ApiBaseUri = 'https://api.github.com'
+            ApiVersion = '2022-11-28'
+            HostName   = 'github.com'
+            AuthType   = 'PAT'
+            Enterprise = 'msx'
+            Owner      = 'octocat'
+            Repo       = 'Hello-World'
+        }
+        Set-GitHubContext -Context $context
 
-        .NOTES
-        General notes
+        Sets the GitHub context with the specified settings as a hashtable.
     #>
     [OutputType([GitHubContext])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
-        # Set the access token type.
-        [Parameter(Mandatory)]
-        [string] $TokenType,
-
-        # Set the client ID.
-        [Parameter()]
-        [string] $ClientID,
-
-        # Set the access token.
-        [Parameter(Mandatory)]
-        [securestring] $Token,
-
-        # Set the expiration date of the contexts token.
-        [Parameter()]
-        [datetime] $TokenExpirationDate,
-
-        # Set the API Base URI.
-        [Parameter(Mandatory)]
-        [string] $ApiBaseUri,
-
-        # Set the GitHub API Version.
-        [Parameter(Mandatory)]
-        [string] $ApiVersion,
-
-        # Set the authentication client ID.
-        [Parameter()]
-        [string] $AuthClientID,
-
-        # Set the authentication type.
-        [Parameter(Mandatory)]
-        [string] $AuthType,
-
-        # Set the device flow type.
-        [Parameter()]
-        [string] $DeviceFlowType,
-
-        # Set the API hostname.
-        [Parameter(Mandatory)]
-        [string] $HostName,
-
-        # Set the installation ID.
-        [Parameter()]
-        [int] $InstallationID,
-
-        # Set the enterprise name for the context.
-        [Parameter()]
-        [string] $Enterprise,
-
-        # Set the default for the Owner parameter.
-        [Parameter()]
-        [string] $Owner,
-
-        # Set the refresh token.
-        [Parameter()]
-        [securestring] $RefreshToken,
-
-        # Set the refresh token expiration date.
-        [Parameter()]
-        [datetime] $RefreshTokenExpirationDate,
-
-        # Set the default for the Repo parameter.
-        [Parameter()]
-        [string] $Repo,
-
-        # Set the scope.
-        [Parameter()]
-        [string] $Scope,
+        # The GitHub context to save in the vault.
+        [hashtable] $Context,
 
         # Set as the default context.
         [Parameter()]
@@ -100,76 +44,64 @@ function Set-GitHubContext {
     }
 
     process {
-        $context = @{
-            ApiBaseUri                 = $ApiBaseUri                 # https://api.github.com
-            ApiVersion                 = $ApiVersion                 # 2022-11-28
-            AuthClientID               = $AuthClientID               # Client ID for UAT
-            AuthType                   = $AuthType                   # UAT / PAT / App / IAT
-            ClientID                   = $ClientID                   # Client ID for GitHub Apps
-            InstallationID             = $InstallationID            # Installation ID
-            DeviceFlowType             = $DeviceFlowType             # GitHubApp / OAuthApp
-            HostName                   = $HostName                   # github.com / msx.ghe.com / github.local
-            Enterprise                 = $Enterprise                 # Enterprise name
-            Owner                      = $Owner                      # Owner name
-            Repo                       = $Repo                       # Repo name
-            Scope                      = $Scope                      # 'gist read:org repo workflow'
-            #-----------------------------------------------------------------------------------------
-            TokenType                  = $TokenType                  # ghu / gho / ghp / github_pat / PEM / ghs /
-            Token                      = $Token                      # Access token
-            TokenExpirationDate        = $TokenExpirationDate        # 2024-01-01-00:00:00
-            RefreshToken               = $RefreshToken               # Refresh token
-            RefreshTokenExpirationDate = $RefreshTokenExpirationDate # 2024-01-01-00:00:00
-        }
-
-        $context | Remove-HashtableEntry -NullOrEmptyValues
-        $tempContext = [GitHubContext]$context
+        Write-Verbose 'Context:'
+        $Context | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
 
         # Run functions to get info on the temporary context.
         try {
-            Write-Verbose 'Getting info on the context.'
-            switch -Regex ($AuthType) {
+            Write-Verbose "Getting info on the context [$($Context['AuthType'])]."
+            switch -Regex ($($Context['AuthType'])) {
                 'PAT|UAT|IAT' {
-                    $viewer = Get-GitHubViewer -Context $tempContext
+                    $viewer = Get-GitHubViewer -Context $Context
                     $login = $viewer.login
-                    $context['Username'] = $login
-                    $context['NodeID'] = $viewer.id
-                    $context['DatabaseID'] = ($viewer.databaseId).ToString()
+                    $Context += @{
+                        Username   = $login
+                        NodeID     = $viewer.id
+                        DatabaseID = ($viewer.databaseId).ToString()
+                    }
                 }
                 'PAT|UAT' {
-                    $contextName = "$HostName/$login"
-                    $context['Name'] = $contextName
-                    $context['Type'] = 'User'
+                    $ContextName = "$($Context['HostName'])/$login"
+                    $Context += @{
+                        Name = $ContextName
+                        Type = 'User'
+                    }
                 }
                 'IAT' {
-                    $contextName = "$HostName/$login/$Owner" -Replace '\[bot\]'
-                    $context['Name'] = $contextName
-                    $context['Type'] = 'Installation'
+                    $ContextName = "$($Context['HostName'])/$login/$($Context['Owner'])" -Replace '\[bot\]'
+                    $Context += @{
+                        Name = $ContextName
+                        Type = 'Installation'
+                    }
                 }
                 'App' {
-                    $app = Get-GitHubApp -Context $tempContext
-                    $contextName = "$HostName/$($app.slug)"
-                    $context['Name'] = $contextName
-                    $context['Username'] = $app.slug
-                    $context['NodeID'] = $app.node_id
-                    $context['DatabaseID'] = $app.id
-                    $context['Type'] = 'App'
+                    $app = Get-GitHubApp -Context $Context
+                    $ContextName = "$($Context['HostName'])/$($app.slug)"
+                    $Context += @{
+                        Name       = $ContextName
+                        Username   = $app.slug
+                        NodeID     = $app.node_id
+                        DatabaseID = $app.id
+                        Type       = 'App'
+                    }
                 }
                 default {
                     throw 'Failed to get info on the context. Unknown logon type.'
                 }
             }
-            Write-Verbose "Found [$($context['Type']) with login: [$contextName]"
+            Write-Verbose "Found [$($Context['Type'])] with login: [$($Context['Name'])]"
+            $Context | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
 
             if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
-                Set-Context -ID "$($script:Config.Name)/$contextName" -Context $context
+                Set-Context -ID "$($script:GitHub.Config.ID)/$($Context['Name'])" -Context $Context
                 if ($Default) {
-                    Set-GitHubDefaultContext -Context $contextName
-                    if ($AuthType -eq 'IAT' -and $script:runEnv -eq 'GHA') {
-                        Set-GitHubGitConfig -Context $contextName
+                    Set-GitHubDefaultContext -Context $Context['Name']
+                    if ($Context['AuthType'] -eq 'IAT' -and $script:GitHub.EnvironmentType -eq 'GHA') {
+                        Set-GitHubGitConfig -Context $Context['Name']
                     }
                 }
                 if ($PassThru) {
-                    Get-GitHubContext -Context $contextName
+                    Get-GitHubContext -Context $($Context['Name'])
                 }
             }
         } catch {

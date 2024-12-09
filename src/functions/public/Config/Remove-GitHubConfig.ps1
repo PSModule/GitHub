@@ -1,4 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '4.0.0' }
+﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '5.0.1' }
 
 function Remove-GitHubConfig {
     <#
@@ -20,18 +20,34 @@ function Remove-GitHubConfig {
         [string] $Name
     )
 
-    $commandName = $MyInvocation.MyCommand.Name
-    Write-Verbose "[$commandName] - Start"
-
-    try {
-        if ($PSCmdlet.ShouldProcess('ContextSetting', 'Remove')) {
-            Remove-ContextSetting -Name $Name -ID $script:Config.Name
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Verbose "[$commandName] - Start"
+        try {
+            if (-not $script:GitHub.Initialized) {
+                Initialize-GitHubConfig
+                Write-Debug "Connected to context [$($script:GitHub.Config.ID)]"
+            }
+        } catch {
+            Write-Error $_
+            throw 'Failed to initialize secret vault'
         }
-    } catch {
-        Write-Error $_
-        Write-Error (Get-PSCallStack | Format-Table | Out-String)
-        throw 'Failed to connect to GitHub.'
     }
 
-    Write-Verbose "[$commandName] - End"
+    process {
+        try {
+            if ($PSCmdlet.ShouldProcess('ContextSetting', 'Remove')) {
+                $script:GitHub.Config.$Name = $null
+            }
+        } catch {
+            Write-Error $_
+            Write-Error (Get-PSCallStack | Format-Table | Out-String)
+            throw 'Failed to connect to GitHub.'
+        }
+        Set-Context -ID $script:GitHub.Config.ID -Context $script:GitHub.Config
+    }
+
+    end {
+        Write-Verbose "[$commandName] - End"
+    }
 }

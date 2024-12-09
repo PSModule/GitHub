@@ -11,18 +11,25 @@
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param(
-        # The context to set as the default.
-        [Parameter(Mandatory)]
-        [Alias('Name')]
-        [string] $Context
+        # The context to run the command in. Used to get the details for the API call.
+        # Can be either a string or a GitHubContext object.
+        [Parameter()]
+        [object] $Context = (Get-GitHubContext)
     )
 
-    $commandName = $MyInvocation.MyCommand.Name
-    Write-Verbose "[$commandName] - Start"
-
-    if ($PSCmdlet.ShouldProcess("$Context", 'Set default context')) {
-        Set-GitHubConfig -Name 'DefaultContext' -Value $Context
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Verbose "[$commandName] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
     }
 
-    Write-Verbose "[$commandName] - End"
+    process {
+        if ($PSCmdlet.ShouldProcess("$Context", 'Set default context')) {
+            Set-GitHubConfig -Name 'DefaultContext' -Value $Context.Name
+        }
+    }
+
+    end {
+        Write-Verbose "[$commandName] - End"
+    }
 }
