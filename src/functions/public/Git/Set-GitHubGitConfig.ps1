@@ -38,12 +38,19 @@
 
         $username = $Context.UserName
         $id = $Context.DatabaseID
+        Write-Verbose "Context.Token: [$($Context.Token)]"
         $token = $Context.Token | ConvertFrom-SecureString -AsPlainText
+        Write-Verbose "token:         [$($token)]"
         $hostName = $Context.HostName
 
         if ($PSCmdlet.ShouldProcess("$Name", 'Set Git configuration')) {
+            Write-Verbose "git config --local user.name '$username'"
             git config --local user.name "$username"
+
+            Write-Verbose "git config --local user.email '$id+$username@users.noreply.github.com'"
             git config --local user.email "$id+$username@users.noreply.github.com"
+
+            Write-Verbose "git config --local 'url.https://oauth2:$token@$hostName.insteadOf' 'https://$hostName'"
             git config --local "url.https://oauth2:$token@$hostName.insteadOf" "https://$hostName"
         }
     }
