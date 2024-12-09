@@ -31,3 +31,4 @@ jobs:
           VALIDATE_MARKDOWN_PRETTIER: false
           VALIDATE_YAML_PRETTIER: false
           VALIDATE_GITLEAKS: false
+          VALIDATE_POWERSHELL: false # Added due to class usage in the project... TypeNotFound
