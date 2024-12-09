@@ -118,7 +118,7 @@
             }
             Write-Verbose 'Logging in using an installation access token...'
             Write-Verbose ($contextParams | Format-Table | Out-String)
-            $tmpContext = Set-GitHubContext -Context [InstallationGitHubContext]$contextParams -PassThru
+            $tmpContext = [InstallationGitHubContext]::new((Set-GitHubContext -Context $contextParams -PassThru))
             Write-Verbose ($tmpContext | Format-List | Out-String)
             if (-not $Silent) {
                 $name = $tmpContext.name
