@@ -56,9 +56,10 @@ function Set-GitHubContext {
                     $viewer = Get-GitHubViewer -Context $Context
                     $login = $viewer.login
                     $Context += @{
-                        Username   = $login
-                        NodeID     = $viewer.id
-                        DatabaseID = ($viewer.databaseId).ToString()
+                        DisplayName = $viewer.name
+                        Username    = $login
+                        NodeID      = $viewer.id
+                        DatabaseID  = ($viewer.databaseId).ToString()
                     }
                 }
                 'PAT|UAT' {
@@ -79,11 +80,16 @@ function Set-GitHubContext {
                     $app = Get-GitHubApp -Context $Context
                     $ContextName = "$($Context['HostName'])/$($app.slug)"
                     $Context += @{
-                        Name       = $ContextName
-                        Username   = $app.slug
-                        NodeID     = $app.node_id
-                        DatabaseID = $app.id
-                        Type       = 'App'
+                        Name        = $ContextName
+                        DisplayName = $app.name
+                        Username    = $app.slug
+                        NodeID      = $app.node_id
+                        DatabaseID  = $app.id
+                        Permissions = $app.permissions
+                        Events      = $app.events
+                        Owner       = $app.owner.login
+                        OwnerType   = $app.owner.type
+                        Type        = 'App'
                     }
                 }
                 default {

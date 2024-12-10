@@ -109,16 +109,25 @@
                 InstallationID      = $installation.id
                 Token               = $token.Token
                 TokenExpirationDate = $token.ExpiresAt
+                Permissions         = $installation.permissions
+                Events              = $installation.events
+                TargetType          = $installation.target_type
             }
             switch ($installation.target_type) {
                 'User' {
-                    $contextParams['Owner'] = $installation.account.login
+                    $contextParams += @{
+                        TargetName = $installation.account.login
+                    }
                 }
                 'Organization' {
-                    $contextParams['Owner'] = $installation.account.login
+                    $contextParams += @{
+                        TargetName = $installation.account.login
+                    }
                 }
                 'Enterprise' {
-                    $contextParams['Enterprise'] = $installation.account.slug
+                    $contextParams += @{
+                        TargetName = $installation.account.slug
+                    }
                 }
             }
             Write-Verbose 'Logging in using an installation access token...'
