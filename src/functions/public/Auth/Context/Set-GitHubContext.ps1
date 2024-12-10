@@ -55,12 +55,12 @@ function Set-GitHubContext {
                 'PAT|UAT|IAT' {
                     $viewer = Get-GitHubViewer -Context $Context
                     $viewer | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
-                    $login = $viewer.login
+                    $login = [string]$viewer.login
                     $Context += @{
-                        DisplayName = $viewer.name
-                        Username    = $login
-                        NodeID      = $viewer.id
-                        DatabaseID  = ($viewer.databaseId).ToString()
+                        DisplayName = [string]$viewer.name
+                        Username    = [string]$login
+                        NodeID      = [string]$viewer.id
+                        DatabaseID  = [string]$viewer.databaseId
                     }
                 }
                 'PAT|UAT' {
@@ -82,14 +82,14 @@ function Set-GitHubContext {
                     $ContextName = "$($Context['HostName'])/$($app.slug)"
                     $Context += @{
                         Name        = $ContextName
-                        DisplayName = $app.name
-                        Username    = $app.slug
-                        NodeID      = $app.node_id
-                        DatabaseID  = $app.id
-                        Permissions = $app.permissions
-                        Events      = $app.events
-                        OwnerName   = $app.owner.login
-                        OwnerType   = $app.owner.type
+                        DisplayName = [string]$app.name
+                        Username    = [string]$app.slug
+                        NodeID      = [string]$app.node_id
+                        DatabaseID  = [string]$app.id
+                        Permissions = [string]$app.permissions
+                        Events      = [string]$app.events
+                        OwnerName   = [string]$app.owner.login
+                        OwnerType   = [string]$app.owner.type
                         Type        = 'App'
                     }
                 }
@@ -97,7 +97,6 @@ function Set-GitHubContext {
                     throw 'Failed to get info on the context. Unknown logon type.'
                 }
             }
-            $contextObj = [pscustomobject]$Context
             Write-Verbose "Found [$($contextObj.Type)] with login: [$($contextObj.Name)]"
             $contextObj | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
             Write-Verbose "----------------------------------------------------"
