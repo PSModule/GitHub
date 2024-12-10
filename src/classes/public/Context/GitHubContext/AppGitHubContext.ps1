@@ -3,7 +3,7 @@
     [string] $ClientID
 
     # Owner of the GitHub App
-    [string] $Owner
+    [string] $OwnerName
 
     # Type of the owner of the GitHub App
     [string] $OwnerType

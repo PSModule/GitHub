@@ -87,7 +87,7 @@ function Set-GitHubContext {
                         DatabaseID  = $app.id
                         Permissions = $app.permissions
                         Events      = $app.events
-                        Owner       = $app.owner.login
+                        OwnerName   = $app.owner.login
                         OwnerType   = $app.owner.type
                         Type        = 'App'
                     }
@@ -98,8 +98,9 @@ function Set-GitHubContext {
             }
             Write-Verbose "Found [$($Context['Type'])] with login: [$($Context['Name'])]"
             $Context | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
-
+            Write-Verbose "----------------------------------------------------"
             if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
+                Write-Verbose "Saving context: [$($script:GitHub.Config.ID)/$($Context['Name'])]"
                 Set-Context -ID "$($script:GitHub.Config.ID)/$($Context['Name'])" -Context $Context
                 if ($Default) {
                     Set-GitHubDefaultContext -Context $Context['Name']
@@ -112,7 +113,7 @@ function Set-GitHubContext {
                 }
             }
         } catch {
-            Write-Error $_ | Select *
+            Write-Error $_ | Select-Object *
             throw 'Failed to set the GitHub context.'
         }
     }
