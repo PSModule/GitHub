@@ -96,20 +96,21 @@ function Set-GitHubContext {
                     throw 'Failed to get info on the context. Unknown logon type.'
                 }
             }
-            Write-Verbose "Found [$($Context['Type'])] with login: [$($Context['Name'])]"
-            $Context | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+            $contextObj = [pscustomobject]$Context
+            Write-Verbose "Found [$($contextObj.Type)] with login: [$($contextObj.Name)]"
+            $contextObj | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
             Write-Verbose "----------------------------------------------------"
             if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
-                Write-Verbose "Saving context: [$($script:GitHub.Config.ID)/$($Context['Name'])]"
-                Set-Context -ID "$($script:GitHub.Config.ID)/$($Context['Name'])" -Context $Context
+                Write-Verbose "Saving context: [$($script:GitHub.Config.ID)/$($contextObj.Name)]"
+                Set-Context -ID "$($script:GitHub.Config.ID)/$($contextObj.Name)" -Context $contextObj -Debug -Verbose
                 if ($Default) {
-                    Set-GitHubDefaultContext -Context $Context['Name']
-                    if ($Context['AuthType'] -eq 'IAT' -and $script:GitHub.EnvironmentType -eq 'GHA') {
-                        Set-GitHubGitConfig -Context $Context['Name']
+                    Set-GitHubDefaultContext -Context $contextObj.Name
+                    if ($contextObj.AuthType -eq 'IAT' -and $script:GitHub.EnvironmentType -eq 'GHA') {
+                        Set-GitHubGitConfig -Context $contextObj.Name
                     }
                 }
                 if ($PassThru) {
-                    Get-GitHubContext -Context $($Context['Name'])
+                    Get-GitHubContext -Context $($contextObj.Name)
                 }
             }
         } catch {
