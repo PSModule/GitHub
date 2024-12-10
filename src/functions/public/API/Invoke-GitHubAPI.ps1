@@ -184,10 +184,7 @@
                 Write-Debug '---------------------------'
                 Write-Debug $headers.'Content-Type'
                 switch -Regex ($headers.'Content-Type') {
-                    'application/json' {
-                        $results = $response.Content | ConvertFrom-Json
-                    }
-                    'application/vnd.github.v3+json' {
+                    'application/.*json' {
                         $results = $response.Content | ConvertFrom-Json
                     }
                     'text/plain' {
