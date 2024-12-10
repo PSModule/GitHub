@@ -112,7 +112,8 @@ function Set-GitHubContext {
                 }
             }
         } catch {
-            throw ($_ -join ';')
+            Write-Error $_ | Select *
+            throw 'Failed to set the GitHub context.'
         }
     }
 
