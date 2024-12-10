@@ -103,6 +103,12 @@
         )]
         [string] $PrivateKey,
 
+        # Skip loading GitHub App contexts.
+        [Parameter(
+            ParameterSetName = 'App'
+        )]
+        [switch] $SkipAppAutoload,
+
         # The default enterprise to use in commands.
         [Parameter()]
         [string] $Enterprise,
@@ -290,6 +296,12 @@
             Write-Host '✓ ' -ForegroundColor Green -NoNewline
             Write-Host "Logged in as $name!"
         }
+
+        if ($authType -eq 'App' -and -not $SkipAppAutoload) {
+            Write-Verbose 'Loading GitHub App contexts...'
+            Get-GitHubApp
+        }
+
     } catch {
         Write-Error $_
         Write-Error (Get-PSCallStack | Format-Table | Out-String)
