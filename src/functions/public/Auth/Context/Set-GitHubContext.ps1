@@ -54,6 +54,7 @@ function Set-GitHubContext {
             switch -Regex ($($Context['AuthType'])) {
                 'PAT|UAT|IAT' {
                     $viewer = Get-GitHubViewer -Context $Context
+                    $viewer | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
                     $login = $viewer.login
                     $Context += @{
                         DisplayName = $viewer.name
