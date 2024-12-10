@@ -182,7 +182,6 @@
                 Write-Debug 'Response:'
                 $response | Out-String -Stream | ForEach-Object { Write-Debug $_ }
                 Write-Debug '---------------------------'
-                Write-Debug $headers.'Content-Type'
                 switch -Regex ($headers.'Content-Type') {
                     'application/.*json' {
                         $results = $response.Content | ConvertFrom-Json
@@ -195,6 +194,10 @@
                         $results = [System.Text.Encoding]::UTF8.GetString($byteArray)
                     }
                     default {
+                        if (-not $response.Content) {
+                            $results = $null
+                            break
+                        }
                         Write-Warning "Unknown content type: $($headers.'Content-Type')"
                         Write-Warning 'Please report this issue!'
                         [byte[]]$byteArray = $response.Content
