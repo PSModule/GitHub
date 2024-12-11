@@ -270,6 +270,7 @@
                     $tokenType = $Token -replace $script:GitHub.TokenPrefixPattern
                     switch -Regex ($tokenType) {
                         'ghp|github_pat' {
+                            Write-Verbose 'Logging in using a user access token...'
                             $context += @{
                                 Token     = ConvertTo-SecureString -AsPlainText $Token
                                 TokenType = $tokenType

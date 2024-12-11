@@ -98,11 +98,11 @@ function Set-GitHubContext {
                 }
             }
             Write-Verbose "Found [$($Context['Type'])] with login: [$($Context['Name'])]"
-            $contextObj | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+            $Context | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
             Write-Verbose '----------------------------------------------------'
             if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
                 Write-Verbose "Saving context: [$($script:GitHub.Config.ID)/$($Context['Name'])]"
-                Set-Context -ID "$($script:GitHub.Config.ID)/$($Context['Name'])" -Context $contextObj
+                Set-Context -ID "$($script:GitHub.Config.ID)/$($Context['Name'])" -Context $Context
                 if ($Default) {
                     Set-GitHubDefaultContext -Context $Context['Name']
                     if ($Context['AuthType'] -eq 'IAT' -and $script:GitHub.EnvironmentType -eq 'GHA') {
