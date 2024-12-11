@@ -72,7 +72,7 @@ function Set-GitHubContext {
                 }
                 'IAT' {
                     $gitHubEvent = Get-Content -Path $env:GITHUB_EVENT_PATH -Raw | ConvertFrom-Json
-                    $app = Get-GitHubApp -AppSlug $login
+                    $app = Get-GitHubApp -AppSlug $login -Context $Context
                     $targetType = $gitHubEvent.repository.owner.type
                     $targetName = $gitHubEvent.repository.owner.login
                     Write-Verbose ('Enterprise:            ' + $gitHubEvent.enterprise.slug)
