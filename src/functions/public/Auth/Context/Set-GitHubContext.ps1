@@ -102,7 +102,7 @@ function Set-GitHubContext {
             Write-Verbose '----------------------------------------------------'
             if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
                 Write-Verbose "Saving context: [$($script:GitHub.Config.ID)/$($Context['Name'])]"
-                Set-Context -ID "$($script:GitHub.Config.ID)/$($Context['Name'])" -Context $contextObj -Debug -Verbose
+                Set-Context -ID "$($script:GitHub.Config.ID)/$($Context['Name'])" -Context $contextObj
                 if ($Default) {
                     Set-GitHubDefaultContext -Context $Context['Name']
                     if ($Context['AuthType'] -eq 'IAT' -and $script:GitHub.EnvironmentType -eq 'GHA') {
