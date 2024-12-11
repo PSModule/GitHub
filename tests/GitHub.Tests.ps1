@@ -92,10 +92,6 @@ Describe 'GitHub' {
             Get-GitHubConfig -Name 'DefaultContext' | Should -Be 'github.com/github-actions/Organization/PSModule'
         }
 
-        # It 'Can be called with a GitHub App Installation Access Token' {
-        #     { Connect-GitHubAccount -Token $env:TEST_APP_INSTALLATION_ACCESS_TOKEN } | Should -Not -Throw
-        # }
-
         It 'Get-GitHubViewer can be called' {
             Get-GitHubViewer | Should -Not -BeNullOrEmpty
         }
