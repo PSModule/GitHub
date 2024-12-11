@@ -58,7 +58,7 @@ function Set-GitHubContext {
                     $login = [string]$viewer.login
                     $Context += @{
                         DisplayName = [string]$viewer.name
-                        Username    = [string]$login
+                        Username    = $login
                         NodeID      = [string]$viewer.id
                         DatabaseID  = [string]$viewer.databaseId
                     }
@@ -97,20 +97,20 @@ function Set-GitHubContext {
                     throw 'Failed to get info on the context. Unknown logon type.'
                 }
             }
-            Write-Verbose "Found [$($contextObj.Type)] with login: [$($contextObj.Name)]"
+            Write-Verbose "Found [$($Context['Type'])] with login: [$($Context['Name'])]"
             $contextObj | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
-            Write-Verbose "----------------------------------------------------"
+            Write-Verbose '----------------------------------------------------'
             if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
-                Write-Verbose "Saving context: [$($script:GitHub.Config.ID)/$($contextObj.Name)]"
-                Set-Context -ID "$($script:GitHub.Config.ID)/$($contextObj.Name)" -Context $contextObj -Debug -Verbose
+                Write-Verbose "Saving context: [$($script:GitHub.Config.ID)/$($Context['Name'])]"
+                Set-Context -ID "$($script:GitHub.Config.ID)/$($Context['Name'])" -Context $contextObj -Debug -Verbose
                 if ($Default) {
-                    Set-GitHubDefaultContext -Context $contextObj.Name
-                    if ($contextObj.AuthType -eq 'IAT' -and $script:GitHub.EnvironmentType -eq 'GHA') {
-                        Set-GitHubGitConfig -Context $contextObj.Name
+                    Set-GitHubDefaultContext -Context $Context['Name']
+                    if ($Context['AuthType'] -eq 'IAT' -and $script:GitHub.EnvironmentType -eq 'GHA') {
+                        Set-GitHubGitConfig -Context $Context['Name']
                     }
                 }
                 if ($PassThru) {
-                    Get-GitHubContext -Context $($contextObj.Name)
+                    Get-GitHubContext -Context $($Context['Name'])
                 }
             }
         } catch {
