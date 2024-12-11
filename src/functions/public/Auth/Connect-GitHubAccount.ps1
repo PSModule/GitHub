@@ -188,7 +188,6 @@
                     Write-Verbose ('Repository Owner:      ' + $gitHubEvent.repository.owner.login)
                     Write-Verbose ('Repository Owner Type: ' + $gitHubEvent.repository.owner.type)
                     Write-Verbose ('Sender:                ' + $gitHubEvent.sender.login)
-
                     $Enterprise = [string]$gitHubEvent.enterprise.slug
                     $TargetType = [string]$gitHubEvent.repository.owner.type
                     $TargetName = [string]$gitHubEvent.repository.owner.login
