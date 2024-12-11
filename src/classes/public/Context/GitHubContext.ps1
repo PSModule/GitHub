@@ -4,6 +4,10 @@
     # github.com/Octocat
     [string] $Name
 
+    # The display name of the context.
+    # Octocat
+    [string] $DisplayName
+
     # The context type
     # User / App / Installation
     [string] $Type

@@ -36,3 +36,5 @@ jobs:
     secrets: inherit
     with:
       SkipTests: SourceCode
+      Debug: true
+      Verbose: true

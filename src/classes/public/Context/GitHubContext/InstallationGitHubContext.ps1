@@ -9,6 +9,18 @@
     # The installation ID.
     [int] $InstallationID
 
+    # The permissions that the app is requesting on the target
+    [string[]] $Permissions
+
+    # The events that the app is subscribing to once installed
+    [string[]] $Events
+
+    # The target type of the installation.
+    [string] $TargetType
+
+    # The target login of the installation.
+    [string] $TargetName
+
     # Creates a context object from a hashtable of key-vaule pairs.
     InstallationGitHubContext([hashtable]$Properties) {
         foreach ($Property in $Properties.Keys) {

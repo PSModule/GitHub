@@ -18,7 +18,7 @@
     param(
         # The fields to return.
         [Parameter()]
-        [string[]] $Fields = @('login', 'id', 'databaseId'),
+        [string[]] $Fields = @('name', 'login', 'id', 'databaseId'),
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.

@@ -54,11 +54,13 @@ function Set-GitHubContext {
             switch -Regex ($($Context['AuthType'])) {
                 'PAT|UAT|IAT' {
                     $viewer = Get-GitHubViewer -Context $Context
-                    $login = $viewer.login
+                    $viewer | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+                    $login = [string]$viewer.login
                     $Context += @{
-                        Username   = $login
-                        NodeID     = $viewer.id
-                        DatabaseID = ($viewer.databaseId).ToString()
+                        DisplayName = [string]$viewer.name
+                        Username    = $login
+                        NodeID      = [string]$viewer.id
+                        DatabaseID  = [string]$viewer.databaseId
                     }
                 }
                 'PAT|UAT' {
@@ -79,11 +81,16 @@ function Set-GitHubContext {
                     $app = Get-GitHubApp -Context $Context
                     $ContextName = "$($Context['HostName'])/$($app.slug)"
                     $Context += @{
-                        Name       = $ContextName
-                        Username   = $app.slug
-                        NodeID     = $app.node_id
-                        DatabaseID = $app.id
-                        Type       = 'App'
+                        Name        = $ContextName
+                        DisplayName = [string]$app.name
+                        Username    = [string]$app.slug
+                        NodeID      = [string]$app.node_id
+                        DatabaseID  = [string]$app.id
+                        Permissions = [string]$app.permissions
+                        Events      = [string]$app.events
+                        OwnerName   = [string]$app.owner.login
+                        OwnerType   = [string]$app.owner.type
+                        Type        = 'App'
                     }
                 }
                 default {
@@ -92,8 +99,9 @@ function Set-GitHubContext {
             }
             Write-Verbose "Found [$($Context['Type'])] with login: [$($Context['Name'])]"
             $Context | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
-
+            Write-Verbose '----------------------------------------------------'
             if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
+                Write-Verbose "Saving context: [$($script:GitHub.Config.ID)/$($Context['Name'])]"
                 Set-Context -ID "$($script:GitHub.Config.ID)/$($Context['Name'])" -Context $Context
                 if ($Default) {
                     Set-GitHubDefaultContext -Context $Context['Name']
@@ -106,7 +114,8 @@ function Set-GitHubContext {
                 }
             }
         } catch {
-            throw ($_ -join ';')
+            Write-Error $_ | Select-Object *
+            throw 'Failed to set the GitHub context.'
         }
     }
 

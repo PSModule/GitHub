@@ -103,6 +103,12 @@
         )]
         [string] $PrivateKey,
 
+        # Skip loading GitHub App contexts.
+        [Parameter(
+            ParameterSetName = 'App'
+        )]
+        [switch] $SkipAppAutoload,
+
         # The default enterprise to use in commands.
         [Parameter()]
         [string] $Enterprise,
@@ -141,165 +147,181 @@
         [switch] $NotDefault
     )
 
-    $commandName = $MyInvocation.MyCommand.Name
-    Write-Verbose "[$commandName] - Start"
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Verbose "[$commandName] - Start"
+    }
 
-    try {
-        if ($Token -is [System.Security.SecureString]) {
-            $Token = ConvertFrom-SecureString $Token -AsPlainText
-        }
-
-        if (-not $HostName) {
-            $HostName = $script:GitHub.Config.HostName
-        }
-        $HostName = $HostName -replace '^https?://'
-        $ApiBaseUri = "https://api.$HostName"
-        $authType = $PSCmdlet.ParameterSetName
-
-        # If running on GitHub Actions and no access token is provided, use the GitHub token.
-        if (($env:GITHUB_ACTIONS -eq 'true') -and $PSCmdlet.ParameterSetName -ne 'App') {
-            $customTokenProvided = -not [string]::IsNullOrEmpty($Token)
-            $gitHubToken = $env:GH_TOKEN ?? $env:GITHUB_TOKEN
-            $gitHubTokenPresent = -not [string]::IsNullOrEmpty($gitHubToken)
-            Write-Verbose "A token was provided:  [$customTokenProvided]"
-            Write-Verbose "Detected GitHub token: [$gitHubTokenPresent]"
-            if (-not $customTokenProvided -and $gitHubTokenPresent) {
-                $authType = 'Token'
-                $Token = $gitHubToken
+    process {
+        try {
+            if ($Token -is [System.Security.SecureString]) {
+                $Token = ConvertFrom-SecureString $Token -AsPlainText
             }
-        }
 
-        $context = @{
-            ApiBaseUri = $ApiBaseUri
-            ApiVersion = $ApiVersion
-            HostName   = $HostName
-            AuthType   = $authType
-            Enterprise = $Enterprise
-            Owner      = $Owner
-            Repo       = $Repo
-        }
+            if (-not $HostName) {
+                $HostName = $script:GitHub.Config.HostName
+            }
+            $HostName = $HostName -replace '^https?://'
+            $ApiBaseUri = "https://api.$HostName"
+            $authType = $PSCmdlet.ParameterSetName
 
-        Write-Verbose ($context | Format-Table | Out-String)
+            # If running on GitHub Actions and no access token is provided, use the GitHub token.
+            if (($env:GITHUB_ACTIONS -eq 'true') -and $PSCmdlet.ParameterSetName -ne 'App') {
+                $customTokenProvided = -not [string]::IsNullOrEmpty($Token)
+                $gitHubToken = $env:GH_TOKEN ?? $env:GITHUB_TOKEN
+                $gitHubTokenPresent = -not [string]::IsNullOrEmpty($gitHubToken)
+                Write-Verbose "A token was provided:  [$customTokenProvided]"
+                Write-Verbose "Detected GitHub token: [$gitHubTokenPresent]"
+                if (-not $customTokenProvided -and $gitHubTokenPresent) {
+                    $authType = 'Token'
+                    $Token = $gitHubToken
+                }
+            }
 
-        switch ($authType) {
-            'UAT' {
-                Write-Verbose 'Logging in using device flow...'
-                if (-not [string]::IsNullOrEmpty($ClientID)) {
-                    Write-Verbose "Using provided ClientID: [$ClientID]"
-                    $authClientID = $ClientID
-                } else {
+            $context = @{
+                ApiBaseUri = $ApiBaseUri
+                ApiVersion = $ApiVersion
+                HostName   = $HostName
+                AuthType   = $authType
+                Enterprise = $Enterprise
+                Owner      = $Owner
+                Repo       = $Repo
+            }
+
+            Write-Verbose ($context | Format-Table | Out-String)
+
+            switch ($authType) {
+                'UAT' {
+                    Write-Verbose 'Logging in using device flow...'
+                    if (-not [string]::IsNullOrEmpty($ClientID)) {
+                        Write-Verbose "Using provided ClientID: [$ClientID]"
+                        $authClientID = $ClientID
+                    } else {
+                        switch ($Mode) {
+                            'GitHubApp' {
+                                Write-Verbose "Using default ClientID: [$($script:GitHub.Config.GitHubAppClientID)']"
+                                $authClientID = $($script:GitHub.Config.GitHubAppClientID)
+                            }
+                            'OAuthApp' {
+                                Write-Verbose "Using default ClientID: [$($script:GitHub.Config.OAuthAppClientID)]"
+                                $authClientID = $($script:GitHub.Config.OAuthAppClientID)
+                            }
+                            default {
+                                Write-Warning '⚠ ' -ForegroundColor Yellow -NoNewline
+                                Write-Warning "Unexpected authentication mode: $Mode"
+                                return
+                            }
+                        }
+                    }
+                    Write-Verbose "Using $Mode authentication..."
+                    $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $authClientID -Scope $Scope -HostName $HostName
+
                     switch ($Mode) {
                         'GitHubApp' {
-                            Write-Verbose "Using default ClientID: [$($script:GitHub.Config.GitHubAppClientID)']"
-                            $authClientID = $($script:GitHub.Config.GitHubAppClientID)
+                            $context += @{
+                                Token                      = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
+                                TokenExpirationDate        = (Get-Date).AddSeconds($tokenResponse.expires_in)
+                                TokenType                  = $tokenResponse.access_token -replace $script:GitHub.TokenPrefixPattern
+                                AuthClientID               = $authClientID
+                                DeviceFlowType             = $Mode
+                                RefreshToken               = ConvertTo-SecureString -AsPlainText $tokenResponse.refresh_token
+                                RefreshTokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.refresh_token_expires_in)
+                                Scope                      = $tokenResponse.scope
+                            }
                         }
                         'OAuthApp' {
-                            Write-Verbose "Using default ClientID: [$($script:GitHub.Config.OAuthAppClientID)]"
-                            $authClientID = $($script:GitHub.Config.OAuthAppClientID)
+                            $context += @{
+                                Token          = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
+                                TokenType      = $tokenResponse.access_token -replace $script:GitHub.TokenPrefixPattern
+                                AuthClientID   = $authClientID
+                                DeviceFlowType = $Mode
+                                Scope          = $tokenResponse.scope
+                            }
                         }
                         default {
-                            Write-Warning '⚠ ' -ForegroundColor Yellow -NoNewline
-                            Write-Warning "Unexpected authentication mode: $Mode"
+                            Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
+                            Write-Host "Unexpected authentication mode: $Mode"
                             return
                         }
                     }
                 }
-                Write-Verbose "Using $Mode authentication..."
-                $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $authClientID -Scope $Scope -HostName $HostName
+                'App' {
+                    Write-Verbose 'Logging in as a GitHub App...'
+                    $context += @{
+                        Token     = ConvertTo-SecureString -AsPlainText $PrivateKey
+                        TokenType = 'PEM'
+                        ClientID  = $ClientID
+                    }
+                }
+                'PAT' {
+                    Write-Debug "UseAccessToken is set to [$UseAccessToken]. Using provided access token..."
+                    Write-Verbose 'Logging in using personal access token...'
+                    Write-Host '! ' -ForegroundColor DarkYellow -NoNewline
+                    Start-Process "https://$HostName/settings/tokens"
+                    $accessTokenValue = Read-Host -Prompt 'Enter your personal access token' -AsSecureString
+                    $Token = ConvertFrom-SecureString $accessTokenValue -AsPlainText
+                    $tokenType = $Token -replace $script:GitHub.TokenPrefixPattern
+                    $context += @{
+                        Token     = ConvertTo-SecureString -AsPlainText $Token
+                        TokenType = $tokenType
+                    }
+                }
+                'Token' {
+                    $tokenType = $Token -replace $script:GitHub.TokenPrefixPattern
+                    switch -Regex ($tokenType) {
+                        'ghp|github_pat' {
+                            Write-Verbose 'Logging in using a user access token...'
+                            $context += @{
+                                Token     = ConvertTo-SecureString -AsPlainText $Token
+                                TokenType = $tokenType
+                            }
+                            $context['AuthType'] = 'PAT'
+                        }
+                        'ghs' {
+                            Write-Verbose 'Logging in using an installation access token...'
+                            $context += @{
+                                Token     = ConvertTo-SecureString -AsPlainText $Token
+                                TokenType = $tokenType
+                            }
+                            $context['AuthType'] = 'IAT'
+                        }
+                        default {
+                            Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
+                            Write-Host "Unexpected token type: $tokenType"
+                            throw "Unexpected token type: $tokenType"
+                        }
+                    }
+                }
+            }
+            $contextObj = Set-GitHubContext -Context $context -Default:(!$NotDefault) -PassThru
+            Write-Verbose ($contextObj | Format-List | Out-String)
+            if (-not $Silent) {
+                $name = $contextObj.Username
+                Write-Host '✓ ' -ForegroundColor Green -NoNewline
+                Write-Host "Logged in as $name!"
+            }
 
-                switch ($Mode) {
-                    'GitHubApp' {
-                        $context += @{
-                            Token                      = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
-                            TokenExpirationDate        = (Get-Date).AddSeconds($tokenResponse.expires_in)
-                            TokenType                  = $tokenResponse.access_token -replace $script:GitHub.TokenPrefixPattern
-                            AuthClientID               = $authClientID
-                            DeviceFlowType             = $Mode
-                            RefreshToken               = ConvertTo-SecureString -AsPlainText $tokenResponse.refresh_token
-                            RefreshTokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.refresh_token_expires_in)
-                            Scope                      = $tokenResponse.scope
-                        }
-                    }
-                    'OAuthApp' {
-                        $context += @{
-                            Token          = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
-                            TokenType      = $tokenResponse.access_token -replace $script:GitHub.TokenPrefixPattern
-                            AuthClientID   = $authClientID
-                            DeviceFlowType = $Mode
-                            Scope          = $tokenResponse.scope
-                        }
-                    }
-                    default {
-                        Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
-                        Write-Host "Unexpected authentication mode: $Mode"
-                        return
-                    }
-                }
+            if ($authType -eq 'App' -and -not $SkipAppAutoload) {
+                Write-Verbose 'Loading GitHub App contexts...'
+                Get-GitHubApp
             }
-            'App' {
-                Write-Verbose 'Logging in as a GitHub App...'
-                $context += @{
-                    Token     = ConvertTo-SecureString -AsPlainText $PrivateKey
-                    TokenType = 'PEM'
-                    ClientID  = $ClientID
-                }
-            }
-            'PAT' {
-                Write-Debug "UseAccessToken is set to [$UseAccessToken]. Using provided access token..."
-                Write-Verbose 'Logging in using personal access token...'
-                Write-Host '! ' -ForegroundColor DarkYellow -NoNewline
-                Start-Process "https://$HostName/settings/tokens"
-                $accessTokenValue = Read-Host -Prompt 'Enter your personal access token' -AsSecureString
-                $Token = ConvertFrom-SecureString $accessTokenValue -AsPlainText
-                $tokenType = $Token -replace $script:GitHub.TokenPrefixPattern
-                $context += @{
-                    Token     = ConvertTo-SecureString -AsPlainText $Token
-                    TokenType = $tokenType
-                }
-            }
-            'Token' {
-                $tokenType = $Token -replace $script:GitHub.TokenPrefixPattern
-                switch -Regex ($tokenType) {
-                    'ghp|github_pat' {
-                        $context += @{
-                            Token     = ConvertTo-SecureString -AsPlainText $Token
-                            TokenType = $tokenType
-                        }
-                        $context['AuthType'] = 'PAT'
-                    }
-                    'ghs' {
-                        Write-Verbose 'Logging in using an installation access token...'
-                        $context += @{
-                            Token     = ConvertTo-SecureString -AsPlainText $Token
-                            TokenType = $tokenType
-                        }
-                        $context['AuthType'] = 'IAT'
-                    }
-                    default {
-                        Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
-                        Write-Host "Unexpected token type: $tokenType"
-                        throw "Unexpected token type: $tokenType"
-                    }
-                }
-            }
+
+        } catch {
+            Write-Error $_
+            Write-Error (Get-PSCallStack | Format-Table | Out-String)
+            throw 'Failed to connect to GitHub.'
         }
-        $contextObj = Set-GitHubContext -Context $context -Default:(!$NotDefault) -PassThru
-        Write-Verbose ($contextObj | Format-List | Out-String)
-        if (-not $Silent) {
-            $name = $contextObj.Username
-            Write-Host '✓ ' -ForegroundColor Green -NoNewline
-            Write-Host "Logged in as $name!"
-        }
-    } catch {
-        Write-Error $_
-        Write-Error (Get-PSCallStack | Format-Table | Out-String)
-        throw 'Failed to connect to GitHub.'
-    } finally {
+    }
+
+    end {
+        Write-Verbose "[$commandName] - End"
+    }
+
+    clean {
         Remove-Variable -Name tokenResponse -ErrorAction SilentlyContinue
         Remove-Variable -Name context -ErrorAction SilentlyContinue
         Remove-Variable -Name contextData -ErrorAction SilentlyContinue
         Remove-Variable -Name Token -ErrorAction SilentlyContinue
         [System.GC]::Collect()
     }
-    Write-Verbose "[$commandName] - End"
 }

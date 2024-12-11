@@ -25,19 +25,29 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = '/graphql'
-        Method      = 'Post'
-        Body        = @{
-            'query'     = $query
-            'variables' = $variables
-        } | ConvertTo-Json
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Verbose "[$commandName] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
     }
 
-    Invoke-GitHubAPI @inputObject | ForEach-Object {
-        Write-Output $_.Response
+    process {
+        $inputObject = @{
+            Context     = $Context
+            APIEndpoint = '/graphql'
+            Method      = 'Post'
+            Body        = @{
+                'query'     = $Query
+                'variables' = $Variables
+            } | ConvertTo-Json
+        }
+
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
+        }
+    }
+
+    end {
+        Write-Verbose "[$commandName] - End"
     }
 }
