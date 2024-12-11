@@ -39,7 +39,7 @@ Describe 'GitHub' {
             { Connect-GitHubAccount -Token $env:TEST_PAT } | Should -Not -Throw
             { Connect-GitHubAccount } | Should -Not -Throw # Logs on with GitHub Actions' token
             (Get-GitHubContext -ListAvailable).Count | Should -Be 2
-            Get-GitHubConfig -Name 'DefaultContext' | Should -Be 'github.com/github-actions/PSModule'
+            Get-GitHubConfig -Name 'DefaultContext' | Should -Be 'github.com/github-actions/Organization/PSModule'
             Write-Verbose (Get-GitHubContext | Out-String) -Verbose
         }
 
@@ -57,15 +57,15 @@ Describe 'GitHub' {
 
         It 'Can list all contexts' {
             Write-Verbose (Get-GitHubContext -ListAvailable | Out-String) -Verbose
-            (Get-GitHubContext -ListAvailable).Count | Should -Be 3
+            (Get-GitHubContext -ListAvailable).Count | Should -Be 7
         }
 
         It 'Can disconnect a specific context' {
-            { Disconnect-GitHubAccount -Context 'github.com/github-actions/PSModule' -Silent } | Should -Not -Throw
-            (Get-GitHubContext -ListAvailable).Count | Should -Be 2
+            { Disconnect-GitHubAccount -Context 'github.com/github-actions/Organization/PSModule' -Silent } | Should -Not -Throw
+            (Get-GitHubContext -ListAvailable).Count | Should -Be 6
             Connect-GitHubAccount
             Connect-GitHubAccount -ClientID $env:TEST_APP_CLIENT_ID -PrivateKey $env:TEST_APP_PRIVATE_KEY
-            (Get-GitHubContext -ListAvailable).Count | Should -Be 3
+            (Get-GitHubContext -ListAvailable).Count | Should -Be 7
         }
 
         It 'Can get the authenticated GitHubApp' {
@@ -88,8 +88,8 @@ Describe 'GitHub' {
         }
 
         It 'Can swap context to another' {
-            { Set-GitHubDefaultContext -Context 'github.com/github-actions/PSModule' } | Should -Not -Throw
-            Get-GitHubConfig -Name 'DefaultContext' | Should -Be 'github.com/github-actions/PSModule'
+            { Set-GitHubDefaultContext -Context 'github.com/github-actions/Organization/PSModule' } | Should -Not -Throw
+            Get-GitHubConfig -Name 'DefaultContext' | Should -Be 'github.com/github-actions/Organization/PSModule'
         }
 
         # It 'Can be called with a GitHub App Installation Access Token' {
