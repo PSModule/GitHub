@@ -55,7 +55,7 @@ function Set-GitHubContext {
                 'PAT|UAT|IAT' {
                     $viewer = Get-GitHubViewer -Context $Context
                     $viewer | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
-                    $login = [string]$viewer.login
+                    $login = [string]$viewer.login -Replace '\[bot\]'
                     $Context += @{
                         DisplayName = [string]$viewer.name
                         Username    = $login
@@ -71,10 +71,22 @@ function Set-GitHubContext {
                     }
                 }
                 'IAT' {
-                    $ContextName = "$($Context['HostName'])/$login/$($Context.TargetType)/$($Context.TargetName)" -Replace '\[bot\]'
+                    $gitHubEvent = Get-Content -Path $env:GITHUB_EVENT_PATH -Raw | ConvertFrom-Json
+                    Write-Verbose ('Enterprise:            ' + $gitHubEvent.enterprise.slug)
+                    Write-Verbose ('Organization:          ' + $gitHubEvent.organization.login)
+                    Write-Verbose ('Repository:            ' + $gitHubEvent.repository.name)
+                    Write-Verbose ('Repository Owner:      ' + $gitHubEvent.repository.owner.login)
+                    Write-Verbose ('Repository Owner Type: ' + $gitHubEvent.repository.owner.type)
+                    Write-Verbose ('Sender:                ' + $gitHubEvent.sender.login)
+                    $ContextName = "$($Context['HostName'])/$login/$appSlup/$($Context.TargetName)"
                     $Context += @{
-                        Name = $ContextName
-                        Type = 'Installation'
+                        Name        = $ContextName
+                        Type        = 'Installation'
+                        $Enterprise = [string]$gitHubEvent.enterprise.slug
+                        $TargetType = [string]$gitHubEvent.repository.owner.type
+                        $TargetName = [string]$gitHubEvent.repository.owner.login
+                        $Owner      = [string]$gitHubEvent.repository.owner.login
+                        $Repo       = [string]$gitHubEvent.repository.name
                     }
                 }
                 'App' {

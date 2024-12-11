@@ -181,19 +181,6 @@
                 if (-not $customTokenProvided -and $gitHubTokenPresent) {
                     $authType = 'Token'
                     $Token = $gitHubToken
-                    $gitHubEvent = Get-Content -Path $env:GITHUB_EVENT_PATH -Raw | ConvertFrom-Json
-                    Write-Verbose ('Enterprise:            ' + $gitHubEvent.enterprise.slug)
-                    Write-Verbose ('Organization:          ' + $gitHubEvent.organization.login)
-                    Write-Verbose ('Repository:            ' + $gitHubEvent.repository.name)
-                    Write-Verbose ('Repository Owner:      ' + $gitHubEvent.repository.owner.login)
-                    Write-Verbose ('Repository Owner Type: ' + $gitHubEvent.repository.owner.type)
-                    Write-Verbose ('Sender:                ' + $gitHubEvent.sender.login)
-
-                    $Enterprise = [string]$gitHubEvent.enterprise.slug
-                    $TargetType = [string]$gitHubEvent.repository.owner.type
-                    $TargetName = [string]$gitHubEvent.repository.owner.login
-                    $Owner = [string]$gitHubEvent.repository.owner.login
-                    $Repo = [string]$gitHubEvent.repository.name
                 }
             }
 
@@ -299,10 +286,8 @@
                         'ghs' {
                             Write-Verbose 'Logging in using an installation access token...'
                             $context += @{
-                                Token      = ConvertTo-SecureString -AsPlainText $Token
-                                TokenType  = $tokenType
-                                TargetType = [string]$TargetType
-                                TargetName = [string]$TargetName
+                                Token     = ConvertTo-SecureString -AsPlainText $Token
+                                TokenType = $tokenType
                             }
                             $context['AuthType'] = 'IAT'
                         }
