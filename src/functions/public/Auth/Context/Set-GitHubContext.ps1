@@ -72,15 +72,19 @@ function Set-GitHubContext {
                 }
                 'IAT' {
                     $gitHubEvent = Get-Content -Path $env:GITHUB_EVENT_PATH -Raw | ConvertFrom-Json
+                    $app = Get-GitHubApp -AppSlug $login
+                    $targetType = $gitHubEvent.repository.owner.type
+                    $targetName = $gitHubEvent.repository.owner.login
                     Write-Verbose ('Enterprise:            ' + $gitHubEvent.enterprise.slug)
                     Write-Verbose ('Organization:          ' + $gitHubEvent.organization.login)
                     Write-Verbose ('Repository:            ' + $gitHubEvent.repository.name)
                     Write-Verbose ('Repository Owner:      ' + $gitHubEvent.repository.owner.login)
                     Write-Verbose ('Repository Owner Type: ' + $gitHubEvent.repository.owner.type)
                     Write-Verbose ('Sender:                ' + $gitHubEvent.sender.login)
-                    $ContextName = "$($Context['HostName'])/$login/$appSlup/$($Context.TargetName)"
+                    $ContextName = "$($Context['HostName'])/$login/$targetType/$targetName"
                     $Context += @{
                         Name        = $ContextName
+                        DisplayName = [string]$app.name
                         Type        = 'Installation'
                         $Enterprise = [string]$gitHubEvent.enterprise.slug
                         $TargetType = [string]$gitHubEvent.repository.owner.type
