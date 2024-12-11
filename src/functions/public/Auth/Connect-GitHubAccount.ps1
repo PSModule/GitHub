@@ -182,22 +182,29 @@
                     $authType = 'Token'
                     $Token = $gitHubToken
                     $gitHubEvent = Get-Content -Path $env:GITHUB_EVENT_PATH -Raw | ConvertFrom-Json
-                    $TargetType = $gitHubEvent.repository.owner.type
-                    $Enterprise = $gitHubEvent.enterprise.slug
-                    $TargetName = $env:GITHUB_REPOSITORY_OWNER
-                    $Owner = $env:GITHUB_REPOSITORY_OWNER
-                    $Repo = $env:GITHUB_REPOSITORY_NAME
+                    'Enterprise:            ' + $gitHubEvent.enterprise.slug
+                    'Organization:          ' + $gitHubEvent.organization.login
+                    'Repository:            ' + $gitHubEvent.repository.name
+                    'Repository Owner:      ' + $gitHubEvent.repository.owner.login
+                    'Repository Owner Type: ' + $gitHubEvent.repository.owner.type
+                    'Sender:                ' + $gitHubEvent.sender.login
+
+                    $Enterprise = [string]$gitHubEvent.enterprise.slug
+                    $TargetType = [string]$gitHubEvent.repository.owner.type
+                    $TargetName = [string]$gitHubEvent.repository.owner.login
+                    $Owner = [string]$gitHubEvent.repository.owner.login
+                    $Repo = [string]$gitHubEvent.repository.name
                 }
             }
 
             $context = @{
-                ApiBaseUri = $ApiBaseUri
-                ApiVersion = $ApiVersion
-                HostName   = $HostName
-                AuthType   = $authType
-                Enterprise = $Enterprise
-                Owner      = $Owner
-                Repo       = $Repo
+                ApiBaseUri = [string]$ApiBaseUri
+                ApiVersion = [string]$ApiVersion
+                HostName   = [string]$HostName
+                AuthType   = [string]$authType
+                Enterprise = [string]$Enterprise
+                Owner      = [string]$Owner
+                Repo       = [string]$Repo
             }
 
             Write-Verbose ($context | Format-Table | Out-String)
