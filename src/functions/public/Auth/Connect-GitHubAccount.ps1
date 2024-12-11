@@ -182,12 +182,12 @@
                     $authType = 'Token'
                     $Token = $gitHubToken
                     $gitHubEvent = Get-Content -Path $env:GITHUB_EVENT_PATH -Raw | ConvertFrom-Json
-                    'Enterprise:            ' + $gitHubEvent.enterprise.slug
-                    'Organization:          ' + $gitHubEvent.organization.login
-                    'Repository:            ' + $gitHubEvent.repository.name
-                    'Repository Owner:      ' + $gitHubEvent.repository.owner.login
-                    'Repository Owner Type: ' + $gitHubEvent.repository.owner.type
-                    'Sender:                ' + $gitHubEvent.sender.login
+                    Write-Verbose ('Enterprise:            ' + $gitHubEvent.enterprise.slug)
+                    Write-Verbose ('Organization:          ' + $gitHubEvent.organization.login)
+                    Write-Verbose ('Repository:            ' + $gitHubEvent.repository.name)
+                    Write-Verbose ('Repository Owner:      ' + $gitHubEvent.repository.owner.login)
+                    Write-Verbose ('Repository Owner Type: ' + $gitHubEvent.repository.owner.type)
+                    Write-Verbose ('Sender:                ' + $gitHubEvent.sender.login)
 
                     $Enterprise = [string]$gitHubEvent.enterprise.slug
                     $TargetType = [string]$gitHubEvent.repository.owner.type
@@ -301,8 +301,8 @@
                             $context += @{
                                 Token      = ConvertTo-SecureString -AsPlainText $Token
                                 TokenType  = $tokenType
-                                TargetType = $TargetType
-                                TargetName = $TargetName
+                                TargetType = [string]$TargetType
+                                TargetName = [string]$TargetName
                             }
                             $context['AuthType'] = 'IAT'
                         }
