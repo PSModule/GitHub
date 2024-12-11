@@ -95,12 +95,12 @@
 
     process {
         $Token = $Context.Token
-        Write-Debug "Token : [$Token]"
+        Write-Debug "Token :      [$Token]"
 
         if ([string]::IsNullOrEmpty($TokenType)) {
             $TokenType = $Context.TokenType
         }
-        Write-Debug "TokenType : [$($Context.TokenType)]"
+        Write-Debug "TokenType :  [$($Context.TokenType)]"
 
         if ([string]::IsNullOrEmpty($ApiBaseUri)) {
             $ApiBaseUri = $Context.ApiBaseUri

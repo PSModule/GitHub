@@ -109,6 +109,12 @@
         )]
         [switch] $SkipAppAutoload,
 
+        # Do not load credentials for the GitHub App Installations, just metadata.
+        [Parameter(
+            ParameterSetName = 'App'
+        )]
+        [switch] $Shallow,
+
         # The default enterprise to use in commands.
         [Parameter()]
         [string] $Enterprise,
@@ -117,12 +123,12 @@
         [Parameter()]
         [Alias('Organization')]
         [Alias('Org')]
-        [string] $Owner = $env:GITHUB_REPOSITORY_OWNER,
+        [string] $Owner,
 
         # Set the default repository to use in commands.
         [Parameter()]
         [Alias('Repository')]
-        [string] $Repo = $env:GITHUB_REPOSITORY_NAME,
+        [string] $Repo,
 
         # API version used for API requests.
         [Parameter()]
@@ -175,6 +181,12 @@
                 if (-not $customTokenProvided -and $gitHubTokenPresent) {
                     $authType = 'Token'
                     $Token = $gitHubToken
+                    $gitHubEvent = Get-Content -Path $env:GITHUB_EVENT_PATH -Raw | ConvertFrom-Json
+                    $TargetType = $gitHubEvent.repository.owner.type
+                    $Enterprise = $gitHubEvent.enterprise.slug
+                    $TargetName = $env:GITHUB_REPOSITORY_OWNER
+                    $Owner = $env:GITHUB_REPOSITORY_OWNER
+                    $Repo = $env:GITHUB_REPOSITORY_NAME
                 }
             }
 
@@ -280,8 +292,10 @@
                         'ghs' {
                             Write-Verbose 'Logging in using an installation access token...'
                             $context += @{
-                                Token     = ConvertTo-SecureString -AsPlainText $Token
-                                TokenType = $tokenType
+                                Token      = ConvertTo-SecureString -AsPlainText $Token
+                                TokenType  = $tokenType
+                                TargetType = $TargetType
+                                TargetName = $TargetName
                             }
                             $context['AuthType'] = 'IAT'
                         }
@@ -303,7 +317,7 @@
 
             if ($authType -eq 'App' -and -not $SkipAppAutoload) {
                 Write-Verbose 'Loading GitHub App contexts...'
-                Get-GitHubApp
+                Connect-GitHubApp -Shallow:$Shallow
             }
 
         } catch {
