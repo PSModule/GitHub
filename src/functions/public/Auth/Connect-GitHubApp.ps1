@@ -64,7 +64,11 @@
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [object] $Context = (Get-GitHubContext)
+        [object] $Context = (Get-GitHubContext),
+
+        # Do not load credentials for the GitHub App Installations, just metadata.
+        [Parameter()]
+        [switch] $Shallow
     )
 
     $commandName = $MyInvocation.MyCommand.Name
@@ -104,7 +108,14 @@
         $installations | ForEach-Object {
             $installation = $_
             $contextParams = @{} + $defaultContextData.Clone()
-            $token = New-GitHubAppInstallationAccessToken -InstallationID $installation.id
+            if ($Shallow) {
+                $token = [PSCustomObject]@{
+                    Token     = [securestring]::new()
+                    ExpiresAt = [datetime]::MinValue
+                }
+            } else {
+                $token = New-GitHubAppInstallationAccessToken -InstallationID $installation.id
+            }
             $contextParams += @{
                 InstallationID      = $installation.id
                 Token               = $token.Token

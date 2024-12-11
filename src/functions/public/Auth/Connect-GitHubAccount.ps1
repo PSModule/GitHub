@@ -109,6 +109,12 @@
         )]
         [switch] $SkipAppAutoload,
 
+        # Do not load credentials for the GitHub App Installations, just metadata.
+        [Parameter(
+            ParameterSetName = 'App'
+        )]
+        [switch] $Shallow,
+
         # The default enterprise to use in commands.
         [Parameter()]
         [string] $Enterprise,
@@ -311,7 +317,7 @@
 
             if ($authType -eq 'App' -and -not $SkipAppAutoload) {
                 Write-Verbose 'Loading GitHub App contexts...'
-                Connect-GitHubApp
+                Connect-GitHubApp -Shallow:$Shallow
             }
 
         } catch {
