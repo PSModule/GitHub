@@ -37,4 +37,4 @@ jobs:
     with:
       SkipTests: SourceCode
       Debug: true
-      Vebose: true
+      Verbose: true
