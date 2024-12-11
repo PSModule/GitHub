@@ -71,7 +71,7 @@ function Set-GitHubContext {
                     }
                 }
                 'IAT' {
-                    $ContextName = "$($Context['HostName'])/$login/$($Context['Owner'])" -Replace '\[bot\]'
+                    $ContextName = "$($Context['HostName'])/$login/$($Context.TargetType)/$($Context.TargetName)" -Replace '\[bot\]'
                     $Context += @{
                         Name = $ContextName
                         Type = 'Installation'

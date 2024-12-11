@@ -66,62 +66,77 @@ function Get-GitHubAppJSONWebToken {
         [object] $PrivateKey
     )
 
-    if ($PrivateKeyFilePath) {
-        if (-not (Test-Path -Path $PrivateKeyFilePath)) {
-            throw "The private key path [$PrivateKeyFilePath] does not exist."
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Verbose "[$commandName] - Start"
+    }
+
+    process {
+        if ($PrivateKeyFilePath) {
+            if (-not (Test-Path -Path $PrivateKeyFilePath)) {
+                throw "The private key path [$PrivateKeyFilePath] does not exist."
+            }
+
+            $PrivateKey = Get-Content -Path $PrivateKeyFilePath -Raw
         }
 
-        $PrivateKey = Get-Content -Path $PrivateKeyFilePath -Raw
-    }
+        if ($PrivateKey -is [securestring]) {
+            $PrivateKey = $PrivateKey | ConvertFrom-SecureString -AsPlainText
+        }
 
-    if ($PrivateKey -is [securestring]) {
-        $PrivateKey = $PrivateKey | ConvertFrom-SecureString -AsPlainText
-    }
-
-    $header = [Convert]::ToBase64String(
-        [System.Text.Encoding]::UTF8.GetBytes(
-            (
-                ConvertTo-Json -InputObject @{
-                    alg = 'RS256'
-                    typ = 'JWT'
-                }
+        $header = [Convert]::ToBase64String(
+            [System.Text.Encoding]::UTF8.GetBytes(
+                (
+                    ConvertTo-Json -InputObject @{
+                        alg = 'RS256'
+                        typ = 'JWT'
+                    }
+                )
             )
-        )
-    ).TrimEnd('=').Replace('+', '-').Replace('/', '_')
+        ).TrimEnd('=').Replace('+', '-').Replace('/', '_')
 
-    $iat = [System.DateTimeOffset]::UtcNow.AddSeconds(-10).ToUnixTimeSeconds()
-    $exp = [System.DateTimeOffset]::UtcNow.AddMinutes(10).ToUnixTimeSeconds()
-    $payload = [Convert]::ToBase64String(
-        [System.Text.Encoding]::UTF8.GetBytes(
-            (
-                ConvertTo-Json -InputObject @{
-                    iat = $iat
-                    exp = $exp
-                    iss = $ClientId
-                }
+        $iat = [System.DateTimeOffset]::UtcNow.AddSeconds(-10).ToUnixTimeSeconds()
+        $exp = [System.DateTimeOffset]::UtcNow.AddMinutes(10).ToUnixTimeSeconds()
+        $payload = [Convert]::ToBase64String(
+            [System.Text.Encoding]::UTF8.GetBytes(
+                (
+                    ConvertTo-Json -InputObject @{
+                        iat = $iat
+                        exp = $exp
+                        iss = $ClientId
+                    }
+                )
             )
-        )
-    ).TrimEnd('=').Replace('+', '-').Replace('/', '_')
+        ).TrimEnd('=').Replace('+', '-').Replace('/', '_')
 
-    $rsa = [System.Security.Cryptography.RSA]::Create()
-    $rsa.ImportFromPem($PrivateKey)
+        $rsa = [System.Security.Cryptography.RSA]::Create()
+        $rsa.ImportFromPem($PrivateKey)
 
-    $signature = [Convert]::ToBase64String(
-        $rsa.SignData(
-            [System.Text.Encoding]::UTF8.GetBytes("$header.$payload"),
-            [System.Security.Cryptography.HashAlgorithmName]::SHA256,
-            [System.Security.Cryptography.RSASignaturePadding]::Pkcs1
-        )
-    ).TrimEnd('=').Replace('+', '-').Replace('/', '_')
-    $jwt = "$header.$payload.$signature"
-    [pscustomobject]@{
-        Token     = ConvertTo-SecureString -String $jwt -AsPlainText
-        IssuedAt  = $iat
-        ExpiresAt = $exp
-        Issuer    = $ClientId
+        $signature = [Convert]::ToBase64String(
+            $rsa.SignData(
+                [System.Text.Encoding]::UTF8.GetBytes("$header.$payload"),
+                [System.Security.Cryptography.HashAlgorithmName]::SHA256,
+                [System.Security.Cryptography.RSASignaturePadding]::Pkcs1
+            )
+        ).TrimEnd('=').Replace('+', '-').Replace('/', '_')
+        $jwt = "$header.$payload.$signature"
+        [pscustomobject]@{
+            Token     = ConvertTo-SecureString -String $jwt -AsPlainText
+            IssuedAt  = $iat
+            ExpiresAt = $exp
+            Issuer    = $ClientId
+        }
     }
-    Remove-Variable -Name jwt -ErrorAction SilentlyContinue
-    Remove-Variable -Name rsa -ErrorAction SilentlyContinue
-    Remove-Variable -Name signature -ErrorAction SilentlyContinue
-    [System.GC]::Collect()
+
+    end {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Verbose "[$commandName] - End"
+    }
+
+    clean {
+        Remove-Variable -Name jwt -ErrorAction SilentlyContinue
+        Remove-Variable -Name rsa -ErrorAction SilentlyContinue
+        Remove-Variable -Name signature -ErrorAction SilentlyContinue
+        [System.GC]::Collect()
+    }
 }
