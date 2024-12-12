@@ -108,10 +108,10 @@
                     HostName            = [string]$Context.HostName
                     ClientID            = [string]$Context.ClientID
                     InstallationID      = [string]$installation.id
-                    Permissions         = [string]$installation.permissions
-                    Events              = [string]$installation.events
+                    Permissions         = [pscustomobject]$installation.permissions
+                    Events              = [string[]]$installation.events
                     TargetType          = [string]$installation.target_type
-                    Token               = [string]$token.Token
+                    Token               = [securestring]$token.Token
                     TokenExpirationDate = [string]$token.ExpiresAt
                 }
 
