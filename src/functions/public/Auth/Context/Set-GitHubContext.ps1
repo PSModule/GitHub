@@ -56,19 +56,15 @@ function Set-GitHubContext {
                     $viewer = Get-GitHubViewer -Context $Context
                     $viewer | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
                     $login = [string]$viewer.login -Replace '\[bot\]'
-                    $Context += @{
-                        DisplayName = [string]$viewer.name
-                        Username    = $login
-                        NodeID      = [string]$viewer.id
-                        DatabaseID  = [string]$viewer.databaseId
-                    }
+                    $Context['DisplayName'] = [string]$viewer.name
+                    $Context['Username'] = $login
+                    $Context['NodeID'] = [string]$viewer.id
+                    $Context['DatabaseID'] = [string]$viewer.databaseId
                 }
                 'PAT|UAT' {
                     $ContextName = "$($Context['HostName'])/$login"
-                    $Context += @{
-                        Name = $ContextName
-                        Type = 'User'
-                    }
+                    $Context['Name'] = $ContextName
+                    $Context['Type'] = 'User'
                 }
                 'IAT' {
                     $gitHubEvent = Get-Content -Path $env:GITHUB_EVENT_PATH -Raw | ConvertFrom-Json
@@ -82,16 +78,14 @@ function Set-GitHubContext {
                     Write-Verbose ('Repository Owner Type: ' + $gitHubEvent.repository.owner.type)
                     Write-Verbose ('Sender:                ' + $gitHubEvent.sender.login)
                     $ContextName = "$($Context['HostName'])/$login/$targetType/$targetName"
-                    $Context += @{
-                        Name        = $ContextName
-                        DisplayName = [string]$app.name
-                        Type        = 'Installation'
-                        $Enterprise = [string]$gitHubEvent.enterprise.slug
-                        $TargetType = [string]$gitHubEvent.repository.owner.type
-                        $TargetName = [string]$gitHubEvent.repository.owner.login
-                        $Owner      = [string]$gitHubEvent.repository.owner.login
-                        $Repo       = [string]$gitHubEvent.repository.name
-                    }
+                    $Context['Name'] = $ContextName
+                    $Context['DisplayName'] = [string]$app.name
+                    $Context['Type'] = 'Installation'
+                    $Context['Enterprise'] = [string]$gitHubEvent.enterprise.slug
+                    $Context['TargetType'] = [string]$gitHubEvent.repository.owner.type
+                    $Context['TargetName'] = [string]$gitHubEvent.repository.owner.login
+                    $Context['Owner'] = [string]$gitHubEvent.repository.owner.login
+                    $Context['Repo'] = [string]$gitHubEvent.repository.name
                 }
                 'App' {
                     $app = Get-GitHubApp -Context $Context
