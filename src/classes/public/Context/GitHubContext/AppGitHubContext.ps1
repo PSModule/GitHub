@@ -9,7 +9,7 @@
     [string] $OwnerType
 
     # The permissions that the app is requesting on the target
-    [string[]] $Permissions
+    [pscustomobject] $Permissions
 
     # The events that the app is subscribing to once installed
     [string[]] $Events

@@ -77,16 +77,6 @@
             $Context = $Context | Resolve-GitHubContext
             $Context | Assert-GitHubContext -AuthType 'App'
 
-            $defaultContextData = @{
-                ApiBaseUri  = [string]$Context.ApiBaseUri
-                ApiVersion  = [string]$Context.ApiVersion
-                HostName    = [string]$Context.HostName
-                ClientID    = [string]$Context.ClientID
-                AuthType    = [string]'IAT'
-                TokenType   = [string]'ghs'
-                DisplayNAme = [string]$Context.DisplayName
-            }
-
             $installations = Get-GitHubAppInstallation
             Write-Verbose "Found [$($installations.Count)] installations."
             switch ($PSCmdlet.ParameterSetName) {
@@ -107,15 +97,23 @@
             Write-Verbose "Found [$($installations.Count)] installations for the target type."
             $installations | ForEach-Object {
                 $installation = $_
-                $contextParams = @{} + $defaultContextData.Clone()
                 $token = New-GitHubAppInstallationAccessToken -InstallationID $installation.id
 
-                $contextParams['InstallationID'] = [string]$installation.id
-                $contextParams['Token'] = [string]$token.Token
-                $contextParams['TokenExpirationDate'] = [string]$token.ExpiresAt
-                $contextParams['Permissions'] = [string]$installation.permissions
-                $contextParams['Events'] = [string]$installation.events
-                $contextParams['TargetType'] = [string]$installation.target_type
+                $contextParams = @{
+                    AuthType            = [string]'IAT'
+                    TokenType           = [string]'ghs'
+                    DisplayNAme         = [string]$Context.DisplayName
+                    ApiBaseUri          = [string]$Context.ApiBaseUri
+                    ApiVersion          = [string]$Context.ApiVersion
+                    HostName            = [string]$Context.HostName
+                    ClientID            = [string]$Context.ClientID
+                    InstallationID      = [string]$installation.id
+                    Permissions         = [string]$installation.permissions
+                    Events              = [string]$installation.events
+                    TargetType          = [string]$installation.target_type
+                    Token               = [string]$token.Token
+                    TokenExpirationDate = [string]$token.ExpiresAt
+                }
 
                 switch ($installation.target_type) {
                     'User' {

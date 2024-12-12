@@ -55,7 +55,7 @@ function Set-GitHubContext {
                 'PAT|UAT|IAT' {
                     $viewer = Get-GitHubViewer -Context $Context
                     $viewer | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
-                    $login = [string]$viewer.login -Replace '\[bot\]'
+                    $login = [string]($viewer.login -Replace '\[bot\]')
                     $Context['DisplayName'] = [string]$viewer.name
                     $Context['Username'] = $login
                     $Context['NodeID'] = [string]$viewer.id
@@ -104,8 +104,8 @@ function Set-GitHubContext {
                     $Context['Username'] = [string]$app.slug
                     $Context['NodeID'] = [string]$app.node_id
                     $Context['DatabaseID'] = [string]$app.id
-                    $Context['Permissions'] = [string]$app.permissions
-                    $Context['Events'] = [string]$app.events
+                    $Context['Permissions'] = [PSCustomObject]$app.permissions
+                    $Context['Events'] = [string[]]$app.events
                     $Context['OwnerName'] = [string]$app.owner.login
                     $Context['OwnerType'] = [string]$app.owner.type
                     $Context['Type'] = 'App'
