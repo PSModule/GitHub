@@ -76,7 +76,14 @@ function Set-GitHubContext {
                 }
                 'IAT' {
                     $Context['Type'] = 'Installation'
-                    $Context['DisplayName'] = [string]$app.name
+                    if ($null -eq $Context['DisplayName']) {
+                        try {
+                        $app = Get-GitHubApp -AppSlug $Context['Name'] -Context $Context
+                        } catch {
+                            Write-Warning "Failed to get the GitHub App with the slug: [$($Context['Name'])]."
+                        }
+                        $Context['DisplayName'] = [string]$app.name
+                    }
 
                     if ($script:GitHub.EnvironmentType -eq 'GHA') {
                         $gitHubEvent = Get-Content -Path $env:GITHUB_EVENT_PATH -Raw | ConvertFrom-Json
