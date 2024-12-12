@@ -90,18 +90,16 @@ function Set-GitHubContext {
                 'App' {
                     $app = Get-GitHubApp -Context $Context
                     $ContextName = "$($Context['HostName'])/$($app.slug)"
-                    $Context += @{
-                        Name        = $ContextName
-                        DisplayName = [string]$app.name
-                        Username    = [string]$app.slug
-                        NodeID      = [string]$app.node_id
-                        DatabaseID  = [string]$app.id
-                        Permissions = [string]$app.permissions
-                        Events      = [string]$app.events
-                        OwnerName   = [string]$app.owner.login
-                        OwnerType   = [string]$app.owner.type
-                        Type        = 'App'
-                    }
+                    $Context['Name'] = $ContextName
+                    $Context['DisplayName'] = [string]$app.name
+                    $Context['Username'] = [string]$app.slug
+                    $Context['NodeID'] = [string]$app.node_id
+                    $Context['DatabaseID'] = [string]$app.id
+                    $Context['Permissions'] = [string]$app.permissions
+                    $Context['Events'] = [string]$app.events
+                    $Context['OwnerName'] = [string]$app.owner.login
+                    $Context['OwnerType'] = [string]$app.owner.type
+                    $Context['Type'] = 'App'
                 }
                 default {
                     throw 'Failed to get info on the context. Unknown logon type.'
