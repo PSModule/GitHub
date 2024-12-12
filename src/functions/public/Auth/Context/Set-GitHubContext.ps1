@@ -55,17 +55,17 @@ function Set-GitHubContext {
                 'PAT|UAT|IAT' {
                     $viewer = Get-GitHubViewer -Context $Context
                     $viewer | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
-                    if ($null -eq $Context['DisplayName']) {
+                    if ([string]::IsNullOrEmpty($Context['DisplayName'])) {
                         $Context['DisplayName'] = [string]$viewer.name
                     }
-                    if ($null -eq $Context['Username']) {
+                    if ([string]::IsNullOrEmpty($Context['Username'])) {
                         $login = [string]($viewer.login -Replace '\[bot\]')
                         $Context['Username'] = $login
                     }
-                    if ($null -eq $Context['NodeID']) {
+                    if ([string]::IsNullOrEmpty($Context['NodeID'])) {
                         $Context['NodeID'] = [string]$viewer.id
                     }
-                    if ($null -eq $Context['DatabaseID']) {
+                    if ([string]::IsNullOrEmpty($Context['DatabaseID'])) {
                         $Context['DatabaseID'] = [string]$viewer.databaseId
                     }
                 }
@@ -76,9 +76,9 @@ function Set-GitHubContext {
                 }
                 'IAT' {
                     $Context['Type'] = 'Installation'
-                    if ($null -eq $Context['DisplayName']) {
+                    if ([string]::IsNullOrEmpty($Context['DisplayName'])) {
                         try {
-                        $app = Get-GitHubApp -AppSlug $Context['Name'] -Context $Context
+                            $app = Get-GitHubApp -AppSlug $Context['Name'] -Context $Context
                         } catch {
                             Write-Warning "Failed to get the GitHub App with the slug: [$($Context['Name'])]."
                         }
