@@ -77,7 +77,7 @@
             $Context = $Context | Resolve-GitHubContext
             $Context | Assert-GitHubContext -AuthType 'App'
 
-            $installations = Get-GitHubAppInstallation
+            $installations = Get-GitHubAppInstallation -Context $Context
             Write-Verbose "Found [$($installations.Count)] installations."
             switch ($PSCmdlet.ParameterSetName) {
                 'User' {
@@ -94,15 +94,15 @@
                 }
             }
 
-            Write-Verbose "Found [$($installations.Count)] installations for the target type."
+            Write-Verbose "Found [$($installations.Count)] installations for the target."
             $installations | ForEach-Object {
                 $installation = $_
-                $token = New-GitHubAppInstallationAccessToken -InstallationID $installation.id
+                $token = New-GitHubAppInstallationAccessToken -Context $Context -InstallationID $installation.id
 
                 $contextParams = @{
                     AuthType            = [string]'IAT'
                     TokenType           = [string]'ghs'
-                    DisplayNAme         = [string]$Context.DisplayName
+                    DisplayName         = [string]$Context.DisplayName
                     ApiBaseUri          = [string]$Context.ApiBaseUri
                     ApiVersion          = [string]$Context.ApiVersion
                     HostName            = [string]$Context.HostName
