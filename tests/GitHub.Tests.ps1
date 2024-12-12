@@ -71,7 +71,7 @@ Describe 'GitHub' {
         }
 
         It 'Can disconnect a specific context' {
-            { Disconnect-GitHubAccount -Context 'github.com/github-actions/Organization/PSModule' -Silent } | Should -Not -Throw
+            { Disconnect-GitHubAccount -Context 'github.com/psmodule-test-app/Organization/PSModule' -Silent } | Should -Not -Throw
             $contexts = Get-GitHubContext -ListAvailable -Verbose:$false
             Write-Verbose ($contexts | Out-String) -Verbose
             ($contexts).Count | Should -Be 6
