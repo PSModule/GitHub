@@ -79,13 +79,12 @@ function Set-GitHubContext {
                     $contextObj['Type'] = 'Installation'
                     if ([string]::IsNullOrEmpty($contextObj['DisplayName'])) {
                         try {
-                            $app = Get-GitHubApp -AppSlug $contextObj['Name'] -Context $contextObj
+                            $app = Get-GitHubApp -AppSlug $contextObj['Username'] -Context $contextObj
+                            $contextObj['DisplayName'] = [string]$app.name
                         } catch {
-                            Write-Warning "Failed to get the GitHub App with the slug: [$($contextObj['Name'])]."
+                            Write-Warning "Failed to get the GitHub App with the slug: [$($contextObj['Username'])]."
                         }
-                        $contextObj['DisplayName'] = [string]$app.name
                     }
-
                     if ($script:GitHub.EnvironmentType -eq 'GHA') {
                         $gitHubEvent = Get-Content -Path $env:GITHUB_EVENT_PATH -Raw | ConvertFrom-Json
                         $targetType = $gitHubEvent.repository.owner.type
@@ -106,9 +105,11 @@ function Set-GitHubContext {
                         $contextObj['TargetName'] = [string]$targetName
                         $contextObj['Owner'] = [string]$owner
                         $contextObj['Repo'] = [string]$repo
-                        $contextObj['Name'] = "$($contextObj['HostName'])/$($contextObj['Username'])/$($contextObj['TargetType'])/$($contextObj['TargetName'])"
+                        $contextObj['Name'] = "$($contextObj['HostName'])/$($contextObj['Username'])/" +
+                        "$($contextObj['TargetType'])/$($contextObj['TargetName'])"
                     } else {
-                        $contextObj['Name'] = "$($contextObj['HostName'])/$($contextObj['Username'])/$($contextObj['TargetType'])/$($contextObj['TargetName'])"
+                        $contextObj['Name'] = "$($contextObj['HostName'])/$($contextObj['Username'])/" +
+                        "$($contextObj['TargetType'])/$($contextObj['TargetName'])"
                     }
                 }
                 'App' {

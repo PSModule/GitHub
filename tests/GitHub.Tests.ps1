@@ -55,7 +55,9 @@ Describe 'GitHub' {
                 PrivateKey = $env:TEST_APP_PRIVATE_KEY
             }
             { Connect-GitHubAccount @params } | Should -Not -Throw
-            (Get-GitHubContext -ListAvailable).Count | Should -Be 3
+            $contexts = Get-GitHubContext -ListAvailable -Verbose:$false
+            Write-Verbose ($contexts | Out-String) -Verbose
+            ($contexts).Count | Should -Be 3
         }
         It 'Can be called with a GitHub App and autoload installations' {
             $params = @{
@@ -63,14 +65,20 @@ Describe 'GitHub' {
                 PrivateKey = $env:TEST_APP_PRIVATE_KEY
             }
             { Connect-GitHubAccount @params -AutoloadInstallations } | Should -Not -Throw
-            (Get-GitHubContext -ListAvailable).Count | Should -Be 7
+            $contexts = Get-GitHubContext -ListAvailable -Verbose:$false
+            Write-Verbose ($contexts | Out-String) -Verbose
+            ($contexts).Count | Should -Be 7
         }
 
         It 'Can disconnect a specific context' {
             { Disconnect-GitHubAccount -Context 'github.com/github-actions/Organization/PSModule' -Silent } | Should -Not -Throw
-            (Get-GitHubContext -ListAvailable).Count | Should -Be 6
+            $contexts = Get-GitHubContext -ListAvailable -Verbose:$false
+            Write-Verbose ($contexts | Out-String) -Verbose
+            ($contexts).Count | Should -Be 6
             Connect-GitHubAccount -ClientID $env:TEST_APP_CLIENT_ID -PrivateKey $env:TEST_APP_PRIVATE_KEY -AutoloadInstallations
-            (Get-GitHubContext -ListAvailable).Count | Should -Be 7
+            $contexts = Get-GitHubContext -ListAvailable -Verbose:$false
+            Write-Verbose ($contexts | Out-String) -Verbose
+            ($contexts).Count | Should -Be 7
         }
 
         It 'Can get the authenticated GitHubApp' {
