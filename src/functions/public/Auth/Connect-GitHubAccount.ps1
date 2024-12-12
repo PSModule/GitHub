@@ -103,17 +103,11 @@
         )]
         [string] $PrivateKey,
 
-        # Skip loading GitHub App contexts.
+        # Automatically load installations for the GitHub App.
         [Parameter(
             ParameterSetName = 'App'
         )]
-        [switch] $SkipAppAutoload,
-
-        # Do not load credentials for the GitHub App Installations, just metadata.
-        [Parameter(
-            ParameterSetName = 'App'
-        )]
-        [switch] $Shallow,
+        [switch] $AutoloadInstallations,
 
         # The default enterprise to use in commands.
         [Parameter()]
@@ -307,9 +301,9 @@
                 Write-Host "Logged in as $name!"
             }
 
-            if ($authType -eq 'App' -and -not $SkipAppAutoload) {
-                Write-Verbose 'Loading GitHub App contexts...'
-                Connect-GitHubApp -Shallow:$Shallow
+            if ($authType -eq 'App' -and $AutoloadInstallations) {
+                Write-Verbose 'Loading GitHub App Installation contexts...'
+                Connect-GitHubApp
             }
 
         } catch {

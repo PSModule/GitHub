@@ -62,35 +62,44 @@ function Set-GitHubContext {
                     $Context['DatabaseID'] = [string]$viewer.databaseId
                 }
                 'PAT|UAT' {
-                    $ContextName = "$($Context['HostName'])/$login"
-                    $Context['Name'] = $ContextName
+                    $contextName = "$($Context['HostName'])/$login"
+                    $Context['Name'] = $contextName
                     $Context['Type'] = 'User'
                 }
                 'IAT' {
-                    $gitHubEvent = Get-Content -Path $env:GITHUB_EVENT_PATH -Raw | ConvertFrom-Json
-                    $app = Get-GitHubApp -AppSlug $login -Context $Context
-                    $targetType = $gitHubEvent.repository.owner.type
-                    $targetName = $gitHubEvent.repository.owner.login
-                    Write-Verbose ('Enterprise:            ' + $gitHubEvent.enterprise.slug)
-                    Write-Verbose ('Organization:          ' + $gitHubEvent.organization.login)
-                    Write-Verbose ('Repository:            ' + $gitHubEvent.repository.name)
-                    Write-Verbose ('Repository Owner:      ' + $gitHubEvent.repository.owner.login)
-                    Write-Verbose ('Repository Owner Type: ' + $gitHubEvent.repository.owner.type)
-                    Write-Verbose ('Sender:                ' + $gitHubEvent.sender.login)
-                    $ContextName = "$($Context['HostName'])/$login/$targetType/$targetName"
-                    $Context['Name'] = $ContextName
-                    $Context['DisplayName'] = [string]$app.name
                     $Context['Type'] = 'Installation'
-                    $Context['Enterprise'] = [string]$gitHubEvent.enterprise.slug
-                    $Context['TargetType'] = [string]$gitHubEvent.repository.owner.type
-                    $Context['TargetName'] = [string]$gitHubEvent.repository.owner.login
-                    $Context['Owner'] = [string]$gitHubEvent.repository.owner.login
-                    $Context['Repo'] = [string]$gitHubEvent.repository.name
+                    $Context['DisplayName'] = [string]$app.name
+
+                    if ($script:GitHub.EnvironmentType -eq 'GHA') {
+                        $gitHubEvent = Get-Content -Path $env:GITHUB_EVENT_PATH -Raw | ConvertFrom-Json
+                        $targetType = $gitHubEvent.repository.owner.type
+                        $targetName = $gitHubEvent.repository.owner.login
+                        $enterprise = $gitHubEvent.enterprise.slug
+                        $organization = $gitHubEvent.organization.login
+                        $owner = $gitHubEvent.repository.owner.login
+                        $repo = $gitHubEvent.repository.name
+                        $gh_sender = $gitHubEvent.sender.login # sender is an automatic variable in Powershell
+                        Write-Verbose "Enterprise:            $enterprise"
+                        Write-Verbose "Organization:          $organization"
+                        Write-Verbose "Repository:            $repo"
+                        Write-Verbose "Repository Owner:      $owner"
+                        Write-Verbose "Repository Owner Type: $targetType"
+                        Write-Verbose "Sender:                $gh_sender"
+                        $Context['Enterprise'] = [string]$enterprise
+                        $Context['TargetType'] = [string]$targetType
+                        $Context['TargetName'] = [string]$owner
+                        $Context['Owner'] = [string]$owner
+                        $Context['Repo'] = [string]$repo
+                        $contextName = "$($Context['HostName'])/$login/$targetType/$targetName"
+                        $Context['Name'] = $contextName
+                    } else {
+                        $login = $Context['Username']
+                    }
                 }
                 'App' {
                     $app = Get-GitHubApp -Context $Context
-                    $ContextName = "$($Context['HostName'])/$($app.slug)"
-                    $Context['Name'] = $ContextName
+                    $contextName = "$($Context['HostName'])/$($app.slug)"
+                    $Context['Name'] = $contextName
                     $Context['DisplayName'] = [string]$app.name
                     $Context['Username'] = [string]$app.slug
                     $Context['NodeID'] = [string]$app.node_id

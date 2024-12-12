@@ -64,11 +64,7 @@
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [object] $Context = (Get-GitHubContext),
-
-        # Do not load credentials for the GitHub App Installations, just metadata.
-        [Parameter()]
-        [switch] $Shallow
+        [object] $Context = (Get-GitHubContext)
     )
 
     begin {
@@ -82,12 +78,13 @@
             $Context | Assert-GitHubContext -AuthType 'App'
 
             $defaultContextData = @{
-                ApiBaseUri = $Context.ApiBaseUri
-                ApiVersion = $Context.ApiVersion
-                HostName   = $Context.HostName
-                ClientID   = $Context.ClientID
-                AuthType   = 'IAT'
-                TokenType  = 'ghs'
+                ApiBaseUri  = [string]$Context.ApiBaseUri
+                ApiVersion  = [string]$Context.ApiVersion
+                HostName    = [string]$Context.HostName
+                ClientID    = [string]$Context.ClientID
+                AuthType    = [string]'IAT'
+                TokenType   = [string]'ghs'
+                DisplayNAme = [string]$Context.DisplayName
             }
 
             $installations = Get-GitHubAppInstallation
@@ -111,21 +108,14 @@
             $installations | ForEach-Object {
                 $installation = $_
                 $contextParams = @{} + $defaultContextData.Clone()
-                if ($Shallow) {
-                    $token = [PSCustomObject]@{
-                        Token     = [securestring]::new()
-                        ExpiresAt = [datetime]::MinValue
-                    }
-                } else {
-                    $token = New-GitHubAppInstallationAccessToken -InstallationID $installation.id
-                }
+                $token = New-GitHubAppInstallationAccessToken -InstallationID $installation.id
 
-                $contextParams['InstallationID'] = $installation.id
-                $contextParams['Token'] = $token.Token
-                $contextParams['TokenExpirationDate'] = $token.ExpiresAt
-                $contextParams['Permissions'] = $installation.permissions
-                $contextParams['Events'] = $installation.events
-                $contextParams['TargetType'] = $installation.target_type
+                $contextParams['InstallationID'] = [string]$installation.id
+                $contextParams['Token'] = [string]$token.Token
+                $contextParams['TokenExpirationDate'] = [string]$token.ExpiresAt
+                $contextParams['Permissions'] = [string]$installation.permissions
+                $contextParams['Events'] = [string]$installation.events
+                $contextParams['TargetType'] = [string]$installation.target_type
 
                 switch ($installation.target_type) {
                     'User' {
