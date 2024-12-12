@@ -97,6 +97,7 @@
             Write-Verbose "Found [$($installations.Count)] installations for the target."
             $installations | ForEach-Object {
                 $installation = $_
+                Write-Verbose "Processing installation [$($installation.account.login)] [$($installation.id)]"
                 $token = New-GitHubAppInstallationAccessToken -Context $Context -InstallationID $installation.id
 
                 $contextParams = @{
@@ -134,6 +135,7 @@
                     $name = $tmpContext.name
                     Write-Host "Connected $name"
                 }
+                $contextParams.Clear()
             }
         } catch {
             Write-Error $_
