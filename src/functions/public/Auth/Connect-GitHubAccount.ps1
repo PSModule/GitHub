@@ -103,17 +103,11 @@
         )]
         [string] $PrivateKey,
 
-        # Skip loading GitHub App contexts.
+        # Automatically load installations for the GitHub App.
         [Parameter(
             ParameterSetName = 'App'
         )]
-        [switch] $SkipAppAutoload,
-
-        # Do not load credentials for the GitHub App Installations, just metadata.
-        [Parameter(
-            ParameterSetName = 'App'
-        )]
-        [switch] $Shallow,
+        [switch] $AutoloadInstallations,
 
         # The default enterprise to use in commands.
         [Parameter()]
@@ -181,19 +175,6 @@
                 if (-not $customTokenProvided -and $gitHubTokenPresent) {
                     $authType = 'Token'
                     $Token = $gitHubToken
-                    $gitHubEvent = Get-Content -Path $env:GITHUB_EVENT_PATH -Raw | ConvertFrom-Json
-                    'Enterprise:            ' + $gitHubEvent.enterprise.slug
-                    'Organization:          ' + $gitHubEvent.organization.login
-                    'Repository:            ' + $gitHubEvent.repository.name
-                    'Repository Owner:      ' + $gitHubEvent.repository.owner.login
-                    'Repository Owner Type: ' + $gitHubEvent.repository.owner.type
-                    'Sender:                ' + $gitHubEvent.sender.login
-
-                    $Enterprise = [string]$gitHubEvent.enterprise.slug
-                    $TargetType = [string]$gitHubEvent.repository.owner.type
-                    $TargetName = [string]$gitHubEvent.repository.owner.login
-                    $Owner = [string]$gitHubEvent.repository.owner.login
-                    $Repo = [string]$gitHubEvent.repository.name
                 }
             }
 
@@ -299,10 +280,8 @@
                         'ghs' {
                             Write-Verbose 'Logging in using an installation access token...'
                             $context += @{
-                                Token      = ConvertTo-SecureString -AsPlainText $Token
-                                TokenType  = $tokenType
-                                TargetType = $TargetType
-                                TargetName = $TargetName
+                                Token     = ConvertTo-SecureString -AsPlainText $Token
+                                TokenType = $tokenType
                             }
                             $context['AuthType'] = 'IAT'
                         }
@@ -322,9 +301,9 @@
                 Write-Host "Logged in as $name!"
             }
 
-            if ($authType -eq 'App' -and -not $SkipAppAutoload) {
-                Write-Verbose 'Loading GitHub App contexts...'
-                Connect-GitHubApp -Shallow:$Shallow
+            if ($authType -eq 'App' -and $AutoloadInstallations) {
+                Write-Verbose 'Loading GitHub App Installation contexts...'
+                Connect-GitHubApp
             }
 
         } catch {
