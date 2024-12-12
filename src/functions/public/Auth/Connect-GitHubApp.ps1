@@ -71,89 +71,89 @@
         [switch] $Shallow
     )
 
-    $commandName = $MyInvocation.MyCommand.Name
-    Write-Verbose "[$commandName] - Start"
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Verbose "[$commandName] - Start"
+    }
 
-    $Context = $Context | Resolve-GitHubContext
-    $Context | Assert-GitHubContext -AuthType 'App'
+    process {
+        try {
+            $Context = $Context | Resolve-GitHubContext
+            $Context | Assert-GitHubContext -AuthType 'App'
 
-    try {
-        $defaultContextData = @{
-            ApiBaseUri = $Context.ApiBaseUri
-            ApiVersion = $Context.ApiVersion
-            HostName   = $Context.HostName
-            ClientID   = $Context.ClientID
-            AuthType   = 'IAT'
-            TokenType  = 'ghs'
-        }
+            $defaultContextData = @{
+                ApiBaseUri = $Context.ApiBaseUri
+                ApiVersion = $Context.ApiVersion
+                HostName   = $Context.HostName
+                ClientID   = $Context.ClientID
+                AuthType   = 'IAT'
+                TokenType  = 'ghs'
+            }
 
-        $installations = Get-GitHubAppInstallation
-        Write-Verbose "Found [$($installations.Count)] installations."
-        switch ($PSCmdlet.ParameterSetName) {
-            'User' {
-                Write-Verbose "Filtering installations for user [$User]."
-                $installations = $installations | Where-Object { $_.target_type -eq 'User' -and $_.account.login -in $User }
-            }
-            'Organization' {
-                Write-Verbose "Filtering installations for organization [$Organization]."
-                $installations = $installations | Where-Object { $_.target_type -eq 'Organization' -and $_.account.login -in $Organization }
-            }
-            'Enterprise' {
-                Write-Verbose "Filtering installations for enterprise [$Enterprise]."
-                $installations = $installations | Where-Object { $_.target_type -eq 'Enterprise' -and $_.account.slug -in $Enterprise }
-            }
-        }
-
-        Write-Verbose "Found [$($installations.Count)] installations for the target type."
-        $installations | ForEach-Object {
-            $installation = $_
-            $contextParams = @{} + $defaultContextData.Clone()
-            if ($Shallow) {
-                $token = [PSCustomObject]@{
-                    Token     = [securestring]::new()
-                    ExpiresAt = [datetime]::MinValue
-                }
-            } else {
-                $token = New-GitHubAppInstallationAccessToken -InstallationID $installation.id
-            }
-            $contextParams += @{
-                InstallationID      = $installation.id
-                Token               = $token.Token
-                TokenExpirationDate = $token.ExpiresAt
-                Permissions         = $installation.permissions
-                Events              = $installation.events
-                TargetType          = $installation.target_type
-            }
-            switch ($installation.target_type) {
+            $installations = Get-GitHubAppInstallation
+            Write-Verbose "Found [$($installations.Count)] installations."
+            switch ($PSCmdlet.ParameterSetName) {
                 'User' {
-                    $contextParams += @{
-                        TargetName = $installation.account.login
-                    }
+                    Write-Verbose "Filtering installations for user [$User]."
+                    $installations = $installations | Where-Object { $_.target_type -eq 'User' -and $_.account.login -in $User }
                 }
                 'Organization' {
-                    $contextParams += @{
-                        TargetName = $installation.account.login
-                    }
+                    Write-Verbose "Filtering installations for organization [$Organization]."
+                    $installations = $installations | Where-Object { $_.target_type -eq 'Organization' -and $_.account.login -in $Organization }
                 }
                 'Enterprise' {
-                    $contextParams += @{
-                        TargetName = $installation.account.slug
-                    }
+                    Write-Verbose "Filtering installations for enterprise [$Enterprise]."
+                    $installations = $installations | Where-Object { $_.target_type -eq 'Enterprise' -and $_.account.slug -in $Enterprise }
                 }
             }
-            Write-Verbose 'Logging in using an installation access token...'
-            Write-Verbose ($contextParams | Format-Table | Out-String)
-            $tmpContext = [InstallationGitHubContext]::new((Set-GitHubContext -Context $contextParams -PassThru))
-            Write-Verbose ($tmpContext | Format-List | Out-String)
-            if (-not $Silent) {
-                $name = $tmpContext.name
-                Write-Host "Connected $name"
+
+            Write-Verbose "Found [$($installations.Count)] installations for the target type."
+            $installations | ForEach-Object {
+                $installation = $_
+                $contextParams = @{} + $defaultContextData.Clone()
+                if ($Shallow) {
+                    $token = [PSCustomObject]@{
+                        Token     = [securestring]::new()
+                        ExpiresAt = [datetime]::MinValue
+                    }
+                } else {
+                    $token = New-GitHubAppInstallationAccessToken -InstallationID $installation.id
+                }
+
+                $contextParams['InstallationID'] = $installation.id
+                $contextParams['Token'] = $token.Token
+                $contextParams['TokenExpirationDate'] = $token.ExpiresAt
+                $contextParams['Permissions'] = $installation.permissions
+                $contextParams['Events'] = $installation.events
+                $contextParams['TargetType'] = $installation.target_type
+
+                switch ($installation.target_type) {
+                    'User' {
+                        $contextParams['TargetName'] = $installation.account.login
+                    }
+                    'Organization' {
+                        $contextParams['TargetName'] = $installation.account.login
+                    }
+                    'Enterprise' {
+                        $contextParams['TargetName'] = $installation.account.slug
+                    }
+                }
+                Write-Verbose 'Logging in using an installation access token...'
+                Write-Verbose ($contextParams | Format-Table | Out-String)
+                $tmpContext = [InstallationGitHubContext]::new((Set-GitHubContext -Context $contextParams -PassThru))
+                Write-Verbose ($tmpContext | Format-List | Out-String)
+                if (-not $Silent) {
+                    $name = $tmpContext.name
+                    Write-Host "Connected $name"
+                }
             }
+        } catch {
+            Write-Error $_
+            Write-Error (Get-PSCallStack | Format-Table | Out-String)
+            throw 'Failed to connect to GitHub using a GitHub App.'
         }
-    } catch {
-        Write-Error $_
-        Write-Error (Get-PSCallStack | Format-Table | Out-String)
-        throw 'Failed to connect to GitHub using a GitHub App.'
     }
-    Write-Verbose "[$commandName] - End"
+    end {
+        Write-Verbose "[$commandName] - End"
+    }
 }
