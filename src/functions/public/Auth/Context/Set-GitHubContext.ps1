@@ -100,11 +100,21 @@ function Set-GitHubContext {
                         Write-Verbose "Repository Owner:      $owner"
                         Write-Verbose "Repository Owner Type: $targetType"
                         Write-Verbose "Sender:                $gh_sender"
-                        $contextObj['Enterprise'] = [string]$enterprise
-                        $contextObj['TargetType'] = [string]$targetType
-                        $contextObj['TargetName'] = [string]$targetName
-                        $contextObj['Owner'] = [string]$owner
-                        $contextObj['Repo'] = [string]$repo
+                        if ([string]::IsNullOrEmpty($contextObj['Enterprise'])) {
+                            $contextObj['Enterprise'] = [string]$enterprise
+                        }
+                        if ([string]::IsNullOrEmpty($contextObj['Owner'])) {
+                            $contextObj['Owner'] = [string]$owner
+                        }
+                        if ([string]::IsNullOrEmpty($contextObj['Repo'])) {
+                            $contextObj['Repo'] = [string]$repo
+                        }
+                        if ([string]::IsNullOrEmpty($contextObj['TargetType'])) {
+                            $contextObj['TargetType'] = [string]$targetType
+                        }
+                        if ([string]::IsNullOrEmpty($contextObj['TargetName'])) {
+                            $contextObj['TargetName'] = [string]$targetName
+                        }
                         $contextObj['Name'] = "$($contextObj['HostName'])/$($contextObj['Username'])/" +
                         "$($contextObj['TargetType'])/$($contextObj['TargetName'])"
                     } else {
