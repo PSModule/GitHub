@@ -9,10 +9,13 @@
     [string] $OwnerType
 
     # The permissions that the app is requesting on the target
-    [string[]] $Permissions
+    [pscustomobject] $Permissions
 
     # The events that the app is subscribing to once installed
     [string[]] $Events
+
+    # Simple parameterless constructor
+    AppGitHubContext() {}
 
     # Creates a context object from a hashtable of key-vaule pairs.
     AppGitHubContext([hashtable]$Properties) {

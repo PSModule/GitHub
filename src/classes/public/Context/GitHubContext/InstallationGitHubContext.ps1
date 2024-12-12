@@ -10,7 +10,7 @@
     [int] $InstallationID
 
     # The permissions that the app is requesting on the target
-    [string[]] $Permissions
+    [pscustomobject] $Permissions
 
     # The events that the app is subscribing to once installed
     [string[]] $Events
@@ -20,6 +20,9 @@
 
     # The target login of the installation.
     [string] $TargetName
+
+    # Simple parameterless constructor
+    InstallationGitHubContext() {}
 
     # Creates a context object from a hashtable of key-vaule pairs.
     InstallationGitHubContext([hashtable]$Properties) {

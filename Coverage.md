@@ -5,7 +5,7 @@
 <table>
     <tr>
         <td>Available functions</td>
-        <td>985</td>
+        <td>980</td>
     </tr>
     <tr>
         <td>Covered functions</td>
@@ -13,11 +13,11 @@
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>830</td>
+        <td>825</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>15.74%</td>
+        <td>15.82%</td>
     </tr>
 </table>
 
@@ -52,13 +52,8 @@
 | `/codes_of_conduct`                                                                                                       |                    | :x:                |                    |                    |                    |
 | `/codes_of_conduct/{key}`                                                                                                 |                    | :x:                |                    |                    |                    |
 | `/emojis`                                                                                                                 |                    | :white_check_mark: |                    |                    |                    |
-| `/enterprises/{enterprise}/copilot/billing/seats`                                                                         |                    | :x:                |                    |                    |                    |
-| `/enterprises/{enterprise}/copilot/metrics`                                                                               |                    | :x:                |                    |                    |                    |
-| `/enterprises/{enterprise}/copilot/usage`                                                                                 |                    | :x:                |                    |                    |                    |
 | `/enterprises/{enterprise}/dependabot/alerts`                                                                             |                    | :x:                |                    |                    |                    |
 | `/enterprises/{enterprise}/secret-scanning/alerts`                                                                        |                    | :x:                |                    |                    |                    |
-| `/enterprises/{enterprise}/team/{team_slug}/copilot/metrics`                                                              |                    | :x:                |                    |                    |                    |
-| `/enterprises/{enterprise}/team/{team_slug}/copilot/usage`                                                                |                    | :x:                |                    |                    |                    |
 | `/events`                                                                                                                 |                    | :x:                |                    |                    |                    |
 | `/feeds`                                                                                                                  |                    | :x:                |                    |                    |                    |
 | `/gists`                                                                                                                  |                    | :x:                |                    | :x:                |                    |
