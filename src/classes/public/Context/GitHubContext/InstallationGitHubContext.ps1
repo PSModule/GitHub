@@ -21,6 +21,9 @@
     # The target login of the installation.
     [string] $TargetName
 
+    # Simple parameterless constructor
+    InstallationGitHubContext() {}
+
     # Creates a context object from a hashtable of key-vaule pairs.
     InstallationGitHubContext([hashtable]$Properties) {
         foreach ($Property in $Properties.Keys) {

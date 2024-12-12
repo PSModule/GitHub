@@ -14,6 +14,9 @@
     # The events that the app is subscribing to once installed
     [string[]] $Events
 
+    # Simple parameterless constructor
+    AppGitHubContext() {}
+
     # Creates a context object from a hashtable of key-vaule pairs.
     AppGitHubContext([hashtable]$Properties) {
         foreach ($Property in $Properties.Keys) {

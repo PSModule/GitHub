@@ -22,6 +22,9 @@
     # 2024-01-01-00:00:00
     [datetime] $RefreshTokenExpirationDate
 
+    # Simple parameterless constructor
+    UserGitHubContext() {}
+
     # Creates a context object from a hashtable of key-vaule pairs.
     UserGitHubContext([hashtable]$Properties) {
         foreach ($Property in $Properties.Keys) {
