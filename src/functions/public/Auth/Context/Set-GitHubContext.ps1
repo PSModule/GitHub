@@ -55,11 +55,19 @@ function Set-GitHubContext {
                 'PAT|UAT|IAT' {
                     $viewer = Get-GitHubViewer -Context $Context
                     $viewer | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
-                    $login = [string]($viewer.login -Replace '\[bot\]')
-                    $Context['DisplayName'] = [string]$viewer.name
-                    $Context['Username'] = $login
-                    $Context['NodeID'] = [string]$viewer.id
-                    $Context['DatabaseID'] = [string]$viewer.databaseId
+                    if ($null -ne $Context['DisplayName']) {
+                        $Context['DisplayName'] = [string]$viewer.name
+                    }
+                    if ($null -ne $Context['Username']) {
+                        $login = [string]($viewer.login -Replace '\[bot\]')
+                        $Context['Username'] = $login
+                    }
+                    if ($null -ne $Context['NodeID']) {
+                        $Context['NodeID'] = [string]$viewer.id
+                    }
+                    if ($null -ne $Context['DatabaseID']) {
+                        $Context['DatabaseID'] = [string]$viewer.databaseId
+                    }
                 }
                 'PAT|UAT' {
                     $contextName = "$($Context['HostName'])/$login"
@@ -87,19 +95,17 @@ function Set-GitHubContext {
                         Write-Verbose "Sender:                $gh_sender"
                         $Context['Enterprise'] = [string]$enterprise
                         $Context['TargetType'] = [string]$targetType
-                        $Context['TargetName'] = [string]$owner
+                        $Context['TargetName'] = [string]$targetName
                         $Context['Owner'] = [string]$owner
                         $Context['Repo'] = [string]$repo
-                        $contextName = "$($Context['HostName'])/$login/$targetType/$targetName"
-                        $Context['Name'] = $contextName
+                        $Context['Name'] = "$($Context['HostName'])/$($Context['Username'])/$($Context['TargetType'])/$($Context['TargetName'])"
                     } else {
-                        $login = $Context['Username']
+                        $Context['Name'] = "$($Context['HostName'])/$($Context['Username'])/$($Context['TargetType'])/$($Context['TargetName'])"
                     }
                 }
                 'App' {
                     $app = Get-GitHubApp -Context $Context
-                    $contextName = "$($Context['HostName'])/$($app.slug)"
-                    $Context['Name'] = $contextName
+                    $Context['Name'] = "$($Context['HostName'])/$($app.slug)"
                     $Context['DisplayName'] = [string]$app.name
                     $Context['Username'] = [string]$app.slug
                     $Context['NodeID'] = [string]$app.node_id
