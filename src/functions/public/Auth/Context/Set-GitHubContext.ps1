@@ -42,47 +42,48 @@ function Set-GitHubContext {
         $commandName = $MyInvocation.MyCommand.Name
         Write-Verbose "[$commandName] - Start"
         $null = Get-GitHubConfig
+        $contextObj = @{} + $Context
     }
 
     process {
         Write-Verbose 'Context:'
-        $Context | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+        $contextObj | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
 
         # Run functions to get info on the temporary context.
         try {
-            Write-Verbose "Getting info on the context [$($Context['AuthType'])]."
-            switch -Regex ($($Context['AuthType'])) {
+            Write-Verbose "Getting info on the context [$($contextObj['AuthType'])]."
+            switch -Regex ($($contextObj['AuthType'])) {
                 'PAT|UAT|IAT' {
-                    $viewer = Get-GitHubViewer -Context $Context
+                    $viewer = Get-GitHubViewer -Context $contextObj
                     $viewer | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
-                    if ([string]::IsNullOrEmpty($Context['DisplayName'])) {
-                        $Context['DisplayName'] = [string]$viewer.name
+                    if ([string]::IsNullOrEmpty($contextObj['DisplayName'])) {
+                        $contextObj['DisplayName'] = [string]$viewer.name
                     }
-                    if ([string]::IsNullOrEmpty($Context['Username'])) {
+                    if ([string]::IsNullOrEmpty($contextObj['Username'])) {
                         $login = [string]($viewer.login -Replace '\[bot\]')
-                        $Context['Username'] = $login
+                        $contextObj['Username'] = $login
                     }
-                    if ([string]::IsNullOrEmpty($Context['NodeID'])) {
-                        $Context['NodeID'] = [string]$viewer.id
+                    if ([string]::IsNullOrEmpty($contextObj['NodeID'])) {
+                        $contextObj['NodeID'] = [string]$viewer.id
                     }
-                    if ([string]::IsNullOrEmpty($Context['DatabaseID'])) {
-                        $Context['DatabaseID'] = [string]$viewer.databaseId
+                    if ([string]::IsNullOrEmpty($contextObj['DatabaseID'])) {
+                        $contextObj['DatabaseID'] = [string]$viewer.databaseId
                     }
                 }
                 'PAT|UAT' {
-                    $contextName = "$($Context['HostName'])/$login"
-                    $Context['Name'] = $contextName
-                    $Context['Type'] = 'User'
+                    $contextName = "$($contextObj['HostName'])/$login"
+                    $contextObj['Name'] = $contextName
+                    $contextObj['Type'] = 'User'
                 }
                 'IAT' {
-                    $Context['Type'] = 'Installation'
-                    if ([string]::IsNullOrEmpty($Context['DisplayName'])) {
+                    $contextObj['Type'] = 'Installation'
+                    if ([string]::IsNullOrEmpty($contextObj['DisplayName'])) {
                         try {
-                            $app = Get-GitHubApp -AppSlug $Context['Name'] -Context $Context
+                            $app = Get-GitHubApp -AppSlug $contextObj['Name'] -Context $contextObj
                         } catch {
-                            Write-Warning "Failed to get the GitHub App with the slug: [$($Context['Name'])]."
+                            Write-Warning "Failed to get the GitHub App with the slug: [$($contextObj['Name'])]."
                         }
-                        $Context['DisplayName'] = [string]$app.name
+                        $contextObj['DisplayName'] = [string]$app.name
                     }
 
                     if ($script:GitHub.EnvironmentType -eq 'GHA') {
@@ -100,52 +101,54 @@ function Set-GitHubContext {
                         Write-Verbose "Repository Owner:      $owner"
                         Write-Verbose "Repository Owner Type: $targetType"
                         Write-Verbose "Sender:                $gh_sender"
-                        $Context['Enterprise'] = [string]$enterprise
-                        $Context['TargetType'] = [string]$targetType
-                        $Context['TargetName'] = [string]$targetName
-                        $Context['Owner'] = [string]$owner
-                        $Context['Repo'] = [string]$repo
-                        $Context['Name'] = "$($Context['HostName'])/$($Context['Username'])/$($Context['TargetType'])/$($Context['TargetName'])"
+                        $contextObj['Enterprise'] = [string]$enterprise
+                        $contextObj['TargetType'] = [string]$targetType
+                        $contextObj['TargetName'] = [string]$targetName
+                        $contextObj['Owner'] = [string]$owner
+                        $contextObj['Repo'] = [string]$repo
+                        $contextObj['Name'] = "$($contextObj['HostName'])/$($contextObj['Username'])/$($contextObj['TargetType'])/$($contextObj['TargetName'])"
                     } else {
-                        $Context['Name'] = "$($Context['HostName'])/$($Context['Username'])/$($Context['TargetType'])/$($Context['TargetName'])"
+                        $contextObj['Name'] = "$($contextObj['HostName'])/$($contextObj['Username'])/$($contextObj['TargetType'])/$($contextObj['TargetName'])"
                     }
                 }
                 'App' {
-                    $app = Get-GitHubApp -Context $Context
-                    $Context['Name'] = "$($Context['HostName'])/$($app.slug)"
-                    $Context['DisplayName'] = [string]$app.name
-                    $Context['Username'] = [string]$app.slug
-                    $Context['NodeID'] = [string]$app.node_id
-                    $Context['DatabaseID'] = [string]$app.id
-                    $Context['Permissions'] = [PSCustomObject]$app.permissions
-                    $Context['Events'] = [string[]]$app.events
-                    $Context['OwnerName'] = [string]$app.owner.login
-                    $Context['OwnerType'] = [string]$app.owner.type
-                    $Context['Type'] = 'App'
+                    $app = Get-GitHubApp -Context $contextObj
+                    $contextObj['Name'] = "$($contextObj['HostName'])/$($app.slug)"
+                    $contextObj['DisplayName'] = [string]$app.name
+                    $contextObj['Username'] = [string]$app.slug
+                    $contextObj['NodeID'] = [string]$app.node_id
+                    $contextObj['DatabaseID'] = [string]$app.id
+                    $contextObj['Permissions'] = [PSCustomObject]$app.permissions
+                    $contextObj['Events'] = [string[]]$app.events
+                    $contextObj['OwnerName'] = [string]$app.owner.login
+                    $contextObj['OwnerType'] = [string]$app.owner.type
+                    $contextObj['Type'] = 'App'
                 }
                 default {
                     throw 'Failed to get info on the context. Unknown logon type.'
                 }
             }
-            Write-Verbose "Found [$($Context['Type'])] with login: [$($Context['Name'])]"
-            $Context | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+            Write-Verbose "Found [$($contextObj['Type'])] with login: [$($contextObj['Name'])]"
+            $contextObj | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
             Write-Verbose '----------------------------------------------------'
             if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
-                Write-Verbose "Saving context: [$($script:GitHub.Config.ID)/$($Context['Name'])]"
-                Set-Context -ID "$($script:GitHub.Config.ID)/$($Context['Name'])" -Context $Context
+                Write-Verbose "Saving context: [$($script:GitHub.Config.ID)/$($contextObj['Name'])]"
+                Set-Context -ID "$($script:GitHub.Config.ID)/$($contextObj['Name'])" -Context $contextObj
                 if ($Default) {
-                    Set-GitHubDefaultContext -Context $Context['Name']
-                    if ($Context['AuthType'] -eq 'IAT' -and $script:GitHub.EnvironmentType -eq 'GHA') {
-                        Set-GitHubGitConfig -Context $Context['Name']
+                    Set-GitHubDefaultContext -Context $contextObj['Name']
+                    if ($contextObj['AuthType'] -eq 'IAT' -and $script:GitHub.EnvironmentType -eq 'GHA') {
+                        Set-GitHubGitConfig -Context $contextObj['Name']
                     }
                 }
                 if ($PassThru) {
-                    Get-GitHubContext -Context $($Context['Name'])
+                    Get-GitHubContext -Context $($contextObj['Name'])
                 }
             }
         } catch {
             Write-Error $_ | Select-Object *
             throw 'Failed to set the GitHub context.'
+        } finally {
+            $contextObj.Clear()
         }
     }
 

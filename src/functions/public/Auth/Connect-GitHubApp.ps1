@@ -126,9 +126,9 @@
                         $contextParams['TargetName'] = $installation.account.slug
                     }
                 }
-                Write-Verbose 'Logging in using an installation access token...'
+                Write-Verbose 'Logging in using a managed installation access token...'
                 Write-Verbose ($contextParams | Format-Table | Out-String)
-                $tmpContext = [InstallationGitHubContext]::new((Set-GitHubContext -Context $contextParams -PassThru))
+                $tmpContext = [InstallationGitHubContext]::new((Set-GitHubContext -Context $contextParams.Copy() -PassThru))
                 Write-Verbose ($tmpContext | Format-List | Out-String)
                 if (-not $Silent) {
                     $name = $tmpContext.name
