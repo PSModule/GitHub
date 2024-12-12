@@ -55,17 +55,17 @@ function Set-GitHubContext {
                 'PAT|UAT|IAT' {
                     $viewer = Get-GitHubViewer -Context $Context
                     $viewer | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
-                    if ($null -ne $Context['DisplayName']) {
+                    if ($null -eq $Context['DisplayName']) {
                         $Context['DisplayName'] = [string]$viewer.name
                     }
-                    if ($null -ne $Context['Username']) {
+                    if ($null -eq $Context['Username']) {
                         $login = [string]($viewer.login -Replace '\[bot\]')
                         $Context['Username'] = $login
                     }
-                    if ($null -ne $Context['NodeID']) {
+                    if ($null -eq $Context['NodeID']) {
                         $Context['NodeID'] = [string]$viewer.id
                     }
-                    if ($null -ne $Context['DatabaseID']) {
+                    if ($null -eq $Context['DatabaseID']) {
                         $Context['DatabaseID'] = [string]$viewer.databaseId
                     }
                 }
