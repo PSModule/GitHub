@@ -22,7 +22,7 @@
 
         # The required authtypes for the command.
         [Parameter(Mandatory)]
-        [GitHubAuthType[]] $AuthType
+        [GitHubContextAuthType[]] $AuthType
     )
 
     $command = (Get-PSCallStack)[1].Command

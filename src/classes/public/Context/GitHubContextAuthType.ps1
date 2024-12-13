@@ -1,4 +1,4 @@
-﻿enum GitHubAuthType {
+﻿enum GitHubContextAuthType {
     PAT
     UAT
     APP
