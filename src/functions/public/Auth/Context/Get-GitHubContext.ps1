@@ -17,7 +17,7 @@ function Get-GitHubContext {
         'PSAvoidUsingConvertToSecureStringWithPlainText', '',
         Justification = 'Encapsulated in a function. Never leaves as a plain text.'
     )]
-    [OutputType([object])]
+    [OutputType([GitHubContext])]
     [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(
         # The name of the context.
