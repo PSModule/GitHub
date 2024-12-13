@@ -70,8 +70,8 @@ function Get-GitHubContext {
             Write-Verbose 'Context:'
             $contextObj | Select-Object * | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
 
-            Write-Verbose "Converting to: [$($contextObj.Type.ToString())GitHubContext]"
-            switch ($contextObj.Type.ToString()) {
+            Write-Verbose "Converting to: [$([GitHubContextType].GetEnumName($contextObj.Type))GitHubContext]"
+            switch ([GitHubContextType].GetEnumName($contextObj.Type)) {
                 'User' {
                     [UserGitHubContext]::new($contextObj)
                 }
@@ -82,7 +82,7 @@ function Get-GitHubContext {
                     [InstallationGitHubContext]::new($contextObj)
                 }
                 default {
-                    throw "Unknown context type: [$($contextObj.Type.ToString())]"
+                    throw "Unknown context type: [$($contextObj.Type)]"
                 }
             }
         }
