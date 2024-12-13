@@ -52,7 +52,7 @@ function Set-GitHubContext {
         # Run functions to get info on the temporary context.
         try {
             Write-Verbose "Getting info on the context [$($contextObj['AuthType'])]."
-            switch -Regex ($contextObj['AuthType']) {
+            switch -Regex ($($contextObj['AuthType'])) {
                 'PAT|UAT|IAT' {
                     $viewer = Get-GitHubViewer -Context $contextObj
                     $viewer | Out-String -Stream | ForEach-Object { Write-Verbose $_ }

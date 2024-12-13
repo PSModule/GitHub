@@ -1,4 +1,4 @@
-class GitHubContext : Context {
+﻿class GitHubContext : Context {
     # The GitHub Context Name.
     # HostName/Username or HostName/AppSlug
     # github.com/Octocat
@@ -18,7 +18,7 @@ class GitHubContext : Context {
 
     # The API base URI.
     # https://api.github.com
-    [uri] $ApiBaseUri
+    [string] $ApiBaseUri
 
     # The GitHub API version.
     # 2022-11-28

@@ -40,7 +40,6 @@
     )
 
     $Context = Resolve-GitHubContext -Context $Context
-    Assert-GitHubContext -Context $Context -AuthType App
 
     switch ($PSCmdlet.ParameterSetName) {
         'BySlug' {

@@ -1,4 +1,4 @@
-function Connect-GitHubApp {
+﻿function Connect-GitHubApp {
     <#
         .SYNOPSIS
         Connects to GitHub as a installation using a GitHub App.
@@ -104,7 +104,7 @@ function Connect-GitHubApp {
                     AuthType            = [string]'IAT'
                     TokenType           = [string]'ghs'
                     DisplayName         = [string]$Context.DisplayName
-                    ApiBaseUri          = [uri]$Context.ApiBaseUri
+                    ApiBaseUri          = [string]$Context.ApiBaseUri
                     ApiVersion          = [string]$Context.ApiVersion
                     HostName            = [string]$Context.HostName
                     ClientID            = [string]$Context.ClientID
@@ -113,18 +113,18 @@ function Connect-GitHubApp {
                     Events              = [string[]]$installation.events
                     TargetType          = [string]$installation.target_type
                     Token               = [securestring]$token.Token
-                    TokenExpirationDate = [datetime]$token.ExpiresAt
+                    TokenExpirationDate = [string]$token.ExpiresAt
                 }
 
                 switch ($installation.target_type) {
                     'User' {
-                        $contextParams['TargetName'] = [string]$installation.account.login
+                        $contextParams['TargetName'] = $installation.account.login
                     }
                     'Organization' {
-                        $contextParams['TargetName'] = [string]$installation.account.login
+                        $contextParams['TargetName'] = $installation.account.login
                     }
                     'Enterprise' {
-                        $contextParams['TargetName'] = [string]$installation.account.slug
+                        $contextParams['TargetName'] = $installation.account.slug
                     }
                 }
                 Write-Verbose 'Logging in using a managed installation access token...'
