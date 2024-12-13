@@ -1,4 +1,4 @@
-﻿function Connect-GitHubApp {
+function Connect-GitHubApp {
     <#
         .SYNOPSIS
         Connects to GitHub as a installation using a GitHub App.
@@ -101,7 +101,7 @@
                 $token = New-GitHubAppInstallationAccessToken -Context $Context -InstallationID $installation.id
 
                 $contextParams = @{
-                    AuthType            = [GitHubContextAuthType]'IAT'
+                    AuthType            = [string]'IAT'
                     TokenType           = [string]'ghs'
                     DisplayName         = [string]$Context.DisplayName
                     ApiBaseUri          = [uri]$Context.ApiBaseUri

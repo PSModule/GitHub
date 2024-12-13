@@ -98,14 +98,14 @@
         Write-Debug "Token :      [$Token]"
 
         if ([string]::IsNullOrEmpty($TokenType)) {
-            $TokenType = $Context.TokenType.ToString()
+            $TokenType = $Context.TokenType
         }
-        Write-Debug "TokenType :  [$($Context.TokenType.ToString())]"
+        Write-Debug "TokenType :  [$($Context.TokenType)]"
 
         if ([string]::IsNullOrEmpty($ApiBaseUri)) {
-            $ApiBaseUri = $Context.ApiBaseUri.ToString()
+            $ApiBaseUri = $Context.ApiBaseUri
         }
-        Write-Debug "ApiBaseUri : [$($Context.ApiBaseUri.ToString())]"
+        Write-Debug "ApiBaseUri : [$($Context.ApiBaseUri)]"
 
         if ([string]::IsNullOrEmpty($ApiVersion)) {
             $ApiVersion = $Context.ApiVersion
