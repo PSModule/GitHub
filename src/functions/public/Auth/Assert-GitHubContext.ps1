@@ -18,7 +18,7 @@
             Mandatory,
             ValueFromPipeline
         )]
-        [GitHubContext] $Context,
+        [object] $Context,
 
         # The required authtypes for the command.
         [Parameter(Mandatory)]

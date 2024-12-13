@@ -20,7 +20,7 @@
 
         This will return the GitHubContext object.
     #>
-    [OutputType([GitHubContext])]
+    [OutputType([object])]
     [CmdletBinding()]
     param(
         # The context to resolve into an object. Used to get the details for the API call.
