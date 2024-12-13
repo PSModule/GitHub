@@ -70,8 +70,8 @@ function Get-GitHubContext {
             Write-Verbose 'Context:'
             $contextObj | Select-Object * | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
 
-            Write-Verbose "Converting to: [$([GitHubContextType].GetEnumName($contextObj.Type))GitHubContext]"
-            switch ([GitHubContextType].GetEnumName($contextObj.Type)) {
+            Write-Verbose "Converting to: [$($contextObj.Type)GitHubContext]"
+            switch ($contextObj.Type) {
                 'User' {
                     [UserGitHubContext]::new($contextObj)
                 }

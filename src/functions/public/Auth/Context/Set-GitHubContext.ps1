@@ -73,7 +73,7 @@ function Set-GitHubContext {
                 'PAT|UAT' {
                     $contextName = "$($contextObj['HostName'])/$login"
                     $contextObj['Name'] = $contextName
-                    $contextObj['Type'] = [GitHubContextType]'User'
+                    $contextObj['Type'] = 'User'
                 }
                 'IAT' {
                     $contextObj['Type'] = 'Installation'
@@ -133,7 +133,7 @@ function Set-GitHubContext {
                     $contextObj['Events'] = [string[]]$app.events
                     $contextObj['OwnerName'] = [string]$app.owner.login
                     $contextObj['OwnerType'] = [string]$app.owner.type
-                    $contextObj['Type'] = [GitHubContextType]'App'
+                    $contextObj['Type'] = 'App'
                 }
                 default {
                     throw 'Failed to get info on the context. Unknown logon type.'
