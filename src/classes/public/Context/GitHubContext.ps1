@@ -26,7 +26,7 @@
 
     # The authentication type.
     # UAT / PAT / App / IAT
-    [string] $AuthType
+    [GitHubAuthType] $AuthType
 
     # User ID / App ID as GraphQL Node ID
     [string] $NodeID
