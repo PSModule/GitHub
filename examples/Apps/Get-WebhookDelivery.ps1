@@ -1,8 +1,7 @@
 ﻿Connect-GitHub -ClientID $ClientID -PrivateKey $PrivateKey -HostName 'msx.ghe.com'
 
-$Return = Invoke-GitHubAPI -ApiEndpoint '/app/hook/deliveries'
-$Webhooks = $Return.Response | ForEach-Object {
-    [psCustomObject]@{
+$deliveries = Get-GitHubAppWebhookDelivery | ForEach-Object {
+    [pscustomobject]@{
         Success        = ($_.status_code -lt 300) -and ($_.status_code -ge 200)
         StatusCode     = $_.status_code
         Status         = $_.status
@@ -20,7 +19,7 @@ $Webhooks = $Return.Response | ForEach-Object {
     }
 }
 
-$Webhooks | Where-Object { $_.Event -eq 'team' } | Format-Table -AutoSize
+$deliveries | Where-Object { $_.Event -eq 'team' } | Format-Table -AutoSize
 
 
 

@@ -10,6 +10,7 @@ foreach ($org in $orgs) {
     }
 }
 
+
 $Teams = Get-GitHubTeamListByOrg -Organization $filter | ForEach-Object {
     [pscustomobject]@{
         Organization = $filter
@@ -17,6 +18,21 @@ $Teams = Get-GitHubTeamListByOrg -Organization $filter | ForEach-Object {
         Id           = $_.id
     }
 }
+
+
+$orgs = Get-GitHubOrganization
+$teams = $orgs | ForEach-Object {
+    $org = $_.login
+    Get-GitHubTeamListByOrg -Organization $org | ForEach-Object {
+        [pscustomobject]@{
+            Organization = $org
+            Team         = $_.name
+            TeamId       = $_.id
+        }
+    }
+}
+$teams
+
 
 $Teams | Where-Object { $_.Name -like 'Team*' } | ForEach-Object {
     Remove-GitHubTeam -Organization $_.Organization -Name $_.Name -Verbose
