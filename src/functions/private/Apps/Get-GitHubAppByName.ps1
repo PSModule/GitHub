@@ -38,7 +38,6 @@
     }
 
     process {
-
         $inputObject = @{
             Context     = $Context
             APIEndpoint = "/apps/$AppSlug"
