@@ -25,7 +25,7 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
+    $Context = $Context | Resolve-GitHubContext
     $Context | Assert-GitHubContext -AuthType App
 
     $inputObject = @{
