@@ -5,7 +5,7 @@
 
     # The device flow type.
     # GitHubApp / OAuthApp
-    [string] $DeviceFlowType
+    [UserGitHubContextAuthAppType] $DeviceFlowType
 
     # The scope when authenticating with OAuth.
     # 'gist read:org repo workflow'

@@ -1,0 +1,4 @@
+﻿enum UserGitHubContextAuthAppType {
+    GitHubApp
+    OAuthApp
+}
