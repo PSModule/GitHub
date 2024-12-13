@@ -1,4 +1,4 @@
-class GitHubContext : Context {
+﻿class GitHubContext : Context {
     # The GitHub Context Name.
     # HostName/Username or HostName/AppSlug
     # github.com/Octocat
@@ -10,7 +10,7 @@ class GitHubContext : Context {
 
     # The context type
     # User / App / Installation
-    [string] $Type
+    [GitHubContextType] $Type
 
     # The API hostname.
     # github.com / msx.ghe.com / github.local
@@ -26,7 +26,7 @@ class GitHubContext : Context {
 
     # The authentication type.
     # UAT / PAT / App / IAT
-    [GitHubAuthType] $AuthType
+    [GitHubContextAuthType] $AuthType
 
     # User ID / App ID as GraphQL Node ID
     [string] $NodeID
@@ -42,7 +42,7 @@ class GitHubContext : Context {
 
     # The token type.
     # ghu / gho / ghp / github_pat / PEM / ghs /
-    [string] $TokenType
+    [GitHubContextTokenType] $TokenType
 
     # The default value for the Enterprise parameter.
     [string] $Enterprise

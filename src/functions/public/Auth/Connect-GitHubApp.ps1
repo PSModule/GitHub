@@ -101,10 +101,10 @@
                 $token = New-GitHubAppInstallationAccessToken -Context $Context -InstallationID $installation.id
 
                 $contextParams = @{
-                    AuthType            = [string]'IAT'
+                    AuthType            = [GitHubContextAuthType]'IAT'
                     TokenType           = [string]'ghs'
                     DisplayName         = [string]$Context.DisplayName
-                    ApiBaseUri          = [string]$Context.ApiBaseUri
+                    ApiBaseUri          = [uri]$Context.ApiBaseUri
                     ApiVersion          = [string]$Context.ApiVersion
                     HostName            = [string]$Context.HostName
                     ClientID            = [string]$Context.ClientID
@@ -113,18 +113,18 @@
                     Events              = [string[]]$installation.events
                     TargetType          = [string]$installation.target_type
                     Token               = [securestring]$token.Token
-                    TokenExpirationDate = [string]$token.ExpiresAt
+                    TokenExpirationDate = [datetime]$token.ExpiresAt
                 }
 
                 switch ($installation.target_type) {
                     'User' {
-                        $contextParams['TargetName'] = $installation.account.login
+                        $contextParams['TargetName'] = [string]$installation.account.login
                     }
                     'Organization' {
-                        $contextParams['TargetName'] = $installation.account.login
+                        $contextParams['TargetName'] = [string]$installation.account.login
                     }
                     'Enterprise' {
-                        $contextParams['TargetName'] = $installation.account.slug
+                        $contextParams['TargetName'] = [string]$installation.account.slug
                     }
                 }
                 Write-Verbose 'Logging in using a managed installation access token...'
