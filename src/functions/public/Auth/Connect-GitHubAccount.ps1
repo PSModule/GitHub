@@ -186,6 +186,7 @@
                 Enterprise = [string]$Enterprise
                 Owner      = [string]$Owner
                 Repo       = [string]$Repo
+                PerPage    = 100
             }
 
             Write-Verbose ($context | Format-Table | Out-String)
