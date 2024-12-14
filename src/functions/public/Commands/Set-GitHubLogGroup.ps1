@@ -41,6 +41,10 @@
     )
 
     Start-GitHubLogGroup -Name $Name
-    . $ScriptBlock
+    try {
+        . $ScriptBlock
+    } catch {
+        throw $_
+    }
     Stop-GitHubLogGroup
 }
