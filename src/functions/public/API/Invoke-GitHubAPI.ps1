@@ -151,7 +151,7 @@
             # Use body to create the query string for certain situations
             if ($Method -eq 'GET') {
                 # If body conatins 'per_page' and its is null, set it to $context.PerPage
-                if ($Body.ContainsKey('per_page') -and $null -eq $Body['per_page']) {
+                if ($Body['per_page'] -eq 0) {
                     $Body['per_page'] = $Context.PerPage
                 }
                 $queryString = $Body | ConvertTo-QueryString
