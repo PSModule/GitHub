@@ -18,16 +18,27 @@
             Mandatory,
             ValueFromPipeline
         )]
-        [GitHubContext] $Context,
+        [object] $Context,
 
         # The required authtypes for the command.
         [Parameter(Mandatory)]
         [string[]] $AuthType
     )
 
-    $command = (Get-PSCallStack)[1].Command
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Verbose "[$commandName] - Start"
+    }
 
-    if ($Context.AuthType -notin $AuthType) {
-        throw "The context '$($Context.Name)' does not match the required AuthTypes [$AuthType] for [$command]."
+    process {
+        $command = (Get-PSCallStack)[1].Command
+
+        if ($Context.AuthType -notin $AuthType) {
+            throw "The context '$($Context.Name)' does not match the required AuthTypes [$AuthType] for [$command]."
+        }
+    }
+
+    end {
+        Write-Verbose "[$commandName] - End"
     }
 }
