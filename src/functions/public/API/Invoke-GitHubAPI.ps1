@@ -131,7 +131,7 @@
         $headers | Remove-HashtableEntry -NullOrEmptyValues
 
         if (-not $URI) {
-            $URI = ("$ApiBaseUri/" -replace '/$', '') + ("/$ApiEndpoint" -replace '^/', '')
+            $URI = ("$ApiBaseUri" -replace '/$'), ("$ApiEndpoint" -replace '^/') -join '/'
         }
 
         $APICall = @{
