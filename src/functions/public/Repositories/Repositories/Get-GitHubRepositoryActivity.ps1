@@ -69,8 +69,7 @@
         # Default: 30
         [Parameter()]
         [ValidateRange(1, 100)]
-        [Alias('per_page')]
-        [int] $PerPage = 30,
+        [int] $PerPage,
 
         # A cursor, as given in the Link header. If specified, the query only searches for results before this cursor.
         [Parameter(ParameterSetName = 'BeforeAfter')]
