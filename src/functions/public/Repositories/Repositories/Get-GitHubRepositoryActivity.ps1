@@ -68,7 +68,7 @@
         # The number of results per page (max 100).
         # Default: 30
         [Parameter()]
-        [ValidateRange(1, 100)]
+        [ValidateRange(0, 100)]
         [int] $PerPage,
 
         # A cursor, as given in the Link header. If specified, the query only searches for results before this cursor.

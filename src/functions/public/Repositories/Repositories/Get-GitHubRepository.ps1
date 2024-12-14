@@ -121,7 +121,7 @@ filter Get-GitHubRepository {
         [Parameter(ParameterSetName = 'MyRepos')]
         [Parameter(ParameterSetName = 'ListByOrg')]
         [Parameter(ParameterSetName = 'ListByUser')]
-        [ValidateRange(1, 100)]
+        [ValidateRange(0, 100)]
         [int] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.
