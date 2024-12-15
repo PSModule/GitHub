@@ -39,8 +39,8 @@ function Set-GitHubContext {
     )
 
     begin {
-        $commandName = $MyInvocation.MyCommand.Name
-        Write-Debug "[$commandName] - Start"
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
         $null = Get-GitHubConfig
         $contextObj = @{} + $Context
     }
@@ -164,6 +164,6 @@ function Set-GitHubContext {
     }
 
     end {
-        Write-Debug "[$commandName] - End"
+        Write-Debug "[$stackPath] - End"
     }
 }

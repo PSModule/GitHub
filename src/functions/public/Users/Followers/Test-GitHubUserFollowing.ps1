@@ -50,8 +50,8 @@
     )
 
     begin {
-        $commandName = $MyInvocation.MyCommand.Name
-        Write-Debug "[$commandName] - Start"
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
@@ -69,6 +69,6 @@
     }
 
     end {
-        Write-Debug "[$commandName] - End"
+        Write-Debug "[$stackPath] - End"
     }
 }

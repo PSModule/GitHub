@@ -162,8 +162,8 @@ filter Get-GitHubRepository {
     }
 
     begin {
-        $commandName = $MyInvocation.MyCommand.Name
-        Write-Debug "[$commandName] - Start"
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
 
@@ -193,7 +193,6 @@ filter Get-GitHubRepository {
                         Since     = $Since
                         Before    = $Before
                     }
-                    $params | Remove-HashtableEntry -NullOrEmptyValues
                     Get-GitHubMyRepositories @params
                 }
                 'MyRepos_Aff-Vis' {
@@ -206,7 +205,6 @@ filter Get-GitHubRepository {
                         Since       = $Since
                         Before      = $Before
                     }
-                    $params | Remove-HashtableEntry -NullOrEmptyValues
                     Get-GitHubMyRepositories @params
                 }
                 'ByName' {
@@ -214,14 +212,12 @@ filter Get-GitHubRepository {
                         Owner = $Owner
                         Repo  = $Repo
                     }
-                    $params | Remove-HashtableEntry -NullOrEmptyValues
                     Get-GitHubRepositoryByName @params
                 }
                 'ListByID' {
                     $params += @{
                         Since = $SinceID
                     }
-                    $params | Remove-HashtableEntry -NullOrEmptyValues
                     Get-GitHubRepositoryListByID @params
                 }
                 'ListByOrg' {
@@ -232,7 +228,6 @@ filter Get-GitHubRepository {
                         Direction = $Direction
                         PerPage   = $PerPage
                     }
-                    $params | Remove-HashtableEntry -NullOrEmptyValues
                     Get-GitHubRepositoryListByOrg @params
                 }
                 'ListByUser' {
@@ -243,7 +238,6 @@ filter Get-GitHubRepository {
                         Direction = $Direction
                         PerPage   = $PerPage
                     }
-                    $params | Remove-HashtableEntry -NullOrEmptyValues
                     Get-GitHubRepositoryListByUser @params
                 }
             }
@@ -253,6 +247,6 @@ filter Get-GitHubRepository {
     }
 
     end {
-        Write-Debug "[$commandName] - End"
+        Write-Debug "[$stackPath] - End"
     }
 }

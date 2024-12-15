@@ -1,4 +1,4 @@
-﻿function Show-CallStack {
+﻿function Get-PSCallStackPath {
     <#
         .SYNOPSIS
         Create a string representation of the current call stack.
@@ -7,30 +7,30 @@
         This function creates a string representation of the current call stack.
         You can use the SkipFirst and SkipLatest parameters to skip the first and last.
         By default it will skip the first (what called the initial function, typically <ScriptBlock>),
-        and the last (the current function, Show-CallStack).
+        and the last (the current function, Get-PSCallStackPath).
 
         .EXAMPLE
-        Show-CallStack
+        Get-PSCallStackPath
         First-Function\Second-Function\Third-Function
 
-        Shows the call stack of the last function called, Third-Function, with the first (<ScriptBlock>) and last (Show-CallStack) functions removed.
+        Shows the call stack of the last function called, Third-Function, with the first (<ScriptBlock>) and last (Get-PSCallStackPath) functions removed.
 
         .EXAMPLE
-        Show-CallStack -SkipFirst 0
+        Get-PSCallStackPath -SkipFirst 0
         <ScriptBlock>\First-Function\Second-Function\Third-Function
 
         Shows the call stack of the last function called, Third-Function, with the first function included (typically <ScriptBlock>).
 
         .EXAMPLE
-        Show-CallStack -SkipLatest 0
-        First-Function\Second-Function\Third-Function\Show-CallStack
+        Get-PSCallStackPath -SkipLatest 0
+        First-Function\Second-Function\Third-Function\Get-PSCallStackPath
 
-        Shows the call stack of the last function called, Third-Function, with the last function included (Show-CallStack).
+        Shows the call stack of the last function called, Third-Function, with the last function included (Get-PSCallStackPath).
     #>
     [CmdletBinding()]
     param(
         # Number of the functions to skip from the last function called.
-        # Last function is this function, Show-CallStack.
+        # Last function is this function, Get-PSCallStackPath.
         [Parameter()]
         [int] $SkipLatest = 1,
 
