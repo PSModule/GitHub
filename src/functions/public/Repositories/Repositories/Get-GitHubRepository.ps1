@@ -115,7 +115,7 @@ filter Get-GitHubRepository {
         [Parameter(ParameterSetName = 'ListByOrg')]
         [Parameter(ParameterSetName = 'ListByUser')]
         [ValidateSet('asc', 'desc')]
-        [string] $Direction,
+        [string] $Direction = 'asc',
 
         # The number of results per page (max 100).
         [Parameter(ParameterSetName = 'MyRepos')]
