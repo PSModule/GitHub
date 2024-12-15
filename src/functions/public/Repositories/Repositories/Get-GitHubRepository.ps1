@@ -180,6 +180,7 @@ filter Get-GitHubRepository {
 
     process {
         try {
+            Write-Verbose "ParamSet: [$($PSCmdlet.ParameterSetName)]"
             switch ($PSCmdlet.ParameterSetName) {
                 'MyRepos_Type' {
                     $params = @{
@@ -191,6 +192,7 @@ filter Get-GitHubRepository {
                         Since     = $Since
                         Before    = $Before
                     }
+                    $params | Format-Table -AutoSize | Out-String | ForEach-Object { Write-Debug $_ }
                     Get-GitHubMyRepositories @params
                 }
                 'MyRepos_Aff-Vis' {
@@ -204,6 +206,7 @@ filter Get-GitHubRepository {
                         Since       = $Since
                         Before      = $Before
                     }
+                    $params | Format-Table -AutoSize | Out-String | ForEach-Object { Write-Debug $_ }
                     Get-GitHubMyRepositories @params
                 }
                 'ByName' {
@@ -212,6 +215,7 @@ filter Get-GitHubRepository {
                         Owner   = $Owner
                         Repo    = $Repo
                     }
+                    $params | Format-Table -AutoSize | Out-String | ForEach-Object { Write-Debug $_ }
                     Get-GitHubRepositoryByName @params
                 }
                 'ListByID' {
@@ -219,6 +223,7 @@ filter Get-GitHubRepository {
                         Context = $Context
                         Since   = $SinceID
                     }
+                    $params | Format-Table -AutoSize | Out-String | ForEach-Object { Write-Debug $_ }
                     Get-GitHubRepositoryListByID @params
                 }
                 'ListByOrg' {
@@ -230,6 +235,7 @@ filter Get-GitHubRepository {
                         Direction = $Direction
                         PerPage   = $PerPage
                     }
+                    $params | Format-Table -AutoSize | Out-String | ForEach-Object { Write-Debug $_ }
                     Get-GitHubRepositoryListByOrg @params
                 }
                 'ListByUser' {
@@ -241,6 +247,7 @@ filter Get-GitHubRepository {
                         Direction = $Direction
                         PerPage   = $PerPage
                     }
+                    $params | Format-Table -AutoSize | Out-String | ForEach-Object { Write-Debug $_ }
                     Get-GitHubRepositoryListByUser @params
                 }
             }
