@@ -1,42 +1,32 @@
-﻿filter Get-GitHubWorkflowRun {
+﻿filter Get-GitHubWorkflowRunByWorkflow {
     <#
         .SYNOPSIS
-        List workflow runs for a repository or a workflow
+        List workflow runs for a workflow
 
         .DESCRIPTION
-        Lists all workflow runs for a repository or a workflow. You can use parameters to narrow the list of results. For more information about using
-        parameters, see [Parameters](https://docs.github.com/rest/guides/getting-started-with-the-rest-api#parameters).
-        Anyone with read access to the repository can use this endpoint.
+        List all workflow runs for a workflow. You can replace `workflow_id` with the workflow file name. For example, you could use `main.yaml`.
+        You can use parameters to narrow the list of results. For more information about using parameters, see
+        [Parameters](https://docs.github.com/rest/guides/getting-started-with-the-rest-api#parameters).
+        Anyone with read access to the repository can use this endpoint
         OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint with a private repository.
-        This endpoint will return up to 1,000 results for each search when using the following parameters: `actor`, `branch`, `check_suite_id`, `created`,
-        `event`, `head_sha`, `status`.
+        This endpoint will return up to 1,000 results for each search when using the following parameters: `actor`, `branch`, `check_suite_id`,
+        `created`, `event`, `head_sha`, `status`.
 
         .EXAMPLE
-        Get-GitHubWorkflowRun -Owner 'owner' -Repo 'repo'
-
-        Lists all workflow runs for a repository.
-
-        .EXAMPLE
-        Get-GitHubWorkflowRun -Owner 'owner' -Repo 'repo' -Actor 'octocat' -Branch 'main' -Event 'push' -Status 'success'
-
-        Lists all workflow runs for a repository with the specified actor, branch, event, and status.
-
-        .EXAMPLE
-        Get-GitHubWorkflowRun -Owner 'octocat' -Repo 'Hello-World' -ID '42'
+        Get-GitHubWorkflowRunByWorkflow -Owner 'octocat' -Repo 'Hello-World' -ID '42'
 
         Gets all workflow runs for the workflow with the ID `42` in the repository `Hello-World` owned by `octocat`.
 
         .EXAMPLE
-        Get-GitHubWorkflowRun -Owner 'octocat' -Repo 'Hello-World' -Name 'nightly.yml' -Actor 'octocat' -Branch 'main' -Event 'push' -Status 'success'
+        Get-GitHubWorkflowRunByWorkflow -Owner 'octocat' -Repo 'Hello-World' -ID '42' -Actor 'octocat' -Branch 'main' -Event 'push' -Status 'success'
 
-        Gets all workflow runs for the workflow with the name `nightly.yml` in the repository `Hello-World` owned by `octocat` that were triggered by
-        the user `octocat` on the branch `main` and have the status `success`.
+        Gets all workflow runs for the workflow with the ID `42` in the repository `Hello-World` owned by `octocat` that were triggered by the user
+        `octocat` on the branch `main` and have the status `success`.
 
         .NOTES
         [List workflow runs for a workflow](https://docs.github.com/rest/actions/workflow-runs?apiVersion=2022-11-28#list-workflow-runs-for-a-workflow)
-        [List workflow runs for a repository](https://docs.github.com/rest/actions/workflow-runs?apiVersion=2022-11-28#list-workflow-runs-for-a-repository)
     #>
-    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
+    [CmdletBinding(DefaultParameterSetName = 'Repo')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidAssignmentToAutomaticVariable', 'Event',
         Justification = 'A parameter that is used in the api call.')]
@@ -50,19 +40,9 @@
         [string] $Repo,
 
         # The ID of the workflow. You can also pass the workflow file name as a string.
-        [Parameter(
-            Mandatory,
-            ParameterSetName = 'ByID'
-        )]
+        [Parameter(Mandatory)]
         [Alias('workflow_id', 'WorkflowID')]
         [string] $ID,
-
-        # The name of the workflow.
-        [Parameter(
-            Mandatory,
-            ParameterSetName = 'ByName'
-        )]
-        [string] $Name,
 
         # Returns someone's workflow runs. Use the login for the user who created the push associated with the check suite or workflow run.
         [Parameter()]
@@ -132,34 +112,27 @@
 
     process {
         try {
-            $params = @{
-                Owner               = $Owner
-                Repo                = $Repo
-                Actor               = $Actor
-                Branch              = $Branch
-                Event               = $Event
-                Status              = $Status
-                Created             = $Created
-                ExcludePullRequests = $ExcludePullRequests
-                CheckSuiteID        = $CheckSuiteID
-                HeadSHA             = $HeadSHA
-                PerPage             = $PerPage
+            $body = @{
+                actor                 = $Actor
+                branch                = $Branch
+                event                 = $Event
+                status                = $Status
+                created               = $Created
+                exclude_pull_requests = $ExcludePullRequests
+                check_suite_id        = $CheckSuiteID
+                head_sha              = $HeadSHA
+                per_page              = $PerPage
             }
 
-            switch ($PSCmdlet.ParameterSetName) {
-                'ByID' {
-                    $params['ID'] = $ID
-                    Get-GitHubWorkflowRunByWorkflow @params
-                }
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = "/repos/$Owner/$Repo/actions/workflows/$ID/runs"
+                Method      = 'GET'
+                Body        = $body
+            }
 
-                'ByName' {
-                    $params['ID'] = (Get-GitHubWorkflow -Owner $Owner -Repo $Repo -Name $Name).id
-                    Get-GitHubWorkflowRunByWorkflow @params
-                }
-
-                '__AllParameterSets' {
-                    Get-GitHubWorkflowRunByRepo @params
-                }
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response.workflow_runs
             }
         } catch {
             throw $_
