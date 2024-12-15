@@ -49,7 +49,7 @@
         [Parameter(Mandatory)]
         [string] $Repo,
 
-        # The ID of the workflow. You can also pass the workflow file name as a string.
+        # The ID of the workflow. You can also pass the workflow filename as a string.
         [Parameter(
             Mandatory,
             ParameterSetName = 'ByID'
