@@ -1,4 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '5.0.3' }
+﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '5.0.4' }
 
 function Remove-GitHubConfig {
     <#
