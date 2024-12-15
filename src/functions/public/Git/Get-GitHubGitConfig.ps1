@@ -18,7 +18,6 @@
     begin {
         $commandName = $MyInvocation.MyCommand.Name
         Write-Debug "[$commandName] - Start"
-        $Context = Resolve-GitHubContext -Context $Context
     }
 
     process {
