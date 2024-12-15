@@ -180,6 +180,7 @@ filter Get-GitHubRepository {
 
     process {
         try {
+            $Type = $PSBoundParameters['Type']
             Write-Verbose "ParamSet: [$($PSCmdlet.ParameterSetName)]"
             switch ($PSCmdlet.ParameterSetName) {
                 'MyRepos_Type' {
