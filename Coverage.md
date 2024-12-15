@@ -9,15 +9,15 @@
     </tr>
     <tr>
         <td>Covered functions</td>
-        <td>155</td>
+        <td>156</td>
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>825</td>
+        <td>824</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>15.82%</td>
+        <td>15.92%</td>
     </tr>
 </table>
 
@@ -54,7 +54,7 @@
 | `/emojis`                                                                                                                 |                    | :white_check_mark: |                    |                    |                    |
 | `/enterprises/{enterprise}/dependabot/alerts`                                                                             |                    | :x:                |                    |                    |                    |
 | `/enterprises/{enterprise}/secret-scanning/alerts`                                                                        |                    | :x:                |                    |                    |                    |
-| `/events`                                                                                                                 |                    | :x:                |                    |                    |                    |
+| `/events`                                                                                                                 |                    | :white_check_mark: |                    |                    |                    |
 | `/feeds`                                                                                                                  |                    | :x:                |                    |                    |                    |
 | `/gists`                                                                                                                  |                    | :x:                |                    | :x:                |                    |
 | `/gists/public`                                                                                                           |                    | :x:                |                    |                    |                    |
