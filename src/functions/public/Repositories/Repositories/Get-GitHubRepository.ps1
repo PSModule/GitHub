@@ -192,7 +192,7 @@ filter Get-GitHubRepository {
                         PerPage   = $PerPage
                         Since     = $Since
                         Before    = $Before
-                    }
+                    } | Remove-HashtableEntry -NullOrEmptyValues
                     $params | Format-Table -AutoSize | Out-String | ForEach-Object { Write-Debug $_ }
                     Get-GitHubMyRepositories @params
                 }
@@ -206,7 +206,7 @@ filter Get-GitHubRepository {
                         PerPage     = $PerPage
                         Since       = $Since
                         Before      = $Before
-                    }
+                    } | Remove-HashtableEntry -NullOrEmptyValues
                     $params | Format-Table -AutoSize | Out-String | ForEach-Object { Write-Debug $_ }
                     Get-GitHubMyRepositories @params
                 }
@@ -215,7 +215,7 @@ filter Get-GitHubRepository {
                         Context = $Context
                         Owner   = $Owner
                         Repo    = $Repo
-                    }
+                    } | Remove-HashtableEntry -NullOrEmptyValues
                     $params | Format-Table -AutoSize | Out-String | ForEach-Object { Write-Debug $_ }
                     Get-GitHubRepositoryByName @params
                 }
@@ -223,7 +223,7 @@ filter Get-GitHubRepository {
                     $params = @{
                         Context = $Context
                         Since   = $SinceID
-                    }
+                    } | Remove-HashtableEntry -NullOrEmptyValues
                     $params | Format-Table -AutoSize | Out-String | ForEach-Object { Write-Debug $_ }
                     Get-GitHubRepositoryListByID @params
                 }
@@ -235,7 +235,7 @@ filter Get-GitHubRepository {
                         Sort      = $Sort
                         Direction = $Direction
                         PerPage   = $PerPage
-                    }
+                    } | Remove-HashtableEntry -NullOrEmptyValues
                     $params | Format-Table -AutoSize | Out-String | ForEach-Object { Write-Debug $_ }
                     Get-GitHubRepositoryListByOrg @params
                 }
@@ -247,7 +247,7 @@ filter Get-GitHubRepository {
                         Sort      = $Sort
                         Direction = $Direction
                         PerPage   = $PerPage
-                    }
+                    } | Remove-HashtableEntry -NullOrEmptyValues
                     $params | Format-Table -AutoSize | Out-String | ForEach-Object { Write-Debug $_ }
                     Get-GitHubRepositoryListByUser @params
                 }
