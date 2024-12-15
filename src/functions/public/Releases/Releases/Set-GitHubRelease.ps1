@@ -80,35 +80,54 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
 
-    if ([string]::IsNullOrEmpty($Owner)) {
-        $Owner = $Context.Owner
-    }
-    Write-Debug "Owner : [$($Context.Owner)]"
-
-    if ([string]::IsNullOrEmpty($Repo)) {
-        $Repo = $Context.Repo
-    }
-    Write-Debug "Repo : [$($Context.Repo)]"
-
-    $requestBody = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-    Remove-HashtableEntry -Hashtable $requestBody -RemoveNames 'Owner', 'Repo', 'Draft', 'Prerelease'
-    $requestBody = Join-Object -AsHashtable -Main $requestBody -Overrides @{
-        draft      = if ($Draft.IsPresent) { $Draft } else { $false }
-        prerelease = if ($Prerelease.IsPresent) { $Prerelease } else { $false }
-    }
-
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = "/repos/$Owner/$Repo/releases/$ID"
-        Method      = 'PATCH'
-        Body        = $requestBody
-    }
-
-    if ($PSCmdlet.ShouldProcess("release with ID [$ID] in [$Owner/$Repo]", 'Update')) {
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+        if ([string]::IsNullOrEmpty($Owner)) {
+            $Owner = $Context.Owner
         }
+        Write-Debug "Owner : [$($Context.Owner)]"
+
+        if ([string]::IsNullOrEmpty($Repo)) {
+            $Repo = $Context.Repo
+        }
+        Write-Debug "Repo : [$($Context.Repo)]"
+    }
+
+    process {
+        try {
+            $requestBody = @{
+                tag_name                 = $TagName
+                target_commitish         = $TargetCommitish
+                name                     = $Name
+                body                     = $Body
+                discussion_category_name = $DiscussionCategoryName
+                make_latest              = $MakeLatest
+                draft                    = $Draft
+                prerelease               = $Prerelease
+            } | Remove-HashtableEntry -NullOrEmptyValues
+
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = "/repos/$Owner/$Repo/releases/$ID"
+                Method      = 'PATCH'
+                Body        = $requestBody
+            }
+
+            if ($PSCmdlet.ShouldProcess("release with ID [$ID] in [$Owner/$Repo]", 'Update')) {
+                Invoke-GitHubAPI @inputObject | ForEach-Object {
+                    Write-Output $_.Response
+                }
+            }
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$commandName] - End"
     }
 }

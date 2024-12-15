@@ -55,9 +55,24 @@
         [string] $Title
     )
 
-    if ($env:GITHUB_ACTIONS -eq 'true') {
-        Write-Host "::warning file=$Name,line=$Line,col=$Column,endColumn=$EndColumn,endLine=$EndLine,title=$Title::$Message"
-    } else {
-        Write-Warning $Message
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+    }
+
+    process {
+        try {
+            if ($env:GITHUB_ACTIONS -eq 'true') {
+                Write-Host "::warning file=$Name,line=$Line,col=$Column,endColumn=$EndColumn,endLine=$EndLine,title=$Title::$Message"
+            } else {
+                Write-Warning $Message
+            }
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$commandName] - End"
     }
 }

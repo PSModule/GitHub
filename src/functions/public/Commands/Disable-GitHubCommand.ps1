@@ -34,9 +34,24 @@
         [string] $String
     )
 
-    $String = $String.ToLower()
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+    }
 
-    if ($env:GITHUB_ACTIONS -eq 'true') {
-        Write-Host "::stop-commands::$String"
+    process {
+        try {
+            $String = $String.ToLower()
+
+            if ($env:GITHUB_ACTIONS -eq 'true') {
+                Write-Host "::stop-commands::$String"
+            }
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$commandName] - End"
     }
 }

@@ -23,5 +23,20 @@
     [Alias('Stop-LogGroup')]
     param()
 
-    Write-Host '::endgroup::'
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+    }
+
+    process {
+        try {
+            Write-Host '::endgroup::'
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$commandName] - End"
+    }
 }

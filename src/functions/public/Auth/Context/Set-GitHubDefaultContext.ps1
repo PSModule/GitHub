@@ -19,7 +19,7 @@
 
     begin {
         $commandName = $MyInvocation.MyCommand.Name
-        Write-Verbose "[$commandName] - Start"
+        Write-Debug "[$commandName] - Start"
         $Context = Resolve-GitHubContext -Context $Context
     }
 
@@ -30,6 +30,6 @@
     }
 
     end {
-        Write-Verbose "[$commandName] - End"
+        Write-Debug "[$commandName] - End"
     }
 }

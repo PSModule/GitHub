@@ -45,21 +45,36 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-
-    $body = @{
-        subject_type = $SubjectType
-        subject_id   = $SubjectID
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = "/users/$Username/hovercard"
-        Method      = 'GET'
-        Body        = $body
+    process {
+        try {
+            $body = @{
+                subject_type = $SubjectType
+                subject_id   = $SubjectID
+            }
+
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = "/users/$Username/hovercard"
+                Method      = 'GET'
+                Body        = $body
+            }
+
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
+            }
+        } catch {
+            throw $_
+        }
     }
 
-    Invoke-GitHubAPI @inputObject | ForEach-Object {
-        Write-Output $_.Response
+    end {
+        Write-Debug "[$commandName] - End"
     }
 }

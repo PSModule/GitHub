@@ -67,8 +67,10 @@ filter Get-GitHubLicense {
     }
 
     begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
         $Context = Resolve-GitHubContext -Context $Context
-
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
         if ([string]::IsNullOrEmpty($Owner)) {
             $Owner = $Context.Owner
         }
@@ -81,17 +83,25 @@ filter Get-GitHubLicense {
     }
 
     process {
-        $Name = $PSBoundParameters['Name']
-        switch ($PSCmdlet.ParameterSetName) {
-            'List' {
-                Get-GitHubLicenseList -Context $Context
+        try {
+            $Name = $PSBoundParameters['Name']
+            switch ($PSCmdlet.ParameterSetName) {
+                'List' {
+                    Get-GitHubLicenseList -Context $Context
+                }
+                'Name' {
+                    Get-GitHubLicenseByName -Name $Name -Context $Context
+                }
+                'Repository' {
+                    Get-GitHubRepositoryLicense -Owner $Owner -Repo $Repo -Context $Context
+                }
             }
-            'Name' {
-                Get-GitHubLicenseByName -Name $Name -Context $Context
-            }
-            'Repository' {
-                Get-GitHubRepositoryLicense -Owner $Owner -Repo $Repo -Context $Context
-            }
+        } catch {
+            throw $_
         }
+    }
+
+    end {
+        Write-Debug "[$commandName] - End"
     }
 }

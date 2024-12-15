@@ -35,9 +35,24 @@
         [string] $Message
     )
 
-    if ($env:GITHUB_ACTIONS -eq 'true') {
-        Write-Host "::debug::$Message"
-    } else {
-        Write-Debug "$Message"
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+    }
+
+    process {
+        try {
+            if ($env:GITHUB_ACTIONS -eq 'true') {
+                Write-Host "::debug::$Message"
+            } else {
+                Write-Debug "$Message"
+            }
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$commandName] - End"
     }
 }

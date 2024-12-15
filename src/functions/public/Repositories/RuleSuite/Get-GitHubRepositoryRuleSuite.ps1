@@ -82,40 +82,55 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
 
-    if ([string]::IsNullOrEmpty($Owner)) {
-        $Owner = $Context.Owner
-    }
-    Write-Debug "Owner : [$($Context.Owner)]"
-
-    if ([string]::IsNullOrEmpty($Repo)) {
-        $Repo = $Context.Repo
-    }
-    Write-Debug "Repo : [$($Context.Repo)]"
-
-    $params = @{
-        Context = $Context
-        Owner   = $Owner
-        Repo    = $Repo
-    }
-
-    switch ($PSCmdlet.ParameterSetName) {
-        'Default' {
-            $params += @{
-                Ref             = $Ref
-                TimePeriod      = $TimePeriod
-                ActorName       = $ActorName
-                RuleSuiteResult = $RuleSuiteResult
-                PerPage         = $PerPage
-            }
-            Get-GitHubRepositoryRuleSuiteList @params
+        if ([string]::IsNullOrEmpty($Owner)) {
+            $Owner = $Context.Owner
         }
-        'ById' {
-            $params += @{
-                RuleSuiteId = $RuleSuiteId
-            }
-            Get-GitHubRepositoryRuleSuiteById @params
+        Write-Debug "Owner : [$($Context.Owner)]"
+
+        if ([string]::IsNullOrEmpty($Repo)) {
+            $Repo = $Context.Repo
         }
+        Write-Debug "Repo : [$($Context.Repo)]"
+    }
+
+    process {
+        try {
+            $params = @{
+                Context = $Context
+                Owner   = $Owner
+                Repo    = $Repo
+            }
+
+            switch ($PSCmdlet.ParameterSetName) {
+                'Default' {
+                    $params += @{
+                        Ref             = $Ref
+                        TimePeriod      = $TimePeriod
+                        ActorName       = $ActorName
+                        RuleSuiteResult = $RuleSuiteResult
+                        PerPage         = $PerPage
+                    }
+                    Get-GitHubRepositoryRuleSuiteList @params
+                }
+                'ById' {
+                    $params += @{
+                        RuleSuiteId = $RuleSuiteId
+                    }
+                    Get-GitHubRepositoryRuleSuiteById @params
+                }
+            }
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$commandName] - End"
     }
 }

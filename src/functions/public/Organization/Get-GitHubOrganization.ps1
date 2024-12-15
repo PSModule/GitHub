@@ -79,25 +79,41 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
 
-    if ([string]::IsNullOrEmpty($Owner)) {
-        $Organization = $Context.Owner
+        if ([string]::IsNullOrEmpty($Owner)) {
+            $Owner = $Context.Owner
+        }
+        Write-Debug "Owner : [$($Context.Owner)]"
     }
-    Write-Debug "Organization : [$($Context.Owner)]"
 
-    switch ($PSCmdlet.ParameterSetName) {
-        '__DefaultSet' {
-            Get-GitHubMyOrganization -PerPage $PerPage -Context $Context | Get-GitHubOrganizationByName -Context $Context
+    process {
+        try {
+
+            switch ($PSCmdlet.ParameterSetName) {
+                '__DefaultSet' {
+                    Get-GitHubMyOrganization -PerPage $PerPage -Context $Context | Get-GitHubOrganizationByName -Context $Context
+                }
+                'NamedOrg' {
+                    Get-GitHubOrganizationByName -Organization $Organization -Context $Context
+                }
+                'NamedUser' {
+                    Get-GitHubUserOrganization -Username $Username -Context $Context
+                }
+                'AllOrg' {
+                    Get-GitHubAllOrganization -Since $Since -PerPage $PerPage -Context $Context
+                }
+            }
+        } catch {
+            throw $_
         }
-        'NamedOrg' {
-            Get-GitHubOrganizationByName -Organization $Organization -Context $Context
-        }
-        'NamedUser' {
-            Get-GitHubUserOrganization -Username $Username -Context $Context
-        }
-        'AllOrg' {
-            Get-GitHubAllOrganization -Since $Since -PerPage $PerPage -Context $Context
-        }
+    }
+
+    end {
+        Write-Debug "[$commandName] - End"
     }
 }

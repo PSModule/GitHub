@@ -69,7 +69,7 @@ function Connect-GitHubApp {
 
     begin {
         $commandName = $MyInvocation.MyCommand.Name
-        Write-Verbose "[$commandName] - Start"
+        Write-Debug "[$commandName] - Start"
     }
 
     process {
@@ -139,11 +139,11 @@ function Connect-GitHubApp {
             }
         } catch {
             Write-Error $_
-            Write-Error (Get-PSCallStack | Format-Table | Out-String)
             throw 'Failed to connect to GitHub using a GitHub App.'
         }
     }
+
     end {
-        Write-Verbose "[$commandName] - End"
+        Write-Debug "[$commandName] - End"
     }
 }

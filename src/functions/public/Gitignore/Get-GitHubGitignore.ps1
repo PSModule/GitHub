@@ -49,18 +49,33 @@ filter Get-GitHubGitignore {
     }
 
     begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
         $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
+        if ([string]::IsNullOrEmpty($Enterprise)) {
+            $Enterprise = $Context.Enterprise
+        }
+        Write-Debug "Enterprise : [$($Context.Enterprise)]"
     }
 
     process {
-        $Name = $PSBoundParameters['Name']
-        switch ($PSCmdlet.ParameterSetName) {
-            'List' {
-                Get-GitHubGitignoreList -Context $Context
+        try {
+            $Name = $PSBoundParameters['Name']
+            switch ($PSCmdlet.ParameterSetName) {
+                'List' {
+                    Get-GitHubGitignoreList -Context $Context
+                }
+                'Name' {
+                    Get-GitHubGitignoreByName -Name $Name -Context $Context
+                }
             }
-            'Name' {
-                Get-GitHubGitignoreByName -Name $Name -Context $Context
-            }
+        } catch {
+            throw $_
         }
+    }
+
+    end {
+        Write-Debug "[$commandName] - End"
     }
 }

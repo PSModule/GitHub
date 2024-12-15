@@ -49,24 +49,39 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
 
-    if ([string]::IsNullOrEmpty($Owner)) {
-        $Owner = $Context.Owner
-    }
-    Write-Debug "Owner : [$($Context.Owner)]"
-
-    if ([string]::IsNullOrEmpty($Repo)) {
-        $Repo = $Context.Repo
-    }
-    Write-Debug "Repo : [$($Context.Repo)]"
-
-    switch ($PSCmdlet.ParameterSetName) {
-        'ById' {
-            Get-GitHubRepositoryAutolinkById -Owner $Owner -Repo $Repo -ID $AutolinkId -Context $Context
+        if ([string]::IsNullOrEmpty($Owner)) {
+            $Owner = $Context.Owner
         }
-        default {
-            Get-GitHubRepositoryAutolinkList -Owner $Owner -Repo $Repo -Context $Context
+        Write-Debug "Owner : [$($Context.Owner)]"
+
+        if ([string]::IsNullOrEmpty($Repo)) {
+            $Repo = $Context.Repo
         }
+        Write-Debug "Repo : [$($Context.Repo)]"
+    }
+
+    process {
+        try {
+            switch ($PSCmdlet.ParameterSetName) {
+                'ById' {
+                    Get-GitHubRepositoryAutolinkById -Owner $Owner -Repo $Repo -ID $AutolinkId -Context $Context
+                }
+                default {
+                    Get-GitHubRepositoryAutolinkList -Owner $Owner -Repo $Repo -Context $Context
+                }
+            }
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$commandName] - End"
     }
 }

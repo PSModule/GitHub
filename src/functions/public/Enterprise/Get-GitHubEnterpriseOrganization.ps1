@@ -20,15 +20,20 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-
-    if ([string]::IsNullOrEmpty($Enterprise)) {
-        $Enterprise = $Context.Enterprise
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
+        if ([string]::IsNullOrEmpty($Enterprise)) {
+            $Enterprise = $Context.Enterprise
+        }
+        Write-Debug "Enterprise : [$($Context.Enterprise)]"
     }
-    Write-Debug "Enterprise : [$($Context.Enterprise)]"
 
-    # Define GraphQL query
-    $query = @"
+    process {
+        try {
+            $query = @"
 query(`$enterpriseSlug: String!, `$first: Int = 100, `$after: String) {
   enterprise(slug: `$enterpriseSlug) {
     organizations(first: `$first, after: `$after) {
@@ -47,34 +52,42 @@ query(`$enterpriseSlug: String!, `$first: Int = 100, `$after: String) {
 }
 "@
 
-    # Initialize pagination variables
-    $variables = @{
-        'enterpriseSlug' = $Enterprise
-        'first'          = 100
-        'after'          = $null
+            # Initialize pagination variables
+            $variables = @{
+                'enterpriseSlug' = $Enterprise
+                'first'          = 100
+                'after'          = $null
+            }
+            $allOrgs = @()
+
+            # Loop through pages to retrieve all organizations
+            do {
+                $response = Invoke-GitHubGraphQLQuery -Query $query -Variables $variables -Context $Context
+                # Check for errors
+                if ($response.errors) {
+                    Write-Error "Error: $($response.errors[0].message)"
+                    break
+                }
+
+                # Extract organization names and add to the list
+                foreach ($org in $response.data.enterprise.organizations.edges) {
+                    $allOrgs += $org.node.name
+                }
+
+                # Update pagination cursor
+                $pageInfo = $response.data.enterprise.organizations.pageInfo
+                $variables.after = $pageInfo.endCursor
+
+            } while ($pageInfo.hasNextPage -eq $true)
+
+            # Output the list of organization names
+            $allOrgs | ForEach-Object { Write-Output $_ }
+        } catch {
+            throw $_
+        }
     }
-    $allOrgs = @()
 
-    # Loop through pages to retrieve all organizations
-    do {
-        $response = Invoke-GitHubGraphQLQuery -Query $query -Variables $variables -Context $Context
-        # Check for errors
-        if ($response.errors) {
-            Write-Error "Error: $($response.errors[0].message)"
-            break
-        }
-
-        # Extract organization names and add to the list
-        foreach ($org in $response.data.enterprise.organizations.edges) {
-            $allOrgs += $org.node.name
-        }
-
-        # Update pagination cursor
-        $pageInfo = $response.data.enterprise.organizations.pageInfo
-        $variables.after = $pageInfo.endCursor
-
-    } while ($pageInfo.hasNextPage -eq $true)
-
-    # Output the list of organization names
-    $allOrgs | ForEach-Object { Write-Output $_ }
+    end {
+        Write-Debug "[$commandName] - End"
+    }
 }

@@ -97,30 +97,49 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
 
-    if ([string]::IsNullOrEmpty($Owner)) {
-        $Owner = $Context.Owner
-    }
-    Write-Debug "Owner : [$($Context.Owner)]"
-
-    if ([string]::IsNullOrEmpty($Repo)) {
-        $Repo = $Context.Repo
-    }
-    Write-Debug "Repo : [$($Context.Repo)]"
-
-    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-    Remove-HashtableEntry -Hashtable $body -RemoveNames 'Owner', 'Repo'
-
-    $inputObject = @{
-        APIEndpoint = "/repos/$Owner/$Repo/releases/generate-notes"
-        Method      = 'POST'
-        Body        = $body
-    }
-
-    if ($PSCmdlet.ShouldProcess("$Owner/$Repo", 'Create release notes')) {
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+        if ([string]::IsNullOrEmpty($Owner)) {
+            $Owner = $Context.Owner
         }
+        Write-Debug "Owner : [$($Context.Owner)]"
+
+        if ([string]::IsNullOrEmpty($Repo)) {
+            $Repo = $Context.Repo
+        }
+        Write-Debug "Repo : [$($Context.Repo)]"
+    }
+
+    process {
+        try {
+            $requestBody = @{
+                tag_name                = $TagName
+                target_commitish        = $TargetCommitish
+                previous_tag_name       = $PreviousTagName
+                configuration_file_path = $ConfigurationFilePath
+            } | Remove-HashtableEntry -NullOrEmptyValues
+
+            $inputObject = @{
+                APIEndpoint = "/repos/$Owner/$Repo/releases/generate-notes"
+                Method      = 'POST'
+                Body        = $requestBody
+            }
+
+            if ($PSCmdlet.ShouldProcess("$Owner/$Repo", 'Create release notes')) {
+                Invoke-GitHubAPI @inputObject | ForEach-Object {
+                    Write-Output $_.Response
+                }
+            }
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$commandName] - End"
     }
 }

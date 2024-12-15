@@ -40,9 +40,24 @@
         [string] $Path = $env:GITHUB_OUTPUT
     )
 
-    if (-not (Test-Path -Path $Path)) {
-        throw "File not found: $Path"
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
     }
 
-    Get-Content -Path $Path | ConvertFrom-GitHubOutput -AsHashtable:$AsHashtable
+    process {
+        try {
+            if (-not (Test-Path -Path $Path)) {
+                throw "File not found: $Path"
+            }
+
+            Get-Content -Path $Path | ConvertFrom-GitHubOutput -AsHashtable:$AsHashtable
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$commandName] - End"
+    }
 }

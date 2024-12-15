@@ -36,6 +36,10 @@
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding(SupportsShouldProcess)]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSAvoidLongLines', '',
+        Justification = 'Long parameter names'
+    )]
     param(
         # The organization name. The name is not case sensitive.
         [Parameter(
@@ -223,27 +227,70 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
 
-    if ([string]::IsNullOrEmpty($Owner)) {
-        $Organization = $Context.Owner
-    }
-    Write-Debug "Organization : [$($Context.Owner)]"
-
-    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-    Remove-HashtableEntry -Hashtable $body -RemoveNames 'organization_name'
-
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = "/orgs/$Organization"
-        Method      = 'PATCH'
-        Body        = $body
+        if ([string]::IsNullOrEmpty($Owner)) {
+            $Owner = $Context.Owner
+        }
+        Write-Debug "Owner : [$($Context.Owner)]"
     }
 
-    if ($PSCmdlet.ShouldProcess("organization [$Organization]", 'Set')) {
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+    process {
+        try {
+            $body = @{
+                billing_email                                                = $BillingEmail
+                company                                                      = $Company
+                email                                                        = $Email
+                twitter_username                                             = $TwitterUsername
+                location                                                     = $Location
+                name                                                         = $Name
+                description                                                  = $Description
+                has_organization_projects                                    = $HasOrganizationProjects
+                has_repository_projects                                      = $HasRepositoryProjects
+                default_repository_permission                                = $DefaultRepositoryPermission
+                members_can_create_repositories                              = $MembersCanCreateRepositories ? $MembersCanCreateRepositories : $true
+                members_can_create_internal_repositories                     = $MembersCanCreateInternalRepositories
+                members_can_create_private_repositories                      = $MembersCanCreatePrivateRepositories
+                members_can_create_public_repositories                       = $MembersCanCreatePublicRepositories
+                members_allowed_repository_creation_type                     = $MembersAllowedRepositoryCreationType
+                members_can_create_pages                                     = $MembersCanCreatePages ? $MembersCanCreatePages : $true
+                members_can_create_public_pages                              = $MembersCanCreatePublicPages ? $MembersCanCreatePublicPages : $true
+                members_can_create_private_pages                             = $MembersCanCreatePrivatePages ? $MembersCanCreatePrivatePages : $true
+                members_can_fork_private_repositories                        = $MembersCanForkPrivateRepositories ? $MembersCanForkPrivateRepositories : $false
+                web_commit_signoff_required                                  = $WebCommitSignoffRequired ? $WebCommitSignoffRequired : $false
+                blog                                                         = $Blog
+                advanced_security_enabled_for_new_repositories               = $AdvancedSecurityEnabledForNewRepositories ? $AdvancedSecurityEnabledForNewRepositories : $false
+                dependabot_alerts_enabled_for_new_repositories               = $DependabotAlertsEnabledForNewRepositories ? $DependabotAlertsEnabledForNewRepositories : $false
+                dependabot_security_updates_enabled_for_new_repositories     = $DependabotSecurityUpdatesEnabledForNewRepositories ? $DependabotSecurityUpdatesEnabledForNewRepositories : $false
+                dependency_graph_enabled_for_new_repositories                = $DependencyGraphEnabledForNewRepositories ? $DependencyGraphEnabledForNewRepositories : $false
+                secret_scanning_enabled_for_new_repositories                 = $SecretScanningEnabledForNewRepositories ? $SecretScanningEnabledForNewRepositories : $false
+                secret_scanning_push_protection_enabled_for_new_repositories = $SecretScanningPushProtectionEnabledForNewRepositories ? $SecretScanningPushProtectionEnabledForNewRepositories : $false
+                secret_scanning_push_protection_custom_link_enabled          = $SecretScanningPushProtectionCustomLinkEnabled ? $SecretScanningPushProtectionCustomLinkEnabled : $false
+                secret_scanning_push_protection_custom_link                  = $SecretScanningPushProtectionCustomLink
+            }
+
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = "/orgs/$Organization"
+                Method      = 'PATCH'
+                Body        = $body
+            }
+
+            if ($PSCmdlet.ShouldProcess("organization [$Organization]", 'Set')) {
+                Invoke-GitHubAPI @inputObject | ForEach-Object {
+                    Write-Output $_.Response
+                }
+            }
+        } catch {
+            throw $_
         }
     }
 
+    end {
+        Write-Debug "[$commandName] - End"
+    }
 }

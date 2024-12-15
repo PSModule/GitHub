@@ -40,11 +40,22 @@
         [scriptblock] $ScriptBlock
     )
 
-    Start-GitHubLogGroup -Name $Name
-    try {
-        . $ScriptBlock
-    } catch {
-        throw $_
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
     }
-    Stop-GitHubLogGroup
+
+    process {
+        Start-GitHubLogGroup -Name $Name
+        try {
+            . $ScriptBlock
+        } catch {
+            throw $_
+        }
+        Stop-GitHubLogGroup
+    }
+
+    end {
+        Write-Debug "[$commandName] - End"
+    }
 }

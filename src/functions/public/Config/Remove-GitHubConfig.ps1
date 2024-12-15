@@ -22,7 +22,7 @@ function Remove-GitHubConfig {
 
     begin {
         $commandName = $MyInvocation.MyCommand.Name
-        Write-Verbose "[$commandName] - Start"
+        Write-Debug "[$commandName] - Start"
         Initialize-GitHubConfig
     }
 
@@ -40,6 +40,6 @@ function Remove-GitHubConfig {
     }
 
     end {
-        Write-Verbose "[$commandName] - End"
+        Write-Debug "[$commandName] - End"
     }
 }

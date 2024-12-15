@@ -59,33 +59,46 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
 
-    if ([string]::IsNullOrEmpty($Owner)) {
-        $Organization = $Context.Owner
-    }
-    Write-Debug "Organization : [$($Context.Owner)]"
-
-
-    $body = @{
-        invitee_id = $InviteeID
-        email      = $Email
-        role       = $Role
-        team_ids   = $TeamIDs
-    }
-
-    $body | Remove-HashtableEntry -NullOrEmptyValues
-
-    $inputObject = @{
-        Context     = $Context
-        Body        = $body
-        Method      = 'post'
-        APIEndpoint = "/orgs/$Organization/invitations"
-    }
-
-    if ($PSCmdlet.ShouldProcess("$InviteeID$Email to organization $Organization", 'Invite')) {
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+        if ([string]::IsNullOrEmpty($Owner)) {
+            $Owner = $Context.Owner
         }
+        Write-Debug "Owner : [$($Context.Owner)]"
+    }
+
+    process {
+        try {
+            $body = @{
+                invitee_id = $InviteeID
+                email      = $Email
+                role       = $Role
+                team_ids   = $TeamIDs
+            }
+            $body | Remove-HashtableEntry -NullOrEmptyValues
+
+            $inputObject = @{
+                Context     = $Context
+                Body        = $body
+                Method      = 'post'
+                APIEndpoint = "/orgs/$Organization/invitations"
+            }
+
+            if ($PSCmdlet.ShouldProcess("$InviteeID$Email to organization $Organization", 'Invite')) {
+                Invoke-GitHubAPI @inputObject | ForEach-Object {
+                    Write-Output $_.Response
+                }
+            }
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$commandName] - End"
     }
 }

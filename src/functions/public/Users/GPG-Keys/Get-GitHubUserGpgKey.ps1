@@ -55,15 +55,30 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
+    }
 
-    if ($Username) {
-        Get-GitHubUserGpgKeyForUser -Username $Username -PerPage $PerPage -Context $Context
-    } else {
-        if ($ID) {
-            Get-GitHubUserMyGpgKeyById -ID $ID -Context $Context
-        } else {
-            Get-GitHubUserMyGpgKey -PerPage $PerPage -Context $Context
+    process {
+        try {
+            if ($Username) {
+                Get-GitHubUserGpgKeyForUser -Username $Username -PerPage $PerPage -Context $Context
+            } else {
+                if ($ID) {
+                    Get-GitHubUserMyGpgKeyById -ID $ID -Context $Context
+                } else {
+                    Get-GitHubUserMyGpgKey -PerPage $PerPage -Context $Context
+                }
+            }
+        } catch {
+            throw $_
         }
+    }
+
+    end {
+        Write-Debug "[$commandName] - End"
     }
 }

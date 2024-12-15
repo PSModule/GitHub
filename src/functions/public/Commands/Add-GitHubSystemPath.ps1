@@ -24,8 +24,23 @@
         [string]$Path
     )
 
-    Write-Verbose "Current PATH: $env:PATH"
-    Write-Verbose "Adding system path: $Path"
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+    }
 
-    $Path | Out-File -FilePath $env:GITHUB_PATH -Append
+    process {
+        try {
+            Write-Verbose "Current PATH: $env:PATH"
+            Write-Verbose "Adding system path: $Path"
+
+            $Path | Out-File -FilePath $env:GITHUB_PATH -Append
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$commandName] - End"
+    }
 }

@@ -49,23 +49,38 @@
         [string] $Stamp = 'public'
     )
 
-    $baseURL = $script:StatusBaseURL[$Stamp]
-
-    if ($Active) {
-        $APIURI = "$baseURL/api/v2/scheduled-maintenances/active.json"
-        $response = Invoke-RestMethod -Uri $APIURI -Method Get
-        $response.scheduled_maintenances
-        return
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
     }
 
-    if ($Upcoming) {
-        $APIURI = "$baseURL/api/v2/scheduled-maintenances/upcoming.json"
-        $response = Invoke-RestMethod -Uri $APIURI -Method Get
-        $response.scheduled_maintenances
-        return
+    process {
+        try {
+            $baseURL = $script:StatusBaseURL[$Stamp]
+
+            if ($Active) {
+                $APIURI = "$baseURL/api/v2/scheduled-maintenances/active.json"
+                $response = Invoke-RestMethod -Uri $APIURI -Method Get
+                $response.scheduled_maintenances
+                return
+            }
+
+            if ($Upcoming) {
+                $APIURI = "$baseURL/api/v2/scheduled-maintenances/upcoming.json"
+                $response = Invoke-RestMethod -Uri $APIURI -Method Get
+                $response.scheduled_maintenances
+                return
+            }
+
+            $APIURI = "$baseURL/api/v2/scheduled-maintenances.json"
+            $response = Invoke-RestMethod -Uri $APIURI -Method Get
+            $response.scheduled_maintenances
+        } catch {
+            throw $_
+        }
     }
 
-    $APIURI = "$baseURL/api/v2/scheduled-maintenances.json"
-    $response = Invoke-RestMethod -Uri $APIURI -Method Get
-    $response.scheduled_maintenances
+    end {
+        Write-Debug "[$commandName] - End"
+    }
 }

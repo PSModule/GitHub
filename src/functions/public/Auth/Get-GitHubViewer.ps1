@@ -28,25 +28,28 @@
 
     begin {
         $commandName = $MyInvocation.MyCommand.Name
-        Write-Verbose "[$commandName] - Start"
+        Write-Debug "[$commandName] - Start"
         $Context = Resolve-GitHubContext -Context $Context
     }
 
     process {
-
-        $query = @"
+        try {
+            $query = @"
 query {
   viewer {
     $($Fields -join "`n")
   }
 }
 "@
-        $results = Invoke-GitHubGraphQLQuery -Query $query -Context $Context
+            $results = Invoke-GitHubGraphQLQuery -Query $query -Context $Context
 
-        $results.data.viewer
+            $results.data.viewer
+        } catch {
+            throw $_
+        }
     }
 
     end {
-        Write-Verbose "[$commandName] - End"
+        Write-Debug "[$commandName] - End"
     }
 }

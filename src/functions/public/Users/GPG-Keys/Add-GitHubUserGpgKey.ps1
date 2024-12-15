@@ -48,21 +48,36 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-
-    $body = @{
-        name               = $Name
-        armored_public_key = $ArmoredPublicKey
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = '/user/gpg_keys'
-        Method      = 'POST'
-        Body        = $body
+    process {
+        try {
+            $body = @{
+                name               = $Name
+                armored_public_key = $ArmoredPublicKey
+            }
+
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = '/user/gpg_keys'
+                Method      = 'POST'
+                Body        = $body
+            }
+
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
+            }
+        } catch {
+            throw $_
+        }
     }
 
-    Invoke-GitHubAPI @inputObject | ForEach-Object {
-        Write-Output $_.Response
+    end {
+        Write-Debug "[$commandName] - End"
     }
 }

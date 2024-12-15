@@ -23,19 +23,23 @@ function Get-GitHubConfig {
 
     begin {
         $commandName = $MyInvocation.MyCommand.Name
-        Write-Verbose "[$commandName] - Start"
+        Write-Debug "[$commandName] - Start"
         Initialize-GitHubConfig
     }
 
     process {
-        if (-not $Name) {
-            return [GitHubConfig]($script:GitHub.Config)
-        }
+        try {
+            if (-not $Name) {
+                return [GitHubConfig]($script:GitHub.Config)
+            }
 
-        $script:GitHub.Config.$Name
+            $script:GitHub.Config.$Name
+        } catch {
+            throw $_
+        }
     }
 
     end {
-        Write-Verbose "[$commandName] - End"
+        Write-Debug "[$commandName] - End"
     }
 }

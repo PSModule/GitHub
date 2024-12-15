@@ -30,21 +30,35 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-
-    $body = @{
-        account_urls = $AccountUrls
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = '/user/social_accounts'
-        Body        = $body
-        Method      = 'POST'
+    process {
+        try {
+            $body = @{
+                account_urls = $AccountUrls
+            }
+
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = '/user/social_accounts'
+                Body        = $body
+                Method      = 'POST'
+            }
+
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
+            }
+        } catch {
+            throw $_
+        }
     }
 
-    Invoke-GitHubAPI @inputObject | ForEach-Object {
-        Write-Output $_.Response
+    end {
+        Write-Debug "[$commandName] - End"
     }
-
 }

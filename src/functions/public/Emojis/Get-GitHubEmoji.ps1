@@ -32,23 +32,38 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = '/emojis'
-        Method      = 'GET'
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 
-    $response = Invoke-GitHubAPI @inputObject | ForEach-Object {
-        Write-Output $_.Response
-    }
+    process {
+        try {
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = '/emojis'
+                Method      = 'GET'
+            }
 
-    if (Test-Path -Path $Destination) {
-        $response.PSObject.Properties | ForEach-Object -ThrottleLimit ([System.Environment]::ProcessorCount) -Parallel {
-            Invoke-WebRequest -Uri $_.Value -OutFile "$using:Destination/$($_.Name).png"
+            $response = Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
+            }
+
+            if (Test-Path -Path $Destination) {
+                $response.PSObject.Properties | ForEach-Object -ThrottleLimit ([System.Environment]::ProcessorCount) -Parallel {
+                    Invoke-WebRequest -Uri $_.Value -OutFile "$using:Destination/$($_.Name).png"
+                }
+            } else {
+                $response
+            }
+        } catch {
+            throw $_
         }
-    } else {
-        $response
+    }
+
+    end {
+        Write-Debug "[$commandName] - End"
     }
 }

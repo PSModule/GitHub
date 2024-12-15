@@ -68,29 +68,44 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-
-    $body = @{
-        name             = $Name
-        email            = $Email
-        blog             = $Blog
-        twitter_username = $TwitterUsername
-        company          = $Company
-        location         = $Location
-        hireable         = $Hireable
-        bio              = $Bio
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = '/user'
-        Method      = 'PATCH'
-        Body        = $body
-    }
+    process {
+        try {
+            $body = @{
+                name             = $Name
+                email            = $Email
+                blog             = $Blog
+                twitter_username = $TwitterUsername
+                company          = $Company
+                location         = $Location
+                hireable         = $Hireable
+                bio              = $Bio
+            }
 
-    if ($PSCmdlet.ShouldProcess('authenticated user', 'Set')) {
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = '/user'
+                Method      = 'PATCH'
+                Body        = $body
+            }
+
+            if ($PSCmdlet.ShouldProcess('authenticated user', 'Set')) {
+                Invoke-GitHubAPI @inputObject | ForEach-Object {
+                    Write-Output $_.Response
+                }
+            }
+        } catch {
+            throw $_
         }
+    }
+
+    end {
+        Write-Debug "[$commandName] - End"
     }
 }

@@ -46,7 +46,22 @@
         [string[]] $Value
     )
 
-    foreach ($item in $Value) {
-        Write-Host "::add-mask::$item"
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+    }
+
+    process {
+        try {
+            foreach ($item in $Value) {
+                Write-Host "::add-mask::$item"
+            }
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$commandName] - End"
     }
 }

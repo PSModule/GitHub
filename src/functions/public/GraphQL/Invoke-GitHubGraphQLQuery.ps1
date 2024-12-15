@@ -27,27 +27,32 @@
 
     begin {
         $commandName = $MyInvocation.MyCommand.Name
-        Write-Verbose "[$commandName] - Start"
+        Write-Debug "[$commandName] - Start"
         $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 
     process {
-        $inputObject = @{
-            Context     = $Context
-            APIEndpoint = '/graphql'
-            Method      = 'Post'
-            Body        = @{
-                'query'     = $Query
-                'variables' = $Variables
-            } | ConvertTo-Json
-        }
+        try {
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = '/graphql'
+                Method      = 'Post'
+                Body        = @{
+                    'query'     = $Query
+                    'variables' = $Variables
+                } | ConvertTo-Json
+            }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
+            }
+        } catch {
+            throw $_
         }
     }
 
     end {
-        Write-Verbose "[$commandName] - End"
+        Write-Debug "[$commandName] - End"
     }
 }

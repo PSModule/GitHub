@@ -38,7 +38,7 @@ function Get-GitHubContext {
 
     begin {
         $commandName = $MyInvocation.MyCommand.Name
-        Write-Verbose "[$commandName] - Start"
+        Write-Debug "[$commandName] - Start"
         $null = Get-GitHubConfig
     }
 
@@ -88,6 +88,6 @@ function Get-GitHubContext {
     }
 
     end {
-        Write-Verbose "[$commandName] - End"
+        Write-Debug "[$commandName] - End"
     }
 }

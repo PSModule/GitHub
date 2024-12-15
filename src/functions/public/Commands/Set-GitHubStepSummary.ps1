@@ -42,9 +42,24 @@
         [switch] $Overwrite
     )
 
-    Write-Verbose 'Step summary:'
-    Write-Verbose $Summary
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+    }
 
-    $Append = -not $Overwrite
-    $Summary | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append:$Append
+    process {
+        try {
+            Write-Verbose 'Step summary:'
+            Write-Verbose $Summary
+
+            $Append = -not $Overwrite
+            $Summary | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append:$Append
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$commandName] - End"
+    }
 }

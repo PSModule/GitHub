@@ -83,72 +83,79 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
 
-    if ([string]::IsNullOrEmpty($Owner)) {
-        $Owner = $Context.Owner
-    }
-    Write-Debug "Owner : [$($Context.Owner)]"
+        if ([string]::IsNullOrEmpty($Owner)) {
+            $Owner = $Context.Owner
+        }
+        Write-Debug "Owner : [$($Context.Owner)]"
 
-    if ([string]::IsNullOrEmpty($Repo)) {
-        $Repo = $Context.Repo
-    }
-    Write-Debug "Repo : [$($Context.Repo)]"
-
-    # If name is not provided, use the name of the file
-    if (!$Name) {
-        $Name = (Get-Item $FilePath).Name
-    }
-
-    # If label is not provided, use the name of the file
-    if (!$Label) {
-        $Label = (Get-Item $FilePath).Name
+        if ([string]::IsNullOrEmpty($Repo)) {
+            $Repo = $Context.Repo
+        }
+        Write-Debug "Repo : [$($Context.Repo)]"
     }
 
-    # If content type is not provided, use the file extension
-    if (!$ContentType) {
-        $ContentType = switch ((Get-Item $FilePath).Extension) {
-            '.zip' { 'application/zip' }
-            '.tar' { 'application/x-tar' }
-            '.gz' { 'application/gzip' }
-            '.bz2' { 'application/x-bzip2' }
-            '.xz' { 'application/x-xz' }
-            '.7z' { 'application/x-7z-compressed' }
-            '.rar' { 'application/vnd.rar' }
-            '.tar.gz' { 'application/gzip' }
-            '.tgz' { 'application/gzip' }
-            '.tar.bz2' { 'application/x-bzip2' }
-            '.tar.xz' { 'application/x-xz' }
-            '.tar.7z' { 'application/x-7z-compressed' }
-            '.tar.rar' { 'application/vnd.rar' }
-            '.png' { 'image/png' }
-            '.json' { 'application/json' }
-            '.txt' { 'text/plain' }
-            '.md' { 'text/markdown' }
-            '.html' { 'text/html' }
-            default { 'application/octet-stream' }
+    process {
+        try {
+            # If name is not provided, use the name of the file
+            if (!$Name) {
+                $Name = (Get-Item $FilePath).Name
+            }
+
+            # If label is not provided, use the name of the file
+            if (!$Label) {
+                $Label = (Get-Item $FilePath).Name
+            }
+
+            # If content type is not provided, use the file extension
+            if (!$ContentType) {
+                $ContentType = switch ((Get-Item $FilePath).Extension) {
+                    '.zip' { 'application/zip' }
+                    '.tar' { 'application/x-tar' }
+                    '.gz' { 'application/gzip' }
+                    '.bz2' { 'application/x-bzip2' }
+                    '.xz' { 'application/x-xz' }
+                    '.7z' { 'application/x-7z-compressed' }
+                    '.rar' { 'application/vnd.rar' }
+                    '.tar.gz' { 'application/gzip' }
+                    '.tgz' { 'application/gzip' }
+                    '.tar.bz2' { 'application/x-bzip2' }
+                    '.tar.xz' { 'application/x-xz' }
+                    '.tar.7z' { 'application/x-7z-compressed' }
+                    '.tar.rar' { 'application/vnd.rar' }
+                    '.png' { 'image/png' }
+                    '.json' { 'application/json' }
+                    '.txt' { 'text/plain' }
+                    '.md' { 'text/markdown' }
+                    '.html' { 'text/html' }
+                    default { 'application/octet-stream' }
+                }
+            }
+
+            $release = Get-GitHubRelease -Owner $Owner -Repo $Repo -ID $ID
+            $uploadURI = $release.upload_url -replace '{\?name,label}', "?name=$($Name)&label=$($Label)"
+
+            $inputObject = @{
+                URI            = $uploadURI
+                Method         = 'POST'
+                ContentType    = $ContentType
+                UploadFilePath = $FilePath
+            }
+
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
+            }
+        } catch {
+            throw $_
         }
     }
 
-    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-    Remove-HashtableEntry -Hashtable $body -RemoveNames 'Owner', 'Repo', 'ID', 'FilePath'
-
-    $body['name'] = $Name
-    $body['label'] = $Label
-
-    Remove-HashtableEntry -Hashtable $body -NullOrEmptyValues
-
-    $release = Get-GitHubRelease -Owner $Owner -Repo $Repo -ID $ID
-    $uploadURI = $release.upload_url -replace '{\?name,label}', "?name=$($Name)&label=$($Label)"
-
-    $inputObject = @{
-        URI            = $uploadURI
-        Method         = 'POST'
-        ContentType    = $ContentType
-        UploadFilePath = $FilePath
-    }
-
-    Invoke-GitHubAPI @inputObject | ForEach-Object {
-        Write-Output $_.Response
+    end {
+        Write-Debug "[$commandName] - End"
     }
 }

@@ -27,5 +27,20 @@
         [string] $Name
     )
 
-    Write-Host "::group::$Name"
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+    }
+
+    process {
+        try {
+            Write-Host "::group::$Name"
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$commandName] - End"
+    }
 }

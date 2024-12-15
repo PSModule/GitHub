@@ -24,20 +24,34 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-
-    if ([string]::IsNullOrEmpty($Enterprise)) {
-        $Enterprise = $Context.Enterprise
-    }
-    Write-Debug "Enterprise : [$($Context.Enterprise)]"
-
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = "/enterprises/$Enterprise/apps/installable_organizations"
-        Method      = 'GET'
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
+        if ([string]::IsNullOrEmpty($Enterprise)) {
+            $Enterprise = $Context.Enterprise
+        }
+        Write-Debug "Enterprise : [$($Context.Enterprise)]"
     }
 
-    Invoke-GitHubAPI @inputObject | ForEach-Object {
-        Write-Output $_.Response
+    process {
+        try {
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = "/enterprises/$Enterprise/apps/installable_organizations"
+                Method      = 'GET'
+            }
+
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
+            }
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$commandName] - End"
     }
 }

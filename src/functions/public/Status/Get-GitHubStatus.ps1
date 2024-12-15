@@ -38,17 +38,31 @@
         [ValidateSet('public', 'eu')]
         [string] $Stamp = 'public'
     )
-
-    $baseURL = $script:StatusBaseURL[$Stamp]
-
-    if ($Summary) {
-        $APIURI = "$baseURL/api/v2/summary.json"
-        $response = Invoke-RestMethod -Uri $APIURI -Method Get
-        $response
-        return
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
     }
 
-    $APIURI = "$baseURL/api/v2/status.json"
-    $response = Invoke-RestMethod -Uri $APIURI -Method Get
-    $response.status
+    process {
+        try {
+            $baseURL = $script:StatusBaseURL[$Stamp]
+
+            if ($Summary) {
+                $APIURI = "$baseURL/api/v2/summary.json"
+                $response = Invoke-RestMethod -Uri $APIURI -Method Get
+                $response
+                return
+            }
+
+            $APIURI = "$baseURL/api/v2/status.json"
+            $response = Invoke-RestMethod -Uri $APIURI -Method Get
+            $response.status
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$commandName] - End"
+    }
 }

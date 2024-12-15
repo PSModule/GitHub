@@ -26,34 +26,38 @@
 
     begin {
         $commandName = $MyInvocation.MyCommand.Name
-        Write-Verbose "[$commandName] - Start"
+        Write-Debug "[$commandName] - Start"
         $Context = Resolve-GitHubContext -Context $Context
     }
 
     process {
-        $gitExists = Get-Command -Name 'git' -ErrorAction SilentlyContinue
-        if (-not $gitExists) {
-            throw 'Git is not installed. Please install Git before running this command.'
-        }
+        try {
+            $gitExists = Get-Command -Name 'git' -ErrorAction SilentlyContinue
+            if (-not $gitExists) {
+                throw 'Git is not installed. Please install Git before running this command.'
+            }
 
-        $username = $Context.UserName
-        $id = $Context.DatabaseID
-        $token = $Context.Token | ConvertFrom-SecureString -AsPlainText
-        $hostName = $Context.HostName
+            $username = $Context.UserName
+            $id = $Context.DatabaseID
+            $token = $Context.Token | ConvertFrom-SecureString -AsPlainText
+            $hostName = $Context.HostName
 
-        if ($PSCmdlet.ShouldProcess("$Name", 'Set Git configuration')) {
-            Write-Verbose "git config --local user.name '$username'"
-            git config --local user.name "$username"
+            if ($PSCmdlet.ShouldProcess("$Name", 'Set Git configuration')) {
+                Write-Verbose "git config --local user.name '$username'"
+                git config --local user.name "$username"
 
-            Write-Verbose "git config --local user.email '$id+$username@users.noreply.github.com'"
-            git config --local user.email "$id+$username@users.noreply.github.com"
+                Write-Verbose "git config --local user.email '$id+$username@users.noreply.github.com'"
+                git config --local user.email "$id+$username@users.noreply.github.com"
 
-            Write-Verbose "git config --local 'url.https://oauth2:$token@$hostName.insteadOf' 'https://$hostName'"
-            git config --local "url.https://oauth2:$token@$hostName.insteadOf" "https://$hostName"
+                Write-Verbose "git config --local 'url.https://oauth2:$token@$hostName.insteadOf' 'https://$hostName'"
+                git config --local "url.https://oauth2:$token@$hostName.insteadOf" "https://$hostName"
+            }
+        } catch {
+            throw $_
         }
     }
 
     end {
-        Write-Verbose "[$commandName] - End"
+        Write-Debug "[$commandName] - End"
     }
 }

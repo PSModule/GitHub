@@ -85,35 +85,49 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
 
-    if ([string]::IsNullOrEmpty($Owner)) {
-        $Organization = $Context.Owner
-    }
-    Write-Debug "Organization : [$($Context.Owner)]"
-
-    $body = @{
-        name                 = $Name
-        description          = $Description
-        maintainers          = $Maintainers
-        repo_names           = $RepoNames
-        privacy              = $Privacy
-        notification_setting = $NotificationSetting
-        permission           = $Permission
-        parent_team_id       = $ParentTeamID -eq 0 ? $null : $ParentTeamID
-    }
-    $body | Remove-HashtableEntry -NullOrEmptyValues
-
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = "/orgs/$Organization/teams"
-        Method      = 'POST'
-        Body        = $body
-    }
-
-    if ($PSCmdlet.ShouldProcess("'$Name' in '$Organization'", 'Create team')) {
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+        if ([string]::IsNullOrEmpty($Organization)) {
+            $Organization = $Context.Owner
         }
+        Write-Debug "Organization : [$($Context.Owner)]"
+    }
+
+    process {
+        try {
+            $body = @{
+                name                 = $Name
+                description          = $Description
+                maintainers          = $Maintainers
+                repo_names           = $RepoNames
+                privacy              = $Privacy
+                notification_setting = $NotificationSetting
+                permission           = $Permission
+                parent_team_id       = $ParentTeamID -eq 0 ? $null : $ParentTeamID
+            } | Remove-HashtableEntry -NullOrEmptyValues
+
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = "/orgs/$Organization/teams"
+                Method      = 'POST'
+                Body        = $body
+            }
+
+            if ($PSCmdlet.ShouldProcess("'$Name' in '$Organization'", 'Create team')) {
+                Invoke-GitHubAPI @inputObject | ForEach-Object {
+                    Write-Output $_.Response
+                }
+            }
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$commandName] - End"
     }
 }

@@ -26,14 +26,14 @@ function Set-GitHubConfig {
 
     begin {
         $commandName = $MyInvocation.MyCommand.Name
-        Write-Verbose "[$commandName] - Start"
+        Write-Debug "[$commandName] - Start"
         Initialize-GitHubConfig
     }
 
     process {
-        Write-Verbose "Setting [$Name] to [$Value]"
-        $script:GitHub.Config.$Name = $Value
         try {
+            Write-Verbose "Setting [$Name] to [$Value]"
+            $script:GitHub.Config.$Name = $Value
             if ($PSCmdlet.ShouldProcess('ContextSetting', 'Set')) {
                 Set-Context -ID $script:GitHub.Config.ID -Context $script:GitHub.Config
             }
@@ -44,6 +44,6 @@ function Set-GitHubConfig {
     }
 
     end {
-        Write-Verbose "[$commandName] - End"
+        Write-Debug "[$commandName] - End"
     }
 }
