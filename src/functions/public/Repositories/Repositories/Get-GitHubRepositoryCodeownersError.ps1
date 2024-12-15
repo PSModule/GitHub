@@ -62,7 +62,8 @@
         try {
             $body = @{
                 ref = $Ref
-            } | Remove-HashtableEntry -NullOrEmptyValues
+            }
+            $body | Remove-HashtableEntry -NullOrEmptyValues
 
             $inputObject = @{
                 Context     = $Context

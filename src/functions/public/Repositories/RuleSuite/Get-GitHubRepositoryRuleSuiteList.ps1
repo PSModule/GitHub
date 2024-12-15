@@ -94,7 +94,8 @@
                 actor_name        = $ActorName
                 rule_suite_result = $RuleSuiteResult
                 per_page          = $PerPage
-            } | Remove-HashtableEntry -NullOrEmptyValues
+            }
+            $body | Remove-HashtableEntry -NullOrEmptyValues
 
             $inputObject = @{
                 Context     = $Context

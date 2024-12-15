@@ -64,7 +64,8 @@
             $body = @{
                 sort     = $Sort
                 per_page = $PerPage
-            } | Remove-HashtableEntry -NullOrEmptyValues
+            }
+            $body | Remove-HashtableEntry -NullOrEmptyValues
 
             $inputObject = @{
                 Context     = $Context

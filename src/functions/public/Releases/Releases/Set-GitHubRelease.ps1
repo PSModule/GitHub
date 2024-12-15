@@ -108,7 +108,8 @@
                 make_latest              = $MakeLatest
                 draft                    = $Draft
                 prerelease               = $Prerelease
-            } | Remove-HashtableEntry -NullOrEmptyValues
+            }
+            $requestBody | Remove-HashtableEntry -NullOrEmptyValues
 
             $inputObject = @{
                 Context     = $Context

@@ -75,7 +75,8 @@
                 new_owner = $NewOwner
                 new_name  = $NewName
                 team_ids  = $TeamIds
-            } | Remove-HashtableEntry -NullOrEmptyValues
+            }
+            $body | Remove-HashtableEntry -NullOrEmptyValues
 
             $inputObject = @{
                 Context     = $Context

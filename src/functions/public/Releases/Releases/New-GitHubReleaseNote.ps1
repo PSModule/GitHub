@@ -121,7 +121,8 @@
                 target_commitish        = $TargetCommitish
                 previous_tag_name       = $PreviousTagName
                 configuration_file_path = $ConfigurationFilePath
-            } | Remove-HashtableEntry -NullOrEmptyValues
+            }
+            $requestBody | Remove-HashtableEntry -NullOrEmptyValues
 
             $inputObject = @{
                 APIEndpoint = "/repos/$Owner/$Repo/releases/generate-notes"

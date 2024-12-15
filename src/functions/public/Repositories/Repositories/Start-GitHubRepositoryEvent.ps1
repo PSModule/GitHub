@@ -91,7 +91,8 @@
             $body = @{
                 event_type     = $EventType
                 client_payload = $ClientPayload
-            } | Remove-HashtableEntry -NullOrEmptyValues
+            }
+            $body | Remove-HashtableEntry -NullOrEmptyValues
 
             $inputObject = @{
                 Context     = $Context

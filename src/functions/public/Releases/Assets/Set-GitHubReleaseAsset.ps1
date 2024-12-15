@@ -72,7 +72,8 @@
                 name  = $Name
                 label = $Label
                 state = $State
-            } | Remove-HashtableEntry -NullOrEmptyValues
+            }
+            $body | Remove-HashtableEntry -NullOrEmptyValues
 
             $inputObject = @{
                 Context     = $Context

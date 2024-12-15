@@ -137,7 +137,8 @@
                 actor         = $Actor
                 time_period   = $TimePeriod
                 activity_type = $ActivityType
-            } | Remove-HashtableEntry -NullOrEmptyValues
+            }
+            $body | Remove-HashtableEntry -NullOrEmptyValues
 
             $inputObject = @{
                 Context     = $Context

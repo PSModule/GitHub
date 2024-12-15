@@ -192,7 +192,8 @@ filter Get-GitHubRepository {
                         PerPage   = $PerPage
                         Since     = $Since
                         Before    = $Before
-                    } | Remove-HashtableEntry -NullOrEmptyValues
+                    }
+                    $params | Remove-HashtableEntry -NullOrEmptyValues
                     Get-GitHubMyRepositories @params
                 }
                 'MyRepos_Aff-Vis' {
@@ -204,20 +205,23 @@ filter Get-GitHubRepository {
                         PerPage     = $PerPage
                         Since       = $Since
                         Before      = $Before
-                    } | Remove-HashtableEntry -NullOrEmptyValues
+                    }
+                    $params | Remove-HashtableEntry -NullOrEmptyValues
                     Get-GitHubMyRepositories @params
                 }
                 'ByName' {
                     $params += @{
                         Owner = $Owner
                         Repo  = $Repo
-                    } | Remove-HashtableEntry -NullOrEmptyValues
+                    }
+                    $params | Remove-HashtableEntry -NullOrEmptyValues
                     Get-GitHubRepositoryByName @params
                 }
                 'ListByID' {
                     $params += @{
                         Since = $SinceID
-                    } | Remove-HashtableEntry -NullOrEmptyValues
+                    }
+                    $params | Remove-HashtableEntry -NullOrEmptyValues
                     Get-GitHubRepositoryListByID @params
                 }
                 'ListByOrg' {
@@ -227,7 +231,8 @@ filter Get-GitHubRepository {
                         Sort      = $Sort
                         Direction = $Direction
                         PerPage   = $PerPage
-                    } | Remove-HashtableEntry -NullOrEmptyValues
+                    }
+                    $params | Remove-HashtableEntry -NullOrEmptyValues
                     Get-GitHubRepositoryListByOrg @params
                 }
                 'ListByUser' {
@@ -237,7 +242,8 @@ filter Get-GitHubRepository {
                         Sort      = $Sort
                         Direction = $Direction
                         PerPage   = $PerPage
-                    } | Remove-HashtableEntry -NullOrEmptyValues
+                    }
+                    $params | Remove-HashtableEntry -NullOrEmptyValues
                     Get-GitHubRepositoryListByUser @params
                 }
             }

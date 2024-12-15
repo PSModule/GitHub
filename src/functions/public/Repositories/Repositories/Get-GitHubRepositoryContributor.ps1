@@ -68,7 +68,8 @@
             $body = @{
                 anon     = $Anon
                 per_page = $PerPage
-            } | Remove-HashtableEntry -NullOrEmptyValues
+            }
+            $body | Remove-HashtableEntry -NullOrEmptyValues
 
             $inputObject = @{
                 Context     = $Context

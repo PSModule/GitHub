@@ -229,7 +229,8 @@
                 archived                        = $Archived ? $Archived : $null
                 allow_forking                   = $AllowForking ? $AllowForking : $null
                 web_commit_signoff_required     = $WebCommitSignoffRequired ? $WebCommitSignoffRequired : $null
-            } | Remove-HashtableEntry -NullOrEmptyValues
+            }
+            $body | Remove-HashtableEntry -NullOrEmptyValues
 
             $inputObject = @{
                 Context     = $Context

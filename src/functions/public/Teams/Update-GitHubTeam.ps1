@@ -100,7 +100,8 @@
                 notification_setting = $NotificationSetting
                 permission           = $Permission
                 parent_team_id       = $ParentTeamID
-            } | Remove-HashtableEntry -NullOrEmptyValues
+            }
+            $body | Remove-HashtableEntry -NullOrEmptyValues
 
             $inputObject = @{
                 Context     = $Context
