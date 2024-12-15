@@ -1,85 +1,72 @@
-﻿function New-Function {
+﻿
+function New-Function {
     <#
-        .SYNOPSIS
-        Short description
+    .SYNOPSIS
+    Short description
 
-        .DESCRIPTION
-        Long description
+    .DESCRIPTION
+    Long description
 
-        .EXAMPLE
-        An example
+    .PARAMETER Path
+    Parameter description
 
-        .NOTES
-        General notes
+    .PARAMETER Method
+    Parameter description
+
+    .EXAMPLE
+    An example
+
+    .NOTES
+    General notes
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param(
-        # The name of the organization.
-        [Parameter()]
-        [string]$Owner,
+        [Parameter(Mandatory)]
+        [string] $Path,
 
-        # The name of the organization.
-        [Parameter()]
-        [string]$Repo,
-
-        # The context to run the command in. Used to get the details for the API call.
-        # Can be either a string or a GitHubContext object.
-        [Parameter()]
-        [object] $Context = (Get-GitHubContext)
+        [Parameter(Mandatory)]
+        [string] $Method
     )
 
-    begin {
-        $commandName = $MyInvocation.MyCommand.Name
-        Write-Debug "[$commandName] - Start"
+    $APIDocURI = 'https://raw.githubusercontent.com/github/rest-api-description/main'
+    $Bundled = '/descriptions/api.github.com/api.github.com.json'
+    # $Dereferenced = 'descriptions/api.github.com/dereferenced/api.github.com.deref.json'
+    $APIDocURI = $APIDocURI + $Bundled
+    $response = Invoke-RestMethod -Uri $APIDocURI -Method Get
 
-        $Context = Resolve-GitHubContext -Context $Context
+    $response.paths.$Path.$Method
 
-        if ([string]::IsNullOrEmpty($Enterprise)) {
-            $Enterprise = $Context.Enterprise
-        }
-        Write-Debug "Enterprise : [$($Context.Enterprise)]"
+    $FunctionName = "$Method-GitHub" + (($response.paths.$path.$method.operationId) -Replace '/', '-')
 
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner : [$($Context.Owner)]"
+    $folderName = $response.paths.$path.$method.'x-github'.category
+    $subFolderName = $response.paths.$path.$method.'x-github'.subcategory
 
-        if ([string]::IsNullOrEmpty($Repo)) {
-            $Repo = $Context.Repo
-        }
-        Write-Debug "Repo : [$($Context.Repo)]"
+    $template = @"
+    function $FunctionName {
+        <#
+            .SYNOPSIS
+            $($response.paths.$path.$method.summary)
+
+            .DESCRIPTION
+            $($response.paths.$path.$method.description)
+
+            .EXAMPLE
+            An example
+
+            .NOTES
+            [$($response.paths.$path.$method.summary)]($($response.paths.$path.$method.externalDocs.url))
+        #>
+        [OutputType([pscustomobject])]
+        [CmdletBinding()]
+        param(
+            # The context to run the command in.
+            [Parameter()]
+            [string] `$Context = (Get-GitHubConfig -Name 'DefaultContext')
+        )
+    }
+"@
+    if ($PSCmdlet.ShouldProcess('Function', 'Create')) {
+        New-Item -Path "src/functions/$folderName/$subFolderName" -Name "$FunctionName.ps1" -ItemType File -Value $template
     }
 
-    process {
-        try {
-            $body = @{
-                per_page = $PerPage
-            }
-
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/orgs/$OrganizationName/blocks"
-                Method      = 'GET'
-                Body        = $body
-            }
-
-            if ($PSCmdlet.ShouldProcess('Target', 'Operation')) {
-                Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
-                }
-            }
-        } catch {
-            Write-Debug "Error: $_"
-        } finally {
-            Write-Debug 'Finally'
-        }
-    }
-
-    end {
-        Write-Debug "[$commandName] - End"
-    }
-
-    clean {
-        Write-Debug 'Clean'
-    }
 }
