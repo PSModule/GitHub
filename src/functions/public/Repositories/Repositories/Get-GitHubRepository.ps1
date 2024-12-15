@@ -180,12 +180,10 @@ filter Get-GitHubRepository {
 
     process {
         try {
-            $params = @{
-                Context = $Context
-            }
             switch ($PSCmdlet.ParameterSetName) {
                 'MyRepos_Type' {
-                    $params += @{
+                    $params = @{
+                        Context   = $Context
                         Type      = $Type
                         Sort      = $Sort
                         Direction = $Direction
@@ -196,7 +194,8 @@ filter Get-GitHubRepository {
                     Get-GitHubMyRepositories @params
                 }
                 'MyRepos_Aff-Vis' {
-                    $params += @{
+                    $params = @{
+                        Context     = $Context
                         Visibility  = $Visibility
                         Affiliation = $Affiliation
                         Sort        = $Sort
@@ -208,20 +207,23 @@ filter Get-GitHubRepository {
                     Get-GitHubMyRepositories @params
                 }
                 'ByName' {
-                    $params += @{
-                        Owner = $Owner
-                        Repo  = $Repo
+                    $params = @{
+                        Context = $Context
+                        Owner   = $Owner
+                        Repo    = $Repo
                     }
                     Get-GitHubRepositoryByName @params
                 }
                 'ListByID' {
-                    $params += @{
-                        Since = $SinceID
+                    $params = @{
+                        Context = $Context
+                        Since   = $SinceID
                     }
                     Get-GitHubRepositoryListByID @params
                 }
                 'ListByOrg' {
-                    $params += @{
+                    $params = @{
+                        Context   = $Context
                         Owner     = $Owner
                         Type      = $Type
                         Sort      = $Sort
@@ -231,7 +233,8 @@ filter Get-GitHubRepository {
                     Get-GitHubRepositoryListByOrg @params
                 }
                 'ListByUser' {
-                    $params += @{
+                    $params = @{
+                        Context   = $Context
                         Username  = $Username
                         Type      = $Type
                         Sort      = $Sort
