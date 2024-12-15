@@ -4,13 +4,13 @@
         Render a Markdown document
 
         .DESCRIPTION
-        Converts markdown to html
+        Converts Markdown to HTML
 
         .EXAMPLE
         Get-GitHubMarkdown -Text "Hello **world**"
         "<p>Hello <strong>world</strong></p>"
 
-        Renders the markdown text "Hello **world**" to HTML.
+        Renders the Markdown text "Hello **world**" to HTML.
 
         .NOTES
         [Render a Markdown document](https://docs.github.com/en/rest/markdown/markdown#render-a-markdown-document)
