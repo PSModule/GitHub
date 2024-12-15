@@ -4,7 +4,7 @@
         List workflow runs for a workflow
 
         .DESCRIPTION
-        List all workflow runs for a workflow. You can replace `workflow_id` with the workflow file name. For example, you could use `main.yaml`.
+        List all workflow runs for a workflow. You can replace `workflow_id` with the workflow filename. For example, you could use `main.yaml`.
         You can use parameters to narrow the list of results. For more information about using parameters, see
         [Parameters](https://docs.github.com/rest/guides/getting-started-with-the-rest-api#parameters).
         Anyone with read access to the repository can use this endpoint
@@ -39,7 +39,7 @@
         [Parameter(Mandatory)]
         [string] $Repo,
 
-        # The ID of the workflow. You can also pass the workflow file name as a string.
+        # The ID of the workflow. You can also pass the workflow filename as a string.
         [Parameter(Mandatory)]
         [Alias('workflow_id', 'WorkflowID')]
         [string] $ID,
