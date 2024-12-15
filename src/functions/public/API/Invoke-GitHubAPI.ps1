@@ -152,6 +152,7 @@
             if ($Method -eq 'GET') {
                 # If body conatins 'per_page' and its is null, set it to $context.PerPage
                 if ($Body['per_page'] -eq 0) {
+                    Write-Debug "Setting per_page to the default value in context [$($Context.PerPage)]."
                     $Body['per_page'] = $Context.PerPage
                 }
                 $queryString = $Body | ConvertTo-QueryString
