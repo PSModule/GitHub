@@ -43,21 +43,33 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = "/orgs/$Organization/blocks/$Username"
-        Method      = 'GET'
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 
-    try {
-        (Invoke-GitHubAPI @inputObject).StatusCode -eq 204
-    } catch {
-        if ($_.Exception.Response.StatusCode.Value__ -eq 404) {
-            return $false
-        } else {
-            throw $_
+    process {
+        $inputObject = @{
+            Context     = $Context
+            APIEndpoint = "/orgs/$Organization/blocks/$Username"
+            Method      = 'GET'
+        }
+
+        try {
+            (Invoke-GitHubAPI @inputObject).StatusCode -eq 204
+        } catch {
+            if ($_.Exception.Response.StatusCode.Value__ -eq 404) {
+                return $false
+            } else {
+                throw $_
+            }
         }
     }
+
+    end {
+        Write-Debug "[$commandName] - End"
+    }
 }
+

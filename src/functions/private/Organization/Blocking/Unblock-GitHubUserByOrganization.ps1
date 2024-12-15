@@ -44,19 +44,30 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = "/orgs/$Organization/blocks/$Username"
-        Method      = 'DELETE'
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 
-    try {
-        $null = (Invoke-GitHubAPI @inputObject)
-        return $true
-    } catch {
-        Write-Error $_.Exception.Response
-        throw $_
+    process {
+        $inputObject = @{
+            Context     = $Context
+            APIEndpoint = "/orgs/$Organization/blocks/$Username"
+            Method      = 'DELETE'
+        }
+
+        try {
+            $null = (Invoke-GitHubAPI @inputObject)
+            return $true
+        } catch {
+            Write-Error $_.Exception.Response
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$commandName] - End"
     }
 }

@@ -30,20 +30,34 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-
-    $body = @{
-        per_page = $PerPage
-    }
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = '/user/emails'
-        Method      = 'GET'
-        Body        = $body
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 
-    Invoke-GitHubAPI @inputObject | ForEach-Object {
-        Write-Output $_.Response
+    process {
+        try {
+            $body = @{
+                per_page = $PerPage
+            }
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = '/user/emails'
+                Method      = 'GET'
+                Body        = $body
+            }
+
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
+            }
+        } catch {
+            throw $_
+        }
     }
 
+    end {
+        Write-Debug "[$commandName] - End"
+    }
 }

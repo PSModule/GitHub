@@ -25,14 +25,30 @@
         [string] $Context
     )
 
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = '/licenses'
-        Method      = 'GET'
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 
-    Invoke-GitHubAPI @inputObject | ForEach-Object {
-        Write-Output $_.Response
+    process {
+        try {
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = '/licenses'
+                Method      = 'GET'
+            }
+
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
+            }
+        } catch {
+            throw $_
+        }
     }
 
+    end {
+        Write-Debug "[$commandName] - End"
+    }
 }

@@ -49,6 +49,8 @@
     )
 
     begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
         $lines = @()
     }
 
@@ -128,8 +130,10 @@
             $i++
         }
         if ($AsHashtable) {
-            return $result
+            $result
+        } else {
+            [PSCustomObject]$result
         }
-        [PSCustomObject]$result
+        Write-Debug "[$commandName] - End"
     }
 }

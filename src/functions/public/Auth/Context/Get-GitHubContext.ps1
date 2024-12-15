@@ -43,7 +43,6 @@ function Get-GitHubContext {
     }
 
     process {
-
         switch ($PSCmdlet.ParameterSetName) {
             'NamedContext' {
                 Write-Verbose "NamedContext: [$Context]"

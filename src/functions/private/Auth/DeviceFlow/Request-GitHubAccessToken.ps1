@@ -42,40 +42,51 @@
         [string] $HostName
     )
 
-    $body = @{
-        'client_id' = $ClientID
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
     }
 
-    if ($PSBoundParameters.ContainsKey('RefreshToken')) {
-        $body += @{
-            'refresh_token' = (ConvertFrom-SecureString $RefreshToken -AsPlainText)
-            'grant_type'    = 'refresh_token'
+    process {
+        $body = @{
+            'client_id' = $ClientID
+        }
+
+        if ($PSBoundParameters.ContainsKey('RefreshToken')) {
+            $body += @{
+                'refresh_token' = (ConvertFrom-SecureString $RefreshToken -AsPlainText)
+                'grant_type'    = 'refresh_token'
+            }
+        }
+
+        if ($PSBoundParameters.ContainsKey('DeviceCode')) {
+            $body += @{
+                'device_code' = $DeviceCode
+                'grant_type'  = 'urn:ietf:params:oauth:grant-type:device_code'
+            }
+        }
+
+        $RESTParams = @{
+            Uri     = "https://$HostName/login/oauth/access_token"
+            Method  = 'POST'
+            Body    = $body
+            Headers = @{ 'Accept' = 'application/json' }
+        }
+
+        try {
+            Write-Debug ($RESTParams.GetEnumerator() | Out-String)
+
+            $tokenResponse = Invoke-RestMethod @RESTParams -Verbose:$false
+
+            Write-Debug ($tokenResponse | ConvertTo-Json | Out-String)
+            return $tokenResponse
+        } catch {
+            Write-Error $_
+            throw $_
         }
     }
 
-    if ($PSBoundParameters.ContainsKey('DeviceCode')) {
-        $body += @{
-            'device_code' = $DeviceCode
-            'grant_type'  = 'urn:ietf:params:oauth:grant-type:device_code'
-        }
-    }
-
-    $RESTParams = @{
-        Uri     = "https://$HostName/login/oauth/access_token"
-        Method  = 'POST'
-        Body    = $body
-        Headers = @{ 'Accept' = 'application/json' }
-    }
-
-    try {
-        Write-Debug ($RESTParams.GetEnumerator() | Out-String)
-
-        $tokenResponse = Invoke-RestMethod @RESTParams -Verbose:$false
-
-        Write-Debug ($tokenResponse | ConvertTo-Json | Out-String)
-        return $tokenResponse
-    } catch {
-        Write-Error $_
-        throw $_
+    end {
+        Write-Debug "[$commandName] - End"
     }
 }

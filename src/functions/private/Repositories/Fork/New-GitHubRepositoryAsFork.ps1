@@ -68,38 +68,53 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-
-    if ([string]::IsNullorEmpty($Name)) {
-        $Name = $Repo
-    }
-
-    if ([string]::IsNullOrEmpty($Owner)) {
-        $Owner = $Context.Owner
-    }
-    Write-Debug "Owner : [$($Context.Owner)]"
-
-    if ([string]::IsNullOrEmpty($Repo)) {
-        $Repo = $Context.Repo
-    }
-    Write-Debug "Repo : [$($Context.Repo)]"
-
-    $body = @{
-        organization        = $Organization
-        name                = $Name
-        default_branch_only = $DefaultBranchOnly
-    }
-
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = "/repos/$Owner/$Repo/forks"
-        Method      = 'POST'
-        Body        = $body
-    }
-
-    if ($PSCmdlet.ShouldProcess("Repository [$Organization/$Name] as fork of [$Owner/$Repo]", 'Create')) {
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
+        if ([string]::IsNullOrEmpty($Owner)) {
+            $Owner = $Context.Owner
         }
+        Write-Debug "Owner : [$($Context.Owner)]"
+
+        if ([string]::IsNullOrEmpty($Repo)) {
+            $Repo = $Context.Repo
+        }
+        Write-Debug "Repo : [$($Context.Repo)]"
+
+        if ([string]::IsNullorEmpty($Name)) {
+            $Name = $Repo
+        }
+        Write-Debug "Name : [$Name]"
+    }
+
+    process {
+        try {
+            $body = @{
+                organization        = $Organization
+                name                = $Name
+                default_branch_only = $DefaultBranchOnly
+            }
+
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = "/repos/$Owner/$Repo/forks"
+                Method      = 'POST'
+                Body        = $body
+            }
+
+            if ($PSCmdlet.ShouldProcess("Repository [$Organization/$Name] as fork of [$Owner/$Repo]", 'Create')) {
+                Invoke-GitHubAPI @inputObject | ForEach-Object {
+                    Write-Output $_.Response
+                }
+            }
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$commandName] - End"
     }
 }

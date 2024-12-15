@@ -65,21 +65,39 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-    Assert-GitHubContext -Context $Context -AuthType App
-
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = "/app/installations/$InstallationID/access_tokens"
-        Method      = 'Post'
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType APP
     }
 
-    Invoke-GitHubAPI @inputObject | ForEach-Object {
-        [pscustomobject]@{
-            Token               = $_.Response.token | ConvertTo-SecureString -AsPlainText -Force
-            ExpiresAt           = $_.Response.expires_at.ToLocalTime()
-            Permissions         = $_.Response.permissions
-            RepositorySelection = $_.Response.repository_selection
+    process {
+        try {
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = "/app/installations/$InstallationID/access_tokens"
+                Method      = 'Post'
+            }
+
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                [pscustomobject]@{
+                    Token               = $_.Response.token | ConvertTo-SecureString -AsPlainText -Force
+                    ExpiresAt           = $_.Response.expires_at.ToLocalTime()
+                    Permissions         = $_.Response.permissions
+                    RepositorySelection = $_.Response.repository_selection
+                }
+            }
+        } catch {
+            throw $_
         }
+    }
+
+    end {
+        Write-Debug "[$commandName] - End"
+    }
+
+    clean {
+        [System.GC]::Collect()
     }
 }

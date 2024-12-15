@@ -40,22 +40,22 @@ function Set-GitHubContext {
 
     begin {
         $commandName = $MyInvocation.MyCommand.Name
-        Write-Verbose "[$commandName] - Start"
+        Write-Debug "[$commandName] - Start"
         $null = Get-GitHubConfig
         $contextObj = @{} + $Context
     }
 
     process {
-        Write-Verbose 'Context:'
-        $contextObj | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+        Write-Debug 'Context:'
+        $contextObj | Out-String -Stream | ForEach-Object { Write-Debug $_ }
 
         # Run functions to get info on the temporary context.
         try {
-            Write-Verbose "Getting info on the context [$($contextObj['AuthType'])]."
+            Write-Debug "Getting info on the context [$($contextObj['AuthType'])]."
             switch -Regex ($($contextObj['AuthType'])) {
                 'PAT|UAT|IAT' {
                     $viewer = Get-GitHubViewer -Context $contextObj
-                    $viewer | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+                    $viewer | Out-String -Stream | ForEach-Object { Write-Debug $_ }
                     if ([string]::IsNullOrEmpty($contextObj['DisplayName'])) {
                         $contextObj['DisplayName'] = [string]$viewer.name
                     }
@@ -94,12 +94,12 @@ function Set-GitHubContext {
                         $owner = $gitHubEvent.repository.owner.login
                         $repo = $gitHubEvent.repository.name
                         $gh_sender = $gitHubEvent.sender.login # sender is an automatic variable in Powershell
-                        Write-Verbose "Enterprise:            $enterprise"
-                        Write-Verbose "Organization:          $organization"
-                        Write-Verbose "Repository:            $repo"
-                        Write-Verbose "Repository Owner:      $owner"
-                        Write-Verbose "Repository Owner Type: $targetType"
-                        Write-Verbose "Sender:                $gh_sender"
+                        Write-Debug "Enterprise:            $enterprise"
+                        Write-Debug "Organization:          $organization"
+                        Write-Debug "Repository:            $repo"
+                        Write-Debug "Repository Owner:      $owner"
+                        Write-Debug "Repository Owner Type: $targetType"
+                        Write-Debug "Sender:                $gh_sender"
                         if ([string]::IsNullOrEmpty($contextObj['Enterprise'])) {
                             $contextObj['Enterprise'] = [string]$enterprise
                         }
@@ -139,11 +139,11 @@ function Set-GitHubContext {
                     throw 'Failed to get info on the context. Unknown logon type.'
                 }
             }
-            Write-Verbose "Found [$($contextObj['Type'])] with login: [$($contextObj['Name'])]"
-            $contextObj | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
-            Write-Verbose '----------------------------------------------------'
+            Write-Debug "Found [$($contextObj['Type'])] with login: [$($contextObj['Name'])]"
+            $contextObj | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+            Write-Debug '----------------------------------------------------'
             if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
-                Write-Verbose "Saving context: [$($script:GitHub.Config.ID)/$($contextObj['Name'])]"
+                Write-Debug "Saving context: [$($script:GitHub.Config.ID)/$($contextObj['Name'])]"
                 Set-Context -ID "$($script:GitHub.Config.ID)/$($contextObj['Name'])" -Context $contextObj
                 if ($Default) {
                     Set-GitHubDefaultContext -Context $contextObj['Name']
@@ -164,6 +164,6 @@ function Set-GitHubContext {
     }
 
     end {
-        Write-Verbose "[$commandName] - End"
+        Write-Debug "[$commandName] - End"
     }
 }

@@ -62,28 +62,42 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-
-    if ([string]::IsNullOrEmpty($Owner)) {
-        $Owner = $Context.Owner
-    }
-    Write-Debug "Owner : [$($Context.Owner)]"
-
-    $body = @{
-        sort      = $Sort
-        type      = $Type
-        direction = $Direction
-        per_page  = $PerPage
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
+        if ([string]::IsNullOrEmpty($Owner)) {
+            $Owner = $Context.Owner
+        }
+        Write-Debug "Owner : [$($Context.Owner)]"
     }
 
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = "/orgs/$Owner/repos"
-        Method      = 'GET'
-        Body        = $body
+    process {
+        try {
+            $body = @{
+                sort      = $Sort
+                type      = $Type
+                direction = $Direction
+                per_page  = $PerPage
+            }
+
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = "/orgs/$Owner/repos"
+                Method      = 'GET'
+                Body        = $body
+            }
+
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
+            }
+        } catch {
+            throw $_
+        }
     }
 
-    Invoke-GitHubAPI @inputObject | ForEach-Object {
-        Write-Output $_.Response
+    end {
+        Write-Debug "[$commandName] - End"
     }
 }

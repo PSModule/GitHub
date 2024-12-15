@@ -206,57 +206,58 @@ filter New-GitHubRepositoryUser {
     }
 
     begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
         $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
         $GitignoreTemplate = $PSBoundParameters['GitignoreTemplate']
         $LicenseTemplate = $PSBoundParameters['LicenseTemplate']
     }
 
     process {
-
-        $PSCmdlet.MyInvocation.MyCommand.Parameters.GetEnumerator() | ForEach-Object {
-            $paramName = $_.Key
-            $paramDefaultValue = Get-Variable -Name $paramName -ValueOnly -ErrorAction SilentlyContinue
-            $providedValue = $PSBoundParameters[$paramName]
-            Write-Debug "[$paramName]"
-            Write-Debug "  - Default:  [$paramDefaultValue]"
-            Write-Debug "  - Provided: [$providedValue]"
-            if (-not $PSBoundParameters.ContainsKey($paramName) -and ($null -ne $paramDefaultValue)) {
-                Write-Debug '  - Using default value'
-                $PSBoundParameters[$paramName] = $paramDefaultValue
-            } else {
-                Write-Debug '  - Using provided value'
+        try {
+            $body = @{
+                name                        = $Name
+                description                 = $Description
+                homepage                    = $Homepage
+                visibility                  = $Visibility
+                has_issues                  = $HasIssues
+                has_projects                = $HasProjects
+                has_wiki                    = $HasWiki
+                has_downloads               = $HasDownloads
+                is_template                 = $IsTemplate
+                team_id                     = $TeamId
+                auto_init                   = $AutoInit
+                allow_squash_merge          = $AllowSquashMerge
+                allow_merge_commit          = $AllowMergeCommit
+                allow_rebase_merge          = $AllowRebaseMerge
+                allow_auto_merge            = $AllowAutoMerge
+                delete_branch_on_merge      = $DeleteBranchOnMerge
+                squash_merge_commit_title   = $SquashMergeCommitTitle
+                squash_merge_commit_message = $SquashMergeCommitMessage
+                merge_commit_title          = $MergeCommitTitle
+                merge_commit_message        = $MergeCommitMessage
+                private                     = $Visibility -eq 'private'
             }
-        }
 
-        $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-        Remove-HashtableEntry -Hashtable $body -RemoveNames 'visibility' -RemoveTypes 'SwitchParameter'
-
-        $body['private'] = $Visibility -eq 'private'
-        $body['has_issues'] = if ($HasIssues.IsPresent) { $HasIssues } else { $false }
-        $body['has_wiki'] = if ($HasWiki.IsPresent) { $HasWiki } else { $false }
-        $body['has_projects'] = if ($HasProjects.IsPresent) { $HasProjects } else { $false }
-        $body['has_downloads'] = if ($HasDownloads.IsPresent) { $HasDownloads } else { $false }
-        $body['is_template'] = if ($IsTemplate.IsPresent) { $IsTemplate } else { $false }
-        $body['auto_init'] = if ($AutoInit.IsPresent) { $AutoInit } else { $false }
-        $body['allow_squash_merge'] = if ($AllowSquashMerge.IsPresent) { $AllowSquashMerge } else { $false }
-        $body['allow_merge_commit'] = if ($AllowMergeCommit.IsPresent) { $AllowMergeCommit } else { $false }
-        $body['allow_rebase_merge'] = if ($AllowRebaseMerge.IsPresent) { $AllowRebaseMerge } else { $false }
-        $body['allow_auto_merge'] = if ($AllowAutoMerge.IsPresent) { $AllowAutoMerge } else { $false }
-        $body['delete_branch_on_merge'] = if ($DeleteBranchOnMerge.IsPresent) { $DeleteBranchOnMerge } else { $false }
-
-        Remove-HashtableEntry -Hashtable $body -NullOrEmptyValues
-
-        $inputObject = @{
-            Context     = $Context
-            APIEndpoint = '/user/repos'
-            Method      = 'POST'
-            Body        = $body
-        }
-
-        if ($PSCmdlet.ShouldProcess('Repository for user', 'Create')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = '/user/repos'
+                Method      = 'POST'
+                Body        = $body
             }
+
+            if ($PSCmdlet.ShouldProcess('Repository for user', 'Create')) {
+                Invoke-GitHubAPI @inputObject | ForEach-Object {
+                    Write-Output $_.Response
+                }
+            }
+        } catch {
+            throw $_
         }
+    }
+
+    end {
+        Write-Debug "[$commandName] - End"
     }
 }

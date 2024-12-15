@@ -31,37 +31,41 @@
 
     begin {
         $commandName = $MyInvocation.MyCommand.Name
-        Write-Verbose "[$commandName] - Start"
+        Write-Debug "[$commandName] - Start"
         Initialize-GitHubConfig
     }
 
     process {
-        if ($Context -is [string]) {
-            $contextName = $Context
-            Write-Verbose "Getting context: [$contextName]"
-            $Context = Get-GitHubContext -Context $contextName
-        }
+        try {
+            if ($Context -is [string]) {
+                $contextName = $Context
+                Write-Debug "Getting context: [$contextName]"
+                $Context = Get-GitHubContext -Context $contextName
+            }
 
-        if (-not $Context) {
-            throw "Please provide a valid context or log in using 'Connect-GitHub'."
-        }
+            if (-not $Context) {
+                throw "Please provide a valid context or log in using 'Connect-GitHub'."
+            }
 
-        # switch ($Context.Type) {
-        #     'App' {
-        #         $availableContexts = Get-GitHubContext -ListAvailable |
-        #             Where-Object { $_.Type -eq 'Installation' -and $_.ClientID -eq $Context.ClientID }
-        #         $params = Get-FunctionParameter -Scope 2
-        #         Write-Verbose 'Resolving parameters used in called function'
-        #         Write-Verbose ($params | Out-String)
-        #         if ($params.Keys -in 'Owner', 'Organization') {
-        #             $Context = $availableContexts | Where-Object { $_.Owner -eq $params.Owner }
-        #         }
-        #     }
-        # }
+            # switch ($Context.Type) {
+            #     'App' {
+            #         $availableContexts = Get-GitHubContext -ListAvailable |
+            #             Where-Object { $_.Type -eq 'Installation' -and $_.ClientID -eq $Context.ClientID }
+            #         $params = Get-FunctionParameter -Scope 2
+            #         Write-Debug 'Resolving parameters used in called function'
+            #         Write-Debug ($params | Out-String)
+            #         if ($params.Keys -in 'Owner', 'Organization') {
+            #             $Context = $availableContexts | Where-Object { $_.Owner -eq $params.Owner }
+            #         }
+            #     }
+            # }
+        } catch {
+            throw $_
+        }
     }
 
     end {
-        Write-Verbose "[$commandName] - End"
+        Write-Debug "[$commandName] - End"
         Write-Output $Context
     }
 }

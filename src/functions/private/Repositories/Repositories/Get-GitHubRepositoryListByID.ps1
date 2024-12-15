@@ -33,21 +33,35 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-
-    $body = @{
-        since = $Since
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = '/repositories'
-        Method      = 'GET'
-        Body        = $body
+    process {
+        try {
+            $body = @{
+                since = $Since
+            }
+
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = '/repositories'
+                Method      = 'GET'
+                Body        = $body
+            }
+
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
+            }
+        } catch {
+            throw $_
+        }
     }
 
-    Invoke-GitHubAPI @inputObject | ForEach-Object {
-        Write-Output $_.Response
+    end {
+        Write-Debug "[$commandName] - End"
     }
-
 }

@@ -1,5 +1,6 @@
 ﻿filter Get-GitHubWorkflowRun {
     <#
+    TODO:Split into two private functions and a swtich statement to handle the parameter set.
         .NOTES
         [List workflow runs for a workflow](https://docs.github.com/rest/actions/workflow-runs?apiVersion=2022-11-28#list-workflow-runs-for-a-workflow)
         [List workflow runs for a repository](https://docs.github.com/rest/actions/workflow-runs?apiVersion=2022-11-28#list-workflow-runs-for-a-repository)
@@ -30,41 +31,54 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
+    begin {
+        $commandName = $MyInvocation.MyCommand.Name
+        Write-Debug "[$commandName] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
+        if ([string]::IsNullOrEmpty($Owner)) {
+            $Owner = $Context.Owner
+        }
+        Write-Debug "Owner : [$($Context.Owner)]"
 
-    if ([string]::IsNullOrEmpty($Owner)) {
-        $Owner = $Context.Owner
-    }
-    Write-Debug "Owner : [$($Context.Owner)]"
-
-    if ([string]::IsNullOrEmpty($Repo)) {
-        $Repo = $Context.Repo
-    }
-    Write-Debug "Repo : [$($Context.Repo)]"
-
-    $body = @{
-        per_page = $PerPage
-    }
-
-    if ($Name) {
-        $ID = (Get-GitHubWorkflow -Owner $Owner -Repo $Repo -Name $Name).id
+        if ([string]::IsNullOrEmpty($Repo)) {
+            $Repo = $Context.Repo
+        }
+        Write-Debug "Repo : [$($Context.Repo)]"
     }
 
-    if ($ID) {
-        $Uri = "/repos/$Owner/$Repo/actions/workflows/$ID/runs"
-    } else {
-        $Uri = "/repos/$Owner/$Repo/actions/runs"
+    process {
+        try {
+            $body = @{
+                per_page = $PerPage
+            }
+
+            if ($Name) {
+                $ID = (Get-GitHubWorkflow -Owner $Owner -Repo $Repo -Name $Name).id
+            }
+
+            if ($ID) {
+                $Uri = "/repos/$Owner/$Repo/actions/workflows/$ID/runs"
+            } else {
+                $Uri = "/repos/$Owner/$Repo/actions/runs"
+            }
+
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = $Uri
+                Method      = 'GET'
+                Body        = $body
+            }
+
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response.workflow_runs
+            }
+        } catch {
+            throw $_
+        }
     }
 
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = $Uri
-        Method      = 'GET'
-        Body        = $body
+    end {
+        Write-Debug "[$commandName] - End"
     }
-
-    Invoke-GitHubAPI @inputObject | ForEach-Object {
-        Write-Output $_.Response.workflow_runs
-    }
-
 }
