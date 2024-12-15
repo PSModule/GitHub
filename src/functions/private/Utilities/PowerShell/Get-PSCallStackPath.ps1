@@ -42,5 +42,6 @@
     $skipFirst++
     $cmds = (Get-PSCallStack).Command
     $functionPath = $cmds[($cmds.Count - $skipFirst)..$SkipLatest] -join '\'
+    $functionPath = $functionPath -replace '^.*<ScriptBlock>'
     return $functionPath
 }
