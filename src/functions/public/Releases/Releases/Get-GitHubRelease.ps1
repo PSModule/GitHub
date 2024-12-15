@@ -46,8 +46,8 @@
 
         # The number of results per page (max 100).
         [Parameter(ParameterSetName = 'All')]
-        [ValidateRange(1, 100)]
-        [int] $PerPage = 30,
+        [ValidateRange(0, 100)]
+        [int] $PerPage,
 
         # Get the latest release only
         [Parameter(
