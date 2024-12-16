@@ -42,7 +42,7 @@
 
         # The context to run the command with.
         # Can be either a string or a GitHubContext object.
-        [Parameter()]
+        [Parameter(ValueFromPipeline)]
         [object] $Context = (Get-GitHubContext)
     )
 
