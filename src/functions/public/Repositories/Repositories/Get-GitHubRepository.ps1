@@ -181,7 +181,7 @@ filter Get-GitHubRepository {
     process {
         try {
             $Type = $PSBoundParameters['Type']
-            Write-Verbose "ParamSet: [$($PSCmdlet.ParameterSetName)]"
+            Write-Debug "ParamSet: [$($PSCmdlet.ParameterSetName)]"
             switch ($PSCmdlet.ParameterSetName) {
                 'MyRepos_Type' {
                     $params = @{
@@ -193,7 +193,7 @@ filter Get-GitHubRepository {
                         Since     = $Since
                         Before    = $Before
                     } | Remove-HashtableEntry -NullOrEmptyValues
-                    $params | Format-Table -AutoSize | Out-String | ForEach-Object { Write-Debug $_ }
+                    $params | Format-Table -AutoSize | Out-String -Stream | ForEach-Object { Write-Debug $_ }
                     Get-GitHubMyRepositories @params
                 }
                 'MyRepos_Aff-Vis' {
@@ -207,7 +207,7 @@ filter Get-GitHubRepository {
                         Since       = $Since
                         Before      = $Before
                     } | Remove-HashtableEntry -NullOrEmptyValues
-                    $params | Format-Table -AutoSize | Out-String | ForEach-Object { Write-Debug $_ }
+                    $params | Format-Table -AutoSize | Out-String -Stream | ForEach-Object { Write-Debug $_ }
                     Get-GitHubMyRepositories @params
                 }
                 'ByName' {
@@ -216,7 +216,7 @@ filter Get-GitHubRepository {
                         Owner   = $Owner
                         Repo    = $Repo
                     } | Remove-HashtableEntry -NullOrEmptyValues
-                    $params | Format-Table -AutoSize | Out-String | ForEach-Object { Write-Debug $_ }
+                    $params | Format-Table -AutoSize | Out-String -Stream | ForEach-Object { Write-Debug $_ }
                     Get-GitHubRepositoryByName @params
                 }
                 'ListByID' {
@@ -224,7 +224,7 @@ filter Get-GitHubRepository {
                         Context = $Context
                         Since   = $SinceID
                     } | Remove-HashtableEntry -NullOrEmptyValues
-                    $params | Format-Table -AutoSize | Out-String | ForEach-Object { Write-Debug $_ }
+                    $params | Format-Table -AutoSize | Out-String -Stream | ForEach-Object { Write-Debug $_ }
                     Get-GitHubRepositoryListByID @params
                 }
                 'ListByOrg' {
@@ -236,7 +236,7 @@ filter Get-GitHubRepository {
                         Direction = $Direction
                         PerPage   = $PerPage
                     } | Remove-HashtableEntry -NullOrEmptyValues
-                    $params | Format-Table -AutoSize | Out-String | ForEach-Object { Write-Debug $_ }
+                    $params | Format-Table -AutoSize | Out-String -Stream | ForEach-Object { Write-Debug $_ }
                     Get-GitHubRepositoryListByOrg @params
                 }
                 'ListByUser' {
@@ -248,7 +248,7 @@ filter Get-GitHubRepository {
                         Direction = $Direction
                         PerPage   = $PerPage
                     } | Remove-HashtableEntry -NullOrEmptyValues
-                    $params | Format-Table -AutoSize | Out-String | ForEach-Object { Write-Debug $_ }
+                    $params | Format-Table -AutoSize | Out-String -Stream | ForEach-Object { Write-Debug $_ }
                     Get-GitHubRepositoryListByUser @params
                 }
             }

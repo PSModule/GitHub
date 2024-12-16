@@ -57,11 +57,26 @@
         )]
         [string]$NameCasingStyle
     )
-    [hashtable]$hashtable = @{}
 
-    foreach ($item in $InputObject.PSObject.Properties) {
-        $name = if ($NameCasingStyle) { ($item.Name | Convert-StringCasingStyle -To $NameCasingStyle) } else { $item.Name }
-        $hashtable[$name] = $item.Value
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+        [hashtable]$hashtable = @{}
     }
-    $hashtable
+
+    process {
+        try {
+            foreach ($item in $InputObject.PSObject.Properties) {
+                $name = if ($NameCasingStyle) { ($item.Name | Convert-StringCasingStyle -To $NameCasingStyle) } else { $item.Name }
+                $hashtable[$name] = $item.Value
+            }
+            $hashtable
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
+    }
 }
