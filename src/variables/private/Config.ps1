@@ -15,5 +15,5 @@
         OAuthAppClientID              = '7204ae9b0580f2cb8288'
         DefaultContext                = ''
     }
-    Config             = [GitHubConfig]::new()
+    Config             = $null
 }
