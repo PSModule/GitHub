@@ -34,7 +34,7 @@
         if (-not $script:GitHub.Config.ID -or $Force) {
             try {
                 Write-Debug 'Attempt to load the stored GitHubConfig from ContextVault'
-                $context = [GitHubConfig](Get-Context -ID $script:GitHub.Config.ID)
+                $context = [GitHubConfig](Get-Context -ID $script:GitHub.DefaultConfig.ID)
                 if (-not $context -or $Force) {
                     Write-Debug 'No stored config found. Loading GitHubConfig from defaults'
                     $context = Set-Context -ID $script:GitHub.DefaultConfig.ID -Context $script:GitHub.DefaultConfig -PassThru
