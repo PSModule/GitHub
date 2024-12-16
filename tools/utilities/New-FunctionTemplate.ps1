@@ -10,7 +10,7 @@
         An example
 
         .NOTES
-        General notes
+        [Ttle](link)
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param(
@@ -31,8 +31,8 @@
     begin {
         $commandName = $MyInvocation.MyCommand.Name
         Write-Debug "[$commandName] - Start"
-
         $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
 
         if ([string]::IsNullOrEmpty($Enterprise)) {
             $Enterprise = $Context.Enterprise
