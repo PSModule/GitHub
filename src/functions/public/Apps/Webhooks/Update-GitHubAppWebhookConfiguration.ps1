@@ -35,7 +35,7 @@
         [Parameter()]
         [string] $Secret,
 
-        # Determines whether the SSL certificate of the host for url will be verified when delivering payloads.
+        # Determines whether the SSL certificate of the host for URL will be verified when delivering payloads.
         # We strongly recommend not setting this as you are subject to man-in-the-middle and other attacks.
         [switch] $InsecureSSL,
 
