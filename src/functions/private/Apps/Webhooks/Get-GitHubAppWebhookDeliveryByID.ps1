@@ -1,28 +1,29 @@
-﻿filter Get-GitHubAppByName {
+﻿function Get-GitHubAppWebhookDeliveryByID {
     <#
         .SYNOPSIS
-        Get an app
+        Get a delivery for an app webhook
 
         .DESCRIPTION
-        Gets a single GitHub App using the app's slug.
+        Returns a delivery for the webhook configured for a GitHub App.
+
+        You must use a [JWT](https://docs.github.com/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app)
+        to access this endpoint.
+
 
         .EXAMPLE
-        Get-GitHubAppByName -AppSlug 'github-actions'
+        Get-GitHubAppWebhookDeliveryByID -ID 123456
 
-        Gets the GitHub App with the slug 'github-actions'.
+        Returns the webhook configuration for the authenticated app.
 
         .NOTES
-        [Get an app](https://docs.github.com/en/rest/apps/apps?apiVersion=2022-11-28#get-an-app)
+        [Get a delivery for an app webhook](https://docs.github.com/rest/apps/webhooks#get-a-delivery-for-an-app-webhook)
     #>
-    [OutputType([pscustomobject])]
     [CmdletBinding()]
     param(
-        # The AppSlug is just the URL-friendly name of a GitHub App.
-        # You can find this on the settings page for your GitHub App (e.g., https://github.com/settings/apps/<app_slug>).
-        # Example: 'github-actions'
+        # The ID of the delivery.
         [Parameter(Mandatory)]
-        [Alias('Name')]
-        [string] $AppSlug,
+        [Alias('DeliveryID', 'delivery_id')]
+        [string] $ID,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -34,14 +35,14 @@
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
-        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
+        Assert-GitHubContext -Context $Context -AuthType APP
     }
 
     process {
         try {
             $inputObject = @{
                 Context     = $Context
-                APIEndpoint = "/apps/$AppSlug"
+                APIEndpoint = "/app/hook/deliveries/$ID"
                 Method      = 'GET'
             }
 
@@ -52,6 +53,7 @@
             throw $_
         }
     }
+
     end {
         Write-Debug "[$stackPath] - End"
     }
