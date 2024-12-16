@@ -41,7 +41,7 @@
         if ([string]::IsNullOrEmpty($Organization)) {
             $Organization = $Context.Owner
         }
-        Write-Debug "Organization : [$($Context.Owner)]"
+        Write-Debug "Organization: [$Organization]"
     }
 
     process {

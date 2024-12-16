@@ -49,7 +49,7 @@
         if ([string]::IsNullOrEmpty($Owner)) {
             $Owner = $Context.Owner
         }
-        Write-Debug "Owner : [$($Context.Owner)]"
+        Write-Debug "Owner: [$Owner]"
     }
 
     process {

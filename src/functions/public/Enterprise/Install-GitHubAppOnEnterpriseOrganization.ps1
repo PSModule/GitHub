@@ -50,7 +50,7 @@
         if ([string]::IsNullOrEmpty($Enterprise)) {
             $Enterprise = $Context.Enterprise
         }
-        Write-Debug "Enterprise : [$($Context.Enterprise)]"
+        Write-Debug "Enterprise: [$Enterprise]"
     }
 
     process {

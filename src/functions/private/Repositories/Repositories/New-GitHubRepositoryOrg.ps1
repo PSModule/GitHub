@@ -221,7 +221,7 @@ filter New-GitHubRepositoryOrg {
         if ([string]::IsNullOrEmpty($Owner)) {
             $Owner = $Context.Owner
         }
-        Write-Debug "Owner : [$($Context.Owner)]"
+        Write-Debug "Owner: [$Owner]"
     }
 
     process {

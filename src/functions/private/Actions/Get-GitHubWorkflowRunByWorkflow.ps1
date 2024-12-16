@@ -102,12 +102,12 @@
         if ([string]::IsNullOrEmpty($Owner)) {
             $Owner = $Context.Owner
         }
-        Write-Debug "Owner : [$($Context.Owner)]"
+        Write-Debug "Owner: [$Owner]"
 
         if ([string]::IsNullOrEmpty($Repo)) {
             $Repo = $Context.Repo
         }
-        Write-Debug "Repo : [$($Context.Repo)]"
+        Write-Debug "Repo: [$Repo]"
     }
 
     process {

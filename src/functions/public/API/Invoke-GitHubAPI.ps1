@@ -105,12 +105,12 @@
         if ([string]::IsNullOrEmpty($ApiBaseUri)) {
             $ApiBaseUri = $Context.ApiBaseUri
         }
-        Write-Debug "ApiBaseUri : [$($Context.ApiBaseUri)]"
+        Write-Debug "ApiBaseUri: [$($Context.ApiBaseUri)]"
 
         if ([string]::IsNullOrEmpty($ApiVersion)) {
             $ApiVersion = $Context.ApiVersion
         }
-        Write-Debug "ApiVersion : [$($Context.ApiVersion)]"
+        Write-Debug "ApiVersion: [$($Context.ApiVersion)]"
 
         switch ($TokenType) {
             'ghu' {
