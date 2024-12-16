@@ -5,7 +5,7 @@
 <table>
     <tr>
         <td>Available functions</td>
-        <td>980</td>
+        <td>992</td>
     </tr>
     <tr>
         <td>Covered functions</td>
@@ -13,11 +13,11 @@
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>821</td>
+        <td>833</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>16.22%</td>
+        <td>16.03%</td>
     </tr>
 </table>
 
@@ -52,6 +52,12 @@
 | `/codes_of_conduct`                                                                                                       |                    | :x:                |                    |                    |                    |
 | `/codes_of_conduct/{key}`                                                                                                 |                    | :x:                |                    |                    |                    |
 | `/emojis`                                                                                                                 |                    | :white_check_mark: |                    |                    |                    |
+| `/enterprises/{enterprise}/code-security/configurations`                                                                  |                    | :x:                |                    | :x:                |                    |
+| `/enterprises/{enterprise}/code-security/configurations/defaults`                                                         |                    | :x:                |                    |                    |                    |
+| `/enterprises/{enterprise}/code-security/configurations/{configuration_id}`                                               | :x:                | :x:                | :x:                |                    |                    |
+| `/enterprises/{enterprise}/code-security/configurations/{configuration_id}/attach`                                        |                    |                    |                    | :x:                |                    |
+| `/enterprises/{enterprise}/code-security/configurations/{configuration_id}/defaults`                                      |                    |                    |                    |                    | :x:                |
+| `/enterprises/{enterprise}/code-security/configurations/{configuration_id}/repositories`                                  |                    | :x:                |                    |                    |                    |
 | `/enterprises/{enterprise}/dependabot/alerts`                                                                             |                    | :x:                |                    |                    |                    |
 | `/enterprises/{enterprise}/secret-scanning/alerts`                                                                        |                    | :x:                |                    |                    |                    |
 | `/events`                                                                                                                 |                    | :white_check_mark: |                    |                    |                    |
@@ -348,6 +354,8 @@
 | `/repos/{owner}/{repo}/check-suites/{check_suite_id}/rerequest`                                                           |                    |                    |                    | :x:                |                    |
 | `/repos/{owner}/{repo}/code-scanning/alerts`                                                                              |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}`                                                               |                    | :x:                | :x:                |                    |                    |
+| `/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix`                                                       |                    | :x:                |                    | :x:                |                    |
+| `/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix/commits`                                               |                    |                    |                    | :x:                |                    |
 | `/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances`                                                     |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/code-scanning/analyses`                                                                            |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}`                                                              | :x:                | :x:                |                    |                    |                    |
