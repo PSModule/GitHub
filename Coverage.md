@@ -9,15 +9,15 @@
     </tr>
     <tr>
         <td>Covered functions</td>
-        <td>156</td>
+        <td>159</td>
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>824</td>
+        <td>821</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>15.92%</td>
+        <td>16.22%</td>
     </tr>
 </table>
 
@@ -30,10 +30,10 @@
 | `/advisories/{ghsa_id}`                                                                                                   |                    | :x:                |                    |                    |                    |
 | `/app`                                                                                                                    |                    | :white_check_mark: |                    |                    |                    |
 | `/app-manifests/{code}/conversions`                                                                                       |                    |                    |                    | :x:                |                    |
-| `/app/hook/config`                                                                                                        |                    | :white_check_mark: | :x:                |                    |                    |
+| `/app/hook/config`                                                                                                        |                    | :white_check_mark: | :white_check_mark: |                    |                    |
 | `/app/hook/deliveries`                                                                                                    |                    | :white_check_mark: |                    |                    |                    |
-| `/app/hook/deliveries/{delivery_id}`                                                                                      |                    | :x:                |                    |                    |                    |
-| `/app/hook/deliveries/{delivery_id}/attempts`                                                                             |                    |                    |                    | :x:                |                    |
+| `/app/hook/deliveries/{delivery_id}`                                                                                      |                    | :white_check_mark: |                    |                    |                    |
+| `/app/hook/deliveries/{delivery_id}/attempts`                                                                             |                    |                    |                    | :white_check_mark: |                    |
 | `/app/installation-requests`                                                                                              |                    | :x:                |                    |                    |                    |
 | `/app/installations`                                                                                                      |                    | :white_check_mark: |                    |                    |                    |
 | `/app/installations/{installation_id}`                                                                                    | :x:                | :x:                |                    |                    |                    |
