@@ -34,13 +34,28 @@
         [string] $Value
     )
 
-    Write-Verbose "Env: [$Name] = [$Value]"
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+    }
 
-    $guid = [guid]::NewGuid().Guid
-    $content = @"
+    process {
+        try {
+            Write-Verbose "Env: [$Name] = [$Value]"
+
+            $guid = [guid]::NewGuid().Guid
+            $content = @"
 $Name<<$guid
 $Value
 $guid
 "@
-    $content | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+            $content | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
+    }
 }

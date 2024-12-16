@@ -34,29 +34,43 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
 
-    if ([string]::IsNullOrEmpty($Owner)) {
-        $Owner = $Context.Owner
-    }
-    Write-Debug "Owner : [$($Context.Owner)]"
+        if ([string]::IsNullOrEmpty($Owner)) {
+            $Owner = $Context.Owner
+        }
+        Write-Debug "Owner: [$Owner]"
 
-    if ([string]::IsNullOrEmpty($Repo)) {
-        $Repo = $Context.Repo
-    }
-    Write-Debug "Repo : [$($Context.Repo)]"
-
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = "/repos/$Owner/$Repo/license"
-        Accept      = 'application/vnd.github+json'
-        Method      = 'GET'
+        if ([string]::IsNullOrEmpty($Repo)) {
+            $Repo = $Context.Repo
+        }
+        Write-Debug "Repo: [$Repo]"
     }
 
-    Invoke-GitHubAPI @inputObject | ForEach-Object {
-        $Response = $_.Response
-        $rawContent = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($Response.content))
-        $Response | Add-Member -NotePropertyName 'raw_content' -NotePropertyValue $rawContent -Force
-        $Response
+    process {
+        try {
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = "/repos/$Owner/$Repo/license"
+                Accept      = 'application/vnd.github+json'
+                Method      = 'GET'
+            }
+
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                $Response = $_.Response
+                $rawContent = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($Response.content))
+                $Response | Add-Member -NotePropertyName 'raw_content' -NotePropertyValue $rawContent -Force
+                $Response
+            }
+        } catch {
+            throw $_
+        }
+    }
+    end {
+        Write-Debug "[$stackPath] - End"
     }
 }

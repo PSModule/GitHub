@@ -32,17 +32,32 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = "/user/following/$Username"
-        Method      = 'DELETE'
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 
-    if ($PSCmdlet.ShouldProcess("User [$Username]", 'Unfollow')) {
-        $null = Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+    process {
+        try {
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = "/user/following/$Username"
+                Method      = 'DELETE'
+            }
+
+            if ($PSCmdlet.ShouldProcess("User [$Username]", 'Unfollow')) {
+                $null = Invoke-GitHubAPI @inputObject | ForEach-Object {
+                    Write-Output $_.Response
+                }
+            }
+        } catch {
+            throw $_
         }
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
     }
 }

@@ -55,9 +55,24 @@
         [string] $Title
     )
 
-    if ($env:GITHUB_ACTIONS -eq 'true') {
-        Write-Host "::error file=$Name,line=$Line,col=$Column,endColumn=$EndColumn,endLine=$EndLine,title=$Title::$Message"
-    } else {
-        Write-Error $Message
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+    }
+
+    process {
+        try {
+            if ($env:GITHUB_ACTIONS -eq 'true') {
+                Write-Host "::error file=$Name,line=$Line,col=$Column,endColumn=$EndColumn,endLine=$EndLine,title=$Title::$Message"
+            } else {
+                Write-Error $Message
+            }
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
     }
 }

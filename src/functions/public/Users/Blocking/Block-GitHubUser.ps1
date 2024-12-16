@@ -24,21 +24,22 @@
         [Block a user from an organization](https://docs.github.com/rest/orgs/blocking#block-a-user-from-an-organization)
     #>
     [OutputType([bool])]
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(
         # The handle for the GitHub user account.
         [Parameter(
-            Mandatory,
-            ValueFromPipeline,
-            ValueFromPipelineByPropertyName
+            Mandatory
         )]
         [Alias('login')]
         [string] $Username,
 
         # The organization name. The name is not case sensitive.
         [Parameter(
-            ValueFromPipeline,
-            ValueFromPipelineByPropertyName
+            Mandatory,
+            ParameterSetName = 'Organization'
+        )]
+        [Parameter(
+            ParameterSetName = '__AllParameterSets'
         )]
         [Alias('org')]
         [Alias('owner')]
@@ -50,16 +51,29 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-
-    if ([string]::IsNullOrEmpty($Owner)) {
-        $Organization = $Context.Owner
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
-    Write-Debug "Organization : [$($Context.Owner)]"
 
-    if ($Organization) {
-        Block-GitHubUserByOrganization -Organization $Organization -Username $Username -Context $Context
-    } else {
-        Block-GitHubUserByUser -Username $Username -Context $Context
+    process {
+        try {
+            switch ($PSCmdlet.ParameterSetName) {
+                'Organization' {
+                    Block-GitHubUserByOrganization -Organization $Organization -Username $Username -Context $Context
+                }
+                '__AllParameterSets' {
+                    Block-GitHubUserByUser -Username $Username -Context $Context
+                }
+            }
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
     }
 }

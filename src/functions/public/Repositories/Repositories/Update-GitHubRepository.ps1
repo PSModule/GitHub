@@ -177,72 +177,79 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
 
-    if ([string]::IsNullOrEmpty($Owner)) {
-        $Owner = $Context.Owner
-    }
-    Write-Debug "Owner : [$($Context.Owner)]"
-
-    if ([string]::IsNullOrEmpty($Repo)) {
-        $Repo = $Context.Repo
-    }
-    Write-Debug "Repo : [$($Context.Repo)]"
-
-    $body = @{
-        name                            = $Name
-        description                     = $Description
-        homepage                        = $Homepage
-        visibility                      = $Visibility
-        private                         = $Visibility -eq 'private'
-        default_branch                  = $DefaultBranch
-        squash_merge_commit_title       = $SquashMergeCommitTitle
-        squash_merge_commit_message     = $SquashMergeCommitMessage
-        merge_commit_title              = $MergeCommitTitle
-        merge_commit_message            = $MergeCommitMessage
-
-        advanced_security               = if ($EnableAdvancedSecurity.IsPresent) {
-            @{
-                status = if ($EnableAdvancedSecurity) { 'enabled' } else { 'disabled' }
-            }
-        } else { $null }
-        secret_scanning                 = if ($EnableSecretScanning.IsPresent) {
-            @{
-                status = if ($EnableSecretScanning) { 'enabled' } else { 'disabled' }
-            }
-        } else { $null }
-        secret_scanning_push_protection = if ($EnableSecretScanningPushProtection.IsPresent) {
-            @{
-                status = if ($EnableSecretScanningPushProtection) { 'enabled' } else { 'disabled' }
-            }
-        } else { $null }
-        has_issues                      = if ($HasIssues.IsPresent) { $HasIssues } else { $null }
-        has_projects                    = if ($HasProjects.IsPresent) { $HasProjects } else { $null }
-        has_wiki                        = if ($HasWiki.IsPresent) { $HasWiki } else { $null }
-        is_template                     = if ($IsTemplate.IsPresent) { $IsTemplate } else { $null }
-        allow_squash_merge              = if ($AllowSquashMerge.IsPresent) { $AllowSquashMerge } else { $null }
-        allow_merge_commit              = if ($AllowMergeCommit.IsPresent) { $AllowMergeCommit } else { $null }
-        allow_rebase_merge              = if ($AllowRebaseMerge.IsPresent) { $AllowRebaseMerge } else { $null }
-        allow_auto_merge                = if ($AllowAutoMerge.IsPresent) { $AllowAutoMerge } else { $null }
-        allow_update_branch             = if ($AllowUpdateMerge.IsPresent) { $AllowUpdateMerge } else { $null }
-        delete_branch_on_merge          = if ($DeleteBranchOnMerge.IsPresent) { $DeleteBranchOnMerge } else { $null }
-        archived                        = if ($Archived.IsPresent) { $Archived } else { $null }
-        allow_forking                   = if ($AllowForking.IsPresent) { $AllowForking } else { $null }
-        web_commit_signoff_required     = if ($WebCommitSignoffRequired.IsPresent) { $WebCommitSignoffRequired } else { $null }
-    }
-
-    Remove-HashtableEntry -Hashtable $body -NullOrEmptyValues
-
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = "/repos/$Owner/$Repo"
-        Method      = 'PATCH'
-        Body        = $body
-    }
-
-    if ($PSCmdlet.ShouldProcess("Repository [$Owner/$Repo]", 'Update')) {
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+        if ([string]::IsNullOrEmpty($Owner)) {
+            $Owner = $Context.Owner
         }
+        Write-Debug "Owner: [$Owner]"
+
+        if ([string]::IsNullOrEmpty($Repo)) {
+            $Repo = $Context.Repo
+        }
+        Write-Debug "Repo: [$Repo]"
+    }
+
+    process {
+        try {
+            $body = @{
+                name                            = $Name
+                description                     = $Description
+                homepage                        = $Homepage
+                visibility                      = $Visibility
+                private                         = $Visibility -eq 'private'
+                default_branch                  = $DefaultBranch
+                squash_merge_commit_title       = $SquashMergeCommitTitle
+                squash_merge_commit_message     = $SquashMergeCommitMessage
+                merge_commit_title              = $MergeCommitTitle
+                merge_commit_message            = $MergeCommitMessage
+                advanced_security               = $EnableAdvancedSecurity ? @{
+                    status = $EnableAdvancedSecurity ? 'enabled' : 'disabled'
+                } : $null
+                secret_scanning                 = $EnableSecretScanning ? @{
+                    status = $EnableSecretScanning ? 'enabled' : 'disabled'
+                } : $null
+                secret_scanning_push_protection = $EnableSecretScanningPushProtection ? @{
+                    status = $EnableSecretScanningPushProtection ? 'enabled' : 'disabled'
+                } : $null
+                has_issues                      = $HasIssues ? $HasIssues : $null
+                has_projects                    = $HasProjects ? $HasProjects : $null
+                has_wiki                        = $HasWiki ? $HasWiki : $null
+                is_template                     = $IsTemplate ? $IsTemplate : $null
+                allow_squash_merge              = $AllowSquashMerge ? $AllowSquashMerge : $null
+                allow_merge_commit              = $AllowMergeCommit ? $AllowMergeCommit : $null
+                allow_rebase_merge              = $AllowRebaseMerge ? $AllowRebaseMerge : $null
+                allow_auto_merge                = $AllowAutoMerge ? $AllowAutoMerge : $null
+                allow_update_branch             = $AllowUpdateMerge ? $AllowUpdateMerge : $null
+                delete_branch_on_merge          = $DeleteBranchOnMerge ? $DeleteBranchOnMerge : $null
+                archived                        = $Archived ? $Archived : $null
+                allow_forking                   = $AllowForking ? $AllowForking : $null
+                web_commit_signoff_required     = $WebCommitSignoffRequired ? $WebCommitSignoffRequired : $null
+            }
+            $body | Remove-HashtableEntry -NullOrEmptyValues
+
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = "/repos/$Owner/$Repo"
+                Method      = 'PATCH'
+                Body        = $body
+            }
+
+            if ($PSCmdlet.ShouldProcess("Repository [$Owner/$Repo]", 'Update')) {
+                Invoke-GitHubAPI @inputObject | ForEach-Object {
+                    Write-Output $_.Response
+                }
+            }
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
     }
 }

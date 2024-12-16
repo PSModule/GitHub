@@ -37,23 +37,37 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
 
-    if ([string]::IsNullOrEmpty($Owner)) {
-        $Organization = $Context.Owner
+        if ([string]::IsNullOrEmpty($Owner)) {
+            $Owner = $Context.Owner
+        }
+        Write-Debug "Owner: [$Owner]"
     }
-    Write-Debug "Organization : [$($Context.Owner)]"
 
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = "/orgs/$Organization"
-        Method      = 'DELETE'
-    }
+    process {
+        try {
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = "/orgs/$Organization"
+                Method      = 'DELETE'
+            }
 
-    if ($PSCmdlet.ShouldProcess("organization [$Organization]", 'Delete')) {
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            if ($PSCmdlet.ShouldProcess("organization [$Organization]", 'Delete')) {
+                Invoke-GitHubAPI @inputObject | ForEach-Object {
+                    Write-Output $_.Response
+                }
+            }
+        } catch {
+            throw $_
         }
     }
 
+    end {
+        Write-Debug "[$stackPath] - End"
+    }
 }

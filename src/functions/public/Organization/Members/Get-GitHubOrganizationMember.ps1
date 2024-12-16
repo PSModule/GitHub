@@ -41,27 +41,42 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
 
-    if ([string]::IsNullOrEmpty($Owner)) {
-        $Organization = $Context.Owner
-    }
-    Write-Debug "Organization : [$($Context.Owner)]"
-
-    $body = @{
-        filter   = $Filter
-        role     = $Role
-        per_page = $PerPage
-    }
-
-    $inputObject = @{
-        Context     = $Context
-        Body        = $body
-        Method      = 'Get'
-        APIEndpoint = "/orgs/$Organization/members"
+        if ([string]::IsNullOrEmpty($Owner)) {
+            $Owner = $Context.Owner
+        }
+        Write-Debug "Owner: [$Owner]"
     }
 
-    Invoke-GitHubAPI @inputObject | ForEach-Object {
-        Write-Output $_.Response
+    process {
+        try {
+            $body = @{
+                filter   = $Filter
+                role     = $Role
+                per_page = $PerPage
+            }
+
+            $inputObject = @{
+                Context     = $Context
+                Body        = $body
+                Method      = 'Get'
+                APIEndpoint = "/orgs/$Organization/members"
+            }
+
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
+            }
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
     }
 }

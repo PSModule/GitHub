@@ -36,39 +36,54 @@
         [string] $Path = $env:GITHUB_OUTPUT
     )
 
-    if (-not (Test-Path -Path $Path)) {
-        throw "File not found: $Path"
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
     }
 
-    $outputs = Get-GitHubOutput -Path $Path -AsHashtable
-
-    if ($Value -Is [securestring]) {
-        $Value = $Value | ConvertFrom-SecureString -AsPlainText -Force
-        Add-Mask -Value $Value
-    }
-
-    if ([string]::IsNullOrEmpty($env:GITHUB_ACTION)) {
-        Write-Warning 'Cannot create output as the step has no ID.'
-    }
-
-    Write-Verbose "Output: [$Name] = [$Value]"
-
-    # If the script is running in a GitHub composite action, accumulate the output under the 'result' key, else append the key-value pair directly.
-    if ($env:PSMODULE_GITHUB_SCRIPT) {
-        if (-not $outputs.result) {
-            $outputs.result = @{
-                $Name = $Value
+    process {
+        try {
+            if (-not (Test-Path -Path $Path)) {
+                throw "File not found: $Path"
             }
-        } else {
-            $outputs.result[$Name] = $Value
+
+            $outputs = Get-GitHubOutput -Path $Path -AsHashtable
+
+            if ($Value -Is [securestring]) {
+                $Value = $Value | ConvertFrom-SecureString -AsPlainText -Force
+                Add-Mask -Value $Value
+            }
+
+            if ([string]::IsNullOrEmpty($env:GITHUB_ACTION)) {
+                Write-Warning 'Cannot create output as the step has no ID.'
+            }
+
+            Write-Verbose "Output: [$Name] = [$Value]"
+
+            # If the script is running in a GitHub composite action, accumulate the output under the 'result' key, else append the key-value pair directly.
+            if ($env:PSMODULE_GITHUB_SCRIPT) {
+                if (-not $outputs.result) {
+                    $outputs.result = @{
+                        $Name = $Value
+                    }
+                } else {
+                    $outputs.result[$Name] = $Value
+                }
+            } else {
+                $outputs[$Name] = $Value
+            }
+
+            Write-Verbose "Output: [$Name] avaiable as `${{ steps.$env:GITHUB_ACTION.outputs.$Name }}'"
+
+            if ($PSCmdlet.ShouldProcess('GitHub Output', 'Set')) {
+                $outputs | ConvertTo-GitHubOutput | Set-Content -Path $Path
+            }
+        } catch {
+            throw $_
         }
-    } else {
-        $outputs[$Name] = $Value
     }
 
-    Write-Verbose "Output: [$Name] avaiable as `${{ steps.$env:GITHUB_ACTION.outputs.$Name }}'"
-
-    if ($PSCmdlet.ShouldProcess('GitHub Output', 'Set')) {
-        $outputs | ConvertTo-GitHubOutput | Set-Content -Path $Path
+    end {
+        Write-Debug "[$stackPath] - End"
     }
 }

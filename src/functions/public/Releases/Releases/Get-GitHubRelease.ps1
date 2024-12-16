@@ -78,30 +78,45 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
 
-    if ([string]::IsNullOrEmpty($Owner)) {
-        $Owner = $Context.Owner
+        if ([string]::IsNullOrEmpty($Owner)) {
+            $Owner = $Context.Owner
+        }
+        Write-Debug "Owner: [$Owner]"
+
+        if ([string]::IsNullOrEmpty($Repo)) {
+            $Repo = $Context.Repo
+        }
+        Write-Debug "Repo: [$Repo]"
     }
-    Write-Debug "Owner : [$($Context.Owner)]"
 
-    if ([string]::IsNullOrEmpty($Repo)) {
-        $Repo = $Context.Repo
+    process {
+        try {
+            switch ($PSCmdlet.ParameterSetName) {
+                'All' {
+                    Get-GitHubReleaseAll -Owner $Owner -Repo $Repo -PerPage $PerPage -Context $Context
+                }
+                'Latest' {
+                    Get-GitHubReleaseLatest -Owner $Owner -Repo $Repo -Context $Context
+                }
+                'Tag' {
+                    Get-GitHubReleaseByTagName -Owner $Owner -Repo $Repo -Tag $Tag -Context $Context
+                }
+                'ID' {
+                    Get-GitHubReleaseByID -Owner $Owner -Repo $Repo -ID $ID -Context $Context
+                }
+            }
+        } catch {
+            throw $_
+        }
     }
-    Write-Debug "Repo : [$($Context.Repo)]"
 
-    switch ($PSCmdlet.ParameterSetName) {
-        'All' {
-            Get-GitHubReleaseAll -Owner $Owner -Repo $Repo -PerPage $PerPage -Context $Context
-        }
-        'Latest' {
-            Get-GitHubReleaseLatest -Owner $Owner -Repo $Repo -Context $Context
-        }
-        'Tag' {
-            Get-GitHubReleaseByTagName -Owner $Owner -Repo $Repo -Tag $Tag -Context $Context
-        }
-        'ID' {
-            Get-GitHubReleaseByID -Owner $Owner -Repo $Repo -ID $ID -Context $Context
-        }
+    end {
+        Write-Debug "[$stackPath] - End"
     }
 }

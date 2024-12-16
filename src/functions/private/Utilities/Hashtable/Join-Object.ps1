@@ -73,24 +73,40 @@
         [switch] $AsHashtable
     )
 
-    if ($Main -isnot [hashtable]) {
-        $Main = $Main | ConvertTo-HashTable
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
     }
-    $hashtable = $Main.clone()
 
-    foreach ($Override in $Overrides) {
-        if ($Override -isnot [hashtable]) {
-            $Override = $Override | ConvertTo-HashTable
+    process {
+        try {
+
+            if ($Main -isnot [hashtable]) {
+                $Main = $Main | ConvertTo-HashTable
+            }
+            $hashtable = $Main.clone()
+
+            foreach ($Override in $Overrides) {
+                if ($Override -isnot [hashtable]) {
+                    $Override = $Override | ConvertTo-HashTable
+                }
+
+                $Override.Keys | ForEach-Object {
+                    $hashtable[$_] = $Override[$_]
+                }
+            }
+
+            if ($AsHashtable) {
+                return $hashtable
+            }
+
+            $hashtable | ConvertFrom-HashTable
+        } catch {
+            throw $_
         }
-
-        $Override.Keys | ForEach-Object {
-            $hashtable[$_] = $Override[$_]
-        }
     }
 
-    if ($AsHashtable) {
-        return $hashtable
+    end {
+        Write-Debug "[$stackPath] - End"
     }
-
-    $hashtable | ConvertFrom-HashTable
 }

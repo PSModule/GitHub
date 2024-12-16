@@ -40,27 +40,41 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-
-    $body = @{
-        per_page = $PerPage
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = "/user/blocks/$Username"
-        Method      = 'GET'
-        Body        = $body
-    }
+    process {
+        try {
+            $body = @{
+                per_page = $PerPage
+            }
 
-    try {
-        (Invoke-GitHubAPI @inputObject).StatusCode -eq 204
-    } catch {
-        if ($_.Exception.Response.StatusCode.Value__ -eq 404) {
-            return $false
-        } else {
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = "/user/blocks/$Username"
+                Method      = 'GET'
+                Body        = $body
+            }
+
+            try {
+                (Invoke-GitHubAPI @inputObject).StatusCode -eq 204
+            } catch {
+                if ($_.Exception.Response.StatusCode.Value__ -eq 404) {
+                    return $false
+                } else {
+                    throw $_
+                }
+            }
+        } catch {
             throw $_
         }
     }
 
+    end {
+        Write-Debug "[$stackPath] - End"
+    }
 }

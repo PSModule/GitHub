@@ -1,4 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '5.0.3' }
+﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '5.0.4' }
 
 function Get-GitHubContext {
     <#
@@ -37,13 +37,12 @@ function Get-GitHubContext {
     )
 
     begin {
-        $commandName = $MyInvocation.MyCommand.Name
-        Write-Verbose "[$commandName] - Start"
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
         $null = Get-GitHubConfig
     }
 
     process {
-
         switch ($PSCmdlet.ParameterSetName) {
             'NamedContext' {
                 Write-Verbose "NamedContext: [$Context]"
@@ -89,6 +88,6 @@ function Get-GitHubContext {
     }
 
     end {
-        Write-Verbose "[$commandName] - End"
+        Write-Debug "[$stackPath] - End"
     }
 }

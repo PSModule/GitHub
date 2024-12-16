@@ -67,31 +67,41 @@ filter Get-GitHubLicense {
     }
 
     begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
-
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
         if ([string]::IsNullOrEmpty($Owner)) {
             $Owner = $Context.Owner
         }
-        Write-Debug "Owner : [$($Context.Owner)]"
+        Write-Debug "Owner: [$Owner]"
 
         if ([string]::IsNullOrEmpty($Repo)) {
             $Repo = $Context.Repo
         }
-        Write-Debug "Repo : [$($Context.Repo)]"
+        Write-Debug "Repo: [$Repo]"
     }
 
     process {
-        $Name = $PSBoundParameters['Name']
-        switch ($PSCmdlet.ParameterSetName) {
-            'List' {
-                Get-GitHubLicenseList -Context $Context
+        try {
+            $Name = $PSBoundParameters['Name']
+            switch ($PSCmdlet.ParameterSetName) {
+                'List' {
+                    Get-GitHubLicenseList -Context $Context
+                }
+                'Name' {
+                    Get-GitHubLicenseByName -Name $Name -Context $Context
+                }
+                'Repository' {
+                    Get-GitHubRepositoryLicense -Owner $Owner -Repo $Repo -Context $Context
+                }
             }
-            'Name' {
-                Get-GitHubLicenseByName -Name $Name -Context $Context
-            }
-            'Repository' {
-                Get-GitHubRepositoryLicense -Owner $Owner -Repo $Repo -Context $Context
-            }
+        } catch {
+            throw $_
         }
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
     }
 }

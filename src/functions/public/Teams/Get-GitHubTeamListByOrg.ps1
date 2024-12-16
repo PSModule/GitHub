@@ -26,20 +26,35 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
 
-    if ([string]::IsNullOrEmpty($Owner)) {
-        $Organization = $Context.Owner
+        if ([string]::IsNullOrEmpty($Organization)) {
+            $Organization = $Context.Owner
+        }
+        Write-Debug "Organization: [$Organization]"
     }
-    Write-Debug "Organization : [$($Context.Owner)]"
 
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = "/orgs/$Organization/teams"
-        Method      = 'Get'
+    process {
+        try {
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = "/orgs/$Organization/teams"
+                Method      = 'Get'
+            }
+
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
+            }
+        } catch {
+            throw $_
+        }
     }
 
-    Invoke-GitHubAPI @inputObject | ForEach-Object {
-        Write-Output $_.Response
+    end {
+        Write-Debug "[$stackPath] - End"
     }
 }

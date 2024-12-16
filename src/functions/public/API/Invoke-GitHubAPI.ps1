@@ -83,8 +83,8 @@
     )
 
     begin {
-        $commandName = $MyInvocation.MyCommand.Name
-        Write-Verbose "[$commandName] - Start"
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Write-Debug 'Invoking GitHub API...'
         Write-Debug 'Parameters:'
@@ -105,12 +105,12 @@
         if ([string]::IsNullOrEmpty($ApiBaseUri)) {
             $ApiBaseUri = $Context.ApiBaseUri
         }
-        Write-Debug "ApiBaseUri : [$($Context.ApiBaseUri)]"
+        Write-Debug "ApiBaseUri: [$($Context.ApiBaseUri)]"
 
         if ([string]::IsNullOrEmpty($ApiVersion)) {
             $ApiVersion = $Context.ApiVersion
         }
-        Write-Debug "ApiVersion : [$($Context.ApiVersion)]"
+        Write-Debug "ApiVersion: [$($Context.ApiVersion)]"
 
         switch ($TokenType) {
             'ghu' {
@@ -251,6 +251,6 @@
     }
 
     end {
-        Write-Verbose "[$commandName] - End"
+        Write-Debug "[$stackPath] - End"
     }
 }

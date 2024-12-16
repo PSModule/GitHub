@@ -47,27 +47,31 @@
     )
 
     begin {
-        $commandName = $MyInvocation.MyCommand.Name
-        Write-Verbose "[$commandName] - Start"
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
     }
 
     process {
-        Remove-GitHubContext -Context $Context
-        $isDefaultContext = $Context.Name -eq $script:GitHub.Config.DefaultContext
-        if ($isDefaultContext) {
-            Remove-GitHubConfig -Name 'DefaultContext'
-            Write-Warning 'There is no longer a default context!'
-            Write-Warning "Please set a new default context using 'Set-GitHubDefaultContext -Name <context>'"
-        }
+        try {
+            Remove-GitHubContext -Context $Context
+            $isDefaultContext = $Context.Name -eq $script:GitHub.Config.DefaultContext
+            if ($isDefaultContext) {
+                Remove-GitHubConfig -Name 'DefaultContext'
+                Write-Warning 'There is no longer a default context!'
+                Write-Warning "Please set a new default context using 'Set-GitHubDefaultContext -Name <context>'"
+            }
 
-        if (-not $Silent) {
-            Write-Host '✓ ' -ForegroundColor Green -NoNewline
-            Write-Host "Logged out of GitHub! [$Context]"
+            if (-not $Silent) {
+                Write-Host '✓ ' -ForegroundColor Green -NoNewline
+                Write-Host "Logged out of GitHub! [$Context]"
+            }
+        } catch {
+            throw $_
         }
     }
 
     end {
-        Write-Verbose "[$commandName] - End"
+        Write-Debug "[$stackPath] - End"
     }
 }

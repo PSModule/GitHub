@@ -46,7 +46,22 @@
         [string[]] $Value
     )
 
-    foreach ($item in $Value) {
-        Write-Host "::add-mask::$item"
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+    }
+
+    process {
+        try {
+            foreach ($item in $Value) {
+                Write-Host "::add-mask::$item"
+            }
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
     }
 }

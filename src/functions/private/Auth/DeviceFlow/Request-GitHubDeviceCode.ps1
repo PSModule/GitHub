@@ -34,29 +34,40 @@
         [string] $HostName
     )
 
-    $headers = @{
-        Accept = 'application/json'
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
     }
 
-    $body = @{
-        client_id = $ClientID
-        scope     = $Scope
+    process {
+        $headers = @{
+            Accept = 'application/json'
+        }
+
+        $body = @{
+            client_id = $ClientID
+            scope     = $Scope
+        }
+
+        $RESTParams = @{
+            Uri     = "https://$HostName/login/device/code"
+            Method  = 'POST'
+            Body    = $body
+            Headers = $headers
+        }
+
+        try {
+            Write-Debug ($RESTParams.GetEnumerator() | Out-String)
+
+            $deviceCodeResponse = Invoke-RestMethod @RESTParams -Verbose:$false
+            return $deviceCodeResponse
+        } catch {
+            Write-Error $_
+            throw $_
+        }
     }
 
-    $RESTParams = @{
-        Uri     = "https://$HostName/login/device/code"
-        Method  = 'POST'
-        Body    = $body
-        Headers = $headers
-    }
-
-    try {
-        Write-Debug ($RESTParams.GetEnumerator() | Out-String)
-
-        $deviceCodeResponse = Invoke-RestMethod @RESTParams -Verbose:$false
-        return $deviceCodeResponse
-    } catch {
-        Write-Error $_
-        throw $_
+    end {
+        Write-Debug "[$stackPath] - End"
     }
 }

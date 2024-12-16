@@ -20,10 +20,24 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-    $tokenExpirationDate = $Context.TokenExpirationDate
-    $currentDateTime = Get-Date
-    $remainingDuration = [datetime]$tokenExpirationDate - $currentDateTime
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+    }
 
-    $remainingDuration.TotalHours -lt $script:GitHub.Config.AccessTokenGracePeriodInHours
+    process {
+        try {
+            $tokenExpirationDate = $Context.TokenExpirationDate
+            $currentDateTime = Get-Date
+            $remainingDuration = [datetime]$tokenExpirationDate - $currentDateTime
+            $remainingDuration.TotalHours -lt $script:GitHub.Config.AccessTokenGracePeriodInHours
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
+    }
 }

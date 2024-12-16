@@ -1,10 +1,24 @@
 ﻿filter Get-GitHubMarkdown {
     <#
+        .SYNOPSIS
+        Render a Markdown document
+
+        .DESCRIPTION
+        Converts Markdown to HTML
+
+        .EXAMPLE
+        Get-GitHubMarkdown -Text "Hello **world**"
+        "<p>Hello <strong>world</strong></p>"
+
+        Renders the Markdown text "Hello **world**" to HTML.
+
         .NOTES
         [Render a Markdown document](https://docs.github.com/en/rest/markdown/markdown#render-a-markdown-document)
     #>
+    [OutputType([string])]
     [CmdletBinding()]
     param(
+        # The Markdown text to render in HTML.
         [Parameter(
             Mandatory,
             ValueFromPipeline,
@@ -12,11 +26,13 @@
         )]
         [switch] $Text,
 
+        # The rendering mode.
         [Parameter()]
         [ValidateSet('markdown', 'gfm')]
         [string] $Mode,
 
-        #TODO: Need docs
+        # The repository context to use when creating references in `gfm` mode. For example, setting `context` to `octo-org/octo-repo` will change the
+        # text `#42` into an HTML link to issue 42 in the `octo-org/octo-repo` repository.
         [Parameter()]
         [string] $RepoContext,
 
@@ -26,23 +42,37 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-
-    $body = @{
-        context = $RepoContext
-        mode    = $Mode
-        text    = $Text
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = '/markdown'
-        Method      = 'POST'
-        Body        = $body
+    process {
+        try {
+            $body = @{
+                context = $RepoContext
+                mode    = $Mode
+                text    = $Text
+            }
+
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = '/markdown'
+                Method      = 'POST'
+                Body        = $body
+            }
+
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
+            }
+        } catch {
+            throw $_
+        }
     }
 
-    Invoke-GitHubAPI @inputObject | ForEach-Object {
-        Write-Output $_.Response
+    end {
+        Write-Debug "[$stackPath] - End"
     }
-
 }

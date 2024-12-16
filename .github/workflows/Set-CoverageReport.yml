@@ -16,6 +16,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Initialize-PSModule
+        uses: PSModule/Initialize-PSModule@v1
+
       - name: Update coverage report
         uses: PSModule/GitHub-Script@v1
         with:

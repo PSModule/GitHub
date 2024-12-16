@@ -115,7 +115,7 @@ filter Get-GitHubRepository {
         [Parameter(ParameterSetName = 'ListByOrg')]
         [Parameter(ParameterSetName = 'ListByUser')]
         [ValidateSet('asc', 'desc')]
-        [string] $Direction,
+        [string] $Direction = 'asc',
 
         # The number of results per page (max 100).
         [Parameter(ParameterSetName = 'MyRepos')]
@@ -162,87 +162,108 @@ filter Get-GitHubRepository {
     }
 
     begin {
-        $Type = $PSBoundParameters['Type']
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
 
         if ([string]::IsNullOrEmpty($Owner)) {
             $Owner = $Context.Owner
         }
-        Write-Debug "Owner : [$($Context.Owner)]"
+        Write-Debug "Owner: [$Owner]"
 
         if ([string]::IsNullOrEmpty($Repo)) {
             $Repo = $Context.Repo
         }
-        Write-Debug "Repo : [$($Context.Repo)]"
+        Write-Debug "Repo: [$Repo]"
     }
 
     process {
-        $params = @{
-            Context = $Context
+        try {
+            $Type = $PSBoundParameters['Type']
+            Write-Debug "ParamSet: [$($PSCmdlet.ParameterSetName)]"
+            switch ($PSCmdlet.ParameterSetName) {
+                'MyRepos_Type' {
+                    $params = @{
+                        Context   = $Context
+                        Type      = $Type
+                        Sort      = $Sort
+                        Direction = $Direction
+                        PerPage   = $PerPage
+                        Since     = $Since
+                        Before    = $Before
+                    }
+                    $params | Remove-HashtableEntry -NullOrEmptyValues
+                    Write-Verbose ($params | Format-List | Out-String)
+                    Get-GitHubMyRepositories @params
+                }
+                'MyRepos_Aff-Vis' {
+                    $params = @{
+                        Context     = $Context
+                        Visibility  = $Visibility
+                        Affiliation = $Affiliation
+                        Sort        = $Sort
+                        Direction   = $Direction
+                        PerPage     = $PerPage
+                        Since       = $Since
+                        Before      = $Before
+                    }
+                    $params | Remove-HashtableEntry -NullOrEmptyValues
+                    Write-Verbose ($params | Format-List | Out-String)
+                    Get-GitHubMyRepositories @params
+                }
+                'ByName' {
+                    $params = @{
+                        Context = $Context
+                        Owner   = $Owner
+                        Repo    = $Repo
+                    }
+                    $params | Remove-HashtableEntry -NullOrEmptyValues
+                    Write-Verbose ($params | Format-List | Out-String)
+                    Get-GitHubRepositoryByName @params
+                }
+                'ListByID' {
+                    $params = @{
+                        Context = $Context
+                        Since   = $SinceID
+                    }
+                    $params | Remove-HashtableEntry -NullOrEmptyValues
+                    Write-Verbose ($params | Format-List | Out-String)
+                    Get-GitHubRepositoryListByID @params
+                }
+                'ListByOrg' {
+                    $params = @{
+                        Context   = $Context
+                        Owner     = $Owner
+                        Type      = $Type
+                        Sort      = $Sort
+                        Direction = $Direction
+                        PerPage   = $PerPage
+                    }
+                    $params | Remove-HashtableEntry -NullOrEmptyValues
+                    Write-Verbose ($params | Format-List | Out-String)
+                    Get-GitHubRepositoryListByOrg @params
+                }
+                'ListByUser' {
+                    $params = @{
+                        Context   = $Context
+                        Username  = $Username
+                        Type      = $Type
+                        Sort      = $Sort
+                        Direction = $Direction
+                        PerPage   = $PerPage
+                    }
+                    $params | Remove-HashtableEntry -NullOrEmptyValues
+                    Write-Verbose ($params | Format-List | Out-String)
+                    Get-GitHubRepositoryListByUser @params
+                }
+            }
+        } catch {
+            throw $_
         }
-        switch ($PSCmdlet.ParameterSetName) {
-            'MyRepos_Type' {
-                $params += @{
-                    Type      = $Type
-                    Sort      = $Sort
-                    Direction = $Direction
-                    PerPage   = $PerPage
-                    Since     = $Since
-                    Before    = $Before
-                }
-                Remove-HashtableEntry -Hashtable $params -NullOrEmptyValues
-                Get-GitHubMyRepositories @params
-            }
-            'MyRepos_Aff-Vis' {
-                $params += @{
-                    Visibility  = $Visibility
-                    Affiliation = $Affiliation
-                    Sort        = $Sort
-                    Direction   = $Direction
-                    PerPage     = $PerPage
-                    Since       = $Since
-                    Before      = $Before
-                }
-                Remove-HashtableEntry -Hashtable $params -NullOrEmptyValues
-                Get-GitHubMyRepositories @params
-            }
-            'ByName' {
-                $params += @{
-                    Owner = $Owner
-                    Repo  = $Repo
-                }
-                Remove-HashtableEntry -Hashtable $params -NullOrEmptyValues
-                Get-GitHubRepositoryByName @params
-            }
-            'ListByID' {
-                $params += @{
-                    Since = $SinceID
-                }
-                Remove-HashtableEntry -Hashtable $params -NullOrEmptyValues
-                Get-GitHubRepositoryListByID @params
-            }
-            'ListByOrg' {
-                $params += @{
-                    Owner     = $Owner
-                    Type      = $Type
-                    Sort      = $Sort
-                    Direction = $Direction
-                    PerPage   = $PerPage
-                }
-                Remove-HashtableEntry -Hashtable $params -NullOrEmptyValues
-                Get-GitHubRepositoryListByOrg @params
-            }
-            'ListByUser' {
-                $params += @{
-                    Username  = $Username
-                    Type      = $Type
-                    Sort      = $Sort
-                    Direction = $Direction
-                    PerPage   = $PerPage
-                }
-                Remove-HashtableEntry -Hashtable $params -NullOrEmptyValues
-                Get-GitHubRepositoryListByUser @params
-            }
-        }
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
     }
 }

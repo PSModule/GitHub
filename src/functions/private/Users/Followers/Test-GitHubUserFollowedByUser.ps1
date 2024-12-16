@@ -38,22 +38,33 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = "/users/$Username/following/$Follows"
-        Method      = 'GET'
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 
-    try {
-        $null = (Invoke-GitHubAPI @inputObject)
-        return $true
-    } catch {
-        if ($_.Exception.Response.StatusCode.Value__ -eq 404) {
-            return $false
-        } else {
-            throw $_
+    process {
+        $inputObject = @{
+            Context     = $Context
+            APIEndpoint = "/users/$Username/following/$Follows"
+            Method      = 'GET'
         }
+
+        try {
+            $null = (Invoke-GitHubAPI @inputObject)
+            return $true
+        } catch {
+            if ($_.Exception.Response.StatusCode.Value__ -eq 404) {
+                return $false
+            } else {
+                throw $_
+            }
+        }
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
     }
 }

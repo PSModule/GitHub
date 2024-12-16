@@ -37,22 +37,35 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-
-    $body = @{
-        since    = $Since
-        per_page = $PerPage
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = '/organizations'
-        Method      = 'GET'
-        Body        = $body
-    }
+    process {
+        try {
+            $body = @{
+                since    = $Since
+                per_page = $PerPage
+            }
 
-    Invoke-GitHubAPI @inputObject | ForEach-Object {
-        Write-Output $_.Response
-    }
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = '/organizations'
+                Method      = 'GET'
+                Body        = $body
+            }
 
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
+            }
+        } catch {
+            throw $_
+        }
+    }
+    end {
+        Write-Debug "[$stackPath] - End"
+    }
 }

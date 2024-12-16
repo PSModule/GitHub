@@ -23,5 +23,20 @@
     [Alias('Stop-LogGroup')]
     param()
 
-    Write-Host '::endgroup::'
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+    }
+
+    process {
+        try {
+            Write-Host '::endgroup::'
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
+    }
 }

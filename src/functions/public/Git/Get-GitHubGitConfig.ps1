@@ -15,22 +15,33 @@
     [CmdletBinding()]
     param()
 
-    $commandName = $MyInvocation.MyCommand.Name
-    Write-Verbose "[$commandName] - Start"
-
-    $gitExists = Get-Command -Name 'git' -ErrorAction SilentlyContinue
-    if (-not $gitExists) {
-        throw 'Git is not installed. Please install Git before running this command.'
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
     }
 
-    git config --local --list | ForEach-Object {
-        (
-            [pscustomobject]@{
-                Name  = $_.Split('=')[0]
-                Value = $_.Split('=')[1]
+    process {
+        try {
+
+            $gitExists = Get-Command -Name 'git' -ErrorAction SilentlyContinue
+            if (-not $gitExists) {
+                throw 'Git is not installed. Please install Git before running this command.'
             }
-        )
+
+            git config --local --list | ForEach-Object {
+                (
+                    [pscustomobject]@{
+                        Name  = $_.Split('=')[0]
+                        Value = $_.Split('=')[1]
+                    }
+                )
+            }
+        } catch {
+            throw $_
+        }
     }
 
-    Write-Verbose "[$commandName] - End"
+    end {
+        Write-Debug "[$stackPath] - End"
+    }
 }

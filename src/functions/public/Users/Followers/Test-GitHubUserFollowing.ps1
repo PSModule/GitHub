@@ -49,11 +49,26 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
+    }
 
-    if ($Username) {
-        Test-GitHubUserFollowedByUser -Username $Username -Follows $Follows -Context $Context
-    } else {
-        Test-GitHubUserFollowedByMe -Username $Follows -Context $Context
+    process {
+        try {
+            if ($Username) {
+                Test-GitHubUserFollowedByUser -Username $Username -Follows $Follows -Context $Context
+            } else {
+                Test-GitHubUserFollowedByMe -Username $Follows -Context $Context
+            }
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
     }
 }

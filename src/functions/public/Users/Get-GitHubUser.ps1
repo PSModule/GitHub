@@ -64,23 +64,38 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
+    }
 
-    switch ($PSCmdlet.ParameterSetName) {
-        '__DefaultSet' {
-            $user = Get-GitHubMyUser -Context $Context
-            $social_accounts = Get-GitHubMyUserSocials -Context $Context
-            $user | Add-Member -MemberType NoteProperty -Name 'social_accounts' -Value $social_accounts -Force
-            $user
+    process {
+        try {
+            switch ($PSCmdlet.ParameterSetName) {
+                '__DefaultSet' {
+                    $user = Get-GitHubMyUser -Context $Context
+                    $social_accounts = Get-GitHubMyUserSocials -Context $Context
+                    $user | Add-Member -MemberType NoteProperty -Name 'social_accounts' -Value $social_accounts -Force
+                    $user
+                }
+                'NamedUser' {
+                    $user = Get-GitHubUserByName -Username $Username -Context $Context
+                    $social_accounts = Get-GitHubUserSocialsByName -Username $Username -Context $Context
+                    $user | Add-Member -MemberType NoteProperty -Name 'social_accounts' -Value $social_accounts -Force
+                    $user
+                }
+                'AllUsers' {
+                    Get-GitHubAllUsers -Since $Since -PerPage $PerPage -Context $Context
+                }
+            }
+        } catch {
+            throw $_
         }
-        'NamedUser' {
-            $user = Get-GitHubUserByName -Username $Username -Context $Context
-            $social_accounts = Get-GitHubUserSocialsByName -Username $Username -Context $Context
-            $user | Add-Member -MemberType NoteProperty -Name 'social_accounts' -Value $social_accounts -Force
-            $user
-        }
-        'AllUsers' {
-            Get-GitHubAllUsers -Since $Since -PerPage $PerPage -Context $Context
-        }
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
     }
 }

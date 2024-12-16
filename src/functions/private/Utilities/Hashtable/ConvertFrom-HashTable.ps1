@@ -41,5 +41,21 @@
         [AllowNull()]
         [object] $InputObject
     )
-    $InputObject | ConvertTo-Json -Depth 100 | ConvertFrom-Json
+
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+    }
+
+    process {
+        try {
+            $InputObject | ConvertTo-Json -Depth 100 | ConvertFrom-Json
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
+    }
 }

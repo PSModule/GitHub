@@ -25,9 +25,24 @@
         [string] $Stamp = 'public'
     )
 
-    $baseURL = $script:StatusBaseURL[$Stamp]
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+    }
 
-    $APIURI = "$baseURL/api/v2/components.json"
-    $response = Invoke-RestMethod -Uri $APIURI -Method Get
-    $response.components
+    process {
+        try {
+            $baseURL = $script:StatusBaseURL[$Stamp]
+
+            $APIURI = "$baseURL/api/v2/components.json"
+            $response = Invoke-RestMethod -Uri $APIURI -Method Get
+            $response.components
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
+    }
 }

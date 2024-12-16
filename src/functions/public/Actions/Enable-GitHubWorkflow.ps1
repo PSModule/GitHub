@@ -23,23 +23,37 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
+        if ([string]::IsNullOrEmpty($Owner)) {
+            $Owner = $Context.Owner
+        }
+        Write-Debug "Owner: [$Owner]"
 
-    if ([string]::IsNullOrEmpty($Owner)) {
-        $Owner = $Context.Owner
-    }
-    Write-Debug "Owner : [$($Context.Owner)]"
-
-    if ([string]::IsNullOrEmpty($Repo)) {
-        $Repo = $Context.Repo
-    }
-    Write-Debug "Repo : [$($Context.Repo)]"
-
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = "/repos/$Owner/$Repo/actions/workflows/$ID/enable"
-        Method      = 'PUT'
+        if ([string]::IsNullOrEmpty($Repo)) {
+            $Repo = $Context.Repo
+        }
+        Write-Debug "Repo: [$Repo]"
     }
 
-    $null = Invoke-GitHubAPI @inputObject
+    process {
+        try {
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = "/repos/$Owner/$Repo/actions/workflows/$ID/enable"
+                Method      = 'PUT'
+            }
+
+            $null = Invoke-GitHubAPI @inputObject
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
+    }
 }

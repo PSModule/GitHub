@@ -74,27 +74,42 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
 
-    if ([string]::IsNullOrEmpty($Owner)) {
-        $Organization = $Context.Owner
-    }
-    Write-Debug "Organization : [$($Context.Owner)]"
-
-    $body = @{
-        query_suite = $QuerySuite
-    }
-
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = "/orgs/$Organization/$SecurityProduct/$Enablement"
-        Method      = 'POST'
-        Body        = $body
-    }
-
-    if ($PSCmdlet.ShouldProcess("security feature [$SecurityProduct] on organization [$Organization]", 'Set')) {
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+        if ([string]::IsNullOrEmpty($Owner)) {
+            $Owner = $Context.Owner
         }
+        Write-Debug "Owner: [$Owner]"
+    }
+
+    process {
+        try {
+            $body = @{
+                query_suite = $QuerySuite
+            }
+
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = "/orgs/$Organization/$SecurityProduct/$Enablement"
+                Method      = 'POST'
+                Body        = $body
+            }
+
+            if ($PSCmdlet.ShouldProcess("security feature [$SecurityProduct] on organization [$Organization]", 'Set')) {
+                Invoke-GitHubAPI @inputObject | ForEach-Object {
+                    Write-Output $_.Response
+                }
+            }
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
     }
 }

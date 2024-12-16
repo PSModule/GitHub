@@ -26,8 +26,8 @@
     )
 
     begin {
-        $commandName = $MyInvocation.MyCommand.Name
-        Write-Verbose "[$commandName] - Start"
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
     }
 
     process {
@@ -39,6 +39,6 @@
     }
 
     end {
-        Write-Verbose "[$commandName] - End"
+        Write-Debug "[$stackPath] - End"
     }
 }

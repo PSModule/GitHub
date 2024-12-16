@@ -78,36 +78,45 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-
-    if ([string]::IsNullOrEmpty($Owner)) {
-        $Owner = $Context.Owner
-    }
-    Write-Debug "Owner : [$($Context.Owner)]"
-
-    if ([string]::IsNullOrEmpty($Repo)) {
-        $Repo = $Context.Repo
-    }
-    Write-Debug "Repo : [$($Context.Repo)]"
-
-    $body = @{
-        owner                = $Owner
-        name                 = $Name
-        description          = $Description
-        include_all_branches = $IncludeAllBranches
-        private              = $Private
-    }
-
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = "/repos/$TemplateOwner/$TemplateRepo/generate"
-        Method      = 'POST'
-        Body        = $body
-    }
-
-    if ($PSCmdlet.ShouldProcess("Repository [$Owner/$Name] from template [$TemplateOwner/$TemplateRepo]", 'Create')) {
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
+        if ([string]::IsNullOrEmpty($Owner)) {
+            $Owner = $Context.Owner
         }
+        Write-Debug "Owner: [$Owner]"
+    }
+
+    process {
+        try {
+            $body = @{
+                owner                = $Owner
+                name                 = $Name
+                description          = $Description
+                include_all_branches = $IncludeAllBranches
+                private              = $Private
+            }
+
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = "/repos/$TemplateOwner/$TemplateRepo/generate"
+                Method      = 'POST'
+                Body        = $body
+            }
+
+            if ($PSCmdlet.ShouldProcess("Repository [$Owner/$Name] from template [$TemplateOwner/$TemplateRepo]", 'Create')) {
+                Invoke-GitHubAPI @inputObject | ForEach-Object {
+                    Write-Output $_.Response
+                }
+            }
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
     }
 }

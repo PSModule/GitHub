@@ -33,24 +33,35 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = "/user/blocks/$Username"
-        Method      = 'PUT'
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 
-    try {
-        $null = (Invoke-GitHubAPI @inputObject)
-        # Should we check if user is already blocked and return true if so?
-        return $true
-    } catch {
-        if ($_.Exception.Response.StatusCode.Value__ -eq 422) {
-            return $false
-        } else {
-            Write-Error $_.Exception.Response
-            throw $_
+    process {
+        $inputObject = @{
+            Context     = $Context
+            APIEndpoint = "/user/blocks/$Username"
+            Method      = 'PUT'
         }
+
+        try {
+            $null = (Invoke-GitHubAPI @inputObject)
+            # Should we check if user is already blocked and return true if so?
+            return $true
+        } catch {
+            if ($_.Exception.Response.StatusCode.Value__ -eq 422) {
+                return $false
+            } else {
+                Write-Error $_.Exception.Response
+                throw $_
+            }
+        }
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
     }
 }

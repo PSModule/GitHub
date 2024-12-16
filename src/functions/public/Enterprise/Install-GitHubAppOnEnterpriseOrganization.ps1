@@ -42,28 +42,41 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-
-    if ([string]::IsNullOrEmpty($Enterprise)) {
-        $Enterprise = $Context.Enterprise
-    }
-    Write-Debug "Enterprise : [$($Context.Enterprise)]"
-
-    $body = @{
-        client_id            = $ClientID
-        repository_selection = $RepositorySelection
-        repositories         = $Repositories
-    }
-    $body | Remove-HashtableEntry -NullOrEmptyValues
-
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = "/enterprises/$Enterprise/apps/organizations/$Organization/installations"
-        Method      = 'Post'
-        Body        = $body
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
+        if ([string]::IsNullOrEmpty($Enterprise)) {
+            $Enterprise = $Context.Enterprise
+        }
+        Write-Debug "Enterprise: [$Enterprise]"
     }
 
-    Invoke-GitHubAPI @inputObject | ForEach-Object {
-        Write-Output $_.Response
+    process {
+        try {
+            $body = @{
+                client_id            = $ClientID
+                repository_selection = $RepositorySelection
+                repositories         = $Repositories
+            }
+
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = "/enterprises/$Enterprise/apps/organizations/$Organization/installations"
+                Method      = 'Post'
+                Body        = $body
+            }
+
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
+            }
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
     }
 }

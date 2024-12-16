@@ -44,16 +44,30 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = "/users/$Username"
-        Method      = 'GET'
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 
-    Invoke-GitHubAPI @inputObject | ForEach-Object {
-        Write-Output $_.Response
+    process {
+        try {
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = "/users/$Username"
+                Method      = 'GET'
+            }
+
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
+            }
+        } catch {
+            throw $_
+        }
     }
 
+    end {
+        Write-Debug "[$stackPath] - End"
+    }
 }

@@ -24,33 +24,33 @@
     )
 
     begin {
-        $commandName = $MyInvocation.MyCommand.Name
-        Write-Debug "[$commandName] - Start"
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
     }
 
     process {
-        Write-Verbose "GitHubConfig ID: [$($script:GitHub.Config.ID)]"
-        Write-Verbose "Force:           [$Force]"
+        Write-Debug "GitHubConfig ID: [$($script:GitHub.Config.ID)]"
+        Write-Debug "Force:           [$Force]"
         if (-not $script:GitHub.Config.ID -or $Force) {
             try {
-                Write-Verbose 'Attempt to load the stored GitHubConfig from ContextVault'
+                Write-Debug 'Attempt to load the stored GitHubConfig from ContextVault'
                 $context = [GitHubConfig](Get-Context -ID $script:GitHub.Config.ID)
                 if (-not $context -or $Force) {
-                    Write-Verbose 'No stored config found. Loading GitHubConfig from defaults'
+                    Write-Debug 'No stored config found. Loading GitHubConfig from defaults'
                     $context = Set-Context -ID $script:GitHub.DefaultConfig.ID -Context $script:GitHub.DefaultConfig -PassThru
                 }
-                Write-Verbose 'GitHubConfig loaded into memory.'
+                Write-Debug 'GitHubConfig loaded into memory.'
                 $script:GitHub.Config = [GitHubConfig]$context
             } catch {
                 Write-Error $_
                 throw 'Failed to initialize GitHub config'
             }
         } else {
-            Write-Verbose 'GitHubConfig already initialized and available in memory.'
+            Write-Debug 'GitHubConfig already initialized and available in memory.'
         }
     }
 
     end {
-        Write-Debug "[$commandName] - End"
+        Write-Debug "[$stackPath] - End"
     }
 }

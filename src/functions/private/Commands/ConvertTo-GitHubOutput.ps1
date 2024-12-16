@@ -46,32 +46,47 @@
         [object] $InputObject
     )
 
-    $outputLines = @()
-
-    if ($InputObject -is [hashtable]) {
-        $InputObject = [PSCustomObject]$InputObject
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
     }
 
-    foreach ($property in $InputObject.PSObject.Properties) {
-        $key = $property.Name
-        $value = $property.Value
+    process {
+        try {
+            $outputLines = @()
 
-        # Convert hashtable or PSCustomObject to compressed JSON
-        if ($value -is [hashtable] -or $value -is [PSCustomObject]) {
-            $value = $value | ConvertTo-Json -Compress
-        }
+            if ($InputObject -is [hashtable]) {
+                $InputObject = [PSCustomObject]$InputObject
+            }
 
-        if ($value -is [string] -and $value.Contains("`n")) {
-            # Multi-line value
-            $guid = [Guid]::NewGuid().ToString()
-            $EOFMarker = "EOF_$guid"
-            $outputLines += "$key<<$EOFMarker"
-            $outputLines += $value
-            $outputLines += $EOFMarker
-        } else {
-            # Single-line value
-            $outputLines += "$key=$value"
+            foreach ($property in $InputObject.PSObject.Properties) {
+                $key = $property.Name
+                $value = $property.Value
+
+                # Convert hashtable or PSCustomObject to compressed JSON
+                if ($value -is [hashtable] -or $value -is [PSCustomObject]) {
+                    $value = $value | ConvertTo-Json -Compress
+                }
+
+                if ($value -is [string] -and $value.Contains("`n")) {
+                    # Multi-line value
+                    $guid = [Guid]::NewGuid().ToString()
+                    $EOFMarker = "EOF_$guid"
+                    $outputLines += "$key<<$EOFMarker"
+                    $outputLines += $value
+                    $outputLines += $EOFMarker
+                } else {
+                    # Single-line value
+                    $outputLines += "$key=$value"
+                }
+            }
+            $outputLines
+        } catch {
+            throw $_
         }
     }
-    $outputLines
+
+    end {
+        Write-Debug "[$stackPath] - End"
+    }
 }

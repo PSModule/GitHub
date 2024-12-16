@@ -56,16 +56,31 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
 
-    if ([string]::IsNullOrEmpty($Owner)) {
-        $Organization = $Context.Owner
+        if ([string]::IsNullOrEmpty($Organization)) {
+            $Organization = $Context.Owner
+        }
+        Write-Debug "Organization: [$Organization]"
     }
-    Write-Debug "Organization : [$($Context.Owner)]"
 
-    if ($Organization) {
-        Test-GitHubBlockedUserByOrganization -Organization $Organization -Username $Username -PerPage $PerPage -Context $Context
-    } else {
-        Test-GitHubBlockedUserByUser -Username $Username -PerPage $PerPage -Context $Context
+    process {
+        try {
+            if ($Organization) {
+                Test-GitHubBlockedUserByOrganization -Organization $Organization -Username $Username -PerPage $PerPage -Context $Context
+            } else {
+                Test-GitHubBlockedUserByUser -Username $Username -PerPage $PerPage -Context $Context
+            }
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
     }
 }

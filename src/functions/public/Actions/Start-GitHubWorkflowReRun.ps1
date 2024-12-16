@@ -36,27 +36,41 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-
-    if ([string]::IsNullOrEmpty($Owner)) {
-        $Owner = $Context.Owner
-    }
-    Write-Debug "Owner : [$($Context.Owner)]"
-
-    if ([string]::IsNullOrEmpty($Repo)) {
-        $Repo = $Context.Repo
-    }
-    Write-Debug "Repo : [$($Context.Repo)]"
-
-    $inputObject = @{
-        Context     = $Context
-        Method      = 'POST'
-        APIEndpoint = "/repos/$Owner/$Repo/actions/runs/$ID/rerun"
-    }
-
-    if ($PSCmdlet.ShouldProcess("workflow with ID [$ID] in [$Owner/$Repo]", 'Re-run')) {
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
+        if ([string]::IsNullOrEmpty($Owner)) {
+            $Owner = $Context.Owner
         }
+        Write-Debug "Owner: [$Owner]"
+
+        if ([string]::IsNullOrEmpty($Repo)) {
+            $Repo = $Context.Repo
+        }
+        Write-Debug "Repo: [$Repo]"
+    }
+
+    process {
+        try {
+            $inputObject = @{
+                Context     = $Context
+                Method      = 'POST'
+                APIEndpoint = "/repos/$Owner/$Repo/actions/runs/$ID/rerun"
+            }
+
+            if ($PSCmdlet.ShouldProcess("workflow with ID [$ID] in [$Owner/$Repo]", 'Re-run')) {
+                Invoke-GitHubAPI @inputObject | ForEach-Object {
+                    Write-Output $_.Response
+                }
+            }
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
     }
 }

@@ -40,11 +40,22 @@
         [scriptblock] $ScriptBlock
     )
 
-    Start-GitHubLogGroup -Name $Name
-    try {
-        . $ScriptBlock
-    } catch {
-        throw $_
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
     }
-    Stop-GitHubLogGroup
+
+    process {
+        Start-GitHubLogGroup -Name $Name
+        try {
+            . $ScriptBlock
+        } catch {
+            throw $_
+        }
+        Stop-GitHubLogGroup
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
+    }
 }

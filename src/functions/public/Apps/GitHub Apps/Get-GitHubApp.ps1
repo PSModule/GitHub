@@ -39,15 +39,39 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-    Assert-GitHubContext -Context $Context -AuthType App
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
 
-    switch ($PSCmdlet.ParameterSetName) {
-        'BySlug' {
-            Get-GitHubAppByName -AppSlug $AppSlug -Context $Context
+        if ([string]::IsNullOrEmpty($Owner)) {
+            $Owner = $Context.Owner
         }
-        default {
-            Get-GitHubAuthenticatedApp -Context $Context
+        Write-Debug "Owner: [$Owner]"
+
+        if ([string]::IsNullOrEmpty($Repo)) {
+            $Repo = $Context.Repo
+        }
+        Write-Debug "Repo: [$Repo]"
+    }
+
+    process {
+        try {
+            switch ($PSCmdlet.ParameterSetName) {
+                'BySlug' {
+                    Get-GitHubAppByName -AppSlug $AppSlug -Context $Context
+                }
+                default {
+                    Get-GitHubAuthenticatedApp -Context $Context
+                }
+            }
+        } catch {
+            throw $_
         }
     }
+
+    end {
+        Write-Debug "[$stackPath] - End"
+    }
 }
+

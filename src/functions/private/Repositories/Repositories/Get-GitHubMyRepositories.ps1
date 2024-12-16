@@ -113,34 +113,48 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-
-    $body = @{
-        type      = $Type
-        sort      = $Sort
-        direction = $Direction
-        per_page  = $PerPage
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 
-    if ($PSBoundParameters.ContainsKey('Affiliation')) {
-        $body['affiliation'] = $Affiliation -join ','
-    }
-    if ($PSBoundParameters.ContainsKey('Since')) {
-        $body['since'] = $Since.ToString('yyyy-MM-ddTHH:mm:ssZ')
-    }
-    if ($PSBoundParameters.ContainsKey('Before')) {
-        $body['before'] = $Before.ToString('yyyy-MM-ddTHH:mm:ssZ')
+    process {
+        try {
+            $body = @{
+                type      = $Type
+                sort      = $Sort
+                direction = $Direction
+                per_page  = $PerPage
+            }
+
+            if ($PSBoundParameters.ContainsKey('Affiliation')) {
+                $body['affiliation'] = $Affiliation -join ','
+            }
+            if ($PSBoundParameters.ContainsKey('Since')) {
+                $body['since'] = $Since.ToString('yyyy-MM-ddTHH:mm:ssZ')
+            }
+            if ($PSBoundParameters.ContainsKey('Before')) {
+                $body['before'] = $Before.ToString('yyyy-MM-ddTHH:mm:ssZ')
+            }
+
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = '/user/repos'
+                Method      = 'GET'
+                body        = $body
+            }
+
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
+            }
+        } catch {
+            throw $_
+        }
     }
 
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = '/user/repos'
-        Method      = 'GET'
-        body        = $body
+    end {
+        Write-Debug "[$stackPath] - End"
     }
-
-    Invoke-GitHubAPI @inputObject | ForEach-Object {
-        Write-Output $_.Response
-    }
-
 }

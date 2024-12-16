@@ -52,34 +52,47 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
+        if ([string]::IsNullOrEmpty($Owner)) {
+            $Owner = $Context.Owner
+        }
+        Write-Debug "Owner: [$Owner]"
 
-    if ([string]::IsNullOrEmpty($Owner)) {
-        $Owner = $Context.Owner
-    }
-    Write-Debug "Owner : [$($Context.Owner)]"
-
-    if ([string]::IsNullOrEmpty($Repo)) {
-        $Repo = $Context.Repo
-    }
-    Write-Debug "Repo : [$($Context.Repo)]"
-
-    $body = @{
-        ref    = $Ref
-        inputs = $Inputs
-    }
-
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = "/repos/$Owner/$Repo/actions/workflows/$ID/dispatches"
-        Method      = 'POST'
-        Body        = $body
+        if ([string]::IsNullOrEmpty($Repo)) {
+            $Repo = $Context.Repo
+        }
+        Write-Debug "Repo: [$Repo]"
     }
 
-    if ($PSCmdlet.ShouldProcess("workflow with ID [$ID] in [$Owner/$Repo]", 'Start')) {
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+    process {
+        try {
+            $body = @{
+                ref    = $Ref
+                inputs = $Inputs
+            }
+
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = "/repos/$Owner/$Repo/actions/workflows/$ID/dispatches"
+                Method      = 'POST'
+                Body        = $body
+            }
+
+            if ($PSCmdlet.ShouldProcess("workflow with ID [$ID] in [$Owner/$Repo]", 'Start')) {
+                Invoke-GitHubAPI @inputObject | ForEach-Object {
+                    Write-Output $_.Response
+                }
+            }
+        } catch {
+            throw $_
         }
     }
 
+    end {
+        Write-Debug "[$stackPath] - End"
+    }
 }

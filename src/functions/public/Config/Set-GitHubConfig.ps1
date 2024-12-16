@@ -1,4 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '5.0.3' }
+﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '5.0.4' }
 
 function Set-GitHubConfig {
     <#
@@ -25,15 +25,15 @@ function Set-GitHubConfig {
     )
 
     begin {
-        $commandName = $MyInvocation.MyCommand.Name
-        Write-Verbose "[$commandName] - Start"
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
         Initialize-GitHubConfig
     }
 
     process {
-        Write-Verbose "Setting [$Name] to [$Value]"
-        $script:GitHub.Config.$Name = $Value
         try {
+            Write-Verbose "Setting [$Name] to [$Value]"
+            $script:GitHub.Config.$Name = $Value
             if ($PSCmdlet.ShouldProcess('ContextSetting', 'Set')) {
                 Set-Context -ID $script:GitHub.Config.ID -Context $script:GitHub.Config
             }
@@ -44,6 +44,6 @@ function Set-GitHubConfig {
     }
 
     end {
-        Write-Verbose "[$commandName] - End"
+        Write-Debug "[$stackPath] - End"
     }
 }

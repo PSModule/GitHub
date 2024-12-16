@@ -31,22 +31,37 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-
-    $body = @{
-        account_urls = $AccountUrls
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = '/user/social_accounts'
-        Body        = $body
-        Method      = 'DELETE'
-    }
+    process {
+        try {
+            $body = @{
+                account_urls = $AccountUrls
+            }
 
-    if ($PSCmdlet.ShouldProcess("Social accounts [$($AccountUrls -join ', ')]", 'Delete')) {
-        $null = Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = '/user/social_accounts'
+                Body        = $body
+                Method      = 'DELETE'
+            }
+
+            if ($PSCmdlet.ShouldProcess("Social accounts [$($AccountUrls -join ', ')]", 'Delete')) {
+                $null = Invoke-GitHubAPI @inputObject | ForEach-Object {
+                    Write-Output $_.Response
+                }
+            }
+        } catch {
+            throw $_
         }
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
     }
 }

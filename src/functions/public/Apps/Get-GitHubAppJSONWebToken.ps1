@@ -67,8 +67,8 @@ function Get-GitHubAppJSONWebToken {
     )
 
     begin {
-        $commandName = $MyInvocation.MyCommand.Name
-        Write-Verbose "[$commandName] - Start"
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
     }
 
     process {
@@ -129,8 +129,7 @@ function Get-GitHubAppJSONWebToken {
     }
 
     end {
-        $commandName = $MyInvocation.MyCommand.Name
-        Write-Verbose "[$commandName] - End"
+        Write-Debug "[$stackPath] - End"
     }
 
     clean {

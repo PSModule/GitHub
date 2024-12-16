@@ -24,24 +24,29 @@
     )
 
     begin {
-        $commandName = $MyInvocation.MyCommand.Name
-        Write-Verbose "[$commandName] - Start"
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 
     process {
-        $inputObject = @{
-            Context     = $Context
-            ApiEndpoint = '/versions'
-            Method      = 'GET'
-        }
+        try {
+            $inputObject = @{
+                Context     = $Context
+                ApiEndpoint = '/versions'
+                Method      = 'GET'
+            }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
+            }
+        } catch {
+            throw $_
         }
     }
 
     end {
-        Write-Verbose "[$commandName] - End"
+        Write-Debug "[$stackPath] - End"
     }
 }

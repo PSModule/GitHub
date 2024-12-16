@@ -42,9 +42,24 @@
         [scriptblock] $ScriptBlock
     )
 
-    $guid = [string][guid]::NewGuid().Guid
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+    }
 
-    Disable-GitHubCommand -String $guid
-    . $ScriptBlock
-    Enable-GitHubCommand -String $guid
+    process {
+        $guid = [string][guid]::NewGuid().Guid
+
+        Disable-GitHubCommand -String $guid
+        try {
+            . $ScriptBlock
+        } catch {
+            throw $_
+        }
+        Enable-GitHubCommand -String $guid
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
+    }
 }

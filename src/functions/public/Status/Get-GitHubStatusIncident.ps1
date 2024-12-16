@@ -38,16 +38,31 @@
         [string] $Stamp = 'public'
     )
 
-    $baseURL = $script:StatusBaseURL[$Stamp]
-
-    if ($Unresolved) {
-        $APIURI = "$baseURL/api/v2/incidents/unresolved.json"
-        $response = Invoke-RestMethod -Uri $APIURI -Method Get
-        $response.incidents
-        return
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
     }
 
-    $APIURI = "$baseURL/api/v2/incidents.json"
-    $response = Invoke-RestMethod -Uri $APIURI -Method Get
-    $response.incidents
+    process {
+        try {
+            $baseURL = $script:StatusBaseURL[$Stamp]
+
+            if ($Unresolved) {
+                $APIURI = "$baseURL/api/v2/incidents/unresolved.json"
+                $response = Invoke-RestMethod -Uri $APIURI -Method Get
+                $response.incidents
+                return
+            }
+
+            $APIURI = "$baseURL/api/v2/incidents.json"
+            $response = Invoke-RestMethod -Uri $APIURI -Method Get
+            $response.incidents
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
+    }
 }

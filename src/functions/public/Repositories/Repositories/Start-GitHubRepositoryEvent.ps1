@@ -69,44 +69,47 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
 
-    if ([string]::IsNullOrEmpty($Owner)) {
-        $Owner = $Context.Owner
+        if ([string]::IsNullOrEmpty($Owner)) {
+            $Owner = $Context.Owner
+        }
+        Write-Debug "Owner: [$Owner]"
+
+        if ([string]::IsNullOrEmpty($Repo)) {
+            $Repo = $Context.Repo
+        }
+        Write-Debug "Repo: [$Repo]"
     }
-    Write-Debug "Owner : [$($Context.Owner)]"
 
-    if ([string]::IsNullOrEmpty($Repo)) {
-        $Repo = $Context.Repo
-    }
-    Write-Debug "Repo : [$($Context.Repo)]"
+    process {
+        try {
+            $body = @{
+                event_type     = $EventType
+                client_payload = $ClientPayload
+            }
+            $body | Remove-HashtableEntry -NullOrEmptyValues
 
-    $PSCmdlet.MyInvocation.MyCommand.Parameters.GetEnumerator() | ForEach-Object {
-        $paramName = $_.Key
-        $paramDefaultValue = Get-Variable -Name $paramName -ValueOnly -ErrorAction SilentlyContinue
-        $providedValue = $PSBoundParameters[$paramName]
-        Write-Verbose "[$paramName]"
-        Write-Verbose "  - Default:  [$paramDefaultValue]"
-        Write-Verbose "  - Provided: [$providedValue]"
-        if (-not $PSBoundParameters.ContainsKey($paramName) -and ($null -ne $paramDefaultValue)) {
-            Write-Verbose '  - Using default value'
-            $PSBoundParameters[$paramName] = $paramDefaultValue
-        } else {
-            Write-Verbose '  - Using provided value'
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = "/repos/$Owner/$Repo/dispatches"
+                Method      = 'POST'
+                Body        = $body
+            }
+
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
+            }
+        } catch {
+            throw $_
         }
     }
 
-    $body = $PSBoundParameters | ConvertFrom-HashTable | ConvertTo-HashTable -NameCasingStyle snake_case
-    Remove-HashtableEntry -Hashtable $body -RemoveNames 'Owner', 'Repo' -RemoveTypes 'SwitchParameter'
-
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = "/repos/$Owner/$Repo/dispatches"
-        Method      = 'POST'
-        Body        = $body
-    }
-
-    Invoke-GitHubAPI @inputObject | ForEach-Object {
-        Write-Output $_.Response
+    end {
+        Write-Debug "[$stackPath] - End"
     }
 }

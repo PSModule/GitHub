@@ -35,9 +35,24 @@
         [string] $Message
     )
 
-    if ($env:GITHUB_ACTIONS -eq 'true') {
-        Write-Host "::debug::$Message"
-    } else {
-        Write-Debug "$Message"
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+    }
+
+    process {
+        try {
+            if ($env:GITHUB_ACTIONS -eq 'true') {
+                Write-Host "::debug::$Message"
+            } else {
+                Write-Debug "$Message"
+            }
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
     }
 }

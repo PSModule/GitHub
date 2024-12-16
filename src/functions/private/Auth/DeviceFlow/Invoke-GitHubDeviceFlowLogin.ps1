@@ -41,25 +41,40 @@
         [securestring] $RefreshToken
     )
 
-    do {
-        if ($RefreshToken) {
-            $tokenResponse = Wait-GitHubAccessToken -ClientID $ClientID -RefreshToken $RefreshToken -HostName $HostName
-        } else {
-            $deviceCodeResponse = Request-GitHubDeviceCode -ClientID $ClientID -Scope $Scope -HostName $HostName
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+    }
 
-            $deviceCode = $deviceCodeResponse.device_code
-            $interval = $deviceCodeResponse.interval
-            $userCode = $deviceCodeResponse.user_code
-            $verificationUri = $deviceCodeResponse.verification_uri
+    process {
+        try {
+            do {
+                if ($RefreshToken) {
+                    $tokenResponse = Wait-GitHubAccessToken -ClientID $ClientID -RefreshToken $RefreshToken -HostName $HostName
+                } else {
+                    $deviceCodeResponse = Request-GitHubDeviceCode -ClientID $ClientID -Scope $Scope -HostName $HostName
 
-            Write-Host '! ' -ForegroundColor DarkYellow -NoNewline
-            Write-Host "We added the code to your clipboard: [$userCode]"
-            $userCode | Set-Clipboard
-            Read-Host "Press Enter to open $HostName in your browser..."
-            Start-Process $verificationUri
+                    $deviceCode = $deviceCodeResponse.device_code
+                    $interval = $deviceCodeResponse.interval
+                    $userCode = $deviceCodeResponse.user_code
+                    $verificationUri = $deviceCodeResponse.verification_uri
 
-            $tokenResponse = Wait-GitHubAccessToken -DeviceCode $deviceCode -ClientID $ClientID -Interval $interval -HostName $HostName
+                    Write-Host '! ' -ForegroundColor DarkYellow -NoNewline
+                    Write-Host "We added the code to your clipboard: [$userCode]"
+                    $userCode | Set-Clipboard
+                    Read-Host "Press Enter to open $HostName in your browser..."
+                    Start-Process $verificationUri
+
+                    $tokenResponse = Wait-GitHubAccessToken -DeviceCode $deviceCode -ClientID $ClientID -Interval $interval -HostName $HostName
+                }
+            } while ($tokenResponse.error)
+            $tokenResponse
+        } catch {
+            throw $_
         }
-    } while ($tokenResponse.error)
-    $tokenResponse
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
+    }
 }

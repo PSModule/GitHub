@@ -49,6 +49,8 @@
     )
 
     begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
         $lines = @()
     }
 
@@ -128,8 +130,10 @@
             $i++
         }
         if ($AsHashtable) {
-            return $result
+            $result
+        } else {
+            [PSCustomObject]$result
         }
-        [PSCustomObject]$result
+        Write-Debug "[$stackPath] - End"
     }
 }

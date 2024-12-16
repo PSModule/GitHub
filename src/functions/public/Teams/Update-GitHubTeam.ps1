@@ -79,33 +79,48 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
 
-    if ([string]::IsNullOrEmpty($Owner)) {
-        $Organization = $Context.Owner
-    }
-    Write-Debug "Organization : [$($Context.Owner)]"
-
-    $body = @{
-        name                 = $NewName
-        description          = $Description
-        privacy              = $Privacy
-        notification_setting = $NotificationSetting
-        permission           = $Permission
-        parent_team_id       = $ParentTeamID
-    }
-    $body | Remove-HashtableEntry -NullOrEmptyValues
-
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = "/orgs/$Organization/teams/$Name"
-        Method      = 'Patch'
-        Body        = $body
-    }
-
-    if ($PSCmdlet.ShouldProcess("$Organization/$Name", 'Update')) {
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+        if ([string]::IsNullOrEmpty($Organization)) {
+            $Organization = $Context.Owner
         }
+        Write-Debug "Organization: [$Organization]"
+    }
+
+    process {
+        try {
+            $body = @{
+                name                 = $NewName
+                description          = $Description
+                privacy              = $Privacy
+                notification_setting = $NotificationSetting
+                permission           = $Permission
+                parent_team_id       = $ParentTeamID
+            }
+            $body | Remove-HashtableEntry -NullOrEmptyValues
+
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = "/orgs/$Organization/teams/$Name"
+                Method      = 'Patch'
+                Body        = $body
+            }
+
+            if ($PSCmdlet.ShouldProcess("$Organization/$Name", 'Update')) {
+                Invoke-GitHubAPI @inputObject | ForEach-Object {
+                    Write-Output $_.Response
+                }
+            }
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
     }
 }

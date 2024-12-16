@@ -42,9 +42,24 @@
         [switch] $Overwrite
     )
 
-    Write-Verbose 'Step summary:'
-    Write-Verbose $Summary
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+    }
 
-    $Append = -not $Overwrite
-    $Summary | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append:$Append
+    process {
+        try {
+            Write-Verbose 'Step summary:'
+            Write-Verbose $Summary
+
+            $Append = -not $Overwrite
+            $Summary | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append:$Append
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
+    }
 }

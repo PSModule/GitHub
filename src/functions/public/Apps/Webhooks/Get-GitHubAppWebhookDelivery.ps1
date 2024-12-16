@@ -25,16 +25,30 @@
         [object] $Context = (Get-GitHubContext)
     )
 
-    $Context = Resolve-GitHubContext -Context $Context
-    Assert-GitHubContext -Context $Context -AuthType App
-
-    $inputObject = @{
-        Context     = $Context
-        APIEndpoint = '/app/hook/deliveries'
-        Method      = 'GET'
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType APP
     }
 
-    Invoke-GitHubAPI @inputObject | ForEach-Object {
-        Write-Output $_.Response
+    process {
+        try {
+            $inputObject = @{
+                Context     = $Context
+                APIEndpoint = '/app/hook/deliveries'
+                Method      = 'GET'
+            }
+
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
+            }
+        } catch {
+            throw $_
+        }
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
     }
 }

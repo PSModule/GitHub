@@ -1,4 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '5.0.3' }
+﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '5.0.4' }
 
 function Get-GitHubConfig {
     <#
@@ -22,20 +22,24 @@ function Get-GitHubConfig {
     )
 
     begin {
-        $commandName = $MyInvocation.MyCommand.Name
-        Write-Verbose "[$commandName] - Start"
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
         Initialize-GitHubConfig
     }
 
     process {
-        if (-not $Name) {
-            return [GitHubConfig]($script:GitHub.Config)
-        }
+        try {
+            if (-not $Name) {
+                return [GitHubConfig]($script:GitHub.Config)
+            }
 
-        $script:GitHub.Config.$Name
+            $script:GitHub.Config.$Name
+        } catch {
+            throw $_
+        }
     }
 
     end {
-        Write-Verbose "[$commandName] - End"
+        Write-Debug "[$stackPath] - End"
     }
 }
