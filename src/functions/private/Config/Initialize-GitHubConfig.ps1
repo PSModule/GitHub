@@ -29,24 +29,34 @@
     }
 
     process {
-        Write-Debug "GitHubConfig ID: [$($script:GitHub.Config.ID)]"
-        Write-Debug "Force:           [$Force]"
-        if (-not $script:GitHub.Config.ID -or $Force) {
-            try {
-                Write-Debug 'Attempt to load the stored GitHubConfig from ContextVault'
-                $context = [GitHubConfig](Get-Context -ID $script:GitHub.DefaultConfig.ID)
-                if (-not $context -or $Force) {
-                    Write-Debug 'No stored config found. Loading GitHubConfig from defaults'
-                    $context = Set-Context -ID $script:GitHub.DefaultConfig.ID -Context $script:GitHub.DefaultConfig -PassThru
-                }
+        try {
+            Write-Debug "Force:           [$Force]"
+            if ($Force) {
+                Write-Debug 'Forcing initialization of GitHubConfig.'
+                $context = Set-Context -ID $script:GitHub.DefaultConfig.ID -Context $script:GitHub.DefaultConfig -PassThru
+                $script:GitHub.Config = [GitHubConfig]$context
+                return
+            }
+
+            Write-Debug "GitHubConfig ID: [$($script:GitHub.Config.ID)]"
+            if ($null -ne $script:GitHub.Config) {
+                Write-Debug 'GitHubConfig already initialized and available in memory.'
+                return
+            }
+
+            Write-Debug 'Attempt to load the stored GitHubConfig from ContextVault'
+            $context = Get-Context -ID $script:GitHub.DefaultConfig.ID
+            if ($context) {
                 Write-Debug 'GitHubConfig loaded into memory.'
                 $script:GitHub.Config = [GitHubConfig]$context
-            } catch {
-                Write-Error $_
-                throw 'Failed to initialize GitHub config'
+                return
             }
-        } else {
-            Write-Debug 'GitHubConfig already initialized and available in memory.'
+            Write-Debug 'Initializing GitHubConfig from defaults'
+            $context = Set-Context -ID $script:GitHub.DefaultConfig.ID -Context $script:GitHub.DefaultConfig -PassThru
+            $script:GitHub.Config = [GitHubConfig]$context
+        } catch {
+            Write-Error $_
+            throw 'Failed to initialize GitHub config'
         }
     }
 
