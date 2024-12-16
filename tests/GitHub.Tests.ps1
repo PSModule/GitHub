@@ -167,7 +167,7 @@ Describe 'GitHub' {
 
         }
     }
-    Describe 'Commands' {
+    Context 'Commands' {
         It "Start-LogGroup 'MyGroup' should not throw" {
             {
                 Start-LogGroup 'MyGroup'
@@ -186,6 +186,88 @@ Describe 'GitHub' {
                     Get-ChildItem env: | Select-Object Name, Value | Format-Table -AutoSize
                 }
             } | Should -Not -Throw
+        }
+    }
+    Context 'Rate-Limit' {
+        It 'Can be called with no parameters' {
+            { Get-GitHubRateLimit } | Should -Not -Throw
+        }
+    }
+    Context 'Repository' {
+        It 'Function exists' {
+            Get-Command Get-GitHubRepository | Should -Not -BeNullOrEmpty
+        }
+
+        # Context 'Parameter Set: MyRepos_Type' {
+        #     It 'Can be called with no parameters' {
+        #         { Get-GitHubRepository - } | Should -Not -Throw
+        #     }
+
+        #     It 'Can be called with Type parameter' {
+        #         { Get-GitHubRepository -Type 'public' } | Should -Not -Throw
+        #     }
+        # }
+
+        # Context 'Parameter Set: MyRepos_Aff-Vis' {
+        #     It 'Can be called with Visibility and Affiliation parameters' {
+        #         { Get-GitHubRepository -Visibility 'public' -Affiliation 'owner' } | Should -Not -Throw
+        #     }
+        # }
+
+        It 'Can be called with Owner and Repo parameters' {
+            { Get-GitHubRepository -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
+        }
+
+        # Context 'Parameter Set: ListByID' {
+        #     It 'Can be called with SinceID parameter' {
+        #         { Get-GitHubRepository -SinceID 123456789 } | Select-Object -First 10 | Should -Not -Throw
+        #     }
+        # }
+
+        It 'Can be called with Owner parameter' {
+            { Get-GitHubRepository -Owner 'PSModule' } | Should -Not -Throw
+        }
+
+        It 'Can be called with Username parameter' {
+            { Get-GitHubRepository -Username 'MariusStorhaug' } | Should -Not -Throw
+        }
+    }
+    Context 'Status' {
+        It 'Can be called with no parameters' {
+            { Get-GitHubScheduledMaintenance } | Should -Not -Throw
+        }
+        It 'Can be called with Active parameter' {
+            { Get-GitHubScheduledMaintenance -Active } | Should -Not -Throw
+        }
+        It 'Can be called with Upcoming parameter' {
+            { Get-GitHubScheduledMaintenance -Upcoming } | Should -Not -Throw
+        }
+        It 'Can be called with no parameters' {
+            { Get-GitHubStatus } | Should -Not -Throw
+        }
+        It 'Can be called with Summary parameter' {
+            { Get-GitHubStatus -Summary } | Should -Not -Throw
+        }
+        It 'Function exists' {
+            Get-Command Get-GitHubStatusComponent | Should -Not -BeNullOrEmpty
+        }
+        It 'Can be called with no parameters' {
+            { Get-GitHubStatusComponent } | Should -Not -Throw
+        }
+        It 'Function exists' {
+            Get-Command Get-GitHubStatusIncident | Should -Not -BeNullOrEmpty
+        }
+        It 'Can be called with no parameters' {
+            { Get-GitHubStatusIncident } | Should -Not -Throw
+        }
+        It 'Can be called with Unresolved parameter' {
+            { Get-GitHubStatusIncident -Unresolved } | Should -Not -Throw
+        }
+    }
+    Context 'Disconnect' {
+        It 'Can disconnect without parameters' {
+            { Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount } | Should -Not -Throw
+            Get-GitHubContext -ListAvailable | Should -HaveCount 0
         }
     }
 }
