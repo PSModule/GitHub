@@ -100,7 +100,7 @@ query(`$org: String!, `$teamSlug: String!) {
                 Visible       = $team.privacy -eq 'VISIBLE' ? $true : $false
                 ParentTeam    = $team.parentTeam.slug
                 Organization  = $team.organization.login
-                ChildTeams    = @($team.childTeams.nodes.name)
+                ChildTeams    = $team.childTeams.nodes.name
                 CreatedAt     = $team.createdAt # 9/9/2023 11:15:12 AM
                 UpdatedAt     = $team.updatedAt # 3/10/2024 4:42:05 PM
             }
