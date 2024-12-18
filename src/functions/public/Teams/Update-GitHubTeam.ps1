@@ -8,26 +8,29 @@
 
         .EXAMPLE
         $params = @{
-            Organization        = 'github'
-            Name                = 'team-name'
-            NewName             = 'new-team-name'
-            Description         = 'A new team'
-            Privacy             = 'closed'
-            NotificationSetting = 'notifications_enabled'
-            Permission          = 'pull'
-            ParentTeamID        = 123456
+            Organization  = 'github'
+            Slug          = 'team-name'
+            NewName       = 'new team name'
+            Description   = 'A new team'
+            Visible       = $true
+            Notifications = $true
+            Permission    = 'pull'
+            ParentTeamID  = 123456
         }
         Update-GitHubTeam @params
+
+        Updates the team with the slug 'team-name' in the `github` organization with the new name 'new team name', description 'A new team',
+        visibility set to 'closed', notifications enabled, permission set to 'pull', and the parent team ID set to 123456.
 
         .NOTES
         [Update a team](https://docs.github.com/en/rest/teams/teams?apiVersion=2022-11-28#update-a-team)
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([GitHubTeam])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The slug of the team name.
         [Parameter(Mandatory)]
-        [Alias('team_slug', 'Name')]
+        [Alias('team_slug')]
         [string] $Slug,
 
         # The organization name. The name is not case sensitive.
@@ -39,7 +42,7 @@
         # The new team name.
         [Parameter()]
         [Alias()]
-        [string] $NewName,
+        [string] $Name,
 
         # The description of the team.
         [Parameter()]
@@ -93,7 +96,7 @@
     process {
         try {
             $body = @{
-                name                 = $NewName
+                name                 = $Name
                 description          = $Description
                 privacy              = $PSBoundParameters.ContainsKey('Visible') ? ($Visible ? 'closed' : 'secret') : $null
                 notification_setting = $PSBoundParameters.ContainsKey('Notifications') ?
@@ -113,21 +116,23 @@
             if ($PSCmdlet.ShouldProcess("$Organization/$Slug", 'Update')) {
                 Invoke-GitHubAPI @inputObject | ForEach-Object {
                     $team = $_.Response
-                    [PSCustomObject]@{
-                        Name          = $team.name
-                        Slug          = $team.slug
-                        NodeID        = $team.node_id
-                        CombinedSlug  = $Organization + '/' + $team.slug
-                        DatabaseId    = $team.id
-                        Description   = $team.description
-                        Notifications = $team.notification_setting -eq 'notifications_enabled' ? $true : $false
-                        Visible       = $team.privacy -eq 'closed' ? $true : $false
-                        ParentTeam    = $team.parent.slug
-                        Organization  = $team.organization.login
-                        ChildTeams    = @()
-                        CreatedAt     = $team.createdAt
-                        UpdatedAt     = $team.updatedAt
-                    }
+                    [GitHubTeam](
+                        @{
+                            Name          = $team.name
+                            Slug          = $team.slug
+                            NodeID        = $team.node_id
+                            CombinedSlug  = $Organization + '/' + $team.slug
+                            DatabaseId    = $team.id
+                            Description   = $team.description
+                            Notifications = $team.notification_setting -eq 'notifications_enabled' ? $true : $false
+                            Visible       = $team.privacy -eq 'closed' ? $true : $false
+                            ParentTeam    = $team.parent.slug
+                            Organization  = $team.organization.login
+                            ChildTeams    = @()
+                            CreatedAt     = $team.created_at
+                            UpdatedAt     = $team.updated_at
+                        }
+                    )
                 }
             }
         } catch {

@@ -10,7 +10,7 @@
         .EXAMPLE
         Get-GitHubTeamByName -Organization 'github' -Name 'my-team-name'
     #>
-    [OutputType([void])]
+    [OutputType([GitHubTeam])]
     [CmdletBinding()]
     param(
         # The slug of the team name.
@@ -89,21 +89,23 @@ query(`$org: String!, `$teamSlug: String!) {
             $team = $response.data.organization.team
 
             # Accumulate the teams in results
-            [PSCustomObject]@{
-                Name          = $team.name # PSModule Admins
-                Slug          = $team.slug # psmodule-admins
-                NodeID        = $team.id # T_kwDOCIVCh84AgoiD
-                CombinedSlug  = $team.combinedSlug # PSModule/psmodule-admins
-                DatabaseId    = $team.databaseId # 8554627
-                Description   = $team.description #
-                Notifications = $team.notificationSetting -eq 'NOTIFICATIONS_ENABLED' ? $true : $false
-                Visible       = $team.privacy -eq 'VISIBLE' ? $true : $false
-                ParentTeam    = $team.parentTeam.slug
-                Organization  = $team.organization.login
-                ChildTeams    = $team.childTeams.nodes.name
-                CreatedAt     = $team.createdAt # 9/9/2023 11:15:12 AM
-                UpdatedAt     = $team.updatedAt # 3/10/2024 4:42:05 PM
-            }
+            [GitHubTeam](
+                @{
+                    Name          = $team.name
+                    Slug          = $team.slug
+                    NodeID        = $team.id
+                    CombinedSlug  = $team.CombinedSlug
+                    DatabaseID    = $team.DatabaseId
+                    Description   = $team.description
+                    Notifications = $team.notificationSetting -eq 'NOTIFICATIONS_ENABLED' ? $true : $false
+                    Visible       = $team.privacy -eq 'VISIBLE' ? $true : $false
+                    ParentTeam    = $team.parentTeam.slug
+                    Organization  = $team.organization.login
+                    ChildTeams    = $team.childTeams.nodes.name
+                    CreatedAt     = $team.createdAt
+                    UpdatedAt     = $team.updatedAt
+                }
+            )
         } catch {
             throw $_
         }

@@ -14,19 +14,19 @@
         Gets all teams in the `github` organization.
 
         .EXAMPLE
-        Get-GitHubTeam -Organization 'github' -Name 'my-team-name'
+        Get-GitHubTeam -Organization 'github' -Slug 'my-team-name'
 
         Gets the team with the slug 'my-team-name' in the `github` organization.
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([GitHubTeam])]
     [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(
         # The slug of the team name.
         [Parameter(
             Mandatory,
-            ParameterSetName = 'ByName'
+            ParameterSetName = 'BySlug'
         )]
-        [Alias('team_slug', 'Name')]
+        [Alias('team_slug')]
         [string] $Slug,
 
         # The organization name. The name is not case sensitive.

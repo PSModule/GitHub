@@ -27,6 +27,7 @@
         .NOTES
         [Create a team](https://docs.github.com/rest/teams/teams#create-a-team)
     #>
+    [OutputType([GitHubTeam])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The name of the team.
@@ -76,7 +77,7 @@
 
         # The ID of a team to set as the parent team.
         [Parameter()]
-        [int] $ParentTeamID,
+        [int] $ParentTeamID = 0,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -96,7 +97,7 @@
         Write-Debug "Organization: [$Organization]"
 
         if (-not $Visible -and $ParentTeamID -gt 0) {
-            throw "A nested team cannot be secret (invisible)."
+            throw 'A nested team cannot be secret (invisible).'
         }
     }
 
@@ -124,21 +125,23 @@
             if ($PSCmdlet.ShouldProcess("'$Name' in '$Organization'", 'Create team')) {
                 Invoke-GitHubAPI @inputObject | ForEach-Object {
                     $team = $_.Response
-                    [PSCustomObject]@{
-                        Name          = $team.name
-                        Slug          = $team.slug
-                        NodeID        = $team.node_id
-                        CombinedSlug  = $Organization + '/' + $team.slug
-                        DatabaseId    = $team.id
-                        Description   = $team.description
-                        Notifications = $team.notification_setting -eq 'notifications_enabled' ? $true : $false
-                        Visible       = $team.privacy -eq "closed" ? $true : $false
-                        ParentTeam    = $team.parent.slug
-                        Organization  = $team.organization.login
-                        ChildTeams    = @()
-                        CreatedAt     = $team.created_at
-                        UpdatedAt     = $team.updated_at
-                    }
+                    [GitHubTeam](
+                        @{
+                            Name          = $team.name
+                            Slug          = $team.slug
+                            NodeID        = $team.node_id
+                            CombinedSlug  = $Organization + '/' + $team.slug
+                            DatabaseId    = $team.id
+                            Description   = $team.description
+                            Notifications = $team.notification_setting -eq 'notifications_enabled' ? $true : $false
+                            Visible       = $team.privacy -eq 'closed' ? $true : $false
+                            ParentTeam    = $team.parent.slug
+                            Organization  = $team.organization.login
+                            ChildTeams    = @()
+                            CreatedAt     = $team.created_at
+                            UpdatedAt     = $team.updated_at
+                        }
+                    )
                 }
             }
         } catch {

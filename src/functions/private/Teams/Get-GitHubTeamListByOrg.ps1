@@ -12,7 +12,7 @@
         .NOTES
         [List teams](https://docs.github.com/rest/teams/teams#list-teams)
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([GitHubTeam[]])]
     [CmdletBinding()]
     param(
         # The organization name. The name is not case sensitive.
@@ -99,21 +99,23 @@ query(`$org: String!, `$after: String) {
 
                 # Accumulate the teams in results
                 $teams.nodes | ForEach-Object {
-                    [PSCustomObject]@{
-                        Name          = $_.name # PSModule Admins
-                        Slug          = $_.slug # psmodule-admins
-                        NodeID        = $_.id # T_kwDOCIVCh84AgoiD
-                        CombinedSlug  = $_.combinedSlug # PSModule/psmodule-admins
-                        DatabaseId    = $_.databaseId # 8554627
-                        Description   = $_.description #
-                        Notifications = $_.notificationSetting -eq 'NOTIFICATIONS_ENABLED' ? $true : $false
-                        Privacy       = $_.privacy # VISIBLE
-                        ParentTeam    = $_.parentTeam.slug
-                        Organization  = $_.organization.login
-                        ChildTeams    = $_.childTeams.nodes.name
-                        CreatedAt     = $_.createdAt # 9/9/2023 11:15:12 AM
-                        UpdatedAt     = $_.updatedAt # 3/10/2024 4:42:05 PM
-                    }
+                    [GitHubTeam](
+                        @{
+                            Name          = $_.name
+                            Slug          = $_.slug
+                            NodeID        = $_.id
+                            CombinedSlug  = $_.combinedSlug
+                            DatabaseId    = $_.databaseId
+                            Description   = $_.description
+                            Notifications = $_.notificationSetting -eq 'NOTIFICATIONS_ENABLED' ? $true : $false
+                            Visible       = $_.privacy -eq 'VISIBLE' ? $true : $false
+                            ParentTeam    = $_.parentTeam.slug
+                            Organization  = $_.organization.login
+                            ChildTeams    = $_.childTeams.nodes.name
+                            CreatedAt     = $_.createdAt
+                            UpdatedAt     = $_.updatedAt
+                        }
+                    )
                 }
 
                 # Check if there's another page to fetch
