@@ -22,7 +22,10 @@
     [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(
         # The slug of the team name.
-        [Parameter(Mandatory)]
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'ByName'
+        )]
         [Alias('team_slug', 'Name')]
         [string] $Slug,
 
@@ -57,7 +60,7 @@
                 Context      = $Context
             }
             switch ($PSCmdlet.ParameterSetName) {
-                'GetByName' {
+                'ByName' {
                     Get-GitHubTeamByName @params -Slug $Slug
                 }
                 '__AllParameterSets' {
