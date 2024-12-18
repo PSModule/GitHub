@@ -21,7 +21,7 @@
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('team_slug',)]
+        [Alias('team_slug')]
         [string] $Slug,
 
         # The organization name. The name is not case sensitive.
