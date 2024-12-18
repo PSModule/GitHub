@@ -9,22 +9,19 @@
 
         .EXAMPLE
         Get-GitHubTeamByName -Organization 'github' -Name 'my-team-name'
-
-        .NOTES
-        [Get team by name](https://docs.github.com/en/rest/teams/teams#get-a-team-by-name)
     #>
     [OutputType([void])]
     [CmdletBinding()]
     param(
-        # The organization name. The name is not case sensitive.
-        [Parameter(Mandatory)]
-        [Alias('Org')]
-        [string] $Organization,
-
         # The slug of the team name.
         [Parameter(Mandatory)]
         [Alias('Team', 'TeamName', 'slug', 'team_slug')]
         [string] $Name,
+
+        # The organization name. The name is not case sensitive.
+        [Parameter(Mandatory)]
+        [Alias('Org')]
+        [string] $Organization,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.

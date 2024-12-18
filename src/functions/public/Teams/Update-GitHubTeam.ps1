@@ -8,37 +8,41 @@
 
         .EXAMPLE
         $params = @{
-            Organization        = 'github'
-            Name                = 'team-name'
-            NewName             = 'new-team-name'
-            Description         = 'A new team'
-            Privacy             = 'closed'
-            NotificationSetting = 'notifications_enabled'
-            Permission          = 'pull'
-            ParentTeamID        = 123456
+            Organization  = 'github'
+            Slug          = 'team-name'
+            NewName       = 'new team name'
+            Description   = 'A new team'
+            Visible       = $true
+            Notifications = $true
+            Permission    = 'pull'
+            ParentTeamID  = 123456
         }
         Update-GitHubTeam @params
+
+        Updates the team with the slug 'team-name' in the `github` organization with the new name 'new team name', description 'A new team',
+        visibility set to 'closed', notifications enabled, permission set to 'pull', and the parent team ID set to 123456.
 
         .NOTES
         [Update a team](https://docs.github.com/en/rest/teams/teams?apiVersion=2022-11-28#update-a-team)
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([GitHubTeam])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
-        # The organization name. The name is not case sensitive.
-        [Parameter(Mandatory)]
-        [Alias('Org')]
-        [string] $Organization,
-
         # The slug of the team name.
         [Parameter(Mandatory)]
-        [Alias('Team', 'TeamName', 'slug', 'team_slug')]
-        [string] $Name,
+        [Alias('team_slug')]
+        [string] $Slug,
+
+        # The organization name. The name is not case sensitive.
+        # If you do not provide this parameter, the command will use the organization from the context.
+        [Parameter()]
+        [Alias('Org')]
+        [string] $Organization,
 
         # The new team name.
         [Parameter()]
         [Alias()]
-        [string] $NewName,
+        [string] $Name,
 
         # The description of the team.
         [Parameter()]
@@ -53,21 +57,19 @@
         # - closed - visible to all members of this organization.
         # Default for child team: closed
         [Parameter()]
-        [ValidateSet('secret', 'closed')]
-        [string] $Privacy = 'closed',
+        [bool] $Visible,
 
         # The notification setting the team has chosen. The options are:
         # notifications_enabled - team members receive notifications when the team is @mentioned.
         # notifications_disabled - no one receives notifications.
         # Default: notifications_enabled
         [Parameter()]
-        [ValidateSet('notifications_enabled', 'notifications_disabled')]
-        [string] $NotificationSetting,
+        [bool] $Notifications,
 
         # Closing down notice. The permission that new repositories will be added to the team with when none is specified.
         [Parameter()]
         [ValidateSet('pull', 'push')]
-        [string] $Permission = 'pull',
+        [string] $Permission,
 
         # The ID of a team to set as the parent team.
         [Parameter()]
@@ -94,25 +96,43 @@
     process {
         try {
             $body = @{
-                name                 = $NewName
+                name                 = $Name
                 description          = $Description
-                privacy              = $Privacy
-                notification_setting = $NotificationSetting
+                privacy              = $PSBoundParameters.ContainsKey('Visible') ? ($Visible ? 'closed' : 'secret') : $null
+                notification_setting = $PSBoundParameters.ContainsKey('Notifications') ?
+                    ($Notifications ? 'notifications_enabled' : 'notifications_disabled') : $null
                 permission           = $Permission
-                parent_team_id       = $ParentTeamID
+                parent_team_id       = $ParentTeamID -eq 0 ? $null : $ParentTeamID
             }
             $body | Remove-HashtableEntry -NullOrEmptyValues
 
             $inputObject = @{
                 Context     = $Context
-                APIEndpoint = "/orgs/$Organization/teams/$Name"
+                APIEndpoint = "/orgs/$Organization/teams/$Slug"
                 Method      = 'Patch'
                 Body        = $body
             }
 
-            if ($PSCmdlet.ShouldProcess("$Organization/$Name", 'Update')) {
+            if ($PSCmdlet.ShouldProcess("$Organization/$Slug", 'Update')) {
                 Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
+                    $team = $_.Response
+                    [GitHubTeam](
+                        @{
+                            Name          = $team.name
+                            Slug          = $team.slug
+                            NodeID        = $team.node_id
+                            CombinedSlug  = $Organization + '/' + $team.slug
+                            DatabaseId    = $team.id
+                            Description   = $team.description
+                            Notifications = $team.notification_setting -eq 'notifications_enabled' ? $true : $false
+                            Visible       = $team.privacy -eq 'closed' ? $true : $false
+                            ParentTeam    = $team.parent.slug
+                            Organization  = $team.organization.login
+                            ChildTeams    = @()
+                            CreatedAt     = $team.created_at
+                            UpdatedAt     = $team.updated_at
+                        }
+                    )
                 }
             }
         } catch {
