@@ -17,12 +17,18 @@
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The organization name. The name is not case sensitive.
-        [Parameter(Mandatory)]
+        [Parameter(
+            Mandatory,
+            ValueFromPipelineByPropertyName
+        )]
         [Alias('Org')]
         [string] $Organization,
 
         # The slug of the team name.
-        [Parameter(Mandatory)]
+        [Parameter(
+            Mandatory,
+            ValueFromPipelineByPropertyName
+        )]
         [Alias('Team', 'TeamName', 'slug', 'team_slug')]
         [string] $Name,
 
