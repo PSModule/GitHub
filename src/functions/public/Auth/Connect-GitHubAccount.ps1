@@ -306,6 +306,7 @@
                 Write-Host "Logged in as $name!"
             }
             if ($PassThru) {
+                Write-Debug "Passing context [$contextObj] to the pipeline."
                 $contextObj
             }
 

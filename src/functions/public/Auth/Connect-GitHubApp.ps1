@@ -61,6 +61,10 @@ function Connect-GitHubApp {
         )]
         [string] $Enterprise,
 
+        # Passes the context object to the pipeline.
+        [Parameter()]
+        [switch] $PassThru,
+
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
@@ -129,11 +133,16 @@ function Connect-GitHubApp {
                 }
                 Write-Verbose 'Logging in using a managed installation access token...'
                 Write-Verbose ($contextParams | Format-Table | Out-String)
-                $tmpContext = [InstallationGitHubContext]::new((Set-GitHubContext -Context $contextParams.Clone() -PassThru))
-                Write-Verbose ($tmpContext | Format-List | Out-String)
+                $contextObj = [InstallationGitHubContext]::new((Set-GitHubContext -Context $contextParams.Clone() -PassThru))
+                Write-Verbose ($contextObj | Format-List | Out-String)
                 if (-not $Silent) {
-                    $name = $tmpContext.name
-                    Write-Host "Connected $name"
+                    $name = $contextObj.name
+                    Write-Host '✓ ' -ForegroundColor Green -NoNewline
+                    Write-Host "Connected $name!"
+                }
+                if ($PassThru) {
+                    Write-Debug "Passing context [$contextObj] to the pipeline."
+                    Write-Output $contextObj
                 }
                 $contextParams.Clear()
             }
