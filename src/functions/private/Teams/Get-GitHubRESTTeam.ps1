@@ -26,7 +26,8 @@
     [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(
         # The organization name. The name is not case sensitive.
-        [Parameter(Mandatory)]
+        # If not provided, the organization from the context is used.
+        [Parameter()]
         [Alias('Org')]
         [string] $Organization,
 

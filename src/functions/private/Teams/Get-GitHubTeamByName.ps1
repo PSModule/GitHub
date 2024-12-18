@@ -9,22 +9,20 @@
 
         .EXAMPLE
         Get-GitHubTeamByName -Organization 'github' -Name 'my-team-name'
-
-        .NOTES
-        [Get team by name](https://docs.github.com/en/rest/teams/teams#get-a-team-by-name)
     #>
     [OutputType([void])]
     [CmdletBinding()]
     param(
-        # The organization name. The name is not case sensitive.
-        [Parameter(Mandatory)]
-        [Alias('Org')]
-        [string] $Organization,
-
         # The slug of the team name.
         [Parameter(Mandatory)]
-        [Alias('Team', 'TeamName', 'slug', 'team_slug')]
-        [string] $Name,
+        [Alias('team_slug', 'Name')]
+        [string] $Slug,
+
+        # The organization name. The name is not case sensitive.
+        # If not provided, the owner from the context will be used.
+        [Parameter()]
+        [Alias('Org')]
+        [string] $Organization,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -46,14 +44,65 @@
 
     process {
         try {
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/orgs/$Organization/teams/$Name"
-                Method      = 'Get'
+            $query = @"
+query(`$org: String!, `$teamSlug: String!) {
+  organization(login: `$org) {
+    team(slug: `$teamSlug) {
+        id
+        name
+        slug
+        combinedSlug
+        databaseId
+        description
+        notificationSetting
+        privacy
+        parentTeam {
+          name
+          slug
+        }
+        organization {
+          login
+        }
+        childTeams(first: 100) {
+          nodes {
+            name
+          }
+        }
+        createdAt
+        updatedAt
+      }
+    }
+  }
+}
+"@
+
+            # Variables hash that will be sent with the query
+            $variables = @{
+                org      = $Organization
+                teamSlug = $Slug
             }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
+            # Send the request to the GitHub GraphQL API
+            $response = Invoke-GitHubGraphQLQuery -Query $query -Variables $variables
+
+            # Extract team data
+            $team = $response.data.organization.team
+
+            # Accumulate the teams in results
+            [PSCustomObject]@{
+                Name          = $team.name # PSModule Admins
+                Slug          = $team.slug # psmodule-admins
+                NodeID        = $team.id # T_kwDOCIVCh84AgoiD
+                CombinedSlug  = $team.combinedSlug # PSModule/psmodule-admins
+                DatabaseId    = $team.databaseId # 8554627
+                Description   = $team.description #
+                Notifications = $team.notificationSetting -eq 'NOTIFICATIONS_ENABLED' ? $true : $false
+                Privacy       = $team.privacy # VISIBLE
+                ParentTeam    = $team.parentTeam.slug
+                Organization  = $team.organization.login
+                ChildTeams    = $team.childTeams.nodes.name
+                CreatedAt     = $team.createdAt # 9/9/2023 11:15:12 AM
+                UpdatedAt     = $team.updatedAt # 3/10/2024 4:42:05 PM
             }
         } catch {
             throw $_
