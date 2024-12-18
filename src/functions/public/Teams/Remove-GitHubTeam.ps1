@@ -16,21 +16,21 @@
     [OutputType([void])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
-        # The organization name. The name is not case sensitive.
-        [Parameter(
-            Mandatory,
-            ValueFromPipelineByPropertyName
-        )]
-        [Alias('Org')]
-        [string] $Organization,
-
         # The slug of the team name.
         [Parameter(
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('Team', 'TeamName', 'slug', 'team_slug')]
-        [string] $Name,
+        [Alias('team_slug', 'Name')]
+        [string] $Slug,
+
+        # The organization name. The name is not case sensitive.
+        # If not provided, the organization from the context is used.
+        [Parameter(
+            ValueFromPipelineByPropertyName
+        )]
+        [Alias('Org')]
+        [string] $Organization,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -55,10 +55,10 @@
             $inputObject = @{
                 Context     = $Context
                 Method      = 'Delete'
-                APIEndpoint = "/orgs/$Organization/teams/$Name"
+                APIEndpoint = "/orgs/$Organization/teams/$Slug"
             }
 
-            if ($PSCmdlet.ShouldProcess("$Organization/$Name", 'Delete')) {
+            if ($PSCmdlet.ShouldProcess("$Organization/$Slug", 'Delete')) {
                 Invoke-GitHubAPI @inputObject | ForEach-Object {
                     Write-Output $_.Response
                 }

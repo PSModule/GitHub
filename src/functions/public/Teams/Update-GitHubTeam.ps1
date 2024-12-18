@@ -25,15 +25,16 @@
     [OutputType([pscustomobject])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
-        # The organization name. The name is not case sensitive.
-        [Parameter(Mandatory)]
-        [Alias('Org')]
-        [string] $Organization,
-
         # The slug of the team name.
         [Parameter(Mandatory)]
-        [Alias('Team', 'TeamName', 'slug', 'team_slug')]
-        [string] $Name,
+        [Alias('team_slug', 'Name')]
+        [string] $Slug,
+
+        # The organization name. The name is not case sensitive.
+        # If you do not provide this parameter, the command will use the organization from the context.
+        [Parameter()]
+        [Alias('Org')]
+        [string] $Organization,
 
         # The new team name.
         [Parameter()]
@@ -53,21 +54,19 @@
         # - closed - visible to all members of this organization.
         # Default for child team: closed
         [Parameter()]
-        [ValidateSet('secret', 'closed')]
-        [string] $Privacy = 'closed',
+        [bool] $Visible,
 
         # The notification setting the team has chosen. The options are:
         # notifications_enabled - team members receive notifications when the team is @mentioned.
         # notifications_disabled - no one receives notifications.
         # Default: notifications_enabled
         [Parameter()]
-        [ValidateSet('notifications_enabled', 'notifications_disabled')]
-        [string] $NotificationSetting,
+        [bool] $Notifications,
 
         # Closing down notice. The permission that new repositories will be added to the team with when none is specified.
         [Parameter()]
         [ValidateSet('pull', 'push')]
-        [string] $Permission = 'pull',
+        [string] $Permission,
 
         # The ID of a team to set as the parent team.
         [Parameter()]
@@ -96,23 +95,38 @@
             $body = @{
                 name                 = $NewName
                 description          = $Description
-                privacy              = $Privacy
-                notification_setting = $NotificationSetting
+                privacy              = $null -ne $Visible ? ($Visible ? 'closed' : 'secret') : $null
+                notification_setting = $null -ne $Notifications ? ($Notifications ? 'notifications_enabled' : 'notifications_disabled') : $null
                 permission           = $Permission
-                parent_team_id       = $ParentTeamID
+                parent_team_id       = $ParentTeamID -eq 0 ? $null : $ParentTeamID
             }
             $body | Remove-HashtableEntry -NullOrEmptyValues
 
             $inputObject = @{
                 Context     = $Context
-                APIEndpoint = "/orgs/$Organization/teams/$Name"
+                APIEndpoint = "/orgs/$Organization/teams/$Slug"
                 Method      = 'Patch'
                 Body        = $body
             }
 
-            if ($PSCmdlet.ShouldProcess("$Organization/$Name", 'Update')) {
+            if ($PSCmdlet.ShouldProcess("$Organization/$Slug", 'Update')) {
                 Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
+                    $team = $_.Response
+                    [PSCustomObject]@{
+                        Name          = $team.name
+                        Slug          = $team.slug
+                        NodeID        = $team.node_id
+                        CombinedSlug  = $Organization + '/' + $team.slug
+                        DatabaseId    = $team.id
+                        Description   = $team.description
+                        Notifications = $team.notification_setting -eq 'notifications_enabled' ? $true : $false
+                        Visible       = $team.privacy -eq 'closed' ? $true : $false
+                        ParentTeam    = $team.parent.slug
+                        Organization  = $team.organization.login
+                        ChildTeams    = @()
+                        CreatedAt     = $team.createdAt
+                        UpdatedAt     = $team.updatedAt
+                    }
                 }
             }
         } catch {

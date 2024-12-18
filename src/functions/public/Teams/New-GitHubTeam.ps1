@@ -29,14 +29,15 @@
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param(
-        # The organization name. The name is not case sensitive.
-        [Parameter(Mandatory)]
-        [Alias('Org')]
-        [string] $Organization,
-
         # The name of the team.
         [Parameter(Mandatory)]
         [string] $Name,
+
+        # The organization name. The name is not case sensitive.
+        # If not provided, the organization from the context is used.
+        [Parameter()]
+        [Alias('Org')]
+        [string] $Organization,
 
         # The description of the team.
         [Parameter()]
@@ -59,16 +60,14 @@
         # - closed - visible to all members of this organization.
         # Default for child team: closed
         [Parameter()]
-        [ValidateSet('secret', 'closed')]
-        [string] $Privacy = 'closed',
+        [bool] $Visible = $true,
 
         # The notification setting the team has chosen. The options are:
         # notifications_enabled - team members receive notifications when the team is @mentioned.
         # notifications_disabled - no one receives notifications.
         # Default: notifications_enabled
         [Parameter()]
-        [ValidateSet('notifications_enabled', 'notifications_disabled')]
-        [string] $NotificationSetting,
+        [bool] $Notifications = $true,
 
         # Closing down notice. The permission that new repositories will be added to the team with when none is specified.
         [Parameter()]
@@ -95,6 +94,10 @@
             $Organization = $Context.Owner
         }
         Write-Debug "Organization: [$Organization]"
+
+        if (-not $Visible -and $ParentTeamID -gt 0) {
+            throw "A nested team cannot be secret (invisible)."
+        }
     }
 
     process {
@@ -104,8 +107,8 @@
                 description          = $Description
                 maintainers          = $Maintainers
                 repo_names           = $RepoNames
-                privacy              = $Privacy
-                notification_setting = $NotificationSetting
+                privacy              = $Visible ? 'closed' : 'secret'
+                notification_setting = $Notifications ? 'notifications_enabled' : 'notifications_disabled'
                 permission           = $Permission
                 parent_team_id       = $ParentTeamID -eq 0 ? $null : $ParentTeamID
             }
@@ -120,7 +123,22 @@
 
             if ($PSCmdlet.ShouldProcess("'$Name' in '$Organization'", 'Create team')) {
                 Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
+                    $team = $_.Response
+                    [PSCustomObject]@{
+                        Name          = $team.name
+                        Slug          = $team.slug
+                        NodeID        = $team.node_id
+                        CombinedSlug  = $Organization + '/' + $team.slug
+                        DatabaseId    = $team.id
+                        Description   = $team.description
+                        Notifications = $team.notification_setting -eq 'notifications_enabled' ? $true : $false
+                        Visible       = $team.privacy -eq "closed" ? $true : $false
+                        ParentTeam    = $team.parent.slug
+                        Organization  = $team.organization.login
+                        ChildTeams    = @()
+                        CreatedAt     = $team.createdAt
+                        UpdatedAt     = $team.updatedAt
+                    }
                 }
             }
         } catch {
