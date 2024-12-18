@@ -88,7 +88,11 @@ query(`$org: String!, `$teamSlug: String!) {
             # Extract team data
             $team = $response.data.organization.team
 
-            # Accumulate the teams in results
+            # Output the team object
+            if (-not $team) {
+                return
+            }
+
             [GitHubTeam](
                 @{
                     Name          = $team.name
