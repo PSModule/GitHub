@@ -95,7 +95,7 @@ Describe 'GitHub' {
         }
 
         It 'Can connect to a GitHub App Installation' {
-            { $appContext = Connect-GitHubApp -Organization 'PSModule' } | Should -Not -Throw
+            { $appContext = Connect-GitHubApp -Organization 'PSModule' -PassThru } | Should -Not -Throw
             $appContext | Should -Not -BeNullOrEmpty
             Write-Verbose ($appContext | Out-String) -Verbose
             { $appContext | Disconnect-GitHub } | Should -Not -Throw
