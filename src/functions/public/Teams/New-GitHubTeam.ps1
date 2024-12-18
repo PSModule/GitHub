@@ -136,8 +136,8 @@
                         ParentTeam    = $team.parent.slug
                         Organization  = $team.organization.login
                         ChildTeams    = @()
-                        CreatedAt     = $team.createdAt
-                        UpdatedAt     = $team.updatedAt
+                        CreatedAt     = $team.created_at
+                        UpdatedAt     = $team.updated_at
                     }
                 }
             }
