@@ -139,7 +139,6 @@ function Connect-GitHubApp {
                     $name = $tmpContext.name
                     Write-Host '✓ ' -ForegroundColor Green -NoNewline
                     Write-Host "Connected $name!"
-                    Write-Host "Logged in as $name!"
                 }
                 if ($PassThru) {
                     $tmpContext
