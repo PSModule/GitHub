@@ -87,7 +87,7 @@
             $Context.RefreshTokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.refresh_token_expires_in)
 
             if ($PSCmdlet.ShouldProcess('Access token', 'Update/refresh')) {
-                Set-GitHubContext -Context $Context
+                Set-Context -Context $Context -ID $Context.ID
             }
 
             if ($PassThru) {
