@@ -60,8 +60,8 @@
                 Context      = $Context
             }
             switch ($PSCmdlet.ParameterSetName) {
-                'ByName' {
-                    Get-GitHubTeamByName @params -Slug $Slug
+                'BySlug' {
+                    Get-GitHubTeamBySlug @params -Slug $Slug
                 }
                 '__AllParameterSets' {
                     Get-GitHubTeamListByOrg @params

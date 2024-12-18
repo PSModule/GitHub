@@ -1,4 +1,4 @@
-﻿function Get-GitHubTeamByName {
+﻿function Get-GitHubTeamBySlug {
     <#
         .SYNOPSIS
         Get a team by name
@@ -8,14 +8,14 @@
         and replaces spaces with a - separator. For example, "My TEam Näme" would become my-team-name.
 
         .EXAMPLE
-        Get-GitHubTeamByName -Organization 'github' -Name 'my-team-name'
+        Get-GitHubTeamBySlug -Organization 'github' -Slug 'my-team-name'
     #>
     [OutputType([GitHubTeam])]
     [CmdletBinding()]
     param(
         # The slug of the team name.
         [Parameter(Mandatory)]
-        [Alias('team_slug', 'Name')]
+        [Alias('team_slug')]
         [string] $Slug,
 
         # The organization name. The name is not case sensitive.
