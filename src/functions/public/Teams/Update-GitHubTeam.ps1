@@ -95,8 +95,9 @@
             $body = @{
                 name                 = $NewName
                 description          = $Description
-                privacy              = $null -ne $Visible ? ($Visible ? 'closed' : 'secret') : $null
-                notification_setting = $null -ne $Notifications ? ($Notifications ? 'notifications_enabled' : 'notifications_disabled') : $null
+                privacy              = $PSBoundParameters.ContainsKey('Visible') ? ($Visible ? 'closed' : 'secret') : $null
+                notification_setting = $PSBoundParameters.ContainsKey('Notifications') ?
+                    ($Notifications ? 'notifications_enabled' : 'notifications_disabled') : $null
                 permission           = $Permission
                 parent_team_id       = $ParentTeamID -eq 0 ? $null : $ParentTeamID
             }
