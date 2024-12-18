@@ -34,6 +34,13 @@ Describe 'GitHub' {
             { Disconnect-GitHubAccount } | Should -Not -Throw
         }
 
+        It 'Can pass the context to the pipeline' {
+            $context = Connect-GitHubAccount -PassThru
+            Write-Verbose (Get-GitHubContext | Out-String) -Verbose
+            $context | Should -Not -BeNullOrEmpty
+            { $context | Disconnect-GitHubAccount } | Should -Not -Throw
+        }
+
         It 'Can connect multiple sessions, GITHUB_TOKEN + classic PAT token' {
             { Connect-GitHubAccount -Token $env:TEST_PAT } | Should -Not -Throw
             { Connect-GitHubAccount -Token $env:TEST_PAT } | Should -Not -Throw

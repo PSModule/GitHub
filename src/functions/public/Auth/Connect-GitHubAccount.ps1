@@ -144,7 +144,11 @@
 
         # Make the connected context NOT the default context.
         [Parameter()]
-        [switch] $NotDefault
+        [switch] $NotDefault,
+
+        # Passes the context object to the pipeline.
+        [Parameter()]
+        [switch] $PassThru
     )
 
     begin {
@@ -300,6 +304,9 @@
                 $name = $contextObj.Username
                 Write-Host '✓ ' -ForegroundColor Green -NoNewline
                 Write-Host "Logged in as $name!"
+            }
+            if ($PassThru) {
+                $contextObj
             }
 
             if ($authType -eq 'App' -and $AutoloadInstallations) {
