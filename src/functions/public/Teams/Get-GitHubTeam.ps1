@@ -50,7 +50,7 @@
             $query = @"
 query(`$org: String!, `$after: String) {
   organization(login: `$org) {
-    teams($teamQuery) {
+    teams(first: 100, after: `$after) {
       nodes {
         id
         name

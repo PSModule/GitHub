@@ -9,14 +9,14 @@
         and replaces spaces with a - separator. For example, "My TEam Näme" would become my-team-name.
 
         .EXAMPLE
-        Get-GitHubRESTTeam -Organization 'github'
+        Get-GitHubRESTTeam -Organization 'GitHub'
 
-        Gets all teams in the 'github' organization.
+        Gets all teams in the `github` organization.
 
         .EXAMPLE
         Get-GitHubRESTTeam -Organization 'github' -Name 'my-team-name'
 
-        Gets the team with the slug 'my-team-name' in the 'github' organization.
+        Gets the team with the slug 'my-team-name' in the `github` organization.
 
         .NOTES
         [List teams](https://docs.github.com/rest/teams/teams#list-teams)
