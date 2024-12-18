@@ -61,6 +61,10 @@ function Connect-GitHubApp {
         )]
         [string] $Enterprise,
 
+        # Passes the context object to the pipeline.
+        [Parameter()]
+        [switch] $PassThru,
+
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
@@ -133,7 +137,12 @@ function Connect-GitHubApp {
                 Write-Verbose ($tmpContext | Format-List | Out-String)
                 if (-not $Silent) {
                     $name = $tmpContext.name
-                    Write-Host "Connected $name"
+                    Write-Host '✓ ' -ForegroundColor Green -NoNewline
+                    Write-Host "Connected $name!"
+                    Write-Host "Logged in as $name!"
+                }
+                if ($PassThru) {
+                    $tmpContext
                 }
                 $contextParams.Clear()
             }
