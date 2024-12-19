@@ -83,7 +83,7 @@ query(`$org: String!, `$teamSlug: String!) {
             }
 
             # Send the request to the GitHub GraphQL API
-            $response = Invoke-GitHubGraphQLQuery -Query $query -Variables $variables
+            $response = Invoke-GitHubGraphQLQuery -Query $query -Variables $variables -Context $Context
 
             # Extract team data
             $team = $response.data.organization.team
