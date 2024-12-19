@@ -52,7 +52,7 @@
                     @{
                         ID             = $_.id
                         GUID           = $_.guid
-                        DeliveredAt    = $null -eq $_.delivered_at ? [datetime]::MinValue : [DateTime]::Parse($_.delivered_at)
+                        DeliveredAt    = $_.delivered_at
                         Redelivery     = $_.redelivery
                         Duration       = $_.duration
                         Status         = $_.status
@@ -61,7 +61,7 @@
                         Action         = $_.action
                         InstallationID = $_.installation.id
                         RepositoryID   = $_.repository.id
-                        ThrottledAt    = $null -eq $_.throttled_at ? [datetime]::MinValue : [DateTime]::Parse($_.throttled_at)
+                        ThrottledAt    = $_.throttled_at
                         URL            = $_.url
                         Request        = $_.request
                         Response       = $_.response
