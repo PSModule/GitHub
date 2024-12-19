@@ -79,7 +79,7 @@ Describe 'GitHub' {
 
         It 'Can disconnect a specific context' {
             { Disconnect-GitHubAccount -Context 'github.com/psmodule-test-app/Organization/PSModule' -Silent } | Should -Not -Throw
-            $contexts = Get-GitHubContextInfo -Name '*psmodule-test-app*' -Verbose:$false
+            $contexts = Get-GitHubContextInfo -Name 'github.com/psmodule-test-app/*' -Verbose:$false
             Write-Verbose ($contexts | Out-String) -Verbose
             ($contexts).Count | Should -Be 3
             Connect-GitHubAccount -ClientID $env:TEST_APP_CLIENT_ID -PrivateKey $env:TEST_APP_PRIVATE_KEY -AutoloadInstallations
