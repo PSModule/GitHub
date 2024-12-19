@@ -1,4 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '5.0.4' }
+﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '5.0.5' }
 
 function Get-GitHubContextInfo {
     <#
@@ -12,6 +12,16 @@ function Get-GitHubContextInfo {
         Get-GitHubContextInfo
 
         Gets the current GitHub context.
+
+        .EXAMPLE
+        Get-GitHubContextInfo -Name 'github.com*'
+
+        Gets the GitHub context that matches the name 'github.com*'.
+
+        .EXAMPLE
+        Get-GitHubContextInfo -Name '*/Organization/*'
+
+        Gets the GitHub context that matches the name '*/Organization/*'.
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSAvoidUsingConvertToSecureStringWithPlainText', '',
@@ -19,7 +29,12 @@ function Get-GitHubContextInfo {
     )]
     [OutputType([GitHubContext])]
     [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
-    param()
+    param(
+        # The name of the context to get.
+        [Parameter()]
+        [SupportsWildcards()]
+        [string] $Name = '*'
+    )
 
     begin {
         $stackPath = Get-PSCallStackPath
@@ -29,7 +44,7 @@ function Get-GitHubContextInfo {
 
     process {
         try {
-            Get-ContextInfo -ID "$($script:GitHub.Config.ID)/*"
+            Get-ContextInfo -ID "$($script:GitHub.Config.ID)/$Name"
         } catch {
             throw $_
         }
