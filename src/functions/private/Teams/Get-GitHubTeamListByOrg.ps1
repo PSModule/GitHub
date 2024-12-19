@@ -92,7 +92,7 @@ query(`$org: String!, `$after: String) {
                 $variables['after'] = $after
 
                 # Send the request to the GitHub GraphQL API
-                $response = Invoke-GitHubGraphQLQuery -Query $query -Variables $variables
+                $response = Invoke-GitHubGraphQLQuery -Query $query -Variables $variables -Context $Context
 
                 # Extract team data
                 $teams = $response.data.organization.teams
