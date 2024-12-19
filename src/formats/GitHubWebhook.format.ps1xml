@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuration>
+    <ViewDefinitions>
+        <!-- Table View -->
+        <View>
+            <Name>GitHubWebhookTable</Name>
+            <ViewSelectedBy>
+                <TypeName>GitHubWebhook</TypeName>
+            </ViewSelectedBy>
+            <TableControl>
+                <TableHeaders>
+                    <TableColumnHeader>Status</TableColumnHeader>
+                    <TableColumnHeader>ID</TableColumnHeader>
+                    <TableColumnHeader>GUID</TableColumnHeader>
+                    <TableColumnHeader>Event</TableColumnHeader>
+                    <TableColumnHeader>StatusCode</TableColumnHeader>
+                    <TableColumnHeader>DeliveredAt</TableColumnHeader>
+                    <TableColumnHeader>Duration(s)</TableColumnHeader>
+                </TableHeaders>
+                <TableRowEntries>
+                    <TableRowEntry>
+                        <TableColumnItems>
+                            <!-- Icon column -->
+                            <TableColumnItem>
+                                <ScriptBlock>
+                                    if ($_.Status -eq 'ok') {
+                                        # Green checkmark
+                                        [char]0x2714
+                                    }
+                                    else {
+                                        # Red heavy ballot X
+                                        [char]0x2718
+                                    }
+                                </ScriptBlock>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>ID</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>GUID</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Event</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>StatusCode</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>DeliveredAt</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Duration</PropertyName>
+                            </TableColumnItem>
+                        </TableColumnItems>
+                    </TableRowEntry>
+                </TableRowEntries>
+            </TableControl>
+        </View>
+
+        <!-- List View -->
+        <View>
+            <Name>GitHubWebhookList</Name>
+            <ViewSelectedBy>
+                <TypeName>GitHubWebhook</TypeName>
+            </ViewSelectedBy>
+            <ListControl>
+                <ListEntries>
+                    <ListEntry>
+                        <ListItems>
+                            <ListItem>
+                                <Label>ID:</Label>
+                                <PropertyName>ID</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>GUID:</Label>
+                                <PropertyName>GUID</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>DeliveredAt:</Label>
+                                <PropertyName>DeliveredAt</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>Redelivery:</Label>
+                                <PropertyName>Redelivery</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>Duration (s):</Label>
+                                <PropertyName>Duration</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>Status:</Label>
+                                <PropertyName>Status</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>StatusCode:</Label>
+                                <PropertyName>StatusCode</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>Event:</Label>
+                                <PropertyName>Event</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>Action:</Label>
+                                <PropertyName>Action</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>InstallationID:</Label>
+                                <PropertyName>InstallationID</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>RepositoryID:</Label>
+                                <PropertyName>RepositoryID</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>ThrottledAt:</Label>
+                                <PropertyName>ThrottledAt</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>URL:</Label>
+                                <PropertyName>URL</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>Request:</Label>
+                                <PropertyName>Request</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>Response:</Label>
+                                <PropertyName>Response</PropertyName>
+                            </ListItem>
+                        </ListItems>
+                    </ListEntry>
+                </ListEntries>
+            </ListControl>
+        </View>
+    </ViewDefinitions>
+</Configuration>

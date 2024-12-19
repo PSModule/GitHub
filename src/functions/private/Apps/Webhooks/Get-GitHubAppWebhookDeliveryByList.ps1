@@ -17,6 +17,7 @@
         .NOTES
         [Get a webhook configuration for an app](https://docs.github.com/rest/apps/webhooks#get-a-webhook-configuration-for-an-app)
     #>
+    [OutputType([GitHubWebhook[]])]
     [CmdletBinding()]
     param(
         # The context to run the command in. Used to get the details for the API call.
@@ -41,7 +42,25 @@
             }
 
             Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
+                [GitHubWebhook](
+                    @{
+                        ID             = $_.id
+                        GUID           = $_.guid
+                        DeliveredAt    = $_.delivered_at
+                        Redelivery     = $_.redelivery
+                        Duration       = $_.duration
+                        Status         = $_.status
+                        StatusCode     = $_.status_code
+                        Event          = $_.event
+                        Action         = $_.action
+                        InstallationID = $_.installation.id
+                        RepositoryID   = $_.repository.id
+                        ThrottledAt    = $_.throttled_at
+                        URL            = $_.url
+                        Request        = $_.request
+                        Response       = $_.response
+                    }
+                )
             }
         } catch {
             throw $_
