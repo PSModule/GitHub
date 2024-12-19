@@ -1,6 +1,6 @@
 ﻿class GitHubWebhook {
     # Unique identifier of the delivery.
-    [int] $ID
+    [uint64] $ID
 
     # Unique identifier for the event (shared with all deliveries for all webhooks that subscribe to this event).
     [string] $GUID
@@ -18,7 +18,7 @@
     [string] $Status
 
     # Status code received when delivery was made.
-    [int] $StatusCode
+    [uint16] $StatusCode
 
     # The event that triggered the delivery.
     [string] $Event
@@ -27,10 +27,10 @@
     [string] $Action
 
     # The id of the GitHub App installation associated with this event.
-    [int] $InstallationID
+    [uint64] $InstallationID
 
     # The id of the repository associated with this event.
-    [int] $RepositoryID
+    [uint64] $RepositoryID
 
     # Time when the webhook delivery was throttled.
     [datetime] $ThrottledAt
