@@ -5,7 +5,7 @@
 <table>
     <tr>
         <td>Available functions</td>
-        <td>992</td>
+        <td>998</td>
     </tr>
     <tr>
         <td>Covered functions</td>
@@ -13,11 +13,11 @@
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>833</td>
+        <td>839</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>16.03%</td>
+        <td>15.93%</td>
     </tr>
 </table>
 
@@ -218,6 +218,9 @@
 | `/orgs/{org}/personal-access-tokens`                                                                                      |                    | :x:                |                    | :x:                |                    |
 | `/orgs/{org}/personal-access-tokens/{pat_id}`                                                                             |                    |                    |                    | :x:                |                    |
 | `/orgs/{org}/personal-access-tokens/{pat_id}/repositories`                                                                |                    | :x:                |                    |                    |                    |
+| `/orgs/{org}/private-registries`                                                                                          |                    | :x:                |                    | :x:                |                    |
+| `/orgs/{org}/private-registries/public-key`                                                                               |                    | :x:                |                    |                    |                    |
+| `/orgs/{org}/private-registries/{secret_name}`                                                                            | :x:                | :x:                | :x:                |                    |                    |
 | `/orgs/{org}/projects`                                                                                                    |                    | :x:                |                    | :x:                |                    |
 | `/orgs/{org}/properties/schema`                                                                                           |                    | :x:                | :x:                |                    |                    |
 | `/orgs/{org}/properties/schema/{custom_property_name}`                                                                    | :x:                | :x:                |                    |                    | :x:                |
