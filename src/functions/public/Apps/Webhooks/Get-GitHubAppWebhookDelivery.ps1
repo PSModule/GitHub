@@ -23,6 +23,7 @@
         [Get a delivery for an app webhook](https://docs.github.com/rest/apps/webhooks#get-a-delivery-for-an-app-webhook)
         [Get a webhook configuration for an app](https://docs.github.com/rest/apps/webhooks#get-a-webhook-configuration-for-an-app)
     #>
+    [OutputType([GitHubWebhook[]])]
     [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(
         # The ID of the delivery.
