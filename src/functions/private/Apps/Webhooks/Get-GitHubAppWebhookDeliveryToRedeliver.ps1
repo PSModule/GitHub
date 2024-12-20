@@ -38,16 +38,29 @@
 
     process {
         try {
-            $allDeliveries = Get-GitHubAppWebhookDeliveryByList -Context $Context -PerPage $PerPage
             $checkPoint = (Get-Date).AddHours($TimeSpan)
-            $allDeliveries | Where-Object { $_.DeliveredAt -gt $checkPoint } | Group-Object -Property guid |
-                Where-Object { $_.Group.status -notcontains 'OK' } | ForEach-Object {
-                    [pscustomobject]@{
-                        guid      = $_.name
-                        redeliver = $_.Group.status -notcontains 'OK'
-                        id        = $_.Group[0].id
+            Get-GitHubAppWebhookDeliveryByList -Context $Context -PerPage $PerPage | Where-Object { $_.DeliveredAt -gt $checkPoint } |
+                Group-Object -Property GUID | Where-Object { $_.Group.Status -notcontains 'OK' } | ForEach-Object {
+                    $refObject = $_.Group | Sort-Object -Property DeliveredAt
+                    [GitHubWebhookRedelivery]@{
+                        Attempts       = $_.Count
+                        GUID           = $_.Name
+                        Status         = $refObject.Status
+                        StatusCode     = $refObject.StatusCode
+                        Event          = $refObject.Event
+                        Action         = $refObject.Action
+                        Duration       = $_.Group.Duration | Measure-Object -Average | Select-Object -ExpandProperty Average
+                        ID             = $refObject.ID
+                        DeliveredAt    = $refObject.DeliveredAt
+                        Redelivery     = $refObject.Redelivery
+                        InstallationID = $refObject.InstallationID
+                        RepositoryID   = $refObject.RepositoryID
+                        ThrottledAt    = $refObject.ThrottledAt
+                        URL            = $refObject.URL
+                        Request        = $refObject.Request
+                        Response       = $refObject.Response
                     }
-                } | Where-Object { $_.redeliver }
+                }
         } catch {
             throw $_
         }
