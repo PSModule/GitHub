@@ -29,9 +29,7 @@
         # The ID of the delivery.
         [Parameter(
             Mandatory,
-            ParameterSetName = 'ByID',
-            ValueFromPipeline,
-            ValueFromPipelineByPropertyName
+            ParameterSetName = 'ByID'
         )]
         [Alias('DeliveryID', 'delivery_id')]
         [string] $ID,
@@ -39,15 +37,16 @@
         # Only the ones to redeliver.
         [Parameter(
             Mandatory,
-            ParameterSetName = 'ToRedeliver')]
-        [switch] $ToRedeliver,
+            ParameterSetName = 'Redelivery')]
+        [switch] $NeedingRedelivery,
 
         # The timespan to check for redeliveries in hours.
-        [Parameter(ParameterSetName = 'ToRedeliver')]
+        [Parameter(ParameterSetName = 'Redelivery')]
         [int] $TimeSpan = -2,
 
         # The number of results per page (max 100).
         [Parameter(ParameterSetName = 'ByList')]
+        [Parameter(ParameterSetName = 'Redelivery')]
         [ValidateRange(0, 100)]
         [int] $PerPage,
 
@@ -71,8 +70,8 @@
                     Write-Debug "ByID: [$ID]"
                     Get-GitHubAppWebhookDeliveryByID -ID $ID -Context $Context
                 }
-                'ToRedeliver' {
-                    Write-Debug "ToRedeliver: [$ToRedeliver]"
+                'Redelivery' {
+                    Write-Debug "Redelivery: [$NeedingRedelivery]"
                     Get-GitHubAppWebhookDeliveryToRedeliver -Context $Context -PerPage $PerPage -TimeSpan $TimeSpan
                 }
                 'ByList' {
