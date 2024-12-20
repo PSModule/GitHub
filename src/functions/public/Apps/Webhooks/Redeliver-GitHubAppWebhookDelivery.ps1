@@ -1,4 +1,4 @@
-﻿function Redeliver-GitHubAppWebhookDelivery {
+﻿function Invoke-GitHubAppWebhookReDelivery {
     <#
         .SYNOPSIS
         Redeliver a delivery for an app webhook
@@ -10,7 +10,7 @@
         to access this endpoint.
 
         .EXAMPLE
-        Redeliver-GitHubAppWebhookDelivery -ID 12345
+        Invoke-GitHubAppWebhookReDelivery -ID 12345
 
         Redelivers the delivery with the ID `12345`.
 
@@ -18,6 +18,7 @@
         [Redeliver a delivery for an app webhook](https://docs.github.com/rest/apps/webhooks#redeliver-a-delivery-for-an-app-webhook)
     #>
     [OutputType([void])]
+    [Alias('Redeliver-GitHubAppWebhookDelivery')]
     [CmdletBinding(SupportsShouldProcess)]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSUseApprovedVerbs', '', Scope = 'Function',

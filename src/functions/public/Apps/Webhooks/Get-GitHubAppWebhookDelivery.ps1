@@ -24,17 +24,31 @@
         [Get a webhook configuration for an app](https://docs.github.com/rest/apps/webhooks#get-a-webhook-configuration-for-an-app)
     #>
     [OutputType([GitHubWebhook[]])]
-    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
+    [CmdletBinding(DefaultParameterSetName = 'ByList')]
     param(
         # The ID of the delivery.
         [Parameter(
             Mandatory,
-            ParameterSetName = 'ByID',
-            ValueFromPipeline,
-            ValueFromPipelineByPropertyName
+            ParameterSetName = 'ByID'
         )]
         [Alias('DeliveryID', 'delivery_id')]
         [string] $ID,
+
+        # Only the ones to redeliver.
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'Redelivery')]
+        [switch] $NeedingRedelivery,
+
+        # The timespan to check for redeliveries in hours.
+        [Parameter(ParameterSetName = 'Redelivery')]
+        [int] $TimeSpan = -2,
+
+        # The number of results per page (max 100).
+        [Parameter(ParameterSetName = 'ByList')]
+        [Parameter(ParameterSetName = 'Redelivery')]
+        [ValidateRange(0, 100)]
+        [int] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -53,10 +67,16 @@
         try {
             switch ($PSCmdlet.ParameterSetName) {
                 'ByID' {
+                    Write-Debug "ByID: [$ID]"
                     Get-GitHubAppWebhookDeliveryByID -ID $ID -Context $Context
                 }
-                '__AllParameterSets' {
-                    Get-GitHubAppWebhookDeliveryByList -Context $Context
+                'Redelivery' {
+                    Write-Debug "Redelivery: [$NeedingRedelivery]"
+                    Get-GitHubAppWebhookDeliveryToRedeliver -Context $Context -PerPage $PerPage -TimeSpan $TimeSpan
+                }
+                'ByList' {
+                    Write-Debug 'ByList'
+                    Get-GitHubAppWebhookDeliveryByList -Context $Context -PerPage $PerPage
                 }
             }
         } catch {
