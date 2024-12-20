@@ -36,6 +36,12 @@
         [Alias('DeliveryID', 'delivery_id')]
         [string] $ID,
 
+        # Only the ones to redeliver.
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'ToRedeliver')]
+        [switch] $ToRedeliver,
+
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
@@ -54,6 +60,9 @@
             switch ($PSCmdlet.ParameterSetName) {
                 'ByID' {
                     Get-GitHubAppWebhookDeliveryByID -ID $ID -Context $Context
+                }
+                'ToRedeliver' {
+                    Get-GitHubAppWebhookDeliveryToRedeliver -Context $Context
                 }
                 '__AllParameterSets' {
                     Get-GitHubAppWebhookDeliveryByList -Context $Context
