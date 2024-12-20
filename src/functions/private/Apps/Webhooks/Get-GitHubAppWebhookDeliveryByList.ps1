@@ -15,11 +15,16 @@
         Returns the webhook configuration for the authenticated app.
 
         .NOTES
-        [Get a webhook configuration for an app](https://docs.github.com/rest/apps/webhooks#get-a-webhook-configuration-for-an-app)
+        [List deliveries for an app webhook](https://docs.github.com/rest/apps/webhooks#list-deliveries-for-an-app-webhook)
     #>
     [OutputType([GitHubWebhook[]])]
     [CmdletBinding()]
     param(
+        # The number of results per page (max 100).
+        [Parameter()]
+        [ValidateRange(0, 100)]
+        [int] $PerPage,
+
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
@@ -35,10 +40,15 @@
 
     process {
         try {
+            $body = @{
+                per_page = $PerPage
+            }
+
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = '/app/hook/deliveries'
                 Method      = 'GET'
+                Body        = $body
             }
 
             Invoke-GitHubAPI @inputObject | ForEach-Object {
