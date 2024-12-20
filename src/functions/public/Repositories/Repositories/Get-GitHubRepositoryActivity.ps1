@@ -66,7 +66,6 @@
         [string] $Direction = 'desc',
 
         # The number of results per page (max 100).
-        # Default: 30
         [Parameter()]
         [ValidateRange(0, 100)]
         [int] $PerPage,
