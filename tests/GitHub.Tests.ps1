@@ -18,6 +18,33 @@ Describe 'GitHub' {
             $config | Should -Not -BeNullOrEmpty
         }
     }
+    Context 'Meta' {
+        It 'Get-GitHubRoot' {
+            $root = Get-GitHubRoot
+            Write-Verbose ($root | Format-Table | Out-String) -Verbose
+            $root | Should -Not -BeNullOrEmpty
+        }
+        It 'Get-GitHubApiVersion' {
+            $apiVersion = Get-GitHubApiVersion
+            Write-Verbose ($apiVersion | Format-Table | Out-String) -Verbose
+            $apiVersion | Should -Not -BeNullOrEmpty
+        }
+        It 'Get-GitHubMeta' {
+            $meta = Get-GitHubMeta
+            Write-Verbose ($meta | Format-Table | Out-String) -Verbose
+            $meta | Should -Not -BeNullOrEmpty
+        }
+        It 'Get-GitHubOctocat' {
+            $octocat = Get-GitHubOctocat
+            Write-Verbose ($octocat | Format-Table | Out-String) -Verbose
+            $octocat | Should -Not -BeNullOrEmpty
+        }
+        It 'Get-GitHubZen' {
+            $zen = Get-GitHubZen
+            Write-Verbose ($zen | Format-Table | Out-String) -Verbose
+            $zen | Should -Not -BeNullOrEmpty
+        }
+    }
     Context 'Auth' {
         It 'Can connect and disconnect without parameters in GitHubActions' {
             { Connect-GitHubAccount } | Should -Not -Throw
@@ -66,6 +93,7 @@ Describe 'GitHub' {
             Write-Verbose ($contexts | Out-String) -Verbose
             ($contexts).Count | Should -Be 3
         }
+
         It 'Can be called with a GitHub App and autoload installations' {
             $params = @{
                 ClientID   = $env:TEST_APP_CLIENT_ID
@@ -129,51 +157,36 @@ Describe 'GitHub' {
             $config.ID | Should -Be 'PSModule.GitHub'
         }
     }
-    Context 'Meta' {
-        It 'Get-GitHubRoot' {
-            $root = Get-GitHubRoot
-            Write-Verbose ($root | Format-Table | Out-String) -Verbose
-            $root | Should -Not -BeNullOrEmpty
+    Context 'Status' {
+        It 'Can be called with no parameters' {
+            { Get-GitHubScheduledMaintenance } | Should -Not -Throw
         }
-        It 'Get-GitHubApiVersion' {
-            $apiVersion = Get-GitHubApiVersion
-            Write-Verbose ($apiVersion | Format-Table | Out-String) -Verbose
-            $apiVersion | Should -Not -BeNullOrEmpty
+        It 'Can be called with Active parameter' {
+            { Get-GitHubScheduledMaintenance -Active } | Should -Not -Throw
         }
-        It 'Get-GitHubMeta' {
-            $meta = Get-GitHubMeta
-            Write-Verbose ($meta | Format-Table | Out-String) -Verbose
-            $meta | Should -Not -BeNullOrEmpty
+        It 'Can be called with Upcoming parameter' {
+            { Get-GitHubScheduledMaintenance -Upcoming } | Should -Not -Throw
         }
-        It 'Get-GitHubOctocat' {
-            $octocat = Get-GitHubOctocat
-            Write-Verbose ($octocat | Format-Table | Out-String) -Verbose
-            $octocat | Should -Not -BeNullOrEmpty
+        It 'Can be called with no parameters' {
+            { Get-GitHubStatus } | Should -Not -Throw
         }
-        It 'Get-GitHubZen' {
-            $zen = Get-GitHubZen
-            Write-Verbose ($zen | Format-Table | Out-String) -Verbose
-            $zen | Should -Not -BeNullOrEmpty
+        It 'Can be called with Summary parameter' {
+            { Get-GitHubStatus -Summary } | Should -Not -Throw
         }
-    }
-    Context 'Git' {
-        It 'Set-GitHubGitConfig sets the Git configuration' {
-            { Set-GitHubGitConfig } | Should -Not -Throw
-            $gitConfig = Get-GitHubGitConfig
-            Write-Verbose ($gitConfig | Format-Table | Out-String) -Verbose
-
-            $gitConfig | Should -Not -BeNullOrEmpty
-            $gitConfig.'user.name' | Should -Not -BeNullOrEmpty
-            $gitConfig.'user.email' | Should -Not -BeNullOrEmpty
+        It 'Function exists' {
+            Get-Command Get-GitHubStatusComponent | Should -Not -BeNullOrEmpty
         }
-    }
-    Context 'API' {
-        It 'Can be called directly to get ratelimits' {
-            {
-                $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit'
-                Write-Verbose ($rateLimit | Format-Table | Out-String) -Verbose
-            } | Should -Not -Throw
-
+        It 'Can be called with no parameters' {
+            { Get-GitHubStatusComponent } | Should -Not -Throw
+        }
+        It 'Function exists' {
+            Get-Command Get-GitHubStatusIncident | Should -Not -BeNullOrEmpty
+        }
+        It 'Can be called with no parameters' {
+            { Get-GitHubStatusIncident } | Should -Not -Throw
+        }
+        It 'Can be called with Unresolved parameter' {
+            { Get-GitHubStatusIncident -Unresolved } | Should -Not -Throw
         }
     }
     Context 'Commands' {
@@ -197,6 +210,28 @@ Describe 'GitHub' {
             } | Should -Not -Throw
         }
     }
+
+    Context 'Git' {
+        It 'Set-GitHubGitConfig sets the Git configuration' {
+            { Set-GitHubGitConfig } | Should -Not -Throw
+            $gitConfig = Get-GitHubGitConfig
+            Write-Verbose ($gitConfig | Format-Table | Out-String) -Verbose
+
+            $gitConfig | Should -Not -BeNullOrEmpty
+            $gitConfig.'user.name' | Should -Not -BeNullOrEmpty
+            $gitConfig.'user.email' | Should -Not -BeNullOrEmpty
+        }
+    }
+    Context 'API' {
+        It 'Can be called directly to get ratelimits' {
+            {
+                $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit'
+                Write-Verbose ($rateLimit | Format-Table | Out-String) -Verbose
+            } | Should -Not -Throw
+
+        }
+    }
+
     Context 'Rate-Limit' {
         It 'Can be called with no parameters' {
             { Get-GitHubRateLimit } | Should -Not -Throw
@@ -241,42 +276,47 @@ Describe 'GitHub' {
             { Get-GitHubRepository -Username 'MariusStorhaug' } | Should -Not -Throw
         }
     }
-    Context 'Status' {
-        It 'Can be called with no parameters' {
-            { Get-GitHubScheduledMaintenance } | Should -Not -Throw
-        }
-        It 'Can be called with Active parameter' {
-            { Get-GitHubScheduledMaintenance -Active } | Should -Not -Throw
-        }
-        It 'Can be called with Upcoming parameter' {
-            { Get-GitHubScheduledMaintenance -Upcoming } | Should -Not -Throw
-        }
-        It 'Can be called with no parameters' {
-            { Get-GitHubStatus } | Should -Not -Throw
-        }
-        It 'Can be called with Summary parameter' {
-            { Get-GitHubStatus -Summary } | Should -Not -Throw
-        }
-        It 'Function exists' {
-            Get-Command Get-GitHubStatusComponent | Should -Not -BeNullOrEmpty
-        }
-        It 'Can be called with no parameters' {
-            { Get-GitHubStatusComponent } | Should -Not -Throw
-        }
-        It 'Function exists' {
-            Get-Command Get-GitHubStatusIncident | Should -Not -BeNullOrEmpty
-        }
-        It 'Can be called with no parameters' {
-            { Get-GitHubStatusIncident } | Should -Not -Throw
-        }
-        It 'Can be called with Unresolved parameter' {
-            { Get-GitHubStatusIncident -Unresolved } | Should -Not -Throw
-        }
-    }
+
     Context 'Disconnect' {
         It 'Can disconnect without parameters' {
             { Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount } | Should -Not -Throw
             Get-GitHubContext -ListAvailable | Should -HaveCount 0
         }
+    }
+}
+
+Describe 'As a user - Fine-grained PAT token' {
+    BeforeAll {
+        Connect-GitHubAccount -Token $env:TEST_FG_PAT
+    }
+    AfterAll {
+        Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+    }
+}
+
+Describe 'As a user - Classic PAT token' {
+    BeforeAll {
+        Connect-GitHubAccount -Token $env:TEST_PAT
+    }
+    AfterAll {
+        Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+    }
+}
+
+Describe 'As GitHub Actions' {
+    BeforeAll {
+        Connect-GitHubAccount
+    }
+    AfterAll {
+        Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+    }
+}
+
+Describe 'As a GitHub App' {
+    BeforeAll {
+        Connect-GitHubAccount -ClientID $env:TEST_APP_CLIENT_ID -PrivateKey $env:TEST_APP_PRIVATE_KEY
+    }
+    AfterAll {
+        Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
 }
