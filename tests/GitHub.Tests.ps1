@@ -598,9 +598,12 @@ Describe 'As a GitHub App' {
                 Write-Verbose ($deliveries | Format-Table | Out-String) -Verbose
                 $deliveries | Should -Not -BeNullOrEmpty
             }
+            It 'Can redeliver a webhook delivery' {
+                $deliveries = Get-GitHubAppWebhookDelivery | Select-Object -First 1
+                { Invoke-GitHubAppWebhookReDelivery -ID $deliveries.id } | Should -Not -Throw
+            }
         }
     }
-    Context ''
     Context 'API' {
         It 'Can be called directly to get ratelimits' {
             {
