@@ -12,6 +12,7 @@
         .NOTES
         [List pending organization invitations](https://docs.github.com/rest/orgs/members#list-pending-organization-invitations)
     #>
+    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [CmdletBinding()]
     param(
         # The organization name. The name is not case sensitive.

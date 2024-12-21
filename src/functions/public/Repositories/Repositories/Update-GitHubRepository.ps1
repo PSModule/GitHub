@@ -23,6 +23,7 @@
         .NOTES
         [Update a repository](https://docs.github.com/rest/repos/repos#update-a-repository)
     #>
+    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.

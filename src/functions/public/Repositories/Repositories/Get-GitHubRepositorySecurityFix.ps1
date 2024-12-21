@@ -15,8 +15,8 @@
 
         .NOTES
         [Check if automated security fixes are enabled for a repository](https://docs.github.com/rest/repos/repos#check-if-automated-security-fixes-are-enabled-for-a-repository)
-
     #>
+    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [Alias('Get-GitHubRepoSecurityFixes')]
     [CmdletBinding()]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]

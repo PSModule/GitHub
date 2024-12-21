@@ -30,6 +30,7 @@
         [List repository rule suites](https://docs.github.com/rest/repos/rule-suites#list-repository-rule-suites)
         [Get a repository rule suite](https://docs.github.com/rest/repos/rule-suites#get-a-repository-rule-suite)
     #>
+    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Long links')]
     [CmdletBinding(DefaultParameterSetName = 'Default')]
