@@ -326,12 +326,12 @@ Describe 'As a user - Fine-grained PAT token' {
             { Get-GitHubLicense -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
         }
     }
-    Context 'Emojis' {
+    Context 'Emoji' {
         It 'Can be called with no parameters' {
-            { Get-GitHubEmojis } | Should -Not -Throw
+            { Get-GitHubEmoji } | Should -Not -Throw
         }
         It 'Can be download the emojis' {
-            { Get-GitHubEmojis -Destination $env:TEMP } | Should -Not -Throw
+            { Get-GitHubEmoji -Destination $env:TEMP } | Should -Not -Throw
         }
     }
     Context 'Repository' {
@@ -428,12 +428,12 @@ Describe 'As a user - Classic PAT token' {
             { Get-GitHubLicense -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
         }
     }
-    Context 'Emojis' {
+    Context 'Emoji' {
         It 'Can be called with no parameters' {
-            { Get-GitHubEmojis } | Should -Not -Throw
+            { Get-GitHubEmoji } | Should -Not -Throw
         }
         It 'Can be download the emojis' {
-            { Get-GitHubEmojis -Destination $env:TEMP } | Should -Not -Throw
+            { Get-GitHubEmoji -Destination $env:TEMP } | Should -Not -Throw
         }
     }
 }
@@ -516,12 +516,12 @@ Describe 'As GitHub Actions' {
             { Get-GitHubLicense -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
         }
     }
-    Context 'Emojis' {
+    Context 'Emoji' {
         It 'Can be called with no parameters' {
-            { Get-GitHubEmojis } | Should -Not -Throw
+            { Get-GitHubEmoji } | Should -Not -Throw
         }
         It 'Can be download the emojis' {
-            { Get-GitHubEmojis -Destination $env:TEMP } | Should -Not -Throw
+            { Get-GitHubEmoji -Destination $env:TEMP } | Should -Not -Throw
         }
     }
 }
