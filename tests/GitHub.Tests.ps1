@@ -359,6 +359,14 @@ Describe 'As a user - Fine-grained PAT token' {
             { Get-GitHubRepository -Username 'MariusStorhaug' } | Should -Not -Throw
         }
     }
+    Context 'GitIgnore' {
+        It 'Can be called with no parameters' {
+            { Get-GitHubGitignore } | Should -Not -Throw
+        }
+        It 'Can be called with Name parameter' {
+            { Get-GitHubGitignore -Name 'VisualStudio' } | Should -Not -Throw
+        }
+    }
 }
 
 Describe 'As a user - Classic PAT token' {
@@ -434,6 +442,14 @@ Describe 'As a user - Classic PAT token' {
         }
         It 'Can be download the emojis' {
             { Get-GitHubEmoji -Destination $env:TEMP } | Should -Not -Throw
+        }
+    }
+    Context 'GitIgnore' {
+        It 'Can be called with no parameters' {
+            { Get-GitHubGitignore } | Should -Not -Throw
+        }
+        It 'Can be called with Name parameter' {
+            { Get-GitHubGitignore -Name 'VisualStudio' } | Should -Not -Throw
         }
     }
 }
@@ -522,6 +538,14 @@ Describe 'As GitHub Actions' {
         }
         It 'Can be download the emojis' {
             { Get-GitHubEmoji -Destination $env:TEMP } | Should -Not -Throw
+        }
+    }
+    Context 'GitIgnore' {
+        It 'Can be called with no parameters' {
+            { Get-GitHubGitignore } | Should -Not -Throw
+        }
+        It 'Can be called with Name parameter' {
+            { Get-GitHubGitignore -Name 'VisualStudio' } | Should -Not -Throw
         }
     }
 }
