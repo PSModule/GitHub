@@ -32,33 +32,6 @@ Describe 'GitHub' {
             Get-GitHubConfig -Name HostName | Should -Be 'github.com'
         }
     }
-    Context 'Meta' {
-        It 'Get-GitHubRoot' {
-            $root = Get-GitHubRoot
-            Write-Verbose ($root | Format-Table | Out-String) -Verbose
-            $root | Should -Not -BeNullOrEmpty
-        }
-        It 'Get-GitHubApiVersion' {
-            $apiVersion = Get-GitHubApiVersion
-            Write-Verbose ($apiVersion | Format-Table | Out-String) -Verbose
-            $apiVersion | Should -Not -BeNullOrEmpty
-        }
-        It 'Get-GitHubMeta' {
-            $meta = Get-GitHubMeta
-            Write-Verbose ($meta | Format-Table | Out-String) -Verbose
-            $meta | Should -Not -BeNullOrEmpty
-        }
-        It 'Get-GitHubOctocat' {
-            $octocat = Get-GitHubOctocat
-            Write-Verbose ($octocat | Format-Table | Out-String) -Verbose
-            $octocat | Should -Not -BeNullOrEmpty
-        }
-        It 'Get-GitHubZen' {
-            $zen = Get-GitHubZen
-            Write-Verbose ($zen | Format-Table | Out-String) -Verbose
-            $zen | Should -Not -BeNullOrEmpty
-        }
-    }
     Context 'Auth' {
         It 'Can connect and disconnect without parameters in GitHubActions' {
             { Connect-GitHubAccount } | Should -Not -Throw
@@ -278,53 +251,6 @@ Describe 'GitHub' {
             { Write-GitHubWarning 'Warning' } | Should -Not -Throw
         }
     }
-    Context 'Git' {
-        It 'Set-GitHubGitConfig sets the Git configuration' {
-            { Set-GitHubGitConfig } | Should -Not -Throw
-            $gitConfig = Get-GitHubGitConfig
-            Write-Verbose ($gitConfig | Format-Table | Out-String) -Verbose
-
-            $gitConfig | Should -Not -BeNullOrEmpty
-            $gitConfig.'user.name' | Should -Not -BeNullOrEmpty
-            $gitConfig.'user.email' | Should -Not -BeNullOrEmpty
-        }
-    }
-    Context 'Repository' {
-
-        # Context 'Parameter Set: MyRepos_Type' {
-        #     It 'Can be called with no parameters' {
-        #         { Get-GitHubRepository - } | Should -Not -Throw
-        #     }
-
-        #     It 'Can be called with Type parameter' {
-        #         { Get-GitHubRepository -Type 'public' } | Should -Not -Throw
-        #     }
-        # }
-
-        # Context 'Parameter Set: MyRepos_Aff-Vis' {
-        #     It 'Can be called with Visibility and Affiliation parameters' {
-        #         { Get-GitHubRepository -Visibility 'public' -Affiliation 'owner' } | Should -Not -Throw
-        #     }
-        # }
-
-        It 'Can be called with Owner and Repo parameters' {
-            { Get-GitHubRepository -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
-        }
-
-        # Context 'Parameter Set: ListByID' {
-        #     It 'Can be called with SinceID parameter' {
-        #         { Get-GitHubRepository -SinceID 123456789 } | Select-Object -First 10 | Should -Not -Throw
-        #     }
-        # }
-
-        It 'Can be called with Owner parameter' {
-            { Get-GitHubRepository -Owner 'PSModule' } | Should -Not -Throw
-        }
-
-        It 'Can be called with Username parameter' {
-            { Get-GitHubRepository -Username 'MariusStorhaug' } | Should -Not -Throw
-        }
-    }
     Context 'Disconnect' {
         It 'Can disconnect without parameters' {
             { Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount } | Should -Not -Throw
@@ -340,11 +266,6 @@ Describe 'As a user - Fine-grained PAT token' {
     AfterAll {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
-    Context 'Rate-Limit' {
-        It 'Can be called with no parameters' {
-            { Get-GitHubRateLimit } | Should -Not -Throw
-        }
-    }
     Context 'API' {
         It 'Can be called directly to get ratelimits' {
             {
@@ -360,6 +281,74 @@ Describe 'As a user - Fine-grained PAT token' {
                 $viewer = Invoke-GitHubGraphQL -Query 'query { viewer { login } }'
                 Write-Verbose ($viewer | Format-Table | Out-String) -Verbose
             } | Should -Not -Throw
+        }
+    }
+    Context 'Meta' {
+        It 'Get-GitHubRoot' {
+            $root = Get-GitHubRoot
+            Write-Verbose ($root | Format-Table | Out-String) -Verbose
+            $root | Should -Not -BeNullOrEmpty
+        }
+        It 'Get-GitHubApiVersion' {
+            $apiVersion = Get-GitHubApiVersion
+            Write-Verbose ($apiVersion | Format-Table | Out-String) -Verbose
+            $apiVersion | Should -Not -BeNullOrEmpty
+        }
+        It 'Get-GitHubMeta' {
+            $meta = Get-GitHubMeta
+            Write-Verbose ($meta | Format-Table | Out-String) -Verbose
+            $meta | Should -Not -BeNullOrEmpty
+        }
+        It 'Get-GitHubOctocat' {
+            $octocat = Get-GitHubOctocat
+            Write-Verbose ($octocat | Format-Table | Out-String) -Verbose
+            $octocat | Should -Not -BeNullOrEmpty
+        }
+        It 'Get-GitHubZen' {
+            $zen = Get-GitHubZen
+            Write-Verbose ($zen | Format-Table | Out-String) -Verbose
+            $zen | Should -Not -BeNullOrEmpty
+        }
+    }
+    Context 'Rate-Limit' {
+        It 'Can be called with no parameters' {
+            { Get-GitHubRateLimit } | Should -Not -Throw
+        }
+    }
+    Context 'License' {
+        It 'Can be called with no parameters' {
+            { Get-GitHubLicense } | Should -Not -Throw
+        }
+        It 'Can be called with Name parameter' {
+            { Get-GitHubLicense -Name 'mit' } | Should -Not -Throw
+        }
+        It 'Can be called with Repository parameter' {
+            { Get-GitHubLicense -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
+        }
+    }
+    Context 'Repository' {
+        Context 'Parameter Set: MyRepos_Type' {
+            It 'Can be called with no parameters' {
+                { Get-GitHubRepository - } | Should -Not -Throw
+            }
+
+            It 'Can be called with Type parameter' {
+                { Get-GitHubRepository -Type 'public' } | Should -Not -Throw
+            }
+        }
+        Context 'Parameter Set: MyRepos_Aff-Vis' {
+            It 'Can be called with Visibility and Affiliation parameters' {
+                { Get-GitHubRepository -Visibility 'public' -Affiliation 'owner' } | Should -Not -Throw
+            }
+        }
+        It 'Can be called with Owner and Repo parameters' {
+            { Get-GitHubRepository -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
+        }
+        It 'Can be called with Owner parameter' {
+            { Get-GitHubRepository -Owner 'PSModule' } | Should -Not -Throw
+        }
+        It 'Can be called with Username parameter' {
+            { Get-GitHubRepository -Username 'MariusStorhaug' } | Should -Not -Throw
         }
     }
 }
@@ -371,11 +360,6 @@ Describe 'As a user - Classic PAT token' {
     AfterAll {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
-    Context 'Rate-Limit' {
-        It 'Can be called with no parameters' {
-            { Get-GitHubRateLimit } | Should -Not -Throw
-        }
-    }
     Context 'API' {
         It 'Can be called directly to get ratelimits' {
             {
@@ -391,6 +375,49 @@ Describe 'As a user - Classic PAT token' {
                 $viewer = Invoke-GitHubGraphQL -Query 'query { viewer { login } }'
                 Write-Verbose ($viewer | Format-Table | Out-String) -Verbose
             } | Should -Not -Throw
+        }
+    }
+    Context 'Meta' {
+        It 'Get-GitHubRoot' {
+            $root = Get-GitHubRoot
+            Write-Verbose ($root | Format-Table | Out-String) -Verbose
+            $root | Should -Not -BeNullOrEmpty
+        }
+        It 'Get-GitHubApiVersion' {
+            $apiVersion = Get-GitHubApiVersion
+            Write-Verbose ($apiVersion | Format-Table | Out-String) -Verbose
+            $apiVersion | Should -Not -BeNullOrEmpty
+        }
+        It 'Get-GitHubMeta' {
+            $meta = Get-GitHubMeta
+            Write-Verbose ($meta | Format-Table | Out-String) -Verbose
+            $meta | Should -Not -BeNullOrEmpty
+        }
+        It 'Get-GitHubOctocat' {
+            $octocat = Get-GitHubOctocat
+            Write-Verbose ($octocat | Format-Table | Out-String) -Verbose
+            $octocat | Should -Not -BeNullOrEmpty
+        }
+        It 'Get-GitHubZen' {
+            $zen = Get-GitHubZen
+            Write-Verbose ($zen | Format-Table | Out-String) -Verbose
+            $zen | Should -Not -BeNullOrEmpty
+        }
+    }
+    Context 'Rate-Limit' {
+        It 'Can be called with no parameters' {
+            { Get-GitHubRateLimit } | Should -Not -Throw
+        }
+    }
+    Context 'License' {
+        It 'Can be called with no parameters' {
+            { Get-GitHubLicense } | Should -Not -Throw
+        }
+        It 'Can be called with Name parameter' {
+            { Get-GitHubLicense -Name 'mit' } | Should -Not -Throw
+        }
+        It 'Can be called with Repository parameter' {
+            { Get-GitHubLicense -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
         }
     }
 }
@@ -402,11 +429,6 @@ Describe 'As GitHub Actions' {
     AfterAll {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
-    Context 'Rate-Limit' {
-        It 'Can be called with no parameters' {
-            { Get-GitHubRateLimit } | Should -Not -Throw
-        }
-    }
     Context 'API' {
         It 'Can be called directly to get ratelimits' {
             {
@@ -424,6 +446,60 @@ Describe 'As GitHub Actions' {
             } | Should -Not -Throw
         }
     }
+    Context 'Git' {
+        It 'Set-GitHubGitConfig sets the Git configuration' {
+            { Set-GitHubGitConfig } | Should -Not -Throw
+            $gitConfig = Get-GitHubGitConfig
+            Write-Verbose ($gitConfig | Format-Table | Out-String) -Verbose
+
+            $gitConfig | Should -Not -BeNullOrEmpty
+            $gitConfig.'user.name' | Should -Not -BeNullOrEmpty
+            $gitConfig.'user.email' | Should -Not -BeNullOrEmpty
+        }
+    }
+    Context 'Meta' {
+        It 'Get-GitHubRoot' {
+            $root = Get-GitHubRoot
+            Write-Verbose ($root | Format-Table | Out-String) -Verbose
+            $root | Should -Not -BeNullOrEmpty
+        }
+        It 'Get-GitHubApiVersion' {
+            $apiVersion = Get-GitHubApiVersion
+            Write-Verbose ($apiVersion | Format-Table | Out-String) -Verbose
+            $apiVersion | Should -Not -BeNullOrEmpty
+        }
+        It 'Get-GitHubMeta' {
+            $meta = Get-GitHubMeta
+            Write-Verbose ($meta | Format-Table | Out-String) -Verbose
+            $meta | Should -Not -BeNullOrEmpty
+        }
+        It 'Get-GitHubOctocat' {
+            $octocat = Get-GitHubOctocat
+            Write-Verbose ($octocat | Format-Table | Out-String) -Verbose
+            $octocat | Should -Not -BeNullOrEmpty
+        }
+        It 'Get-GitHubZen' {
+            $zen = Get-GitHubZen
+            Write-Verbose ($zen | Format-Table | Out-String) -Verbose
+            $zen | Should -Not -BeNullOrEmpty
+        }
+    }
+    Context 'Rate-Limit' {
+        It 'Can be called with no parameters' {
+            { Get-GitHubRateLimit } | Should -Not -Throw
+        }
+    }
+    Context 'License' {
+        It 'Can be called with no parameters' {
+            { Get-GitHubLicense } | Should -Not -Throw
+        }
+        It 'Can be called with Name parameter' {
+            { Get-GitHubLicense -Name 'mit' } | Should -Not -Throw
+        }
+        It 'Can be called with Repository parameter' {
+            { Get-GitHubLicense -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
+        }
+    }
 }
 
 Describe 'As a GitHub App' {
@@ -433,25 +509,12 @@ Describe 'As a GitHub App' {
     AfterAll {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
-    Context 'Rate-Limit' {
-        It 'Can be called with no parameters' {
-            { Get-GitHubRateLimit } | Should -Throw
-        }
-    }
     Context 'API' {
         It 'Can be called directly to get ratelimits' {
             {
                 $app = Invoke-GitHubAPI -ApiEndpoint '/app'
                 Write-Verbose ($app | Format-Table | Out-String) -Verbose
             } | Should -Not -Throw
-        }
-    }
-    Context 'GraphQL' {
-        It 'Can be called directly to get viewer' {
-            {
-                $viewer = Invoke-GitHubGraphQL -Query 'query { viewer { login } }'
-                Write-Verbose ($viewer | Format-Table | Out-String) -Verbose
-            } | Should -Throw
         }
     }
 }
