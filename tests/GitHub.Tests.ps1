@@ -171,30 +171,30 @@ Describe 'GitHub' {
             $config.ID | Should -Be 'PSModule.GitHub'
         }
     }
-    Context 'Status' {
+    Context 'Status' -ForEach @('public', 'eu') {
         It 'Can be called with no parameters' {
-            { Get-GitHubScheduledMaintenance } | Should -Not -Throw
+            { Get-GitHubScheduledMaintenance -Stamp $_ } | Should -Not -Throw
         }
         It 'Can be called with Active parameter' {
-            { Get-GitHubScheduledMaintenance -Active } | Should -Not -Throw
+            { Get-GitHubScheduledMaintenance -Stamp $_ -Active } | Should -Not -Throw
         }
         It 'Can be called with Upcoming parameter' {
-            { Get-GitHubScheduledMaintenance -Upcoming } | Should -Not -Throw
+            { Get-GitHubScheduledMaintenance -Stamp $_ -Upcoming } | Should -Not -Throw
         }
         It 'Can be called with no parameters' {
-            { Get-GitHubStatus } | Should -Not -Throw
+            { Get-GitHubStatus -Stamp $_ } | Should -Not -Throw
         }
         It 'Can be called with Summary parameter' {
-            { Get-GitHubStatus -Summary } | Should -Not -Throw
+            { Get-GitHubStatus -Stamp $_ -Summary } | Should -Not -Throw
         }
         It 'Can be called with no parameters' {
-            { Get-GitHubStatusComponent } | Should -Not -Throw
+            { Get-GitHubStatusComponent -Stamp $_ } | Should -Not -Throw
         }
         It 'Can be called with no parameters' {
-            { Get-GitHubStatusIncident } | Should -Not -Throw
+            { Get-GitHubStatusIncident -Stamp $_ } | Should -Not -Throw
         }
         It 'Can be called with Unresolved parameter' {
-            { Get-GitHubStatusIncident -Unresolved } | Should -Not -Throw
+            { Get-GitHubStatusIncident -Stamp $_ -Unresolved } | Should -Not -Throw
         }
     }
     Context 'Commands' {
@@ -229,7 +229,7 @@ Describe 'GitHub' {
         }
         It 'Add-GitHubSystemPath should not throw' {
             {
-                Add-GitHubPath -Path $pwd.ToString()
+                Add-GitHubSystemPath -Path $pwd.ToString()
             } | Should -Not -Throw
             $env:Path | Should -Contain $pwd.ToString()
         }
@@ -354,6 +354,14 @@ Describe 'As a user - Fine-grained PAT token' {
 
         }
     }
+    Context 'GraphQL' {
+        It 'Can be called directly to get viewer' {
+            {
+                $viewer = Invoke-GitHubGraphQL -Query 'query { viewer { login } }'
+                Write-Verbose ($viewer | Format-Table | Out-String) -Verbose
+            } | Should -Not -Throw
+        }
+    }
 }
 
 Describe 'As a user - Classic PAT token' {
@@ -375,6 +383,14 @@ Describe 'As a user - Classic PAT token' {
                 Write-Verbose ($rateLimit | Format-Table | Out-String) -Verbose
             } | Should -Not -Throw
 
+        }
+    }
+    Context 'GraphQL' {
+        It 'Can be called directly to get viewer' {
+            {
+                $viewer = Invoke-GitHubGraphQL -Query 'query { viewer { login } }'
+                Write-Verbose ($viewer | Format-Table | Out-String) -Verbose
+            } | Should -Not -Throw
         }
     }
 }
@@ -400,6 +416,14 @@ Describe 'As GitHub Actions' {
 
         }
     }
+    Context 'GraphQL' {
+        It 'Can be called directly to get viewer' {
+            {
+                $viewer = Invoke-GitHubGraphQL -Query 'query { viewer { login } }'
+                Write-Verbose ($viewer | Format-Table | Out-String) -Verbose
+            } | Should -Not -Throw
+        }
+    }
 }
 
 Describe 'As a GitHub App' {
@@ -420,6 +444,14 @@ Describe 'As a GitHub App' {
                 $app = Invoke-GitHubAPI -ApiEndpoint '/app'
                 Write-Verbose ($app | Format-Table | Out-String) -Verbose
             } | Should -Not -Throw
+        }
+    }
+    Context 'GraphQL' {
+        It 'Can be called directly to get viewer' {
+            {
+                $viewer = Invoke-GitHubGraphQL -Query 'query { viewer { login } }'
+                Write-Verbose ($viewer | Format-Table | Out-String) -Verbose
+            } | Should -Throw
         }
     }
 }
