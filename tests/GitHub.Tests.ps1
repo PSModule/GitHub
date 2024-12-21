@@ -278,7 +278,7 @@ Describe 'As a user - Fine-grained PAT token' {
     Context 'GraphQL' {
         It 'Can be called directly to get viewer' {
             {
-                $viewer = Invoke-GitHubGraphQL -Query 'query { viewer { login } }'
+                $viewer = Invoke-GitHubGraphQLQuery -Query 'query { viewer { login } }'
                 Write-Verbose ($viewer | Format-Table | Out-String) -Verbose
             } | Should -Not -Throw
         }
@@ -372,7 +372,7 @@ Describe 'As a user - Classic PAT token' {
     Context 'GraphQL' {
         It 'Can be called directly to get viewer' {
             {
-                $viewer = Invoke-GitHubGraphQL -Query 'query { viewer { login } }'
+                $viewer = Invoke-GitHubGraphQLQuery -Query 'query { viewer { login } }'
                 Write-Verbose ($viewer | Format-Table | Out-String) -Verbose
             } | Should -Not -Throw
         }
@@ -441,7 +441,7 @@ Describe 'As GitHub Actions' {
     Context 'GraphQL' {
         It 'Can be called directly to get viewer' {
             {
-                $viewer = Invoke-GitHubGraphQL -Query 'query { viewer { login } }'
+                $viewer = Invoke-GitHubGraphQLQuery -Query 'query { viewer { login } }'
                 Write-Verbose ($viewer | Format-Table | Out-String) -Verbose
             } | Should -Not -Throw
         }
