@@ -12,10 +12,24 @@ BeforeAll {
 
 Describe 'GitHub' {
     Context 'Config' {
-        It 'Can get the configuration' {
+        It 'Get-GitHubConfig - Can get the configuration' {
             $config = Get-GitHubConfig
             Write-Verbose ($config | Format-Table | Out-String) -Verbose
             $config | Should -Not -BeNullOrEmpty
+        }
+        It 'Set-GitHubConfig - Can set the configuration' {
+            Set-GitHubConfig -Name 'MyName' -Value 'MyValue'
+            Get-GitHubConfig -Name 'MyName' | Should -Be 'MyValue'
+        }
+        It 'Remove-GetGitHubConfig - Can remove the configuration' {
+            Remove-GitHubConfig -Name 'MyName'
+            { Get-GitHubConfig -Name 'MyName' } | Should -BeNullOrEmpty
+        }
+        It 'Reset-GitHubConfig - Can reset the configuration' {
+            Set-GitHubConfig -Name HostName -Value 'msx.ghe.com'
+            Get-GitHubConfig -Name HostName | Should -Be 'msx.ghe.com'
+            Reset-GitHubConfig
+            Get-GitHubConfig -Name HostName | Should -Be 'github.com'
         }
     }
     Context 'Meta' {
@@ -189,13 +203,11 @@ Describe 'GitHub' {
                 Start-GitHubLogGroup 'MyGroup'
             } | Should -Not -Throw
         }
-
         It 'Stop-LogGroup should not throw' {
             {
                 Stop-GitHubLogGroup
             } | Should -Not -Throw
         }
-
         It "Set-GitHubLogGroup 'MyGroup' should not throw" {
             {
                 Set-GitHubLogGroup -Name 'MyGroup' -ScriptBlock {
@@ -266,7 +278,6 @@ Describe 'GitHub' {
             { Write-GitHubWarning 'Warning' } | Should -Not -Throw
         }
     }
-
     Context 'Git' {
         It 'Set-GitHubGitConfig sets the Git configuration' {
             { Set-GitHubGitConfig } | Should -Not -Throw
@@ -287,7 +298,6 @@ Describe 'GitHub' {
 
         }
     }
-
     Context 'Rate-Limit' {
         It 'Can be called with no parameters' {
             { Get-GitHubRateLimit } | Should -Not -Throw
@@ -329,7 +339,6 @@ Describe 'GitHub' {
             { Get-GitHubRepository -Username 'MariusStorhaug' } | Should -Not -Throw
         }
     }
-
     Context 'Disconnect' {
         It 'Can disconnect without parameters' {
             { Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount } | Should -Not -Throw
