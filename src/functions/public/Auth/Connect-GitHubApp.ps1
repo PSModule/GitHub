@@ -1,4 +1,4 @@
-function Connect-GitHubApp {
+﻿function Connect-GitHubApp {
     <#
         .SYNOPSIS
         Connects to GitHub as a installation using a GitHub App.

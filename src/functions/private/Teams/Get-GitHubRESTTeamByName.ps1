@@ -1,4 +1,4 @@
-﻿function Get-GitHubTeamByName {
+﻿function Get-GitHubRESTTeamByName {
     <#
         .SYNOPSIS
         Get a team by name
@@ -8,7 +8,7 @@
         and replaces spaces with a - separator. For example, "My TEam Näme" would become my-team-name.
 
         .EXAMPLE
-        Get-GitHubTeamByName -Organization 'github' -Name 'my-team-name'
+        Get-GitHubRESTTeamByName -Organization 'github' -Name 'my-team-name'
     #>
     [OutputType([void])]
     [CmdletBinding()]

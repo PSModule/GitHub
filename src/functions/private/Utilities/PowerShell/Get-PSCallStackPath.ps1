@@ -13,7 +13,8 @@
         Get-PSCallStackPath
         First-Function\Second-Function\Third-Function
 
-        Shows the call stack of the last function called, Third-Function, with the first (<ScriptBlock>) and last (Get-PSCallStackPath) functions removed.
+        Shows the call stack of the last function called, Third-Function, with the first (<ScriptBlock>)
+        and last (Get-PSCallStackPath) functions removed.
 
         .EXAMPLE
         Get-PSCallStackPath -SkipFirst 0

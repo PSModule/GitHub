@@ -22,7 +22,6 @@ filter Get-GitHubGitignore {
         .NOTES
         [Get a gitignore template](https://docs.github.com/rest/gitignore/gitignore#get-a-gitignore-template)
         [Get all gitignore templates](https://docs.github.com/rest/gitignore/gitignore#get-all-gitignore-templates)
-
     #>
     [CmdletBinding(DefaultParameterSetName = 'List')]
     param(

@@ -12,6 +12,7 @@
         .EXAMPLE
         Get-GitHubEnterpriseInstallableOrganization -Enterprise 'msx'
     #>
+    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [CmdletBinding()]
     param(
         # The enterprise slug or ID.

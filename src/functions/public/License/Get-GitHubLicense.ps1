@@ -32,7 +32,6 @@ filter Get-GitHubLicense {
         [Get a license](https://docs.github.com/rest/licenses/licenses#get-a-license)
         [Get all commonly used licenses](https://docs.github.com/rest/licenses/licenses#get-all-commonly-used-licenses)
         [Get the license for a repository](https://docs.github.com/rest/licenses/licenses#get-the-license-for-a-repository)
-
     #>
     [CmdletBinding(DefaultParameterSetName = 'List')]
     param(
