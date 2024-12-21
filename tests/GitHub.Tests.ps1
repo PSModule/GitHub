@@ -173,14 +173,8 @@ Describe 'GitHub' {
         It 'Can be called with Summary parameter' {
             { Get-GitHubStatus -Summary } | Should -Not -Throw
         }
-        It 'Function exists' {
-            Get-Command Get-GitHubStatusComponent | Should -Not -BeNullOrEmpty
-        }
         It 'Can be called with no parameters' {
             { Get-GitHubStatusComponent } | Should -Not -Throw
-        }
-        It 'Function exists' {
-            Get-Command Get-GitHubStatusIncident | Should -Not -BeNullOrEmpty
         }
         It 'Can be called with no parameters' {
             { Get-GitHubStatusIncident } | Should -Not -Throw
@@ -190,24 +184,86 @@ Describe 'GitHub' {
         }
     }
     Context 'Commands' {
-        It "Start-LogGroup 'MyGroup' should not throw" {
+        It "Start-GitHubLogGroup 'MyGroup' should not throw" {
             {
-                Start-LogGroup 'MyGroup'
+                Start-GitHubLogGroup 'MyGroup'
             } | Should -Not -Throw
         }
 
         It 'Stop-LogGroup should not throw' {
             {
-                Stop-LogGroup
+                Stop-GitHubLogGroup
             } | Should -Not -Throw
         }
 
+        It "Set-GitHubLogGroup 'MyGroup' should not throw" {
+            {
+                Set-GitHubLogGroup -Name 'MyGroup' -ScriptBlock {
+                    Get-ChildItem env: | Select-Object Name, Value | Format-Table -AutoSize
+                }
+            } | Should -Not -Throw
+        }
         It "LogGroup 'MyGroup' should not throw" {
             {
                 LogGroup 'MyGroup' {
                     Get-ChildItem env: | Select-Object Name, Value | Format-Table -AutoSize
                 }
             } | Should -Not -Throw
+        }
+        It 'Add-GitHubMask should not throw' {
+            {
+                Add-GitHubMask -Value 'taskmaster'
+            } | Should -Not -Throw
+        }
+        It 'Add-GitHubSystemPath should not throw' {
+            {
+                Add-GitHubPath -Path $pwd.ToString()
+            } | Should -Not -Throw
+            $env:Path | Should -Contain $pwd.ToString()
+        }
+        It 'Disable-GitHubCommand should not throw' {
+            {
+                Disable-GitHubCommand -String 'MyString'
+            } | Should -Not -Throw
+        }
+        It 'Enable-GitHubCommand should not throw' {
+            {
+                Enable-GitHubCommand -String 'MyString'
+            } | Should -Not -Throw
+        }
+        It 'Set-GitHubNoCommandGroup should not throw' {
+            {
+                Set-GitHubNoCommandGroup {
+                    Write-Output 'Hello, World!'
+                }
+            } | Should -Not -Throw
+        }
+        It 'Set-GitHubOutput should not throw' {
+            {
+                Set-GitHubOutput -Name 'MyName' -Value 'MyValue'
+            } | Should -Not -Throw
+        }
+        It 'Get-GitHubOutput should not throw' {
+            {
+                Get-GitHubOutput
+            } | Should -Not -Throw
+        }
+        It 'Set-GitHubEnvironmentVariable should not throw' {
+            {
+                Set-GitHubEnvironmentVariable -Name 'MyName' -Value 'MyValue'
+            } | Should -Not -Throw
+            $env:MyName | Should -Be 'MyValue'
+        }
+        It 'Set-GitHubStepSummary should not throw' {
+            {
+                Set-GitHubStepSummary -Summary 'MySummary'
+            } | Should -Not -Throw
+        }
+        It 'Write-GitHub* should not throw' {
+            { Write-GitHubDebug 'Debug' } | Should -Not -Throw
+            { Write-GitHubError 'Error' } | Should -Not -Throw
+            { Write-GitHubNotice 'Notice' } | Should -Not -Throw
+            { Write-GitHubWarning 'Warning' } | Should -Not -Throw
         }
     }
 
@@ -238,9 +294,6 @@ Describe 'GitHub' {
         }
     }
     Context 'Repository' {
-        It 'Function exists' {
-            Get-Command Get-GitHubRepository | Should -Not -BeNullOrEmpty
-        }
 
         # Context 'Parameter Set: MyRepos_Type' {
         #     It 'Can be called with no parameters' {
