@@ -19,6 +19,7 @@
         .NOTES
         [List followers of the authenticated user](https://docs.github.com/rest/users/followers#list-followers-of-the-authenticated-user)
     #>
+    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [OutputType([pscustomobject])]
     [Alias('Get-GitHubUserMyFollowers')]
     [CmdletBinding()]

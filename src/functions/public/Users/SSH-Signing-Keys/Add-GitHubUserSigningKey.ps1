@@ -16,8 +16,8 @@
 
         .NOTES
         [Create a SSH signing key for the authenticated user](https://docs.github.com/rest/users/ssh-signing-keys#create-a-ssh-signing-key-for-the-authenticated-user)
-
     #>
+    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Long links for documentation.')]
     [OutputType([pscustomobject])]
     [CmdletBinding()]

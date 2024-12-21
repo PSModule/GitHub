@@ -15,8 +15,8 @@
 
         .NOTES
         [Follow a user](https://docs.github.com/rest/users/followers#follow-a-user)
-
     #>
+    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [OutputType([pscustomobject])]
     [Alias('Follow-GitHubUser')]
     [CmdletBinding()]

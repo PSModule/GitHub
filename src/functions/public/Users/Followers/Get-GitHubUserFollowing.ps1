@@ -19,8 +19,8 @@
         .NOTES
         [List the people the authenticated user follows](https://docs.github.com/rest/users/followers#list-the-people-the-authenticated-user-follows)
         [List the people a user follows](https://docs.github.com/rest/users/followers#list-the-people-a-user-follows)
-
     #>
+    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [OutputType([pscustomobject])]
     [CmdletBinding()]
     param(

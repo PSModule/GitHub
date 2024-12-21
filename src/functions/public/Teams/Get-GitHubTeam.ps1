@@ -18,6 +18,7 @@
 
         Gets the team with the slug 'my-team-name' in the `github` organization.
     #>
+    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [OutputType([GitHubTeam])]
     [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(

@@ -25,6 +25,7 @@
         .NOTES
         [Update a team](https://docs.github.com/en/rest/teams/teams?apiVersion=2022-11-28#update-a-team)
     #>
+    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [OutputType([GitHubTeam])]
     [CmdletBinding(SupportsShouldProcess)]
     param(

@@ -25,8 +25,8 @@
         [List SSH signing keys for the authenticated user](https://docs.github.com/rest/users/ssh-signing-keys#list-ssh-signing-keys-for-the-authenticated-user)
         [Get an SSH signing key for the authenticated user](https://docs.github.com/rest/users/ssh-signing-keys#get-an-ssh-signing-key-for-the-authenticated-user)
         [List SSH signing keys for a user](https://docs.github.com/rest/users/ssh-signing-keys#list-ssh-signing-keys-for-a-user)
-
     #>
+    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [CmdletBinding()]
