@@ -28,7 +28,7 @@ Describe 'GitHub' {
         }
         It 'Remove-GetGitHubConfig - Can remove the configuration' {
             Remove-GitHubConfig -Name 'HostName'
-            { Get-GitHubConfig -Name 'HostName' } | Should -BeNullOrEmpty
+            Get-GitHubConfig -Name 'HostName' | Should -BeNullOrEmpty
         }
         It 'Reset-GitHubConfig - Can reset the configuration' {
             Set-GitHubConfig -Name HostName -Value 'msx.ghe.com'
