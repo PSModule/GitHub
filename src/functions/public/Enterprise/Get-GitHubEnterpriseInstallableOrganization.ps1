@@ -1,5 +1,4 @@
-﻿#SkipTest:FunctionTest:Will add a test for this function in a future PR
-function Get-GitHubEnterpriseInstallableOrganization {
+﻿function Get-GitHubEnterpriseInstallableOrganization {
     <#
         .SYNOPSIS
         Get enterprise-owned organizations that can have GitHub Apps installed
@@ -13,6 +12,7 @@ function Get-GitHubEnterpriseInstallableOrganization {
         .EXAMPLE
         Get-GitHubEnterpriseInstallableOrganization -Enterprise 'msx'
     #>
+    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [CmdletBinding()]
     param(
         # The enterprise slug or ID.

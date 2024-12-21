@@ -1,5 +1,4 @@
-﻿#SkipTest:FunctionTest:Will add a test for this function in a future PR
-function Get-GitHubEnterpriseOrganization {
+﻿function Get-GitHubEnterpriseOrganization {
     <#
         .SYNOPSIS
         Get the list of organizations in a GitHub Enterprise instance.
@@ -10,6 +9,7 @@ function Get-GitHubEnterpriseOrganization {
         .EXAMPLE
         Get-GitHubEnterpriseOrganization -Enterprise 'msx'
     #>
+    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [CmdletBinding()]
     param(
         [Parameter()]

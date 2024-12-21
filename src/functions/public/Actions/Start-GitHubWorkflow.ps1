@@ -1,5 +1,4 @@
-﻿#SkipTest:FunctionTest:Will add a test for this function in a future PR
-filter Start-GitHubWorkflow {
+﻿filter Start-GitHubWorkflow {
     <#
         .SYNOPSIS
         Start a workflow run using the workflow's ID.
@@ -18,6 +17,7 @@ filter Start-GitHubWorkflow {
         .NOTES
         [Create a workflow dispatch event](https://docs.github.com/en/rest/actions/workflows#create-a-workflow-dispatch-event)
     #>
+    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.

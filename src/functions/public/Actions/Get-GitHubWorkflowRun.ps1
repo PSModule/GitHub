@@ -1,5 +1,4 @@
-﻿#SkipTest:FunctionTest:Will add a test for this function in a future PR
-filter Get-GitHubWorkflowRun {
+﻿filter Get-GitHubWorkflowRun {
     <#
         .SYNOPSIS
         List workflow runs for a repository or a workflow
@@ -37,6 +36,7 @@ filter Get-GitHubWorkflowRun {
         [List workflow runs for a workflow](https://docs.github.com/rest/actions/workflow-runs?apiVersion=2022-11-28#list-workflow-runs-for-a-workflow)
         [List workflow runs for a repository](https://docs.github.com/rest/actions/workflow-runs?apiVersion=2022-11-28#list-workflow-runs-for-a-repository)
     #>
+    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidAssignmentToAutomaticVariable', 'Event',

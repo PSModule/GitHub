@@ -1,17 +1,17 @@
-﻿#SkipTest:FunctionTest:Will add a test for this function in a future PR
-function Install-GitHubAppOnEnterpriseOrganization {
+﻿function Install-GitHubAppOnEnterpriseOrganization {
     <#
-        .SYNOPSIS
-        Install an app on an Enterprise-owned organization
+    .SYNOPSIS
+    Install an app on an Enterprise-owned organization
 
-        .DESCRIPTION
-        Installs the provided GitHub App on the specified organization owned by the enterprise.
+    .DESCRIPTION
+    Installs the provided GitHub App on the specified organization owned by the enterprise.
 
-        The authenticated GitHub App must be installed on the enterprise and be granted the Enterprise/organization_installations (write) permission.
+    The authenticated GitHub App must be installed on the enterprise and be granted the Enterprise/organization_installations (write) permission.
 
-        .EXAMPLE
-        Install-GitHubAppOnEnterpriseOrganization -Enterprise 'msx' -Organization 'org' -ClientID '123456'
+    .EXAMPLE
+    Install-GitHubAppOnEnterpriseOrganization -Enterprise 'msx' -Organization 'org' -ClientID '123456'
     #>
+    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [CmdletBinding()]
     param(
         # The enterprise slug or ID.

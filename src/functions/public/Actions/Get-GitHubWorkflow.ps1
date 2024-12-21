@@ -1,5 +1,4 @@
-﻿#SkipTest:FunctionTest:Will add a test for this function in a future PR
-filter Get-GitHubWorkflow {
+﻿filter Get-GitHubWorkflow {
     <#
         .SYNOPSIS
         Lists the workflows in a repository.
@@ -22,6 +21,7 @@ filter Get-GitHubWorkflow {
         .NOTES
         [List repository workflows](https://docs.github.com/rest/actions/workflows?apiVersion=2022-11-28#list-repository-workflows)
     #>
+    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [CmdletBinding(DefaultParameterSetName = 'ByName')]
     param(
         [Parameter()]

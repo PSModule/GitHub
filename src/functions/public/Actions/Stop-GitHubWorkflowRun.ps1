@@ -1,5 +1,4 @@
-﻿#SkipTest:FunctionTest:Will add a test for this function in a future PR
-filter Stop-GitHubWorkflowRun {
+﻿filter Stop-GitHubWorkflowRun {
     <#
         .SYNOPSIS
         Cancel a workflow run
@@ -15,6 +14,7 @@ filter Stop-GitHubWorkflowRun {
         .NOTES
         [Cancel a workflow run](https://docs.github.com/en/rest/actions/workflow-runs#cancel-a-workflow-run)
     #>
+    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [CmdletBinding(SupportsShouldProcess)]
     [alias('Cancel-GitHubWorkflowRun')]
     param(

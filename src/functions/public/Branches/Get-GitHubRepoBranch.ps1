@@ -1,5 +1,4 @@
-﻿#SkipTest:FunctionTest:Will add a test for this function in a future PR
-filter Get-GitHubRepoBranch {
+﻿filter Get-GitHubRepoBranch {
     <#
         .SYNOPSIS
         List branches
@@ -15,6 +14,7 @@ filter Get-GitHubRepoBranch {
         .NOTES
         [List branches](https://docs.github.com/rest/branches/branches#list-branches)
     #>
+    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
