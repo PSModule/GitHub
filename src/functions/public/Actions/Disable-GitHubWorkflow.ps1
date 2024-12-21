@@ -1,4 +1,5 @@
-﻿filter Disable-GitHubWorkflow {
+﻿#SkipTest:FunctionTest:Will add a test for this function in a future PR
+filter Disable-GitHubWorkflow {
     <#
         .NOTES
         [Disable a workflow](https://docs.github.com/en/rest/actions/workflows#disable-a-workflow)

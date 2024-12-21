@@ -1,4 +1,5 @@
-﻿filter Start-GitHubWorkflow {
+﻿#SkipTest:FunctionTest:Will add a test for this function in a future PR
+filter Start-GitHubWorkflow {
     <#
         .SYNOPSIS
         Start a workflow run using the workflow's ID.

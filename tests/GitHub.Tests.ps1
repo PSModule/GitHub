@@ -367,6 +367,17 @@ Describe 'As a user - Fine-grained PAT token' {
             { Get-GitHubGitignore -Name 'VisualStudio' } | Should -Not -Throw
         }
     }
+    Context 'Markdown' {
+        It 'Can be called with Text parameter' {
+            { Get-GitHubMarkdown -Text 'Hello, World!' } | Should -Not -Throw
+        }
+        It 'Can be called with Text parameter and GitHub Format Mardown' {
+            { Get-GitHubMarkdown -Text 'Hello, World!' -Mode gfm } | Should -Not -Throw
+        }
+        It 'Raw - Can be called with Text parameter' {
+            { Get-GitHubMarkdownRaw -Text 'Hello, World!' } | Should -Not -Throw
+        }
+    }
 }
 
 Describe 'As a user - Classic PAT token' {
@@ -450,6 +461,17 @@ Describe 'As a user - Classic PAT token' {
         }
         It 'Can be called with Name parameter' {
             { Get-GitHubGitignore -Name 'VisualStudio' } | Should -Not -Throw
+        }
+    }
+    Context 'Markdown' {
+        It 'Can be called with Text parameter' {
+            { Get-GitHubMarkdown -Text 'Hello, World!' } | Should -Not -Throw
+        }
+        It 'Can be called with Text parameter and GitHub Format Mardown' {
+            { Get-GitHubMarkdown -Text 'Hello, World!' -Mode gfm } | Should -Not -Throw
+        }
+        It 'Raw - Can be called with Text parameter' {
+            { Get-GitHubMarkdownRaw -Text 'Hello, World!' } | Should -Not -Throw
         }
     }
 }
@@ -546,6 +568,17 @@ Describe 'As GitHub Actions' {
         }
         It 'Can be called with Name parameter' {
             { Get-GitHubGitignore -Name 'VisualStudio' } | Should -Not -Throw
+        }
+    }
+    Context 'Markdown' {
+        It 'Can be called with Text parameter' {
+            { Get-GitHubMarkdown -Text 'Hello, World!' } | Should -Not -Throw
+        }
+        It 'Can be called with Text parameter and GitHub Format Mardown' {
+            { Get-GitHubMarkdown -Text 'Hello, World!' -Mode gfm } | Should -Not -Throw
+        }
+        It 'Raw - Can be called with Text parameter' {
+            { Get-GitHubMarkdownRaw -Text 'Hello, World!' } | Should -Not -Throw
         }
     }
 }

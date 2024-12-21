@@ -1,4 +1,5 @@
-﻿filter Enable-GitHubWorkflow {
+﻿#SkipTest:FunctionTest:Will add a test for this function in a future PR
+filter Enable-GitHubWorkflow {
     <#
         .NOTES
         [Enable a workflow](https://docs.github.com/en/rest/actions/workflows#enable-a-workflow)

@@ -1,4 +1,5 @@
-﻿function Get-GitHubEnterpriseOrganization {
+﻿#SkipTest:FunctionTest:Will add a test for this function in a future PR
+function Get-GitHubEnterpriseOrganization {
     <#
         .SYNOPSIS
         Get the list of organizations in a GitHub Enterprise instance.

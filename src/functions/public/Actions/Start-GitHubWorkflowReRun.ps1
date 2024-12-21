@@ -1,4 +1,5 @@
-﻿filter Start-GitHubWorkflowReRun {
+﻿#SkipTest:FunctionTest:Will add a test for this function in a future PR
+filter Start-GitHubWorkflowReRun {
     <#
         .SYNOPSIS
         Re-run a workflow

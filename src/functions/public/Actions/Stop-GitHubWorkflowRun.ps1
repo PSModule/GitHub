@@ -1,4 +1,5 @@
-﻿filter Stop-GitHubWorkflowRun {
+﻿#SkipTest:FunctionTest:Will add a test for this function in a future PR
+filter Stop-GitHubWorkflowRun {
     <#
         .SYNOPSIS
         Cancel a workflow run

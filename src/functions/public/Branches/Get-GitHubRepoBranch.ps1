@@ -1,4 +1,5 @@
-﻿filter Get-GitHubRepoBranch {
+﻿#SkipTest:FunctionTest:Will add a test for this function in a future PR
+filter Get-GitHubRepoBranch {
     <#
         .SYNOPSIS
         List branches

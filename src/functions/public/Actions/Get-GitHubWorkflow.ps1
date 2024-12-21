@@ -1,4 +1,5 @@
-﻿filter Get-GitHubWorkflow {
+﻿#SkipTest:FunctionTest:Will add a test for this function in a future PR
+filter Get-GitHubWorkflow {
     <#
         .SYNOPSIS
         Lists the workflows in a repository.

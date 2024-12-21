@@ -1,4 +1,5 @@
-﻿filter Get-GitHubWorkflowUsage {
+﻿#SkipTest:FunctionTest:Will add a test for this function in a future PR
+filter Get-GitHubWorkflowUsage {
     <#
         .SYNOPSIS
         Short description

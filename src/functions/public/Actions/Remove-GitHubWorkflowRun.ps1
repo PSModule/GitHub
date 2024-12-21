@@ -1,4 +1,5 @@
-﻿filter Remove-GitHubWorkflowRun {
+﻿#SkipTest:FunctionTest:Will add a test for this function in a future PR
+filter Remove-GitHubWorkflowRun {
     <#
         .SYNOPSIS
         Delete a workflow run

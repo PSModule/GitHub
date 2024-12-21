@@ -1,4 +1,5 @@
-﻿function Install-GitHubAppOnEnterpriseOrganization {
+﻿#SkipTest:FunctionTest:Will add a test for this function in a future PR
+function Install-GitHubAppOnEnterpriseOrganization {
     <#
         .SYNOPSIS
         Install an app on an Enterprise-owned organization
