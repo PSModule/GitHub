@@ -17,13 +17,18 @@ Describe 'GitHub' {
             Write-Verbose ($config | Format-Table | Out-String) -Verbose
             $config | Should -Not -BeNullOrEmpty
         }
+        It 'Get-GitHubConfig - Can get the configuration by name' {
+            $config = Get-GitHubConfig -Name 'HostName'
+            Write-Verbose ($config | Format-Table | Out-String) -Verbose
+            $config | Should -Not -BeNullOrEmpty
+        }
         It 'Set-GitHubConfig - Can set the configuration' {
-            Set-GitHubConfig -Name 'MyName' -Value 'MyValue'
-            Get-GitHubConfig -Name 'MyName' | Should -Be 'MyValue'
+            Set-GitHubConfig -Name 'HostName' -Value 'msx.ghe.com'
+            Get-GitHubConfig -Name 'HostName' | Should -Be 'msx.ghe.com'
         }
         It 'Remove-GetGitHubConfig - Can remove the configuration' {
-            Remove-GitHubConfig -Name 'MyName'
-            { Get-GitHubConfig -Name 'MyName' } | Should -BeNullOrEmpty
+            Remove-GitHubConfig -Name 'HostName'
+            { Get-GitHubConfig -Name 'HostName' } | Should -BeNullOrEmpty
         }
         It 'Reset-GitHubConfig - Can reset the configuration' {
             Set-GitHubConfig -Name HostName -Value 'msx.ghe.com'
