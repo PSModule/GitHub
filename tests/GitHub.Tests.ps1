@@ -326,6 +326,14 @@ Describe 'As a user - Fine-grained PAT token' {
             { Get-GitHubLicense -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
         }
     }
+    Context 'Emojis' {
+        It 'Can be called with no parameters' {
+            { Get-GitHubEmojis } | Should -Not -Throw
+        }
+        It 'Can be download the emojis' {
+            { Get-GitHubEmojis -Destination $env:TEMP } | Should -Not -Throw
+        }
+    }
     Context 'Repository' {
         Context 'Parameter Set: MyRepos_Type' {
             It 'Can be called with no parameters' {
@@ -420,6 +428,14 @@ Describe 'As a user - Classic PAT token' {
             { Get-GitHubLicense -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
         }
     }
+    Context 'Emojis' {
+        It 'Can be called with no parameters' {
+            { Get-GitHubEmojis } | Should -Not -Throw
+        }
+        It 'Can be download the emojis' {
+            { Get-GitHubEmojis -Destination $env:TEMP } | Should -Not -Throw
+        }
+    }
 }
 
 Describe 'As GitHub Actions' {
@@ -500,6 +516,14 @@ Describe 'As GitHub Actions' {
             { Get-GitHubLicense -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
         }
     }
+    Context 'Emojis' {
+        It 'Can be called with no parameters' {
+            { Get-GitHubEmojis } | Should -Not -Throw
+        }
+        It 'Can be download the emojis' {
+            { Get-GitHubEmojis -Destination $env:TEMP } | Should -Not -Throw
+        }
+    }
 }
 
 Describe 'As a GitHub App' {
@@ -508,6 +532,18 @@ Describe 'As a GitHub App' {
     }
     AfterAll {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+    }
+    Context 'App' {
+        It 'Can get a JWT for the app' {
+            $jwt = Get-GitHubAppJSONWebToken -ClientId $env:TEST_APP_CLIENT_ID -PrivateKey $env:TEST_APP_PRIVATE_KEY
+            Write-Verbose ($jwt | Format-Table | Out-String) -Verbose
+            $jwt | Should -Not -BeNullOrEmpty
+        }
+        It 'Can get app details' {
+            $app = Get-GitHubApp
+            Write-Verbose ($app | Format-Table | Out-String) -Verbose
+            $app | Should -Not -BeNullOrEmpty
+        }
     }
     Context 'API' {
         It 'Can be called directly to get ratelimits' {
