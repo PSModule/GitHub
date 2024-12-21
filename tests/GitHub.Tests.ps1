@@ -289,20 +289,6 @@ Describe 'GitHub' {
             $gitConfig.'user.email' | Should -Not -BeNullOrEmpty
         }
     }
-    Context 'API' {
-        It 'Can be called directly to get ratelimits' {
-            {
-                $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit'
-                Write-Verbose ($rateLimit | Format-Table | Out-String) -Verbose
-            } | Should -Not -Throw
-
-        }
-    }
-    Context 'Rate-Limit' {
-        It 'Can be called with no parameters' {
-            { Get-GitHubRateLimit } | Should -Not -Throw
-        }
-    }
     Context 'Repository' {
 
         # Context 'Parameter Set: MyRepos_Type' {
@@ -354,6 +340,20 @@ Describe 'As a user - Fine-grained PAT token' {
     AfterAll {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
+    Context 'Rate-Limit' {
+        It 'Can be called with no parameters' {
+            { Get-GitHubRateLimit } | Should -Not -Throw
+        }
+    }
+    Context 'API' {
+        It 'Can be called directly to get ratelimits' {
+            {
+                $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit'
+                Write-Verbose ($rateLimit | Format-Table | Out-String) -Verbose
+            } | Should -Not -Throw
+
+        }
+    }
 }
 
 Describe 'As a user - Classic PAT token' {
@@ -362,6 +362,20 @@ Describe 'As a user - Classic PAT token' {
     }
     AfterAll {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+    }
+    Context 'Rate-Limit' {
+        It 'Can be called with no parameters' {
+            { Get-GitHubRateLimit } | Should -Not -Throw
+        }
+    }
+    Context 'API' {
+        It 'Can be called directly to get ratelimits' {
+            {
+                $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit'
+                Write-Verbose ($rateLimit | Format-Table | Out-String) -Verbose
+            } | Should -Not -Throw
+
+        }
     }
 }
 
@@ -372,6 +386,20 @@ Describe 'As GitHub Actions' {
     AfterAll {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
+    Context 'Rate-Limit' {
+        It 'Can be called with no parameters' {
+            { Get-GitHubRateLimit } | Should -Not -Throw
+        }
+    }
+    Context 'API' {
+        It 'Can be called directly to get ratelimits' {
+            {
+                $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit'
+                Write-Verbose ($rateLimit | Format-Table | Out-String) -Verbose
+            } | Should -Not -Throw
+
+        }
+    }
 }
 
 Describe 'As a GitHub App' {
@@ -380,5 +408,18 @@ Describe 'As a GitHub App' {
     }
     AfterAll {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+    }
+    Context 'Rate-Limit' {
+        It 'Can be called with no parameters' {
+            { Get-GitHubRateLimit } | Should -Throw
+        }
+    }
+    Context 'API' {
+        It 'Can be called directly to get ratelimits' {
+            {
+                $app = Invoke-GitHubAPI -ApiEndpoint '/app'
+                Write-Verbose ($app | Format-Table | Out-String) -Verbose
+            } | Should -Not -Throw
+        }
     }
 }
