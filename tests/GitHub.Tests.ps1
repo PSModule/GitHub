@@ -557,18 +557,50 @@ Describe 'As a GitHub App' {
     AfterAll {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
-    Context 'App' {
-        It 'Can get a JWT for the app' {
-            $jwt = Get-GitHubAppJSONWebToken -ClientId $env:TEST_APP_CLIENT_ID -PrivateKey $env:TEST_APP_PRIVATE_KEY
-            Write-Verbose ($jwt | Format-Table | Out-String) -Verbose
-            $jwt | Should -Not -BeNullOrEmpty
+    Context 'Apps' {
+        Context 'GitHub Apps' {
+            It 'Can get a JWT for the app' {
+                $jwt = Get-GitHubAppJSONWebToken -ClientId $env:TEST_APP_CLIENT_ID -PrivateKey $env:TEST_APP_PRIVATE_KEY
+                Write-Verbose ($jwt | Format-Table | Out-String) -Verbose
+                $jwt | Should -Not -BeNullOrEmpty
+            }
+            It 'Can get app details' {
+                $app = Get-GitHubApp
+                Write-Verbose ($app | Format-Table | Out-String) -Verbose
+                $app | Should -Not -BeNullOrEmpty
+            }
+            It 'Can get app installations' {
+                $installations = Get-GitHubAppInstallation
+                Write-Verbose ($installations | Format-Table | Out-String) -Verbose
+                $installations | Should -Not -BeNullOrEmpty
+            }
+            It 'Can get app installation access tokens' {
+                $installations = Get-GitHubAppInstallation
+                $installations | ForEach-Object {
+                    $token = New-GitHubAppInstallationAccessToken -InstallationID $_.id
+                    Write-Verbose ($token | Format-Table | Out-String) -Verbose
+                    $token | Should -Not -BeNullOrEmpty
+                }
+            }
         }
-        It 'Can get app details' {
-            $app = Get-GitHubApp
-            Write-Verbose ($app | Format-Table | Out-String) -Verbose
-            $app | Should -Not -BeNullOrEmpty
+        Context 'Webhooks' {
+            It 'Can get the webhook configuration' {
+                $webhooks = Get-GitHubAppWebhookConfiguration
+                Write-Verbose ($webhooks | Format-Table | Out-String) -Verbose
+                $webhooks | Should -Not -BeNullOrEmpty
+            }
+            It 'Can update the webhook configuration' {
+                { Update-GitHubAppWebhookConfiguration -ContentType 'form' } | Should -Not -Throw
+                { Update-GitHubAppWebhookConfiguration -ContentType 'json' } | Should -Not -Throw
+            }
+            It 'Can get webhook deliveries' {
+                $deliveries = Get-GitHubAppWebhookDelivery
+                Write-Verbose ($deliveries | Format-Table | Out-String) -Verbose
+                $deliveries | Should -Not -BeNullOrEmpty
+            }
         }
     }
+    Context ''
     Context 'API' {
         It 'Can be called directly to get ratelimits' {
             {
