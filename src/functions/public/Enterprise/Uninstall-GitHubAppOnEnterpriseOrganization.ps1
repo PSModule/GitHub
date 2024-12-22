@@ -11,7 +11,7 @@
         .EXAMPLE
         Uninstall-GitHubAppOnEnterpriseOrganization -Enterprise 'github' -Organization 'octokit' -InstallationID '123456'
 
-        Uninstall the GitHub App with the installation ID '123456' from the organization 'octokit' in the enterprise 'github'.
+        Uninstall the GitHub App with the installation ID `123456` from the organization `octokit` in the enterprise `github`.
     #>
     #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [CmdletBinding()]
