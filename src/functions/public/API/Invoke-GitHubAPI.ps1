@@ -194,6 +194,9 @@
                     'text/plain' {
                         $results = $response.Content
                     }
+                    'text/html' {
+                        $results = $response.Content
+                    }
                     'application/octocat-stream' {
                         [byte[]]$byteArray = $response.Content
                         $results = [System.Text.Encoding]::UTF8.GetString($byteArray)
