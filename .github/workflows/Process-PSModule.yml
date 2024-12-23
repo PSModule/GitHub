@@ -34,3 +34,6 @@ jobs:
   Process-PSModule:
     uses: PSModule/Process-PSModule/.github/workflows/workflow.yml@v3
     secrets: inherit
+    with:
+      Debug: true
+      Verbose: true
