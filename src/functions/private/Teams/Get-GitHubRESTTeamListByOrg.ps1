@@ -1,4 +1,4 @@
-﻿function Get-GitHubTeamListByOrg {
+﻿function Get-GitHubRESTTeamListByOrg {
     <#
         .SYNOPSIS
         List teams
@@ -7,7 +7,7 @@
         Lists all teams in an organization that are visible to the authenticated user.
 
         .EXAMPLE
-        Get-GitHubTeamListByOrg -Organization 'github'
+        Get-GitHubRESTTeamListByOrg -Organization 'github'
 
         .NOTES
         [List teams](https://docs.github.com/rest/teams/teams#list-teams)

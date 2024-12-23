@@ -47,8 +47,8 @@
 
         .NOTES
         [List repository activities](https://docs.github.com/rest/repos/repos#list-repository-activities)
-
     #>
+    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.

@@ -32,7 +32,6 @@ filter Get-GitHubLicense {
         [Get a license](https://docs.github.com/rest/licenses/licenses#get-a-license)
         [Get all commonly used licenses](https://docs.github.com/rest/licenses/licenses#get-all-commonly-used-licenses)
         [Get the license for a repository](https://docs.github.com/rest/licenses/licenses#get-the-license-for-a-repository)
-
     #>
     [CmdletBinding(DefaultParameterSetName = 'List')]
     param(
@@ -44,27 +43,15 @@ filter Get-GitHubLicense {
         [Parameter(ParameterSetName = 'Repository')]
         [string] $Repo,
 
+        # The license keyword, license name, or license SPDX ID. For example, mit or mpl-2.0.
+        [Parameter(ParameterSetName = 'Name')]
+        [string] $Name,
+
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
         [object] $Context = (Get-GitHubContext)
     )
-
-    dynamicparam {
-        $DynamicParamDictionary = New-DynamicParamDictionary
-
-        $dynParam = @{
-            Name                   = 'Name'
-            ParameterSetName       = 'Name'
-            Type                   = [string]
-            Mandatory              = $true
-            ValidateSet            = Get-GitHubLicenseList | Select-Object -ExpandProperty Name
-            DynamicParamDictionary = $DynamicParamDictionary
-        }
-        New-DynamicParam @dynParam
-
-        return $DynamicParamDictionary
-    }
 
     begin {
         $stackPath = Get-PSCallStackPath
@@ -84,7 +71,6 @@ filter Get-GitHubLicense {
 
     process {
         try {
-            $Name = $PSBoundParameters['Name']
             switch ($PSCmdlet.ParameterSetName) {
                 'List' {
                     Get-GitHubLicenseList -Context $Context
@@ -103,5 +89,14 @@ filter Get-GitHubLicense {
 
     end {
         Write-Debug "[$stackPath] - End"
+    }
+}
+
+Register-ArgumentCompleter -CommandName Get-GitHubLicense -ParameterName Name -ScriptBlock {
+    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
+    $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter
+    $names = Get-GitHubLicenseList | Select-Object -ExpandProperty Name | Where-Object { $_ -like "$wordToComplete*" }
+    $names | ForEach-Object {
+        [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
     }
 }

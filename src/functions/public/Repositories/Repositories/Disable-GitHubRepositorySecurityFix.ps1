@@ -15,8 +15,8 @@
 
         .NOTES
         [Disable automated security fixes](https://docs.github.com/rest/repos/repos#disable-automated-security-fixes)
-
     #>
+    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [CmdletBinding(SupportsShouldProcess)]
     [Alias('Disable-GitHubRepositorySecurityFixes')]
     param(

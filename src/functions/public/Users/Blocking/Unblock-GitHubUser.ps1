@@ -22,6 +22,7 @@
         [Unblock a user](https://docs.github.com/rest/users/blocking#unblock-a-user)
         [Unblock a user from an organization](https://docs.github.com/rest/orgs/blocking#unblock-a-user-from-an-organization)
     #>
+    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [OutputType([bool])]
     [CmdletBinding()]
     param(

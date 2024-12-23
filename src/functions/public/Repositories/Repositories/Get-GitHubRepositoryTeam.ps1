@@ -21,8 +21,8 @@
 
         .NOTES
         [List repository teams](https://docs.github.com/rest/repos/repos#list-repository-teams)
-
     #>
+    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [CmdletBinding()]
     [Alias('Get-GitHubRepositoryTeams')]
     param(

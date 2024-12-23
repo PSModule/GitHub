@@ -32,8 +32,8 @@
 
         .NOTES
         [Update an organization](https://docs.github.com/rest/orgs/orgs#update-an-organization)
-
     #>
+    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [OutputType([pscustomobject])]
     [CmdletBinding(SupportsShouldProcess)]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(

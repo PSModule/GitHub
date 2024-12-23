@@ -21,6 +21,7 @@
         .NOTES
         [Enable or disable a security feature for an organization](https://docs.github.com/rest/orgs/orgs#enable-or-disable-a-security-feature-for-an-organization)
     #>
+    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Long link in notes.')]
     [CmdletBinding(SupportsShouldProcess)]

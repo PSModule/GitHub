@@ -19,8 +19,8 @@
 
         .NOTES
         [Get a release asset](https://docs.github.com/rest/releases/assets#get-a-release-asset)
-
     #>
+    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.

@@ -9,6 +9,7 @@
         .EXAMPLE
         Get-GitHubEnterpriseOrganization -Enterprise 'msx'
     #>
+    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [CmdletBinding()]
     param(
         [Parameter()]

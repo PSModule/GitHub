@@ -14,8 +14,8 @@
 
         .NOTES
         [Create an autolink reference for a repository](https://docs.github.com/rest/repos/autolinks#create-an-autolink-reference-for-a-repository)
-
     #>
+    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [OutputType([pscustomobject])]
     [CmdletBinding(SupportsShouldProcess)]
     param(

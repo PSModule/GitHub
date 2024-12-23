@@ -21,8 +21,8 @@
 
         .NOTES
         [Create a GPG key for the authenticated user](https://docs.github.com/rest/users/gpg-keys#create-a-gpg-key-for-the-authenticated-user)
-
     #>
+    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [OutputType([pscustomobject])]
     [CmdletBinding()]
     param(

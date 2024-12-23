@@ -123,20 +123,25 @@
     process {
         try {
             $body = @{
-                type      = $Type
                 sort      = $Sort
                 direction = $Direction
                 per_page  = $PerPage
-            }
-
-            if ($PSBoundParameters.ContainsKey('Affiliation')) {
-                $body['affiliation'] = $Affiliation -join ','
             }
             if ($PSBoundParameters.ContainsKey('Since')) {
                 $body['since'] = $Since.ToString('yyyy-MM-ddTHH:mm:ssZ')
             }
             if ($PSBoundParameters.ContainsKey('Before')) {
                 $body['before'] = $Before.ToString('yyyy-MM-ddTHH:mm:ssZ')
+            }
+            Write-Debug "ParamSet: [$($PSCmdlet.ParameterSetName)]"
+            switch ($PSCmdlet.ParameterSetName) {
+                'Aff-Vis' {
+                    $body['affiliation'] = $Affiliation -join ','
+                    $body['visibility'] = $Visibility
+                }
+                'Type' {
+                    $body['type'] = $Type
+                }
             }
 
             $inputObject = @{

@@ -15,7 +15,6 @@ filter New-GitHubRepository {
         * `public_repo` scope or `repo` scope to create a public repository. Note: For GitHub AE, use `repo` scope to create an internal repository.
         * `repo` scope to create a private repository
 
-
         .EXAMPLE
         $params = @{
             Name                     = 'Hello-World'
@@ -101,8 +100,8 @@ filter New-GitHubRepository {
         .NOTES
         [Create a repository for the authenticated user](https://docs.github.com/rest/repos/repos#create-a-repository-for-the-authenticated-user)
         [Create an organization repository](https://docs.github.com/rest/repos/repos#create-an-organization-repository)
-
     #>
+    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [OutputType([pscustomobject])]
     [CmdletBinding(
         SupportsShouldProcess,

@@ -95,12 +95,12 @@
 
     process {
         $Token = $Context.Token
-        Write-Debug "Token :      [$Token]"
+        Write-Debug "Token :     [$Token]"
 
         if ([string]::IsNullOrEmpty($TokenType)) {
             $TokenType = $Context.TokenType
         }
-        Write-Debug "TokenType :  [$($Context.TokenType)]"
+        Write-Debug "TokenType : [$($Context.TokenType)]"
 
         if ([string]::IsNullOrEmpty($ApiBaseUri)) {
             $ApiBaseUri = $Context.ApiBaseUri
@@ -194,6 +194,9 @@
                     'text/plain' {
                         $results = $response.Content
                     }
+                    'text/html' {
+                        $results = $response.Content
+                    }
                     'application/octocat-stream' {
                         [byte[]]$byteArray = $response.Content
                         $results = [System.Text.Encoding]::UTF8.GetString($byteArray)
@@ -227,6 +230,9 @@
             $headers = [pscustomobject]$headers
             $sortedProperties = $headers.PSObject.Properties.Name | Sort-Object
             $headers = $headers | Select-Object $sortedProperties
+            Write-Debug 'Response headers:'
+            $headers | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+            Write-Debug '---------------------------'
 
             $errordetails = $failure.ErrorDetails | ConvertFrom-Json -AsHashtable
             $errorResult = [ordered]@{
@@ -239,13 +245,13 @@
             $APICall.Headers = $APICall.Headers | ConvertTo-Json
             $APICall.Method = $APICall.Method.ToString()
 
-            Write-Error '----------------------------------'
-            Write-Error 'Error details:'
-            $errorResult | Format-Table -AutoSize -HideTableHeaders | Out-String -Stream | ForEach-Object { Write-Error $_ }
-            Write-Error '----------------------------------'
-            Write-Debug 'Response headers:'
-            $headers | Out-String -Stream | ForEach-Object { Write-Debug $_ }
-            Write-Debug '---------------------------'
+            $errorResult = @"
+----------------------------------
+Error details:
+$($errorResult | Format-Table -AutoSize -HideTableHeaders | Out-String)
+----------------------------------
+"@
+            Write-Error $errorResult
             throw $failure.Exception.Message
         }
     }

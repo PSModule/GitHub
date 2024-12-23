@@ -58,8 +58,9 @@
                 url          = $URL
                 content_type = $ContentType
                 secret       = $Secret
-                insecure_ssl = $InsecureSSL ? 1 : 0
+                insecure_ssl = $PSBoundParameters.ContainsKey($InsecureSSL) ? ($InsecureSSL ? 1 : 0) : $null
             }
+            $body | Remove-HashtableEntry -NullOrEmptyValues
 
             $inputObject = @{
                 Context     = $Context
