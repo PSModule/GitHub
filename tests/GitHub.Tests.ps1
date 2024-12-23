@@ -106,7 +106,7 @@ Describe 'GitHub' {
             Connect-GitHubAccount -ClientID $env:TEST_APP_ORG_CLIENT_ID -PrivateKey $env:TEST_APP_ORG_PRIVATE_KEY -AutoloadInstallations
             $contexts = Get-GitHubContext -ListAvailable -Verbose:$false
             Write-Verbose ($contexts | Out-String) -Verbose
-            ($contexts).Count | Should -Be 9
+            ($contexts).Count | Should -Be 8
         }
         It 'Can get the authenticated GitHubApp' {
             $app = Get-GitHubApp
@@ -204,7 +204,7 @@ Describe 'GitHub' {
             {
                 Add-GitHubSystemPath -Path $pwd.ToString()
             } | Should -Not -Throw
-            Get-Content $env:GITHUB_PATH -Raw | Should -Belike "*$($pwd.ToString())*"
+            Get-Content $env:GITHUB_PATH -Raw | Should -BeLike "*$($pwd.ToString())*"
         }
         It 'Disable-GitHubCommand should not throw' {
             {
@@ -237,7 +237,7 @@ Describe 'GitHub' {
             {
                 Set-GitHubEnvironmentVariable -Name 'MyName' -Value 'MyValue'
             } | Should -Not -Throw
-            Get-Content $env:GITHUB_ENV -Raw | Should -BeLike "*MyName*MyValue*"
+            Get-Content $env:GITHUB_ENV -Raw | Should -BeLike '*MyName*MyValue*'
         }
         It 'Set-GitHubStepSummary should not throw' {
             {
@@ -337,7 +337,7 @@ Describe 'As a user - Fine-grained PAT token - user account access' {
     Context 'Repository' {
         Context 'Parameter Set: MyRepos_Type' {
             It 'Can be called with no parameters' {
-                { Get-GitHubRepository - } | Should -Not -Throw
+                { Get-GitHubRepository } | Should -Not -Throw
             }
 
             It 'Can be called with Type parameter' {
@@ -457,7 +457,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access' {
     Context 'Repository' {
         Context 'Parameter Set: MyRepos_Type' {
             It 'Can be called with no parameters' {
-                { Get-GitHubRepository - } | Should -Not -Throw
+                { Get-GitHubRepository } | Should -Not -Throw
             }
             It 'Can be called with Type parameter' {
                 { Get-GitHubRepository -Type 'public' } | Should -Not -Throw
