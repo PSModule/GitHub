@@ -10,13 +10,14 @@ permissions:
   pull-requests: write
   statuses: write
 
-env:
-  TEST_APP_CLIENT_ID: ${{ secrets.TEST_APP_CLIENT_ID }}
-  TEST_APP_PRIVATE_KEY: ${{ secrets.TEST_APP_PRIVATE_KEY }}
-  TEST_FG_PAT: ${{ secrets.TEST_FG_PAT }}
-  TEST_PAT: ${{ secrets.TEST_PAT }}
-
 jobs:
   Process-PSModule:
     uses: PSModule/Process-PSModule/.github/workflows/CI.yml@v3
-    secrets: inherit
+    secrets:
+      TEST_APP_ENT_CLIENT_ID: ${{ secrets.TEST_APP_ENT_CLIENT_ID }}
+      TEST_APP_ENT_PRIVATE_KEY: ${{ secrets.TEST_APP_ENT_PRIVATE_KEY }}
+      TEST_APP_ORG_CLIENT_ID: ${{ secrets.TEST_APP_ORG_CLIENT_ID }}
+      TEST_APP_ORG_PRIVATE_KEY: ${{ secrets.TEST_APP_ORG_PRIVATE_KEY }}
+      TEST_USER_ORG_FG_PAT: ${{ secrets.TEST_USER_ORG_FG_PAT }}
+      TEST_USER_USER_FG_PAT: ${{ secrets.TEST_USER_USER_FG_PAT }}
+      TEST_USER_PAT: ${{ secrets.TEST_USER_PAT }}
