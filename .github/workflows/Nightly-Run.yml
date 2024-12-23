@@ -14,6 +14,7 @@ jobs:
   Process-PSModule:
     uses: PSModule/Process-PSModule/.github/workflows/CI.yml@v3
     secrets:
+      APIKey: ${{ secrets.APIKey }}
       TEST_APP_ENT_CLIENT_ID: ${{ secrets.TEST_APP_ENT_CLIENT_ID }}
       TEST_APP_ENT_PRIVATE_KEY: ${{ secrets.TEST_APP_ENT_PRIVATE_KEY }}
       TEST_APP_ORG_CLIENT_ID: ${{ secrets.TEST_APP_ORG_CLIENT_ID }}
