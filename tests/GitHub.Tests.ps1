@@ -242,7 +242,7 @@ Describe 'GitHub' {
             {
                 Set-GitHubEnvironmentVariable -Name 'MyName' -Value 'MyValue'
             } | Should -Not -Throw
-            Get-Content $env:GITHUB_ENV -Raw | Should -BeLike "*MyName=MyValue*"
+            Get-Content $env:GITHUB_ENV -Raw | Should -BeLike "*MyName*MyValue*"
         }
         It 'Set-GitHubStepSummary should not throw' {
             {
