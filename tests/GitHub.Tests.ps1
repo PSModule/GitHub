@@ -209,7 +209,7 @@ Describe 'GitHub' {
             {
                 Add-GitHubSystemPath -Path $pwd.ToString()
             } | Should -Not -Throw
-            $env:Path | Should -Contain $pwd.ToString()
+            Get-Content $env:GITHUB_PATH -Raw | Should -Belike "*$($pwd.ToString())*"
         }
         It 'Disable-GitHubCommand should not throw' {
             {
@@ -242,7 +242,7 @@ Describe 'GitHub' {
             {
                 Set-GitHubEnvironmentVariable -Name 'MyName' -Value 'MyValue'
             } | Should -Not -Throw
-            $env:MyName | Should -Be 'MyValue'
+            Get-Content $env:GITHUB_ENV -Raw | Should -BeLike "*MyName=MyValue*"
         }
         It 'Set-GitHubStepSummary should not throw' {
             {

@@ -15,7 +15,7 @@
         Get the license for the Hello-World repository from the octocat account.
 
         .NOTES
-        https://docs.github.com/rest/licenses/licenses#get-the-license-for-a-repository
+        [Get the license for a repository](https://docs.github.com/rest/licenses/licenses#get-the-license-for-a-repository)
 
     #>
     [CmdletBinding()]
@@ -27,6 +27,11 @@
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter()]
         [string] $Repo,
+
+        # The type of data to return. Can be either 'raw' or 'html'.
+        [Parameter()]
+        [ValidateSet('raw', 'html')]
+        [string] $Type = 'raw',
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -49,6 +54,11 @@
             $Repo = $Context.Repo
         }
         Write-Debug "Repo: [$Repo]"
+
+        $contentType = switch ($Type) {
+            'raw' { 'application/vnd.github.raw+json' }
+            'html' { 'application/vnd.github.html+json' }
+        }
     }
 
     process {
@@ -56,7 +66,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = "/repos/$Owner/$Repo/license"
-                Accept      = 'application/vnd.github+json'
+                ContentType = $contentType
                 Method      = 'GET'
             }
 
