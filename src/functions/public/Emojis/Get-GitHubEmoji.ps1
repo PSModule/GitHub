@@ -53,6 +53,7 @@
 
             if (Test-Path -Path $Destination) {
                 $response.PSObject.Properties | ForEach-Object -ThrottleLimit ([System.Environment]::ProcessorCount) -Parallel {
+                    Write-Verbose "Downloading [$($_.Name).png] to [$using:Destination/$($_.Name).png]"
                     Invoke-WebRequest -Uri $_.Value -OutFile "$using:Destination/$($_.Name).png"
                 }
             } else {
