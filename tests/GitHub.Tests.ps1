@@ -42,7 +42,6 @@ Describe 'GitHub' {
             { Connect-GitHubAccount } | Should -Not -Throw
             { Disconnect-GitHubAccount } | Should -Not -Throw
         }
-
         It 'Can connect and disconnect - a second time' {
             Connect-GitHubAccount
             Write-Verbose (Get-GitHubContext | Out-String) -Verbose
@@ -52,75 +51,66 @@ Describe 'GitHub' {
             Write-Verbose (Get-GitHubConfig | Out-String) -Verbose
             { Disconnect-GitHubAccount } | Should -Not -Throw
         }
-
         It 'Can pass the context to the pipeline' {
             $context = Connect-GitHubAccount -PassThru
             Write-Verbose (Get-GitHubContext | Out-String) -Verbose
             $context | Should -Not -BeNullOrEmpty
             { $context | Disconnect-GitHubAccount } | Should -Not -Throw
         }
-
         It 'Can connect multiple sessions, GITHUB_TOKEN + classic PAT token' {
-            { Connect-GitHubAccount -Token $env:TEST_PAT } | Should -Not -Throw
-            { Connect-GitHubAccount -Token $env:TEST_PAT } | Should -Not -Throw
+            { Connect-GitHubAccount -Token $env:TEST_USER_PAT } | Should -Not -Throw
+            { Connect-GitHubAccount -Token $env:TEST_USER_PAT } | Should -Not -Throw
             { Connect-GitHubAccount } | Should -Not -Throw # Logs on with GitHub Actions' token
             (Get-GitHubContext -ListAvailable).Count | Should -Be 2
             Get-GitHubConfig -Name 'DefaultContext' | Should -Be 'github.com/github-actions/Organization/PSModule'
             Write-Verbose (Get-GitHubContext | Out-String) -Verbose
         }
-
         It 'Can reconfigure an existing context to be fine-grained PAT token' {
-            { Connect-GitHubAccount -Token $env:TEST_FG_PAT } | Should -Not -Throw
+            { Connect-GitHubAccount -Token $env:TEST_USER_USER_FG_PAT } | Should -Not -Throw
             (Get-GitHubContext -ListAvailable).Count | Should -Be 2
             Write-Verbose (Get-GitHubContext -ListAvailable | Out-String) -Verbose
         }
-
         It 'Can be called with a GitHub App' {
             $params = @{
-                ClientID   = $env:TEST_APP_CLIENT_ID
-                PrivateKey = $env:TEST_APP_PRIVATE_KEY
+                ClientID   = $env:TEST_APP_ORG_CLIENT_ID
+                PrivateKey = $env:TEST_APP_ORG_PRIVATE_KEY
             }
             { Connect-GitHubAccount @params } | Should -Not -Throw
             $contexts = Get-GitHubContextInfo -Verbose:$false
             Write-Verbose ($contexts | Out-String) -Verbose
             ($contexts).Count | Should -Be 3
         }
-
         It 'Can be called with a GitHub App and autoload installations' {
             $params = @{
-                ClientID   = $env:TEST_APP_CLIENT_ID
-                PrivateKey = $env:TEST_APP_PRIVATE_KEY
+                ClientID   = $env:TEST_APP_ORG_CLIENT_ID
+                PrivateKey = $env:TEST_APP_ORG_PRIVATE_KEY
             }
             { Connect-GitHubAccount @params -AutoloadInstallations } | Should -Not -Throw
             $contexts = Get-GitHubContextInfo -Verbose:$false
             Write-Verbose ($contexts | Out-String) -Verbose
             ($contexts).Count | Should -Be 7
         }
-
         It 'Can disconnect a specific context' {
-            { Disconnect-GitHubAccount -Context 'github.com/psmodule-test-app/Organization/PSModule' -Silent } | Should -Not -Throw
-            $contexts = Get-GitHubContextInfo -Name 'github.com/psmodule-test-app/*' -Verbose:$false
+            { Disconnect-GitHubAccount -Context 'github.com/psmodule-org-app/Organization/PSModule' -Silent } | Should -Not -Throw
+            $contexts = Get-GitHubContextInfo -Name 'github.com/psmodule-org-app/*' -Verbose:$false
             Write-Verbose ($contexts | Out-String) -Verbose
             ($contexts).Count | Should -Be 3
-            Connect-GitHubAccount -ClientID $env:TEST_APP_CLIENT_ID -PrivateKey $env:TEST_APP_PRIVATE_KEY -AutoloadInstallations
+            Connect-GitHubAccount -ClientID $env:TEST_APP_ORG_CLIENT_ID -PrivateKey $env:TEST_APP_ORG_PRIVATE_KEY -AutoloadInstallations
             $contexts = Get-GitHubContext -ListAvailable -Verbose:$false
             Write-Verbose ($contexts | Out-String) -Verbose
             ($contexts).Count | Should -Be 7
         }
-
         It 'Can get the authenticated GitHubApp' {
             $app = Get-GitHubApp
             Write-Verbose ($app | Format-Table | Out-String) -Verbose
             $app | Should -Not -BeNullOrEmpty
         }
-
         It 'Can connect to a GitHub App Installation' {
             $appContext = Connect-GitHubApp -Organization 'PSModule' -PassThru
             Write-Verbose ($appContext | Out-String) -Verbose
             $appContext | Should -Not -BeNullOrEmpty
             { $appContext | Disconnect-GitHub } | Should -Not -Throw
         }
-
         It 'Can connect to all GitHub App Installations' {
             { Connect-GitHubApp } | Should -Not -Throw
             Write-Verbose 'Default context:' -Verbose
@@ -128,16 +118,13 @@ Describe 'GitHub' {
             Write-Verbose 'All contexts:' -Verbose
             Write-Verbose (Get-GitHubContext -ListAvailable | Out-String) -Verbose
         }
-
         It 'Can swap context to another' {
             { Set-GitHubDefaultContext -Context 'github.com/github-actions/Organization/PSModule' } | Should -Not -Throw
             Get-GitHubConfig -Name 'DefaultContext' | Should -Be 'github.com/github-actions/Organization/PSModule'
         }
-
         It 'Get-GitHubViewer can be called' {
             Get-GitHubViewer | Should -Not -BeNullOrEmpty
         }
-
         It 'Get-GitHubConfig gets the DefaultContext' {
             Write-Verbose (Get-GitHubConfig -Name 'DefaultContext') -Verbose
             { Get-GitHubConfig -Name 'DefaultContext' } | Should -Not -Throw
@@ -264,9 +251,9 @@ Describe 'GitHub' {
     }
 }
 
-Describe 'As a user - Fine-grained PAT token' {
+Describe 'As a user - Fine-grained PAT token - user account access' {
     BeforeAll {
-        Connect-GitHubAccount -Token $env:TEST_FG_PAT
+        Connect-GitHubAccount -Token $env:TEST_USER_USER_FG_PAT
     }
     AfterAll {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
@@ -385,9 +372,128 @@ Describe 'As a user - Fine-grained PAT token' {
     }
 }
 
+Describe 'As a user - Fine-grained PAT token - organization account access' {
+    BeforeAll {
+        Connect-GitHubAccount -Token $env:TEST_USER_ORG_FG_PAT
+    }
+    AfterAll {
+        Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+    }
+    Context 'API' {
+        It 'Can be called directly to get ratelimits' {
+            {
+                $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit'
+                Write-Verbose ($rateLimit | Format-Table | Out-String) -Verbose
+            } | Should -Not -Throw
+        }
+    }
+    Context 'GraphQL' {
+        It 'Can be called directly to get viewer' {
+            {
+                $viewer = Invoke-GitHubGraphQLQuery -Query 'query { viewer { login } }'
+                Write-Verbose ($viewer | Format-Table | Out-String) -Verbose
+            } | Should -Not -Throw
+        }
+    }
+    Context 'Meta' {
+        It 'Get-GitHubRoot' {
+            $root = Get-GitHubRoot
+            Write-Verbose ($root | Format-Table | Out-String) -Verbose
+            $root | Should -Not -BeNullOrEmpty
+        }
+        It 'Get-GitHubApiVersion' {
+            $apiVersion = Get-GitHubApiVersion
+            Write-Verbose ($apiVersion | Format-Table | Out-String) -Verbose
+            $apiVersion | Should -Not -BeNullOrEmpty
+        }
+        It 'Get-GitHubMeta' {
+            $meta = Get-GitHubMeta
+            Write-Verbose ($meta | Format-Table | Out-String) -Verbose
+            $meta | Should -Not -BeNullOrEmpty
+        }
+        It 'Get-GitHubOctocat' {
+            $octocat = Get-GitHubOctocat
+            Write-Verbose ($octocat | Format-Table | Out-String) -Verbose
+            $octocat | Should -Not -BeNullOrEmpty
+        }
+        It 'Get-GitHubZen' {
+            $zen = Get-GitHubZen
+            Write-Verbose ($zen | Format-Table | Out-String) -Verbose
+            $zen | Should -Not -BeNullOrEmpty
+        }
+    }
+    Context 'Rate-Limit' {
+        It 'Can be called with no parameters' {
+            { Get-GitHubRateLimit } | Should -Not -Throw
+        }
+    }
+    Context 'License' {
+        It 'Can be called with no parameters' {
+            { Get-GitHubLicense } | Should -Not -Throw
+        }
+        It 'Can be called with Name parameter' {
+            { Get-GitHubLicense -Name 'mit' } | Should -Not -Throw
+        }
+        It 'Can be called with Repository parameter' {
+            { Get-GitHubLicense -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
+        }
+    }
+    Context 'Emoji' {
+        It 'Can be called with no parameters' {
+            { Get-GitHubEmoji } | Should -Not -Throw
+        }
+        It 'Can be download the emojis' {
+            { Get-GitHubEmoji -Destination $env:TEMP } | Should -Not -Throw
+        }
+    }
+    Context 'Repository' {
+        Context 'Parameter Set: MyRepos_Type' {
+            It 'Can be called with no parameters' {
+                { Get-GitHubRepository - } | Should -Not -Throw
+            }
+            It 'Can be called with Type parameter' {
+                { Get-GitHubRepository -Type 'public' } | Should -Not -Throw
+            }
+        }
+        Context 'Parameter Set: MyRepos_Aff-Vis' {
+            It 'Can be called with Visibility and Affiliation parameters' {
+                { Get-GitHubRepository -Visibility 'public' -Affiliation 'owner' } | Should -Not -Throw
+            }
+        }
+        It 'Can be called with Owner and Repo parameters' {
+            { Get-GitHubRepository -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
+        }
+        It 'Can be called with Owner parameter' {
+            { Get-GitHubRepository -Owner 'PSModule' } | Should -Not -Throw
+        }
+        It 'Can be called with Username parameter' {
+            { Get-GitHubRepository -Username 'MariusStorhaug' } | Should -Not -Throw
+        }
+    }
+    Context 'GitIgnore' {
+        It 'Can be called with no parameters' {
+            { Get-GitHubGitignore } | Should -Not -Throw
+        }
+        It 'Can be called with Name parameter' {
+            { Get-GitHubGitignore -Name 'VisualStudio' } | Should -Not -Throw
+        }
+    }
+    Context 'Markdown' {
+        It 'Can be called with Text parameter' {
+            { Get-GitHubMarkdown -Text 'Hello, World!' } | Should -Not -Throw
+        }
+        It 'Can be called with Text parameter and GitHub Format Mardown' {
+            { Get-GitHubMarkdown -Text 'Hello, World!' -Mode gfm } | Should -Not -Throw
+        }
+        It 'Raw - Can be called with Text parameter' {
+            { Get-GitHubMarkdownRaw -Text 'Hello, World!' } | Should -Not -Throw
+        }
+    }
+}
+
 Describe 'As a user - Classic PAT token' {
     BeforeAll {
-        Connect-GitHubAccount -Token $env:TEST_PAT
+        Connect-GitHubAccount -Token $env:TEST_USER_PAT
     }
     AfterAll {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
@@ -588,9 +694,18 @@ Describe 'As GitHub Actions' {
     }
 }
 
-Describe 'As a GitHub App' {
+Describe 'As a GitHub App - Enterprise' {
     BeforeAll {
-        Connect-GitHubAccount -ClientID $env:TEST_APP_CLIENT_ID -PrivateKey $env:TEST_APP_PRIVATE_KEY
+        Connect-GitHubAccount -ClientID $env:TEST_APP_ENT_CLIENT_ID -PrivateKey $env:TEST_APP_ENT_PRIVATE_KEY
+    }
+    AfterAll {
+        Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+    }
+}
+
+Describe 'As a GitHub App - Organization' {
+    BeforeAll {
+        Connect-GitHubAccount -ClientID $env:TEST_APP_ORG_CLIENT_ID -PrivateKey $env:TEST_APP_ORG_PRIVATE_KEY
     }
     AfterAll {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
@@ -598,7 +713,7 @@ Describe 'As a GitHub App' {
     Context 'Apps' {
         Context 'GitHub Apps' {
             It 'Can get a JWT for the app' {
-                $jwt = Get-GitHubAppJSONWebToken -ClientId $env:TEST_APP_CLIENT_ID -PrivateKey $env:TEST_APP_PRIVATE_KEY
+                $jwt = Get-GitHubAppJSONWebToken -ClientId $env:TEST_APP_ORG_CLIENT_ID -PrivateKey $env:TEST_APP_ORG_PRIVATE_KEY
                 Write-Verbose ($jwt | Format-Table | Out-String) -Verbose
                 $jwt | Should -Not -BeNullOrEmpty
             }
