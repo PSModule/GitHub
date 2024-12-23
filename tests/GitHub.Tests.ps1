@@ -92,11 +92,11 @@ Describe 'GitHub' {
             { Connect-GitHubAccount @params -AutoloadInstallations } | Should -Not -Throw
             $contexts = Get-GitHubContextInfo -Verbose:$false
             Write-Verbose ($contexts | Out-String) -Verbose
-            ($contexts).Count | Should -Be 6
+            ($contexts).Count | Should -Be 7
         }
         It 'Can disconnect a specific context' {
-            { Disconnect-GitHubAccount -Context 'github.com/psmodule-org-app/Organization/PSModule' -Silent } | Should -Not -Throw
-            $contexts = Get-GitHubContextInfo -Name 'github.com/psmodule-org-app/*' -Verbose:$false
+            { Disconnect-GitHubAccount -Context 'github.com/psmodule-enterprise-app/Organization/PSModule' -Silent } | Should -Not -Throw
+            $contexts = Get-GitHubContextInfo -Name 'github.com/psmodule-enterprise-app/*' -Verbose:$false
             Write-Verbose ($contexts | Out-String) -Verbose
             ($contexts).Count | Should -Be 2
             Connect-GitHubAccount -ClientID $env:TEST_APP_ORG_CLIENT_ID -PrivateKey $env:TEST_APP_ORG_PRIVATE_KEY -AutoloadInstallations
