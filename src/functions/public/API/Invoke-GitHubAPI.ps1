@@ -227,6 +227,9 @@
             $headers = [pscustomobject]$headers
             $sortedProperties = $headers.PSObject.Properties.Name | Sort-Object
             $headers = $headers | Select-Object $sortedProperties
+            Write-Debug 'Response headers:'
+            $headers | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+            Write-Debug '---------------------------'
 
             $errordetails = $failure.ErrorDetails | ConvertFrom-Json -AsHashtable
             $errorResult = [ordered]@{
@@ -239,13 +242,13 @@
             $APICall.Headers = $APICall.Headers | ConvertTo-Json
             $APICall.Method = $APICall.Method.ToString()
 
-            Write-Error '----------------------------------'
-            Write-Error 'Error details:'
-            $errorResult | Format-Table -AutoSize -HideTableHeaders | Out-String -Stream | ForEach-Object { Write-Error $_ }
-            Write-Error '----------------------------------'
-            Write-Debug 'Response headers:'
-            $headers | Out-String -Stream | ForEach-Object { Write-Debug $_ }
-            Write-Debug '---------------------------'
+            $errorResult = @"
+----------------------------------
+Error details:
+$($errorResult | Format-Table -AutoSize -HideTableHeaders | Out-String)
+----------------------------------
+"@
+            Write-Error $errorResult
             throw $failure.Exception.Message
         }
     }
