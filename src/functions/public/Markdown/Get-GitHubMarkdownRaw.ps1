@@ -16,6 +16,7 @@
 
         .NOTES
         [Render a Markdown document in raw mode](https://docs.github.com/rest/reference/meta#github-api-root)
+        https://docs.github.com/rest/markdown/markdown#render-a-markdown-document-in-raw-mode
     #>
     [CmdletBinding()]
     param(
@@ -38,12 +39,15 @@
 
     process {
         try {
+            $body = @{
+                text = $Text
+            }
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = '/markdown/raw'
                 ContentType = 'text/plain'
-                Body        = $Text
                 Method      = 'POST'
+                Body        = $body
             }
 
             Invoke-GitHubAPI @inputObject | ForEach-Object {

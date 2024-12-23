@@ -24,7 +24,7 @@
             ValueFromPipeline,
             ValueFromPipelineByPropertyName
         )]
-        [switch] $Text,
+        [string] $Text,
 
         # The rendering mode.
         [Parameter()]
