@@ -378,6 +378,18 @@ Describe 'As a user - Fine-grained PAT token - user account access' {
             { Get-GitHubMarkdownRaw -Text 'Hello, World!' } | Should -Not -Throw
         }
     }
+    Context 'User' {
+        It 'Can be called with no parameters' {
+            { Get-GitHubUser } | Should -Not -Throw
+        }
+        It 'Can be called with Username parameter' {
+            { Get-GitHubUser -Username 'Octocat' } | Should -Not -Throw
+        }
+        It 'Can be called with no parameters' {
+            $repo = Get-GitHubRepository -Owner 'PSModule' -Repo 'GitHub'
+            { Get-GitHubUserCard -Username 'MariusStorhaug' -SubjectType repository -SubjectID $repo.id } | Should -Not -Throw
+        }
+    }
 }
 
 Describe 'As a user - Fine-grained PAT token - organization account access' {
@@ -497,6 +509,18 @@ Describe 'As a user - Fine-grained PAT token - organization account access' {
             { Get-GitHubMarkdownRaw -Text 'Hello, **World**' } | Should -Not -Throw
         }
     }
+    Context 'User' {
+        It 'Can be called with no parameters' {
+            { Get-GitHubUser } | Should -Not -Throw
+        }
+        It 'Can be called with Username parameter' {
+            { Get-GitHubUser -Username 'Octocat' } | Should -Not -Throw
+        }
+        It 'Can be called with no parameters' {
+            $repo = Get-GitHubRepository -Owner 'PSModule' -Repo 'GitHub'
+            { Get-GitHubUserCard -Username 'MariusStorhaug' -SubjectType repository -SubjectID $repo.id } | Should -Not -Throw
+        }
+    }
 }
 
 Describe 'As a user - Classic PAT token' {
@@ -591,6 +615,18 @@ Describe 'As a user - Classic PAT token' {
         }
         It 'Raw - Can be called with Text parameter' {
             { Get-GitHubMarkdownRaw -Text 'Hello, World!' } | Should -Not -Throw
+        }
+    }
+    Context 'User' {
+        It 'Can be called with no parameters' {
+            { Get-GitHubUser } | Should -Not -Throw
+        }
+        It 'Can be called with Username parameter' {
+            { Get-GitHubUser -Username 'Octocat' } | Should -Not -Throw
+        }
+        It 'Can be called with no parameters' {
+            $repo = Get-GitHubRepository -Owner 'PSModule' -Repo 'GitHub'
+            { Get-GitHubUserCard -Username 'MariusStorhaug' -SubjectType repository -SubjectID $repo.id } | Should -Not -Throw
         }
     }
 }
@@ -700,6 +736,15 @@ Describe 'As GitHub Actions' {
             { Get-GitHubMarkdownRaw -Text 'Hello, World!' } | Should -Not -Throw
         }
     }
+    Context 'User' {
+        It 'Can be called with Username parameter' {
+            { Get-GitHubUser -Username 'Octocat' } | Should -Not -Throw
+        }
+        It 'Can be called with no parameters' {
+            $repo = Get-GitHubRepository -Owner 'PSModule' -Repo 'GitHub'
+            { Get-GitHubUserCard -Username 'MariusStorhaug' -SubjectType repository -SubjectID $repo.id } | Should -Not -Throw
+        }
+    }
 }
 
 Describe 'As a GitHub App - Enterprise' {
@@ -708,6 +753,15 @@ Describe 'As a GitHub App - Enterprise' {
     }
     AfterAll {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+    }
+    Context 'User' {
+        It 'Can be called with Username parameter' {
+            { Get-GitHubUser -Username 'Octocat' } | Should -Not -Throw
+        }
+        It 'Can be called with no parameters' {
+            $repo = Get-GitHubRepository -Owner 'PSModule' -Repo 'GitHub'
+            { Get-GitHubUserCard -Username 'MariusStorhaug' -SubjectType repository -SubjectID $repo.id } | Should -Not -Throw
+        }
     }
 }
 
@@ -771,6 +825,15 @@ Describe 'As a GitHub App - Organization' {
                 $app = Invoke-GitHubAPI -ApiEndpoint '/app'
                 Write-Verbose ($app | Format-Table | Out-String) -Verbose
             } | Should -Not -Throw
+        }
+    }
+    Context 'User' {
+        It 'Can be called with Username parameter' {
+            { Get-GitHubUser -Username 'Octocat' } | Should -Not -Throw
+        }
+        It 'Can be called with no parameters' {
+            $repo = Get-GitHubRepository -Owner 'PSModule' -Repo 'GitHub'
+            { Get-GitHubUserCard -Username 'MariusStorhaug' -SubjectType repository -SubjectID $repo.id } | Should -Not -Throw
         }
     }
 }

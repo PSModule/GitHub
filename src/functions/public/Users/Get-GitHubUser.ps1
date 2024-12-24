@@ -33,7 +33,7 @@
         'All',
         Justification = 'Parameter is used in dynamic parameter validation.'
     )]
-    [CmdletBinding(DefaultParameterSetName = '__DefaultSet')]
+    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(
         # The handle for the GitHub user account.
         [Parameter(
@@ -75,7 +75,7 @@
     process {
         try {
             switch ($PSCmdlet.ParameterSetName) {
-                '__DefaultSet' {
+                '__AllParameterSets' {
                     $user = Get-GitHubMyUser -Context $Context
                     $social_accounts = Get-GitHubMyUserSocials -Context $Context
                     $user | Add-Member -MemberType NoteProperty -Name 'social_accounts' -Value $social_accounts -Force
