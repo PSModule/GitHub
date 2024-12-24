@@ -330,8 +330,8 @@ Describe 'As a user - Fine-grained PAT token - user account access' {
         It 'Can be called with no parameters' {
             { Get-GitHubEmoji } | Should -Not -Throw
         }
-        It 'Can be download the emojis' {
-            { Get-GitHubEmoji -Destination $env:TEMP } | Should -Not -Throw
+        It 'Can download the emojis' {
+            { Get-GitHubEmoji -Destination $Home } | Should -Not -Throw
         }
     }
     Context 'Repository' {
@@ -451,7 +451,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access' {
             { Get-GitHubEmoji } | Should -Not -Throw
         }
         It 'Can be download the emojis' {
-            { Get-GitHubEmoji -Destination $env:TEMP } | Should -Not -Throw
+            { Get-GitHubEmoji -Destination $Home } | Should -Not -Throw
         }
     }
     Context 'Repository' {
@@ -571,7 +571,7 @@ Describe 'As a user - Classic PAT token' {
             { Get-GitHubEmoji } | Should -Not -Throw
         }
         It 'Can be download the emojis' {
-            { Get-GitHubEmoji -Destination $env:TEMP } | Should -Not -Throw
+            { Get-GitHubEmoji -Destination $Home } | Should -Not -Throw
         }
     }
     Context 'GitIgnore' {
@@ -678,7 +678,7 @@ Describe 'As GitHub Actions' {
             { Get-GitHubEmoji } | Should -Not -Throw
         }
         It 'Can be download the emojis' {
-            { Get-GitHubEmoji -Destination $env:TEMP } | Should -Not -Throw
+            { Get-GitHubEmoji -Destination $Home } | Should -Not -Throw
         }
     }
     Context 'GitIgnore' {
