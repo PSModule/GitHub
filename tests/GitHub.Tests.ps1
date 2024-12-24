@@ -331,7 +331,7 @@ Describe 'As a user - Fine-grained PAT token - user account access' {
             { Get-GitHubEmoji } | Should -Not -Throw
         }
         It 'Can download the emojis' {
-            { Get-GitHubEmoji -Destination $env:TEMP } | Should -Not -Throw
+            { Get-GitHubEmoji -Destination $Home } | Should -Not -Throw
         }
     }
     Context 'Repository' {
