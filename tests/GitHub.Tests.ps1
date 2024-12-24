@@ -389,6 +389,39 @@ Describe 'As a user - Fine-grained PAT token - user account access' {
             $repo = Get-GitHubRepository -Owner 'PSModule' -Repo 'GitHub'
             { Get-GitHubUserCard -Username 'MariusStorhaug' -SubjectType repository -SubjectID $repo.id } | Should -Not -Throw
         }
+        It 'Can set configuration on a user' {
+            $user = Get-GitHubUser
+            $params = @{
+                Name            = 'Octocat'
+                Email           = 'psmodule@psmodule.io'
+                Blog            = 'https://marius-storhaug.com'
+                TwitterUsername = 'MariusStorhaug123'
+                Company         = 'PSModule'
+                Location        = 'USA'
+                Hireable        = $true
+                Bio             = 'I love programming'
+            }
+            { Set-GitHubUser @params } | Should -Not -Throw
+            (Get-GitHubUser).Name | Should -Be 'Octocat'
+            (Get-GitHubUser).Email | Should -Be 'psmodule@psmodule.io'
+            (Get-GitHubUser).Blog | Should -Be 'https://marius-storhaug.com'
+            (Get-GitHubUser).TwitterUsername | Should -Be 'MariusStorhaug123'
+            (Get-GitHubUser).Company | Should -Be 'PSModule'
+            (Get-GitHubUser).Location | Should -Be 'USA'
+            (Get-GitHubUser).Hireable | Should -Be $true
+            (Get-GitHubUser).Bio | Should -Be 'I love programming'
+            $user = @{
+                Name            = $user.Name
+                Email           = $user.Email
+                Blog            = $user.Blog
+                TwitterUsername = $user.TwitterUsername
+                Company         = $user.Company
+                Location        = $user.Location
+                Hireable        = $user.Hireable
+                Bio             = $user.Bio
+            }
+            Set-GitHubUser @user
+        }
     }
 }
 
