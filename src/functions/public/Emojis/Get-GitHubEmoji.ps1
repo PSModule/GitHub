@@ -56,7 +56,7 @@
                 }
                 $failedEmojis = $response.PSObject.Properties | ForEach-Object -ThrottleLimit ([System.Environment]::ProcessorCount) -Parallel {
                     $emoji = $_
-                    Write-Verbose "Downloading [$($emoji.Name).png] from [$($emoji.Value)] -> [$using:Destination/$($emoji.Name).png]" -Verbose
+                    Write-Verbose "Downloading [$($emoji.Name).png] from [$($emoji.Value)] -> [$using:Destination/$($emoji.Name).png]"
                     try {
                         Invoke-WebRequest -Uri $emoji.Value -OutFile "$using:Destination/$($emoji.Name).png" -RetryIntervalSec 1 -MaximumRetryCount 5
                     } catch {
