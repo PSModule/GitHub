@@ -52,7 +52,7 @@
             if ($PSBoundParameters.ContainsKey('Destination')) {
                 $failedEmojis = @()
                 if (-not (Test-Path -Path $Destination)) {
-                    New-Item -Path $Destination -ItemType Directory -Force | Out-Null
+                    $null = New-Item -Path $Destination -ItemType Directory -Force
                 }
                 $failedEmojis = $response.PSObject.Properties | ForEach-Object -ThrottleLimit ([System.Environment]::ProcessorCount) -Parallel {
                     $emoji = $_
