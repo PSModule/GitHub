@@ -330,7 +330,7 @@ Describe 'As a user - Fine-grained PAT token - user account access' {
         It 'Can be called with no parameters' {
             { Get-GitHubEmoji } | Should -Not -Throw
         }
-        It 'Can be download the emojis' {
+        It 'Can download the emojis' {
             { Get-GitHubEmoji -Destination $env:TEMP } | Should -Not -Throw
         }
     }

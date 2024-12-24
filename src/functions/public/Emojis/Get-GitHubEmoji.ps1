@@ -47,14 +47,26 @@
                 Method      = 'GET'
             }
 
-            $response = Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
+            $response = Invoke-GitHubAPI @inputObject | Select-Object -ExpandProperty Response
 
-            if (Test-Path -Path $Destination) {
-                $response.PSObject.Properties | ForEach-Object -ThrottleLimit ([System.Environment]::ProcessorCount) -Parallel {
-                    Write-Verbose "Downloading [$($_.Name).png] to [$using:Destination/$($_.Name).png]"
-                    Invoke-WebRequest -Uri $_.Value -OutFile "$using:Destination/$($_.Name).png"
+            if ($PSBoundParameters.ContainsKey('Destination')) {
+                $failedEmojis = @()
+                if (-not (Test-Path -Path $Destination)) {
+                    New-Item -Path $Destination -ItemType Directory -Force | Out-Null
+                }
+                $failedEmojis = $response.PSObject.Properties | ForEach-Object -ThrottleLimit ([System.Environment]::ProcessorCount) -Parallel {
+                    $emoji = $_
+                    Write-Verbose "Downloading [$($emoji.Name).png] from [$($emoji.Value)] -> [$using:Destination/$($emoji.Name).png]" -Verbose
+                    try {
+                        Invoke-WebRequest -Uri $emoji.Value -OutFile "$using:Destination/$($emoji.Name).png" -RetryIntervalSec 1 -MaximumRetryCount 5
+                    } catch {
+                        $emoji
+                        Write-Warning "Could not download [$($emoji.Name).png] from [$($emoji.Value)] -> [$using:Destination/$($emoji.Name).png]"
+                    }
+                }
+                if ($failedEmojis.Count -gt 0) {
+                    Write-Warning "Failed to download the following emojis:"
+                    $failedEmojis | Out-String -Stream | ForEach-Object { Write-Warning $_ }
                 }
             } else {
                 $response
