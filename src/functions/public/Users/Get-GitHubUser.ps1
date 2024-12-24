@@ -26,7 +26,6 @@
         .NOTES
         [Get the authenticated user](https://docs.github.com/rest/users/users)
     #>
-    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSReviewUnusedParameter',

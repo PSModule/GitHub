@@ -22,7 +22,6 @@
         .NOTES
         [Get contextual information for a user](https://docs.github.com/rest/users/users#get-contextual-information-for-a-user)
     #>
-    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [OutputType([pscustomobject])]
     [CmdletBinding()]
     param(
