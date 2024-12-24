@@ -20,10 +20,13 @@
         .NOTES
         [Get emojis](https://docs.github.com/rest/reference/emojis#get-emojis)
     #>
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(
         # The path to the directory where the emojis will be downloaded.
-        [Parameter()]
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'Download'
+        )]
         [string] $Destination,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -49,7 +52,7 @@
 
             $response = Invoke-GitHubAPI @inputObject | Select-Object -ExpandProperty Response
 
-            if ($PSBoundParameters.ContainsKey('Destination')) {
+            if ($PSCmdlet.ParameterSetName -eq 'Download') {
                 $failedEmojis = @()
                 if (-not (Test-Path -Path $Destination)) {
                     $null = New-Item -Path $Destination -ItemType Directory -Force
@@ -65,7 +68,7 @@
                     }
                 }
                 if ($failedEmojis.Count -gt 0) {
-                    Write-Warning "Failed to download the following emojis:"
+                    Write-Warning 'Failed to download the following emojis:'
                     $failedEmojis | Out-String -Stream | ForEach-Object { Write-Warning $_ }
                 }
             } else {
