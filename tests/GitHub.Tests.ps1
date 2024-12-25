@@ -364,7 +364,6 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
         It 'Get-GitHubUser - Can set configuration on a user (USER_FG_PAT)' {
             # $params = @{
             #     Name            = 'Octocat'
-            #     Email           = 'Marius.Storhaug@outlook.com'
             #     Blog            = 'https://marius-storhaug.com'
             #     TwitterUsername = 'MariusStorhaug123'
             #     Company         = 'PSModule'
@@ -375,7 +374,6 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
             # { Set-GitHubUser @params } | Should -Not -Throw
             $user = Get-GitHubUser
             { Set-GitHubUser -Name 'Octocat' } | Should -Not -Throw
-            { Set-GitHubUser -Email 'Marius.Storhaug@outlook.com' } | Should -Not -Throw
             { Set-GitHubUser -Blog 'https://marius-storhaug.com' } | Should -Not -Throw
             { Set-GitHubUser -TwitterUsername 'MariusStorhaug123' } | Should -Not -Throw
             { Set-GitHubUser -Company 'PSModule' } | Should -Not -Throw
@@ -384,7 +382,6 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
             { Set-GitHubUser -Bio 'I love programming' } | Should -Not -Throw
             $tmpUser = Get-GitHubUser
             $tmpUser.Name | Should -Be 'Octocat'
-            $tmpUser.Email | Should -Be 'Marius.Storhaug@outlook.com'
             $tmpUser.Blog | Should -Be 'https://marius-storhaug.com'
             $tmpUser.TwitterUsername | Should -Be 'MariusStorhaug123'
             $tmpUser.Company | Should -Be 'PSModule'
@@ -542,7 +539,6 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         It 'Get-GitHubUser - Can set configuration on a user (ORG_FG_PAT)' {
             # $params = @{
             #     Name            = 'Octocat'
-            #     Email           = 'Marius.Storhaug@outlook.com'
             #     Blog            = 'https://marius-storhaug.com'
             #     TwitterUsername = 'MariusStorhaug123'
             #     Company         = 'PSModule'
@@ -553,7 +549,6 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
             # { Set-GitHubUser @params } | Should -Not -Throw
             $user = Get-GitHubUser
             { Set-GitHubUser -Name 'Octocat' } | Should -Not -Throw
-            { Set-GitHubUser -Email 'Marius.Storhaug@outlook.com' } | Should -Not -Throw
             { Set-GitHubUser -Blog 'https://marius-storhaug.com' } | Should -Not -Throw
             { Set-GitHubUser -TwitterUsername 'MariusStorhaug123' } | Should -Not -Throw
             { Set-GitHubUser -Company 'PSModule' } | Should -Not -Throw
@@ -562,7 +557,6 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
             { Set-GitHubUser -Bio 'I love programming' } | Should -Not -Throw
             $tmpUser = Get-GitHubUser
             $tmpUser.Name | Should -Be 'Octocat'
-            $tmpUser.Email | Should -Be 'Marius.Storhaug@outlook.com'
             $tmpUser.Blog | Should -Be 'https://marius-storhaug.com'
             $tmpUser.TwitterUsername | Should -Be 'MariusStorhaug123'
             $tmpUser.Company | Should -Be 'PSModule'
@@ -700,7 +694,6 @@ Describe 'As a user - Classic PAT token (PAT)' {
         It 'Get-GitHubUser - Can set configuration on a user (PAT)' {
             # $params = @{
             #     Name            = 'Octocat'
-            #     Email           = 'Marius.Storhaug@outlook.com'
             #     Blog            = 'https://marius-storhaug.com'
             #     TwitterUsername = 'MariusStorhaug123'
             #     Company         = 'PSModule'
@@ -711,7 +704,6 @@ Describe 'As a user - Classic PAT token (PAT)' {
             # { Set-GitHubUser @params } | Should -Not -Throw
             $user = Get-GitHubUser
             { Set-GitHubUser -Name 'Octocat' } | Should -Not -Throw
-            { Set-GitHubUser -Email 'Marius.Storhaug@outlook.com' } | Should -Not -Throw
             { Set-GitHubUser -Blog 'https://marius-storhaug.com' } | Should -Not -Throw
             { Set-GitHubUser -TwitterUsername 'MariusStorhaug123' } | Should -Not -Throw
             { Set-GitHubUser -Company 'PSModule' } | Should -Not -Throw
@@ -720,7 +712,6 @@ Describe 'As a user - Classic PAT token (PAT)' {
             { Set-GitHubUser -Bio 'I love programming' } | Should -Not -Throw
             $tmpUser = Get-GitHubUser
             $tmpUser.Name | Should -Be 'Octocat'
-            $tmpUser.Email | Should -Be 'Marius.Storhaug@outlook.com'
             $tmpUser.Blog | Should -Be 'https://marius-storhaug.com'
             $tmpUser.TwitterUsername | Should -Be 'MariusStorhaug123'
             $tmpUser.Company | Should -Be 'PSModule'
