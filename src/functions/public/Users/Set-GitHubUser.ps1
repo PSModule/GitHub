@@ -87,6 +87,7 @@
                 hireable         = $Hireable
                 bio              = $Bio
             }
+            $body | Remove-HashtableEntry -NullOrEmptyValues
 
             $inputObject = @{
                 Context     = $Context
