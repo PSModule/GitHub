@@ -410,7 +410,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access' {
         }
     }
     Context 'API' {
-        It 'Can be called directly to get ratelimits' {
+        It 'Invoke-GitHubAPI - Gets the rate limits directly' {
             {
                 $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit'
                 Write-Verbose ($rateLimit | Format-Table | Out-String) -Verbose
@@ -418,7 +418,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access' {
         }
     }
     Context 'GraphQL' {
-        It 'Can be called directly to get viewer' {
+        It 'Invoke-GitHubGraphQLQuery - Gets the viewer directly' {
             {
                 $viewer = Invoke-GitHubGraphQLQuery -Query 'query { viewer { login } }'
                 Write-Verbose ($viewer | Format-Table | Out-String) -Verbose
@@ -426,105 +426,135 @@ Describe 'As a user - Fine-grained PAT token - organization account access' {
         }
     }
     Context 'Meta' {
-        It 'Get-GitHubRoot' {
+        It 'Get-GitHubRoot - Gets the GitHub API Root' {
             $root = Get-GitHubRoot
             Write-Verbose ($root | Format-Table | Out-String) -Verbose
             $root | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubApiVersion' {
+        It 'Get-GitHubApiVersion - Gets all API versions' {
             $apiVersion = Get-GitHubApiVersion
             Write-Verbose ($apiVersion | Format-Table | Out-String) -Verbose
             $apiVersion | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubMeta' {
+        It 'Get-GitHubMeta - Gets GitHub meta information' {
             $meta = Get-GitHubMeta
             Write-Verbose ($meta | Format-Table | Out-String) -Verbose
             $meta | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubOctocat' {
+        It 'Get-GitHubOctocat - Gets the Octocat' {
             $octocat = Get-GitHubOctocat
             Write-Verbose ($octocat | Format-Table | Out-String) -Verbose
             $octocat | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubZen' {
+        It 'Get-GitHubZen - Gets the Zen of GitHub' {
             $zen = Get-GitHubZen
             Write-Verbose ($zen | Format-Table | Out-String) -Verbose
             $zen | Should -Not -BeNullOrEmpty
         }
     }
     Context 'Rate-Limit' {
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubRateLimit - Gets the rate limit status for the authenticated user' {
             { Get-GitHubRateLimit } | Should -Not -Throw
         }
     }
     Context 'License' {
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubLicense - Gets a list of all popular license templates' {
             { Get-GitHubLicense } | Should -Not -Throw
         }
-        It 'Can be called with Name parameter' {
+        It 'Get-GitHubLicense - Gets a spesific license' {
             { Get-GitHubLicense -Name 'mit' } | Should -Not -Throw
         }
-        It 'Can be called with Repository parameter' {
+        It 'Get-GitHubLicense - Gets a license from a repository' {
             { Get-GitHubLicense -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
         }
     }
     Context 'Emoji' {
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubEmoji - Gets a list of all emojis' {
             { Get-GitHubEmoji } | Should -Not -Throw
         }
-        It 'Can be download the emojis' {
+        It 'Get-GitHubEmoji - Downloads all emojis' {
             { Get-GitHubEmoji -Destination $Home } | Should -Not -Throw
         }
     }
     Context 'Repository' {
-        Context 'Parameter Set: MyRepos_Type' {
-            It 'Can be called with no parameters' {
-                { Get-GitHubRepository } | Should -Not -Throw
-            }
-            It 'Can be called with Type parameter' {
-                { Get-GitHubRepository -Type 'public' } | Should -Not -Throw
-            }
+        It "Get-GitHubRepository - Gets the authenticated user's repositories" {
+            { Get-GitHubRepository } | Should -Not -Throw
         }
-        Context 'Parameter Set: MyRepos_Aff-Vis' {
-            It 'Can be called with Visibility and Affiliation parameters' {
-                { Get-GitHubRepository -Visibility 'public' -Affiliation 'owner' } | Should -Not -Throw
-            }
+        It "Get-GitHubRepository - Gets the authenticated user's public repositories" {
+            { Get-GitHubRepository -Type 'public' } | Should -Not -Throw
         }
-        It 'Can be called with Owner and Repo parameters' {
+        It 'Get-GitHubRepository - Gets the public repos where the authenticated user is owner' {
+            { Get-GitHubRepository -Visibility 'public' -Affiliation 'owner' } | Should -Not -Throw
+        }
+        It 'Get-GitHubRepository - Gets a specific repository' {
             { Get-GitHubRepository -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
         }
-        It 'Can be called with Owner parameter' {
+        It 'Get-GitHubRepository - Gets all repositories from a organization' {
             { Get-GitHubRepository -Owner 'PSModule' } | Should -Not -Throw
         }
-        It 'Can be called with Username parameter' {
+        It 'Get-GitHubRepository - Gets all repositories from a user' {
             { Get-GitHubRepository -Username 'MariusStorhaug' } | Should -Not -Throw
         }
     }
     Context 'GitIgnore' {
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubGitignore - Gets a list of all gitignore templates names' {
             { Get-GitHubGitignore } | Should -Not -Throw
         }
-        It 'Can be called with Name parameter' {
+        It 'Get-GitHubGitignore - Gets a gitignore template' {
             { Get-GitHubGitignore -Name 'VisualStudio' } | Should -Not -Throw
         }
     }
     Context 'Markdown' {
-        It 'Can be called with Text parameter' {
-            { Get-GitHubMarkdown -Text 'Hello, **World**' } | Should -Not -Throw
+        It 'Get-GitHubMarkdown - Gets the rendered markdown for provided text' {
+            { Get-GitHubMarkdown -Text 'Hello, World!' } | Should -Not -Throw
         }
-        It 'Can be called with Text parameter and GitHub Format Mardown' {
-            { Get-GitHubMarkdown -Text 'Hello, **World**' -Mode gfm } | Should -Not -Throw
+        It 'Get-GitHubMarkdown - Gets the rendered markdown for provided text using GitHub Formated Markdown' {
+            { Get-GitHubMarkdown -Text 'Hello, World!' -Mode gfm } | Should -Not -Throw
         }
-        It 'Raw - Can be called with Text parameter' {
-            { Get-GitHubMarkdownRaw -Text 'Hello, **World**' } | Should -Not -Throw
+        It 'Get-GitHubMarkdownRaw - Gets the raw rendered markdown for provided text' {
+            { Get-GitHubMarkdownRaw -Text 'Hello, World!' } | Should -Not -Throw
         }
     }
     Context 'User' {
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubUser - Gets the authenticated user' {
             { Get-GitHubUser } | Should -Not -Throw
         }
-        It 'Can be called with Username parameter' {
+        It 'Get-GitHubUser - Get the specified user' {
             { Get-GitHubUser -Username 'Octocat' } | Should -Not -Throw
+        }
+        It 'Get-GitHubUser - Can set configuration on a user' {
+            $user = Get-GitHubUser
+            $params = @{
+                Name            = 'Octocat'
+                Email           = 'psmodule@psmodule.io'
+                Blog            = 'https://marius-storhaug.com'
+                TwitterUsername = 'MariusStorhaug123'
+                Company         = 'PSModule'
+                Location        = 'USA'
+                Hireable        = $true
+                Bio             = 'I love programming'
+            }
+            { Set-GitHubUser @params } | Should -Not -Throw
+            $tmpUser = Get-GitHubUser
+            $tmpUser.Name | Should -Be 'Octocat'
+            $tmpUser.Email | Should -Be 'psmodule@psmodule.io'
+            $tmpUser.Blog | Should -Be 'https://marius-storhaug.com'
+            $tmpUser.TwitterUsername | Should -Be 'MariusStorhaug123'
+            $tmpUser.Company | Should -Be 'PSModule'
+            $tmpUser.Location | Should -Be 'USA'
+            $tmpUser.Hireable | Should -Be $true
+            $tmpUser.Bio | Should -Be 'I love programming'
+            $user = @{
+                Name            = $user.Name
+                Email           = $user.Email
+                Blog            = $user.Blog
+                TwitterUsername = $user.TwitterUsername
+                Company         = $user.Company
+                Location        = $user.Location
+                Hireable        = $user.Hireable
+                Bio             = $user.Bio
+            }
+            Set-GitHubUser @user
         }
     }
 }
@@ -542,16 +572,15 @@ Describe 'As a user - Classic PAT token' {
         }
     }
     Context 'API' {
-        It 'Can be called directly to get ratelimits' {
+        It 'Invoke-GitHubAPI - Gets the rate limits directly' {
             {
                 $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit'
                 Write-Verbose ($rateLimit | Format-Table | Out-String) -Verbose
             } | Should -Not -Throw
-
         }
     }
     Context 'GraphQL' {
-        It 'Can be called directly to get viewer' {
+        It 'Invoke-GitHubGraphQLQuery - Gets the viewer directly' {
             {
                 $viewer = Invoke-GitHubGraphQLQuery -Query 'query { viewer { login } }'
                 Write-Verbose ($viewer | Format-Table | Out-String) -Verbose
@@ -559,85 +588,115 @@ Describe 'As a user - Classic PAT token' {
         }
     }
     Context 'Meta' {
-        It 'Get-GitHubRoot' {
+        It 'Get-GitHubRoot - Gets the GitHub API Root' {
             $root = Get-GitHubRoot
             Write-Verbose ($root | Format-Table | Out-String) -Verbose
             $root | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubApiVersion' {
+        It 'Get-GitHubApiVersion - Gets all API versions' {
             $apiVersion = Get-GitHubApiVersion
             Write-Verbose ($apiVersion | Format-Table | Out-String) -Verbose
             $apiVersion | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubMeta' {
+        It 'Get-GitHubMeta - Gets GitHub meta information' {
             $meta = Get-GitHubMeta
             Write-Verbose ($meta | Format-Table | Out-String) -Verbose
             $meta | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubOctocat' {
+        It 'Get-GitHubOctocat - Gets the Octocat' {
             $octocat = Get-GitHubOctocat
             Write-Verbose ($octocat | Format-Table | Out-String) -Verbose
             $octocat | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubZen' {
+        It 'Get-GitHubZen - Gets the Zen of GitHub' {
             $zen = Get-GitHubZen
             Write-Verbose ($zen | Format-Table | Out-String) -Verbose
             $zen | Should -Not -BeNullOrEmpty
         }
     }
     Context 'Rate-Limit' {
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubRateLimit - Gets the rate limit status for the authenticated user' {
             { Get-GitHubRateLimit } | Should -Not -Throw
         }
     }
     Context 'License' {
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubLicense - Gets a list of all popular license templates' {
             { Get-GitHubLicense } | Should -Not -Throw
         }
-        It 'Can be called with Name parameter' {
+        It 'Get-GitHubLicense - Gets a spesific license' {
             { Get-GitHubLicense -Name 'mit' } | Should -Not -Throw
         }
-        It 'Can be called with Repository parameter' {
+        It 'Get-GitHubLicense - Gets a license from a repository' {
             { Get-GitHubLicense -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
         }
     }
     Context 'Emoji' {
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubEmoji - Gets a list of all emojis' {
             { Get-GitHubEmoji } | Should -Not -Throw
         }
-        It 'Can be download the emojis' {
+        It 'Get-GitHubEmoji - Downloads all emojis' {
             { Get-GitHubEmoji -Destination $Home } | Should -Not -Throw
         }
     }
     Context 'GitIgnore' {
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubGitignore - Gets a list of all gitignore templates names' {
             { Get-GitHubGitignore } | Should -Not -Throw
         }
-        It 'Can be called with Name parameter' {
+        It 'Get-GitHubGitignore - Gets a gitignore template' {
             { Get-GitHubGitignore -Name 'VisualStudio' } | Should -Not -Throw
         }
     }
     Context 'Markdown' {
-        It 'Can be called with Text parameter' {
+        It 'Get-GitHubMarkdown - Gets the rendered markdown for provided text' {
             { Get-GitHubMarkdown -Text 'Hello, World!' } | Should -Not -Throw
         }
-        It 'Can be called with Text parameter and GitHub Format Mardown' {
+        It 'Get-GitHubMarkdown - Gets the rendered markdown for provided text using GitHub Formated Markdown' {
             { Get-GitHubMarkdown -Text 'Hello, World!' -Mode gfm } | Should -Not -Throw
         }
-        It 'Raw - Can be called with Text parameter' {
+        It 'Get-GitHubMarkdownRaw - Gets the raw rendered markdown for provided text' {
             { Get-GitHubMarkdownRaw -Text 'Hello, World!' } | Should -Not -Throw
         }
     }
     Context 'User' {
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubUser - Gets the authenticated user' {
             { Get-GitHubUser } | Should -Not -Throw
         }
-        It 'Can be called with Username parameter' {
+        It 'Get-GitHubUser - Get the specified user' {
             { Get-GitHubUser -Username 'Octocat' } | Should -Not -Throw
         }
-        It 'Can be called with no parameters' {
-            $repo = Get-GitHubRepository -Owner 'PSModule' -Repo 'GitHub'
-            { Get-GitHubUserCard -Username 'MariusStorhaug' -SubjectType repository -SubjectID $repo.id } | Should -Not -Throw
+        It 'Get-GitHubUser - Can set configuration on a user' {
+            $user = Get-GitHubUser
+            $params = @{
+                Name            = 'Octocat'
+                Email           = 'psmodule@psmodule.io'
+                Blog            = 'https://marius-storhaug.com'
+                TwitterUsername = 'MariusStorhaug123'
+                Company         = 'PSModule'
+                Location        = 'USA'
+                Hireable        = $true
+                Bio             = 'I love programming'
+            }
+            { Set-GitHubUser @params } | Should -Not -Throw
+            $tmpUser = Get-GitHubUser
+            $tmpUser.Name | Should -Be 'Octocat'
+            $tmpUser.Email | Should -Be 'psmodule@psmodule.io'
+            $tmpUser.Blog | Should -Be 'https://marius-storhaug.com'
+            $tmpUser.TwitterUsername | Should -Be 'MariusStorhaug123'
+            $tmpUser.Company | Should -Be 'PSModule'
+            $tmpUser.Location | Should -Be 'USA'
+            $tmpUser.Hireable | Should -Be $true
+            $tmpUser.Bio | Should -Be 'I love programming'
+            $user = @{
+                Name            = $user.Name
+                Email           = $user.Email
+                Blog            = $user.Blog
+                TwitterUsername = $user.TwitterUsername
+                Company         = $user.Company
+                Location        = $user.Location
+                Hireable        = $user.Hireable
+                Bio             = $user.Bio
+            }
+            Set-GitHubUser @user
         }
     }
 }
@@ -655,16 +714,15 @@ Describe 'As GitHub Actions' {
         }
     }
     Context 'API' {
-        It 'Can be called directly to get ratelimits' {
+        It 'Invoke-GitHubAPI - Gets the rate limits directly' {
             {
                 $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit'
                 Write-Verbose ($rateLimit | Format-Table | Out-String) -Verbose
             } | Should -Not -Throw
-
         }
     }
     Context 'GraphQL' {
-        It 'Can be called directly to get viewer' {
+        It 'Invoke-GitHubGraphQLQuery - Gets the viewer directly' {
             {
                 $viewer = Invoke-GitHubGraphQLQuery -Query 'query { viewer { login } }'
                 Write-Verbose ($viewer | Format-Table | Out-String) -Verbose
@@ -683,78 +741,115 @@ Describe 'As GitHub Actions' {
         }
     }
     Context 'Meta' {
-        It 'Get-GitHubRoot' {
+        It 'Get-GitHubRoot - Gets the GitHub API Root' {
             $root = Get-GitHubRoot
             Write-Verbose ($root | Format-Table | Out-String) -Verbose
             $root | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubApiVersion' {
+        It 'Get-GitHubApiVersion - Gets all API versions' {
             $apiVersion = Get-GitHubApiVersion
             Write-Verbose ($apiVersion | Format-Table | Out-String) -Verbose
             $apiVersion | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubMeta' {
+        It 'Get-GitHubMeta - Gets GitHub meta information' {
             $meta = Get-GitHubMeta
             Write-Verbose ($meta | Format-Table | Out-String) -Verbose
             $meta | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubOctocat' {
+        It 'Get-GitHubOctocat - Gets the Octocat' {
             $octocat = Get-GitHubOctocat
             Write-Verbose ($octocat | Format-Table | Out-String) -Verbose
             $octocat | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubZen' {
+        It 'Get-GitHubZen - Gets the Zen of GitHub' {
             $zen = Get-GitHubZen
             Write-Verbose ($zen | Format-Table | Out-String) -Verbose
             $zen | Should -Not -BeNullOrEmpty
         }
     }
     Context 'Rate-Limit' {
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubRateLimit - Gets the rate limit status for the authenticated user' {
             { Get-GitHubRateLimit } | Should -Not -Throw
         }
     }
     Context 'License' {
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubLicense - Gets a list of all popular license templates' {
             { Get-GitHubLicense } | Should -Not -Throw
         }
-        It 'Can be called with Name parameter' {
+        It 'Get-GitHubLicense - Gets a spesific license' {
             { Get-GitHubLicense -Name 'mit' } | Should -Not -Throw
         }
-        It 'Can be called with Repository parameter' {
+        It 'Get-GitHubLicense - Gets a license from a repository' {
             { Get-GitHubLicense -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
         }
     }
     Context 'Emoji' {
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubEmoji - Gets a list of all emojis' {
             { Get-GitHubEmoji } | Should -Not -Throw
         }
-        It 'Can be download the emojis' {
+        It 'Get-GitHubEmoji - Downloads all emojis' {
             { Get-GitHubEmoji -Destination $Home } | Should -Not -Throw
         }
     }
     Context 'GitIgnore' {
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubGitignore - Gets a list of all gitignore templates names' {
             { Get-GitHubGitignore } | Should -Not -Throw
         }
-        It 'Can be called with Name parameter' {
+        It 'Get-GitHubGitignore - Gets a gitignore template' {
             { Get-GitHubGitignore -Name 'VisualStudio' } | Should -Not -Throw
         }
     }
     Context 'Markdown' {
-        It 'Can be called with Text parameter' {
+        It 'Get-GitHubMarkdown - Gets the rendered markdown for provided text' {
             { Get-GitHubMarkdown -Text 'Hello, World!' } | Should -Not -Throw
         }
-        It 'Can be called with Text parameter and GitHub Format Mardown' {
+        It 'Get-GitHubMarkdown - Gets the rendered markdown for provided text using GitHub Formated Markdown' {
             { Get-GitHubMarkdown -Text 'Hello, World!' -Mode gfm } | Should -Not -Throw
         }
-        It 'Raw - Can be called with Text parameter' {
+        It 'Get-GitHubMarkdownRaw - Gets the raw rendered markdown for provided text' {
             { Get-GitHubMarkdownRaw -Text 'Hello, World!' } | Should -Not -Throw
         }
     }
     Context 'User' {
-        It 'Can be called with Username parameter' {
+        It 'Get-GitHubUser - Gets the authenticated user' {
+            { Get-GitHubUser } | Should -Not -Throw
+        }
+        It 'Get-GitHubUser - Get the specified user' {
             { Get-GitHubUser -Username 'Octocat' } | Should -Not -Throw
+        }
+        It 'Get-GitHubUser - Can set configuration on a user' {
+            $user = Get-GitHubUser
+            $params = @{
+                Name            = 'Octocat'
+                Email           = 'psmodule@psmodule.io'
+                Blog            = 'https://marius-storhaug.com'
+                TwitterUsername = 'MariusStorhaug123'
+                Company         = 'PSModule'
+                Location        = 'USA'
+                Hireable        = $true
+                Bio             = 'I love programming'
+            }
+            { Set-GitHubUser @params } | Should -Not -Throw
+            $tmpUser = Get-GitHubUser
+            $tmpUser.Name | Should -Be 'Octocat'
+            $tmpUser.Email | Should -Be 'psmodule@psmodule.io'
+            $tmpUser.Blog | Should -Be 'https://marius-storhaug.com'
+            $tmpUser.TwitterUsername | Should -Be 'MariusStorhaug123'
+            $tmpUser.Company | Should -Be 'PSModule'
+            $tmpUser.Location | Should -Be 'USA'
+            $tmpUser.Hireable | Should -Be $true
+            $tmpUser.Bio | Should -Be 'I love programming'
+            $user = @{
+                Name            = $user.Name
+                Email           = $user.Email
+                Blog            = $user.Blog
+                TwitterUsername = $user.TwitterUsername
+                Company         = $user.Company
+                Location        = $user.Location
+                Hireable        = $user.Hireable
+                Bio             = $user.Bio
+            }
+            Set-GitHubUser @user
         }
     }
 }
