@@ -361,7 +361,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
         It 'Get-GitHubUser - Get the specified user (USER_FG_PAT)' {
             { Get-GitHubUser -Username 'Octocat' } | Should -Not -Throw
         }
-        It 'Set-GitHubUser - Can set configuration on a user (USER_FG_PAT)' {
+        It 'Get-GitHubUser - Can set configuration on a user (USER_FG_PAT)' {
             # $params = @{
             #     Name            = 'Octocat'
             #     Blog            = 'https://marius-storhaug.com'
@@ -383,7 +383,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
             $tmpUser = Get-GitHubUser
             $tmpUser.Name | Should -Be 'Octocat'
             $tmpUser.Blog | Should -Be 'https://marius-storhaug.com'
-            $tmpUser.TwitterUsername | Should -Be 'MariusStorhaug123'
+            $tmpUser.twitter_username | Should -Be 'MariusStorhaug123'
             $tmpUser.Company | Should -Be 'PSModule'
             $tmpUser.Location | Should -Be 'USA'
             $tmpUser.Hireable | Should -Be $true
@@ -391,7 +391,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
             { Set-GitHubUser -Name $user.Name } | Should -Not -Throw
             { Set-GitHubUser -Email $user.Email } | Should -Not -Throw
             { Set-GitHubUser -Blog $user.Blog } | Should -Not -Throw
-            { Set-GitHubUser -TwitterUsername $user.TwitterUsername } | Should -Not -Throw
+            { Set-GitHubUser -TwitterUsername $user.twitter_username } | Should -Not -Throw
             { Set-GitHubUser -Company $user.Company } | Should -Not -Throw
             { Set-GitHubUser -Location $user.Location } | Should -Not -Throw
             { Set-GitHubUser -Hireable $user.Hireable } | Should -Not -Throw
@@ -400,7 +400,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
             #     Name            = $user.Name
             #     Email           = $user.Email
             #     Blog            = $user.Blog
-            #     TwitterUsername = $user.TwitterUsername
+            #     TwitterUsername = $user.twitter_username
             #     Company         = $user.Company
             #     Location        = $user.Location
             #     Hireable        = $user.Hireable
@@ -536,7 +536,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         It 'Get-GitHubUser - Get the specified user (ORG_FG_PAT)' {
             { Get-GitHubUser -Username 'Octocat' } | Should -Not -Throw
         }
-        It 'Set-GitHubUser - Can set configuration on a user (ORG_FG_PAT)' {
+        It 'Get-GitHubUser - Can set configuration on a user (ORG_FG_PAT)' {
             # $params = @{
             #     Name            = 'Octocat'
             #     Blog            = 'https://marius-storhaug.com'
@@ -558,7 +558,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
             $tmpUser = Get-GitHubUser
             $tmpUser.Name | Should -Be 'Octocat'
             $tmpUser.Blog | Should -Be 'https://marius-storhaug.com'
-            $tmpUser.TwitterUsername | Should -Be 'MariusStorhaug123'
+            $tmpUser.twitter_username | Should -Be 'MariusStorhaug123'
             $tmpUser.Company | Should -Be 'PSModule'
             $tmpUser.Location | Should -Be 'USA'
             $tmpUser.Hireable | Should -Be $true
@@ -566,7 +566,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
             { Set-GitHubUser -Name $user.Name } | Should -Not -Throw
             { Set-GitHubUser -Email $user.Email } | Should -Not -Throw
             { Set-GitHubUser -Blog $user.Blog } | Should -Not -Throw
-            { Set-GitHubUser -TwitterUsername $user.TwitterUsername } | Should -Not -Throw
+            { Set-GitHubUser -TwitterUsername $user.twitter_username } | Should -Not -Throw
             { Set-GitHubUser -Company $user.Company } | Should -Not -Throw
             { Set-GitHubUser -Location $user.Location } | Should -Not -Throw
             { Set-GitHubUser -Hireable $user.Hireable } | Should -Not -Throw
@@ -575,7 +575,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
             #     Name            = $user.Name
             #     Email           = $user.Email
             #     Blog            = $user.Blog
-            #     TwitterUsername = $user.TwitterUsername
+            #     TwitterUsername = $user.twitter_username
             #     Company         = $user.Company
             #     Location        = $user.Location
             #     Hireable        = $user.Hireable
@@ -691,7 +691,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
         It 'Get-GitHubUser - Get the specified user (PAT)' {
             { Get-GitHubUser -Username 'Octocat' } | Should -Not -Throw
         }
-        It 'Set-GitHubUser - Can set configuration on a user (PAT)' {
+        It 'Get-GitHubUser - Can set configuration on a user (PAT)' {
             # $params = @{
             #     Name            = 'Octocat'
             #     Blog            = 'https://marius-storhaug.com'
@@ -721,7 +721,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
             { Set-GitHubUser -Name $user.Name } | Should -Not -Throw
             { Set-GitHubUser -Email $user.Email } | Should -Not -Throw
             { Set-GitHubUser -Blog $user.Blog } | Should -Not -Throw
-            { Set-GitHubUser -TwitterUsername $user.TwitterUsername } | Should -Not -Throw
+            { Set-GitHubUser -TwitterUsername $user.twitter_username } | Should -Not -Throw
             { Set-GitHubUser -Company $user.Company } | Should -Not -Throw
             { Set-GitHubUser -Location $user.Location } | Should -Not -Throw
             { Set-GitHubUser -Hireable $user.Hireable } | Should -Not -Throw
@@ -730,7 +730,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
             #     Name            = $user.Name
             #     Email           = $user.Email
             #     Blog            = $user.Blog
-            #     TwitterUsername = $user.TwitterUsername
+            #     TwitterUsername = $user.twitter_username
             #     Company         = $user.Company
             #     Location        = $user.Location
             #     Hireable        = $user.Hireable
