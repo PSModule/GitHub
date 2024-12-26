@@ -12,25 +12,25 @@ BeforeAll {
 
 Describe 'GitHub' {
     Context 'Config' {
-        It 'Get-GitHubConfig - Can get the configuration' {
+        It 'Get-GitHubConfig - Gets the module configuration' {
             $config = Get-GitHubConfig
             Write-Verbose ($config | Format-Table | Out-String) -Verbose
             $config | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubConfig - Can get the configuration by name' {
+        It 'Get-GitHubConfig - Gets a configuration item by name' {
             $config = Get-GitHubConfig -Name 'HostName'
             Write-Verbose ($config | Format-Table | Out-String) -Verbose
             $config | Should -Not -BeNullOrEmpty
         }
-        It 'Set-GitHubConfig - Can set the configuration' {
+        It 'Set-GitHubConfig - Sets a configuration item' {
             Set-GitHubConfig -Name 'HostName' -Value 'msx.ghe.com'
             Get-GitHubConfig -Name 'HostName' | Should -Be 'msx.ghe.com'
         }
-        It 'Remove-GetGitHubConfig - Can remove the configuration' {
+        It 'Remove-GitHubConfig - Removes a configuration item' {
             Remove-GitHubConfig -Name 'HostName'
             Get-GitHubConfig -Name 'HostName' | Should -BeNullOrEmpty
         }
-        It 'Reset-GitHubConfig - Can reset the configuration' {
+        It 'Reset-GitHubConfig - Resets the module configuration' {
             Set-GitHubConfig -Name HostName -Value 'msx.ghe.com'
             Get-GitHubConfig -Name HostName | Should -Be 'msx.ghe.com'
             Reset-GitHubConfig
@@ -38,39 +38,39 @@ Describe 'GitHub' {
         }
     }
     Context 'Auth' {
-        It 'Can connect and disconnect without parameters in GitHubActions' {
+        It 'Connect-GitHubAccount - Connects GitHub Actions without parameters' {
             { Connect-GitHubAccount } | Should -Not -Throw
+        }
+        It 'Disconnect-GitHubAccount - Disconnects GitHub Actions' {
             { Disconnect-GitHubAccount } | Should -Not -Throw
         }
-        It 'Can connect and disconnect - a second time' {
-            Connect-GitHubAccount
-            Write-Verbose (Get-GitHubContext | Out-String) -Verbose
-            Write-Verbose (Get-GitHubConfig | Out-String) -Verbose
-            Connect-GitHubAccount
-            Write-Verbose (Get-GitHubContext | Out-String) -Verbose
-            Write-Verbose (Get-GitHubConfig | Out-String) -Verbose
-            { Disconnect-GitHubAccount } | Should -Not -Throw
-        }
-        It 'Can pass the context to the pipeline' {
+        It 'Connect-GitHubAccount - Passes the context to the pipeline' {
             $context = Connect-GitHubAccount -PassThru
             Write-Verbose (Get-GitHubContext | Out-String) -Verbose
             $context | Should -Not -BeNullOrEmpty
+        }
+        It 'Disconnect-GitHubAccount - Disconnects the context from the pipeline' {
+            $context = Get-GitHubContext
             { $context | Disconnect-GitHubAccount } | Should -Not -Throw
         }
-        It 'Can connect multiple sessions, GITHUB_TOKEN + classic PAT token' {
+        It 'Connect-GitHubAccount - Connects GitHub Actions even if called multiple times' {
+            { Connect-GitHubAccount } | Should -Not -Throw
+            { Connect-GitHubAccount } | Should -Not -Throw
+        }
+        It 'Connect-GitHubAccount - Connects multiple contexts, GitHub Actions and a user via classic PAT token' {
             { Connect-GitHubAccount -Token $env:TEST_USER_PAT } | Should -Not -Throw
             { Connect-GitHubAccount -Token $env:TEST_USER_PAT } | Should -Not -Throw
-            { Connect-GitHubAccount } | Should -Not -Throw # Logs on with GitHub Actions' token
+            { Connect-GitHubAccount } | Should -Not -Throw
             (Get-GitHubContext -ListAvailable).Count | Should -Be 2
             Get-GitHubConfig -Name 'DefaultContext' | Should -Be 'github.com/github-actions/Organization/PSModule'
             Write-Verbose (Get-GitHubContext | Out-String) -Verbose
         }
-        It 'Can reconfigure an existing context to be fine-grained PAT token' {
+        It 'Connect-GitHubAccount - Reconfigures an existing user context to be a fine-grained PAT token' {
             { Connect-GitHubAccount -Token $env:TEST_USER_USER_FG_PAT } | Should -Not -Throw
             (Get-GitHubContext -ListAvailable).Count | Should -Be 2
             Write-Verbose (Get-GitHubContext -ListAvailable | Out-String) -Verbose
         }
-        It 'Can be called with a GitHub App' {
+        It 'Connect-GitHubAccount - Connects a GitHub App from an organization' {
             $params = @{
                 ClientID   = $env:TEST_APP_ORG_CLIENT_ID
                 PrivateKey = $env:TEST_APP_ORG_PRIVATE_KEY
@@ -79,12 +79,18 @@ Describe 'GitHub' {
             $contexts = Get-GitHubContextInfo -Verbose:$false
             Write-Verbose ($contexts | Out-String) -Verbose
             ($contexts).Count | Should -Be 3
+        }
+        It 'Connect-GitHubAccount - Connects all of a (org) GitHub Apps installations' {
+            $params = @{
+                ClientID   = $env:TEST_APP_ORG_CLIENT_ID
+                PrivateKey = $env:TEST_APP_ORG_PRIVATE_KEY
+            }
             { Connect-GitHubAccount @params -AutoloadInstallations } | Should -Not -Throw
             $contexts = Get-GitHubContextInfo -Verbose:$false
             Write-Verbose ($contexts | Out-String) -Verbose
             ($contexts).Count | Should -Be 5
         }
-        It 'Can be called with a GitHub App and autoload installations' {
+        It 'Connect-GitHubAccount - Connects a GitHub App from an enterprise' {
             $params = @{
                 ClientID   = $env:TEST_APP_ENT_CLIENT_ID
                 PrivateKey = $env:TEST_APP_ENT_PRIVATE_KEY
@@ -93,158 +99,129 @@ Describe 'GitHub' {
             $contexts = Get-GitHubContextInfo -Verbose:$false
             Write-Verbose ($contexts | Out-String) -Verbose
             ($contexts).Count | Should -Be 6
+        }
+        It 'Connect-GitHubAccount - Connects all of a (ent) GitHub Apps installations' {
+            $params = @{
+                ClientID   = $env:TEST_APP_ENT_CLIENT_ID
+                PrivateKey = $env:TEST_APP_ENT_PRIVATE_KEY
+            }
             { Connect-GitHubAccount @params -AutoloadInstallations } | Should -Not -Throw
             $contexts = Get-GitHubContextInfo -Verbose:$false
             Write-Verbose ($contexts | Out-String) -Verbose
             ($contexts).Count | Should -Be 9
         }
-        It 'Can disconnect a specific context' {
+        It 'Disconnect-GitHubAccount - Disconnects a specific context' {
             { Disconnect-GitHubAccount -Context 'github.com/psmodule-enterprise-app/Organization/PSModule' -Silent } | Should -Not -Throw
             $contexts = Get-GitHubContextInfo -Name 'github.com/psmodule-enterprise-app/*' -Verbose:$false
             Write-Verbose ($contexts | Out-String) -Verbose
             ($contexts).Count | Should -Be 2
-            Connect-GitHubAccount -ClientID $env:TEST_APP_ORG_CLIENT_ID -PrivateKey $env:TEST_APP_ORG_PRIVATE_KEY -AutoloadInstallations
-            $contexts = Get-GitHubContext -ListAvailable -Verbose:$false
-            Write-Verbose ($contexts | Out-String) -Verbose
-            ($contexts).Count | Should -Be 8
         }
-        It 'Can get the authenticated GitHubApp' {
-            $app = Get-GitHubApp
-            Write-Verbose ($app | Format-Table | Out-String) -Verbose
-            $app | Should -Not -BeNullOrEmpty
-        }
-        It 'Can connect to a GitHub App Installation' {
-            $appContext = Connect-GitHubApp -Organization 'PSModule' -PassThru
-            Write-Verbose ($appContext | Out-String) -Verbose
-            $appContext | Should -Not -BeNullOrEmpty
-            { $appContext | Disconnect-GitHub } | Should -Not -Throw
-        }
-        It 'Can connect to all GitHub App Installations' {
-            { Connect-GitHubApp } | Should -Not -Throw
-            Write-Verbose 'Default context:' -Verbose
-            Write-Verbose (Get-GitHubContext | Out-String) -Verbose
-            Write-Verbose 'All contexts:' -Verbose
-            Write-Verbose (Get-GitHubContext -ListAvailable | Out-String) -Verbose
-        }
-        It 'Can swap context to another' {
+        It 'Set-GitHubDefaultContext - Can swap context to another' {
             { Set-GitHubDefaultContext -Context 'github.com/github-actions/Organization/PSModule' } | Should -Not -Throw
             Get-GitHubConfig -Name 'DefaultContext' | Should -Be 'github.com/github-actions/Organization/PSModule'
         }
-        It 'Get-GitHubViewer can be called' {
-            Get-GitHubViewer | Should -Not -BeNullOrEmpty
-        }
-        It 'Get-GitHubConfig gets the DefaultContext' {
-            Write-Verbose (Get-GitHubConfig -Name 'DefaultContext') -Verbose
-            { Get-GitHubConfig -Name 'DefaultContext' } | Should -Not -Throw
-        }
-        It 'Can be called without a parameter' {
-            $config = Get-GitHubConfig
-            Write-Verbose ($config | Format-Table | Out-String) -Verbose
-            { Get-GitHubConfig } | Should -Not -Throw
-            $config.ID | Should -Be 'PSModule.GitHub'
-        }
     }
     Context 'Status' -ForEach @('public', 'eu') {
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubScheduledMaintenance - Gets scheduled maintenance for <_>' {
             { Get-GitHubScheduledMaintenance -Stamp $_ } | Should -Not -Throw
         }
-        It 'Can be called with Active parameter' {
+        It 'Get-GitHubScheduledMaintenance - Gets active maintenance for <_>' {
             { Get-GitHubScheduledMaintenance -Stamp $_ -Active } | Should -Not -Throw
         }
-        It 'Can be called with Upcoming parameter' {
+        It 'Get-GitHubScheduledMaintenance - Gets upcoming maintenance for <_>' {
             { Get-GitHubScheduledMaintenance -Stamp $_ -Upcoming } | Should -Not -Throw
         }
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubStatus - Gets all status for <_>' {
             { Get-GitHubStatus -Stamp $_ } | Should -Not -Throw
         }
-        It 'Can be called with Summary parameter' {
+        It 'Get-GitHubStatus - Gets summary status for <_>' {
             { Get-GitHubStatus -Stamp $_ -Summary } | Should -Not -Throw
         }
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubStatusComponent - Gets the status of GitHub components for <_>' {
             { Get-GitHubStatusComponent -Stamp $_ } | Should -Not -Throw
         }
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubStatusIncident - Gets the status of all GitHub incidents for <_>' {
             { Get-GitHubStatusIncident -Stamp $_ } | Should -Not -Throw
         }
-        It 'Can be called with Unresolved parameter' {
+        It 'Get-GitHubStatusIncident - Gets the status of unresolved GitHub incidents for <_>' {
             { Get-GitHubStatusIncident -Stamp $_ -Unresolved } | Should -Not -Throw
         }
     }
     Context 'Commands' {
-        It "Start-GitHubLogGroup 'MyGroup' should not throw" {
+        It 'Start-GitHubLogGroup - Should not throw' {
             {
                 Start-GitHubLogGroup 'MyGroup'
             } | Should -Not -Throw
         }
-        It 'Stop-LogGroup should not throw' {
+        It 'Stop-LogGroup - Should not throw' {
             {
                 Stop-GitHubLogGroup
             } | Should -Not -Throw
         }
-        It "Set-GitHubLogGroup 'MyGroup' should not throw" {
+        It 'Set-GitHubLogGroup - Should not throw' {
             {
                 Set-GitHubLogGroup -Name 'MyGroup' -ScriptBlock {
                     Get-ChildItem env: | Select-Object Name, Value | Format-Table -AutoSize
                 }
             } | Should -Not -Throw
         }
-        It "LogGroup 'MyGroup' should not throw" {
+        It 'LogGroup - Should not throw' {
             {
                 LogGroup 'MyGroup' {
                     Get-ChildItem env: | Select-Object Name, Value | Format-Table -AutoSize
                 }
             } | Should -Not -Throw
         }
-        It 'Add-GitHubMask should not throw' {
+        It 'Add-GitHubMask - Should not throw' {
             {
                 Add-GitHubMask -Value 'taskmaster'
             } | Should -Not -Throw
         }
-        It 'Add-GitHubSystemPath should not throw' {
+        It 'Add-GitHubSystemPath - Should not throw' {
             {
                 Add-GitHubSystemPath -Path $pwd.ToString()
             } | Should -Not -Throw
             Get-Content $env:GITHUB_PATH -Raw | Should -BeLike "*$($pwd.ToString())*"
         }
-        It 'Disable-GitHubCommand should not throw' {
+        It 'Disable-GitHubCommand - Should not throw' {
             {
                 Disable-GitHubCommand -String 'MyString'
             } | Should -Not -Throw
         }
-        It 'Enable-GitHubCommand should not throw' {
+        It 'Enable-GitHubCommand - Should not throw' {
             {
                 Enable-GitHubCommand -String 'MyString'
             } | Should -Not -Throw
         }
-        It 'Set-GitHubNoCommandGroup should not throw' {
+        It 'Set-GitHubNoCommandGroup - Should not throw' {
             {
                 Set-GitHubNoCommandGroup {
                     Write-Output 'Hello, World!'
                 }
             } | Should -Not -Throw
         }
-        It 'Set-GitHubOutput should not throw' {
+        It 'Set-GitHubOutput - Should not throw' {
             {
                 Set-GitHubOutput -Name 'MyName' -Value 'MyValue'
             } | Should -Not -Throw
         }
-        It 'Get-GitHubOutput should not throw' {
+        It 'Get-GitHubOutput - Should not throw' {
             {
                 Get-GitHubOutput
             } | Should -Not -Throw
         }
-        It 'Set-GitHubEnvironmentVariable should not throw' {
+        It 'Set-GitHubEnvironmentVariable - Should not throw' {
             {
                 Set-GitHubEnvironmentVariable -Name 'MyName' -Value 'MyValue'
             } | Should -Not -Throw
             Get-Content $env:GITHUB_ENV -Raw | Should -BeLike '*MyName*MyValue*'
         }
-        It 'Set-GitHubStepSummary should not throw' {
+        It 'Set-GitHubStepSummary - Should not throw' {
             {
                 Set-GitHubStepSummary -Summary 'MySummary'
             } | Should -Not -Throw
         }
-        It 'Write-GitHub* should not throw' {
+        It 'Write-GitHub* - Should not throw' {
             { Write-GitHubDebug 'Debug' } | Should -Not -Throw
             { Write-GitHubError 'Error' } | Should -Not -Throw
             { Write-GitHubNotice 'Notice' } | Should -Not -Throw
@@ -252,31 +229,35 @@ Describe 'GitHub' {
         }
     }
     Context 'Disconnect' {
-        It 'Can disconnect without parameters' {
+        It 'Disconnect-GitHubAccount - Can disconnect all context through the pipeline' {
             { Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount } | Should -Not -Throw
             Get-GitHubContext -ListAvailable | Should -HaveCount 0
         }
     }
 }
 
-Describe 'As a user - Fine-grained PAT token - user account access' {
+Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)' {
     BeforeAll {
         Connect-GitHubAccount -Token $env:TEST_USER_USER_FG_PAT
     }
     AfterAll {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
+    Context 'Auth' {
+        It 'Get-GitHubViewer - Gets the logged in context (USER_FG_PAT)' {
+            Get-GitHubViewer | Should -Not -BeNullOrEmpty
+        }
+    }
     Context 'API' {
-        It 'Can be called directly to get ratelimits' {
+        It 'Invoke-GitHubAPI - Gets the rate limits directly (USER_FG_PAT)' {
             {
                 $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit'
                 Write-Verbose ($rateLimit | Format-Table | Out-String) -Verbose
             } | Should -Not -Throw
-
         }
     }
     Context 'GraphQL' {
-        It 'Can be called directly to get viewer' {
+        It 'Invoke-GitHubGraphQLQuery - Gets the viewer directly (USER_FG_PAT)' {
             {
                 $viewer = Invoke-GitHubGraphQLQuery -Query 'query { viewer { login } }'
                 Write-Verbose ($viewer | Format-Table | Out-String) -Verbose
@@ -284,111 +265,159 @@ Describe 'As a user - Fine-grained PAT token - user account access' {
         }
     }
     Context 'Meta' {
-        It 'Get-GitHubRoot' {
+        It 'Get-GitHubRoot - Gets the GitHub API Root (USER_FG_PAT)' {
             $root = Get-GitHubRoot
             Write-Verbose ($root | Format-Table | Out-String) -Verbose
             $root | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubApiVersion' {
+        It 'Get-GitHubApiVersion - Gets all API versions (USER_FG_PAT)' {
             $apiVersion = Get-GitHubApiVersion
             Write-Verbose ($apiVersion | Format-Table | Out-String) -Verbose
             $apiVersion | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubMeta' {
+        It 'Get-GitHubMeta - Gets GitHub meta information (USER_FG_PAT)' {
             $meta = Get-GitHubMeta
             Write-Verbose ($meta | Format-Table | Out-String) -Verbose
             $meta | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubOctocat' {
+        It 'Get-GitHubOctocat - Gets the Octocat (USER_FG_PAT)' {
             $octocat = Get-GitHubOctocat
             Write-Verbose ($octocat | Format-Table | Out-String) -Verbose
             $octocat | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubZen' {
+        It 'Get-GitHubZen - Gets the Zen of GitHub (USER_FG_PAT)' {
             $zen = Get-GitHubZen
             Write-Verbose ($zen | Format-Table | Out-String) -Verbose
             $zen | Should -Not -BeNullOrEmpty
         }
     }
     Context 'Rate-Limit' {
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubRateLimit - Gets the rate limit status for the authenticated user (USER_FG_PAT)' {
             { Get-GitHubRateLimit } | Should -Not -Throw
         }
     }
     Context 'License' {
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubLicense - Gets a list of all popular license templates (USER_FG_PAT)' {
             { Get-GitHubLicense } | Should -Not -Throw
         }
-        It 'Can be called with Name parameter' {
+        It 'Get-GitHubLicense - Gets a spesific license (USER_FG_PAT)' {
             { Get-GitHubLicense -Name 'mit' } | Should -Not -Throw
         }
-        It 'Can be called with Repository parameter' {
+        It 'Get-GitHubLicense - Gets a license from a repository (USER_FG_PAT)' {
             { Get-GitHubLicense -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
         }
     }
     Context 'Emoji' {
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubEmoji - Gets a list of all emojis (USER_FG_PAT)' {
             { Get-GitHubEmoji } | Should -Not -Throw
         }
-        It 'Can download the emojis' {
+        It 'Get-GitHubEmoji - Downloads all emojis (USER_FG_PAT)' {
             { Get-GitHubEmoji -Destination $Home } | Should -Not -Throw
         }
     }
     Context 'Repository' {
-        Context 'Parameter Set: MyRepos_Type' {
-            It 'Can be called with no parameters' {
-                { Get-GitHubRepository } | Should -Not -Throw
-            }
-
-            It 'Can be called with Type parameter' {
-                { Get-GitHubRepository -Type 'public' } | Should -Not -Throw
-            }
+        It "Get-GitHubRepository - Gets the authenticated user's repositories (USER_FG_PAT)" {
+            { Get-GitHubRepository } | Should -Not -Throw
         }
-        Context 'Parameter Set: MyRepos_Aff-Vis' {
-            It 'Can be called with Visibility and Affiliation parameters' {
-                { Get-GitHubRepository -Visibility 'public' -Affiliation 'owner' } | Should -Not -Throw
-            }
+        It "Get-GitHubRepository - Gets the authenticated user's public repositories (USER_FG_PAT)" {
+            { Get-GitHubRepository -Type 'public' } | Should -Not -Throw
         }
-        It 'Can be called with Owner and Repo parameters' {
+        It 'Get-GitHubRepository - Gets the public repos where the authenticated user is owner (USER_FG_PAT)' {
+            { Get-GitHubRepository -Visibility 'public' -Affiliation 'owner' } | Should -Not -Throw
+        }
+        It 'Get-GitHubRepository - Gets a specific repository (USER_FG_PAT)' {
             { Get-GitHubRepository -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
         }
-        It 'Can be called with Owner parameter' {
+        It 'Get-GitHubRepository - Gets all repositories from a organization (USER_FG_PAT)' {
             { Get-GitHubRepository -Owner 'PSModule' } | Should -Not -Throw
         }
-        It 'Can be called with Username parameter' {
+        It 'Get-GitHubRepository - Gets all repositories from a user (USER_FG_PAT)' {
             { Get-GitHubRepository -Username 'MariusStorhaug' } | Should -Not -Throw
         }
     }
     Context 'GitIgnore' {
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubGitignore - Gets a list of all gitignore templates names (USER_FG_PAT)' {
             { Get-GitHubGitignore } | Should -Not -Throw
         }
-        It 'Can be called with Name parameter' {
+        It 'Get-GitHubGitignore - Gets a gitignore template (USER_FG_PAT)' {
             { Get-GitHubGitignore -Name 'VisualStudio' } | Should -Not -Throw
         }
     }
     Context 'Markdown' {
-        It 'Can be called with Text parameter' {
+        It 'Get-GitHubMarkdown - Gets the rendered markdown for provided text (USER_FG_PAT)' {
             { Get-GitHubMarkdown -Text 'Hello, World!' } | Should -Not -Throw
         }
-        It 'Can be called with Text parameter and GitHub Format Mardown' {
+        It 'Get-GitHubMarkdown - Gets the rendered markdown for provided text using GitHub Formated Markdown (USER_FG_PAT)' {
             { Get-GitHubMarkdown -Text 'Hello, World!' -Mode gfm } | Should -Not -Throw
         }
-        It 'Raw - Can be called with Text parameter' {
+        It 'Get-GitHubMarkdownRaw - Gets the raw rendered markdown for provided text (USER_FG_PAT)' {
             { Get-GitHubMarkdownRaw -Text 'Hello, World!' } | Should -Not -Throw
+        }
+    }
+    Context 'User' {
+        It 'Get-GitHubUser - Gets the authenticated user (USER_FG_PAT)' {
+            { Get-GitHubUser } | Should -Not -Throw
+        }
+        It 'Get-GitHubUser - Get the specified user (USER_FG_PAT)' {
+            { Get-GitHubUser -Username 'Octocat' } | Should -Not -Throw
+        }
+        It 'Get-GitHubUser - Can set configuration on a user (USER_FG_PAT)' {
+            # $params = @{
+            #     Name            = 'Octocat'
+            #     Blog            = 'https://marius-storhaug.com'
+            #     TwitterUsername = 'MariusStorhaug123'
+            #     Company         = 'PSModule'
+            #     Location        = 'USA'
+            #     Bio             = 'I love programming'
+            # }
+            # { Set-GitHubUser @params } | Should -Not -Throw
+            $user = Get-GitHubUser
+            { Set-GitHubUser -Name 'Octocat' } | Should -Not -Throw
+            { Set-GitHubUser -Blog 'https://marius-storhaug.com' } | Should -Not -Throw
+            { Set-GitHubUser -TwitterUsername 'MariusStorhaug123' } | Should -Not -Throw
+            { Set-GitHubUser -Company 'PSModule' } | Should -Not -Throw
+            { Set-GitHubUser -Location 'USA' } | Should -Not -Throw
+            { Set-GitHubUser -Bio 'I love programming' } | Should -Not -Throw
+            $tmpUser = Get-GitHubUser
+            $tmpUser.name | Should -Be 'Octocat'
+            $tmpUser.blog | Should -Be 'https://marius-storhaug.com'
+            $tmpUser.twitter_username | Should -Be 'MariusStorhaug123'
+            $tmpUser.company | Should -Be 'PSModule'
+            $tmpUser.location | Should -Be 'USA'
+            $tmpUser.bio | Should -Be 'I love programming'
+            { Set-GitHubUser -Name $user.name } | Should -Not -Throw
+            { Set-GitHubUser -Blog $user.blog } | Should -Not -Throw
+            { Set-GitHubUser -TwitterUsername $user.twitter_username } | Should -Not -Throw
+            { Set-GitHubUser -Company $user.company } | Should -Not -Throw
+            { Set-GitHubUser -Location $user.location } | Should -Not -Throw
+            { Set-GitHubUser -Bio $user.bio } | Should -Not -Throw
+            # $user = @{
+            #     Name            = $user.name
+            #     Blog            = $user.blog
+            #     TwitterUsername = $user.twitter_username
+            #     Company         = $user.company
+            #     Location        = $user.location
+            #     Bio             = $user.bio
+            # }
+            # Set-GitHubUser @user
         }
     }
 }
 
-Describe 'As a user - Fine-grained PAT token - organization account access' {
+Describe 'As a user - Fine-grained PAT token - organization account access (ORG_FG_PAT)' {
     BeforeAll {
         Connect-GitHubAccount -Token $env:TEST_USER_ORG_FG_PAT
     }
     AfterAll {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
+    Context 'Auth' {
+        It 'Get-GitHubViewer - Gets the logged in context (ORG_FG_PAT)' {
+            Get-GitHubViewer | Should -Not -BeNullOrEmpty
+        }
+    }
     Context 'API' {
-        It 'Can be called directly to get ratelimits' {
+        It 'Invoke-GitHubAPI - Gets the rate limits directly (ORG_FG_PAT)' {
             {
                 $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit'
                 Write-Verbose ($rateLimit | Format-Table | Out-String) -Verbose
@@ -396,7 +425,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access' {
         }
     }
     Context 'GraphQL' {
-        It 'Can be called directly to get viewer' {
+        It 'Invoke-GitHubGraphQLQuery - Gets the viewer directly (ORG_FG_PAT)' {
             {
                 $viewer = Invoke-GitHubGraphQLQuery -Query 'query { viewer { login } }'
                 Write-Verbose ($viewer | Format-Table | Out-String) -Verbose
@@ -404,119 +433,127 @@ Describe 'As a user - Fine-grained PAT token - organization account access' {
         }
     }
     Context 'Meta' {
-        It 'Get-GitHubRoot' {
+        It 'Get-GitHubRoot - Gets the GitHub API Root (ORG_FG_PAT)' {
             $root = Get-GitHubRoot
             Write-Verbose ($root | Format-Table | Out-String) -Verbose
             $root | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubApiVersion' {
+        It 'Get-GitHubApiVersion - Gets all API versions (ORG_FG_PAT)' {
             $apiVersion = Get-GitHubApiVersion
             Write-Verbose ($apiVersion | Format-Table | Out-String) -Verbose
             $apiVersion | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubMeta' {
+        It 'Get-GitHubMeta - Gets GitHub meta information (ORG_FG_PAT)' {
             $meta = Get-GitHubMeta
             Write-Verbose ($meta | Format-Table | Out-String) -Verbose
             $meta | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubOctocat' {
+        It 'Get-GitHubOctocat - Gets the Octocat (ORG_FG_PAT)' {
             $octocat = Get-GitHubOctocat
             Write-Verbose ($octocat | Format-Table | Out-String) -Verbose
             $octocat | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubZen' {
+        It 'Get-GitHubZen - Gets the Zen of GitHub (ORG_FG_PAT)' {
             $zen = Get-GitHubZen
             Write-Verbose ($zen | Format-Table | Out-String) -Verbose
             $zen | Should -Not -BeNullOrEmpty
         }
     }
     Context 'Rate-Limit' {
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubRateLimit - Gets the rate limit status for the authenticated user (ORG_FG_PAT)' {
             { Get-GitHubRateLimit } | Should -Not -Throw
         }
     }
     Context 'License' {
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubLicense - Gets a list of all popular license templates (ORG_FG_PAT)' {
             { Get-GitHubLicense } | Should -Not -Throw
         }
-        It 'Can be called with Name parameter' {
+        It 'Get-GitHubLicense - Gets a spesific license (ORG_FG_PAT)' {
             { Get-GitHubLicense -Name 'mit' } | Should -Not -Throw
         }
-        It 'Can be called with Repository parameter' {
+        It 'Get-GitHubLicense - Gets a license from a repository (ORG_FG_PAT)' {
             { Get-GitHubLicense -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
         }
     }
     Context 'Emoji' {
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubEmoji - Gets a list of all emojis (ORG_FG_PAT)' {
             { Get-GitHubEmoji } | Should -Not -Throw
         }
-        It 'Can be download the emojis' {
+        It 'Get-GitHubEmoji - Downloads all emojis (ORG_FG_PAT)' {
             { Get-GitHubEmoji -Destination $Home } | Should -Not -Throw
         }
     }
     Context 'Repository' {
-        Context 'Parameter Set: MyRepos_Type' {
-            It 'Can be called with no parameters' {
-                { Get-GitHubRepository } | Should -Not -Throw
-            }
-            It 'Can be called with Type parameter' {
-                { Get-GitHubRepository -Type 'public' } | Should -Not -Throw
-            }
+        It "Get-GitHubRepository - Gets the authenticated user's repositories (ORG_FG_PAT)" {
+            { Get-GitHubRepository } | Should -Not -Throw
         }
-        Context 'Parameter Set: MyRepos_Aff-Vis' {
-            It 'Can be called with Visibility and Affiliation parameters' {
-                { Get-GitHubRepository -Visibility 'public' -Affiliation 'owner' } | Should -Not -Throw
-            }
+        It "Get-GitHubRepository - Gets the authenticated user's public repositories (ORG_FG_PAT)" {
+            { Get-GitHubRepository -Type 'public' } | Should -Not -Throw
         }
-        It 'Can be called with Owner and Repo parameters' {
+        It 'Get-GitHubRepository - Gets the public repos where the authenticated user is owner (ORG_FG_PAT)' {
+            { Get-GitHubRepository -Visibility 'public' -Affiliation 'owner' } | Should -Not -Throw
+        }
+        It 'Get-GitHubRepository - Gets a specific repository (ORG_FG_PAT)' {
             { Get-GitHubRepository -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
         }
-        It 'Can be called with Owner parameter' {
+        It 'Get-GitHubRepository - Gets all repositories from a organization (ORG_FG_PAT)' {
             { Get-GitHubRepository -Owner 'PSModule' } | Should -Not -Throw
         }
-        It 'Can be called with Username parameter' {
+        It 'Get-GitHubRepository - Gets all repositories from a user (ORG_FG_PAT)' {
             { Get-GitHubRepository -Username 'MariusStorhaug' } | Should -Not -Throw
         }
     }
     Context 'GitIgnore' {
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubGitignore - Gets a list of all gitignore templates names (ORG_FG_PAT)' {
             { Get-GitHubGitignore } | Should -Not -Throw
         }
-        It 'Can be called with Name parameter' {
+        It 'Get-GitHubGitignore - Gets a gitignore template (ORG_FG_PAT)' {
             { Get-GitHubGitignore -Name 'VisualStudio' } | Should -Not -Throw
         }
     }
     Context 'Markdown' {
-        It 'Can be called with Text parameter' {
-            { Get-GitHubMarkdown -Text 'Hello, **World**' } | Should -Not -Throw
+        It 'Get-GitHubMarkdown - Gets the rendered markdown for provided text (ORG_FG_PAT)' {
+            { Get-GitHubMarkdown -Text 'Hello, World!' } | Should -Not -Throw
         }
-        It 'Can be called with Text parameter and GitHub Format Mardown' {
-            { Get-GitHubMarkdown -Text 'Hello, **World**' -Mode gfm } | Should -Not -Throw
+        It 'Get-GitHubMarkdown - Gets the rendered markdown for provided text using GitHub Formated Markdown (ORG_FG_PAT)' {
+            { Get-GitHubMarkdown -Text 'Hello, World!' -Mode gfm } | Should -Not -Throw
         }
-        It 'Raw - Can be called with Text parameter' {
-            { Get-GitHubMarkdownRaw -Text 'Hello, **World**' } | Should -Not -Throw
+        It 'Get-GitHubMarkdownRaw - Gets the raw rendered markdown for provided text (ORG_FG_PAT)' {
+            { Get-GitHubMarkdownRaw -Text 'Hello, World!' } | Should -Not -Throw
+        }
+    }
+    Context 'User' {
+        It 'Get-GitHubUser - Gets the authenticated user (ORG_FG_PAT)' {
+            { Get-GitHubUser } | Should -Not -Throw
+        }
+        It 'Get-GitHubUser - Get the specified user (ORG_FG_PAT)' {
+            { Get-GitHubUser -Username 'Octocat' } | Should -Not -Throw
         }
     }
 }
 
-Describe 'As a user - Classic PAT token' {
+Describe 'As a user - Classic PAT token (PAT)' {
     BeforeAll {
         Connect-GitHubAccount -Token $env:TEST_USER_PAT
     }
     AfterAll {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
+    Context 'Auth' {
+        It 'Get-GitHubViewer - Gets the logged in context (PAT)' {
+            Get-GitHubViewer | Should -Not -BeNullOrEmpty
+        }
+    }
     Context 'API' {
-        It 'Can be called directly to get ratelimits' {
+        It 'Invoke-GitHubAPI - Gets the rate limits directly (PAT)' {
             {
                 $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit'
                 Write-Verbose ($rateLimit | Format-Table | Out-String) -Verbose
             } | Should -Not -Throw
-
         }
     }
     Context 'GraphQL' {
-        It 'Can be called directly to get viewer' {
+        It 'Invoke-GitHubGraphQLQuery - Gets the viewer directly (PAT)' {
             {
                 $viewer = Invoke-GitHubGraphQLQuery -Query 'query { viewer { login } }'
                 Write-Verbose ($viewer | Format-Table | Out-String) -Verbose
@@ -524,95 +561,147 @@ Describe 'As a user - Classic PAT token' {
         }
     }
     Context 'Meta' {
-        It 'Get-GitHubRoot' {
+        It 'Get-GitHubRoot - Gets the GitHub API Root (PAT)' {
             $root = Get-GitHubRoot
             Write-Verbose ($root | Format-Table | Out-String) -Verbose
             $root | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubApiVersion' {
+        It 'Get-GitHubApiVersion - Gets all API versions (PAT)' {
             $apiVersion = Get-GitHubApiVersion
             Write-Verbose ($apiVersion | Format-Table | Out-String) -Verbose
             $apiVersion | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubMeta' {
+        It 'Get-GitHubMeta - Gets GitHub meta information (PAT)' {
             $meta = Get-GitHubMeta
             Write-Verbose ($meta | Format-Table | Out-String) -Verbose
             $meta | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubOctocat' {
+        It 'Get-GitHubOctocat - Gets the Octocat (PAT)' {
             $octocat = Get-GitHubOctocat
             Write-Verbose ($octocat | Format-Table | Out-String) -Verbose
             $octocat | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubZen' {
+        It 'Get-GitHubZen - Gets the Zen of GitHub (PAT)' {
             $zen = Get-GitHubZen
             Write-Verbose ($zen | Format-Table | Out-String) -Verbose
             $zen | Should -Not -BeNullOrEmpty
         }
     }
     Context 'Rate-Limit' {
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubRateLimit - Gets the rate limit status for the authenticated user (PAT)' {
             { Get-GitHubRateLimit } | Should -Not -Throw
         }
     }
     Context 'License' {
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubLicense - Gets a list of all popular license templates (PAT)' {
             { Get-GitHubLicense } | Should -Not -Throw
         }
-        It 'Can be called with Name parameter' {
+        It 'Get-GitHubLicense - Gets a spesific license (PAT)' {
             { Get-GitHubLicense -Name 'mit' } | Should -Not -Throw
         }
-        It 'Can be called with Repository parameter' {
+        It 'Get-GitHubLicense - Gets a license from a repository (PAT)' {
             { Get-GitHubLicense -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
         }
     }
     Context 'Emoji' {
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubEmoji - Gets a list of all emojis (PAT)' {
             { Get-GitHubEmoji } | Should -Not -Throw
         }
-        It 'Can be download the emojis' {
+        It 'Get-GitHubEmoji - Downloads all emojis (PAT)' {
             { Get-GitHubEmoji -Destination $Home } | Should -Not -Throw
         }
     }
     Context 'GitIgnore' {
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubGitignore - Gets a list of all gitignore templates names (PAT)' {
             { Get-GitHubGitignore } | Should -Not -Throw
         }
-        It 'Can be called with Name parameter' {
+        It 'Get-GitHubGitignore - Gets a gitignore template (PAT)' {
             { Get-GitHubGitignore -Name 'VisualStudio' } | Should -Not -Throw
         }
     }
     Context 'Markdown' {
-        It 'Can be called with Text parameter' {
+        It 'Get-GitHubMarkdown - Gets the rendered markdown for provided text (PAT)' {
             { Get-GitHubMarkdown -Text 'Hello, World!' } | Should -Not -Throw
         }
-        It 'Can be called with Text parameter and GitHub Format Mardown' {
+        It 'Get-GitHubMarkdown - Gets the rendered markdown for provided text using GitHub Formated Markdown (PAT)' {
             { Get-GitHubMarkdown -Text 'Hello, World!' -Mode gfm } | Should -Not -Throw
         }
-        It 'Raw - Can be called with Text parameter' {
+        It 'Get-GitHubMarkdownRaw - Gets the raw rendered markdown for provided text (PAT)' {
             { Get-GitHubMarkdownRaw -Text 'Hello, World!' } | Should -Not -Throw
+        }
+    }
+    Context 'User' {
+        It 'Get-GitHubUser - Gets the authenticated user (PAT)' {
+            { Get-GitHubUser } | Should -Not -Throw
+        }
+        It 'Get-GitHubUser - Get the specified user (PAT)' {
+            { Get-GitHubUser -Username 'Octocat' } | Should -Not -Throw
+        }
+        It 'Get-GitHubUser - Can set configuration on a user (PAT)' {
+            # $params = @{
+            #     Name            = 'Octocat'
+            #     Blog            = 'https://marius-storhaug.com'
+            #     TwitterUsername = 'MariusStorhaug123'
+            #     Company         = 'PSModule'
+            #     Location        = 'USA'
+            #     Bio             = 'I love programming'
+            # }
+            # { Set-GitHubUser @params } | Should -Not -Throw
+            $user = Get-GitHubUser
+            { Set-GitHubUser -Name 'Octocat' } | Should -Not -Throw
+            { Set-GitHubUser -Blog 'https://marius-storhaug.com' } | Should -Not -Throw
+            { Set-GitHubUser -TwitterUsername 'MariusStorhaug123' } | Should -Not -Throw
+            { Set-GitHubUser -Company 'PSModule' } | Should -Not -Throw
+            { Set-GitHubUser -Location 'USA' } | Should -Not -Throw
+            { Set-GitHubUser -Bio 'I love programming' } | Should -Not -Throw
+            $tmpUser = Get-GitHubUser
+            $tmpUser.name | Should -Be 'Octocat'
+            $tmpUser.blog | Should -Be 'https://marius-storhaug.com'
+            $tmpUser.twitter_username | Should -Be 'MariusStorhaug123'
+            $tmpUser.company | Should -Be 'PSModule'
+            $tmpUser.location | Should -Be 'USA'
+            $tmpUser.bio | Should -Be 'I love programming'
+            { Set-GitHubUser -Name $user.name } | Should -Not -Throw
+            { Set-GitHubUser -Blog $user.blog } | Should -Not -Throw
+            { Set-GitHubUser -TwitterUsername $user.twitter_username } | Should -Not -Throw
+            { Set-GitHubUser -Company $user.company } | Should -Not -Throw
+            { Set-GitHubUser -Location $user.location } | Should -Not -Throw
+            { Set-GitHubUser -Bio $user.bio } | Should -Not -Throw
+            # $user = @{
+            #     Name            = $user.name
+            #     Blog            = $user.blog
+            #     TwitterUsername = $user.twitter_username
+            #     Company         = $user.company
+            #     Location        = $user.location
+            #     Bio             = $user.bio
+            # }
+            # Set-GitHubUser @user
         }
     }
 }
 
-Describe 'As GitHub Actions' {
+Describe 'As GitHub Actions (GHA)' {
     BeforeAll {
         Connect-GitHubAccount
     }
     AfterAll {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
+    Context 'Auth' {
+        It 'Get-GitHubViewer - Gets the logged in context (GHA)' {
+            Get-GitHubViewer | Should -Not -BeNullOrEmpty
+        }
+    }
     Context 'API' {
-        It 'Can be called directly to get ratelimits' {
+        It 'Invoke-GitHubAPI - Gets the rate limits directly (GHA)' {
             {
                 $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit'
                 Write-Verbose ($rateLimit | Format-Table | Out-String) -Verbose
             } | Should -Not -Throw
-
         }
     }
     Context 'GraphQL' {
-        It 'Can be called directly to get viewer' {
+        It 'Invoke-GitHubGraphQLQuery - Gets the viewer directly (GHA)' {
             {
                 $viewer = Invoke-GitHubGraphQLQuery -Query 'query { viewer { login } }'
                 Write-Verbose ($viewer | Format-Table | Out-String) -Verbose
@@ -620,7 +709,7 @@ Describe 'As GitHub Actions' {
         }
     }
     Context 'Git' {
-        It 'Set-GitHubGitConfig sets the Git configuration' {
+        It 'Set-GitHubGitConfig sets the Git configuration (GHA)' {
             { Set-GitHubGitConfig } | Should -Not -Throw
             $gitConfig = Get-GitHubGitConfig
             Write-Verbose ($gitConfig | Format-Table | Out-String) -Verbose
@@ -631,87 +720,99 @@ Describe 'As GitHub Actions' {
         }
     }
     Context 'Meta' {
-        It 'Get-GitHubRoot' {
+        It 'Get-GitHubRoot - Gets the GitHub API Root (GHA)' {
             $root = Get-GitHubRoot
             Write-Verbose ($root | Format-Table | Out-String) -Verbose
             $root | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubApiVersion' {
+        It 'Get-GitHubApiVersion - Gets all API versions (GHA)' {
             $apiVersion = Get-GitHubApiVersion
             Write-Verbose ($apiVersion | Format-Table | Out-String) -Verbose
             $apiVersion | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubMeta' {
+        It 'Get-GitHubMeta - Gets GitHub meta information (GHA)' {
             $meta = Get-GitHubMeta
             Write-Verbose ($meta | Format-Table | Out-String) -Verbose
             $meta | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubOctocat' {
+        It 'Get-GitHubOctocat - Gets the Octocat (GHA)' {
             $octocat = Get-GitHubOctocat
             Write-Verbose ($octocat | Format-Table | Out-String) -Verbose
             $octocat | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubZen' {
+        It 'Get-GitHubZen - Gets the Zen of GitHub (GHA)' {
             $zen = Get-GitHubZen
             Write-Verbose ($zen | Format-Table | Out-String) -Verbose
             $zen | Should -Not -BeNullOrEmpty
         }
     }
     Context 'Rate-Limit' {
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubRateLimit - Gets the rate limit status for the authenticated user (GHA)' {
             { Get-GitHubRateLimit } | Should -Not -Throw
         }
     }
     Context 'License' {
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubLicense - Gets a list of all popular license templates (GHA)' {
             { Get-GitHubLicense } | Should -Not -Throw
         }
-        It 'Can be called with Name parameter' {
+        It 'Get-GitHubLicense - Gets a spesific license (GHA)' {
             { Get-GitHubLicense -Name 'mit' } | Should -Not -Throw
         }
-        It 'Can be called with Repository parameter' {
+        It 'Get-GitHubLicense - Gets a license from a repository (GHA)' {
             { Get-GitHubLicense -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
         }
     }
     Context 'Emoji' {
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubEmoji - Gets a list of all emojis (GHA)' {
             { Get-GitHubEmoji } | Should -Not -Throw
         }
-        It 'Can be download the emojis' {
+        It 'Get-GitHubEmoji - Downloads all emojis (GHA)' {
             { Get-GitHubEmoji -Destination $Home } | Should -Not -Throw
         }
     }
     Context 'GitIgnore' {
-        It 'Can be called with no parameters' {
+        It 'Get-GitHubGitignore - Gets a list of all gitignore templates names (GHA)' {
             { Get-GitHubGitignore } | Should -Not -Throw
         }
-        It 'Can be called with Name parameter' {
+        It 'Get-GitHubGitignore - Gets a gitignore template (GHA)' {
             { Get-GitHubGitignore -Name 'VisualStudio' } | Should -Not -Throw
         }
     }
     Context 'Markdown' {
-        It 'Can be called with Text parameter' {
+        It 'Get-GitHubMarkdown - Gets the rendered markdown for provided text (GHA)' {
             { Get-GitHubMarkdown -Text 'Hello, World!' } | Should -Not -Throw
         }
-        It 'Can be called with Text parameter and GitHub Format Mardown' {
+        It 'Get-GitHubMarkdown - Gets the rendered markdown for provided text using GitHub Formated Markdown (GHA)' {
             { Get-GitHubMarkdown -Text 'Hello, World!' -Mode gfm } | Should -Not -Throw
         }
-        It 'Raw - Can be called with Text parameter' {
+        It 'Get-GitHubMarkdownRaw - Gets the raw rendered markdown for provided text (GHA)' {
             { Get-GitHubMarkdownRaw -Text 'Hello, World!' } | Should -Not -Throw
+        }
+    }
+    Context 'User' {
+        It 'Get-GitHubUser - Get the specified user (GHA)' {
+            { Get-GitHubUser -Username 'Octocat' } | Should -Not -Throw
         }
     }
 }
 
-Describe 'As a GitHub App - Enterprise' {
+Describe 'As a GitHub App - Enterprise (APP_ENT)' {
     BeforeAll {
         Connect-GitHubAccount -ClientID $env:TEST_APP_ENT_CLIENT_ID -PrivateKey $env:TEST_APP_ENT_PRIVATE_KEY
     }
     AfterAll {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
+    Context 'App' {
+        It 'Can get the authenticated GitHubApp (APP_ENT)' {
+            $app = Get-GitHubApp
+            Write-Verbose ($app | Format-Table | Out-String) -Verbose
+            $app | Should -Not -BeNullOrEmpty
+        }
+    }
 }
 
-Describe 'As a GitHub App - Organization' {
+Describe 'As a GitHub App - Organization (APP_ORG)' {
     BeforeAll {
         Connect-GitHubAccount -ClientID $env:TEST_APP_ORG_CLIENT_ID -PrivateKey $env:TEST_APP_ORG_PRIVATE_KEY
     }
@@ -720,22 +821,22 @@ Describe 'As a GitHub App - Organization' {
     }
     Context 'Apps' {
         Context 'GitHub Apps' {
-            It 'Can get a JWT for the app' {
+            It 'Can get a JWT for the app (APP_ENT)' {
                 $jwt = Get-GitHubAppJSONWebToken -ClientId $env:TEST_APP_ORG_CLIENT_ID -PrivateKey $env:TEST_APP_ORG_PRIVATE_KEY
                 Write-Verbose ($jwt | Format-Table | Out-String) -Verbose
                 $jwt | Should -Not -BeNullOrEmpty
             }
-            It 'Can get app details' {
+            It 'Can get app details (APP_ENT)' {
                 $app = Get-GitHubApp
                 Write-Verbose ($app | Format-Table | Out-String) -Verbose
                 $app | Should -Not -BeNullOrEmpty
             }
-            It 'Can get app installations' {
+            It 'Can get app installations (APP_ENT)' {
                 $installations = Get-GitHubAppInstallation
                 Write-Verbose ($installations | Format-Table | Out-String) -Verbose
                 $installations | Should -Not -BeNullOrEmpty
             }
-            It 'Can get app installation access tokens' {
+            It 'Can get app installation access tokens (APP_ENT)' {
                 $installations = Get-GitHubAppInstallation
                 $installations | ForEach-Object {
                     $token = New-GitHubAppInstallationAccessToken -InstallationID $_.id
@@ -745,28 +846,28 @@ Describe 'As a GitHub App - Organization' {
             }
         }
         Context 'Webhooks' {
-            It 'Can get the webhook configuration' {
+            It 'Can get the webhook configuration (APP_ENT)' {
                 $webhooks = Get-GitHubAppWebhookConfiguration
                 Write-Verbose ($webhooks | Format-Table | Out-String) -Verbose
                 $webhooks | Should -Not -BeNullOrEmpty
             }
-            It 'Can update the webhook configuration' {
+            It 'Can update the webhook configuration (APP_ENT)' {
                 { Update-GitHubAppWebhookConfiguration -ContentType 'form' } | Should -Not -Throw
                 { Update-GitHubAppWebhookConfiguration -ContentType 'json' } | Should -Not -Throw
             }
-            It 'Can get webhook deliveries' {
+            It 'Can get webhook deliveries (APP_ENT)' {
                 $deliveries = Get-GitHubAppWebhookDelivery
                 Write-Verbose ($deliveries | Format-Table | Out-String) -Verbose
                 $deliveries | Should -Not -BeNullOrEmpty
             }
-            It 'Can redeliver a webhook delivery' {
+            It 'Can redeliver a webhook delivery (APP_ENT)' {
                 $deliveries = Get-GitHubAppWebhookDelivery | Select-Object -First 1
                 { Invoke-GitHubAppWebhookReDelivery -ID $deliveries.id } | Should -Not -Throw
             }
         }
     }
     Context 'API' {
-        It 'Can be called directly to get ratelimits' {
+        It 'Can be called directly to get ratelimits (APP_ENT)' {
             {
                 $app = Invoke-GitHubAPI -ApiEndpoint '/app'
                 Write-Verbose ($app | Format-Table | Out-String) -Verbose

@@ -26,7 +26,6 @@
         .NOTES
         [Update the authenticated user](https://docs.github.com/rest/users/users#update-the-authenticated-user)
     #>
-    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [OutputType([void])]
     [Alias('Update-GitHubUser')]
     [CmdletBinding(SupportsShouldProcess)]
@@ -88,6 +87,7 @@
                 hireable         = $Hireable
                 bio              = $Bio
             }
+            $body | Remove-HashtableEntry -NullOrEmptyValues
 
             $inputObject = @{
                 Context     = $Context
