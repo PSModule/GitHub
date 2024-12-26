@@ -361,7 +361,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
         It 'Get-GitHubUser - Get the specified user (USER_FG_PAT)' {
             { Get-GitHubUser -Username 'Octocat' } | Should -Not -Throw
         }
-        It 'Get-GitHubUser - Can set configuration on a user (USER_FG_PAT)' {
+        It 'Set-GitHubUser - Can set configuration on a user (USER_FG_PAT)' {
             # $params = @{
             #     Name            = 'Octocat'
             #     Blog            = 'https://marius-storhaug.com'
@@ -536,7 +536,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         It 'Get-GitHubUser - Get the specified user (ORG_FG_PAT)' {
             { Get-GitHubUser -Username 'Octocat' } | Should -Not -Throw
         }
-        It 'Get-GitHubUser - Can set configuration on a user (ORG_FG_PAT)' {
+        It 'Set-GitHubUser - Can set configuration on a user (ORG_FG_PAT)' {
             # $params = @{
             #     Name            = 'Octocat'
             #     Blog            = 'https://marius-storhaug.com'
@@ -691,7 +691,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
         It 'Get-GitHubUser - Get the specified user (PAT)' {
             { Get-GitHubUser -Username 'Octocat' } | Should -Not -Throw
         }
-        It 'Get-GitHubUser - Can set configuration on a user (PAT)' {
+        It 'Set-GitHubUser - Can set configuration on a user (PAT)' {
             # $params = @{
             #     Name            = 'Octocat'
             #     Blog            = 'https://marius-storhaug.com'
@@ -713,11 +713,11 @@ Describe 'As a user - Classic PAT token (PAT)' {
             $tmpUser = Get-GitHubUser
             $tmpUser.Name | Should -Be 'Octocat'
             $tmpUser.Blog | Should -Be 'https://marius-storhaug.com'
-            $tmpUser.TwitterUsername | Should -Be 'MariusStorhaug123'
+            $tmpUser.twitter_username | Should -Be 'MariusStorhaug123'
             $tmpUser.Company | Should -Be 'PSModule'
-            $tmpUser.Location | Should -Be 'USA'
-            $tmpUser.Hireable | Should -Be $true
-            $tmpUser.Bio | Should -Be 'I love programming'
+            $tmpUser.location | Should -Be 'USA'
+            $tmpUser.hireable | Should -Be $true
+            $tmpUser.bio | Should -Be 'I love programming'
             { Set-GitHubUser -Name $user.Name } | Should -Not -Throw
             { Set-GitHubUser -Email $user.Email } | Should -Not -Throw
             { Set-GitHubUser -Blog $user.Blog } | Should -Not -Throw
