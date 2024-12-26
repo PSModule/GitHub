@@ -57,10 +57,10 @@ Get-GitHubUser | Select-Object Name, login, ID, company, blog, twitter_username,
 $user = Get-GitHubUser
 $user.social_accounts
 
-Set-GitHubUser -Company '@DNBBank' -Email 'marstor@hotmail.com' -Blog 'https://www.github.com/MariusStorhaug' -TwitterUsername MariusStorhaug -Location 'Norway' -Hireable $false -Bio 'DevOps Engineer at DNB Bank. I ❤️ PowerShell and automation.'
-Set-GitHubUser -Company ' '
-Set-GitHubUser -Hireable $true | Select-Object login, hireable
-Set-GitHubUser -Hireable $false | Select-Object login, hireable
+Update-GitHubUser -Company '@DNBBank' -Email 'marstor@hotmail.com' -Blog 'https://www.github.com/MariusStorhaug' -TwitterUsername MariusStorhaug -Location 'Norway' -Hireable $false -Bio 'DevOps Engineer at DNB Bank. I ❤️ PowerShell and automation.'
+Update-GitHubUser -Company ' '
+Update-GitHubUser -Hireable $true | Select-Object login, hireable
+Update-GitHubUser -Hireable $false | Select-Object login, hireable
 
 Add-GitHubUserSocials -AccountUrls 'https://www.github.com/MariusStorhaug'
 

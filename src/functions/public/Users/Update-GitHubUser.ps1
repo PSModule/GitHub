@@ -1,4 +1,4 @@
-﻿filter Set-GitHubUser {
+﻿filter Update-GitHubUser {
     <#
         .SYNOPSIS
         Update the authenticated user
@@ -9,17 +9,17 @@
         displayed on your public profile or via the API.
 
         .EXAMPLE
-        Set-GitHubUser -Name 'octocat'
+        Update-GitHubUser -Name 'octocat'
 
         Update the authenticated user's name to 'octocat'
 
         .EXAMPLE
-        Set-GitHubUser -Location 'San Francisco'
+        Update-GitHubUser -Location 'San Francisco'
 
         Update the authenticated user's location to 'San Francisco'
 
         .EXAMPLE
-        Set-GitHubUser -Hireable $true -Bio 'I love programming'
+        Update-GitHubUser -Hireable $true -Bio 'I love programming'
 
         Update the authenticated user's hiring availability to 'true' and their biography to 'I love programming'
 
