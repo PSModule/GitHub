@@ -803,6 +803,22 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
     AfterAll {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
+    Context 'Auth' {
+        It 'Connect-GitHubApp - Connects one enterprise installation for the authenticated GitHub App (APP_ENT)' {
+            $context = Get-GitHubContext
+            { Connect-GitHubApp -Enterprise msx -Context $context } | Should -Not -Throw
+            Get-GitHubContext -ListAvailable | Should -HaveCount 2
+        }
+        It 'Connect-GitHubApp - Connects one organization installation for the authenticated GitHub App (APP_ENT)' {
+            $context = Connect-GitHubApp -Organization AzActions -PassThru
+            $context.Name | Should -BeLike '*/Organization/AzActions'
+            Get-GitHubContext -ListAvailable | Should -HaveCount 3
+        }
+        It 'Connect-GitHubApp - Connects all installations for the authenticated GitHub App (APP_ENT)' {
+            { Connect-GitHubApp } | Should -Not -Throw
+            Get-GitHubContext -ListAvailable | Should -HaveCount 4
+        }
+    }
     Context 'App' {
         It 'Can get the authenticated GitHubApp (APP_ENT)' {
             $app = Get-GitHubApp
@@ -818,6 +834,22 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
     }
     AfterAll {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+    }
+    Context 'Auth' {
+        It 'Connect-GitHubApp - Connects one user installation for the authenticated GitHub App (APP_ORG)' {
+            $context = Get-GitHubContext
+            { Connect-GitHubApp -User MariusStorhaug -Context $context } | Should -Not -Throw
+            Get-GitHubContext -ListAvailable | Should -HaveCount 2
+        }
+        It 'Connect-GitHubApp - Connects one organization installation for the authenticated GitHub App (APP_ORG)' {
+            $context = Connect-GitHubApp -Organization AzActions -PassThru
+            $context.Name | Should -BeLike '*/Organization/AzActions'
+            Get-GitHubContext -ListAvailable | Should -HaveCount 3
+        }
+        It 'Connect-GitHubApp - Connects all installations for the authenticated GitHub App (APP_ORG)' {
+            { Connect-GitHubApp } | Should -Not -Throw
+            Get-GitHubContext -ListAvailable | Should -HaveCount 4
+        }
     }
     Context 'Apps' {
         Context 'GitHub Apps' {
