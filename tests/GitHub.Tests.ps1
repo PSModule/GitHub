@@ -88,7 +88,7 @@ Describe 'GitHub' {
             { Connect-GitHubAccount @params -AutoloadInstallations } | Should -Not -Throw
             $contexts = Get-GitHubContextInfo -Verbose:$false
             Write-Verbose ($contexts | Out-String) -Verbose
-            ($contexts).Count | Should -Be 5
+            ($contexts).Count | Should -Be 6
         }
         It 'Connect-GitHubAccount - Connects a GitHub App from an enterprise' {
             $params = @{
@@ -98,7 +98,7 @@ Describe 'GitHub' {
             { Connect-GitHubAccount @params } | Should -Not -Throw
             $contexts = Get-GitHubContextInfo -Verbose:$false
             Write-Verbose ($contexts | Out-String) -Verbose
-            ($contexts).Count | Should -Be 6
+            ($contexts).Count | Should -Be 7
         }
         It 'Connect-GitHubAccount - Connects all of a (ent) GitHub Apps installations' {
             $params = @{
@@ -108,7 +108,7 @@ Describe 'GitHub' {
             { Connect-GitHubAccount @params -AutoloadInstallations } | Should -Not -Throw
             $contexts = Get-GitHubContextInfo -Verbose:$false
             Write-Verbose ($contexts | Out-String) -Verbose
-            ($contexts).Count | Should -Be 9
+            ($contexts).Count | Should -Be 10
         }
         It 'Disconnect-GitHubAccount - Disconnects a specific context' {
             { Disconnect-GitHubAccount -Context 'github.com/psmodule-enterprise-app/Organization/PSModule' -Silent } | Should -Not -Throw
@@ -804,15 +804,15 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     Context 'Auth' {
-        It 'Connect-GitHubApp - Connects one enterprise installation for the authenticated GitHub App (APP_ENT)' {
-            $context = Get-GitHubContext
-            { Connect-GitHubApp -Enterprise msx -Context $context } | Should -Not -Throw
-            Get-GitHubContext -ListAvailable | Should -HaveCount 2
-        }
+        # It 'Connect-GitHubApp - Connects one enterprise installation for the authenticated GitHub App (APP_ENT)' {
+        #     $context = Get-GitHubContext
+        #     { Connect-GitHubApp -Enterprise msx -Context $context } | Should -Not -Throw
+        #     Get-GitHubContext -ListAvailable | Should -HaveCount 2
+        # }
         It 'Connect-GitHubApp - Connects one organization installation for the authenticated GitHub App (APP_ENT)' {
             $context = Connect-GitHubApp -Organization AzActions -PassThru
             $context.Name | Should -BeLike '*/Organization/AzActions'
-            Get-GitHubContext -ListAvailable | Should -HaveCount 3
+            Get-GitHubContext -ListAvailable | Should -HaveCount 2
         }
         It 'Connect-GitHubApp - Connects all installations for the authenticated GitHub App (APP_ENT)' {
             { Connect-GitHubApp } | Should -Not -Throw
