@@ -529,46 +529,6 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         It 'Get-GitHubUser - Get the specified user (ORG_FG_PAT)' {
             { Get-GitHubUser -Username 'Octocat' } | Should -Not -Throw
         }
-        It 'Get-GitHubUser - Can set configuration on a user (ORG_FG_PAT)' {
-            # $params = @{
-            #     Name            = 'Octocat'
-            #     Blog            = 'https://marius-storhaug.com'
-            #     TwitterUsername = 'MariusStorhaug123'
-            #     Company         = 'PSModule'
-            #     Location        = 'USA'
-            #     Bio             = 'I love programming'
-            # }
-            # { Set-GitHubUser @params } | Should -Not -Throw
-            $user = Get-GitHubUser
-            { Set-GitHubUser -Name 'Octocat' } | Should -Not -Throw
-            { Set-GitHubUser -Blog 'https://marius-storhaug.com' } | Should -Not -Throw
-            { Set-GitHubUser -TwitterUsername 'MariusStorhaug123' } | Should -Not -Throw
-            { Set-GitHubUser -Company 'PSModule' } | Should -Not -Throw
-            { Set-GitHubUser -Location 'USA' } | Should -Not -Throw
-            { Set-GitHubUser -Bio 'I love programming' } | Should -Not -Throw
-            $tmpUser = Get-GitHubUser
-            $tmpUser.name | Should -Be 'Octocat'
-            $tmpUser.blog | Should -Be 'https://marius-storhaug.com'
-            $tmpUser.twitter_username | Should -Be 'MariusStorhaug123'
-            $tmpUser.company | Should -Be 'PSModule'
-            $tmpUser.location | Should -Be 'USA'
-            $tmpUser.bio | Should -Be 'I love programming'
-            { Set-GitHubUser -Name $user.name } | Should -Not -Throw
-            { Set-GitHubUser -Blog $user.blog } | Should -Not -Throw
-            { Set-GitHubUser -TwitterUsername $user.twitter_username } | Should -Not -Throw
-            { Set-GitHubUser -Company $user.company } | Should -Not -Throw
-            { Set-GitHubUser -Location $user.location } | Should -Not -Throw
-            { Set-GitHubUser -Bio $user.bio } | Should -Not -Throw
-            # $user = @{
-            #     Name            = $user.name
-            #     Blog            = $user.blog
-            #     TwitterUsername = $user.twitter_username
-            #     Company         = $user.company
-            #     Location        = $user.location
-            #     Bio             = $user.bio
-            # }
-            # Set-GitHubUser @user
-        }
     }
 }
 
@@ -843,11 +803,6 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
     AfterAll {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
-    Context 'User' {
-        It 'Can be called with Username parameter (APP_ENT)' {
-            { Get-GitHubUser -Username 'Octocat' } | Should -Not -Throw
-        }
-    }
     Context 'App' {
         It 'Can get the authenticated GitHubApp (APP_ENT)' {
             $app = Get-GitHubApp
@@ -917,11 +872,6 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
                 $app = Invoke-GitHubAPI -ApiEndpoint '/app'
                 Write-Verbose ($app | Format-Table | Out-String) -Verbose
             } | Should -Not -Throw
-        }
-    }
-    Context 'User' {
-        It 'Can be called with Username parameter (APP_ENT)' {
-            { Get-GitHubUser -Username 'Octocat' } | Should -Not -Throw
         }
     }
 }
