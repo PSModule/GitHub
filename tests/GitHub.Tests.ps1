@@ -361,7 +361,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
         It 'Get-GitHubUser - Get the specified user (USER_FG_PAT)' {
             { Get-GitHubUser -Username 'Octocat' } | Should -Not -Throw
         }
-        It 'Update-GitHubUser - Can set configuration on a user (USER_FG_PAT)' {
+        It 'Set-GitHubUser - Can set configuration on a user (USER_FG_PAT)' {
             # $params = @{
             #     Name            = 'Octocat'
             #     Blog            = 'https://marius-storhaug.com'
@@ -370,14 +370,14 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
             #     Location        = 'USA'
             #     Bio             = 'I love programming'
             # }
-            # { Update-GitHubUser @params } | Should -Not -Throw
+            # { Set-GitHubUser @params } | Should -Not -Throw
             $user = Get-GitHubUser
-            { Update-GitHubUser -Name 'Octocat' } | Should -Not -Throw
-            { Update-GitHubUser -Blog 'https://marius-storhaug.com' } | Should -Not -Throw
-            { Update-GitHubUser -TwitterUsername 'MariusStorhaug123' } | Should -Not -Throw
-            { Update-GitHubUser -Company 'PSModule' } | Should -Not -Throw
-            { Update-GitHubUser -Location 'USA' } | Should -Not -Throw
-            { Update-GitHubUser -Bio 'I love programming' } | Should -Not -Throw
+            { Set-GitHubUser -Name 'Octocat' } | Should -Not -Throw
+            { Set-GitHubUser -Blog 'https://marius-storhaug.com' } | Should -Not -Throw
+            { Set-GitHubUser -TwitterUsername 'MariusStorhaug123' } | Should -Not -Throw
+            { Set-GitHubUser -Company 'PSModule' } | Should -Not -Throw
+            { Set-GitHubUser -Location 'USA' } | Should -Not -Throw
+            { Set-GitHubUser -Bio 'I love programming' } | Should -Not -Throw
             $tmpUser = Get-GitHubUser
             $tmpUser.name | Should -Be 'Octocat'
             $tmpUser.blog | Should -Be 'https://marius-storhaug.com'
@@ -385,12 +385,12 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
             $tmpUser.company | Should -Be 'PSModule'
             $tmpUser.location | Should -Be 'USA'
             $tmpUser.bio | Should -Be 'I love programming'
-            { Update-GitHubUser -Name $user.name } | Should -Not -Throw
-            { Update-GitHubUser -Blog $user.blog } | Should -Not -Throw
-            { Update-GitHubUser -TwitterUsername $user.twitter_username } | Should -Not -Throw
-            { Update-GitHubUser -Company $user.company } | Should -Not -Throw
-            { Update-GitHubUser -Location $user.location } | Should -Not -Throw
-            { Update-GitHubUser -Bio $user.bio } | Should -Not -Throw
+            { Set-GitHubUser -Name $user.name } | Should -Not -Throw
+            { Set-GitHubUser -Blog $user.blog } | Should -Not -Throw
+            { Set-GitHubUser -TwitterUsername $user.twitter_username } | Should -Not -Throw
+            { Set-GitHubUser -Company $user.company } | Should -Not -Throw
+            { Set-GitHubUser -Location $user.location } | Should -Not -Throw
+            { Set-GitHubUser -Bio $user.bio } | Should -Not -Throw
             # $user = @{
             #     Name            = $user.name
             #     Blog            = $user.blog
@@ -399,7 +399,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
             #     Location        = $user.location
             #     Bio             = $user.bio
             # }
-            # Update-GitHubUser @user
+            # Set-GitHubUser @user
         }
     }
 }
@@ -637,7 +637,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
         It 'Get-GitHubUser - Get the specified user (PAT)' {
             { Get-GitHubUser -Username 'Octocat' } | Should -Not -Throw
         }
-        It 'Update-GitHubUser - Can set configuration on a user (PAT)' {
+        It 'Set-GitHubUser - Can set configuration on a user (PAT)' {
             # $params = @{
             #     Name            = 'Octocat'
             #     Blog            = 'https://marius-storhaug.com'
@@ -646,14 +646,14 @@ Describe 'As a user - Classic PAT token (PAT)' {
             #     Location        = 'USA'
             #     Bio             = 'I love programming'
             # }
-            # { Update-GitHubUser @params } | Should -Not -Throw
+            # { Set-GitHubUser @params } | Should -Not -Throw
             $user = Get-GitHubUser
-            { Update-GitHubUser -Name 'Octocat' } | Should -Not -Throw
-            { Update-GitHubUser -Blog 'https://marius-storhaug.com' } | Should -Not -Throw
-            { Update-GitHubUser -TwitterUsername 'MariusStorhaug123' } | Should -Not -Throw
-            { Update-GitHubUser -Company 'PSModule' } | Should -Not -Throw
-            { Update-GitHubUser -Location 'USA' } | Should -Not -Throw
-            { Update-GitHubUser -Bio 'I love programming' } | Should -Not -Throw
+            { Set-GitHubUser -Name 'Octocat' } | Should -Not -Throw
+            { Set-GitHubUser -Blog 'https://marius-storhaug.com' } | Should -Not -Throw
+            { Set-GitHubUser -TwitterUsername 'MariusStorhaug123' } | Should -Not -Throw
+            { Set-GitHubUser -Company 'PSModule' } | Should -Not -Throw
+            { Set-GitHubUser -Location 'USA' } | Should -Not -Throw
+            { Set-GitHubUser -Bio 'I love programming' } | Should -Not -Throw
             $tmpUser = Get-GitHubUser
             $tmpUser.name | Should -Be 'Octocat'
             $tmpUser.blog | Should -Be 'https://marius-storhaug.com'
@@ -661,12 +661,12 @@ Describe 'As a user - Classic PAT token (PAT)' {
             $tmpUser.company | Should -Be 'PSModule'
             $tmpUser.location | Should -Be 'USA'
             $tmpUser.bio | Should -Be 'I love programming'
-            { Update-GitHubUser -Name $user.name } | Should -Not -Throw
-            { Update-GitHubUser -Blog $user.blog } | Should -Not -Throw
-            { Update-GitHubUser -TwitterUsername $user.twitter_username } | Should -Not -Throw
-            { Update-GitHubUser -Company $user.company } | Should -Not -Throw
-            { Update-GitHubUser -Location $user.location } | Should -Not -Throw
-            { Update-GitHubUser -Bio $user.bio } | Should -Not -Throw
+            { Set-GitHubUser -Name $user.name } | Should -Not -Throw
+            { Set-GitHubUser -Blog $user.blog } | Should -Not -Throw
+            { Set-GitHubUser -TwitterUsername $user.twitter_username } | Should -Not -Throw
+            { Set-GitHubUser -Company $user.company } | Should -Not -Throw
+            { Set-GitHubUser -Location $user.location } | Should -Not -Throw
+            { Set-GitHubUser -Bio $user.bio } | Should -Not -Throw
             # $user = @{
             #     Name            = $user.name
             #     Blog            = $user.blog
@@ -675,7 +675,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
             #     Location        = $user.location
             #     Bio             = $user.bio
             # }
-            # Update-GitHubUser @user
+            # Set-GitHubUser @user
         }
     }
 }
