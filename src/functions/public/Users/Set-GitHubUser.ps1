@@ -27,7 +27,6 @@
         [Update the authenticated user](https://docs.github.com/rest/users/users#update-the-authenticated-user)
     #>
     [OutputType([void])]
-    [Alias('Update-GitHubUser')]
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The new name of the user.

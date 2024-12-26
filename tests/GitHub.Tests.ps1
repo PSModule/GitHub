@@ -361,7 +361,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
         It 'Get-GitHubUser - Get the specified user (USER_FG_PAT)' {
             { Get-GitHubUser -Username 'Octocat' } | Should -Not -Throw
         }
-        It 'Get-GitHubUser - Can set configuration on a user (USER_FG_PAT)' {
+        It 'Set-GitHubUser - Can set configuration on a user (USER_FG_PAT)' {
             # $params = @{
             #     Name            = 'Octocat'
             #     Blog            = 'https://marius-storhaug.com'
@@ -637,7 +637,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
         It 'Get-GitHubUser - Get the specified user (PAT)' {
             { Get-GitHubUser -Username 'Octocat' } | Should -Not -Throw
         }
-        It 'Get-GitHubUser - Can set configuration on a user (PAT)' {
+        It 'Set-GitHubUser - Can set configuration on a user (PAT)' {
             # $params = @{
             #     Name            = 'Octocat'
             #     Blog            = 'https://marius-storhaug.com'
