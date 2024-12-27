@@ -524,14 +524,14 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
             { Get-GitHubOrganization } | Should -Not -Throw
         }
         It 'Get-GitHubOrganization - Gets a specific organization (ORG_FG_PAT)' {
-            { Get-GitHubOrganization -Organization 'psmodule-test-org2' } | Should -Not -Throw
+            { Get-GitHubOrganization -Organization 'psmodule-test-org' } | Should -Not -Throw
         }
         It "Get-GitHubOrganization - List public organizations for the user 'psmodule-user'. (ORG_FG_PAT)" {
             { Get-GitHubOrganization -Username 'psmodule-user' } | Should -Not -Throw
         }
         It 'Get-GitHubOrganizationMember - Gets the members of a specific organization (ORG_FG_PAT)' {
             $members = @()
-            { $members = Get-GitHubOrganizationMember -Organization 'psmodule-test-org2' } | Should -Not -Throw
+            { $members = Get-GitHubOrganizationMember -Organization 'psmodule-test-org' } | Should -Not -Throw
             $members.login | Should -Contain 'psmodule-user'
         }
     }
