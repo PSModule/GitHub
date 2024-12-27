@@ -519,6 +519,22 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
             { Get-GitHubUser -Username 'Octocat' } | Should -Not -Throw
         }
     }
+    Context 'Organization' {
+        It 'Get-GitHubOrganization - Gets the organizations for the authenticated user (ORG_FG_PAT)' {
+            { Get-GitHubOrganization } | Should -Not -Throw
+        }
+        It 'Get-GitHubOrganization - Gets a specific organization (ORG_FG_PAT)' {
+            { Get-GitHubOrganization -Organization 'psmodule-test-org2' } | Should -Not -Throw
+        }
+        It "Get-GitHubOrganization - List public organizations for the user 'psmodule-user'. (ORG_FG_PAT)" {
+            { Get-GitHubOrganization -Username 'psmodule-user' } | Should -Not -Throw
+        }
+        It 'Get-GitHubOrganizationMember - Gets the members of a specific organization (ORG_FG_PAT)' {
+            $members = @()
+            { $members = Get-GitHubOrganizationMember -Organization 'psmodule-test-org2' } | Should -Not -Throw
+            $members.login | Should -Contain 'psmodule-user'
+        }
+    }
 }
 
 Describe 'As a user - Classic PAT token (PAT)' {
@@ -654,6 +670,22 @@ Describe 'As a user - Classic PAT token (PAT)' {
                 { Remove-GitHubUserEmail -Emails $newEmail } | Should -Not -Throw
                 (Get-GitHubUserEmail).email | Should -Not -Contain $newEmail
             }
+        }
+    }
+    Context 'Organization' {
+        It 'Get-GitHubOrganization - Gets the organizations for the authenticated user (PAT)' {
+            { Get-GitHubOrganization } | Should -Not -Throw
+        }
+        It 'Get-GitHubOrganization - Gets a specific organization (PAT)' {
+            { Get-GitHubOrganization -Organization 'psmodule-test-org2' } | Should -Not -Throw
+        }
+        It "Get-GitHubOrganization - List public organizations for the user 'psmodule-user'. (PAT)" {
+            { Get-GitHubOrganization -Username 'psmodule-user' } | Should -Not -Throw
+        }
+        It 'Get-GitHubOrganizationMember - Gets the members of a specific organization (PAT)' {
+            $members = @()
+            { $members = Get-GitHubOrganizationMember -Organization 'psmodule-test-org2' } | Should -Not -Throw
+            $members.login | Should -Contain 'psmodule-user'
         }
     }
 }
@@ -804,6 +836,19 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
             $app | Should -Not -BeNullOrEmpty
         }
     }
+    Context 'Organization' {
+        It 'Get-GitHubOrganization - Gets the organizations for the authenticated user (APP_ENT)' {
+            { Get-GitHubOrganization } | Should -Not -Throw
+        }
+        It 'Get-GitHubOrganization - Gets a specific organization (APP_ENT)' {
+            { Get-GitHubOrganization -Organization 'psmodule-test-org' } | Should -Not -Throw
+        }
+        It 'Get-GitHubOrganizationMember - Gets the members of a specific organization (APP_ENT)' {
+            $members = @()
+            { $members = Get-GitHubOrganizationMember -Organization 'psmodule-test-org' } | Should -Not -Throw
+            $members.login | Should -Contain 'psmodule-user'
+        }
+    }
 }
 
 Describe 'As a GitHub App - Organization (APP_ORG)' {
@@ -882,6 +927,19 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
                 $app = Invoke-GitHubAPI -ApiEndpoint '/app'
                 Write-Verbose ($app | Format-Table | Out-String) -Verbose
             } | Should -Not -Throw
+        }
+    }
+    Context 'Organization' {
+        It 'Get-GitHubOrganization - Gets the organizations for the authenticated user (APP_ORG)' {
+            { Get-GitHubOrganization } | Should -Not -Throw
+        }
+        It 'Get-GitHubOrganization - Gets a specific organization (APP_ORG)' {
+            { Get-GitHubOrganization -Organization 'psmodule-test-org' } | Should -Not -Throw
+        }
+        It 'Get-GitHubOrganizationMember - Gets the members of a specific organization (APP_ORG)' {
+            $members = @()
+            { $members = Get-GitHubOrganizationMember -Organization 'psmodule-test-org' } | Should -Not -Throw
+            $members.login | Should -Contain 'psmodule-user'
         }
     }
 }
