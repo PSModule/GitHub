@@ -530,8 +530,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
             { Get-GitHubOrganization -Username 'psmodule-user' } | Should -Not -Throw
         }
         It 'Get-GitHubOrganizationMember - Gets the members of a specific organization (ORG_FG_PAT)' {
-            $members = @()
-            { $members = Get-GitHubOrganizationMember -Organization 'psmodule-test-org' } | Should -Not -Throw
+            $members = Get-GitHubOrganizationMember -Organization 'psmodule-test-org' | Should -Not -Throw
             $members.login | Should -Contain 'psmodule-user'
         }
     }
@@ -683,8 +682,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
             { Get-GitHubOrganization -Username 'psmodule-user' } | Should -Not -Throw
         }
         It 'Get-GitHubOrganizationMember - Gets the members of a specific organization (PAT)' {
-            $members = @()
-            { $members = Get-GitHubOrganizationMember -Organization 'psmodule-test-org2' } | Should -Not -Throw
+            $members = Get-GitHubOrganizationMember -Organization 'psmodule-test-org2'
             $members.login | Should -Contain 'psmodule-user'
         }
     }
@@ -844,8 +842,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
             { Get-GitHubOrganization -Organization 'psmodule-test-org' } | Should -Not -Throw
         }
         It 'Get-GitHubOrganizationMember - Gets the members of a specific organization (APP_ENT)' {
-            $members = @()
-            { $members = Get-GitHubOrganizationMember -Organization 'psmodule-test-org' } | Should -Not -Throw
+            $members = Get-GitHubOrganizationMember -Organization 'psmodule-test-org' | Should -Not -Throw
             $members.login | Should -Contain 'psmodule-user'
         }
     }
@@ -937,8 +934,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
             { Get-GitHubOrganization -Organization 'psmodule-test-org' } | Should -Not -Throw
         }
         It 'Get-GitHubOrganizationMember - Gets the members of a specific organization (APP_ORG)' {
-            $members = @()
-            { $members = Get-GitHubOrganizationMember -Organization 'psmodule-test-org' } | Should -Not -Throw
+            $members = Get-GitHubOrganizationMember -Organization 'psmodule-test-org' | Should -Not -Throw
             $members.login | Should -Contain 'psmodule-user'
         }
     }
