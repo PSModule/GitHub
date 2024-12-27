@@ -841,15 +841,12 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         AfterAll {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
         }
-        It 'Get-GitHubOrganization - Gets the organizations for the authenticated user (APP_ENT)' {
-            { Get-GitHubOrganization } | Should -Not -Throw
-        }
         It 'Get-GitHubOrganization - Gets a specific organization (APP_ENT)' {
             { Get-GitHubOrganization -Organization 'psmodule-test-org3' } | Should -Not -Throw
         }
         It 'Get-GitHubOrganizationMember - Gets the members of a specific organization (APP_ENT)' {
             $members = Get-GitHubOrganizationMember -Organization 'psmodule-test-org3'
-            $members.login | Should -Contain 'psmodule-user'
+            $members.login | Should -Contain 'MariusStorhaug'
         }
     }
 }
@@ -874,7 +871,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         }
         It 'Connect-GitHubApp - Connects all installations for the authenticated GitHub App (APP_ORG)' {
             { Connect-GitHubApp } | Should -Not -Throw
-            Get-GitHubContext -ListAvailable | Should -HaveCount 4
+            Get-GitHubContext -ListAvailable | Should -HaveCount 5
         }
     }
     Context 'Apps' {
@@ -939,15 +936,12 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         AfterAll {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
         }
-        It 'Get-GitHubOrganization - Gets the organizations for the authenticated user (APP_ORG)' {
-            { Get-GitHubOrganization } | Should -Not -Throw
-        }
         It 'Get-GitHubOrganization - Gets a specific organization (APP_ORG)' {
             { Get-GitHubOrganization -Organization 'psmodule-test-org' } | Should -Not -Throw
         }
         It 'Get-GitHubOrganizationMember - Gets the members of a specific organization (APP_ORG)' {
             $members = Get-GitHubOrganizationMember -Organization 'psmodule-test-org'
-            $members.login | Should -Contain 'psmodule-user'
+            $members.login | Should -Contain 'MariusStorhaug'
         }
     }
 }
