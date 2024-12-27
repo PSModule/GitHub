@@ -22,9 +22,9 @@
         Connects to GitHub as the user 'octocat' using the logged in GitHub App.
 
         .EXAMPLE
-        Connect-GitHubApp -Organization 'psmodule'
+        Connect-GitHubApp -Organization 'psmodule' -Default
 
-        Connects to GitHub as the organization 'psmodule' using the logged in GitHub App.
+        Connects to GitHub as the organization 'psmodule' using the logged in GitHub App and sets it as the default context.
 
         .EXAMPLE
         Connect-GitHubApp -Enterprise 'msx'
@@ -64,6 +64,10 @@
         # Passes the context object to the pipeline.
         [Parameter()]
         [switch] $PassThru,
+
+        # Set as the default context.
+        [Parameter()]
+        [switch] $Default,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -133,7 +137,7 @@
                 }
                 Write-Verbose 'Logging in using a managed installation access token...'
                 Write-Verbose ($contextParams | Format-Table | Out-String)
-                $contextObj = [InstallationGitHubContext]::new((Set-GitHubContext -Context $contextParams.Clone() -PassThru))
+                $contextObj = [InstallationGitHubContext]::new((Set-GitHubContext -Context $contextParams.Clone() -PassThru -Default:$Default))
                 Write-Verbose ($contextObj | Format-List | Out-String)
                 if (-not $Silent) {
                     $name = $contextObj.name
