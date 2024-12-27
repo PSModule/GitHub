@@ -401,6 +401,18 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
             # }
             # Update-GitHubUser @user
         }
+        Context 'Email' {
+            It 'Get-GitHubUserEmail - Gets all email addresses for the authenticated user (USER_FG_PAT)' {
+                { Get-GitHubUserEmail } | Should -Not -Throw
+            }
+            It 'Add/Remove-GitHubUserEmail - Adds and removes an email to the authenticated user (USER_FG_PAT)' {
+                $newEmail = (New-Guid).Guid + '@example.com'
+                { Add-GitHubUserEmail -Emails $newEmail } | Should -Not -Throw
+                { Get-GitHubUserEmail } | Should -Contain $newEmail
+                { Remove-GitHubUserEmail -Emails $newEmail } | Should -Not -Throw
+                { Get-GitHubUserEmail } | Should -Not -Contain $newEmail
+            }
+        }
     }
 }
 
@@ -676,6 +688,18 @@ Describe 'As a user - Classic PAT token (PAT)' {
             #     Bio             = $user.bio
             # }
             # Update-GitHubUser @user
+        }
+        Context 'Email' {
+            It 'Get-GitHubUserEmail - Gets all email addresses for the authenticated user (PAT)' {
+                { Get-GitHubUserEmail } | Should -Not -Throw
+            }
+            It 'Add/Remove-GitHubUserEmail - Adds and removes an email to the authenticated user (PAT)' {
+                $newEmail = (New-Guid).Guid + '@example.com'
+                { Add-GitHubUserEmail -Emails $newEmail } | Should -Not -Throw
+                { Get-GitHubUserEmail } | Should -Contain $newEmail
+                { Remove-GitHubUserEmail -Emails $newEmail } | Should -Not -Throw
+                { Get-GitHubUserEmail } | Should -Not -Contain $newEmail
+            }
         }
     }
 }
