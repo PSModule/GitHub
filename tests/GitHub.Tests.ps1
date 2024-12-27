@@ -362,44 +362,33 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
             { Get-GitHubUser -Username 'Octocat' } | Should -Not -Throw
         }
         It 'Update-GitHubUser - Can set configuration on a user (USER_FG_PAT)' {
-            # $params = @{
-            #     Name            = 'Octocat'
-            #     Blog            = 'https://marius-storhaug.com'
-            #     TwitterUsername = 'MariusStorhaug123'
-            #     Company         = 'PSModule'
-            #     Location        = 'USA'
-            #     Bio             = 'I love programming'
-            # }
-            # { Update-GitHubUser @params } | Should -Not -Throw
+            $guid = (New-Guid).Guid
             $user = Get-GitHubUser
             { Update-GitHubUser -Name 'Octocat' } | Should -Not -Throw
-            { Update-GitHubUser -Blog 'https://marius-storhaug.com' } | Should -Not -Throw
-            { Update-GitHubUser -TwitterUsername 'MariusStorhaug123' } | Should -Not -Throw
+            { Update-GitHubUser -Blog 'https://example.com' } | Should -Not -Throw
+            { Update-GitHubUser -TwitterUsername $guid } | Should -Not -Throw
             { Update-GitHubUser -Company 'PSModule' } | Should -Not -Throw
             { Update-GitHubUser -Location 'USA' } | Should -Not -Throw
             { Update-GitHubUser -Bio 'I love programming' } | Should -Not -Throw
             $tmpUser = Get-GitHubUser
             $tmpUser.name | Should -Be 'Octocat'
-            $tmpUser.blog | Should -Be 'https://marius-storhaug.com'
-            $tmpUser.twitter_username | Should -Be 'MariusStorhaug123'
+            $tmpUser.blog | Should -Be 'https://example.com'
+            $tmpUser.twitter_username | Should -Be $guid
             $tmpUser.company | Should -Be 'PSModule'
             $tmpUser.location | Should -Be 'USA'
             $tmpUser.bio | Should -Be 'I love programming'
-            { Update-GitHubUser -Name $user.name } | Should -Not -Throw
-            { Update-GitHubUser -Blog $user.blog } | Should -Not -Throw
-            { Update-GitHubUser -TwitterUsername $user.twitter_username } | Should -Not -Throw
-            { Update-GitHubUser -Company $user.company } | Should -Not -Throw
-            { Update-GitHubUser -Location $user.location } | Should -Not -Throw
-            { Update-GitHubUser -Bio $user.bio } | Should -Not -Throw
-            # $user = @{
-            #     Name            = $user.name
-            #     Blog            = $user.blog
-            #     TwitterUsername = $user.twitter_username
-            #     Company         = $user.company
-            #     Location        = $user.location
-            #     Bio             = $user.bio
-            # }
-            # Update-GitHubUser @user
+        }
+        Context 'Email' {
+            It 'Get-GitHubUserEmail - Gets all email addresses for the authenticated user (USER_FG_PAT)' {
+                { Get-GitHubUserEmail } | Should -Not -Throw
+            }
+            It 'Add/Remove-GitHubUserEmail - Adds and removes an email to the authenticated user (USER_FG_PAT)' {
+                $newEmail = (New-Guid).Guid + '@example.com'
+                { Add-GitHubUserEmail -Emails $newEmail } | Should -Not -Throw
+                (Get-GitHubUserEmail).email | Should -Contain $newEmail
+                { Remove-GitHubUserEmail -Emails $newEmail } | Should -Not -Throw
+                (Get-GitHubUserEmail).email | Should -Not -Contain $newEmail
+            }
         }
     }
 }
@@ -638,44 +627,33 @@ Describe 'As a user - Classic PAT token (PAT)' {
             { Get-GitHubUser -Username 'Octocat' } | Should -Not -Throw
         }
         It 'Update-GitHubUser - Can set configuration on a user (PAT)' {
-            # $params = @{
-            #     Name            = 'Octocat'
-            #     Blog            = 'https://marius-storhaug.com'
-            #     TwitterUsername = 'MariusStorhaug123'
-            #     Company         = 'PSModule'
-            #     Location        = 'USA'
-            #     Bio             = 'I love programming'
-            # }
-            # { Update-GitHubUser @params } | Should -Not -Throw
+            $guid = (New-Guid).Guid
             $user = Get-GitHubUser
             { Update-GitHubUser -Name 'Octocat' } | Should -Not -Throw
-            { Update-GitHubUser -Blog 'https://marius-storhaug.com' } | Should -Not -Throw
-            { Update-GitHubUser -TwitterUsername 'MariusStorhaug123' } | Should -Not -Throw
+            { Update-GitHubUser -Blog 'https://example.com' } | Should -Not -Throw
+            { Update-GitHubUser -TwitterUsername $guid } | Should -Not -Throw
             { Update-GitHubUser -Company 'PSModule' } | Should -Not -Throw
             { Update-GitHubUser -Location 'USA' } | Should -Not -Throw
             { Update-GitHubUser -Bio 'I love programming' } | Should -Not -Throw
             $tmpUser = Get-GitHubUser
             $tmpUser.name | Should -Be 'Octocat'
-            $tmpUser.blog | Should -Be 'https://marius-storhaug.com'
-            $tmpUser.twitter_username | Should -Be 'MariusStorhaug123'
+            $tmpUser.blog | Should -Be 'https://example.com'
+            $tmpUser.twitter_username | Should -Be $guid
             $tmpUser.company | Should -Be 'PSModule'
             $tmpUser.location | Should -Be 'USA'
             $tmpUser.bio | Should -Be 'I love programming'
-            { Update-GitHubUser -Name $user.name } | Should -Not -Throw
-            { Update-GitHubUser -Blog $user.blog } | Should -Not -Throw
-            { Update-GitHubUser -TwitterUsername $user.twitter_username } | Should -Not -Throw
-            { Update-GitHubUser -Company $user.company } | Should -Not -Throw
-            { Update-GitHubUser -Location $user.location } | Should -Not -Throw
-            { Update-GitHubUser -Bio $user.bio } | Should -Not -Throw
-            # $user = @{
-            #     Name            = $user.name
-            #     Blog            = $user.blog
-            #     TwitterUsername = $user.twitter_username
-            #     Company         = $user.company
-            #     Location        = $user.location
-            #     Bio             = $user.bio
-            # }
-            # Update-GitHubUser @user
+        }
+        Context 'Email' {
+            It 'Get-GitHubUserEmail - Gets all email addresses for the authenticated user (PAT)' {
+                { Get-GitHubUserEmail } | Should -Not -Throw
+            }
+            It 'Add/Remove-GitHubUserEmail - Adds and removes an email to the authenticated user (PAT)' {
+                $newEmail = (New-Guid).Guid + '@example.com'
+                { Add-GitHubUserEmail -Emails $newEmail } | Should -Not -Throw
+                (Get-GitHubUserEmail).email | Should -Contain $newEmail
+                { Remove-GitHubUserEmail -Emails $newEmail } | Should -Not -Throw
+                (Get-GitHubUserEmail).email | Should -Not -Contain $newEmail
+            }
         }
     }
 }
