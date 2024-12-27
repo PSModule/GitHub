@@ -696,9 +696,9 @@ Describe 'As a user - Classic PAT token (PAT)' {
             It 'Add/Remove-GitHubUserEmail - Adds and removes an email to the authenticated user (PAT)' {
                 $newEmail = (New-Guid).Guid + '@example.com'
                 { Add-GitHubUserEmail -Emails $newEmail } | Should -Not -Throw
-                { Get-GitHubUserEmail } | Should -Contain $newEmail
+                (Get-GitHubUserEmail).email | Should -Contain $newEmail
                 { Remove-GitHubUserEmail -Emails $newEmail } | Should -Not -Throw
-                { Get-GitHubUserEmail } | Should -Not -Contain $newEmail
+                (Get-GitHubUserEmail).email | Should -Not -Contain $newEmail
             }
         }
     }
