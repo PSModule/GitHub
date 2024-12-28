@@ -533,27 +533,27 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
             $members = Get-GitHubOrganizationMember -Organization 'psmodule-test-org2'
             $members.login | Should -Contain 'psmodule-user'
         }
-        It 'Set-GitHubOrganization - Sets the organization configuration (ORG_FG_PAT)' {
-            { Set-GitHubOrganization -Organization 'psmodule-test-org2' -Company 'ABC' } | Should -Not -Throw
+        It 'Update-GitHubOrganization - Sets the organization configuration (ORG_FG_PAT)' {
+            { Update-GitHubOrganization -Organization 'psmodule-test-org2' -Company 'ABC' } | Should -Not -Throw
             {
                 $guid = (New-Guid).Guid
                 $email = $guid + '@example.com'
-                Set-GitHubOrganization -Organization 'psmodule-test-org2' -BillingEmail $email
+                Update-GitHubOrganization -Organization 'psmodule-test-org2' -BillingEmail $email
             } | Should -Not -Throw
             {
                 $guid = (New-Guid).Guid
                 $email = $guid + '@example.com'
-                Set-GitHubOrganization -Organization 'psmodule-test-org2' -Email $email
+                Update-GitHubOrganization -Organization 'psmodule-test-org2' -Email $email
             } | Should -Not -Throw
             {
                 $guid = (New-Guid).Guid
-                Set-GitHubOrganization -Organization 'psmodule-test-org2' -TwitterUsername $guid
+                Update-GitHubOrganization -Organization 'psmodule-test-org2' -TwitterUsername $guid
             } | Should -Not -Throw
-            { Set-GitHubOrganization -Organization 'psmodule-test-org2' -Location 'USA' } | Should -Not -Throw
-            { Set-GitHubOrganization -Organization 'psmodule-test-org2' -Description 'Test Organization' } | Should -Not -Throw
-            { Set-GitHubOrganization -Organization 'psmodule-test-org2' -DefaultRepositoryPermission read } | Should -Not -Throw
-            { Set-GitHubOrganization -Organization 'psmodule-test-org2' -MembersCanCreateRepositories $true } | Should -Not -Throw
-            { Set-GitHubOrganization -Organization 'psmodule-test-org2' -Blog 'https://example.com' } | Should -Not -Throw
+            { Update-GitHubOrganization -Organization 'psmodule-test-org2' -Location 'USA' } | Should -Not -Throw
+            { Update-GitHubOrganization -Organization 'psmodule-test-org2' -Description 'Test Organization' } | Should -Not -Throw
+            { Update-GitHubOrganization -Organization 'psmodule-test-org2' -DefaultRepositoryPermission read } | Should -Not -Throw
+            { Update-GitHubOrganization -Organization 'psmodule-test-org2' -MembersCanCreateRepositories $true } | Should -Not -Throw
+            { Update-GitHubOrganization -Organization 'psmodule-test-org2' -Blog 'https://example.com' } | Should -Not -Throw
         }
     }
 }
@@ -875,27 +875,27 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
             $members = Get-GitHubOrganizationMember -Organization 'psmodule-test-org3'
             $members.login | Should -Contain 'MariusStorhaug'
         }
-        It 'Set-GitHubOrganization - Sets the organization configuration (APP_ENT)' {
-            { Set-GitHubOrganization -Organization 'psmodule-test-org3' -Company 'ABC' } | Should -Not -Throw
+        It 'Update-GitHubOrganization - Sets the organization configuration (APP_ENT)' {
+            { Update-GitHubOrganization -Organization 'psmodule-test-org3' -Company 'ABC' } | Should -Not -Throw
             {
                 $guid = (New-Guid).Guid
                 $email = $guid + '@example.com'
-                Set-GitHubOrganization -Organization 'psmodule-test-org3' -BillingEmail $email
+                Update-GitHubOrganization -Organization 'psmodule-test-org3' -BillingEmail $email
             } | Should -Not -Throw
             {
                 $guid = (New-Guid).Guid
                 $email = $guid + '@example.com'
-                Set-GitHubOrganization -Organization 'psmodule-test-org3' -Email $email
+                Update-GitHubOrganization -Organization 'psmodule-test-org3' -Email $email
             } | Should -Not -Throw
             {
                 $guid = (New-Guid).Guid
-                Set-GitHubOrganization -Organization 'psmodule-test-org3' -TwitterUsername $guid
+                Update-GitHubOrganization -Organization 'psmodule-test-org3' -TwitterUsername $guid
             } | Should -Not -Throw
-            { Set-GitHubOrganization -Organization 'psmodule-test-org3' -Location 'USA' } | Should -Not -Throw
-            { Set-GitHubOrganization -Organization 'psmodule-test-org3' -Description 'Test Organization' } | Should -Not -Throw
-            { Set-GitHubOrganization -Organization 'psmodule-test-org3' -DefaultRepositoryPermission read } | Should -Not -Throw
-            { Set-GitHubOrganization -Organization 'psmodule-test-org3' -MembersCanCreateRepositories $true } | Should -Not -Throw
-            { Set-GitHubOrganization -Organization 'psmodule-test-org3' -Blog 'https://example.com' } | Should -Not -Throw
+            { Update-GitHubOrganization -Organization 'psmodule-test-org3' -Location 'USA' } | Should -Not -Throw
+            { Update-GitHubOrganization -Organization 'psmodule-test-org3' -Description 'Test Organization' } | Should -Not -Throw
+            { Update-GitHubOrganization -Organization 'psmodule-test-org3' -DefaultRepositoryPermission read } | Should -Not -Throw
+            { Update-GitHubOrganization -Organization 'psmodule-test-org3' -MembersCanCreateRepositories $true } | Should -Not -Throw
+            { Update-GitHubOrganization -Organization 'psmodule-test-org3' -Blog 'https://example.com' } | Should -Not -Throw
         }
     }
 }
@@ -997,27 +997,27 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
             $members = Get-GitHubOrganizationMember -Organization 'psmodule-test-org'
             $members.login | Should -Contain 'MariusStorhaug'
         }
-        It 'Set-GitHubOrganization - Sets the organization configuration (APP_ORG)' {
-            { Set-GitHubOrganization -Organization 'psmodule-test-org' -Company 'ABC' } | Should -Not -Throw
+        It 'Update-GitHubOrganization - Sets the organization configuration (APP_ORG)' {
+            { Update-GitHubOrganization -Organization 'psmodule-test-org' -Company 'ABC' } | Should -Not -Throw
             {
                 $guid = (New-Guid).Guid
                 $email = $guid + '@example.com'
-                Set-GitHubOrganization -Organization 'psmodule-test-org' -BillingEmail $email
+                Update-GitHubOrganization -Organization 'psmodule-test-org' -BillingEmail $email
             } | Should -Not -Throw
             {
                 $guid = (New-Guid).Guid
                 $email = $guid + '@example.com'
-                Set-GitHubOrganization -Organization 'psmodule-test-org' -Email $email
+                Update-GitHubOrganization -Organization 'psmodule-test-org' -Email $email
             } | Should -Not -Throw
             {
                 $guid = (New-Guid).Guid
-                Set-GitHubOrganization -Organization 'psmodule-test-org' -TwitterUsername $guid
+                Update-GitHubOrganization -Organization 'psmodule-test-org' -TwitterUsername $guid
             } | Should -Not -Throw
-            { Set-GitHubOrganization -Organization 'psmodule-test-org' -Location 'USA' } | Should -Not -Throw
-            { Set-GitHubOrganization -Organization 'psmodule-test-org' -Description 'Test Organization' } | Should -Not -Throw
-            { Set-GitHubOrganization -Organization 'psmodule-test-org' -DefaultRepositoryPermission read } | Should -Not -Throw
-            { Set-GitHubOrganization -Organization 'psmodule-test-org' -MembersCanCreateRepositories $true } | Should -Not -Throw
-            { Set-GitHubOrganization -Organization 'psmodule-test-org' -Blog 'https://example.com' } | Should -Not -Throw
+            { Update-GitHubOrganization -Organization 'psmodule-test-org' -Location 'USA' } | Should -Not -Throw
+            { Update-GitHubOrganization -Organization 'psmodule-test-org' -Description 'Test Organization' } | Should -Not -Throw
+            { Update-GitHubOrganization -Organization 'psmodule-test-org' -DefaultRepositoryPermission read } | Should -Not -Throw
+            { Update-GitHubOrganization -Organization 'psmodule-test-org' -MembersCanCreateRepositories $true } | Should -Not -Throw
+            { Update-GitHubOrganization -Organization 'psmodule-test-org' -Blog 'https://example.com' } | Should -Not -Throw
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿filter Set-GitHubOrganization {
+﻿filter Update-GitHubOrganization {
     <#
         .SYNOPSIS
         Update an organization
@@ -14,7 +14,7 @@
         profile and member privileges.
 
         .EXAMPLE
-        Set-GitHubOrganization -Organization 'GitHub' -Blog 'https://github.blog'
+        Update-GitHubOrganization -Organization 'GitHub' -Blog 'https://github.blog'
 
         Sets the blog URL for the organization 'GitHub' to '<https://github.blog>'.
 
@@ -25,7 +25,7 @@
             MembersCanCreatePrivateRepositories = $true
             MembersCanCreateInternalRepositories = $true
         }
-        Set-GitHubOrganization @param
+        Update-GitHubOrganization @param
 
         Sets the repository creation permissions for the organization 'GitHub' to allow all members to create public, private,
         and internal repositories.
