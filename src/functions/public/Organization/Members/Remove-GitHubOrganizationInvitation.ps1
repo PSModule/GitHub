@@ -27,8 +27,8 @@
 
         # The unique identifier of the invitation.
         [Parameter(Mandatory)]
-        [Alias('invitation_id')]
-        [string] $InvitationID,
+        [Alias('invitation_id', 'InvitationID')]
+        [string] $ID,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -47,7 +47,7 @@
         try {
             $inputObject = @{
                 Context     = $Context
-                APIEndpoint = "/orgs/$Organization/invitations/$InvitationID"
+                APIEndpoint = "/orgs/$Organization/invitations/$ID"
                 Method      = 'DELETE'
             }
 

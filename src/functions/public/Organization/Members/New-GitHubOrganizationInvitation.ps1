@@ -84,7 +84,7 @@
     process {
         try {
             $body = @{
-                invitee_id = $InviteeID
+                invitee_id = $PSBoundParameters.ContainsKey('InviteeID') ? $InviteeID : $null
                 email      = $Email
                 role       = $Role
                 team_ids   = $TeamIDs
