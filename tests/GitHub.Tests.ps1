@@ -365,14 +365,14 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
             $guid = (New-Guid).Guid
             $user = Get-GitHubUser
             { Update-GitHubUser -Name 'Octocat' } | Should -Not -Throw
-            { Update-GitHubUser -Blog 'https://example.com' } | Should -Not -Throw
+            { Update-GitHubUser -Blog 'https://psmodule.io' } | Should -Not -Throw
             { Update-GitHubUser -TwitterUsername $guid } | Should -Not -Throw
             { Update-GitHubUser -Company 'PSModule' } | Should -Not -Throw
             { Update-GitHubUser -Location 'USA' } | Should -Not -Throw
             { Update-GitHubUser -Bio 'I love programming' } | Should -Not -Throw
             $tmpUser = Get-GitHubUser
             $tmpUser.name | Should -Be 'Octocat'
-            $tmpUser.blog | Should -Be 'https://example.com'
+            $tmpUser.blog | Should -Be 'https://psmodule.io'
             $tmpUser.twitter_username | Should -Be $guid
             $tmpUser.company | Should -Be 'PSModule'
             $tmpUser.location | Should -Be 'USA'
@@ -383,11 +383,11 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
                 { Get-GitHubUserEmail } | Should -Not -Throw
             }
             It 'Add/Remove-GitHubUserEmail - Adds and removes an email to the authenticated user (USER_FG_PAT)' {
-                $newEmail = (New-Guid).Guid + '@example.com'
-                { Add-GitHubUserEmail -Emails $newEmail } | Should -Not -Throw
-                (Get-GitHubUserEmail).email | Should -Contain $newEmail
-                { Remove-GitHubUserEmail -Emails $newEmail } | Should -Not -Throw
-                (Get-GitHubUserEmail).email | Should -Not -Contain $newEmail
+                $email = (New-Guid).Guid + '@psmodule.io'
+                { Add-GitHubUserEmail -Emails $email } | Should -Not -Throw
+                (Get-GitHubUserEmail).email | Should -Contain $email
+                { Remove-GitHubUserEmail -Emails $email } | Should -Not -Throw
+                (Get-GitHubUserEmail).email | Should -Not -Contain $email
             }
         }
     }
@@ -536,13 +536,11 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         It 'Update-GitHubOrganization - Sets the organization configuration (ORG_FG_PAT)' {
             { Update-GitHubOrganization -Organization 'psmodule-test-org2' -Company 'ABC' } | Should -Not -Throw
             {
-                $guid = (New-Guid).Guid
-                $email = $guid + '@example.com'
+                $email = (New-Guid).Guid + '@psmodule.io'
                 Update-GitHubOrganization -Organization 'psmodule-test-org2' -BillingEmail $email
             } | Should -Not -Throw
             {
-                $guid = (New-Guid).Guid
-                $email = $guid + '@example.com'
+                $email = (New-Guid).Guid + '@psmodule.io'
                 Update-GitHubOrganization -Organization 'psmodule-test-org2' -Email $email
             } | Should -Not -Throw
             {
@@ -553,7 +551,24 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
             { Update-GitHubOrganization -Organization 'psmodule-test-org2' -Description 'Test Organization' } | Should -Not -Throw
             { Update-GitHubOrganization -Organization 'psmodule-test-org2' -DefaultRepositoryPermission read } | Should -Not -Throw
             { Update-GitHubOrganization -Organization 'psmodule-test-org2' -MembersCanCreateRepositories $true } | Should -Not -Throw
-            { Update-GitHubOrganization -Organization 'psmodule-test-org2' -Blog 'https://example.com' } | Should -Not -Throw
+            { Update-GitHubOrganization -Organization 'psmodule-test-org2' -Blog 'https://psmodule.io' } | Should -Not -Throw
+        }
+        It 'New-GitHubOrganizationInvitation - Invites a user to an organization (ORG_FG_PAT)' {
+            {
+                $email = (New-Guid).Guid + '@psmodule.io'
+                New-GitHubOrganizationInvitation -Organization 'psmodule-test-org2' -Email $email -Role 'admin'
+            } | Should -Not -Throw
+        }
+        It 'Get-GitHubOrganizationPendingInvitation - Gets the pending invitations for a specific organization (ORG_FG_PAT)' {
+            { Get-GitHubOrganizationPendingInvitation -Organization 'psmodule-test-org2' } | Should -Not -Throw
+            { Get-GitHubOrganizationPendingInvitation -Organization 'psmodule-test-org2' -Role 'admin' } | Should -Not -Throw
+            { Get-GitHubOrganizationPendingInvitation -Organization 'psmodule-test-org2' -InvitationSource 'member' } | Should -Not -Throw
+        }
+        It 'Remove-GitHubOrganizationInvitation - Removes a user invitation from an organization (ORG_FG_PAT)' {
+            {
+                $invitation = Get-GitHubOrganizationPendingInvitation -Organization 'psmodule-test-org2' | Select-Object -First 1
+                Remove-GitHubOrganizationInvitation -Organization 'psmodule-test-org2' -ID $invitation.id
+            } | Should -Not -Throw
         }
     }
 }
@@ -667,14 +682,14 @@ Describe 'As a user - Classic PAT token (PAT)' {
             $guid = (New-Guid).Guid
             $user = Get-GitHubUser
             { Update-GitHubUser -Name 'Octocat' } | Should -Not -Throw
-            { Update-GitHubUser -Blog 'https://example.com' } | Should -Not -Throw
+            { Update-GitHubUser -Blog 'https://psmodule.io' } | Should -Not -Throw
             { Update-GitHubUser -TwitterUsername $guid } | Should -Not -Throw
             { Update-GitHubUser -Company 'PSModule' } | Should -Not -Throw
             { Update-GitHubUser -Location 'USA' } | Should -Not -Throw
             { Update-GitHubUser -Bio 'I love programming' } | Should -Not -Throw
             $tmpUser = Get-GitHubUser
             $tmpUser.name | Should -Be 'Octocat'
-            $tmpUser.blog | Should -Be 'https://example.com'
+            $tmpUser.blog | Should -Be 'https://psmodule.io'
             $tmpUser.twitter_username | Should -Be $guid
             $tmpUser.company | Should -Be 'PSModule'
             $tmpUser.location | Should -Be 'USA'
@@ -685,11 +700,11 @@ Describe 'As a user - Classic PAT token (PAT)' {
                 { Get-GitHubUserEmail } | Should -Not -Throw
             }
             It 'Add/Remove-GitHubUserEmail - Adds and removes an email to the authenticated user (PAT)' {
-                $newEmail = (New-Guid).Guid + '@example.com'
-                { Add-GitHubUserEmail -Emails $newEmail } | Should -Not -Throw
-                (Get-GitHubUserEmail).email | Should -Contain $newEmail
-                { Remove-GitHubUserEmail -Emails $newEmail } | Should -Not -Throw
-                (Get-GitHubUserEmail).email | Should -Not -Contain $newEmail
+                $email = (New-Guid).Guid + '@psmodule.io'
+                { Add-GitHubUserEmail -Emails $email } | Should -Not -Throw
+                (Get-GitHubUserEmail).email | Should -Contain $email
+                { Remove-GitHubUserEmail -Emails $email } | Should -Not -Throw
+                (Get-GitHubUserEmail).email | Should -Not -Contain $email
             }
         }
     }
@@ -878,13 +893,11 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         It 'Update-GitHubOrganization - Sets the organization configuration (APP_ENT)' {
             { Update-GitHubOrganization -Organization 'psmodule-test-org3' -Company 'ABC' } | Should -Not -Throw
             {
-                $guid = (New-Guid).Guid
-                $email = $guid + '@example.com'
+                $email = (New-Guid).Guid + '@psmodule.io'
                 Update-GitHubOrganization -Organization 'psmodule-test-org3' -BillingEmail $email
             } | Should -Not -Throw
             {
-                $guid = (New-Guid).Guid
-                $email = $guid + '@example.com'
+                $email = (New-Guid).Guid + '@psmodule.io'
                 Update-GitHubOrganization -Organization 'psmodule-test-org3' -Email $email
             } | Should -Not -Throw
             {
@@ -895,7 +908,24 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
             { Update-GitHubOrganization -Organization 'psmodule-test-org3' -Description 'Test Organization' } | Should -Not -Throw
             { Update-GitHubOrganization -Organization 'psmodule-test-org3' -DefaultRepositoryPermission read } | Should -Not -Throw
             { Update-GitHubOrganization -Organization 'psmodule-test-org3' -MembersCanCreateRepositories $true } | Should -Not -Throw
-            { Update-GitHubOrganization -Organization 'psmodule-test-org3' -Blog 'https://example.com' } | Should -Not -Throw
+            { Update-GitHubOrganization -Organization 'psmodule-test-org3' -Blog 'https://psmodule.io' } | Should -Not -Throw
+        }
+        It 'New-GitHubOrganizationInvitation - Invites a user to an organization (APP_ENT)' {
+            {
+                $email = (New-Guid).Guid + '@psmodule.io'
+                New-GitHubOrganizationInvitation -Organization 'psmodule-test-org3' -Email $email -Role 'admin'
+            } | Should -Not -Throw
+        }
+        It 'Get-GitHubOrganizationPendingInvitation - Gets the pending invitations for a specific organization (APP_ENT)' {
+            { Get-GitHubOrganizationPendingInvitation -Organization 'psmodule-test-org3' } | Should -Not -Throw
+            { Get-GitHubOrganizationPendingInvitation -Organization 'psmodule-test-org3' -Role 'admin' } | Should -Not -Throw
+            { Get-GitHubOrganizationPendingInvitation -Organization 'psmodule-test-org3' -InvitationSource 'member' } | Should -Not -Throw
+        }
+        It 'Remove-GitHubOrganizationInvitation - Removes a user invitation from an organization (APP_ENT)' {
+            {
+                $invitation = Get-GitHubOrganizationPendingInvitation -Organization 'psmodule-test-org3' | Select-Object -First 1
+                Remove-GitHubOrganizationInvitation -Organization 'psmodule-test-org3' -ID $invitation.id
+            } | Should -Not -Throw
         }
     }
 }
@@ -1000,13 +1030,11 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         It 'Update-GitHubOrganization - Sets the organization configuration (APP_ORG)' {
             { Update-GitHubOrganization -Organization 'psmodule-test-org' -Company 'ABC' } | Should -Not -Throw
             {
-                $guid = (New-Guid).Guid
-                $email = $guid + '@example.com'
+                $email = (New-Guid).Guid + '@psmodule.io'
                 Update-GitHubOrganization -Organization 'psmodule-test-org' -BillingEmail $email
             } | Should -Not -Throw
             {
-                $guid = (New-Guid).Guid
-                $email = $guid + '@example.com'
+                $email = (New-Guid).Guid + '@psmodule.io'
                 Update-GitHubOrganization -Organization 'psmodule-test-org' -Email $email
             } | Should -Not -Throw
             {
@@ -1017,7 +1045,24 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
             { Update-GitHubOrganization -Organization 'psmodule-test-org' -Description 'Test Organization' } | Should -Not -Throw
             { Update-GitHubOrganization -Organization 'psmodule-test-org' -DefaultRepositoryPermission read } | Should -Not -Throw
             { Update-GitHubOrganization -Organization 'psmodule-test-org' -MembersCanCreateRepositories $true } | Should -Not -Throw
-            { Update-GitHubOrganization -Organization 'psmodule-test-org' -Blog 'https://example.com' } | Should -Not -Throw
+            { Update-GitHubOrganization -Organization 'psmodule-test-org' -Blog 'https://psmodule.io' } | Should -Not -Throw
+        }
+        It 'New-GitHubOrganizationInvitation - Invites a user to an organization (APP_ORG)' {
+            {
+                $email = (New-Guid).Guid + '@psmodule.io'
+                New-GitHubOrganizationInvitation -Organization 'psmodule-test-org' -Email $email -Role 'admin'
+            } | Should -Not -Throw
+        }
+        It 'Get-GitHubOrganizationPendingInvitation - Gets the pending invitations for a specific organization (APP_ORG)' {
+            { Get-GitHubOrganizationPendingInvitation -Organization 'psmodule-test-org' } | Should -Not -Throw
+            { Get-GitHubOrganizationPendingInvitation -Organization 'psmodule-test-org' -Role 'admin' } | Should -Not -Throw
+            { Get-GitHubOrganizationPendingInvitation -Organization 'psmodule-test-org' -InvitationSource 'member' } | Should -Not -Throw
+        }
+        It 'Remove-GitHubOrganizationInvitation - Removes a user invitation from an organization (APP_ORG)' {
+            {
+                $invitation = Get-GitHubOrganizationPendingInvitation -Organization 'psmodule-test-org' | Select-Object -First 1
+                Remove-GitHubOrganizationInvitation -Organization 'psmodule-test-org' -ID $invitation.id
+            } | Should -Not -Throw
         }
     }
 }

@@ -12,10 +12,19 @@
         "[Rate limits for the API](https://docs.github.com/rest/using-the-rest-api/rate-limits-for-the-rest-api#about-secondary-rate-limits)"
         and "[Best practices for using the REST API](https://docs.github.com/rest/guides/best-practices-for-using-the-rest-api)."
 
+        .EXAMPLE
+        New-GitHubOrganizationInvitation -Organization 'PSModule' -InviteeID 12345679 -Role 'admin'
+
+        Invites the user with the ID `12345679` to the organization `PSModule` with the role `admin`.
+
+        .EXAMPLE
+        New-GitHubOrganizationInvitation -Organization 'PSModule' -Email 'user@psmodule.io'
+
+        Invites the user with the email `user@psmodule.io` to the organization `PSModule`.
+
         .NOTES
         [Create an organization invitation](https://docs.github.com/rest/orgs/members#list-pending-organization-invitations)
     #>
-    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The organization name. The name is not case sensitive.
