@@ -4,12 +4,6 @@
         Update an organization
 
         .DESCRIPTION
-        **Parameter Deprecation Notice:** GitHub will replace and discontinue `members_allowed_repository_creation_type`
-        in favor of more granular permissions. The new input parameters are `members_can_create_public_repositories`,
-        `members_can_create_private_repositories` for all organizations and `members_can_create_internal_repositories`
-        for organizations associated with an enterprise account using GitHub Enterprise Cloud or GitHub Enterprise Server
-        2.20+. For more information, see the [blog post](https://developer.github.com/changes/2019-12-03-internal-visibility-changes).
-
         Enables an authenticated organization owner with the `admin:org` scope or the `repo` scope to update the organization's
         profile and member privileges.
 
@@ -101,7 +95,7 @@
         # Note: A parameter can override this parameter. See members_allowed_repository_creation_type in this table for details.
         [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('members_can_create_repositories')]
-        [bool] $MembersCanCreateRepositories = $true,
+        [bool] $MembersCanCreateRepositories,
 
         # Whether organization members can create internal repositories, which are visible to all enterprise members.
         # You can only allow members to create internal repositories if your organization is associated with an enterprise
@@ -123,83 +117,34 @@
         [Alias('members_can_create_public_repositories')]
         [bool] $MembersCanCreatePublicRepositories,
 
-        # Specifies which types of repositories non-admin organization members can create. private is only available to
-        # repositories that are part of an organization on GitHub Enterprise Cloud. Note: This parameter is deprecated and
-        # will be removed in the future. Its return value ignores internal repositories. Using this parameter overrides values
-        # set in members_can_create_repositories. See the parameter deprecation notice in the operation description for details.
-        [Parameter(ValueFromPipelineByPropertyName)]
-        [Alias('members_allowed_repository_creation_type')]
-        [ValidateSet('all', 'private', 'none')]
-        [string] $MembersAllowedRepositoryCreationType,
-
         # Whether organization members can create GitHub Pages sites. Existing published sites will not be impacted.
         [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('members_can_create_pages')]
-        [bool] $MembersCanCreatePages = $true,
+        [bool] $MembersCanCreatePages,
 
         # Whether organization members can create public GitHub Pages sites. Existing published sites will not be impacted.
         [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('members_can_create_public_pages')]
-        [bool] $MembersCanCreatePublicPages = $true,
+        [bool] $MembersCanCreatePublicPages,
 
         # Whether organization members can create private GitHub Pages sites. Existing published sites will not be impacted.
         [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('members_can_create_private_pages')]
-        [bool] $MembersCanCreatePrivatePages = $true,
+        [bool] $MembersCanCreatePrivatePages,
 
         # Whether organization members can fork private organization repositories.
         [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('members_can_fork_private_repositories')]
-        [bool] $MembersCanForkPrivateRepositories = $false,
+        [bool] $MembersCanForkPrivateRepositories,
 
         # Whether contributors to organization repositories are required to sign off on commits they make through GitHub's web interface.
         [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('web_commit_signoff_required')]
-        [bool] $WebCommitSignoffRequired = $false,
+        [bool] $WebCommitSignoffRequired,
 
         # Path to the organization's blog.
         [Parameter(ValueFromPipelineByPropertyName)]
         [string] $Blog,
-
-        # Whether GitHub Advanced Security is automatically enabled for new repositories.
-        # To use this parameter, you must have admin permissions for the repository or be an owner or security manager for
-        # the organization that owns the repository. For more information, see "Managing security managers in your organization."
-        # You can check which security and analysis features are currently enabled by using a GET /orgs/{org} request.
-        [Parameter(ValueFromPipelineByPropertyName)]
-        [Alias('advanced_security_enabled_for_new_repositories')]
-        [bool] $AdvancedSecurityEnabledForNewRepositories = $false,
-
-        # Whether Dependabot alerts is automatically enabled for new repositories.
-        # To use this parameter, you must have admin permissions for the repository or be an owner or security manager for
-        # the organization that owns the repository. For more information, see "Managing security managers in your organization."
-        # You can check which security and analysis features are currently enabled by using a GET /orgs/{org} request.
-        [Parameter(ValueFromPipelineByPropertyName)]
-        [Alias('dependabot_alerts_enabled_for_new_repositories')]
-        [bool] $DependabotAlertsEnabledForNewRepositories = $false,
-
-        # Whether Dependabot security updates is automatically enabled for new repositories.
-        # To use this parameter, you must have admin permissions for the repository or be an owner or security manager for
-        # the organization that owns the repository. For more information, see "Managing security managers in your organization."
-        # You can check which security and analysis features are currently enabled by using a GET /orgs/{org} request.
-        [Parameter(ValueFromPipelineByPropertyName)]
-        [Alias('dependabot_security_updates_enabled_for_new_repositories')]
-        [bool] $DependabotSecurityUpdatesEnabledForNewRepositories = $false,
-
-        # Whether dependency graph is automatically enabled for new repositories.
-        # To use this parameter, you must have admin permissions for the repository or be an owner or security manager for
-        # the organization that owns the repository. For more information, see "Managing security managers in your organization."
-        # You can check which security and analysis features are currently enabled by using a GET /orgs/{org} request.
-        [Parameter(ValueFromPipelineByPropertyName)]
-        [Alias('dependency_graph_enabled_for_new_repositories')]
-        [bool] $DependencyGraphEnabledForNewRepositories = $false,
-
-        # Whether secret scanning is automatically enabled for new repositories.
-        # To use this parameter, you must have admin permissions for the repository or be an owner or security manager for
-        # the organization that owns the repository. For more information, see "Managing security managers in your organization."
-        # You can check which security and analysis features are currently enabled by using a GET /orgs/{org} request.
-        [Parameter(ValueFromPipelineByPropertyName)]
-        [Alias('secret_scanning_enabled_for_new_repositories')]
-        [bool] $SecretScanningEnabledForNewRepositories = $false,
 
         # Whether secret scanning push protection is automatically enabled for new repositories.
         # To use this parameter, you must have admin permissions for the repository or be an owner or security manager for
@@ -207,12 +152,12 @@
         # You can check which security and analysis features are currently enabled by using a GET /orgs/{org} request.
         [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('secret_scanning_push_protection_enabled_for_new_repositories')]
-        [bool] $SecretScanningPushProtectionEnabledForNewRepositories = $false,
+        [bool] $SecretScanningPushProtectionEnabledForNewRepositories,
 
         # Whether a custom link is shown to contributors who are blocked from pushing a secret by push protection.
         [Parameter(ValueFromPipelineByPropertyName)]
         [Alias('secret_scanning_push_protection_custom_link_enabled')]
-        [bool] $SecretScanningPushProtectionCustomLinkEnabled = $false,
+        [bool] $SecretScanningPushProtectionCustomLinkEnabled,
 
         # If secret_scanning_push_protection_custom_link_enabled is true, the URL that will be displayed to contributors who
         # are blocked from pushing a secret.
@@ -241,35 +186,29 @@
     process {
         try {
             $body = @{
-                billing_email                                                = $BillingEmail
-                company                                                      = $Company
-                email                                                        = $Email
-                twitter_username                                             = $TwitterUsername
-                location                                                     = $Location
                 name                                                         = $Name
-                description                                                  = $Description
-                has_organization_projects                                    = $HasOrganizationProjects
-                has_repository_projects                                      = $HasRepositoryProjects
-                default_repository_permission                                = $DefaultRepositoryPermission
-                members_can_create_repositories                              = $MembersCanCreateRepositories ? $MembersCanCreateRepositories : $true
-                members_can_create_internal_repositories                     = $MembersCanCreateInternalRepositories
-                members_can_create_private_repositories                      = $MembersCanCreatePrivateRepositories
-                members_can_create_public_repositories                       = $MembersCanCreatePublicRepositories
-                members_allowed_repository_creation_type                     = $MembersAllowedRepositoryCreationType
-                members_can_create_pages                                     = $MembersCanCreatePages ? $MembersCanCreatePages : $true
-                members_can_create_public_pages                              = $MembersCanCreatePublicPages ? $MembersCanCreatePublicPages : $true
-                members_can_create_private_pages                             = $MembersCanCreatePrivatePages ? $MembersCanCreatePrivatePages : $true
-                members_can_fork_private_repositories                        = $MembersCanForkPrivateRepositories ? $MembersCanForkPrivateRepositories : $false
-                web_commit_signoff_required                                  = $WebCommitSignoffRequired ? $WebCommitSignoffRequired : $false
+                billing_email                                                = $BillingEmail
                 blog                                                         = $Blog
-                advanced_security_enabled_for_new_repositories               = $AdvancedSecurityEnabledForNewRepositories ? $AdvancedSecurityEnabledForNewRepositories : $false
-                dependabot_alerts_enabled_for_new_repositories               = $DependabotAlertsEnabledForNewRepositories ? $DependabotAlertsEnabledForNewRepositories : $false
-                dependabot_security_updates_enabled_for_new_repositories     = $DependabotSecurityUpdatesEnabledForNewRepositories ? $DependabotSecurityUpdatesEnabledForNewRepositories : $false
-                dependency_graph_enabled_for_new_repositories                = $DependencyGraphEnabledForNewRepositories ? $DependencyGraphEnabledForNewRepositories : $false
-                secret_scanning_enabled_for_new_repositories                 = $SecretScanningEnabledForNewRepositories ? $SecretScanningEnabledForNewRepositories : $false
-                secret_scanning_push_protection_enabled_for_new_repositories = $SecretScanningPushProtectionEnabledForNewRepositories ? $SecretScanningPushProtectionEnabledForNewRepositories : $false
-                secret_scanning_push_protection_custom_link_enabled          = $SecretScanningPushProtectionCustomLinkEnabled ? $SecretScanningPushProtectionCustomLinkEnabled : $false
-                secret_scanning_push_protection_custom_link                  = $SecretScanningPushProtectionCustomLink
+                company                                                      = $Company
+                description                                                  = $Description
+                email                                                        = $Email
+                location                                                     = $Location
+                twitter_username                                             = $TwitterUsername
+                has_organization_projects                                    = $PSBoundParameters.ContainsKey('HasOrganizationProjects') ? $HasOrganizationProjects : $null
+                has_repository_projects                                      = $PSBoundParameters.ContainsKey('HasRepositoryProjects') ? $HasRepositoryProjects : $null
+                default_repository_permission                                = $PSBoundParameters.ContainsKey('DefaultRepositoryPermission') ? $DefaultRepositoryPermission : $null
+                members_can_create_repositories                              = $PSBoundParameters.ContainsKey('MembersCanCreateRepositories') ? $MembersCanCreateRepositories : $null
+                members_can_create_internal_repositories                     = $PSBoundParameters.ContainsKey('MembersCanCreateInternalRepositories') ? $MembersCanCreateInternalRepositories : $null
+                members_can_create_private_repositories                      = $PSBoundParameters.ContainsKey('MembersCanCreatePrivateRepositories') ? $MembersCanCreatePrivateRepositories : $null
+                members_can_create_public_repositories                       = $PSBoundParameters.ContainsKey('MembersCanCreatePublicRepositories') ? $MembersCanCreatePublicRepositories : $null
+                members_can_create_pages                                     = $PSBoundParameters.ContainsKey('MembersCanCreatePages') ? $MembersCanCreatePages : $null
+                members_can_create_public_pages                              = $PSBoundParameters.ContainsKey('MembersCanCreatePublicPages') ? $MembersCanCreatePublicPages : $null
+                members_can_create_private_pages                             = $PSBoundParameters.ContainsKey('MembersCanCreatePrivatePages') ? $MembersCanCreatePrivatePages : $null
+                members_can_fork_private_repositories                        = $PSBoundParameters.ContainsKey('MembersCanForkPrivateRepositories') ? $MembersCanForkPrivateRepositories : $null
+                web_commit_signoff_required                                  = $PSBoundParameters.ContainsKey('WebCommitSignoffRequired') ? $WebCommitSignoffRequired : $null
+                secret_scanning_push_protection_enabled_for_new_repositories = $PSBoundParameters.ContainsKey('SecretScanningPushProtectionEnabledForNewRepositories') ? $SecretScanningPushProtectionEnabledForNewRepositories : $null
+                secret_scanning_push_protection_custom_link_enabled          = $PSBoundParameters.ContainsKey('SecretScanningPushProtectionCustomLinkEnabled') ? $SecretScanningPushProtectionCustomLinkEnabled : $null
+                secret_scanning_push_protection_custom_link                  = $PSBoundParameters.ContainsKey('SecretScanningPushProtectionCustomLink') ? $SecretScanningPushProtectionCustomLink : $null
             }
             $body | Remove-HashtableEntry -NullOrEmptyValues
 
