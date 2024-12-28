@@ -271,6 +271,7 @@
                 secret_scanning_push_protection_custom_link_enabled          = $SecretScanningPushProtectionCustomLinkEnabled ? $SecretScanningPushProtectionCustomLinkEnabled : $false
                 secret_scanning_push_protection_custom_link                  = $SecretScanningPushProtectionCustomLink
             }
+            $body | Remove-HashtableEntry -NullOrEmptyValues
 
             $inputObject = @{
                 Context     = $Context
