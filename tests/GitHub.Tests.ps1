@@ -241,7 +241,10 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
         Connect-GitHubAccount -Token $env:TEST_USER_USER_FG_PAT
     }
     AfterAll {
-        Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+        Get-GitHubContext -ListAvailable | ForEach-Object {
+            Write-Host "Disconnecting $($_.Name)"
+            Disconnect-GitHubAccount -Context $_
+        }
     }
     Context 'Auth' {
         It 'Get-GitHubViewer - Gets the logged in context (USER_FG_PAT)' {
@@ -398,7 +401,10 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         Connect-GitHubAccount -Token $env:TEST_USER_ORG_FG_PAT
     }
     AfterAll {
-        Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+        Get-GitHubContext -ListAvailable | ForEach-Object {
+            Write-Host "Disconnecting $($_.Name)"
+            Disconnect-GitHubAccount -Context $_
+        }
     }
     Context 'Auth' {
         It 'Get-GitHubViewer - Gets the logged in context (ORG_FG_PAT)' {
@@ -541,7 +547,10 @@ Describe 'As a user - Classic PAT token (PAT)' {
         Connect-GitHubAccount -Token $env:TEST_USER_PAT
     }
     AfterAll {
-        Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+        Get-GitHubContext -ListAvailable | ForEach-Object {
+            Write-Host "Disconnecting $($_.Name)"
+            Disconnect-GitHubAccount -Context $_
+        }
     }
     Context 'Auth' {
         It 'Get-GitHubViewer - Gets the logged in context (PAT)' {
@@ -693,7 +702,10 @@ Describe 'As GitHub Actions (GHA)' {
         Connect-GitHubAccount
     }
     AfterAll {
-        Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+        Get-GitHubContext -ListAvailable | ForEach-Object {
+            Write-Host "Disconnecting $($_.Name)"
+            Disconnect-GitHubAccount -Context $_
+        }
     }
     Context 'Auth' {
         It 'Get-GitHubViewer - Gets the logged in context (GHA)' {
@@ -809,7 +821,10 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         Connect-GitHubAccount -ClientID $env:TEST_APP_ENT_CLIENT_ID -PrivateKey $env:TEST_APP_ENT_PRIVATE_KEY
     }
     AfterAll {
-        Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+        Get-GitHubContext -ListAvailable | ForEach-Object {
+            Write-Host "Disconnecting $($_.Name)"
+            Disconnect-GitHubAccount -Context $_
+        }
     }
     Context 'Auth' {
         # It 'Connect-GitHubApp - Connects one enterprise installation for the authenticated GitHub App (APP_ENT)' {
@@ -839,7 +854,10 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
             Connect-GitHubApp -Organization 'psmodule-test-org3' -Default
         }
         AfterAll {
-            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+            Get-GitHubContext -ListAvailable | ForEach-Object {
+                Write-Host "Disconnecting $($_.Name)"
+                Disconnect-GitHubAccount -Context $_
+            }
         }
         It 'Get-GitHubOrganization - Gets a specific organization (APP_ENT)' {
             { Get-GitHubOrganization -Organization 'psmodule-test-org3' } | Should -Not -Throw
@@ -856,7 +874,10 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         Connect-GitHubAccount -ClientID $env:TEST_APP_ORG_CLIENT_ID -PrivateKey $env:TEST_APP_ORG_PRIVATE_KEY
     }
     AfterAll {
-        Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+        Get-GitHubContext -ListAvailable | ForEach-Object {
+            Write-Host "Disconnecting $($_.Name)"
+            Disconnect-GitHubAccount -Context $_
+        }
     }
     Context 'Auth' {
         It 'Connect-GitHubApp - Connects one user installation for the authenticated GitHub App (APP_ORG)' {
@@ -934,7 +955,10 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
             Connect-GitHubApp -Organization 'psmodule-test-org' -Default
         }
         AfterAll {
-            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+            Get-GitHubContext -ListAvailable | ForEach-Object {
+                Write-Host "Disconnecting $($_.Name)"
+                Disconnect-GitHubAccount -Context $_
+            }
         }
         It 'Get-GitHubOrganization - Gets a specific organization (APP_ORG)' {
             { Get-GitHubOrganization -Organization 'psmodule-test-org' } | Should -Not -Throw
