@@ -43,31 +43,36 @@
         # The context to run the command with.
         # Can be either a string or a GitHubContext object.
         [Parameter(ValueFromPipeline)]
-        [object] $Context = (Get-GitHubContext)
+        [object[]] $Context
     )
 
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $Context = Resolve-GitHubContext -Context $Context
     }
 
     process {
-        try {
-            Remove-GitHubContext -Context $Context
-            $isDefaultContext = $Context.Name -eq $script:GitHub.Config.DefaultContext
-            if ($isDefaultContext) {
-                Remove-GitHubConfig -Name 'DefaultContext'
-                Write-Warning 'There is no longer a default context!'
-                Write-Warning "Please set a new default context using 'Set-GitHubDefaultContext -Name <context>'"
-            }
+        if (-not $Context) {
+            $Context = Get-GitHubContext
+        }
+        foreach ($contextItem in $Context) {
+            $contextItem = Resolve-GitHubContext -Context $contextItem
+            try {
+                Remove-GitHubContext -Context $contextItem
+                $isDefaultContext = $contextItem.Name -eq $script:GitHub.Config.DefaultContext
+                if ($isDefaultContext) {
+                    Remove-GitHubConfig -Name 'DefaultContext'
+                    Write-Warning 'There is no longer a default context!'
+                    Write-Warning "Please set a new default context using 'Set-GitHubDefaultContext -Name <context>'"
+                }
 
-            if (-not $Silent) {
-                Write-Host '✓ ' -ForegroundColor Green -NoNewline
-                Write-Host "Logged out of GitHub! [$Context]"
+                if (-not $Silent) {
+                    Write-Host '✓ ' -ForegroundColor Green -NoNewline
+                    Write-Host "Logged out of GitHub! [$contextItem]"
+                }
+            } catch {
+                throw $_
             }
-        } catch {
-            throw $_
         }
     }
 
