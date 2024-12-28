@@ -828,7 +828,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         }
     }
     Context 'App' {
-        It 'Can get the authenticated GitHubApp (APP_ENT)' {
+        It 'Get-GitHubApp - Can get the authenticated GitHubApp (APP_ENT)' {
             $app = Get-GitHubApp
             Write-Verbose ($app | Format-Table | Out-String) -Verbose
             $app | Should -Not -BeNullOrEmpty
@@ -843,6 +843,11 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         }
         It 'Get-GitHubOrganization - Gets a specific organization (APP_ENT)' {
             { Get-GitHubOrganization -Organization 'psmodule-test-org3' } | Should -Not -Throw
+        }
+        It 'Get-GitHubOrganizationAppInstallation - Gets the GitHub App installations on the organization (APP_ENT)' {
+            $installations = Get-GitHubOrganizationAppInstallation -Organization 'psmodule-test-org3'
+            Write-Verbose ($installations | Format-Table | Out-String) -Verbose
+            $installations | Should -Not -BeNullOrEmpty
         }
         It 'Get-GitHubOrganizationMember - Gets the members of a specific organization (APP_ENT)' {
             $members = Get-GitHubOrganizationMember -Organization 'psmodule-test-org3'
@@ -881,17 +886,17 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
                 Write-Verbose ($jwt | Format-Table | Out-String) -Verbose
                 $jwt | Should -Not -BeNullOrEmpty
             }
-            It 'Can get app details (APP_ENT)' {
+            It 'Get-GitHubApp - Can get app details (APP_ENT)' {
                 $app = Get-GitHubApp
                 Write-Verbose ($app | Format-Table | Out-String) -Verbose
                 $app | Should -Not -BeNullOrEmpty
             }
-            It 'Can get app installations (APP_ENT)' {
+            It 'Get-GitHubAppInstallation - Can get app installations (APP_ENT)' {
                 $installations = Get-GitHubAppInstallation
                 Write-Verbose ($installations | Format-Table | Out-String) -Verbose
                 $installations | Should -Not -BeNullOrEmpty
             }
-            It 'Can get app installation access tokens (APP_ENT)' {
+            It 'New-GitHubAppInstallationAccessToken - Can get app installation access tokens (APP_ENT)' {
                 $installations = Get-GitHubAppInstallation
                 $installations | ForEach-Object {
                     $token = New-GitHubAppInstallationAccessToken -InstallationID $_.id
@@ -938,6 +943,11 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         }
         It 'Get-GitHubOrganization - Gets a specific organization (APP_ORG)' {
             { Get-GitHubOrganization -Organization 'psmodule-test-org' } | Should -Not -Throw
+        }
+        It 'Get-GitHubOrganizationAppInstallation - Gets the GitHub App installations on the organization (APP_ORG)' {
+            $installations = Get-GitHubOrganizationAppInstallation -Organization 'psmodule-test-org'
+            Write-Verbose ($installations | Format-Table | Out-String) -Verbose
+            $installations | Should -Not -BeNullOrEmpty
         }
         It 'Get-GitHubOrganizationMember - Gets the members of a specific organization (APP_ORG)' {
             $members = Get-GitHubOrganizationMember -Organization 'psmodule-test-org'
