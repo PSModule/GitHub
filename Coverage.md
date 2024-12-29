@@ -9,15 +9,15 @@
     </tr>
     <tr>
         <td>Covered functions</td>
-        <td>160</td>
+        <td>159</td>
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>838</td>
+        <td>839</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>16.03%</td>
+        <td>15.93%</td>
     </tr>
 </table>
 
@@ -259,7 +259,7 @@
 | `/orgs/{org}/teams/{team_slug}/repos`                                                                                     |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}`                                                                      | :x:                | :x:                |                    |                    | :x:                |
 | `/orgs/{org}/teams/{team_slug}/teams`                                                                                     |                    | :x:                |                    |                    |                    |
-| `/orgs/{org}/{security_product}/{enablement}`                                                                             |                    |                    |                    | :white_check_mark: |                    |
+| `/orgs/{org}/{security_product}/{enablement}`                                                                             |                    |                    |                    | :x:                |                    |
 | `/projects/columns/cards/{card_id}`                                                                                       | :x:                | :x:                | :x:                |                    |                    |
 | `/projects/columns/cards/{card_id}/moves`                                                                                 |                    |                    |                    | :x:                |                    |
 | `/projects/columns/{column_id}`                                                                                           | :x:                | :x:                | :x:                |                    |                    |
