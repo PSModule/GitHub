@@ -13,7 +13,7 @@
         and "[Best practices for using the REST API](https://docs.github.com/rest/guides/best-practices-for-using-the-rest-api)."
 
         .EXAMPLE
-        New-GitHubOrganizationInvitation -Organization 'PSModule' -InviteeID 12345679 -Role 'admin'
+        New-GitHubOrganizationInvitation -Organization 'PSModule' -InviteeID 123456789 -Role 'admin'
 
         Invites the user with the ID `12345679` to the organization `PSModule` with the role `admin`.
 
@@ -37,8 +37,8 @@
             Mandatory,
             ParameterSetName = 'UserID'
         )]
-        [Alias('invitee_id', 'user_id')]
-        [int] $InviteeID,
+        [Alias('invitee_id', 'user_id', 'ID')]
+        [Nullable[int]] $InviteeID,
 
         # Email address of the person you are inviting, which can be an existing GitHub user.
         [Parameter(
