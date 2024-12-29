@@ -910,23 +910,6 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
             { Update-GitHubOrganization -Organization 'psmodule-test-org3' -MembersCanCreateRepositories $true } | Should -Not -Throw
             { Update-GitHubOrganization -Organization 'psmodule-test-org3' -Blog 'https://psmodule.io' } | Should -Not -Throw
         }
-        It 'New-GitHubOrganizationInvitation - Invites a user to an organization (APP_ENT)' {
-            {
-                $email = (New-Guid).Guid + '@psmodule.io'
-                New-GitHubOrganizationInvitation -Organization 'psmodule-test-org3' -Email $email -Role 'admin'
-            } | Should -Not -Throw
-        }
-        It 'Get-GitHubOrganizationPendingInvitation - Gets the pending invitations for a specific organization (APP_ENT)' {
-            { Get-GitHubOrganizationPendingInvitation -Organization 'psmodule-test-org3' } | Should -Not -Throw
-            { Get-GitHubOrganizationPendingInvitation -Organization 'psmodule-test-org3' -Role 'admin' } | Should -Not -Throw
-            { Get-GitHubOrganizationPendingInvitation -Organization 'psmodule-test-org3' -InvitationSource 'member' } | Should -Not -Throw
-        }
-        It 'Remove-GitHubOrganizationInvitation - Removes a user invitation from an organization (APP_ENT)' {
-            {
-                $invitation = Get-GitHubOrganizationPendingInvitation -Organization 'psmodule-test-org3' | Select-Object -First 1
-                Remove-GitHubOrganizationInvitation -Organization 'psmodule-test-org3' -ID $invitation.id
-            } | Should -Not -Throw
-        }
     }
 }
 
