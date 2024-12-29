@@ -9,15 +9,15 @@
     </tr>
     <tr>
         <td>Covered functions</td>
-        <td>159</td>
+        <td>160</td>
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>839</td>
+        <td>838</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>15.93%</td>
+        <td>16.03%</td>
     </tr>
 </table>
 
@@ -181,7 +181,7 @@
 | `/orgs/{org}/installations`                                                                                               |                    | :white_check_mark: |                    |                    |                    |
 | `/orgs/{org}/interaction-limits`                                                                                          | :x:                | :x:                |                    |                    | :x:                |
 | `/orgs/{org}/invitations`                                                                                                 |                    | :white_check_mark: |                    | :white_check_mark: |                    |
-| `/orgs/{org}/invitations/{invitation_id}`                                                                                 | :x:                |                    |                    |                    |                    |
+| `/orgs/{org}/invitations/{invitation_id}`                                                                                 | :white_check_mark: |                    |                    |                    |                    |
 | `/orgs/{org}/invitations/{invitation_id}/teams`                                                                           |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/issues`                                                                                                      |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/members`                                                                                                     |                    | :white_check_mark: |                    |                    |                    |

@@ -45,11 +45,11 @@ Get-GitHubOrganization -OrganizationName 'PSModule'
 
 Get-GitHubOrganizationAppInstallation -OrganizationName 'PSModule'
 
-Set-GitHubOrganization -OrganizationName 'PSModule' -Blog 'https://www.psmodule.io'
-Set-GitHubOrganization -OrganizationName 'PSModule' -Blog ''
+Update-GitHubOrganization -OrganizationName 'PSModule' -Blog 'https://www.psmodule.io'
+Update-GitHubOrganization -OrganizationName 'PSModule' -Blog ''
 
-Set-GitHubOrganization -OrganizationName 'PSModule' -Company 'PSModule123' -DefaultRepositoryPermission admin | Select-Object name, company, default_repository_permission
-Set-GitHubOrganization -OrganizationName 'PSModule' -Company 'PSModule' -DefaultRepositoryPermission read | Select-Object name, company, default_repository_permission
+Update-GitHubOrganization -OrganizationName 'PSModule' -Company 'PSModule123' -DefaultRepositoryPermission admin | Select-Object name, company, default_repository_permission
+Update-GitHubOrganization -OrganizationName 'PSModule' -Company 'PSModule' -DefaultRepositoryPermission read | Select-Object name, company, default_repository_permission
 
 Get-GitHubUser
 Get-GitHubUser | Select-Object Name, login, ID, company, blog, twitter_username, location, hireable, bio

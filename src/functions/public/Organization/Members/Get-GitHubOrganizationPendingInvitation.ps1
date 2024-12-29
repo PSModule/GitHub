@@ -9,10 +9,19 @@
         `billing_manager`, or `hiring_manager`. If the invitee is not a GitHub
         member, the `login` field in the return hash will be `null`.
 
+        .EXAMPLE
+        Get-GitHubOrganizationPendingInvitation -Organization 'github'
+
+        List all pending organization invitations for the organization `github`.
+
+        .EXAMPLE
+        Get-GitHubOrganizationPendingInvitation -Organization 'github' -Role 'admin'
+
+        List all pending organization invitations for the organization `github` with the role `admin`.
+
         .NOTES
         [List pending organization invitations](https://docs.github.com/rest/orgs/members#list-pending-organization-invitations)
     #>
-    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [CmdletBinding()]
     param(
         # The organization name. The name is not case sensitive.

@@ -1,4 +1,4 @@
-﻿filter Set-GitHubOrganizationSecurityFeature {
+﻿filter Update-GitHubOrganizationSecurityFeature {
     <#
         .SYNOPSIS
         Enable or disable a security feature for an organization
@@ -14,7 +14,7 @@
         For more information, see "[Managing security managers in your organization](https://docs.github.com/organizations/managing-peoples-access-to-your-organization-with-roles/managing-security-managers-in-your-organization)."
 
         .EXAMPLE
-        Set-GitHubOrganizationSecurityFeature -Organization 'github' -SecurityProduct 'dependency_graph' -Enablement 'enable_all'
+        Update-GitHubOrganizationSecurityFeature -Organization 'github' -SecurityProduct 'dependency_graph' -Enablement 'enable_all'
 
         Enable the dependency graph for all repositories in the organization `github`.
 
