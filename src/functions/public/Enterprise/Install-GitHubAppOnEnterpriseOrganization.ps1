@@ -61,6 +61,7 @@
                 repository_selection = $RepositorySelection
                 repositories         = $Repositories
             }
+            $body | Remove-HashtableEntry -NullOrEmptyValues
 
             $inputObject = @{
                 Context     = $Context
