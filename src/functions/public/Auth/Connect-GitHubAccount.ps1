@@ -154,6 +154,7 @@
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
+        Initialize-GitHubConfig
     }
 
     process {
