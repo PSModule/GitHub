@@ -55,6 +55,10 @@
         try {
             $outputLines = @()
 
+            Write-Debug "Input object type: $($InputObject.GetType().Name)"
+            Write-Debug "Input object value:"
+            Write-Debug $InputObject
+
             if ($InputObject -is [hashtable]) {
                 $InputObject = [PSCustomObject]$InputObject
             }
@@ -63,9 +67,17 @@
                 $key = $property.Name
                 $value = $property.Value
 
+                Write-Debug "Processing property: $key"
+                Write-Debug "Property value type: $($value.GetType().Name)"
+                Write-Debug "Property value:"
+                Write-Debug $value
+
                 # Convert hashtable or PSCustomObject to compressed JSON
                 if ($value -is [hashtable] -or $value -is [PSCustomObject]) {
+                    Write-Debug "Converting property value to JSON"
                     $value = $value | ConvertTo-Json -Compress -Depth 100
+                    Write-Debug 'Property value:'
+                    Write-Debug $value
                 }
 
                 $guid = [Guid]::NewGuid().ToString()
