@@ -64,10 +64,6 @@
             Write-Debug "Line: $line"
             $lines += $line -split "`n"
         }
-        Write-Debug "[$stackPath] - Process - End"
-    }
-
-    end {
         Write-Debug "[$stackPath] - End - Start"
         # Initialize variables
         $result = @{}
@@ -82,7 +78,7 @@
 
             # Check for key=value pattern
             if ($line -match '^([^=]+)=(.*)$') {
-                Write-Debug " - key=value pattern"
+                Write-Debug ' - key=value pattern'
                 $key = $Matches[1].Trim()
                 $value = $Matches[2]
 
@@ -147,6 +143,10 @@
             $i++
             continue
         }
+        Write-Debug "[$stackPath] - Process - End"
+    }
+
+    end {
         if ($AsHashtable) {
             $result
         } else {
