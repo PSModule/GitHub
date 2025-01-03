@@ -47,6 +47,9 @@
 
     process {
         try {
+            if (-not $Path) {
+                throw "The path to the GitHub output file is not set. Please set the path to the GitHub output file using the -Path parameter."
+            }
             Write-Debug "[$stackPath] - Output path"
             Write-Debug $Path
             if (-not (Test-Path -Path $Path)) {
@@ -54,11 +57,11 @@
             }
 
             $outputContent = Get-Content -Path $Path
-            Write-Debug "[$stackPath] - Output content"
-            Write-Debug $outputContent
             if (-not $outputContent) {
                 return
             }
+            Write-Debug "[$stackPath] - Output content"
+            Write-Debug $outputContent
             $outputContent | ConvertFrom-GitHubOutput -AsHashtable:$AsHashtable
         } catch {
             throw $_
