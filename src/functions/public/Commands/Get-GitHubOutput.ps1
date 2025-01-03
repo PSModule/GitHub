@@ -56,13 +56,23 @@
                 throw "File not found: $Path"
             }
 
-            $outputContent = Get-Content -Path $Path
-            if (-not $outputContent) {
+            $outputContent = Get-Content -Path $Path -Raw
+            Write-Debug "[$stackPath] - Output lines: $($outputContent.Count)"
+            if ($outputContent.count -eq 0) {
                 return @{}
             }
+
+            $content = @()
+            foreach ($line in $outputContent) {
+                if ([string]::IsNullOrWhiteSpace($line) -or [string]::IsNullOrEmpty($line)) {
+                    $content += ''
+                    continue
+                }
+                $content += $line
+            }
             Write-Debug "[$stackPath] - Output content"
-            Write-Debug ($outputContent | Out-String)
-            $outputContent | ConvertFrom-GitHubOutput -AsHashtable:$AsHashtable
+            Write-Debug ($content | Out-String)
+            $content | ConvertFrom-GitHubOutput -AsHashtable:$AsHashtable
         } catch {
             throw $_
         }
