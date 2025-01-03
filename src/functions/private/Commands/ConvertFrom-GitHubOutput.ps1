@@ -42,6 +42,7 @@
             Mandatory,
             ValueFromPipeline
         )]
+        [AllowNull()]
         [string[]] $InputData,
 
         # Whether to convert the input data to a hashtable
@@ -56,11 +57,12 @@
 
     process {
         Write-Debug "[$stackPath] - Process - Start"
+        if (-not $InputData) {
+            $InputData = ''
+        }
         foreach ($line in $InputData) {
             Write-Debug "Line: $line"
-            if ($line -is [string]) {
-                $lines += $line -split "`n"
-            }
+            $lines += $line -split "`n"
         }
         Write-Debug "[$stackPath] - Process - End"
     }
@@ -78,22 +80,15 @@
             $line = $lines[$i].Trim()
             Write-Debug "[$line]"
 
-            # Skip empty or delimiter lines
-            if ($line -match '^-+$' -or [string]::IsNullOrWhiteSpace($line)) {
-                Write-Debug "[$line] - Skipping empty line"
-                $i++
-                continue
-            }
-
             # Check for key=value pattern
             if ($line -match '^([^=]+)=(.*)$') {
-                Write-Debug "[$line] - key=value pattern"
+                Write-Debug " - key=value pattern"
                 $key = $Matches[1].Trim()
                 $value = $Matches[2]
 
                 # Attempt to parse JSON
                 if (Test-Json $value -ErrorAction SilentlyContinue) {
-                    Write-Debug "[$line] - value is JSON"
+                    Write-Debug " - value is JSON"
                     $value = ConvertFrom-Json $value -AsHashtable:$AsHashtable
                 }
 
@@ -104,37 +99,42 @@
 
             # Check for key<<EOF pattern
             if ($line -match '^([^<]+)<<(\S+)$') {
-                Write-Debug "[$line] - key<<EOF pattern"
+                Write-Debug ' - key<<EOF pattern'
                 $key = $Matches[1].Trim()
                 $eof_marker = $Matches[2]
-                Write-Debug "[$line] - key<<EOF pattern - [$eof_marker]"
+                Write-Debug " - key<<EOF pattern - [$eof_marker] - Start"
                 $i++
                 $value_lines = @()
 
+                # Read lines until the EOF marker
                 while ($i -lt $lines.Count -and $lines[$i] -ne $eof_marker) {
                     $valueItem = $lines[$i].Trim()
-                    Write-Debug "[$line] - key<<EOF pattern - [$eof_marker] - [$valueItem]"
+                    Write-Debug "   [$valueItem]"
                     $value_lines += $valueItem
                     $i++
                 }
 
                 # Skip the EOF marker
                 if ($i -lt $lines.Count -and $lines[$i] -eq $eof_marker) {
-                    Write-Debug "[$line] - key<<EOF pattern - Closing"
+                    Write-Debug " - key<<EOF pattern - [$eof_marker] - End"
                     $i++
                 }
 
                 $value = $value_lines -join "`n"
 
                 if (Test-Json $value -ErrorAction SilentlyContinue) {
-                    Write-Debug "[$line] - key<<EOF pattern - value is JSON"
+                    Write-Debug ' - key<<EOF pattern - value is JSON'
                     $value = ConvertFrom-Json $value -AsHashtable:$AsHashtable
                 }
 
                 $result[$key] = $value
                 continue
             }
+
+            # Unexpected line type
+            Write-Debug ' - Skipping empty line'
             $i++
+            continue
         }
         if ($AsHashtable) {
             $result
