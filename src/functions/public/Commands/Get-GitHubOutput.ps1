@@ -28,7 +28,7 @@
 
         Gets the GitHub output and returns a hashtable.
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([hashtable])]
     [CmdletBinding()]
     param(
         # Returns the output as a hashtable.
@@ -47,11 +47,22 @@
 
     process {
         try {
+            if (-not $Path) {
+                throw 'The path to the GitHub output file is not set. Please set the path to the GitHub output file using the -Path parameter.'
+            }
+            Write-Debug "[$stackPath] - Output path"
+            Write-Debug $Path
             if (-not (Test-Path -Path $Path)) {
                 throw "File not found: $Path"
             }
 
-            Get-Content -Path $Path | ConvertFrom-GitHubOutput -AsHashtable:$AsHashtable
+            $outputContent = Get-Content -Path $Path
+            if (-not $outputContent) {
+                return @{}
+            }
+            Write-Debug "[$stackPath] - Output content"
+            Write-Debug $outputContent
+            $outputContent | ConvertFrom-GitHubOutput -AsHashtable:$AsHashtable
         } catch {
             throw $_
         }
