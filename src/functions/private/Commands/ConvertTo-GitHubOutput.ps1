@@ -65,7 +65,7 @@
 
                 # Convert hashtable or PSCustomObject to compressed JSON
                 if ($value -is [hashtable] -or $value -is [PSCustomObject]) {
-                    $value = $value | ConvertTo-Json -Compress
+                    $value = $value | ConvertTo-Json -Compress -Depth 100
                 }
 
                 $guid = [Guid]::NewGuid().ToString()
