@@ -62,7 +62,7 @@
             }
             Write-Debug "[$stackPath] - Output content"
             Write-Debug ($outputContent | Out-String)
-            $outputContent | ConvertFrom-GitHubOutput -AsHashtable:$AsHashtable
+            ConvertFrom-GitHubOutput -InputData $outputContent -AsHashtable:$AsHashtable
         } catch {
             throw $_
         }
