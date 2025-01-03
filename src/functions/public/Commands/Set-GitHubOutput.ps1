@@ -63,13 +63,11 @@
             # If the script is running in a GitHub composite action, accumulate the output under the 'result' key,
             # else append the key-value pair directly.
             if ($env:PSMODULE_GITHUB_SCRIPT) {
-                if (-not $outputs.result) {
-                    $outputs.result = @{
-                        $Name = $Value
-                    }
-                } else {
-                    $outputs.result[$Name] = $Value
+                Write-Debug "[$stackPath] - Running in GitHub-Script composite action"
+                if (-not $outputs.ContainsKey('result')) {
+                    $outputs['result'] = @{}
                 }
+                $outputs['result'][$Name] = $Value
             } else {
                 $outputs[$Name] = $Value
             }

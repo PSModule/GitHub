@@ -48,7 +48,7 @@
     process {
         try {
             if (-not $Path) {
-                throw "The path to the GitHub output file is not set. Please set the path to the GitHub output file using the -Path parameter."
+                throw 'The path to the GitHub output file is not set. Please set the path to the GitHub output file using the -Path parameter.'
             }
             Write-Debug "[$stackPath] - Output path"
             Write-Debug $Path
@@ -58,7 +58,7 @@
 
             $outputContent = Get-Content -Path $Path
             if (-not $outputContent) {
-                return
+                return @{}
             }
             Write-Debug "[$stackPath] - Output content"
             Write-Debug $outputContent
