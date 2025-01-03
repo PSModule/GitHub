@@ -55,17 +55,24 @@
     }
 
     process {
-        foreach ($item in $InputData) {
-            if ($item -is [string]) {
-                $lines += $item -split "`n"
+        Write-Debug "[$stackPath] - Process - Start"
+        foreach ($line in $InputData) {
+            Write-Debug "Line: $line"
+            if ($line -is [string]) {
+                $lines += $line -split "`n"
             }
         }
+        Write-Debug "[$stackPath] - Process - End"
     }
 
     end {
+        Write-Debug "[$stackPath] - End - Start"
         # Initialize variables
         $result = @{}
         $i = 0
+
+        Write-Debug "Lines: $($lines.Count)"
+        $lines | ForEach-Object { Write-Debug "[$_]" }
 
         while ($i -lt $lines.Count) {
             $line = $lines[$i].Trim()
@@ -134,6 +141,6 @@
         } else {
             [PSCustomObject]$result
         }
-        Write-Debug "[$stackPath] - End"
+        Write-Debug "[$stackPath] - End - End"
     }
 }
