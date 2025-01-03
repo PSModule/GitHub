@@ -47,6 +47,8 @@
 
     process {
         try {
+            Write-Debug "[$stackPath] - Output path"
+            Write-Debug $Path
             if (-not (Test-Path -Path $Path)) {
                 throw "File not found: $Path"
             }
