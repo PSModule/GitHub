@@ -86,9 +86,15 @@
                 $key = $Matches[1].Trim()
                 $value = $Matches[2]
 
+                if ([string]::IsNullOrWhiteSpace($value) -or [string]::IsNullOrEmpty($value)) {
+                    $result[$key] = ''
+                    $i++
+                    continue
+                }
+
                 # Attempt to parse JSON
                 if (Test-Json $value -ErrorAction SilentlyContinue) {
-                    Write-Debug " - value is JSON"
+                    Write-Debug "[$key] - value is JSON"
                     $value = ConvertFrom-Json $value -AsHashtable:$AsHashtable
                 }
 
@@ -121,6 +127,11 @@
                 }
 
                 $value = $value_lines -join "`n"
+
+                if ([string]::IsNullOrWhiteSpace($value) -or [string]::IsNullOrEmpty($value)) {
+                    $result[$key] = ''
+                    continue
+                }
 
                 if (Test-Json $value -ErrorAction SilentlyContinue) {
                     Write-Debug ' - key<<EOF pattern - value is JSON'
