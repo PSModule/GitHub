@@ -68,17 +68,11 @@
                     $value = $value | ConvertTo-Json -Compress
                 }
 
-                if ($value -is [string] -and $value.Contains("`n")) {
-                    # Multi-line value
-                    $guid = [Guid]::NewGuid().ToString()
-                    $EOFMarker = "EOF_$guid"
-                    $outputLines += "$key<<$EOFMarker"
-                    $outputLines += $value
-                    $outputLines += $EOFMarker
-                } else {
-                    # Single-line value
-                    $outputLines += "$key=$value"
-                }
+                $guid = [Guid]::NewGuid().ToString()
+                $EOFMarker = "EOF_$guid"
+                $outputLines += "$key<<$EOFMarker"
+                $outputLines += $value
+                $outputLines += $EOFMarker
             }
             $outputLines
         } catch {
