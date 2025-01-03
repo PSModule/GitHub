@@ -51,7 +51,13 @@
                 throw "File not found: $Path"
             }
 
-            Get-Content -Path $Path | ConvertFrom-GitHubOutput -AsHashtable:$AsHashtable
+            $outputContent = Get-Content -Path $Path
+            Write-Debug "[$stackPath] - Output content"
+            Write-Debug $outputContent
+            if (-not $outputContent) {
+                return
+            }
+            $outputContent | ConvertFrom-GitHubOutput -AsHashtable:$AsHashtable
         } catch {
             throw $_
         }
