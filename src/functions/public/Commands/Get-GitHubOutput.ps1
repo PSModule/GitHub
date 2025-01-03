@@ -28,7 +28,7 @@
 
         Gets the GitHub output and returns a hashtable.
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([hashtable])]
     [CmdletBinding()]
     param(
         # Returns the output as a hashtable.
