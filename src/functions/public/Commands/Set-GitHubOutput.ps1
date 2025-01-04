@@ -68,11 +68,11 @@
                     $outputs['result'] = @{}
                 }
                 $outputs['result'][$Name] = $Value
+                Write-Verbose "Output: [$Name] avaiable as `${{ fromJson(steps.$env:GITHUB_ACTION.outputs.result).$Name }}'"
             } else {
                 $outputs[$Name] = $Value
+                Write-Verbose "Output: [$Name] avaiable as `${{ steps.$env:GITHUB_ACTION.outputs.$Name }}'"
             }
-
-            Write-Verbose "Output: [$Name] avaiable as `${{ steps.$env:GITHUB_ACTION.outputs.$Name }}'"
 
             if ($PSCmdlet.ShouldProcess('GitHub Output', 'Set')) {
                 $outputs | ConvertTo-GitHubOutput | Set-Content -Path $Path
