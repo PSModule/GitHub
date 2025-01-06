@@ -9,11 +9,13 @@ and GitHub enthusiasts who want to use PowerShell to integrate or manage GitHub 
   As an operator of any type of GitHub environment, you can use this module to automate your workflows and tasks. The module supports connecting
   with multiple accounts; be that GitHub (public, github.com), GitHub Enterprise Cloud (GHEC, including GHE.com) and GitHub Enterprise Server (GHES).
 - **A great GitHub Action Workflow companion**
-  The module is built to be a companion in GitHub Actions. It comes with PowerShell-flavored [workflow-commands]() and is [context aware](). So it detects how
-  it is being used and loads available information dynamically. You can provide it the `GITHUB_TOKEN`, a client ID and private key for a GitHub App,
-  or a user access token (fine-grained or classic). In addition to be a great local scripting companion, it also understands when its run in GitHub
-  Actions where it will automatically detect the event that triggered the workflow and provide the necessary context to commands. So if you want to
-  comment on the PR that triggered the workflow, that is the default it will use when writing a comment to the PR.
+  The module is built to be a companion in GitHub Actions. It comes with PowerShell-flavored
+  [workflow-commands](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions) and
+  is [context aware](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/accessing-contextual-information-about-workflow-runs).
+  So it detects how it is being used and loads available information dynamically. You can provide it the `GITHUB_TOKEN`, a client ID and private key
+  for a GitHub App, or a user access token (fine-grained or classic). In addition to be a great local scripting companion, it also understands when
+  its run in GitHub Actions where it will automatically detect the event that triggered the workflow and provide the necessary context to commands. So
+  if you want to comment on the PR that triggered the workflow, that is the default it will use when writing a comment to the PR.
   Use the [`GitHub-Script`](https://github.com/PSModule/GitHub-Script) action to get started. You can also use it in you own composite actions by
   either using the [`GitHub-Script`](https://github.com/PSModule/GitHub-Script) action or by installing the module.
 - **Automate GitHub**
