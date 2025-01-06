@@ -56,7 +56,7 @@
                 throw "File not found: $Path"
             }
 
-            $outputContent = Get-Content -Path $Path -Raw
+            $outputContent = Get-Content -Path $Path
             Write-Debug "[$stackPath] - Output lines: $($outputContent.Count)"
             if ($outputContent.count -eq 0) {
                 return @{}
