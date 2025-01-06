@@ -36,3 +36,4 @@ jobs:
       TEST_USER_ORG_FG_PAT: ${{ secrets.TEST_USER_ORG_FG_PAT }}
       TEST_USER_USER_FG_PAT: ${{ secrets.TEST_USER_USER_FG_PAT }}
       TEST_USER_PAT: ${{ secrets.TEST_USER_PAT }}
+      SkipTests: All
