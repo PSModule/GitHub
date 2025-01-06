@@ -68,10 +68,9 @@
                     $outputs['result'] = @{}
                 }
                 $outputs['result'][$Name] = $Value
-                Write-Verbose "Output: [$Name] avaiable as `${{ fromJson(steps.$env:GITHUB_ACTION.outputs.result).$Name }}'"
             } else {
+                Write-Debug "[$stackPath] - Running in a custom action"
                 $outputs[$Name] = $Value
-                Write-Verbose "Output: [$Name] avaiable as `${{ steps.$env:GITHUB_ACTION.outputs.$Name }}'"
             }
 
             if ($PSCmdlet.ShouldProcess('GitHub Output', 'Set')) {
@@ -83,6 +82,11 @@
     }
 
     end {
+        if ($env:PSMODULE_GITHUB_SCRIPT) {
+            Write-Verbose "Output: [$Name] avaiable as '`${{ fromJson(steps.$env:GITHUB_ACTION.outputs.result).$Name }}'"
+        } else {
+            Write-Verbose "Output: [$Name] avaiable as '`${{ steps.$env:GITHUB_ACTION.outputs.$Name }}'"
+        }
         Write-Debug "[$stackPath] - End"
     }
 }
