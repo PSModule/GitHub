@@ -39,13 +39,10 @@ function Get-GitHubAppJSONWebToken {
     param(
         # The client ID of the GitHub App.
         # Can use the GitHub App ID or the client ID.
-        # Example: 'Iv23li8tyK9NUwl7rWlQ'
-        # Example: '123456'
         [Parameter(Mandatory)]
         [string] $ClientId,
 
         # The path to the private key file of the GitHub App.
-        # Example: '/path/to/private-key.pem'
         [Parameter(
             Mandatory,
             ParameterSetName = 'FilePath'
@@ -53,12 +50,6 @@ function Get-GitHubAppJSONWebToken {
         [string] $PrivateKeyFilePath,
 
         # The private key of the GitHub App.
-        # Example: @'
-        # -----BEGIN RSA PRIVATE KEY-----
-        # qwe
-        # ...
-        # -----END RSA PRIVATE KEY-----
-        # '@
         [Parameter(
             Mandatory,
             ParameterSetName = 'PrivateKey'
