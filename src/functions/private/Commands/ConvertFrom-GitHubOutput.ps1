@@ -62,6 +62,7 @@
         $result = @{}
         $i = 0
         while ($i -lt $lines.Count) {
+            $line = $lines[$i].Trim()
             Write-Debug "[$line]"
 
             # Check for key=value pattern (single-line)
