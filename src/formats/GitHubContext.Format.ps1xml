@@ -54,6 +54,9 @@
                     <ListEntry>
                         <ListItems>
                             <ListItem>
+                                <PropertyName>Name</PropertyName>
+                            </ListItem>
+                            <ListItem>
                                 <PropertyName>HostName</PropertyName>
                             </ListItem>
                             <ListItem>
@@ -94,9 +97,6 @@
                             </ListItem>
                             <ListItem>
                                 <PropertyName>DatabaseID</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>ID</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>Owner</PropertyName>
