@@ -29,6 +29,10 @@
         'PSUseShouldProcessForStateChangingFunctions', '', Scope = 'Function',
         Justification = 'Does not change state'
     )]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSAvoidUsingWriteHost', '', Scope = 'Function',
+        Justification = 'Intended for logging in Github Runners which does support Write-Host'
+    )]
     [CmdletBinding()]
     param(
         # The name of the log group
