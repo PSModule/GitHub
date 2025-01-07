@@ -27,20 +27,6 @@
         [string] $Name
     )
 
-    begin {
-        $stackPath = Get-PSCallStackPath
-        Write-Debug "[$stackPath] - Start"
-    }
+    Write-Host "::group::$Name"
 
-    process {
-        try {
-            Write-Host "::group::$Name"
-        } catch {
-            throw $_
-        }
-    }
-
-    end {
-        Write-Debug "[$stackPath] - End"
-    }
 }

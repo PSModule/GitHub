@@ -20,7 +20,7 @@
         Numbers=12345
         '@
 
-        $content | ConvertFrom-GitHubOutput
+        ConvertFrom-GitHubOutput -OutputContent $content
 
         zen      : something else
         result   : @{MyOutput=Hello, World!; Status=Success}
@@ -38,12 +38,9 @@
     [CmdletBinding()]
     param(
         # The input data to convert
-        [Parameter(
-            Mandatory,
-            ValueFromPipeline
-        )]
-        [AllowNull()]
-        [string[]] $InputData,
+        [Parameter(Mandatory)]
+        [AllowEmptyString()]
+        [string] $OutputContent,
 
         # Whether to convert the input data to a hashtable
         [switch] $AsHashtable
@@ -52,37 +49,34 @@
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $lines = @()
     }
 
     process {
         Write-Debug "[$stackPath] - Process - Start"
-        if (-not $InputData) {
-            $InputData = ''
+        $lines = $OutputContent -split [System.Environment]::NewLine
+        Write-Debug "[$stackPath] - Output lines: $($lines.Count)"
+        if ($lines.count -eq 0) {
+            return @{}
         }
-        foreach ($line in $InputData) {
-            Write-Debug "Line: $line"
-            $lines += $line -split "`n"
-        }
-        Write-Debug "[$stackPath] - End - Start"
-        # Initialize variables
+
         $result = @{}
         $i = 0
-
-        Write-Debug "Lines: $($lines.Count)"
-        $lines | ForEach-Object { Write-Debug "[$_]" }
-
+        $pad = $lines.count.ToString().Length
         while ($i -lt $lines.Count) {
+            $lineNumber = ($i + 1).ToString().PadLeft($pad)
             $line = $lines[$i].Trim()
-            Write-Debug "[$line]"
+            Write-Debug "[$lineNumber]: [$line]"
 
-            # Check for key=value pattern
+            # Check for key=value pattern (single-line)
             if ($line -match '^([^=]+)=(.*)$') {
-                Write-Debug ' - key=value pattern'
+                Write-Debug ' - Single-line pattern'
                 $key = $Matches[1].Trim()
                 $value = $Matches[2]
 
-                if ([string]::IsNullOrWhiteSpace($value) -or [string]::IsNullOrEmpty($value)) {
+                Write-Debug " - Single-line pattern - [$key] = [$value]"
+                # Check for empty value
+                if ([string]::IsNullOrWhiteSpace($value) -or [string]::IsNullOrEmpty($value) -or $value.Length -eq 0) {
+                    Write-Debug ' - Single-line pattern - Empty value'
                     $result[$key] = ''
                     $i++
                     continue
@@ -90,7 +84,7 @@
 
                 # Attempt to parse JSON
                 if (Test-Json $value -ErrorAction SilentlyContinue) {
-                    Write-Debug "[$key] - value is JSON"
+                    Write-Debug " - Single-line pattern - value is JSON"
                     $value = ConvertFrom-Json $value -AsHashtable:$AsHashtable
                 }
 
@@ -99,38 +93,42 @@
                 continue
             }
 
-            # Check for key<<EOF pattern
+            # Check for key<<EOF pattern (multi-line)
             if ($line -match '^([^<]+)<<(\S+)$') {
-                Write-Debug ' - key<<EOF pattern'
+                Write-Debug ' - Multi-line pattern'
                 $key = $Matches[1].Trim()
+                Write-Debug " - Multi-line pattern' - [$key]"
                 $eof_marker = $Matches[2]
-                Write-Debug " - key<<EOF pattern - [$eof_marker] - Start"
+                Write-Debug " - Multi-line pattern' - [$key] - [$eof_marker] - Start"
                 $i++
                 $value_lines = @()
 
                 # Read lines until the EOF marker
                 while ($i -lt $lines.Count -and $lines[$i] -ne $eof_marker) {
                     $valueItem = $lines[$i].Trim()
-                    Write-Debug "   [$valueItem]"
+                    Write-Debug " [$key] <- [$valueItem]"
                     $value_lines += $valueItem
                     $i++
                 }
 
                 # Skip the EOF marker
                 if ($i -lt $lines.Count -and $lines[$i] -eq $eof_marker) {
-                    Write-Debug " - key<<EOF pattern - [$eof_marker] - End"
+                    Write-Debug " - Multi-line pattern' - [$key] - [$eof_marker] - End"
                     $i++
                 }
 
-                $value = $value_lines -join "`n"
+                $value = $value_lines -join [System.Environment]::NewLine
 
-                if ([string]::IsNullOrWhiteSpace($value) -or [string]::IsNullOrEmpty($value)) {
+                # Check for empty value
+                if ([string]::IsNullOrWhiteSpace($value) -or [string]::IsNullOrEmpty($value) -or $value.Length -eq 0) {
+                    Write-Debug " - key<<EOF pattern - [$key] - Empty value"
                     $result[$key] = ''
                     continue
                 }
 
+                # Attempt to parse JSON
                 if (Test-Json $value -ErrorAction SilentlyContinue) {
-                    Write-Debug ' - key<<EOF pattern - value is JSON'
+                    Write-Debug " - key<<EOF pattern - [$key] - value is JSON"
                     $value = ConvertFrom-Json $value -AsHashtable:$AsHashtable
                 }
 
@@ -139,7 +137,7 @@
             }
 
             # Unexpected line type
-            Write-Debug ' - Skipping empty line'
+            Write-Debug ' - No pattern match - Skipping line'
             $i++
             continue
         }
@@ -147,6 +145,7 @@
     }
 
     end {
+        Write-Debug "[$stackPath] - End - Start"
         if ($AsHashtable) {
             $result
         } else {
