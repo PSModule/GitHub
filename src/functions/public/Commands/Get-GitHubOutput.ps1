@@ -65,6 +65,7 @@
             $content = @()
             foreach ($line in $outputContent) {
                 if ([string]::IsNullOrWhiteSpace($line) -or [string]::IsNullOrEmpty($line)) {
+                    Write-Debug "[$line] - Empty line"
                     $content += ''
                     continue
                 }
@@ -72,7 +73,7 @@
             }
             Write-Debug "[$stackPath] - Output content"
             Write-Debug ($content | Out-String)
-            $content | ConvertFrom-GitHubOutput -AsHashtable:$AsHashtable
+            ConvertFrom-GitHubOutput -InputData $content -AsHashtable:$AsHashtable
         } catch {
             throw $_
         }
