@@ -61,9 +61,11 @@
 
         $result = @{}
         $i = 0
+        $pad = $lines.count.ToString().Length
         while ($i -lt $lines.Count) {
+            $lineNumber = ($i + 1).ToString().PadLeft($pad)
             $line = $lines[$i].Trim()
-            Write-Debug "[$line]"
+            Write-Debug "[$lineNumber]: [$line]"
 
             # Check for key=value pattern (single-line)
             if ($line -match '^([^=]+)=(.*)$') {

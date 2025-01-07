@@ -57,8 +57,6 @@
             }
 
             $outputContent = Get-Content -Path $Path -Raw
-            Write-Debug "[$stackPath] - Output content"
-            Write-Debug ($outputContent | Out-String)
             ConvertFrom-GitHubOutput -OutputContent $outputContent -AsHashtable:$AsHashtable
         } catch {
             throw $_
