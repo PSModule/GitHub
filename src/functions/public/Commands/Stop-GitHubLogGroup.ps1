@@ -23,10 +23,7 @@
     [Alias('Stop-LogGroup')]
     param()
 
-    begin {
-        $stackPath = Get-PSCallStackPath
-        Write-Debug "[$stackPath] - Start"
-    }
+    begin {}
 
     process {
         try {
@@ -36,7 +33,5 @@
         }
     }
 
-    end {
-        Write-Debug "[$stackPath] - End"
-    }
+    end {}
 }
