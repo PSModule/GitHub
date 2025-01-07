@@ -20,7 +20,7 @@
         Numbers=12345
         '@
 
-        $content | ConvertFrom-GitHubOutput
+        ConvertFrom-GitHubOutput -OutputContent $content
 
         zen      : something else
         result   : @{MyOutput=Hello, World!; Status=Success}
@@ -38,12 +38,9 @@
     [CmdletBinding()]
     param(
         # The input data to convert
-        [Parameter(
-            Mandatory,
-            ValueFromPipeline
-        )]
-        [AllowNull()]
-        [string[]] $InputData,
+        [Parameter(Mandatory)]
+        [AllowEmptyString()]
+        [string] $OutputContent,
 
         # Whether to convert the input data to a hashtable
         [switch] $AsHashtable
@@ -55,23 +52,28 @@
         $lines = @()
     }
 
+
     process {
         Write-Debug "[$stackPath] - Process - Start"
-        if (-not $InputData) {
-            $InputData = ''
+        $lines = $OutputContent -split [System.Environment]::NewLine
+        Write-Debug "[$stackPath] - Output lines: $($lines.Count)"
+        if ($lines.count -eq 0) {
+            return @{}
         }
-        foreach ($line in $InputData) {
-            Write-Debug "Line: $line"
-            $lines += $line -split "`n"
+        $lines | ForEach-Object { Write-Debug "[$_]" }
+
+        foreach ($line in $lines) {
+            if ([string]::IsNullOrWhiteSpace($line) -or [string]::IsNullOrEmpty($line)) {
+                Write-Debug "[$line] - Empty line"
+                $content += ''
+                continue
+            }
+            Write-Debug "[$line] - Non-empty line"
+            $content += $line
         }
-        Write-Debug "[$stackPath] - End - Start"
         # Initialize variables
         $result = @{}
         $i = 0
-
-        Write-Debug "Lines: $($lines.Count)"
-        $lines | ForEach-Object { Write-Debug "[$_]" }
-
         while ($i -lt $lines.Count) {
             $line = $lines[$i].Trim()
             Write-Debug "[$line]"
@@ -82,7 +84,9 @@
                 $key = $Matches[1].Trim()
                 $value = $Matches[2]
 
+                # Check for empty value
                 if ([string]::IsNullOrWhiteSpace($value) -or [string]::IsNullOrEmpty($value)) {
+                    Write-Debug ' - key=value pattern - Empty value'
                     $result[$key] = ''
                     $i++
                     continue
@@ -90,7 +94,7 @@
 
                 # Attempt to parse JSON
                 if (Test-Json $value -ErrorAction SilentlyContinue) {
-                    Write-Debug "[$key] - value is JSON"
+                    Write-Debug " - key=value pattern - value is JSON"
                     $value = ConvertFrom-Json $value -AsHashtable:$AsHashtable
                 }
 
@@ -122,13 +126,16 @@
                     $i++
                 }
 
-                $value = $value_lines -join "`n"
+                $value = $value_lines -join [System.Environment]::NewLine
 
+                # Check for empty value
                 if ([string]::IsNullOrWhiteSpace($value) -or [string]::IsNullOrEmpty($value)) {
+                    Write-Debug ' - key<<EOF pattern - Empty value'
                     $result[$key] = ''
                     continue
                 }
 
+                # Attempt to parse JSON
                 if (Test-Json $value -ErrorAction SilentlyContinue) {
                     Write-Debug ' - key<<EOF pattern - value is JSON'
                     $value = ConvertFrom-Json $value -AsHashtable:$AsHashtable
@@ -147,6 +154,8 @@
     }
 
     end {
+
+        Write-Debug "[$stackPath] - End - Start"
         if ($AsHashtable) {
             $result
         } else {
