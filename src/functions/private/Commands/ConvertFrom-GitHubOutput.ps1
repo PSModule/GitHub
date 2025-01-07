@@ -60,7 +60,6 @@
         if ($lines.count -eq 0) {
             return @{}
         }
-        $lines | ForEach-Object { Write-Debug "[$_]" }
 
         foreach ($line in $lines) {
             if ([string]::IsNullOrWhiteSpace($line) -or [string]::IsNullOrEmpty($line)) {
@@ -85,7 +84,7 @@
                 $value = $Matches[2]
 
                 # Check for empty value
-                if ([string]::IsNullOrWhiteSpace($value) -or [string]::IsNullOrEmpty($value)) {
+                if ([string]::IsNullOrWhiteSpace($value) -or [string]::IsNullOrEmpty($value) -or $value.Length -eq 0) {
                     Write-Debug ' - key=value pattern - Empty value'
                     $result[$key] = ''
                     $i++
@@ -129,7 +128,7 @@
                 $value = $value_lines -join [System.Environment]::NewLine
 
                 # Check for empty value
-                if ([string]::IsNullOrWhiteSpace($value) -or [string]::IsNullOrEmpty($value)) {
+                if ([string]::IsNullOrWhiteSpace($value) -or [string]::IsNullOrEmpty($value) -or $value.Length -eq 0) {
                     Write-Debug ' - key<<EOF pattern - Empty value'
                     $result[$key] = ''
                     continue
