@@ -40,19 +40,12 @@
         [scriptblock] $ScriptBlock
     )
 
-    begin {
-        Write-Host "::group::$Name"
+    Write-Host "::group::$Name"
+    try {
+        . $ScriptBlock
+    } catch {
+        throw $_
     }
+    Write-Host '::endgroup::'
 
-    process {
-        try {
-            . $ScriptBlock
-        } catch {
-            throw $_
-        }
-    }
-
-    end {
-        Write-Host '::endgroup::'
-    }
 }

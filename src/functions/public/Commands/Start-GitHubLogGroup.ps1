@@ -27,15 +27,6 @@
         [string] $Name
     )
 
-    begin {}
+    Write-Host "::group::$Name"
 
-    process {
-        try {
-            Write-Host "::group::$Name"
-        } catch {
-            throw $_
-        }
-    }
-
-    end {}
 }

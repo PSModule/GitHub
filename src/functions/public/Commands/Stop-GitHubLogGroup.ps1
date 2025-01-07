@@ -23,15 +23,6 @@
     [Alias('Stop-LogGroup')]
     param()
 
-    begin {}
+    Write-Host '::endgroup::'
 
-    process {
-        try {
-            Write-Host '::endgroup::'
-        } catch {
-            throw $_
-        }
-    }
-
-    end {}
 }

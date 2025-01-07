@@ -49,9 +49,7 @@
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $lines = @()
     }
-
 
     process {
         Write-Debug "[$stackPath] - Process - Start"
@@ -61,31 +59,21 @@
             return @{}
         }
 
-        foreach ($line in $lines) {
-            if ([string]::IsNullOrWhiteSpace($line) -or [string]::IsNullOrEmpty($line)) {
-                Write-Debug "[$line] - Empty line"
-                $content += ''
-                continue
-            }
-            Write-Debug "[$line] - Non-empty line"
-            $content += $line
-        }
-        # Initialize variables
         $result = @{}
         $i = 0
-        while ($i -lt $lines.Count) {
-            $line = $lines[$i].Trim()
+        foreach ($line in $lines) {
             Write-Debug "[$line]"
 
-            # Check for key=value pattern
+            # Check for key=value pattern (single-line)
             if ($line -match '^([^=]+)=(.*)$') {
-                Write-Debug ' - key=value pattern'
+                Write-Debug ' - Single-line pattern'
                 $key = $Matches[1].Trim()
                 $value = $Matches[2]
 
+                Write-Debug " - Single-line pattern - [$key] = [$value]"
                 # Check for empty value
                 if ([string]::IsNullOrWhiteSpace($value) -or [string]::IsNullOrEmpty($value) -or $value.Length -eq 0) {
-                    Write-Debug ' - key=value pattern - Empty value'
+                    Write-Debug ' - Single-line pattern - Empty value'
                     $result[$key] = ''
                     $i++
                     continue
@@ -93,7 +81,7 @@
 
                 # Attempt to parse JSON
                 if (Test-Json $value -ErrorAction SilentlyContinue) {
-                    Write-Debug " - key=value pattern - value is JSON"
+                    Write-Debug " - Single-line pattern - value is JSON"
                     $value = ConvertFrom-Json $value -AsHashtable:$AsHashtable
                 }
 
@@ -102,12 +90,13 @@
                 continue
             }
 
-            # Check for key<<EOF pattern
+            # Check for key<<EOF pattern (multi-line)
             if ($line -match '^([^<]+)<<(\S+)$') {
-                Write-Debug ' - key<<EOF pattern'
+                Write-Debug ' - Multi-line pattern'
                 $key = $Matches[1].Trim()
+                Write-Debug " - Multi-line pattern' - [$key]"
                 $eof_marker = $Matches[2]
-                Write-Debug " - key<<EOF pattern - [$eof_marker] - Start"
+                Write-Debug " - Multi-line pattern' - [$key] - [$eof_marker] - Start"
                 $i++
                 $value_lines = @()
 
@@ -121,7 +110,7 @@
 
                 # Skip the EOF marker
                 if ($i -lt $lines.Count -and $lines[$i] -eq $eof_marker) {
-                    Write-Debug " - key<<EOF pattern - [$eof_marker] - End"
+                    Write-Debug " - Multi-line pattern' - [$key] - [$eof_marker] - End"
                     $i++
                 }
 
@@ -129,14 +118,14 @@
 
                 # Check for empty value
                 if ([string]::IsNullOrWhiteSpace($value) -or [string]::IsNullOrEmpty($value) -or $value.Length -eq 0) {
-                    Write-Debug ' - key<<EOF pattern - Empty value'
+                    Write-Debug " - key<<EOF pattern - [$key] - Empty value"
                     $result[$key] = ''
                     continue
                 }
 
                 # Attempt to parse JSON
                 if (Test-Json $value -ErrorAction SilentlyContinue) {
-                    Write-Debug ' - key<<EOF pattern - value is JSON'
+                    Write-Debug " - key<<EOF pattern - [$key] - value is JSON"
                     $value = ConvertFrom-Json $value -AsHashtable:$AsHashtable
                 }
 
@@ -145,7 +134,7 @@
             }
 
             # Unexpected line type
-            Write-Debug ' - Skipping empty line'
+            Write-Debug ' - No pattern match - Skipping line'
             $i++
             continue
         }
@@ -153,7 +142,6 @@
     }
 
     end {
-
         Write-Debug "[$stackPath] - End - Start"
         if ($AsHashtable) {
             $result
