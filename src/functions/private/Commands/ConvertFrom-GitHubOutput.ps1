@@ -61,7 +61,7 @@
 
         $result = @{}
         $i = 0
-        foreach ($line in $lines) {
+        while ($i -lt $lines.Count) {
             Write-Debug "[$line]"
 
             # Check for key=value pattern (single-line)
@@ -103,7 +103,7 @@
                 # Read lines until the EOF marker
                 while ($i -lt $lines.Count -and $lines[$i] -ne $eof_marker) {
                     $valueItem = $lines[$i].Trim()
-                    Write-Debug "   [$valueItem]"
+                    Write-Debug " [$key] <- [$valueItem]"
                     $value_lines += $valueItem
                     $i++
                 }
