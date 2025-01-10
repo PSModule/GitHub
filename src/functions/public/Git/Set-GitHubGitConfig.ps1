@@ -35,7 +35,13 @@
         try {
             $gitExists = Get-Command -Name 'git' -ErrorAction SilentlyContinue
             if (-not $gitExists) {
-                throw 'Git is not installed. Please install Git before running this command.'
+                Write-Warning 'Git is not installed. Cannot configure Git.'
+                return
+            }
+
+            $null = git rev-parse --is-inside-work-tree 2>&1
+            if ($LASTEXITCODE -ne 0) {
+                Write-Warning 'Not a Git repository. Cannot configure Git.'
             }
 
             $username = $Context.UserName
