@@ -24,8 +24,20 @@
         try {
 
             $gitExists = Get-Command -Name 'git' -ErrorAction SilentlyContinue
+            Write-Debug "GITEXISTS: $gitExists"
             if (-not $gitExists) {
-                throw 'Git is not installed. Please install Git before running this command.'
+                Write-Verbose "Git is not installed. Cannot get git configuration."
+                return
+            }
+
+            $cmdresult = git rev-parse --is-inside-work-tree 2>&1
+            Write-Debug "LASTEXITCODE: $LASTEXITCODE"
+            Write-Debug "CMDRESULT:    $cmdresult"
+            if ($LASTEXITCODE -ne 0) {
+                Write-Verbose 'Not a git repository. Cannot get git configuration.'
+                $Global:LASTEXITCODE = 0
+                Write-Debug "Resetting LASTEXITCODE: $LASTEXITCODE"
+                return
             }
 
             git config --local --list | ForEach-Object {
