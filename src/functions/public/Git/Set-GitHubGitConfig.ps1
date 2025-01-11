@@ -34,12 +34,15 @@
     process {
         try {
             $gitExists = Get-Command -Name 'git' -ErrorAction SilentlyContinue
+            Write-Debug "GITEXISTS: $gitExists"
             if (-not $gitExists) {
                 Write-Verbose 'Git is not installed. Cannot configure git.'
                 return
             }
 
-            $null = git rev-parse --is-inside-work-tree 2>&1
+            $cmdresult = git rev-parse --is-inside-work-tree 2>&1
+            Write-Debug "LASTEXITCODE: $LASTEXITCODE"
+            Write-Debug "CMDRESULT:    $cmdresult"
             if ($LASTEXITCODE -ne 0) {
                 Write-Verbose 'Not a git repository. Cannot configure git.'
                 return
