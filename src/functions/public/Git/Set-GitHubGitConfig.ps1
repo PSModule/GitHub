@@ -45,6 +45,7 @@
             Write-Debug "CMDRESULT:    $cmdresult"
             if ($LASTEXITCODE -ne 0) {
                 Write-Verbose 'Not a git repository. Cannot configure git.'
+                $LASTEXITCODE = 0
                 return
             }
 

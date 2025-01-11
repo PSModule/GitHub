@@ -35,6 +35,7 @@
             Write-Debug "CMDRESULT:    $cmdresult"
             if ($LASTEXITCODE -ne 0) {
                 Write-Verbose 'Not a git repository. Cannot get git configuration.'
+                $LASTEXITCODE = 0
                 return
             }
 
