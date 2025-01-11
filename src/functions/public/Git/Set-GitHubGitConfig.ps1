@@ -45,7 +45,7 @@
             Write-Debug "CMDRESULT:    $cmdresult"
             if ($LASTEXITCODE -ne 0) {
                 Write-Verbose 'Not a git repository. Cannot configure git.'
-                pwsh -NoProfile -WindowStyle hidden -Command { $true }
+                $Global:LASTEXITCODE = 0
                 Write-Debug "Resetting LASTEXITCODE: $LASTEXITCODE"
                 return
             }
