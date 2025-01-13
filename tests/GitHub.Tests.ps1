@@ -2,6 +2,10 @@
     'PSUseDeclaredVarsMoreThanAssignments', '',
     Justification = 'Pester grouping syntax: known issue.'
 )]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+    'PSAvoidUsingConvertToSecureStringWithPlainText', '',
+    Justification = 'Used to create a secure string for testing.'
+)]
 [CmdletBinding()]
 param()
 
