@@ -775,7 +775,7 @@ Describe 'As GitHub Actions (GHA)' {
             $gitConfig | Should -Not -BeNullOrEmpty
         }
         It "Get-GitHubGitConfig gets the 'global' Git configuration (GHA)" {
-            git config --global --replace-all safe.directory *
+            git config --global advice.pushfetchfirst false
             $gitConfig = Get-GitHubGitConfig -Scope 'global'
             Write-Verbose ($gitConfig | Format-List | Out-String) -Verbose
             $gitConfig | Should -Not -BeNullOrEmpty
