@@ -22,7 +22,6 @@
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $result = @{}
     }
 
     process {
@@ -45,19 +44,23 @@
                 return
             }
 
+            $config = @{}
             git config --$Scope --list | ConvertFrom-StringData | ForEach-Object {
-                $_.GetEnumerator() | ForEach-Object {
-                    $name = $_.Key
-                    $value = $_.Value
-                    if ($value -match '(?i)AUTHORIZATION:\s*(?<scheme>[^\s]+)\s+(?<token>.*)') {
-                        $secret = $matches['token']
-                        Add-GitHubMask -Value $secret
-                    }
-                    $result += @{
-                        $name = $value
-                    }
+                $config += $_
+            }
+            $result = @{}
+            $config.GetEnumerator() | ForEach-Object {
+                $name = $_.Key
+                $value = $_.Value
+                if ($value -match '(?i)AUTHORIZATION:\s*(?<scheme>[^\s]+)\s+(?<token>.*)') {
+                    $secret = $matches['token']
+                    Add-GitHubMask -Value $secret
+                }
+                $result += @{
+                    $name = $value
                 }
             }
+            [pscustomobject]$result
         } catch {
             throw $_
         }
