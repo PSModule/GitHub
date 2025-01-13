@@ -50,7 +50,7 @@
             $outputs = Get-GitHubOutput -Path $Path -AsHashtable
 
             if ($Value -Is [securestring]) {
-                $Value = $Value | ConvertFrom-SecureString -AsPlainText -Force
+                $Value = $Value | ConvertFrom-SecureString -AsPlainText
                 Add-Mask -Value $Value
             }
 
