@@ -205,6 +205,17 @@ Describe 'GitHub' {
                 Set-GitHubOutput -Name 'MyName' -Value 'MyValue'
             } | Should -Not -Throw
         }
+        It 'Set-GitHubOutput + SecureString - Should not throw' {
+            {
+                $secret = 'MyValue' | ConvertTo-SecureString -AsPlainText -Force
+                Set-GitHubOutput -Name 'SecretName' -Value $secret
+            } | Should -Not -Throw
+        }
+        It 'Set-GitHubOutput + Object - Should not throw' {
+            {
+                Set-GitHubOutput -Name 'Config' -Value (Get-GitHubConfig)
+            } | Should -Not -Throw
+        }
         It 'Get-GitHubOutput - Should not throw' {
             {
                 Get-GitHubOutput
