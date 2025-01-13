@@ -13,7 +13,11 @@
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]
-    param()
+    param(
+        [Parameter()]
+        [ValidateSet('local', 'global', 'system')]
+        [string] $Scope = 'local'
+    )
 
     begin {
         $stackPath = Get-PSCallStackPath
@@ -26,7 +30,7 @@
             $gitExists = Get-Command -Name 'git' -ErrorAction SilentlyContinue
             Write-Debug "GITEXISTS: $gitExists"
             if (-not $gitExists) {
-                Write-Verbose "Git is not installed. Cannot get git configuration."
+                Write-Verbose 'Git is not installed. Cannot get git configuration.'
                 return
             }
 
@@ -40,14 +44,23 @@
                 return
             }
 
-            git config --local --list | ForEach-Object {
-                (
-                    [pscustomobject]@{
-                        Name  = $_.Split('=')[0]
-                        Value = $_.Split('=')[1]
-                    }
-                )
+            $config = @{}
+            git config --$Scope --list | ConvertFrom-StringData | ForEach-Object {
+                $config += $_
             }
+            $result = @{}
+            $config.GetEnumerator() | ForEach-Object {
+                $name = $_.Key
+                $value = $_.Value
+                if ($value -match '(?i)AUTHORIZATION:\s*(?<scheme>[^\s]+)\s+(?<token>.*)') {
+                    $secret = $matches['token']
+                    Add-GitHubMask -Value $secret
+                }
+                $result += @{
+                    $name = $value
+                }
+            }
+            [pscustomobject]$result
         } catch {
             throw $_
         }
