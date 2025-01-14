@@ -1,4 +1,4 @@
-name: Update coverage report
+name: Update-CoverageReport
 
 on:
   workflow_dispatch:
@@ -10,7 +10,7 @@ permissions:
   contents: write
 
 jobs:
-  Update-Coverage:
+  Update-CoverageReport:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -19,7 +19,7 @@ jobs:
       - name: Initialize-PSModule
         uses: PSModule/Initialize-PSModule@v1
 
-      - name: Update coverage report
+      - name: Update-CoverageReport
         uses: PSModule/GitHub-Script@v1
         with:
-          Script: . '.\scripts\Set-CoverageReport.ps1'
+          Script: . '.\scripts\Update-CoverageReport.ps1'
