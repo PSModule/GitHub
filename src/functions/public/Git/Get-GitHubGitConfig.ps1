@@ -26,7 +26,6 @@
 
     process {
         try {
-
             $gitExists = Get-Command -Name 'git' -ErrorAction SilentlyContinue
             Write-Debug "GITEXISTS: $gitExists"
             if (-not $gitExists) {
@@ -44,23 +43,27 @@
                 return
             }
 
-            $config = @{}
-            git config --$Scope --list | ConvertFrom-StringData | ForEach-Object {
-                $config += $_
-            }
-            $result = @{}
-            $config.GetEnumerator() | ForEach-Object {
-                $name = $_.Key
-                $value = $_.Value
-                if ($value -match '(?i)AUTHORIZATION:\s*(?<scheme>[^\s]+)\s+(?<token>.*)') {
-                    $secret = $matches['token']
-                    Add-GitHubMask -Value $secret
+            $Scope = 'local'
+            $Scope = 'global'
+            $Scope = 'system'
+            $configList = git config --$Scope --list 2>&1
+            if ($LASTEXITCODE -ne 0) {
+                $global:LASTEXITCODE = 0
+                $configList = $null
+            } else {
+                $config = @()
+                $configList = $configList | Sort-Object
+                $configList | ForEach-Object {
+                    $name, $value = $_ -split '=', 2
+                    if ($value -match '(?i)AUTHORIZATION:\s*(?<scheme>[^\s]+)\s+(?<token>.*)') {
+                        $secret = $matches['token']
+                        Add-GitHubMask -Value $secret
+                    }
+                    $config += @{
+                        ($name.Trim()) = ($value.Trim())
+                    }
                 }
-                $result += @{
-                    $name = $value
-                }
             }
-            [pscustomobject]$result
         } catch {
             throw $_
         }
