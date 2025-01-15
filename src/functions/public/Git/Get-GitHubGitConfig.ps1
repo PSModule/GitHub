@@ -11,7 +11,7 @@
 
         Gets the global Git configuration.
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([object[]])]
     [CmdletBinding()]
     param(
         [Parameter()]
@@ -43,27 +43,23 @@
                 return
             }
 
-            $Scope = 'local'
-            $Scope = 'global'
-            $Scope = 'system'
+            $config = @()
             $configList = git config --$Scope --list 2>&1
             if ($LASTEXITCODE -ne 0) {
+                Write-Verbose "Failed to get git configuration for [$Scope]."
                 $global:LASTEXITCODE = 0
-                $configList = $null
-            } else {
-                $config = @()
-                $configList = $configList | Sort-Object
-                $configList | ForEach-Object {
-                    $name, $value = $_ -split '=', 2
-                    if ($value -match '(?i)AUTHORIZATION:\s*(?<scheme>[^\s]+)\s+(?<token>.*)') {
-                        $secret = $matches['token']
-                        Add-GitHubMask -Value $secret
-                    }
-                    $config += @{
-                        ($name.Trim()) = ($value.Trim())
-                    }
+                Write-Debug "Resetting LASTEXITCODE: $LASTEXITCODE"
+                return $config
+            }
+
+            $configList = $configList | Sort-Object
+            $configList | ForEach-Object {
+                $name, $value = $_ -split '=', 2
+                $config += @{
+                    ($name.Trim()) = ($value.Trim())
                 }
             }
+            $config
         } catch {
             throw $_
         }
