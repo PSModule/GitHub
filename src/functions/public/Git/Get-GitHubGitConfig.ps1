@@ -11,7 +11,7 @@
 
         Gets the global Git configuration.
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([object[]])]
     [CmdletBinding()]
     param(
         [Parameter()]
@@ -26,7 +26,6 @@
 
     process {
         try {
-
             $gitExists = Get-Command -Name 'git' -ErrorAction SilentlyContinue
             Write-Debug "GITEXISTS: $gitExists"
             if (-not $gitExists) {
@@ -44,23 +43,23 @@
                 return
             }
 
-            $config = @{}
-            git config --$Scope --list | ConvertFrom-StringData | ForEach-Object {
-                $config += $_
+            $config = @()
+            $configList = git config --$Scope --list 2>&1
+            if ($LASTEXITCODE -ne 0) {
+                Write-Verbose "Failed to get git configuration for [$Scope]."
+                $global:LASTEXITCODE = 0
+                Write-Debug "Resetting LASTEXITCODE: $LASTEXITCODE"
+                return $config
             }
-            $result = @{}
-            $config.GetEnumerator() | ForEach-Object {
-                $name = $_.Key
-                $value = $_.Value
-                if ($value -match '(?i)AUTHORIZATION:\s*(?<scheme>[^\s]+)\s+(?<token>.*)') {
-                    $secret = $matches['token']
-                    Add-GitHubMask -Value $secret
-                }
-                $result += @{
-                    $name = $value
+
+            $configList = $configList | Sort-Object
+            $configList | ForEach-Object {
+                $name, $value = $_ -split '=', 2
+                $config += @{
+                    ($name.Trim()) = ($value.Trim())
                 }
             }
-            [pscustomobject]$result
+            $config
         } catch {
             throw $_
         }
