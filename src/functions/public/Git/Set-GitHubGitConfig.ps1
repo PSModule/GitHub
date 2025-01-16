@@ -60,11 +60,11 @@
             if ($PSCmdlet.ShouldProcess("$username on $installationName", 'Set Git configuration')) {
                 $git = 'git'
                 @(
-                    @('config', '--local', 'user.name', "$username"),
-                    @('config', '--local', 'user.email', "$id+$username@users.noreply.github.com"),
-                    @('config', '--local', "url.""https://oauth2:$token@$hostName/$installationName"".insteadOf",
+                    @('config', '--global', 'user.name', "$username"),
+                    @('config', '--global', 'user.email', "$id+$username@users.noreply.github.com"),
+                    @('config', '--global', "url.""https://oauth2:$token@$hostName/$installationName"".insteadOf",
                         "https://$hostName/$installationName"),
-                    @('config', '--local', "url.""https://oauth2:$token@$hostName/$installationName"".insteadOf",
+                    @('config', '--global', "url.""https://oauth2:$token@$hostName/$installationName"".insteadOf",
                         "ssh://$sshUser@$hostName`:$installationName")
                 ) | ForEach-Object {
                     Write-Verbose "$git $($_ -join ' ')"
