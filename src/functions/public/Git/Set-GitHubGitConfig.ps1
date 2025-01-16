@@ -54,16 +54,22 @@
             $id = $Context.DatabaseID
             $token = $Context.Token | ConvertFrom-SecureString -AsPlainText
             $hostName = $Context.HostName
+            $installationName = $Context.InstallationName
 
             if ($PSCmdlet.ShouldProcess("$Name", 'Set Git configuration')) {
-                Write-Verbose "git config --local user.name '$username'"
-                git config --local user.name "$username"
-
-                Write-Verbose "git config --local user.email '$id+$username@users.noreply.github.com'"
-                git config --local user.email "$id+$username@users.noreply.github.com"
-
-                Write-Verbose "git config --local 'url.https://oauth2:$token@$hostName.insteadOf' 'https://$hostName'"
-                git config --local "url.https://oauth2:$token@$hostName.insteadOf" "https://$hostName"
+                $git = 'git'
+                @(
+                    @('config', '--local', 'user.name', "$username"),
+                    @('config', '--local', 'user.email', "$id+$username@users.noreply.github.com"),
+                    @('config', '--local', "url.https://oauth2:$token@$hostName/$installationName.insteadOf",
+                        "https://$hostName/$installationName")
+                ) | ForEach-Object {
+                    Write-Verbose "$git $($_ -join ' ')"
+                    & $git $_
+                    if ($LASTEXITCODE -ne 0) {
+                        throw "Failed to run git command. ($LASTEXITCODE)"
+                    }
+                }
             }
         } catch {
             throw $_
