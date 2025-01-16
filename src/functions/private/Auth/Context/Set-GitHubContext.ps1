@@ -87,8 +87,8 @@ function Set-GitHubContext {
                     }
                     if ($script:GitHub.EnvironmentType -eq 'GHA') {
                         $gitHubEvent = Get-Content -Path $env:GITHUB_EVENT_PATH -Raw | ConvertFrom-Json
-                        $targetType = $gitHubEvent.repository.owner.type
-                        $targetName = $gitHubEvent.repository.owner.login
+                        $installationType = $gitHubEvent.repository.owner.type
+                        $installationName = $gitHubEvent.repository.owner.login
                         $enterprise = $gitHubEvent.enterprise.slug
                         $organization = $gitHubEvent.organization.login
                         $owner = $gitHubEvent.repository.owner.login
@@ -98,7 +98,7 @@ function Set-GitHubContext {
                         Write-Debug "Organization:          $organization"
                         Write-Debug "Repository:            $repo"
                         Write-Debug "Repository Owner:      $owner"
-                        Write-Debug "Repository Owner Type: $targetType"
+                        Write-Debug "Repository Owner Type: $installationType"
                         Write-Debug "Sender:                $gh_sender"
                         if ([string]::IsNullOrEmpty($contextObj['Enterprise'])) {
                             $contextObj['Enterprise'] = [string]$enterprise
@@ -109,17 +109,17 @@ function Set-GitHubContext {
                         if ([string]::IsNullOrEmpty($contextObj['Repo'])) {
                             $contextObj['Repo'] = [string]$repo
                         }
-                        if ([string]::IsNullOrEmpty($contextObj['TargetType'])) {
-                            $contextObj['TargetType'] = [string]$targetType
+                        if ([string]::IsNullOrEmpty($contextObj['InstallationType'])) {
+                            $contextObj['InstallationType'] = [string]$installationType
                         }
-                        if ([string]::IsNullOrEmpty($contextObj['TargetName'])) {
-                            $contextObj['TargetName'] = [string]$targetName
+                        if ([string]::IsNullOrEmpty($contextObj['InstallationName'])) {
+                            $contextObj['InstallationName'] = [string]$installationName
                         }
                         $contextObj['Name'] = "$($contextObj['HostName'])/$($contextObj['Username'])/" +
-                        "$($contextObj['TargetType'])/$($contextObj['TargetName'])"
+                        "$($contextObj['InstallationType'])/$($contextObj['InstallationName'])"
                     } else {
                         $contextObj['Name'] = "$($contextObj['HostName'])/$($contextObj['Username'])/" +
-                        "$($contextObj['TargetType'])/$($contextObj['TargetName'])"
+                        "$($contextObj['InstallationType'])/$($contextObj['InstallationName'])"
                     }
                 }
                 'App' {

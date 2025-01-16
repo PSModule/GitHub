@@ -16,10 +16,10 @@
     [string[]] $Events
 
     # The target type of the installation.
-    [string] $TargetType
+    [string] $InstallationType
 
-    # The target login of the installation.
-    [string] $TargetName
+    # The target login or slug of the installation.
+    [string] $InstallationName
 
     # Simple parameterless constructor
     InstallationGitHubContext() {}
