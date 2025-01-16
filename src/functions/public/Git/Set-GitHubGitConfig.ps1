@@ -56,7 +56,7 @@
             $hostName = $Context.HostName
             $installationName = $Context.InstallationName
 
-            if ($PSCmdlet.ShouldProcess("$Name", 'Set Git configuration')) {
+            if ($PSCmdlet.ShouldProcess("$username on $installationName", 'Set Git configuration')) {
                 $git = 'git'
                 @(
                     @('config', '--local', 'user.name', "$username"),
