@@ -62,10 +62,10 @@
                 @(
                     @('config', '--global', 'user.name', "$username"),
                     @('config', '--global', 'user.email', "$id+$username@users.noreply.github.com"),
-                    @('config', '--global', "url.""https://oauth2:$token@$hostName/$installationName"".insteadOf",
-                        "https://$hostName/$installationName"),
-                    @('config', '--global', "url.""https://oauth2:$token@$hostName/$installationName"".insteadOf",
-                        "ssh://$sshUser@$hostName`:$installationName")
+                    @('config', '--global', '--add', "url.""https://oauth2:$token@$hostName/$installationName"".insteadOf",
+                        "ssh://$sshUser@$hostName`:$installationName"),
+                    @('config', '--global', '--add', "url.""https://oauth2:$token@$hostName/$installationName"".insteadOf",
+                        "https://$hostName/$installationName")
                 ) | ForEach-Object {
                     Write-Verbose "$git $($_ -join ' ')"
                     & $git $_
