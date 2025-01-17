@@ -55,7 +55,7 @@
             $token = $Context.Token | ConvertFrom-SecureString -AsPlainText
             $hostName = $Context.HostName
             $installationName = $Context.InstallationName
-            $sshUser = $Context.Enterprise ?? 'git'
+            # $sshUser = $Context.Enterprise ?? 'git'
 
             if ($PSCmdlet.ShouldProcess("$username on $installationName", 'Set Git configuration')) {
                 $git = 'git'
