@@ -55,16 +55,16 @@
             $token = $Context.Token | ConvertFrom-SecureString -AsPlainText
             $hostName = $Context.HostName
             $installationName = $Context.InstallationName
-            # $sshUser = $Context.Enterprise ?? 'git'
+            $sshUser = $Context.Enterprise ?? 'git'
 
             if ($PSCmdlet.ShouldProcess("$username on $installationName", 'Set Git configuration')) {
                 $git = 'git'
                 @(
                     @('config', '--global', 'user.name', "$username"),
                     @('config', '--global', 'user.email', "$id+$username@users.noreply.github.com"),
-                    # @('config', '--global', '--add', "url.""https://oauth2:$token@$hostName/$installationName"".insteadOf",
-                    #     "ssh://$sshUser@$hostName`:$installationName"),
-                    @('config', '--global', '--add', "url.""https://oauth2:$token@$hostName/$installationName"".insteadOf",
+                    @('config', '--global', '--add', "url.https://oauth2:$token@$hostName/$installationName.insteadOf",
+                        "ssh://$sshUser@$hostName`:$installationName"),
+                    @('config', '--global', '--add', "url.https://oauth2:$token@$hostName/$installationName.insteadOf",
                         "https://$hostName/$installationName")
                 ) | ForEach-Object {
                     Write-Verbose "$git $($_ -join ' ')"
