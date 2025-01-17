@@ -5,7 +5,7 @@
 <table>
     <tr>
         <td>Available functions</td>
-        <td>998</td>
+        <td>1009</td>
     </tr>
     <tr>
         <td>Covered functions</td>
@@ -13,11 +13,11 @@
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>838</td>
+        <td>849</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>16.03%</td>
+        <td>15.86%</td>
     </tr>
 </table>
 
@@ -98,6 +98,13 @@
 | `/orgs/{org}`                                                                                                             | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
 | `/orgs/{org}/actions/cache/usage`                                                                                         |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/actions/cache/usage-by-repository`                                                                           |                    | :x:                |                    |                    |                    |
+| `/orgs/{org}/actions/hosted-runners`                                                                                      |                    | :x:                |                    | :x:                |                    |
+| `/orgs/{org}/actions/hosted-runners/images/github-owned`                                                                  |                    | :x:                |                    |                    |                    |
+| `/orgs/{org}/actions/hosted-runners/images/partner`                                                                       |                    | :x:                |                    |                    |                    |
+| `/orgs/{org}/actions/hosted-runners/limits`                                                                               |                    | :x:                |                    |                    |                    |
+| `/orgs/{org}/actions/hosted-runners/machine-sizes`                                                                        |                    | :x:                |                    |                    |                    |
+| `/orgs/{org}/actions/hosted-runners/platforms`                                                                            |                    | :x:                |                    |                    |                    |
+| `/orgs/{org}/actions/hosted-runners/{hosted_runner_id}`                                                                   | :x:                | :x:                | :x:                |                    |                    |
 | `/orgs/{org}/actions/oidc/customization/sub`                                                                              |                    | :x:                |                    |                    | :x:                |
 | `/orgs/{org}/actions/permissions`                                                                                         |                    | :x:                |                    |                    | :x:                |
 | `/orgs/{org}/actions/permissions/repositories`                                                                            |                    | :x:                |                    |                    | :x:                |
@@ -106,6 +113,7 @@
 | `/orgs/{org}/actions/permissions/workflow`                                                                                |                    | :x:                |                    |                    | :x:                |
 | `/orgs/{org}/actions/runner-groups`                                                                                       |                    | :x:                |                    | :x:                |                    |
 | `/orgs/{org}/actions/runner-groups/{runner_group_id}`                                                                     | :x:                | :x:                | :x:                |                    |                    |
+| `/orgs/{org}/actions/runner-groups/{runner_group_id}/hosted-runners`                                                      |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/actions/runner-groups/{runner_group_id}/repositories`                                                        |                    | :x:                |                    |                    | :x:                |
 | `/orgs/{org}/actions/runner-groups/{runner_group_id}/repositories/{repository_id}`                                        | :x:                |                    |                    |                    | :x:                |
 | `/orgs/{org}/actions/runner-groups/{runner_group_id}/runners`                                                             |                    | :x:                |                    |                    | :x:                |
