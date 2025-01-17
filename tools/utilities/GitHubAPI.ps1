@@ -1,3 +1,4 @@
+# https://github.com/github/rest-api-description
 $APIDocURI = 'https://raw.githubusercontent.com/github/rest-api-description/main'
 $Bundled = '/descriptions/api.github.com/api.github.com.json'
 # $Dereferenced = 'descriptions/api.github.com/dereferenced/api.github.com.deref.json'
@@ -47,3 +48,50 @@ $response.components.responses # HTTP status descriptions
 $path = '/repos/{owner}/{repo}/actions/runs'
 $method = 'get'
 $response.components.schemas.'issue-comment'
+
+
+
+$response.Info
+
+$response.tags
+
+$response.'x-webhooks'.'branch-protection-configuration-disabled'.post
+
+$webhooks = @()
+$response.'x-webhooks'.PSObject.Properties | ForEach-Object {
+    $Name = $_.Name
+    $_.Value.PSObject.Properties | ForEach-Object {
+        $Type = $_.Name
+        $Data = $_.Value
+        $Supports = $Data.'x-github'.'supported-webhook-types'
+        $Category = $Data.'x-github'.category
+        $Subcategory = $Data.'x-github'.subcategory
+        $CloudOnly = $Data.'x-github'.githubCloudOnly
+        $SchemaID = $Data.requestBody.content.'application/json'.schema.'$ref' | Split-Path -Leaf
+        $schema = $response.components.schemas.$SchemaID
+        $schema | Add-Member -MemberType NoteProperty -Name ID -Value $SchemaID -Force
+        $Properties = $schema.properties
+        $Data | Add-Member -MemberType NoteProperty -Name Name -Value $Name -Force
+        $Data | Add-Member -MemberType NoteProperty -Name Type -Value $Type -Force
+        $Data | Add-Member -MemberType NoteProperty -Name Supports -Value $Supports -Force
+        $Data | Add-Member -MemberType NoteProperty -Name Category -Value $Category -Force
+        $Data | Add-Member -MemberType NoteProperty -Name Subcategory -Value $Subcategory -Force
+        $Data | Add-Member -MemberType NoteProperty -Name CloudOnly -Value $CloudOnly -Force
+        $Data | Add-Member -MemberType NoteProperty -Name Schema -Value $Schema -Force
+        $Data | Add-Member -MemberType NoteProperty -Name Properties -Value $Properties -Force
+        $webhooks += $Data
+    }
+}
+$webhooks | Select-Object -Property Name, Type, Supports, Category, Subcategory, CloudOnly | Format-Table
+$Data.name
+$Data.parameters
+$Data.responses
+$Data.'x-github'
+$Data.requestBody
+
+
+$schema.title
+
+$schema.properties.action.enum
+$schema.required
+
