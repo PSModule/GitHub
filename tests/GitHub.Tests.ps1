@@ -747,6 +747,13 @@ Describe 'As GitHub Actions (GHA)' {
     AfterAll {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
+    Context 'Actions' {
+        It 'Get-GitHubWorkflowData - Gets info about the workflow environment' {
+            $workflow = Get-GitHubWorkflowData
+            Write-Verbose ($workflow | Format-Table | Out-String) -Verbose
+            $workflow | Should -Not -BeNullOrEmpty
+        }
+    }
     Context 'Auth' {
         It 'Get-GitHubViewer - Gets the logged in context (GHA)' {
             Get-GitHubViewer | Should -Not -BeNullOrEmpty
