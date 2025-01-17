@@ -41,6 +41,13 @@ Describe 'GitHub' {
             Get-GitHubConfig -Name HostName | Should -Be 'github.com'
         }
     }
+    Context 'Actions' {
+        It 'Get-GitHubWorkflowData - Gets info about the workflow environment' {
+            $workflow = Get-GitHubWorkflowData
+            Write-Verbose ($workflow | Format-Table | Out-String) -Verbose
+            $workflow | Should -Not -BeNullOrEmpty
+        }
+    }
     Context 'Auth' {
         It 'Connect-GitHubAccount - Connects GitHub Actions without parameters' {
             { Connect-GitHubAccount } | Should -Not -Throw
@@ -747,13 +754,6 @@ Describe 'As GitHub Actions (GHA)' {
     AfterAll {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
-    Context 'Actions' {
-        It 'Get-GitHubWorkflowData - Gets info about the workflow environment' {
-            $workflow = Get-GitHubWorkflowData
-            Write-Verbose ($workflow | Format-Table | Out-String) -Verbose
-            $workflow | Should -Not -BeNullOrEmpty
-        }
-    }
     Context 'Auth' {
         It 'Get-GitHubViewer - Gets the logged in context (GHA)' {
             Get-GitHubViewer | Should -Not -BeNullOrEmpty
@@ -794,7 +794,7 @@ Describe 'As GitHub Actions (GHA)' {
         }
         It 'Set-GitHubGitConfig sets the Git configuration (GHA)' {
             { Set-GitHubGitConfig } | Should -Not -Throw
-            $gitConfig = Get-GitHubGitConfig
+            $gitConfig = Get-GitHubGitConfig -Scope 'global'
             Write-Verbose ($gitConfig | Format-List | Out-String) -Verbose
 
             $gitConfig | Should -Not -BeNullOrEmpty
