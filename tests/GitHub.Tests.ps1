@@ -2,6 +2,10 @@
     'PSUseDeclaredVarsMoreThanAssignments', '',
     Justification = 'Pester grouping syntax: known issue.'
 )]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+    'PSAvoidUsingConvertToSecureStringWithPlainText', '',
+    Justification = 'Used to create a secure string for testing.'
+)]
 [CmdletBinding()]
 param()
 
@@ -203,6 +207,17 @@ Describe 'GitHub' {
         It 'Set-GitHubOutput - Should not throw' {
             {
                 Set-GitHubOutput -Name 'MyName' -Value 'MyValue'
+            } | Should -Not -Throw
+        }
+        It 'Set-GitHubOutput + SecureString - Should not throw' {
+            {
+                $secret = 'MyValue' | ConvertTo-SecureString -AsPlainText -Force
+                Set-GitHubOutput -Name 'SecretName' -Value $secret
+            } | Should -Not -Throw
+        }
+        It 'Set-GitHubOutput + Object - Should not throw' {
+            {
+                Set-GitHubOutput -Name 'Config' -Value (Get-GitHubConfig)
             } | Should -Not -Throw
         }
         It 'Get-GitHubOutput - Should not throw' {
@@ -754,10 +769,26 @@ Describe 'As GitHub Actions (GHA)' {
         }
     }
     Context 'Git' {
+        It "Get-GitHubGitConfig gets the 'local' (default) Git configuration (GHA)" {
+            $gitConfig = Get-GitHubGitConfig
+            Write-Verbose ($gitConfig | Format-List | Out-String) -Verbose
+            $gitConfig | Should -Not -BeNullOrEmpty
+        }
+        It "Get-GitHubGitConfig gets the 'global' Git configuration (GHA)" {
+            git config --global advice.pushfetchfirst false
+            $gitConfig = Get-GitHubGitConfig -Scope 'global'
+            Write-Verbose ($gitConfig | Format-List | Out-String) -Verbose
+            $gitConfig | Should -Not -BeNullOrEmpty
+        }
+        It "Get-GitHubGitConfig gets the 'system' Git configuration (GHA)" {
+            $gitConfig = Get-GitHubGitConfig -Scope 'system'
+            Write-Verbose ($gitConfig | Format-List | Out-String) -Verbose
+            $gitConfig | Should -Not -BeNullOrEmpty
+        }
         It 'Set-GitHubGitConfig sets the Git configuration (GHA)' {
             { Set-GitHubGitConfig } | Should -Not -Throw
             $gitConfig = Get-GitHubGitConfig
-            Write-Verbose ($gitConfig | Format-Table | Out-String) -Verbose
+            Write-Verbose ($gitConfig | Format-List | Out-String) -Verbose
 
             $gitConfig | Should -Not -BeNullOrEmpty
             $gitConfig.'user.name' | Should -Not -BeNullOrEmpty

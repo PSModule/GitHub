@@ -11,9 +11,13 @@
 
         Gets the global Git configuration.
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([object[]])]
     [CmdletBinding()]
-    param()
+    param(
+        [Parameter()]
+        [ValidateSet('local', 'global', 'system')]
+        [string] $Scope = 'local'
+    )
 
     begin {
         $stackPath = Get-PSCallStackPath
@@ -22,20 +26,40 @@
 
     process {
         try {
-
             $gitExists = Get-Command -Name 'git' -ErrorAction SilentlyContinue
+            Write-Debug "GITEXISTS: $gitExists"
             if (-not $gitExists) {
-                throw 'Git is not installed. Please install Git before running this command.'
+                Write-Verbose 'Git is not installed. Cannot get git configuration.'
+                return
             }
 
-            git config --local --list | ForEach-Object {
-                (
-                    [pscustomobject]@{
-                        Name  = $_.Split('=')[0]
-                        Value = $_.Split('=')[1]
-                    }
-                )
+            $cmdresult = git rev-parse --is-inside-work-tree 2>&1
+            Write-Debug "LASTEXITCODE: $LASTEXITCODE"
+            Write-Debug "CMDRESULT:    $cmdresult"
+            if ($LASTEXITCODE -ne 0) {
+                Write-Verbose 'Not a git repository. Cannot get git configuration.'
+                $Global:LASTEXITCODE = 0
+                Write-Debug "Resetting LASTEXITCODE: $LASTEXITCODE"
+                return
             }
+
+            $config = @()
+            $configList = git config --$Scope --list 2>&1
+            if ($LASTEXITCODE -ne 0) {
+                Write-Verbose "Failed to get git configuration for [$Scope]."
+                $global:LASTEXITCODE = 0
+                Write-Debug "Resetting LASTEXITCODE: $LASTEXITCODE"
+                return $config
+            }
+
+            $configList = $configList | Sort-Object
+            $configList | ForEach-Object {
+                $name, $value = $_ -split '=', 2
+                $config += @{
+                    ($name.Trim()) = ($value.Trim())
+                }
+            }
+            $config
         } catch {
             throw $_
         }

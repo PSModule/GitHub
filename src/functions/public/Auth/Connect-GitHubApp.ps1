@@ -119,20 +119,20 @@
                     InstallationID      = [string]$installation.id
                     Permissions         = [pscustomobject]$installation.permissions
                     Events              = [string[]]$installation.events
-                    TargetType          = [string]$installation.target_type
+                    InstallationType    = [string]$installation.target_type
                     Token               = [securestring]$token.Token
                     TokenExpirationDate = [datetime]$token.ExpiresAt
                 }
 
-                switch ($installation.target_type) {
+                $contextParams['InstallationName'] = switch ($installation.target_type) {
                     'User' {
-                        $contextParams['TargetName'] = [string]$installation.account.login
+                        [string]$installation.account.login
                     }
                     'Organization' {
-                        $contextParams['TargetName'] = [string]$installation.account.login
+                        [string]$installation.account.login
                     }
                     'Enterprise' {
-                        $contextParams['TargetName'] = [string]$installation.account.slug
+                        [string]$installation.account.slug
                     }
                 }
                 Write-Verbose 'Logging in using a managed installation access token...'
