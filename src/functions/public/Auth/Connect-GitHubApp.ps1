@@ -112,7 +112,7 @@
                     AuthType            = [string]'IAT'
                     TokenType           = [string]'ghs'
                     DisplayName         = [string]$Context.DisplayName
-                    ApiBaseUri          = [uri]$Context.ApiBaseUri
+                    ApiBaseUri          = [string]$Context.ApiBaseUri
                     ApiVersion          = [string]$Context.ApiVersion
                     HostName            = [string]$Context.HostName
                     ClientID            = [string]$Context.ClientID
