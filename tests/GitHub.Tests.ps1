@@ -42,8 +42,13 @@ Describe 'GitHub' {
         }
     }
     Context 'Actions' {
-        It 'Get-GitHubWorkflowData - Gets info about the workflow environment' {
-            $workflow = Get-GitHubWorkflowData
+        It 'Get-GitHubEventData - Gets data about the event that triggered the workflow' {
+            $workflow = Get-GitHubEventData
+            Write-Verbose ($workflow | Format-Table | Out-String) -Verbose
+            $workflow | Should -Not -BeNullOrEmpty
+        }
+        It 'Get-GitHubRunnerData - Gets data about the runner that is running the workflow' {
+            $workflow = Get-GitHubRunnerData
             Write-Verbose ($workflow | Format-Table | Out-String) -Verbose
             $workflow | Should -Not -BeNullOrEmpty
         }

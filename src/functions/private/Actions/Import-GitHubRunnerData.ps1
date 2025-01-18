@@ -1,10 +1,10 @@
 ﻿function Import-GitHubRunnerData {
     <#
         .SYNOPSIS
-        Import data of the runner of the workflow
+        Import data about the runner that is running the workflow.
 
         .DESCRIPTION
-        Import data of the runner of the workflow
+        Import data about the runner that is running the workflow.
 
         .EXAMPLE
         Import-GitHubRunnerData

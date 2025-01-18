@@ -1,10 +1,10 @@
 ﻿function Import-GitHubEventData {
     <#
         .SYNOPSIS
-        Import data of the event that triggered the workflow
+        Import data from the event that triggered the workflow.
 
         .DESCRIPTION
-        Import data of the event that triggered the workflow
+        Import data from the event that triggered the workflow.
 
         .EXAMPLE
         Import-GitHubEventData

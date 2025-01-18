@@ -1,10 +1,10 @@
 ﻿function Get-GitHubEventData {
     <#
         .SYNOPSIS
-        Get data of the event that triggered the workflow.
+        Gets data about the event that triggered the workflow.
 
         .DESCRIPTION
-        Get data of the event that triggered the workflow.
+        Gets data about the event that triggered the workflow.
 
         .EXAMPLE
         Get-GitHubEventData
