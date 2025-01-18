@@ -44,7 +44,7 @@
             }
             $gitHubEvent = [pscustomobject]$hashtable
 
-            $gitHubEvent | Add-Member -MemberType NoteProperty -Name Name -Value $env:GITHUB_EVENT_NAME -Force
+            $gitHubEvent | Add-Member -MemberType NoteProperty -Name Type -Value $env:GITHUB_EVENT_NAME -Force
             if ($eventAction) {
                 $gitHubEvent | Add-Member -MemberType NoteProperty -Name Action -Value $eventAction -Force
             }
