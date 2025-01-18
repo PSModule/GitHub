@@ -9,8 +9,8 @@ Invoke-GitHubAPI -ApiEndpoint /user
 
 # Most complex example - output is the entire web response
 $context = Get-GitHubContext
-Invoke-RestMethod -Uri "$($context.ApiBaseUri)user" -Token ($context.Token) -Authentication Bearer
-Invoke-WebRequest -Uri "$($context.ApiBaseUri)user" -Token ($context.Token) -Authentication Bearer
+Invoke-RestMethod -Uri "$($context.ApiBaseUri)/user" -Token ($context.Token) -Authentication Bearer
+Invoke-WebRequest -Uri "$($context.ApiBaseUri)/user" -Token ($context.Token) -Authentication Bearer
 #endregion
 
 
