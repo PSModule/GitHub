@@ -1,14 +1,15 @@
-﻿function Get-GitHubWorkflowData {
+﻿function Get-GitHubEventData {
     <#
         .SYNOPSIS
-        Get data from the workflow and the event that triggered the workflow
+        Get data of the event that triggered the workflow.
 
         .DESCRIPTION
-        Get data from the workflow and the event that triggered the workflow
+        Get data of the event that triggered the workflow.
 
         .EXAMPLE
-        Get-GitHubWorkflowData
+        Get-GitHubEventData
     #>
+    [OutputType([pscustomobject])]
     [CmdletBinding()]
     param()
 
@@ -18,7 +19,7 @@
     }
 
     process {
-        $script:GitHub.Event
+        $script:GitHubEvent
     }
 
     end {

@@ -1,13 +1,13 @@
-﻿function Import-GitHubWorkflowData {
+﻿function Import-GitHubEventData {
     <#
         .SYNOPSIS
-        Import data from the workflow and the event that triggered the workflow
+        Import data of the event that triggered the workflow
 
         .DESCRIPTION
-        Import data from the workflow and the event that triggered the workflow
+        Import data of the event that triggered the workflow
 
         .EXAMPLE
-        Import-GitHubWorkflowData
+        Import-GitHubEventData
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSUseShouldProcessForStateChangingFunctions', '',
@@ -54,7 +54,7 @@
             if ($eventRepository) {
                 $gitHubEvent | Add-Member -MemberType NoteProperty -Name Repository -Value $eventRepository -Force
             }
-            $script:GitHub.Event = $gitHubEvent
+            $script:GitHubEvent = $gitHubEvent
         } catch {
             throw $_
         }
