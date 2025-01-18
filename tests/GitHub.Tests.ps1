@@ -41,6 +41,18 @@ Describe 'GitHub' {
             Get-GitHubConfig -Name HostName | Should -Be 'github.com'
         }
     }
+    Context 'Actions' {
+        It 'Get-GitHubEventData - Gets data about the event that triggered the workflow' {
+            $workflow = Get-GitHubEventData
+            Write-Verbose ($workflow | Format-Table | Out-String) -Verbose
+            $workflow | Should -Not -BeNullOrEmpty
+        }
+        It 'Get-GitHubRunnerData - Gets data about the runner that is running the workflow' {
+            $workflow = Get-GitHubRunnerData
+            Write-Verbose ($workflow | Format-Table | Out-String) -Verbose
+            $workflow | Should -Not -BeNullOrEmpty
+        }
+    }
     Context 'Auth' {
         It 'Connect-GitHubAccount - Connects GitHub Actions without parameters' {
             { Connect-GitHubAccount } | Should -Not -Throw
@@ -787,7 +799,7 @@ Describe 'As GitHub Actions (GHA)' {
         }
         It 'Set-GitHubGitConfig sets the Git configuration (GHA)' {
             { Set-GitHubGitConfig } | Should -Not -Throw
-            $gitConfig = Get-GitHubGitConfig
+            $gitConfig = Get-GitHubGitConfig -Scope 'global'
             Write-Verbose ($gitConfig | Format-List | Out-String) -Verbose
 
             $gitConfig | Should -Not -BeNullOrEmpty
