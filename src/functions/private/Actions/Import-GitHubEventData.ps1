@@ -35,6 +35,15 @@
             $eventRepository = $gitHubEvent.repository | Select-Object -Property name, full_name, html_url, id, node_id, default_branch
 
             $gitHubEvent = $gitHubEvent | Select-Object -ExcludeProperty action, sender, enterprise, organization, repository
+
+            $hashtable = @{}
+            $gitHubEvent.PSObject.Properties | ForEach-Object {
+                $name = $_.Name
+                $name = $name | Convert-StringCasingStyle -To PascalCase
+                $hashtable[$_.Name] = $_.Value
+            }
+            $gitHubEvent = [pscustomobject]$hashtable
+
             $gitHubEvent | Add-Member -MemberType NoteProperty -Name Name -Value $env:GITHUB_EVENT_NAME -Force
             if ($eventAction) {
                 $gitHubEvent | Add-Member -MemberType NoteProperty -Name Action -Value $eventAction -Force
