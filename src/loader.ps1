@@ -8,5 +8,6 @@ switch ($script:GitHub.EnvironmentType) {
         $env:GITHUB_REPOSITORY_NAME = $env:GITHUB_REPOSITORY -replace '.+/'
         Set-GitHubEnv -Name 'GITHUB_REPOSITORY_NAME' -Value $env:GITHUB_REPOSITORY_NAME
         Import-GitHubEventData
+        Import-GitHubRunnerData
     }
 }

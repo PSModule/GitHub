@@ -17,4 +17,5 @@
     }
     Config             = $null
     Event              = $null
+    Runner             = $null
 }
