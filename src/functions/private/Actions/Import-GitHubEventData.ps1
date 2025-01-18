@@ -54,7 +54,7 @@
             if ($eventRepository) {
                 $gitHubEvent | Add-Member -MemberType NoteProperty -Name Repository -Value $eventRepository -Force
             }
-            $script:GitHubEvent = $gitHubEvent
+            $script:GitHub.Event = $gitHubEvent
         } catch {
             throw $_
         }

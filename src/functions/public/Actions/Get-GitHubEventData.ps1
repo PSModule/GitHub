@@ -19,7 +19,7 @@
     }
 
     process {
-        $script:GitHubEvent
+        $script:GitHub.Event
     }
 
     end {

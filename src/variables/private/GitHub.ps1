@@ -16,4 +16,5 @@
         DefaultContext                = ''
     }
     Config             = $null
+    Event              = $null
 }
