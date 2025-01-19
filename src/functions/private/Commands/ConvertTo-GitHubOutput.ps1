@@ -57,7 +57,7 @@
 
             Write-Debug "Input object type: $($InputObject.GetType().Name)"
             Write-Debug "Input object value:"
-            Write-Debug $InputObject
+            Write-Debug ($InputObject | Out-String)
 
             if ($InputObject -is [hashtable]) {
                 $InputObject = [PSCustomObject]$InputObject
@@ -70,7 +70,7 @@
                 Write-Debug "Processing property: $key"
                 Write-Debug "Property value type: $($value.GetType().Name)"
                 Write-Debug "Property value:"
-                Write-Debug $value
+                Write-Debug ($InputObject | Out-String)
 
                 # Convert hashtable or PSCustomObject to compressed JSON
                 if ($value -is [hashtable] -or $value -is [PSCustomObject]) {
@@ -86,6 +86,8 @@
                 $outputLines += $value
                 $outputLines += $EOFMarker
             }
+            Write-Debug "Output lines:"
+            Write-Debug ($outputLines | Out-String)
             $outputLines
         } catch {
             throw $_
