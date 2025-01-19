@@ -17,12 +17,12 @@
         - [ ] Item 1
         - [x] Item 2
         @ | ConvertFrom-IssueBody
-
-        Converts the issue body content into a hashtable.
-
         Section 1            Section 2
         ---------            ---------
         Content 1…           {[Item 2, True], [Item 1, False]}
+
+        Converts the issue body content into a hashtable.
+
     #>
     [OutputType([PSCustomObject])]
     [OutputType([hashtable])]
