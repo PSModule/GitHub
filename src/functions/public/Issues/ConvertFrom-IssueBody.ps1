@@ -16,7 +16,7 @@
         ### Section 2
         - [ ] Item 1
         - [x] Item 2
-        @ | ConvertFrom-IssueBody
+        '@ | ConvertFrom-IssueBody
         Section 1            Section 2
         ---------            ---------
         Content 1…           {[Item 2, True], [Item 1, False]}
