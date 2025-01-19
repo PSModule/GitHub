@@ -1,10 +1,10 @@
-﻿filter ConvertFrom-IssueBody {
+﻿filter ConvertFrom-IssueForm {
     <#
         .SYNOPSIS
-        Converts the issue body content into a hashtable or object.
+        Converts the issue form content into a hashtable or object.
 
         .DESCRIPTION
-        Aligns with the issue body content structure and converts it into a hashtable or object.
+        Aligns with the issue form content structure and converts it into a hashtable or object.
         Section titles become keys and their content becomes values.
 
         .EXAMPLE
@@ -16,24 +16,24 @@
         ### Section 2
         - [ ] Item 1
         - [x] Item 2
-        '@ | ConvertFrom-IssueBody
+        '@ | ConvertFrom-IssueForm
         Section 1            Section 2
         ---------            ---------
         Content 1…           {[Item 2, True], [Item 1, False]}
 
-        Converts the issue body content into a hashtable.
+        Converts the issue form content into a hashtable.
 
     #>
     [OutputType([PSCustomObject])]
     [OutputType([hashtable])]
     [CmdletBinding()]
     param(
-        # The issue body content to parse.
+        # The issue form content to parse.
         [Parameter(
             Mandatory,
             ValueFromPipeline
         )]
-        [string] $IssueBody,
+        [string] $IssueForm,
 
         # If set, the output will be a hashtable instead of an object.
         [Parameter()]
@@ -46,8 +46,8 @@
     }
 
     process {
-        # Clean up the issue body
-        $content = $IssueBody -replace '<!--[\s\S]*?-->'
+        # Clean up the issue form
+        $content = $IssueForm -replace '<!--[\s\S]*?-->'
         $content = $content.Split([Environment]::NewLine).Trim() | Where-Object { $_ -ne '' }
 
         $results = @()
