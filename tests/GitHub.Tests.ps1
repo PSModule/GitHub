@@ -229,13 +229,26 @@ Describe 'GitHub' {
         }
         It 'Set-GitHubOutput + Object - Should not throw' {
             {
-                Set-GitHubOutput -Name 'Config' -Value (Get-GitHubConfig)
+                $jupiter = [PSCustomObject]@{
+                    Name          = 'Jupiter'
+                    NumberOfMoons = 79
+                    Moons         = @(@{ Name = 'Io'; Radius = 1821 }, @{ Name = 'Europa'; Radius = 1560 })
+                    NumberOfRings = 4
+                    RockyPlanet   = $false
+                    Neighbors     = @('Mars', 'Saturn')
+                    SomethingElse = [PSCustomObject]@{
+                        Name  = 'Something'
+                        Value = 'Else'
+                    }
+                }
+                Set-GitHubOutput -Name 'Config' -Value $jupiter
             } | Should -Not -Throw
         }
         It 'Get-GitHubOutput - Should not throw' {
             {
                 Get-GitHubOutput
             } | Should -Not -Throw
+            Write-Verbose (Get-GitHubOutput | Format-Table | Out-String) -Verbose
         }
         It 'Set-GitHubEnvironmentVariable - Should not throw' {
             {
