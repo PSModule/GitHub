@@ -1,4 +1,4 @@
-﻿filter ConvertFrom-IssueForm {
+﻿function ConvertFrom-IssueForm {
     <#
         .SYNOPSIS
         Converts the issue form content into a hashtable or object.
