@@ -132,6 +132,11 @@ Describe 'GitHub' {
             Write-Verbose ($contexts | Out-String) -Verbose
             ($contexts).Count | Should -Be 3
         }
+    }
+    Context 'DefaultContext' {
+        BeforeAll {
+            Connect-GitHub
+        }
         It 'Set-GitHubDefaultContext - Can swap context to another' {
             { Set-GitHubDefaultContext -Context 'github.com/github-actions/Organization/PSModule' } | Should -Not -Throw
             Get-GitHubConfig -Name 'DefaultContext' | Should -Be 'github.com/github-actions/Organization/PSModule'
