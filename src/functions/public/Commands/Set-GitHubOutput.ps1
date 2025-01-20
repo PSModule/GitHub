@@ -49,18 +49,24 @@
 
             $outputs = Get-GitHubOutput -Path $Path -AsHashtable
 
-            if ($Value -Is [securestring]) {
-                $Value = $Value | ConvertFrom-SecureString -AsPlainText
-                Add-Mask -Value $Value
-            }
-
             if ([string]::IsNullOrEmpty($env:GITHUB_ACTION)) {
                 Write-Warning 'Cannot create output as the step has no ID.'
             }
 
-            Write-Verbose "Output: [$Name] = [$Value]"
+            switch -Regex ($value.GetType().Name) {
+                'SecureString' {
+                    $Value = $Value | ConvertFrom-SecureString -AsPlainText
+                    Add-Mask -Value $Value
+                }
+                'Hashtable|PSCustomObject' {
+                    Write-Debug 'Converting value to JSON:'
+                    $Value = $Value | ConvertTo-Json -Compress -Depth 100
+                    Write-Debug $value
+                }
+                default {}
+            }
 
-            $Value = $Value | ConvertTo-Json -Compress -Depth 100
+            Write-Verbose "Output: [$Name] = [$Value]"
 
             # If the script is running in a GitHub composite action, accumulate the output under the 'result' key,
             # else append the key-value pair directly.
