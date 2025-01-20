@@ -60,7 +60,12 @@
 
             Write-Verbose "Output: [$Name] = [$Value]"
 
-            $Value = $Value | ConvertTo-Json -Compress -Depth 100
+            # Convert hashtable or PSCustomObject to compressed JSON
+            if ($value -is [hashtable] -or $value -is [PSCustomObject]) {
+                Write-Debug 'Converting value to JSON:'
+                $Value = $Value | ConvertTo-Json -Compress -Depth 100
+                Write-Debug $value
+            }
 
             # If the script is running in a GitHub composite action, accumulate the output under the 'result' key,
             # else append the key-value pair directly.
