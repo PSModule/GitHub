@@ -216,16 +216,30 @@ Describe 'GitHub' {
                 }
             } | Should -Not -Throw
         }
-        It 'Set-GitHubOutput - Should not throw' {
+        It 'Set-GitHubOutput + Simple string - Should not throw' {
             {
-                Set-GitHubOutput -Name 'MyName' -Value 'MyValue'
+                Set-GitHubOutput -Name 'MyOutput' -Value 'MyValue'
             } | Should -Not -Throw
+            (Get-GitHubOutput).result.MyOutput | Should -Be 'MyValue'
+        }
+        It 'Set-GitHubOutput + Multiline string - Should not throw' {
+            {
+                Set-GitHubOutput -Name 'MyOutput' -Value @'
+This is a multiline
+string
+'@
+            } | Should -Not -Throw
+            (Get-GitHubOutput).result.MyOutput | Should -Be @'
+This is a multiline
+string
+'@
         }
         It 'Set-GitHubOutput + SecureString - Should not throw' {
             {
                 $secret = 'MyValue' | ConvertTo-SecureString -AsPlainText -Force
-                Set-GitHubOutput -Name 'SecretName' -Value $secret
+                Set-GitHubOutput -Name 'MySecret' -Value $secret
             } | Should -Not -Throw
+            (Get-GitHubOutput).result.MySecret | Should -Be 'MyValue'
         }
         It 'Set-GitHubOutput + Object - Should not throw' {
             {
@@ -241,14 +255,15 @@ Describe 'GitHub' {
                         Value = 'Else'
                     }
                 }
-                Set-GitHubOutput -Name 'Config' -Value $jupiter
+                Set-GitHubOutput -Name 'Jupiter' -Value $jupiter
             } | Should -Not -Throw
+            (Get-GitHubOutput).result.Config | Should -BeLike ''
         }
         It 'Get-GitHubOutput - Should not throw' {
             {
                 Get-GitHubOutput
             } | Should -Not -Throw
-            Write-Verbose (Get-GitHubOutput | Format-Table | Out-String) -Verbose
+            Write-Verbose (Get-GitHubOutput | Format-List | Out-String) -Verbose
         }
         It 'Set-GitHubEnvironmentVariable - Should not throw' {
             {
