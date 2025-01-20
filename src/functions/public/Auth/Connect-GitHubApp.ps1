@@ -115,6 +115,7 @@
                     ApiBaseUri          = [string]$Context.ApiBaseUri
                     ApiVersion          = [string]$Context.ApiVersion
                     HostName            = [string]$Context.HostName
+                    PerPage             = 100
                     ClientID            = [string]$Context.ClientID
                     InstallationID      = [string]$installation.id
                     Permissions         = [pscustomobject]$installation.permissions
