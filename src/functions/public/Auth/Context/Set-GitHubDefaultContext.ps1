@@ -24,6 +24,10 @@
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
+        Write-Debug "[$stackPath] - Parameters:"
+        Get-FunctionParameter | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+        Write-Debug "[$stackPath] - Parent function parameters:"
+        Get-FunctionParameter -Scope 1 | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
         $Context = Resolve-GitHubContext -Context $Context
     }
 
