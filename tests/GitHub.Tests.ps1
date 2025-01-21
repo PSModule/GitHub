@@ -138,16 +138,19 @@ Describe 'GitHub' {
             Connect-GitHub
         }
         It 'Set-GitHubDefaultContext - Can swap context to another' {
+            Get-GitHubContext -ListAvailable -Debug:$false -Verbose:$false | Out-String -Stream | ForEach-Object { Write-Verbose $_ -Verbose }
             { Set-GitHubDefaultContext -Context 'github.com/github-actions/Organization/PSModule' } | Should -Not -Throw
             Get-GitHubConfig -Name 'DefaultContext' | Should -Be 'github.com/github-actions/Organization/PSModule'
         }
 
         It 'Set-GitHubDefaultContext - Can swap context to another using pipeline - String' {
+            Get-GitHubContext -ListAvailable -Debug:$false -Verbose:$false | Out-String -Stream | ForEach-Object { Write-Verbose $_ -Verbose }
             { 'github.com/github-actions/Organization/PSModule' | Set-GitHubDefaultContext } | Should -Not -Throw
             Get-GitHubConfig -Name 'DefaultContext' | Should -Be 'github.com/github-actions/Organization/PSModule'
         }
 
         It 'Set-GitHubDefaultContext - Can swap context to another using pipeline - Context object' {
+            Get-GitHubContext -ListAvailable -Debug:$false -Verbose:$false | Out-String -Stream | ForEach-Object { Write-Verbose $_ -Verbose }
             { Get-GitHubContext -Context 'github.com/github-actions/Organization/PSModule' | Set-GitHubDefaultContext } | Should -Not -Throw
             Get-GitHubConfig -Name 'DefaultContext' | Should -Be 'github.com/github-actions/Organization/PSModule'
         }
