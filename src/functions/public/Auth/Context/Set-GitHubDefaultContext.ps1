@@ -20,15 +20,11 @@
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        Write-Debug "[$stackPath] - Parameters:"
-        Get-FunctionParameter | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
-        Write-Debug "[$stackPath] - Parent function parameters:"
-        Get-FunctionParameter -Scope 1 | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
-        $Context = Resolve-GitHubContext -Context $Context
     }
 
     process {
         Write-Debug "Setting default context to [$Context]"
+        $Context = Resolve-GitHubContext -Context $Context
         if ($PSCmdlet.ShouldProcess("$Context", 'Set default context')) {
             Set-GitHubConfig -Name 'DefaultContext' -Value $Context.Name
         }
