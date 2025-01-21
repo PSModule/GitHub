@@ -13,11 +13,7 @@
     param(
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter(
-            ValueFromPipeline,
-            ValueFromPipelineByPropertyName
-        )]
-        [Alias('Name')]
+        [Parameter(ValueFromPipeline)]
         [object] $Context = (Get-GitHubContext)
     )
 
@@ -32,6 +28,7 @@
     }
 
     process {
+        Write-Debug "Setting default context to [$Context]"
         if ($PSCmdlet.ShouldProcess("$Context", 'Set default context')) {
             Set-GitHubConfig -Name 'DefaultContext' -Value $Context.Name
         }
