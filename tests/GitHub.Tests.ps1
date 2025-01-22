@@ -132,9 +132,27 @@ Describe 'GitHub' {
             Write-Verbose ($contexts | Out-String) -Verbose
             ($contexts).Count | Should -Be 3
         }
+    }
+    Context 'DefaultContext' {
+        BeforeAll {
+            Connect-GitHub
+        }
         It 'Set-GitHubDefaultContext - Can swap context to another' {
+            Write-Verbose (Get-GitHubContext -ListAvailable | Out-String) -Verbose
             { Set-GitHubDefaultContext -Context 'github.com/github-actions/Organization/PSModule' } | Should -Not -Throw
             Get-GitHubConfig -Name 'DefaultContext' | Should -Be 'github.com/github-actions/Organization/PSModule'
+        }
+
+        It 'Set-GitHubDefaultContext - Can swap context to another using pipeline - String' {
+            Write-Verbose (Get-GitHubContext -ListAvailable | Out-String) -Verbose
+            { 'github.com/psmodule-user' | Set-GitHubDefaultContext } | Should -Not -Throw
+            Get-GitHubConfig -Name 'DefaultContext' | Should -Be 'github.com/psmodule-user'
+        }
+
+        It 'Set-GitHubDefaultContext - Can swap context to another using pipeline - Context object' {
+            Write-Verbose (Get-GitHubContext -ListAvailable | Out-String) -Verbose
+            { Get-GitHubContext -Context 'github.com/psmodule-org-app' | Set-GitHubDefaultContext } | Should -Not -Throw
+            Get-GitHubConfig -Name 'DefaultContext' | Should -Be 'github.com/psmodule-org-app'
         }
     }
     Context 'Status' -ForEach @('public', 'eu') {
