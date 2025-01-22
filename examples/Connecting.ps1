@@ -40,6 +40,15 @@ Get-GitHubContext -Context 'msx.ghe.com/MariusStorhaug'
 # Take a name dynamically from Get-GitHubContext? Autocomplete the name
 Set-GitHubDefaultContext -Context 'msx.ghe.com/MariusStorhaug'
 
+# Set a specific context as the default context using pipeline
+'msx.ghe.com/MariusStorhaug' | Set-GitHubDefaultContext
+
+Get-GitHubContext -Context 'github.com/MariusStorhaug' | Set-GitHubDefaultContext
+
+# Abstraction layers on GitHubContexts
+Get-GitHubContext -Context 'msx.ghe.com/MariusStorhaug' # Only manages secrets prefixed with 'Context:PSModule.GitHub/'
+Get-Context -ID 'PSModule.GitHub/msx.ghe.com/MariusStorhaug' # Only manages secrets prefixed with 'Context:', handles conversion to/from JSON
+Get-Secret -Name 'Context:PSModule.GitHub/msx.ghe.com/MariusStorhaug' # Only manages secrets storage on the system
 
 ###
 ### DISCONNECTING

@@ -5,7 +5,7 @@
 <table>
     <tr>
         <td>Available functions</td>
-        <td>1009</td>
+        <td>1015</td>
     </tr>
     <tr>
         <td>Covered functions</td>
@@ -13,11 +13,11 @@
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>849</td>
+        <td>855</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>15.86%</td>
+        <td>15.76%</td>
     </tr>
 </table>
 
@@ -247,6 +247,9 @@
 | `/orgs/{org}/settings/billing/actions`                                                                                    |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/settings/billing/packages`                                                                                   |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/settings/billing/shared-storage`                                                                             |                    | :x:                |                    |                    |                    |
+| `/orgs/{org}/settings/network-configurations`                                                                             |                    | :x:                |                    | :x:                |                    |
+| `/orgs/{org}/settings/network-configurations/{network_configuration_id}`                                                  | :x:                | :x:                | :x:                |                    |                    |
+| `/orgs/{org}/settings/network-settings/{network_settings_id}`                                                             |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/team/{team_slug}/copilot/metrics`                                                                            |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/team/{team_slug}/copilot/usage`                                                                              |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/teams`                                                                                                       |                    | :white_check_mark: |                    | :white_check_mark: |                    |
