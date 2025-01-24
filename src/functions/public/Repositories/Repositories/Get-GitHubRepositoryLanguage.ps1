@@ -15,7 +15,6 @@
         .NOTES
         [List repository languages](https://docs.github.com/rest/repos/repos#list-repository-languages)
     #>
-    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [CmdletBinding()]
     [Alias('Get-GitHubRepositoryLanguages')]
     param(
@@ -71,3 +70,5 @@
         Write-Debug "[$stackPath] - End"
     }
 }
+
+#SkipTest:FunctionTest:Will add a test for this function in a future PR

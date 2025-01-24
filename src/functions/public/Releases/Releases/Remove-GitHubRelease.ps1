@@ -14,7 +14,6 @@
         .NOTES
         [Delete a release](https://docs.github.com/rest/releases/releases#delete-a-release)
     #>
-    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [OutputType([pscustomobject])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
@@ -78,3 +77,5 @@
         Write-Debug "[$stackPath] - End"
     }
 }
+
+#SkipTest:FunctionTest:Will add a test for this function in a future PR

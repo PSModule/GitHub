@@ -101,7 +101,6 @@ filter New-GitHubRepository {
         [Create a repository for the authenticated user](https://docs.github.com/rest/repos/repos#create-a-repository-for-the-authenticated-user)
         [Create an organization repository](https://docs.github.com/rest/repos/repos#create-an-organization-repository)
     #>
-    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [OutputType([pscustomobject])]
     [CmdletBinding(
         SupportsShouldProcess,
@@ -427,3 +426,5 @@ filter New-GitHubRepository {
         Write-Debug "[$stackPath] - End"
     }
 }
+
+#SkipTest:FunctionTest:Will add a test for this function in a future PR

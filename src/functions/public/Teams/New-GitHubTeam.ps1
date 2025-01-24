@@ -27,7 +27,6 @@
         .NOTES
         [Create a team](https://docs.github.com/rest/teams/teams#create-a-team)
     #>
-    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [OutputType([GitHubTeam])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
@@ -154,3 +153,5 @@
         Write-Debug "[$stackPath] - End"
     }
 }
+
+#SkipTest:FunctionTest:Will add a test for this function in a future PR

@@ -15,7 +15,6 @@
         .NOTES
         [Update a release asset](https://docs.github.com/rest/releases/assets#update-a-release-asset)
     #>
-    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.
@@ -97,3 +96,5 @@
         Write-Debug "[$stackPath] - End"
     }
 }
+
+#SkipTest:FunctionTest:Will add a test for this function in a future PR

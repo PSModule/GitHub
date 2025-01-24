@@ -21,7 +21,6 @@
         .NOTES
         [List repository workflows](https://docs.github.com/rest/actions/workflows?apiVersion=2022-11-28#list-repository-workflows)
     #>
-    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [CmdletBinding(DefaultParameterSetName = 'ByName')]
     param(
         [Parameter()]
@@ -82,3 +81,5 @@
         Write-Debug "[$stackPath] - End"
     }
 }
+
+#SkipTest:FunctionTest:Will add a test for this function in a future PR

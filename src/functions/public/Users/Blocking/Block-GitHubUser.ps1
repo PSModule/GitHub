@@ -23,7 +23,6 @@
         [Block a user](https://docs.github.com/rest/users/blocking#block-a-user)
         [Block a user from an organization](https://docs.github.com/rest/orgs/blocking#block-a-user-from-an-organization)
     #>
-    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [OutputType([bool])]
     [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(
@@ -78,3 +77,5 @@
         Write-Debug "[$stackPath] - End"
     }
 }
+
+#SkipTest:FunctionTest:Will add a test for this function in a future PR

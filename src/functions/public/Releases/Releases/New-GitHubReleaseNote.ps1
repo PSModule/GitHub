@@ -51,7 +51,6 @@
         .NOTES
         [Generate release notes content for a release](https://docs.github.com/rest/releases/releases#list-releases)
     #>
-    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [OutputType([pscustomobject])]
     [Alias('Generate-GitHubReleaseNotes')]
     [Alias('New-GitHubReleaseNotes')]
@@ -144,3 +143,5 @@
         Write-Debug "[$stackPath] - End"
     }
 }
+
+#SkipTest:FunctionTest:Will add a test for this function in a future PR

@@ -17,7 +17,6 @@
         .NOTES
         [Delete an organization](https://docs.github.com/rest/orgs/orgs#delete-an-organization)
     #>
-    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [OutputType([pscustomobject])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
@@ -72,3 +71,5 @@
         Write-Debug "[$stackPath] - End"
     }
 }
+
+#SkipTest:FunctionTest:Will add a test for this function in a future PR
