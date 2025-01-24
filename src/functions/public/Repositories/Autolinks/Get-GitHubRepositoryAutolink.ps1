@@ -21,7 +21,6 @@
         .NOTES
         [Get all autolinks of a repository](https://docs.github.com/rest/repos/autolinks#list-all-autolinks-of-a-repository)
     #>
-    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [Alias('Get-GitHubRepositoryAutolinks')]
     [CmdletBinding(DefaultParameterSetName = 'Default')]
     param(
@@ -85,3 +84,5 @@
         Write-Debug "[$stackPath] - End"
     }
 }
+
+#SkipTest:FunctionTest:Will add a test for this function in a future PR

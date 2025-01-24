@@ -48,7 +48,6 @@ filter Get-GitHubRepository {
         [List organization repositories](https://docs.github.com/rest/repos/repos#list-organization-repositories)
         [List repositories for a user](https://docs.github.com/rest/repos/repos#list-repositories-for-a-user)
     #>
-    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [CmdletBinding(DefaultParameterSetName = 'MyRepos_Type')]
     param(
         #Limit results to repositories with the specified visibility.
@@ -268,3 +267,5 @@ filter Get-GitHubRepository {
         Write-Debug "[$stackPath] - End"
     }
 }
+
+#SkipTest:FunctionTest:Will add a test for this function in a future PR

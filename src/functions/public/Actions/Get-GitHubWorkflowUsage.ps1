@@ -12,7 +12,6 @@
         .NOTES
         [Get workflow usage](https://docs.github.com/en/rest/actions/workflows#get-workflow-usage)
     #>
-    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [CmdletBinding(
         DefaultParameterSetName = 'ByName'
     )]
@@ -72,3 +71,5 @@
         Write-Debug "[$stackPath] - End"
     }
 }
+
+#SkipTest:FunctionTest:Will add a test for this function in a future PR

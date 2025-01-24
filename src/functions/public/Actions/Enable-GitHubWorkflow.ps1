@@ -3,7 +3,6 @@
         .NOTES
         [Enable a workflow](https://docs.github.com/en/rest/actions/workflows#enable-a-workflow)
     #>
-    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [CmdletBinding()]
     param(
         [Parameter()]
@@ -58,3 +57,5 @@
         Write-Debug "[$stackPath] - End"
     }
 }
+
+#SkipTest:FunctionTest:Will add a test for this function in a future PR

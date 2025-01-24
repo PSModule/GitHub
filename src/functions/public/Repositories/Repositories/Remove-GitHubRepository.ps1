@@ -17,7 +17,6 @@
         .NOTES
         [Delete a repository](https://docs.github.com/rest/repos/repos#delete-a-repository)
     #>
-    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     #TODO: Set high impact
     [CmdletBinding(SupportsShouldProcess)]
     param(
@@ -76,3 +75,5 @@
         Write-Debug "[$stackPath] - End"
     }
 }
+
+#SkipTest:FunctionTest:Will add a test for this function in a future PR
