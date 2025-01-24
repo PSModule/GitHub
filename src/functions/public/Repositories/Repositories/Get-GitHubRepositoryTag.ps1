@@ -14,7 +14,6 @@
         .NOTES
         [List repository tags](https://docs.github.com/rest/repos/repos#list-repository-tags)
     #>
-    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [CmdletBinding()]
     [Alias('Get-GitHubRepositoryTags')]
     param(
@@ -80,3 +79,5 @@
         Write-Debug "[$stackPath] - End"
     }
 }
+
+#SkipTest:FunctionTest:Will add a test for this function in a future PR

@@ -23,7 +23,6 @@
         [Check if a user is blocked by the authenticated user](https://docs.github.com/rest/users/blocking#check-if-a-user-is-blocked-by-the-authenticated-user)
         [Check if a user is blocked by an organization](https://docs.github.com/rest/orgs/blocking#check-if-a-user-is-blocked-by-an-organization)
     #>
-    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [OutputType([bool])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [CmdletBinding()]
@@ -85,3 +84,5 @@
         Write-Debug "[$stackPath] - End"
     }
 }
+
+#SkipTest:FunctionTest:Will add a test for this function in a future PR

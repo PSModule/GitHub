@@ -16,7 +16,6 @@
         .NOTES
         [Delete a workflow run](https://docs.github.com/rest/actions/workflow-runs#delete-a-workflow-run)
     #>
-    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.
@@ -79,3 +78,5 @@
         Write-Debug "[$stackPath] - End"
     }
 }
+
+#SkipTest:FunctionTest:Will add a test for this function in a future PR

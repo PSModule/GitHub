@@ -9,7 +9,6 @@
         .EXAMPLE
         Get-GitHubEnterpriseOrganization -Enterprise 'msx'
     #>
-    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [CmdletBinding()]
     param(
         [Parameter()]
@@ -92,3 +91,5 @@ query(`$enterpriseSlug: String!, `$first: Int = 100, `$after: String) {
         Write-Debug "[$stackPath] - End"
     }
 }
+
+#SkipTest:FunctionTest:Will add a test for this function in a future PR

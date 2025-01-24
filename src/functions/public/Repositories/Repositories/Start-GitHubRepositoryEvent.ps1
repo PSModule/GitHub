@@ -39,7 +39,6 @@
         .NOTES
         [Create a repository dispatch event](https://docs.github.com/rest/repos/repos#create-a-repository-dispatch-event)
     #>
-    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [CmdletBinding(SupportsShouldProcess)]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Long links')]
     param(
@@ -113,3 +112,5 @@
         Write-Debug "[$stackPath] - End"
     }
 }
+
+#SkipTest:FunctionTest:Will add a test for this function in a future PR

@@ -23,7 +23,6 @@
         .NOTES
         [List repository rule suites](https://docs.github.com/rest/repos/rule-suites#list-repository-rule-suites)
     #>
-    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Long links')]
     [CmdletBinding()]
@@ -116,3 +115,5 @@
         Write-Debug "[$stackPath] - End"
     }
 }
+
+#SkipTest:FunctionTest:Will add a test for this function in a future PR

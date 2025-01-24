@@ -14,7 +14,6 @@
         .NOTES
         [Unfollow a user](https://docs.github.com/rest/users/followers#unfollow-a-user)
     #>
-    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [OutputType([pscustomobject])]
     [Alias('Unfollow-GitHubUser')]
     [CmdletBinding(SupportsShouldProcess)]
@@ -62,3 +61,5 @@
         Write-Debug "[$stackPath] - End"
     }
 }
+
+#SkipTest:FunctionTest:Will add a test for this function in a future PR

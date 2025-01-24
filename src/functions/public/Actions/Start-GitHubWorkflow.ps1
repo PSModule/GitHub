@@ -17,7 +17,6 @@
         .NOTES
         [Create a workflow dispatch event](https://docs.github.com/en/rest/actions/workflows#create-a-workflow-dispatch-event)
     #>
-    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.
@@ -97,3 +96,5 @@
         Write-Debug "[$stackPath] - End"
     }
 }
+
+#SkipTest:FunctionTest:Will add a test for this function in a future PR

@@ -17,7 +17,6 @@
         .NOTES
         [List CODEOWNERS errors](https://docs.github.com/rest/repos/repos#list-codeowners-errors)
     #>
-    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [CmdletBinding()]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     param(
@@ -84,3 +83,5 @@
         Write-Debug "[$stackPath] - End"
     }
 }
+
+#SkipTest:FunctionTest:Will add a test for this function in a future PR

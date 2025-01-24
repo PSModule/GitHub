@@ -32,7 +32,6 @@
         [List releases](https://docs.github.com/rest/releases/releases#list-releases)
         [Get the latest release](https://docs.github.com/rest/releases/releases#get-the-latest-release)
     #>
-    #SkipTest:FunctionTest:Will add a test for this function in a future PR
     [CmdletBinding(DefaultParameterSetName = 'All')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'Latest', Justification = 'Required for parameter set')]
     param(
@@ -120,3 +119,5 @@
         Write-Debug "[$stackPath] - End"
     }
 }
+
+#SkipTest:FunctionTest:Will add a test for this function in a future PR
