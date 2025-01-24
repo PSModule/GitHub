@@ -14,7 +14,7 @@
     [CmdletBinding()]
     param(
         # The enterprise slug or ID.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [string] $Enterprise,
 
         # The organization name. The name is not case sensitive.
@@ -28,9 +28,9 @@
         # The repository selection for the GitHub App. Can be one of:
         # - all - all repositories that the authenticated GitHub App installation can access.
         # - selected - select specific repositories.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [ValidateSet('all', 'selected')]
-        [string] $RepositorySelection = 'all',
+        [string] $RepositorySelection,
 
         # The names of the repositories to which the installation will be granted access.
         [Parameter()]
@@ -39,18 +39,12 @@
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [object] $Context = (Get-GitHubContext)
+        [object] $Context
     )
 
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $Context = Resolve-GitHubContext -Context $Context
-        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-        if ([string]::IsNullOrEmpty($Enterprise)) {
-            $Enterprise = $Context.Enterprise
-        }
-        Write-Debug "Enterprise: [$Enterprise]"
     }
 
     process {
