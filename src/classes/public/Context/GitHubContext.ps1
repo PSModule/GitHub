@@ -1,4 +1,7 @@
-class GitHubContext : Context {
+class GitHubContext {
+    # The context ID.
+    [string] $ID
+
     # The GitHub Context Name.
     # HostName/Username or HostName/AppSlug
     # github.com/Octocat
