@@ -11,7 +11,7 @@ param()
 
 BeforeAll {
     Get-SecretInfo | Remove-Secret
-    Get-SecretVault | Unregister-SecretVault
+    # Get-SecretVault | Unregister-SecretVault
 }
 
 Describe 'GitHub' {
