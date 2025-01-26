@@ -115,7 +115,7 @@
                     ApiBaseUri          = [string]$Context.ApiBaseUri
                     ApiVersion          = [string]$Context.ApiVersion
                     HostName            = [string]$Context.HostName
-                    HttpVersion         = [version]$Context.HttpVersion
+                    HttpVersion         = [string]$Context.HttpVersion
                     PerPage             = [int]$Context.PerPage
                     ClientID            = [string]$Context.ClientID
                     InstallationID      = [string]$installation.id

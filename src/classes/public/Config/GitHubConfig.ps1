@@ -21,7 +21,7 @@
     [string] $ApiVersion
 
     # The default value for the HTTP protocol version.
-    [version] $HttpVersion
+    [string] $HttpVersion
 
     # The default value for the 'per_page' API parameter used in 'Get' functions that support paging.
     [int] $PerPage

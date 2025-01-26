@@ -51,7 +51,7 @@
 
         # Specifies the HTTP version used for the request.
         [Parameter()]
-        [version] $HttpVersion,
+        [string] $HttpVersion,
 
         # The file path to be used for the API request. This is used for uploading files.
         [Parameter()]

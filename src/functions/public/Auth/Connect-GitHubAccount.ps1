@@ -186,7 +186,7 @@
                 ApiBaseUri  = [string]$ApiBaseUri
                 ApiVersion  = [string]$ApiVersion
                 HostName    = [string]$HostName
-                HttpVersion = [version]$httpVersion
+                HttpVersion = [string]$httpVersion
                 PerPage     = [int]$perPage
                 AuthType    = [string]$authType
                 Enterprise  = [string]$Enterprise
