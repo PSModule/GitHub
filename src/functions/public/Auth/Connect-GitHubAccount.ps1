@@ -124,10 +124,6 @@
         [Alias('Repository')]
         [string] $Repo,
 
-        # API version used for API requests.
-        [Parameter()]
-        [string] $ApiVersion = '2022-11-28',
-
         # The host to connect to. Can use $env:GITHUB_SERVER_URL to set the host, as the protocol is removed automatically.
         # Example: github.com, github.enterprise.com, msx.ghe.com
         [Parameter()]
@@ -166,6 +162,9 @@
             if (-not $HostName) {
                 $HostName = $script:GitHub.Config.HostName
             }
+            $httpVersion = $script:GitHub.Config.HttpVersion
+            $perPage = $script:GitHub.Config.PerPage
+            $ApiVersion = $script:GitHub.Config.ApiVersion
             $HostName = $HostName -replace '^https?://'
             $ApiBaseUri = "https://api.$HostName"
             $authType = $PSCmdlet.ParameterSetName
@@ -184,14 +183,15 @@
             }
 
             $context = @{
-                ApiBaseUri = [string]$ApiBaseUri
-                ApiVersion = [string]$ApiVersion
-                HostName   = [string]$HostName
-                AuthType   = [string]$authType
-                Enterprise = [string]$Enterprise
-                Owner      = [string]$Owner
-                Repo       = [string]$Repo
-                PerPage    = 100
+                ApiBaseUri  = [string]$ApiBaseUri
+                ApiVersion  = [string]$ApiVersion
+                HostName    = [string]$HostName
+                HttpVersion = [string]$httpVersion
+                PerPage     = [int]$perPage
+                AuthType    = [string]$authType
+                Enterprise  = [string]$Enterprise
+                Owner       = [string]$Owner
+                Repo        = [string]$Repo
             }
 
             Write-Verbose ($context | Format-Table | Out-String)

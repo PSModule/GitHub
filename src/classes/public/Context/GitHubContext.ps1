@@ -56,6 +56,9 @@ class GitHubContext {
     # The default value for the Repo parameter.
     [string] $Repo
 
+    # The default value for the HTTP protocol version.
+    [string] $HttpVersion
+
     # The default value for the 'per_page' API parameter used in 'Get' functions that support paging.
     [int] $PerPage
 
