@@ -11,7 +11,8 @@ param()
 
 BeforeAll {
     Get-SecretInfo | Remove-Secret
-    # Get-SecretVault | Unregister-SecretVault
+    Get-SecretVault | Unregister-SecretVault
+    Import-Module -Name Context -Force -RequiredVersion 6.0.0
 }
 
 Describe 'GitHub' {
