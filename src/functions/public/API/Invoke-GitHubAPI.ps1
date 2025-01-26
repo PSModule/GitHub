@@ -51,7 +51,7 @@
 
         # Specifies the HTTP version used for the request.
         [Parameter()]
-        [version] $HttpVersion = '2.0',
+        [version] $HttpVersion,
 
         # The file path to be used for the API request. This is used for uploading files.
         [Parameter()]
@@ -97,20 +97,25 @@
         $Token = $Context.Token
         Write-Debug "Token :     [$Token]"
 
-        if ([string]::IsNullOrEmpty($TokenType)) {
-            $TokenType = $Context.TokenType
+        if ([string]::IsNullOrEmpty($HttpVersion)) {
+            $HttpVersion = $Context.HttpVersion
         }
-        Write-Debug "TokenType : [$($Context.TokenType)]"
+        Write-Debug "HttpVersion: [$HttpVersion]"
 
         if ([string]::IsNullOrEmpty($ApiBaseUri)) {
             $ApiBaseUri = $Context.ApiBaseUri
         }
-        Write-Debug "ApiBaseUri: [$($Context.ApiBaseUri)]"
+        Write-Debug "ApiBaseUri: [$ApiBaseUri]"
 
         if ([string]::IsNullOrEmpty($ApiVersion)) {
             $ApiVersion = $Context.ApiVersion
         }
-        Write-Debug "ApiVersion: [$($Context.ApiVersion)]"
+        Write-Debug "ApiVersion: [$ApiVersion]"
+
+        if ([string]::IsNullOrEmpty($TokenType)) {
+            $TokenType = $Context.TokenType
+        }
+        Write-Debug "TokenType : [$TokenType]"
 
         switch ($TokenType) {
             'ghu' {

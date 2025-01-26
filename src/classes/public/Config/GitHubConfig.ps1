@@ -17,6 +17,12 @@
     # The default OAuth app client ID.
     [string] $OAuthAppClientID
 
+    # The default value for the HTTP protocol version.
+    [version] $HttpVersion
+
+    # The default value for the 'per_page' API parameter used in 'Get' functions that support paging.
+    [int] $PerPage
+
     # Simple parameterless constructor
     GitHubConfig() {}
 
