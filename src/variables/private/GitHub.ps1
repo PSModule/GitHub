@@ -14,6 +14,7 @@
         GitHubAppClientID             = 'Iv1.f26b61bc99e69405'
         OAuthAppClientID              = '7204ae9b0580f2cb8288'
         DefaultContext                = ''
+        ApiVersion                    = '2022-11-28'
         HttpVersion                   = '2.0'
         PerPage                       = 100
     }

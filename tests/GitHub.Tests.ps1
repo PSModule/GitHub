@@ -12,7 +12,7 @@ param()
 BeforeAll {
     Get-SecretInfo | Remove-Secret
     Get-SecretVault | Unregister-SecretVault
-    Import-Module -Name Context -Force -RequiredVersion 6.0.0
+    Get-Module -ListAvailable -Name Context | Sort-Object -Property Version | Select-Object -Last 1 | Import-Module -Force
 }
 
 Describe 'GitHub' {
@@ -23,9 +23,11 @@ Describe 'GitHub' {
             $config | Should -Not -BeNullOrEmpty
         }
         It 'Get-GitHubConfig - Gets a configuration item by name' {
-            $config = Get-GitHubConfig -Name 'HostName'
-            Write-Verbose ($config | Format-Table | Out-String) -Verbose
-            $config | Should -Not -BeNullOrEmpty
+            $config = Get-GitHubConfig
+            $config.AccessTokenGracePeriodInHours | Should -Be 4
+            $config.HostName | Should -Be 'github.com'
+            $config.HttpVersion | Should -Be '2.0'
+            $config.PerPage | Should -Be 100
         }
         It 'Set-GitHubConfig - Sets a configuration item' {
             Set-GitHubConfig -Name 'HostName' -Value 'msx.ghe.com'
@@ -65,6 +67,18 @@ Describe 'GitHub' {
             $context = Connect-GitHubAccount -PassThru
             Write-Verbose (Get-GitHubContext | Out-String) -Verbose
             $context | Should -Not -BeNullOrEmpty
+        }
+        It 'Connect-GitHubAccount - Connects with default settings' {
+            $context = Get-GitHubContext
+            Write-Verbose ($context | Select-Object -Property * | Out-String) -Verbose
+            $context | Should -Not -BeNullOrEmpty
+            $context.ApiBaseUri | Should -Be 'https://api.github.com'
+            $context.ApiVersion | Should -Be '2022-11-28'
+            $context.AuthType | Should -Be 'IAT'
+            $context.HostName | Should -Be 'github.com'
+            $context.HttpVersion | Should -Be '2.0'
+            $context.TokenType | Should -Be 'ghs'
+            $context.Name | Should -Be 'github.com/github-actions/Organization/PSModule'
         }
         It 'Disconnect-GitHubAccount - Disconnects the context from the pipeline' {
             $context = Get-GitHubContext
