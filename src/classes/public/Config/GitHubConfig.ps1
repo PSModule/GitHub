@@ -1,4 +1,7 @@
-﻿class GitHubConfig : Context {
+﻿class GitHubConfig {
+    # The context ID.
+    [string] $ID
+
     # The access token grace period in hours.
     [int] $AccessTokenGracePeriodInHours
 
