@@ -126,15 +126,18 @@
                     TokenExpirationDate = [datetime]$token.ExpiresAt
                 }
 
-                $contextParams['InstallationName'] = switch ($installation.target_type) {
+                switch ($installation.target_type) {
                     'User' {
-                        [string]$installation.account.login
+                        $contextParams['InstallationName'] = [string]$installation.account.login
+                        $contextParams['Organization'] = [string]$installation.account.login
                     }
                     'Organization' {
-                        [string]$installation.account.login
+                        $contextParams['InstallationName'] = [string]$installation.account.login
+                        $contextParams['Organization'] = [string]$installation.account.login
                     }
                     'Enterprise' {
-                        [string]$installation.account.slug
+                        $contextParams['InstallationName'] = [string]$installation.account.slug
+                        $contextParams['Enterprise'] = [string]$installation.account.slug
                     }
                 }
                 Write-Verbose 'Logging in using a managed installation access token...'
