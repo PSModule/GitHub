@@ -12,6 +12,7 @@ param()
 BeforeAll {
     Get-SecretInfo | Remove-Secret
     Get-SecretVault | Unregister-SecretVault
+    Import-Module -Name Context -Force -RequiredVersion 6.0.0
 }
 
 Describe 'GitHub' {
@@ -92,7 +93,7 @@ Describe 'GitHub' {
                 PrivateKey = $env:TEST_APP_ORG_PRIVATE_KEY
             }
             { Connect-GitHubAccount @params } | Should -Not -Throw
-            $contexts = Get-GitHubContextInfo -Verbose:$false
+            $contexts = Get-GitHubContext -ListAvailable -Verbose:$false
             Write-Verbose ($contexts | Out-String) -Verbose
             ($contexts).Count | Should -Be 3
         }
@@ -102,7 +103,7 @@ Describe 'GitHub' {
                 PrivateKey = $env:TEST_APP_ORG_PRIVATE_KEY
             }
             { Connect-GitHubAccount @params -AutoloadInstallations } | Should -Not -Throw
-            $contexts = Get-GitHubContextInfo -Verbose:$false
+            $contexts = Get-GitHubContext -ListAvailable -Verbose:$false
             Write-Verbose ($contexts | Out-String) -Verbose
             ($contexts).Count | Should -Be 7
         }
@@ -112,7 +113,7 @@ Describe 'GitHub' {
                 PrivateKey = $env:TEST_APP_ENT_PRIVATE_KEY
             }
             { Connect-GitHubAccount @params } | Should -Not -Throw
-            $contexts = Get-GitHubContextInfo -Verbose:$false
+            $contexts = Get-GitHubContext -ListAvailable -Verbose:$false
             Write-Verbose ($contexts | Out-String) -Verbose
             ($contexts).Count | Should -Be 8
         }
@@ -122,13 +123,13 @@ Describe 'GitHub' {
                 PrivateKey = $env:TEST_APP_ENT_PRIVATE_KEY
             }
             { Connect-GitHubAccount @params -AutoloadInstallations } | Should -Not -Throw
-            $contexts = Get-GitHubContextInfo -Verbose:$false
+            $contexts = Get-GitHubContext -ListAvailable -Verbose:$false
             Write-Verbose ($contexts | Out-String) -Verbose
             ($contexts).Count | Should -Be 12
         }
         It 'Disconnect-GitHubAccount - Disconnects a specific context' {
             { Disconnect-GitHubAccount -Context 'github.com/psmodule-enterprise-app/Organization/PSModule' -Silent } | Should -Not -Throw
-            $contexts = Get-GitHubContextInfo -Name 'github.com/psmodule-enterprise-app/*' -Verbose:$false
+            $contexts = Get-GitHubContext -Context 'github.com/psmodule-enterprise-app/*' -Verbose:$false
             Write-Verbose ($contexts | Out-String) -Verbose
             ($contexts).Count | Should -Be 3
         }
