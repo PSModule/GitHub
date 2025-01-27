@@ -129,11 +129,11 @@
                 switch ($installation.target_type) {
                     'User' {
                         $contextParams['InstallationName'] = [string]$installation.account.login
-                        $contextParams['Organization'] = [string]$installation.account.login
+                        $contextParams['Owner'] = [string]$installation.account.login
                     }
                     'Organization' {
                         $contextParams['InstallationName'] = [string]$installation.account.login
-                        $contextParams['Organization'] = [string]$installation.account.login
+                        $contextParams['Owner'] = [string]$installation.account.login
                     }
                     'Enterprise' {
                         $contextParams['InstallationName'] = [string]$installation.account.slug
