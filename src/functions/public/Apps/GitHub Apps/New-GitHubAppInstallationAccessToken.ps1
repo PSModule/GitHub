@@ -56,7 +56,7 @@
             ValueFromPipeline,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('installation_id','InstallationID')]
+        [Alias('installation_id', 'InstallationID')]
         [int] $ID,
 
         # The context to run the command in. Used to get the details for the API call.
