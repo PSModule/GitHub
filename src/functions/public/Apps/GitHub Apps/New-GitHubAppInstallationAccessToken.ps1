@@ -56,8 +56,8 @@
             ValueFromPipeline,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('ID')]
-        [int] $InstallationID,
+        [Alias('installation_id','InstallationID')]
+        [int] $ID,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -76,7 +76,7 @@
         try {
             $inputObject = @{
                 Context     = $Context
-                APIEndpoint = "/app/installations/$InstallationID/access_tokens"
+                APIEndpoint = "/app/installations/$ID/access_tokens"
                 Method      = 'Post'
             }
 

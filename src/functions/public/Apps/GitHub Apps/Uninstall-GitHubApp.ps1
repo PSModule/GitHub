@@ -34,8 +34,8 @@
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('installation_id', 'id')]
-        [string] $InstallationID,
+        [Alias('installation_id', 'InstallationID')]
+        [string] $ID,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -63,10 +63,10 @@
             switch ($PSCmdlet.ParameterSetName) {
                 'EnterpriseOrganization' {
                     $params = @{
-                        Enterprise     = $Enterprise
-                        Organization   = $Organization
-                        InstallationID = $InstallationID
-                        Context        = $Context
+                        Enterprise   = $Enterprise
+                        Organization = $Organization
+                        ID           = $ID
+                        Context      = $Context
                     }
                     Uninstall-GitHubAppOnEnterpriseOrganization @params
                 }

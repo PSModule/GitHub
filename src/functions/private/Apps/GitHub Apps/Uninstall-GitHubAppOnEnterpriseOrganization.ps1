@@ -25,8 +25,8 @@
 
         # The client ID of the GitHub App to install.
         [Parameter(Mandatory)]
-        [Alias('installation_id', 'id')]
-        [string] $InstallationID,
+        [Alias('installation_id', 'InstallationID')]
+        [string] $ID,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -43,7 +43,7 @@
         try {
             $inputObject = @{
                 Context     = $Context
-                APIEndpoint = "/enterprises/$Enterprise/apps/organizations/$Organization/installations/$InstallationID}"
+                APIEndpoint = "/enterprises/$Enterprise/apps/organizations/$Organization/installations/$ID}"
                 Method      = 'Delete'
             }
 

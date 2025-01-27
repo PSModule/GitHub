@@ -1,4 +1,4 @@
-﻿function Get-GitHubEnterpriseInstallableOrganization {
+﻿function Get-GitHubAppInstallableOrganization {
     <#
         .SYNOPSIS
         Get enterprise-owned organizations that can have GitHub Apps installed
@@ -10,13 +10,18 @@
         (read) permission.
 
         .EXAMPLE
-        Get-GitHubEnterpriseInstallableOrganization -Enterprise 'msx'
+        Get-GitHubAppInstallableOrganization -Enterprise 'msx'
     #>
     [CmdletBinding()]
     param(
         # The enterprise slug or ID.
         [Parameter()]
         [string] $Enterprise,
+
+        # The number of results per page (max 100).
+        [Parameter()]
+        [ValidateRange(0, 100)]
+        [int] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -37,10 +42,15 @@
 
     process {
         try {
+            $body = @{
+                pre_page = $PerPage
+            }
+
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = "/enterprises/$Enterprise/apps/installable_organizations"
                 Method      = 'GET'
+                Body        = $body
             }
 
             Invoke-GitHubAPI @inputObject | ForEach-Object {
