@@ -1,6 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'DynamicParams'; RequiredVersion = '1.1.8' }
-
-filter Get-GitHubGitignore {
+﻿filter Get-GitHubGitignore {
     <#
         .SYNOPSIS
         Get a gitignore template or list of all gitignore templates names
@@ -25,27 +23,17 @@ filter Get-GitHubGitignore {
     #>
     [CmdletBinding(DefaultParameterSetName = 'List')]
     param(
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'Name'
+        )]
+        [string] $Name,
+
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
         [object] $Context = (Get-GitHubContext)
     )
-
-    dynamicparam {
-        $DynamicParamDictionary = New-DynamicParamDictionary
-
-        $dynParam = @{
-            Name                   = 'Name'
-            ParameterSetName       = 'Name'
-            Type                   = [string]
-            Mandatory              = $true
-            ValidateSet            = Get-GitHubGitignoreList
-            DynamicParamDictionary = $DynamicParamDictionary
-        }
-        New-DynamicParam @dynParam
-
-        return $DynamicParamDictionary
-    }
 
     begin {
         $stackPath = Get-PSCallStackPath
@@ -76,5 +64,13 @@ filter Get-GitHubGitignore {
 
     end {
         Write-Debug "[$stackPath] - End"
+    }
+}
+
+Register-ArgumentCompleter -CommandName Get-GitHubGitignore -ParameterName Name -ScriptBlock {
+    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
+    $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter
+    Get-GitHubGitignoreList -Context $fakeBoundParameter.Context | Where-Object { $_ -like "$wordToComplete*" } | ForEach-Object {
+        [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
     }
 }
