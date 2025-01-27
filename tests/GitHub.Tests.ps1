@@ -1030,8 +1030,8 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         It 'Get-GitHubOrganization - Gets a specific organization (APP_ENT)' {
             { Get-GitHubOrganization -Organization 'psmodule-test-org3' } | Should -Not -Throw
         }
-        It 'Get-GitHubOrganizationAppInstallation - Gets the GitHub App installations on the organization (APP_ENT)' {
-            $installations = Get-GitHubOrganizationAppInstallation -Organization 'psmodule-test-org3'
+        It 'Get-GitHubAppInstallation - Gets the GitHub App installations on the organization (APP_ENT)' {
+            $installations = Get-GitHubAppInstallation -Organization 'psmodule-test-org3'
             Write-Verbose ($installations | Format-Table | Out-String) -Verbose
             $installations | Should -Not -BeNullOrEmpty
         }
@@ -1150,8 +1150,8 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         It 'Get-GitHubOrganization - Gets a specific organization (APP_ORG)' {
             { Get-GitHubOrganization -Organization 'psmodule-test-org' } | Should -Not -Throw
         }
-        It 'Get-GitHubOrganizationAppInstallation - Gets the GitHub App installations on the organization (APP_ORG)' {
-            $installations = Get-GitHubOrganizationAppInstallation -Organization 'psmodule-test-org'
+        It 'Get-GitHubAppInstallation - Gets the GitHub App installations on the organization (APP_ORG)' {
+            $installations = Get-GitHubAppInstallation -Organization 'psmodule-test-org'
             Write-Verbose ($installations | Format-Table | Out-String) -Verbose
             $installations | Should -Not -BeNullOrEmpty
         }
