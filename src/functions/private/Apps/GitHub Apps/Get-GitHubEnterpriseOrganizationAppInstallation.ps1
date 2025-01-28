@@ -64,7 +64,7 @@
             }
 
             Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response.installations
+                Write-Output $_.Response
             }
         } catch {
             throw $_
