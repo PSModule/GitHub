@@ -28,17 +28,11 @@
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The enterprise slug or ID.
-        [Parameter(
-            Mandatory,
-            ValueFromPipelineByPropertyName
-        )]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string] $Enterprise,
 
         # The organization name. The name is not case sensitive.
-        [Parameter(
-            Mandatory,
-            ValueFromPipelineByPropertyName
-        )]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string] $Organization,
 
         # The unique identifier of the installation.
@@ -90,6 +84,7 @@
                 repository_selection = $RepositorySelection
                 repositories         = $Repositories
             }
+            $body | Remove-HashtableEntry -NullOrEmptyValues
 
             $inputObject = @{
                 Context     = $Context
