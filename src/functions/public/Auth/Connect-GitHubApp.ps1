@@ -41,19 +41,19 @@
     [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(
         # The user account to connect to.
-        [Parameter()]
+        [Parameter(ParameterSetName = 'Filtered')]
         [SupportsWildcards()]
-        [string[]] $User = '*',
+        [string[]] $User,
 
         # The organization to connect to.
-        [Parameter()]
+        [Parameter(ParameterSetName = 'Filtered')]
         [SupportsWildcards()]
-        [string[]] $Organization = '*',
+        [string[]] $Organization,
 
         # The enterprise to connect to.
-        [Parameter()]
+        [Parameter(ParameterSetName = 'Filtered')]
         [SupportsWildcards()]
-        [string[]] $Enterprise = '*',
+        [string[]] $Enterprise,
 
         # Passes the context object to the pipeline.
         [Parameter()]
@@ -82,38 +82,52 @@
             $installations = Get-GitHubAppInstallation -Context $Context
             $selectedInstallations = @()
             Write-Verbose "Found [$($installations.Count)] installations."
-            $User | ForEach-Object {
-                $userItem = $_
-                Write-Verbose "Adding installation based on user [$userItem]."
-                $selectedInstallations += $installations | Where-Object { $_.target_type -eq 'User' -and $_.account.login -like $userItem }
-            }
-            $Organization | ForEach-Object {
-                $organizationItem = $_
-                Write-Verbose "Filtering installations for organization [$organizationItem]."
-                $selectedInstallations += $installations | Where-Object { $_.target_type -eq 'Organization' -and $_.account.login -like $organizationItem }
-            }
-            $Enterprise | ForEach-Object {
-                $enterpriseItem = $_
-                Write-Verbose "Filtering installations for enterprise [$enterpriseItem]."
-                $selectedInstallations += $installations | Where-Object { $_.target_type -eq 'Enterprise' -and $_.account.slug -like $enterpriseItem }
+            switch ($PSCmdlet.ParameterSetName) {
+                'Filtered' {
+                    $User | ForEach-Object {
+                        $userItem = $_
+                        Write-Verbose "Adding installation based on user [$userItem]."
+                        $selectedInstallations += $installations | Where-Object {
+                            $_.target_type -eq 'User' -and $_.account.login -like $userItem
+                        }
+                    }
+                    $Organization | ForEach-Object {
+                        $organizationItem = $_
+                        Write-Verbose "Filtering installations for organization [$organizationItem]."
+                        $selectedInstallations += $installations | Where-Object {
+                            $_.target_type -eq 'Organization' -and $_.account.login -like $organizationItem
+                        }
+                    }
+                    $Enterprise | ForEach-Object {
+                        $enterpriseItem = $_
+                        Write-Verbose "Filtering installations for enterprise [$enterpriseItem]."
+                        $selectedInstallations += $installations | Where-Object {
+                            $_.target_type -eq 'Enterprise' -and $_.account.slug -like $enterpriseItem
+                        }
+                    }
+                }
+                default {
+                    Write-Verbose 'No target specified. Connecting to all installations.'
+                    $selectedInstallations = $installations
+                }
             }
 
-            Write-Verbose "Found [$($selectedInstallations.Count)] installations for the target."
-            $contextParamObjects = $selectedInstallations | ForEach-Object -ThrottleLimit ([Environment]::ProcessorCount * 2) -Parallel {
+            Write-Verbose "Found [$($installations.Count)] installations for the target."
+            $installations | ForEach-Object {
                 $installation = $_
                 Write-Verbose "Processing installation [$($installation.account.login)] [$($installation.id)]"
-                $token = New-GitHubAppInstallationAccessToken -Context $using:Context -InstallationID $installation.id
+                $token = New-GitHubAppInstallationAccessToken -Context $Context -InstallationID $installation.id
 
                 $contextParams = @{
                     AuthType            = [string]'IAT'
                     TokenType           = [string]'ghs'
-                    DisplayName         = [string]$using:Context.DisplayName
-                    ApiBaseUri          = [string]$using:Context.ApiBaseUri
-                    ApiVersion          = [string]$using:Context.ApiVersion
-                    HostName            = [string]$using:Context.HostName
-                    HttpVersion         = [string]$using:Context.HttpVersion
-                    PerPage             = [int]$using:Context.PerPage
-                    ClientID            = [string]$using:Context.ClientID
+                    DisplayName         = [string]$Context.DisplayName
+                    ApiBaseUri          = [string]$Context.ApiBaseUri
+                    ApiVersion          = [string]$Context.ApiVersion
+                    HostName            = [string]$Context.HostName
+                    HttpVersion         = [string]$Context.HttpVersion
+                    PerPage             = [int]$Context.PerPage
+                    ClientID            = [string]$Context.ClientID
                     InstallationID      = [string]$installation.id
                     Permissions         = [pscustomobject]$installation.permissions
                     Events              = [string[]]$installation.events
@@ -136,11 +150,9 @@
                         $contextParams['Enterprise'] = [string]$installation.account.slug
                     }
                 }
-                $contextParams
-            }
-
-            $contextParamObjects | ForEach-Object {
-                $contextObj = [InstallationGitHubContext]::new((Set-GitHubContext -Context $_ -PassThru -Default:$Default))
+                Write-Verbose 'Logging in using a managed installation access token...'
+                Write-Verbose ($contextParams | Format-Table | Out-String)
+                $contextObj = [InstallationGitHubContext]::new((Set-GitHubContext -Context $contextParams.Clone() -PassThru -Default:$Default))
                 Write-Verbose ($contextObj | Format-List | Out-String)
                 if (-not $Silent) {
                     $name = $contextObj.name
@@ -151,6 +163,7 @@
                     Write-Debug "Passing context [$contextObj] to the pipeline."
                     Write-Output $contextObj
                 }
+                $contextParams.Clear()
             }
         } catch {
             Write-Error $_
