@@ -72,7 +72,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = "/enterprises/$Enterprise/apps/installable_organizations/$Organization/accessible_repositories"
-                Method      = 'PATCH'
+                Method      = 'GET'
                 Body        = $body
             }
 
