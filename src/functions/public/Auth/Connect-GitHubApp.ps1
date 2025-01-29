@@ -90,16 +90,16 @@
             $Organization | ForEach-Object {
                 $organizationItem = $_
                 Write-Verbose "Filtering installations for organization [$organizationItem]."
-                $installations = $installations | Where-Object { $_.target_type -eq 'Organization' -and $_.account.login -in $organizationItem }
+                $selectedInstallations += $installations | Where-Object { $_.target_type -eq 'Organization' -and $_.account.login -in $organizationItem }
             }
             $Enterprise | ForEach-Object {
                 $enterpriseItem = $_
                 Write-Verbose "Filtering installations for enterprise [$enterpriseItem]."
-                $installations = $installations | Where-Object { $_.target_type -eq 'Enterprise' -and $_.account.slug -in $enterpriseItem }
+                $selectedInstallations += $installations | Where-Object { $_.target_type -eq 'Enterprise' -and $_.account.slug -in $enterpriseItem }
             }
 
-            Write-Verbose "Found [$($installations.Count)] installations for the target."
-            $installations | ForEach-Object -ThrottleLimit ([Environment]::ProcessorCount * 2) -Parallel {
+            Write-Verbose "Found [$($selectedInstallations.Count)] installations for the target."
+            $selectedInstallations | ForEach-Object -ThrottleLimit ([Environment]::ProcessorCount * 2) -Parallel {
                 $installation = $_
                 Write-Verbose "Processing installation [$($installation.account.login)] [$($installation.id)]"
                 $token = New-GitHubAppInstallationAccessToken -Context $using:Context -InstallationID $installation.id
