@@ -59,6 +59,13 @@
         [Parameter()]
         [switch] $PassThru,
 
+        # Suppresses the output of the function.
+        [Parameter()]
+        [Alias('Quiet')]
+        [Alias('q')]
+        [Alias('s')]
+        [switch] $Silent,
+
         # Set as the default context.
         [Parameter()]
         [switch] $Default,

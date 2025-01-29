@@ -33,7 +33,7 @@
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'Is the CLI part of the module.')]
     [CmdletBinding()]
     param(
-        # Silently disconnects from GitHub.
+        # Suppresses the output of the function.
         [Parameter()]
         [Alias('Quiet')]
         [Alias('q')]
