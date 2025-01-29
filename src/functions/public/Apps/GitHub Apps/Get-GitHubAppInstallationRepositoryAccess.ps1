@@ -75,7 +75,7 @@
     process {
         try {
             $body = @{
-                pre_page = $PerPage
+                per_page = $PerPage
             }
 
             $inputObject = @{
