@@ -90,16 +90,16 @@
             $Organization | ForEach-Object {
                 $organizationItem = $_
                 Write-Verbose "Filtering installations for organization [$organizationItem]."
-                $selectedInstallations += $installations | Where-Object { $_.target_type -eq 'Organization' -and $_.account.login -in $organizationItem }
+                $selectedInstallations += $installations | Where-Object { $_.target_type -eq 'Organization' -and $_.account.login -like $organizationItem }
             }
             $Enterprise | ForEach-Object {
                 $enterpriseItem = $_
                 Write-Verbose "Filtering installations for enterprise [$enterpriseItem]."
-                $selectedInstallations += $installations | Where-Object { $_.target_type -eq 'Enterprise' -and $_.account.slug -in $enterpriseItem }
+                $selectedInstallations += $installations | Where-Object { $_.target_type -eq 'Enterprise' -and $_.account.slug -like $enterpriseItem }
             }
 
             Write-Verbose "Found [$($selectedInstallations.Count)] installations for the target."
-            $selectedInstallations | ForEach-Object -ThrottleLimit ([Environment]::ProcessorCount * 2) -Parallel {
+            $contextParamObjects = $selectedInstallations | ForEach-Object -ThrottleLimit ([Environment]::ProcessorCount * 2) -Parallel {
                 $installation = $_
                 Write-Verbose "Processing installation [$($installation.account.login)] [$($installation.id)]"
                 $token = New-GitHubAppInstallationAccessToken -Context $using:Context -InstallationID $installation.id
@@ -137,7 +137,9 @@
                     }
                 }
                 $contextParams
-            } | ForEach-Object {
+            }
+
+            $contextParamObjects | ForEach-Object {
                 $contextObj = [InstallationGitHubContext]::new((Set-GitHubContext -Context $_ -PassThru -Default:$Default))
                 Write-Verbose ($contextObj | Format-List | Out-String)
                 if (-not $Silent) {
