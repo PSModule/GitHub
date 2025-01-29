@@ -81,7 +81,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = "/enterprises/$Enterprise/apps/organizations/$Organization/installations/$ID/repositories"
-                Method      = 'PATCH'
+                Method      = 'GET'
                 Body        = $body
             }
 
