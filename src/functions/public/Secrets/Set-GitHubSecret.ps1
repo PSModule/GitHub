@@ -21,6 +21,12 @@
     .PARAMETER Type
         actions / codespaces
 
+    .PARAMETER Private
+        Set visibility to private.
+
+    .PARAMETER SelectedRepositoryIDs
+        List of numeric selected_repository_ids the secret should be visible to.
+
     .EXAMPLE
         # TODO
 
@@ -60,6 +66,13 @@
 
         [ValidateSet('actions', 'codespaces')]
         [string]$Type = 'actions',
+
+        [Parameter(ParameterSetName = 'Organization')]
+        [switch]$Private,
+
+        [Parameter(ParameterSetName = 'AuthenticatedUser')]
+        [Parameter(ParameterSetName = 'Organization')]
+        [int[]]$SelectedRepositoryIDs,
 
         [Parameter(Mandatory)]
         [SecureString]$Value,
@@ -140,12 +153,22 @@
                 }
             }
             $publicKey = Get-GitHubPublicKey @getPublicKeyParams
+            $body = @{
+                encrypted_value = ConvertTo-SodiumEncryptedString -Secret (ConvertFrom-SecureString $Value -AsPlainText) -PublicKey $publicKey.key
+                key_id          = $publicKey.key_id
+            }
+            if ($PSCmdlet.ParameterSetName -in 'AuthenticatedUser','Organization') {
+                if ($Private.IsPresent -and $PSCmdlet.ParameterSetName -eq 'Organization') {
+                    # ParameterSetName -eq Organization filter should be redundant since -Private can only be applied to the Organization ParameterSet
+                    $body['visibility'] = 'private'
+                } elseif ($PSBoundParameters.ContainsKey('SelectedRepositoryIDs')) {
+                    $body['selected_repository_ids'] = @($SelectedRepositoryIDs)
+                    $body['visibility'] = 'selected'
+                }
+            }
             $putParams = @{
                 APIEndpoint = $apiEndPoint
-                Body        = [PSCustomObject]@{
-                    encrypted_value = ConvertTo-SodiumEncryptedString -Secret (ConvertFrom-SecureString $Value -AsPlainText) -PublicKey $publicKey.key
-                    key_id          = $publicKey.key_id
-                } | ConvertTo-Json
+                Body        = [PSCustomObject]$body | ConvertTo-Json
                 Context     = $Context
                 Method      = 'PUT'
             }
