@@ -143,7 +143,7 @@
             $putParams = @{
                 APIEndpoint = $apiEndPoint
                 Body        = [PSCustomObject]@{
-                    encrypted_value = ConvertTo-SodiumEncryptedString -Text (ConvertFrom-SecureString $Value -AsPlainText) -PublicKey $publicKey.key
+                    encrypted_value = ConvertTo-SodiumEncryptedString -Secret (ConvertFrom-SecureString $Value -AsPlainText) -PublicKey $publicKey.key
                     key_id          = $publicKey.key_id
                 } | ConvertTo-Json
                 Context     = $Context
