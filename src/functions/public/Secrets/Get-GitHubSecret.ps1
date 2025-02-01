@@ -16,7 +16,9 @@
         The name of the repository environment.
 
     .PARAMETER Type
-        actions / codespaces
+        actions / codespaces / organization
+
+        organization lists all organization actions secrets shared with a repository
 
     .PARAMETER Name
         The name of the secret.
@@ -59,6 +61,9 @@
     .LINK
         https://docs.github.com/en/rest/codespaces/secrets?apiVersion=2022-11-28#get-a-secret-for-the-authenticated-user
 
+    .LINK
+        https://docs.github.com/en/rest/actions/secrets?apiVersion=2022-11-28#list-repository-organization-secrets
+
     #>
     [CmdletBinding(DefaultParameterSetName = 'AuthorizedUser', SupportsPaging)]
     param (
@@ -78,7 +83,7 @@
 
         [string]$Name,
 
-        [ValidateSet('actions', 'codespaces')]
+        [ValidateSet('actions', 'codespaces', 'organization')]
         [string]$Type = 'actions',
 
         # The context to run the command in. Used to get the details for the API call.
@@ -116,7 +121,9 @@
                     break
                 }
                 'Repository' {
-                    "/repos/$Owner/$Repository/$Type/secrets"
+                    $Type -eq 'organization' ?
+                        "/repos/$Owner/$Repository/actions/organization-secrets" :
+                        "/repos/$Owner/$Repository/$Type/secrets"
                     break
                 }
                 'AuthorizedUser' {
@@ -126,7 +133,8 @@
             Context        = $Context
             Method         = 'GET'
         }
-        if (-not [string]::IsNullOrWhiteSpace($Name)) {
+        # There is no endpoint for /repos/$Owner/$Repository/actions/organization-secrets/$Name
+        if ($Type -ne 'organization'-and -not [string]::IsNullOrWhiteSpace($Name)) {
             $getParams.APIEndpoint += "/$Name"
         }
         $response = Invoke-GitHubAPI @getParams | Select-Object -ExpandProperty Response
