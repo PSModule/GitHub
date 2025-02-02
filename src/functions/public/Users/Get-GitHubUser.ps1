@@ -27,12 +27,7 @@
         [Get the authenticated user](https://docs.github.com/rest/users/users)
     #>
     [OutputType([pscustomobject])]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-        'PSReviewUnusedParameter',
-        'All',
-        Justification = 'Parameter is used in dynamic parameter validation.'
-    )]
-    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
+    [CmdletBinding(DefaultParameterSetName = 'AuthenticatedUser', SupportsPaging)]
     param(
         # The handle for the GitHub user account.
         [Parameter(
@@ -72,26 +67,43 @@
     }
 
     process {
-        try {
-            switch ($PSCmdlet.ParameterSetName) {
-                '__AllParameterSets' {
-                    $user = Get-GitHubMyUser -Context $Context
-                    $social_accounts = Get-GitHubMyUserSocials -Context $Context
-                    $user | Add-Member -MemberType NoteProperty -Name 'social_accounts' -Value $social_accounts -Force
-                    $user
+        $irmParams = @{
+            APIEndpoint = switch ($PSCmdlet.ParameterSetName) {
+                'AuthenticatedUser' {
+                    '/user'
                 }
                 'NamedUser' {
-                    $user = Get-GitHubUserByName -Username $Username -Context $Context
-                    $social_accounts = Get-GitHubUserSocialsByName -Username $Username -Context $Context
-                    $user | Add-Member -MemberType NoteProperty -Name 'social_accounts' -Value $social_accounts -Force
-                    $user
+                    "/users/$Username"
                 }
                 'AllUsers' {
-                    Get-GitHubAllUsers -Since $Since -PerPage $PerPage -Context $Context
+                    '/users'
                 }
             }
-        } catch {
-            throw $_
+            Context     = $Context
+            Method      = 'GET'
+        }
+        if ($PScmdlet.ParameterSetName -eq 'AllUsers') {
+            $irmParams['QueryParameters'] = @{
+                since    = $Since
+                per_page = $PerPage
+            }
+            foreach ($_name in 'First', 'Skip') {
+                if ($PSBoundParameters.ContainsKey($_name)) {
+                    $irmParams[$_name] = $_name
+                }
+            }
+            Invoke-GitHubRestMethod @irmParams
+        }
+        else {
+            $user = Invoke-GitHubRestMethod @irmParams
+            $getSocialParams = @{
+                Context = $Context
+            }
+            if (-not [string]::IsNullOrWhiteSpace($Username)) {
+                $getSocialParams['Username'] = $Username
+            }
+            $social_accounts = Get-GitHubUserSocialAccount @getSocialParams
+            $user | Add-Member -MemberType NoteProperty -Name 'social_accounts' -Value $social_accounts -Force -PassThru
         }
     }
 
