@@ -214,7 +214,7 @@
         do {
             try {
                 $result = Invoke-RestMethod @irmParams
-                (Get-Variable -Name $script:GitHub.Config.HttpResponseHeadersVariable -Scope Global).Value.Add(
+                (Get-Variable -Name $script:GitHub.Config.HttpResponsesVariable -Scope Global).Value.Add(
                     [PSCustomObject]@{
                         Content    = $result
                         Date       = [datetime]::Now
