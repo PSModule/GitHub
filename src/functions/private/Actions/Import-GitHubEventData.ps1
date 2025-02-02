@@ -1,4 +1,6 @@
-﻿function Import-GitHubEventData {
+﻿#Requires -Modules @{ ModuleName = 'CasingStyle'; RequiredVersion = '1.0.2' }
+
+function Import-GitHubEventData {
     <#
         .SYNOPSIS
         Import data from the event that triggered the workflow.
