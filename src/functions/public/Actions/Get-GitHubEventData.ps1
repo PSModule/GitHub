@@ -26,4 +26,3 @@
         Write-Debug "[$stackPath] - End"
     }
 }
-

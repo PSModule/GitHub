@@ -1,4 +1,6 @@
-﻿function Import-GitHubEventData {
+﻿#Requires -Modules @{ ModuleName = 'CasingStyle'; RequiredVersion = '1.0.2' }
+
+function Import-GitHubEventData {
     <#
         .SYNOPSIS
         Import data from the event that triggered the workflow.
@@ -39,7 +41,7 @@
             $hashtable = @{}
             $gitHubEvent.PSObject.Properties | ForEach-Object {
                 $name = $_.Name
-                $name = $name | Convert-StringCasingStyle -To PascalCase
+                $name = $name | ConvertTo-CasingStyle -To PascalCase
                 $hashtable[$name] = $_.Value
             }
             $gitHubEvent = [pscustomobject]$hashtable
