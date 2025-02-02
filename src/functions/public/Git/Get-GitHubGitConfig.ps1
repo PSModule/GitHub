@@ -56,7 +56,7 @@
             $configList | ForEach-Object {
                 Write-Debug "CONFIG: $_"
                 $name, $value = $_ -split '=', 2
-                $name = ("" + $name).Trim()
+                $name = ('' + $name).Trim()
                 $value = ('' + $value).Trim()
                 $config += @{
                     $name = $value
