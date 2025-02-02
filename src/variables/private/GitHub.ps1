@@ -15,6 +15,7 @@
         OAuthAppClientID              = '7204ae9b0580f2cb8288'
         DefaultContext                = ''
         ApiVersion                    = '2022-11-28'
+        HttpResponseHeadersVariable    = 'GITHUB_RESPONSES'
         HttpVersion                   = '2.0'
         PerPage                       = 100
     }

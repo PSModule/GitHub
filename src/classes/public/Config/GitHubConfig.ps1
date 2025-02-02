@@ -23,6 +23,9 @@
     # The default value for the HTTP protocol version.
     [string] $HttpVersion
 
+    # The name of the global variable to store a collection of API Responses with Headers and StatusCode
+    [string] $HttpResponseHeadersVariable
+
     # The default value for the 'per_page' API parameter used in 'Get' functions that support paging.
     [int] $PerPage
 
