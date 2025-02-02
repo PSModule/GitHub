@@ -54,6 +54,7 @@
 
             $configList = $configList | Sort-Object
             $configList | ForEach-Object {
+                Write-Debug "CONFIG: $_"
                 $name, $value = $_ -split '=', 2
                 $config += @{
                     ($name.Trim()) = ($value.Trim())
