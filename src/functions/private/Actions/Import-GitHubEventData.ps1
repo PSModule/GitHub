@@ -39,7 +39,7 @@
             $hashtable = @{}
             $gitHubEvent.PSObject.Properties | ForEach-Object {
                 $name = $_.Name
-                $name = $name | Convert-StringCasingStyle -To PascalCase
+                $name = $name | ConvertTo-CasingStyle -To PascalCase
                 $hashtable[$name] = $_.Value
             }
             $gitHubEvent = [pscustomobject]$hashtable
