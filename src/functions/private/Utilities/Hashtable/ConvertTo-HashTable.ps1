@@ -1,4 +1,6 @@
-﻿filter ConvertTo-HashTable {
+﻿#Requires -Modules @{ ModuleName = 'CasingStyle'; RequiredVersion = '1.0.2' }
+
+filter ConvertTo-HashTable {
     <#
         .SYNOPSIS
         Converts an object to a hashtable
