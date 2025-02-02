@@ -1,6 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'CasingStyle'; RequiredVersion = '1.0.2' }
-
-filter ConvertTo-HashTable {
+﻿filter ConvertTo-HashTable {
     <#
         .SYNOPSIS
         Converts an object to a hashtable
@@ -69,7 +67,7 @@ filter ConvertTo-HashTable {
     process {
         try {
             foreach ($item in $InputObject.PSObject.Properties) {
-                $name = if ($NameCasingStyle) { ($item.Name | ConvertTo-CasingStyle -To $NameCasingStyle) } else { $item.Name } #FIXME: Add '#Requires -Modules' for [ConvertTo-CasingStyle] Suggestions: CasingStyle, Casing
+                $name = if ($NameCasingStyle) { ($item.Name | ConvertTo-CasingStyle -To $NameCasingStyle) } else { $item.Name }
                 $hashtable[$name] = $item.Value
             }
             $hashtable
