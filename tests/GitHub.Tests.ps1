@@ -1,4 +1,7 @@
-﻿[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+﻿#Requires -Modules @{ ModuleName = 'Microsoft.PowerShell.SecretManagement'; RequiredVersion = '1.1.2' }
+#Requires -Modules @{ ModuleName = 'Pester'; RequiredVersion = '5.7.1' }
+
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
     'PSUseDeclaredVarsMoreThanAssignments', '',
     Justification = 'Pester grouping syntax: known issue.'
 )]

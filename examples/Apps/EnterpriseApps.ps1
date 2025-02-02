@@ -1,4 +1,6 @@
-﻿$appIDs = @(
+﻿#Requires -Modules @{ ModuleName = 'GitHub'; RequiredVersion = '0.13.2' }
+
+$appIDs = @(
     'qweqweqwe',
     'qweqweqweqwe'
 )

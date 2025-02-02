@@ -1,4 +1,6 @@
-﻿#####
+﻿#Requires -Modules @{ ModuleName = 'Microsoft.PowerShell.SecretManagement'; RequiredVersion = '1.1.2' }
+
+#####
 Get-Module -Name GitHub -ListAvailable
 Get-Module -Name GitHub* -ListAvailable | Remove-Module -Force
 Get-Module -Name GitHub* -ListAvailable | Uninstall-Module -Force -AllVersions

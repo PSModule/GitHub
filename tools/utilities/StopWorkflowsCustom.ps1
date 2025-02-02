@@ -30,8 +30,6 @@ Get-GitHubWorkflow | Disable-GitHubWorkflow
 # Cancel all started workflows
 Get-GitHubWorkflowRun | Where-Object status -NE completed | Stop-GitHubWorkflowRun
 
-Get-GitHubRepoTeams
-
 
 (Get-GitHubWorkflow).count
 

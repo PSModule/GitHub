@@ -51,5 +51,4 @@
         throw $_
     }
     Write-Host '::endgroup::'
-
 }

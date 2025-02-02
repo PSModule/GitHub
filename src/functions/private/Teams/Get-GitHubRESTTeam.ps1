@@ -64,7 +64,7 @@
             }
             switch ($PSCmdlet.ParameterSetName) {
                 'GetByName' {
-                    Get-GitHubTeamByName @params -Name $Name
+                    Get-GitHubRESTTeamByName @params -Name $Name
                 }
                 '__AllParameterSets' {
                     Get-GitHubTeamListByOrg @params

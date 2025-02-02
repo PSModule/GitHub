@@ -18,6 +18,7 @@
         .NOTES
         https://docs.github.com/rest/users/users#list-users
     #>
+    [Alias('Get-GitHubAllUsers')]
     [OutputType([pscustomobject])]
     [CmdletBinding()]
     param(

@@ -1,4 +1,4 @@
-class GitHubContext {
+﻿class GitHubContext {
     # The context ID.
     [string] $ID
 

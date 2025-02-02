@@ -1,4 +1,7 @@
-﻿###
+﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '6.0.0' }
+#Requires -Modules @{ ModuleName = 'Microsoft.PowerShell.SecretManagement'; RequiredVersion = '1.1.2' }
+
+###
 ### CONNECTING
 ###
 

@@ -1,5 +1,4 @@
-﻿
-function New-Function {
+﻿function New-Function {
     <#
     .SYNOPSIS
     Short description
