@@ -86,7 +86,7 @@ function Set-GitHubCodespace {
                     Context     = $Context
                     Method      = 'PATCH'
                 }
-                Invoke-GitHubAPI @patchParams | Select-Object -ExpandProperty Response
+                Invoke-GitHubAPI @patchParams | Select-Object -ExpandProperty Response | ConvertTo-GitHubCodespace
                 # | Add-ObjectDetail -TypeName GitHub.Codespace -DefaultProperties name,display_name,location,state,created_at,updated_at,last_used_at
             }
         }

@@ -98,7 +98,7 @@ function Get-GitHubCodespace {
         #     }
         # }
         $response = Invoke-GitHubAPI @getParams | Select-Object -ExpandProperty Response
-        [bool]$response.PSObject.Properties['codespaces'] ? $response.codespaces : $response
+        [bool]$response.PSObject.Properties['codespaces'] ? $response.codespaces : $response | ConvertTo-GitHubCodespace
         #| Add-ObjectDetail -TypeName GitHub.Codespace -DefaultProperties name, display_name, location, state, created_at, updated_at, last_used_at
     }
 }

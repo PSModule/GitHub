@@ -152,7 +152,7 @@ function New-GitHubCodespace {
                 Context     = $Context
                 Method      = 'POST'
             }
-            Invoke-GitHubAPI @postParams | Select-Object -ExpandProperty Response
+            Invoke-GitHubAPI @postParams | Select-Object -ExpandProperty Response | ConvertTo-GitHubCodespace
             # | Add-ObjectDetail -TypeName GitHub.Codespace -DefaultProperties name, display_name, location, state, created_at, updated_at, last_used_at
         }
     }
