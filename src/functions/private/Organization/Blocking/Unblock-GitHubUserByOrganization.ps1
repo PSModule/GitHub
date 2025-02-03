@@ -41,7 +41,7 @@
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [object] $Context
+        [GitHubContext] $Context
     )
 
     begin {
@@ -52,18 +52,11 @@
 
     process {
         $inputObject = @{
-            Context     = $Context
-            APIEndpoint = "/orgs/$Organization/blocks/$Username"
             Method      = 'DELETE'
+            APIEndpoint = "/orgs/$Organization/blocks/$Username"
+            Context     = $Context
         }
-
-        try {
-            $null = (Invoke-GitHubAPI @inputObject)
-            return $true
-        } catch {
-            Write-Error $_.Exception.Response
-            throw $_
-        }
+        Invoke-GitHubAPI @inputObject
     }
 
     end {

@@ -36,47 +36,33 @@
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [object] $Context
+        [GitHubContext] $Context
     )
 
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
+    }
 
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
-
-        if ([string]::IsNullOrEmpty($Repo)) {
-            $Repo = $Context.Repo
-        }
-        Write-Debug "Repo: [$Repo]"
-
+    process {
         $contentType = switch ($Type) {
             'raw' { 'application/vnd.github.raw+json' }
             'html' { 'application/vnd.github.html+json' }
         }
-    }
 
-    process {
-        try {
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/repos/$Owner/$Repo/license"
-                ContentType = $contentType
-                Method      = 'GET'
-            }
+        $inputObject = @{
+            Method      = 'GET'
+            APIEndpoint = "/repos/$Owner/$Repo/license"
+            ContentType = $contentType
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                $Response = $_.Response
-                $rawContent = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($Response.content))
-                $Response | Add-Member -NotePropertyName 'raw_content' -NotePropertyValue $rawContent -Force
-                $Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            $Response = $_.Response
+            $rawContent = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($Response.content))
+            $Response | Add-Member -NotePropertyName 'raw_content' -NotePropertyValue $rawContent -Force
+            $Response
         }
     }
     end {
