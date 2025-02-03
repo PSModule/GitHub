@@ -8,7 +8,7 @@
         If the context does not meet the requirements, an error is thrown.
 
         .EXAMPLE
-        Assert-GitHubContext -Context 'github.com/Octocat' -TokenType 'App'
+        Assert-GitHubContext -Context 'github.com/Octocat' -AuthType 'App'
     #>
     [OutputType([void])]
     [CmdletBinding()]
@@ -18,11 +18,15 @@
             Mandatory,
             ValueFromPipeline
         )]
-        [object] $Context,
+        [GitHubContext] $Context,
 
         # The required authtypes for the command.
         [Parameter(Mandatory)]
         [string[]] $AuthType
+
+        # # The required permission for the command.
+        # [Parameter()]
+        # [string] $Permission
     )
 
     begin {
@@ -36,6 +40,9 @@
         if ($Context.AuthType -notin $AuthType) {
             throw "The context '$($Context.Name)' does not match the required AuthTypes [$AuthType] for [$command]."
         }
+        # if ($Context.AuthType -in 'IAT' -and $Context.Permission -notin $Permission) {
+        #     throw "The context '$($Context.Name)' does not match the required Permission [$Permission] for [$command]."
+        # }
     }
 
     end {
