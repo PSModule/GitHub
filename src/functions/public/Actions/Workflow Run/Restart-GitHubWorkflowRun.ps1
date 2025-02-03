@@ -1,28 +1,36 @@
-﻿filter Stop-GitHubWorkflowRun {
+﻿filter Restart-GitHubWorkflowRun {
     <#
         .SYNOPSIS
-        Cancel a workflow run
+        Re-run a workflow
 
         .DESCRIPTION
-        Cancels a workflow run using its `run_id`. You can use this endpoint to cancel a workflow run that is in progress or waiting
+        Re-runs your workflow run using its `run_id`. You can also specify a branch or tag name to re-run a workflow run from a branch
 
         .EXAMPLE
-        Stop-GitHubWorkflowRun -Owner 'octocat' -Repo 'Hello-World' -ID 123456789
-
-        Cancels the workflow run with the ID 123456789 from the 'Hello-World' repository owned by 'octocat'
+        Start-GitHubWorkflowReRun -Owner 'octocat' -Repo 'Hello-World' -ID 123456789
 
         .NOTES
-        [Cancel a workflow run](https://docs.github.com/en/rest/actions/workflow-runs#cancel-a-workflow-run)
+        [Re-run a workflow](https://docs.github.com/en/rest/actions/workflow-runs#re-run-a-workflow)
     #>
     [CmdletBinding(SupportsShouldProcess)]
-    [alias('Cancel-GitHubWorkflowRun')]
     param(
-        [Parameter()]
+        # The account owner of the repository. The name is not case sensitive.
+        [Parameter(
+            Mandatory,
+            ValueFromPipelineByPropertyName
+        )]
+        [Alias('Organization')]
+        [Alias('User')]
         [string] $Owner,
 
-        [Parameter()]
-        [string] $Repo,
+        # The name of the repository without the .git extension. The name is not case sensitive.
+        [Parameter(
+            Mandatory,
+            ValueFromPipelineByPropertyName
+        )]
+        [string] $Repository,
 
+        # The unique identifier of the workflow run.
         [Alias('workflow_id')]
         [Parameter(
             Mandatory,
@@ -57,10 +65,10 @@
             $inputObject = @{
                 Context     = $Context
                 Method      = 'POST'
-                APIEndpoint = "/repos/$Owner/$Repo/actions/runs/$ID/cancel"
+                APIEndpoint = "/repos/$Owner/$Repo/actions/runs/$ID/rerun"
             }
 
-            if ($PSCmdlet.ShouldProcess("workflow run with ID [$ID] in [$Owner/$Repo]", 'Cancel/Stop')) {
+            if ($PSCmdlet.ShouldProcess("workflow with ID [$ID] in [$Owner/$Repo]", 'Re-run')) {
                 Invoke-GitHubAPI @inputObject | ForEach-Object {
                     Write-Output $_.Response
                 }

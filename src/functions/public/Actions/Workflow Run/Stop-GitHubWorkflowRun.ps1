@@ -1,29 +1,37 @@
-﻿filter Start-GitHubWorkflowReRun {
+﻿filter Stop-GitHubWorkflowRun {
     <#
         .SYNOPSIS
-        Re-run a workflow
+        Cancel a workflow run
 
         .DESCRIPTION
-        Re-runs your workflow run using its `run_id`. You can also specify a branch or tag name to re-run a workflow run from a branch
+        Cancels a workflow run using its `run_id`. You can use this endpoint to cancel a workflow run that is in progress or waiting
 
         .EXAMPLE
-        Start-GitHubWorkflowReRun -Owner 'octocat' -Repo 'Hello-World' -ID 123456789
+        Stop-GitHubWorkflowRun -Owner 'octocat' -Repo 'Hello-World' -ID 123456789
+
+        Cancels the workflow run with the ID 123456789 from the 'Hello-World' repository owned by 'octocat'
 
         .NOTES
-        [Re-run a workflow](https://docs.github.com/en/rest/actions/workflow-runs#re-run-a-workflow)
+        [Cancel a workflow run](https://docs.github.com/en/rest/actions/workflow-runs#cancel-a-workflow-run)
     #>
     [CmdletBinding(SupportsShouldProcess)]
+    [alias('Cancel-GitHubWorkflowRun')]
     param(
-        # The account owner of the repository. The name is not case sensitive.
-        [Parameter()]
+        [Parameter(
+            Mandatory,
+            ValueFromPipelineByPropertyName
+        )]
+        [Alias('Organization')]
+        [Alias('User')]
         [string] $Owner,
 
-        # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(
+            Mandatory,
+            ValueFromPipelineByPropertyName
+        )]
+        [string] $Repository,
 
-        # The unique identifier of the workflow run.
-        [Alias('workflow_id')]
+        [Alias('workflow_id', 'WorkflowID')]
         [Parameter(
             Mandatory,
             ValueFromPipelineByPropertyName
@@ -41,26 +49,17 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
-
-        if ([string]::IsNullOrEmpty($Repo)) {
-            $Repo = $Context.Repo
-        }
-        Write-Debug "Repo: [$Repo]"
     }
 
     process {
         try {
             $inputObject = @{
-                Context     = $Context
                 Method      = 'POST'
-                APIEndpoint = "/repos/$Owner/$Repo/actions/runs/$ID/rerun"
+                APIEndpoint = "/repos/$Owner/$Repository/actions/runs/$ID/cancel"
+                Context     = $Context
             }
 
-            if ($PSCmdlet.ShouldProcess("workflow with ID [$ID] in [$Owner/$Repo]", 'Re-run')) {
+            if ($PSCmdlet.ShouldProcess("$Owner/$Repo/$ID", 'Cancel/Stop workflow run')) {
                 Invoke-GitHubAPI @inputObject | ForEach-Object {
                     Write-Output $_.Response
                 }
