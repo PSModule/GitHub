@@ -8,7 +8,7 @@
         If the app is installed on an enterprise, the installations for the enterprise are returned.
         If the app is installed on an organization, the installations for the organization are returned.
     #>
-    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
+    [CmdletBinding()]
     param(
         # The enterprise slug or ID.
         [Parameter(
@@ -54,31 +54,27 @@
     }
 
     process {
-        try {
-            switch ($PSCmdlet.ParameterSetName) {
-                'Enterprise' {
-                    $params = @{
-                        Enterprise   = $Enterprise
-                        Organization = $Organization
-                        PerPage      = $PerPage
-                        Context      = $Context
-                    }
-                    Get-GitHubEnterpriseOrganizationAppInstallation @params
+        switch ($PSCmdlet.ParameterSetName) {
+            'Enterprise' {
+                $params = @{
+                    Enterprise   = $Enterprise
+                    Organization = $Organization
+                    PerPage      = $PerPage
+                    Context      = $Context
                 }
-                'Organization' {
-                    $params = @{
-                        Organization = $Organization
-                        PerPage      = $PerPage
-                        Context      = $Context
-                    }
-                    Get-GitHubOrganizationAppInstallation @params
-                }
-                '__AllParameterSets' {
-                    Get-GitHubAppInstallationForAuthenticatedApp -Context $Context
-                }
+                Get-GitHubEnterpriseOrganizationAppInstallation @params
             }
-        } catch {
-            throw $_
+            'Organization' {
+                $params = @{
+                    Organization = $Organization
+                    PerPage      = $PerPage
+                    Context      = $Context
+                }
+                Get-GitHubOrganizationAppInstallation @params
+            }
+            default {
+                Get-GitHubAppInstallationForAuthenticatedApp -Context $Context
+            }
         }
     }
 

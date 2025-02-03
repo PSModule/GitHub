@@ -31,7 +31,7 @@
             Mandatory,
             ParameterSetName = 'ByID'
         )]
-        [Alias('DeliveryID', 'delivery_id')]
+        [Alias('delivery_id', 'DeliveryID')]
         [string] $ID,
 
         # Only the ones to redeliver.
@@ -64,23 +64,16 @@
     }
 
     process {
-        try {
-            switch ($PSCmdlet.ParameterSetName) {
-                'ByID' {
-                    Write-Debug "ByID: [$ID]"
-                    Get-GitHubAppWebhookDeliveryByID -ID $ID -Context $Context
-                }
-                'Redelivery' {
-                    Write-Debug "Redelivery: [$NeedingRedelivery]"
-                    Get-GitHubAppWebhookDeliveryToRedeliver -Context $Context -PerPage $PerPage -TimeSpan $TimeSpan
-                }
-                'ByList' {
-                    Write-Debug 'ByList'
-                    Get-GitHubAppWebhookDeliveryByList -Context $Context -PerPage $PerPage
-                }
+        switch ($PSCmdlet.ParameterSetName) {
+            'ByID' {
+                Get-GitHubAppWebhookDeliveryByID -ID $ID -Context $Context
             }
-        } catch {
-            throw $_
+            'Redelivery' {
+                Get-GitHubAppWebhookDeliveryToRedeliver -Context $Context -PerPage $PerPage -TimeSpan $TimeSpan
+            }
+            default {
+                Get-GitHubAppWebhookDeliveryByList -Context $Context -PerPage $PerPage
+            }
         }
     }
 

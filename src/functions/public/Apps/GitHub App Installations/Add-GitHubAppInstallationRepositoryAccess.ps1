@@ -57,39 +57,27 @@
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
-        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Enterprise)) {
-            $Enterprise = $Context.Enterprise
-        }
-        Write-Debug "Enterprise : [$($Context.Enterprise)]"
-
-        if ([string]::IsNullOrEmpty($Organization)) {
-            $Organization = $Context.Organization
-        }
-        Write-Debug "Organization : [$($Context.Organization)]"
+        Assert-GitHubContext -Context $Context -AuthType IAT, UAT
+        #enterprise_organization_installation_repositories=write
+        #enterprise_organization_installations=write
     }
 
     process {
-        try {
-            $body = @{
-                repositories = $Repositories
-            }
+        $body = @{
+            repositories = $Repositories
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/enterprises/$Enterprise/apps/organizations/$Organization/installations/$ID/repositories/add"
-                Method      = 'PATCH'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'PATCH'
+            APIEndpoint = "/enterprises/$Enterprise/apps/organizations/$Organization/installations/$ID/repositories/add"
+            Body        = $body
+            Context     = $Context
+        }
 
-            if ($PSCmdlet.ShouldProcess('Target', 'Operation')) {
-                Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
-                }
+        if ($PSCmdlet.ShouldProcess("$Enterprise/$Organization", 'Add repo access to installation')) {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
             }
-        } catch {
-            Write-Debug "Error: $_"
         }
     }
 

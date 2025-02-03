@@ -19,7 +19,7 @@
         Get the repositories accessible to the GitHub App installation
         with the ID '12345678' on the organization 'PSModule' in the enterprise 'msx'.
     #>
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding()]
     param(
         # The enterprise slug or ID.
         [Parameter(
@@ -59,39 +59,25 @@
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
-        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Enterprise)) {
-            $Enterprise = $Context.Enterprise
-        }
-        Write-Debug "Enterprise : [$($Context.Enterprise)]"
-
-        if ([string]::IsNullOrEmpty($Organization)) {
-            $Organization = $Context.Organization
-        }
-        Write-Debug "Organization : [$($Context.Organization)]"
+        Assert-GitHubContext -Context $Context -AuthType IAT, UAT
+        #enterprise_organization_installation_repositories=read
+        #enterprise_organization_installations=read
     }
 
     process {
-        try {
-            $body = @{
-                per_page = $PerPage
-            }
+        $body = @{
+            per_page = $PerPage
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/enterprises/$Enterprise/apps/organizations/$Organization/installations/$ID/repositories"
-                Method      = 'GET'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'GET'
+            APIEndpoint = "/enterprises/$Enterprise/apps/organizations/$Organization/installations/$ID/repositories"
+            Body        = $body
+            Context     = $Context
+        }
 
-            if ($PSCmdlet.ShouldProcess('Target', 'Operation')) {
-                Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
-                }
-            }
-        } catch {
-            Write-Debug "Error: $_"
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 
