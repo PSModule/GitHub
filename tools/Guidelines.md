@@ -83,6 +83,8 @@ function documentation they can search based on the official documentation.
 - If Public function
   - Resolve-GitHubContext
 
+- To select underlying private functions use parameter sets, in a swticth statement.
+  - Use the `default` block to cover the default parameter set `__AllParameterSets`.
 
 ### Content - Private
 

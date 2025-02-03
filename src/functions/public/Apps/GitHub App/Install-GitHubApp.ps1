@@ -23,7 +23,7 @@
         - the repository selection 'all'
         on the organization 'org' in the enterprise 'msx'.
     #>
-    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
+    [CmdletBinding()]
     param(
         # The enterprise slug or ID.
         [Parameter(
@@ -66,34 +66,23 @@
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
-        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
+        Assert-GitHubContext -Context $Context -AuthType IAT, UAT
+        #enterprise_organization_installations=write
     }
 
     process {
-        if ([string]::IsNullOrEmpty($Enterprise)) {
-            $Enterprise = $Context.Enterprise
-        }
-        Write-Debug "Enterprise: [$Enterprise]"
-        if ([string]::IsNullOrEmpty($Organization)) {
-            $Organization = $Context.Organization
-        }
-        Write-Debug "Organization: [$Organization]"
-        try {
-            switch ($PSCmdlet.ParameterSetName) {
-                'EnterpriseOrganization' {
-                    $params = @{
-                        Enterprise          = $Enterprise
-                        Organization        = $Organization
-                        ClientID            = $ClientID
-                        RepositorySelection = $RepositorySelection
-                        Repositories        = $Repositories
-                        Context             = $Context
-                    }
-                    Install-GitHubAppOnEnterpriseOrganization @params
+        switch ($PSCmdlet.ParameterSetName) {
+            'EnterpriseOrganization' {
+                $params = @{
+                    Enterprise          = $Enterprise
+                    Organization        = $Organization
+                    ClientID            = $ClientID
+                    RepositorySelection = $RepositorySelection
+                    Repositories        = $Repositories
+                    Context             = $Context
                 }
+                Install-GitHubAppOnEnterpriseOrganization @params
             }
-        } catch {
-            throw $_
         }
     }
 

@@ -6,8 +6,9 @@
         .DESCRIPTION
         List of organizations owned by the enterprise on which the authenticated GitHub App installation may install other GitHub Apps.
 
-        The authenticated GitHub App must be installed on the enterprise and be granted the Enterprise/enterprise_organization_installations
-        (read) permission.
+        .NOTES
+        Permissions required:
+        - enterprise_organization_installations: read
 
         .EXAMPLE
         Get-GitHubAppInstallableOrganization -Enterprise 'msx'
@@ -33,31 +34,24 @@
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
-        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-        if ([string]::IsNullOrEmpty($Enterprise)) {
-            $Enterprise = $Context.Enterprise
-        }
-        Write-Debug "Enterprise: [$Enterprise]"
+        Assert-GitHubContext -Context $Context -AuthType IAT, UAT
+        # enterprise_organization_installations=read
     }
 
     process {
-        try {
-            $body = @{
-                per_page = $PerPage
-            }
+        $body = @{
+            per_page = $PerPage
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/enterprises/$Enterprise/apps/installable_organizations"
-                Method      = 'GET'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'GET'
+            APIEndpoint = "/enterprises/$Enterprise/apps/installable_organizations"
+            Body        = $body
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 

@@ -21,7 +21,7 @@
         [Get the authenticated app | GitHub Docs](https://docs.github.com/rest/apps/apps#get-the-authenticated-app)
     #>
     [OutputType([pscustomobject])]
-    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
+    [CmdletBinding()]
     param(
         # The AppSlug is just the URL-friendly name of a GitHub App.
         # You can find this on the settings page for your GitHub App (e.g., <https://github.com/settings/apps/{app_slug}>).
@@ -30,8 +30,8 @@
             Mandatory,
             ParameterSetName = 'BySlug'
         )]
-        [Alias('Name')]
-        [string] $AppSlug,
+        [Alias('AppSlug')]
+        [string] $Name,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -43,23 +43,13 @@
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
-
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
-
-        if ([string]::IsNullOrEmpty($Repo)) {
-            $Repo = $Context.Repo
-        }
-        Write-Debug "Repo: [$Repo]"
     }
 
     process {
         try {
             switch ($PSCmdlet.ParameterSetName) {
                 'BySlug' {
-                    Get-GitHubAppByName -AppSlug $AppSlug -Context $Context
+                    Get-GitHubAppByName -AppSlug $Name -Context $Context
                 }
                 default {
                     Get-GitHubAuthenticatedApp -Context $Context
