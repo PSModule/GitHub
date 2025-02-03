@@ -47,30 +47,18 @@
     }
 
     process {
-        try {
-            $body = @{
-                per_page = $PerPage
-            }
-
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/user/blocks/$Username"
-                Method      = 'Get'
-                Body        = $body
-            }
-
-            try {
-                (Invoke-GitHubAPI @inputObject).StatusCode -eq 204
-            } catch {
-                if ($_.Exception.Response.StatusCode.Value__ -eq 404) {
-                    return $false
-                } else {
-                    throw $_
-                }
-            }
-        } catch {
-            throw $_
+        $body = @{
+            per_page = $PerPage
         }
+
+        $inputObject = @{
+            Method      = 'Get'
+            APIEndpoint = "/user/blocks/$Username"
+            Body        = $body
+            Context     = $Context
+        }
+
+        Invoke-GitHubAPI @inputObject
     }
 
     end {

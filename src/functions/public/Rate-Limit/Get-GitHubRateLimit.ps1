@@ -48,18 +48,14 @@
     }
 
     process {
-        try {
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = '/rate_limit'
-                Method      = 'Get'
-            }
+        $inputObject = @{
+            Method      = 'Get'
+            APIEndpoint = '/rate_limit'
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response.Resources
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response.Resources
         }
     }
 

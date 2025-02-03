@@ -38,10 +38,10 @@
 
     process {
         $inputObject = @{
-            Context     = $Context
+            Method      = 'Get'
             APIEndpoint = "/licenses/$Name"
             Accept      = 'application/vnd.github+json'
-            Method      = 'Get'
+            Context     = $Context
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {

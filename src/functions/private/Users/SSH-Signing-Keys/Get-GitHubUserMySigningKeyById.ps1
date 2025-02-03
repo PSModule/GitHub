@@ -41,18 +41,14 @@
     }
 
     process {
-        try {
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/user/ssh_signing_keys/$ID"
-                Method      = 'Get'
-            }
+        $inputObject = @{
+            Method      = 'Get'
+            APIEndpoint = "/user/ssh_signing_keys/$ID"
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 

@@ -32,15 +32,15 @@
     }
 
     process {
-            $inputObject = @{
-                Method      = 'Get'
-                APIEndpoint = '/gitignore/templates'
-                Context     = $Context
-            }
+        $inputObject = @{
+            Method      = 'Get'
+            APIEndpoint = '/gitignore/templates'
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
+        }
     }
 
     end {

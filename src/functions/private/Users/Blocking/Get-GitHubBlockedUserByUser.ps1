@@ -35,23 +35,19 @@
     }
 
     process {
-        try {
-            $body = @{
-                per_page = $PerPage
-            }
+        $body = @{
+            per_page = $PerPage
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = '/user/blocks'
-                Method      = 'Get'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'Get'
+            APIEndpoint = '/user/blocks'
+            Body        = $body
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 

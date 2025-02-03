@@ -40,18 +40,14 @@
     }
 
     process {
-        try {
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/user/gpg_keys/$ID"
-                Method      = 'Get'
-            }
+        $inputObject = @{
+            Method      = 'Get'
+            APIEndpoint = "/user/gpg_keys/$ID"
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 

@@ -40,23 +40,13 @@
     }
 
     process {
-        try {
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/user/blocks/$Username"
-                Method      = 'Delete'
-            }
-
-            try {
-                $null = (Invoke-GitHubAPI @inputObject)
-                return $true
-            } catch {
-                Write-Error $_.Exception.Response
-                throw $_
-            }
-        } catch {
-            throw $_
+        $inputObject = @{
+            Method      = 'Delete'
+            APIEndpoint = "/user/blocks/$Username"
+            Context     = $Context
         }
+
+        Invoke-GitHubAPI @inputObject
     }
 
     end {

@@ -40,20 +40,14 @@
     }
 
     process {
-        try {
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/user/following/$Username"
-                Method      = 'Delete'
-            }
+        $inputObject = @{
+            Method      = 'Delete'
+            APIEndpoint = "/user/following/$Username"
+            Context     = $Context
+        }
 
-            if ($PSCmdlet.ShouldProcess("User [$Username]", 'Unfollow')) {
-                $null = Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
-                }
-            }
-        } catch {
-            throw $_
+        if ($PSCmdlet.ShouldProcess("User [$Username]", 'Unfollow')) {
+            Invoke-GitHubAPI @inputObject
         }
     }
 

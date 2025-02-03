@@ -26,7 +26,11 @@
     )]
     param(
         # The ID of the delivery.
-        [Parameter(Mandatory)]
+        [Parameter(
+            Mandatory,
+            ValueFromPipeline,
+            ValueFromPipelineByPropertyName
+        )]
         [Alias('delivery_id', 'DeliveryID')]
         [string] $ID,
 
@@ -46,8 +50,8 @@
     process {
         $inputObject = @{
             Method      = 'Post'
-            Context     = $Context
             APIEndpoint = "/app/hook/deliveries/$ID/attempts"
+            Context     = $Context
         }
 
         if ($PSCmdlet.ShouldProcess("[$ID]", 'Redeliver event')) {

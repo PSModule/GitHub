@@ -41,23 +41,12 @@
 
     process {
         $inputObject = @{
-            Context     = $Context
-            APIEndpoint = "/user/blocks/$Username"
             Method      = 'Put'
+            APIEndpoint = "/user/blocks/$Username"
+            Context     = $Context
         }
 
-        try {
-            $null = (Invoke-GitHubAPI @inputObject)
-            # Should we check if user is already blocked and return true if so?
-            return $true
-        } catch {
-            if ($_.Exception.Response.StatusCode.Value__ -eq 422) {
-                return $false
-            } else {
-                Write-Error $_.Exception.Response
-                throw $_
-            }
-        }
+        Invoke-GitHubAPI @inputObject
     }
 
     end {

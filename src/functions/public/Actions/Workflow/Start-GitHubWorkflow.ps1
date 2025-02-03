@@ -74,10 +74,10 @@
         }
 
         $inputObject = @{
-            Context     = $Context
-            APIEndpoint = "/repos/$Owner/$Repository/actions/workflows/$ID/dispatches"
             Method      = 'Post'
+            APIEndpoint = "/repos/$Owner/$Repository/actions/workflows/$ID/dispatches"
             Body        = $body
+            Context     = $Context
         }
 
         if ($PSCmdlet.ShouldProcess("$Owner/$Repo/$ID", 'Start workflow')) {

@@ -43,13 +43,7 @@
         .NOTES
         [Authenticating to the REST API](https://docs.github.com/rest/overview/other-authentication-methods#authenticating-for-saml-sso)
     #>
-    [Alias('Connect-GHAccount')]
     [Alias('Connect-GitHub')]
-    [Alias('Connect-GH')]
-    [Alias('Login-GitHubAccount')]
-    [Alias('Login-GHAccount')]
-    [Alias('Login-GitHub')]
-    [Alias('Login-GH')]
     [OutputType([void])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Long links for documentation.')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'Is the CLI part of the module.')]

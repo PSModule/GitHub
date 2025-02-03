@@ -26,9 +26,6 @@
             ValueFromPipeline,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('org')]
-        [Alias('owner')]
-        [Alias('login')]
         [string] $Organization,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -42,28 +39,19 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
     }
 
     process {
-        try {
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/orgs/$Organization"
-                Method      = 'Delete'
-            }
+        $inputObject = @{
+            Method      = 'Delete'
+            APIEndpoint = "/orgs/$Organization"
+            Context     = $Context
+        }
 
-            if ($PSCmdlet.ShouldProcess("organization [$Organization]", 'Delete')) {
-                Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
-                }
+        if ($PSCmdlet.ShouldProcess("organization [$Organization]", 'Delete')) {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
             }
-        } catch {
-            throw $_
         }
     }
 

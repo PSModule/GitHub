@@ -82,36 +82,28 @@
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
     }
 
     process {
-        try {
-            $body = @{
-                owner                = $Owner
-                name                 = $Name
-                description          = $Description
-                include_all_branches = $IncludeAllBranches
-                private              = $Private
-            }
+        $body = @{
+            owner                = $Owner
+            name                 = $Name
+            description          = $Description
+            include_all_branches = $IncludeAllBranches
+            private              = $Private
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/repos/$TemplateOwner/$TemplateRepo/generate"
-                Method      = 'Post'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'Post'
+            APIEndpoint = "/repos/$TemplateOwner/$TemplateRepo/generate"
+            Body        = $body
+            Context     = $Context
+        }
 
-            if ($PSCmdlet.ShouldProcess("Repository [$Owner/$Name] from template [$TemplateOwner/$TemplateRepo]", 'Create')) {
-                Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
-                }
+        if ($PSCmdlet.ShouldProcess("Repository [$Owner/$Name] from template [$TemplateOwner/$TemplateRepo]", 'Create')) {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
             }
-        } catch {
-            throw $_
         }
     }
 

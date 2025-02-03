@@ -40,23 +40,19 @@
     }
 
     process {
-        try {
-            $body = @{
-                since = $Since
-            }
+        $body = @{
+            since = $Since
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = '/repositories'
-                Method      = 'Get'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'Get'
+            APIEndpoint = '/repositories'
+            Body        = $body
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 

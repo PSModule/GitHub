@@ -7,7 +7,7 @@
         This endpoint is accessible with the `user` scope.
 
         .EXAMPLE
-        Add-GitHubUserEmail -Emails 'octocat@github.com','firstname.lastname@work.com'
+        Add-GitHubUserEmail -Email 'octocat@github.com','firstname.lastname@work.com'
 
         Adds the email addresses `octocat@github.com` and `firstname.lastname@work.com` to the authenticated user's account.
 
@@ -26,7 +26,7 @@
             ValueFromPipeline,
             ValueFromPipelineByPropertyName
         )]
-        [string[]] $Emails,
+        [string[]] $Email,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -42,23 +42,19 @@
     }
 
     process {
-        try {
-            $body = @{
-                emails = $Emails
-            }
+        $body = @{
+            emails = $Email
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = '/user/emails'
-                Method      = 'Post'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'Post'
+            APIEndpoint = '/user/emails'
+            Body        = $body
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 

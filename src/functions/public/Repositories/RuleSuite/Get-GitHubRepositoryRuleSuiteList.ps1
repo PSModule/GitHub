@@ -28,8 +28,9 @@
     [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter()]
-        [Alias('org')]
+        [Parameter(Mandatory)]
+        [Alias('Organization')]
+        [Alias('User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
@@ -73,41 +74,27 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
-
-        if ([string]::IsNullOrEmpty($Repo)) {
-            $Repo = $Context.Repo
-        }
-        Write-Debug "Repo: [$Repo]"
     }
 
     process {
-        try {
-            $body = @{
-                ref               = $Ref
-                time_period       = $TimePeriod
-                actor_name        = $ActorName
-                rule_suite_result = $RuleSuiteResult
-                per_page          = $PerPage
-            }
-            $body | Remove-HashtableEntry -NullOrEmptyValues
+        $body = @{
+            ref               = $Ref
+            time_period       = $TimePeriod
+            actor_name        = $ActorName
+            rule_suite_result = $RuleSuiteResult
+            per_page          = $PerPage
+        }
+        $body | Remove-HashtableEntry -NullOrEmptyValues
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/repos/$Owner/$Repo/rulesets/rule-suites"
-                Method      = 'Get'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'Get'
+            APIEndpoint = "/repos/$Owner/$Repo/rulesets/rule-suites"
+            Body        = $body
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 

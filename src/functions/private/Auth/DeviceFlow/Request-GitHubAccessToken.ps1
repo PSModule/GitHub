@@ -66,11 +66,15 @@
             }
         }
 
+        $headers = @{
+            'Accept' = 'application/json'
+        }
+
         $RESTParams = @{
-            Uri     = "https://$HostName/login/oauth/access_token"
             Method  = 'Post'
+            Uri     = "https://$HostName/login/oauth/access_token"
+            Headers = $headers
             Body    = $body
-            Headers = @{ 'Accept' = 'application/json' }
         }
 
         try {

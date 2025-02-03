@@ -31,18 +31,14 @@
     }
 
     process {
-        try {
-            $inputObject = @{
-                Context     = $Context
-                ApiEndpoint = '/versions'
-                Method      = 'Get'
-            }
+        $inputObject = @{
+            Method      = 'Get'
+            ApiEndpoint = '/versions'
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 

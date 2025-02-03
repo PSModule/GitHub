@@ -31,11 +31,11 @@
         )]
         [string] $Repository,
 
-        [Alias('workflow_id', 'WorkflowID')]
         [Parameter(
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
+        [Alias('workflow_id', 'WorkflowID')]
         [string] $ID,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -52,20 +52,16 @@
     }
 
     process {
-        try {
-            $inputObject = @{
-                Method      = 'Post'
-                APIEndpoint = "/repos/$Owner/$Repository/actions/runs/$ID/cancel"
-                Context     = $Context
-            }
+        $inputObject = @{
+            Method      = 'Post'
+            APIEndpoint = "/repos/$Owner/$Repository/actions/runs/$ID/cancel"
+            Context     = $Context
+        }
 
-            if ($PSCmdlet.ShouldProcess("$Owner/$Repo/$ID", 'Cancel/Stop workflow run')) {
-                Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
-                }
+        if ($PSCmdlet.ShouldProcess("$Owner/$Repo/$ID", 'Cancel/Stop workflow run')) {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
             }
-        } catch {
-            throw $_
         }
     }
 

@@ -72,44 +72,26 @@
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
-
-        if ([string]::IsNullOrEmpty($Repo)) {
-            $Repo = $Context.Repo
-        }
-        Write-Debug "Repo: [$Repo]"
-
-        if ([string]::IsNullorEmpty($Name)) {
-            $Name = $Repo
-        }
-        Write-Debug "Name: [$Name]"
     }
 
     process {
-        try {
-            $body = @{
-                organization        = $Organization
-                name                = $Name
-                default_branch_only = $DefaultBranchOnly
-            }
+        $body = @{
+            organization        = $Organization
+            name                = $Name
+            default_branch_only = $DefaultBranchOnly
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/repos/$Owner/$Repo/forks"
-                Method      = 'Post'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'Post'
+            APIEndpoint = "/repos/$Owner/$Repo/forks"
+            Body        = $body
+            Context     = $Context
+        }
 
-            if ($PSCmdlet.ShouldProcess("Repository [$Organization/$Name] as fork of [$Owner/$Repo]", 'Create')) {
-                Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
-                }
+        if ($PSCmdlet.ShouldProcess("Repository [$Organization/$Name] as fork of [$Owner/$Repo]", 'Create')) {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
             }
-        } catch {
-            throw $_
         }
     }
 

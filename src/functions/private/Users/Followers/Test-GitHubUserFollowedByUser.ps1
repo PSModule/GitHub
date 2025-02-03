@@ -46,21 +46,12 @@
 
     process {
         $inputObject = @{
-            Context     = $Context
-            APIEndpoint = "/users/$Username/following/$Follows"
             Method      = 'Get'
+            APIEndpoint = "/users/$Username/following/$Follows"
+            Context     = $Context
         }
 
-        try {
-            $null = (Invoke-GitHubAPI @inputObject)
-            return $true
-        } catch {
-            if ($_.Exception.Response.StatusCode.Value__ -eq 404) {
-                return $false
-            } else {
-                throw $_
-            }
-        }
+        Invoke-GitHubAPI @inputObject
     }
 
     end {

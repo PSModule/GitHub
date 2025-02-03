@@ -37,22 +37,18 @@
     }
 
     process {
-        try {
-            $body = @{
-                per_page = $PerPage
-            }
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = '/user/emails'
-                Method      = 'Get'
-                Body        = $body
-            }
+        $body = @{
+            per_page = $PerPage
+        }
+        $inputObject = @{
+            Method      = 'Get'
+            APIEndpoint = '/user/emails'
+            Body        = $body
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 

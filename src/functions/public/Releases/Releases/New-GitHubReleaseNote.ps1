@@ -57,7 +57,9 @@
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter()]
+        [Parameter(Mandatory)]
+        [Alias('Organization')]
+        [Alias('User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
@@ -101,41 +103,27 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
-
-        if ([string]::IsNullOrEmpty($Repo)) {
-            $Repo = $Context.Repo
-        }
-        Write-Debug "Repo: [$Repo]"
     }
 
     process {
-        try {
-            $requestBody = @{
-                tag_name                = $TagName
-                target_commitish        = $TargetCommitish
-                previous_tag_name       = $PreviousTagName
-                configuration_file_path = $ConfigurationFilePath
-            }
-            $requestBody | Remove-HashtableEntry -NullOrEmptyValues
+        $body = @{
+            tag_name                = $TagName
+            target_commitish        = $TargetCommitish
+            previous_tag_name       = $PreviousTagName
+            configuration_file_path = $ConfigurationFilePath
+        }
+        $body | Remove-HashtableEntry -NullOrEmptyValues
 
-            $inputObject = @{
-                APIEndpoint = "/repos/$Owner/$Repo/releases/generate-notes"
-                Method      = 'Post'
-                Body        = $requestBody
-            }
+        $inputObject = @{
+            Method      = 'Post'
+            APIEndpoint = "/repos/$Owner/$Repo/releases/generate-notes"
+            Body        = $body
+        }
 
-            if ($PSCmdlet.ShouldProcess("$Owner/$Repo", 'Create release notes')) {
-                Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
-                }
+        if ($PSCmdlet.ShouldProcess("$Owner/$Repo", 'Create release notes')) {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
             }
-        } catch {
-            throw $_
         }
     }
 

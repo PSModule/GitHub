@@ -27,9 +27,6 @@
     param(
         # The organization name. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [Alias('org')]
-        [Alias('owner')]
-        [Alias('login')]
         [string] $Organization,
 
         # The security feature to enable or disable.
@@ -79,33 +76,24 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
     }
 
     process {
-        try {
-            $body = @{
-                query_suite = $QuerySuite
-            }
+        $body = @{
+            query_suite = $QuerySuite
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/orgs/$Organization/$SecurityProduct/$Enablement"
-                Method      = 'Post'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'Post'
+            APIEndpoint = "/orgs/$Organization/$SecurityProduct/$Enablement"
+            Body        = $body
+            Context     = $Context
+        }
 
-            if ($PSCmdlet.ShouldProcess("security feature [$SecurityProduct] on organization [$Organization]", 'Set')) {
-                Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
-                }
+        if ($PSCmdlet.ShouldProcess("security feature [$SecurityProduct] on organization [$Organization]", 'Set')) {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
             }
-        } catch {
-            throw $_
         }
     }
 

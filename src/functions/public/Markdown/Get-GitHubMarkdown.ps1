@@ -50,25 +50,21 @@
     }
 
     process {
-        try {
-            $body = @{
-                context = $RepoContext
-                mode    = $Mode
-                text    = $Text
-            }
+        $body = @{
+            context = $RepoContext
+            mode    = $Mode
+            text    = $Text
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = '/markdown'
-                Method      = 'Post'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'Post'
+            APIEndpoint = '/markdown'
+            Body        = $body
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 

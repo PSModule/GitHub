@@ -45,6 +45,7 @@ filter Invoke-GitHubAPI {
 
         # The body of the API request. This can be a hashtable or a string. If a hashtable is provided, it will be converted to JSON.
         [Parameter()]
+        [Alias('Query')]
         [Object] $Body,
 
         # The 'Accept' header for the API request. If not provided, the default will be used by GitHub's API.

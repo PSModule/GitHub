@@ -16,7 +16,7 @@
     [CmdletBinding()]
     param(
         # The enterprise slug or ID.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [string] $Enterprise,
 
         # The number of results per page (max 100).

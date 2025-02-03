@@ -52,24 +52,20 @@
     }
 
     process {
-        try {
-            $body = @{
-                subject_type = $SubjectType
-                subject_id   = $SubjectID
-            }
+        $body = @{
+            subject_type = $SubjectType
+            subject_id   = $SubjectID
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/users/$Username/hovercard"
-                Method      = 'Get'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'Get'
+            APIEndpoint = "/users/$Username/hovercard"
+            Body        = $body
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 

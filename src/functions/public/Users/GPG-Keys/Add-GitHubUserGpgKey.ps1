@@ -24,7 +24,7 @@
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]
-    param(
+    param (
         # A descriptive name for the new key.
         [Parameter(
             Mandatory,
@@ -55,24 +55,20 @@
     }
 
     process {
-        try {
-            $body = @{
-                name               = $Name
-                armored_public_key = $ArmoredPublicKey
-            }
+        $body = @{
+            name               = $Name
+            armored_public_key = $ArmoredPublicKey
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = '/user/gpg_keys'
-                Method      = 'Post'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'Post'
+            APIEndpoint = '/user/gpg_keys'
+            Body        = $body
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 

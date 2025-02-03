@@ -17,8 +17,9 @@
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter()]
-        [Alias('org')]
+        [Parameter(Mandatory)]
+        [Alias('Organization')]
+        [Alias('User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
@@ -41,38 +42,24 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
-
-        if ([string]::IsNullOrEmpty($Repo)) {
-            $Repo = $Context.Repo
-        }
-        Write-Debug "Repo: [$Repo]"
     }
 
     process {
-        try {
-            $body = @{
-                names = $Names | ForEach-Object { $_.ToLower() }
-            }
+        $body = @{
+            names = $Names | ForEach-Object { $_.ToLower() }
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/repos/$Owner/$Repo/topics"
-                Method      = 'Put'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'Put'
+            APIEndpoint = "/repos/$Owner/$Repo/topics"
+            Body        = $body
+            Context     = $Context
+        }
 
-            if ($PSCmdlet.ShouldProcess("topics for repo [$Owner/$Repo]", 'Set')) {
-                Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response.names
-                }
+        if ($PSCmdlet.ShouldProcess("topics for repo [$Owner/$Repo]", 'Set')) {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response.names
             }
-        } catch {
-            throw $_
         }
     }
 
