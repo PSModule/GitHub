@@ -91,50 +91,37 @@
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [object] $Context
+        [GitHubContext] $Context
     )
 
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
-
-        if ([string]::IsNullOrEmpty($Repo)) {
-            $Repo = $Context.Repo
-        }
-        Write-Debug "Repo: [$Repo]"
     }
 
     process {
-        try {
-            $body = @{
-                actor                 = $Actor
-                branch                = $Branch
-                event                 = $Event
-                status                = $Status
-                created               = $Created
-                exclude_pull_requests = $ExcludePullRequests
-                check_suite_id        = $CheckSuiteID
-                head_sha              = $HeadSHA
-                per_page              = $PerPage
-            }
+        $body = @{
+            actor                 = $Actor
+            branch                = $Branch
+            event                 = $Event
+            status                = $Status
+            created               = $Created
+            exclude_pull_requests = $ExcludePullRequests
+            check_suite_id        = $CheckSuiteID
+            head_sha              = $HeadSHA
+            per_page              = $PerPage
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/repos/$Owner/$Repo/actions/workflows/$ID/runs"
-                Method      = 'GET'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'GET'
+            APIEndpoint = "/repos/$Owner/$Repo/actions/workflows/$ID/runs"
+            Body        = $body
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response.workflow_runs
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response.workflow_runs
         }
     }
 
