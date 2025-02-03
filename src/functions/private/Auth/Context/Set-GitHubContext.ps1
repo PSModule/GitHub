@@ -82,7 +82,7 @@ function Set-GitHubContext {
                             $app = Get-GitHubApp -AppSlug $contextObj['Username'] -Context $contextObj
                             $contextObj['DisplayName'] = [string]$app.name
                         } catch {
-                            Write-Warning "Failed to get the GitHub App with the slug: [$($contextObj['Username'])]."
+                            Write-Debug "Failed to get the GitHub App with the slug: [$($contextObj['Username'])]."
                         }
                     }
                     if ($script:GitHub.EnvironmentType -eq 'GHA') {

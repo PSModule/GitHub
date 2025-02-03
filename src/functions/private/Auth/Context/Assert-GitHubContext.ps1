@@ -24,6 +24,7 @@
         [Parameter(Mandatory)]
         [string[]] $AuthType
 
+        # TODO: Implement permission check
         # # The required permission for the command.
         # [Parameter()]
         # [string] $Permission
@@ -40,6 +41,7 @@
         if ($Context.AuthType -notin $AuthType) {
             throw "The context '$($Context.Name)' does not match the required AuthTypes [$AuthType] for [$command]."
         }
+        # TODO: Implement permission check
         # if ($Context.AuthType -in 'IAT' -and $Context.Permission -notin $Permission) {
         #     throw "The context '$($Context.Name)' does not match the required Permission [$Permission] for [$command]."
         # }
