@@ -183,7 +183,7 @@ filter New-GitHubRepositoryOrg {
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [GitHubContext] $Context
     )
 
@@ -252,7 +252,7 @@ filter New-GitHubRepositoryOrg {
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = "/orgs/$Owner/repos"
-                Method      = 'POST'
+                Method      = 'Post'
                 Body        = $body
             }
 

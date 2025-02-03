@@ -56,7 +56,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = "/repos/$Owner/$Repo/automated-security-fixes"
-                Method      = 'DELETE'
+                Method      = 'Delete'
             }
 
             if ($PSCmdlet.ShouldProcess("Security Fixes for [$Owner/$Repo]", 'Disable')) {

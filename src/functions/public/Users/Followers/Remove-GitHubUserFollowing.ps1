@@ -44,7 +44,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = "/user/following/$Username"
-                Method      = 'DELETE'
+                Method      = 'Delete'
             }
 
             if ($PSCmdlet.ShouldProcess("User [$Username]", 'Unfollow')) {

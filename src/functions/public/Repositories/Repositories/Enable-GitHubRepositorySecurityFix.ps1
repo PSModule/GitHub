@@ -56,7 +56,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = "/repos/$Owner/$Repo/automated-security-fixes"
-                Method      = 'PUT'
+                Method      = 'Put'
             }
 
             if ($PSCmdlet.ShouldProcess("Security Fixes for [$Owner/$Repo]", 'Enable')) {

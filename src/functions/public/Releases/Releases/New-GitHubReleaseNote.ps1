@@ -125,7 +125,7 @@
 
             $inputObject = @{
                 APIEndpoint = "/repos/$Owner/$Repo/releases/generate-notes"
-                Method      = 'POST'
+                Method      = 'Post'
                 Body        = $requestBody
             }
 

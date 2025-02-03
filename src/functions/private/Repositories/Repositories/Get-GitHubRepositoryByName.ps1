@@ -32,7 +32,7 @@
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [GitHubContext] $Context
     )
 
@@ -57,7 +57,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = "/repos/$Owner/$Repo"
-                Method      = 'GET'
+                Method      = 'Get'
             }
 
             Invoke-GitHubAPI @inputObject | ForEach-Object {

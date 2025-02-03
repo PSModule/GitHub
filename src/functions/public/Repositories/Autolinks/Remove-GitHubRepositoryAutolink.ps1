@@ -61,7 +61,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = "/repos/$Owner/$Repo/autolinks/$AutolinkId"
-                Method      = 'DELETE'
+                Method      = 'Delete'
                 Body        = $body
             }
 

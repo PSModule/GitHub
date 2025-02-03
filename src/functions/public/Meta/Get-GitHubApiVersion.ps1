@@ -35,7 +35,7 @@
             $inputObject = @{
                 Context     = $Context
                 ApiEndpoint = '/versions'
-                Method      = 'GET'
+                Method      = 'Get'
             }
 
             Invoke-GitHubAPI @inputObject | ForEach-Object {

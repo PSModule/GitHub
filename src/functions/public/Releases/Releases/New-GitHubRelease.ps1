@@ -117,7 +117,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = "/repos/$Owner/$Repo/releases"
-                Method      = 'POST'
+                Method      = 'Post'
                 Body        = $requestBody
             }
 

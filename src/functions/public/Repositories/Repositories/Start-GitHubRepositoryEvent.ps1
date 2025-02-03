@@ -96,7 +96,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = "/repos/$Owner/$Repo/dispatches"
-                Method      = 'POST'
+                Method      = 'Post'
                 Body        = $body
             }
 

@@ -27,7 +27,7 @@
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [GitHubContext] $Context
     )
 
@@ -43,7 +43,7 @@
         }
 
         $inputObject = @{
-            Method      = 'GET'
+            Method      = 'Get'
             APIEndpoint = '/app/hook/deliveries'
             Body        = $body
             Context     = $Context

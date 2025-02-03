@@ -47,7 +47,7 @@
                 Context     = $Context
                 APIEndpoint = '/user/social_accounts'
                 Body        = $body
-                Method      = 'POST'
+                Method      = 'Post'
             }
 
             Invoke-GitHubAPI @inputObject | ForEach-Object {

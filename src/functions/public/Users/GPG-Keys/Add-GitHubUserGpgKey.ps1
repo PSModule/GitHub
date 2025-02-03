@@ -64,7 +64,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = '/user/gpg_keys'
-                Method      = 'POST'
+                Method      = 'Post'
                 Body        = $body
             }
 

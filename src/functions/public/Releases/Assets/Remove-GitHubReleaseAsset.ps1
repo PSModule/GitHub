@@ -57,7 +57,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = "/repos/$Owner/$Repo/releases/assets/$ID"
-                Method      = 'DELETE'
+                Method      = 'Delete'
             }
 
             if ($PSCmdlet.ShouldProcess("Asset with ID [$ID] in [$Owner/$Repo]", 'Delete')) {

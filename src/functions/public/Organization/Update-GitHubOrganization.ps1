@@ -215,7 +215,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = "/orgs/$Organization"
-                Method      = 'PATCH'
+                Method      = 'Patch'
                 Body        = $body
             }
 

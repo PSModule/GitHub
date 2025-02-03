@@ -47,7 +47,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = '/emojis'
-                Method      = 'GET'
+                Method      = 'Get'
             }
 
             $response = Invoke-GitHubAPI @inputObject | Select-Object -ExpandProperty Response

@@ -235,7 +235,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = "/repos/$Owner/$Repo"
-                Method      = 'PATCH'
+                Method      = 'Patch'
                 Body        = $body
             }
 

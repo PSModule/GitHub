@@ -44,7 +44,7 @@
         }
 
         $inputObject = @{
-            Method      = 'GET'
+            Method      = 'Get'
             APIEndpoint = "/enterprises/$Enterprise/apps/installable_organizations"
             Body        = $body
             Context     = $Context

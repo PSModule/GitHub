@@ -54,7 +54,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = '/user/email/visibility'
-                Method      = 'PATCH'
+                Method      = 'Patch'
                 Body        = $body
             }
 

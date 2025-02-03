@@ -91,7 +91,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = '/user'
-                Method      = 'PATCH'
+                Method      = 'Patch'
                 Body        = $body
             }
 

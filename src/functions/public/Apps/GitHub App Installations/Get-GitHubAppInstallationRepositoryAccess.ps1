@@ -70,7 +70,7 @@
         }
 
         $inputObject = @{
-            Method      = 'GET'
+            Method      = 'Get'
             APIEndpoint = "/enterprises/$Enterprise/apps/organizations/$Organization/installations/$ID/repositories"
             Body        = $body
             Context     = $Context

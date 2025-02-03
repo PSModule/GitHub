@@ -64,7 +64,7 @@
         try {
             $inputObject = @{
                 Context     = $Context
-                Method      = 'POST'
+                Method      = 'Post'
                 APIEndpoint = "/repos/$Owner/$Repo/actions/runs/$ID/rerun"
             }
 

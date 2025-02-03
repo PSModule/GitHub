@@ -52,7 +52,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = '/rate_limit'
-                Method      = 'GET'
+                Method      = 'Get'
             }
 
             Invoke-GitHubAPI @inputObject | ForEach-Object {

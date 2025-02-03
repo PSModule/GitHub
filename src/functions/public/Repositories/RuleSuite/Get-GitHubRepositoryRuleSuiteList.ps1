@@ -99,7 +99,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = "/repos/$Owner/$Repo/rulesets/rule-suites"
-                Method      = 'GET'
+                Method      = 'Get'
                 Body        = $body
             }
 

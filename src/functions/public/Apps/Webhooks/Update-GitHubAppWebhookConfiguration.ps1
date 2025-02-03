@@ -63,7 +63,7 @@
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
         $inputObject = @{
-            Method      = 'PATCH'
+            Method      = 'Patch'
             APIEndpoint = '/app/hook/config'
             Body        = $body
             Context     = $Context

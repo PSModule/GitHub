@@ -5,6 +5,7 @@ Writing down guidelines so that it can be the basis for pester tests.
 ## Functions
 
 - Group functions by the object type they are working with in a folder based on the name of the object, NOT based on the API.
+- DefaultParameterSetName must never be declared unless its different the default parameter set.
 
 ### Name
 

@@ -141,7 +141,7 @@
 
             $inputObject = @{
                 URI            = $uploadURI
-                Method         = 'POST'
+                Method         = 'Post'
                 ContentType    = $ContentType
                 UploadFilePath = $FilePath
             }

@@ -80,7 +80,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = "/repos/$Owner/$Repo/transfer"
-                Method      = 'POST'
+                Method      = 'Post'
                 Body        = $body
             }
 

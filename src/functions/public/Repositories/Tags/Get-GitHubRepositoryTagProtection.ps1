@@ -56,7 +56,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = "/repos/$Owner/$Repo/tags/protection"
-                Method      = 'GET'
+                Method      = 'Get'
             }
 
             Invoke-GitHubAPI @inputObject | ForEach-Object {

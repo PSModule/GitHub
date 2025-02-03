@@ -57,7 +57,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = "/repos/$Owner/$Repo/automated-security-fixes"
-                Method      = 'GET'
+                Method      = 'Get'
             }
 
             Invoke-GitHubAPI @inputObject | ForEach-Object {

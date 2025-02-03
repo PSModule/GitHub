@@ -44,7 +44,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = "/user/gpg_keys/$ID"
-                Method      = 'DELETE'
+                Method      = 'Delete'
             }
 
             if ($PSCmdlet.ShouldProcess("GPG key with ID [$ID]", 'Delete')) {

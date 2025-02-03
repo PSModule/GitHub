@@ -78,7 +78,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = "/repos/$Owner/$Repo/releases/assets/$ID"
-                Method      = 'PATCH'
+                Method      = 'Patch'
                 Body        = $body
             }
 

@@ -50,7 +50,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = '/user/emails'
-                Method      = 'POST'
+                Method      = 'Post'
                 Body        = $body
             }
 

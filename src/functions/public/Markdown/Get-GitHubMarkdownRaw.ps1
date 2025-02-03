@@ -45,7 +45,7 @@
                 Context     = $Context
                 APIEndpoint = '/markdown/raw'
                 ContentType = 'text/plain'
-                Method      = 'POST'
+                Method      = 'Post'
                 Body        = $body
             }
 

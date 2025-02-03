@@ -46,7 +46,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = "/user/following/$Username"
-                Method      = 'PUT'
+                Method      = 'Put'
             }
 
             $null = Invoke-GitHubAPI @inputObject | ForEach-Object {

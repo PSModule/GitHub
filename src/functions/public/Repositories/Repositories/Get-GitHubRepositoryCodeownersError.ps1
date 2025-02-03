@@ -67,7 +67,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = "/repos/$Owner/$Repo/codeowners/errors"
-                Method      = 'GET'
+                Method      = 'Get'
                 Body        = $body
             }
 

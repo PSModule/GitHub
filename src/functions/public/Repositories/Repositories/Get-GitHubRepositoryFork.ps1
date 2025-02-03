@@ -69,7 +69,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = "/repos/$Owner/$Repo/forks"
-                Method      = 'GET'
+                Method      = 'Get'
                 Body        = $body
             }
 

@@ -45,7 +45,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = "/user/keys/$ID"
-                Method      = 'DELETE'
+                Method      = 'Delete'
             }
 
             if ($PSCmdlet.ShouldProcess("Key with ID [$ID]", 'Delete')) {

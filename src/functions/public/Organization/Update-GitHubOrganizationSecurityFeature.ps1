@@ -95,7 +95,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = "/orgs/$Organization/$SecurityProduct/$Enablement"
-                Method      = 'POST'
+                Method      = 'Post'
                 Body        = $body
             }
 

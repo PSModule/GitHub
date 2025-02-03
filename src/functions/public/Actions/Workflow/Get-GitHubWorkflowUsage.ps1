@@ -49,7 +49,7 @@
 
     process {
         $inputObject = @{
-            Method      = 'GET'
+            Method      = 'Get'
             APIEndpoint = "/repos/$Owner/$Repository/actions/workflows/$ID/timing"
             Context     = $Context
         }

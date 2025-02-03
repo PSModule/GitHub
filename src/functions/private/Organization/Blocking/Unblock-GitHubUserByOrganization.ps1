@@ -40,7 +40,7 @@
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [GitHubContext] $Context
     )
 
@@ -52,7 +52,7 @@
 
     process {
         $inputObject = @{
-            Method      = 'DELETE'
+            Method      = 'Delete'
             APIEndpoint = "/orgs/$Organization/blocks/$Username"
             Context     = $Context
         }

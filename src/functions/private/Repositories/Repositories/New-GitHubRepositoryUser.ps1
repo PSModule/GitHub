@@ -177,7 +177,7 @@ filter New-GitHubRepositoryUser {
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [GitHubContext] $Context
     )
 
@@ -242,7 +242,7 @@ filter New-GitHubRepositoryUser {
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = '/user/repos'
-                Method      = 'POST'
+                Method      = 'Post'
                 Body        = $body
             }
 

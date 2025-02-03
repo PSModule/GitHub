@@ -54,7 +54,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = "/orgs/$Organization"
-                Method      = 'DELETE'
+                Method      = 'Delete'
             }
 
             if ($PSCmdlet.ShouldProcess("organization [$Organization]", 'Delete')) {

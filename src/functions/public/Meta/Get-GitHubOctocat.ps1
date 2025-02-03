@@ -50,7 +50,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = '/octocat'
-                Method      = 'GET'
+                Method      = 'Get'
                 Body        = $body
             }
 

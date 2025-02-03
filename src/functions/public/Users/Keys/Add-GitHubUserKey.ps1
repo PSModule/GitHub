@@ -58,7 +58,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = '/user/keys'
-                Method      = 'POST'
+                Method      = 'Post'
                 Body        = $body
             }
 

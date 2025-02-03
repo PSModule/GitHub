@@ -48,7 +48,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = '/user/emails'
-                Method      = 'DELETE'
+                Method      = 'Delete'
                 Body        = $body
             }
 

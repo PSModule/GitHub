@@ -48,7 +48,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = "/orgs/$Organization/invitations/$ID"
-                Method      = 'DELETE'
+                Method      = 'Delete'
             }
 
             try {

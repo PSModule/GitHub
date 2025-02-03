@@ -35,7 +35,7 @@
 
     process {
         $inputObject = @{
-            Method      = 'GET'
+            Method      = 'Get'
             APIEndpoint = '/app/hook/config'
             Context     = $Context
         }

@@ -63,7 +63,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = "/repos/$Owner/$Repo/tags"
-                Method      = 'GET'
+                Method      = 'Get'
                 Body        = $body
             }
 

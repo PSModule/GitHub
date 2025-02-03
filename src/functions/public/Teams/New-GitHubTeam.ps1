@@ -118,7 +118,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = "/orgs/$Organization/teams"
-                Method      = 'POST'
+                Method      = 'Post'
                 Body        = $body
             }
 

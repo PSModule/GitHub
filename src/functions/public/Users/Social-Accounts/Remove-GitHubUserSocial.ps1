@@ -48,7 +48,7 @@
                 Context     = $Context
                 APIEndpoint = '/user/social_accounts'
                 Body        = $body
-                Method      = 'DELETE'
+                Method      = 'Delete'
             }
 
             if ($PSCmdlet.ShouldProcess("Social accounts [$($AccountUrls -join ', ')]", 'Delete')) {

@@ -141,7 +141,7 @@
             $inputObject = @{
                 Context     = $Context
                 APIEndpoint = "/repos/$Owner/$Repo/activity"
-                Method      = 'GET'
+                Method      = 'Get'
                 Body        = $body
             }
 
