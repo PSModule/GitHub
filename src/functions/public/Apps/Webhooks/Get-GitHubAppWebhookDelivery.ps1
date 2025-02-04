@@ -66,12 +66,15 @@
     process {
         switch ($PSCmdlet.ParameterSetName) {
             'ByID' {
+                Write-Debug "ByID: [$ID]"
                 Get-GitHubAppWebhookDeliveryByID -ID $ID -Context $Context
             }
             'Redelivery' {
+                Write-Debug "Redelivery: [$NeedingRedelivery]"
                 Get-GitHubAppWebhookDeliveryToRedeliver -Context $Context -PerPage $PerPage -TimeSpan $TimeSpan
             }
             default {
+                Write-Debug 'ByList'
                 Get-GitHubAppWebhookDeliveryByList -Context $Context -PerPage $PerPage
             }
         }
