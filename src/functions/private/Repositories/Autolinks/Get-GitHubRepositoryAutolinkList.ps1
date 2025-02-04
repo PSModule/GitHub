@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryAutolinkList {
+filter Get-GitHubRepositoryAutolinkList {
     <#
         .SYNOPSIS
         List all autolinks of a repository
@@ -21,7 +21,6 @@
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [Alias('org')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
@@ -30,7 +29,7 @@
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [object] $Context
     )
 
@@ -38,30 +37,17 @@
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
-
-        if ([string]::IsNullOrEmpty($Repo)) {
-            $Repo = $Context.Repo
-        }
-        Write-Debug "Repo: [$Repo]"
     }
 
     process {
-        try {
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/repos/$Owner/$Repo/autolinks"
-                Method      = 'GET'
-            }
+        $inputObject = @{
+            Method      = 'Get'
+            APIEndpoint = "/repos/$Owner/$Repo/autolinks"
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 
