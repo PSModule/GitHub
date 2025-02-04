@@ -96,7 +96,7 @@ function documentation they can search based on the official documentation.
 - One class pr type of resource
 - Properties are PascalCased (as expected by PowerShell users)
 
-```
+```pwsh
 if ([string]::IsNullOrEmpty($Enterprise)) {
     $Enterprise = $Context.Enterprise
 }
