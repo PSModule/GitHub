@@ -9,15 +9,15 @@
     </tr>
     <tr>
         <td>Covered functions</td>
-        <td>160</td>
+        <td>180</td>
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>855</td>
+        <td>835</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>15.76%</td>
+        <td>17.73%</td>
     </tr>
 </table>
 
@@ -146,9 +146,9 @@
 | `/orgs/{org}/code-security/configurations/{configuration_id}/attach`                                                      |                    |                    |                    | :x:                |                    |
 | `/orgs/{org}/code-security/configurations/{configuration_id}/defaults`                                                    |                    |                    |                    |                    | :x:                |
 | `/orgs/{org}/code-security/configurations/{configuration_id}/repositories`                                                |                    | :x:                |                    |                    |                    |
-| `/orgs/{org}/codespaces`                                                                                                  |                    | :x:                |                    |                    |                    |
-| `/orgs/{org}/codespaces/access`                                                                                           |                    |                    |                    |                    | :x:                |
-| `/orgs/{org}/codespaces/access/selected_users`                                                                            | :x:                |                    |                    | :x:                |                    |
+| `/orgs/{org}/codespaces`                                                                                                  |                    | :white_check_mark: |                    |                    |                    |
+| `/orgs/{org}/codespaces/access`                                                                                           |                    |                    |                    |                    | :white_check_mark: |
+| `/orgs/{org}/codespaces/access/selected_users`                                                                            | :white_check_mark: |                    |                    | :white_check_mark: |                    |
 | `/orgs/{org}/codespaces/secrets`                                                                                          |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/codespaces/secrets/public-key`                                                                               |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/codespaces/secrets/{secret_name}`                                                                            | :x:                | :x:                |                    |                    | :x:                |
@@ -193,10 +193,10 @@
 | `/orgs/{org}/invitations/{invitation_id}/teams`                                                                           |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/issues`                                                                                                      |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/members`                                                                                                     |                    | :white_check_mark: |                    |                    |                    |
-| `/orgs/{org}/members/{username}`                                                                                          | :x:                | :x:                |                    |                    |                    |
-| `/orgs/{org}/members/{username}/codespaces`                                                                               |                    | :x:                |                    |                    |                    |
+| `/orgs/{org}/members/{username}`                                                                                          | :x:                | :white_check_mark: |                    |                    |                    |
+| `/orgs/{org}/members/{username}/codespaces`                                                                               |                    | :white_check_mark: |                    |                    |                    |
 | `/orgs/{org}/members/{username}/codespaces/{codespace_name}`                                                              | :x:                |                    |                    |                    |                    |
-| `/orgs/{org}/members/{username}/codespaces/{codespace_name}/stop`                                                         |                    |                    |                    | :x:                |                    |
+| `/orgs/{org}/members/{username}/codespaces/{codespace_name}/stop`                                                         |                    |                    |                    | :white_check_mark: |                    |
 | `/orgs/{org}/members/{username}/copilot`                                                                                  |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/memberships/{username}`                                                                                      | :x:                | :x:                |                    |                    | :x:                |
 | `/orgs/{org}/migrations`                                                                                                  |                    | :x:                |                    | :x:                |                    |
@@ -383,8 +383,8 @@
 | `/repos/{owner}/{repo}/code-scanning/sarifs/{sarif_id}`                                                                   |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/code-security-configuration`                                                                       |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/codeowners/errors`                                                                                 |                    | :white_check_mark: |                    |                    |                    |
-| `/repos/{owner}/{repo}/codespaces`                                                                                        |                    | :x:                |                    | :x:                |                    |
-| `/repos/{owner}/{repo}/codespaces/devcontainers`                                                                          |                    | :x:                |                    |                    |                    |
+| `/repos/{owner}/{repo}/codespaces`                                                                                        |                    | :white_check_mark: |                    | :white_check_mark: |                    |
+| `/repos/{owner}/{repo}/codespaces/devcontainers`                                                                          |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/codespaces/machines`                                                                               |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/codespaces/new`                                                                                    |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/codespaces/permissions_check`                                                                      |                    | :x:                |                    |                    |                    |
@@ -511,13 +511,13 @@
 | `/repos/{owner}/{repo}/private-vulnerability-reporting`                                                                   | :white_check_mark: | :x:                |                    |                    | :white_check_mark: |
 | `/repos/{owner}/{repo}/projects`                                                                                          |                    | :x:                |                    | :x:                |                    |
 | `/repos/{owner}/{repo}/properties/values`                                                                                 |                    | :white_check_mark: | :x:                |                    |                    |
-| `/repos/{owner}/{repo}/pulls`                                                                                             |                    | :white_check_mark: |                    | :x:                |                    |
+| `/repos/{owner}/{repo}/pulls`                                                                                             |                    | :white_check_mark: |                    | :white_check_mark: |                    |
 | `/repos/{owner}/{repo}/pulls/comments`                                                                                    |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/pulls/comments/{comment_id}`                                                                       | :x:                | :x:                | :x:                |                    |                    |
 | `/repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions`                                                             |                    | :x:                |                    | :x:                |                    |
 | `/repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions/{reaction_id}`                                               | :x:                |                    |                    |                    |                    |
 | `/repos/{owner}/{repo}/pulls/{pull_number}`                                                                               |                    | :x:                | :x:                |                    |                    |
-| `/repos/{owner}/{repo}/pulls/{pull_number}/codespaces`                                                                    |                    |                    |                    | :x:                |                    |
+| `/repos/{owner}/{repo}/pulls/{pull_number}/codespaces`                                                                    |                    |                    |                    | :white_check_mark: |                    |
 | `/repos/{owner}/{repo}/pulls/{pull_number}/comments`                                                                      |                    | :x:                |                    | :x:                |                    |
 | `/repos/{owner}/{repo}/pulls/{pull_number}/comments/{comment_id}/replies`                                                 |                    |                    |                    | :x:                |                    |
 | `/repos/{owner}/{repo}/pulls/{pull_number}/commits`                                                                       |                    | :x:                |                    |                    |                    |
@@ -606,19 +606,19 @@
 | `/user`                                                                                                                   |                    | :white_check_mark: | :white_check_mark: |                    |                    |
 | `/user/blocks`                                                                                                            |                    | :white_check_mark: |                    |                    |                    |
 | `/user/blocks/{username}`                                                                                                 | :white_check_mark: | :white_check_mark: |                    |                    | :white_check_mark: |
-| `/user/codespaces`                                                                                                        |                    | :x:                |                    | :x:                |                    |
+| `/user/codespaces`                                                                                                        |                    | :white_check_mark: |                    | :white_check_mark: |                    |
 | `/user/codespaces/secrets`                                                                                                |                    | :x:                |                    |                    |                    |
 | `/user/codespaces/secrets/public-key`                                                                                     |                    | :x:                |                    |                    |                    |
 | `/user/codespaces/secrets/{secret_name}`                                                                                  | :x:                | :x:                |                    |                    | :x:                |
 | `/user/codespaces/secrets/{secret_name}/repositories`                                                                     |                    | :x:                |                    |                    | :x:                |
 | `/user/codespaces/secrets/{secret_name}/repositories/{repository_id}`                                                     | :x:                |                    |                    |                    | :x:                |
-| `/user/codespaces/{codespace_name}`                                                                                       | :x:                | :x:                | :x:                |                    |                    |
-| `/user/codespaces/{codespace_name}/exports`                                                                               |                    |                    |                    | :x:                |                    |
-| `/user/codespaces/{codespace_name}/exports/{export_id}`                                                                   |                    | :x:                |                    |                    |                    |
+| `/user/codespaces/{codespace_name}`                                                                                       | :x:                | :white_check_mark: | :white_check_mark: |                    |                    |
+| `/user/codespaces/{codespace_name}/exports`                                                                               |                    |                    |                    | :white_check_mark: |                    |
+| `/user/codespaces/{codespace_name}/exports/{export_id}`                                                                   |                    | :white_check_mark: |                    |                    |                    |
 | `/user/codespaces/{codespace_name}/machines`                                                                              |                    | :x:                |                    |                    |                    |
 | `/user/codespaces/{codespace_name}/publish`                                                                               |                    |                    |                    | :x:                |                    |
-| `/user/codespaces/{codespace_name}/start`                                                                                 |                    |                    |                    | :x:                |                    |
-| `/user/codespaces/{codespace_name}/stop`                                                                                  |                    |                    |                    | :x:                |                    |
+| `/user/codespaces/{codespace_name}/start`                                                                                 |                    |                    |                    | :white_check_mark: |                    |
+| `/user/codespaces/{codespace_name}/stop`                                                                                  |                    |                    |                    | :white_check_mark: |                    |
 | `/user/docker/conflicts`                                                                                                  |                    | :x:                |                    |                    |                    |
 | `/user/email/visibility`                                                                                                  |                    |                    | :white_check_mark: |                    |                    |
 | `/user/emails`                                                                                                            | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |                    |
