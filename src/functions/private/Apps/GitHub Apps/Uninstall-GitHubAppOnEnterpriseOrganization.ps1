@@ -29,7 +29,7 @@
 
         # The context to run the command in. Used to get the details for the API call.
         [Parameter(Mandatory)]
-        [GitHubContext] $Context
+        [object] $Context
     )
 
     begin {

@@ -54,11 +54,7 @@ function Set-GitHubContext {
             Write-Debug "Getting info on the context [$($contextObj['AuthType'])]."
             switch -Regex (($contextObj['AuthType'])) {
                 'PAT|UAT|IAT' {
-                    if ($_ -eq 'IAT') {
-                        $viewer = Get-GitHubViewer -Context [InstallationGitHubContext]($contextObj)
-                    } else {
-                        $viewer = Get-GitHubViewer -Context [UserGitHubContext]($contextObj)
-                    }
+                    $viewer = Get-GitHubViewer -Context $contextObj
                     $viewer | Out-String -Stream | ForEach-Object { Write-Debug $_ }
                     if ([string]::IsNullOrEmpty($contextObj['DisplayName'])) {
                         $contextObj['DisplayName'] = [string]$viewer.name
@@ -83,7 +79,7 @@ function Set-GitHubContext {
                     $contextObj['Type'] = 'Installation'
                     if ([string]::IsNullOrEmpty($contextObj['DisplayName'])) {
                         try {
-                            $app = Get-GitHubApp -Name $contextObj['Username'] -Context [InstallationGitHubContext]($contextObj)
+                            $app = Get-GitHubApp -Name $contextObj['Username'] -Context $contextObj
                             $contextObj['DisplayName'] = [string]$app.name
                         } catch {
                             Write-Debug "Failed to get the GitHub App with the slug: [$($contextObj['Username'])]."
@@ -127,7 +123,7 @@ function Set-GitHubContext {
                     }
                 }
                 'App' {
-                    $app = Get-GitHubApp -Context [AppGitHubContext]($contextObj)
+                    $app = Get-GitHubApp -Context $contextObj
                     $contextObj['Name'] = "$($contextObj['HostName'])/$($app.slug)"
                     $contextObj['DisplayName'] = [string]$app.name
                     $contextObj['Username'] = [string]$app.slug
