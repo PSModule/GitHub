@@ -16,19 +16,7 @@
 
         Disconnects from GitHub and removes the context 'github.com/Octocat'.
     #>
-    [Alias(
-        'Disconnect-GHAccount',
-        'Disconnect-GitHub',
-        'Disconnect-GH',
-        'Logout-GitHubAccount',
-        'Logout-GHAccount',
-        'Logout-GitHub',
-        'Logout-GH',
-        'Logoff-GitHubAccount',
-        'Logoff-GHAccount',
-        'Logoff-GitHub',
-        'Logoff-GH'
-    )]
+    [Alias('Disconnect-GitHub')]
     [OutputType([void])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'Is the CLI part of the module.')]
     [CmdletBinding()]
@@ -36,8 +24,6 @@
         # Suppresses the output of the function.
         [Parameter()]
         [Alias('Quiet')]
-        [Alias('q')]
-        [Alias('s')]
         [switch] $Silent,
 
         # The context to run the command with.
