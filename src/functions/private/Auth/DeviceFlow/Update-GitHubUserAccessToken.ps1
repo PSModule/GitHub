@@ -1,4 +1,4 @@
-﻿function Update-GitHubUserAccessToken {
+function Update-GitHubUserAccessToken {
     <#
         .SYNOPSIS
         Updates the GitHub access token.
@@ -27,7 +27,7 @@
     param(
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [object] $Context,
 
         # Return the new access token.

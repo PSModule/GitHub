@@ -25,7 +25,10 @@
     param(
         # The context to resolve into an object. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter(ValueFromPipeline)]
+        [Parameter(
+            Mandatory,
+            ValueFromPipeline
+        )]
         [object] $Context
     )
 
@@ -36,36 +39,33 @@
     }
 
     process {
-        try {
-            if ($Context -is [string]) {
-                $contextName = $Context
-                Write-Debug "Getting context: [$contextName]"
-                $Context = Get-GitHubContext -Context $contextName
-            }
-
-            if (-not $Context) {
-                throw "Please provide a valid context or log in using 'Connect-GitHub'."
-            }
-
-            # switch ($Context.Type) {
-            #     'App' {
-            #         $availableContexts = Get-GitHubContext -ListAvailable |
-            #             Where-Object { $_.Type -eq 'Installation' -and $_.ClientID -eq $Context.ClientID }
-            #         $params = Get-FunctionParameter -Scope 2
-            #         Write-Debug 'Resolving parameters used in called function'
-            #         Write-Debug ($params | Out-String)
-            #         if ($params.Keys -in 'Owner', 'Organization') {
-            #             $Context = $availableContexts | Where-Object { $_.Owner -eq $params.Owner }
-            #         }
-            #     }
-            # }
-        } catch {
-            throw $_
+        if ($Context -is [string]) {
+            $contextName = $Context
+            Write-Debug "Getting context: [$contextName]"
+            $Context = Get-GitHubContext -Context $contextName
         }
+
+        if (-not $Context) {
+            throw "Please provide a valid context or log in using 'Connect-GitHub'."
+        }
+
+        # TODO: Implement App installation context resolution
+        # switch ($Context.Type) {
+        #     'App' {
+        #         $availableContexts = Get-GitHubContext -ListAvailable |
+        #             Where-Object { $_.Type -eq 'Installation' -and $_.ClientID -eq $Context.ClientID }
+        #         $params = Get-FunctionParameter -Scope 2
+        #         Write-Debug 'Resolving parameters used in called function'
+        #         Write-Debug ($params | Out-String)
+        #         if ($params.Keys -in 'Owner', 'Organization') {
+        #             $Context = $availableContexts | Where-Object { $_.Owner -eq $params.Owner }
+        #         }
+        #     }
+        # }
+        Write-Output $Context
     }
 
     end {
         Write-Debug "[$stackPath] - End"
-        Write-Output $Context
     }
 }

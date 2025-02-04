@@ -1,4 +1,4 @@
-﻿filter Test-GitHubBlockedUserByOrganization {
+filter Test-GitHubBlockedUserByOrganization {
     <#
         .SYNOPSIS
         Check if a user is blocked by an organization
@@ -39,7 +39,7 @@
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [object] $Context
     )
 
@@ -51,20 +51,12 @@
 
     process {
         $inputObject = @{
-            Context     = $Context
+            Method      = 'Get'
             APIEndpoint = "/orgs/$Organization/blocks/$Username"
-            Method      = 'GET'
+            Context     = $Context
         }
 
-        try {
-            (Invoke-GitHubAPI @inputObject).StatusCode -eq 204
-        } catch {
-            if ($_.Exception.Response.StatusCode.Value__ -eq 404) {
-                return $false
-            } else {
-                throw $_
-            }
-        }
+        Invoke-GitHubAPI @inputObject
     }
 
     end {

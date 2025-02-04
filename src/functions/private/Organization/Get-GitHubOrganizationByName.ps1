@@ -1,4 +1,4 @@
-﻿filter Get-GitHubOrganizationByName {
+filter Get-GitHubOrganizationByName {
     <#
         .SYNOPSIS
         Get an organization
@@ -38,7 +38,7 @@
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [object] $Context
     )
 
@@ -49,18 +49,14 @@
     }
 
     process {
-        try {
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/orgs/$Organization"
-                Method      = 'GET'
-            }
+        $inputObject = @{
+            Method      = 'Get'
+            APIEndpoint = "/orgs/$Organization"
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
     end {
