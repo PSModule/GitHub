@@ -440,7 +440,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
             { Get-GitHubLicense -Name 'mit' } | Should -Not -Throw
         }
         It 'Get-GitHubLicense - Gets a license from a repository (USER_FG_PAT)' {
-            { Get-GitHubLicense -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
+            { Get-GitHubLicense -Owner 'PSModule' -Repository 'GitHub' } | Should -Not -Throw
         }
     }
     Context 'Emoji' {
@@ -462,7 +462,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
             { Get-GitHubRepository -Visibility 'public' -Affiliation 'owner' } | Should -Not -Throw
         }
         It 'Get-GitHubRepository - Gets a specific repository (USER_FG_PAT)' {
-            { Get-GitHubRepository -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
+            { Get-GitHubRepository -Owner 'PSModule' -Repository 'GitHub' } | Should -Not -Throw
         }
         It 'Get-GitHubRepository - Gets all repositories from a organization (USER_FG_PAT)' {
             { Get-GitHubRepository -Owner 'PSModule' } | Should -Not -Throw
@@ -597,7 +597,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
             { Get-GitHubLicense -Name 'mit' } | Should -Not -Throw
         }
         It 'Get-GitHubLicense - Gets a license from a repository (ORG_FG_PAT)' {
-            { Get-GitHubLicense -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
+            { Get-GitHubLicense -Owner 'PSModule' -Repository 'GitHub' } | Should -Not -Throw
         }
     }
     Context 'Emoji' {
@@ -619,7 +619,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
             { Get-GitHubRepository -Visibility 'public' -Affiliation 'owner' } | Should -Not -Throw
         }
         It 'Get-GitHubRepository - Gets a specific repository (ORG_FG_PAT)' {
-            { Get-GitHubRepository -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
+            { Get-GitHubRepository -Owner 'PSModule' -Repository 'GitHub' } | Should -Not -Throw
         }
         It 'Get-GitHubRepository - Gets all repositories from a organization (ORG_FG_PAT)' {
             { Get-GitHubRepository -Owner 'PSModule' } | Should -Not -Throw
@@ -777,7 +777,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
             { Get-GitHubLicense -Name 'mit' } | Should -Not -Throw
         }
         It 'Get-GitHubLicense - Gets a license from a repository (PAT)' {
-            { Get-GitHubLicense -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
+            { Get-GitHubLicense -Owner 'PSModule' -Repository 'GitHub' } | Should -Not -Throw
         }
     }
     Context 'Emoji' {
@@ -956,7 +956,7 @@ Describe 'As GitHub Actions (GHA)' {
             { Get-GitHubLicense -Name 'mit' } | Should -Not -Throw
         }
         It 'Get-GitHubLicense - Gets a license from a repository (GHA)' {
-            { Get-GitHubLicense -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
+            { Get-GitHubLicense -Owner 'PSModule' -Repository 'GitHub' } | Should -Not -Throw
         }
     }
     Context 'Emoji' {
