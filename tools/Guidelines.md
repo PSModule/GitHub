@@ -19,25 +19,25 @@ Writing down guidelines so that it can be the basis for pester tests.
 
 ### Documentation
 
-#### SYNOPSIS
+#### .SYNOPSIS
 
-#### DESCRIPTION
+#### .DESCRIPTION
 
-#### EXAMPLES
+#### .EXAMPLES
 
 - PSModule framework removes the default fencing. So, we need to add the fencing back in the examples where we see fit.
 
-#### PARAMETERS
+#### .PARAMETERS
 
 - Parameter docs do not go in the comment block. They are in the `param` block above each parameter.
   Principle: Keep documentation close to the code it documents.
 
-#### NOTES
+#### .NOTES
 
 - Have a link to the documentation with the display name of the official documentation. This is so that when user search on the online
 function documentation they can search based on the official documentation.
 
-#### LINK
+#### .LINK
 
 - First link is to the function documentation that is generated for the PowerShell module.
 - Other links can be to the official documentation.
