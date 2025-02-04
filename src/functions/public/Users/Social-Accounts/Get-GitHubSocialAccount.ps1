@@ -1,4 +1,4 @@
-﻿filter Get-GitHubMyUserSocials {
+﻿function Get-GitHubUserSocialAccount {
     <#
         .SYNOPSIS
         List social accounts for the authenticated user
@@ -7,7 +7,7 @@
         Lists all of your social accounts.
 
         .EXAMPLE
-        Get-GitHubMyUserSocials
+        Get-GitHubUserSocialAccount
 
         Lists all of your social accounts.
 
@@ -15,9 +15,18 @@
         https://docs.github.com/rest/users/social-accounts#list-social-accounts-for-the-authenticated-user
     #>
     [OutputType([pscustomobject])]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Private function, not exposed to user.')]
-    [CmdletBinding()]
+    [CmdletBinding(SupportsPaging, DefaultParameterSetName = 'AuthenticatedUser')]
     param(
+        # The handle for the GitHub user account.
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'User',
+            ValueFromPipeline,
+            ValueFromPipelineByPropertyName
+        )]
+        [Alias('login')]
+        [string] $Username,
+    
         # The number of results per page (max 100).
         [Parameter()]
         [ValidateRange(0, 100)]
@@ -37,24 +46,20 @@
     }
 
     process {
-        try {
-            $body = @{
+        $irmParams = @{
+            APIEndpoint     = $PScmdlet.ParameterSetName -eq 'AuthenticatedUser' ? '/user/social_accounts' : "/users/$Username/social_accounts"
+            Context         = $Context
+            Method          = 'GET'
+            QueryParameters = @{
                 per_page = $PerPage
             }
-
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = '/user/social_accounts'
-                Method      = 'GET'
-                Body        = $body
-            }
-
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
         }
+        foreach($_name in 'First','Skip') {
+            if ($PSBoundParameters.ContainsKey($_name)) {
+                $irmParams[$_name] = $_name
+            }
+        }
+        Invoke-GitHubRestMethod @irmParams
     }
 
     end {

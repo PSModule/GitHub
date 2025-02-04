@@ -151,6 +151,11 @@
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         Initialize-GitHubConfig
+        # Maybe this should move to it's own Initialize-GlobalVariable function (or similar); open to suggestions
+        # Intent is to allow end users to configure the global variable name
+        if (-not (Get-Variable -Name $script:GitHub.Config.HttpResponsesVariable  -Scope Global -ErrorAction SilentlyContinue)) {
+            Set-Variable -Name $script:GitHub.Config.HttpResponsesVariable -Value ([System.Collections.Generic.List[object]]::new()) -Scope Global
+        }
     }
 
     process {
