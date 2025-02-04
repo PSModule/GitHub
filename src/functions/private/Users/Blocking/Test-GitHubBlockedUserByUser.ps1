@@ -1,4 +1,4 @@
-﻿filter Test-GitHubBlockedUserByUser {
+filter Test-GitHubBlockedUserByUser {
     <#
         .SYNOPSIS
         Check if a user is blocked by the authenticated user
@@ -36,7 +36,7 @@
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [object] $Context
     )
 
@@ -47,30 +47,18 @@
     }
 
     process {
-        try {
-            $body = @{
-                per_page = $PerPage
-            }
-
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/user/blocks/$Username"
-                Method      = 'GET'
-                Body        = $body
-            }
-
-            try {
-                (Invoke-GitHubAPI @inputObject).StatusCode -eq 204
-            } catch {
-                if ($_.Exception.Response.StatusCode.Value__ -eq 404) {
-                    return $false
-                } else {
-                    throw $_
-                }
-            }
-        } catch {
-            throw $_
+        $body = @{
+            per_page = $PerPage
         }
+
+        $inputObject = @{
+            Method      = 'Get'
+            APIEndpoint = "/user/blocks/$Username"
+            Body        = $body
+            Context     = $Context
+        }
+
+        Invoke-GitHubAPI @inputObject
     }
 
     end {

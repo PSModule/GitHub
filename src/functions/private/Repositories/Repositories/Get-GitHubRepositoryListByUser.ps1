@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryListByUser {
+filter Get-GitHubRepositoryListByUser {
     <#
         .SYNOPSIS
         List repositories for a user
@@ -60,7 +60,7 @@
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [object] $Context
     )
 
@@ -68,38 +68,25 @@
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
-
-        if ([string]::IsNullOrEmpty($Repo)) {
-            $Repo = $Context.Repo
-        }
-        Write-Debug "Repo: [$Repo]"
     }
 
     process {
-        try {
-            $body = @{
-                sort      = $Sort
-                type      = $Type
-                direction = $Direction
-                per_page  = $PerPage
-            }
+        $body = @{
+            sort      = $Sort
+            type      = $Type
+            direction = $Direction
+            per_page  = $PerPage
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/users/$Username/repos"
-                Method      = 'GET'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'Get'
+            APIEndpoint = "/users/$Username/repos"
+            Body        = $body
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 

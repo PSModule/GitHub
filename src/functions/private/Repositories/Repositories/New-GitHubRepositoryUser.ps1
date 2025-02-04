@@ -1,4 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'DynamicParams'; RequiredVersion = '1.1.8' }
+#Requires -Modules @{ ModuleName = 'DynamicParams'; RequiredVersion = '1.1.8' }
 
 filter New-GitHubRepositoryUser {
     <#
@@ -177,7 +177,7 @@ filter New-GitHubRepositoryUser {
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [object] $Context
     )
 
@@ -214,45 +214,41 @@ filter New-GitHubRepositoryUser {
     }
 
     process {
-        try {
-            $body = @{
-                name                        = $Name
-                description                 = $Description
-                homepage                    = $Homepage
-                visibility                  = $Visibility
-                has_issues                  = $HasIssues
-                has_projects                = $HasProjects
-                has_wiki                    = $HasWiki
-                has_downloads               = $HasDownloads
-                is_template                 = $IsTemplate
-                team_id                     = $TeamId
-                auto_init                   = $AutoInit
-                allow_squash_merge          = $AllowSquashMerge
-                allow_merge_commit          = $AllowMergeCommit
-                allow_rebase_merge          = $AllowRebaseMerge
-                allow_auto_merge            = $AllowAutoMerge
-                delete_branch_on_merge      = $DeleteBranchOnMerge
-                squash_merge_commit_title   = $SquashMergeCommitTitle
-                squash_merge_commit_message = $SquashMergeCommitMessage
-                merge_commit_title          = $MergeCommitTitle
-                merge_commit_message        = $MergeCommitMessage
-                private                     = $Visibility -eq 'private'
-            }
+        $body = @{
+            name                        = $Name
+            description                 = $Description
+            homepage                    = $Homepage
+            visibility                  = $Visibility
+            has_issues                  = $HasIssues
+            has_projects                = $HasProjects
+            has_wiki                    = $HasWiki
+            has_downloads               = $HasDownloads
+            is_template                 = $IsTemplate
+            team_id                     = $TeamId
+            auto_init                   = $AutoInit
+            allow_squash_merge          = $AllowSquashMerge
+            allow_merge_commit          = $AllowMergeCommit
+            allow_rebase_merge          = $AllowRebaseMerge
+            allow_auto_merge            = $AllowAutoMerge
+            delete_branch_on_merge      = $DeleteBranchOnMerge
+            squash_merge_commit_title   = $SquashMergeCommitTitle
+            squash_merge_commit_message = $SquashMergeCommitMessage
+            merge_commit_title          = $MergeCommitTitle
+            merge_commit_message        = $MergeCommitMessage
+            private                     = $Visibility -eq 'private'
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = '/user/repos'
-                Method      = 'POST'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'Post'
+            APIEndpoint = '/user/repos'
+            Body        = $body
+            Context     = $Context
+        }
 
-            if ($PSCmdlet.ShouldProcess('Repository for user', 'Create')) {
-                Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
-                }
+        if ($PSCmdlet.ShouldProcess('Repository for user', 'Create')) {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
             }
-        } catch {
-            throw $_
         }
     }
 

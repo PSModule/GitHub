@@ -120,41 +120,37 @@ filter Get-GitHubMyRepositories {
     }
 
     process {
-        try {
-            $body = @{
-                sort      = $Sort
-                direction = $Direction
-                per_page  = $PerPage
+        $body = @{
+            sort      = $Sort
+            direction = $Direction
+            per_page  = $PerPage
+        }
+        if ($PSBoundParameters.ContainsKey('Since')) {
+            $body['since'] = $Since.ToString('yyyy-MM-ddTHH:mm:ssZ')
+        }
+        if ($PSBoundParameters.ContainsKey('Before')) {
+            $body['before'] = $Before.ToString('yyyy-MM-ddTHH:mm:ssZ')
+        }
+        Write-Debug "ParamSet: [$($PSCmdlet.ParameterSetName)]"
+        switch ($PSCmdlet.ParameterSetName) {
+            'Aff-Vis' {
+                $body['affiliation'] = $Affiliation -join ','
+                $body['visibility'] = $Visibility
             }
-            if ($PSBoundParameters.ContainsKey('Since')) {
-                $body['since'] = $Since.ToString('yyyy-MM-ddTHH:mm:ssZ')
+            'Type' {
+                $body['type'] = $Type
             }
-            if ($PSBoundParameters.ContainsKey('Before')) {
-                $body['before'] = $Before.ToString('yyyy-MM-ddTHH:mm:ssZ')
-            }
-            Write-Debug "ParamSet: [$($PSCmdlet.ParameterSetName)]"
-            switch ($PSCmdlet.ParameterSetName) {
-                'Aff-Vis' {
-                    $body['affiliation'] = $Affiliation -join ','
-                    $body['visibility'] = $Visibility
-                }
-                'Type' {
-                    $body['type'] = $Type
-                }
-            }
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = '/user/repos'
-                Method      = 'GET'
-                body        = $body
-            }
+        $inputObject = @{
+            Method      = 'Get'
+            APIEndpoint = '/user/repos'
+            body        = $body
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 

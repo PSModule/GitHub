@@ -91,14 +91,6 @@ function documentation they can search based on the official documentation.
 
 - Pipelining is not supported
 
-#### Parameters
-
-
-
-
-
-
-
 ## Classes
 
 - One class pr type of resource

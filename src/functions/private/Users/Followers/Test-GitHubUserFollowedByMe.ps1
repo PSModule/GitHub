@@ -1,4 +1,4 @@
-﻿filter Test-GitHubUserFollowedByMe {
+filter Test-GitHubUserFollowedByMe {
     <#
         .SYNOPSIS
         Check if a person is followed by the authenticated user
@@ -24,11 +24,12 @@
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
+        [Alias('login')]
         [string] $Username,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [object] $Context
     )
 
@@ -40,21 +41,12 @@
 
     process {
         $inputObject = @{
-            Context     = $Context
+            Method      = 'Get'
             APIEndpoint = "/user/following/$Username"
-            Method      = 'GET'
+            Context     = $Context
         }
 
-        try {
-            $null = (Invoke-GitHubAPI @inputObject)
-            return $true
-        } catch {
-            if ($_.Exception.Response.StatusCode.Value__ -eq 404) {
-                return $false
-            } else {
-                throw $_
-            }
-        }
+        Invoke-GitHubAPI @inputObject
     }
 
     end {

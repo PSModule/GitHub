@@ -1,4 +1,4 @@
-﻿function Get-GitHubRESTTeamListByOrg {
+function Get-GitHubRESTTeamListByOrg {
     <#
         .SYNOPSIS
         List teams
@@ -17,12 +17,11 @@
     param(
         # The organization name. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [Alias('Org')]
         [string] $Organization,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [object] $Context
     )
 
@@ -30,26 +29,17 @@
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Organization)) {
-            $Organization = $Context.Owner
-        }
-        Write-Debug "Organization: [$Organization]"
     }
 
     process {
-        try {
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/orgs/$Organization/teams"
-                Method      = 'Get'
-            }
+        $inputObject = @{
+            Method      = 'Get'
+            APIEndpoint = "/orgs/$Organization/teams"
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 

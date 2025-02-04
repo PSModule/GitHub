@@ -1,4 +1,4 @@
-﻿function Get-GitHubTeamBySlug {
+function Get-GitHubTeamBySlug {
     <#
         .SYNOPSIS
         Get a team by name
@@ -21,12 +21,11 @@
         # The organization name. The name is not case sensitive.
         # If not provided, the owner from the context will be used.
         [Parameter()]
-        [Alias('Org')]
         [string] $Organization,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [object] $Context
     )
 
@@ -34,11 +33,6 @@
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Organization)) {
-            $Organization = $Context.Owner
-        }
-        Write-Debug "Organization: [$Organization]"
     }
 
     process {

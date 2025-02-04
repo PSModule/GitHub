@@ -1,4 +1,4 @@
-﻿filter Get-GitHubUserPublicEmail {
+filter Get-GitHubUserPublicEmail {
     <#
         .SYNOPSIS
         List public email addresses for the authenticated user
@@ -28,7 +28,7 @@
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [object] $Context
     )
 
@@ -39,23 +39,19 @@
     }
 
     process {
-        try {
-            $body = @{
-                per_page = $PerPage
-            }
+        $body = @{
+            per_page = $PerPage
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = '/user/public_emails'
-                Method      = 'GET'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'Get'
+            APIEndpoint = '/user/public_emails'
+            Body        = $body
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 

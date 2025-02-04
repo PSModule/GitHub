@@ -1,4 +1,4 @@
-﻿function Get-GitHubRESTTeam {
+function Get-GitHubRESTTeam {
     <#
         .SYNOPSIS
         List teams from an org or get a team by name
@@ -27,8 +27,7 @@
     param(
         # The organization name. The name is not case sensitive.
         # If not provided, the organization from the context is used.
-        [Parameter()]
-        [Alias('Org')]
+        [Parameter(Mandatory)]
         [string] $Organization,
 
         # The slug of the team name.
@@ -41,7 +40,7 @@
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [object] $Context
     )
 
@@ -49,29 +48,20 @@
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Organization)) {
-            $Organization = $Context.Owner
-        }
-        Write-Debug "Organization: [$Organization]"
     }
 
     process {
-        try {
-            $params = @{
-                Organization = $Organization
-                Context      = $Context
+        $params = @{
+            Organization = $Organization
+            Context      = $Context
+        }
+        switch ($PSCmdlet.ParameterSetName) {
+            'GetByName' {
+                Get-GitHubRESTTeamByName @params -Name $Name
             }
-            switch ($PSCmdlet.ParameterSetName) {
-                'GetByName' {
-                    Get-GitHubRESTTeamByName @params -Name $Name
-                }
-                '__AllParameterSets' {
-                    Get-GitHubTeamListByOrg @params
-                }
+            default {
+                Get-GitHubTeamListByOrg @params
             }
-        } catch {
-            throw $_
         }
     }
 

@@ -1,4 +1,4 @@
-﻿filter Block-GitHubUserByUser {
+filter Block-GitHubUserByUser {
     <#
         .SYNOPSIS
         Block a user
@@ -29,7 +29,7 @@
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [object] $Context
     )
 
@@ -41,23 +41,12 @@
 
     process {
         $inputObject = @{
-            Context     = $Context
+            Method      = 'Put'
             APIEndpoint = "/user/blocks/$Username"
-            Method      = 'PUT'
+            Context     = $Context
         }
 
-        try {
-            $null = (Invoke-GitHubAPI @inputObject)
-            # Should we check if user is already blocked and return true if so?
-            return $true
-        } catch {
-            if ($_.Exception.Response.StatusCode.Value__ -eq 422) {
-                return $false
-            } else {
-                Write-Error $_.Exception.Response
-                throw $_
-            }
-        }
+        Invoke-GitHubAPI @inputObject
     }
 
     end {

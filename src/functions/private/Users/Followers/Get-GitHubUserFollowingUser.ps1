@@ -1,4 +1,4 @@
-﻿filter Get-GitHubUserFollowingUser {
+filter Get-GitHubUserFollowingUser {
     <#
         .SYNOPSIS
         List the people a user follows
@@ -34,7 +34,7 @@
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [object] $Context
     )
 
@@ -45,23 +45,19 @@
     }
 
     process {
-        try {
-            $body = @{
-                per_page = $PerPage
-            }
+        $body = @{
+            per_page = $PerPage
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/users/$Username/following"
-                Method      = 'GET'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'Get'
+            APIEndpoint = "/users/$Username/following"
+            Body        = $body
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 
