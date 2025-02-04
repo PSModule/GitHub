@@ -19,7 +19,7 @@
         Gets the team with the slug 'my-team-name' in the `github` organization.
     #>
     [OutputType([GitHubTeam])]
-    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
+    [CmdletBinding()]
     param(
         # The slug of the team name.
         [Parameter(
@@ -63,7 +63,7 @@
                 'BySlug' {
                     Get-GitHubTeamBySlug @params -Slug $Slug
                 }
-                '__AllParameterSets' {
+                default {
                     Get-GitHubTeamListByOrg @params
                 }
             }

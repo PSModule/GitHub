@@ -18,7 +18,7 @@ function Get-GitHubContext {
         Justification = 'Encapsulated in a function. Never leaves as a plain text.'
     )]
     [OutputType([GitHubContext])]
-    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
+    [CmdletBinding()]
     param(
         # The name of the context.
         [Parameter(
@@ -54,7 +54,7 @@ function Get-GitHubContext {
                 $ID = "$($script:GitHub.Config.ID)/*"
                 Write-Verbose "Getting available contexts for [$ID]"
             }
-            '__AllParameterSets' {
+            default {
                 Write-Verbose 'Getting default context.'
                 $ID = "$($script:GitHub.Config.ID)/$($script:GitHub.Config.DefaultContext)"
                 if ([string]::IsNullOrEmpty($ID)) {

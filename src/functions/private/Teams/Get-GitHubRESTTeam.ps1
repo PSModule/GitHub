@@ -23,7 +23,7 @@
         [Get team by name](https://docs.github.com/en/rest/teams/teams#get-a-team-by-name)
     #>
     [OutputType([pscustomobject])]
-    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
+    [CmdletBinding()]
     param(
         # The organization name. The name is not case sensitive.
         # If not provided, the organization from the context is used.
@@ -66,7 +66,7 @@
                 'GetByName' {
                     Get-GitHubRESTTeamByName @params -Name $Name
                 }
-                '__AllParameterSets' {
+                default {
                     Get-GitHubTeamListByOrg @params
                 }
             }

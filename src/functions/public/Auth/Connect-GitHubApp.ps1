@@ -38,7 +38,7 @@
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'Is the CLI part of the module.')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText', '',
         Justification = 'The tokens are recieved as clear text. Mitigating exposure by removing variables and performing garbage collection.')]
-    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
+    [CmdletBinding()]
     param(
         # The user account to connect to.
         [Parameter(ParameterSetName = 'Filtered')]
@@ -62,8 +62,6 @@
         # Suppresses the output of the function.
         [Parameter()]
         [Alias('Quiet')]
-        [Alias('q')]
-        [Alias('s')]
         [switch] $Silent,
 
         # Set as the default context.
