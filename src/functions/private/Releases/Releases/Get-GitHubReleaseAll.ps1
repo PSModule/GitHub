@@ -1,4 +1,4 @@
-filter Get-GitHubReleaseAll {
+﻿filter Get-GitHubReleaseAll {
     <#
         .SYNOPSIS
         List releases
@@ -9,7 +9,7 @@ filter Get-GitHubReleaseAll {
         Information about published releases are available to everyone. Only users with push access will receive listings for draft releases.
 
         .EXAMPLE
-        Get-GitHubReleaseAll -Owner 'octocat' -Repo 'hello-world'
+        Get-GitHubReleaseAll -Owner 'octocat' -Repository 'hello-world'
 
         Gets all the releases for the repository 'hello-world' owned by 'octocat'.
 
@@ -25,7 +25,7 @@ filter Get-GitHubReleaseAll {
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [string] $Repo,
+        [string] $Repository,
 
         # The number of results per page (max 100).
         [Parameter(ParameterSetName = 'AllUsers')]
@@ -35,7 +35,7 @@ filter Get-GitHubReleaseAll {
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter(Mandatory)]
-        [object] $Context
+        [GitHubContext] $Context
     )
 
     begin {
@@ -51,7 +51,7 @@ filter Get-GitHubReleaseAll {
 
         $inputObject = @{
             Method      = 'Get'
-            APIEndpoint = "/repos/$Owner/$Repo/releases"
+            APIEndpoint = "/repos/$Owner/$Repository/releases"
             Body        = $body
             Context     = $Context
         }

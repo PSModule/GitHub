@@ -26,8 +26,12 @@
     )]
     param(
         # The ID of the delivery.
-        [Parameter(Mandatory)]
-        [Alias('DeliveryID', 'delivery_id')]
+        [Parameter(
+            Mandatory,
+            ValueFromPipeline,
+            ValueFromPipelineByPropertyName
+        )]
+        [Alias('delivery_id', 'DeliveryID')]
         [string] $ID,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -44,20 +48,16 @@
     }
 
     process {
-        try {
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/app/hook/deliveries/$ID/attempts"
-                Method      = 'post'
-            }
+        $inputObject = @{
+            Method      = 'Post'
+            APIEndpoint = "/app/hook/deliveries/$ID/attempts"
+            Context     = $Context
+        }
 
-            if ($PSCmdlet.ShouldProcess('webhook delivery', 'Redeliver')) {
-                Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
-                }
+        if ($PSCmdlet.ShouldProcess("[$ID]", 'Redeliver event')) {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
             }
-        } catch {
-            throw $_
         }
     }
 

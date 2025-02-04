@@ -75,33 +75,29 @@
     }
 
     process {
-        try {
-            $body = @{
-                name             = $Name
-                email            = $Email
-                blog             = $Blog
-                twitter_username = $TwitterUsername
-                company          = $Company
-                location         = $Location
-                hireable         = $Hireable
-                bio              = $Bio
-            }
-            $body | Remove-HashtableEntry -NullOrEmptyValues
+        $body = @{
+            name             = $Name
+            email            = $Email
+            blog             = $Blog
+            twitter_username = $TwitterUsername
+            company          = $Company
+            location         = $Location
+            hireable         = $Hireable
+            bio              = $Bio
+        }
+        $body | Remove-HashtableEntry -NullOrEmptyValues
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = '/user'
-                Method      = 'PATCH'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'Patch'
+            APIEndpoint = '/user'
+            Body        = $body
+            Context     = $Context
+        }
 
-            if ($PSCmdlet.ShouldProcess('authenticated user', 'Set')) {
-                Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
-                }
+        if ($PSCmdlet.ShouldProcess('authenticated user', 'Set')) {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
             }
-        } catch {
-            throw $_
         }
     }
 

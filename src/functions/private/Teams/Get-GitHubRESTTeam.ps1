@@ -1,4 +1,4 @@
-function Get-GitHubRESTTeam {
+﻿function Get-GitHubRESTTeam {
     <#
         .SYNOPSIS
         List teams from an org or get a team by name
@@ -41,7 +41,7 @@ function Get-GitHubRESTTeam {
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter(Mandatory)]
-        [object] $Context
+        [GitHubContext] $Context
     )
 
     begin {

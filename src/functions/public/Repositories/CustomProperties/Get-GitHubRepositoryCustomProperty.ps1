@@ -8,7 +8,7 @@
         Users with read access to the repository can use this endpoint.
 
         .EXAMPLE
-        Get-GitHubRepositoryCustomProperty -Owner 'octocat' -Repo 'hello-world'
+        Get-GitHubRepositoryCustomProperty -Owner 'octocat' -Repository 'hello-world'
 
         Gets all custom property values that are set for the 'hello-world' repository.
 
@@ -21,13 +21,14 @@
     [OutputType([pscustomobject])]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter()]
-        [Alias('org')]
+        [Parameter(Mandatory)]
+        [Alias('Organization')]
+        [Alias('User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(Mandatory)]
+        [string] $Repository,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -40,31 +41,17 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
-
-        if ([string]::IsNullOrEmpty($Repo)) {
-            $Repo = $Context.Repo
-        }
-        Write-Debug "Repo: [$Repo]"
     }
 
     process {
-        try {
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/repos/$Owner/$Repo/properties/values"
-                Method      = 'GET'
-            }
+        $inputObject = @{
+            Method      = 'Get'
+            APIEndpoint = "/repos/$Owner/$Repository/properties/values"
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 

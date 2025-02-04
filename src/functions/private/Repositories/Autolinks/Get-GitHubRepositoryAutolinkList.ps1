@@ -1,4 +1,4 @@
-filter Get-GitHubRepositoryAutolinkList {
+﻿filter Get-GitHubRepositoryAutolinkList {
     <#
         .SYNOPSIS
         List all autolinks of a repository
@@ -9,7 +9,7 @@ filter Get-GitHubRepositoryAutolinkList {
         Information about autolinks are only available to repository administrators.
 
         .EXAMPLE
-        Get-GitHubRepositoryAutolinkList -Owner 'octocat' -Repo 'Hello-World'
+        Get-GitHubRepositoryAutolinkList -Owner 'octocat' -Repository 'Hello-World'
 
         Gets all autolinks for the repository 'Hello-World' owned by 'octocat'.
 
@@ -25,12 +25,12 @@ filter Get-GitHubRepositoryAutolinkList {
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [string] $Repo,
+        [string] $Repository,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter(Mandatory)]
-        [object] $Context
+        [GitHubContext] $Context
     )
 
     begin {
@@ -42,7 +42,7 @@ filter Get-GitHubRepositoryAutolinkList {
     process {
         $inputObject = @{
             Method      = 'Get'
-            APIEndpoint = "/repos/$Owner/$Repo/autolinks"
+            APIEndpoint = "/repos/$Owner/$Repository/autolinks"
             Context     = $Context
         }
 

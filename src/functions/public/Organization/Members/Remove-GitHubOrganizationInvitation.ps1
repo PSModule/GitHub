@@ -22,7 +22,6 @@
     param(
         # The organization name. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [Alias('Org')]
         [string] $Organization,
 
         # The unique identifier of the invitation.
@@ -44,24 +43,14 @@
     }
 
     process {
-        try {
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/orgs/$Organization/invitations/$ID"
-                Method      = 'DELETE'
-            }
+        $inputObject = @{
+            Method      = 'Delete'
+            APIEndpoint = "/orgs/$Organization/invitations/$ID"
+            Context     = $Context
+        }
 
-            try {
-                if ($PSCmdlet.ShouldProcess('GitHub Organization invitation', 'Remove')) {
-                    $null = (Invoke-GitHubAPI @inputObject)
-                }
-                return $true
-            } catch {
-                Write-Error $_.Exception.Response
-                throw $_
-            }
-        } catch {
-            throw $_
+        if ($PSCmdlet.ShouldProcess('GitHub Organization invitation', 'Remove')) {
+            Invoke-GitHubAPI @inputObject
         }
     }
 

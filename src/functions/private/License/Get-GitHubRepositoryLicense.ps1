@@ -1,4 +1,4 @@
-filter Get-GitHubRepositoryLicense {
+﻿filter Get-GitHubRepositoryLicense {
     <#
         .SYNOPSIS
         Get the license for a repository
@@ -10,7 +10,7 @@ filter Get-GitHubRepositoryLicense {
         [custom media types](https://docs.github.com/rest/overview/media-types) for retrieving the raw license content or rendered license HTML.
 
         .EXAMPLE
-        Get-GitHubRepositoryLicense -Owner 'octocat' -Repo 'Hello-World'
+        Get-GitHubRepositoryLicense -Owner 'octocat' -Repository 'Hello-World'
 
         Get the license for the Hello-World repository from the octocat account.
 
@@ -26,7 +26,7 @@ filter Get-GitHubRepositoryLicense {
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [string] $Repo,
+        [string] $Repository,
 
         # The type of data to return. Can be either 'raw' or 'html'.
         [Parameter()]
@@ -36,7 +36,7 @@ filter Get-GitHubRepositoryLicense {
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter(Mandatory)]
-        [object] $Context
+        [GitHubContext] $Context
     )
 
     begin {
@@ -53,7 +53,7 @@ filter Get-GitHubRepositoryLicense {
 
         $inputObject = @{
             Method      = 'Get'
-            APIEndpoint = "/repos/$Owner/$Repo/license"
+            APIEndpoint = "/repos/$Owner/$Repository/license"
             ContentType = $contentType
             Context     = $Context
         }

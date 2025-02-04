@@ -73,31 +73,23 @@
     }
 
     process {
-        try {
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/app/installations/$ID/access_tokens"
-                Method      = 'Post'
-            }
+        $inputObject = @{
+            Method      = 'Post'
+            APIEndpoint = "/app/installations/$ID/access_tokens"
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                [pscustomobject]@{
-                    Token               = $_.Response.token | ConvertTo-SecureString -AsPlainText -Force
-                    ExpiresAt           = $_.Response.expires_at.ToLocalTime()
-                    Permissions         = $_.Response.permissions
-                    RepositorySelection = $_.Response.repository_selection
-                }
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            [pscustomobject]@{
+                Token               = $_.Response.token | ConvertTo-SecureString -AsPlainText -Force
+                ExpiresAt           = $_.Response.expires_at.ToLocalTime()
+                Permissions         = $_.Response.permissions
+                RepositorySelection = $_.Response.repository_selection
             }
-        } catch {
-            throw $_
         }
     }
 
     end {
         Write-Debug "[$stackPath] - End"
-    }
-
-    clean {
-        [System.GC]::Collect()
     }
 }

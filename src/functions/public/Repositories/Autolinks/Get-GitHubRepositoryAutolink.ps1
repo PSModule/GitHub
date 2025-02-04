@@ -9,12 +9,12 @@
         Information about autolinks are only available to repository administrators.
 
         .EXAMPLE
-        Get-GitHubRepositoryAutolink -Owner 'octocat' -Repo 'Hello-World'
+        Get-GitHubRepositoryAutolink -Owner 'octocat' -Repository 'Hello-World'
 
         Gets all autolinks for the repository 'Hello-World' owned by 'octocat'.
 
         .EXAMPLE
-        Get-GitHubRepositoryAutolink -Owner 'octocat' -Repo 'Hello-World' -ID 1
+        Get-GitHubRepositoryAutolink -Owner 'octocat' -Repository 'Hello-World' -ID 1
 
         Gets the autolink with the ID 1 for the repository 'Hello-World' owned by 'octocat'.
 
@@ -22,25 +22,25 @@
         [Get all autolinks of a repository](https://docs.github.com/rest/repos/autolinks#list-all-autolinks-of-a-repository)
     #>
     [Alias('Get-GitHubRepositoryAutolinks')]
-    [CmdletBinding(DefaultParameterSetName = 'Default')]
+    [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter()]
-        [Alias('org')]
+        [Parameter(Mandatory)]
+        [Alias('Organization')]
+        [Alias('User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(Mandatory)]
+        [string] $Repository,
 
         # The unique identifier of the autolink.
         [Parameter(
             Mandatory,
             ParameterSetName = 'ById'
         )]
-        [Alias('autolink_id')]
-        [Alias('ID')]
-        [int] $AutolinkId,
+        [Alias('autolink_id', 'AutolinkID')]
+        [int] $ID,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -53,26 +53,16 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
-
-        if ([string]::IsNullOrEmpty($Repo)) {
-            $Repo = $Context.Repo
-        }
-        Write-Debug "Repo: [$Repo]"
     }
 
     process {
         try {
             switch ($PSCmdlet.ParameterSetName) {
                 'ById' {
-                    Get-GitHubRepositoryAutolinkById -Owner $Owner -Repo $Repo -ID $AutolinkId -Context $Context
+                    Get-GitHubRepositoryAutolinkById -Owner $Owner -Repository $Repository -ID $ID -Context $Context
                 }
                 default {
-                    Get-GitHubRepositoryAutolinkList -Owner $Owner -Repo $Repo -Context $Context
+                    Get-GitHubRepositoryAutolinkList -Owner $Owner -Repository $Repository -Context $Context
                 }
             }
         } catch {

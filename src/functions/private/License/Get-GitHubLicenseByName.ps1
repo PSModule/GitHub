@@ -1,4 +1,4 @@
-filter Get-GitHubLicenseByName {
+﻿filter Get-GitHubLicenseByName {
     <#
         .SYNOPSIS
         Get a license
@@ -27,7 +27,7 @@ filter Get-GitHubLicenseByName {
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter(Mandatory)]
-        [object] $Context
+        [GitHubContext] $Context
     )
 
     begin {

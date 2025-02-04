@@ -1,4 +1,4 @@
-filter New-GitHubRepositoryAsFork {
+﻿filter New-GitHubRepositoryAsFork {
     <#
         .SYNOPSIS
         Create a fork
@@ -46,7 +46,7 @@ filter New-GitHubRepositoryAsFork {
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [string] $Repo,
+        [string] $Repository,
 
         # The organization or person who will own the new repository.
         # To create a new repository in an organization, the authenticated user must be a member of the specified organization.
@@ -65,7 +65,7 @@ filter New-GitHubRepositoryAsFork {
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter(Mandatory)]
-        [object] $Context
+        [GitHubContext] $Context
     )
 
     begin {
@@ -83,12 +83,12 @@ filter New-GitHubRepositoryAsFork {
 
         $inputObject = @{
             Method      = 'Post'
-            APIEndpoint = "/repos/$Owner/$Repo/forks"
+            APIEndpoint = "/repos/$Owner/$Repository/forks"
             Body        = $body
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("Repository [$Organization/$Name] as fork of [$Owner/$Repo]", 'Create')) {
+        if ($PSCmdlet.ShouldProcess("Repository [$Organization/$Name] as fork of [$Owner/$Repository]", 'Create')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }

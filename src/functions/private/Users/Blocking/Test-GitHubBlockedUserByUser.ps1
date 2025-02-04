@@ -1,4 +1,4 @@
-filter Test-GitHubBlockedUserByUser {
+﻿filter Test-GitHubBlockedUserByUser {
     <#
         .SYNOPSIS
         Check if a user is blocked by the authenticated user
@@ -37,7 +37,7 @@ filter Test-GitHubBlockedUserByUser {
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter(Mandatory)]
-        [object] $Context
+        [GitHubContext] $Context
     )
 
     begin {

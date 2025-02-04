@@ -1,4 +1,4 @@
-#Requires -Modules @{ ModuleName = 'DynamicParams'; RequiredVersion = '1.1.8' }
+﻿#Requires -Modules @{ ModuleName = 'DynamicParams'; RequiredVersion = '1.1.8' }
 
 filter New-GitHubRepositoryOrg {
     <#
@@ -184,7 +184,7 @@ filter New-GitHubRepositoryOrg {
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter(Mandatory)]
-        [object] $Context
+        [GitHubContext] $Context
     )
 
     dynamicparam {

@@ -22,8 +22,8 @@
     param(
         # Full URLs for the social media profiles to add.
         [Parameter(Mandatory)]
-        [Alias('account_urls')]
-        [string[]] $AccountUrls,
+        [Alias('account_urls', 'social_accounts', 'AccountUrls')]
+        [string[]] $URL,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -39,25 +39,19 @@
     }
 
     process {
-        try {
-            $body = @{
-                account_urls = $AccountUrls
-            }
+        $body = @{
+            account_urls = $URL
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = '/user/social_accounts'
-                Body        = $body
-                Method      = 'DELETE'
-            }
+        $inputObject = @{
+            Method      = 'Delete'
+            APIEndpoint = '/user/social_accounts'
+            Body        = $body
+            Context     = $Context
+        }
 
-            if ($PSCmdlet.ShouldProcess("Social accounts [$($AccountUrls -join ', ')]", 'Delete')) {
-                $null = Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
-                }
-            }
-        } catch {
-            throw $_
+        if ($PSCmdlet.ShouldProcess("Social accounts [$($URL -join ', ')]", 'Delete')) {
+            Invoke-GitHubAPI @inputObject
         }
     }
 

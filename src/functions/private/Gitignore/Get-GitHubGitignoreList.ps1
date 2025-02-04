@@ -1,4 +1,4 @@
-filter Get-GitHubGitignoreList {
+﻿filter Get-GitHubGitignoreList {
     <#
         .SYNOPSIS
         Get all gitignore templates
@@ -22,7 +22,7 @@ filter Get-GitHubGitignoreList {
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter(Mandatory)]
-        [object] $Context
+        [GitHubContext] $Context
     )
 
     begin {

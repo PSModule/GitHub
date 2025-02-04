@@ -1,4 +1,4 @@
-filter Get-GitHubRepositoryAutolinkById {
+﻿filter Get-GitHubRepositoryAutolinkById {
     <#
         .SYNOPSIS
         Get an autolink reference of a repository
@@ -9,7 +9,7 @@ filter Get-GitHubRepositoryAutolinkById {
         Information about autolinks are only available to repository administrators.
 
         .EXAMPLE
-        Get-GitHubRepositoryAutolinkById -Owner 'octocat' -Repo 'Hello-World' -ID 1
+        Get-GitHubRepositoryAutolinkById -Owner 'octocat' -Repository 'Hello-World' -ID 1
 
         Gets the autolink with the ID 1 for the repository 'Hello-World' owned by 'octocat'.
 
@@ -26,7 +26,7 @@ filter Get-GitHubRepositoryAutolinkById {
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [string] $Repo,
+        [string] $Repository,
 
         # The unique identifier of the autolink.
         [Parameter(Mandatory)]
@@ -37,7 +37,7 @@ filter Get-GitHubRepositoryAutolinkById {
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter(Mandatory)]
-        [object] $Context
+        [GitHubContext] $Context
     )
 
     begin {
@@ -49,7 +49,7 @@ filter Get-GitHubRepositoryAutolinkById {
     process {
         $inputObject = @{
             Method      = 'Get'
-            APIEndpoint = "/repos/$Owner/$Repo/autolinks/$ID"
+            APIEndpoint = "/repos/$Owner/$Repository/autolinks/$ID"
             Context     = $Context
         }
 

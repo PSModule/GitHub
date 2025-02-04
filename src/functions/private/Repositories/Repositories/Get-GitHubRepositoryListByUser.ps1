@@ -1,4 +1,4 @@
-filter Get-GitHubRepositoryListByUser {
+﻿filter Get-GitHubRepositoryListByUser {
     <#
         .SYNOPSIS
         List repositories for a user
@@ -61,7 +61,7 @@ filter Get-GitHubRepositoryListByUser {
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter(Mandatory)]
-        [object] $Context
+        [GitHubContext] $Context
     )
 
     begin {

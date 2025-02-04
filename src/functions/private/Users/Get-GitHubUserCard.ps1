@@ -41,8 +41,8 @@
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter()]
-        [object] $Context
+        [Parameter(Mandatory)]
+        [GitHubContext] $Context
     )
 
     begin {
@@ -52,24 +52,20 @@
     }
 
     process {
-        try {
-            $body = @{
-                subject_type = $SubjectType
-                subject_id   = $SubjectID
-            }
+        $body = @{
+            subject_type = $SubjectType
+            subject_id   = $SubjectID
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/users/$Username/hovercard"
-                Method      = 'GET'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'Get'
+            APIEndpoint = "/users/$Username/hovercard"
+            Body        = $body
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 

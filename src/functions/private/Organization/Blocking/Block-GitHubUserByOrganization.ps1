@@ -1,4 +1,4 @@
-filter Block-GitHubUserByOrganization {
+﻿filter Block-GitHubUserByOrganization {
     <#
         .SYNOPSIS
         Block a user from an organization
@@ -41,7 +41,7 @@ filter Block-GitHubUserByOrganization {
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter(Mandatory)]
-        [object] $Context
+        [GitHubContext] $Context
     )
 
     begin {

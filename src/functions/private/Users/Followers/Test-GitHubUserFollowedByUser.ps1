@@ -1,4 +1,4 @@
-filter Test-GitHubUserFollowedByUser {
+﻿filter Test-GitHubUserFollowedByUser {
     <#
         .SYNOPSIS
         Check if a user follows another user
@@ -35,7 +35,7 @@ filter Test-GitHubUserFollowedByUser {
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter(Mandatory)]
-        [object] $Context
+        [GitHubContext] $Context
     )
 
     begin {
@@ -46,21 +46,12 @@ filter Test-GitHubUserFollowedByUser {
 
     process {
         $inputObject = @{
-            Context     = $Context
+            Method      = 'Get'
             APIEndpoint = "/users/$Username/following/$Follows"
-            Method      = 'GET'
+            Context     = $Context
         }
 
-        try {
-            $null = (Invoke-GitHubAPI @inputObject)
-            return $true
-        } catch {
-            if ($_.Exception.Response.StatusCode.Value__ -eq 404) {
-                return $false
-            } else {
-                throw $_
-            }
-        }
+        Invoke-GitHubAPI @inputObject
     }
 
     end {

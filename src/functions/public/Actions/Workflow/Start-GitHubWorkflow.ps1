@@ -20,15 +20,23 @@
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter()]
+        [Parameter(
+            Mandatory,
+            ValueFromPipelineByPropertyName
+        )]
+        [Alias('Organization')]
+        [Alias('User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(
+            Mandatory,
+            ValueFromPipelineByPropertyName
+        )]
+        [string] $Repository,
 
         # The ID of the workflow.
-        [Alias('workflow_id')]
+        [Alias('workflow_id', 'WorkflowID')]
         [Parameter(
             Mandatory,
             ValueFromPipelineByPropertyName
@@ -57,38 +65,25 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
-
-        if ([string]::IsNullOrEmpty($Repo)) {
-            $Repo = $Context.Repo
-        }
-        Write-Debug "Repo: [$Repo]"
     }
 
     process {
-        try {
-            $body = @{
-                ref    = $Ref
-                inputs = $Inputs
-            }
+        $body = @{
+            ref    = $Ref
+            inputs = $Inputs
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/repos/$Owner/$Repo/actions/workflows/$ID/dispatches"
-                Method      = 'POST'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'Post'
+            APIEndpoint = "/repos/$Owner/$Repository/actions/workflows/$ID/dispatches"
+            Body        = $body
+            Context     = $Context
+        }
 
-            if ($PSCmdlet.ShouldProcess("workflow with ID [$ID] in [$Owner/$Repo]", 'Start')) {
-                Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
-                }
+        if ($PSCmdlet.ShouldProcess("$Owner/$Repository/$ID", 'Start workflow')) {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
             }
-        } catch {
-            throw $_
         }
     }
 

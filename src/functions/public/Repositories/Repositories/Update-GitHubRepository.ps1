@@ -14,7 +14,7 @@
         $params = @{
             Owner       = 'octocat'
             Repo        = 'Hello-World'
-            name        = 'Hello-World-Repo
+            name        = 'Hello-World-Repository
             description = 'This is your first repository'
             homepage    = 'https://github.com'
         }
@@ -26,13 +26,14 @@
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter()]
-        [Alias('org')]
+        [Parameter(Mandatory)]
+        [Alias('Organization')]
+        [Alias('User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(Mandatory)]
+        [string] $Repository,
 
         # The name of the repository.
         [Parameter()]
@@ -182,70 +183,56 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
-
-        if ([string]::IsNullOrEmpty($Repo)) {
-            $Repo = $Context.Repo
-        }
-        Write-Debug "Repo: [$Repo]"
     }
 
     process {
-        try {
-            $body = @{
-                name                            = $Name
-                description                     = $Description
-                homepage                        = $Homepage
-                visibility                      = $Visibility
-                private                         = $Visibility -eq 'private'
-                default_branch                  = $DefaultBranch
-                squash_merge_commit_title       = $SquashMergeCommitTitle
-                squash_merge_commit_message     = $SquashMergeCommitMessage
-                merge_commit_title              = $MergeCommitTitle
-                merge_commit_message            = $MergeCommitMessage
-                advanced_security               = $EnableAdvancedSecurity ? @{
-                    status = $EnableAdvancedSecurity ? 'enabled' : 'disabled'
-                } : $null
-                secret_scanning                 = $EnableSecretScanning ? @{
-                    status = $EnableSecretScanning ? 'enabled' : 'disabled'
-                } : $null
-                secret_scanning_push_protection = $EnableSecretScanningPushProtection ? @{
-                    status = $EnableSecretScanningPushProtection ? 'enabled' : 'disabled'
-                } : $null
-                has_issues                      = $HasIssues ? $HasIssues : $null
-                has_projects                    = $HasProjects ? $HasProjects : $null
-                has_wiki                        = $HasWiki ? $HasWiki : $null
-                is_template                     = $IsTemplate ? $IsTemplate : $null
-                allow_squash_merge              = $AllowSquashMerge ? $AllowSquashMerge : $null
-                allow_merge_commit              = $AllowMergeCommit ? $AllowMergeCommit : $null
-                allow_rebase_merge              = $AllowRebaseMerge ? $AllowRebaseMerge : $null
-                allow_auto_merge                = $AllowAutoMerge ? $AllowAutoMerge : $null
-                allow_update_branch             = $AllowUpdateMerge ? $AllowUpdateMerge : $null
-                delete_branch_on_merge          = $DeleteBranchOnMerge ? $DeleteBranchOnMerge : $null
-                archived                        = $Archived ? $Archived : $null
-                allow_forking                   = $AllowForking ? $AllowForking : $null
-                web_commit_signoff_required     = $WebCommitSignoffRequired ? $WebCommitSignoffRequired : $null
-            }
-            $body | Remove-HashtableEntry -NullOrEmptyValues
+        $body = @{
+            name                            = $Name
+            description                     = $Description
+            homepage                        = $Homepage
+            visibility                      = $Visibility
+            private                         = $Visibility -eq 'private'
+            default_branch                  = $DefaultBranch
+            squash_merge_commit_title       = $SquashMergeCommitTitle
+            squash_merge_commit_message     = $SquashMergeCommitMessage
+            merge_commit_title              = $MergeCommitTitle
+            merge_commit_message            = $MergeCommitMessage
+            advanced_security               = $EnableAdvancedSecurity ? @{
+                status = $EnableAdvancedSecurity ? 'enabled' : 'disabled'
+            } : $null
+            secret_scanning                 = $EnableSecretScanning ? @{
+                status = $EnableSecretScanning ? 'enabled' : 'disabled'
+            } : $null
+            secret_scanning_push_protection = $EnableSecretScanningPushProtection ? @{
+                status = $EnableSecretScanningPushProtection ? 'enabled' : 'disabled'
+            } : $null
+            has_issues                      = $HasIssues ? $HasIssues : $null
+            has_projects                    = $HasProjects ? $HasProjects : $null
+            has_wiki                        = $HasWiki ? $HasWiki : $null
+            is_template                     = $IsTemplate ? $IsTemplate : $null
+            allow_squash_merge              = $AllowSquashMerge ? $AllowSquashMerge : $null
+            allow_merge_commit              = $AllowMergeCommit ? $AllowMergeCommit : $null
+            allow_rebase_merge              = $AllowRebaseMerge ? $AllowRebaseMerge : $null
+            allow_auto_merge                = $AllowAutoMerge ? $AllowAutoMerge : $null
+            allow_update_branch             = $AllowUpdateMerge ? $AllowUpdateMerge : $null
+            delete_branch_on_merge          = $DeleteBranchOnMerge ? $DeleteBranchOnMerge : $null
+            archived                        = $Archived ? $Archived : $null
+            allow_forking                   = $AllowForking ? $AllowForking : $null
+            web_commit_signoff_required     = $WebCommitSignoffRequired ? $WebCommitSignoffRequired : $null
+        }
+        $body | Remove-HashtableEntry -NullOrEmptyValues
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/repos/$Owner/$Repo"
-                Method      = 'PATCH'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'Patch'
+            APIEndpoint = "/repos/$Owner/$Repository"
+            Body        = $body
+            Context     = $Context
+        }
 
-            if ($PSCmdlet.ShouldProcess("Repository [$Owner/$Repo]", 'Update')) {
-                Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
-                }
+        if ($PSCmdlet.ShouldProcess("Repository [$Owner/$Repository]", 'Update')) {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
             }
-        } catch {
-            throw $_
         }
     }
 

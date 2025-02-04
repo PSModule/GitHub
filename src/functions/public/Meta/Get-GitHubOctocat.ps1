@@ -24,9 +24,7 @@
     param(
         # The words to show in Octocat's speech bubble
         [Parameter()]
-        [Alias('Say')]
-        [Alias('Saying')]
-        [string] $S,
+        [string] $Saying,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -42,23 +40,19 @@
     }
 
     process {
-        try {
-            $body = @{
-                s = $S
-            }
+        $body = @{
+            s = $Saying
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = '/octocat'
-                Method      = 'GET'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'Get'
+            APIEndpoint = '/octocat'
+            Body        = $body
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 

@@ -14,9 +14,9 @@
 
         .EXAMPLE
         $param = @{
-            Organization = 'GitHub'
-            MembersCanCreatePublicRepositories = $true
-            MembersCanCreatePrivateRepositories = $true
+            Organization                         = 'GitHub'
+            MembersCanCreatePublicRepositories   = $true
+            MembersCanCreatePrivateRepositories  = $true
             MembersCanCreateInternalRepositories = $true
         }
         Update-GitHubOrganization @param
@@ -40,9 +40,6 @@
             ValueFromPipeline,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('org')]
-        [Alias('owner')]
-        [Alias('login')]
         [string] $Organization,
 
         # Billing email address. This address is not publicized.
@@ -176,56 +173,47 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
     }
 
     process {
-        try {
-            $body = @{
-                name                                                         = $Name
-                billing_email                                                = $BillingEmail
-                blog                                                         = $Blog
-                company                                                      = $Company
-                description                                                  = $Description
-                email                                                        = $Email
-                location                                                     = $Location
-                twitter_username                                             = $TwitterUsername
-                has_organization_projects                                    = $PSBoundParameters.ContainsKey('HasOrganizationProjects') ? $HasOrganizationProjects : $null
-                has_repository_projects                                      = $PSBoundParameters.ContainsKey('HasRepositoryProjects') ? $HasRepositoryProjects : $null
-                default_repository_permission                                = $PSBoundParameters.ContainsKey('DefaultRepositoryPermission') ? $DefaultRepositoryPermission : $null
-                members_can_create_repositories                              = $PSBoundParameters.ContainsKey('MembersCanCreateRepositories') ? $MembersCanCreateRepositories : $null
-                members_can_create_internal_repositories                     = $PSBoundParameters.ContainsKey('MembersCanCreateInternalRepositories') ? $MembersCanCreateInternalRepositories : $null
-                members_can_create_private_repositories                      = $PSBoundParameters.ContainsKey('MembersCanCreatePrivateRepositories') ? $MembersCanCreatePrivateRepositories : $null
-                members_can_create_public_repositories                       = $PSBoundParameters.ContainsKey('MembersCanCreatePublicRepositories') ? $MembersCanCreatePublicRepositories : $null
-                members_can_create_pages                                     = $PSBoundParameters.ContainsKey('MembersCanCreatePages') ? $MembersCanCreatePages : $null
-                members_can_create_public_pages                              = $PSBoundParameters.ContainsKey('MembersCanCreatePublicPages') ? $MembersCanCreatePublicPages : $null
-                members_can_create_private_pages                             = $PSBoundParameters.ContainsKey('MembersCanCreatePrivatePages') ? $MembersCanCreatePrivatePages : $null
-                members_can_fork_private_repositories                        = $PSBoundParameters.ContainsKey('MembersCanForkPrivateRepositories') ? $MembersCanForkPrivateRepositories : $null
-                web_commit_signoff_required                                  = $PSBoundParameters.ContainsKey('WebCommitSignoffRequired') ? $WebCommitSignoffRequired : $null
-                secret_scanning_push_protection_enabled_for_new_repositories = $PSBoundParameters.ContainsKey('SecretScanningPushProtectionEnabledForNewRepositories') ? $SecretScanningPushProtectionEnabledForNewRepositories : $null
-                secret_scanning_push_protection_custom_link_enabled          = $PSBoundParameters.ContainsKey('SecretScanningPushProtectionCustomLinkEnabled') ? $SecretScanningPushProtectionCustomLinkEnabled : $null
-                secret_scanning_push_protection_custom_link                  = $PSBoundParameters.ContainsKey('SecretScanningPushProtectionCustomLink') ? $SecretScanningPushProtectionCustomLink : $null
-            }
-            $body | Remove-HashtableEntry -NullOrEmptyValues
+        $body = @{
+            name                                                         = $Name
+            billing_email                                                = $BillingEmail
+            blog                                                         = $Blog
+            company                                                      = $Company
+            description                                                  = $Description
+            email                                                        = $Email
+            location                                                     = $Location
+            twitter_username                                             = $TwitterUsername
+            has_organization_projects                                    = $PSBoundParameters.ContainsKey('HasOrganizationProjects') ? $HasOrganizationProjects : $null
+            has_repository_projects                                      = $PSBoundParameters.ContainsKey('HasRepositoryProjects') ? $HasRepositoryProjects : $null
+            default_repository_permission                                = $PSBoundParameters.ContainsKey('DefaultRepositoryPermission') ? $DefaultRepositoryPermission : $null
+            members_can_create_repositories                              = $PSBoundParameters.ContainsKey('MembersCanCreateRepositories') ? $MembersCanCreateRepositories : $null
+            members_can_create_internal_repositories                     = $PSBoundParameters.ContainsKey('MembersCanCreateInternalRepositories') ? $MembersCanCreateInternalRepositories : $null
+            members_can_create_private_repositories                      = $PSBoundParameters.ContainsKey('MembersCanCreatePrivateRepositories') ? $MembersCanCreatePrivateRepositories : $null
+            members_can_create_public_repositories                       = $PSBoundParameters.ContainsKey('MembersCanCreatePublicRepositories') ? $MembersCanCreatePublicRepositories : $null
+            members_can_create_pages                                     = $PSBoundParameters.ContainsKey('MembersCanCreatePages') ? $MembersCanCreatePages : $null
+            members_can_create_public_pages                              = $PSBoundParameters.ContainsKey('MembersCanCreatePublicPages') ? $MembersCanCreatePublicPages : $null
+            members_can_create_private_pages                             = $PSBoundParameters.ContainsKey('MembersCanCreatePrivatePages') ? $MembersCanCreatePrivatePages : $null
+            members_can_fork_private_repositories                        = $PSBoundParameters.ContainsKey('MembersCanForkPrivateRepositories') ? $MembersCanForkPrivateRepositories : $null
+            web_commit_signoff_required                                  = $PSBoundParameters.ContainsKey('WebCommitSignoffRequired') ? $WebCommitSignoffRequired : $null
+            secret_scanning_push_protection_enabled_for_new_repositories = $PSBoundParameters.ContainsKey('SecretScanningPushProtectionEnabledForNewRepositories') ? $SecretScanningPushProtectionEnabledForNewRepositories : $null
+            secret_scanning_push_protection_custom_link_enabled          = $PSBoundParameters.ContainsKey('SecretScanningPushProtectionCustomLinkEnabled') ? $SecretScanningPushProtectionCustomLinkEnabled : $null
+            secret_scanning_push_protection_custom_link                  = $PSBoundParameters.ContainsKey('SecretScanningPushProtectionCustomLink') ? $SecretScanningPushProtectionCustomLink : $null
+        }
+        $body | Remove-HashtableEntry -NullOrEmptyValues
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/orgs/$Organization"
-                Method      = 'PATCH'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'Patch'
+            APIEndpoint = "/orgs/$Organization"
+            Body        = $body
+            Context     = $Context
+        }
 
-            if ($PSCmdlet.ShouldProcess("organization [$Organization]", 'Set')) {
-                Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
-                }
+        if ($PSCmdlet.ShouldProcess("organization [$Organization]", 'Set')) {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
             }
-        } catch {
-            throw $_
         }
     }
 

@@ -1,4 +1,4 @@
-filter New-GitHubRepositoryFromTemplate {
+﻿filter New-GitHubRepositoryFromTemplate {
     <#
         .SYNOPSIS
         Create a repository using a template
@@ -75,7 +75,7 @@ filter New-GitHubRepositoryFromTemplate {
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter(Mandatory)]
-        [object] $Context
+        [GitHubContext] $Context
     )
 
     begin {

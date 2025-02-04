@@ -50,39 +50,24 @@
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
-        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Enterprise)) {
-            $Enterprise = $Context.Enterprise
-        }
-        Write-Debug "Enterprise : [$($Context.Enterprise)]"
-
-        if ([string]::IsNullOrEmpty($Organization)) {
-            $Organization = $Context.Organization
-        }
-        Write-Debug "Organization : [$($Context.Organization)]"
+        Assert-GitHubContext -Context $Context -AuthType IAT, UAT
+        # Enterprise organization installations (read)
     }
 
     process {
-        try {
-            $body = @{
-                per_page = $PerPage
-            }
+        $body = @{
+            per_page = $PerPage
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/enterprises/$Enterprise/apps/installable_organizations/$Organization/accessible_repositories"
-                Method      = 'GET'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'Get'
+            APIEndpoint = "/enterprises/$Enterprise/apps/installable_organizations/$Organization/accessible_repositories"
+            Body        = $body
+            Context     = $Context
+        }
 
-            if ($PSCmdlet.ShouldProcess('Target', 'Operation')) {
-                Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
-                }
-            }
-        } catch {
-            Write-Debug "Error: $_"
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 

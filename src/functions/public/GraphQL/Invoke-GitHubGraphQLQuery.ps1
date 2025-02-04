@@ -36,22 +36,20 @@
     }
 
     process {
-        try {
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = '/graphql'
-                Method      = 'Post'
-                Body        = @{
-                    'query'     = $Query
-                    'variables' = $Variables
-                } | ConvertTo-Json
-            }
+        $body = @{
+            'query'     = $Query
+            'variables' = $Variables
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        $inputObject = @{
+            Method      = 'Post'
+            APIEndpoint = '/graphql'
+            Body        = $body
+            Context     = $Context
+        }
+
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 

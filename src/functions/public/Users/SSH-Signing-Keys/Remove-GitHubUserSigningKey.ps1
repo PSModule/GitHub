@@ -42,20 +42,14 @@
     }
 
     process {
-        try {
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/user/ssh_signing_keys/$ID"
-                Method      = 'DELETE'
-            }
+        $inputObject = @{
+            Method      = 'Delete'
+            APIEndpoint = "/user/ssh_signing_keys/$ID"
+            Context     = $Context
+        }
 
-            if ($PSCmdlet.ShouldProcess("SSH signing key with ID [$ID]", 'Delete')) {
-                $null = Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
-                }
-            }
-        } catch {
-            throw $_
+        if ($PSCmdlet.ShouldProcess("SSH signing key with ID [$ID]", 'Delete')) {
+            Invoke-GitHubAPI @inputObject
         }
     }
 

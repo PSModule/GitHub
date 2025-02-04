@@ -12,22 +12,22 @@
         `event`, `head_sha`, `status`.
 
         .EXAMPLE
-        Get-GitHubWorkflowRun -Owner 'owner' -Repo 'repo'
+        Get-GitHubWorkflowRun -Owner 'owner' -Repository 'repo'
 
         Lists all workflow runs for a repository.
 
         .EXAMPLE
-        Get-GitHubWorkflowRun -Owner 'owner' -Repo 'repo' -Actor 'octocat' -Branch 'main' -Event 'push' -Status 'success'
+        Get-GitHubWorkflowRun -Owner 'owner' -Repository 'repo' -Actor 'octocat' -Branch 'main' -Event 'push' -Status 'success'
 
         Lists all workflow runs for a repository with the specified actor, branch, event, and status.
 
         .EXAMPLE
-        Get-GitHubWorkflowRun -Owner 'octocat' -Repo 'Hello-World' -ID '42'
+        Get-GitHubWorkflowRun -Owner 'octocat' -Repository 'Hello-World' -ID '42'
 
         Gets all workflow runs for the workflow with the ID `42` in the repository `Hello-World` owned by `octocat`.
 
         .EXAMPLE
-        Get-GitHubWorkflowRun -Owner 'octocat' -Repo 'Hello-World' -Name 'nightly.yml' -Actor 'octocat' -Branch 'main' -Event 'push' -Status 'success'
+        Get-GitHubWorkflowRun -Owner 'octocat' -Repository 'Hello-World' -Name 'nightly.yml' -Actor 'octocat' -Branch 'main' -Event 'push' -Status 'success'
 
         Gets all workflow runs for the workflow with the name `nightly.yml` in the repository `Hello-World` owned by `octocat` that were triggered by
         the user `octocat` on the branch `main` and have the status `success`.
@@ -36,18 +36,26 @@
         [List workflow runs for a workflow](https://docs.github.com/rest/actions/workflow-runs?apiVersion=2022-11-28#list-workflow-runs-for-a-workflow)
         [List workflow runs for a repository](https://docs.github.com/rest/actions/workflow-runs?apiVersion=2022-11-28#list-workflow-runs-for-a-repository)
     #>
-    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
+    [CmdletBinding()]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidAssignmentToAutomaticVariable', 'Event',
         Justification = 'A parameter that is used in the api call.')]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(Mandatory)]
+        [Parameter(
+            Mandatory,
+            ValueFromPipelineByPropertyName
+        )]
+        [Alias('Organization')]
+        [Alias('User')]
         [string] $Owner,
 
         # The name of the repository. The name is not case sensitive.
-        [Parameter(Mandatory)]
-        [string] $Repo,
+        [Parameter(
+            Mandatory,
+            ValueFromPipelineByPropertyName
+        )]
+        [string] $Repository,
 
         # The ID of the workflow. You can also pass the workflow filename as a string.
         [Parameter(
@@ -119,50 +127,37 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
-
-        if ([string]::IsNullOrEmpty($Repo)) {
-            $Repo = $Context.Repo
-        }
-        Write-Debug "Repo: [$Repo]"
     }
 
     process {
-        try {
-            $params = @{
-                Owner               = $Owner
-                Repo                = $Repo
-                Actor               = $Actor
-                Branch              = $Branch
-                Event               = $Event
-                Status              = $Status
-                Created             = $Created
-                ExcludePullRequests = $ExcludePullRequests
-                CheckSuiteID        = $CheckSuiteID
-                HeadSHA             = $HeadSHA
-                PerPage             = $PerPage
+        $params = @{
+            Owner               = $Owner
+            Repository          = $Repository
+            Actor               = $Actor
+            Branch              = $Branch
+            Event               = $Event
+            Status              = $Status
+            Created             = $Created
+            ExcludePullRequests = $ExcludePullRequests
+            CheckSuiteID        = $CheckSuiteID
+            HeadSHA             = $HeadSHA
+            PerPage             = $PerPage
+        }
+
+        switch ($PSCmdlet.ParameterSetName) {
+            'ByID' {
+                $params['ID'] = $ID
+                Get-GitHubWorkflowRunByWorkflow @params
             }
 
-            switch ($PSCmdlet.ParameterSetName) {
-                'ByID' {
-                    $params['ID'] = $ID
-                    Get-GitHubWorkflowRunByWorkflow @params
-                }
-
-                'ByName' {
-                    $params['ID'] = (Get-GitHubWorkflow -Owner $Owner -Repo $Repo -Name $Name).id
-                    Get-GitHubWorkflowRunByWorkflow @params
-                }
-
-                '__AllParameterSets' {
-                    Get-GitHubWorkflowRunByRepo @params
-                }
+            'ByName' {
+                $params['ID'] = (Get-GitHubWorkflow -Owner $Owner -Repository $Repository -Name $Name).id
+                Get-GitHubWorkflowRunByWorkflow @params
             }
-        } catch {
-            throw $_
+
+            default {
+                Get-GitHubWorkflowRunByRepo @params
+            }
         }
     }
 

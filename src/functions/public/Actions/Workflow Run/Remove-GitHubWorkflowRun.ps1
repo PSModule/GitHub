@@ -9,7 +9,7 @@
         this endpoint.
 
         .EXAMPLE
-        Remove-GitHubWorkflowRun -Owner 'octocat' -Repo 'Hello-World' -ID 123456789
+        Remove-GitHubWorkflowRun -Owner 'octocat' -Repository 'Hello-World' -ID 123456789
 
         Deletes the workflow run with the ID 123456789 from the 'Hello-World' repository owned by 'octocat'
 
@@ -19,20 +19,28 @@
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter()]
+        [Parameter(
+            Mandatory,
+            ValueFromPipelineByPropertyName
+        )]
+        [Alias('Organization')]
+        [Alias('User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(
+            Mandatory,
+            ValueFromPipelineByPropertyName
+        )]
+        [string] $Repository,
 
         # The unique identifier of the workflow run.
         [Parameter(
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('ID', 'run_id')]
-        [string] $RunID,
+        [Alias('run_id', 'RunID')]
+        [string] $ID,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -45,32 +53,19 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
-
-        if ([string]::IsNullOrEmpty($Repo)) {
-            $Repo = $Context.Repo
-        }
-        Write-Debug "Repo: [$Repo]"
     }
 
     process {
-        try {
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "repos/$Owner/$Repo/actions/runs/$RunID"
-                Method      = 'DELETE'
-            }
+        $inputObject = @{
+            Method      = 'Delete'
+            APIEndpoint = "repos/$Owner/$Repository/actions/runs/$ID"
+            Context     = $Context
+        }
 
-            if ($PSCmdlet.ShouldProcess("workflow run with ID [$RunID] in [$Owner/$Repo]", 'Delete')) {
-                Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
-                }
+        if ($PSCmdlet.ShouldProcess("$Owner/$Repository/$ID", 'Delete workflow run')) {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
             }
-        } catch {
-            throw $_
         }
     }
 

@@ -24,7 +24,7 @@
             ValueFromPipeline,
             ValueFromPipelineByPropertyName
         )]
-        [string[]] $Emails,
+        [string[]] $Email,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -40,25 +40,21 @@
     }
 
     process {
-        try {
-            $body = @{
-                emails = $Emails
-            }
+        $body = @{
+            emails = $Email
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = '/user/emails'
-                Method      = 'DELETE'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'Delete'
+            APIEndpoint = '/user/emails'
+            Body        = $body
+            Context     = $Context
+        }
 
-            if ($PSCmdlet.ShouldProcess("Email addresses [$($Emails -join ', ')]", 'Delete')) {
-                $null = Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
-                }
+        if ($PSCmdlet.ShouldProcess("Email addresses [$($Email -join ', ')]", 'Delete')) {
+            $null = Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
             }
-        } catch {
-            throw $_
         }
     }
 

@@ -1,4 +1,4 @@
-function Get-GitHubTeamBySlug {
+﻿function Get-GitHubTeamBySlug {
     <#
         .SYNOPSIS
         Get a team by name
@@ -26,7 +26,7 @@ function Get-GitHubTeamBySlug {
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter(Mandatory)]
-        [object] $Context
+        [GitHubContext] $Context
     )
 
     begin {

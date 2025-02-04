@@ -1,4 +1,4 @@
-filter Block-GitHubUserByUser {
+﻿filter Block-GitHubUserByUser {
     <#
         .SYNOPSIS
         Block a user
@@ -30,7 +30,7 @@ filter Block-GitHubUserByUser {
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter(Mandatory)]
-        [object] $Context
+        [GitHubContext] $Context
     )
 
     begin {

@@ -1,4 +1,4 @@
-filter Get-GitHubUserFollowingMe {
+﻿filter Get-GitHubUserFollowingMe {
     <#
         .SYNOPSIS
         List the people the authenticated user follows
@@ -26,7 +26,7 @@ filter Get-GitHubUserFollowingMe {
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter(Mandatory)]
-        [object] $Context
+        [GitHubContext] $Context
     )
 
     begin {

@@ -1,4 +1,4 @@
-filter Get-GitHubReleaseByID {
+﻿filter Get-GitHubReleaseByID {
     <#
         .SYNOPSIS
         Get a release
@@ -8,7 +8,7 @@ filter Get-GitHubReleaseByID {
         This key is a [hypermedia resource](https://docs.github.com/rest/overview/resources-in-the-rest-api#hypermedia).
 
         .EXAMPLE
-        Get-GitHubReleaseById -Owner 'octocat' -Repo 'hello-world' -ID '1234567'
+        Get-GitHubReleaseById -Owner 'octocat' -Repository 'hello-world' -ID '1234567'
 
         Gets the release with the ID '1234567' for the repository 'hello-world' owned by 'octocat'.
 
@@ -24,7 +24,7 @@ filter Get-GitHubReleaseByID {
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [string] $Repo,
+        [string] $Repository,
 
         # The unique identifier of the release.
         [Parameter(Mandatory)]
@@ -34,7 +34,7 @@ filter Get-GitHubReleaseByID {
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter(Mandatory)]
-        [object] $Context
+        [GitHubContext] $Context
     )
 
     begin {
@@ -46,7 +46,7 @@ filter Get-GitHubReleaseByID {
     process {
         $inputObject = @{
             Method      = 'Get'
-            APIEndpoint = "/repos/$Owner/$Repo/releases/$ID"
+            APIEndpoint = "/repos/$Owner/$Repository/releases/$ID"
             Context     = $Context
         }
 

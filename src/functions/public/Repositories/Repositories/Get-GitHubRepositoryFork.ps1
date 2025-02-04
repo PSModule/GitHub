@@ -7,7 +7,7 @@
         List forks of a named repository.
 
         .EXAMPLE
-        Get-GitHubRepositoryFork -Owner 'octocat' -Repo 'Hello-World'
+        Get-GitHubRepositoryFork -Owner 'octocat' -Repository 'Hello-World'
 
         List forks of the 'Hello-World' repository owned by 'octocat'.
 
@@ -17,13 +17,14 @@
     [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter()]
-        [Alias('org')]
+        [Parameter(Mandatory)]
+        [Alias('Organization')]
+        [Alias('User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(Mandatory)]
+        [string] $Repository,
 
         # The direction to sort the results by.
         [Parameter()]
@@ -46,38 +47,24 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
-
-        if ([string]::IsNullOrEmpty($Repo)) {
-            $Repo = $Context.Repo
-        }
-        Write-Debug "Repo: [$Repo]"
     }
 
     process {
-        try {
-            $body = @{
-                sort     = $Sort
-                per_page = $PerPage
-            }
-            $body | Remove-HashtableEntry -NullOrEmptyValues
+        $body = @{
+            sort     = $Sort
+            per_page = $PerPage
+        }
+        $body | Remove-HashtableEntry -NullOrEmptyValues
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/repos/$Owner/$Repo/forks"
-                Method      = 'GET'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'Get'
+            APIEndpoint = "/repos/$Owner/$Repository/forks"
+            Body        = $body
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 

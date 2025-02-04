@@ -3,13 +3,21 @@
         .NOTES
         [Enable a workflow](https://docs.github.com/en/rest/actions/workflows#enable-a-workflow)
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
-        [Parameter()]
+        [Parameter(
+            Mandatory,
+            ValueFromPipelineByPropertyName
+        )]
+        [Alias('Organization')]
+        [Alias('User')]
         [string] $Owner,
 
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(
+            Mandatory,
+            ValueFromPipelineByPropertyName
+        )]
+        [string] $Repository,
 
         [Parameter(
             Mandatory,
@@ -28,28 +36,17 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
-
-        if ([string]::IsNullOrEmpty($Repo)) {
-            $Repo = $Context.Repo
-        }
-        Write-Debug "Repo: [$Repo]"
     }
 
     process {
-        try {
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/repos/$Owner/$Repo/actions/workflows/$ID/enable"
-                Method      = 'PUT'
-            }
+        $inputObject = @{
+            Method      = 'Put'
+            APIEndpoint = "/repos/$Owner/$Repository/actions/workflows/$ID/enable"
+            Context     = $Context
+        }
 
-            $null = Invoke-GitHubAPI @inputObject
-        } catch {
-            throw $_
+        if ($PSCmdlet.ShouldProcess("$Owner/$Repository/$ID", 'Enable workflow')) {
+            Invoke-GitHubAPI @inputObject
         }
     }
 

@@ -42,9 +42,6 @@
             ParameterSetName = 'NamedOrg',
             ValueFromPipelineByPropertyName
         )]
-        [Alias('login')]
-        [Alias('org')]
-        [Alias('owner')]
         [string] $Organization,
 
         # The handle for the GitHub user account.

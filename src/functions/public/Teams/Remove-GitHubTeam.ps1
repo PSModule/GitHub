@@ -21,15 +21,15 @@
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('team_slug')]
-        [string] $Slug,
+        [Alias('team_slug', 'Slug')]
+        [string] $Name,
 
         # The organization name. The name is not case sensitive.
         # If not provided, the organization from the context is used.
         [Parameter(
+            Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('Org')]
         [string] $Organization,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -43,28 +43,19 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Organization)) {
-            $Organization = $Context.Owner
-        }
-        Write-Debug "Organization: [$Organization]"
     }
 
     process {
-        try {
-            $inputObject = @{
-                Context     = $Context
-                Method      = 'Delete'
-                APIEndpoint = "/orgs/$Organization/teams/$Slug"
-            }
+        $inputObject = @{
+            Method      = 'Delete'
+            APIEndpoint = "/orgs/$Organization/teams/$Name"
+            Context     = $Context
+        }
 
-            if ($PSCmdlet.ShouldProcess("$Organization/$Slug", 'Delete')) {
-                Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
-                }
+        if ($PSCmdlet.ShouldProcess("$Organization/$Name", 'Delete')) {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
             }
-        } catch {
-            throw $_
         }
     }
 

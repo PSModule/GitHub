@@ -1,4 +1,4 @@
-filter Get-GitHubReleaseAssetByReleaseID {
+﻿filter Get-GitHubReleaseAssetByReleaseID {
     <#
         .SYNOPSIS
         List release assets
@@ -7,7 +7,7 @@ filter Get-GitHubReleaseAssetByReleaseID {
         List release assets
 
         .EXAMPLE
-        Get-GitHubReleaseAssetByReleaseID -Owner 'octocat' -Repo 'hello-world' -ID '1234567'
+        Get-GitHubReleaseAssetByReleaseID -Owner 'octocat' -Repository 'hello-world' -ID '1234567'
 
         Gets the release assets for the release with the ID '1234567' for the repository 'octocat/hello-world'.
 
@@ -23,7 +23,7 @@ filter Get-GitHubReleaseAssetByReleaseID {
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [string] $Repo,
+        [string] $Repository,
 
         # The unique identifier of the release.
         [Parameter(
@@ -41,7 +41,7 @@ filter Get-GitHubReleaseAssetByReleaseID {
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter(Mandatory)]
-        [object] $Context
+        [GitHubContext] $Context
     )
 
     begin {
@@ -57,7 +57,7 @@ filter Get-GitHubReleaseAssetByReleaseID {
 
         $inputObject = @{
             Method      = 'Get'
-            APIEndpoint = "/repos/$Owner/$Repo/releases/$ID/assets"
+            APIEndpoint = "/repos/$Owner/$Repository/releases/$ID/assets"
             Body        = $body
             Context     = $Context
         }

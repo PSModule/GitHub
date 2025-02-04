@@ -1,4 +1,4 @@
-filter Test-GitHubUserFollowedByMe {
+﻿filter Test-GitHubUserFollowedByMe {
     <#
         .SYNOPSIS
         Check if a person is followed by the authenticated user
@@ -30,7 +30,7 @@ filter Test-GitHubUserFollowedByMe {
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter(Mandatory)]
-        [object] $Context
+        [GitHubContext] $Context
     )
 
     begin {

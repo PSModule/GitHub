@@ -1,4 +1,4 @@
-function Get-GitHubTeamListByOrg {
+﻿function Get-GitHubTeamListByOrg {
     <#
         .SYNOPSIS
         List teams
@@ -23,7 +23,7 @@ function Get-GitHubTeamListByOrg {
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter(Mandatory)]
-        [object] $Context
+        [GitHubContext] $Context
     )
 
     begin {

@@ -1,4 +1,4 @@
-filter Assert-GitHubContext {
+﻿filter Assert-GitHubContext {
     <#
         .SYNOPSIS
         Check if the context meets the requirements for the command.

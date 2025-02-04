@@ -1,4 +1,4 @@
-filter Get-GitHubUserPublicEmail {
+﻿filter Get-GitHubUserPublicEmail {
     <#
         .SYNOPSIS
         List public email addresses for the authenticated user
@@ -29,7 +29,7 @@ filter Get-GitHubUserPublicEmail {
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter(Mandatory)]
-        [object] $Context
+        [GitHubContext] $Context
     )
 
     begin {

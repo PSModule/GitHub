@@ -22,7 +22,7 @@
         Gets a list of rule suites for the main branch of the hello-world repository owned by octocat.
 
         .EXAMPLE
-        Get-GitHubRepositoryRuleSuite -Owner 'octocat' -Repo 'hello-world' -RuleSuiteId 123456789
+        Get-GitHubRepositoryRuleSuite -Owner 'octocat' -Repository 'hello-world' -RuleSuiteId 123456789
 
         Gets information about a suite of rule evaluations with ID 123456789 from within the octocat/hello-world repository.
 
@@ -32,7 +32,7 @@
     #>
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Long links')]
-    [CmdletBinding(DefaultParameterSetName = 'Default')]
+    [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter()]
@@ -40,8 +40,8 @@
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(Mandatory)]
+        [string] $Repository,
 
         # The name of the ref. Cannot contain wildcard characters.
         # When specified, only rule evaluations triggered for this ref will be returned.
@@ -87,46 +87,32 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
-
-        if ([string]::IsNullOrEmpty($Repo)) {
-            $Repo = $Context.Repo
-        }
-        Write-Debug "Repo: [$Repo]"
     }
 
     process {
-        try {
-            $params = @{
-                Context = $Context
-                Owner   = $Owner
-                Repo    = $Repo
-            }
+        $params = @{
+            Context    = $Context
+            Owner      = $Owner
+            Repository = $Repository
+        }
 
-            switch ($PSCmdlet.ParameterSetName) {
-                'Default' {
-                    $params += @{
-                        Ref             = $Ref
-                        TimePeriod      = $TimePeriod
-                        ActorName       = $ActorName
-                        RuleSuiteResult = $RuleSuiteResult
-                        PerPage         = $PerPage
-                    }
-                    Get-GitHubRepositoryRuleSuiteList @params
+        switch ($PSCmdlet.ParameterSetName) {
+            'ById' {
+                $params += @{
+                    RuleSuiteId = $RuleSuiteId
                 }
-                'ById' {
-                    $params += @{
-                        RuleSuiteId = $RuleSuiteId
-                    }
-                    Get-GitHubRepositoryRuleSuiteById @params
-                }
+                Get-GitHubRepositoryRuleSuiteById @params
             }
-        } catch {
-            throw $_
+            default {
+                $params += @{
+                    Ref             = $Ref
+                    TimePeriod      = $TimePeriod
+                    ActorName       = $ActorName
+                    RuleSuiteResult = $RuleSuiteResult
+                    PerPage         = $PerPage
+                }
+                Get-GitHubRepositoryRuleSuiteList @params
+            }
         }
     }
 

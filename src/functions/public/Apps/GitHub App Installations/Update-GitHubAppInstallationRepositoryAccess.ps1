@@ -28,11 +28,16 @@
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The enterprise slug or ID.
-        [Parameter(ValueFromPipelineByPropertyName)]
+        [Parameter(
+            Mandatory,
+            ValueFromPipelineByPropertyName
+        )]
         [string] $Enterprise,
 
         # The organization name. The name is not case sensitive.
-        [Parameter(ValueFromPipelineByPropertyName)]
+        [Parameter(
+            Mandatory,
+            ValueFromPipelineByPropertyName)]
         [string] $Organization,
 
         # The unique identifier of the installation.
@@ -65,41 +70,29 @@
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
-        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Enterprise)) {
-            $Enterprise = $Context.Enterprise
-        }
-        Write-Debug "Enterprise : [$($Context.Enterprise)]"
-
-        if ([string]::IsNullOrEmpty($Organization)) {
-            $Organization = $Context.Organization
-        }
-        Write-Debug "Organization : [$($Context.Organization)]"
+        Assert-GitHubContext -Context $Context -AuthType IAT, UAT
+        #enterprise_organization_installation_repositories=write
+        #enterprise_organization_installations=write
     }
 
     process {
-        try {
-            $body = @{
-                repository_selection = $RepositorySelection
-                repositories         = $Repositories
-            }
-            $body | Remove-HashtableEntry -NullOrEmptyValues
+        $body = @{
+            repository_selection = $RepositorySelection
+            repositories         = $Repositories
+        }
+        $body | Remove-HashtableEntry -NullOrEmptyValues
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/enterprises/$Enterprise/apps/organizations/$Organization/installations/$ID/repositories"
-                Method      = 'PATCH'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'Patch'
+            APIEndpoint = "/enterprises/$Enterprise/apps/organizations/$Organization/installations/$ID/repositories"
+            Body        = $body
+            Context     = $Context
+        }
 
-            if ($PSCmdlet.ShouldProcess('Target', 'Operation')) {
-                Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
-                }
+        if ($PSCmdlet.ShouldProcess("$Enterprise/$Organization", 'Update repository access')) {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
             }
-        } catch {
-            Write-Debug "Error: $_"
         }
     }
 
