@@ -87,7 +87,7 @@
                     $user
                 }
                 'AllUsers' {
-                    Get-GitHubAllUsers -Since $Since -PerPage $PerPage -Context $Context
+                    Get-GitHubAllUser -Since $Since -PerPage $PerPage -Context $Context
                 }
             }
         } catch {
