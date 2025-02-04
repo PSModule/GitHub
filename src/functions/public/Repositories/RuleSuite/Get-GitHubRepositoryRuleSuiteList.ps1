@@ -34,8 +34,8 @@
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(Mandatory)]
+        [string] $Repository,
 
         # The name of the ref. Cannot contain wildcard characters.
         # When specified, only rule evaluations triggered for this ref will be returned.
@@ -88,7 +88,7 @@
 
         $inputObject = @{
             Method      = 'Get'
-            APIEndpoint = "/repos/$Owner/$Repo/rulesets/rule-suites"
+            APIEndpoint = "/repos/$Owner/$Repository/rulesets/rule-suites"
             Body        = $body
             Context     = $Context
         }

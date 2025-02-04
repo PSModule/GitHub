@@ -7,7 +7,7 @@
         Get a published release with the specified tag.
 
         .EXAMPLE
-        Get-GitHubReleaseByTagName -Owner 'octocat' -Repo 'hello-world' -Tag 'v1.0.0'
+        Get-GitHubReleaseByTagName -Owner 'octocat' -Repository 'hello-world' -Tag 'v1.0.0'
 
         Gets the release with the tag 'v1.0.0' for the repository 'hello-world' owned by 'octocat'.
 
@@ -23,7 +23,7 @@
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [string] $Repo,
+        [string] $Repository,
 
         # The name of the tag to get a release from.
         [Parameter(Mandatory)]
@@ -45,7 +45,7 @@
     process {
         $inputObject = @{
             Method      = 'Get'
-            APIEndpoint = "/repos/$Owner/$Repo/releases/tags/$Tag"
+            APIEndpoint = "/repos/$Owner/$Repository/releases/tags/$Tag"
             Context     = $Context
         }
 

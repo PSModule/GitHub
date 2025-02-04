@@ -63,8 +63,8 @@
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(Mandatory)]
+        [string] $Repository,
 
         # The tag name for the release. This can be an existing tag or a new one.
         [Parameter(Mandatory)]
@@ -116,11 +116,11 @@
 
         $inputObject = @{
             Method      = 'Post'
-            APIEndpoint = "/repos/$Owner/$Repo/releases/generate-notes"
+            APIEndpoint = "/repos/$Owner/$Repository/releases/generate-notes"
             Body        = $body
         }
 
-        if ($PSCmdlet.ShouldProcess("$Owner/$Repo", 'Create release notes')) {
+        if ($PSCmdlet.ShouldProcess("$Owner/$Repository", 'Create release notes')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }

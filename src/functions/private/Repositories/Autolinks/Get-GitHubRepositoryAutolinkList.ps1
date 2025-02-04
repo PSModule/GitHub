@@ -9,7 +9,7 @@
         Information about autolinks are only available to repository administrators.
 
         .EXAMPLE
-        Get-GitHubRepositoryAutolinkList -Owner 'octocat' -Repo 'Hello-World'
+        Get-GitHubRepositoryAutolinkList -Owner 'octocat' -Repository 'Hello-World'
 
         Gets all autolinks for the repository 'Hello-World' owned by 'octocat'.
 
@@ -25,7 +25,7 @@
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [string] $Repo,
+        [string] $Repository,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -42,7 +42,7 @@
     process {
         $inputObject = @{
             Method      = 'Get'
-            APIEndpoint = "/repos/$Owner/$Repo/autolinks"
+            APIEndpoint = "/repos/$Owner/$Repository/autolinks"
             Context     = $Context
         }
 

@@ -7,7 +7,7 @@
         Lists all branches from a repository
 
         .EXAMPLE
-        Get-GitHubRepoBranch -Owner 'octocat' -Repo 'Hello-World'
+        Get-GitHubRepoBranch -Owner 'octocat' -Repository 'Hello-World'
 
         Gets all the branches from the 'Hello-World' repository owned by 'octocat'
 
@@ -17,12 +17,14 @@
     [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter()]
+        [Parameter(Mandatory)]
+        [Alias('Organization')]
+        [Alias('User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(Mandatory)]
+        [string] $Repository,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -40,7 +42,7 @@
     process {
         $inputObject = @{
             Method      = 'Get'
-            APIEndpoint = "/repos/$Owner/$Repo/branches"
+            APIEndpoint = "/repos/$Owner/$Repository/branches"
             Context     = $Context
         }
 

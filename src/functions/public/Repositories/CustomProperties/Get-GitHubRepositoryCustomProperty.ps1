@@ -8,7 +8,7 @@
         Users with read access to the repository can use this endpoint.
 
         .EXAMPLE
-        Get-GitHubRepositoryCustomProperty -Owner 'octocat' -Repo 'hello-world'
+        Get-GitHubRepositoryCustomProperty -Owner 'octocat' -Repository 'hello-world'
 
         Gets all custom property values that are set for the 'hello-world' repository.
 
@@ -27,8 +27,8 @@
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(Mandatory)]
+        [string] $Repository,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -46,7 +46,7 @@
     process {
         $inputObject = @{
             Method      = 'Get'
-            APIEndpoint = "/repos/$Owner/$Repo/properties/values"
+            APIEndpoint = "/repos/$Owner/$Repository/properties/values"
             Context     = $Context
         }
 

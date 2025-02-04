@@ -11,7 +11,7 @@
         and "[Dealing with secondary rate limits](https://docs.github.com/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
 
         .EXAMPLE
-        New-GitHubRelease -Owner 'octocat' -Repo 'hello-world' -TagName 'v1.0.0' -TargetCommitish 'main' -Body 'Release notes'
+        New-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -TagName 'v1.0.0' -TargetCommitish 'main' -Body 'Release notes'
 
         Creates a release for the repository 'octocat/hello-world' with the tag 'v1.0.0' and the target commitish 'main'.
 
@@ -29,8 +29,8 @@
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(Mandatory)]
+        [string] $Repository,
 
         # The name of the tag.
         [Parameter(Mandatory)]
@@ -107,12 +107,12 @@
 
         $inputObject = @{
             Method      = 'Post'
-            APIEndpoint = "/repos/$Owner/$Repo/releases"
+            APIEndpoint = "/repos/$Owner/$Repository/releases"
             Body        = $body
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("$Owner/$Repo", 'Create a release')) {
+        if ($PSCmdlet.ShouldProcess("$Owner/$Repository", 'Create a release')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }

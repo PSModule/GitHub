@@ -54,7 +54,7 @@
     [string] $Owner
 
     # The default value for the Repo parameter.
-    [string] $Repo
+    [string] $Repository
 
     # The default value for the HTTP protocol version.
     [string] $HttpVersion

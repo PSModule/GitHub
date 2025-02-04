@@ -7,7 +7,7 @@
         Users with push access to the repository can edit a release asset.
 
         .EXAMPLE
-        Set-GitHubReleaseAsset -Owner 'octocat' -Repo 'hello-world' -ID '1234567' -Name 'new_asset_name' -Label 'new_asset_label'
+        Set-GitHubReleaseAsset -Owner 'octocat' -Repository 'hello-world' -ID '1234567' -Name 'new_asset_name' -Label 'new_asset_label'
 
         Updates the release asset with the ID '1234567' for the repository 'octocat/hello-world' with the new name 'new_asset_name' and
         label 'new_asset_label'.
@@ -25,7 +25,7 @@
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter()]
-        [string] $Repo,
+        [string] $Repository,
 
         # The unique identifier of the asset.
         [Parameter(Mandatory)]
@@ -68,12 +68,12 @@
 
         $inputObject = @{
             Method      = 'Patch'
-            APIEndpoint = "/repos/$Owner/$Repo/releases/assets/$ID"
+            APIEndpoint = "/repos/$Owner/$Repository/releases/assets/$ID"
             Body        = $body
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("assets for release with ID [$ID] in [$Owner/$Repo]", 'Set')) {
+        if ($PSCmdlet.ShouldProcess("assets for release with ID [$ID] in [$Owner/$Repository]", 'Set')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }

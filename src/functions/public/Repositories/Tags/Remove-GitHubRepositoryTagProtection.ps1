@@ -8,7 +8,7 @@
         This endpoint is only available to repository administrators.
 
         .EXAMPLE
-        Remove-GitHubRepositoryTagProtection -Owner 'octocat' -Repo 'hello-world' -TagProtectionId 1
+        Remove-GitHubRepositoryTagProtection -Owner 'octocat' -Repository 'hello-world' -TagProtectionId 1
 
         Deletes the tag protection state with the ID 1 for the 'hello-world' repository.
 
@@ -25,8 +25,8 @@
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(Mandatory)]
+        [string] $Repository,
 
         # The unique identifier of the tag protection.
         [Parameter(Mandatory)]
@@ -48,11 +48,11 @@
     process {
         $inputObject = @{
             Method      = 'Delete'
-            APIEndpoint = "/repos/$Owner/$Repo/tags/protection/$TagProtectionId"
+            APIEndpoint = "/repos/$Owner/$Repository/tags/protection/$TagProtectionId"
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("tag protection state with ID [$TagProtectionId] for repository [$Owner/$Repo]", 'Delete')) {
+        if ($PSCmdlet.ShouldProcess("tag protection state with ID [$TagProtectionId] for repository [$Owner/$Repository]", 'Delete')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }

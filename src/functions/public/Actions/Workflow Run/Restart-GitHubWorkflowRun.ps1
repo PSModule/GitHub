@@ -7,7 +7,7 @@
         Re-runs your workflow run using its `run_id`. You can also specify a branch or tag name to re-run a workflow run from a branch
 
         .EXAMPLE
-        Start-GitHubWorkflowReRun -Owner 'octocat' -Repo 'Hello-World' -ID 123456789
+        Start-GitHubWorkflowReRun -Owner 'octocat' -Repository 'Hello-World' -ID 123456789
 
         .NOTES
         [Re-run a workflow](https://docs.github.com/en/rest/actions/workflow-runs#re-run-a-workflow)
@@ -58,7 +58,7 @@
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("workflow with ID [$ID] in [$Owner/$Repo]", 'Re-run')) {
+        if ($PSCmdlet.ShouldProcess("workflow with ID [$ID] in [$Owner/$Repository]", 'Re-run')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }

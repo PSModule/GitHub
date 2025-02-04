@@ -10,7 +10,7 @@
         repositories, you will get a `403 Forbidden` response.
 
         .EXAMPLE
-        Remove-GitHubRepository -Owner 'PSModule' -Repo 'Hello-World'
+        Remove-GitHubRepository -Owner 'PSModule' -Repository 'Hello-World'
 
         Deletes the repository `Hello-World` in the `PSModule` organization.
 
@@ -27,7 +27,7 @@
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [string] $Repo,
+        [string] $Repository,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -45,11 +45,11 @@
     process {
         $inputObject = @{
             Method      = 'Delete'
-            APIEndpoint = "/repos/$Owner/$Repo"
+            APIEndpoint = "/repos/$Owner/$Repository"
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("repo [$Owner/$Repo]", 'Delete')) {
+        if ($PSCmdlet.ShouldProcess("repo [$Owner/$Repository]", 'Delete')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }

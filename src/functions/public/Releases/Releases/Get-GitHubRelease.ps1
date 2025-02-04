@@ -9,22 +9,22 @@
         Information about published releases are available to everyone. Only users with push access will receive listings for draft releases.
 
         .EXAMPLE
-        Get-GitHubRelease -Owner 'octocat' -Repo 'hello-world'
+        Get-GitHubRelease -Owner 'octocat' -Repository 'hello-world'
 
         Gets the releases for the repository 'hello-world' owned by 'octocat'.
 
         .EXAMPLE
-        Get-GitHubRelease -Owner 'octocat' -Repo 'hello-world' -Latest
+        Get-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -Latest
 
         Gets the latest releases for the repository 'hello-world' owned by 'octocat'.
 
         .EXAMPLE
-        Get-GitHubRelease -Owner 'octocat' -Repo 'hello-world' -Tag 'v1.0.0'
+        Get-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -Tag 'v1.0.0'
 
         Gets the release with the tag 'v1.0.0' for the repository 'hello-world' owned by 'octocat'.
 
         .EXAMPLE
-        Get-GitHubRelease -Owner 'octocat' -Repo 'hello-world' -ID '1234567'
+        Get-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -ID '1234567'
 
         Gets the release with the ID '1234567' for the repository 'hello-world' owned by 'octocat'.
 
@@ -36,12 +36,14 @@
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'Latest', Justification = 'Required for parameter set')]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter()]
+        [Parameter(Mandatory)]
+        [Alias('Organization')]
+        [Alias('User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(Mandatory)]
+        [string] $Repository,
 
         # The number of results per page (max 100).
         [Parameter(ParameterSetName = 'All')]
@@ -82,32 +84,22 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
-
-        if ([string]::IsNullOrEmpty($Repo)) {
-            $Repo = $Context.Repo
-        }
-        Write-Debug "Repo: [$Repo]"
     }
 
     process {
         try {
             switch ($PSCmdlet.ParameterSetName) {
                 'All' {
-                    Get-GitHubReleaseAll -Owner $Owner -Repo $Repo -PerPage $PerPage -Context $Context
+                    Get-GitHubReleaseAll -Owner $Owner -Repository $Repository -PerPage $PerPage -Context $Context
                 }
                 'Latest' {
-                    Get-GitHubReleaseLatest -Owner $Owner -Repo $Repo -Context $Context
+                    Get-GitHubReleaseLatest -Owner $Owner -Repository $Repository -Context $Context
                 }
                 'Tag' {
-                    Get-GitHubReleaseByTagName -Owner $Owner -Repo $Repo -Tag $Tag -Context $Context
+                    Get-GitHubReleaseByTagName -Owner $Owner -Repository $Repository -Tag $Tag -Context $Context
                 }
                 'ID' {
-                    Get-GitHubReleaseByID -Owner $Owner -Repo $Repo -ID $ID -Context $Context
+                    Get-GitHubReleaseByID -Owner $Owner -Repository $Repository -ID $ID -Context $Context
                 }
             }
         } catch {

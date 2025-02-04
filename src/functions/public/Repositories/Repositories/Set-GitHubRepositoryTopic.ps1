@@ -7,7 +7,7 @@
         Replace all repository topics
 
         .EXAMPLE
-        Set-GitHubRepositoryTopic -Owner 'octocat' -Repo 'hello-world' -Names 'octocat', 'octo', 'octocat/hello-world'
+        Set-GitHubRepositoryTopic -Owner 'octocat' -Repository 'hello-world' -Names 'octocat', 'octo', 'octocat/hello-world'
 
         Replaces all topics for the repository 'octocat/hello-world' with the topics 'octocat', 'octo', 'octocat/hello-world'.
 
@@ -23,8 +23,8 @@
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(Mandatory)]
+        [string] $Repository,
 
         # The number of results per page (max 100).
         [Parameter()]
@@ -51,12 +51,12 @@
 
         $inputObject = @{
             Method      = 'Put'
-            APIEndpoint = "/repos/$Owner/$Repo/topics"
+            APIEndpoint = "/repos/$Owner/$Repository/topics"
             Body        = $body
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("topics for repo [$Owner/$Repo]", 'Set')) {
+        if ($PSCmdlet.ShouldProcess("topics for repo [$Owner/$Repository]", 'Set')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response.names
             }

@@ -12,7 +12,7 @@
         a fine-grained personal access token cannot be used because they are only granted access to a single account.
 
         .EXAMPLE
-        Move-GitHubRepository -Owner 'PSModule' -Repo 'GitHub' -NewOwner 'GitHub' -NewName 'PowerShell'
+        Move-GitHubRepository -Owner 'PSModule' -Repository 'GitHub' -NewOwner 'GitHub' -NewName 'PowerShell'
 
         Moves the GitHub repository to the PSModule organization and renames it to GitHub.
 
@@ -28,8 +28,8 @@
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(Mandatory)]
+        [string] $Repository,
 
         # The username or organization name the repository will be transferred to.
         [Parameter(Mandatory)]
@@ -69,7 +69,7 @@
 
         $inputObject = @{
             Method      = 'Post'
-            APIEndpoint = "/repos/$Owner/$Repo/transfer"
+            APIEndpoint = "/repos/$Owner/$Repository/transfer"
             Body        = $body
             Context     = $Context
         }

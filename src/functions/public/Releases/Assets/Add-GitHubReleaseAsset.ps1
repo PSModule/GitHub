@@ -37,7 +37,7 @@
         the old file before you can re-upload the new asset.
 
         .EXAMPLE
-        Add-GitHubReleaseAsset -Owner 'octocat' -Repo 'hello-world' -ID '7654321' -FilePath 'C:\Users\octocat\Downloads\hello-world.zip'
+        Add-GitHubReleaseAsset -Owner 'octocat' -Repository 'hello-world' -ID '7654321' -FilePath 'C:\Users\octocat\Downloads\hello-world.zip'
 
         Gets the release assets for the release with the ID '1234567' for the repository 'octocat/hello-world'.
 
@@ -54,7 +54,7 @@
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [string] $Repo,
+        [string] $Repository,
 
         # The unique identifier of the release.
         [Parameter(Mandatory)]
@@ -127,7 +127,7 @@
             }
         }
 
-        $release = Get-GitHubRelease -Owner $Owner -Repo $Repo -ID $ID
+        $release = Get-GitHubRelease -Owner $Owner -Repository $Repository -ID $ID
         $uploadURI = $release.upload_url -replace '{\?name,label}', "?name=$($Name)&label=$($Label)"
 
         $inputObject = @{

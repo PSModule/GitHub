@@ -14,7 +14,7 @@
         $params = @{
             Owner       = 'octocat'
             Repo        = 'Hello-World'
-            name        = 'Hello-World-Repo
+            name        = 'Hello-World-Repository
             description = 'This is your first repository'
             homepage    = 'https://github.com'
         }
@@ -32,8 +32,8 @@
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(Mandatory)]
+        [string] $Repository,
 
         # The name of the repository.
         [Parameter()]
@@ -224,12 +224,12 @@
 
         $inputObject = @{
             Method      = 'Patch'
-            APIEndpoint = "/repos/$Owner/$Repo"
+            APIEndpoint = "/repos/$Owner/$Repository"
             Body        = $body
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("Repository [$Owner/$Repo]", 'Update')) {
+        if ($PSCmdlet.ShouldProcess("Repository [$Owner/$Repository]", 'Update')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }

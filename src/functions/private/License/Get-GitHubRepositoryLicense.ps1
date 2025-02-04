@@ -10,7 +10,7 @@
         [custom media types](https://docs.github.com/rest/overview/media-types) for retrieving the raw license content or rendered license HTML.
 
         .EXAMPLE
-        Get-GitHubRepositoryLicense -Owner 'octocat' -Repo 'Hello-World'
+        Get-GitHubRepositoryLicense -Owner 'octocat' -Repository 'Hello-World'
 
         Get the license for the Hello-World repository from the octocat account.
 
@@ -21,12 +21,12 @@
     [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(Mandatory)]
+        [string] $Repository,
 
         # The type of data to return. Can be either 'raw' or 'html'.
         [Parameter()]
@@ -53,7 +53,7 @@
 
         $inputObject = @{
             Method      = 'Get'
-            APIEndpoint = "/repos/$Owner/$Repo/license"
+            APIEndpoint = "/repos/$Owner/$Repository/license"
             ContentType = $contentType
             Context     = $Context
         }

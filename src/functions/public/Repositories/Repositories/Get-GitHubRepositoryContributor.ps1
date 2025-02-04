@@ -12,7 +12,7 @@
         in the repository link to GitHub users. The rest will appear as anonymous contributors without associated GitHub user information.
 
         .EXAMPLE
-        Get-GitHubRepositoryContributor -Owner 'PSModule' -Repo 'GitHub'
+        Get-GitHubRepositoryContributor -Owner 'PSModule' -Repository 'GitHub'
 
         Gets all contributors to the GitHub repository.
 
@@ -28,8 +28,8 @@
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(Mandatory)]
+        [string] $Repository,
 
         # Wether to include anonymous contributors in results.
         [Parameter()]
@@ -62,7 +62,7 @@
 
         $inputObject = @{
             Method      = 'Get'
-            APIEndpoint = "/repos/$Owner/$Repo/contributors"
+            APIEndpoint = "/repos/$Owner/$Repository/contributors"
             Body        = $body
             Context     = $Context
         }

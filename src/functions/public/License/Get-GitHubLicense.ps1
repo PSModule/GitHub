@@ -19,7 +19,7 @@
         Get the mit license template
 
         .EXAMPLE
-        Get-GitHubLicense -Owner 'octocat' -Repo 'Hello-World'
+        Get-GitHubLicense -Owner 'octocat' -Repository 'Hello-World'
 
         Get the license for the Hello-World repository from the octocat account.
 
@@ -39,7 +39,7 @@
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(ParameterSetName = 'Repository')]
-        [string] $Repo,
+        [string] $Repository,
 
         # The license keyword, license name, or license SPDX ID. For example, mit or mpl-2.0.
         [Parameter(ParameterSetName = 'Name')]
@@ -56,32 +56,19 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
-
-        if ([string]::IsNullOrEmpty($Repo)) {
-            $Repo = $Context.Repo
-        }
-        Write-Debug "Repo: [$Repo]"
     }
 
     process {
-        try {
-            switch ($PSCmdlet.ParameterSetName) {
-                'List' {
-                    Get-GitHubLicenseList -Context $Context
-                }
-                'Name' {
-                    Get-GitHubLicenseByName -Name $Name -Context $Context
-                }
-                'Repository' {
-                    Get-GitHubRepositoryLicense -Owner $Owner -Repo $Repo -Context $Context
-                }
+        switch ($PSCmdlet.ParameterSetName) {
+            'List' {
+                Get-GitHubLicenseList -Context $Context
             }
-        } catch {
-            throw $_
+            'Name' {
+                Get-GitHubLicenseByName -Name $Name -Context $Context
+            }
+            'Repository' {
+                Get-GitHubRepositoryLicense -Owner $Owner -Repository $Repository -Context $Context
+            }
         }
     }
 

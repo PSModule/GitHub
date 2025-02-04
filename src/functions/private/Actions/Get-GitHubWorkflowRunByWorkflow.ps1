@@ -13,12 +13,12 @@
         `created`, `event`, `head_sha`, `status`.
 
         .EXAMPLE
-        Get-GitHubWorkflowRunByWorkflow -Owner 'octocat' -Repo 'Hello-World' -ID '42'
+        Get-GitHubWorkflowRunByWorkflow -Owner 'octocat' -Repository 'Hello-World' -ID '42'
 
         Gets all workflow runs for the workflow with the ID `42` in the repository `Hello-World` owned by `octocat`.
 
         .EXAMPLE
-        Get-GitHubWorkflowRunByWorkflow -Owner 'octocat' -Repo 'Hello-World' -ID '42' -Actor 'octocat' -Branch 'main' -Event 'push' -Status 'success'
+        Get-GitHubWorkflowRunByWorkflow -Owner 'octocat' -Repository 'Hello-World' -ID '42' -Actor 'octocat' -Branch 'main' -Event 'push' -Status 'success'
 
         Gets all workflow runs for the workflow with the ID `42` in the repository `Hello-World` owned by `octocat` that were triggered by the user
         `octocat` on the branch `main` and have the status `success`.
@@ -37,7 +37,7 @@
 
         # The name of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [string] $Repo,
+        [string] $Repository,
 
         # The ID of the workflow. You can also pass the workflow filename as a string.
         [Parameter(Mandatory)]
@@ -115,7 +115,7 @@
 
         $inputObject = @{
             Method      = 'Get'
-            APIEndpoint = "/repos/$Owner/$Repo/actions/workflows/$ID/runs"
+            APIEndpoint = "/repos/$Owner/$Repository/actions/workflows/$ID/runs"
             Body        = $body
             Context     = $Context
         }

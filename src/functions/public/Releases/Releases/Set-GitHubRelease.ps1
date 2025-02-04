@@ -7,7 +7,7 @@
         Users with push access to the repository can edit a release.
 
         .EXAMPLE
-        Set-GitHubRelease -Owner 'octocat' -Repo 'hello-world' -ID '1234567' -Body 'Release notes'
+        Set-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -ID '1234567' -Body 'Release notes'
 
         Updates the release with the ID '1234567' for the repository 'octocat/hello-world' with the body 'Release notes'.
 
@@ -25,8 +25,8 @@
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(Mandatory)]
+        [string] $Repository,
 
         # The unique identifier of the release.
         [Parameter(Mandatory)]
@@ -104,12 +104,12 @@
 
         $inputObject = @{
             Method      = 'Patch'
-            APIEndpoint = "/repos/$Owner/$Repo/releases/$ID"
+            APIEndpoint = "/repos/$Owner/$Repository/releases/$ID"
             Body        = $body
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("release with ID [$ID] in [$Owner/$Repo]", 'Update')) {
+        if ($PSCmdlet.ShouldProcess("release with ID [$ID] in [$Owner/$Repository]", 'Update')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }

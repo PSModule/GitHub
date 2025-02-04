@@ -10,7 +10,7 @@
         possible. API clients should handle both a `200` or `302` response.
 
         .EXAMPLE
-        Get-GitHubReleaseAssetByID -Owner 'octocat' -Repo 'hello-world' -ID '1234567'
+        Get-GitHubReleaseAssetByID -Owner 'octocat' -Repository 'hello-world' -ID '1234567'
 
         Gets the release asset with the ID '1234567' for the repository 'octocat/hello-world'.
 
@@ -26,7 +26,7 @@
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [string] $Repo,
+        [string] $Repository,
 
         # The unique identifier of the asset.
         [Parameter(Mandatory)]
@@ -48,7 +48,7 @@
     process {
         $inputObject = @{
             Method      = 'Get'
-            APIEndpoint = "/repos/$Owner/$Repo/releases/assets/$ID"
+            APIEndpoint = "/repos/$Owner/$Repository/releases/assets/$ID"
             Context     = $Context
         }
 

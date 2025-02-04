@@ -9,7 +9,7 @@
         this endpoint.
 
         .EXAMPLE
-        Remove-GitHubWorkflowRun -Owner 'octocat' -Repo 'Hello-World' -ID 123456789
+        Remove-GitHubWorkflowRun -Owner 'octocat' -Repository 'Hello-World' -ID 123456789
 
         Deletes the workflow run with the ID 123456789 from the 'Hello-World' repository owned by 'octocat'
 
@@ -62,7 +62,7 @@
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("$Owner/$Repo/$ID", 'Delete workflow run')) {
+        if ($PSCmdlet.ShouldProcess("$Owner/$Repository/$ID", 'Delete workflow run')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }

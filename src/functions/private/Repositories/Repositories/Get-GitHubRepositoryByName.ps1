@@ -11,7 +11,7 @@
         For more information, see "[Managing security managers in your organization](https://docs.github.com/organizations/managing-peoples-access-to-your-organization-with-roles/managing-security-managers-in-your-organization)."
 
         .EXAMPLE
-        Get-GitHubRepositoryByName -Owner 'octocat' -Repo 'Hello-World'
+        Get-GitHubRepositoryByName -Owner 'octocat' -Repository 'Hello-World'
 
         Gets the repository 'Hello-World' for the organization 'octocat'.
 
@@ -28,7 +28,7 @@
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [string] $Repo,
+        [string] $Repository,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -45,7 +45,7 @@
     process {
         $inputObject = @{
             Method      = 'Get'
-            APIEndpoint = "/repos/$Owner/$Repo"
+            APIEndpoint = "/repos/$Owner/$Repository"
             Context     = $Context
         }
 

@@ -7,7 +7,7 @@
         List forks of a named repository.
 
         .EXAMPLE
-        Get-GitHubRepositoryFork -Owner 'octocat' -Repo 'Hello-World'
+        Get-GitHubRepositoryFork -Owner 'octocat' -Repository 'Hello-World'
 
         List forks of the 'Hello-World' repository owned by 'octocat'.
 
@@ -23,8 +23,8 @@
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(Mandatory)]
+        [string] $Repository,
 
         # The direction to sort the results by.
         [Parameter()]
@@ -58,7 +58,7 @@
 
         $inputObject = @{
             Method      = 'Get'
-            APIEndpoint = "/repos/$Owner/$Repo/forks"
+            APIEndpoint = "/repos/$Owner/$Repository/forks"
             Body        = $body
             Context     = $Context
         }

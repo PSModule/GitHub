@@ -9,7 +9,7 @@
         Information about autolinks are only available to repository administrators.
 
         .EXAMPLE
-        Remove-GitHubRepositoryAutolink -Owner 'octocat' -Repo 'Hello-World' -AutolinkId 1
+        Remove-GitHubRepositoryAutolink -Owner 'octocat' -Repository 'Hello-World' -AutolinkId 1
 
         Deletes the autolink with ID 1 for the repository 'Hello-World' owned by 'octocat'.
 
@@ -27,7 +27,7 @@
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [string] $Repo,
+        [string] $Repository,
 
         # The unique identifier of the autolink.
         [Parameter(Mandatory)]
@@ -50,12 +50,12 @@
     process {
         $inputObject = @{
             Method      = 'Delete'
-            APIEndpoint = "/repos/$Owner/$Repo/autolinks/$ID"
+            APIEndpoint = "/repos/$Owner/$Repository/autolinks/$ID"
             Body        = $body
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("Autolink with ID [$ID] for repository [$Owner/$Repo]", 'Delete')) {
+        if ($PSCmdlet.ShouldProcess("Autolink with ID [$ID] for repository [$Owner/$Repository]", 'Delete')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }

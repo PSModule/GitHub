@@ -110,13 +110,11 @@
         # Set the default owner to use in commands.
         [Parameter()]
         [Alias('Organization')]
-        [Alias('Org')]
         [string] $Owner,
 
         # Set the default repository to use in commands.
         [Parameter()]
-        [Alias('Repository')]
-        [string] $Repo,
+        [string] $Repository,
 
         # The host to connect to. Can use $env:GITHUB_SERVER_URL to set the host, as the protocol is removed automatically.
         # Example: github.com, github.enterprise.com, msx.ghe.com
@@ -128,8 +126,6 @@
         # Suppresses the output of the function.
         [Parameter()]
         [Alias('Quiet')]
-        [Alias('q')]
-        [Alias('s')]
         [switch] $Silent,
 
         # Make the connected context NOT the default context.
@@ -185,7 +181,7 @@
                 AuthType    = [string]$authType
                 Enterprise  = [string]$Enterprise
                 Owner       = [string]$Owner
-                Repo        = [string]$Repo
+                Repository  = [string]$Repository
             }
 
             Write-Verbose ($context | Format-Table | Out-String)

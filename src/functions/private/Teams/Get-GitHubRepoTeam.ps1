@@ -9,7 +9,7 @@
         [string] $Owner,
 
         [Parameter(Mandatory)]
-        [string] $Repo,
+        [string] $Repository,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -26,7 +26,7 @@
     process {
         $inputObject = @{
             Method      = 'Get'
-            APIEndpoint = "/repos/$Owner/$Repo/teams"
+            APIEndpoint = "/repos/$Owner/$Repository/teams"
             Context     = $Context
         }
 

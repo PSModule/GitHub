@@ -7,7 +7,7 @@
         Users with push access to the repository can delete a release.
 
         .EXAMPLE
-        Remove-GitHubRelease -Owner 'octocat' -Repo 'hello-world' -ID '1234567'
+        Remove-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -ID '1234567'
 
         Deletes the release with the ID '1234567' for the repository 'octocat/hello-world'.
 
@@ -24,8 +24,8 @@
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(Mandatory)]
+        [string] $Repository,
 
         # The unique identifier of the release.
         [Parameter(
@@ -50,11 +50,11 @@
     process {
         $inputObject = @{
             Method      = 'Delete'
-            APIEndpoint = "/repos/$Owner/$Repo/releases/$ID"
+            APIEndpoint = "/repos/$Owner/$Repository/releases/$ID"
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("Release with ID [$ID] in [$Owner/$Repo]", 'Delete')) {
+        if ($PSCmdlet.ShouldProcess("Release with ID [$ID] in [$Owner/$Repository]", 'Delete')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }

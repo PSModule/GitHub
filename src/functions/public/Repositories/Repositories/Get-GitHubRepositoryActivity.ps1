@@ -11,25 +11,25 @@
         see "[Viewing activity and data for your repository](https://docs.github.com/repositories/viewing-activity-and-data-for-your-repository)."
 
         .EXAMPLE
-        Get-GitHubRepositoryActivity -Owner 'PSModule' -Repo 'GitHub'
+        Get-GitHubRepositoryActivity -Owner 'PSModule' -Repository 'GitHub'
 
         .EXAMPLE
-        Get-GitHubRepositoryActivity -Owner 'PSModule' -Repo 'GitHub' -Direction 'asc'
+        Get-GitHubRepositoryActivity -Owner 'PSModule' -Repository 'GitHub' -Direction 'asc'
 
         .EXAMPLE
-        Get-GitHubRepositoryActivity -Owner 'PSModule' -Repo 'GitHub' -PerPage 100
+        Get-GitHubRepositoryActivity -Owner 'PSModule' -Repository 'GitHub' -PerPage 100
 
         .EXAMPLE
-        Get-GitHubRepositoryActivity -Owner 'PSModule' -Repo 'GitHub' -Before '2021-01-01T00:00:00Z'
+        Get-GitHubRepositoryActivity -Owner 'PSModule' -Repository 'GitHub' -Before '2021-01-01T00:00:00Z'
 
         .EXAMPLE
-        Get-GitHubRepositoryActivity -Owner 'PSModule' -Repo 'GitHub' -After '2021-01-01T00:00:00Z'
+        Get-GitHubRepositoryActivity -Owner 'PSModule' -Repository 'GitHub' -After '2021-01-01T00:00:00Z'
 
         .EXAMPLE
-        Get-GitHubRepositoryActivity -Owner 'PSModule' -Repo 'GitHub' -Ref 'refs/heads/main'
+        Get-GitHubRepositoryActivity -Owner 'PSModule' -Repository 'GitHub' -Ref 'refs/heads/main'
 
         .EXAMPLE
-        Get-GitHubRepositoryActivity -Owner 'PSModule' -Repo 'GitHub' -Actor 'octocat'
+        Get-GitHubRepositoryActivity -Owner 'PSModule' -Repository 'GitHub' -Actor 'octocat'
 
         .EXAMPLE
         $params = @{
@@ -43,7 +43,7 @@
         Gets the activity for the past 24 hours and selects the actor, activity type, ref, and timestamp.
 
         .EXAMPLE
-        Get-GitHubRepositoryActivity -Owner 'PSModule' -Repo 'GitHub' -ActivityType 'push','force_push'
+        Get-GitHubRepositoryActivity -Owner 'PSModule' -Repository 'GitHub' -ActivityType 'push','force_push'
 
         .NOTES
         [List repository activities](https://docs.github.com/rest/repos/repos#list-repository-activities)
@@ -57,8 +57,8 @@
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(Mandatory)]
+        [string] $Repository,
 
         # The direction to sort the results by.
         [Parameter()]
@@ -130,7 +130,7 @@
 
         $inputObject = @{
             Method      = 'Get'
-            APIEndpoint = "/repos/$Owner/$Repo/activity"
+            APIEndpoint = "/repos/$Owner/$Repository/activity"
             Body        = $body
             Context     = $Context
         }

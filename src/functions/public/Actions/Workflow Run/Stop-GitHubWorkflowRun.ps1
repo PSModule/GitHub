@@ -7,7 +7,7 @@
         Cancels a workflow run using its `run_id`. You can use this endpoint to cancel a workflow run that is in progress or waiting
 
         .EXAMPLE
-        Stop-GitHubWorkflowRun -Owner 'octocat' -Repo 'Hello-World' -ID 123456789
+        Stop-GitHubWorkflowRun -Owner 'octocat' -Repository 'Hello-World' -ID 123456789
 
         Cancels the workflow run with the ID 123456789 from the 'Hello-World' repository owned by 'octocat'
 
@@ -58,7 +58,7 @@
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("$Owner/$Repo/$ID", 'Cancel/Stop workflow run')) {
+        if ($PSCmdlet.ShouldProcess("$Owner/$Repository/$ID", 'Cancel/Stop workflow run')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }

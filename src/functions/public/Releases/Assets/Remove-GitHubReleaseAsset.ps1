@@ -7,7 +7,7 @@
         Delete a release asset
 
         .EXAMPLE
-        Remove-GitHubReleaseAsset -Owner 'octocat' -Repo 'hello-world' -ID '1234567'
+        Remove-GitHubReleaseAsset -Owner 'octocat' -Repository 'hello-world' -ID '1234567'
 
         Deletes the release asset with the ID '1234567' for the repository 'octocat/hello-world'.
 
@@ -23,8 +23,8 @@
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(Mandatory)]
+        [string] $Repository,
 
         # The unique identifier of the asset.
         [Parameter(Mandatory)]
@@ -47,11 +47,11 @@
     process {
         $inputObject = @{
             Method      = 'Delete'
-            APIEndpoint = "/repos/$Owner/$Repo/releases/assets/$ID"
+            APIEndpoint = "/repos/$Owner/$Repository/releases/assets/$ID"
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("Asset with ID [$ID] in [$Owner/$Repo]", 'Delete')) {
+        if ($PSCmdlet.ShouldProcess("Asset with ID [$ID] in [$Owner/$Repository]", 'Delete')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }

@@ -80,7 +80,7 @@
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("$Owner/$Repo/$ID", 'Start workflow')) {
+        if ($PSCmdlet.ShouldProcess("$Owner/$Repository/$ID", 'Start workflow')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }

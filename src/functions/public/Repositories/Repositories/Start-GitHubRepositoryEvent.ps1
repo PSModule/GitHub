@@ -49,8 +49,8 @@
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(Mandatory)]
+        [string] $Repository,
 
         # A custom webhook event name. Must be 100 characters or fewer.
         [Parameter(Mandatory)]
@@ -85,7 +85,7 @@
 
         $inputObject = @{
             Method      = 'Post'
-            APIEndpoint = "/repos/$Owner/$Repo/dispatches"
+            APIEndpoint = "/repos/$Owner/$Repository/dispatches"
             Body        = $body
             Context     = $Context
         }

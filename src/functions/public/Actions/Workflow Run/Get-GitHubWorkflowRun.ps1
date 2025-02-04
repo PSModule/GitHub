@@ -12,22 +12,22 @@
         `event`, `head_sha`, `status`.
 
         .EXAMPLE
-        Get-GitHubWorkflowRun -Owner 'owner' -Repo 'repo'
+        Get-GitHubWorkflowRun -Owner 'owner' -Repository 'repo'
 
         Lists all workflow runs for a repository.
 
         .EXAMPLE
-        Get-GitHubWorkflowRun -Owner 'owner' -Repo 'repo' -Actor 'octocat' -Branch 'main' -Event 'push' -Status 'success'
+        Get-GitHubWorkflowRun -Owner 'owner' -Repository 'repo' -Actor 'octocat' -Branch 'main' -Event 'push' -Status 'success'
 
         Lists all workflow runs for a repository with the specified actor, branch, event, and status.
 
         .EXAMPLE
-        Get-GitHubWorkflowRun -Owner 'octocat' -Repo 'Hello-World' -ID '42'
+        Get-GitHubWorkflowRun -Owner 'octocat' -Repository 'Hello-World' -ID '42'
 
         Gets all workflow runs for the workflow with the ID `42` in the repository `Hello-World` owned by `octocat`.
 
         .EXAMPLE
-        Get-GitHubWorkflowRun -Owner 'octocat' -Repo 'Hello-World' -Name 'nightly.yml' -Actor 'octocat' -Branch 'main' -Event 'push' -Status 'success'
+        Get-GitHubWorkflowRun -Owner 'octocat' -Repository 'Hello-World' -Name 'nightly.yml' -Actor 'octocat' -Branch 'main' -Event 'push' -Status 'success'
 
         Gets all workflow runs for the workflow with the name `nightly.yml` in the repository `Hello-World` owned by `octocat` that were triggered by
         the user `octocat` on the branch `main` and have the status `success`.
@@ -132,7 +132,7 @@
     process {
         $params = @{
             Owner               = $Owner
-            Repo                = $Repo
+            Repository          = $Repository
             Actor               = $Actor
             Branch              = $Branch
             Event               = $Event
@@ -151,7 +151,7 @@
             }
 
             'ByName' {
-                $params['ID'] = (Get-GitHubWorkflow -Owner $Owner -Repo $Repository -Name $Name).id
+                $params['ID'] = (Get-GitHubWorkflow -Owner $Owner -Repository $Repository -Name $Name).id
                 Get-GitHubWorkflowRunByWorkflow @params
             }
 

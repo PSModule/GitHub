@@ -15,7 +15,7 @@
         This endpoint is not compatible with fine-grained personal access tokens.
 
         .EXAMPLE
-        Get-GitHubRepositoryTeam -Owner 'PSModule' -Repo 'GitHub'
+        Get-GitHubRepositoryTeam -Owner 'PSModule' -Repository 'GitHub'
 
         Lists the teams that have access to the specified repository and that are also visible to the authenticated user.
 
@@ -32,8 +32,8 @@
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(Mandatory)]
+        [string] $Repository,
 
         # The number of results per page (max 100).
         [Parameter()]
@@ -60,7 +60,7 @@
 
         $inputObject = @{
             Method      = 'Get'
-            APIEndpoint = "/repos/$Owner/$Repo/teams"
+            APIEndpoint = "/repos/$Owner/$Repository/teams"
             Body        = $body
             Context     = $Context
         }

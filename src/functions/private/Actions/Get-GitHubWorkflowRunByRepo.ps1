@@ -12,19 +12,19 @@
         `created`, `event`, `head_sha`, `status`.
 
         .EXAMPLE
-        Get-GitHubWorkflowRunByRepo -Owner 'owner' -Repo 'repo'
+        Get-GitHubWorkflowRunByRepo -Owner 'owner' -Repository 'repo'
 
         Lists all workflow runs for a repository.
 
         .EXAMPLE
-        Get-GitHubWorkflowRunByRepo -Owner 'owner' -Repo 'repo' -Actor 'octocat' -Branch 'main' -Event 'push' -Status 'success'
+        Get-GitHubWorkflowRunByRepo -Owner 'owner' -Repository 'repo' -Actor 'octocat' -Branch 'main' -Event 'push' -Status 'success'
 
         Lists all workflow runs for a repository with the specified actor, branch, event, and status.
 
         .NOTES
         [List workflow runs for a repository](https://docs.github.com/rest/actions/workflow-runs?apiVersion=2022-11-28#list-workflow-runs-for-a-repository)
     #>
-    [CmdletBinding(DefaultParameterSetName = 'Repo')]
+    [CmdletBinding()]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidAssignmentToAutomaticVariable', 'Event',
         Justification = 'A parameter that is used in the api call.')]
@@ -35,7 +35,7 @@
 
         # The name of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [string] $Repo,
+        [string] $Repository,
 
         # Returns someone's workflow runs. Use the login for the user who created the push associated with the check suite or workflow run.
         [Parameter()]
@@ -108,7 +108,7 @@
 
         $inputObject = @{
             Method      = 'Get'
-            APIEndpoint = "/repos/$Owner/$Repo/actions/runs"
+            APIEndpoint = "/repos/$Owner/$Repository/actions/runs"
             Body        = $body
             Context     = $Context
         }

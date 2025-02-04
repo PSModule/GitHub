@@ -7,7 +7,7 @@
         Users with admin access to the repository can create an autolink.
 
         .EXAMPLE
-        New-GitHubRepositoryAutolink -Owner 'octocat' -Repo 'Hello-World' -KeyPrefix 'GH-' -UrlTemplate 'https://www.example.com/issue/<num>'
+        New-GitHubRepositoryAutolink -Owner 'octocat' -Repository 'Hello-World' -KeyPrefix 'GH-' -UrlTemplate 'https://www.example.com/issue/<num>'
 
         Creates an autolink for the repository 'Hello-World' owned by 'octocat' that links to <https://www.example.com/issue/123>
         when the prefix 'GH-' is found in an issue, pull request, or commit.
@@ -26,7 +26,7 @@
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [string] $Repo,
+        [string] $Repository,
 
         # This prefix appended by certain characters will generate a link any time it is found in an issue, pull request, or commit.
         [Parameter(Mandatory)]
@@ -66,12 +66,12 @@
 
         $inputObject = @{
             Method      = 'Post'
-            APIEndpoint = "/repos/$Owner/$Repo/autolinks"
+            APIEndpoint = "/repos/$Owner/$Repository/autolinks"
             Body        = $body
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("Autolink for repository [$Owner/$Repo]", 'Create')) {
+        if ($PSCmdlet.ShouldProcess("Autolink for repository [$Owner/$Repository]", 'Create')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }

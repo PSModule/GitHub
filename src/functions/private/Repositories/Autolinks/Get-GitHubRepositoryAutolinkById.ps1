@@ -9,7 +9,7 @@
         Information about autolinks are only available to repository administrators.
 
         .EXAMPLE
-        Get-GitHubRepositoryAutolinkById -Owner 'octocat' -Repo 'Hello-World' -ID 1
+        Get-GitHubRepositoryAutolinkById -Owner 'octocat' -Repository 'Hello-World' -ID 1
 
         Gets the autolink with the ID 1 for the repository 'Hello-World' owned by 'octocat'.
 
@@ -26,7 +26,7 @@
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [string] $Repo,
+        [string] $Repository,
 
         # The unique identifier of the autolink.
         [Parameter(Mandatory)]
@@ -49,7 +49,7 @@
     process {
         $inputObject = @{
             Method      = 'Get'
-            APIEndpoint = "/repos/$Owner/$Repo/autolinks/$AutolinkId"
+            APIEndpoint = "/repos/$Owner/$Repository/autolinks/$AutolinkId"
             Context     = $Context
         }
 
