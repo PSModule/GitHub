@@ -119,3 +119,76 @@ Write-Debug "Repo: [$Repo]"
 
 # What about "Name", "Login", "Username"
 ```
+
+
+## TO DO
+
+In private, make Context Mandatory
+
+if ([string]::IsNullOrEmpty($Repo)) {
+            $Repo = $Context.Repo
+        }
+Write-Debug "Repo: [$Repo]"
+if (-not $Repo) { throw }
+
+Remove [org] alias on $organization parameter
+
+Rename $Repo to $Repository
+
+Add Alias Organization and User for $Owner prarm
+Aliases, one pr line or one pr definition?
+
+Document: API Method is written in Sentencase/PascalCase, Post, Delete, Put, Get, etc.
+
+SupportsShouldProcess must not be on Get- functions
+
+Context Enterprise, Owner, Organization, ID, Repo Are mandatory in private functions
+
+
+Parameters always have a [Parameter()] attribute
+Parameters always define type, then a space to the value [string] $String
+ID should be the main parameter name
+Parameters, snake_case -> PascalCase
+
+Dont use DefaultParameterSet = '__AllParameterSets'
+
+Class every return to have an agreed interface
+Remove API spefic properties
+
+Username alias is login
+
+All powershell keywords = lowercase
+
+Brace style: One True Bracing Style (OTBS)
+https://en.wikipedia.org/wiki/Indentation_style
+
+Private functions do not take pipeline params
+Private functions have no aliases, on functions or params
+
+We do really not have to have 100% API coverage... like Hovercards.. ?
+convert all filter types to function type (we have begin, process, end)
+
+Parameter attribute order:
+1. Parameter()]
+Function attribute order:
+y. [CmdletBinding()]
+z. param()
+
+
+Output to pipeline, select or foreach?
+Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
+        }
+
+Invoke-GitHubAPI @inputObject | Select-Object -ExpandProperty Response
+
+
+Rename APIEndpoint to Endpoint (maybe keep APIEndpoint as alias)
+
+
+Remove if([string]IsNullOrEmpty())
+
+
+Add a file where we store endponits we do not wish to cover. Update the coverage report with ⚠️
+
+Parameter name design: Assume there is an object that is processed. Not RepositoryID for a function that has repository in it. The value/name at hand is related to the object being processed. Object oriented naming.

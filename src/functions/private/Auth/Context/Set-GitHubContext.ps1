@@ -54,7 +54,11 @@ function Set-GitHubContext {
             Write-Debug "Getting info on the context [$($contextObj['AuthType'])]."
             switch -Regex (($contextObj['AuthType'])) {
                 'PAT|UAT|IAT' {
-                    $viewer = Get-GitHubViewer -Context [UserGitHubContext]($contextObj)
+                    if ($_ -eq 'IAT') {
+                        $viewer = Get-GitHubViewer -Context [InstallationGitHubContext]($contextObj)
+                    } else {
+                        $viewer = Get-GitHubViewer -Context [UserGitHubContext]($contextObj)
+                    }
                     $viewer | Out-String -Stream | ForEach-Object { Write-Debug $_ }
                     if ([string]::IsNullOrEmpty($contextObj['DisplayName'])) {
                         $contextObj['DisplayName'] = [string]$viewer.name
