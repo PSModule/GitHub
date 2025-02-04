@@ -1,6 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '6.0.0' }
-
-function Update-GitHubUserAccessToken {
+﻿function Update-GitHubUserAccessToken {
     <#
         .SYNOPSIS
         Updates the GitHub access token.
