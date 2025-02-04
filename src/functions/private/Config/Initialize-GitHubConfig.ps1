@@ -1,4 +1,6 @@
-﻿function Initialize-GitHubConfig {
+﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '6.0.0' }
+
+function Initialize-GitHubConfig {
     <#
         .SYNOPSIS
         Initialize the GitHub module configuration.
