@@ -1,4 +1,4 @@
-function Get-GitHubAppJSONWebToken {
+﻿function Get-GitHubAppJSONWebToken {
     <#
         .SYNOPSIS
         Generates a JSON Web Token (JWT) for a GitHub App.

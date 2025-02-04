@@ -53,4 +53,3 @@
         Write-Debug "[$stackPath] - End"
     }
 }
-
