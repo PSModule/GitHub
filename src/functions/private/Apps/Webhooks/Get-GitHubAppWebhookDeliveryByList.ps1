@@ -27,8 +27,8 @@
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter()]
-        [object] $Context
+        [Parameter(Mandatory)]
+        [GitHubContext] $Context
     )
 
     begin {
@@ -38,43 +38,39 @@
     }
 
     process {
-        try {
-            $body = @{
-                per_page = $PerPage
-            }
+        $body = @{
+            per_page = $PerPage
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = '/app/hook/deliveries'
-                Method      = 'GET'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'Get'
+            APIEndpoint = '/app/hook/deliveries'
+            Body        = $body
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                $_.Response | ForEach-Object {
-                    [GitHubWebhook](
-                        @{
-                            ID             = $_.id
-                            GUID           = $_.guid
-                            DeliveredAt    = $_.delivered_at
-                            Redelivery     = $_.redelivery
-                            Duration       = $_.duration
-                            Status         = $_.status
-                            StatusCode     = $_.status_code
-                            Event          = $_.event
-                            Action         = $_.action
-                            InstallationID = $_.installation.id
-                            RepositoryID   = $_.repository.id
-                            ThrottledAt    = $_.throttled_at
-                            URL            = $_.url
-                            Request        = $_.request
-                            Response       = $_.response
-                        }
-                    )
-                }
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            $_.Response | ForEach-Object {
+                [GitHubWebhook](
+                    @{
+                        ID             = $_.id
+                        GUID           = $_.guid
+                        DeliveredAt    = $_.delivered_at
+                        Redelivery     = $_.redelivery
+                        Duration       = $_.duration
+                        Status         = $_.status
+                        StatusCode     = $_.status_code
+                        Event          = $_.event
+                        Action         = $_.action
+                        InstallationID = $_.installation.id
+                        RepositoryID   = $_.repository.id
+                        ThrottledAt    = $_.throttled_at
+                        URL            = $_.url
+                        Request        = $_.request
+                        Response       = $_.response
+                    }
+                )
             }
-        } catch {
-            throw $_
         }
     }
 

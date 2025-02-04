@@ -38,36 +38,34 @@
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter()]
-        [object] $Context
+        [Parameter(Mandatory)]
+        [GitHubContext] $Context
     )
 
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
+        Assert-GitHubContext -Context $Context -AuthType IAT, UAT
+        # enterprise_organization_installations=write
     }
 
     process {
-        try {
-            $body = @{
-                client_id            = $ClientID
-                repository_selection = $RepositorySelection
-                repositories         = $Repositories
-            }
-            $body | Remove-HashtableEntry -NullOrEmptyValues
+        $body = @{
+            client_id            = $ClientID
+            repository_selection = $RepositorySelection
+            repositories         = $Repositories
+        }
+        $body | Remove-HashtableEntry -NullOrEmptyValues
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/enterprises/$Enterprise/apps/organizations/$Organization/installations"
-                Method      = 'Post'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'Post'
+            APIEndpoint = "/enterprises/$Enterprise/apps/organizations/$Organization/installations"
+            Body        = $body
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 
