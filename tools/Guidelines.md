@@ -157,10 +157,10 @@ Remove API spefic properties
 
 Username alias is login
 
-All powershell keywords = lowercase
+All PowerShell keywords = lowercase
 
 Brace style: One True Bracing Style (OTBS)
-https://en.wikipedia.org/wiki/Indentation_style
+<https://en.wikipedia.org/wiki/Indentation_style>
 
 Private functions do not take pipeline params
 Private functions have no aliases, on functions or params
