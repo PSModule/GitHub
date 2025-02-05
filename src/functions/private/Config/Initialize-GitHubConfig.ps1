@@ -31,35 +31,30 @@ function Initialize-GitHubConfig {
     }
 
     process {
-        try {
-            Write-Debug "Force:           [$Force]"
-            if ($Force) {
-                Write-Debug 'Forcing initialization of GitHubConfig.'
-                $context = Set-Context -ID $script:GitHub.DefaultConfig.ID -Context $script:GitHub.DefaultConfig -PassThru
-                $script:GitHub.Config = [GitHubConfig]$context
-                return
-            }
-
-            Write-Debug "GitHubConfig ID: [$($script:GitHub.Config.ID)]"
-            if ($null -ne $script:GitHub.Config) {
-                Write-Debug 'GitHubConfig already initialized and available in memory.'
-                return
-            }
-
-            Write-Debug 'Attempt to load the stored GitHubConfig from ContextVault'
-            $context = Get-Context -ID $script:GitHub.DefaultConfig.ID
-            if ($context) {
-                Write-Debug 'GitHubConfig loaded into memory.'
-                $script:GitHub.Config = [GitHubConfig]$context
-                return
-            }
-            Write-Debug 'Initializing GitHubConfig from defaults'
+        Write-Debug "Force:           [$Force]"
+        if ($Force) {
+            Write-Debug 'Forcing initialization of GitHubConfig.'
             $context = Set-Context -ID $script:GitHub.DefaultConfig.ID -Context $script:GitHub.DefaultConfig -PassThru
             $script:GitHub.Config = [GitHubConfig]$context
-        } catch {
-            Write-Error $_
-            throw 'Failed to initialize GitHub config'
+            return
         }
+
+        Write-Debug "GitHubConfig ID: [$($script:GitHub.Config.ID)]"
+        if ($null -ne $script:GitHub.Config) {
+            Write-Debug 'GitHubConfig already initialized and available in memory.'
+            return
+        }
+
+        Write-Debug 'Attempt to load the stored GitHubConfig from ContextVault'
+        $context = Get-Context -ID $script:GitHub.DefaultConfig.ID
+        if ($context) {
+            Write-Debug 'GitHubConfig loaded into memory.'
+            $script:GitHub.Config = [GitHubConfig]$context
+            return
+        }
+        Write-Debug 'Initializing GitHubConfig from defaults'
+        $context = Set-Context -ID $script:GitHub.DefaultConfig.ID -Context $script:GitHub.DefaultConfig -PassThru
+        $script:GitHub.Config = [GitHubConfig]$context
     }
 
     end {

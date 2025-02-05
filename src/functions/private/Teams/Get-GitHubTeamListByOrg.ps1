@@ -33,8 +33,7 @@
     }
 
     process {
-        try {
-            $query = @"
+        $query = @"
 query(`$org: String!, `$after: String) {
   organization(login: `$org) {
     teams(first: 100, after: `$after) {
@@ -71,52 +70,49 @@ query(`$org: String!, `$after: String) {
 }
 "@
 
-            # Variables hash that will be sent with the query
-            $variables = @{
-                org = $Organization
+        # Variables hash that will be sent with the query
+        $variables = @{
+            org = $Organization
+        }
+
+        # Prepare to store results and handle pagination
+        $hasNextPage = $true
+        $after = $null
+
+        while ($hasNextPage) {
+            # Update the cursor for pagination
+            $variables['after'] = $after
+
+            # Send the request to the GitHub GraphQL API
+            $response = Invoke-GitHubGraphQLQuery -Query $query -Variables $variables -Context $Context
+
+            # Extract team data
+            $teams = $response.data.organization.teams
+
+            # Accumulate the teams in results
+            $teams.nodes | ForEach-Object {
+                [GitHubTeam](
+                    @{
+                        Name          = $_.name
+                        Slug          = $_.slug
+                        NodeID        = $_.id
+                        CombinedSlug  = $_.combinedSlug
+                        DatabaseId    = $_.databaseId
+                        Description   = $_.description
+                        Notifications = $_.notificationSetting -eq 'NOTIFICATIONS_ENABLED' ? $true : $false
+                        Visible       = $_.privacy -eq 'VISIBLE' ? $true : $false
+                        ParentTeam    = $_.parentTeam.slug
+                        Organization  = $_.organization.login
+                        ChildTeams    = $_.childTeams.nodes.name
+                        CreatedAt     = $_.createdAt
+                        UpdatedAt     = $_.updatedAt
+                    }
+                )
             }
 
-            # Prepare to store results and handle pagination
-            $hasNextPage = $true
-            $after = $null
-
-            while ($hasNextPage) {
-                # Update the cursor for pagination
-                $variables['after'] = $after
-
-                # Send the request to the GitHub GraphQL API
-                $response = Invoke-GitHubGraphQLQuery -Query $query -Variables $variables -Context $Context
-
-                # Extract team data
-                $teams = $response.data.organization.teams
-
-                # Accumulate the teams in results
-                $teams.nodes | ForEach-Object {
-                    [GitHubTeam](
-                        @{
-                            Name          = $_.name
-                            Slug          = $_.slug
-                            NodeID        = $_.id
-                            CombinedSlug  = $_.combinedSlug
-                            DatabaseId    = $_.databaseId
-                            Description   = $_.description
-                            Notifications = $_.notificationSetting -eq 'NOTIFICATIONS_ENABLED' ? $true : $false
-                            Visible       = $_.privacy -eq 'VISIBLE' ? $true : $false
-                            ParentTeam    = $_.parentTeam.slug
-                            Organization  = $_.organization.login
-                            ChildTeams    = $_.childTeams.nodes.name
-                            CreatedAt     = $_.createdAt
-                            UpdatedAt     = $_.updatedAt
-                        }
-                    )
-                }
-
-                # Check if there's another page to fetch
-                $hasNextPage = $teams.pageInfo.hasNextPage
-                $after = $teams.pageInfo.endCursor
-            }
-        } catch {
-            throw $_
+            # Check if there's another page to fetch
+            $hasNextPage = $teams.pageInfo.hasNextPage
+            $after = $teams.pageInfo.endCursor
         }
     }
 

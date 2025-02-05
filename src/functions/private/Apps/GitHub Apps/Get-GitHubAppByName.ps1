@@ -36,18 +36,14 @@
     }
 
     process {
-        try {
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/apps/$AppSlug"
-                Method      = 'GET'
-            }
+        $inputObject = @{
+            Context     = $Context
+            APIEndpoint = "/apps/$AppSlug"
+            Method      = 'GET'
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
     end {

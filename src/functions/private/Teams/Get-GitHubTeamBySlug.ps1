@@ -36,8 +36,7 @@
     }
 
     process {
-        try {
-            $query = @"
+        $query = @"
 query(`$org: String!, `$teamSlug: String!) {
   organization(login: `$org) {
     team(slug: `$teamSlug) {
@@ -69,43 +68,40 @@ query(`$org: String!, `$teamSlug: String!) {
 }
 "@
 
-            # Variables hash that will be sent with the query
-            $variables = @{
-                org      = $Organization
-                teamSlug = $Slug
-            }
-
-            # Send the request to the GitHub GraphQL API
-            $response = Invoke-GitHubGraphQLQuery -Query $query -Variables $variables -Context $Context
-
-            # Extract team data
-            $team = $response.data.organization.team
-
-            # Output the team object
-            if (-not $team) {
-                return
-            }
-
-            [GitHubTeam](
-                @{
-                    Name          = $team.name
-                    Slug          = $team.slug
-                    NodeID        = $team.id
-                    CombinedSlug  = $team.CombinedSlug
-                    DatabaseID    = $team.DatabaseId
-                    Description   = $team.description
-                    Notifications = $team.notificationSetting -eq 'NOTIFICATIONS_ENABLED' ? $true : $false
-                    Visible       = $team.privacy -eq 'VISIBLE' ? $true : $false
-                    ParentTeam    = $team.parentTeam.slug
-                    Organization  = $team.organization.login
-                    ChildTeams    = $team.childTeams.nodes.name
-                    CreatedAt     = $team.createdAt
-                    UpdatedAt     = $team.updatedAt
-                }
-            )
-        } catch {
-            throw $_
+        # Variables hash that will be sent with the query
+        $variables = @{
+            org      = $Organization
+            teamSlug = $Slug
         }
+
+        # Send the request to the GitHub GraphQL API
+        $response = Invoke-GitHubGraphQLQuery -Query $query -Variables $variables -Context $Context
+
+        # Extract team data
+        $team = $response.data.organization.team
+
+        # Output the team object
+        if (-not $team) {
+            return
+        }
+
+        [GitHubTeam](
+            @{
+                Name          = $team.name
+                Slug          = $team.slug
+                NodeID        = $team.id
+                CombinedSlug  = $team.CombinedSlug
+                DatabaseID    = $team.DatabaseId
+                Description   = $team.description
+                Notifications = $team.notificationSetting -eq 'NOTIFICATIONS_ENABLED' ? $true : $false
+                Visible       = $team.privacy -eq 'VISIBLE' ? $true : $false
+                ParentTeam    = $team.parentTeam.slug
+                Organization  = $team.organization.login
+                ChildTeams    = $team.childTeams.nodes.name
+                CreatedAt     = $team.createdAt
+                UpdatedAt     = $team.updatedAt
+            }
+        )
     }
 
     end {

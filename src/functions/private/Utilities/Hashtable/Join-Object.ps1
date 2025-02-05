@@ -76,31 +76,26 @@
     }
 
     process {
-        try {
-
-            if ($Main -isnot [hashtable]) {
-                $Main = $Main | ConvertTo-Hashtable
-            }
-            $hashtable = $Main.clone()
-
-            foreach ($Override in $Overrides) {
-                if ($Override -isnot [hashtable]) {
-                    $Override = $Override | ConvertTo-Hashtable
-                }
-
-                $Override.Keys | ForEach-Object {
-                    $hashtable[$_] = $Override[$_]
-                }
-            }
-
-            if ($AsHashtable) {
-                return $hashtable
-            }
-
-            $hashtable | ConvertFrom-HashTable
-        } catch {
-            throw $_
+        if ($Main -isnot [hashtable]) {
+            $Main = $Main | ConvertTo-Hashtable
         }
+        $hashtable = $Main.clone()
+
+        foreach ($Override in $Overrides) {
+            if ($Override -isnot [hashtable]) {
+                $Override = $Override | ConvertTo-Hashtable
+            }
+
+            $Override.Keys | ForEach-Object {
+                $hashtable[$_] = $Override[$_]
+            }
+        }
+
+        if ($AsHashtable) {
+            return $hashtable
+        }
+
+        $hashtable | ConvertFrom-HashTable
     }
 
     end {

@@ -52,46 +52,42 @@
     }
 
     process {
-        try {
-            $outputLines = @()
+        $outputLines = @()
 
-            Write-Debug "Input object type: $($InputObject.GetType().Name)"
-            Write-Debug "Input object value:"
+        Write-Debug "Input object type: $($InputObject.GetType().Name)"
+        Write-Debug 'Input object value:'
+        Write-Debug ($InputObject | Out-String)
+
+        if ($InputObject -is [hashtable]) {
+            $InputObject = [PSCustomObject]$InputObject
+        }
+
+        foreach ($property in $InputObject.PSObject.Properties) {
+            $key = $property.Name
+            $value = $property.Value
+
+            Write-Debug "Processing property: $key"
+            Write-Debug "Property value type: $($value.GetType().Name)"
+            Write-Debug 'Property value:'
             Write-Debug ($InputObject | Out-String)
 
-            if ($InputObject -is [hashtable]) {
-                $InputObject = [PSCustomObject]$InputObject
+            # Convert hashtable or PSCustomObject to compressed JSON
+            if ($value -is [hashtable] -or $value -is [PSCustomObject]) {
+                Write-Debug 'Converting property value to JSON'
+                $value = $value | ConvertTo-Json -Compress -Depth 100
+                Write-Debug 'Property value:'
+                Write-Debug $value
             }
 
-            foreach ($property in $InputObject.PSObject.Properties) {
-                $key = $property.Name
-                $value = $property.Value
-
-                Write-Debug "Processing property: $key"
-                Write-Debug "Property value type: $($value.GetType().Name)"
-                Write-Debug "Property value:"
-                Write-Debug ($InputObject | Out-String)
-
-                # Convert hashtable or PSCustomObject to compressed JSON
-                if ($value -is [hashtable] -or $value -is [PSCustomObject]) {
-                    Write-Debug "Converting property value to JSON"
-                    $value = $value | ConvertTo-Json -Compress -Depth 100
-                    Write-Debug 'Property value:'
-                    Write-Debug $value
-                }
-
-                $guid = [Guid]::NewGuid().ToString()
-                $EOFMarker = "EOF_$guid"
-                $outputLines += "$key<<$EOFMarker"
-                $outputLines += $value
-                $outputLines += $EOFMarker
-            }
-            Write-Debug "Output lines:"
-            Write-Debug ($outputLines | Out-String)
-            $outputLines
-        } catch {
-            throw $_
+            $guid = [Guid]::NewGuid().ToString()
+            $EOFMarker = "EOF_$guid"
+            $outputLines += "$key<<$EOFMarker"
+            $outputLines += $value
+            $outputLines += $EOFMarker
         }
+        Write-Debug 'Output lines:'
+        Write-Debug ($outputLines | Out-String)
+        $outputLines
     }
 
     end {
