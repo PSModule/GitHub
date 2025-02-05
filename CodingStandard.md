@@ -1,10 +1,7 @@
----
+# Coding Standards for `GitHub`
 
-# Combined Specification for the Module
-
-This document outlines the conventions, naming standards, and best practices for building PowerShell functions and classes in this module. It merges all guidelines, including the additional notes and clarifications.
-
----
+Start by reading the general coding standards for [`PSModule`](https://psmodule.io/docs) which is the basis for all modules in the framework.
+Additions or adjustments to those defaults are covered in this document to ensure that the modules drive consistancy for all developers.
 
 ## General Coding Standards
 
