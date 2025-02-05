@@ -28,7 +28,8 @@ filter Invoke-GitHubAPI {
     param(
         # The HTTP method to be used for the API request. It can be one of the following: GET, POST, PUT, DELETE, or PATCH.
         [Parameter()]
-        [Microsoft.PowerShell.Commands.WebRequestMethod] $Method = 'Get',
+        [ValidateSet('GET', 'POST', 'PUT', 'DELETE', 'PATCH')]
+        $Method = 'GET',
 
         # The base URI for the GitHub API. This is usually `https://api.github.com`, but can be adjusted if necessary.
         [Parameter(
@@ -157,7 +158,7 @@ filter Invoke-GitHubAPI {
 
         if ($Body) {
             # Use body to create the query string for certain situations
-            if ($Method -eq 'Get') {
+            if ($Method -eq 'GET') {
                 # If body conatins 'per_page' and its is null, set it to $context.PerPage
                 if ($Body['per_page'] -eq 0) {
                     Write-Debug "Setting per_page to the default value in context [$($Context.PerPage)]."

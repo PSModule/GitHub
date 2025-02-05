@@ -57,7 +57,7 @@
         }
 
         $inputObject = @{
-            Method      = 'Post'
+            Method      = 'POST'
             APIEndpoint = '/markdown'
             Body        = $body
             Context     = $Context

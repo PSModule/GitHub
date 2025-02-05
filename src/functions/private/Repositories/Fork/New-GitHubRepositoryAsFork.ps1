@@ -82,7 +82,7 @@
         }
 
         $inputObject = @{
-            Method      = 'Post'
+            Method      = 'POST'
             APIEndpoint = "/repos/$Owner/$Repository/forks"
             Body        = $body
             Context     = $Context

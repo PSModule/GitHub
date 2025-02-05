@@ -52,7 +52,7 @@
         }
 
         $inputObject = @{
-            Method      = 'Get'
+            Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/license"
             ContentType = $contentType
             Context     = $Context

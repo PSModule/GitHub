@@ -85,7 +85,7 @@
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
         $inputObject = @{
-            Method      = 'Post'
+            Method      = 'POST'
             APIEndpoint = "/orgs/$Organization/invitations"
             Body        = $body
             Context     = $Context

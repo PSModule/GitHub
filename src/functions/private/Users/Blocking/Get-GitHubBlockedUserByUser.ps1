@@ -40,7 +40,7 @@
         }
 
         $inputObject = @{
-            Method      = 'Get'
+            Method      = 'GET'
             APIEndpoint = '/user/blocks'
             Body        = $body
             Context     = $Context

@@ -33,7 +33,7 @@
 
     process {
         $inputObject = @{
-            Method      = 'Get'
+            Method      = 'GET'
             APIEndpoint = '/gitignore/templates'
             Context     = $Context
         }

@@ -44,7 +44,7 @@
         }
 
         $inputObject = @{
-            Method      = 'Get'
+            Method      = 'GET'
             APIEndpoint = '/user/public_emails'
             Body        = $body
             Context     = $Context

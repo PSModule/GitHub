@@ -61,7 +61,7 @@
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
         $inputObject = @{
-            Method      = 'Get'
+            Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/contributors"
             Body        = $body
             Context     = $Context

@@ -246,7 +246,7 @@ filter New-GitHubRepositoryOrg {
         }
 
         $inputObject = @{
-            Method      = 'Post'
+            Method      = 'POST'
             APIEndpoint = "/orgs/$Owner/repos"
             Body        = $body
             Context     = $Context

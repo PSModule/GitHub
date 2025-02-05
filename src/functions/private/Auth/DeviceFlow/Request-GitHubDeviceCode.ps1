@@ -50,7 +50,7 @@
         }
 
         $RESTParams = @{
-            Method  = 'Post'
+            Method  = 'POST'
             Uri     = "https://$HostName/login/device/code"
             Headers = $headers
             Body    = $body

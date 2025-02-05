@@ -45,7 +45,7 @@
         }
 
         $inputObject = @{
-            Method      = 'Get'
+            Method      = 'GET'
             APIEndpoint = '/repositories'
             Body        = $body
             Context     = $Context

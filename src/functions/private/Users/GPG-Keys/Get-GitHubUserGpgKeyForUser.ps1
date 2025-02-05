@@ -49,7 +49,7 @@
         }
 
         $inputObject = @{
-            Method      = 'Get'
+            Method      = 'GET'
             APIEndpoint = "/users/$Username/gpg_keys"
             Body        = $body
             Context     = $Context

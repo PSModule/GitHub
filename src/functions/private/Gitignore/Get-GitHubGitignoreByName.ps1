@@ -35,7 +35,7 @@
 
     process {
         $inputObject = @{
-            Method      = 'Get'
+            Method      = 'GET'
             APIEndpoint = "/gitignore/templates/$Name"
             Accept      = 'application/vnd.github.raw+json'
             Context     = $Context

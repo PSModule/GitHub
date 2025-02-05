@@ -93,7 +93,7 @@
         }
 
         $inputObject = @{
-            Method      = 'Post'
+            Method      = 'POST'
             APIEndpoint = "/repos/$TemplateOwner/$TemplateRepo/generate"
             Body        = $body
             Context     = $Context

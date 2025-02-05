@@ -40,7 +40,7 @@
 
     process {
         $inputObject = @{
-            Method      = 'Put'
+            Method      = 'PUT'
             APIEndpoint = "/repos/$Owner/$Repository/actions/workflows/$ID/enable"
             Context     = $Context
         }

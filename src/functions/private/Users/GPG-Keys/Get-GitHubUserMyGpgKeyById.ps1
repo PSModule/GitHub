@@ -41,7 +41,7 @@
 
     process {
         $inputObject = @{
-            Method      = 'Get'
+            Method      = 'GET'
             APIEndpoint = "/user/gpg_keys/$ID"
             Context     = $Context
         }

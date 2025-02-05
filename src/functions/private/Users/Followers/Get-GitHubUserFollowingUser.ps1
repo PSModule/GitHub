@@ -50,7 +50,7 @@
         }
 
         $inputObject = @{
-            Method      = 'Get'
+            Method      = 'GET'
             APIEndpoint = "/users/$Username/following"
             Body        = $body
             Context     = $Context

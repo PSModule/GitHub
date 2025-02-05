@@ -58,7 +58,7 @@
         }
 
         $inputObject = @{
-            Method      = 'Get'
+            Method      = 'GET'
             APIEndpoint = "/users/$Username/hovercard"
             Body        = $body
             Context     = $Context

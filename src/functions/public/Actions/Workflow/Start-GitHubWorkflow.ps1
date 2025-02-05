@@ -74,7 +74,7 @@
         }
 
         $inputObject = @{
-            Method      = 'Post'
+            Method      = 'POST'
             APIEndpoint = "/repos/$Owner/$Repository/actions/workflows/$ID/dispatches"
             Body        = $body
             Context     = $Context

@@ -41,7 +41,7 @@
 
     process {
         $inputObject = @{
-            Method      = 'Delete'
+            Method      = 'DELETE'
             APIEndpoint = "/enterprises/$Enterprise/apps/organizations/$Organization/installations/$ID"
             Context     = $Context
         }

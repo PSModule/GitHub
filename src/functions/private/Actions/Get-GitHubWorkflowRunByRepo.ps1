@@ -106,10 +106,10 @@
         }
 
         $inputObject = @{
-            Context     = $Context
-            APIEndpoint = "/repos/$Owner/$Repository/actions/runs"
             Method      = 'GET'
+            APIEndpoint = "/repos/$Owner/$Repository/actions/runs"
             Body        = $body
+            Context     = $Context
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {

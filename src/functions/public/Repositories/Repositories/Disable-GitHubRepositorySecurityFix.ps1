@@ -44,7 +44,7 @@
 
     process {
         $inputObject = @{
-            Method      = 'Delete'
+            Method      = 'DELETE'
             APIEndpoint = "/repos/$Owner/$Repository/automated-security-fixes"
             Context     = $Context
         }

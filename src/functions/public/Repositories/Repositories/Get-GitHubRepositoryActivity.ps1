@@ -129,7 +129,7 @@
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
         $inputObject = @{
-            Method      = 'Get'
+            Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/activity"
             Body        = $body
             Context     = $Context

@@ -41,7 +41,7 @@
 
     process {
         $inputObject = @{
-            Method      = 'Delete'
+            Method      = 'DELETE'
             APIEndpoint = "/user/blocks/$Username"
             Context     = $Context
         }

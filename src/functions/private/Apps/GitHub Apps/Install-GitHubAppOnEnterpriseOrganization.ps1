@@ -57,7 +57,7 @@
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
         $inputObject = @{
-            Method      = 'Post'
+            Method      = 'POST'
             APIEndpoint = "/enterprises/$Enterprise/apps/organizations/$Organization/installations"
             Body        = $body
             Context     = $Context

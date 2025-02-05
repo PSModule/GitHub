@@ -49,12 +49,12 @@
 
     process {
         $inputObject = @{
-            Method      = 'Delete'
+            Method      = 'DELETE'
             APIEndpoint = "/repos/$Owner/$Repository/releases/$ID"
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("Release with ID [$ID] in [$Owner/$Repository]", 'Delete')) {
+        if ($PSCmdlet.ShouldProcess("Release with ID [$ID] in [$Owner/$Repository]", 'DELETE')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }

@@ -44,7 +44,7 @@
 
     process {
         $inputObject = @{
-            Method      = 'Get'
+            Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository"
             Context     = $Context
         }

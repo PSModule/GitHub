@@ -64,7 +64,7 @@
         }
 
         $inputObject = @{
-            Method      = 'Get'
+            Method      = 'GET'
             APIEndpoint = "/orgs/$Organization/invitations"
             Body        = $body
             Context     = $Context

@@ -43,7 +43,7 @@
         }
 
         $inputObject = @{
-            Method      = 'Post'
+            Method      = 'POST'
             APIEndpoint = '/user/social_accounts'
             Body        = $body
             Context     = $Context

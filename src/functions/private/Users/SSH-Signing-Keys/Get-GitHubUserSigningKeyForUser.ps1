@@ -49,7 +49,7 @@
         }
 
         $inputObject = @{
-            Method      = 'Get'
+            Method      = 'GET'
             APIEndpoint = "/users/$Username/ssh_signing_keys"
             Body        = $body
             Context     = $Context

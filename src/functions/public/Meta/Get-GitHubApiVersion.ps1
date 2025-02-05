@@ -32,7 +32,7 @@
 
     process {
         $inputObject = @{
-            Method      = 'Get'
+            Method      = 'GET'
             ApiEndpoint = '/versions'
             Context     = $Context
         }

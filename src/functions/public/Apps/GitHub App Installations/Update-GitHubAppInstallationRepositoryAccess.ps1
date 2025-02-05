@@ -83,7 +83,7 @@
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
         $inputObject = @{
-            Method      = 'Patch'
+            Method      = 'PATCH'
             APIEndpoint = "/enterprises/$Enterprise/apps/organizations/$Organization/installations/$ID/repositories"
             Body        = $body
             Context     = $Context

@@ -49,7 +49,7 @@
 
     process {
         $inputObject = @{
-            Method      = 'Post'
+            Method      = 'POST'
             APIEndpoint = "/app/hook/deliveries/$ID/attempts"
             Context     = $Context
         }

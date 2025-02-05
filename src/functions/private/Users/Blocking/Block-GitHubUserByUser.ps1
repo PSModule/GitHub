@@ -41,7 +41,7 @@
 
     process {
         $inputObject = @{
-            Method      = 'Put'
+            Method      = 'PUT'
             APIEndpoint = "/user/blocks/$Username"
             Context     = $Context
         }

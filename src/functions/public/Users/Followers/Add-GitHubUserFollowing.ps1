@@ -43,7 +43,7 @@
 
     process {
         $inputObject = @{
-            Method      = 'Put'
+            Method      = 'PUT'
             APIEndpoint = "/user/following/$Username"
             Context     = $Context
         }

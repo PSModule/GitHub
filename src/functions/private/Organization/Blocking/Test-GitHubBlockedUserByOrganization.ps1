@@ -49,7 +49,7 @@
 
     process {
         $inputObject = @{
-            Method      = 'Get'
+            Method      = 'GET'
             APIEndpoint = "/orgs/$Organization/blocks/$Username"
             Context     = $Context
         }

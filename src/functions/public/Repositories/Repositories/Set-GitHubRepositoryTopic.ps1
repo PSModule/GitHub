@@ -50,7 +50,7 @@
         }
 
         $inputObject = @{
-            Method      = 'Put'
+            Method      = 'PUT'
             APIEndpoint = "/repos/$Owner/$Repository/topics"
             Body        = $body
             Context     = $Context

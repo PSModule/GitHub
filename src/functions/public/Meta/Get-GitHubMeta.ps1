@@ -40,7 +40,7 @@
 
     process {
         $inputObject = @{
-            Method      = 'Get'
+            Method      = 'GET'
             ApiEndpoint = '/meta'
             Context     = $Context
         }

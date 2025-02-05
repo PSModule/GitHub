@@ -79,7 +79,7 @@
         }
 
         $inputObject = @{
-            Method      = 'Get'
+            Method      = 'GET'
             APIEndpoint = "/users/$Username/repos"
             Body        = $body
             Context     = $Context

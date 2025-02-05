@@ -204,7 +204,7 @@
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
         $inputObject = @{
-            Method      = 'Patch'
+            Method      = 'PATCH'
             APIEndpoint = "/orgs/$Organization"
             Body        = $body
             Context     = $Context

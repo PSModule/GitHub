@@ -103,7 +103,7 @@
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
         $inputObject = @{
-            Method      = 'Patch'
+            Method      = 'PATCH'
             APIEndpoint = "/repos/$Owner/$Repository/releases/$ID"
             Body        = $body
             Context     = $Context

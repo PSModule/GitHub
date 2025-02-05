@@ -65,7 +65,7 @@
         }
 
         $inputObject = @{
-            Method      = 'Post'
+            Method      = 'POST'
             APIEndpoint = "/repos/$Owner/$Repository/autolinks"
             Body        = $body
             Context     = $Context

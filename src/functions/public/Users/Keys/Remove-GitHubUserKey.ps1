@@ -42,12 +42,12 @@
 
     process {
         $inputObject = @{
-            Context     = $Context
+            Method      = 'DELETE'
             APIEndpoint = "/user/keys/$ID"
-            Method      = 'Delete'
+            Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("Key with ID [$ID]", 'Delete')) {
+        if ($PSCmdlet.ShouldProcess("Key with ID [$ID]", 'DELETE')) {
             Invoke-GitHubAPI @inputObject
         }
     }

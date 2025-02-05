@@ -41,7 +41,7 @@
             per_page = $PerPage
         }
         $inputObject = @{
-            Method      = 'Get'
+            Method      = 'GET'
             APIEndpoint = '/user/emails'
             Body        = $body
             Context     = $Context

@@ -131,7 +131,7 @@
         $uploadURI = $release.upload_url -replace '{\?name,label}', "?name=$($Name)&label=$($Label)"
 
         $inputObject = @{
-            Method         = 'Post'
+            Method         = 'POST'
             URI            = $uploadURI
             ContentType    = $ContentType
             UploadFilePath = $FilePath

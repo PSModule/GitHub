@@ -74,7 +74,7 @@
 
     process {
         $inputObject = @{
-            Method      = 'Post'
+            Method      = 'POST'
             APIEndpoint = "/app/installations/$ID/access_tokens"
             Context     = $Context
         }

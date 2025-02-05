@@ -42,7 +42,7 @@
         }
 
         $inputObject = @{
-            Method      = 'Post'
+            Method      = 'POST'
             APIEndpoint = '/graphql'
             Body        = $body
             Context     = $Context

@@ -51,7 +51,7 @@
         }
 
         $inputObject = @{
-            Method      = 'Post'
+            Method      = 'POST'
             APIEndpoint = "/repos/$Owner/$Repository/tags/protection"
             Body        = $body
             Context     = $Context

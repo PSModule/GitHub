@@ -87,7 +87,7 @@
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
         $inputObject = @{
-            Method      = 'Get'
+            Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/rulesets/rule-suites"
             Body        = $body
             Context     = $Context

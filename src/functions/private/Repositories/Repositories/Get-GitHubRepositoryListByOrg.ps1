@@ -77,7 +77,7 @@
         }
 
         $inputObject = @{
-            Method      = 'Get'
+            Method      = 'GET'
             APIEndpoint = "/orgs/$Owner/repos"
             Body        = $body
             Context     = $Context

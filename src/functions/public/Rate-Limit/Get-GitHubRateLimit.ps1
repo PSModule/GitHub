@@ -49,7 +49,7 @@
 
     process {
         $inputObject = @{
-            Method      = 'Get'
+            Method      = 'GET'
             APIEndpoint = '/rate_limit'
             Context     = $Context
         }

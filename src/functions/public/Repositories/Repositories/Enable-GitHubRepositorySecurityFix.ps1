@@ -44,7 +44,7 @@
 
     process {
         $inputObject = @{
-            Method      = 'Put'
+            Method      = 'PUT'
             APIEndpoint = "/repos/$Owner/$Repository/automated-security-fixes"
             Context     = $Context
         }

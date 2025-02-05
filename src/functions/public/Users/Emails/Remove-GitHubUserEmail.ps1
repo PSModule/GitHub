@@ -45,13 +45,13 @@
         }
 
         $inputObject = @{
-            Method      = 'Delete'
+            Method      = 'DELETE'
             APIEndpoint = '/user/emails'
             Body        = $body
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("Email addresses [$($Email -join ', ')]", 'Delete')) {
+        if ($PSCmdlet.ShouldProcess("Email addresses [$($Email -join ', ')]", 'DELETE')) {
             $null = Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }

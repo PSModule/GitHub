@@ -61,7 +61,7 @@
         }
 
         $inputObject = @{
-            Method      = 'Get'
+            Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/actions/workflows"
             Body        = $body
             Context     = $Context

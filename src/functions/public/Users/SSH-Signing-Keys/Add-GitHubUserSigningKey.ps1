@@ -57,7 +57,7 @@
         }
 
         $inputObject = @{
-            Method      = 'Post'
+            Method      = 'POST'
             APIEndpoint = '/user/ssh_signing_keys'
             Body        = $body
             Context     = $Context

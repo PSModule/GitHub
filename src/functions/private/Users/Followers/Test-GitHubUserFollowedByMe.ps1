@@ -41,7 +41,7 @@
 
     process {
         $inputObject = @{
-            Method      = 'Get'
+            Method      = 'GET'
             APIEndpoint = "/user/following/$Username"
             Context     = $Context
         }

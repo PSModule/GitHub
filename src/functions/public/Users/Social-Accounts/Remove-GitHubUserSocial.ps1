@@ -44,13 +44,13 @@
         }
 
         $inputObject = @{
-            Method      = 'Delete'
+            Method      = 'DELETE'
             APIEndpoint = '/user/social_accounts'
             Body        = $body
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("Social accounts [$($URL -join ', ')]", 'Delete')) {
+        if ($PSCmdlet.ShouldProcess("Social accounts [$($URL -join ', ')]", 'DELETE')) {
             Invoke-GitHubAPI @inputObject
         }
     }

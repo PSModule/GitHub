@@ -31,7 +31,7 @@
 
     process {
         $inputObject = @{
-            Method      = 'Get'
+            Method      = 'GET'
             APIEndpoint = '/zen'
             Context     = $Context
         }

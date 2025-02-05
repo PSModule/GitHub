@@ -53,7 +53,7 @@
 
     process {
         $inputObject = @{
-            Method      = 'Post'
+            Method      = 'POST'
             APIEndpoint = "/repos/$Owner/$Repository/actions/runs/$ID/cancel"
             Context     = $Context
         }

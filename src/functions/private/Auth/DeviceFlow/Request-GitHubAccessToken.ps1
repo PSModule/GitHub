@@ -71,7 +71,7 @@
         }
 
         $RESTParams = @{
-            Method  = 'Post'
+            Method  = 'POST'
             Uri     = "https://$HostName/login/oauth/access_token"
             Headers = $headers
             Body    = $body

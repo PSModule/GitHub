@@ -41,7 +41,7 @@
         }
 
         $inputObject = @{
-            Method      = 'Get'
+            Method      = 'GET'
             APIEndpoint = '/user/social_accounts'
             Body        = $body
             Context     = $Context

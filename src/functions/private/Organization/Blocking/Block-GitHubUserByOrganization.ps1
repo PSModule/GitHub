@@ -50,7 +50,7 @@
 
     process {
         $inputObject = @{
-            Method      = 'Put'
+            Method      = 'PUT'
             APIEndpoint = "/orgs/$Organization/blocks/$Username"
             Context     = $Context
         }

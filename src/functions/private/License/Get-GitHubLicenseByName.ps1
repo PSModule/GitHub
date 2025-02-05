@@ -38,7 +38,7 @@
 
     process {
         $inputObject = @{
-            Method      = 'Get'
+            Method      = 'GET'
             APIEndpoint = "/licenses/$Name"
             Accept      = 'application/vnd.github+json'
             Context     = $Context

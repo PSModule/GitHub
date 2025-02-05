@@ -43,7 +43,7 @@
         }
 
         $inputObject = @{
-            Method      = 'Get'
+            Method      = 'GET'
             APIEndpoint = '/user/keys'
             Body        = $body
             Context     = $Context

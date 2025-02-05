@@ -42,7 +42,7 @@
         }
 
         $inputObject = @{
-            Method      = 'Post'
+            Method      = 'POST'
             APIEndpoint = '/markdown/raw'
             ContentType = 'text/plain'
             Body        = $body

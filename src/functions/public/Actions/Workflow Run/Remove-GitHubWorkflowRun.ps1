@@ -57,7 +57,7 @@
 
     process {
         $inputObject = @{
-            Method      = 'Delete'
+            Method      = 'DELETE'
             APIEndpoint = "repos/$Owner/$Repository/actions/runs/$ID"
             Context     = $Context
         }

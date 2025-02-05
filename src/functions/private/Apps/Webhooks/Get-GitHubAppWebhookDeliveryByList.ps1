@@ -42,7 +42,7 @@
         }
 
         $inputObject = @{
-            Method      = 'Get'
+            Method      = 'GET'
             APIEndpoint = '/app/hook/deliveries'
             Body        = $body
             Context     = $Context

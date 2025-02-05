@@ -239,7 +239,7 @@ filter New-GitHubRepositoryUser {
         }
 
         $inputObject = @{
-            Method      = 'Post'
+            Method      = 'POST'
             APIEndpoint = '/user/repos'
             Body        = $body
             Context     = $Context
