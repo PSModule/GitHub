@@ -1,4 +1,4 @@
-function Install-GitHubApp {
+﻿function Install-GitHubApp {
     <#
         .SYNOPSIS
         Install an app

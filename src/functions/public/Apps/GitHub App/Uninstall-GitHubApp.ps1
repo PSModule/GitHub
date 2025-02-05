@@ -1,4 +1,4 @@
-function Uninstall-GitHubApp {
+﻿function Uninstall-GitHubApp {
     <#
         .SYNOPSIS
         Uninstall a GitHub App.
