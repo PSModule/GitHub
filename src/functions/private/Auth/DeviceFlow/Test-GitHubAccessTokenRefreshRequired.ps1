@@ -16,25 +16,20 @@
     param(
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter()]
-        [object] $Context = (Get-GitHubContext)
+        [Parameter(Mandatory)]
+        [object] $Context
     )
 
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $Context = Resolve-GitHubContext -Context $Context
     }
 
     process {
-        try {
-            $tokenExpirationDate = $Context.TokenExpirationDate
-            $currentDateTime = Get-Date
-            $remainingDuration = [datetime]$tokenExpirationDate - $currentDateTime
-            $remainingDuration.TotalHours -lt $script:GitHub.Config.AccessTokenGracePeriodInHours
-        } catch {
-            throw $_
-        }
+        $tokenExpirationDate = $Context.TokenExpirationDate
+        $currentDateTime = Get-Date
+        $remainingDuration = [datetime]$tokenExpirationDate - $currentDateTime
+        $remainingDuration.TotalHours -lt $script:GitHub.Config.AccessTokenGracePeriodInHours
     }
 
     end {

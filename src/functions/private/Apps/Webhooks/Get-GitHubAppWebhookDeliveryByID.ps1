@@ -23,53 +23,47 @@
     param(
         # The ID of the delivery.
         [Parameter(Mandatory)]
-        [Alias('DeliveryID', 'delivery_id')]
+        [Alias('delivery_id', 'DeliveryID')]
         [string] $ID,
 
         # The context to run the command in. Used to get the details for the API call.
-        # Can be either a string or a GitHubContext object.
-        [Parameter()]
-        [object] $Context = (Get-GitHubContext)
+        [Parameter(Mandatory)]
+        [object] $Context
     )
 
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType APP
     }
 
     process {
-        try {
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/app/hook/deliveries/$ID"
-                Method      = 'GET'
-            }
+        $inputObject = @{
+            Method      = 'GET'
+            APIEndpoint = "/app/hook/deliveries/$ID"
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                [GitHubWebhook](
-                    @{
-                        ID             = $_.id
-                        GUID           = $_.guid
-                        DeliveredAt    = $_.delivered_at
-                        Redelivery     = $_.redelivery
-                        Duration       = $_.duration
-                        Status         = $_.status
-                        StatusCode     = $_.status_code
-                        Event          = $_.event
-                        Action         = $_.action
-                        InstallationID = $_.installation.id
-                        RepositoryID   = $_.repository.id
-                        ThrottledAt    = $_.throttled_at
-                        URL            = $_.url
-                        Request        = $_.request
-                        Response       = $_.response
-                    }
-                )
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            [GitHubWebhook](
+                @{
+                    ID             = $_.id
+                    GUID           = $_.guid
+                    DeliveredAt    = $_.delivered_at
+                    Redelivery     = $_.redelivery
+                    Duration       = $_.duration
+                    Status         = $_.status
+                    StatusCode     = $_.status_code
+                    Event          = $_.event
+                    Action         = $_.action
+                    InstallationID = $_.installation.id
+                    RepositoryID   = $_.repository.id
+                    ThrottledAt    = $_.throttled_at
+                    URL            = $_.url
+                    Request        = $_.request
+                    Response       = $_.response
+                }
+            )
         }
     }
 

@@ -33,20 +33,16 @@
     }
 
     process {
-        try {
-            $query = @"
+        $query = @"
 query {
   viewer {
     $($Fields -join "`n")
   }
 }
 "@
-            $results = Invoke-GitHubGraphQLQuery -Query $query -Context $Context
+        $results = Invoke-GitHubGraphQLQuery -Query $query -Context $Context
 
-            $results.data.viewer
-        } catch {
-            throw $_
-        }
+        $results.data.viewer
     }
 
     end {

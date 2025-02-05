@@ -41,8 +41,6 @@
         [Parameter(
             ParameterSetName = '__AllParameterSets'
         )]
-        [Alias('org')]
-        [Alias('owner')]
         [string] $Organization,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -59,17 +57,13 @@
     }
 
     process {
-        try {
-            switch ($PSCmdlet.ParameterSetName) {
-                'Organization' {
-                    Block-GitHubUserByOrganization -Organization $Organization -Username $Username -Context $Context
-                }
-                '__AllParameterSets' {
-                    Block-GitHubUserByUser -Username $Username -Context $Context
-                }
+        switch ($PSCmdlet.ParameterSetName) {
+            'Organization' {
+                Block-GitHubUserByOrganization -Organization $Organization -Username $Username -Context $Context
             }
-        } catch {
-            throw $_
+            '__AllParameterSets' {
+                Block-GitHubUserByUser -Username $Username -Context $Context
+            }
         }
     }
 

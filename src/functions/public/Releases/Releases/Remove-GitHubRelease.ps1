@@ -7,7 +7,7 @@
         Users with push access to the repository can delete a release.
 
         .EXAMPLE
-        Remove-GitHubRelease -Owner 'octocat' -Repo 'hello-world' -ID '1234567'
+        Remove-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -ID '1234567'
 
         Deletes the release with the ID '1234567' for the repository 'octocat/hello-world'.
 
@@ -18,12 +18,14 @@
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter()]
+        [Parameter(Mandatory)]
+        [Alias('Organization')]
+        [Alias('User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(Mandatory)]
+        [string] $Repository,
 
         # The unique identifier of the release.
         [Parameter(
@@ -43,33 +45,19 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
-
-        if ([string]::IsNullOrEmpty($Repo)) {
-            $Repo = $Context.Repo
-        }
-        Write-Debug "Repo: [$Repo]"
     }
 
     process {
-        try {
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/repos/$Owner/$Repo/releases/$ID"
-                Method      = 'DELETE'
-            }
+        $inputObject = @{
+            Method      = 'DELETE'
+            APIEndpoint = "/repos/$Owner/$Repository/releases/$ID"
+            Context     = $Context
+        }
 
-            if ($PSCmdlet.ShouldProcess("Release with ID [$ID] in [$Owner/$Repo]", 'Delete')) {
-                Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
-                }
+        if ($PSCmdlet.ShouldProcess("Release with ID [$ID] in [$Owner/$Repository]", 'DELETE')) {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
             }
-        } catch {
-            throw $_
         }
     }
 

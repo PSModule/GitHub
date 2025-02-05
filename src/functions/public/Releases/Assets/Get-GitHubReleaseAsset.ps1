@@ -8,27 +8,29 @@
         If a release ID is provided, all assets for the release are returned.
 
         .EXAMPLE
-        Get-GitHubReleaseAsset -Owner 'octocat' -Repo 'hello-world' -ID '1234567'
+        Get-GitHubReleaseAsset -Owner 'octocat' -Repository 'hello-world' -ID '1234567'
 
         Gets the release asset with the ID '1234567' for the repository 'octocat/hello-world'.
 
         .EXAMPLE
-        Get-GitHubReleaseAsset -Owner 'octocat' -Repo 'hello-world' -ReleaseID '7654321'
+        Get-GitHubReleaseAsset -Owner 'octocat' -Repository 'hello-world' -ReleaseID '7654321'
 
         Gets the release assets for the release with the ID '7654321' for the repository 'octocat/hello-world'.
 
         .NOTES
         [Get a release asset](https://docs.github.com/rest/releases/assets#get-a-release-asset)
     #>
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter()]
+        [Parameter(Mandatory)]
+        [Alias('Organization')]
+        [Alias('User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(Mandatory)]
+        [string] $Repository,
 
         # The unique identifier of the asset.
         [Parameter(
@@ -57,28 +59,16 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
-
-        if ([string]::IsNullOrEmpty($Repo)) {
-            $Repo = $Context.Repo
-        }
-        Write-Debug "Repo: [$Repo]"
     }
 
     process {
-        try {
-            if ($ReleaseID) {
-                Get-GitHubReleaseAssetByReleaseID -Owner $Owner -Repo $Repo -ReleaseID $ReleaseID -Context $Context
+        switch ($PSCmdlet.ParameterSetName) {
+            'ReleaseID' {
+                Get-GitHubReleaseAssetByReleaseID -Owner $Owner -Repository $Repository -ReleaseID $ReleaseID -Context $Context
             }
-            if ($ID) {
-                Get-GitHubReleaseAssetByID -Owner $Owner -Repo $Repo -ID $ID -Context $Context
+            'ID' {
+                Get-GitHubReleaseAssetByID -Owner $Owner -Repository $Repository -ID $ID -Context $Context
             }
-        } catch {
-            throw $_
         }
     }
 

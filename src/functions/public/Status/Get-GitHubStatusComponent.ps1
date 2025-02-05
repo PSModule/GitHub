@@ -31,15 +31,11 @@
     }
 
     process {
-        try {
-            $baseURL = $script:StatusBaseURL[$Stamp]
+        $baseURL = $script:StatusBaseURL[$Stamp]
 
-            $APIURI = "$baseURL/api/v2/components.json"
-            $response = Invoke-RestMethod -Uri $APIURI -Method Get
-            $response.components
-        } catch {
-            throw $_
-        }
+        $APIURI = "$baseURL/api/v2/components.json"
+        $response = Invoke-RestMethod -Uri $APIURI -Method Get
+        $response.components
     }
 
     end {

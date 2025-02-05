@@ -21,13 +21,8 @@
     }
 
     process {
-        try {
-            if ($PSCmdlet.ShouldProcess('GitHubConfig', 'Reset')) {
-                Initialize-GitHubConfig -Force
-            }
-        } catch {
-            Write-Error $_
-            throw 'Failed to reset GitHub module configuration.'
+        if ($PSCmdlet.ShouldProcess('GitHubConfig', 'Reset')) {
+            Initialize-GitHubConfig -Force
         }
     }
 

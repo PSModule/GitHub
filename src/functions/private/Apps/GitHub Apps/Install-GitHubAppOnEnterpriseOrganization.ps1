@@ -14,7 +14,7 @@
     [CmdletBinding()]
     param(
         # The enterprise slug or ID.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [string] $Enterprise,
 
         # The organization name. The name is not case sensitive.
@@ -28,52 +28,43 @@
         # The repository selection for the GitHub App. Can be one of:
         # - all - all repositories that the authenticated GitHub App installation can access.
         # - selected - select specific repositories.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [ValidateSet('all', 'selected')]
-        [string] $RepositorySelection = 'all',
+        [string] $RepositorySelection,
 
         # The names of the repositories to which the installation will be granted access.
         [Parameter()]
         [string[]] $Repositories,
 
         # The context to run the command in. Used to get the details for the API call.
-        # Can be either a string or a GitHubContext object.
-        [Parameter()]
-        [object] $Context = (Get-GitHubContext)
+        [Parameter(Mandatory)]
+        [object] $Context
     )
 
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $Context = Resolve-GitHubContext -Context $Context
-        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-        if ([string]::IsNullOrEmpty($Enterprise)) {
-            $Enterprise = $Context.Enterprise
-        }
-        Write-Debug "Enterprise: [$Enterprise]"
+        Assert-GitHubContext -Context $Context -AuthType IAT, UAT
+        # enterprise_organization_installations=write
     }
 
     process {
-        try {
-            $body = @{
-                client_id            = $ClientID
-                repository_selection = $RepositorySelection
-                repositories         = $Repositories
-            }
-            $body | Remove-HashtableEntry -NullOrEmptyValues
+        $body = @{
+            client_id            = $ClientID
+            repository_selection = $RepositorySelection
+            repositories         = $Repositories
+        }
+        $body | Remove-HashtableEntry -NullOrEmptyValues
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/enterprises/$Enterprise/apps/organizations/$Organization/installations"
-                Method      = 'Post'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'POST'
+            APIEndpoint = "/enterprises/$Enterprise/apps/organizations/$Organization/installations"
+            Body        = $body
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 

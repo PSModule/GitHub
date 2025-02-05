@@ -12,7 +12,7 @@
         Get the authenticated app.
 
         .EXAMPLE
-        Get-GitHubApp -AppSlug 'github-actions'
+        Get-GitHubApp -Name 'github-actions'
 
         Get the GitHub App with the slug 'github-actions'.
 
@@ -30,8 +30,8 @@
             Mandatory,
             ParameterSetName = 'BySlug'
         )]
-        [Alias('Name')]
-        [string] $AppSlug,
+        [Alias('AppSlug')]
+        [string] $Name,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -43,30 +43,16 @@
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
-
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
-
-        if ([string]::IsNullOrEmpty($Repo)) {
-            $Repo = $Context.Repo
-        }
-        Write-Debug "Repo: [$Repo]"
     }
 
     process {
-        try {
-            switch ($PSCmdlet.ParameterSetName) {
-                'BySlug' {
-                    Get-GitHubAppByName -AppSlug $AppSlug -Context $Context
-                }
-                default {
-                    Get-GitHubAuthenticatedApp -Context $Context
-                }
+        switch ($PSCmdlet.ParameterSetName) {
+            'BySlug' {
+                Get-GitHubAppByName -AppSlug $Name -Context $Context
             }
-        } catch {
-            throw $_
+            default {
+                Get-GitHubAuthenticatedApp -Context $Context
+            }
         }
     }
 

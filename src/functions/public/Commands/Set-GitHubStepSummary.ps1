@@ -48,15 +48,11 @@
     }
 
     process {
-        try {
-            Write-Verbose 'Step summary:'
-            Write-Verbose $Summary
+        Write-Verbose 'Step summary:'
+        Write-Verbose $Summary
 
-            $Append = -not $Overwrite
-            $Summary | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append:$Append
-        } catch {
-            throw $_
-        }
+        $Append = -not $Overwrite
+        $Summary | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append:$Append
     }
 
     end {

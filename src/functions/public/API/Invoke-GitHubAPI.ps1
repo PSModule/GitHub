@@ -28,7 +28,8 @@ filter Invoke-GitHubAPI {
     param(
         # The HTTP method to be used for the API request. It can be one of the following: GET, POST, PUT, DELETE, or PATCH.
         [Parameter()]
-        [Microsoft.PowerShell.Commands.WebRequestMethod] $Method = 'GET',
+        [ValidateSet('GET', 'POST', 'PUT', 'DELETE', 'PATCH')]
+        $Method = 'GET',
 
         # The base URI for the GitHub API. This is usually `https://api.github.com`, but can be adjusted if necessary.
         [Parameter(
@@ -45,6 +46,7 @@ filter Invoke-GitHubAPI {
 
         # The body of the API request. This can be a hashtable or a string. If a hashtable is provided, it will be converted to JSON.
         [Parameter()]
+        [Alias('Query')]
         [Object] $Body,
 
         # The 'Accept' header for the API request. If not provided, the default will be used by GitHub's API.
@@ -97,7 +99,7 @@ filter Invoke-GitHubAPI {
 
     process {
         $Token = $Context.Token
-        Write-Debug "Token :     [$Token]"
+        Write-Debug "Token :      [$Token]"
 
         if ([string]::IsNullOrEmpty($HttpVersion)) {
             $HttpVersion = $Context.HttpVersion
@@ -107,17 +109,17 @@ filter Invoke-GitHubAPI {
         if ([string]::IsNullOrEmpty($ApiBaseUri)) {
             $ApiBaseUri = $Context.ApiBaseUri
         }
-        Write-Debug "ApiBaseUri: [$ApiBaseUri]"
+        Write-Debug "ApiBaseUri:  [$ApiBaseUri]"
 
         if ([string]::IsNullOrEmpty($ApiVersion)) {
             $ApiVersion = $Context.ApiVersion
         }
-        Write-Debug "ApiVersion: [$ApiVersion]"
+        Write-Debug "ApiVersion:  [$ApiVersion]"
 
         if ([string]::IsNullOrEmpty($TokenType)) {
             $TokenType = $Context.TokenType
         }
-        Write-Debug "TokenType : [$TokenType]"
+        Write-Debug "TokenType :  [$TokenType]"
 
         switch ($TokenType) {
             'ghu' {

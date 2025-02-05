@@ -40,20 +40,14 @@
     }
 
     process {
-        try {
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/user/gpg_keys/$ID"
-                Method      = 'DELETE'
-            }
+        $inputObject = @{
+            Method      = 'DELETE'
+            APIEndpoint = "/user/gpg_keys/$ID"
+            Context     = $Context
+        }
 
-            if ($PSCmdlet.ShouldProcess("GPG key with ID [$ID]", 'Delete')) {
-                $null = Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
-                }
-            }
-        } catch {
-            throw $_
+        if ($PSCmdlet.ShouldProcess("GPG key with ID [$ID]", 'DELETE')) {
+            Invoke-GitHubAPI @inputObject
         }
     }
 

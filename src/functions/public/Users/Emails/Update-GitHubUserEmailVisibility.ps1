@@ -46,25 +46,21 @@
     }
 
     process {
-        try {
-            $body = @{
-                visibility = $Visibility
-            }
+        $body = @{
+            visibility = $Visibility
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = '/user/email/visibility'
-                Method      = 'PATCH'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'PATCH'
+            APIEndpoint = '/user/email/visibility'
+            Body        = $body
+            Context     = $Context
+        }
 
-            if ($PSCmdlet.ShouldProcess("Email visibility [$Visibility]", 'Set')) {
-                $null = Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
-                }
+        if ($PSCmdlet.ShouldProcess("Email visibility [$Visibility]", 'Set')) {
+            $null = Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
             }
-        } catch {
-            throw $_
         }
     }
 

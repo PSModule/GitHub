@@ -43,13 +43,7 @@
         .NOTES
         [Authenticating to the REST API](https://docs.github.com/rest/overview/other-authentication-methods#authenticating-for-saml-sso)
     #>
-    [Alias('Connect-GHAccount')]
     [Alias('Connect-GitHub')]
-    [Alias('Connect-GH')]
-    [Alias('Login-GitHubAccount')]
-    [Alias('Login-GHAccount')]
-    [Alias('Login-GitHub')]
-    [Alias('Login-GH')]
     [OutputType([void])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Long links for documentation.')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'Is the CLI part of the module.')]
@@ -116,13 +110,11 @@
         # Set the default owner to use in commands.
         [Parameter()]
         [Alias('Organization')]
-        [Alias('Org')]
         [string] $Owner,
 
         # Set the default repository to use in commands.
         [Parameter()]
-        [Alias('Repository')]
-        [string] $Repo,
+        [string] $Repository,
 
         # The host to connect to. Can use $env:GITHUB_SERVER_URL to set the host, as the protocol is removed automatically.
         # Example: github.com, github.enterprise.com, msx.ghe.com
@@ -134,8 +126,6 @@
         # Suppresses the output of the function.
         [Parameter()]
         [Alias('Quiet')]
-        [Alias('q')]
-        [Alias('s')]
         [switch] $Silent,
 
         # Make the connected context NOT the default context.
@@ -191,7 +181,7 @@
                 AuthType    = [string]$authType
                 Enterprise  = [string]$Enterprise
                 Owner       = [string]$Owner
-                Repo        = [string]$Repo
+                Repository  = [string]$Repository
             }
 
             Write-Verbose ($context | Format-Table | Out-String)

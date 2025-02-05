@@ -21,30 +21,22 @@
         # The organization name. The name is not case sensitive.
         # If not provided, the owner from the context will be used.
         [Parameter()]
-        [Alias('Org')]
         [string] $Organization,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter()]
-        [object] $Context = (Get-GitHubContext)
+        [Parameter(Mandatory)]
+        [object] $Context
     )
 
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Organization)) {
-            $Organization = $Context.Owner
-        }
-        Write-Debug "Organization: [$Organization]"
     }
 
     process {
-        try {
-            $query = @"
+        $query = @"
 query(`$org: String!, `$teamSlug: String!) {
   organization(login: `$org) {
     team(slug: `$teamSlug) {
@@ -76,43 +68,40 @@ query(`$org: String!, `$teamSlug: String!) {
 }
 "@
 
-            # Variables hash that will be sent with the query
-            $variables = @{
-                org      = $Organization
-                teamSlug = $Slug
-            }
-
-            # Send the request to the GitHub GraphQL API
-            $response = Invoke-GitHubGraphQLQuery -Query $query -Variables $variables -Context $Context
-
-            # Extract team data
-            $team = $response.data.organization.team
-
-            # Output the team object
-            if (-not $team) {
-                return
-            }
-
-            [GitHubTeam](
-                @{
-                    Name          = $team.name
-                    Slug          = $team.slug
-                    NodeID        = $team.id
-                    CombinedSlug  = $team.CombinedSlug
-                    DatabaseID    = $team.DatabaseId
-                    Description   = $team.description
-                    Notifications = $team.notificationSetting -eq 'NOTIFICATIONS_ENABLED' ? $true : $false
-                    Visible       = $team.privacy -eq 'VISIBLE' ? $true : $false
-                    ParentTeam    = $team.parentTeam.slug
-                    Organization  = $team.organization.login
-                    ChildTeams    = $team.childTeams.nodes.name
-                    CreatedAt     = $team.createdAt
-                    UpdatedAt     = $team.updatedAt
-                }
-            )
-        } catch {
-            throw $_
+        # Variables hash that will be sent with the query
+        $variables = @{
+            org      = $Organization
+            teamSlug = $Slug
         }
+
+        # Send the request to the GitHub GraphQL API
+        $response = Invoke-GitHubGraphQLQuery -Query $query -Variables $variables -Context $Context
+
+        # Extract team data
+        $team = $response.data.organization.team
+
+        # Output the team object
+        if (-not $team) {
+            return
+        }
+
+        [GitHubTeam](
+            @{
+                Name          = $team.name
+                Slug          = $team.slug
+                NodeID        = $team.id
+                CombinedSlug  = $team.CombinedSlug
+                DatabaseID    = $team.DatabaseId
+                Description   = $team.description
+                Notifications = $team.notificationSetting -eq 'NOTIFICATIONS_ENABLED' ? $true : $false
+                Visible       = $team.privacy -eq 'VISIBLE' ? $true : $false
+                ParentTeam    = $team.parentTeam.slug
+                Organization  = $team.organization.login
+                ChildTeams    = $team.childTeams.nodes.name
+                CreatedAt     = $team.createdAt
+                UpdatedAt     = $team.updatedAt
+            }
+        )
     }
 
     end {

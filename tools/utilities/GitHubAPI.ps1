@@ -1,4 +1,4 @@
-# https://github.com/github/rest-api-description
+﻿# https://github.com/github/rest-api-description
 $APIDocURI = 'https://raw.githubusercontent.com/github/rest-api-description/main'
 $Bundled = '/descriptions/api.github.com/api.github.com.json'
 # $Dereferenced = 'descriptions/api.github.com/dereferenced/api.github.com.deref.json'
@@ -94,4 +94,3 @@ $schema.title
 
 $schema.properties.action.enum
 $schema.required
-

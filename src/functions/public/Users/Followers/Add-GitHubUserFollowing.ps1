@@ -42,19 +42,13 @@
     }
 
     process {
-        try {
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/user/following/$Username"
-                Method      = 'PUT'
-            }
-
-            $null = Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        $inputObject = @{
+            Method      = 'PUT'
+            APIEndpoint = "/user/following/$Username"
+            Context     = $Context
         }
+
+        Invoke-GitHubAPI @inputObject
     }
 
     end {

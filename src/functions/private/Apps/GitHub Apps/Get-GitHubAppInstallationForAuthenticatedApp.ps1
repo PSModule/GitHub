@@ -1,7 +1,7 @@
-﻿filter Get-GitHubAppInstallation {
+﻿function Get-GitHubAppInstallationForAuthenticatedApp {
     <#
         .SYNOPSIS
-        List installations for the authenticated app
+        List installations for the authenticated app.
 
         .DESCRIPTION
         The permissions the installation has are included under the `permissions` key.
@@ -10,7 +10,7 @@
         to access this endpoint.
 
         .EXAMPLE
-        Get-GitHubAppInstallation
+        Get-GitHubAppInstallationForAuthenticatedApp
 
         List installations for the authenticated app.
 
@@ -20,31 +20,25 @@
     [CmdletBinding()]
     param(
         # The context to run the command in. Used to get the details for the API call.
-        # Can be either a string or a GitHubContext object.
-        [Parameter()]
-        [object] $Context = (Get-GitHubContext)
+        [Parameter(Mandatory)]
+        [object] $Context
     )
 
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType APP
     }
 
     process {
-        try {
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = '/app/installations'
-                Method      = 'GET'
-            }
+        $inputObject = @{
+            Context     = $Context
+            APIEndpoint = '/app/installations'
+            Method      = 'GET'
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 

@@ -55,29 +55,26 @@
     }
 
     process {
-        try {
-            $baseURL = $script:StatusBaseURL[$Stamp]
+        $baseURL = $script:StatusBaseURL[$Stamp]
 
-            if ($Active) {
-                $APIURI = "$baseURL/api/v2/scheduled-maintenances/active.json"
-                $response = Invoke-RestMethod -Uri $APIURI -Method Get
-                $response.scheduled_maintenances
-                return
-            }
-
-            if ($Upcoming) {
-                $APIURI = "$baseURL/api/v2/scheduled-maintenances/upcoming.json"
-                $response = Invoke-RestMethod -Uri $APIURI -Method Get
-                $response.scheduled_maintenances
-                return
-            }
-
-            $APIURI = "$baseURL/api/v2/scheduled-maintenances.json"
+        if ($Active) {
+            $APIURI = "$baseURL/api/v2/scheduled-maintenances/active.json"
             $response = Invoke-RestMethod -Uri $APIURI -Method Get
             $response.scheduled_maintenances
-        } catch {
-            throw $_
+            return
         }
+
+        if ($Upcoming) {
+            $APIURI = "$baseURL/api/v2/scheduled-maintenances/upcoming.json"
+            $response = Invoke-RestMethod -Uri $APIURI -Method Get
+            $response.scheduled_maintenances
+            return
+        }
+
+        $APIURI = "$baseURL/api/v2/scheduled-maintenances.json"
+        $response = Invoke-RestMethod -Uri $APIURI -Method Get
+        $response.scheduled_maintenances
+
     }
 
     end {

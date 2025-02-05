@@ -32,7 +32,6 @@
         # The organization name. The name is not case sensitive.
         # If not provided, the owner from the context will be used.
         [Parameter()]
-        [Alias('Org')]
         [string] $Organization,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -54,21 +53,17 @@
     }
 
     process {
-        try {
-            $params = @{
-                Organization = $Organization
-                Context      = $Context
+        $params = @{
+            Organization = $Organization
+            Context      = $Context
+        }
+        switch ($PSCmdlet.ParameterSetName) {
+            'BySlug' {
+                Get-GitHubTeamBySlug @params -Slug $Slug
             }
-            switch ($PSCmdlet.ParameterSetName) {
-                'BySlug' {
-                    Get-GitHubTeamBySlug @params -Slug $Slug
-                }
-                '__AllParameterSets' {
-                    Get-GitHubTeamListByOrg @params
-                }
+            default {
+                Get-GitHubTeamListByOrg @params
             }
-        } catch {
-            throw $_
         }
     }
 

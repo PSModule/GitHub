@@ -37,23 +37,20 @@
     }
 
     process {
-        try {
-            $body = @{
-                text = $Text
-            }
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = '/markdown/raw'
-                ContentType = 'text/plain'
-                Method      = 'POST'
-                Body        = $body
-            }
+        $body = @{
+            text = $Text
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        $inputObject = @{
+            Method      = 'POST'
+            APIEndpoint = '/markdown/raw'
+            ContentType = 'text/plain'
+            Body        = $body
+            Context     = $Context
+        }
+
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 

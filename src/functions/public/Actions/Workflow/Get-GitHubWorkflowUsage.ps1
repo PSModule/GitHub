@@ -12,15 +12,21 @@
         .NOTES
         [Get workflow usage](https://docs.github.com/en/rest/actions/workflows#get-workflow-usage)
     #>
-    [CmdletBinding(
-        DefaultParameterSetName = 'ByName'
-    )]
+    [CmdletBinding()]
     param(
-        [Parameter()]
+        [Parameter(
+            Mandatory,
+            ValueFromPipelineByPropertyName
+        )]
+        [Alias('Organization')]
+        [Alias('User')]
         [string] $Owner,
 
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(
+            Mandatory,
+            ValueFromPipelineByPropertyName
+        )]
+        [string] $Repository,
 
         [Parameter(
             Mandatory,
@@ -39,31 +45,17 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
-
-        if ([string]::IsNullOrEmpty($Repo)) {
-            $Repo = $Context.Repo
-        }
-        Write-Debug "Repo: [$Repo]"
     }
 
     process {
-        try {
+        $inputObject = @{
+            Method      = 'GET'
+            APIEndpoint = "/repos/$Owner/$Repository/actions/workflows/$ID/timing"
+            Context     = $Context
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                Method      = 'GET'
-                APIEndpoint = "/repos/$Owner/$Repo/actions/workflows/$ID/timing"
-            }
-
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response.billable
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 

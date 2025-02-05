@@ -26,7 +26,6 @@
     param(
         # The organization name. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [Alias('Org')]
         [string] $Organization,
 
         # Filter invitations by their member role.
@@ -55,33 +54,24 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
     }
 
     process {
-        try {
-            $body = @{
-                role              = $Role
-                invitation_source = $InvitationSource
-                per_page          = $PerPage
-            }
+        $body = @{
+            role              = $Role
+            invitation_source = $InvitationSource
+            per_page          = $PerPage
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                Body        = $body
-                Method      = 'Get'
-                APIEndpoint = "/orgs/$Organization/invitations"
-            }
+        $inputObject = @{
+            Method      = 'GET'
+            APIEndpoint = "/orgs/$Organization/invitations"
+            Body        = $body
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 

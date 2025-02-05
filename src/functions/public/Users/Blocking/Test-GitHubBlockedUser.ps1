@@ -41,8 +41,6 @@
             ValueFromPipeline,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('org')]
-        [Alias('owner')]
         [string] $Organization,
 
         # The number of results per page (max 100).
@@ -69,14 +67,10 @@
     }
 
     process {
-        try {
-            if ($Organization) {
-                Test-GitHubBlockedUserByOrganization -Organization $Organization -Username $Username -PerPage $PerPage -Context $Context
-            } else {
-                Test-GitHubBlockedUserByUser -Username $Username -PerPage $PerPage -Context $Context
-            }
-        } catch {
-            throw $_
+        if ($Organization) {
+            Test-GitHubBlockedUserByOrganization -Organization $Organization -Username $Username -PerPage $PerPage -Context $Context
+        } else {
+            Test-GitHubBlockedUserByUser -Username $Username -PerPage $PerPage -Context $Context
         }
     }
 

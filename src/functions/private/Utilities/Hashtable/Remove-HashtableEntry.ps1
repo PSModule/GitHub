@@ -60,44 +60,40 @@
     }
 
     process {
-        try {
-            if ($NullOrEmptyValues) {
-                Write-Debug 'Remove keys with null or empty values'
+        if ($NullOrEmptyValues) {
+            Write-Debug 'Remove keys with null or empty values'
             ($Hashtable.GetEnumerator() | Where-Object { [string]::IsNullOrEmpty($_.Value) }) | ForEach-Object {
-                    Write-Debug " - [$($_.Name)] - Value: [$($_.Value)] - Remove"
-                    $Hashtable.Remove($_.Name)
-                }
+                Write-Debug " - [$($_.Name)] - Value: [$($_.Value)] - Remove"
+                $Hashtable.Remove($_.Name)
             }
-            if ($RemoveTypes) {
-                Write-Debug "Remove keys of type: [$RemoveTypes]"
+        }
+        if ($RemoveTypes) {
+            Write-Debug "Remove keys of type: [$RemoveTypes]"
             ($Hashtable.GetEnumerator() | Where-Object { ($_.Value.GetType().Name -in $RemoveTypes) }) | ForEach-Object {
-                    Write-Debug " - [$($_.Name)] - Type: [$($_.Value.GetType().Name)] - Remove"
-                    $Hashtable.Remove($_.Name)
-                }
+                Write-Debug " - [$($_.Name)] - Type: [$($_.Value.GetType().Name)] - Remove"
+                $Hashtable.Remove($_.Name)
             }
-            if ($KeepTypes) {
-                Write-Debug "Remove keys NOT of type: [$KeepTypes]"
+        }
+        if ($KeepTypes) {
+            Write-Debug "Remove keys NOT of type: [$KeepTypes]"
             ($Hashtable.GetEnumerator() | Where-Object { ($_.Value.GetType().Name -notin $KeepTypes) }) | ForEach-Object {
-                    Write-Debug " - [$($_.Name)] - Type: [$($_.Value.GetType().Name)] - Remove"
-                    $Hashtable.Remove($_.Name)
-                }
+                Write-Debug " - [$($_.Name)] - Type: [$($_.Value.GetType().Name)] - Remove"
+                $Hashtable.Remove($_.Name)
             }
-            if ($RemoveNames) {
-                Write-Debug "Remove keys named: [$RemoveNames]"
+        }
+        if ($RemoveNames) {
+            Write-Debug "Remove keys named: [$RemoveNames]"
             ($Hashtable.GetEnumerator() | Where-Object { $_.Name -in $RemoveNames }) | ForEach-Object {
-                    Write-Debug " - [$($_.Name)] - Remove"
-                    $Hashtable.Remove($_.Name)
-                }
+                Write-Debug " - [$($_.Name)] - Remove"
+                $Hashtable.Remove($_.Name)
             }
-            if ($KeepNames) {
-                Write-Debug "Remove keys NOT named: [$KeepNames]"
+        }
+        if ($KeepNames) {
+            Write-Debug "Remove keys NOT named: [$KeepNames]"
             ($Hashtable.GetEnumerator() | Where-Object { $_.Name -notin $KeepNames }) | ForEach-Object {
-                    Write-Debug " - [$($_.Name)] - Remove"
-                    $Hashtable.Remove($_.Name)
-                }
+                Write-Debug " - [$($_.Name)] - Remove"
+                $Hashtable.Remove($_.Name)
             }
-        } catch {
-            throw $_
         }
     }
 

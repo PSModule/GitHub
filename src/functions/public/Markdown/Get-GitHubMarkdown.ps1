@@ -31,8 +31,8 @@
         [ValidateSet('markdown', 'gfm')]
         [string] $Mode = 'markdown',
 
-        # The repository context to use when creating references in `gfm` mode. For example, setting `context` to `octo-org/octo-repo` will change the
-        # text `#42` into an HTML link to issue 42 in the `octo-org/octo-repo` repository.
+        # The repository context to use when creating references in `gfm` mode. For example, setting `context` to `octo-org/octo-Repository` will
+        # change the text `#42` into an HTML link to issue 42 in the `octo-org/octo-Repository` repository.
         [Parameter()]
         [string] $RepoContext,
 
@@ -50,25 +50,21 @@
     }
 
     process {
-        try {
-            $body = @{
-                context = $RepoContext
-                mode    = $Mode
-                text    = $Text
-            }
+        $body = @{
+            context = $RepoContext
+            mode    = $Mode
+            text    = $Text
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = '/markdown'
-                Method      = 'POST'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'POST'
+            APIEndpoint = '/markdown'
+            Body        = $body
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 
