@@ -56,15 +56,9 @@
             Body    = $body
         }
 
-        try {
-            Write-Debug ($RESTParams.GetEnumerator() | Out-String)
-
-            $deviceCodeResponse = Invoke-RestMethod @RESTParams -Verbose:$false
-            return $deviceCodeResponse
-        } catch {
-            Write-Error $_
-            throw $_
-        }
+        Write-Debug ($RESTParams.GetEnumerator() | Out-String)
+        $deviceCodeResponse = Invoke-RestMethod @RESTParams -Verbose:$false
+        return $deviceCodeResponse
     }
 
     end {

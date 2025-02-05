@@ -61,14 +61,10 @@
     }
 
     process {
-        try {
-            if ($env:GITHUB_ACTIONS -eq 'true') {
-                Write-Host "::notice file=$Name,line=$Line,col=$Column,endColumn=$EndColumn,endLine=$EndLine,title=$Title::$Message"
-            } else {
-                Write-Host $Message
-            }
-        } catch {
-            throw $_
+        if ($env:GITHUB_ACTIONS -eq 'true') {
+            Write-Host "::notice file=$Name,line=$Line,col=$Column,endColumn=$EndColumn,endLine=$EndLine,title=$Title::$Message"
+        } else {
+            Write-Host $Message
         }
     }
 

@@ -59,17 +59,13 @@
     }
 
     process {
-        try {
-            switch ($PSCmdlet.ParameterSetName) {
-                'Organization' {
-                    Block-GitHubUserByOrganization -Organization $Organization -Username $Username -Context $Context
-                }
-                '__AllParameterSets' {
-                    Block-GitHubUserByUser -Username $Username -Context $Context
-                }
+        switch ($PSCmdlet.ParameterSetName) {
+            'Organization' {
+                Block-GitHubUserByOrganization -Organization $Organization -Username $Username -Context $Context
             }
-        } catch {
-            throw $_
+            '__AllParameterSets' {
+                Block-GitHubUserByUser -Username $Username -Context $Context
+            }
         }
     }
 

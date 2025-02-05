@@ -42,51 +42,48 @@
     }
 
     process {
-        try {
-            if (-not (Test-Path -Path $Path)) {
-                throw "File not found: $Path"
-            }
-
-            $outputs = Get-GitHubOutput -Path $Path -AsHashtable
-
-            if ([string]::IsNullOrEmpty($env:GITHUB_ACTION)) {
-                Write-Warning 'Cannot create output as the step has no ID.'
-            }
-
-            switch -Regex ($value.GetType().Name) {
-                'SecureString' {
-                    $Value = $Value | ConvertFrom-SecureString -AsPlainText
-                    Add-Mask -Value $Value
-                }
-                'Hashtable|PSCustomObject' {
-                    Write-Debug 'Converting value to JSON:'
-                    $Value = $Value | ConvertTo-Json -Compress -Depth 100
-                    Write-Debug $value
-                }
-                default {}
-            }
-
-            Write-Verbose "Output: [$Name] = [$Value]"
-
-            # If the script is running in a GitHub composite action, accumulate the output under the 'result' key,
-            # else append the key-value pair directly.
-            if ($env:PSMODULE_GITHUB_SCRIPT) {
-                Write-Debug "[$stackPath] - Running in GitHub-Script composite action"
-                if (-not $outputs.ContainsKey('result')) {
-                    $outputs['result'] = @{}
-                }
-                $outputs['result'][$Name] = $Value
-            } else {
-                Write-Debug "[$stackPath] - Running in a custom action"
-                $outputs[$Name] = $Value
-            }
-
-            if ($PSCmdlet.ShouldProcess('GitHub Output', 'Set')) {
-                $outputs | ConvertTo-GitHubOutput | Set-Content -Path $Path
-            }
-        } catch {
-            throw $_
+        if (-not (Test-Path -Path $Path)) {
+            throw "File not found: $Path"
         }
+
+        $outputs = Get-GitHubOutput -Path $Path -AsHashtable
+
+        if ([string]::IsNullOrEmpty($env:GITHUB_ACTION)) {
+            Write-Warning 'Cannot create output as the step has no ID.'
+        }
+
+        switch -Regex ($value.GetType().Name) {
+            'SecureString' {
+                $Value = $Value | ConvertFrom-SecureString -AsPlainText
+                Add-Mask -Value $Value
+            }
+            'Hashtable|PSCustomObject' {
+                Write-Debug 'Converting value to JSON:'
+                $Value = $Value | ConvertTo-Json -Compress -Depth 100
+                Write-Debug $value
+            }
+            default {}
+        }
+
+        Write-Verbose "Output: [$Name] = [$Value]"
+
+        # If the script is running in a GitHub composite action, accumulate the output under the 'result' key,
+        # else append the key-value pair directly.
+        if ($env:PSMODULE_GITHUB_SCRIPT) {
+            Write-Debug "[$stackPath] - Running in GitHub-Script composite action"
+            if (-not $outputs.ContainsKey('result')) {
+                $outputs['result'] = @{}
+            }
+            $outputs['result'][$Name] = $Value
+        } else {
+            Write-Debug "[$stackPath] - Running in a custom action"
+            $outputs[$Name] = $Value
+        }
+
+        if ($PSCmdlet.ShouldProcess('GitHub Output', 'Set')) {
+            $outputs | ConvertTo-GitHubOutput | Set-Content -Path $Path
+        }
+
     }
 
     end {

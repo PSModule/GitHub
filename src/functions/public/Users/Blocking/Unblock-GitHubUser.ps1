@@ -62,14 +62,10 @@
     }
 
     process {
-        try {
-            if ($Organization) {
-                Unblock-GitHubUserByOrganization -Organization $Organization -Username $Username -Context $Context
-            } else {
-                Unblock-GitHubUserByUser -Username $Username -Context $Context
-            }
-        } catch {
-            throw $_
+        if ($Organization) {
+            Unblock-GitHubUserByOrganization -Organization $Organization -Username $Username -Context $Context
+        } else {
+            Unblock-GitHubUserByUser -Username $Username -Context $Context
         }
     }
 

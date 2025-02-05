@@ -44,22 +44,19 @@
     }
 
     process {
-        try {
-            $baseURL = $script:StatusBaseURL[$Stamp]
+        $baseURL = $script:StatusBaseURL[$Stamp]
 
-            if ($Summary) {
-                $APIURI = "$baseURL/api/v2/summary.json"
-                $response = Invoke-RestMethod -Uri $APIURI -Method Get
-                $response
-                return
-            }
-
-            $APIURI = "$baseURL/api/v2/status.json"
+        if ($Summary) {
+            $APIURI = "$baseURL/api/v2/summary.json"
             $response = Invoke-RestMethod -Uri $APIURI -Method Get
-            $response.status
-        } catch {
-            throw $_
+            $response
+            return
         }
+
+        $APIURI = "$baseURL/api/v2/status.json"
+        $response = Invoke-RestMethod -Uri $APIURI -Method Get
+        $response.status
+
     }
 
     end {

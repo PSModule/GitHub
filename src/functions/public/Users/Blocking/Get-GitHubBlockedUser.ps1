@@ -57,14 +57,10 @@
     }
 
     process {
-        try {
-            if ($Organization) {
-                Get-GitHubBlockedUserByOrganization -Organization $Organization -PerPage $PerPage -Context $Context
-            } else {
-                Get-GitHubBlockedUserByUser -PerPage $PerPage -Context $Context
-            }
-        } catch {
-            throw $_
+        if ($Organization) {
+            Get-GitHubBlockedUserByOrganization -Organization $Organization -PerPage $PerPage -Context $Context
+        } else {
+            Get-GitHubBlockedUserByUser -PerPage $PerPage -Context $Context
         }
     }
 

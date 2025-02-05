@@ -45,10 +45,6 @@
     )
 
     Write-Host "::group::$Name"
-    try {
-        . $ScriptBlock
-    } catch {
-        throw $_
-    }
+    . $ScriptBlock
     Write-Host '::endgroup::'
 }

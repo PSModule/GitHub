@@ -338,88 +338,85 @@ filter New-GitHubRepository {
     }
 
     process {
-        try {
-            $GitignoreTemplate = $PSBoundParameters['GitignoreTemplate']
-            $LicenseTemplate = $PSBoundParameters['LicenseTemplate']
-            if ($PSCmdlet.ParameterSetName -in 'user', 'org') {
-                $params = @{
-                    Context                  = $Context
-                    Owner                    = $Owner
-                    Name                     = $Name
-                    Description              = $Description
-                    Homepage                 = $Homepage
-                    Visibility               = $Visibility
-                    HasIssues                = $HasIssues
-                    HasProjects              = $HasProjects
-                    HasWiki                  = $HasWiki
-                    HasDiscussions           = $HasDiscussions
-                    HasDownloads             = $HasDownloads
-                    IsTemplate               = $IsTemplate
-                    TeamId                   = $TeamId
-                    AutoInit                 = $AutoInit
-                    AllowSquashMerge         = $AllowSquashMerge
-                    AllowMergeCommit         = $AllowMergeCommit
-                    AllowRebaseMerge         = $AllowRebaseMerge
-                    AllowAutoMerge           = $AllowAutoMerge
-                    DeleteBranchOnMerge      = $DeleteBranchOnMerge
-                    SquashMergeCommitTitle   = $SquashMergeCommitTitle
-                    SquashMergeCommitMessage = $SquashMergeCommitMessage
-                    MergeCommitTitle         = $MergeCommitTitle
-                    MergeCommitMessage       = $MergeCommitMessage
-                    GitignoreTemplate        = $GitignoreTemplate
-                    LicenseTemplate          = $LicenseTemplate
-                }
-                Remove-HashtableEntry -Hashtable $params -NullOrEmptyValues
+        $GitignoreTemplate = $PSBoundParameters['GitignoreTemplate']
+        $LicenseTemplate = $PSBoundParameters['LicenseTemplate']
+        if ($PSCmdlet.ParameterSetName -in 'user', 'org') {
+            $params = @{
+                Context                  = $Context
+                Owner                    = $Owner
+                Name                     = $Name
+                Description              = $Description
+                Homepage                 = $Homepage
+                Visibility               = $Visibility
+                HasIssues                = $HasIssues
+                HasProjects              = $HasProjects
+                HasWiki                  = $HasWiki
+                HasDiscussions           = $HasDiscussions
+                HasDownloads             = $HasDownloads
+                IsTemplate               = $IsTemplate
+                TeamId                   = $TeamId
+                AutoInit                 = $AutoInit
+                AllowSquashMerge         = $AllowSquashMerge
+                AllowMergeCommit         = $AllowMergeCommit
+                AllowRebaseMerge         = $AllowRebaseMerge
+                AllowAutoMerge           = $AllowAutoMerge
+                DeleteBranchOnMerge      = $DeleteBranchOnMerge
+                SquashMergeCommitTitle   = $SquashMergeCommitTitle
+                SquashMergeCommitMessage = $SquashMergeCommitMessage
+                MergeCommitTitle         = $MergeCommitTitle
+                MergeCommitMessage       = $MergeCommitMessage
+                GitignoreTemplate        = $GitignoreTemplate
+                LicenseTemplate          = $LicenseTemplate
             }
-
-            switch ($PSCmdlet.ParameterSetName) {
-                'user' {
-                    if ($PSCmdlet.ShouldProcess("repository for user [$Name]", 'Create')) {
-                        New-GitHubRepositoryUser @params
-                    }
-                }
-                'org' {
-                    if ($PSCmdlet.ShouldProcess("repository for organization [$Owner/$Name]", 'Create')) {
-                        New-GitHubRepositoryOrg @params
-                    }
-                }
-                'template' {
-                    if ($PSCmdlet.ShouldProcess("repository [$Owner/$Name] from template [$TemplateOwner/$TemplateRepo]", 'Create')) {
-                        $params = @{
-                            Context            = $Context
-                            TemplateOwner      = $TemplateOwner
-                            TemplateRepo       = $TemplateRepo
-                            Owner              = $Owner
-                            Name               = $Name
-                            IncludeAllBranches = $IncludeAllBranches
-                            Description        = $Description
-                            Private            = $Visibility -eq 'private'
-                        }
-                        Remove-HashtableEntry -Hashtable $params -NullOrEmptyValues
-                        New-GitHubRepositoryFromTemplate @params
-                    }
-                }
-                'fork' {
-                    if ([string]::IsNullorEmpty($Name)) {
-                        $Name = $ForkRepo
-                    }
-                    if ($PSCmdlet.ShouldProcess("repository [$Owner/$Name] as fork from [$ForkOwner/$ForkRepo]", 'Create')) {
-                        $params = @{
-                            Context           = $Context
-                            Owner             = $ForkOwner
-                            Repo              = $ForkRepo
-                            Organization      = $Owner
-                            Name              = $Name
-                            DefaultBranchOnly = $DefaultBranchOnly
-                        }
-                        Remove-HashtableEntry -Hashtable $params -NullOrEmptyValues
-                        New-GitHubRepositoryAsFork @params
-                    }
-                }
-            }
-        } catch {
-            throw $_
+            Remove-HashtableEntry -Hashtable $params -NullOrEmptyValues
         }
+
+        switch ($PSCmdlet.ParameterSetName) {
+            'user' {
+                if ($PSCmdlet.ShouldProcess("repository for user [$Name]", 'Create')) {
+                    New-GitHubRepositoryUser @params
+                }
+            }
+            'org' {
+                if ($PSCmdlet.ShouldProcess("repository for organization [$Owner/$Name]", 'Create')) {
+                    New-GitHubRepositoryOrg @params
+                }
+            }
+            'template' {
+                if ($PSCmdlet.ShouldProcess("repository [$Owner/$Name] from template [$TemplateOwner/$TemplateRepo]", 'Create')) {
+                    $params = @{
+                        Context            = $Context
+                        TemplateOwner      = $TemplateOwner
+                        TemplateRepo       = $TemplateRepo
+                        Owner              = $Owner
+                        Name               = $Name
+                        IncludeAllBranches = $IncludeAllBranches
+                        Description        = $Description
+                        Private            = $Visibility -eq 'private'
+                    }
+                    Remove-HashtableEntry -Hashtable $params -NullOrEmptyValues
+                    New-GitHubRepositoryFromTemplate @params
+                }
+            }
+            'fork' {
+                if ([string]::IsNullorEmpty($Name)) {
+                    $Name = $ForkRepo
+                }
+                if ($PSCmdlet.ShouldProcess("repository [$Owner/$Name] as fork from [$ForkOwner/$ForkRepo]", 'Create')) {
+                    $params = @{
+                        Context           = $Context
+                        Owner             = $ForkOwner
+                        Repo              = $ForkRepo
+                        Organization      = $Owner
+                        Name              = $Name
+                        DefaultBranchOnly = $DefaultBranchOnly
+                    }
+                    Remove-HashtableEntry -Hashtable $params -NullOrEmptyValues
+                    New-GitHubRepositoryAsFork @params
+                }
+            }
+        }
+
     }
 
     end {

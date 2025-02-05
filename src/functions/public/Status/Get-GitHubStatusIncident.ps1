@@ -44,22 +44,18 @@
     }
 
     process {
-        try {
-            $baseURL = $script:StatusBaseURL[$Stamp]
+        $baseURL = $script:StatusBaseURL[$Stamp]
 
-            if ($Unresolved) {
-                $APIURI = "$baseURL/api/v2/incidents/unresolved.json"
-                $response = Invoke-RestMethod -Uri $APIURI -Method Get
-                $response.incidents
-                return
-            }
-
-            $APIURI = "$baseURL/api/v2/incidents.json"
+        if ($Unresolved) {
+            $APIURI = "$baseURL/api/v2/incidents/unresolved.json"
             $response = Invoke-RestMethod -Uri $APIURI -Method Get
             $response.incidents
-        } catch {
-            throw $_
+            return
         }
+
+        $APIURI = "$baseURL/api/v2/incidents.json"
+        $response = Invoke-RestMethod -Uri $APIURI -Method Get
+        $response.incidents
     }
 
     end {

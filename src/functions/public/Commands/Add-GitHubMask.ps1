@@ -52,12 +52,8 @@
     }
 
     process {
-        try {
-            foreach ($item in $Value) {
-                Write-Host "::add-mask::$item"
-            }
-        } catch {
-            throw $_
+        foreach ($item in $Value) {
+            Write-Host "::add-mask::$item"
         }
     }
 

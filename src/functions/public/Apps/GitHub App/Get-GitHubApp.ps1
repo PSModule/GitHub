@@ -46,17 +46,13 @@
     }
 
     process {
-        try {
-            switch ($PSCmdlet.ParameterSetName) {
-                'BySlug' {
-                    Get-GitHubAppByName -AppSlug $Name -Context $Context
-                }
-                default {
-                    Get-GitHubAuthenticatedApp -Context $Context
-                }
+        switch ($PSCmdlet.ParameterSetName) {
+            'BySlug' {
+                Get-GitHubAppByName -AppSlug $Name -Context $Context
             }
-        } catch {
-            throw $_
+            default {
+                Get-GitHubAuthenticatedApp -Context $Context
+            }
         }
     }
 

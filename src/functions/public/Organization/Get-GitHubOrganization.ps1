@@ -33,7 +33,7 @@
         [List organizations](https://docs.github.com/rest/orgs/orgs)
     #>
     [OutputType([pscustomobject])]
-    [CmdletBinding(DefaultParameterSetName = '__DefaultSet')]
+    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'All', Justification = 'Required for parameter set')]
     param(
         # The organization name. The name is not case sensitive.
@@ -66,7 +66,7 @@
         # The number of results per page (max 100).
         [Parameter(ParameterSetName = 'AllOrg')]
         [Parameter(ParameterSetName = 'UserOrg')]
-        [Parameter(ParameterSetName = '__DefaultSet')]
+        [Parameter(ParameterSetName = '__AllParameterSets')]
         [ValidateRange(0, 100)]
         [int] $PerPage,
 
@@ -89,24 +89,19 @@
     }
 
     process {
-        try {
-
-            switch ($PSCmdlet.ParameterSetName) {
-                '__DefaultSet' {
-                    Get-GitHubMyOrganization -PerPage $PerPage -Context $Context | Get-GitHubOrganizationByName -Context $Context
-                }
-                'NamedOrg' {
-                    Get-GitHubOrganizationByName -Organization $Organization -Context $Context
-                }
-                'NamedUser' {
-                    Get-GitHubUserOrganization -Username $Username -Context $Context
-                }
-                'AllOrg' {
-                    Get-GitHubAllOrganization -Since $Since -PerPage $PerPage -Context $Context
-                }
+        switch ($PSCmdlet.ParameterSetName) {
+            'NamedOrg' {
+                Get-GitHubOrganizationByName -Organization $Organization -Context $Context
             }
-        } catch {
-            throw $_
+            'NamedUser' {
+                Get-GitHubUserOrganization -Username $Username -Context $Context
+            }
+            'AllOrg' {
+                Get-GitHubAllOrganization -Since $Since -PerPage $PerPage -Context $Context
+            }
+            default {
+                Get-GitHubMyOrganization -PerPage $PerPage -Context $Context | Get-GitHubOrganizationByName -Context $Context
+            }
         }
     }
 

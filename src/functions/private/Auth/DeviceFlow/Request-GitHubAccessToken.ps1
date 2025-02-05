@@ -77,17 +77,11 @@
             Body    = $body
         }
 
-        try {
-            Write-Debug ($RESTParams.GetEnumerator() | Out-String)
+        Write-Debug ($RESTParams.GetEnumerator() | Out-String)
+        $tokenResponse = Invoke-RestMethod @RESTParams -Verbose:$false
+        Write-Debug ($tokenResponse | ConvertTo-Json | Out-String)
+        return $tokenResponse
 
-            $tokenResponse = Invoke-RestMethod @RESTParams -Verbose:$false
-
-            Write-Debug ($tokenResponse | ConvertTo-Json | Out-String)
-            return $tokenResponse
-        } catch {
-            Write-Error $_
-            throw $_
-        }
     }
 
     end {

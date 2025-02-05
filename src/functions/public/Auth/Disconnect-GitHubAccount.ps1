@@ -43,21 +43,17 @@
         }
         foreach ($contextItem in $Context) {
             $contextItem = Resolve-GitHubContext -Context $contextItem
-            try {
-                Remove-GitHubContext -Context $contextItem
-                $isDefaultContext = $contextItem.Name -eq $script:GitHub.Config.DefaultContext
-                if ($isDefaultContext) {
-                    Remove-GitHubConfig -Name 'DefaultContext'
-                    Write-Warning 'There is no longer a default context!'
-                    Write-Warning "Please set a new default context using 'Set-GitHubDefaultContext -Name <context>'"
-                }
+            Remove-GitHubContext -Context $contextItem
+            $isDefaultContext = $contextItem.Name -eq $script:GitHub.Config.DefaultContext
+            if ($isDefaultContext) {
+                Remove-GitHubConfig -Name 'DefaultContext'
+                Write-Warning 'There is no longer a default context!'
+                Write-Warning "Please set a new default context using 'Set-GitHubDefaultContext -Name <context>'"
+            }
 
-                if (-not $Silent) {
-                    Write-Host '✓ ' -ForegroundColor Green -NoNewline
-                    Write-Host "Logged out of GitHub! [$contextItem]"
-                }
-            } catch {
-                throw $_
+            if (-not $Silent) {
+                Write-Host '✓ ' -ForegroundColor Green -NoNewline
+                Write-Host "Logged out of GitHub! [$contextItem]"
             }
         }
     }

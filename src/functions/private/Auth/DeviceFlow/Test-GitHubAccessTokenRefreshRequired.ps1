@@ -26,14 +26,10 @@
     }
 
     process {
-        try {
-            $tokenExpirationDate = $Context.TokenExpirationDate
-            $currentDateTime = Get-Date
-            $remainingDuration = [datetime]$tokenExpirationDate - $currentDateTime
-            $remainingDuration.TotalHours -lt $script:GitHub.Config.AccessTokenGracePeriodInHours
-        } catch {
-            throw $_
-        }
+        $tokenExpirationDate = $Context.TokenExpirationDate
+        $currentDateTime = Get-Date
+        $remainingDuration = [datetime]$tokenExpirationDate - $currentDateTime
+        $remainingDuration.TotalHours -lt $script:GitHub.Config.AccessTokenGracePeriodInHours
     }
 
     end {

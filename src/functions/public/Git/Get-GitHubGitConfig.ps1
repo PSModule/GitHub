@@ -25,7 +25,6 @@
     }
 
     process {
-        try {
             $gitExists = Get-Command -Name 'git' -ErrorAction SilentlyContinue
             Write-Debug "GITEXISTS: $gitExists"
             if (-not $gitExists) {
@@ -63,9 +62,7 @@
                 }
             }
             $config
-        } catch {
-            throw $_
-        }
+
     }
 
     end {

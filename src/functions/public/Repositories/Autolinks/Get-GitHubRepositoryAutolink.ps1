@@ -56,17 +56,13 @@
     }
 
     process {
-        try {
-            switch ($PSCmdlet.ParameterSetName) {
-                'ById' {
-                    Get-GitHubRepositoryAutolinkById -Owner $Owner -Repository $Repository -ID $ID -Context $Context
-                }
-                default {
-                    Get-GitHubRepositoryAutolinkList -Owner $Owner -Repository $Repository -Context $Context
-                }
+        switch ($PSCmdlet.ParameterSetName) {
+            'ById' {
+                Get-GitHubRepositoryAutolinkById -Owner $Owner -Repository $Repository -ID $ID -Context $Context
             }
-        } catch {
-            throw $_
+            default {
+                Get-GitHubRepositoryAutolinkList -Owner $Owner -Repository $Repository -Context $Context
+            }
         }
     }
 

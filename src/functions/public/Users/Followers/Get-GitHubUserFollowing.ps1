@@ -50,14 +50,10 @@
     }
 
     process {
-        try {
-            if ($Username) {
-                Get-GitHubUserFollowingUser -Username $Username -PerPage $PerPage -Context $Context
-            } else {
-                Get-GitHubUserFollowingMe -PerPage $PerPage -Context $Context
-            }
-        } catch {
-            throw $_
+        if ($Username) {
+            Get-GitHubUserFollowingUser -Username $Username -PerPage $PerPage -Context $Context
+        } else {
+            Get-GitHubUserFollowingMe -PerPage $PerPage -Context $Context
         }
     }
 

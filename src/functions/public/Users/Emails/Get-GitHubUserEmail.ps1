@@ -48,14 +48,10 @@
     }
 
     process {
-        try {
-            if ($Public) {
-                Get-GitHubUserPublicEmail -PerPage $PerPage -Context $Context
-            } else {
-                Get-GitHubUserAllEmail -PerPage $PerPage -Context $Context
-            }
-        } catch {
-            throw $_
+        if ($Public) {
+            Get-GitHubUserPublicEmail -PerPage $PerPage -Context $Context
+        } else {
+            Get-GitHubUserAllEmail -PerPage $PerPage -Context $Context
         }
     }
 

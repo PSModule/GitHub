@@ -46,21 +46,18 @@
     }
 
     process {
-        try {
-            if (-not $Path) {
-                throw 'The path to the GitHub output file is not set. Please set the path to the GitHub output file using the -Path parameter.'
-            }
-            Write-Debug "[$stackPath] - Output path"
-            Write-Debug $Path
-            if (-not (Test-Path -Path $Path)) {
-                throw "File not found: $Path"
-            }
-
-            $outputContent = Get-Content -Path $Path -Raw
-            ConvertFrom-GitHubOutput -OutputContent $outputContent -AsHashtable:$AsHashtable
-        } catch {
-            throw $_
+        if (-not $Path) {
+            throw 'The path to the GitHub output file is not set. Please set the path to the GitHub output file using the -Path parameter.'
         }
+        Write-Debug "[$stackPath] - Output path"
+        Write-Debug $Path
+        if (-not (Test-Path -Path $Path)) {
+            throw "File not found: $Path"
+        }
+
+        $outputContent = Get-Content -Path $Path -Raw
+        ConvertFrom-GitHubOutput -OutputContent $outputContent -AsHashtable:$AsHashtable
+
     }
 
     end {

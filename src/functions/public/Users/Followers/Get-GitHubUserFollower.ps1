@@ -50,14 +50,10 @@
     }
 
     process {
-        try {
-            if ($Username) {
-                Get-GitHubUserFollowersOfUser -Username $Username -PerPage $PerPage -Context $Context
-            } else {
-                Get-GitHubUserMyFollowers -PerPage $PerPage -Context $Context
-            }
-        } catch {
-            throw $_
+        if ($Username) {
+            Get-GitHubUserFollowersOfUser -Username $Username -PerPage $PerPage -Context $Context
+        } else {
+            Get-GitHubUserMyFollowers -PerPage $PerPage -Context $Context
         }
     }
 

@@ -47,18 +47,13 @@
     }
 
     process {
-        try {
-            $Name = $PSBoundParameters['Name']
-            switch ($PSCmdlet.ParameterSetName) {
-                'List' {
-                    Get-GitHubGitignoreList -Context $Context
-                }
-                'Name' {
-                    Get-GitHubGitignoreByName -Name $Name -Context $Context
-                }
+        switch ($PSCmdlet.ParameterSetName) {
+            'List' {
+                Get-GitHubGitignoreList -Context $Context
             }
-        } catch {
-            throw $_
+            'Name' {
+                Get-GitHubGitignoreByName -Name $Name -Context $Context
+            }
         }
     }
 

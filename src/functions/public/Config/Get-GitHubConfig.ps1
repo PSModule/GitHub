@@ -26,15 +26,11 @@
     }
 
     process {
-        try {
-            if (-not $Name) {
-                return [GitHubConfig]($script:GitHub.Config)
-            }
-
-            $script:GitHub.Config.$Name
-        } catch {
-            throw $_
+        if (-not $Name) {
+            return [GitHubConfig]($script:GitHub.Config)
         }
+
+        $script:GitHub.Config.$Name
     }
 
     end {

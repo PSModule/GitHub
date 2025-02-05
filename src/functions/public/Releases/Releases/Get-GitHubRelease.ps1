@@ -87,24 +87,21 @@
     }
 
     process {
-        try {
-            switch ($PSCmdlet.ParameterSetName) {
-                'All' {
-                    Get-GitHubReleaseAll -Owner $Owner -Repository $Repository -PerPage $PerPage -Context $Context
-                }
-                'Latest' {
-                    Get-GitHubReleaseLatest -Owner $Owner -Repository $Repository -Context $Context
-                }
-                'Tag' {
-                    Get-GitHubReleaseByTagName -Owner $Owner -Repository $Repository -Tag $Tag -Context $Context
-                }
-                'ID' {
-                    Get-GitHubReleaseByID -Owner $Owner -Repository $Repository -ID $ID -Context $Context
-                }
+        switch ($PSCmdlet.ParameterSetName) {
+            'All' {
+                Get-GitHubReleaseAll -Owner $Owner -Repository $Repository -PerPage $PerPage -Context $Context
             }
-        } catch {
-            throw $_
+            'Latest' {
+                Get-GitHubReleaseLatest -Owner $Owner -Repository $Repository -Context $Context
+            }
+            'Tag' {
+                Get-GitHubReleaseByTagName -Owner $Owner -Repository $Repository -Tag $Tag -Context $Context
+            }
+            'ID' {
+                Get-GitHubReleaseByID -Owner $Owner -Repository $Repository -ID $ID -Context $Context
+            }
         }
+
     }
 
     end {
