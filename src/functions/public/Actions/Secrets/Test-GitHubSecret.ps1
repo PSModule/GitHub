@@ -57,14 +57,13 @@
 
         [Parameter()]
         [object] $Context = (Get-GitHubContext)
-    )   
+    )
 
     process {
         try {
             $secret = Get-GitHubSecret @PSBoundParameters
             [bool]$secret.name
-        }
-        catch {
+        } catch {
             $false
             # This part doesn't work as intended because of the error handling in Invoke-GitHubAPI :(
             # if (404 -ne $_.Exception.Response.StatusCode.value__) {

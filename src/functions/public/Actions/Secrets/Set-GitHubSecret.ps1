@@ -84,13 +84,6 @@
     )
 
     begin {
-        # TODO: This check should probably be built-in to the Sodium module
-        if ([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform([System.Runtime.InteropServices.OSPlatform]::Windows)) {
-            if (-not (Test-VisualCRedistributableInstalled -Version '14.29.30037')) {
-                throw  'The libsodium library used to encrypt secrets for Set-GitHubSecret requires the Microsoft Visual C++ Redistributable for Visual Studio 2015, 2017, 2019, and 2022 to be installed on windows.'
-            }
-        }
-
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
@@ -154,10 +147,10 @@
             }
             $publicKey = Get-GitHubPublicKey @getPublicKeyParams
             $body = @{
-                encrypted_value = ConvertTo-SodiumEncryptedString -Secret (ConvertFrom-SecureString $Value -AsPlainText) -PublicKey $publicKey.key
+                encrypted_value = ConvertTo-SodiumEncryptedString -Secret (ConvertFrom-SecureString $Value -AsPlainText) -PublicKey $publicKey.key #FIXME: Add '#Requires -Modules' for [ConvertTo-SodiumEncryptedString] Suggestions: Sodium, PSSodium
                 key_id          = $publicKey.key_id
             }
-            if ($PSCmdlet.ParameterSetName -in 'AuthenticatedUser','Organization') {
+            if ($PSCmdlet.ParameterSetName -in 'AuthenticatedUser', 'Organization') {
                 if ($Private.IsPresent -and $PSCmdlet.ParameterSetName -eq 'Organization') {
                     # ParameterSetName -eq Organization filter should be redundant since -Private can only be applied to the Organization ParameterSet
                     $body['visibility'] = 'private'

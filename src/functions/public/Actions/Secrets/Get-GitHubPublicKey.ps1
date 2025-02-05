@@ -1,60 +1,65 @@
 ﻿function Get-GitHubPublicKey {
     <#
-    .SYNOPSIS
+        .SYNOPSIS
         Gets your public key, which you need to encrypt secrets.
 
-    .DESCRIPTION
+        .DESCRIPTION
         Gets your public key, which you need to encrypt secrets. You need to encrypt a secret before you can create or update secrets.
 
-    .PARAMETER Organization
-        The account owner of the repository. The name is not case sensitive.
-        
-    .PARAMETER Owner
-        The account owner of the repository. The name is not case sensitive.
-
-    .PARAMETER Repository
-        The name of the repository. The name is not case sensitive.
-
-    .EXAMPLE
-        > Get-GitHubPublicKey -Owner PSModule -Repo Demo
+        .EXAMPLE
+        Get-GitHubPublicKey -Owner MyOrg -Repo MyRepo
 
         key_id              key
         ------              ---
         3780435238020453366 Et862t3cCgJnI8e8D6Z9BUvvtdS7eZdkhdap+bgJAi4=
 
-    .OUTPUTS
+        .OUTPUTS
         [PSObject[]]
 
-    .LINK
+        .LINK
         https://docs.github.com/en/rest/actions/secrets?apiVersion=2022-11-28#get-a-repository-public-key
 
-    .LINK
+        .LINK
         https://docs.github.com/en/rest/actions/secrets?apiVersion=2022-11-28#get-an-organization-public-key
 
-    .LINK
+        .LINK
         https://docs.github.com/en/rest/codespaces/organization-secrets?apiVersion=2022-11-28#get-an-organization-public-key
 
-    .LINK
+        .LINK
         https://docs.github.com/en/rest/codespaces/secrets?apiVersion=2022-11-28#get-public-key-for-the-authenticated-user
     #>
     [CmdletBinding(DefaultParameterSetName = 'AuthenticatedUser')]
     param (
-        [Parameter(Mandatory, ParameterSetName = 'Organization')]
-        [string]$Organization,
+        # The account owner of the repository. The name is not case sensitive.
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'Organization'
+        )]
+        [string] $Organization,
 
-        [Parameter(Mandatory, ParameterSetName = 'Repository')]
-        [string]$Owner,
+        # The account owner of the repository. The name is not case sensitive.
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'Repository'
+        )]
+        [string] $Owner,
 
-        [Parameter(Mandatory, ParameterSetName = 'Repository')]
-        [string]$Repository,
+        # The name of the repository. The name is not case sensitive.
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'Repository'
+        )]
+        [string] $Repository,
 
+        # The context to run the command in. Used to get the details for the API call.
+        [Parameter()]
         [ValidateSet('actions', 'codespaces')]
-        [string]$Type = 'actions',
+        [string] $Type = 'actions',
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [object]$Context = (Get-GitHubContext)
+        [object] $Context = (Get-GitHubContext)
     )
 
     begin {
@@ -69,14 +74,14 @@
         Write-Debug "Owner: [$Owner]"
 
         if ([string]::IsNullOrEmpty($Repository)) {
-            $Repository = $Context.Repo
+            $Repository = $Context.Repository
         }
         Write-Debug "Repository: [$Repository]"
     }
 
     process {
         $getParams = @{
-            APIEndpoint    = switch ($PSCmdlet.ParameterSetName) {
+            APIEndpoint = switch ($PSCmdlet.ParameterSetName) {
                 'Organization' {
                     "/orgs/$Organization/$Type/secrets/public-key"
                     break
@@ -90,8 +95,8 @@
                     break
                 }
             }
-            Context        = $Context
-            Method         = 'GET'
+            Context     = $Context
+            Method      = 'GET'
         }
         Invoke-GitHubAPI @getParams | Select-Object -ExpandProperty Response
     }

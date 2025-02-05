@@ -111,7 +111,7 @@
 
     process {
         $getParams = @{
-            APIEndpoint    = switch ($PSCmdlet.ParameterSetName) {
+            APIEndpoint = switch ($PSCmdlet.ParameterSetName) {
                 'Environment' {
                     "/repos/$Owner/$Repository/environments/$Environment/secrets"
                     break
@@ -122,19 +122,19 @@
                 }
                 'Repository' {
                     $Type -eq 'organization' ?
-                        "/repos/$Owner/$Repository/actions/organization-secrets" :
-                        "/repos/$Owner/$Repository/$Type/secrets"
+                    "/repos/$Owner/$Repository/actions/organization-secrets" :
+                    "/repos/$Owner/$Repository/$Type/secrets"
                     break
                 }
                 'AuthorizedUser' {
                     'user/codespaces/secrets'
                 }
             }
-            Context        = $Context
-            Method         = 'GET'
+            Context     = $Context
+            Method      = 'GET'
         }
         # There is no endpoint for /repos/$Owner/$Repository/actions/organization-secrets/$Name
-        if ($Type -ne 'organization'-and -not [string]::IsNullOrWhiteSpace($Name)) {
+        if ($Type -ne 'organization' -and -not [string]::IsNullOrWhiteSpace($Name)) {
             $getParams.APIEndpoint += "/$Name"
         }
         $response = Invoke-GitHubAPI @getParams | Select-Object -ExpandProperty Response
