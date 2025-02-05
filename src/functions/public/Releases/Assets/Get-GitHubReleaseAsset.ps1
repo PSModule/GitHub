@@ -1,4 +1,4 @@
-﻿filter Get-GitHubReleaseAsset {
+filter Get-GitHubReleaseAsset {
     <#
         .SYNOPSIS
         List release assets based on a release ID or asset ID
@@ -20,7 +20,7 @@
         .NOTES
         [Get a release asset](https://docs.github.com/rest/releases/assets#get-a-release-asset)
     #>
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]

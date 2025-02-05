@@ -1,4 +1,4 @@
-﻿function Get-GitHubAppInstallation {
+function Get-GitHubAppInstallation {
     <#
         .SYNOPSIS
         List installations for the authenticated app, on organization or enterprise organization.
@@ -8,7 +8,7 @@
         If the app is installed on an enterprise, the installations for the enterprise are returned.
         If the app is installed on an organization, the installations for the organization are returned.
     #>
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(
         # The enterprise slug or ID.
         [Parameter(

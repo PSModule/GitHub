@@ -1,4 +1,4 @@
-﻿function Uninstall-GitHubApp {
+function Uninstall-GitHubApp {
     <#
         .SYNOPSIS
         Uninstall a GitHub App.
@@ -11,7 +11,7 @@
 
         Uninstall the GitHub App with the installation ID '123456' from the organization 'org' in the enterprise 'msx'.
     #>
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(
         # The enterprise slug or ID.
         [Parameter(

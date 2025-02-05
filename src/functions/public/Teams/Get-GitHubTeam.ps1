@@ -1,4 +1,4 @@
-﻿function Get-GitHubTeam {
+function Get-GitHubTeam {
     <#
         .SYNOPSIS
         List teams from an org or get a team by name
@@ -19,7 +19,7 @@
         Gets the team with the slug 'my-team-name' in the `github` organization.
     #>
     [OutputType([GitHubTeam])]
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(
         # The slug of the team name.
         [Parameter(
@@ -54,21 +54,17 @@
     }
 
     process {
-        try {
-            $params = @{
-                Organization = $Organization
-                Context      = $Context
+        $params = @{
+            Organization = $Organization
+            Context      = $Context
+        }
+        switch ($PSCmdlet.ParameterSetName) {
+            'BySlug' {
+                Get-GitHubTeamBySlug @params -Slug $Slug
             }
-            switch ($PSCmdlet.ParameterSetName) {
-                'BySlug' {
-                    Get-GitHubTeamBySlug @params -Slug $Slug
-                }
-                default {
-                    Get-GitHubTeamListByOrg @params
-                }
+            default {
+                Get-GitHubTeamListByOrg @params
             }
-        } catch {
-            throw $_
         }
     }
 
@@ -78,3 +74,4 @@
 }
 
 #SkipTest:FunctionTest:Will add a test for this function in a future PR
+

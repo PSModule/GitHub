@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryActivity {
+filter Get-GitHubRepositoryActivity {
     <#
         .SYNOPSIS
         List repository activities
@@ -48,7 +48,7 @@
         .NOTES
         [List repository activities](https://docs.github.com/rest/repos/repos#list-repository-activities)
     #>
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]

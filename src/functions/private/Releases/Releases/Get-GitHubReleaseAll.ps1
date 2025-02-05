@@ -1,4 +1,4 @@
-﻿filter Get-GitHubReleaseAll {
+filter Get-GitHubReleaseAll {
     <#
         .SYNOPSIS
         List releases
@@ -17,7 +17,7 @@
         https://docs.github.com/rest/releases/releases#list-releases
 
     #>
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]

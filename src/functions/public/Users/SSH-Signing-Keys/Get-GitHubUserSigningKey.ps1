@@ -1,4 +1,4 @@
-﻿filter Get-GitHubUserSigningKey {
+filter Get-GitHubUserSigningKey {
     <#
         .SYNOPSIS
         List SSH signing keys for a given user or the authenticated user.
@@ -28,7 +28,7 @@
     #>
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(
         # The handle for the GitHub user account.
         [Parameter(
@@ -65,18 +65,16 @@
     }
 
     process {
-        try {
-            if ($Username) {
+        switch ($PSCmdlet.ParameterSetName) {
+            'Username' {
                 Get-GitHubUserSigningKeyForUser -Username $Username -PerPage $PerPage -Context $Context
-            } else {
-                if ($ID) {
-                    Get-GitHubUserMySigningKeyById -ID $ID -Context $Context
-                } else {
-                    Get-GitHubUserMySigningKey -PerPage $PerPage -Context $Context
-                }
             }
-        } catch {
-            throw $_
+            'Me' {
+                Get-GitHubUserMySigningKeyById -ID $ID -Context $Context
+            }
+            default {
+                Get-GitHubUserMySigningKey -PerPage $PerPage -Context $Context
+            }
         }
     }
 

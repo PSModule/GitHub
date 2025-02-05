@@ -1,4 +1,4 @@
-﻿function Install-GitHubApp {
+function Install-GitHubApp {
     <#
         .SYNOPSIS
         Install an app
@@ -23,7 +23,7 @@
         - the repository selection 'all'
         on the organization 'org' in the enterprise 'msx'.
     #>
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(
         # The enterprise slug or ID.
         [Parameter(

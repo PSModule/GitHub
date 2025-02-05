@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryRuleSuite {
+filter Get-GitHubRepositoryRuleSuite {
     <#
         .SYNOPSIS
         List repository rule suites or a rule suite by ID.
@@ -32,7 +32,7 @@
     #>
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Long links')]
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter()]

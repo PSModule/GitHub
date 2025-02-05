@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryAutolink {
+filter Get-GitHubRepositoryAutolink {
     <#
         .SYNOPSIS
         List all autolinks of a repository
@@ -22,7 +22,7 @@
         [Get all autolinks of a repository](https://docs.github.com/rest/repos/autolinks#list-all-autolinks-of-a-repository)
     #>
     [Alias('Get-GitHubRepositoryAutolinks')]
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
