@@ -32,8 +32,6 @@
             ValueFromPipelineByPropertyName
         )]
         [Alias('login')]
-        [Alias('org')]
-        [Alias('owner')]
         [string] $Organization,
 
         # The context to run the command in. Used to get the details for the API call.

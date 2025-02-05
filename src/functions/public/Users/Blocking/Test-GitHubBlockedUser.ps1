@@ -41,8 +41,6 @@
             ValueFromPipeline,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('org')]
-        [Alias('owner')]
         [string] $Organization,
 
         # The number of results per page (max 100).

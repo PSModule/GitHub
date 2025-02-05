@@ -32,7 +32,6 @@
         # The organization name. The name is not case sensitive.
         # If not provided, the owner from the context will be used.
         [Parameter()]
-        [Alias('Org')]
         [string] $Organization,
 
         # The context to run the command in. Used to get the details for the API call.

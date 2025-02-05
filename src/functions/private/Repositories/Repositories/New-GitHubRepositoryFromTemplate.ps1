@@ -51,7 +51,6 @@
         # The organization or person who will own the new repository.
         # To create a new repository in an organization, the authenticated user must be a member of the specified organization.
         [Parameter(Mandatory)]
-        [Alias('org')]
         [string] $Owner,
 
         # The name of the new repository.

@@ -25,8 +25,6 @@
             ValueFromPipeline,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('org')]
-        [Alias('owner')]
         [Alias('login')]
         [string] $Organization,
 
