@@ -509,7 +509,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
             $tmpUser = Get-GitHubUser
             $tmpUser.name | Should -Be 'Octocat'
             $tmpUser.blog | Should -Be 'https://psmodule.io'
-            $tmpUser.twitter_username | Should -Be $guid
+            $tmpUser.twitter_username | Should -Be 'PSModule'
             $tmpUser.company | Should -Be 'PSModule'
             $tmpUser.location | Should -Be 'USA'
             $tmpUser.bio | Should -Be 'I love programming'
@@ -680,7 +680,6 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
                 Update-GitHubOrganization -Organization 'psmodule-test-org2' -Email $email
             } | Should -Not -Throw
             {
-                $guid = (New-Guid).Guid
                 Update-GitHubOrganization -Organization 'psmodule-test-org2' -TwitterUsername 'PSModule'
             } | Should -Not -Throw
             { Update-GitHubOrganization -Organization 'psmodule-test-org2' -Location 'USA' } | Should -Not -Throw
@@ -826,7 +825,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
             $tmpUser = Get-GitHubUser
             $tmpUser.name | Should -Be 'Octocat'
             $tmpUser.blog | Should -Be 'https://psmodule.io'
-            $tmpUser.twitter_username | Should -Be $guid
+            $tmpUser.twitter_username | Should -Be 'PSModule'
             $tmpUser.company | Should -Be 'PSModule'
             $tmpUser.location | Should -Be 'USA'
             $tmpUser.bio | Should -Be 'I love programming'
@@ -1053,7 +1052,6 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
                 Update-GitHubOrganization -Organization 'psmodule-test-org3' -Email $email
             } | Should -Not -Throw
             {
-                $guid = (New-Guid).Guid
                 Update-GitHubOrganization -Organization 'psmodule-test-org3' -TwitterUsername 'PSModule'
             } | Should -Not -Throw
             { Update-GitHubOrganization -Organization 'psmodule-test-org3' -Location 'USA' } | Should -Not -Throw
@@ -1173,7 +1171,6 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
                 Update-GitHubOrganization -Organization 'psmodule-test-org' -Email $email
             } | Should -Not -Throw
             {
-                $guid = (New-Guid).Guid
                 Update-GitHubOrganization -Organization 'psmodule-test-org' -TwitterUsername 'PSModule'
             } | Should -Not -Throw
             { Update-GitHubOrganization -Organization 'psmodule-test-org' -Location 'USA' } | Should -Not -Throw
