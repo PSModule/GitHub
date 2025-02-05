@@ -28,7 +28,7 @@
         [List GPG keys for the authenticated user](https://docs.github.com/rest/users/gpg-keys#list-gpg-keys-for-the-authenticated-user)
     #>
     [OutputType([pscustomobject])]
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(
         # The handle for the GitHub user account.
         [Parameter(
@@ -65,18 +65,16 @@
     }
 
     process {
-        try {
-            if ($Username) {
+        switch ($PSCmdlet.ParameterSetName) {
+            'Username' {
                 Get-GitHubUserKeyForUser -Username $Username -PerPage $PerPage -Context $Context
-            } else {
-                if ($ID) {
-                    Get-GitHubUserMyKeyById -ID $ID -Context $Context
-                } else {
-                    Get-GitHubUserMyKey -PerPage $PerPage -Context $Context
-                }
             }
-        } catch {
-            throw $_
+            'Me' {
+                Get-GitHubUserMyKeyById -ID $ID -Context $Context
+            }
+            default {
+                Get-GitHubUserMyKey -PerPage $PerPage -Context $Context
+            }
         }
     }
 

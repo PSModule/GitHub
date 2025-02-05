@@ -3,15 +3,23 @@
         .NOTES
         [Disable a workflow](https://docs.github.com/en/rest/actions/workflows#disable-a-workflow)
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter()]
+        [Parameter(
+            Mandatory,
+            ValueFromPipelineByPropertyName
+        )]
+        [Alias('Organization')]
+        [Alias('User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(
+            Mandatory,
+            ValueFromPipelineByPropertyName
+        )]
+        [string] $Repository,
 
         # The ID of the workflow. You can also pass the workflow filename as a string.
         [Parameter(
@@ -31,28 +39,17 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
-
-        if ([string]::IsNullOrEmpty($Repo)) {
-            $Repo = $Context.Repo
-        }
-        Write-Debug "Repo: [$Repo]"
     }
 
     process {
-        try {
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/repos/$Owner/$Repo/actions/workflows/$ID/disable"
-                Method      = 'PUT'
-            }
+        $inputObject = @{
+            Method      = 'PUT'
+            APIEndpoint = "/repos/$Owner/$Repository/actions/workflows/$ID/disable"
+            Context     = $Context
+        }
 
-            $null = Invoke-GitHubAPI @inputObject
-        } catch {
-            throw $_
+        if ($PSCmdlet.ShouldProcess("$Owner/$Repository/$ID", 'Disable workflow')) {
+            Invoke-GitHubAPI @inputObject
         }
     }
 

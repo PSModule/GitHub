@@ -56,8 +56,8 @@
             ValueFromPipeline,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('ID')]
-        [int] $InstallationID,
+        [Alias('installation_id', 'InstallationID')]
+        [int] $ID,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -73,31 +73,23 @@
     }
 
     process {
-        try {
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/app/installations/$InstallationID/access_tokens"
-                Method      = 'Post'
-            }
+        $inputObject = @{
+            Method      = 'POST'
+            APIEndpoint = "/app/installations/$ID/access_tokens"
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                [pscustomobject]@{
-                    Token               = $_.Response.token | ConvertTo-SecureString -AsPlainText -Force
-                    ExpiresAt           = $_.Response.expires_at.ToLocalTime()
-                    Permissions         = $_.Response.permissions
-                    RepositorySelection = $_.Response.repository_selection
-                }
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            [pscustomobject]@{
+                Token               = $_.Response.token | ConvertTo-SecureString -AsPlainText -Force
+                ExpiresAt           = $_.Response.expires_at.ToLocalTime()
+                Permissions         = $_.Response.permissions
+                RepositorySelection = $_.Response.repository_selection
             }
-        } catch {
-            throw $_
         }
     }
 
     end {
         Write-Debug "[$stackPath] - End"
-    }
-
-    clean {
-        [System.GC]::Collect()
     }
 }

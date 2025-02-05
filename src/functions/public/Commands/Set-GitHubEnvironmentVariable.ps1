@@ -40,19 +40,16 @@
     }
 
     process {
-        try {
-            Write-Verbose "Env: [$Name] = [$Value]"
+        Write-Verbose "Env: [$Name] = [$Value]"
 
-            $guid = [guid]::NewGuid().Guid
-            $content = @"
+        $guid = [guid]::NewGuid().Guid
+        $content = @"
 $Name<<$guid
 $Value
 $guid
 "@
-            $content | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-        } catch {
-            throw $_
-        }
+        $content | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
     }
 
     end {

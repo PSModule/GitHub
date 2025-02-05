@@ -1,4 +1,4 @@
-﻿#Requires -Modules MarkdownPS
+﻿#Requires -Modules @{ ModuleName = 'MarkdownPS'; RequiredVersion = '1.10' }
 
 [CmdletBinding()]
 param()

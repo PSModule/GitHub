@@ -47,31 +47,27 @@
     }
 
     process {
-        try {
-            do {
-                if ($RefreshToken) {
-                    $tokenResponse = Wait-GitHubAccessToken -ClientID $ClientID -RefreshToken $RefreshToken -HostName $HostName
-                } else {
-                    $deviceCodeResponse = Request-GitHubDeviceCode -ClientID $ClientID -Scope $Scope -HostName $HostName
+        do {
+            if ($RefreshToken) {
+                $tokenResponse = Wait-GitHubAccessToken -ClientID $ClientID -RefreshToken $RefreshToken -HostName $HostName
+            } else {
+                $deviceCodeResponse = Request-GitHubDeviceCode -ClientID $ClientID -Scope $Scope -HostName $HostName
 
-                    $deviceCode = $deviceCodeResponse.device_code
-                    $interval = $deviceCodeResponse.interval
-                    $userCode = $deviceCodeResponse.user_code
-                    $verificationUri = $deviceCodeResponse.verification_uri
+                $deviceCode = $deviceCodeResponse.device_code
+                $interval = $deviceCodeResponse.interval
+                $userCode = $deviceCodeResponse.user_code
+                $verificationUri = $deviceCodeResponse.verification_uri
 
-                    Write-Host '! ' -ForegroundColor DarkYellow -NoNewline
-                    Write-Host "We added the code to your clipboard: [$userCode]"
-                    $userCode | Set-Clipboard
-                    Read-Host "Press Enter to open $HostName in your browser..."
-                    Start-Process $verificationUri
+                Write-Host '! ' -ForegroundColor DarkYellow -NoNewline
+                Write-Host "We added the code to your clipboard: [$userCode]"
+                $userCode | Set-Clipboard
+                Read-Host "Press Enter to open $HostName in your browser..."
+                Start-Process $verificationUri
 
-                    $tokenResponse = Wait-GitHubAccessToken -DeviceCode $deviceCode -ClientID $ClientID -Interval $interval -HostName $HostName
-                }
-            } while ($tokenResponse.error)
-            $tokenResponse
-        } catch {
-            throw $_
-        }
+                $tokenResponse = Wait-GitHubAccessToken -DeviceCode $deviceCode -ClientID $ClientID -Interval $interval -HostName $HostName
+            }
+        } while ($tokenResponse.error)
+        $tokenResponse
     }
 
     end {

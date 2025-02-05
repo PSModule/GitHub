@@ -49,24 +49,20 @@
     }
 
     process {
-        try {
-            $body = @{
-                title = $Title
-                key   = $Key
-            }
+        $body = @{
+            title = $Title
+            key   = $Key
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = '/user/keys'
-                Method      = 'POST'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'POST'
+            APIEndpoint = '/user/keys'
+            Body        = $body
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 

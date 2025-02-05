@@ -41,14 +41,10 @@
     }
 
     process {
-        try {
-            if ($env:GITHUB_ACTIONS -eq 'true') {
-                Write-Host "::debug::$Message"
-            } else {
-                Write-Debug "$Message"
-            }
-        } catch {
-            throw $_
+        if ($env:GITHUB_ACTIONS -eq 'true') {
+            Write-Host "::debug::$Message"
+        } else {
+            Write-Debug "$Message"
         }
     }
 

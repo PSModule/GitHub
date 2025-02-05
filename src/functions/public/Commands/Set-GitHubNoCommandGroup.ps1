@@ -51,11 +51,7 @@
         $guid = [string][guid]::NewGuid().Guid
 
         Disable-GitHubCommand -String $guid
-        try {
-            . $ScriptBlock
-        } catch {
-            throw $_
-        }
+        . $ScriptBlock
         Enable-GitHubCommand -String $guid
     }
 

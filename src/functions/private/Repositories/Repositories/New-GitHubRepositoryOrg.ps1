@@ -63,7 +63,8 @@ filter New-GitHubRepositoryOrg {
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [Alias('org')]
+        [Alias('Organization')]
+        [Alias('User')]
         [string] $Owner,
 
         # The name of the repository.
@@ -183,8 +184,8 @@ filter New-GitHubRepositoryOrg {
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter()]
-        [object] $Context = (Get-GitHubContext)
+        [Parameter(Mandatory)]
+        [object] $Context
     )
 
     dynamicparam {
@@ -214,56 +215,47 @@ filter New-GitHubRepositoryOrg {
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
         $GitignoreTemplate = $PSBoundParameters['GitignoreTemplate']
         $LicenseTemplate = $PSBoundParameters['LicenseTemplate']
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
     }
 
     process {
-        try {
-            $body = @{
-                name                        = $Name
-                description                 = $Description
-                homepage                    = $Homepage
-                visibility                  = $Visibility
-                has_issues                  = $HasIssues
-                has_projects                = $HasProjects
-                has_wiki                    = $HasWiki
-                has_downloads               = $HasDownloads
-                is_template                 = $IsTemplate
-                team_id                     = $TeamId
-                auto_init                   = $AutoInit
-                allow_squash_merge          = $AllowSquashMerge
-                allow_merge_commit          = $AllowMergeCommit
-                allow_rebase_merge          = $AllowRebaseMerge
-                allow_auto_merge            = $AllowAutoMerge
-                delete_branch_on_merge      = $DeleteBranchOnMerge
-                squash_merge_commit_title   = $SquashMergeCommitTitle
-                squash_merge_commit_message = $SquashMergeCommitMessage
-                merge_commit_title          = $MergeCommitTitle
-                merge_commit_message        = $MergeCommitMessage
-                private                     = $Visibility -eq 'private'
-            }
+        $body = @{
+            name                        = $Name
+            description                 = $Description
+            homepage                    = $Homepage
+            visibility                  = $Visibility
+            has_issues                  = $HasIssues
+            has_projects                = $HasProjects
+            has_wiki                    = $HasWiki
+            has_downloads               = $HasDownloads
+            is_template                 = $IsTemplate
+            team_id                     = $TeamId
+            auto_init                   = $AutoInit
+            allow_squash_merge          = $AllowSquashMerge
+            allow_merge_commit          = $AllowMergeCommit
+            allow_rebase_merge          = $AllowRebaseMerge
+            allow_auto_merge            = $AllowAutoMerge
+            delete_branch_on_merge      = $DeleteBranchOnMerge
+            squash_merge_commit_title   = $SquashMergeCommitTitle
+            squash_merge_commit_message = $SquashMergeCommitMessage
+            merge_commit_title          = $MergeCommitTitle
+            merge_commit_message        = $MergeCommitMessage
+            private                     = $Visibility -eq 'private'
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/orgs/$Owner/repos"
-                Method      = 'POST'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'POST'
+            APIEndpoint = "/orgs/$Owner/repos"
+            Body        = $body
+            Context     = $Context
+        }
 
-            if ($PSCmdlet.ShouldProcess("Repository in organization $Owner", 'Create')) {
-                Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
-                }
+        if ($PSCmdlet.ShouldProcess("Repository in organization $Owner", 'Create')) {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
             }
-        } catch {
-            throw $_
         }
     }
 

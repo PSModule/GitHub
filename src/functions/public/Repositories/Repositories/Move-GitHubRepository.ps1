@@ -12,7 +12,7 @@
         a fine-grained personal access token cannot be used because they are only granted access to a single account.
 
         .EXAMPLE
-        Move-GitHubRepository -Owner 'PSModule' -Repo 'GitHub' -NewOwner 'GitHub' -NewName 'PowerShell'
+        Move-GitHubRepository -Owner 'PSModule' -Repository 'GitHub' -NewOwner 'GitHub' -NewName 'PowerShell'
 
         Moves the GitHub repository to the PSModule organization and renames it to GitHub.
 
@@ -22,13 +22,14 @@
     [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter()]
-        [Alias('org')]
+        [Parameter(Mandatory)]
+        [Alias('Organization')]
+        [Alias('User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(Mandatory)]
+        [string] $Repository,
 
         # The username or organization name the repository will be transferred to.
         [Parameter(Mandatory)]
@@ -56,39 +57,25 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
-
-        if ([string]::IsNullOrEmpty($Repo)) {
-            $Repo = $Context.Repo
-        }
-        Write-Debug "Repo: [$Repo]"
     }
 
     process {
-        try {
-            $body = @{
-                new_owner = $NewOwner
-                new_name  = $NewName
-                team_ids  = $TeamIds
-            }
-            $body | Remove-HashtableEntry -NullOrEmptyValues
+        $body = @{
+            new_owner = $NewOwner
+            new_name  = $NewName
+            team_ids  = $TeamIds
+        }
+        $body | Remove-HashtableEntry -NullOrEmptyValues
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/repos/$Owner/$Repo/transfer"
-                Method      = 'POST'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'POST'
+            APIEndpoint = "/repos/$Owner/$Repository/transfer"
+            Body        = $body
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 

@@ -37,6 +37,7 @@
 
         # Determines whether the SSL certificate of the host for URL will be verified when delivering payloads.
         # We strongly recommend not setting this as you are subject to man-in-the-middle and other attacks.
+        [Parameter()]
         [switch] $InsecureSSL,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -53,29 +54,25 @@
     }
 
     process {
-        try {
-            $body = @{
-                url          = $URL
-                content_type = $ContentType
-                secret       = $Secret
-                insecure_ssl = $PSBoundParameters.ContainsKey($InsecureSSL) ? ($InsecureSSL ? 1 : 0) : $null
-            }
-            $body | Remove-HashtableEntry -NullOrEmptyValues
+        $body = @{
+            url          = $URL
+            content_type = $ContentType
+            secret       = $Secret
+            insecure_ssl = $PSBoundParameters.ContainsKey($InsecureSSL) ? ($InsecureSSL ? 1 : 0) : $null
+        }
+        $body | Remove-HashtableEntry -NullOrEmptyValues
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = '/app/hook/config'
-                Method      = 'PATCH'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'PATCH'
+            APIEndpoint = '/app/hook/config'
+            Body        = $body
+            Context     = $Context
+        }
 
-            if ($PSCmdlet.ShouldProcess('webhook configuration', 'Update')) {
-                Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
-                }
+        if ($PSCmdlet.ShouldProcess('webhook configuration', 'Update')) {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
             }
-        } catch {
-            throw $_
         }
     }
 

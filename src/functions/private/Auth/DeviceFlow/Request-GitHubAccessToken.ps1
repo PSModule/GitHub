@@ -66,24 +66,22 @@
             }
         }
 
+        $headers = @{
+            'Accept' = 'application/json'
+        }
+
         $RESTParams = @{
-            Uri     = "https://$HostName/login/oauth/access_token"
             Method  = 'POST'
+            Uri     = "https://$HostName/login/oauth/access_token"
+            Headers = $headers
             Body    = $body
-            Headers = @{ 'Accept' = 'application/json' }
         }
 
-        try {
-            Write-Debug ($RESTParams.GetEnumerator() | Out-String)
+        Write-Debug ($RESTParams.GetEnumerator() | Out-String)
+        $tokenResponse = Invoke-RestMethod @RESTParams -Verbose:$false
+        Write-Debug ($tokenResponse | ConvertTo-Json | Out-String)
+        return $tokenResponse
 
-            $tokenResponse = Invoke-RestMethod @RESTParams -Verbose:$false
-
-            Write-Debug ($tokenResponse | ConvertTo-Json | Out-String)
-            return $tokenResponse
-        } catch {
-            Write-Error $_
-            throw $_
-        }
     }
 
     end {

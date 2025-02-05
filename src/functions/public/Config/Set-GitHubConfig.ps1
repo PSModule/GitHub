@@ -31,15 +31,10 @@ function Set-GitHubConfig {
     }
 
     process {
-        try {
-            Write-Verbose "Setting [$Name] to [$Value]"
-            $script:GitHub.Config.$Name = $Value
-            if ($PSCmdlet.ShouldProcess('ContextSetting', 'Set')) {
-                Set-Context -ID $script:GitHub.Config.ID -Context $script:GitHub.Config
-            }
-        } catch {
-            Write-Error $_
-            throw 'Failed to set GitHub module configuration.'
+        Write-Verbose "Setting [$Name] to [$Value]"
+        $script:GitHub.Config.$Name = $Value
+        if ($PSCmdlet.ShouldProcess('ContextSetting', 'Set')) {
+            Set-Context -ID $script:GitHub.Config.ID -Context $script:GitHub.Config
         }
     }
 

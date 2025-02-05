@@ -23,21 +23,17 @@
     }
 
     process {
-        try {
-            $script:GitHub.Runner = [pscustomobject]@{
-                Name        = $env:RUNNER_NAME
-                OS          = $env:RUNNER_OS
-                Arch        = $env:RUNNER_ARCH
-                Environment = $env:RUNNER_ENVIRONMENT
-                Temp        = $env:RUNNER_TEMP
-                Perflog     = $env:RUNNER_PERFLOG
-                ToolCache   = $env:RUNNER_TOOL_CACHE
-                TrackingID  = $env:RUNNER_TRACKING_ID
-                Workspace   = $env:RUNNER_WORKSPACE
-                Processors  = [System.Environment]::ProcessorCount
-            }
-        } catch {
-            throw $_
+        $script:GitHub.Runner = [pscustomobject]@{
+            Name        = $env:RUNNER_NAME
+            OS          = $env:RUNNER_OS
+            Arch        = $env:RUNNER_ARCH
+            Environment = $env:RUNNER_ENVIRONMENT
+            Temp        = $env:RUNNER_TEMP
+            Perflog     = $env:RUNNER_PERFLOG
+            ToolCache   = $env:RUNNER_TOOL_CACHE
+            TrackingID  = $env:RUNNER_TRACKING_ID
+            Workspace   = $env:RUNNER_WORKSPACE
+            Processors  = [System.Environment]::ProcessorCount
         }
     }
 

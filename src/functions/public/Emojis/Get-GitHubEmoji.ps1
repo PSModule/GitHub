@@ -5,7 +5,7 @@
 
         .DESCRIPTION
         Lists all the emojis available to use on GitHub.
-        If you pass the `Destination` parameter, the emojis will be downloaded to the specified destination.
+        If you pass the `Path` parameter, the emojis will be downloaded to the specified destination.
 
         .EXAMPLE
         Get-GitHubEmoji
@@ -13,7 +13,7 @@
         Gets all the emojis available to use on GitHub.
 
         .EXAMPLE
-        Get-GitHubEmoji -Destination 'C:\Users\user\Documents\GitHub\Emojis'
+        Get-GitHubEmoji -Path 'C:\Users\user\Documents\GitHub\Emojis'
 
         Downloads all the emojis available to use on GitHub to the specified destination.
 
@@ -27,7 +27,7 @@
             Mandatory,
             ParameterSetName = 'Download'
         )]
-        [string] $Destination,
+        [string] $Path,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -43,39 +43,37 @@
     }
 
     process {
-        try {
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = '/emojis'
-                Method      = 'GET'
-            }
+        $inputObject = @{
+            Method      = 'GET'
+            APIEndpoint = '/emojis'
+            Context     = $Context
+        }
 
-            $response = Invoke-GitHubAPI @inputObject | Select-Object -ExpandProperty Response
+        $response = Invoke-GitHubAPI @inputObject | Select-Object -ExpandProperty Response
 
-            if ($PSCmdlet.ParameterSetName -eq 'Download') {
+        switch ($PSCmdlet.ParameterSetName) {
+            'Download' {
                 $failedEmojis = @()
-                if (-not (Test-Path -Path $Destination)) {
-                    $null = New-Item -Path $Destination -ItemType Directory -Force
+                if (-not (Test-Path -Path $Path)) {
+                    $null = New-Item -Path $Path -ItemType Directory -Force
                 }
                 $failedEmojis = $response.PSObject.Properties | ForEach-Object -ThrottleLimit ([System.Environment]::ProcessorCount) -Parallel {
                     $emoji = $_
-                    Write-Verbose "Downloading [$($emoji.Name).png] from [$($emoji.Value)] -> [$using:Destination/$($emoji.Name).png]"
+                    Write-Verbose "Downloading [$($emoji.Name).png] from [$($emoji.Value)] -> [$using:Path/$($emoji.Name).png]"
                     try {
-                        Invoke-WebRequest -Uri $emoji.Value -OutFile "$using:Destination/$($emoji.Name).png" -RetryIntervalSec 1 -MaximumRetryCount 5
+                        Invoke-WebRequest -Uri $emoji.Value -OutFile "$using:Path/$($emoji.Name).png" -RetryIntervalSec 1 -MaximumRetryCount 5
                     } catch {
-                        $emoji
-                        Write-Warning "Could not download [$($emoji.Name).png] from [$($emoji.Value)] -> [$using:Destination/$($emoji.Name).png]"
+                        Write-Warning "Could not download [$($emoji.Name).png] from [$($emoji.Value)] -> [$using:Path/$($emoji.Name).png]"
                     }
                 }
                 if ($failedEmojis.Count -gt 0) {
                     Write-Warning 'Failed to download the following emojis:'
                     $failedEmojis | Out-String -Stream | ForEach-Object { Write-Warning $_ }
                 }
-            } else {
+            }
+            default {
                 $response
             }
-        } catch {
-            throw $_
         }
     }
 

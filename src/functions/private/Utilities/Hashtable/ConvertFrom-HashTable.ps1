@@ -48,11 +48,7 @@
     }
 
     process {
-        try {
-            $InputObject | ConvertTo-Json -Depth 100 | ConvertFrom-Json
-        } catch {
-            throw $_
-        }
+        $InputObject | ConvertTo-Json -Depth 100 | ConvertFrom-Json
     }
 
     end {

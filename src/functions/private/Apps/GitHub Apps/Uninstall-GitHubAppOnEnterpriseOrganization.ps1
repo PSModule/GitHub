@@ -16,7 +16,7 @@
     [CmdletBinding()]
     param(
         # The enterprise slug or ID.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [string] $Enterprise,
 
         # The organization name. The name is not case sensitive.
@@ -25,39 +25,29 @@
 
         # The client ID of the GitHub App to install.
         [Parameter(Mandatory)]
-        [Alias('installation_id')]
-        [string] $InstallationID,
+        [string] $ID,
 
         # The context to run the command in. Used to get the details for the API call.
-        # Can be either a string or a GitHubContext object.
-        [Parameter()]
-        [object] $Context = (Get-GitHubContext)
+        [Parameter(Mandatory)]
+        [object] $Context
     )
 
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $Context = Resolve-GitHubContext -Context $Context
-        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-        if ([string]::IsNullOrEmpty($Enterprise)) {
-            $Enterprise = $Context.Enterprise
-        }
-        Write-Debug "Enterprise: [$Enterprise]"
+        Assert-GitHubContext -Context $Context -AuthType IAT, UAT
+        #enterprise_organization_installations=write
     }
 
     process {
-        try {
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/enterprises/$Enterprise/apps/organizations/$Organization/installations/$InstallationID}"
-                Method      = 'Delete'
-            }
+        $inputObject = @{
+            Method      = 'DELETE'
+            APIEndpoint = "/enterprises/$Enterprise/apps/organizations/$Organization/installations/$ID"
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 

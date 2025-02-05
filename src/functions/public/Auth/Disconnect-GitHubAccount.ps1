@@ -16,28 +16,14 @@
 
         Disconnects from GitHub and removes the context 'github.com/Octocat'.
     #>
-    [Alias(
-        'Disconnect-GHAccount',
-        'Disconnect-GitHub',
-        'Disconnect-GH',
-        'Logout-GitHubAccount',
-        'Logout-GHAccount',
-        'Logout-GitHub',
-        'Logout-GH',
-        'Logoff-GitHubAccount',
-        'Logoff-GHAccount',
-        'Logoff-GitHub',
-        'Logoff-GH'
-    )]
+    [Alias('Disconnect-GitHub')]
     [OutputType([void])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'Is the CLI part of the module.')]
     [CmdletBinding()]
     param(
-        # Silently disconnects from GitHub.
+        # Suppresses the output of the function.
         [Parameter()]
         [Alias('Quiet')]
-        [Alias('q')]
-        [Alias('s')]
         [switch] $Silent,
 
         # The context to run the command with.
@@ -57,21 +43,17 @@
         }
         foreach ($contextItem in $Context) {
             $contextItem = Resolve-GitHubContext -Context $contextItem
-            try {
-                Remove-GitHubContext -Context $contextItem
-                $isDefaultContext = $contextItem.Name -eq $script:GitHub.Config.DefaultContext
-                if ($isDefaultContext) {
-                    Remove-GitHubConfig -Name 'DefaultContext'
-                    Write-Warning 'There is no longer a default context!'
-                    Write-Warning "Please set a new default context using 'Set-GitHubDefaultContext -Name <context>'"
-                }
+            Remove-GitHubContext -Context $contextItem
+            $isDefaultContext = $contextItem.Name -eq $script:GitHub.Config.DefaultContext
+            if ($isDefaultContext) {
+                Remove-GitHubConfig -Name 'DefaultContext'
+                Write-Warning 'There is no longer a default context!'
+                Write-Warning "Please set a new default context using 'Set-GitHubDefaultContext -Name <context>'"
+            }
 
-                if (-not $Silent) {
-                    Write-Host '✓ ' -ForegroundColor Green -NoNewline
-                    Write-Host "Logged out of GitHub! [$contextItem]"
-                }
-            } catch {
-                throw $_
+            if (-not $Silent) {
+                Write-Host '✓ ' -ForegroundColor Green -NoNewline
+                Write-Host "Logged out of GitHub! [$contextItem]"
             }
         }
     }

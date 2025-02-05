@@ -39,14 +39,10 @@
     }
 
     process {
-        try {
-            $String = $String.ToLower()
+        $String = $String.ToLower()
 
-            if ($env:GITHUB_ACTIONS -eq 'true') {
-                Write-Host "::$String::"
-            }
-        } catch {
-            throw $_
+        if ($env:GITHUB_ACTIONS -eq 'true') {
+            Write-Host "::$String::"
         }
     }
 

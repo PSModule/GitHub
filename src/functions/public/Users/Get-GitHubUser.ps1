@@ -72,26 +72,22 @@
     }
 
     process {
-        try {
-            switch ($PSCmdlet.ParameterSetName) {
-                '__AllParameterSets' {
-                    $user = Get-GitHubMyUser -Context $Context
-                    $social_accounts = Get-GitHubMyUserSocials -Context $Context
-                    $user | Add-Member -MemberType NoteProperty -Name 'social_accounts' -Value $social_accounts -Force
-                    $user
-                }
-                'NamedUser' {
-                    $user = Get-GitHubUserByName -Username $Username -Context $Context
-                    $social_accounts = Get-GitHubUserSocialsByName -Username $Username -Context $Context
-                    $user | Add-Member -MemberType NoteProperty -Name 'social_accounts' -Value $social_accounts -Force
-                    $user
-                }
-                'AllUsers' {
-                    Get-GitHubAllUser -Since $Since -PerPage $PerPage -Context $Context
-                }
+        switch ($PSCmdlet.ParameterSetName) {
+            'NamedUser' {
+                $user = Get-GitHubUserByName -Username $Username -Context $Context
+                $social_accounts = Get-GitHubUserSocialsByName -Username $Username -Context $Context
+                $user | Add-Member -MemberType NoteProperty -Name 'social_accounts' -Value $social_accounts -Force
+                $user
             }
-        } catch {
-            throw $_
+            'AllUsers' {
+                Get-GitHubAllUser -Since $Since -PerPage $PerPage -Context $Context
+            }
+            default {
+                $user = Get-GitHubMyUser -Context $Context
+                $social_accounts = Get-GitHubMyUserSocials -Context $Context
+                $user | Add-Member -MemberType NoteProperty -Name 'social_accounts' -Value $social_accounts -Force
+                $user
+            }
         }
     }
 

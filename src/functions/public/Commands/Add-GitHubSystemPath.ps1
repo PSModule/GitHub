@@ -30,14 +30,10 @@
     }
 
     process {
-        try {
-            Write-Verbose "Current PATH: $env:PATH"
-            Write-Verbose "Adding system path: $Path"
+        Write-Verbose "Current PATH: $env:PATH"
+        Write-Verbose "Adding system path: $Path"
 
-            $Path | Out-File -FilePath $env:GITHUB_PATH -Append
-        } catch {
-            throw $_
-        }
+        $Path | Out-File -FilePath $env:GITHUB_PATH -Append
     }
 
     end {

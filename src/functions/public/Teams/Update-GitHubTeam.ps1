@@ -30,19 +30,18 @@
     param(
         # The slug of the team name.
         [Parameter(Mandatory)]
-        [Alias('team_slug')]
-        [string] $Slug,
+        [Alias('team_slug', 'Slug')]
+        [string] $Name,
 
         # The organization name. The name is not case sensitive.
         # If you do not provide this parameter, the command will use the organization from the context.
-        [Parameter()]
-        [Alias('Org')]
+        [Parameter(Mandatory)]
         [string] $Organization,
 
         # The new team name.
         [Parameter()]
         [Alias()]
-        [string] $Name,
+        [string] $NewName,
 
         # The description of the team.
         [Parameter()]
@@ -86,57 +85,48 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Organization)) {
-            $Organization = $Context.Owner
-        }
-        Write-Debug "Organization: [$Organization]"
     }
 
     process {
-        try {
-            $body = @{
-                name                 = $Name
-                description          = $Description
-                privacy              = $PSBoundParameters.ContainsKey('Visible') ? ($Visible ? 'closed' : 'secret') : $null
-                notification_setting = $PSBoundParameters.ContainsKey('Notifications') ?
+        $body = @{
+            name                 = $NewName
+            description          = $Description
+            privacy              = $PSBoundParameters.ContainsKey('Visible') ? ($Visible ? 'closed' : 'secret') : $null
+            notification_setting = $PSBoundParameters.ContainsKey('Notifications') ?
                     ($Notifications ? 'notifications_enabled' : 'notifications_disabled') : $null
-                permission           = $Permission
-                parent_team_id       = $ParentTeamID -eq 0 ? $null : $ParentTeamID
-            }
-            $body | Remove-HashtableEntry -NullOrEmptyValues
+            permission           = $Permission
+            parent_team_id       = $ParentTeamID -eq 0 ? $null : $ParentTeamID
+        }
+        $body | Remove-HashtableEntry -NullOrEmptyValues
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/orgs/$Organization/teams/$Slug"
-                Method      = 'Patch'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'PATCH'
+            APIEndpoint = "/orgs/$Organization/teams/$Name"
+            Body        = $body
+            Context     = $Context
+        }
 
-            if ($PSCmdlet.ShouldProcess("$Organization/$Slug", 'Update')) {
-                Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    $team = $_.Response
-                    [GitHubTeam](
-                        @{
-                            Name          = $team.name
-                            Slug          = $team.slug
-                            NodeID        = $team.node_id
-                            CombinedSlug  = $Organization + '/' + $team.slug
-                            DatabaseId    = $team.id
-                            Description   = $team.description
-                            Notifications = $team.notification_setting -eq 'notifications_enabled' ? $true : $false
-                            Visible       = $team.privacy -eq 'closed' ? $true : $false
-                            ParentTeam    = $team.parent.slug
-                            Organization  = $team.organization.login
-                            ChildTeams    = @()
-                            CreatedAt     = $team.created_at
-                            UpdatedAt     = $team.updated_at
-                        }
-                    )
-                }
+        if ($PSCmdlet.ShouldProcess("$Organization/$Name", 'Update')) {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                $team = $_.Response
+                [GitHubTeam](
+                    @{
+                        Name          = $team.name
+                        Slug          = $team.slug
+                        NodeID        = $team.node_id
+                        CombinedSlug  = $Organization + '/' + $team.slug
+                        DatabaseId    = $team.id
+                        Description   = $team.description
+                        Notifications = $team.notification_setting -eq 'notifications_enabled' ? $true : $false
+                        Visible       = $team.privacy -eq 'closed' ? $true : $false
+                        ParentTeam    = $team.parent.slug
+                        Organization  = $team.organization.login
+                        ChildTeams    = @()
+                        CreatedAt     = $team.created_at
+                        UpdatedAt     = $team.updated_at
+                    }
+                )
             }
-        } catch {
-            throw $_
         }
     }
 

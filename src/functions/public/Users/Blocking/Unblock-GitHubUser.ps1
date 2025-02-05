@@ -39,8 +39,6 @@
             ValueFromPipeline,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('org')]
-        [Alias('owner')]
         [string] $Organization,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -62,14 +60,10 @@
     }
 
     process {
-        try {
-            if ($Organization) {
-                Unblock-GitHubUserByOrganization -Organization $Organization -Username $Username -Context $Context
-            } else {
-                Unblock-GitHubUserByUser -Username $Username -Context $Context
-            }
-        } catch {
-            throw $_
+        if ($Organization) {
+            Unblock-GitHubUserByOrganization -Organization $Organization -Username $Username -Context $Context
+        } else {
+            Unblock-GitHubUserByUser -Username $Username -Context $Context
         }
     }
 

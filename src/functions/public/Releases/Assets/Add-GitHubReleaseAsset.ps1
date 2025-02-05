@@ -37,7 +37,7 @@
         the old file before you can re-upload the new asset.
 
         .EXAMPLE
-        Add-GitHubReleaseAsset -Owner 'octocat' -Repo 'hello-world' -ID '7654321' -FilePath 'C:\Users\octocat\Downloads\hello-world.zip'
+        Add-GitHubReleaseAsset -Owner 'octocat' -Repository 'hello-world' -ID '7654321' -FilePath 'C:\Users\octocat\Downloads\hello-world.zip'
 
         Gets the release assets for the release with the ID '1234567' for the repository 'octocat/hello-world'.
 
@@ -47,12 +47,14 @@
     [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter()]
+        [Parameter(Mandatory)]
+        [Alias('Organization')]
+        [Alias('User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(Mandatory)]
+        [string] $Repository,
 
         # The unique identifier of the release.
         [Parameter(Mandatory)]
@@ -73,7 +75,7 @@
 
         # The path to the asset file.
         [Parameter(Mandatory)]
-        [alias('fullname')]
+        [alias('FullName')]
         [string] $FilePath,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -87,70 +89,56 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
-
-        if ([string]::IsNullOrEmpty($Repo)) {
-            $Repo = $Context.Repo
-        }
-        Write-Debug "Repo: [$Repo]"
     }
 
     process {
-        try {
-            # If name is not provided, use the name of the file
-            if (!$Name) {
-                $Name = (Get-Item $FilePath).Name
-            }
+        # If name is not provided, use the name of the file
+        if (!$Name) {
+            $Name = (Get-Item $FilePath).Name
+        }
 
-            # If label is not provided, use the name of the file
-            if (!$Label) {
-                $Label = (Get-Item $FilePath).Name
-            }
+        # If label is not provided, use the name of the file
+        if (!$Label) {
+            $Label = (Get-Item $FilePath).Name
+        }
 
-            # If content type is not provided, use the file extension
-            if (!$ContentType) {
-                $ContentType = switch ((Get-Item $FilePath).Extension) {
-                    '.zip' { 'application/zip' }
-                    '.tar' { 'application/x-tar' }
-                    '.gz' { 'application/gzip' }
-                    '.bz2' { 'application/x-bzip2' }
-                    '.xz' { 'application/x-xz' }
-                    '.7z' { 'application/x-7z-compressed' }
-                    '.rar' { 'application/vnd.rar' }
-                    '.tar.gz' { 'application/gzip' }
-                    '.tgz' { 'application/gzip' }
-                    '.tar.bz2' { 'application/x-bzip2' }
-                    '.tar.xz' { 'application/x-xz' }
-                    '.tar.7z' { 'application/x-7z-compressed' }
-                    '.tar.rar' { 'application/vnd.rar' }
-                    '.png' { 'image/png' }
-                    '.json' { 'application/json' }
-                    '.txt' { 'text/plain' }
-                    '.md' { 'text/markdown' }
-                    '.html' { 'text/html' }
-                    default { 'application/octet-stream' }
-                }
+        # If content type is not provided, use the file extension
+        if (!$ContentType) {
+            $ContentType = switch ((Get-Item $FilePath).Extension) {
+                '.zip' { 'application/zip' }
+                '.tar' { 'application/x-tar' }
+                '.gz' { 'application/gzip' }
+                '.bz2' { 'application/x-bzip2' }
+                '.xz' { 'application/x-xz' }
+                '.7z' { 'application/x-7z-compressed' }
+                '.rar' { 'application/vnd.rar' }
+                '.tar.gz' { 'application/gzip' }
+                '.tgz' { 'application/gzip' }
+                '.tar.bz2' { 'application/x-bzip2' }
+                '.tar.xz' { 'application/x-xz' }
+                '.tar.7z' { 'application/x-7z-compressed' }
+                '.tar.rar' { 'application/vnd.rar' }
+                '.png' { 'image/png' }
+                '.json' { 'application/json' }
+                '.txt' { 'text/plain' }
+                '.md' { 'text/markdown' }
+                '.html' { 'text/html' }
+                default { 'application/octet-stream' }
             }
+        }
 
-            $release = Get-GitHubRelease -Owner $Owner -Repo $Repo -ID $ID
-            $uploadURI = $release.upload_url -replace '{\?name,label}', "?name=$($Name)&label=$($Label)"
+        $release = Get-GitHubRelease -Owner $Owner -Repository $Repository -ID $ID
+        $uploadURI = $release.upload_url -replace '{\?name,label}', "?name=$($Name)&label=$($Label)"
 
-            $inputObject = @{
-                URI            = $uploadURI
-                Method         = 'POST'
-                ContentType    = $ContentType
-                UploadFilePath = $FilePath
-            }
+        $inputObject = @{
+            Method         = 'POST'
+            URI            = $uploadURI
+            ContentType    = $ContentType
+            UploadFilePath = $FilePath
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
         }
     }
 

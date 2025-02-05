@@ -54,7 +54,7 @@ function Get-GitHubContext {
                 $ID = "$($script:GitHub.Config.ID)/*"
                 Write-Verbose "Getting available contexts for [$ID]"
             }
-            '__AllParameterSets' {
+            default {
                 Write-Verbose 'Getting default context.'
                 $ID = "$($script:GitHub.Config.ID)/$($script:GitHub.Config.DefaultContext)"
                 if ([string]::IsNullOrEmpty($ID)) {

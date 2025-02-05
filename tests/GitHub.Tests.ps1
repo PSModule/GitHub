@@ -1,4 +1,7 @@
-﻿[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+﻿#Requires -Modules @{ ModuleName = 'Microsoft.PowerShell.SecretManagement'; RequiredVersion = '1.1.2' }
+#Requires -Modules @{ ModuleName = 'Pester'; RequiredVersion = '5.7.1' }
+
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
     'PSUseDeclaredVarsMoreThanAssignments', '',
     Justification = 'Pester grouping syntax: known issue.'
 )]
@@ -437,7 +440,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
             { Get-GitHubLicense -Name 'mit' } | Should -Not -Throw
         }
         It 'Get-GitHubLicense - Gets a license from a repository (USER_FG_PAT)' {
-            { Get-GitHubLicense -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
+            { Get-GitHubLicense -Owner 'PSModule' -Repository 'GitHub' } | Should -Not -Throw
         }
     }
     Context 'Emoji' {
@@ -445,7 +448,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
             { Get-GitHubEmoji } | Should -Not -Throw
         }
         It 'Get-GitHubEmoji - Downloads all emojis (USER_FG_PAT)' {
-            { Get-GitHubEmoji -Destination $Home } | Should -Not -Throw
+            { Get-GitHubEmoji -Path $Home } | Should -Not -Throw
         }
     }
     Context 'Repository' {
@@ -459,7 +462,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
             { Get-GitHubRepository -Visibility 'public' -Affiliation 'owner' } | Should -Not -Throw
         }
         It 'Get-GitHubRepository - Gets a specific repository (USER_FG_PAT)' {
-            { Get-GitHubRepository -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
+            { Get-GitHubRepository -Owner 'PSModule' -Repository 'GitHub' } | Should -Not -Throw
         }
         It 'Get-GitHubRepository - Gets all repositories from a organization (USER_FG_PAT)' {
             { Get-GitHubRepository -Owner 'PSModule' } | Should -Not -Throw
@@ -499,14 +502,14 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
             $user = Get-GitHubUser
             { Update-GitHubUser -Name 'Octocat' } | Should -Not -Throw
             { Update-GitHubUser -Blog 'https://psmodule.io' } | Should -Not -Throw
-            { Update-GitHubUser -TwitterUsername $guid } | Should -Not -Throw
+            { Update-GitHubUser -TwitterUsername 'PSModule' } | Should -Not -Throw
             { Update-GitHubUser -Company 'PSModule' } | Should -Not -Throw
             { Update-GitHubUser -Location 'USA' } | Should -Not -Throw
             { Update-GitHubUser -Bio 'I love programming' } | Should -Not -Throw
             $tmpUser = Get-GitHubUser
             $tmpUser.name | Should -Be 'Octocat'
             $tmpUser.blog | Should -Be 'https://psmodule.io'
-            $tmpUser.twitter_username | Should -Be $guid
+            $tmpUser.twitter_username | Should -Be 'PSModule'
             $tmpUser.company | Should -Be 'PSModule'
             $tmpUser.location | Should -Be 'USA'
             $tmpUser.bio | Should -Be 'I love programming'
@@ -517,9 +520,9 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
             }
             It 'Add/Remove-GitHubUserEmail - Adds and removes an email to the authenticated user (USER_FG_PAT)' {
                 $email = (New-Guid).Guid + '@psmodule.io'
-                { Add-GitHubUserEmail -Emails $email } | Should -Not -Throw
+                { Add-GitHubUserEmail -Email $email } | Should -Not -Throw
                 (Get-GitHubUserEmail).email | Should -Contain $email
-                { Remove-GitHubUserEmail -Emails $email } | Should -Not -Throw
+                { Remove-GitHubUserEmail -Email $email } | Should -Not -Throw
                 (Get-GitHubUserEmail).email | Should -Not -Contain $email
             }
         }
@@ -594,7 +597,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
             { Get-GitHubLicense -Name 'mit' } | Should -Not -Throw
         }
         It 'Get-GitHubLicense - Gets a license from a repository (ORG_FG_PAT)' {
-            { Get-GitHubLicense -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
+            { Get-GitHubLicense -Owner 'PSModule' -Repository 'GitHub' } | Should -Not -Throw
         }
     }
     Context 'Emoji' {
@@ -602,7 +605,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
             { Get-GitHubEmoji } | Should -Not -Throw
         }
         It 'Get-GitHubEmoji - Downloads all emojis (ORG_FG_PAT)' {
-            { Get-GitHubEmoji -Destination $Home } | Should -Not -Throw
+            { Get-GitHubEmoji -Path $Home } | Should -Not -Throw
         }
     }
     Context 'Repository' {
@@ -616,7 +619,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
             { Get-GitHubRepository -Visibility 'public' -Affiliation 'owner' } | Should -Not -Throw
         }
         It 'Get-GitHubRepository - Gets a specific repository (ORG_FG_PAT)' {
-            { Get-GitHubRepository -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
+            { Get-GitHubRepository -Owner 'PSModule' -Repository 'GitHub' } | Should -Not -Throw
         }
         It 'Get-GitHubRepository - Gets all repositories from a organization (ORG_FG_PAT)' {
             { Get-GitHubRepository -Owner 'PSModule' } | Should -Not -Throw
@@ -677,8 +680,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
                 Update-GitHubOrganization -Organization 'psmodule-test-org2' -Email $email
             } | Should -Not -Throw
             {
-                $guid = (New-Guid).Guid
-                Update-GitHubOrganization -Organization 'psmodule-test-org2' -TwitterUsername $guid
+                Update-GitHubOrganization -Organization 'psmodule-test-org2' -TwitterUsername 'PSModule'
             } | Should -Not -Throw
             { Update-GitHubOrganization -Organization 'psmodule-test-org2' -Location 'USA' } | Should -Not -Throw
             { Update-GitHubOrganization -Organization 'psmodule-test-org2' -Description 'Test Organization' } | Should -Not -Throw
@@ -774,7 +776,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
             { Get-GitHubLicense -Name 'mit' } | Should -Not -Throw
         }
         It 'Get-GitHubLicense - Gets a license from a repository (PAT)' {
-            { Get-GitHubLicense -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
+            { Get-GitHubLicense -Owner 'PSModule' -Repository 'GitHub' } | Should -Not -Throw
         }
     }
     Context 'Emoji' {
@@ -782,7 +784,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
             { Get-GitHubEmoji } | Should -Not -Throw
         }
         It 'Get-GitHubEmoji - Downloads all emojis (PAT)' {
-            { Get-GitHubEmoji -Destination $Home } | Should -Not -Throw
+            { Get-GitHubEmoji -Path $Home } | Should -Not -Throw
         }
     }
     Context 'GitIgnore' {
@@ -816,14 +818,14 @@ Describe 'As a user - Classic PAT token (PAT)' {
             $user = Get-GitHubUser
             { Update-GitHubUser -Name 'Octocat' } | Should -Not -Throw
             { Update-GitHubUser -Blog 'https://psmodule.io' } | Should -Not -Throw
-            { Update-GitHubUser -TwitterUsername $guid } | Should -Not -Throw
+            { Update-GitHubUser -TwitterUsername 'PSModule' } | Should -Not -Throw
             { Update-GitHubUser -Company 'PSModule' } | Should -Not -Throw
             { Update-GitHubUser -Location 'USA' } | Should -Not -Throw
             { Update-GitHubUser -Bio 'I love programming' } | Should -Not -Throw
             $tmpUser = Get-GitHubUser
             $tmpUser.name | Should -Be 'Octocat'
             $tmpUser.blog | Should -Be 'https://psmodule.io'
-            $tmpUser.twitter_username | Should -Be $guid
+            $tmpUser.twitter_username | Should -Be 'PSModule'
             $tmpUser.company | Should -Be 'PSModule'
             $tmpUser.location | Should -Be 'USA'
             $tmpUser.bio | Should -Be 'I love programming'
@@ -834,9 +836,9 @@ Describe 'As a user - Classic PAT token (PAT)' {
             }
             It 'Add/Remove-GitHubUserEmail - Adds and removes an email to the authenticated user (PAT)' {
                 $email = (New-Guid).Guid + '@psmodule.io'
-                { Add-GitHubUserEmail -Emails $email } | Should -Not -Throw
+                { Add-GitHubUserEmail -Email $email } | Should -Not -Throw
                 (Get-GitHubUserEmail).email | Should -Contain $email
-                { Remove-GitHubUserEmail -Emails $email } | Should -Not -Throw
+                { Remove-GitHubUserEmail -Email $email } | Should -Not -Throw
                 (Get-GitHubUserEmail).email | Should -Not -Contain $email
             }
         }
@@ -953,7 +955,7 @@ Describe 'As GitHub Actions (GHA)' {
             { Get-GitHubLicense -Name 'mit' } | Should -Not -Throw
         }
         It 'Get-GitHubLicense - Gets a license from a repository (GHA)' {
-            { Get-GitHubLicense -Owner 'PSModule' -Repo 'GitHub' } | Should -Not -Throw
+            { Get-GitHubLicense -Owner 'PSModule' -Repository 'GitHub' } | Should -Not -Throw
         }
     }
     Context 'Emoji' {
@@ -961,7 +963,7 @@ Describe 'As GitHub Actions (GHA)' {
             { Get-GitHubEmoji } | Should -Not -Throw
         }
         It 'Get-GitHubEmoji - Downloads all emojis (GHA)' {
-            { Get-GitHubEmoji -Destination $Home } | Should -Not -Throw
+            { Get-GitHubEmoji -Path $Home } | Should -Not -Throw
         }
     }
     Context 'GitIgnore' {
@@ -1030,8 +1032,8 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         It 'Get-GitHubOrganization - Gets a specific organization (APP_ENT)' {
             { Get-GitHubOrganization -Organization 'psmodule-test-org3' } | Should -Not -Throw
         }
-        It 'Get-GitHubOrganizationAppInstallation - Gets the GitHub App installations on the organization (APP_ENT)' {
-            $installations = Get-GitHubOrganizationAppInstallation -Organization 'psmodule-test-org3'
+        It 'Get-GitHubAppInstallation - Gets the GitHub App installations on the organization (APP_ENT)' {
+            $installations = Get-GitHubAppInstallation -Organization 'psmodule-test-org3'
             Write-Verbose ($installations | Format-Table | Out-String) -Verbose
             $installations | Should -Not -BeNullOrEmpty
         }
@@ -1050,8 +1052,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
                 Update-GitHubOrganization -Organization 'psmodule-test-org3' -Email $email
             } | Should -Not -Throw
             {
-                $guid = (New-Guid).Guid
-                Update-GitHubOrganization -Organization 'psmodule-test-org3' -TwitterUsername $guid
+                Update-GitHubOrganization -Organization 'psmodule-test-org3' -TwitterUsername 'PSModule'
             } | Should -Not -Throw
             { Update-GitHubOrganization -Organization 'psmodule-test-org3' -Location 'USA' } | Should -Not -Throw
             { Update-GitHubOrganization -Organization 'psmodule-test-org3' -Description 'Test Organization' } | Should -Not -Throw
@@ -1150,8 +1151,8 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         It 'Get-GitHubOrganization - Gets a specific organization (APP_ORG)' {
             { Get-GitHubOrganization -Organization 'psmodule-test-org' } | Should -Not -Throw
         }
-        It 'Get-GitHubOrganizationAppInstallation - Gets the GitHub App installations on the organization (APP_ORG)' {
-            $installations = Get-GitHubOrganizationAppInstallation -Organization 'psmodule-test-org'
+        It 'Get-GitHubAppInstallation - Gets the GitHub App installations on the organization (APP_ORG)' {
+            $installations = Get-GitHubAppInstallation -Organization 'psmodule-test-org'
             Write-Verbose ($installations | Format-Table | Out-String) -Verbose
             $installations | Should -Not -BeNullOrEmpty
         }
@@ -1170,8 +1171,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
                 Update-GitHubOrganization -Organization 'psmodule-test-org' -Email $email
             } | Should -Not -Throw
             {
-                $guid = (New-Guid).Guid
-                Update-GitHubOrganization -Organization 'psmodule-test-org' -TwitterUsername $guid
+                Update-GitHubOrganization -Organization 'psmodule-test-org' -TwitterUsername 'PSModule'
             } | Should -Not -Throw
             { Update-GitHubOrganization -Organization 'psmodule-test-org' -Location 'USA' } | Should -Not -Throw
             { Update-GitHubOrganization -Organization 'psmodule-test-org' -Description 'Test Organization' } | Should -Not -Throw

@@ -10,7 +10,7 @@
         [custom media types](https://docs.github.com/rest/overview/media-types) for retrieving the raw license content or rendered license HTML.
 
         .EXAMPLE
-        Get-GitHubRepositoryLicense -Owner 'octocat' -Repo 'Hello-World'
+        Get-GitHubRepositoryLicense -Owner 'octocat' -Repository 'Hello-World'
 
         Get the license for the Hello-World repository from the octocat account.
 
@@ -21,12 +21,12 @@
     [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter()]
-        [string] $Repo,
+        [Parameter(Mandatory)]
+        [string] $Repository,
 
         # The type of data to return. Can be either 'raw' or 'html'.
         [Parameter()]
@@ -35,49 +35,34 @@
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter()]
-        [object] $Context = (Get-GitHubContext)
+        [Parameter(Mandatory)]
+        [object] $Context
     )
 
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
+    }
 
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
-
-        if ([string]::IsNullOrEmpty($Repo)) {
-            $Repo = $Context.Repo
-        }
-        Write-Debug "Repo: [$Repo]"
-
+    process {
         $contentType = switch ($Type) {
             'raw' { 'application/vnd.github.raw+json' }
             'html' { 'application/vnd.github.html+json' }
         }
-    }
 
-    process {
-        try {
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/repos/$Owner/$Repo/license"
-                ContentType = $contentType
-                Method      = 'GET'
-            }
+        $inputObject = @{
+            Method      = 'GET'
+            APIEndpoint = "/repos/$Owner/$Repository/license"
+            ContentType = $contentType
+            Context     = $Context
+        }
 
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                $Response = $_.Response
-                $rawContent = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($Response.content))
-                $Response | Add-Member -NotePropertyName 'raw_content' -NotePropertyValue $rawContent -Force
-                $Response
-            }
-        } catch {
-            throw $_
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            $Response = $_.Response
+            $rawContent = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($Response.content))
+            $Response | Add-Member -NotePropertyName 'raw_content' -NotePropertyValue $rawContent -Force
+            $Response
         }
     }
     end {

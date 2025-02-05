@@ -56,14 +56,10 @@
     }
 
     process {
-        try {
-            if ($Username) {
-                Test-GitHubUserFollowedByUser -Username $Username -Follows $Follows -Context $Context
-            } else {
-                Test-GitHubUserFollowedByMe -Username $Follows -Context $Context
-            }
-        } catch {
-            throw $_
+        if ($Username) {
+            Test-GitHubUserFollowedByUser -Username $Username -Follows $Follows -Context $Context
+        } else {
+            Test-GitHubUserFollowedByMe -Username $Follows -Context $Context
         }
     }
 

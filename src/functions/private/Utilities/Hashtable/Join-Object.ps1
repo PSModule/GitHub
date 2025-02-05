@@ -52,7 +52,7 @@
     [OutputType([pscustomobject])]
     [OutputType(ParameterSetName = 'AsHashTable', [hashtable])]
     [Alias('Merge-Object')]
-    [CmdletBinding(DefaultParameterSetName = '__DefaultSet')]
+    [CmdletBinding()]
     param(
         # The main object to merge into. This object will be cloned, so the original object will not be modified.
         [Parameter(
@@ -66,10 +66,7 @@
         [object[]] $Overrides,
 
         # Return the result as a hashtable instead of a pscustomobject
-        [Parameter(
-            Mandatory,
-            ParameterSetName = 'AsHashTable'
-        )]
+        [Parameter()]
         [switch] $AsHashtable
     )
 
@@ -79,31 +76,26 @@
     }
 
     process {
-        try {
-
-            if ($Main -isnot [hashtable]) {
-                $Main = $Main | ConvertTo-HashTable
-            }
-            $hashtable = $Main.clone()
-
-            foreach ($Override in $Overrides) {
-                if ($Override -isnot [hashtable]) {
-                    $Override = $Override | ConvertTo-HashTable
-                }
-
-                $Override.Keys | ForEach-Object {
-                    $hashtable[$_] = $Override[$_]
-                }
-            }
-
-            if ($AsHashtable) {
-                return $hashtable
-            }
-
-            $hashtable | ConvertFrom-HashTable
-        } catch {
-            throw $_
+        if ($Main -isnot [hashtable]) {
+            $Main = $Main | ConvertTo-Hashtable
         }
+        $hashtable = $Main.clone()
+
+        foreach ($Override in $Overrides) {
+            if ($Override -isnot [hashtable]) {
+                $Override = $Override | ConvertTo-Hashtable
+            }
+
+            $Override.Keys | ForEach-Object {
+                $hashtable[$_] = $Override[$_]
+            }
+        }
+
+        if ($AsHashtable) {
+            return $hashtable
+        }
+
+        $hashtable | ConvertFrom-HashTable
     }
 
     end {

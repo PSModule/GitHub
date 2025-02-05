@@ -177,8 +177,8 @@ filter New-GitHubRepositoryUser {
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter()]
-        [object] $Context = (Get-GitHubContext)
+        [Parameter(Mandatory)]
+        [object] $Context
     )
 
     dynamicparam {
@@ -208,52 +208,47 @@ filter New-GitHubRepositoryUser {
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
         $GitignoreTemplate = $PSBoundParameters['GitignoreTemplate']
         $LicenseTemplate = $PSBoundParameters['LicenseTemplate']
     }
 
     process {
-        try {
-            $body = @{
-                name                        = $Name
-                description                 = $Description
-                homepage                    = $Homepage
-                visibility                  = $Visibility
-                has_issues                  = $HasIssues
-                has_projects                = $HasProjects
-                has_wiki                    = $HasWiki
-                has_downloads               = $HasDownloads
-                is_template                 = $IsTemplate
-                team_id                     = $TeamId
-                auto_init                   = $AutoInit
-                allow_squash_merge          = $AllowSquashMerge
-                allow_merge_commit          = $AllowMergeCommit
-                allow_rebase_merge          = $AllowRebaseMerge
-                allow_auto_merge            = $AllowAutoMerge
-                delete_branch_on_merge      = $DeleteBranchOnMerge
-                squash_merge_commit_title   = $SquashMergeCommitTitle
-                squash_merge_commit_message = $SquashMergeCommitMessage
-                merge_commit_title          = $MergeCommitTitle
-                merge_commit_message        = $MergeCommitMessage
-                private                     = $Visibility -eq 'private'
-            }
+        $body = @{
+            name                        = $Name
+            description                 = $Description
+            homepage                    = $Homepage
+            visibility                  = $Visibility
+            has_issues                  = $HasIssues
+            has_projects                = $HasProjects
+            has_wiki                    = $HasWiki
+            has_downloads               = $HasDownloads
+            is_template                 = $IsTemplate
+            team_id                     = $TeamId
+            auto_init                   = $AutoInit
+            allow_squash_merge          = $AllowSquashMerge
+            allow_merge_commit          = $AllowMergeCommit
+            allow_rebase_merge          = $AllowRebaseMerge
+            allow_auto_merge            = $AllowAutoMerge
+            delete_branch_on_merge      = $DeleteBranchOnMerge
+            squash_merge_commit_title   = $SquashMergeCommitTitle
+            squash_merge_commit_message = $SquashMergeCommitMessage
+            merge_commit_title          = $MergeCommitTitle
+            merge_commit_message        = $MergeCommitMessage
+            private                     = $Visibility -eq 'private'
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = '/user/repos'
-                Method      = 'POST'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'POST'
+            APIEndpoint = '/user/repos'
+            Body        = $body
+            Context     = $Context
+        }
 
-            if ($PSCmdlet.ShouldProcess('Repository for user', 'Create')) {
-                Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
-                }
+        if ($PSCmdlet.ShouldProcess('Repository for user', 'Create')) {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
             }
-        } catch {
-            throw $_
         }
     }
 

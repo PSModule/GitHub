@@ -17,7 +17,7 @@ function Set-GitHubContext {
             AuthType   = 'PAT'
             Enterprise = 'msx'
             Owner      = 'octocat'
-            Repo       = 'Hello-World'
+            Repository = 'Hello-World'
         }
         Set-GitHubContext -Context $context
 
@@ -52,7 +52,7 @@ function Set-GitHubContext {
         # Run functions to get info on the temporary context.
         try {
             Write-Debug "Getting info on the context [$($contextObj['AuthType'])]."
-            switch -Regex ($($contextObj['AuthType'])) {
+            switch -Regex (($contextObj['AuthType'])) {
                 'PAT|UAT|IAT' {
                     $viewer = Get-GitHubViewer -Context $contextObj
                     $viewer | Out-String -Stream | ForEach-Object { Write-Debug $_ }
@@ -79,10 +79,10 @@ function Set-GitHubContext {
                     $contextObj['Type'] = 'Installation'
                     if ([string]::IsNullOrEmpty($contextObj['DisplayName'])) {
                         try {
-                            $app = Get-GitHubApp -AppSlug $contextObj['Username'] -Context $contextObj
+                            $app = Get-GitHubApp -Name $contextObj['Username'] -Context $contextObj
                             $contextObj['DisplayName'] = [string]$app.name
                         } catch {
-                            Write-Warning "Failed to get the GitHub App with the slug: [$($contextObj['Username'])]."
+                            Write-Debug "Failed to get the GitHub App with the slug: [$($contextObj['Username'])]."
                         }
                     }
                     if ($script:GitHub.EnvironmentType -eq 'GHA') {
@@ -92,11 +92,11 @@ function Set-GitHubContext {
                         $enterprise = $gitHubEvent.enterprise.slug
                         $organization = $gitHubEvent.organization.login
                         $owner = $gitHubEvent.repository.owner.login
-                        $repo = $gitHubEvent.repository.name
+                        $Repository = $gitHubEvent.repository.name
                         $gh_sender = $gitHubEvent.sender.login # sender is an automatic variable in Powershell
                         Write-Debug "Enterprise:            $enterprise"
                         Write-Debug "Organization:          $organization"
-                        Write-Debug "Repository:            $repo"
+                        Write-Debug "Repository:            $Repository"
                         Write-Debug "Repository Owner:      $owner"
                         Write-Debug "Repository Owner Type: $installationType"
                         Write-Debug "Sender:                $gh_sender"
@@ -106,8 +106,8 @@ function Set-GitHubContext {
                         if ([string]::IsNullOrEmpty($contextObj['Owner'])) {
                             $contextObj['Owner'] = [string]$owner
                         }
-                        if ([string]::IsNullOrEmpty($contextObj['Repo'])) {
-                            $contextObj['Repo'] = [string]$repo
+                        if ([string]::IsNullOrEmpty($contextObj['Repository'])) {
+                            $contextObj['Repository'] = [string]$Repository
                         }
                         if ([string]::IsNullOrEmpty($contextObj['InstallationType'])) {
                             $contextObj['InstallationType'] = [string]$installationType
