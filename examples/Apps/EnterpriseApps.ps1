@@ -1,6 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'GitHub'; RequiredVersion = '0.13.2' }
-
-$appIDs = @(
+﻿$appIDs = @(
     'qweqweqwe',
     'qweqweqweqwe'
 )
@@ -26,7 +24,7 @@ filter Install-GithubApp {
     }
 
     process {
-        $installableOrgs = Get-GitHubEnterpriseInstallableOrganization -Enterprise $Enterprise -Debug -Verbose
+        $installableOrgs = Get-GitHubAppInstallableOrganization -Enterprise $Enterprise -Debug -Verbose #FIXME: Add '#Requires -Modules' for [Get-GitHubEnterpriseInstallableOrganization] Suggestions: GitHub
         $orgs = $installableOrgs | Where-Object { $_.login -like $organization }
         foreach ($org in $orgs) {
             foreach ($appIDitem in $AppID) {

@@ -448,7 +448,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
             { Get-GitHubEmoji } | Should -Not -Throw
         }
         It 'Get-GitHubEmoji - Downloads all emojis (USER_FG_PAT)' {
-            { Get-GitHubEmoji -Destination $Home } | Should -Not -Throw
+            { Get-GitHubEmoji -Path $Home } | Should -Not -Throw
         }
     }
     Context 'Repository' {
@@ -605,7 +605,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
             { Get-GitHubEmoji } | Should -Not -Throw
         }
         It 'Get-GitHubEmoji - Downloads all emojis (ORG_FG_PAT)' {
-            { Get-GitHubEmoji -Destination $Home } | Should -Not -Throw
+            { Get-GitHubEmoji -Path $Home } | Should -Not -Throw
         }
     }
     Context 'Repository' {
@@ -785,7 +785,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
             { Get-GitHubEmoji } | Should -Not -Throw
         }
         It 'Get-GitHubEmoji - Downloads all emojis (PAT)' {
-            { Get-GitHubEmoji -Destination $Home } | Should -Not -Throw
+            { Get-GitHubEmoji -Path $Home } | Should -Not -Throw
         }
     }
     Context 'GitIgnore' {
@@ -964,7 +964,7 @@ Describe 'As GitHub Actions (GHA)' {
             { Get-GitHubEmoji } | Should -Not -Throw
         }
         It 'Get-GitHubEmoji - Downloads all emojis (GHA)' {
-            { Get-GitHubEmoji -Destination $Home } | Should -Not -Throw
+            { Get-GitHubEmoji -Path $Home } | Should -Not -Throw
         }
     }
     Context 'GitIgnore' {
