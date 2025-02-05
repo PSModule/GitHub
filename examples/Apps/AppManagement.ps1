@@ -2,7 +2,7 @@
 $appIDs = @(
     'Iv1.f26b61bc99e69405'
 )
-$orgs = Get-GitHubAppInstallableOrganization -Enterprise 'msx' #FIXME: Add '#Requires -Modules' for [Get-GitHubEnterpriseInstallableOrganization] Suggestions: GitHub
+$orgs = Get-GitHubAppInstallableOrganization -Enterprise 'msx'
 foreach ($org in $orgs) {
     foreach ($appID in $appIDs) {
         Install-GitHubAppOnEnterpriseOrganization -Enterprise msx -Organization $org.login -ClientID $appID -RepositorySelection all

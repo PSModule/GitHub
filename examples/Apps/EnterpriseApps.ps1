@@ -19,12 +19,8 @@ filter Install-GithubApp {
         [string] $AppID
     )
 
-    begin {
-
-    }
-
     process {
-        $installableOrgs = Get-GitHubAppInstallableOrganization -Enterprise $Enterprise -Debug -Verbose #FIXME: Add '#Requires -Modules' for [Get-GitHubEnterpriseInstallableOrganization] Suggestions: GitHub
+        $installableOrgs = Get-GitHubAppInstallableOrganization -Enterprise $Enterprise -Debug -Verbose
         $orgs = $installableOrgs | Where-Object { $_.login -like $organization }
         foreach ($org in $orgs) {
             foreach ($appIDitem in $AppID) {
@@ -37,12 +33,8 @@ filter Install-GithubApp {
             }
         }
     }
-
-    end {
-
-    }
 }
 
-$appIDs | Install-GithubApp -Organization $organization -Debug -Verbose
+$appIDs | Install-GitHubApp -Organization $organization -Debug -Verbose
 
 $installation = Get-GitHubAppInstallation
