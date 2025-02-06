@@ -34,7 +34,7 @@ function Invoke-GitHubAppCreationForm {
 
         # The homepage URL of the GitHub App.
         [Parameter(Mandatory)]
-        [string] $Url,
+        [string] $HomepageUrl,
 
         # Enables webhook support for the GitHub App.
         [Parameter()]
@@ -107,7 +107,7 @@ function Invoke-GitHubAppCreationForm {
         # Build the manifest object
         $manifest = @{
             name                     = $Name
-            url                      = $Url
+            url                      = $HomepageUrl
             hook_attributes          = @{
                 url    = $WebhookURL
                 active = $WebhookEnabled

@@ -15,16 +15,24 @@
 
         .NOTES
         [GitHub Apps](https://docs.github.com/apps)
-    #>
+        #>
     [CmdletBinding(DefaultParameterSetName = 'Personal', SupportsShouldProcess)]
     param(
         # The name of the GitHub App.
         [Parameter()]
         [string] $Name,
 
+        # A brief description of the GitHub App.
+        [Parameter()]
+        [string] $Description,
+
         # The main URL of the GitHub App.
         [Parameter(Mandatory)]
-        [string] $Url,
+        [string] $HomepageUrl,
+
+        # List of callback URLs for OAuth authentication.
+        [Parameter()]
+        [string[]] $CallbackUrls,
 
         # The webhook URL for event notifications.
         [Parameter()]
@@ -38,17 +46,9 @@
         [Parameter()]
         [string] $RedirectUrl,
 
-        # List of callback URLs for OAuth authentication.
-        [Parameter()]
-        [string[]] $CallbackUrls,
-
         # The setup URL for the GitHub App.
         [Parameter()]
         [string] $SetupUrl,
-
-        # A brief description of the GitHub App.
-        [Parameter()]
-        [string] $Description,
 
         # Specifies whether the app should be publicly visible.
         [Parameter()]
@@ -70,17 +70,22 @@
         [Parameter()]
         [switch] $SetupOnUpdate,
 
-        # The organization under which the app is being created (Organization parameter set).
-        [Parameter(ParameterSetName = 'Organization', Mandatory)]
-        [string] $Organization,
-
         # The enterprise under which the app is being created (Enterprise parameter set).
         [Parameter(ParameterSetName = 'Enterprise', Mandatory)]
         [string] $Enterprise,
 
+        # The organization under which the app is being created (Organization parameter set).
+        [Parameter(ParameterSetName = 'Organization', Mandatory)]
+        [string] $Organization,
+
         # The state parameter for additional configuration.
         [Parameter()]
-        [string] $State
+        [string] $State,
+
+        # The context to run the command in. Used to get the details for the API call.
+        # Can be either a string or a GitHubContext object.
+        [Parameter()]
+        [object] $Context = (Get-GitHubContext)
     )
     begin {
         $stackPath = $MyInvocation.MyCommand.Name
@@ -90,22 +95,23 @@
         Write-Verbose 'Initiating GitHub App creation process...'
         # Step 1: Send manifest and get the temporary code
         $params = @{
+            Enterprise            = $Enterprise
+            Organization          = $Organization
             Name                  = $Name
-            Url                   = $Url
+            HomepageUrl           = $HomepageUrl
             WebhookEnabled        = $WebhookEnabled
             WebhookURL            = $WebhookURL
             RedirectUrl           = $RedirectUrl
             CallbackUrls          = $CallbackUrls
             SetupUrl              = $SetupUrl
             Description           = $Description
-            Public                = $Public
             Events                = $Events
             Permissions           = $Permissions
             RequestOAuthOnInstall = $RequestOAuthOnInstall
             SetupOnUpdate         = $SetupOnUpdate
-            Enterprise            = $Enterprise
-            Org                   = $Organization
+            Public                = $Public
             State                 = $State
+            Context               = $Context
         }
         $code = Invoke-GitHubAppCreationForm @params
 

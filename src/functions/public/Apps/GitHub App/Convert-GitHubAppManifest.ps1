@@ -36,9 +36,9 @@
 
     process {
         $inputObject = @{
-            Context     = $Context
-            APIEndpoint = "/app-manifests/$Code/conversions"
             Method      = 'GET'
+            APIEndpoint = "/app-manifests/$Code/conversions"
+            Context     = $Context
         }
 
         $response = Invoke-GitHubAPI @inputObject | Select-Object -ExpandProperty Response
