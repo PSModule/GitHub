@@ -36,22 +36,12 @@
 
     process {
         $inputObject = @{
-            Method      = 'GET'
+            Method      = 'POST'
             APIEndpoint = "/app-manifests/$Code/conversions"
             Context     = $Context
         }
 
-        $response = Invoke-GitHubAPI @inputObject | Select-Object -ExpandProperty Response
-
-        Write-Verbose 'GitHub App converted successfully.'
-        Write-Verbose ($response | Format-List | Out-String)
-
-        [PSCustomObject]@{
-            AppId         = $response.id
-            ClientId      = $response.client_id
-            PrivateKey    = $response.pem
-            WebhookSecret = $response.webhook_secret
-        }
+        Invoke-GitHubAPI @inputObject | Select-Object -ExpandProperty Response
     }
 
     end {
