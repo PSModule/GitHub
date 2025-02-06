@@ -110,7 +110,7 @@ function Invoke-GitHubAppCreationForm {
     )
 
     begin {
-        $stackPath = $MyInvocation.MyCommand.Name
+        $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
     }
 
@@ -133,18 +133,21 @@ function Invoke-GitHubAppCreationForm {
             default_permissions      = $Permissions
             request_oauth_on_install = $RequestOAuthOnInstall
             setup_on_update          = $SetupOnUpdate
-        } | ConvertTo-Json -Depth 10 -Compress
+            device_flow              = $DeviceFlow
+            expire_user_tokens       = $ExpireUserTokens
+        }
+        $manifest | ConvertTo-Json -Depth 10 -Compress
 
         # Determine target URL based on Org value
         switch ($PSCmdlet.ParameterSetName) {
             'Enterprise' {
-                $targetUrl = "$($Context.ApiBaseUri)/enterprises/$Enterprise/settings/apps/new"
+                $targetUrl = "https://$($Context.HostName)/enterprises/$Enterprise/settings/apps/new"
             }
             'Organization' {
-                $targetUrl = "$($Context.ApiBaseUri)/organizations/$Organization/settings/apps/new"
+                $targetUrl = "https://$($Context.HostName)/organizations/$Organization/settings/apps/new"
             }
             'Personal' {
-                $targetUrl = "$($Context.ApiBaseUri)/settings/apps/new"
+                $targetUrl = "https://$($Context.HostName)/settings/apps/new"
             }
         }
 
@@ -170,9 +173,17 @@ function Invoke-GitHubAppCreationForm {
                 Token              = $Context.Token
                 ErrorAction        = 'Stop'
             }
+            Write-Verbose ($inputObject | Format-List | Out-String)
             $response = Invoke-WebRequest @inputObject
         } catch {
             Write-Error "Error sending manifest: $_"
+            return
+        }
+
+        Write-Verbose "Received response: $($response.StatusCode)"
+        Write-Verbose ($response | Format-List | Out-String)
+        if ($response.StatusCode -ne 302) {
+            Write-Error "Unexpected response code: $($response.StatusCode)"
             return
         }
 

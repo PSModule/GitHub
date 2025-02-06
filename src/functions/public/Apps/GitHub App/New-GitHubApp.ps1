@@ -101,7 +101,7 @@
         [object] $Context = (Get-GitHubContext)
     )
     begin {
-        $stackPath = Get-PSStackPath
+        $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
     }
     process {

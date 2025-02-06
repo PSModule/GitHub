@@ -29,7 +29,7 @@
     )
 
     begin {
-        $stackPath = Get-PSStackPath
+        $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
