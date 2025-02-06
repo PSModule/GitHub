@@ -118,25 +118,24 @@ function Invoke-GitHubAppCreationForm {
         Write-Verbose 'Building GitHub App manifest JSON payload...'
         # Build the manifest object
         $manifest = @{
-            name                     = $Name
-            url                      = $HomepageUrl
-            hook_attributes          = @{
-                url    = $WebhookURL
-                active = $WebhookEnabled
-            }
-            redirect_url             = $RedirectUrl
-            callback_urls            = $CallbackUrls
-            setup_url                = $SetupUrl
-            description              = $Description
-            public                   = $Public
-            default_events           = $Events
-            default_permissions      = $Permissions
-            request_oauth_on_install = $RequestOAuthOnInstall
-            setup_on_update          = $SetupOnUpdate
-            device_flow              = $DeviceFlow
-            expire_user_tokens       = $ExpireUserTokens
-        }
-        $manifest | ConvertTo-Json -Depth 10 -Compress
+            redirect_url = $RedirectUrl
+            name         = $Name
+            url          = $HomepageUrl
+            # hook_attributes          = @{
+            #     url    = $WebhookURL
+            #     active = [bool] $WebhookEnabled
+            # }
+            # callback_urls            = $CallbackUrls
+            # setup_url                = $SetupUrl
+            # description              = $Description
+            # public                   = [bool] $Public
+            # default_events           = $Events
+            # default_permissions      = $Permissions
+            # request_oauth_on_install = [bool]$RequestOAuthOnInstall
+            # setup_on_update          = [bool]$SetupOnUpdate
+            # device_flow              = [bool] $DeviceFlow
+            # expire_user_tokens       = [bool] $ExpireUserTokens
+        } | ConvertTo-Json -Depth 10 -Compress
 
         # Determine target URL based on Org value
         switch ($PSCmdlet.ParameterSetName) {
@@ -163,18 +162,6 @@ function Invoke-GitHubAppCreationForm {
         # Prepare the request body and headers
         $body = @{ manifest = $manifest }
 
-        $inputObject = @{
-            Method             = 'POST'
-            Uri                = $targetUrl
-            Body               = $body
-            MaximumRedirection = 0
-            Authentication     = 'Bearer'
-            Token              = $Context.Token
-            ErrorAction        = 'Stop'
-        }
-        Write-Verbose ($inputObject | Format-List | Out-String)
-        $response = Invoke-WebRequest @inputObject
-
         try {
             $inputObject = @{
                 Method             = 'POST'
@@ -185,7 +172,7 @@ function Invoke-GitHubAppCreationForm {
                 Token              = $Context.Token
                 ErrorAction        = 'Stop'
             }
-            Write-Verbose ($inputObject | Format-List | Out-String)
+            Write-Verbose ([pscustomobject]$inputObject | Format-List | Out-String)
             $response = Invoke-RestMethod @inputObject
         } catch {
             # When a 302 is returned, Invoke-WebRequest throws an exception.
@@ -195,37 +182,15 @@ function Invoke-GitHubAppCreationForm {
                 throw $_.Exception
             }
         }
-        # At this point, $response should have a StatusCode of 302.
-        if ($response.StatusCode -eq 302) {
-            # Extract the Set-Cookie header.
-            $setCookie = $response.Headers['Set-Cookie']
-            return [PSCustomObject]@{
-                StatusCode = $response.StatusCode
-                SetCookie  = $setCookie
-            }
-        } else {
-            throw "Expected a 302 redirect, but received status code $($response.StatusCode)."
-        }
 
-        Write-Verbose "Received response: $($response.StatusCode)"
-        Write-Verbose ($response | Format-List | Out-String)
-        Write-Verbose ($response.Headers | Format-List | Out-String)
         if ($response.StatusCode -ne 302) {
             Write-Error "Unexpected response code: $($response.StatusCode)"
             return
         }
 
         # Extract the 'code' from the redirect Location header
-        $location = $response.Headers['Location']
-        Write-Verbose "Received redirect location: $location"
-        if (-not $location) {
-            Write-Error 'No redirect location found. The app may not have been created.'
-            return
-        }
-        $code = $null
-        if ($location -match 'code=([^&]+)') {
-            $code = $matches[1]
-        }
+        $code = ($response.Headers | Where-Object { $_.Key -eq 'Set-Cookie' } | Select-Object -ExpandProperty Value) -split ';\s*' |
+            Where-Object { $_ -like 'app_manifest_token*' } | ConvertFrom-StringData | Select-Object -ExpandProperty app_manifest_token
         if (-not $code) {
             Write-Error 'Failed to parse the app creation code from redirect URL.'
             return
