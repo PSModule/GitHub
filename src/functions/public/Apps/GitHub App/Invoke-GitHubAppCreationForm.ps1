@@ -25,7 +25,10 @@ function Invoke-GitHubAppCreationForm {
         .NOTES
         [Registering a GitHub App from a manifest](https://docs.github.com/en/apps/sharing-github-apps/registering-a-github-app-from-a-manifest)
     #>
-
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSAvoidLongLines', '',
+        Justification = 'log links are long'
+    )]
     [CmdletBinding(DefaultParameterSetName = 'Personal')]
     param(
         # The name of the GitHub App.
@@ -72,21 +75,30 @@ function Invoke-GitHubAppCreationForm {
         [Parameter()]
         [hashtable] $Permissions,
 
-        # Determines if OAuth authorization should be requested upon installation.
+        # This will provide a `refresh_token``  which can be used to request an updated access token when this access token expires.
+        [Parameter()]
+        [switch] $ExpireUserTokens,
+
+        # Requests that the installing user grants access to their identity during installation of your App
+        # Read our [Identifying and authorizing users for GitHub Apps documentation](https://docs.github.com/apps/building-github-apps/identifying-and-authorizing-users-for-github-apps/) for more information.
         [Parameter()]
         [switch] $RequestOAuthOnInstall,
+
+        # Allow this GitHub App to authorize users via the Device Flow. Read the [Device Flow documentation](https://docs.github.com/apps/building-oauth-apps/authorizing-oauth-apps#device-flow) for more information.
+        [Parameter()]
+        [switch] $DeviceFlow,
 
         # Determines if setup should be prompted when the app is updated.
         [Parameter()]
         [switch] $SetupOnUpdate,
 
-        # The organization under which the app is being created (Organization parameter set).
-        [Parameter(ParameterSetName = 'Organization', Mandatory)]
-        [string] $Organization,
-
         # The enterprise under which the app is being created (Enterprise parameter set).
         [Parameter(ParameterSetName = 'Enterprise', Mandatory)]
         [string] $Enterprise,
+
+        # The organization under which the app is being created (Organization parameter set).
+        [Parameter(ParameterSetName = 'Organization', Mandatory)]
+        [string] $Organization,
 
         # Optional state parameter to pass during app creation.
         [Parameter()]

@@ -29,7 +29,7 @@
     )
 
     begin {
-        $stackPath = $MyInvocation.MyCommand.Name
+        $stackPath = Get-PSStackPath
         Write-Debug "[$stackPath] - Start"
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }

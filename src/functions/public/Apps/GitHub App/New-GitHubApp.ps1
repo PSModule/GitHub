@@ -15,7 +15,11 @@
 
         .NOTES
         [GitHub Apps](https://docs.github.com/apps)
-        #>
+    #>
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSAvoidLongLines', '',
+        Justification = 'log links are long'
+    )]
     [CmdletBinding(DefaultParameterSetName = 'Personal', SupportsShouldProcess)]
     param(
         # The name of the GitHub App.
@@ -34,41 +38,50 @@
         [Parameter()]
         [string[]] $CallbackUrls,
 
-        # The webhook URL for event notifications.
+        # This will provide a `refresh_token``  which can be used to request an updated access token when this access token expires.
         [Parameter()]
-        [string] $WebhookURL,
+        [switch] $ExpireUserTokens,
 
-        # Enables or disables webhooks.
+        # Requests that the installing user grants access to their identity during installation of your App
+        # Read our [Identifying and authorizing users for GitHub Apps documentation](https://docs.github.com/apps/building-github-apps/identifying-and-authorizing-users-for-github-apps/) for more information.
         [Parameter()]
-        [switch] $WebhookEnabled,
+        [switch] $RequestOAuthOnInstall,
 
-        # The redirect URL after authentication.
+        # Allow this GitHub App to authorize users via the Device Flow. Read the [Device Flow documentation](https://docs.github.com/apps/building-oauth-apps/authorizing-oauth-apps#device-flow) for more information.
         [Parameter()]
-        [string] $RedirectUrl,
+        [switch] $DeviceFlow,
 
         # The setup URL for the GitHub App.
         [Parameter()]
         [string] $SetupUrl,
 
-        # Specifies whether the app should be publicly visible.
+        # Whether the setup process should run again when updating the app.
         [Parameter()]
-        [switch] $Public,
+        [switch] $SetupOnUpdate,
 
-        # List of GitHub events the app subscribes to.
+        # Enables or disables webhooks.
         [Parameter()]
-        [string[]] $Events,
+        [switch] $WebhookEnabled,
+
+        # The webhook URL for event notifications.
+        [Parameter()]
+        [string] $WebhookURL,
+
+        # The redirect URL after authentication.
+        [Parameter()]
+        [string] $RedirectUrl,
 
         # The permissions required by the GitHub App.
         [Parameter()]
         [hashtable] $Permissions,
 
-        # Whether the app requests OAuth authorization on installation.
+        # List of GitHub events the app subscribes to.
         [Parameter()]
-        [switch] $RequestOAuthOnInstall,
+        [string[]] $Events,
 
-        # Whether the setup process should run again when updating the app.
+        # Specifies whether the app should be publicly visible.
         [Parameter()]
-        [switch] $SetupOnUpdate,
+        [switch] $Public,
 
         # The enterprise under which the app is being created (Enterprise parameter set).
         [Parameter(ParameterSetName = 'Enterprise', Mandatory)]
@@ -88,15 +101,15 @@
         [object] $Context = (Get-GitHubContext)
     )
     begin {
-        $stackPath = $MyInvocation.MyCommand.Name
+        $stackPath = Get-PSStackPath
         Write-Debug "[$stackPath] - Start"
     }
     process {
         Write-Verbose 'Initiating GitHub App creation process...'
         # Step 1: Send manifest and get the temporary code
         $params = @{
-            Enterprise            = $Enterprise
-            Organization          = $Organization
+            ExpireUserTokens      = $ExpireUserTokens
+            DeviceFlow            = $DeviceFlow
             Name                  = $Name
             HomepageUrl           = $HomepageUrl
             WebhookEnabled        = $WebhookEnabled
@@ -113,6 +126,16 @@
             State                 = $State
             Context               = $Context
         }
+
+        switch ($PSCmdlet.ParameterSetName) {
+            'Enterprise' {
+                $params['Enterprise'] = $Enterprise
+            }
+            'Organization' {
+                $params['Organization'] = $Organization
+            }
+        }
+
         $code = Invoke-GitHubAppCreationForm @params
 
         if (-not $code) {
