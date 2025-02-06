@@ -31,7 +31,7 @@
         Saves the response body in the specified output file. Enter a path and file name. If you omit the path, the default is the current location. The name is treated as a literal path. Names that contain brackets (`[]`) must be enclosed in single quotes (`'`).
 
     .PARAMETER QueryParameters
-        An IDictionary of query string parameters to add to the Uri via ConvertTo-QueryString.
+        An IDictionary of query string parameters to add to the Uri via ConvertTo-WebQueryString.
 
     .PARAMETER RetryIntervalSec
         Specifies the interval between retries for the connection when a failure code between 400 and 599, inclusive or 304 is received. Also see MaximumRetryCount parameter for specifying number of retries. The value must be between `1` and `[int]::MaxValue`.
@@ -177,7 +177,7 @@
             SkipCertificateCheck    = $true
             StatusCodeVariable      = 'StatusCode'
             Token                   = $Token
-            Uri                     = Join-UriAndQueryParameters -Uri $Uri -QueryParameters $QueryParameters
+            Uri                     = Join-WebUriAndQueryParameters -Uri $Uri -QueryParameters $QueryParameters
             Verbose                 = $false
         }
         foreach ($name in 'MaximumRetryCount', 'RetryIntervalSec') {
