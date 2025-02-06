@@ -9,15 +9,15 @@
     </tr>
     <tr>
         <td>Covered functions</td>
-        <td>160</td>
+        <td>161</td>
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>855</td>
+        <td>854</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>15.76%</td>
+        <td>15.86%</td>
     </tr>
 </table>
 
@@ -29,7 +29,7 @@
 | `/advisories`                                                                                                             |                    | :x:                |                    |                    |                    |
 | `/advisories/{ghsa_id}`                                                                                                   |                    | :x:                |                    |                    |                    |
 | `/app`                                                                                                                    |                    | :white_check_mark: |                    |                    |                    |
-| `/app-manifests/{code}/conversions`                                                                                       |                    |                    |                    | :x:                |                    |
+| `/app-manifests/{code}/conversions`                                                                                       |                    |                    |                    | :white_check_mark: |                    |
 | `/app/hook/config`                                                                                                        |                    | :white_check_mark: | :white_check_mark: |                    |                    |
 | `/app/hook/deliveries`                                                                                                    |                    | :white_check_mark: |                    |                    |                    |
 | `/app/hook/deliveries/{delivery_id}`                                                                                      |                    | :white_check_mark: |                    |                    |                    |
