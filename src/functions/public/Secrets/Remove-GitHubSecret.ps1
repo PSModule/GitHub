@@ -1,63 +1,58 @@
 ﻿function Remove-GitHubSecret {
     <#
-    .SYNOPSIS
-        Delete a secret.
+        .SYNOPSIS
+        Deletes a secret from GitHub.
 
-    .PARAMETER Organization
-        The organization name. The name is not case sensitive.
+        .DESCRIPTION
+        Removes a secret from a specified GitHub repository, environment, organization, or authenticated user.
+        Supports both Actions and Codespaces secrets and requires appropriate authentication.
 
-    .PARAMETER Owner
-        The account owner of the repository. The name is not case sensitive.
+        .EXAMPLE
+        Remove-GitHubSecret -Owner PSModule -Repository Demo -Type actions -Name TEST
 
-    .PARAMETER Repository
-        The name of the repository. The name is not case sensitive.
+        Deletes the secret named 'TEST' from the 'Demo' repository in the 'PSModule' organization.
 
-    .PARAMETER Environment
-        The name of the repository environment.
+        .EXAMPLE
+        Remove-GitHubSecret -Organization MyOrg -Type actions -Name API_KEY
 
-    .PARAMETER Name
-        The name of the secret.
+        Deletes the secret 'API_KEY' from the organization 'MyOrg'.
 
-    .PARAMETER Type
-        actions / codespaces
+        .EXAMPLE
+        Remove-GitHubSecret -Owner MyUser -Repository MyRepo -Environment Production -Name DB_PASSWORD
 
-    .EXAMPLE
-        > Remove-GitHubSecret -Owner PSModule -Repository Demo -Type actions -Name TEST
+        Deletes the 'DB_PASSWORD' secret from the 'Production' environment in the 'MyRepo' repository.
 
-    .OUTPUTS
-        [PSObject[]]
+        .NOTES
+        Supports authentication using GitHub App tokens (IAT), Personal Access Tokens (PAT), or User Access Tokens (UAT).
 
-    .LINK
-        https://docs.github.com/en/rest/actions/secrets?apiVersion=2022-11-28#delete-an-organization-secret
-
-    .LINK
-        https://docs.github.com/en/rest/actions/secrets?apiVersion=2022-11-28#delete-a-repository-secret
-
-    .LINK
-        https://docs.github.com/en/rest/actions/secrets?apiVersion=2022-11-28#delete-an-environment-secret
-
-    .LINK
-        https://docs.github.com/en/rest/codespaces/secrets?apiVersion=2022-11-28#delete-a-secret-for-the-authenticated-user
+        .LINK
+        https://psmodule.io/GitHub/Functions/Secrets/Remove-GitHubSecret/
     #>
     [CmdletBinding(DefaultParameterSetName = 'AuthenticatedUser', SupportsShouldProcess)]
     param (
+        # The organization name. The name is not case-sensitive.
         [Parameter(ParameterSetName = 'Organization', Mandatory)]
         [string]$Organization,
 
+        # The account owner of the repository. The name is not case-sensitive.
         [Parameter(ParameterSetName = 'Environment', Mandatory)]
         [Parameter(ParameterSetName = 'Repository', Mandatory)]
         [string]$Owner,
 
+        # The name of the repository. The name is not case-sensitive.
         [Parameter(ParameterSetName = 'Environment', Mandatory)]
         [Parameter(ParameterSetName = 'Repository', Mandatory)]
         [string]$Repository,
 
+        # The name of the repository environment.
         [Parameter(ParameterSetName = 'Environment', Mandatory)]
         [string]$Environment,
 
+        # The name of the secret to delete.
         [Parameter(Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName)]
         [string]$Name,
 
+        # Specifies whether the secret is for Actions or Codespaces.
         [ValidateSet('actions', 'codespaces')]
         [string]$Type = 'actions',
 
@@ -66,25 +61,17 @@
         [Parameter()]
         [object]$Context = (Get-GitHubContext)
     )
+
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
-
-        if ([string]::IsNullOrEmpty($Repository)) {
-            $Repository = $Context.Repo
-        }
-        Write-Debug "Repository: [$Repository]"
     }
 
     process {
-        $delParams = @{
+        $inputObject = @{
+            Method      = 'DELETE'
             APIEndpoint = switch ($PSCmdlet.ParameterSetName) {
                 'Environment' {
                     "/repos/$Owner/$Repository/environments/$Environment/secrets/$Name"
@@ -104,14 +91,14 @@
                 }
             }
             Context     = $Context
-            Method      = 'DELETE'
         }
+
         if ($PSCmdLet.ShouldProcess(
                 "Deleting GitHub $Type secret [$Name]",
-                "Are you sure you want to delete $($($delParams.APIEndPoint))?",
+                "Are you sure you want to delete $($inputObject.APIEndpoint)?",
                 'Delete secret'
             )) {
-            Invoke-GitHubAPI @delParams
+            Invoke-GitHubAPI @inputObject
         }
     }
 
@@ -119,5 +106,3 @@
         Write-Debug "[$stackPath] - End"
     }
 }
-
-#SkipTest:FunctionTest:Will add a test for this function in a future PR

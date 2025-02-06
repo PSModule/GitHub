@@ -1,81 +1,84 @@
 ﻿function Set-GitHubSecret {
     <#
-    .SYNOPSIS
-         Update a secret.
+        .SYNOPSIS
+        Updates a GitHub secret for an organization, repository, or user.
 
-    .PARAMETER Organization
-        The organization name. The name is not case sensitive.
+        .DESCRIPTION
+        This function updates a secret in a GitHub repository, environment, or organization.
+        It encrypts the secret value before storing it and supports different visibility levels.
 
-    .PARAMETER Owner
-        The account owner of the repository. The name is not case sensitive.
+        .EXAMPLE
+        $secret = ConvertTo-SecureString "my-secret-value" -AsPlainText -Force
+        Set-GitHubSecret -Repository 'MyRepo' -Owner 'MyUser' -Name 'MySecret' -Value $secret
 
-    .PARAMETER Repository
-        The name of the repository. The name is not case sensitive.
+        Updates the secret `MySecret` in the `MyRepo` repository for the owner `MyUser`.
 
-    .PARAMETER Environment
-        The name of the repository environment.
+        .EXAMPLE
+        $params = @{
+            Organization = 'MyOrg'
+            Name         = 'MySecret'
+            Type         = 'actions'
+            Value        = (ConvertTo-SecureString "my-secret-value" -AsPlainText -Force)
+            Private      = $true
+        }
+        Set-GitHubSecret @params
 
-    .PARAMETER Name
-        The name of the secret.
+        Updates the secret `MySecret` at the organization level for GitHub Actions, setting visibility to private.
 
-    .PARAMETER Type
-        actions / codespaces
+        .EXAMPLE
+        $params = @{
+            Owner      = 'MyUser'
+            Repository = 'MyRepo'
+            Environment = 'Production'
+            Name       = 'MySecret'
+            Value      = (ConvertTo-SecureString "my-secret-value" -AsPlainText -Force)
+        }
+        Set-GitHubSecret @params
 
-    .PARAMETER Private
-        Set visibility to private.
+        Updates the secret `MySecret` in the `Production` environment of the `MyRepo` repository for `MyUser`.
 
-    .PARAMETER SelectedRepositoryIDs
-        List of numeric selected_repository_ids the secret should be visible to.
-
-    .EXAMPLE
-        # TODO
-
-    .OUTPUTS
-        [PSObject[]]
-
-    .LINK
-        https://docs.github.com/en/rest/actions/secrets?apiVersion=2022-11-28#create-or-update-an-organization-secret
-
-    .LINK
-        https://docs.github.com/en/rest/actions/secrets?apiVersion=2022-11-28#create-or-update-a-repository-secret
-
-    .LINK
-        https://docs.github.com/en/rest/actions/secrets?apiVersion=2022-11-28#create-or-update-an-environment-secret
-
-    .LINK
-        https://docs.github.com/en/rest/codespaces/secrets?apiVersion=2022-11-28#create-or-update-a-secret-for-the-authenticated-user
+        .LINK
+        https://psmodule.io/GitHub/Functions/Secrets/Set-GitHubSecret/
     #>
+
     [CmdletBinding(DefaultParameterSetName = 'AuthenticatedUser', SupportsShouldProcess, ConfirmImpact = 'Low')]
     param (
+        # The account owner of the repository. The name is not case-sensitive.
         [Parameter(ParameterSetName = 'Organization', Mandatory)]
-        [string]$Organization,
-
         [Parameter(ParameterSetName = 'Environment', Mandatory)]
         [Parameter(ParameterSetName = 'Repository', Mandatory)]
-        [string]$Owner,
+        [Alias('Organization', 'User')]
+        [string] $Owner,
 
+        # The name of the repository. The name is not case-sensitive.
         [Parameter(ParameterSetName = 'Environment', Mandatory)]
         [Parameter(ParameterSetName = 'Repository', Mandatory)]
-        [string]$Repository,
+        [string] $Repository,
 
+        # The name of the repository environment.
         [Parameter(ParameterSetName = 'Environment', Mandatory)]
-        [string]$Environment,
+        [string] $Environment,
 
+        # The name of the secret to be updated.
         [Parameter(Mandatory)]
-        [string]$Name,
+        [string] $Name,
 
+        # The type of secret, either 'actions' or 'codespaces'.
         [ValidateSet('actions', 'codespaces')]
-        [string]$Type = 'actions',
+        [string] $Type = 'actions',
 
+        # Set visibility to private (only applicable at the organization level).
         [Parameter(ParameterSetName = 'Organization')]
-        [switch]$Private,
+        [switch] $Private,
 
+        # List of numeric repository IDs where the secret should be visible.
         [Parameter(ParameterSetName = 'AuthenticatedUser')]
         [Parameter(ParameterSetName = 'Organization')]
-        [int[]]$SelectedRepositoryIDs,
+        [int[]] $SelectedRepositoryIDs,
 
+        # The secret value to be stored, provided as a SecureString.
         [Parameter(Mandatory)]
-        [SecureString]$Value,
+        [SecureString] $Value,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -88,16 +91,6 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
-
-        if ([string]::IsNullOrEmpty($Repository)) {
-            $Repository = $Context.Repo
-        }
-        Write-Debug "Repository: [$Repository]"
     }
 
     process {
@@ -107,7 +100,7 @@
                 break
             }
             'Organization' {
-                "/orgs/$Organization/$Type/secrets/$Name"
+                "/orgs/$Owner/$Type/secrets/$Name"
                 break
             }
             'Repository' {
@@ -120,21 +113,21 @@
             }
         }
         if ($PSCmdLet.ShouldProcess(
-                "Updating github secret [$Name]",
-                "Are you sure you want to update github secret [$apiEndPoint]?",
+                "Updating GitHub secret [$Name]",
+                "Are you sure you want to update GitHub secret [$apiEndPoint]?",
                 'Update secret'
             )) {
             # Get the Organization, Repository, or AuthenticatedUser public key for encryption
             $getPublicKeyParams = switch ($PSCmdlet.ParameterSetName) {
                 'Organization' {
                     @{
-                        Organization = $Organization
+                        Organization = $Owner
                         Type         = $Type
                     }
                     break
                 }
                 'AuthenticatedUser' {
-                    @{}
+                    @{ }
                     break
                 }
                 default {
@@ -147,12 +140,11 @@
             }
             $publicKey = Get-GitHubPublicKey @getPublicKeyParams
             $body = @{
-                encrypted_value = ConvertTo-SodiumEncryptedString -Secret (ConvertFrom-SecureString $Value -AsPlainText) -PublicKey $publicKey.key #FIXME: Add '#Requires -Modules' for [ConvertTo-SodiumEncryptedString] Suggestions: Sodium, PSSodium
+                encrypted_value = ConvertTo-SodiumEncryptedString -Secret (ConvertFrom-SecureString $Value -AsPlainText) -PublicKey $publicKey.key
                 key_id          = $publicKey.key_id
             }
             if ($PSCmdlet.ParameterSetName -in 'AuthenticatedUser', 'Organization') {
                 if ($Private.IsPresent -and $PSCmdlet.ParameterSetName -eq 'Organization') {
-                    # ParameterSetName -eq Organization filter should be redundant since -Private can only be applied to the Organization ParameterSet
                     $body['visibility'] = 'private'
                 } elseif ($PSBoundParameters.ContainsKey('SelectedRepositoryIDs')) {
                     $body['selected_repository_ids'] = @($SelectedRepositoryIDs)
@@ -161,7 +153,7 @@
             }
             $putParams = @{
                 APIEndpoint = $apiEndPoint
-                Body        = [PSCustomObject]$body | ConvertTo-Json
+                Body        = [PSCustomObject] $body | ConvertTo-Json
                 Context     = $Context
                 Method      = 'PUT'
             }
@@ -173,5 +165,3 @@
         Write-Debug "[$stackPath] - End"
     }
 }
-
-#SkipTest:FunctionTest:Will add a test for this function in a future PR
