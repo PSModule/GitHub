@@ -59,23 +59,26 @@
     }
 
     process {
+        switch ($PSCmdlet.ParameterSetName) {
+            'Organization' {
+                $APIEndpoint = "/orgs/$Owner/$Type/secrets/public-key"
+                break
+            }
+            'Repository' {
+                $APIEndpoint = "/repos/$Owner/$Repository/$Type/secrets/public-key"
+                break
+            }
+            'AuthenticatedUser' {
+                $APIEndpoint = '/user/codespaces/secrets/public-key'
+                break
+            }
+        }
+
         $inputObject = @{
             Method      = 'GET'
-            APIEndpoint = switch ($PSCmdlet.ParameterSetName) {
-                'Organization' {
-                    "/orgs/$Owner/$Type/secrets/public-key"
-                    break
-                }
-                'Repository' {
-                    "/repos/$Owner/$Repository/$Type/secrets/public-key"
-                    break
-                }
-                'AuthenticatedUser' {
-                    '/user/codespaces/secrets/public-key'
-                    break
-                }
-            }
+            APIEndpoint = $APIEndpoint
             Context     = $Context
+            AuthType    = $AuthType
         }
         Invoke-GitHubAPI @inputObject | Select-Object -ExpandProperty Response
     }
