@@ -163,6 +163,18 @@ function Invoke-GitHubAppCreationForm {
         # Prepare the request body and headers
         $body = @{ manifest = $manifest }
 
+        $inputObject = @{
+            Method             = 'POST'
+            Uri                = $targetUrl
+            Body               = $body
+            MaximumRedirection = 0
+            Authentication     = 'Bearer'
+            Token              = $Context.Token
+            ErrorAction        = 'Stop'
+        }
+        Write-Verbose ($inputObject | Format-List | Out-String)
+        $response = Invoke-WebRequest @inputObject
+
         try {
             $inputObject = @{
                 Method             = 'POST'
@@ -174,14 +186,30 @@ function Invoke-GitHubAppCreationForm {
                 ErrorAction        = 'Stop'
             }
             Write-Verbose ($inputObject | Format-List | Out-String)
-            $response = Invoke-WebRequest @inputObject
+            $response = Invoke-RestMethod @inputObject
         } catch {
-            Write-Error "Error sending manifest: $_"
-            return
+            # When a 302 is returned, Invoke-WebRequest throws an exception.
+            if ($_.Exception.Response) {
+                $response = $_.Exception.Response
+            } else {
+                throw $_.Exception
+            }
+        }
+        # At this point, $response should have a StatusCode of 302.
+        if ($response.StatusCode -eq 302) {
+            # Extract the Set-Cookie header.
+            $setCookie = $response.Headers['Set-Cookie']
+            return [PSCustomObject]@{
+                StatusCode = $response.StatusCode
+                SetCookie  = $setCookie
+            }
+        } else {
+            throw "Expected a 302 redirect, but received status code $($response.StatusCode)."
         }
 
         Write-Verbose "Received response: $($response.StatusCode)"
         Write-Verbose ($response | Format-List | Out-String)
+        Write-Verbose ($response.Headers | Format-List | Out-String)
         if ($response.StatusCode -ne 302) {
             Write-Error "Unexpected response code: $($response.StatusCode)"
             return
