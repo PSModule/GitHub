@@ -35,9 +35,6 @@ Additions or adjustments to those defaults are covered in this document to ensur
   - Do **not** declare `DefaultParameterSetName = '__AllParameterSets'`.
   - Only specify a `DefaultParameterSetName` if it is actually different from the first parameter set.
 
-- **One API Call = One Function**
-  - If you find that a single function is handling multiple distinct API calls, split it into multiple functions.
-
 - **Public vs. Private**
   1. **Public Functions**
      - Support pipeline input if appropriate.
