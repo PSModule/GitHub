@@ -237,6 +237,15 @@ filter Invoke-GitHubAPI {
                 $headers[$item.Key] = ($item.Value).Trim() -join ', '
             }
             $headers = [pscustomobject]$headers
+            if ($headers.'x-ratelimit-reset') {
+                $headers.'x-ratelimit-reset' = [DateTime]::UnixEpoch.AddSeconds($headers.'x-ratelimit-reset').ToString('s')
+            }
+            if ($headers.'Date') {
+                $headers.'Date' = [DateTime]::Parse(($headers.'Date').Replace('UTC', '').Trim()).ToString('s')
+            }
+            if ($headers.'github-authentication-token-expiration') {
+                $headers.'github-authentication-token-expiration' = [DateTime]::Parse(($headers.'github-authentication-token-expiration').Replace('UTC', '').Trim()).ToString('s')
+            }
             $sortedProperties = $headers.PSObject.Properties.Name | Sort-Object
             $headers = $headers | Select-Object $sortedProperties
             Write-Debug 'Response headers:'
