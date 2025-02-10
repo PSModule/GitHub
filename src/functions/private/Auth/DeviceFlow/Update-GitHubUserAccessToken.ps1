@@ -98,4 +98,4 @@
         Write-Debug "[$stackPath] - End"
     }
 }
-#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '6.0.0' }
+#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '7.0.0' }

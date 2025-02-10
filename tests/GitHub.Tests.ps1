@@ -1,5 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Microsoft.PowerShell.SecretManagement'; RequiredVersion = '1.1.2' }
-#Requires -Modules @{ ModuleName = 'Pester'; RequiredVersion = '5.7.1' }
+﻿#Requires -Modules @{ ModuleName = 'Pester'; RequiredVersion = '5.7.1' }
 
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
     'PSUseDeclaredVarsMoreThanAssignments', '',
@@ -13,8 +12,6 @@
 param()
 
 BeforeAll {
-    Get-SecretInfo | Remove-Secret
-    Get-SecretVault | Unregister-SecretVault
     Get-Module -ListAvailable -Name Context | Sort-Object -Property Version | Select-Object -Last 1 | Import-Module -Force
 }
 
