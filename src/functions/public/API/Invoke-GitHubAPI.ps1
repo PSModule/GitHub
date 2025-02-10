@@ -70,7 +70,7 @@ filter Invoke-GitHubAPI {
             Mandatory,
             ParameterSetName = 'Uri'
         )]
-        [string] $URI,
+        [string] $Uri,
 
         # The 'Content-Type' header for the API request. The default is 'application/vnd.github+json'.
         [Parameter()]
@@ -124,12 +124,13 @@ filter Invoke-GitHubAPI {
         }
         $headers | Remove-HashtableEntry -NullOrEmptyValues
 
-        if (-not $URI) {
-            $URI = New-Uri -BaseUri $ApiBaseUri -Path $ApiEndpoint -AsString
+        if (-not $Uri) {
+            $Uri = New-Uri -BaseUri $ApiBaseUri -Path $ApiEndpoint -AsString
+            $Uri = $Uri -replace '//', '/'
         }
 
         $APICall = @{
-            Uri            = $URI
+            Uri            = $Uri
             Method         = [string]$Method
             Headers        = $Headers
             Authentication = 'Bearer'
@@ -149,7 +150,7 @@ filter Invoke-GitHubAPI {
                     Write-Debug "Setting per_page to the default value in context [$($Context.PerPage)]."
                     $Body['per_page'] = $Context.PerPage
                 }
-                $APICall.Uri = New-Uri -BaseUri $URI -Query $Body -AsString
+                $APICall.Uri = New-Uri -BaseUri $Uri -Query $Body -AsString
             } elseif ($Body -is [string]) {
                 # Use body to create the form data
                 $APICall.Body = $Body
