@@ -1197,4 +1197,57 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
             } | Should -Not -Throw
         }
     }
+    Context 'Repository' {
+        Context 'Content' {
+            It 'Get-GitHubRepositoryContent - retrieves README.md from main branch' {
+                $Owner = 'github'
+                $Repository = 'rest-api-description'
+                $Path = 'README.md'
+                $Ref = 'main'
+
+                $Result = Get-GitHubRepositoryContent -Owner $Owner -Repository $Repository -Path $Path -Ref $Ref
+
+                $Result | Should -Not -BeNullOrEmpty
+                $Result | Should -BeOfType 'System.Object'
+                $result | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+                $Result.name | Should -Be 'README.md'
+            }
+        }
+
+        Context 'Get-GitHubRepositoryContent - Retrieve repository root contents' {
+            It 'Get-GitHubRepositoryContent - retrieves root directory contents' {
+                $Owner = 'github'
+                $Repository = 'rest-api-description'
+
+                $Result = Get-GitHubRepositoryContent -Owner $Owner -Repository $Repository
+                $result | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+                $Result | Should -Not -BeNullOrEmpty
+                $Result | Should -BeOfType 'System.Object'
+            }
+        }
+
+        Context 'Get-GitHubRepositoryContent - Handle invalid path' {
+            It 'Get-GitHubRepositoryContent - returns error for non-existent file' {
+                $Owner = 'github'
+                $Repository = 'rest-api-description'
+                $Path = 'nonexistentfile.md'
+
+                { Get-GitHubRepositoryContent -Owner $Owner -Repository $Repository -Path $Path } | Should -Throw
+            }
+        }
+
+        Context 'Get-GitHubRepositoryContent - Retrieve content from a specific branch' {
+            It 'Get-GitHubRepositoryContent - retrieves content from a feature branch' {
+                $Owner = 'github'
+                $Repository = 'rest-api-description'
+                $Path = 'README.md'
+                $Ref = 'feature-branch'
+
+                $Result = Get-GitHubRepositoryContent -Owner $Owner -Repository $Repository -Path $Path -Ref $Ref
+                $result | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+                $Result | Should -Not -BeNullOrEmpty
+                $Result | Should -BeOfType 'System.Object'
+            }
+        }
+    }
 }

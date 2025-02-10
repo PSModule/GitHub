@@ -1,4 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Web'; RequiredVersion = '1.0.0' }
+﻿#Requires -Modules @{ ModuleName = 'Uri'; RequiredVersion = '1.1.0' }
 
 filter Invoke-GitHubAPI {
     <#
@@ -164,7 +164,7 @@ filter Invoke-GitHubAPI {
                     Write-Debug "Setting per_page to the default value in context [$($Context.PerPage)]."
                     $Body['per_page'] = $Context.PerPage
                 }
-                $queryString = $Body | ConvertTo-WebQueryString
+                $queryString = $Body | ConvertTo-UriQueryString
                 $APICall.Uri = $APICall.Uri + $queryString
             } elseif ($Body -is [string]) {
                 # Use body to create the form data
