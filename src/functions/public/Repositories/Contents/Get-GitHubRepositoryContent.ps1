@@ -29,7 +29,10 @@
         Retrieves the README.md file from the main branch of the repository.
 
         .OUTPUTS
-        System.Object. The response object containing details about the repository contents.
+        System.Object
+
+        .NOTES
+        The response object containing details about the repository contents.
 
         .LINK
         https://psmodule.io/GitHub/Functions/Get-GitHubRepositoryContent/
