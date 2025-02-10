@@ -126,7 +126,7 @@ filter Invoke-GitHubAPI {
 
         if (-not $Uri) {
             $Uri = New-Uri -BaseUri $ApiBaseUri -Path $ApiEndpoint -AsString
-            $Uri = $Uri -replace '//', '/'
+            $Uri = $Uri -replace '//$', '/'
         }
 
         $APICall = @{
