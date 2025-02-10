@@ -204,21 +204,10 @@ Get-Command -Module GitHub
 
 - [Generic HTTP Status Codes (MDN)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
 
-### Inspiration Behind the Project
+### Alternative GitHub PowerShell Modules
 
 - [Microsoft's PowerShellForGitHub](https://github.com/microsoft/PowerShellForGitHub)
 - [PSGitHub by pcgeek86](https://github.com/pcgeek86/PSGitHub)
-- [PSSodium by TylerLeonhardt](https://github.com/TylerLeonhardt/PSSodium)
-- [libsodium NuGet Package](https://www.nuget.org/packages/Sodium.Core/)
 - [GitHubActions by ebekker](https://github.com/ebekker/pwsh-github-action-tools)
 - [powershell-devops by smokedlinq](https://github.com/smokedlinq/powershell-devops)
 - [GitHubActionsToolkit by hugoalh-studio](https://github.com/hugoalh-studio/ghactions-toolkit-powershell)
-
-### Authentication and Login
-
-- [PowerShell for GitHub on GitHub Marketplace](https://github.com/apps/powershell-for-github)
-- [Building a CLI with a GitHub App](https://docs.github.com/en/apps/creating-github-apps/writing-code-for-a-github-app/building-a-cli-with-a-github-app)
-
-### Module Configuration and Environment
-
-- [GH Environment for GitHub CLI](https://cli.github.com/manual/gh_help_environment)

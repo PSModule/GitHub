@@ -1,4 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '6.0.0' }
+﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '7.0.2' }
 
 filter Remove-GitHubContext {
     <#
@@ -16,9 +16,9 @@ filter Remove-GitHubContext {
         Removes all contexts from the vault.
 
         .EXAMPLE
-        Remove-Context -ID 'MySecret'
+        Remove-Context -ID 'MyContext'
 
-        Removes the context called 'MySecret' from the vault.
+        Removes the context called 'MyContext' from the vault.
     #>
     [OutputType([void])]
     [CmdletBinding(SupportsShouldProcess)]
@@ -38,7 +38,7 @@ filter Remove-GitHubContext {
     process {
         $ID = "$($script:GitHub.Config.ID)/$Context"
 
-        if ($PSCmdlet.ShouldProcess('Remove-Secret', $context.Name)) {
+        if ($PSCmdlet.ShouldProcess($context.Name, 'Remove context')) {
             Remove-Context -ID $ID
         }
     }
