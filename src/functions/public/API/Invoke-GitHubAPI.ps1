@@ -1,4 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Web'; RequiredVersion = '1.0.0' }
+﻿#Requires -Modules @{ ModuleName = 'Uri'; RequiredVersion = '1.1.0' }
 
 filter Invoke-GitHubAPI {
     <#
@@ -70,7 +70,7 @@ filter Invoke-GitHubAPI {
             Mandatory,
             ParameterSetName = 'Uri'
         )]
-        [string] $URI,
+        [string] $Uri,
 
         # The 'Content-Type' header for the API request. The default is 'application/vnd.github+json'.
         [Parameter()]
@@ -101,25 +101,10 @@ filter Invoke-GitHubAPI {
         $Token = $Context.Token
         Write-Debug "Token :      [$Token]"
 
-        if ([string]::IsNullOrEmpty($HttpVersion)) {
-            $HttpVersion = $Context.HttpVersion
-        }
-        Write-Debug "HttpVersion: [$HttpVersion]"
-
-        if ([string]::IsNullOrEmpty($ApiBaseUri)) {
-            $ApiBaseUri = $Context.ApiBaseUri
-        }
-        Write-Debug "ApiBaseUri:  [$ApiBaseUri]"
-
-        if ([string]::IsNullOrEmpty($ApiVersion)) {
-            $ApiVersion = $Context.ApiVersion
-        }
-        Write-Debug "ApiVersion:  [$ApiVersion]"
-
-        if ([string]::IsNullOrEmpty($TokenType)) {
-            $TokenType = $Context.TokenType
-        }
-        Write-Debug "TokenType :  [$TokenType]"
+        $HttpVersion = Resolve-GitHubContextSetting -Name 'HttpVersion' -Value $HttpVersion -Context $Context
+        $ApiBaseUri = Resolve-GitHubContextSetting -Name 'ApiBaseUri' -Value $ApiBaseUri -Context $Context
+        $ApiVersion = Resolve-GitHubContextSetting -Name 'ApiVersion' -Value $ApiVersion -Context $Context
+        $TokenType = Resolve-GitHubContextSetting -Name 'TokenType' -Value $TokenType -Context $Context
 
         switch ($TokenType) {
             'ghu' {
@@ -139,12 +124,13 @@ filter Invoke-GitHubAPI {
         }
         $headers | Remove-HashtableEntry -NullOrEmptyValues
 
-        if (-not $URI) {
-            $URI = ("$ApiBaseUri" -replace '/$'), ("$ApiEndpoint" -replace '^/') -join '/'
+        if (-not $Uri) {
+            $Uri = New-Uri -BaseUri $ApiBaseUri -Path $ApiEndpoint -AsString
+            $Uri = $Uri -replace '//$', '/'
         }
 
         $APICall = @{
-            Uri            = $URI
+            Uri            = $Uri
             Method         = [string]$Method
             Headers        = $Headers
             Authentication = 'Bearer'
@@ -164,8 +150,7 @@ filter Invoke-GitHubAPI {
                     Write-Debug "Setting per_page to the default value in context [$($Context.PerPage)]."
                     $Body['per_page'] = $Context.PerPage
                 }
-                $queryString = $Body | ConvertTo-WebQueryString
-                $APICall.Uri = $APICall.Uri + $queryString
+                $APICall.Uri = New-Uri -BaseUri $Uri -Query $Body -AsString
             } elseif ($Body -is [string]) {
                 # Use body to create the form data
                 $APICall.Body = $Body
