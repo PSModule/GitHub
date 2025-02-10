@@ -1,4 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '7.0.1' }
+﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '7.0.2' }
 #Requires -Modules @{ ModuleName = 'Sodium'; RequiredVersion = '2.1.2' }
 
 filter Remove-GitHubContext {
