@@ -39,6 +39,10 @@ function Invoke-GitHubAppCreationForm {
         [Parameter(Mandatory)]
         [string] $HomepageUrl,
 
+        # The redirect URL after app creation.
+        [Parameter(Mandatory)]
+        [string] $RedirectUrl,
+
         # Enables webhook support for the GitHub App.
         [Parameter()]
         [switch] $WebhookEnabled,
@@ -46,10 +50,6 @@ function Invoke-GitHubAppCreationForm {
         # The webhook URL where GitHub will send event payloads.
         [Parameter()]
         [string] $WebhookURL,
-
-        # The redirect URL after app creation.
-        [Parameter()]
-        [string] $RedirectUrl,
 
         # List of callback URLs for OAuth flows.
         [Parameter()]
@@ -117,25 +117,29 @@ function Invoke-GitHubAppCreationForm {
     process {
         Write-Verbose 'Building GitHub App manifest JSON payload...'
         # Build the manifest object
+        $hookAttributes = @{
+            url    = $WebhookURL
+            active = [bool] $WebhookEnabled
+        }
+        $hookAttributes | Remove-HashtableEntry -NullOrEmptyValues
         $manifest = @{
-            redirect_url = $RedirectUrl
-            name         = $Name
-            url          = $HomepageUrl
-            # hook_attributes          = @{
-            #     url    = $WebhookURL
-            #     active = [bool] $WebhookEnabled
-            # }
-            # callback_urls            = $CallbackUrls
-            # setup_url                = $SetupUrl
-            # description              = $Description
-            # public                   = [bool] $Public
-            # default_events           = $Events
-            # default_permissions      = $Permissions
-            # request_oauth_on_install = [bool]$RequestOAuthOnInstall
-            # setup_on_update          = [bool]$SetupOnUpdate
-            # device_flow              = [bool] $DeviceFlow
-            # expire_user_tokens       = [bool] $ExpireUserTokens
-        } | ConvertTo-Json -Depth 10 -Compress
+            redirect_url             = $RedirectUrl
+            name                     = $Name
+            url                      = $HomepageUrl
+            hook_attributes          = $hook_attributes
+            callback_urls            = $CallbackUrls
+            setup_url                = $SetupUrl
+            description              = $Description
+            public                   = [bool] $Public
+            default_events           = $Events
+            default_permissions      = $Permissions
+            request_oauth_on_install = [bool]$RequestOAuthOnInstall
+            setup_on_update          = [bool]$SetupOnUpdate
+            device_flow              = [bool] $DeviceFlow
+            expire_user_tokens       = [bool] $ExpireUserTokens
+        }
+        $manifest | Remove-HashtableEntry -NullOrEmptyValues
+        $manifest = $manifest | ConvertTo-Json -Depth 10 -Compress
 
         # Determine target URL based on Org value
         switch ($PSCmdlet.ParameterSetName) {
@@ -173,7 +177,7 @@ function Invoke-GitHubAppCreationForm {
                 ErrorAction        = 'Stop'
             }
             Write-Verbose ([pscustomobject]$inputObject | Format-List | Out-String)
-            $response = Invoke-RestMethod @inputObject
+            $response = Invoke-WebRequest @inputObject
         } catch {
             # When a 302 is returned, Invoke-WebRequest throws an exception.
             if ($_.Exception.Response) {
@@ -183,10 +187,14 @@ function Invoke-GitHubAppCreationForm {
             }
         }
 
+
         if ($response.StatusCode -ne 302) {
             Write-Error "Unexpected response code: $($response.StatusCode)"
             return
         }
+
+        $response | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+        Write-Verbose ($response.Headers | ConvertTo-Json)
 
         # Extract the 'code' from the redirect Location header
         $code = ($response.Headers | Where-Object { $_.Key -eq 'Set-Cookie' } | Select-Object -ExpandProperty Value) -split ';\s*' |

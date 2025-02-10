@@ -136,6 +136,7 @@
             }
         }
 
+        $params | Format-Table | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
         $code = Invoke-GitHubAppCreationForm @params
 
         if (-not $code) {
