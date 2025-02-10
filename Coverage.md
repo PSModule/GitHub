@@ -9,15 +9,15 @@
     </tr>
     <tr>
         <td>Covered functions</td>
-        <td>160</td>
+        <td>162</td>
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>855</td>
+        <td>853</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>15.76%</td>
+        <td>15.96%</td>
     </tr>
 </table>
 
@@ -409,7 +409,7 @@
 | `/repos/{owner}/{repo}/commits/{ref}/statuses`                                                                            |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/community/profile`                                                                                 |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/compare/{basehead}`                                                                                |                    | :x:                |                    |                    |                    |
-| `/repos/{owner}/{repo}/contents/{path}`                                                                                   | :x:                | :x:                |                    |                    | :x:                |
+| `/repos/{owner}/{repo}/contents/{path}`                                                                                   | :x:                | :white_check_mark: |                    |                    | :x:                |
 | `/repos/{owner}/{repo}/contributors`                                                                                      |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/dependabot/alerts`                                                                                 |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/dependabot/alerts/{alert_number}`                                                                  |                    | :x:                | :x:                |                    |                    |
@@ -530,7 +530,7 @@
 | `/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/dismissals`                                                |                    |                    |                    |                    | :x:                |
 | `/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/events`                                                    |                    |                    |                    | :x:                |                    |
 | `/repos/{owner}/{repo}/pulls/{pull_number}/update-branch`                                                                 |                    |                    |                    |                    | :x:                |
-| `/repos/{owner}/{repo}/readme`                                                                                            |                    | :x:                |                    |                    |                    |
+| `/repos/{owner}/{repo}/readme`                                                                                            |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/readme/{dir}`                                                                                      |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/releases`                                                                                          |                    | :white_check_mark: |                    | :white_check_mark: |                    |
 | `/repos/{owner}/{repo}/releases/assets/{asset_id}`                                                                        | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
