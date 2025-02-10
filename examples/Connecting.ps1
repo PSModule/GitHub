@@ -48,8 +48,8 @@ Set-GitHubDefaultContext -Context 'msx.ghe.com/MariusStorhaug'
 Get-GitHubContext -Context 'github.com/MariusStorhaug' | Set-GitHubDefaultContext
 
 # Abstraction layers on GitHubContexts
-Get-GitHubContext -Context 'msx.ghe.com/MariusStorhaug' # Only manages secrets prefixed with 'Context:PSModule.GitHub/'
-Get-Context -ID 'PSModule.GitHub/msx.ghe.com/MariusStorhaug' # Only manages secrets prefixed with 'Context:', handles conversion to/from JSON
+Get-GitHubContext -Context 'msx.ghe.com/MariusStorhaug'
+Get-Context -ID 'PSModule.GitHub/msx.ghe.com/MariusStorhaug'
 
 ###
 ### DISCONNECTING
