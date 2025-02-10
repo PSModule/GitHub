@@ -370,10 +370,10 @@ line
 }
 
 Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)' {
-    BeforeAll {
+    BeforeEach {
         Connect-GitHubAccount -Token $env:TEST_USER_USER_FG_PAT
     }
-    AfterAll {
+    AfterEach {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     Context 'Auth' {
@@ -467,6 +467,54 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
         It 'Get-GitHubRepository - Gets all repositories from a user (USER_FG_PAT)' {
             { Get-GitHubRepository -Username 'MariusStorhaug' } | Should -Not -Throw
         }
+        Context 'Content' {
+            BeforeEach {
+                Connect-GitHub
+            }
+            AfterEach {
+                Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+            }
+            It 'Get-GitHubRepositoryContent - retrieves README.md from main branch' {
+                $Owner = 'github'
+                $Repository = 'rest-api-description'
+                $Path = 'README.md'
+                $Ref = 'main'
+
+                $Result = Get-GitHubRepositoryContent -Owner $Owner -Repository $Repository -Path $Path -Ref $Ref
+
+                $Result | Should -Not -BeNullOrEmpty
+                $Result | Should -BeOfType 'System.Object'
+                $result | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+                $Result.name | Should -Be 'README.md'
+            }
+            It 'Get-GitHubRepositoryContent - retrieves root directory contents' {
+                $Owner = 'github'
+                $Repository = 'rest-api-description'
+
+                $Result = Get-GitHubRepositoryContent -Owner $Owner -Repository $Repository
+                $result | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+                $Result | Should -Not -BeNullOrEmpty
+                $Result | Should -BeOfType 'System.Object'
+            }
+            It 'Get-GitHubRepositoryContent - returns error for non-existent file' {
+                $Owner = 'github'
+                $Repository = 'rest-api-description'
+                $Path = 'nonexistentfile.md'
+
+                { Get-GitHubRepositoryContent -Owner $Owner -Repository $Repository -Path $Path } | Should -Throw
+            }
+            It 'Get-GitHubRepositoryContent - retrieves content from a feature branch' {
+                $Owner = 'github'
+                $Repository = 'rest-api-description'
+                $Path = 'README.md'
+                $Ref = 'feature-branch'
+
+                $Result = Get-GitHubRepositoryContent -Owner $Owner -Repository $Repository -Path $Path -Ref $Ref
+                $result | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+                $Result | Should -Not -BeNullOrEmpty
+                $Result | Should -BeOfType 'System.Object'
+            }
+        }
     }
     Context 'GitIgnore' {
         It 'Get-GitHubGitignore - Gets a list of all gitignore templates names (USER_FG_PAT)' {
@@ -527,10 +575,10 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
 }
 
 Describe 'As a user - Fine-grained PAT token - organization account access (ORG_FG_PAT)' {
-    BeforeAll {
+    BeforeEach {
         Connect-GitHubAccount -Token $env:TEST_USER_ORG_FG_PAT
     }
-    AfterAll {
+    AfterEach {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     Context 'Auth' {
@@ -703,13 +751,57 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
             } | Should -Not -Throw
         }
     }
+    Context 'Repository' {
+        Context 'Content' {
+            It 'Get-GitHubRepositoryContent - retrieves README.md from main branch' {
+                $Owner = 'github'
+                $Repository = 'rest-api-description'
+                $Path = 'README.md'
+                $Ref = 'main'
+
+                $Result = Get-GitHubRepositoryContent -Owner $Owner -Repository $Repository -Path $Path -Ref $Ref
+
+                $Result | Should -Not -BeNullOrEmpty
+                $Result | Should -BeOfType 'System.Object'
+                $result | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+                $Result.name | Should -Be 'README.md'
+            }
+            It 'Get-GitHubRepositoryContent - retrieves root directory contents' {
+                $Owner = 'github'
+                $Repository = 'rest-api-description'
+
+                $Result = Get-GitHubRepositoryContent -Owner $Owner -Repository $Repository
+                $result | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+                $Result | Should -Not -BeNullOrEmpty
+                $Result | Should -BeOfType 'System.Object'
+            }
+            It 'Get-GitHubRepositoryContent - returns error for non-existent file' {
+                $Owner = 'github'
+                $Repository = 'rest-api-description'
+                $Path = 'nonexistentfile.md'
+
+                { Get-GitHubRepositoryContent -Owner $Owner -Repository $Repository -Path $Path } | Should -Throw
+            }
+            It 'Get-GitHubRepositoryContent - retrieves content from a feature branch' {
+                $Owner = 'github'
+                $Repository = 'rest-api-description'
+                $Path = 'README.md'
+                $Ref = 'feature-branch'
+
+                $Result = Get-GitHubRepositoryContent -Owner $Owner -Repository $Repository -Path $Path -Ref $Ref
+                $result | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+                $Result | Should -Not -BeNullOrEmpty
+                $Result | Should -BeOfType 'System.Object'
+            }
+        }
+    }
 }
 
 Describe 'As a user - Classic PAT token (PAT)' {
-    BeforeAll {
+    BeforeEach {
         Connect-GitHubAccount -Token $env:TEST_USER_PAT
     }
-    AfterAll {
+    AfterEach {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     Context 'Auth' {
@@ -855,13 +947,57 @@ Describe 'As a user - Classic PAT token (PAT)' {
             $members.login | Should -Contain 'psmodule-user'
         }
     }
+    Context 'Repository' {
+        Context 'Content' {
+            It 'Get-GitHubRepositoryContent - retrieves README.md from main branch' {
+                $Owner = 'github'
+                $Repository = 'rest-api-description'
+                $Path = 'README.md'
+                $Ref = 'main'
+
+                $Result = Get-GitHubRepositoryContent -Owner $Owner -Repository $Repository -Path $Path -Ref $Ref
+
+                $Result | Should -Not -BeNullOrEmpty
+                $Result | Should -BeOfType 'System.Object'
+                $result | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+                $Result.name | Should -Be 'README.md'
+            }
+            It 'Get-GitHubRepositoryContent - retrieves root directory contents' {
+                $Owner = 'github'
+                $Repository = 'rest-api-description'
+
+                $Result = Get-GitHubRepositoryContent -Owner $Owner -Repository $Repository
+                $result | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+                $Result | Should -Not -BeNullOrEmpty
+                $Result | Should -BeOfType 'System.Object'
+            }
+            It 'Get-GitHubRepositoryContent - returns error for non-existent file' {
+                $Owner = 'github'
+                $Repository = 'rest-api-description'
+                $Path = 'nonexistentfile.md'
+
+                { Get-GitHubRepositoryContent -Owner $Owner -Repository $Repository -Path $Path } | Should -Throw
+            }
+            It 'Get-GitHubRepositoryContent - retrieves content from a feature branch' {
+                $Owner = 'github'
+                $Repository = 'rest-api-description'
+                $Path = 'README.md'
+                $Ref = 'feature-branch'
+
+                $Result = Get-GitHubRepositoryContent -Owner $Owner -Repository $Repository -Path $Path -Ref $Ref
+                $result | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+                $Result | Should -Not -BeNullOrEmpty
+                $Result | Should -BeOfType 'System.Object'
+            }
+        }
+    }
 }
 
 Describe 'As GitHub Actions (GHA)' {
-    BeforeAll {
+    BeforeEach {
         Connect-GitHubAccount
     }
-    AfterAll {
+    AfterEach {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     Context 'Auth' {
@@ -987,6 +1123,56 @@ Describe 'As GitHub Actions (GHA)' {
             { Get-GitHubUser -Username 'Octocat' } | Should -Not -Throw
         }
     }
+    Context 'Repository' {
+        Context 'Content' {
+            BeforeEach {
+                Connect-GitHub
+            }
+            AfterEach {
+                Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+            }
+            It 'Get-GitHubRepositoryContent - retrieves README.md from main branch' {
+                $Owner = 'github'
+                $Repository = 'rest-api-description'
+                $Path = 'README.md'
+                $Ref = 'main'
+
+                $Result = Get-GitHubRepositoryContent -Owner $Owner -Repository $Repository -Path $Path -Ref $Ref
+
+                $Result | Should -Not -BeNullOrEmpty
+                $Result | Should -BeOfType 'System.Object'
+                $result | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+                $Result.name | Should -Be 'README.md'
+            }
+            It 'Get-GitHubRepositoryContent - retrieves root directory contents' {
+                $Owner = 'github'
+                $Repository = 'rest-api-description'
+
+                $Result = Get-GitHubRepositoryContent -Owner $Owner -Repository $Repository
+                $result | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+                $Result | Should -Not -BeNullOrEmpty
+                $Result | Should -BeOfType 'System.Object'
+            }
+            It 'Get-GitHubRepositoryContent - returns error for non-existent file' {
+                $Owner = 'github'
+                $Repository = 'rest-api-description'
+                $Path = 'nonexistentfile.md'
+
+                { Get-GitHubRepositoryContent -Owner $Owner -Repository $Repository -Path $Path } | Should -Throw
+            }
+            It 'Get-GitHubRepositoryContent - retrieves content from a feature branch' {
+                $Owner = 'github'
+                $Repository = 'rest-api-description'
+                $Path = 'README.md'
+                $Ref = 'feature-branch'
+
+                $Result = Get-GitHubRepositoryContent -Owner $Owner -Repository $Repository -Path $Path -Ref $Ref
+                $result | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+                $Result | Should -Not -BeNullOrEmpty
+                $Result | Should -BeOfType 'System.Object'
+            }
+        }
+    }
 }
 
 Describe 'As a GitHub App - Enterprise (APP_ENT)' {
@@ -1058,13 +1244,63 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
             { Update-GitHubOrganization -Organization 'psmodule-test-org3' -Blog 'https://psmodule.io' } | Should -Not -Throw
         }
     }
+    Context 'Repository' {
+        Context 'Content' {
+            BeforeEach {
+                Connect-GitHubApp -Organization 'psmodule-test-org3' -Default
+            }
+            AfterEach {
+                Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+            }
+            It 'Get-GitHubRepositoryContent - retrieves README.md from main branch' {
+                $Owner = 'github'
+                $Repository = 'rest-api-description'
+                $Path = 'README.md'
+                $Ref = 'main'
+
+                $Result = Get-GitHubRepositoryContent -Owner $Owner -Repository $Repository -Path $Path -Ref $Ref
+
+                $Result | Should -Not -BeNullOrEmpty
+                $Result | Should -BeOfType 'System.Object'
+                $result | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+                $Result.name | Should -Be 'README.md'
+            }
+            It 'Get-GitHubRepositoryContent - retrieves root directory contents' {
+                $Owner = 'github'
+                $Repository = 'rest-api-description'
+
+                $Result = Get-GitHubRepositoryContent -Owner $Owner -Repository $Repository
+                $result | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+                $Result | Should -Not -BeNullOrEmpty
+                $Result | Should -BeOfType 'System.Object'
+            }
+            It 'Get-GitHubRepositoryContent - returns error for non-existent file' {
+                $Owner = 'github'
+                $Repository = 'rest-api-description'
+                $Path = 'nonexistentfile.md'
+
+                { Get-GitHubRepositoryContent -Owner $Owner -Repository $Repository -Path $Path } | Should -Throw
+            }
+            It 'Get-GitHubRepositoryContent - retrieves content from a feature branch' {
+                $Owner = 'github'
+                $Repository = 'rest-api-description'
+                $Path = 'README.md'
+                $Ref = 'feature-branch'
+
+                $Result = Get-GitHubRepositoryContent -Owner $Owner -Repository $Repository -Path $Path -Ref $Ref
+                $result | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+                $Result | Should -Not -BeNullOrEmpty
+                $Result | Should -BeOfType 'System.Object'
+            }
+        }
+    }
 }
 
 Describe 'As a GitHub App - Organization (APP_ORG)' {
-    BeforeAll {
+    BeforeEach {
         Connect-GitHubAccount -ClientID $env:TEST_APP_ORG_CLIENT_ID -PrivateKey $env:TEST_APP_ORG_PRIVATE_KEY
     }
-    AfterAll {
+    AfterEach {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     Context 'Auth' {
@@ -1139,10 +1375,10 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         }
     }
     Context 'Organization' {
-        BeforeAll {
+        BeforeEach {
             Connect-GitHubApp -Organization 'psmodule-test-org' -Default
         }
-        AfterAll {
+        AfterEach {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
         }
         It 'Get-GitHubOrganization - Gets a specific organization (APP_ORG)' {
@@ -1196,6 +1432,12 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
     }
     Context 'Repository' {
         Context 'Content' {
+            BeforeEach {
+                Connect-GitHubApp -Organization 'psmodule-test-org' -Default
+            }
+            AfterEach {
+                Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+            }
             It 'Get-GitHubRepositoryContent - retrieves README.md from main branch' {
                 $Owner = 'github'
                 $Repository = 'rest-api-description'
@@ -1209,9 +1451,6 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
                 $result | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
                 $Result.name | Should -Be 'README.md'
             }
-        }
-
-        Context 'Get-GitHubRepositoryContent - Retrieve repository root contents' {
             It 'Get-GitHubRepositoryContent - retrieves root directory contents' {
                 $Owner = 'github'
                 $Repository = 'rest-api-description'
@@ -1221,9 +1460,6 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
                 $Result | Should -Not -BeNullOrEmpty
                 $Result | Should -BeOfType 'System.Object'
             }
-        }
-
-        Context 'Get-GitHubRepositoryContent - Handle invalid path' {
             It 'Get-GitHubRepositoryContent - returns error for non-existent file' {
                 $Owner = 'github'
                 $Repository = 'rest-api-description'
@@ -1231,9 +1467,6 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
 
                 { Get-GitHubRepositoryContent -Owner $Owner -Repository $Repository -Path $Path } | Should -Throw
             }
-        }
-
-        Context 'Get-GitHubRepositoryContent - Retrieve content from a specific branch' {
             It 'Get-GitHubRepositoryContent - retrieves content from a feature branch' {
                 $Owner = 'github'
                 $Repository = 'rest-api-description'
