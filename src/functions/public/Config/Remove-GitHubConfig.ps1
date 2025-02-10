@@ -1,4 +1,5 @@
 ﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '7.0.0' }
+#Requires -Modules @{ ModuleName = 'Sodium'; RequiredVersion = '2.1.2' }
 
 function Remove-GitHubConfig {
     <#
