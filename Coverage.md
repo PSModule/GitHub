@@ -5,7 +5,7 @@
 <table>
     <tr>
         <td>Available functions</td>
-        <td>1015</td>
+        <td>1019</td>
     </tr>
     <tr>
         <td>Covered functions</td>
@@ -13,11 +13,11 @@
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>855</td>
+        <td>859</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>15.76%</td>
+        <td>15.7%</td>
     </tr>
 </table>
 
@@ -240,6 +240,8 @@
 | `/orgs/{org}/rulesets/rule-suites`                                                                                        |                    | :white_check_mark: |                    |                    |                    |
 | `/orgs/{org}/rulesets/rule-suites/{rule_suite_id}`                                                                        |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/rulesets/{ruleset_id}`                                                                                       | :x:                | :white_check_mark: |                    |                    | :x:                |
+| `/orgs/{org}/rulesets/{ruleset_id}/history`                                                                               |                    | :x:                |                    |                    |                    |
+| `/orgs/{org}/rulesets/{ruleset_id}/history/{version_id}`                                                                  |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/secret-scanning/alerts`                                                                                      |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/security-advisories`                                                                                         |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/security-managers`                                                                                           |                    | :x:                |                    |                    |                    |
@@ -546,6 +548,8 @@
 | `/repos/{owner}/{repo}/rulesets/rule-suites`                                                                              |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/rulesets/rule-suites/{rule_suite_id}`                                                              |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/rulesets/{ruleset_id}`                                                                             | :x:                | :white_check_mark: |                    |                    | :x:                |
+| `/repos/{owner}/{repo}/rulesets/{ruleset_id}/history`                                                                     |                    | :x:                |                    |                    |                    |
+| `/repos/{owner}/{repo}/rulesets/{ruleset_id}/history/{version_id}`                                                        |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/secret-scanning/alerts`                                                                            |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}`                                                             |                    | :x:                | :x:                |                    |                    |
 | `/repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations`                                                   |                    | :x:                |                    |                    |                    |
