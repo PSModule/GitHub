@@ -148,8 +148,11 @@ function Set-GitHubContext {
                 if ($Default) {
                     Set-GitHubDefaultContext -Context $contextObj['Name']
                 }
-                if ($contextObj['AuthType'] -eq 'IAT' -and $script:GitHub.EnvironmentType -eq 'GHA') {
-                    Set-GitHubGitConfig -Context $contextObj['Name']
+                if ($script:GitHub.EnvironmentType -eq 'GHA') {
+                    if ($contextObj['AuthType'] -eq 'IAT') {
+                        Set-GitHubGitConfig -Context $contextObj['Name']
+                    }
+                    Connect-GitHubCli -Context $contextObj
                 }
                 if ($PassThru) {
                     Get-GitHubContext -Context $($contextObj['Name'])

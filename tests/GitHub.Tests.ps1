@@ -59,6 +59,7 @@ Describe 'GitHub' {
     Context 'Auth' {
         It 'Connect-GitHubAccount - Connects GitHub Actions without parameters' {
             { Connect-GitHubAccount } | Should -Not -Throw
+            [string]::IsNullOrEmpty($(gh auth token)) | Should -Be $false
         }
         It 'Disconnect-GitHubAccount - Disconnects GitHub Actions' {
             { Disconnect-GitHubAccount } | Should -Not -Throw
