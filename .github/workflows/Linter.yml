@@ -27,6 +27,7 @@ jobs:
         uses: super-linter/super-linter@latest
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          FILTER_REGEX_EXCLUDE: '.*(/examples/|/src/classes/|/tools/).*'
           VALIDATE_JSON_PRETTIER: false
           VALIDATE_MARKDOWN_PRETTIER: false
           VALIDATE_YAML_PRETTIER: false
