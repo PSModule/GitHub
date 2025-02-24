@@ -57,11 +57,6 @@
                 $Value = $Value | ConvertFrom-SecureString -AsPlainText
                 Add-Mask -Value $Value
             }
-            'Hashtable|PSCustomObject' {
-                Write-Debug 'Converting value to JSON:'
-                $Value = $Value | ConvertTo-Json -Compress -Depth 100
-                Write-Debug $value
-            }
             default {}
         }
 
