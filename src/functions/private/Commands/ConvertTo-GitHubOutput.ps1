@@ -72,11 +72,9 @@
             Write-Debug ($InputObject | Out-String)
 
             # Convert hashtable or PSCustomObject to compressed JSON
-            if ($value -is [hashtable] -or $value -is [PSCustomObject]) {
-                Write-Debug 'Converting property value to JSON'
+            if (-not ($value -is [string])) {
+                # This condition now catches objects, hashtables, and arrays.
                 $value = $value | ConvertTo-Json -Compress -Depth 100
-                Write-Debug 'Property value:'
-                Write-Debug $value
             }
 
             $guid = [Guid]::NewGuid().ToString()
