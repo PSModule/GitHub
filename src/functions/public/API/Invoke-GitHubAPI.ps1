@@ -1,4 +1,5 @@
 ﻿#Requires -Modules @{ ModuleName = 'Uri'; RequiredVersion = '1.1.0' }
+#Requires -Modules @{ ModuleName = 'Hashtable'; RequiredVersion = '1.1.1' }
 
 filter Invoke-GitHubAPI {
     <#
@@ -162,7 +163,7 @@ filter Invoke-GitHubAPI {
         try {
             Write-Debug '----------------------------------'
             Write-Debug 'Request:'
-            $APICall | ConvertFrom-HashTable | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+            [pscustomobject]$APICall | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
             Write-Debug '----------------------------------'
             do {
                 $response = Invoke-WebRequest @APICall
