@@ -57,11 +57,6 @@
                 $Value = $Value | ConvertFrom-SecureString -AsPlainText
                 Add-Mask -Value $Value
             }
-            'Hashtable|PSCustomObject' {
-                Write-Debug 'Converting value to JSON:'
-                $Value = $Value | ConvertTo-Json -Compress -Depth 100
-                Write-Debug $value
-            }
             default {}
         }
 
@@ -70,6 +65,9 @@
         # If the script is running in a GitHub composite action, accumulate the output under the 'result' key,
         # else append the key-value pair directly.
         if ($env:PSMODULE_GITHUB_SCRIPT) {
+            if ($Value -isnot [string]) {
+                $Value = $Value | ConvertTo-Json -Compress -Depth 100
+            }
             Write-Debug "[$stackPath] - Running in GitHub-Script composite action"
             if (-not $outputs.ContainsKey('result')) {
                 $outputs['result'] = @{}

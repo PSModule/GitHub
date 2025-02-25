@@ -34,7 +34,10 @@
     [CmdletBinding()]
     param(
         # Summary of the step
-        [Parameter(Mandatory)]
+        [Parameter(
+            Mandatory,
+            ValueFromPipeline
+        )]
         [AllowNull()]
         [string] $Summary,
 
