@@ -60,15 +60,14 @@
             default {}
         }
 
-        if ($Value -isnot [string]) {
-            $Value = $Value | ConvertTo-Json -Compress -Depth 100
-        }
-
         Write-Verbose "Output: [$Name] = [$Value]"
-
+        
         # If the script is running in a GitHub composite action, accumulate the output under the 'result' key,
         # else append the key-value pair directly.
         if ($env:PSMODULE_GITHUB_SCRIPT) {
+            if ($Value -isnot [string]) {
+                $Value = $Value | ConvertTo-Json -Compress -Depth 100
+            }
             Write-Debug "[$stackPath] - Running in GitHub-Script composite action"
             if (-not $outputs.ContainsKey('result')) {
                 $outputs['result'] = @{}
