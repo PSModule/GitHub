@@ -61,7 +61,7 @@
         }
 
         Write-Verbose "Output: [$Name] = [$Value]"
-        
+
         # If the script is running in a GitHub composite action, accumulate the output under the 'result' key,
         # else append the key-value pair directly.
         if ($env:PSMODULE_GITHUB_SCRIPT) {
