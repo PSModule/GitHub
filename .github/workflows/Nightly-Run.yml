@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   Process-PSModule:
-    uses: PSModule/Process-PSModule/.github/workflows/CI.yml@v3
+    uses: PSModule/Process-PSModule/.github/workflows/CI.yml@v4
     secrets:
       APIKey: ${{ secrets.APIKey }}
       TEST_APP_ENT_CLIENT_ID: ${{ secrets.TEST_APP_ENT_CLIENT_ID }}
