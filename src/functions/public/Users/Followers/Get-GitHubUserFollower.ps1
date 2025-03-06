@@ -20,7 +20,6 @@
         [List followers of the authenticated user](https://docs.github.com/rest/users/followers#list-followers-of-the-authenticated-user)
     #>
     [OutputType([pscustomobject])]
-    [Alias('Get-GitHubUserMyFollowers')]
     [CmdletBinding()]
     param(
         # The handle for the GitHub user account.

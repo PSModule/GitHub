@@ -55,7 +55,7 @@
         switch -Regex ($value.GetType().Name) {
             'SecureString' {
                 $Value = $Value | ConvertFrom-SecureString -AsPlainText
-                Add-Mask -Value $Value
+                Add-GitHubMask -Value $Value
             }
             default {}
         }
