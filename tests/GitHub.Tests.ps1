@@ -12,7 +12,9 @@
 param()
 
 BeforeAll {
-    Get-Module -ListAvailable -Name Context | Sort-Object -Property Version | Select-Object -Last 1 | Import-Module -Force
+    'Context', 'GitHub' | ForEach-Object {
+        Get-Module -ListAvailable -Name $_ | Sort-Object -Property Version | Select-Object -Last 1 | Import-Module -Force
+    }
 }
 
 Describe 'GitHub' {
