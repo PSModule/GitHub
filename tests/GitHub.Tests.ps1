@@ -256,7 +256,7 @@ Describe 'GitHub' {
             {
                 Set-GitHubOutput -Name 'MyOutput' -Value 'MyValue'
             } | Should -Not -Throw
-            (Get-GitHubOutput).result.MyOutput | Should -Be 'MyValue'
+            (Get-GitHubOutput).MyOutput | Should -Be 'MyValue'
         }
         It 'Set-GitHubOutput + Multiline string - Should not throw' {
             {
@@ -265,7 +265,7 @@ This is a multiline
 string
 '@
             } | Should -Not -Throw
-            (Get-GitHubOutput).result.MyOutput | Should -Be @'
+            (Get-GitHubOutput).MyOutput | Should -Be @'
 This is a multiline
 string
 '@
@@ -275,7 +275,7 @@ string
                 $secret = 'MyValue' | ConvertTo-SecureString -AsPlainText -Force
                 Set-GitHubOutput -Name 'MySecret' -Value $secret
             } | Should -Not -Throw
-            (Get-GitHubOutput).result.MySecret | Should -Be 'MyValue'
+            (Get-GitHubOutput).MySecret | Should -Be 'MyValue'
         }
         It 'Set-GitHubOutput + Object - Should not throw' {
             {
@@ -293,7 +293,7 @@ string
                 }
                 Set-GitHubOutput -Name 'Jupiter' -Value $jupiter
             } | Should -Not -Throw
-            (Get-GitHubOutput).result.Config | Should -BeLike ''
+            (Get-GitHubOutput).Config | Should -BeLike ''
         }
         It 'Get-GitHubOutput - Should not throw' {
             {
