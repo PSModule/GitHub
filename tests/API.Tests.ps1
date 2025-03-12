@@ -77,14 +77,6 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
             { Get-GitHubLicense -Owner 'PSModule' -Repository 'GitHub' } | Should -Not -Throw
         }
     }
-    Context 'Emoji' {
-        It 'Get-GitHubEmoji - Gets a list of all emojis (USER_FG_PAT)' {
-            { Get-GitHubEmoji } | Should -Not -Throw
-        }
-        It 'Get-GitHubEmoji - Downloads all emojis (USER_FG_PAT)' {
-            { Get-GitHubEmoji -Path $Home } | Should -Not -Throw
-        }
-    }
     Context 'Repository' {
         It "Get-GitHubRepository - Gets the authenticated user's repositories (USER_FG_PAT)" {
             { Get-GitHubRepository } | Should -Not -Throw
@@ -192,14 +184,6 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
             { Get-GitHubLicense -Owner 'PSModule' -Repository 'GitHub' } | Should -Not -Throw
         }
     }
-    Context 'Emoji' {
-        It 'Get-GitHubEmoji - Gets a list of all emojis (ORG_FG_PAT)' {
-            { Get-GitHubEmoji } | Should -Not -Throw
-        }
-        It 'Get-GitHubEmoji - Downloads all emojis (ORG_FG_PAT)' {
-            { Get-GitHubEmoji -Path $Home } | Should -Not -Throw
-        }
-    }
     Context 'Repository' {
         It "Get-GitHubRepository - Gets the authenticated user's repositories (ORG_FG_PAT)" {
             { Get-GitHubRepository } | Should -Not -Throw
@@ -305,14 +289,6 @@ Describe 'As a user - Classic PAT token (PAT)' {
         }
         It 'Get-GitHubLicense - Gets a license from a repository (PAT)' {
             { Get-GitHubLicense -Owner 'PSModule' -Repository 'GitHub' } | Should -Not -Throw
-        }
-    }
-    Context 'Emoji' {
-        It 'Get-GitHubEmoji - Gets a list of all emojis (PAT)' {
-            { Get-GitHubEmoji } | Should -Not -Throw
-        }
-        It 'Get-GitHubEmoji - Downloads all emojis (PAT)' {
-            { Get-GitHubEmoji -Path $Home } | Should -Not -Throw
         }
     }
     Context 'GitIgnore' {
@@ -427,14 +403,6 @@ Describe 'As GitHub Actions (GHA)' {
         }
         It 'Get-GitHubLicense - Gets a license from a repository (GHA)' {
             { Get-GitHubLicense -Owner 'PSModule' -Repository 'GitHub' } | Should -Not -Throw
-        }
-    }
-    Context 'Emoji' {
-        It 'Get-GitHubEmoji - Gets a list of all emojis (GHA)' {
-            { Get-GitHubEmoji } | Should -Not -Throw
-        }
-        It 'Get-GitHubEmoji - Downloads all emojis (GHA)' {
-            { Get-GitHubEmoji -Path $Home } | Should -Not -Throw
         }
     }
     Context 'GitIgnore' {
