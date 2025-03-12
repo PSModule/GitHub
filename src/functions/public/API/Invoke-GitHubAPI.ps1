@@ -165,6 +165,20 @@ filter Invoke-GitHubAPI {
             $APICall | ConvertFrom-HashTable | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
             Write-Debug '----------------------------------'
             do {
+                switch ($TokenType) {
+                    'ghu' {
+                        if (Test-GitHubAccessTokenRefreshRequired -Context $Context) {
+                            $Token = Update-GitHubUserAccessToken -Context $Context -PassThru
+                        }
+                    }
+                    'PEM' {
+                        if ($JWT.ExpiresAt -lt (Get-Date)) {
+                            $JWT = Get-GitHubAppJSONWebToken -ClientId $Context.ClientID -PrivateKey $Token
+                            $Token = $JWT.Token
+                            $APICall['Token'] = $Token
+                        }
+                    }
+                }
                 $response = Invoke-WebRequest @APICall
 
                 $headers = @{}
