@@ -87,10 +87,16 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     Context 'Emoji' {
-        It 'Get-GitHubEmoji - Gets a list of all emojis (PAT)' {
+        BeforeAll {
+            Connect-GitHubApp -Organization 'psmodule-test-org3' -Default
+        }
+        AfterAll {
+            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+        }
+        It 'Get-GitHubEmoji - Gets a list of all emojis (APP_ENT)' {
             { Get-GitHubEmoji } | Should -Not -Throw
         }
-        It 'Get-GitHubEmoji - Downloads all emojis (PAT)' {
+        It 'Get-GitHubEmoji - Downloads all emojis (APP_ENT)' {
             { Get-GitHubEmoji -Path $Home } | Should -Not -Throw
         }
     }
@@ -110,10 +116,10 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         AfterAll {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
         }
-        It 'Get-GitHubEmoji - Gets a list of all emojis (PAT)' {
+        It 'Get-GitHubEmoji - Gets a list of all emojis (APP_ORG)' {
             { Get-GitHubEmoji } | Should -Not -Throw
         }
-        It 'Get-GitHubEmoji - Downloads all emojis (PAT)' {
+        It 'Get-GitHubEmoji - Downloads all emojis (APP_ORG)' {
             { Get-GitHubEmoji -Path $Home } | Should -Not -Throw
         }
     }
