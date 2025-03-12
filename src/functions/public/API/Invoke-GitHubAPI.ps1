@@ -105,7 +105,7 @@ filter Invoke-GitHubAPI {
         $ApiBaseUri = Resolve-GitHubContextSetting -Name 'ApiBaseUri' -Value $ApiBaseUri -Context $Context
         $ApiVersion = Resolve-GitHubContextSetting -Name 'ApiVersion' -Value $ApiVersion -Context $Context
         $TokenType = Resolve-GitHubContextSetting -Name 'TokenType' -Value $TokenType -Context $Context
-
+        $jwt = $null
         switch ($TokenType) {
             'ghu' {
                 if (Test-GitHubAccessTokenRefreshRequired -Context $Context) {
@@ -113,8 +113,8 @@ filter Invoke-GitHubAPI {
                 }
             }
             'PEM' {
-                $JWT = Get-GitHubAppJSONWebToken -ClientId $Context.ClientID -PrivateKey $Token
-                $Token = $JWT.Token
+                $jwt = Get-GitHubAppJSONWebToken -ClientId $Context.ClientID -PrivateKey $Context.Token
+                $Token = $jwt.Token
             }
         }
 
@@ -165,6 +165,20 @@ filter Invoke-GitHubAPI {
             $APICall | ConvertFrom-HashTable | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
             Write-Debug '----------------------------------'
             do {
+                switch ($TokenType) {
+                    'ghu' {
+                        if (Test-GitHubAccessTokenRefreshRequired -Context $Context) {
+                            $Token = Update-GitHubUserAccessToken -Context $Context -PassThru
+                        }
+                    }
+                    'PEM' {
+                        if ($jwt.ExpiresAt -lt (Get-Date)) {
+                            $jwt = Get-GitHubAppJSONWebToken -ClientId $Context.ClientID -PrivateKey $Context.Token
+                            $Token = $jwt.Token
+                            $APICall['Token'] = $Token
+                        }
+                    }
+                }
                 $response = Invoke-WebRequest @APICall
 
                 $headers = @{}
@@ -174,6 +188,21 @@ filter Invoke-GitHubAPI {
                 $headers = [pscustomobject]$headers
                 $sortedProperties = $headers.PSObject.Properties.Name | Sort-Object
                 $headers = $headers | Select-Object $sortedProperties
+                if ($headers.'x-ratelimit-reset') {
+                    $headers.'x-ratelimit-reset' = [DateTime]::UnixEpoch.AddSeconds(
+                        $headers.'x-ratelimit-reset'
+                    ).ToString('s')
+                }
+                if ($headers.'Date') {
+                    $headers.'Date' = [DateTime]::Parse(
+                        ($headers.'Date').Replace('UTC', '').Trim()
+                    ).ToString('s')
+                }
+                if ($headers.'github-authentication-token-expiration') {
+                    $headers.'github-authentication-token-expiration' = [DateTime]::Parse(
+                        ($headers.'github-authentication-token-expiration').Replace('UTC', '').Trim()
+                    ).ToString('s')
+                }
                 Write-Debug '----------------------------------'
                 Write-Debug 'Response headers:'
                 $headers | Out-String -Stream | ForEach-Object { Write-Debug $_ }

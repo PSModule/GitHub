@@ -113,8 +113,8 @@
         $jwt = "$header.$payload.$signature"
         [pscustomobject]@{
             Token     = ConvertTo-SecureString -String $jwt -AsPlainText
-            IssuedAt  = $iat
-            ExpiresAt = $exp
+            IssuedAt  = [DateTime]::UnixEpoch.AddSeconds($iat)
+            ExpiresAt = [DateTime]::UnixEpoch.AddSeconds($exp)
             Issuer    = $ClientId
         }
     }
