@@ -11,12 +11,6 @@
 [CmdletBinding()]
 param()
 
-BeforeAll {
-    'Context', 'GitHub' | ForEach-Object {
-        Get-Module -ListAvailable -Name $_ | Sort-Object -Property Version | Select-Object -Last 1 | Import-Module -Force
-    }
-}
-
 Describe 'GitHub' {
     Context 'Config' {
         It 'Get-GitHubConfig - Gets the module configuration' {

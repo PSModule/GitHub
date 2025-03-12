@@ -11,12 +11,6 @@
 [CmdletBinding()]
 param()
 
-BeforeAll {
-    'Context', 'GitHub' | ForEach-Object {
-        Get-Module -ListAvailable -Name $_ | Sort-Object -Property Version | Select-Object -Last 1 | Import-Module -Force
-    }
-}
-
 Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)' {
     BeforeAll {
         Connect-GitHubAccount -Token $env:TEST_USER_USER_FG_PAT
