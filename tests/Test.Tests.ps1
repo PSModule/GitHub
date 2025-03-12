@@ -1,4 +1,0 @@
-﻿param(
-    [Parameter(Mandatory)]
-    $Test
-)
