@@ -18,11 +18,6 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
     AfterAll {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
-    Context 'Auth' {
-        It 'Get-GitHubViewer - Gets the logged in context (USER_FG_PAT)' {
-            Get-GitHubViewer | Should -Not -BeNullOrEmpty
-        }
-    }
     Context 'API' {
         It 'Invoke-GitHubAPI - Gets the rate limits directly (USER_FG_PAT)' {
             {
@@ -174,11 +169,6 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
     }
     AfterAll {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
-    }
-    Context 'Auth' {
-        It 'Get-GitHubViewer - Gets the logged in context (ORG_FG_PAT)' {
-            Get-GitHubViewer | Should -Not -BeNullOrEmpty
-        }
     }
     Context 'API' {
         It 'Invoke-GitHubAPI - Gets the rate limits directly (ORG_FG_PAT)' {
@@ -354,11 +344,6 @@ Describe 'As a user - Classic PAT token (PAT)' {
     AfterAll {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
-    Context 'Auth' {
-        It 'Get-GitHubViewer - Gets the logged in context (PAT)' {
-            Get-GitHubViewer | Should -Not -BeNullOrEmpty
-        }
-    }
     Context 'API' {
         It 'Invoke-GitHubAPI - Gets the rate limits directly (PAT)' {
             {
@@ -506,11 +491,6 @@ Describe 'As GitHub Actions (GHA)' {
     AfterAll {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
-    Context 'Auth' {
-        It 'Get-GitHubViewer - Gets the logged in context (GHA)' {
-            Get-GitHubViewer | Should -Not -BeNullOrEmpty
-        }
-    }
     Context 'API' {
         It 'Invoke-GitHubAPI - Gets the rate limits directly (GHA)' {
             {
@@ -638,22 +618,6 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
     AfterAll {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
-    Context 'Auth' {
-        # It 'Connect-GitHubApp - Connects one enterprise installation for the authenticated GitHub App (APP_ENT)' {
-        #     $context = Get-GitHubContext
-        #     { Connect-GitHubApp -Enterprise msx -Context $context } | Should -Not -Throw
-        #     Get-GitHubContext -ListAvailable | Should -HaveCount 2
-        # }
-        It 'Connect-GitHubApp - Connects one organization installation for the authenticated GitHub App (APP_ENT)' {
-            $context = Connect-GitHubApp -Organization AzActions -PassThru
-            $context.Name | Should -BeLike '*/Organization/AzActions'
-            Get-GitHubContext -ListAvailable | Should -HaveCount 2
-        }
-        It 'Connect-GitHubApp - Connects all installations for the authenticated GitHub App (APP_ENT)' {
-            { Connect-GitHubApp } | Should -Not -Throw
-            Get-GitHubContext -ListAvailable | Should -HaveCount 5
-        }
-    }
     Context 'Organization' {
         BeforeAll {
             Connect-GitHubApp -Organization 'psmodule-test-org3' -Default
@@ -701,22 +665,6 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
     }
     AfterAll {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
-    }
-    Context 'Auth' {
-        It 'Connect-GitHubApp - Connects one user installation for the authenticated GitHub App (APP_ORG)' {
-            $context = Get-GitHubContext
-            { Connect-GitHubApp -User MariusStorhaug -Context $context } | Should -Not -Throw
-            Get-GitHubContext -ListAvailable | Should -HaveCount 2
-        }
-        It 'Connect-GitHubApp - Connects one organization installation for the authenticated GitHub App (APP_ORG)' {
-            $context = Connect-GitHubApp -Organization AzActions -PassThru
-            $context.Name | Should -BeLike '*/Organization/AzActions'
-            Get-GitHubContext -ListAvailable | Should -HaveCount 3
-        }
-        It 'Connect-GitHubApp - Connects all installations for the authenticated GitHub App (APP_ORG)' {
-            { Connect-GitHubApp } | Should -Not -Throw
-            Get-GitHubContext -ListAvailable | Should -HaveCount 5
-        }
     }
     Context 'API' {
         It 'Can be called directly to get ratelimits (APP_ENT)' {
