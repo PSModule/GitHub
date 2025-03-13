@@ -69,10 +69,10 @@ filter Set-GitHubEnvironment {
 
     process {
         $body = @{
-            wait_timer               = $WaitTimer
-            prevent_self_review      = $PreventSelfReview
-            reviewers                = $Reviewers
-            deployment_branch_policy = $DeploymentBranchPolicy
+            wait_timer               = $PSBoundParameters.ContainsKey('WaitTimer') ? $WaitTimer : $null
+            prevent_self_review      = $PSBoundParameters.ContainsKey('PreventSelfReview') ? $PreventSelfReview : $null
+            reviewers                = $PSBoundParameters.ContainsKey('Reviewers') ? $Reviewers : $null
+            deployment_branch_policy = $PSBoundParameters.ContainsKey('DeploymentBranchPolicy') ? $DeploymentBranchPolicy : $null
         } | Remove-HashtableEntry -NullOrEmptyValues
 
         $inputObject = @{
@@ -80,7 +80,8 @@ filter Set-GitHubEnvironment {
             APIEndpoint = "/repos/$Owner/$Repository/environments/$EnvironmentName"
             Body        = $body
             Context     = $Context
-        }
+        } | Remove-HashtableEntry -NullOrEmptyValues
+
 
         if ($PSCmdlet.ShouldProcess("Environment [$EnvironmentName]", 'Set')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
