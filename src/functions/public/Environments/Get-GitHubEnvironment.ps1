@@ -13,7 +13,7 @@ filter Get-GitHubEnvironment {
         Lists all environments for the 'PSModule/GitHub' repository.
 
         .EXAMPLE
-        Get-GitHubEnvironment -Owner 'PSModule' -Repository 'Github' -EnvironmentName 'Production'
+        Get-GitHubEnvironment -Owner 'PSModule' -Repository 'Github' -Name 'Production'
 
         Get the 'Production' environment for the 'PSModule/GitHub' repository.
 
@@ -21,7 +21,7 @@ filter Get-GitHubEnvironment {
         [List environments](https://docs.github.com/en/rest/deployments/environments#list-environments)
     #>
     [OutputType([pscustomobject])]
-    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
+    [CmdletBinding()]
     param(
         # The name of the organization.
         [Parameter(
@@ -44,9 +44,9 @@ filter Get-GitHubEnvironment {
             ParameterSetName = 'NamedEnv',
             ValueFromPipelineByPropertyName
         )]
-        [string] $EnvironmentName,
+        [string] $Name,
 
-        [Parameter(ParameterSetName = '__AllParameterSets')]
+        [Parameter()]
         [ValidateRange(0, 100)]
         [int] $PerPage,
 
@@ -76,7 +76,7 @@ filter Get-GitHubEnvironment {
         }
 
         if ($PSCmdlet.ParameterSetName -eq 'NamedEnv') {
-            $inputObject.APIEndpoint = "/repos/$Owner/$Repository/environments/$EnvironmentName"
+            $inputObject.APIEndpoint = "/repos/$Owner/$Repository/environments/$Name"
             $inputObject.Remove('Body')
         }
 

@@ -31,7 +31,7 @@ filter Set-GitHubEnvironment {
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [string] $EnvironmentName,
+        [string] $Name,
 
         # The amount of time to delay a job after the job is initially triggered. The time (in minutes).
         [Parameter(ValueFromPipelineByPropertyName)]
@@ -77,13 +77,13 @@ filter Set-GitHubEnvironment {
 
         $inputObject = @{
             Method      = 'PUT'
-            APIEndpoint = "/repos/$Owner/$Repository/environments/$EnvironmentName"
+            APIEndpoint = "/repos/$Owner/$Repository/environments/$Name"
             Body        = $body
             Context     = $Context
         } | Remove-HashtableEntry -NullOrEmptyValues
 
 
-        if ($PSCmdlet.ShouldProcess("Environment [$EnvironmentName]", 'Set')) {
+        if ($PSCmdlet.ShouldProcess("Environment [$Name]", 'Set')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }

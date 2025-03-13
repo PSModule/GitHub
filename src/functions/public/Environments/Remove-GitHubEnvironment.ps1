@@ -7,7 +7,7 @@ filter Remove-GitHubEnvironment {
         Deletes an environment from a repository
 
         .EXAMPLE
-        Remove-GitHubEnvironment -Owner 'PSModule' -Repository 'GitHub' -EnvironmentName 'Production'
+        Remove-GitHubEnvironment -Owner 'PSModule' -Repository 'GitHub' -Name 'Production'
         
         Deletes the 'Production' environment from the 'PSModule/GitHub' repository.
 
@@ -37,7 +37,7 @@ filter Remove-GitHubEnvironment {
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [string] $EnvironmentName,
+        [string] $Name,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -55,11 +55,11 @@ filter Remove-GitHubEnvironment {
     process {
         $inputObject = @{
             Method      = 'DELETE'
-            APIEndpoint = "/repos/$Owner/$Repository/environments/$EnvironmentName"
+            APIEndpoint = "/repos/$Owner/$Repository/environments/$Name"
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("Environment [$EnvironmentName]", 'DELETE')) {
+        if ($PSCmdlet.ShouldProcess("Environment [$Name]", 'DELETE')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }
