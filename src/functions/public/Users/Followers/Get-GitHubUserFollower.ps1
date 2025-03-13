@@ -20,7 +20,6 @@
         [List followers of the authenticated user](https://docs.github.com/rest/users/followers#list-followers-of-the-authenticated-user)
     #>
     [OutputType([pscustomobject])]
-    [Alias('Get-GitHubUserMyFollowers')]
     [CmdletBinding()]
     param(
         # The handle for the GitHub user account.
@@ -53,7 +52,7 @@
         if ($Username) {
             Get-GitHubUserFollowersOfUser -Username $Username -PerPage $PerPage -Context $Context
         } else {
-            Get-GitHubUserMyFollowers -PerPage $PerPage -Context $Context
+            Get-GitHubUserMyFollower -PerPage $PerPage -Context $Context
         }
     }
 
