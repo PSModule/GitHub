@@ -109,7 +109,7 @@ function Set-GitHubVariable {
     process {
         $getParams = $PSBoundParameters
         $getParams | Remove-HashtableEntry -NullOrEmptyValues -RemoveNames 'Value','Private','SelectedRepositoryIDs','Context' 
-        $variableFound = Get-GitHubVariable @getParams -Name $Name }
+        $variableFound = Get-GitHubVariable @getParams -Name $Name 
 
         $body = @{
             name  = $Name
@@ -158,6 +158,7 @@ function Set-GitHubVariable {
             $result = Invoke-GitHubAPI @inputObject
             Write-Output $result.Response
         }    
+    }
 
     end {
         Write-Debug "[$stackPath] - End"
