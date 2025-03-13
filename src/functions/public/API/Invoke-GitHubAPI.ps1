@@ -1,5 +1,5 @@
 ﻿#Requires -Modules @{ ModuleName = 'Uri'; RequiredVersion = '1.1.0' }
-#Requires -Modules @{ ModuleName = 'Hashtable'; RequiredVersion = '1.1.1' }
+#Requires -Modules @{ ModuleName = 'Hashtable'; RequiredVersion = '1.1.5' }
 
 filter Invoke-GitHubAPI {
     <#
