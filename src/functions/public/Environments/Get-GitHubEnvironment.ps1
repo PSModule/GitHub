@@ -1,27 +1,47 @@
 filter Get-GitHubEnvironment {
     <#
         .SYNOPSIS
-        List environments for a repository
+        Retrieves details of a specified GitHub environment or lists all environments for a repository.
 
         .DESCRIPTION
-        List environments for a repository 
-        Get an environment for a repository
+        This function retrieves details of a specific environment in a GitHub repository when the `-Name` parameter
+        is provided. Otherwise, it lists all available environments for the specified repository.
+
+        Anyone with read access to the repository can use this function.
+        OAuth app tokens and personal access tokens (classic) need the `repo` scope
+        to use this function with a private repository.
 
         .EXAMPLE
-        Get-GitHubEnvironment -Owner 'PSModule' -Repository 'Github'
+        Get-GitHubEnvironment -Owner "octocat" -Repository "Hello-World" -Name "production"
 
-        Lists all environments for the 'PSModule/GitHub' repository.
+        Output:
+        ```pwsh
+        Name        : production
+        URL         : https://github.com/octocat/Hello-World/environments/production
+        Protection  : @{WaitTimer=0; Reviewers=@()}
+        ```
+
+        Retrieves details of the "production" environment in the specified repository.
 
         .EXAMPLE
-        Get-GitHubEnvironment -Owner 'PSModule' -Repository 'Github' -Name 'Production'
+        Get-GitHubEnvironment -Owner "octocat" -Repository "Hello-World"
 
-        Get the 'Production' environment for the 'PSModule/GitHub' repository.
+        Output:
+        ```pwsh
+        Name         : production
+        Protection   : @{required_reviewers=System.Object[]}
+        ```
 
-        .NOTES
-        [List environments](https://docs.github.com/en/rest/deployments/environments#list-environments)
+        Lists all environments available in the "Hello-World" repository owned by "octocat".
+
+        .OUTPUTS
+        PSCustomObject. Returns details of a GitHub environment or a list of environments for a repository.
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Environments/Get-GitHubEnvironment/
     #>
     [OutputType([pscustomobject])]
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'List')]
     param(
         # The name of the organization.
         [Parameter(
@@ -41,12 +61,13 @@ filter Get-GitHubEnvironment {
         # The name of the environment.
         [Parameter(
             Mandatory,
-            ParameterSetName = 'NamedEnv',
+            ParameterSetName = 'ByName',
             ValueFromPipelineByPropertyName
         )]
         [string] $Name,
 
-        [Parameter()]
+        # The maximum number of environments to return per request.
+        [Parameter(ParameterSetName = 'List')]
         [ValidateRange(0, 100)]
         [int] $PerPage,
 
@@ -64,24 +85,13 @@ filter Get-GitHubEnvironment {
     }
 
     process {
-        $body = @{
-            per_page = $PerPage
-        }
-
-        $inputObject = @{
-            Method      = 'GET'
-            APIEndpoint = "/repos/$Owner/$Repository/environments"
-            Body        = $body
-            Context     = $Context
-        }
-
-        if ($PSCmdlet.ParameterSetName -eq 'NamedEnv') {
-            $inputObject.APIEndpoint = "/repos/$Owner/$Repository/environments/$Name"
-            $inputObject.Remove('Body')
-        }
-
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+        switch ($PSCmdlet.ParameterSetName) {
+            'ByName' {
+                Get-GitHubEnvironmentByName -Owner $Owner -Repository $Repository -Name $Name -Context $Context
+            }
+            'List' {
+                Get-GitHubEnvironmentList -Owner $Owner -Repository $Repository -PerPage $PerPage -Context $Context
+            }
         }
     }
 
