@@ -109,7 +109,7 @@ filter New-GitHubRepositoryUser {
         # The ID of the team that will be granted access to this repository. This is only valid when creating a repository in an organization.
         [Parameter()]
         [Alias('team_id')]
-        [int] $TeamId,
+        [System.Nullable[int]] $TeamId,
 
         # Pass true to create an initial commit with empty README.
         [Parameter()]
