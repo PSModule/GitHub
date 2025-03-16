@@ -96,7 +96,7 @@
                 }
                 $data[$header] = $checkboxHashTable
             } else {
-                $data[$header] = ($paragraph | ForEach-Object { $_.Trim(); Write-Verbose $_ }) -join [Environment]::NewLine
+                $data[$header] = $paragraph -join [System.Environment]::NewLine
             }
         }
 
