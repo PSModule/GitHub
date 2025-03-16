@@ -76,7 +76,7 @@ Describe 'GitHub' {
             { Connect-GitHubAccount @params -AutoloadInstallations } | Should -Not -Throw
             $contexts = Get-GitHubContext -ListAvailable -Verbose:$false
             Write-Verbose ($contexts | Out-String) -Verbose
-            ($contexts).Count | Should -Be 4
+            ($contexts).Count | Should -Be 5
         }
         It 'Connect-GitHubAccount - Connects a GitHub App from an enterprise' {
             $params = @{
@@ -86,7 +86,7 @@ Describe 'GitHub' {
             { Connect-GitHubAccount @params } | Should -Not -Throw
             $contexts = Get-GitHubContext -ListAvailable -Verbose:$false
             Write-Verbose ($contexts | Out-String) -Verbose
-            ($contexts).Count | Should -Be 5
+            ($contexts).Count | Should -Be 6
         }
         It 'Connect-GitHubAccount - Connects all of a (ent) GitHub Apps installations' {
             $params = @{
@@ -96,7 +96,7 @@ Describe 'GitHub' {
             { Connect-GitHubAccount @params -AutoloadInstallations } | Should -Not -Throw
             $contexts = Get-GitHubContext -ListAvailable -Verbose:$false
             Write-Verbose ($contexts | Out-String) -Verbose
-            ($contexts).Count | Should -Be 7
+            ($contexts).Count | Should -Be 8
         }
         It 'Disconnect-GitHubAccount - Disconnects a specific context' {
             { Disconnect-GitHubAccount -Context 'github.com/psmodule-enterprise-app/Enterprise/msx' -Silent } | Should -Not -Throw
