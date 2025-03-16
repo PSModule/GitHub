@@ -24,7 +24,7 @@ filter Remove-GitHubEnvironment {
         Returns the API response indicating success or failure of the deletion process.
 
         .LINK
-        https://psmodule.io/GitHub/Functions/Remove-GitHubEnvironment/
+        https://psmodule.io/GitHub/Functions/Environments/Remove-GitHubEnvironment/
 
         .LINK
         [Delete environments](https://docs.github.com/en/rest/deployments/environments?#delete-an-environment)

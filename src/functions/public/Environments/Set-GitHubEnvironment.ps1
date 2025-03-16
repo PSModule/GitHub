@@ -1,32 +1,52 @@
 filter Set-GitHubEnvironment {
     <#
         .SYNOPSIS
-        Create or update an environment
+        Create or update an environment.
 
         .DESCRIPTION
-        Create or update an environment with protection rules, such as required reviewers. For more information about environment protection rules,
-        see "[Environments](/actions/reference/environments#environment-protection-rules)."
+        Create or update an environment with protection rules, such as required reviewers. For more information about
+        environment protection rules, see "[Environments](https://docs.github.com/en/actions/reference/environments#environment-protection-rules)."
 
-        > [!NOTE]
-        > To create or update name patterns that branches must match in order to deploy to this environment, see
-        "[Deployment branch policies](/rest/deployments/branch-policies)."
+        To create or update name patterns that branches must match in order to deploy to this environment, see
+        "[Deployment branch policies](https://docs.github.com/en/rest/deployments/branch-policies)."
 
-        > [!NOTE]
-        > To create or update secrets for an environment, see "[GitHub Actions secrets](/rest/actions/secrets)."
+        To create or update secrets for an environment, see "[GitHub Actions secrets](https://docs.github.com/en/rest/actions/secrets)."
 
         OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
+        .EXAMPLE
+        Set-GitHubEnvironment -Owner "my-org" -Repository "my-repo" -Name "staging" -WaitTimer 30
+
+        Output:
+        ```powershell
+        StatusCode    : 200
+        ResponseBody  : @{name=staging; wait_timer=30; deployment_branch_policy=}
+        ```
+
+        Creates or updates the "staging" environment with a 30-minute wait timer.
+
+        .OUTPUTS
+        PSCustomObject
+
+        .NOTES
+        Returns the response object from the GitHub API call.
 
         .LINK
-        [Create or update an environment](https://docs.github.com/rest/deployments/environments#create-or-update-an-environment)
+        https://psmodule.io/GitHub/Functions/Environments/Set-GitHubEnvironment/
     #>
     [OutputType([pscustomobject])]
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName = 'Default')]
     param(
         # The name of the organization.
         [Parameter(
             Mandatory,
-            ValueFromPipelineByPropertyName
+            ValueFromPipelineByPropertyName,
+            ParameterSetName = 'Default'
+        )]
+        [Parameter(
+            Mandatory,
+            ValueFromPipelineByPropertyName,
+            ParameterSetName = 'WithReviewers'
         )]
         [Alias('Organization', 'User')]
         [string] $Owner,
@@ -34,36 +54,76 @@ filter Set-GitHubEnvironment {
         # The name of the Repository.
         [Parameter(
             Mandatory,
-            ValueFromPipelineByPropertyName
+            ValueFromPipelineByPropertyName,
+            ParameterSetName = 'Default'
+        )]
+        [Parameter(
+            Mandatory,
+            ValueFromPipelineByPropertyName,
+            ParameterSetName = 'WithReviewers'
         )]
         [string] $Repository,
 
         # The name of the environment.
         [Parameter(
             Mandatory,
-            ValueFromPipelineByPropertyName
+            ValueFromPipelineByPropertyName,
+            ParameterSetName = 'Default'
+        )]
+        [Parameter(
+            Mandatory,
+            ValueFromPipelineByPropertyName,
+            ParameterSetName = 'WithReviewers'
         )]
         [string] $Name,
 
         # The amount of time to delay a job after the job is initially triggered.
         # The time (in minutes) must be an integer between 0 and 43,200 (30 days).
-        [Parameter(ValueFromPipelineByPropertyName)]
+        [Parameter(
+            ValueFromPipelineByPropertyName,
+            ParameterSetName = 'Default'
+        )]
+        [Parameter(
+            ValueFromPipelineByPropertyName,
+            ParameterSetName = 'WithReviewers'
+        )]
         [Alias('wait_timer')]
         [ValidateRange(0, 43200)]
-        [int] $WaitTimer,
+        [int] $WaitTimer = 0,
+
+        # The people or teams that may review jobs that reference the environment.
+        # Must be an object with the following properties:
+        # - ID: The ID of the user or team.
+        # - Type: The type of reviewer. Can be either 'User' or 'Team'.
+        # Example:
+        # $Reviewers = @(
+        #     @{ ID = 123456789; Type = 'User' },
+        #     @{ ID = 987654321; Type = 'Team' }
+        # )
+        [Parameter(
+            Mandatory,
+            ValueFromPipelineByPropertyName,
+            ParameterSetName = 'WithReviewers'
+        )]
+        [array] $Reviewers,
 
         # Whether or not a user who created the job is prevented from approving their own job.
-        [Parameter(ValueFromPipelineByPropertyName)]
+        [Parameter(
+            ValueFromPipelineByPropertyName,
+            ParameterSetName = 'WithReviewers'
+        )]
         [Alias('prevent_self_review')]
         [switch] $PreventSelfReview,
 
-        # The people or teams that may review jobs that reference the environment. You can list up to six users or teams as reviewers. The reviewers
-        # must have at least read access to the repository. Only one of the required reviewers needs to approve the job for it to proceed.
-        [Parameter(ValueFromPipelineByPropertyName)]
-        [array] $Reviewers,
-
-        # The type of deployment branch policy for this environment. To allow all branches to deploy, set to null.
-        [parameter(ValueFromPipelineByPropertyName)]
+        # The type of deployment branch policy for this environment.
+        [Parameter(
+            ValueFromPipelineByPropertyName,
+            ParameterSetName = 'Default'
+        )]
+        [Parameter(
+            ValueFromPipelineByPropertyName,
+            ParameterSetName = 'WithReviewers'
+        )]
         [Alias('deployment_branch_policy')]
         [ValidateSet('ProtectedBranches', 'CustomBranchPolicies')]
         [string] $DeploymentBranchPolicy,
@@ -102,26 +162,52 @@ filter Set-GitHubEnvironment {
 
         $body = @{
             wait_timer               = $WaitTimer
-            prevent_self_review      = $PreventSelfReview
-            reviewers                = $Reviewers
-            deployment_branch_policy = $deploymentBranchPolicyValue
-        } | Remove-HashtableEntry -NullOrEmptyValues
-
-        $inputObject = @{
-            Method      = 'PUT'
-            APIEndpoint = "/repos/$Owner/$Repository/environments/$Name"
-            Body        = $body
-            Context     = $Context
+            deployment_branch_policy = $DeploymentBranchPolicyValue
         }
+        if ($PSBoundParameters.ContainsKey('Reviewers')) {
+            # loop through the reviewers and ensure type is User or Team. If either (case-insensitive) is found, ensure casing is User or Team.
+            $reviewerList = [System.Collections.Generic.List[Object]]::new()
+            foreach ($reviewer in $Reviewers) {
+                switch ($reviewer.Type) {
+                    'User' {
+                        $reviewer.Type = 'User'
+                    }
+                    'Team' {
+                        $reviewer.Type = 'Team'
+                    }
+                    default {
+                        $PSCmdlet.ThrowTerminatingError(
+                            [System.Management.Automation.ErrorRecord]::new(
+                                [System.Exception]::new(
+                                    "Invalid type '$($reviewer.Type)' for reviewer '$($reviewer.ID)'. Must be either 'User' or 'Team'."
+                                ),
+                                'InvalidReviewerType',
+                                [System.Management.Automation.ErrorCategory]::InvalidArgument,
+                                $_
+                            )
+                        )
+                    }
+                }
+                $reviewerList.Add($reviewer)
+            }
+            $body['reviewers'] = $Reviewers
+            $body['prevent_self_review'] = [bool]$PreventSelfReview
 
-        if ($PSCmdlet.ShouldProcess("Environment [$Owner/$Repository/$Name]", 'Set')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
+            $inputObject = @{
+                Method      = 'PUT'
+                APIEndpoint = "/repos/$Owner/$Repository/environments/$Name"
+                Body        = $body
+                Context     = $Context
+            }
+
+            if ($PSCmdlet.ShouldProcess("Environment [$Owner/$Repository/$Name]", 'Set')) {
+                Invoke-GitHubAPI @inputObject | ForEach-Object {
+                    Write-Output $_.Response
+                }
             }
         }
-    }
 
-    end {
-        Write-Debug "[$stackPath] - End"
+        end {
+            Write-Debug "[$stackPath] - End"
+        }
     }
-}

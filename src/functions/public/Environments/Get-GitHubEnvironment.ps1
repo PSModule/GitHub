@@ -35,7 +35,10 @@ filter Get-GitHubEnvironment {
         Lists all environments available in the "Hello-World" repository owned by "octocat".
 
         .OUTPUTS
-        PSCustomObject. Returns details of a GitHub environment or a list of environments for a repository.
+        PSCustomObject
+
+        .NOTES
+        Returns details of a GitHub environment or a list of environments for a repository.
 
         .LINK
         https://psmodule.io/GitHub/Functions/Environments/Get-GitHubEnvironment/
