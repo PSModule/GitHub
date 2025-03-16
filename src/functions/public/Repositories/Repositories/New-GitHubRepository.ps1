@@ -368,8 +368,7 @@ filter New-GitHubRepository {
                 MergeCommitMessage       = $MergeCommitMessage
                 GitignoreTemplate        = $GitignoreTemplate
                 LicenseTemplate          = $LicenseTemplate
-            }
-            Remove-HashtableEntry -Hashtable $params -NullOrEmptyValues
+            } | Remove-HashtableEntry -NullOrEmptyValues
         }
 
         switch ($PSCmdlet.ParameterSetName) {
@@ -394,8 +393,7 @@ filter New-GitHubRepository {
                         IncludeAllBranches = $IncludeAllBranches
                         Description        = $Description
                         Private            = $Visibility -eq 'private'
-                    }
-                    Remove-HashtableEntry -Hashtable $params -NullOrEmptyValues
+                    } | Remove-HashtableEntry -NullOrEmptyValues
                     New-GitHubRepositoryFromTemplate @params
                 }
             }
@@ -411,8 +409,7 @@ filter New-GitHubRepository {
                         Organization      = $Owner
                         Name              = $Name
                         DefaultBranchOnly = $DefaultBranchOnly
-                    }
-                    Remove-HashtableEntry -Hashtable $params -NullOrEmptyValues
+                    } | Remove-HashtableEntry -NullOrEmptyValues
                     New-GitHubRepositoryAsFork @params
                 }
             }
