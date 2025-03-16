@@ -9,15 +9,15 @@
     </tr>
     <tr>
         <td>Covered functions</td>
-        <td>160</td>
+        <td>164</td>
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>859</td>
+        <td>855</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>15.7%</td>
+        <td>16.09%</td>
     </tr>
 </table>
 
@@ -426,8 +426,8 @@
 | `/repos/{owner}/{repo}/deployments/{deployment_id}/statuses`                                                              |                    | :x:                |                    | :x:                |                    |
 | `/repos/{owner}/{repo}/deployments/{deployment_id}/statuses/{status_id}`                                                  |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/dispatches`                                                                                        |                    |                    |                    | :white_check_mark: |                    |
-| `/repos/{owner}/{repo}/environments`                                                                                      |                    | :x:                |                    |                    |                    |
-| `/repos/{owner}/{repo}/environments/{environment_name}`                                                                   | :x:                | :x:                |                    |                    | :x:                |
+| `/repos/{owner}/{repo}/environments`                                                                                      |                    | :white_check_mark: |                    |                    |                    |
+| `/repos/{owner}/{repo}/environments/{environment_name}`                                                                   | :white_check_mark: | :white_check_mark: |                    |                    | :white_check_mark: |
 | `/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies`                                        |                    | :x:                |                    | :x:                |                    |
 | `/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}`                     | :x:                | :x:                |                    |                    | :x:                |
 | `/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules`                                       |                    | :x:                |                    | :x:                |                    |
