@@ -190,24 +190,25 @@ filter Set-GitHubEnvironment {
                 }
                 $reviewerList.Add($reviewer)
             }
-            $body['reviewers'] = $Reviewers
+            $body['reviewers'] = $reviewerList
             $body['prevent_self_review'] = [bool]$PreventSelfReview
-
-            $inputObject = @{
-                Method      = 'PUT'
-                APIEndpoint = "/repos/$Owner/$Repository/environments/$Name"
-                Body        = $body
-                Context     = $Context
-            }
-
-            if ($PSCmdlet.ShouldProcess("Environment [$Owner/$Repository/$Name]", 'Set')) {
-                Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
-                }
-            }
         }
 
-        end {
-            Write-Debug "[$stackPath] - End"
+        $inputObject = @{
+            Method      = 'PUT'
+            APIEndpoint = "/repos/$Owner/$Repository/environments/$Name"
+            Body        = $body
+            Context     = $Context
+        }
+
+        if ($PSCmdlet.ShouldProcess("Environment [$Owner/$Repository/$Name]", 'Set')) {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
+            }
         }
     }
+
+    end {
+        Write-Debug "[$stackPath] - End"
+    }
+}
