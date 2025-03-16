@@ -115,7 +115,7 @@ filter New-GitHubRepositoryOrg {
         # The ID of the team that will be granted access to this repository. This is only valid when creating a repository in an organization.
         [Parameter()]
         [Alias('team_id')]
-        [int] $TeamId,
+        [System.Nullable[int]] $TeamId,
 
         # Pass true to create an initial commit with empty README.
         [Parameter()]
@@ -195,7 +195,7 @@ filter New-GitHubRepositoryOrg {
             Name                   = 'GitignoreTemplate'
             Alias                  = 'gitignore_template'
             Type                   = [string]
-            ValidateSet            = Get-GitHubGitignoreList
+            ValidateSet            = Get-GitHubGitignore
             DynamicParamDictionary = $DynamicParamDictionary
         }
         New-DynamicParam @dynParam
@@ -204,7 +204,7 @@ filter New-GitHubRepositoryOrg {
             Name                   = 'LicenseTemplate'
             Alias                  = 'license_template'
             Type                   = [string]
-            ValidateSet            = Get-GitHubLicenseList | Select-Object -ExpandProperty key
+            ValidateSet            = Get-GitHubLicense | Select-Object -ExpandProperty key
             DynamicParamDictionary = $DynamicParamDictionary
         }
         New-DynamicParam @dynParam2
@@ -216,11 +216,11 @@ filter New-GitHubRepositoryOrg {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-        $GitignoreTemplate = $PSBoundParameters['GitignoreTemplate']
-        $LicenseTemplate = $PSBoundParameters['LicenseTemplate']
     }
 
     process {
+        $GitignoreTemplate = $PSBoundParameters['GitignoreTemplate']
+        $LicenseTemplate = $PSBoundParameters['LicenseTemplate']
         $body = @{
             name                        = $Name
             description                 = $Description
@@ -244,6 +244,7 @@ filter New-GitHubRepositoryOrg {
             merge_commit_message        = $MergeCommitMessage
             private                     = $Visibility -eq 'private'
         }
+        $body | Remove-HashtableEntry -NullOrEmptyValues
 
         $inputObject = @{
             Method      = 'POST'
@@ -252,7 +253,7 @@ filter New-GitHubRepositoryOrg {
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("Repository in organization $Owner", 'Create')) {
+        if ($PSCmdlet.ShouldProcess("Repository [$Name] in organization [$Owner]", 'Create')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }
