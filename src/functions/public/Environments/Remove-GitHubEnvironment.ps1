@@ -10,18 +10,7 @@ filter Remove-GitHubEnvironment {
         .EXAMPLE
         Remove-GitHubEnvironment -Owner 'PSModule' -Repository 'GitHub' -Name 'Production'
 
-        Output:
-        ```powershell
-        Success: Environment 'Production' deleted from repository 'PSModule/GitHub'.
-        ```
-
         Deletes the 'Production' environment from the 'PSModule/GitHub' repository.
-
-        .OUTPUTS
-        PSCustomObject
-
-        .NOTES
-        Returns the API response indicating success or failure of the deletion process.
 
         .LINK
         https://psmodule.io/GitHub/Functions/Environments/Remove-GitHubEnvironment/
@@ -29,7 +18,7 @@ filter Remove-GitHubEnvironment {
         .LINK
         [Delete environments](https://docs.github.com/en/rest/deployments/environments?#delete-an-environment)
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([void])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The name of the organization.

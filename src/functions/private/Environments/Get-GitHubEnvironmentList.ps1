@@ -10,15 +10,25 @@ filter Get-GitHubEnvironmentList {
         to use this endpoint with a private repository.
 
         .EXAMPLE
-        Get-GitHubEnvironmentList -Owner 'octocat' -Repository 'Hello-World' -Context $GitHubContext
+        Get-GitHubEnvironmentList -Owner 'PSModule' -Repository 'EnvironmentTest'
 
         Output:
-        ```powershell
-        Name         : production
-        Protection   : @{required_reviewers=System.Object[]}
+        ```pwsh
+        id                       : 5944178128
+        node_id                  : EN_kwDOOJqfM88AAAABYkz10A
+        name                     : test
+        url                      : https://api.github.com/repos/PSModule/EnvironmentTest/environments/test
+        html_url                 : https://github.com/PSModule/EnvironmentTest/deployments/activity_log?environments_filter=test
+        created_at               : 3/16/2025 11:17:52 PM
+        updated_at               : 3/16/2025 11:17:52 PM
+        can_admins_bypass        : True
+        protection_rules         : {@{id=30352888; node_id=GA_kwDOOJqfM84BzyX4; type=required_reviewers; prevent_self_review=False;
+                                   reviewers=System.Object[]}, @{id=30352889; node_id=GA_kwDOOJqfM84BzyX5; type=wait_timer; wait_timer=100},
+                                   @{id=30352890; node_id=GA_kwDOOJqfM84BzyX6; type=branch_policy}}
+        deployment_branch_policy : @{protected_branches=False; custom_branch_policies=True}
         ```
 
-        Retrieves the list of environments for the 'Hello-World' repository owned by 'octocat'.
+        Lists all environments available in the "EnvironmentTest" repository owned by "PSModule".
 
         .OUTPUTS
         PSCustomObject
