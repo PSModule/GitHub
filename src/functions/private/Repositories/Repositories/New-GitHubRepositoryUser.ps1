@@ -218,7 +218,6 @@ filter New-GitHubRepositoryUser {
             name                        = $Name
             description                 = $Description
             homepage                    = $Homepage
-            visibility                  = $Visibility
             has_issues                  = [bool]$HasIssues
             has_projects                = [bool]$HasProjects
             has_wiki                    = [bool]$HasWiki
