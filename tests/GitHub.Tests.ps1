@@ -198,4 +198,46 @@ string
             { Write-GitHubWarning 'Warning' } | Should -Not -Throw
         }
     }
+    Context 'IssueParser' {
+        BeforeAll {
+            $issueTestFilePath = Join-Path -Path $PSScriptRoot -ChildPath 'IssueForm.md'
+            Write-Verbose "Reading from $issueTestFilePath" -Verbose
+            $dataObject = Get-Content -Path $issueTestFilePath -Raw | ConvertFrom-IssueForm
+            Write-Verbose ($dataObject | Format-Table | Out-String) -Verbose
+            $dataHashtable = Get-Content -Path $issueTestFilePath -Raw | ConvertFrom-IssueForm -AsHashtable
+            Write-Verbose ($dataHashtable | Out-String) -Verbose
+        }
+        
+        It 'ConvertFrom-IssueForm - Should return a PSCustomObject' {
+            $dataObject | Should -BeOfType 'PSCustomObject'
+        }
+
+        It 'ConvertFrom-IssueForm -AsHashtable - Should return a hashtable' {
+            $dataHashtable | Should -BeOfType 'hashtable'
+        }
+
+        It "'Type with spaces' should contain 'Action'" {
+            Write-Verbose ($dataHashtable['Type with spaces'] | Out-String) -Verbose
+            $dataHashtable.Keys | Should -Contain 'Type with spaces'
+            $dataHashtable['Type with spaces'] | Should -Be 'Action'
+        }
+
+        It "'Multiline' should contain a multiline string with 3 lines" {
+            Write-Verbose ($dataHashtable['Multiline'] | Out-String) -Verbose
+            $dataHashtable.Keys | Should -Contain 'Multiline'
+            $dataHashtable['Multiline'] | Should -Be @'
+test
+is multi
+line
+'@
+        }
+
+        It "'OS' should contain a hashtable with 3 items" {
+            Write-Verbose ($dataHashtable['OS'] | Out-String) -Verbose
+            $dataHashtable.Keys | Should -Contain 'OS'
+            $dataHashtable['OS'].Windows | Should -BeTrue
+            $dataHashtable['OS'].Linux | Should -BeTrue
+            $dataHashtable['OS'].Mac | Should -BeFalse
+        }
+    }
 }
