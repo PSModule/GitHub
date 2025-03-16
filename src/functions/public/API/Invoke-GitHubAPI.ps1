@@ -100,7 +100,7 @@ filter Invoke-GitHubAPI {
 
     process {
         $Token = $Context.Token
-        Write-Debug "Token :      [$Token]"
+        Write-Debug "Token: [$Token]"
 
         $HttpVersion = Resolve-GitHubContextSetting -Name 'HttpVersion' -Value $HttpVersion -Context $Context
         $ApiBaseUri = Resolve-GitHubContextSetting -Name 'ApiBaseUri' -Value $ApiBaseUri -Context $Context

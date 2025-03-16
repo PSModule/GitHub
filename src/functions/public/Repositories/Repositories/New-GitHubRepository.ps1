@@ -220,7 +220,7 @@ filter New-GitHubRepository {
         [Parameter(ParameterSetName = 'user')]
         [Parameter(ParameterSetName = 'org')]
         [Alias('team_id')]
-        [int] $TeamId,
+        [System.Nullable[int]] $TeamId,
 
         # Pass true to create an initial commit with empty README.
         [Parameter(ParameterSetName = 'user')]
