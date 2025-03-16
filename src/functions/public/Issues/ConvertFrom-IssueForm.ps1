@@ -96,7 +96,8 @@
                 }
                 $data[$header] = $checkboxHashTable
             } else {
-                $data[$header] = $paragraph -join [Environment]::NewLine
+                # Ensure multiline paragraphs are joined correctly
+                $data[$header] = ($paragraph | ForEach-Object { $_.Trim() }) -join [Environment]::NewLine
             }
         }
 
