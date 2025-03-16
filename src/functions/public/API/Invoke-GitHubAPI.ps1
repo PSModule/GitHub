@@ -288,21 +288,21 @@ filter Invoke-GitHubAPI {
             $APICall.Headers = $APICall.Headers | ConvertTo-Json
             $APICall.Method = $APICall.Method.ToString()
 
-            $errorOutput = @(
-                '----------------------------------'
-                'Error details:'
-                ($errorResult | Format-List | Out-String).Trim()
-                '----------------------------------'
-            ) -join "`n"
+            Write-Error @"
 
-            Write-Error $errorOutput
+----------------------------------
+Error details:
+$($errorResult | Format-List | Out-String -Stream | ForEach-Object { "    $_`n" })
+----------------------------------
+
+"@
 
             $PSCmdlet.ThrowTerminatingError(
                 [System.Management.Automation.ErrorRecord]::new(
                     [System.Exception]::new('GitHub API call failed. See error details above.'),
                     'GitHubAPIError',
                     [System.Management.Automation.ErrorCategory]::InvalidOperation,
-                    $_
+                    $errorResult
                 )
             )
         }
