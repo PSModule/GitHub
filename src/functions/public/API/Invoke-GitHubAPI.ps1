@@ -275,7 +275,7 @@ filter Invoke-GitHubAPI {
 
             $errordetails = $failure.ErrorDetails | ConvertFrom-Json -AsHashtable
             $errors = $errordetails.errors
-            $errorResult = [ordered]@{
+            $errorResult = [pscustomobject]@{
                 Message     = $errordetails.message
                 Resource    = $errors.resource
                 Code        = $errors.code
@@ -291,11 +291,17 @@ filter Invoke-GitHubAPI {
             $errorOutput = [System.Collections.ArrayList]::new()
             $null = $errorOutput.Add('----------------------------------')
             $null = $errorOutput.Add('Error details:')
-            $null = $($errorResult | Format-Table -AutoSize -HideTableHeaders | Out-String -Stream | ForEach-Object { $errorOutput.Add($_) })
+            $null = $($errorResult | Format-List | Out-String -Stream | ForEach-Object { $errorOutput.Add($_) })
             $null = $errorOutput.Add('----------------------------------')
 
-            Write-Error ($errorOutput -join [System.Environment]::NewLine)
-            throw $failure.Exception.Message
+            $PSCmdlet.ThrowTerminatingError(
+                [System.Management.Automation.ErrorRecord]::new(
+                    [System.Exception]::new($errorOutput -join [System.Environment]::NewLine),
+                    'GitHubAPIError',
+                    [System.Management.Automation.ErrorCategory]::InvalidOperation,
+                    $_
+                )
+            )
         }
     }
 
