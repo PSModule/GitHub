@@ -39,7 +39,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
             $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -WaitTimer 10
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be $environmentName
-            $result.Protection.WaitTimer | Should -Be 10
+            $result.protection_rules.wait_timer | Should -Be 10
         }
 
         It 'Get-GitHubEnvironment - retrieves a specific environment' {
