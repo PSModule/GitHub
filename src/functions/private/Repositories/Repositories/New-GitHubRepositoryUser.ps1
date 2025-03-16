@@ -109,7 +109,7 @@ filter New-GitHubRepositoryUser {
         # The ID of the team that will be granted access to this repository. This is only valid when creating a repository in an organization.
         [Parameter()]
         [Alias('team_id')]
-        [int] $TeamId,
+        [System.Nullable[int]] $TeamId,
 
         # Pass true to create an initial commit with empty README.
         [Parameter()]
@@ -188,7 +188,7 @@ filter New-GitHubRepositoryUser {
             Name                   = 'GitignoreTemplate'
             Alias                  = 'gitignore_template'
             Type                   = [string]
-            ValidateSet            = Get-GitHubGitignoreList
+            ValidateSet            = Get-GitHubGitignore
             DynamicParamDictionary = $DynamicParamDictionary
         }
         New-DynamicParam @dynParam
@@ -197,7 +197,7 @@ filter New-GitHubRepositoryUser {
             Name                   = 'LicenseTemplate'
             Alias                  = 'license_template'
             Type                   = [string]
-            ValidateSet            = Get-GitHubLicenseList | Select-Object -ExpandProperty key
+            ValidateSet            = Get-GitHubLicense | Select-Object -ExpandProperty key
             DynamicParamDictionary = $DynamicParamDictionary
         }
         New-DynamicParam @dynParam2
@@ -237,6 +237,7 @@ filter New-GitHubRepositoryUser {
             merge_commit_message        = $MergeCommitMessage
             private                     = $Visibility -eq 'private'
         }
+        $body | Remove-HashtableEntry -NullOrEmptyValues
 
         $inputObject = @{
             Method      = 'POST'
