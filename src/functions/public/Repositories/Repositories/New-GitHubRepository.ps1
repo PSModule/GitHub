@@ -309,7 +309,7 @@ filter New-GitHubRepository {
             Name                   = 'GitignoreTemplate'
             Alias                  = 'gitignore_template'
             Type                   = [string]
-            ValidateSet            = Get-GitHubGitignoreList
+            ValidateSet            = Get-GitHubGitignore
             DynamicParamDictionary = $DynamicParamDictionary
         }
         New-DynamicParam @dynParam
@@ -318,7 +318,7 @@ filter New-GitHubRepository {
             Name                   = 'LicenseTemplate'
             Alias                  = 'license_template'
             Type                   = [string]
-            ValidateSet            = Get-GitHubLicenseList | Select-Object -ExpandProperty key
+            ValidateSet            = Get-GitHubLicense | Select-Object -ExpandProperty key
             DynamicParamDictionary = $DynamicParamDictionary
         }
         New-DynamicParam @dynParam2
