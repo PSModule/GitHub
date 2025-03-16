@@ -225,7 +225,6 @@ filter New-GitHubRepositoryOrg {
             name                        = $Name
             description                 = $Description
             homepage                    = $Homepage
-            visibility                  = $Visibility
             has_issues                  = [bool]$HasIssues
             has_projects                = [bool]$HasProjects
             has_wiki                    = [bool]$HasWiki
@@ -242,6 +241,7 @@ filter New-GitHubRepositoryOrg {
             squash_merge_commit_message = $SquashMergeCommitMessage
             merge_commit_title          = $MergeCommitTitle
             merge_commit_message        = $MergeCommitMessage
+            private                     = $Visibility -eq 'private'
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
