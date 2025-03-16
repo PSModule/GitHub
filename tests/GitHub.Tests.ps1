@@ -202,7 +202,8 @@ string
         BeforeAll {
             $issueTestFilePath = Join-Path -Path $PSScriptRoot -ChildPath 'IssueForm.md'
             Write-Verbose "Reading from $issueTestFilePath" -Verbose
-            $content = Get-Content -Path $issueTestFilePath
+            $content = Get-Content -Path $issueTestFilePath -Raw -Encoding UTF8
+            Write-Verbose ($content | Out-String) -Verbose
             $dataObject = $content | ConvertFrom-IssueForm
             Write-Verbose ($dataObject | Format-List | Out-String) -Verbose
             $dataHashtable = $content | ConvertFrom-IssueForm -AsHashtable
