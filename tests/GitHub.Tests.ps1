@@ -204,10 +204,10 @@ string
             Write-Verbose "Reading from $issueTestFilePath" -Verbose
             $content = Get-Content -Path $issueTestFilePath -Raw
             Write-Verbose ($content | Out-String) -Verbose
-            $dataObject = $content | ConvertFrom-IssueForm
+            $dataObject = $content | ConvertFrom-IssueForm -Verbose
             Write-Verbose "As PSCustomObject" -Verbose
             Write-Verbose ($dataObject | Format-List | Out-String) -Verbose
-            $dataHashtable = $content | ConvertFrom-IssueForm -AsHashtable
+            $dataHashtable = $content | ConvertFrom-IssueForm -AsHashtable -Verbose
             Write-Verbose "As Hashtable" -Verbose
             Write-Verbose ($dataHashtable | Out-String) -Verbose
         }

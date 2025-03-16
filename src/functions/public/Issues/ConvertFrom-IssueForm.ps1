@@ -47,7 +47,7 @@
 
     process {
         # Properly remove HTML comments
-        $content = $IssueForm -replace '(?s)<!--.*?-->', ''
+        $content = $IssueForm -replace '(?s)<!--.*?-->'
         $content = $content -split '\r?\n' | ForEach-Object { $_.Trim() } | Where-Object { $_ -ne '' }
 
         $results = @()
@@ -96,8 +96,7 @@
                 }
                 $data[$header] = $checkboxHashTable
             } else {
-                # Ensure multiline paragraphs are joined correctly
-                $data[$header] = ($paragraph | ForEach-Object { $_.Trim() }) -join [Environment]::NewLine
+                $data[$header] = ($paragraph | ForEach-Object { $_.Trim(); Write-Verbose $_ }) -join [Environment]::NewLine
             }
         }
 
