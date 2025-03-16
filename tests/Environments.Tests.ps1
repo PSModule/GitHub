@@ -33,7 +33,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
         }
 
         It 'Get-GitHubEnvironment - retrieves a specific environment that does not exist yet' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
+            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo | Where-Object { $_.Name -eq $environmentName }
             $result | Should -BeNullOrEmpty
         }
 
@@ -52,12 +52,16 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
 
         It 'Get-GitHubEnvironment - lists all environments' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo
-            $result | Should -BeOfType [System.Array]
+            $result.Count | Should -Be 1
         }
 
         It 'Remove-GitHubEnvironment - deletes an environment' {
-            $result = Remove-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -Confirm:$false
-            $result | Should -Not -BeNullOrEmpty
+            { Remove-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -Confirm:$false } | Should -Not -Throw
+        }
+
+        It 'Get-GitHubEnvironment - retrieves a specific environment that does not exist yet' {
+            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo | Where-Object { $_.Name -eq $environmentName }
+            $result | Should -BeNullOrEmpty
         }
     }
 }
@@ -79,7 +83,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         }
 
         It 'Get-GitHubEnvironment - retrieves a specific environment that does not exist yet' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
+            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo | Where-Object { $_.Name -eq $environmentName }
             $result | Should -BeNullOrEmpty
         }
 
@@ -87,7 +91,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
             $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -WaitTimer 10
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be $environmentName
-            $result.Protection.WaitTimer | Should -Be 10
+            $result.protection_rules.wait_timer | Should -Be 10
         }
 
         It 'Get-GitHubEnvironment - retrieves a specific environment' {
@@ -98,12 +102,16 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
 
         It 'Get-GitHubEnvironment - lists all environments' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo
-            $result | Should -BeOfType [System.Array]
+            $result.Count | Should -Be 1
         }
 
         It 'Remove-GitHubEnvironment - deletes an environment' {
-            $result = Remove-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -Confirm:$false
-            $result | Should -Not -BeNullOrEmpty
+            { Remove-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -Confirm:$false } | Should -Not -Throw
+        }
+
+        It 'Get-GitHubEnvironment - retrieves a specific environment that does not exist yet' {
+            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo | Where-Object { $_.Name -eq $environmentName }
+            $result | Should -BeNullOrEmpty
         }
     }
 }
@@ -125,7 +133,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
         }
 
         It 'Get-GitHubEnvironment - retrieves a specific environment that does not exist yet' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
+            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo | Where-Object { $_.Name -eq $environmentName }
             $result | Should -BeNullOrEmpty
         }
 
@@ -133,7 +141,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
             $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -WaitTimer 10
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be $environmentName
-            $result.Protection.WaitTimer | Should -Be 10
+            $result.protection_rules.wait_timer | Should -Be 10
         }
 
         It 'Get-GitHubEnvironment - retrieves a specific environment' {
@@ -144,12 +152,16 @@ Describe 'As a user - Classic PAT token (PAT)' {
 
         It 'Get-GitHubEnvironment - lists all environments' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo
-            $result | Should -BeOfType [System.Array]
+            $result.Count | Should -Be 1
         }
 
         It 'Remove-GitHubEnvironment - deletes an environment' {
-            $result = Remove-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -Confirm:$false
-            $result | Should -Not -BeNullOrEmpty
+            { Remove-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -Confirm:$false } | Should -Not -Throw
+        }
+
+        It 'Get-GitHubEnvironment - retrieves a specific environment that does not exist yet' {
+            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo | Where-Object { $_.Name -eq $environmentName }
+            $result | Should -BeNullOrEmpty
         }
     }
 }
@@ -172,6 +184,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
     BeforeAll {
         Connect-GitHubAccount -ClientID $env:TEST_APP_ENT_CLIENT_ID -PrivateKey $env:TEST_APP_ENT_PRIVATE_KEY
         $owner = 'psmodule-test-org3'
+        Connect-GitHubApp -Organization $owner -Default
         New-GitHubRepository -Owner $owner -Name $repo
     }
     AfterAll {
@@ -185,7 +198,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         }
 
         It 'Get-GitHubEnvironment - retrieves a specific environment that does not exist yet' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
+            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo | Where-Object { $_.Name -eq $environmentName }
             $result | Should -BeNullOrEmpty
         }
 
@@ -193,7 +206,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
             $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -WaitTimer 10
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be $environmentName
-            $result.Protection.WaitTimer | Should -Be 10
+            $result.protection_rules.wait_timer | Should -Be 10
         }
 
         It 'Get-GitHubEnvironment - retrieves a specific environment' {
@@ -204,12 +217,16 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
 
         It 'Get-GitHubEnvironment - lists all environments' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo
-            $result | Should -BeOfType [System.Array]
+            $result.Count | Should -Be 1
         }
 
         It 'Remove-GitHubEnvironment - deletes an environment' {
-            $result = Remove-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -Confirm:$false
-            $result | Should -Not -BeNullOrEmpty
+            { Remove-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -Confirm:$false } | Should -Not -Throw
+        }
+
+        It 'Get-GitHubEnvironment - retrieves a specific environment that does not exist yet' {
+            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo | Where-Object { $_.Name -eq $environmentName }
+            $result | Should -BeNullOrEmpty
         }
     }
 }
@@ -218,6 +235,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
     BeforeAll {
         Connect-GitHubAccount -ClientID $env:TEST_APP_ORG_CLIENT_ID -PrivateKey $env:TEST_APP_ORG_PRIVATE_KEY
         $owner = 'psmodule-test-org'
+        Connect-GitHubApp -Organization $owner -Default
         New-GitHubRepository -Owner $owner -Name $repo
     }
     AfterAll {
@@ -231,7 +249,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         }
 
         It 'Get-GitHubEnvironment - retrieves a specific environment that does not exist yet' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
+            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo | Where-Object { $_.Name -eq $environmentName }
             $result | Should -BeNullOrEmpty
         }
 
@@ -239,7 +257,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
             $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -WaitTimer 10
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be $environmentName
-            $result.Protection.WaitTimer | Should -Be 10
+            $result.protection_rules.wait_timer | Should -Be 10
         }
 
         It 'Get-GitHubEnvironment - retrieves a specific environment' {
@@ -250,12 +268,16 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
 
         It 'Get-GitHubEnvironment - lists all environments' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo
-            $result | Should -BeOfType [System.Array]
+            $result.Count | Should -Be 1
         }
 
         It 'Remove-GitHubEnvironment - deletes an environment' {
-            $result = Remove-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -Confirm:$false
-            $result | Should -Not -BeNullOrEmpty
+            { Remove-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -Confirm:$false } | Should -Not -Throw
+        }
+
+        It 'Get-GitHubEnvironment - retrieves a specific environment that does not exist yet' {
+            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo | Where-Object { $_.Name -eq $environmentName }
+            $result | Should -BeNullOrEmpty
         }
     }
 }
