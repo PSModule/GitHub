@@ -284,13 +284,13 @@ filter Invoke-GitHubAPI {
             $APICall.Headers = $APICall.Headers | ConvertTo-Json
             $APICall.Method = $APICall.Method.ToString()
 
-            $errorResult = @"
-----------------------------------
-Error details:
-$($errorResult | Format-Table -AutoSize -HideTableHeaders | Out-String)
-----------------------------------
-"@
-            Write-Error $errorResult
+            $errorResult = [System.Collections.ArrayList]::new()
+            $null = $errorResult.Add('----------------------------------')
+            $null = $errorResult.Add('Error details:')
+            $null = $($errorResult | Format-Table -AutoSize -HideTableHeaders | Out-String -Stream | ForEach-Object { $errorResult.Add($_) })
+            $null = $errorResult.Add('----------------------------------')
+
+            Write-Error ($errorResult -join [System.Environment]::NewLine)
             throw $failure.Exception.Message
         }
     }
