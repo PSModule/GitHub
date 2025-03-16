@@ -288,7 +288,7 @@ filter Invoke-GitHubAPI {
             $APICall.Headers = $APICall.Headers | ConvertTo-Json
             $APICall.Method = $APICall.Method.ToString()
 
-            Write-Error @"
+            Write-Warning @"
 
 ----------------------------------
 Error details:

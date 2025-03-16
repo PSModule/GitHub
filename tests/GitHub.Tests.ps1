@@ -43,12 +43,12 @@ Describe 'GitHub' {
     Context 'Actions' {
         It 'Get-GitHubEventData - Gets data about the event that triggered the workflow' {
             $workflow = Get-GitHubEventData
-            Write-Verbose ($workflow | Format-Table | Out-String) -Verbose
+            Write-Verbose ($workflow | Format-List | Out-String) -Verbose
             $workflow | Should -Not -BeNullOrEmpty
         }
         It 'Get-GitHubRunnerData - Gets data about the runner that is running the workflow' {
             $workflow = Get-GitHubRunnerData
-            Write-Verbose ($workflow | Format-Table | Out-String) -Verbose
+            Write-Verbose ($workflow | Format-List | Out-String) -Verbose
             $workflow | Should -Not -BeNullOrEmpty
         }
     }
@@ -202,11 +202,13 @@ string
         BeforeAll {
             $issueTestFilePath = Join-Path -Path $PSScriptRoot -ChildPath 'IssueForm.md'
             Write-Verbose "Reading from $issueTestFilePath" -Verbose
-            $content = Get-Content -Path $issueTestFilePath -Raw -Encoding UTF8
+            $content = Get-Content -Path $issueTestFilePath -Raw
             Write-Verbose ($content | Out-String) -Verbose
             $dataObject = $content | ConvertFrom-IssueForm
+            Write-Verbose "As PSCustomObject" -Verbose
             Write-Verbose ($dataObject | Format-List | Out-String) -Verbose
             $dataHashtable = $content | ConvertFrom-IssueForm -AsHashtable
+            Write-Verbose "As Hashtable" -Verbose
             Write-Verbose ($dataHashtable | Out-String) -Verbose
         }
 

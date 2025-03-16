@@ -46,9 +46,9 @@
     }
 
     process {
-        # Clean up the issue form
-        $content = $IssueForm -replace '<!--[\s\S]*?-->'
-        $content = $content.Split([Environment]::NewLine).Trim() | Where-Object { $_ -ne '' }
+        # Properly remove HTML comments
+        $content = $IssueForm -replace '(?s)<!--.*?-->', ''
+        $content = $content -split '\r?\n' | ForEach-Object { $_.Trim() } | Where-Object { $_ -ne '' }
 
         $results = @()
         $currentHeader = ''
@@ -59,65 +59,54 @@
 
             if ($line -match '^### (.+)$') {
                 Write-Verbose ' - Is header'
-                # If a new header is found, store the current header and paragraph in the results
                 if ($currentHeader -ne '') {
                     $results += [PSCustomObject]@{
                         Header    = $currentHeader
-                        Paragraph = $currentParagraph.Trim()
+                        Paragraph = $currentParagraph
                     }
                 }
 
-                # Update the newly detected header and reset the paragraph
                 $currentHeader = $matches[1]
                 $currentParagraph = @()
             } else {
-                # Append the line to the current paragraph
                 $currentParagraph += $line
             }
         }
 
-        # Add the last header and paragraph to the results
         if ($currentHeader -ne '') {
             $results += [PSCustomObject]@{
                 Header    = $currentHeader
-                Paragraph = $currentParagraph.Trim()
+                Paragraph = $currentParagraph
             }
         }
 
-        # Process each entry
         $data = @{}
         foreach ($entry in $results) {
             $header = $entry.Header
             $paragraph = $entry.Paragraph
 
-            if ($paragraph -is [string]) {
-                # Assign string value directly
-                $data[$header] = $paragraph
-            } elseif ($paragraph -is [array]) {
-                # Check if it's a multi-line string or checkbox list
-                if ($paragraph -match '^\s*- \[.\]\s') {
-                    # It's a checkbox list, process as key-value pairs
-                    $checkboxHashTable = @{}
-                    foreach ($line in $paragraph) {
-                        if ($line -match '^\s*- \[(x| )\]\s*(.+)$') {
-                            $checked = $matches[1] -eq 'x'
-                            $item = $matches[2]
-                            $checkboxHashTable[$item] = $checked
-                        }
+            if ($paragraph -match '^\s*-\s*\[.\]\s+') {
+                $checkboxHashTable = @{}
+                foreach ($line in $paragraph) {
+                    if ($line -match '^\s*-\s*\[(x| )\]\s*(.+)$') {
+                        $checked = $matches[1] -eq 'x'
+                        $item = $matches[2]
+                        $checkboxHashTable[$item] = $checked
                     }
-                    $data[$header] = $checkboxHashTable
-                } else {
-                    # It's a multi-line string
-                    $data[$header] = $paragraph -join [System.Environment]::NewLine
                 }
+                $data[$header] = $checkboxHashTable
+            } else {
+                $data[$header] = $paragraph -join [Environment]::NewLine
             }
         }
 
         if ($AsHashtable) {
             return $data
         }
+
         [PSCustomObject]$data
     }
+
 
     end {
         Write-Debug "[$stackPath] - End"
