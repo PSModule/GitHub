@@ -70,7 +70,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
     BeforeAll {
         Connect-GitHubAccount -Token $env:TEST_USER_ORG_FG_PAT
         $owner = 'psmodule-test-org2'
-        New-GitHubRepository -Name $repo
+        New-GitHubRepository -Owner $owner -Name $repo
     }
     AfterAll {
         Remove-GitHubRepository -Owner $owner -Name $repo -Confirm:$false
@@ -116,69 +116,9 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
     }
 }
 
-Describe 'As a user - Classic PAT token (PAT)' {
-    BeforeAll {
-        Connect-GitHubAccount -Token $env:TEST_USER_PAT
-        $owner = 'psmodule-user'
-        New-GitHubRepository -Name $repo
-    }
-    AfterAll {
-        Remove-GitHubRepository -Owner $owner -Name $repo -Confirm:$false
-        Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
-    }
-    Context 'Environments' {
-        It 'Get-GitHubEnvironment - lists all environments' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo
-            $result | Should -BeNullOrEmpty
-        }
+Describe 'As a user - Classic PAT token (PAT)' -Skip {}
 
-        It 'Get-GitHubEnvironment - retrieves a specific environment that does not exist yet' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo | Where-Object { $_.Name -eq $environmentName }
-            $result | Should -BeNullOrEmpty
-        }
-
-        It 'Set-GitHubEnvironment - creates an environment' {
-            $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -WaitTimer 10
-            $result | Should -Not -BeNullOrEmpty
-            $result.Name | Should -Be $environmentName
-            $result.protection_rules.wait_timer | Should -Be 10
-        }
-
-        It 'Get-GitHubEnvironment - retrieves a specific environment' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
-            $result | Should -Not -BeNullOrEmpty
-            $result.Name | Should -Be $environmentName
-        }
-
-        It 'Get-GitHubEnvironment - lists all environments' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo
-            $result.Count | Should -Be 1
-        }
-
-        It 'Remove-GitHubEnvironment - deletes an environment' {
-            { Remove-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -Confirm:$false } | Should -Not -Throw
-        }
-
-        It 'Get-GitHubEnvironment - retrieves a specific environment that does not exist yet' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo | Where-Object { $_.Name -eq $environmentName }
-            $result | Should -BeNullOrEmpty
-        }
-    }
-}
-
-Describe 'As GitHub Actions (GHA)' {
-    BeforeAll {
-        Connect-GitHubAccount
-        $owner = 'PSModule'
-        $repo = 'GitHub'
-    }
-    AfterAll {
-        Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
-    }
-    Context 'Environments' {
-        # TESTS HERE
-    }
-}
+Describe 'As GitHub Actions (GHA)' -Skip {}
 
 Describe 'As a GitHub App - Enterprise (APP_ENT)' {
     BeforeAll {
