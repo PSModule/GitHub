@@ -274,8 +274,12 @@ filter Invoke-GitHubAPI {
             Write-Debug '---------------------------'
 
             $errordetails = $failure.ErrorDetails | ConvertFrom-Json -AsHashtable
+            $errors = $errordetails.errors
             $errorResult = [ordered]@{
-                Message     = ($errordetails.message, ($errordetails.errors | Select-Object -ExpandProperty message)) -join ', '
+                Message     = $errordetails.message
+                Resource    = $errors.resource
+                Code        = $errors.code
+                Details     = $errors.message
                 Information = $errordetails.documentation_url
                 Status      = $failure.Exception.Message
                 StatusCode  = $errordetails.status
