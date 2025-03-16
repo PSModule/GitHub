@@ -244,6 +244,7 @@ filter New-GitHubRepositoryOrg {
             merge_commit_message        = $MergeCommitMessage
             private                     = $Visibility -eq 'private'
         }
+        $body | Remove-HashtableEntry -NullOrEmptyValues
 
         $inputObject = @{
             Method      = 'POST'
