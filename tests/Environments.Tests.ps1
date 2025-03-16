@@ -20,8 +20,10 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
     BeforeAll {
         Connect-GitHubAccount -Token $env:TEST_USER_USER_FG_PAT
         $owner = 'psmodule-user'
+        New-GitHubRepository -Owner $owner -Name $repo
     }
     AfterAll {
+        Remove-GitHubRepository -Owner $owner -Name $repo
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     Context 'Environments' {
@@ -64,8 +66,10 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
     BeforeAll {
         Connect-GitHubAccount -Token $env:TEST_USER_ORG_FG_PAT
         $owner = 'psmodule-test-org2'
+        New-GitHubRepository -Owner $owner -Name $repo
     }
     AfterAll {
+        Remove-GitHubRepository -Owner $owner -Name $repo
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     Context 'Environments' {
@@ -108,8 +112,10 @@ Describe 'As a user - Classic PAT token (PAT)' {
     BeforeAll {
         Connect-GitHubAccount -Token $env:TEST_USER_PAT
         $owner = 'psmodule-user'
+        New-GitHubRepository -Owner $owner -Name $repo
     }
     AfterAll {
+        Remove-GitHubRepository -Owner $owner -Name $repo
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     Context 'Environments' {
@@ -166,8 +172,10 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
     BeforeAll {
         Connect-GitHubAccount -ClientID $env:TEST_APP_ENT_CLIENT_ID -PrivateKey $env:TEST_APP_ENT_PRIVATE_KEY
         $owner = 'psmodule-test-org3'
+        New-GitHubRepository -Owner $owner -Name $repo
     }
     AfterAll {
+        Remove-GitHubRepository -Owner $owner -Name $repo
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     Context 'Environments' {
@@ -210,8 +218,10 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
     BeforeAll {
         Connect-GitHubAccount -ClientID $env:TEST_APP_ORG_CLIENT_ID -PrivateKey $env:TEST_APP_ORG_PRIVATE_KEY
         $owner = 'psmodule-test-org'
+        New-GitHubRepository -Owner $owner -Name $repo
     }
     AfterAll {
+        Remove-GitHubRepository -Owner $owner -Name $repo
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     Context 'Environments' {
