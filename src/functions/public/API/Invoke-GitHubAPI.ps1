@@ -274,8 +274,12 @@ filter Invoke-GitHubAPI {
             Write-Debug '---------------------------'
 
             $errordetails = $failure.ErrorDetails | ConvertFrom-Json -AsHashtable
-            $errorResult = [ordered]@{
+            $errors = $errordetails.errors
+            $errorResult = [pscustomobject]@{
                 Message     = $errordetails.message
+                Resource    = $errors.resource
+                Code        = $errors.code
+                Details     = $errors.message
                 Information = $errordetails.documentation_url
                 Status      = $failure.Exception.Message
                 StatusCode  = $errordetails.status
@@ -284,14 +288,23 @@ filter Invoke-GitHubAPI {
             $APICall.Headers = $APICall.Headers | ConvertTo-Json
             $APICall.Method = $APICall.Method.ToString()
 
-            $errorResult = @"
+            Write-Warning @"
+
 ----------------------------------
 Error details:
-$($errorResult | Format-Table -AutoSize -HideTableHeaders | Out-String)
+$($errorResult | Format-List | Out-String -Stream | ForEach-Object { "    $_`n" })
 ----------------------------------
+
 "@
-            Write-Error $errorResult
-            throw $failure.Exception.Message
+
+            $PSCmdlet.ThrowTerminatingError(
+                [System.Management.Automation.ErrorRecord]::new(
+                    [System.Exception]::new('GitHub API call failed. See error details above.'),
+                    'GitHubAPIError',
+                    [System.Management.Automation.ErrorCategory]::InvalidOperation,
+                    $errorResult
+                )
+            )
         }
     }
 

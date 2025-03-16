@@ -27,7 +27,7 @@
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [string] $Repository,
+        [string] $Name,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -45,11 +45,11 @@
     process {
         $inputObject = @{
             Method      = 'DELETE'
-            APIEndpoint = "/repos/$Owner/$Repository"
+            APIEndpoint = "/repos/$Owner/$Name"
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("repo [$Owner/$Repository]", 'DELETE')) {
+        if ($PSCmdlet.ShouldProcess("repo [$Owner/$Name]", 'DELETE')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }

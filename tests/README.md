@@ -4,7 +4,8 @@
 
 Login: 'psmodule-user'
 Owner of:
-- psmodule-test-org2 (standalone org)
+- [psmodule-user](https://github.com/psmodule-user) (standalone org)
+- [psmodule-test-org2](https://github.com/orgs/psmodule-test-org2) (standalone org)
 
 Secrets:
 - TEST_USER_PAT -> 'psmodule-user' (user)
@@ -16,7 +17,7 @@ Secrets:
 Homed in 'MSX'
 ClientID: 'Iv23lieHcDQDwVV3alK1'
 Installed on:
-- 'psmodule-test-org3' (enterprise org)
+- [psmodule-test-org3](https://github.com/orgs/psmodule-test-org3) (enterprise org)
 Permissions:
 - All
 Events:
@@ -31,7 +32,7 @@ Secrets:
 Homed in PSModule
 ClientID: 'Iv23liYDnEbKlS9IVzHf'
 Installed on:
-- 'psmodule-test-org' (standalone org)
+- [psmodule-test-org](https://github.com/orgs/psmodule-test-org) (standalone org)
 Permissions:
 - All
 Events:
