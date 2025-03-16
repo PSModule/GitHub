@@ -23,7 +23,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
         New-GitHubRepository -Name $repo
     }
     AfterAll {
-        Remove-GitHubRepository -Name $repo
+        Remove-GitHubRepository -Owner $owner -Name $repo -Confirm:$false
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     Context 'Environments' {
@@ -73,7 +73,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         New-GitHubRepository -Name $repo
     }
     AfterAll {
-        Remove-GitHubRepository -Name $repo
+        Remove-GitHubRepository -Owner $owner -Name $repo -Confirm:$false
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     Context 'Environments' {
@@ -123,7 +123,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
         New-GitHubRepository -Name $repo
     }
     AfterAll {
-        Remove-GitHubRepository -Name $repo
+        Remove-GitHubRepository -Owner $owner -Name $repo -Confirm:$false
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     Context 'Environments' {
@@ -188,7 +188,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         New-GitHubRepository -Owner $owner -Name $repo
     }
     AfterAll {
-        Remove-GitHubRepository -Owner $owner -Name $repo
+        Remove-GitHubRepository -Owner $owner -Name $repo -Confirm:$false
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     Context 'Environments' {
@@ -239,7 +239,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         New-GitHubRepository -Owner $owner -Name $repo
     }
     AfterAll {
-        Remove-GitHubRepository -Owner $owner -Name $repo
+        Remove-GitHubRepository -Owner $owner -Name $repo -Confirm:$false
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     Context 'Environments' {
