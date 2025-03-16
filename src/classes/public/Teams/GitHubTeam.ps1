@@ -15,7 +15,7 @@
     [string] $NodeID
 
     # The database ID of the team.
-    [string] $DatabaseID
+    [int64] $DatabaseID
 
     # The description of the team.
     [string] $Description
