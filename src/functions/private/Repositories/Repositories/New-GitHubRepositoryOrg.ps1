@@ -216,11 +216,11 @@ filter New-GitHubRepositoryOrg {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-        $GitignoreTemplate = $PSBoundParameters['GitignoreTemplate']
-        $LicenseTemplate = $PSBoundParameters['LicenseTemplate']
     }
 
     process {
+        $GitignoreTemplate = $PSBoundParameters['GitignoreTemplate']
+        $LicenseTemplate = $PSBoundParameters['LicenseTemplate']
         $body = @{
             name                        = $Name
             description                 = $Description
@@ -252,7 +252,7 @@ filter New-GitHubRepositoryOrg {
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("Repository in organization $Owner", 'Create')) {
+        if ($PSCmdlet.ShouldProcess("Repository [$Name] in organization [$Owner]", 'Create')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }

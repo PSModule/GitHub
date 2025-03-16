@@ -331,53 +331,74 @@ filter New-GitHubRepository {
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
     }
 
     process {
         $GitignoreTemplate = $PSBoundParameters['GitignoreTemplate']
         $LicenseTemplate = $PSBoundParameters['LicenseTemplate']
-        if ($PSCmdlet.ParameterSetName -in 'user', 'org') {
-            $params = @{
-                Context                  = $Context
-                Owner                    = $Owner
-                Name                     = $Name
-                Description              = $Description
-                Homepage                 = $Homepage
-                Visibility               = $Visibility
-                HasIssues                = $HasIssues
-                HasProjects              = $HasProjects
-                HasWiki                  = $HasWiki
-                HasDiscussions           = $HasDiscussions
-                HasDownloads             = $HasDownloads
-                IsTemplate               = $IsTemplate
-                TeamId                   = $TeamId
-                AutoInit                 = $AutoInit
-                AllowSquashMerge         = $AllowSquashMerge
-                AllowMergeCommit         = $AllowMergeCommit
-                AllowRebaseMerge         = $AllowRebaseMerge
-                AllowAutoMerge           = $AllowAutoMerge
-                DeleteBranchOnMerge      = $DeleteBranchOnMerge
-                SquashMergeCommitTitle   = $SquashMergeCommitTitle
-                SquashMergeCommitMessage = $SquashMergeCommitMessage
-                MergeCommitTitle         = $MergeCommitTitle
-                MergeCommitMessage       = $MergeCommitMessage
-                GitignoreTemplate        = $GitignoreTemplate
-                LicenseTemplate          = $LicenseTemplate
-            } | Remove-HashtableEntry -NullOrEmptyValues
-        }
+        Write-Verbose "ParameterSetName: $($PSCmdlet.ParameterSetName)"
 
         switch ($PSCmdlet.ParameterSetName) {
             'user' {
+                $params = @{
+                    Context                  = $Context
+                    Name                     = $Name
+                    Description              = $Description
+                    Homepage                 = $Homepage
+                    Visibility               = $Visibility
+                    HasIssues                = $HasIssues
+                    HasProjects              = $HasProjects
+                    HasWiki                  = $HasWiki
+                    HasDiscussions           = $HasDiscussions
+                    HasDownloads             = $HasDownloads
+                    IsTemplate               = $IsTemplate
+                    TeamId                   = $TeamId
+                    AutoInit                 = $AutoInit
+                    AllowSquashMerge         = $AllowSquashMerge
+                    AllowMergeCommit         = $AllowMergeCommit
+                    AllowRebaseMerge         = $AllowRebaseMerge
+                    AllowAutoMerge           = $AllowAutoMerge
+                    DeleteBranchOnMerge      = $DeleteBranchOnMerge
+                    SquashMergeCommitTitle   = $SquashMergeCommitTitle
+                    SquashMergeCommitMessage = $SquashMergeCommitMessage
+                    MergeCommitTitle         = $MergeCommitTitle
+                    MergeCommitMessage       = $MergeCommitMessage
+                    GitignoreTemplate        = $GitignoreTemplate
+                    LicenseTemplate          = $LicenseTemplate
+                }
+                $params | Remove-HashtableEntry -NullOrEmptyValues
                 if ($PSCmdlet.ShouldProcess("repository for user [$Name]", 'Create')) {
                     New-GitHubRepositoryUser @params
                 }
             }
             'org' {
+                $params = @{
+                    Context                  = $Context
+                    Owner                    = $Owner
+                    Name                     = $Name
+                    Description              = $Description
+                    Homepage                 = $Homepage
+                    Visibility               = $Visibility
+                    HasIssues                = $HasIssues
+                    HasProjects              = $HasProjects
+                    HasWiki                  = $HasWiki
+                    HasDownloads             = $HasDownloads
+                    IsTemplate               = $IsTemplate
+                    TeamId                   = $TeamId
+                    AutoInit                 = $AutoInit
+                    AllowSquashMerge         = $AllowSquashMerge
+                    AllowMergeCommit         = $AllowMergeCommit
+                    AllowRebaseMerge         = $AllowRebaseMerge
+                    AllowAutoMerge           = $AllowAutoMerge
+                    DeleteBranchOnMerge      = $DeleteBranchOnMerge
+                    SquashMergeCommitTitle   = $SquashMergeCommitTitle
+                    SquashMergeCommitMessage = $SquashMergeCommitMessage
+                    MergeCommitTitle         = $MergeCommitTitle
+                    MergeCommitMessage       = $MergeCommitMessage
+                    GitignoreTemplate        = $GitignoreTemplate
+                    LicenseTemplate          = $LicenseTemplate
+                }
+                $params | Remove-HashtableEntry -NullOrEmptyValues
                 if ($PSCmdlet.ShouldProcess("repository for organization [$Owner/$Name]", 'Create')) {
                     New-GitHubRepositoryOrg @params
                 }
@@ -393,7 +414,8 @@ filter New-GitHubRepository {
                         IncludeAllBranches = $IncludeAllBranches
                         Description        = $Description
                         Private            = $Visibility -eq 'private'
-                    } | Remove-HashtableEntry -NullOrEmptyValues
+                    }
+                    $params | Remove-HashtableEntry -NullOrEmptyValues
                     New-GitHubRepositoryFromTemplate @params
                 }
             }
@@ -409,12 +431,12 @@ filter New-GitHubRepository {
                         Organization      = $Owner
                         Name              = $Name
                         DefaultBranchOnly = $DefaultBranchOnly
-                    } | Remove-HashtableEntry -NullOrEmptyValues
+                    }
+                    $params | Remove-HashtableEntry -NullOrEmptyValues
                     New-GitHubRepositoryAsFork @params
                 }
             }
         }
-
     }
 
     end {
