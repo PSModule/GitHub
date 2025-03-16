@@ -77,7 +77,7 @@ filter Get-GitHubEnvironmentList {
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            Write-Output $_.Response.environments
         }
     }
 

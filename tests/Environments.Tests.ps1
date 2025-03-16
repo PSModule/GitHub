@@ -166,7 +166,6 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
     BeforeAll {
         Connect-GitHubAccount -ClientID $env:TEST_APP_ENT_CLIENT_ID -PrivateKey $env:TEST_APP_ENT_PRIVATE_KEY
         $owner = 'psmodule-test-org3'
-        # repo: EnvironmentTest
     }
     AfterAll {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
@@ -211,7 +210,6 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
     BeforeAll {
         Connect-GitHubAccount -ClientID $env:TEST_APP_ORG_CLIENT_ID -PrivateKey $env:TEST_APP_ORG_PRIVATE_KEY
         $owner = 'psmodule-test-org'
-        # repo: EnvironmentTest
     }
     AfterAll {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount

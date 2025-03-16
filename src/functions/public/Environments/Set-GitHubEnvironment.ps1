@@ -60,7 +60,6 @@ filter Set-GitHubEnvironment {
         # The people or teams that may review jobs that reference the environment. You can list up to six users or teams as reviewers. The reviewers
         # must have at least read access to the repository. Only one of the required reviewers needs to approve the job for it to proceed.
         [Parameter(ValueFromPipelineByPropertyName)]
-        [Alias('reviewers')]
         [array] $Reviewers,
 
         # The type of deployment branch policy for this environment. To allow all branches to deploy, set to null.
