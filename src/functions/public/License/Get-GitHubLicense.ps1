@@ -80,7 +80,7 @@
 Register-ArgumentCompleter -CommandName Get-GitHubLicense -ParameterName Name -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter
-    Get-GitHubLicenseList | Select-Object -ExpandProperty Name | Where-Object { $_ -like "$wordToComplete*" } | ForEach-Object {
+    Get-GitHubLicense | Select-Object -ExpandProperty Name | Where-Object { $_ -like "$wordToComplete*" } | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
     }
 }
