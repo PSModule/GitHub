@@ -9,15 +9,15 @@
     </tr>
     <tr>
         <td>Covered functions</td>
-        <td>177</td>
+        <td>179</td>
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>842</td>
+        <td>840</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>17.37%</td>
+        <td>17.57%</td>
     </tr>
 </table>
 
@@ -132,7 +132,7 @@
 | `/orgs/{org}/actions/secrets/{secret_name}/repositories`                                                                  |                    | :x:                |                    |                    | :x:                |
 | `/orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}`                                                  | :x:                |                    |                    |                    | :x:                |
 | `/orgs/{org}/actions/variables`                                                                                           |                    | :white_check_mark: |                    | :white_check_mark: |                    |
-| `/orgs/{org}/actions/variables/{name}`                                                                                    | :white_check_mark: | :white_check_mark: | :x:                |                    |                    |
+| `/orgs/{org}/actions/variables/{name}`                                                                                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
 | `/orgs/{org}/actions/variables/{name}/repositories`                                                                       |                    | :white_check_mark: |                    |                    | :x:                |
 | `/orgs/{org}/actions/variables/{name}/repositories/{repository_id}`                                                       | :x:                |                    |                    |                    | :x:                |
 | `/orgs/{org}/attestations/{subject_digest}`                                                                               |                    | :x:                |                    |                    |                    |
@@ -437,7 +437,7 @@
 | `/repos/{owner}/{repo}/environments/{environment_name}/secrets/public-key`                                                |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}`                                             | :x:                | :x:                |                    |                    | :x:                |
 | `/repos/{owner}/{repo}/environments/{environment_name}/variables`                                                         |                    | :white_check_mark: |                    | :white_check_mark: |                    |
-| `/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}`                                                  | :white_check_mark: | :white_check_mark: | :x:                |                    |                    |
+| `/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}`                                                  | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
 | `/repos/{owner}/{repo}/events`                                                                                            |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/forks`                                                                                             |                    | :white_check_mark: |                    | :white_check_mark: |                    |
 | `/repos/{owner}/{repo}/git/blobs`                                                                                         |                    |                    |                    | :x:                |                    |
