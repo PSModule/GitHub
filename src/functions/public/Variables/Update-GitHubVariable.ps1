@@ -102,6 +102,7 @@ function Update-GitHubVariable {
             Value                = $Value
             Visibility           = $Visibility
             SelectedRepositories = $SelectedRepositories
+            ErrorAction          = 'Stop'
         }
         $params | Remove-HashtableEntry -NullOrEmptyValues
         switch ($PSCmdlet.ParameterSetName) {

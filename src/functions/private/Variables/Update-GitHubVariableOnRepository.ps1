@@ -68,9 +68,7 @@ function Update-GitHubVariableOnRepository {
         }
 
         if ($PSCmdlet.ShouldProcess("variable [$Name] on [$Owner/$Repository]", 'Update')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
+            $null = Invoke-GitHubAPI @inputObject
         }
     }
 

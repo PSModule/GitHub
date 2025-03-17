@@ -81,9 +81,7 @@ function Update-GitHubVariableOnEnvironment {
         }
 
         if ($PSCmdlet.ShouldProcess("variable [$Name] on [$Owner/$Repository/$Environment]", 'Update')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
+            $null = Invoke-GitHubAPI @inputObject
         }
     }
 
