@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Configuration>
     <ViewDefinitions>
-        <!-- Table View -->
         <View>
             <Name>GitHubWebhookTable</Name>
             <ViewSelectedBy>
@@ -79,8 +78,6 @@
                 </TableRowEntries>
             </TableControl>
         </View>
-
-        <!-- List View -->
         <View>
             <Name>GitHubWebhookList</Name>
             <ViewSelectedBy>
