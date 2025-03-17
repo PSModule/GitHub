@@ -119,17 +119,18 @@ function New-GitHubVariable {
                 break
             }
         }
-        if ($PassThru) {
-            $params = @{
-                Owner       = $Owner
-                Repository  = $Repository
-                Environment = $Environment
-                Name        = $Name
-                Context     = $Context
-            }
-            $params | Remove-HashtableEntry -NullOrEmptyValues
-            Get-GitHubVariable @params
+        $params = @{
+            Owner       = $Owner
+            Repository  = $Repository
+            Environment = $Environment
+            Name        = $Name
+            Context     = $Context
         }
+        $params | Remove-HashtableEntry -NullOrEmptyValues
+        $tmp = $script:GitHub.Config.RetryCount
+        $script:GitHub.Config.RetryCount = 5
+        Get-GitHubVariable @params
+        $script:GitHub.Config.RetryCount = $tmp
     }
 
     end {
