@@ -1,55 +1,144 @@
 function Get-GitHubVariable {
     <#
         .SYNOPSIS
-        Gets the GitHub variable details for a Organisation, Repository or Environment.
+        Retrieves a variable from GitHub based on the specified scope.
 
         .DESCRIPTION
-        Gets the GitHub variable details for a Organisation, Repository or Environment.
-
-        .PARAMETER Owner
-        The account owner of the repository. The name is not case-sensitive.
-
-        .PARAMETER Repository
-        The name of the repository. The name is not case-sensitive.
-
-        .PARAMETER Environment
-        The name of the repository environment.
-
-        .PARAMETER Name
-        The name of the variable. If left blank, all variable names are returned.
-
-        .PARAMETER Context
-        The context to run the command in. Used to get the details for the API call.
+        Gets a variable from GitHub, which can be at the organization, repository, or environment level.
+        This function determines the appropriate API call based on the provided parameters.
+        Authenticated users must have the required access rights to read variables.
+        OAuth tokens and personal access tokens (classic) need the `repo` scope for repositories,
+        `admin:org` for organizations, and collaborator access for environments.
 
         .EXAMPLE
-        Get-GitHubVariable -Owner "octocat" -Repository "Hello-World" -Environment "dev"
-        Get-GitHubVariable -Owner "octocat" -Repository "Hello-World" -Name "myVariable"
-        Get-GitHubVariable -Owner "octocat" -Name "myVariable"
+        Get-GitHubVariable -Owner 'octocat' -Name 'HOST_NAME' -Context $GitHubContext
 
-        .NOTES
-        [Gets an Organisation Variable](https://docs.github.com/en/rest/actions/variables?apiVersion=2022-11-28#get-an-organization-variable)
-        [Gets an Repository Variable](https://docs.github.com/en/rest/actions/variables?apiVersion=2022-11-28#get-a-repository-variable)
-        [Gets an Environment Variable](https://docs.github.com/en/rest/actions/variables?apiVersion=2022-11-28#get-an-environment-variable)
+        Output:
+        ```powershell
+        Name        : HOST_NAME
+        Value       : github.com
+        Owner       : octocat
+        Repository  :
+        Environment :
+        ```
+
+        Retrieves the specified variable from the organization level.
+
+        .EXAMPLE
+        Get-GitHubVariable -Owner 'octocat' -Repository 'Hello-World' -Name 'GUID' -Context $GitHubContext
+
+        Output:
+        ```powershell
+        Name        : GUID
+        Value       : 354aa0b0-65b1-46c8-9c3e-1576f4167a41
+        Owner       : octocat
+        Repository  : Hello-World
+        Environment :
+        ```
+
+        Retrieves the specified variable from the repository level.
+
+        .EXAMPLE
+        Get-GitHubVariable -Owner 'octocat' -Repository 'Hello-World' -Environment 'dev' -Name 'DB_SERVER' -Context $GitHubContext
+
+        Output:
+        ```powershell
+        Name        : DB_SERVER
+        Value       : db.example.com
+        Owner       : octocat
+        Repository  : Hello-World
+        Environment : dev
+        ```
+
+        Retrieves the specified variable from the environment level within a repository.
+
+        .EXAMPLE
+        Get-GitHubVariable -Owner 'octocat' -Context $GitHubContext
+
+        Output:
+        ```powershell
+        Name        : MAX_THREADS
+        Value       : 10
+        Owner       : octocat
+        Repository  :
+        Environment :
+
+        Name        : API_TIMEOUT
+        Value       : 30
+        Owner       : octocat
+        Repository  :
+        Environment :
+        ```
+
+        Retrieves all variables available at the organization level.
+
+        .EXAMPLE
+        Get-GitHubVariable -Owner 'octocat' -Repository 'Hello-World' -Context $GitHubContext
+
+        Output:
+        ```powershell
+        Name        : LOG_LEVEL
+        Value       : INFO
+        Owner       : octocat
+        Repository  : Hello-World
+        Environment :
+
+        Name        : FEATURE_FLAG
+        Value       : Enabled
+        Owner       : octocat
+        Repository  : Hello-World
+        Environment :
+        ```
+
+        Retrieves all variables available at the repository level.
+
+        .EXAMPLE
+        Get-GitHubVariable -Owner 'octocat' -Repository 'Hello-World' -Environment 'staging' -Context $GitHubContext
+
+        Output:
+        ```powershell
+        Name        : CACHE_DURATION
+        Value       : 3600
+        Owner       : octocat
+        Repository  : Hello-World
+        Environment : staging
+
+        Name        : CONNECTION_RETRIES
+        Value       : 5
+        Owner       : octocat
+        Repository  : Hello-World
+        Environment : staging
+        ```
+
+        Retrieves all variables available in the 'staging' environment within the repository.
 
         .OUTPUTS
-        psobject[]
+        GitHubVariable
+
+        .NOTES
+        An object representing the GitHub variable, containing Name, Value, Owner,
+        Repository, and Environment details.
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Variables/Get-GitHubVariable
     #>
-    [OutputType([psobject[]])]
+    [OutputType([GitHubVariable])]
     [CmdletBinding()]
     param(
-        [Parameter(ParameterSetName = 'Environment', Mandatory)]
-        [Parameter(ParameterSetName = 'Organization', Mandatory)]
-        [Parameter(ParameterSetName = 'Repository', Mandatory)]
+        # The account owner of the repository. The name is not case sensitive.
+        [Parameter(Mandatory, ParameterSetName = 'Owner')]
+        [Parameter(Mandatory, ParameterSetName = 'Repository')]
+        [Parameter(Mandatory, ParameterSetName = 'Environment')]
         [Alias('Organization', 'User')]
         [string] $Owner,
 
-        # The name of the repository. The name is not case sensitive.
-        [Parameter(ParameterSetName = 'Environment', Mandatory)]
-        [Parameter(ParameterSetName = 'Repository', Mandatory)]
+        # The name of the repository without the .git extension. The name is not case sensitive.
+        [Parameter(Mandatory, ParameterSetName = 'Repository')]
+        [Parameter(Mandatory, ParameterSetName = 'Environment')]
         [string] $Repository,
 
-        # The name of the repository environment.
-        [Parameter(ParameterSetName = 'Environment', Mandatory)]
+        # The name of the environment.
+        [Parameter(Mandatory, ParameterSetName = 'Environment')]
         [string] $Environment,
 
         # The name of the variable.
@@ -70,31 +159,31 @@ function Get-GitHubVariable {
     }
 
     process {
-        $inputObject = @{
-            Method      = 'Get'
-            APIEndpoint = switch ($PSCmdlet.ParameterSetName) {
-                'Environment' {
-                    "/repos/$Owner/$Repository/environments/$Environment/variables"
-                    break
+        switch ($PSCmdlet.ParameterSetName) {
+            'Owner' {
+                if ($Name) {
+                    Get-GitHubVariableOwnerByName -Owner $Owner -Name $Name -Context $Context
+                } else {
+                    Get-GitHubVariableOwnerList -Owner $Owner -Context $Context
                 }
-                'Repository' {
-                    "/repos/$Owner/$Repository/actions/variables"
-                    break
-                }
-                'Organization' {
-                    "/orgs/$Owner/actions/variables"
-                    break
-                }
+                break
             }
-            Context     = $Context
-        }
-
-        if (-not [string]::IsNullOrWhiteSpace($Name)) {
-            $inputObject.APIEndpoint += "/$Name"
-        }
-
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            'Repository' {
+                if ($Name) {
+                    Get-GitHubVariableRepositoryByName -Owner $Owner -Repository $Repository -Name $Name -Context $Context
+                } else {
+                    Get-GitHubVariableRepositoryList -Owner $Owner -Repository $Repository -Context $Context
+                }
+                break
+            }
+            'Environment' {
+                if ($Name) {
+                    Get-GitHubVariableEnvironmentByName -Owner $Owner -Repository $Repository -Environment $Environment -Name $Name -Context $Context
+                } else {
+                    Get-GitHubVariableEnvironmentList -Owner $Owner -Repository $Repository -Environment $Environment -Context $Context
+                }
+                break
+            }
         }
     }
 
