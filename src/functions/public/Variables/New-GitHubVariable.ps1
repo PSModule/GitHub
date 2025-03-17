@@ -3,11 +3,11 @@ function New-GitHubVariable {
 
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-        'PSUseShouldProcessForStateChangingFunctions', '',
-        Scope = 'Function', Justification = 'This check is performed in the private functions.'
+        'PSShouldProcess', '', Scope = 'Function',
+        Justification = 'This check is performed in the private functions.'
     )]
     [OutputType([void])]
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory, ParameterSetName = 'Organization')]
