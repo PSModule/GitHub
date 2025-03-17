@@ -126,7 +126,7 @@ function Get-GitHubVariable {
     [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(Mandatory, ParameterSetName = 'Owner')]
+        [Parameter(Mandatory, ParameterSetName = 'Organization')]
         [Parameter(Mandatory, ParameterSetName = 'Repository')]
         [Parameter(Mandatory, ParameterSetName = 'Environment')]
         [Alias('Organization', 'User')]
@@ -160,7 +160,7 @@ function Get-GitHubVariable {
 
     process {
         switch ($PSCmdlet.ParameterSetName) {
-            'Owner' {
+            'Organization' {
                 if ($Name) {
                     Get-GitHubVariableOwnerByName -Owner $Owner -Name $Name -Context $Context
                 } else {
