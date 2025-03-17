@@ -41,6 +41,6 @@
     if ([string]::IsNullOrEmpty($Value)) {
         $Value = $Context.$Name
     }
-    Write-Debug "$Name`:  [$Value]"
+    Write-Debug "$Name`: [$Value]"
     return $Value
 }

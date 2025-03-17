@@ -43,12 +43,12 @@ Describe 'GitHub' {
     Context 'Actions' {
         It 'Get-GitHubEventData - Gets data about the event that triggered the workflow' {
             $workflow = Get-GitHubEventData
-            Write-Verbose ($workflow | Format-Table | Out-String) -Verbose
+            Write-Verbose ($workflow | Format-List | Out-String) -Verbose
             $workflow | Should -Not -BeNullOrEmpty
         }
         It 'Get-GitHubRunnerData - Gets data about the runner that is running the workflow' {
             $workflow = Get-GitHubRunnerData
-            Write-Verbose ($workflow | Format-Table | Out-String) -Verbose
+            Write-Verbose ($workflow | Format-List | Out-String) -Verbose
             $workflow | Should -Not -BeNullOrEmpty
         }
     }
@@ -199,34 +199,37 @@ string
         }
     }
     Context 'IssueParser' {
-        It 'ConvertFrom-IssueForm - Should return a PSCustomObject' {
+        BeforeAll {
             $issueTestFilePath = Join-Path -Path $PSScriptRoot -ChildPath 'IssueForm.md'
-            $data = Get-Content -Path $issueTestFilePath -Raw | ConvertFrom-IssueForm
-            Write-Verbose ($data | Format-Table | Out-String) -Verbose
-            $data | Should -BeOfType 'PSCustomObject'
+            Write-Verbose "Reading from $issueTestFilePath" -Verbose
+            $content = Get-Content -Path $issueTestFilePath -Raw
+            Write-Verbose ($content | Out-String) -Verbose
+            $dataObject = $content | ConvertFrom-IssueForm -Verbose
+            Write-Verbose "As PSCustomObject" -Verbose
+            Write-Verbose ($dataObject | Format-List | Out-String) -Verbose
+            $dataHashtable = $content | ConvertFrom-IssueForm -AsHashtable -Verbose
+            Write-Verbose "As Hashtable" -Verbose
+            Write-Verbose ($dataHashtable | Out-String) -Verbose
+        }
+
+        It 'ConvertFrom-IssueForm - Should return a PSCustomObject' {
+            $dataObject | Should -BeOfType 'PSCustomObject'
         }
 
         It 'ConvertFrom-IssueForm -AsHashtable - Should return a hashtable' {
-            $issueTestFilePath = Join-Path -Path $PSScriptRoot -ChildPath 'IssueForm.md'
-            $data = Get-Content -Path $issueTestFilePath -Raw | ConvertFrom-IssueForm -AsHashtable
-            Write-Verbose ($data | Out-String) -Verbose
-            $data | Should -BeOfType 'hashtable'
+            $dataHashtable | Should -BeOfType 'hashtable'
         }
 
         It "'Type with spaces' should contain 'Action'" {
-            $issueTestFilePath = Join-Path -Path $PSScriptRoot -ChildPath 'IssueForm.md'
-            $data = Get-Content -Path $issueTestFilePath -Raw | ConvertFrom-IssueForm -AsHashtable
-            Write-Verbose ($data['Type with spaces'] | Out-String) -Verbose
-            $data.Keys | Should -Contain 'Type with spaces'
-            $data['Type with spaces'] | Should -Be 'Action'
+            Write-Verbose ($dataHashtable['Type with spaces'] | Out-String) -Verbose
+            $dataHashtable.Keys | Should -Contain 'Type with spaces'
+            $dataHashtable['Type with spaces'] | Should -Be 'Action'
         }
 
         It "'Multiline' should contain a multiline string with 3 lines" {
-            $issueTestFilePath = Join-Path -Path $PSScriptRoot -ChildPath 'IssueForm.md'
-            $data = Get-Content -Path $issueTestFilePath -Raw | ConvertFrom-IssueForm -AsHashtable
-            Write-Verbose ($data['Multiline'] | Out-String) -Verbose
-            $data.Keys | Should -Contain 'Multiline'
-            $data['Multiline'] | Should -Be @'
+            Write-Verbose ($dataHashtable['Multiline'] | Out-String) -Verbose
+            $dataHashtable.Keys | Should -Contain 'Multiline'
+            $dataHashtable['Multiline'] | Should -Be @'
 test
 is multi
 line
@@ -234,13 +237,11 @@ line
         }
 
         It "'OS' should contain a hashtable with 3 items" {
-            $issueTestFilePath = Join-Path -Path $PSScriptRoot -ChildPath 'IssueForm.md'
-            $data = Get-Content -Path $issueTestFilePath -Raw | ConvertFrom-IssueForm -AsHashtable
-            Write-Verbose ($data['OS'] | Out-String) -Verbose
-            $data.Keys | Should -Contain 'OS'
-            $data['OS'].Windows | Should -BeTrue
-            $data['OS'].Linux | Should -BeTrue
-            $data['OS'].Mac | Should -BeFalse
+            Write-Verbose ($dataHashtable['OS'] | Out-String) -Verbose
+            $dataHashtable.Keys | Should -Contain 'OS'
+            $dataHashtable['OS'].Windows | Should -BeTrue
+            $dataHashtable['OS'].Linux | Should -BeTrue
+            $dataHashtable['OS'].Mac | Should -BeFalse
         }
     }
 }
