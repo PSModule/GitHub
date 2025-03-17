@@ -35,7 +35,7 @@ function New-GitHubVariable {
         'PSShouldProcess', '', Scope = 'Function',
         Justification = 'This check is performed in the private functions.'
     )]
-    [OutputType([void])]
+    [OutputType([GitHubVariable])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.

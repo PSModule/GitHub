@@ -41,6 +41,7 @@ function Remove-GitHubVariable {
         'PSShouldProcess', '', Scope = 'Function',
         Justification = 'This check is performed in the private functions.'
     )]
+    [OutputType([void])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
         [Parameter(Mandatory, ParameterSetName = 'Organization', ValueFromPipelineByPropertyName)]
