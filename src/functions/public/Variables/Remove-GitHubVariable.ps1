@@ -62,7 +62,7 @@ function Remove-GitHubVariable {
         [Parameter(ValueFromPipelineByPropertyName)]
         [object] $Context = (Get-GitHubContext),
 
-        [Parameter(Mandatory, ParameterSetName = 'ArrayInput')]
+        [Parameter(Mandatory, ParameterSetName = 'ArrayInput', ValueFromPipeline)]
         [GitHubVariable[]] $InputObject
     )
 
