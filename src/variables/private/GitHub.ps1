@@ -17,7 +17,7 @@
         ApiVersion                    = '2022-11-28'
         HttpVersion                   = '2.0'
         PerPage                       = 100
-        RetryCount                    = 10
+        RetryCount                    = 0
         RetryInterval                 = 1
     }
     Config             = $null

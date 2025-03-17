@@ -82,11 +82,13 @@ filter Invoke-GitHubAPI {
         [string] $ApiVersion,
 
         # Specifies how many times PowerShell retries a connection when a failure code between 400 and 599, inclusive or 304 is received.
+        [Parameter()]
         [int] $RetryCount = $script:GitHub.Config.RetryCount,
 
         # Specifies the interval between retries for the connection when a failure code between 400 and 599, inclusive or 304 is received.
         # When the failure code is 429 and the response includes the Retry-After property in its headers, the cmdlet uses that value for the retry
         # interval, even if this parameter is specified.
+        [Parameter()]
         [int] $RetryInterval = $script:GitHub.Config.RetryInterval,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -139,15 +141,17 @@ filter Invoke-GitHubAPI {
         }
 
         $APICall = @{
-            Uri            = $Uri
-            Method         = [string]$Method
-            Headers        = $Headers
-            Authentication = 'Bearer'
-            Token          = $Token
-            ContentType    = $ContentType
-            InFile         = $UploadFilePath
-            OutFile        = $DownloadFilePath
-            HttpVersion    = [string]$HttpVersion
+            Uri               = $Uri
+            Method            = [string]$Method
+            Headers           = $Headers
+            Authentication    = 'Bearer'
+            Token             = $Token
+            ContentType       = $ContentType
+            InFile            = $UploadFilePath
+            OutFile           = $DownloadFilePath
+            HttpVersion       = [string]$HttpVersion
+            MaximumRetryCount = $RetryCount
+            RetryIntervalSec  = $RetryInterval
         }
         $APICall | Remove-HashtableEntry -NullOrEmptyValues
 
@@ -188,7 +192,7 @@ filter Invoke-GitHubAPI {
                         }
                     }
                 }
-                $response = Invoke-WebRequest @APICall -MaximumRetryCount $RetryCount -RetryIntervalSec $RetryInterval
+                $response = Invoke-WebRequest @APICall
 
                 $headers = @{}
                 foreach ($item in $response.Headers.GetEnumerator()) {
