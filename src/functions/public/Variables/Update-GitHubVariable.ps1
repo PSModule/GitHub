@@ -124,7 +124,7 @@ function Update-GitHubVariable {
                 Owner       = $Owner
                 Repository  = $Repository
                 Environment = $Environment
-                Name        = $Name
+                Name        = $PSBoundParameters.ContainsKey('NewName') ? $NewName : $Name
                 Context     = $Context
             }
             $params | Remove-HashtableEntry -NullOrEmptyValues
