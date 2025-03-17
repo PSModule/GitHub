@@ -1,13 +1,21 @@
 function Remove-GitHubVariableOnOwner {
     <#
         .SYNOPSIS
+        Delete an organization variable.
 
         .DESCRIPTION
+        Deletes an organization variable using the variable name.
+        Authenticated users must have collaborator access to a repository to create, update, or read variables.
+        OAuth tokens and personal access tokens (classic) need the`admin:org` scope to use this endpoint. If the repository is private,
+        OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        Remove-GitHubVariableOnOwner -Owner 'octocat' -Name 'HOST_NAME' -Context $GitHubContext
+
+        Deletes the specified variable from the specified organization.
 
         .LINK
-        []()
+        [Delete an organization variable](https://docs.github.com/rest/actions/variables#delete-an-organization-variable)
     #>
     [OutputType([void])]
     [CmdletBinding(SupportsShouldProcess)]
@@ -41,9 +49,9 @@ function Remove-GitHubVariableOnOwner {
 
         if ($PSCmdlet.ShouldProcess("variable [$Name] on [$Owner]", 'Delete')) {
             Invoke-GitHubAPI @inputObject
-            # Invoke-GitHubAPI @inputObject | ForeEach-Object {
-            #     Write-Output $_.Response
-            # }
+            Invoke-GitHubAPI @inputObject | ForeEach-Object {
+                Write-Output $_.Response
+            }
         }
     }
 

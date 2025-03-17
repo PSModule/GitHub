@@ -1,13 +1,20 @@
 function Remove-GitHubVariableOnEnvironment {
     <#
         .SYNOPSIS
+        Delete an environment variable.
 
         .DESCRIPTION
+        Deletes an environment variable using the variable name.
+        Authenticated users must have collaborator access to a repository to create, update, or read variables.
+        OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        Remove-GitHubVariableOnEnvironment -Owner 'octocat' -Repository 'Hello-World' -Environment 'dev' -Name 'HOST_NAME' -Context $GitHubContext
+
+        Deletes the specified variable from the specified environment.
 
         .LINK
-        []()
+        [Delete an environment variable](https://docs.github.com/rest/actions/variables#delete-an-environment-variable)
     #>
     [OutputType([void])]
     [CmdletBinding(SupportsShouldProcess)]
@@ -48,10 +55,9 @@ function Remove-GitHubVariableOnEnvironment {
         }
 
         if ($PSCmdlet.ShouldProcess("variable [$Name] on [$Owner/$Repository/$Environment]", 'Delete')) {
-            Invoke-GitHubAPI @inputObject
-            # Invoke-GitHubAPI @inputObject | ForeEach-Object {
-            #     Write-Output $_.Response
-            # }
+            Invoke-GitHubAPI @inputObject | ForeEach-Object {
+                Write-Output $_.Response
+            }
         }
     }
 
