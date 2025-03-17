@@ -81,6 +81,14 @@ filter Invoke-GitHubAPI {
         [Parameter()]
         [string] $ApiVersion,
 
+        # Specifies how many times PowerShell retries a connection when a failure code between 400 and 599, inclusive or 304 is received.
+        [int] $RetryCount = $script:GitHub.Config.RetryCount,
+
+        # Specifies the interval between retries for the connection when a failure code between 400 and 599, inclusive or 304 is received.
+        # When the failure code is 429 and the response includes the Retry-After property in its headers, the cmdlet uses that value for the retry
+        # interval, even if this parameter is specified.
+        [int] $RetryInterval = $script:GitHub.Config.RetryInterval,
+
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
@@ -180,7 +188,7 @@ filter Invoke-GitHubAPI {
                         }
                     }
                 }
-                $response = Invoke-WebRequest @APICall
+                $response = Invoke-WebRequest @APICall -MaximumRetryCount $RetryCount -RetryIntervalSec $RetryInterval
 
                 $headers = @{}
                 foreach ($item in $response.Headers.GetEnumerator()) {
