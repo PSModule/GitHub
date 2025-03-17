@@ -1,31 +1,36 @@
-function New-GitHubVariableOnOwner {
+function Update-GitHubVariableOnOwner {
     <#
         .SYNOPSIS
-        Create an organization variable.
+        Update an organization variable.
 
         .DESCRIPTION
-        Creates an organization variable that you can reference in a GitHub Actions workflow.
+        Updates an organization variable that you can reference in a GitHub Actions workflow.
         Authenticated users must have collaborator access to a repository to create, update, or read variables.
-        OAuth tokens and personal access tokens (classic) need the`admin:org` scope to use this endpoint. If the repository is private,
-        OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
+        OAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint. If the repository is private,
+        the `repo` scope is also required.
 
         .EXAMPLE
-        New-GitHubVariableOnOwner -Owner 'octocat' -Name 'HOST_NAME' -Value 'github.com' -Context $GitHubContext
+        Update-GitHubVariableOnOwner -Owner 'octocat' -Name 'HOST_NAME' -Value 'github.com' -Context $GitHubContext
 
-        Creates a new organization variable named `HOST_NAME` with the value `github.com` in the specified organization.
+        Updates the organization variable named `HOST_NAME` with the value `github.com` in the specified organization.
 
         .LINK
-        [Create an organization variable](https://docs.github.com/rest/actions/variables#create-an-organization-variable)
+        [Update an organization variable](https://docs.github.com/rest/actions/variables#update-an-organization-variable)
     #>
     [OutputType([void])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
+        # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
         [string] $Owner,
 
         # The name of the variable.
         [Parameter(Mandatory)]
         [string] $Name,
+
+        # The new name of the variable.
+        [Parameter()]
+        [string] $NewName,
 
         # The value of the variable.
         [Parameter(Mandatory)]
@@ -37,7 +42,7 @@ function New-GitHubVariableOnOwner {
         # `all` - The variable is available to all repositories in the organization.
         [Parameter()]
         [ValidateSet('private', 'selected', 'all')]
-        [string] $Visibility = 'private',
+        [string] $Visibility,
 
         # The IDs of the repositories to which the variable is available.
         # This parameter is only used when the `-Visibility` parameter is set to `selected`.
@@ -58,10 +63,18 @@ function New-GitHubVariableOnOwner {
     }
 
     process {
-        $body = @{
-            name       = $Name
-            value      = $Value
-            visibility = $Visibility
+        $body = @{}
+        if ($PSBoundParameters.ContainsKey('NewName')) {
+            $body.name = $NewName
+        }
+        if ($PSBoundParameters.ContainsKey('Value')) {
+            $body.value = $Value
+        }
+        if ($PSBoundParameters.ContainsKey('Visibility')) {
+            $body.visibility = $Visibility
+        }
+        if ($PSBoundParameters.ContainsKey('SelectedRepositories')) {
+            $body.selected_repository_ids = $SelectedRepositories
         }
 
         if ($Visibility -eq 'selected') {
@@ -72,13 +85,13 @@ function New-GitHubVariableOnOwner {
         }
 
         $inputObject = @{
-            Method      = 'POST'
-            APIEndpoint = "/orgs/$Owner/actions/variables"
+            Method      = 'PATCH'
+            APIEndpoint = "/orgs/$Owner/actions/variables/$Name"
             Body        = $body
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("variable [$Name] on [$Owner]", 'Create')) {
+        if ($PSCmdlet.ShouldProcess("variable [$Name] on [$Owner]", 'Update')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }
