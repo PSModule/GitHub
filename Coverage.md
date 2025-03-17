@@ -9,15 +9,15 @@
     </tr>
     <tr>
         <td>Covered functions</td>
-        <td>179</td>
+        <td>180</td>
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>840</td>
+        <td>839</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>17.57%</td>
+        <td>17.66%</td>
     </tr>
 </table>
 
@@ -330,7 +330,7 @@
 | `/repos/{owner}/{repo}/actions/secrets/public-key`                                                                        |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/secrets/{secret_name}`                                                                     | :x:                | :x:                |                    |                    | :x:                |
 | `/repos/{owner}/{repo}/actions/variables`                                                                                 |                    | :white_check_mark: |                    | :white_check_mark: |                    |
-| `/repos/{owner}/{repo}/actions/variables/{name}`                                                                          | :white_check_mark: | :white_check_mark: | :x:                |                    |                    |
+| `/repos/{owner}/{repo}/actions/variables/{name}`                                                                          | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
 | `/repos/{owner}/{repo}/actions/workflows`                                                                                 |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/workflows/{workflow_id}`                                                                   |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable`                                                           |                    |                    |                    |                    | :white_check_mark: |
