@@ -33,7 +33,7 @@ function Update-GitHubVariableOnOwner {
         [string] $NewName,
 
         # The value of the variable.
-        [Parameter(Mandatory)]
+        [Parameter()]
         [string] $Value,
 
         # The visibility of the variable. Can be `private`, `selected`, or `all`.
