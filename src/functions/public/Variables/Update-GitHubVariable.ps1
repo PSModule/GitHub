@@ -100,13 +100,13 @@ function Update-GitHubVariable {
             Context              = $Context
             NewName              = $NewName
             Value                = $Value
-            Visibility           = $Visibility
             SelectedRepositories = $SelectedRepositories
             ErrorAction          = 'Stop'
         }
         $params | Remove-HashtableEntry -NullOrEmptyValues
         switch ($PSCmdlet.ParameterSetName) {
             'Organization' {
+                $params.Visibility = $Visibility
                 Update-GitHubVariableOnOwner @params
                 break
             }

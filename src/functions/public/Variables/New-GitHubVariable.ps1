@@ -95,7 +95,6 @@ function New-GitHubVariable {
             Environment          = $Environment
             Name                 = $Name
             Value                = $Value
-            Visibility           = $Visibility
             SelectedRepositories = $SelectedRepositories
             Context              = $Context
             ErrorAction          = 'Stop'
@@ -103,6 +102,7 @@ function New-GitHubVariable {
         $params | Remove-HashtableEntry -NullOrEmptyValues
         switch ($PSCmdlet.ParameterSetName) {
             'Organization' {
+                $params.Visibility = $Visibility
                 New-GitHubVariableOnOwner @params
                 break
             }
