@@ -53,7 +53,7 @@ function Remove-GitHubVariable {
         [string] $Environment,
 
         # The name of the variable.
-        
+
         [Parameter(ParameterSetName = 'Organization', Mandatory)]
         [Parameter(ParameterSetName = 'Repository', Mandatory)]
         [Parameter(ParameterSetName = 'Environment', Mandatory)]
@@ -74,7 +74,7 @@ function Remove-GitHubVariable {
 
     process {
         $inputObject = @{
-            Method      = "DELETE"
+            Method      = 'DELETE'
             APIEndpoint = switch ($PSCmdlet.ParameterSetName) {
                 'Environment' {
                     "/repos/$Owner/$Repository/environments/$Environment/variables/$Name"
@@ -85,7 +85,7 @@ function Remove-GitHubVariable {
                     break
                 }
                 'Organization' {
-                    "/orgs/$Owner/actions/variables/$Name" 
+                    "/orgs/$Owner/actions/variables/$Name"
                     break
                 }
             }
@@ -95,11 +95,11 @@ function Remove-GitHubVariable {
         if ($PSCmdlet.ShouldProcess("Variable [$Name]", 'DELETE')) {
             Invoke-GitHubAPI @inputObject | ForeEach-Object {
                 Write-Output $_.Response
-            } 
+            }
         }
     }
 
     end {
-        write-Debug "[$stackPath] - End"
+        Write-Debug "[$stackPath] - End"
     }
 }

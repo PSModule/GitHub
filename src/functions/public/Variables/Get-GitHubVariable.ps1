@@ -16,7 +16,7 @@ function Get-GitHubVariable {
     The name of the repository environment.
 
     .PARAMETER Name
-    The name of the variable. If left blank, all variable names are returned.   
+    The name of the variable. If left blank, all variable names are returned.
 
     .PARAMETER Context
     The context to run the command in. Used to get the details for the API call.
@@ -72,29 +72,29 @@ function Get-GitHubVariable {
 
     process {
         $inputObject = @{
-            Method      = "Get"
+            Method      = 'Get'
             APIEndpoint = switch ($PSCmdlet.ParameterSetName) {
-                'Environment' { 
-                    "/repos/$Owner/$Repository/environments/$Environment/variables" 
+                'Environment' {
+                    "/repos/$Owner/$Repository/environments/$Environment/variables"
                     break
                 }
                 'Repository' {
                     "/repos/$Owner/$Repository/actions/variables"
                     break
-                 }
+                }
                 'Organization' {
-                    "/orgs/$Owner/actions/variables" 
+                    "/orgs/$Owner/actions/variables"
                     break
                 }
             }
             Context     = $Context
         }
 
-        if(-not [string]::IsNullOrWhiteSpace($Name)) {
+        if (-not [string]::IsNullOrWhiteSpace($Name)) {
             $inputObject.APIEndpoint += "/$Name"
         }
 
-        Invoke-GitHubAPI @inputObject | Foreach-Object {
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
             Write-Output $_.Response
         }
     }
