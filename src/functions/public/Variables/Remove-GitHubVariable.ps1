@@ -6,7 +6,7 @@ function Remove-GitHubVariable {
         .DESCRIPTION
         Deletes a GitHub variable based on the provided scope (organization, repository, or environment).
 
-        This function routes the request to the appropriate private function based on the provided parameters.
+        Supports pipeline input from Get-GitHubVariable or direct array input.
 
         Authenticated users must have collaborator access to a repository to manage variables.
         OAuth tokens and personal access tokens (classic) require specific scopes:
@@ -14,19 +14,22 @@ function Remove-GitHubVariable {
         - `repo` for repository and environment-level variables.
 
         .EXAMPLE
+        Get-GitHubVariable -Owner 'octocat' -Repository 'Hello-World' | Remove-GitHubVariable
+
+        Removes all variables retrieved from the specified repository.
+
+        .EXAMPLE
         Remove-GitHubVariable -Owner 'octocat' -Name 'HOST_NAME' -Context $GitHubContext
 
         Deletes the specified variable from the specified organization.
 
         .EXAMPLE
-        Remove-GitHubVariable -Owner 'octocat' -Repository 'Hello-World' -Name 'HOST_NAME' -Context $GitHubContext
+        Remove-GitHubVariable -Variable $variablesArray
 
-        Deletes the specified variable from the specified repository.
+        Removes all variables provided in the array.
 
-        .EXAMPLE
-        Remove-GitHubVariable -Owner 'octocat' -Repository 'Hello-World' -Environment 'dev' -Name 'HOST_NAME' -Context $GitHubContext
-
-        Deletes the specified variable from the specified environment.
+        .INPUTS
+        GitHubVariable
 
         .OUTPUTS
         void
@@ -38,33 +41,29 @@ function Remove-GitHubVariable {
         'PSShouldProcess', '', Scope = 'Function',
         Justification = 'This check is performed in the private functions.'
     )]
-    [OutputType([psobject[]])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
-        # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory, ParameterSetName = 'Organization', ValueFromPipelineByPropertyName)]
         [Parameter(Mandatory, ParameterSetName = 'Repository', ValueFromPipelineByPropertyName)]
         [Parameter(Mandatory, ParameterSetName = 'Environment', ValueFromPipelineByPropertyName)]
         [Alias('Organization', 'User')]
         [string] $Owner,
 
-        # The name of the repository. The name is not case sensitive.
         [Parameter(Mandatory, ParameterSetName = 'Repository', ValueFromPipelineByPropertyName)]
         [Parameter(Mandatory, ParameterSetName = 'Environment', ValueFromPipelineByPropertyName)]
         [string] $Repository,
 
-        # The name of the repository environment.
         [Parameter(Mandatory, ParameterSetName = 'Environment', ValueFromPipelineByPropertyName)]
         [string] $Environment,
 
-        # The name of the variable.
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Name,
 
-        # The context to run the command in. Used to get the details for the API call.
-        # Can be either a string or a GitHubContext object.
-        [Parameter()]
-        [object] $Context = (Get-GitHubContext)
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [object] $Context = (Get-GitHubContext),
+
+        [Parameter(Mandatory, ParameterSetName = 'ArrayInput')]
+        [GitHubVariable[]] $InputObject
     )
 
     begin {
@@ -76,17 +75,61 @@ function Remove-GitHubVariable {
 
     process {
         switch ($PSCmdlet.ParameterSetName) {
+            'ArrayInput' {
+                foreach ($item in $InputObject) {
+                    if ($item.Environment) {
+                        $params = @{
+                            Owner       = $item.Owner
+                            Repository  = $item.Repository
+                            Environment = $item.Environment
+                            Name        = $item.Name
+                            Context     = $Context
+                        }
+                        Remove-GitHubVariableOnEnvironment @params
+                    } elseif ($item.Repository) {
+                        $params = @{
+                            Owner      = $item.Owner
+                            Repository = $item.Repository
+                            Name       = $item.Name
+                            Context    = $Context
+                        }
+                        Remove-GitHubVariableOnRepository @params
+                    } else {
+                        $params = @{
+                            Owner   = $item.Owner
+                            Name    = $item.Name
+                            Context = $Context
+                        }
+                        Remove-GitHubVariableOnOwner @params
+                    }
+                }
+            }
             'Organization' {
-                Remove-GitHubVariableOnOwner -Owner $Owner -Name $Name -Context $Context
-                break
+                $params = @{
+                    Owner   = $Owner
+                    Name    = $Name
+                    Context = $Context
+                }
+                Remove-GitHubVariableOnOwner @params
             }
             'Repository' {
-                Remove-GitHubVariableOnRepository -Owner $Owner -Repository $Repository -Name $Name -Context $Context
-                break
+                $params = @{
+                    Owner      = $Owner
+                    Repository = $Repository
+                    Name       = $Name
+                    Context    = $Context
+                }
+                Remove-GitHubVariableOnRepository @params
             }
             'Environment' {
-                Remove-GitHubVariableOnEnvironment -Owner $Owner -Repository $Repository -Environment $Environment -Name $Name -Context $Context
-                break
+                $params = @{
+                    Owner       = $Owner
+                    Repository  = $Repository
+                    Environment = $Environment
+                    Name        = $Name
+                    Context     = $Context
+                }
+                Remove-GitHubVariableOnEnvironment @params
             }
         }
     }
