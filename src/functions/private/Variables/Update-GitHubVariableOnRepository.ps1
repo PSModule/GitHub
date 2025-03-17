@@ -62,7 +62,7 @@ function Update-GitHubVariableOnRepository {
 
         $inputObject = @{
             Method      = 'PATCH'
-            APIEndpoint = "/repos/$Owner/$Repository/actions/variables"
+            APIEndpoint = "/repos/$Owner/$Repository/actions/variables/$Name"
             Body        = $body
             Context     = $Context
         }
