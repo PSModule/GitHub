@@ -75,6 +75,10 @@ function New-GitHubVariable {
         [Parameter(ParameterSetName = 'Organization')]
         [UInt64[]] $SelectedRepositories,
 
+        # If specified, the function will return the updated variable object.
+        [Parameter()]
+        [switch] $PassThru,
+
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
@@ -89,42 +93,41 @@ function New-GitHubVariable {
     }
 
     process {
+        $params = @{
+            Owner                = $Owner
+            Repository           = $Repository
+            Environment          = $Environment
+            Name                 = $Name
+            Value                = $Value
+            Visibility           = $Visibility
+            SelectedRepositories = $SelectedRepositories
+            Context              = $Context
+        }
+        $params | Remove-HashtableEntry -NullOrEmptyValues
         switch ($PSCmdlet.ParameterSetName) {
             'Organization' {
-                $params = @{
-                    Owner                = $Owner
-                    Name                 = $Name
-                    Value                = $Value
-                    Visibility           = $Visibility
-                    SelectedRepositories = $SelectedRepositories
-                    Context              = $Context
-                }
                 New-GitHubVariableOnOwner @params
                 break
             }
             'Repository' {
-                $params = @{
-                    Owner      = $Owner
-                    Repository = $Repository
-                    Name       = $Name
-                    Value      = $Value
-                    Context    = $Context
-                }
                 New-GitHubVariableOnRepository @params
                 break
             }
             'Environment' {
-                $params = @{
-                    Owner       = $Owner
-                    Repository  = $Repository
-                    Environment = $Environment
-                    Name        = $Name
-                    Value       = $Value
-                    Context     = $Context
-                }
                 New-GitHubVariableOnEnvironment @params
                 break
             }
+        }
+        if ($PassThru) {
+            $params = @{
+                Owner       = $Owner
+                Repository  = $Repository
+                Environment = $Environment
+                Name        = $Name
+                Context     = $Context
+            }
+            $params | Remove-HashtableEntry -NullOrEmptyValues
+            Get-GitHubVariable @params
         }
     }
 

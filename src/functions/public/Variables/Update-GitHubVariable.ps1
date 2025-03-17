@@ -75,6 +75,10 @@ function Update-GitHubVariable {
         [Parameter(ParameterSetName = 'Organization')]
         [UInt64[]] $SelectedRepositories,
 
+        # If specified, the function will return the updated variable object.
+        [Parameter()]
+        [switch] $PassThru,
+
         # The context to run the command in. Can be either a string or a GitHubContext object.
         [Parameter()]
         [object] $Context = (Get-GitHubContext)
@@ -89,38 +93,41 @@ function Update-GitHubVariable {
 
     process {
         $params = @{
-            Owner   = $Owner
-            Name    = $Name
-            Context = $Context
+            Owner                = $Owner
+            Repository           = $Repository
+            Environment          = $Environment
+            Name                 = $Name
+            Context              = $Context
+            NewName              = $NewName
+            Value                = $Value
+            Visibility           = $Visibility
+            SelectedRepositories = $SelectedRepositories
         }
-        if ($PSBoundParameters.ContainsKey('NewName')) {
-            $params['NewName'] = $NewName
-        }
-        if ($PSBoundParameters.ContainsKey('Value')) {
-            $params['Value'] = $Value
-        }
+        $params | Remove-HashtableEntry -NullOrEmptyValues
         switch ($PSCmdlet.ParameterSetName) {
             'Organization' {
-                if ($PSBoundParameters.ContainsKey('Visibility')) {
-                    $params['Visibility'] = $Visibility
-                }
-                if ($PSBoundParameters.ContainsKey('SelectedRepositories')) {
-                    $params['SelectedRepositories'] = $SelectedRepositories
-                }
                 Update-GitHubVariableOnOwner @params
                 break
             }
             'Repository' {
-                $params['Repository'] = $Repository
                 Update-GitHubVariableOnRepository @params
                 break
             }
             'Environment' {
-                $params['Repository'] = $Repository
-                $params['Environment'] = $Environment
                 Update-GitHubVariableOnEnvironment @params
                 break
             }
+        }
+        if ($PassThru) {
+            $params = @{
+                Owner       = $Owner
+                Repository  = $Repository
+                Environment = $Environment
+                Name        = $Name
+                Context     = $Context
+            }
+            $params | Remove-HashtableEntry -NullOrEmptyValues
+            Get-GitHubVariable @params
         }
     }
 
