@@ -48,8 +48,7 @@ function Remove-GitHubVariableOnOwner {
         }
 
         if ($PSCmdlet.ShouldProcess("variable [$Name] on [$Owner]", 'Delete')) {
-            Invoke-GitHubAPI @inputObject
-            Invoke-GitHubAPI @inputObject | ForeEach-Object {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }
         }

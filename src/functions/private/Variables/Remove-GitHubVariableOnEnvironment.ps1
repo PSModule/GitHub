@@ -55,7 +55,7 @@ function Remove-GitHubVariableOnEnvironment {
         }
 
         if ($PSCmdlet.ShouldProcess("variable [$Name] on [$Owner/$Repository/$Environment]", 'Delete')) {
-            Invoke-GitHubAPI @inputObject | ForeEach-Object {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }
         }
