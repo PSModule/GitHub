@@ -91,7 +91,6 @@ function Update-GitHubVariable {
         $params = @{
             Owner   = $Owner
             Name    = $Name
-            NewName = $NewName
             Value   = $Value
             Context = $Context
         }
