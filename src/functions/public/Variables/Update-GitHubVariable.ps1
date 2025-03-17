@@ -91,7 +91,6 @@ function Update-GitHubVariable {
         $params = @{
             Owner   = $Owner
             Name    = $Name
-            Value   = $Value
             Context = $Context
         }
         if ($PSBoundParameters.ContainsKey('NewName')) {
