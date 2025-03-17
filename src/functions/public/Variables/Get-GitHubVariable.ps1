@@ -1,39 +1,38 @@
 function Get-GitHubVariable {
     <#
-    .SYNOPSIS
-    Gets the GitHub variable details for a Organisation, Repository or Environment.
+        .SYNOPSIS
+        Gets the GitHub variable details for a Organisation, Repository or Environment.
 
-    .DESCRIPTION
-    Gets the GitHub variable details for a Organisation, Repository or Environment.
+        .DESCRIPTION
+        Gets the GitHub variable details for a Organisation, Repository or Environment.
 
-    .PARAMETER Owner
-    The account owner of the repository. The name is not case-sensitive.
+        .PARAMETER Owner
+        The account owner of the repository. The name is not case-sensitive.
 
-    .PARAMETER Repository
-    The name of the repository. The name is not case-sensitive.
+        .PARAMETER Repository
+        The name of the repository. The name is not case-sensitive.
 
-    .PARAMETER Environment
-    The name of the repository environment.
+        .PARAMETER Environment
+        The name of the repository environment.
 
-    .PARAMETER Name
-    The name of the variable. If left blank, all variable names are returned.
+        .PARAMETER Name
+        The name of the variable. If left blank, all variable names are returned.
 
-    .PARAMETER Context
-    The context to run the command in. Used to get the details for the API call.
+        .PARAMETER Context
+        The context to run the command in. Used to get the details for the API call.
 
-    .EXAMPLE
-    Get-GitHubVariable -Owner "octocat" -Repository "Hello-World" -Environment "dev"
-    Get-GitHubVariable -Owner "octocat" -Repository "Hello-World" -Name "myVariable"
-    Get-GitHubVariable -Owner "octocat" -Name "myVariable"
+        .EXAMPLE
+        Get-GitHubVariable -Owner "octocat" -Repository "Hello-World" -Environment "dev"
+        Get-GitHubVariable -Owner "octocat" -Repository "Hello-World" -Name "myVariable"
+        Get-GitHubVariable -Owner "octocat" -Name "myVariable"
 
-    .NOTES
-    [Gets an Organisation Variable](https://docs.github.com/en/rest/actions/variables?apiVersion=2022-11-28#get-an-organization-variable)
-    [Gets an Repository Variable](https://docs.github.com/en/rest/actions/variables?apiVersion=2022-11-28#get-a-repository-variable)
-    [Gets an Environment Variable](https://docs.github.com/en/rest/actions/variables?apiVersion=2022-11-28#get-an-environment-variable)
+        .NOTES
+        [Gets an Organisation Variable](https://docs.github.com/en/rest/actions/variables?apiVersion=2022-11-28#get-an-organization-variable)
+        [Gets an Repository Variable](https://docs.github.com/en/rest/actions/variables?apiVersion=2022-11-28#get-a-repository-variable)
+        [Gets an Environment Variable](https://docs.github.com/en/rest/actions/variables?apiVersion=2022-11-28#get-an-environment-variable)
 
-    .OUTPUTS
-    psobject[]
-
+        .OUTPUTS
+        psobject[]
     #>
     [OutputType([psobject[]])]
     [CmdletBinding()]

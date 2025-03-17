@@ -1,38 +1,38 @@
 function Remove-GitHubVariable {
     <#
-     .SYNOPSIS
-    Removes a GitHub variable from an Organisation, Repository or Environment.
+        .SYNOPSIS
+        Removes a GitHub variable from an Organisation, Repository or Environment.
 
-    .DESCRIPTION
-    Removes a GitHub variable from an Organisation, Repository or Environment.
+        .DESCRIPTION
+        Removes a GitHub variable from an Organisation, Repository or Environment.
 
-    .PARAMETER Owner
-    The account owner of the repository. The name is not case-sensitive.
+        .PARAMETER Owner
+        The account owner of the repository. The name is not case-sensitive.
 
-    .PARAMETER Repository
-    The name of the repository. The name is not case-sensitive.
+        .PARAMETER Repository
+        The name of the repository. The name is not case-sensitive.
 
-    .PARAMETER Environment
-    The name of the repository environment.
+        .PARAMETER Environment
+        The name of the repository environment.
 
-    .PARAMETER Name
-    The name of the variable.
+        .PARAMETER Name
+        The name of the variable.
 
-    .PARAMETER Context
-    The context to run the command in. Used to get the details for the API call.
+        .PARAMETER Context
+        The context to run the command in. Used to get the details for the API call.
 
-    .EXAMPLE
-    Remove-GitHubVariable -Owner "octocat" -Repository "Hello-World" -Environment "dev" -Name "myVariable"
-    Remove-GitHubVariable -Owner "octocat" -Repository "Hello-World" -Name "myVariable"
-    Remove-GitHubVariable -Owner "octocat" -Name "myVariable"
+        .EXAMPLE
+        Remove-GitHubVariable -Owner "octocat" -Repository "Hello-World" -Environment "dev" -Name "myVariable"
+        Remove-GitHubVariable -Owner "octocat" -Repository "Hello-World" -Name "myVariable"
+        Remove-GitHubVariable -Owner "octocat" -Name "myVariable"
 
-    .NOTES
-    [Delete an Organisation Variable](https://docs.github.com/en/rest/actions/variables?apiVersion=2022-11-28#delete-an-organization-variable)
-    [Delete a Repository Variable](https://docs.github.com/en/rest/actions/variables?apiVersion=2022-11-28#delete-a-repository-variable)
-    [Delete an Environment Variable](https://docs.github.com/en/rest/actions/variables?apiVersion=2022-11-28#delete-an-environment-variable)
+        .NOTES
+        [Delete an Organisation Variable](https://docs.github.com/en/rest/actions/variables?apiVersion=2022-11-28#delete-an-organization-variable)
+        [Delete a Repository Variable](https://docs.github.com/en/rest/actions/variables?apiVersion=2022-11-28#delete-a-repository-variable)
+        [Delete an Environment Variable](https://docs.github.com/en/rest/actions/variables?apiVersion=2022-11-28#delete-an-environment-variable)
 
-    .OUTPUTS
-    psobject[]
+        .OUTPUTS
+        psobject[]
     #>
     [OutputType([psobject[]])]
     [CmdletBinding(SupportsShouldProcess)]
