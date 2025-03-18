@@ -104,9 +104,9 @@ function Remove-GitHubVariable {
                         Remove-GitHubVariableOnOwner @params
                     }
                     $scopeParam = @{
-                        Owner       = $Owner
-                        Repository  = $Repository
-                        Environment = $Environment
+                        Owner       = $item.Owner
+                        Repository  = $item.Repository
+                        Environment = $item.Environment
                     }
                     $scopeParam | Remove-HashtableEntry -NullOrEmptyValues
                     for ($i = 0; ($i -le 10); $i++) {
