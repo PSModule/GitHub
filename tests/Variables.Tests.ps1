@@ -30,26 +30,32 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     Context 'Variables' {
-        It 'Set-GitHubVariable - Repository' {
-            $param = @{
-                Name  = 'TestVariable'
-                Value = 'TestValue'
-            }
-            $result = Set-GitHubVariable @param -Owner $owner -Repository $repo
-            $result | Should -Not -BeNullOrEmpty
+        Context 'Repository' {
+            It 'Set-GitHubVariable' {
+                $param = @{
+                    Name  = 'TestVariable'
+                    Value = 'TestValue'
+                }
+                $result = Set-GitHubVariable @param -Owner $owner -Repository $repo
+                $result = Set-GitHubVariable @param -Owner $owner -Repository $repo
+                $result | Should -Not -BeNullOrEmpty
 
-            $result | Remove-GitHubVariable
+                $result | Remove-GitHubVariable
+            }
         }
 
-        It 'Set-GitHubVariable - Environment' {
-            $param = @{
-                Name  = 'TestVariable'
-                Value = 'TestValue'
-            }
-            $result = Set-GitHubVariable @param -Owner $owner -Repository $repo -Environment $environmentName
-            $result | Should -Not -BeNullOrEmpty
+        Context 'Environment' {
+            It 'Set-GitHubVariable' {
+                $param = @{
+                    Name  = 'TestVariable'
+                    Value = 'TestValue'
+                }
+                $result = Set-GitHubVariable @param -Owner $owner -Repository $repo -Environment $environmentName
+                $result = Set-GitHubVariable @param -Owner $owner -Repository $repo -Environment $environmentName
+                $result | Should -Not -BeNullOrEmpty
 
-            $result | Remove-GitHubVariable
+                $result | Remove-GitHubVariable
+            }
         }
     }
 }
@@ -68,38 +74,75 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     Context 'Variables' {
-        It 'Set-GitHubVariable - Organization' {
-            $param = @{
-                Name  = 'TestVariable'
-                Value = 'TestValue'
+        Context 'Organization' {
+            It 'Set-GitHubVariable' {
+                $param = @{
+                    Name  = 'TestVariable'
+                    Value = 'TestValue'
+                }
+                $result = Set-GitHubVariable @param -Owner $owner
+                $result = Set-GitHubVariable @param -Owner $owner
+                $result | Should -Not -BeNullOrEmpty
             }
-            $result = Set-GitHubVariable @param -Owner $owner
-            $result | Should -Not -BeNullOrEmpty
 
-            $result | Remove-GitHubVariable
+            It 'Update-GitHubVariable' {
+                $param = @{
+                    Name       = 'TestVariable'
+                    Value      = 'TestValue123'
+                    Visibility = 'all'
+                }
+                $result = Update-GitHubVariable @param -Owner $owner
+                $result | Should -Not -BeNullOrEmpty
+            }
+
+            It 'New-GitHubVariable' {
+                $param = @{
+                    Name  = 'TestVariable2'
+                    Value = 'TestValue123'
+                }
+                $result = New-GitHubVariable @param -Owner $owner
+                $result | Should -Not -BeNullOrEmpty
+            }
+
+            It 'Get-GitHubVariable' {
+                $result = Get-GitHubVariable -Owner $owner
+                $result | Should -Not -BeNullOrEmpty
+            }
+
+            It 'Remove-GitHubVariable' {
+                Get-GitHubVariable -Owner $owner | Remove-GitHubVariable
+                Get-GitHubVariable -Owner $owner | Should -BeNullOrEmpty
+            }
         }
 
-        It 'Set-GitHubVariable - Repository' {
-            $param = @{
-                Name  = 'TestVariable'
-                Value = 'TestValue'
-            }
-            $result = Set-GitHubVariable @param -Owner $owner -Repository $repo
-            $result | Should -Not -BeNullOrEmpty
+        Context 'Repository' {
+            It 'Set-GitHubVariable' {
+                $param = @{
+                    Name  = 'TestVariable'
+                    Value = 'TestValue'
+                }
+                $result = Set-GitHubVariable @param -Owner $owner -Repository $repo
+                $result = Set-GitHubVariable @param -Owner $owner -Repository $repo
+                $result | Should -Not -BeNullOrEmpty
 
-            $result | Remove-GitHubVariable
+                $result | Remove-GitHubVariable
+            }
+        }
+        Context 'Environment' {
+            It 'Set-GitHubVariable' {
+                $param = @{
+                    Name  = 'TestVariable'
+                    Value = 'TestValue'
+                }
+                $result = Set-GitHubVariable @param -Owner $owner -Repository $repo -Environment $environmentName
+                $result = Set-GitHubVariable @param -Owner $owner -Repository $repo -Environment $environmentName
+                $result | Should -Not -BeNullOrEmpty
+
+                $result | Remove-GitHubVariable
+            }
         }
 
-        It 'Set-GitHubVariable - Environment' {
-            $param = @{
-                Name  = 'TestVariable'
-                Value = 'TestValue'
-            }
-            $result = Set-GitHubVariable @param -Owner $owner -Repository $repo -Environment $environmentName
-            $result | Should -Not -BeNullOrEmpty
 
-            $result | Remove-GitHubVariable
-        }
     }
 }
 
@@ -123,6 +166,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
                 Value = 'TestValue'
             }
             $result = Set-GitHubVariable @param -Owner $owner -Repository $repo
+            $result = Set-GitHubVariable @param -Owner $owner -Repository $repo
             $result | Should -Not -BeNullOrEmpty
 
             $result | Remove-GitHubVariable
@@ -133,6 +177,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
                 Name  = 'TestVariable'
                 Value = 'TestValue'
             }
+            $result = Set-GitHubVariable @param -Owner $owner -Repository $repo -Environment $environmentName
             $result = Set-GitHubVariable @param -Owner $owner -Repository $repo -Environment $environmentName
             $result | Should -Not -BeNullOrEmpty
 
@@ -174,6 +219,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
                 Value = 'TestValue'
             }
             $result = Set-GitHubVariable @param -Owner $owner
+            $result = Set-GitHubVariable @param -Owner $owner
             $result | Should -Not -BeNullOrEmpty
 
             $result | Remove-GitHubVariable
@@ -185,6 +231,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
                 Value = 'TestValue'
             }
             $result = Set-GitHubVariable @param -Owner $owner -Repository $repo
+            $result = Set-GitHubVariable @param -Owner $owner -Repository $repo
             $result | Should -Not -BeNullOrEmpty
 
             $result | Remove-GitHubVariable
@@ -195,6 +242,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
                 Name  = 'TestVariable'
                 Value = 'TestValue'
             }
+            $result = Set-GitHubVariable @param -Owner $owner -Repository $repo -Environment $environmentName
             $result = Set-GitHubVariable @param -Owner $owner -Repository $repo -Environment $environmentName
             $result | Should -Not -BeNullOrEmpty
 
@@ -224,6 +272,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
                 Value = 'TestValue'
             }
             $result = Set-GitHubVariable @param -Owner $owner
+            $result = Set-GitHubVariable @param -Owner $owner
             $result | Should -Not -BeNullOrEmpty
 
             $result | Remove-GitHubVariable
@@ -235,6 +284,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
                 Value = 'TestValue'
             }
             $result = Set-GitHubVariable @param -Owner $owner -Repository $repo
+            $result = Set-GitHubVariable @param -Owner $owner -Repository $repo
             $result | Should -Not -BeNullOrEmpty
 
             $result | Remove-GitHubVariable
@@ -245,6 +295,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
                 Name  = 'TestVariable'
                 Value = 'TestValue'
             }
+            $result = Set-GitHubVariable @param -Owner $owner -Repository $repo -Environment $environmentName
             $result = Set-GitHubVariable @param -Owner $owner -Repository $repo -Environment $environmentName
             $result | Should -Not -BeNullOrEmpty
 
