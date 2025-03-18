@@ -73,6 +73,13 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
 
         It 'Get-GitHubVariable' {
             $result = Get-GitHubVariable @scope -Name "*$os*"
+            Write-Host "$($result | Out-String)"
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Get-GitHubVariable -All' {
+            $result = Get-GitHubVariable @scope -Name "*$os*" -All
+            Write-Host "$($result | Out-String)"
             $result | Should -Not -BeNullOrEmpty
         }
 
@@ -125,6 +132,13 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
 
         It 'Get-GitHubVariable' {
             $result = Get-GitHubVariable @scope -Name "*$os*"
+            Write-Host "$($result | Out-String)"
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Get-GitHubVariable -All' {
+            $result = Get-GitHubVariable @scope -Name "*$os*" -All
+            Write-Host "$($result | Out-String)"
             $result | Should -Not -BeNullOrEmpty
         }
 
@@ -193,6 +207,13 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
 
         It 'Get-GitHubVariable' {
             $result = Get-GitHubVariable @scope -Name "*$os*"
+            Write-Host "$($result | Out-String)"
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Get-GitHubVariable -All' {
+            $result = Get-GitHubVariable @scope -Name "*$os*" -All
+            Write-Host "$($result | Out-String)"
             $result | Should -Not -BeNullOrEmpty
         }
 
@@ -243,6 +264,13 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
 
         It 'Get-GitHubVariable' {
             $result = Get-GitHubVariable @scope -Name "*$os*"
+            Write-Host "$($result | Out-String)"
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Get-GitHubVariable -All' {
+            $result = Get-GitHubVariable @scope -Name "*$os*" -All
+            Write-Host "$($result | Out-String)"
             $result | Should -Not -BeNullOrEmpty
         }
 
@@ -295,6 +323,13 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
 
         It 'Get-GitHubVariable' {
             $result = Get-GitHubVariable @scope -Name "*$os*"
+            Write-Host "$($result | Out-String)"
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Get-GitHubVariable -All' {
+            $result = Get-GitHubVariable @scope -Name "*$os*" -All
+            Write-Host "$($result | Out-String)"
             $result | Should -Not -BeNullOrEmpty
         }
 
@@ -363,6 +398,13 @@ Describe 'As a user - Classic PAT token (PAT)' {
 
         It 'Get-GitHubVariable' {
             $result = Get-GitHubVariable @scope -Name "*$os*"
+            Write-Host "$($result | Out-String)"
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Get-GitHubVariable -All' {
+            $result = Get-GitHubVariable @scope -Name "*$os*" -All
+            Write-Host "$($result | Out-String)"
             $result | Should -Not -BeNullOrEmpty
         }
 
@@ -413,6 +455,13 @@ Describe 'As a user - Classic PAT token (PAT)' {
 
         It 'Get-GitHubVariable' {
             $result = Get-GitHubVariable @scope -Name "*$os*"
+            Write-Host "$($result | Out-String)"
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Get-GitHubVariable -All' {
+            $result = Get-GitHubVariable @scope -Name "*$os*" -All
+            Write-Host "$($result | Out-String)"
             $result | Should -Not -BeNullOrEmpty
         }
 
@@ -465,6 +514,13 @@ Describe 'As a user - Classic PAT token (PAT)' {
 
         It 'Get-GitHubVariable' {
             $result = Get-GitHubVariable @scope -Name "*$os*"
+            Write-Host "$($result | Out-String)"
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Get-GitHubVariable -All' {
+            $result = Get-GitHubVariable @scope -Name "*$os*" -All
+            Write-Host "$($result | Out-String)"
             $result | Should -Not -BeNullOrEmpty
         }
 
@@ -546,6 +602,13 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
 
         It 'Get-GitHubVariable' {
             $result = Get-GitHubVariable @scope -Name "*$os*"
+            Write-Host "$($result | Out-String)"
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Get-GitHubVariable -All' {
+            $result = Get-GitHubVariable @scope -Name "*$os*" -All
+            Write-Host "$($result | Out-String)"
             $result | Should -Not -BeNullOrEmpty
         }
 
@@ -596,6 +659,13 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
 
         It 'Get-GitHubVariable' {
             $result = Get-GitHubVariable @scope -Name "*$os*"
+            Write-Host "$($result | Out-String)"
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Get-GitHubVariable -All' {
+            $result = Get-GitHubVariable @scope -Name "*$os*" -All
+            Write-Host "$($result | Out-String)"
             $result | Should -Not -BeNullOrEmpty
         }
 
@@ -648,6 +718,13 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
 
         It 'Get-GitHubVariable' {
             $result = Get-GitHubVariable @scope -Name "*$os*"
+            Write-Host "$($result | Out-String)"
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Get-GitHubVariable -All' {
+            $result = Get-GitHubVariable @scope -Name "*$os*" -All
+            Write-Host "$($result | Out-String)"
             $result | Should -Not -BeNullOrEmpty
         }
 
@@ -717,6 +794,13 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
 
         It 'Get-GitHubVariable' {
             $result = Get-GitHubVariable @scope -Name "*$os*"
+            Write-Host "$($result | Out-String)"
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Get-GitHubVariable -All' {
+            $result = Get-GitHubVariable @scope -Name "*$os*" -All
+            Write-Host "$($result | Out-String)"
             $result | Should -Not -BeNullOrEmpty
         }
 
@@ -767,6 +851,13 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
 
         It 'Get-GitHubVariable' {
             $result = Get-GitHubVariable @scope -Name "*$os*"
+            Write-Host "$($result | Out-String)"
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Get-GitHubVariable -All' {
+            $result = Get-GitHubVariable @scope -Name "*$os*" -All
+            Write-Host "$($result | Out-String)"
             $result | Should -Not -BeNullOrEmpty
         }
 
@@ -819,6 +910,13 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
 
         It 'Get-GitHubVariable' {
             $result = Get-GitHubVariable @scope -Name "*$os*"
+            Write-Host "$($result | Out-String)"
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Get-GitHubVariable -All' {
+            $result = Get-GitHubVariable @scope -Name "*$os*" -All
+            Write-Host "$($result | Out-String)"
             $result | Should -Not -BeNullOrEmpty
         }
 
