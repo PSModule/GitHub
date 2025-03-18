@@ -24,7 +24,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
         $owner = 'psmodule-user'
         $guid = [guid]::NewGuid().ToString()
         $repo = "$repoSuffix-$guid"
-        New-GitHubRepository -Owner $owner -Name $repo -AllowSquashMerge
+        New-GitHubRepository -Name $repo -AllowSquashMerge
         Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
     }
     AfterAll {
@@ -51,8 +51,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
         It 'Update-GitHubVariable' {
             $param = @{
                 Name       = "$prefix`TestVariable"
-                Value      = 'TestValue123'
-                Visibility = 'all'
+                Value      = 'TestValue1234'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
             $result | Should -Not -BeNullOrEmpty
@@ -98,8 +97,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
         It 'Update-GitHubVariable' {
             $param = @{
                 Name       = "$prefix`TestVariable"
-                Value      = 'TestValue123'
-                Visibility = 'all'
+                Value      = 'TestValue1234'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
             $result | Should -Not -BeNullOrEmpty
@@ -158,7 +156,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         It 'Update-GitHubVariable' {
             $param = @{
                 Name       = "$prefix`TestVariable"
-                Value      = 'TestValue123'
+                Value      = 'TestValue1234'
                 Visibility = 'all'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
@@ -204,8 +202,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         It 'Update-GitHubVariable' {
             $param = @{
                 Name       = "$prefix`TestVariable"
-                Value      = 'TestValue123'
-                Visibility = 'all'
+                Value      = 'TestValue1234'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
             $result | Should -Not -BeNullOrEmpty
@@ -251,8 +248,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         It 'Update-GitHubVariable' {
             $param = @{
                 Name       = "$prefix`TestVariable"
-                Value      = 'TestValue123'
-                Visibility = 'all'
+                Value      = 'TestValue1234'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
             $result | Should -Not -BeNullOrEmpty
@@ -311,7 +307,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
         It 'Update-GitHubVariable' {
             $param = @{
                 Name       = "$prefix`TestVariable"
-                Value      = 'TestValue123'
+                Value      = 'TestValue1234'
                 Visibility = 'all'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
@@ -357,8 +353,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
         It 'Update-GitHubVariable' {
             $param = @{
                 Name       = "$prefix`TestVariable"
-                Value      = 'TestValue123'
-                Visibility = 'all'
+                Value      = 'TestValue1234'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
             $result | Should -Not -BeNullOrEmpty
@@ -404,8 +399,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
         It 'Update-GitHubVariable' {
             $param = @{
                 Name       = "$prefix`TestVariable"
-                Value      = 'TestValue123'
-                Visibility = 'all'
+                Value      = 'TestValue1234'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
             $result | Should -Not -BeNullOrEmpty
@@ -477,7 +471,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         It 'Update-GitHubVariable' {
             $param = @{
                 Name       = "$prefix`TestVariable"
-                Value      = 'TestValue123'
+                Value      = 'TestValue1234'
                 Visibility = 'all'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
@@ -523,8 +517,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         It 'Update-GitHubVariable' {
             $param = @{
                 Name       = "$prefix`TestVariable"
-                Value      = 'TestValue123'
-                Visibility = 'all'
+                Value      = 'TestValue1234'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
             $result | Should -Not -BeNullOrEmpty
@@ -570,8 +563,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         It 'Update-GitHubVariable' {
             $param = @{
                 Name       = "$prefix`TestVariable"
-                Value      = 'TestValue123'
-                Visibility = 'all'
+                Value      = 'TestValue1234'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
             $result | Should -Not -BeNullOrEmpty
@@ -631,7 +623,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         It 'Update-GitHubVariable' {
             $param = @{
                 Name       = "$prefix`TestVariable"
-                Value      = 'TestValue123'
+                Value      = 'TestValue1234'
                 Visibility = 'all'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
@@ -677,8 +669,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         It 'Update-GitHubVariable' {
             $param = @{
                 Name       = "$prefix`TestVariable"
-                Value      = 'TestValue123'
-                Visibility = 'all'
+                Value      = 'TestValue1234'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
             $result | Should -Not -BeNullOrEmpty
@@ -724,8 +715,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         It 'Update-GitHubVariable' {
             $param = @{
                 Name       = "$prefix`TestVariable"
-                Value      = 'TestValue123'
-                Visibility = 'all'
+                Value      = 'TestValue1234'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
             $result | Should -Not -BeNullOrEmpty
