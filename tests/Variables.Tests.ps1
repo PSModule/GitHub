@@ -28,8 +28,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
         $repoName = "$testName-$os-$testType"
         $variablePrefix = "$testName`_$os`_$testType`_"
         $environmentName = "$testName-$os-$testType"
-        New-GitHubRepository -Name $repoName -AllowSquashMerge
-        Set-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName
+        $repo = New-GitHubRepository -Name $repoName -AllowSquashMerge
     }
     AfterAll {
         Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
@@ -41,6 +40,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
                 Owner      = $owner
                 Repository = $repoName
             }
+            Set-GitHubVariable -Owner $owner -Repository $repoName -Name $os -Value 'repository'
         }
         It 'Set-GitHubVariable' {
             $param = @{
@@ -91,6 +91,8 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
                 Repository  = $repoName
                 Environment = $environmentName
             }
+            Set-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName
+            Set-GitHubVariable @scope -Name $os -Value 'environment'
         }
         It 'Set-GitHubVariable' {
             $param = @{
@@ -144,11 +146,11 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         $repoName = "$testName-$os-$testType"
         $variablePrefix = "$testName`_$os`_$testType`_"
         $environmentName = "$testName-$os-$testType"
-        New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
-        Set-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName
+        $repo = New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
     }
     AfterAll {
         Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
+        Get-GitHubVariable -Owner $owner -Name "*$os*" | Remove-GitHubVariable
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     Context 'Organization' {
@@ -156,6 +158,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
             $scope = @{
                 Owner = $owner
             }
+            Set-GitHubVariable -Owner $owner -Name $os -Value 'organization' -Visibility selected -SelectedRepositories $repo.id
         }
         It 'Set-GitHubVariable' {
             $param = @{
@@ -206,6 +209,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
                 Owner      = $owner
                 Repository = $repoName
             }
+            Set-GitHubVariable -Owner $owner -Repository $repoName -Name $os -Value 'repository'
         }
         It 'Set-GitHubVariable' {
             $param = @{
@@ -256,6 +260,8 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
                 Repository  = $repoName
                 Environment = $environmentName
             }
+            Set-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName
+            Set-GitHubVariable @scope -Name $os -Value 'environment'
         }
         It 'Set-GitHubVariable' {
             $param = @{
@@ -309,11 +315,11 @@ Describe 'As a user - Classic PAT token (PAT)' {
         $repoName = "$testName-$os-$testType"
         $variablePrefix = "$testName`_$os`_$testType`_"
         $environmentName = "$testName-$os-$testType"
-        New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
-        Set-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName
+        $repo = New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
     }
     AfterAll {
         Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
+        Get-GitHubVariable -Owner $owner -Name "*$os*" | Remove-GitHubVariable
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     Context 'Organization' {
@@ -321,6 +327,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
             $scope = @{
                 Owner = $owner
             }
+            Set-GitHubVariable @scope -Name $os -Value 'organization' -Visibility selected -SelectedRepositories $repo.id
         }
         It 'Set-GitHubVariable' {
             $param = @{
@@ -371,6 +378,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
                 Owner      = $owner
                 Repository = $repoName
             }
+            Set-GitHubVariable @scope -Name $os -Value 'repository'
         }
         It 'Set-GitHubVariable' {
             $param = @{
@@ -421,6 +429,8 @@ Describe 'As a user - Classic PAT token (PAT)' {
                 Repository  = $repoName
                 Environment = $environmentName
             }
+            Set-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName
+            Set-GitHubVariable @scope -Name $os -Value 'environment'
         }
         It 'Set-GitHubVariable' {
             $param = @{
@@ -487,11 +497,11 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         $repoName = "$testName-$os-$testType"
         $variablePrefix = "$testName`_$os`_$testType`_"
         $environmentName = "$testName-$os-$testType"
-        New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
-        Set-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName
+        $repo = New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
     }
     AfterAll {
         Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
+        Get-GitHubVariable -Owner $owner -Name "*$os*" | Remove-GitHubVariable
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     Context 'Organization' {
@@ -499,6 +509,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
             $scope = @{
                 Owner = $owner
             }
+            Set-GitHubVariable @scope -Name $os -Value 'organization' -Visibility selected -SelectedRepositories $repo.id
         }
         It 'Set-GitHubVariable' {
             $param = @{
@@ -549,6 +560,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
                 Owner      = $owner
                 Repository = $repoName
             }
+            Set-GitHubVariable @scope -Name $os -Value 'repository'
         }
         It 'Set-GitHubVariable' {
             $param = @{
@@ -599,6 +611,8 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
                 Repository  = $repoName
                 Environment = $environmentName
             }
+            Set-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName
+            Set-GitHubVariable @scope -Name $os -Value 'environment'
         }
         It 'Set-GitHubVariable' {
             $param = @{
@@ -653,11 +667,11 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         $repoName = "$testName-$os-$testType"
         $variablePrefix = "$testName`_$os`_$testType`_"
         $environmentName = "$testName-$os-$testType"
-        New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
-        Set-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName
+        $repo = New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
     }
     AfterAll {
         Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
+        Get-GitHubVariable -Owner $owner -Name "*$os*" | Remove-GitHubVariable
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     Context 'Organization' {
@@ -665,6 +679,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
             $scope = @{
                 Owner = $owner
             }
+            Set-GitHubVariable @scope -Name $os -Value 'organization' -Visibility selected -SelectedRepositories $repo.id
         }
         It 'Set-GitHubVariable' {
             $param = @{
@@ -715,6 +730,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
                 Owner      = $owner
                 Repository = $repoName
             }
+            Set-GitHubVariable @scope -Name $os -Value 'repository'
         }
         It 'Set-GitHubVariable' {
             $param = @{
@@ -765,6 +781,8 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
                 Repository  = $repoName
                 Environment = $environmentName
             }
+            Set-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName
+            Set-GitHubVariable @scope -Name $os -Value 'environment'
         }
         It 'Set-GitHubVariable' {
             $param = @{
