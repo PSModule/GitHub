@@ -40,7 +40,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
                 Owner      = $owner
                 Repository = $repoName
             }
-            Set-GitHubVariable -Owner $owner -Repository $repoName -Name $os -Value 'repository'
+            Set-GitHubVariable @scope -Name $repoName -Value 'repository'
         }
         It 'Set-GitHubVariable' {
             $param = @{
@@ -92,7 +92,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
                 Environment = $environmentName
             }
             Set-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName
-            Set-GitHubVariable @scope -Name $os -Value 'environment'
+            Set-GitHubVariable @scope -Name $repoName -Value 'environment'
         }
         It 'Set-GitHubVariable' {
             $param = @{
@@ -158,7 +158,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
             $scope = @{
                 Owner = $owner
             }
-            Set-GitHubVariable -Owner $owner -Name $os -Value 'organization' -Visibility selected -SelectedRepositories $repo.id
+            Set-GitHubVariable @scope -Name $repoName -Value 'organization' -Visibility selected -SelectedRepositories $repo.id
         }
         It 'Set-GitHubVariable' {
             $param = @{
@@ -209,7 +209,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
                 Owner      = $owner
                 Repository = $repoName
             }
-            Set-GitHubVariable -Owner $owner -Repository $repoName -Name $os -Value 'repository'
+            Set-GitHubVariable @scope -Name $repoName -Value 'repository'
         }
         It 'Set-GitHubVariable' {
             $param = @{
@@ -261,7 +261,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
                 Environment = $environmentName
             }
             Set-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName
-            Set-GitHubVariable @scope -Name $os -Value 'environment'
+            Set-GitHubVariable @scope -Name $repoName -Value 'environment'
         }
         It 'Set-GitHubVariable' {
             $param = @{
@@ -327,7 +327,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
             $scope = @{
                 Owner = $owner
             }
-            Set-GitHubVariable @scope -Name $os -Value 'organization' -Visibility selected -SelectedRepositories $repo.id
+            Set-GitHubVariable @scope -Name $repoName -Value 'organization' -Visibility selected -SelectedRepositories $repo.id
         }
         It 'Set-GitHubVariable' {
             $param = @{
@@ -378,7 +378,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
                 Owner      = $owner
                 Repository = $repoName
             }
-            Set-GitHubVariable @scope -Name $os -Value 'repository'
+            Set-GitHubVariable @scope -Name $repoName -Value 'repository'
         }
         It 'Set-GitHubVariable' {
             $param = @{
@@ -430,7 +430,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
                 Environment = $environmentName
             }
             Set-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName
-            Set-GitHubVariable @scope -Name $os -Value 'environment'
+            Set-GitHubVariable @scope -Name $repoName -Value 'environment'
         }
         It 'Set-GitHubVariable' {
             $param = @{
@@ -509,7 +509,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
             $scope = @{
                 Owner = $owner
             }
-            Set-GitHubVariable @scope -Name $os -Value 'organization' -Visibility selected -SelectedRepositories $repo.id
+            Set-GitHubVariable @scope -Name $repoName -Value 'organization' -Visibility selected -SelectedRepositories $repo.id
         }
         It 'Set-GitHubVariable' {
             $param = @{
@@ -560,7 +560,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
                 Owner      = $owner
                 Repository = $repoName
             }
-            Set-GitHubVariable @scope -Name $os -Value 'repository'
+            Set-GitHubVariable @scope -Name $repoName -Value 'repository'
         }
         It 'Set-GitHubVariable' {
             $param = @{
@@ -612,7 +612,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
                 Environment = $environmentName
             }
             Set-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName
-            Set-GitHubVariable @scope -Name $os -Value 'environment'
+            Set-GitHubVariable @scope -Name $repoName -Value 'environment'
         }
         It 'Set-GitHubVariable' {
             $param = @{
@@ -679,7 +679,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
             $scope = @{
                 Owner = $owner
             }
-            Set-GitHubVariable @scope -Name $os -Value 'organization' -Visibility selected -SelectedRepositories $repo.id
+            Set-GitHubVariable @scope -Name $repoName -Value 'organization' -Visibility selected -SelectedRepositories $repo.id
         }
         It 'Set-GitHubVariable' {
             $param = @{
@@ -730,7 +730,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
                 Owner      = $owner
                 Repository = $repoName
             }
-            Set-GitHubVariable @scope -Name $os -Value 'repository'
+            Set-GitHubVariable @scope -Name $repoName -Value 'repository'
         }
         It 'Set-GitHubVariable' {
             $param = @{
@@ -782,7 +782,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
                 Environment = $environmentName
             }
             Set-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName
-            Set-GitHubVariable @scope -Name $os -Value 'environment'
+            Set-GitHubVariable @scope -Name $repoName -Value 'environment'
         }
         It 'Set-GitHubVariable' {
             $param = @{
