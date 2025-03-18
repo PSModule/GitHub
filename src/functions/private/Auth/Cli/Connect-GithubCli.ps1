@@ -42,8 +42,9 @@
     }
 
     process {
-        $Context.Token | ConvertFrom-SecureString -AsPlainText | gh auth login --with-token --hostname $Context.HostName
+        $return = $Context.Token | ConvertFrom-SecureString -AsPlainText | gh auth login --with-token --hostname $Context.HostName
         if ($LASTEXITCODE -ne 0) {
+            Write-Warning $return
             Write-Warning "Unable to log on with the GitHub Cli. ($LASTEXITCODE)"
             $Global:LASTEXITCODE = 0
             Write-Debug "Resetting LASTEXITCODE: $LASTEXITCODE"

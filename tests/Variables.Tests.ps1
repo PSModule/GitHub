@@ -72,6 +72,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
         }
 
         It 'Remove-GitHubVariable' {
+            Write-Verbose "$(Get-GitHubVariable @scope)" -Verbose
             Get-GitHubVariable @scope | Remove-GitHubVariable
             (Get-GitHubVariable @scope).Count | Should -Be 0
         }
@@ -118,6 +119,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
         }
 
         It 'Remove-GitHubVariable' {
+            Write-Verbose "$(Get-GitHubVariable @scope)" -Verbose
             Get-GitHubVariable @scope | Remove-GitHubVariable
             (Get-GitHubVariable @scope).Count | Should -Be 0
         }
@@ -178,6 +180,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         }
 
         It 'Remove-GitHubVariable' {
+            Write-Verbose "$(Get-GitHubVariable @scope)" -Verbose
             Get-GitHubVariable @scope | Remove-GitHubVariable
             (Get-GitHubVariable @scope).Count | Should -Be 0
         }
@@ -223,6 +226,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         }
 
         It 'Remove-GitHubVariable' {
+            Write-Verbose "$(Get-GitHubVariable @scope)" -Verbose
             Get-GitHubVariable @scope | Remove-GitHubVariable
             (Get-GitHubVariable @scope).Count | Should -Be 0
         }
@@ -269,6 +273,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         }
 
         It 'Remove-GitHubVariable' {
+            Write-Verbose "$(Get-GitHubVariable @scope)" -Verbose
             Get-GitHubVariable @scope | Remove-GitHubVariable
             (Get-GitHubVariable @scope).Count | Should -Be 0
         }
@@ -329,6 +334,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
         }
 
         It 'Remove-GitHubVariable' {
+            Write-Verbose "$(Get-GitHubVariable @scope)" -Verbose
             Get-GitHubVariable @scope | Remove-GitHubVariable
             (Get-GitHubVariable @scope).Count | Should -Be 0
         }
@@ -374,6 +380,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
         }
 
         It 'Remove-GitHubVariable' {
+            Write-Verbose "$(Get-GitHubVariable @scope)" -Verbose
             Get-GitHubVariable @scope | Remove-GitHubVariable
             (Get-GitHubVariable @scope).Count | Should -Be 0
         }
@@ -420,6 +427,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
         }
 
         It 'Remove-GitHubVariable' {
+            Write-Verbose "$(Get-GitHubVariable @scope)" -Verbose
             Get-GitHubVariable @scope | Remove-GitHubVariable
             (Get-GitHubVariable @scope).Count | Should -Be 0
         }
@@ -493,6 +501,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         }
 
         It 'Remove-GitHubVariable' {
+            Write-Verbose "$(Get-GitHubVariable @scope)" -Verbose
             Get-GitHubVariable @scope | Remove-GitHubVariable
             (Get-GitHubVariable @scope).Count | Should -Be 0
         }
@@ -538,6 +547,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         }
 
         It 'Remove-GitHubVariable' {
+            Write-Verbose "$(Get-GitHubVariable @scope)" -Verbose
             Get-GitHubVariable @scope | Remove-GitHubVariable
             (Get-GitHubVariable @scope).Count | Should -Be 0
         }
@@ -584,6 +594,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         }
 
         It 'Remove-GitHubVariable' {
+            Write-Verbose "$(Get-GitHubVariable @scope)" -Verbose
             Get-GitHubVariable @scope | Remove-GitHubVariable
             (Get-GitHubVariable @scope).Count | Should -Be 0
         }
@@ -645,6 +656,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         }
 
         It 'Remove-GitHubVariable' {
+            Write-Verbose "$(Get-GitHubVariable @scope)" -Verbose
             Get-GitHubVariable @scope | Remove-GitHubVariable
             (Get-GitHubVariable @scope).Count | Should -Be 0
         }
@@ -690,6 +702,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         }
 
         It 'Remove-GitHubVariable' {
+            Write-Verbose "$(Get-GitHubVariable @scope)" -Verbose
             Get-GitHubVariable @scope | Remove-GitHubVariable
             (Get-GitHubVariable @scope).Count | Should -Be 0
         }
@@ -736,6 +749,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         }
 
         It 'Remove-GitHubVariable' {
+            Write-Verbose "$(Get-GitHubVariable @scope)" -Verbose
             Get-GitHubVariable @scope | Remove-GitHubVariable
             (Get-GitHubVariable @scope).Count | Should -Be 0
         }
