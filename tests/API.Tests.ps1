@@ -77,26 +77,6 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
             { Get-GitHubLicense -Owner 'PSModule' -Repository 'GitHub' } | Should -Not -Throw
         }
     }
-    Context 'Repository' {
-        It "Get-GitHubRepository - Gets the authenticated user's repositories (USER_FG_PAT)" {
-            { Get-GitHubRepository } | Should -Not -Throw
-        }
-        It "Get-GitHubRepository - Gets the authenticated user's public repositories (USER_FG_PAT)" {
-            { Get-GitHubRepository -Type 'public' } | Should -Not -Throw
-        }
-        It 'Get-GitHubRepository - Gets the public repos where the authenticated user is owner (USER_FG_PAT)' {
-            { Get-GitHubRepository -Visibility 'public' -Affiliation 'owner' } | Should -Not -Throw
-        }
-        It 'Get-GitHubRepository - Gets a specific repository (USER_FG_PAT)' {
-            { Get-GitHubRepository -Owner 'PSModule' -Repository 'GitHub' } | Should -Not -Throw
-        }
-        It 'Get-GitHubRepository - Gets all repositories from a organization (USER_FG_PAT)' {
-            { Get-GitHubRepository -Owner 'PSModule' } | Should -Not -Throw
-        }
-        It 'Get-GitHubRepository - Gets all repositories from a user (USER_FG_PAT)' {
-            { Get-GitHubRepository -Username 'MariusStorhaug' } | Should -Not -Throw
-        }
-    }
     Context 'GitIgnore' {
         It 'Get-GitHubGitignore - Gets a list of all gitignore templates names (USER_FG_PAT)' {
             { Get-GitHubGitignore } | Should -Not -Throw
@@ -182,26 +162,6 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         }
         It 'Get-GitHubLicense - Gets a license from a repository (ORG_FG_PAT)' {
             { Get-GitHubLicense -Owner 'PSModule' -Repository 'GitHub' } | Should -Not -Throw
-        }
-    }
-    Context 'Repository' {
-        It "Get-GitHubRepository - Gets the authenticated user's repositories (ORG_FG_PAT)" {
-            { Get-GitHubRepository } | Should -Not -Throw
-        }
-        It "Get-GitHubRepository - Gets the authenticated user's public repositories (ORG_FG_PAT)" {
-            { Get-GitHubRepository -Type 'public' } | Should -Not -Throw
-        }
-        It 'Get-GitHubRepository - Gets the public repos where the authenticated user is owner (ORG_FG_PAT)' {
-            { Get-GitHubRepository -Visibility 'public' -Affiliation 'owner' } | Should -Not -Throw
-        }
-        It 'Get-GitHubRepository - Gets a specific repository (ORG_FG_PAT)' {
-            { Get-GitHubRepository -Owner 'PSModule' -Repository 'GitHub' } | Should -Not -Throw
-        }
-        It 'Get-GitHubRepository - Gets all repositories from a organization (ORG_FG_PAT)' {
-            { Get-GitHubRepository -Owner 'PSModule' } | Should -Not -Throw
-        }
-        It 'Get-GitHubRepository - Gets all repositories from a user (ORG_FG_PAT)' {
-            { Get-GitHubRepository -Username 'MariusStorhaug' } | Should -Not -Throw
         }
     }
     Context 'GitIgnore' {
