@@ -12,35 +12,35 @@
 param()
 
 BeforeAll {
-    $repoSuffix = 'VariableTest'
-    $environmentName = 'production'
+    $testName = 'VariableTest'
     $os = Get-GitHubRunnerData | Select-Object -ExpandProperty OS
-    $prefix = $os + 'ORG_FG_PAT'
 }
 
 Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)' {
     BeforeAll {
         Connect-GitHubAccount -Token $env:TEST_USER_USER_FG_PAT
         $owner = 'psmodule-user'
-        $guid = [guid]::NewGuid().ToString()
-        $repo = "$repoSuffix-$guid"
-        New-GitHubRepository -Name $repo -AllowSquashMerge
-        Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
+        $testType = 'USER_FG_PAT'
+        $repoName = "$testName-$os-$testType"
+        $variablePrefix = "$testName`_$os`_$testType`_"
+        $environmentName = "$testName-$os-$testType"
+        New-GitHubRepository -Name $repoName -AllowSquashMerge
+        Set-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName
     }
     AfterAll {
-        Remove-GitHubRepository -Owner $owner -Name $repo -Confirm:$false
+        Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     Context 'Repository' {
         BeforeAll {
             $scope = @{
                 Owner      = $owner
-                Repository = $repo
+                Repository = $repoName
             }
         }
         It 'Set-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable"
+                Name  = "$variablePrefix`TestVariable"
                 Value = 'TestValue'
             }
             $result = Set-GitHubVariable @param @scope
@@ -50,7 +50,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
 
         It 'Update-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable"
+                Name  = "$variablePrefix`TestVariable"
                 Value = 'TestValue1234'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
@@ -59,7 +59,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
 
         It 'New-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable2"
+                Name  = "$variablePrefix`TestVariable2"
                 Value = 'TestValue123'
             }
             $result = New-GitHubVariable @param @scope
@@ -82,13 +82,13 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
         BeforeAll {
             $scope = @{
                 Owner       = $owner
-                Repository  = $repo
+                Repository  = $repoName
                 Environment = $environmentName
             }
         }
         It 'Set-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable"
+                Name  = "$variablePrefix`TestVariable"
                 Value = 'TestValue'
             }
             $result = Set-GitHubVariable @param @scope
@@ -98,7 +98,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
 
         It 'Update-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable"
+                Name  = "$variablePrefix`TestVariable"
                 Value = 'TestValue1234'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
@@ -107,7 +107,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
 
         It 'New-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable2"
+                Name  = "$variablePrefix`TestVariable2"
                 Value = 'TestValue123'
             }
             $result = New-GitHubVariable @param @scope
@@ -132,13 +132,15 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
     BeforeAll {
         Connect-GitHubAccount -Token $env:TEST_USER_ORG_FG_PAT
         $owner = 'psmodule-test-org2'
-        $guid = [guid]::NewGuid().ToString()
-        $repo = "$repoSuffix-$guid"
-        New-GitHubRepository -Owner $owner -Name $repo -AllowSquashMerge
-        Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
+        $testType = 'ORG_FG_PAT'
+        $repoName = "$testName-$os-$testType"
+        $variablePrefix = "$testName`_$os`_$testType`_"
+        $environmentName = "$testName-$os-$testType"
+        New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
+        Set-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName
     }
     AfterAll {
-        Remove-GitHubRepository -Owner $owner -Name $repo -Confirm:$false
+        Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     Context 'Organization' {
@@ -149,7 +151,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         }
         It 'Set-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable"
+                Name  = "$variablePrefix`TestVariable"
                 Value = 'TestValue'
             }
             $result = Set-GitHubVariable @param @scope
@@ -159,7 +161,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
 
         It 'Update-GitHubVariable' {
             $param = @{
-                Name       = "$prefix`TestVariable"
+                Name       = "$variablePrefix`TestVariable"
                 Value      = 'TestValue1234'
                 Visibility = 'all'
             }
@@ -169,7 +171,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
 
         It 'New-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable2"
+                Name  = "$variablePrefix`TestVariable2"
                 Value = 'TestValue123'
             }
             $result = New-GitHubVariable @param @scope
@@ -192,12 +194,12 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         BeforeAll {
             $scope = @{
                 Owner      = $owner
-                Repository = $repo
+                Repository = $repoName
             }
         }
         It 'Set-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable"
+                Name  = "$variablePrefix`TestVariable"
                 Value = 'TestValue'
             }
             $result = Set-GitHubVariable @param @scope
@@ -207,7 +209,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
 
         It 'Update-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable"
+                Name  = "$variablePrefix`TestVariable"
                 Value = 'TestValue1234'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
@@ -216,7 +218,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
 
         It 'New-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable2"
+                Name  = "$variablePrefix`TestVariable2"
                 Value = 'TestValue123'
             }
             $result = New-GitHubVariable @param @scope
@@ -239,13 +241,13 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         BeforeAll {
             $scope = @{
                 Owner       = $owner
-                Repository  = $repo
+                Repository  = $repoName
                 Environment = $environmentName
             }
         }
         It 'Set-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable"
+                Name  = "$variablePrefix`TestVariable"
                 Value = 'TestValue'
             }
             $result = Set-GitHubVariable @param @scope
@@ -255,7 +257,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
 
         It 'Update-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable"
+                Name  = "$variablePrefix`TestVariable"
                 Value = 'TestValue1234'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
@@ -264,7 +266,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
 
         It 'New-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable2"
+                Name  = "$variablePrefix`TestVariable2"
                 Value = 'TestValue123'
             }
             $result = New-GitHubVariable @param @scope
@@ -289,13 +291,15 @@ Describe 'As a user - Classic PAT token (PAT)' {
     BeforeAll {
         Connect-GitHubAccount -Token $env:TEST_USER_PAT
         $owner = 'psmodule-test-org2'
-        $guid = [guid]::NewGuid().ToString()
-        $repo = "$repoSuffix-$guid"
-        New-GitHubRepository -Owner $owner -Name $repo -AllowSquashMerge
-        Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
+        $testType = 'PAT'
+        $repoName = "$testName-$os-$testType"
+        $variablePrefix = "$testName`_$os`_$testType`_"
+        $environmentName = "$testName-$os-$testType"
+        New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
+        Set-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName
     }
     AfterAll {
-        Remove-GitHubRepository -Owner $owner -Name $repo -Confirm:$false
+        Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     Context 'Organization' {
@@ -306,7 +310,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
         }
         It 'Set-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable"
+                Name  = "$variablePrefix`TestVariable"
                 Value = 'TestValue'
             }
             $result = Set-GitHubVariable @param @scope
@@ -316,7 +320,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
 
         It 'Update-GitHubVariable' {
             $param = @{
-                Name       = "$prefix`TestVariable"
+                Name       = "$variablePrefix`TestVariable"
                 Value      = 'TestValue1234'
                 Visibility = 'all'
             }
@@ -326,7 +330,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
 
         It 'New-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable2"
+                Name  = "$variablePrefix`TestVariable2"
                 Value = 'TestValue123'
             }
             $result = New-GitHubVariable @param @scope
@@ -349,12 +353,12 @@ Describe 'As a user - Classic PAT token (PAT)' {
         BeforeAll {
             $scope = @{
                 Owner      = $owner
-                Repository = $repo
+                Repository = $repoName
             }
         }
         It 'Set-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable"
+                Name  = "$variablePrefix`TestVariable"
                 Value = 'TestValue'
             }
             $result = Set-GitHubVariable @param @scope
@@ -364,7 +368,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
 
         It 'Update-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable"
+                Name  = "$variablePrefix`TestVariable"
                 Value = 'TestValue1234'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
@@ -373,7 +377,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
 
         It 'New-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable2"
+                Name  = "$variablePrefix`TestVariable2"
                 Value = 'TestValue123'
             }
             $result = New-GitHubVariable @param @scope
@@ -396,13 +400,13 @@ Describe 'As a user - Classic PAT token (PAT)' {
         BeforeAll {
             $scope = @{
                 Owner       = $owner
-                Repository  = $repo
+                Repository  = $repoName
                 Environment = $environmentName
             }
         }
         It 'Set-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable"
+                Name  = "$variablePrefix`TestVariable"
                 Value = 'TestValue'
             }
             $result = Set-GitHubVariable @param @scope
@@ -412,7 +416,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
 
         It 'Update-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable"
+                Name  = "$variablePrefix`TestVariable"
                 Value = 'TestValue1234'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
@@ -421,7 +425,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
 
         It 'New-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable2"
+                Name  = "$variablePrefix`TestVariable2"
                 Value = 'TestValue123'
             }
             $result = New-GitHubVariable @param @scope
@@ -459,13 +463,15 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         Connect-GitHubAccount -ClientID $env:TEST_APP_ENT_CLIENT_ID -PrivateKey $env:TEST_APP_ENT_PRIVATE_KEY
         $owner = 'psmodule-test-org3'
         Connect-GitHubApp -Organization $owner -Default
-        $guid = [guid]::NewGuid().ToString()
-        $repo = "$repoSuffix-$guid"
-        New-GitHubRepository -Owner $owner -Name $repo -AllowSquashMerge
-        Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
+        $testType = 'APP_ENT'
+        $repoName = "$testName-$os-$testType"
+        $variablePrefix = "$testName`_$os`_$testType`_"
+        $environmentName = "$testName-$os-$testType"
+        New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
+        Set-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName
     }
     AfterAll {
-        Remove-GitHubRepository -Owner $owner -Name $repo -Confirm:$false
+        Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     Context 'Organization' {
@@ -476,7 +482,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         }
         It 'Set-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable"
+                Name  = "$variablePrefix`TestVariable"
                 Value = 'TestValue'
             }
             $result = Set-GitHubVariable @param @scope
@@ -486,7 +492,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
 
         It 'Update-GitHubVariable' {
             $param = @{
-                Name       = "$prefix`TestVariable"
+                Name       = "$variablePrefix`TestVariable"
                 Value      = 'TestValue1234'
                 Visibility = 'all'
             }
@@ -496,7 +502,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
 
         It 'New-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable2"
+                Name  = "$variablePrefix`TestVariable2"
                 Value = 'TestValue123'
             }
             $result = New-GitHubVariable @param @scope
@@ -519,12 +525,12 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         BeforeAll {
             $scope = @{
                 Owner      = $owner
-                Repository = $repo
+                Repository = $repoName
             }
         }
         It 'Set-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable"
+                Name  = "$variablePrefix`TestVariable"
                 Value = 'TestValue'
             }
             $result = Set-GitHubVariable @param @scope
@@ -534,7 +540,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
 
         It 'Update-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable"
+                Name  = "$variablePrefix`TestVariable"
                 Value = 'TestValue1234'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
@@ -543,7 +549,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
 
         It 'New-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable2"
+                Name  = "$variablePrefix`TestVariable2"
                 Value = 'TestValue123'
             }
             $result = New-GitHubVariable @param @scope
@@ -566,13 +572,13 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         BeforeAll {
             $scope = @{
                 Owner       = $owner
-                Repository  = $repo
+                Repository  = $repoName
                 Environment = $environmentName
             }
         }
         It 'Set-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable"
+                Name  = "$variablePrefix`TestVariable"
                 Value = 'TestValue'
             }
             $result = Set-GitHubVariable @param @scope
@@ -582,7 +588,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
 
         It 'Update-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable"
+                Name  = "$variablePrefix`TestVariable"
                 Value = 'TestValue1234'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
@@ -591,7 +597,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
 
         It 'New-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable2"
+                Name  = "$variablePrefix`TestVariable2"
                 Value = 'TestValue123'
             }
             $result = New-GitHubVariable @param @scope
@@ -617,13 +623,15 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         Connect-GitHubAccount -ClientID $env:TEST_APP_ORG_CLIENT_ID -PrivateKey $env:TEST_APP_ORG_PRIVATE_KEY
         $owner = 'psmodule-test-org'
         Connect-GitHubApp -Organization $owner -Default
-        $guid = [guid]::NewGuid().ToString()
-        $repo = "$repoSuffix-$guid"
-        New-GitHubRepository -Owner $owner -Name $repo -AllowSquashMerge
-        Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
+        $testType = 'APP_ORG'
+        $repoName = "$testName-$os-$testType"
+        $variablePrefix = "$testName`_$os`_$testType`_"
+        $environmentName = "$testName-$os-$testType"
+        New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
+        Set-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName
     }
     AfterAll {
-        Remove-GitHubRepository -Owner $owner -Name $repo -Confirm:$false
+        Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     Context 'Organization' {
@@ -634,7 +642,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         }
         It 'Set-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable"
+                Name  = "$variablePrefix`TestVariable"
                 Value = 'TestValue'
             }
             $result = Set-GitHubVariable @param @scope
@@ -644,7 +652,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
 
         It 'Update-GitHubVariable' {
             $param = @{
-                Name       = "$prefix`TestVariable"
+                Name       = "$variablePrefix`TestVariable"
                 Value      = 'TestValue1234'
                 Visibility = 'all'
             }
@@ -654,7 +662,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
 
         It 'New-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable2"
+                Name  = "$variablePrefix`TestVariable2"
                 Value = 'TestValue123'
             }
             $result = New-GitHubVariable @param @scope
@@ -677,12 +685,12 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         BeforeAll {
             $scope = @{
                 Owner      = $owner
-                Repository = $repo
+                Repository = $repoName
             }
         }
         It 'Set-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable"
+                Name  = "$variablePrefix`TestVariable"
                 Value = 'TestValue'
             }
             $result = Set-GitHubVariable @param @scope
@@ -692,7 +700,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
 
         It 'Update-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable"
+                Name  = "$variablePrefix`TestVariable"
                 Value = 'TestValue1234'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
@@ -701,7 +709,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
 
         It 'New-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable2"
+                Name  = "$variablePrefix`TestVariable2"
                 Value = 'TestValue123'
             }
             $result = New-GitHubVariable @param @scope
@@ -724,13 +732,13 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         BeforeAll {
             $scope = @{
                 Owner       = $owner
-                Repository  = $repo
+                Repository  = $repoName
                 Environment = $environmentName
             }
         }
         It 'Set-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable"
+                Name  = "$variablePrefix`TestVariable"
                 Value = 'TestValue'
             }
             $result = Set-GitHubVariable @param @scope
@@ -740,7 +748,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
 
         It 'Update-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable"
+                Name  = "$variablePrefix`TestVariable"
                 Value = 'TestValue1234'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
@@ -749,7 +757,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
 
         It 'New-GitHubVariable' {
             $param = @{
-                Name  = "$prefix`TestVariable2"
+                Name  = "$variablePrefix`TestVariable2"
                 Value = 'TestValue123'
             }
             $result = New-GitHubVariable @param @scope
