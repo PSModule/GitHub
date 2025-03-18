@@ -50,8 +50,8 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
 
         It 'Update-GitHubVariable' {
             $param = @{
-                Name       = "$prefix`TestVariable"
-                Value      = 'TestValue1234'
+                Name  = "$prefix`TestVariable"
+                Value = 'TestValue1234'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
             $result | Should -Not -BeNullOrEmpty
@@ -96,8 +96,8 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
 
         It 'Update-GitHubVariable' {
             $param = @{
-                Name       = "$prefix`TestVariable"
-                Value      = 'TestValue1234'
+                Name  = "$prefix`TestVariable"
+                Value = 'TestValue1234'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
             $result | Should -Not -BeNullOrEmpty
@@ -201,8 +201,8 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
 
         It 'Update-GitHubVariable' {
             $param = @{
-                Name       = "$prefix`TestVariable"
-                Value      = 'TestValue1234'
+                Name  = "$prefix`TestVariable"
+                Value = 'TestValue1234'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
             $result | Should -Not -BeNullOrEmpty
@@ -247,8 +247,8 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
 
         It 'Update-GitHubVariable' {
             $param = @{
-                Name       = "$prefix`TestVariable"
-                Value      = 'TestValue1234'
+                Name  = "$prefix`TestVariable"
+                Value = 'TestValue1234'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
             $result | Should -Not -BeNullOrEmpty
@@ -352,8 +352,8 @@ Describe 'As a user - Classic PAT token (PAT)' {
 
         It 'Update-GitHubVariable' {
             $param = @{
-                Name       = "$prefix`TestVariable"
-                Value      = 'TestValue1234'
+                Name  = "$prefix`TestVariable"
+                Value = 'TestValue1234'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
             $result | Should -Not -BeNullOrEmpty
@@ -398,8 +398,8 @@ Describe 'As a user - Classic PAT token (PAT)' {
 
         It 'Update-GitHubVariable' {
             $param = @{
-                Name       = "$prefix`TestVariable"
-                Value      = 'TestValue1234'
+                Name  = "$prefix`TestVariable"
+                Value = 'TestValue1234'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
             $result | Should -Not -BeNullOrEmpty
@@ -516,8 +516,8 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
 
         It 'Update-GitHubVariable' {
             $param = @{
-                Name       = "$prefix`TestVariable"
-                Value      = 'TestValue1234'
+                Name  = "$prefix`TestVariable"
+                Value = 'TestValue1234'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
             $result | Should -Not -BeNullOrEmpty
@@ -562,8 +562,8 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
 
         It 'Update-GitHubVariable' {
             $param = @{
-                Name       = "$prefix`TestVariable"
-                Value      = 'TestValue1234'
+                Name  = "$prefix`TestVariable"
+                Value = 'TestValue1234'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
             $result | Should -Not -BeNullOrEmpty
@@ -668,8 +668,8 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
 
         It 'Update-GitHubVariable' {
             $param = @{
-                Name       = "$prefix`TestVariable"
-                Value      = 'TestValue1234'
+                Name  = "$prefix`TestVariable"
+                Value = 'TestValue1234'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
             $result | Should -Not -BeNullOrEmpty
@@ -714,8 +714,8 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
 
         It 'Update-GitHubVariable' {
             $param = @{
-                Name       = "$prefix`TestVariable"
-                Value      = 'TestValue1234'
+                Name  = "$prefix`TestVariable"
+                Value = 'TestValue1234'
             }
             $result = Update-GitHubVariable @param @scope -PassThru
             $result | Should -Not -BeNullOrEmpty

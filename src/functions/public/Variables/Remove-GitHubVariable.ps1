@@ -103,6 +103,17 @@ function Remove-GitHubVariable {
                         }
                         Remove-GitHubVariableOnOwner @params
                     }
+                    $scopeParam = @{
+                        Owner       = $Owner
+                        Repository  = $Repository
+                        Environment = $Environment
+                    }
+                    $scopeParam | Remove-HashtableEntry -NullOrEmptyValues
+                    for ($i = 0; ($i -le 10); $i++) {
+                        Start-Sleep -Seconds 1
+                        $variable = Get-GitHubVariable @scopeParam | Where-Object { $_.Name -eq $Name }
+                        if (-not $variable) { break }
+                    }
                 }
             }
             'Organization' {
@@ -132,6 +143,17 @@ function Remove-GitHubVariable {
                 }
                 Remove-GitHubVariableOnEnvironment @params
             }
+        }
+        $scopeParam = @{
+            Owner       = $Owner
+            Repository  = $Repository
+            Environment = $Environment
+        }
+        $scopeParam | Remove-HashtableEntry -NullOrEmptyValues
+        for ($i = 0; ($i -le 10); $i++) {
+            Start-Sleep -Seconds 1
+            $variable = Get-GitHubVariable @scopeParam | Where-Object { $_.Name -eq $Name }
+            if (-not $variable) { break }
         }
     }
 
