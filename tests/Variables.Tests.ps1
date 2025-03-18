@@ -14,58 +14,14 @@ param()
 BeforeAll {
     $repoSuffix = 'VariableTest'
     $environmentName = 'production'
+    $os = Get-GitHubRunnerData | Select-Object -ExpandProperty OS
+    $prefix = $os + 'ORG_FG_PAT'
 }
 
 Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)' {
     BeforeAll {
         Connect-GitHubAccount -Token $env:TEST_USER_USER_FG_PAT
         $owner = 'psmodule-user'
-        $guid = [guid]::NewGuid().ToString()
-        $repo = "$repoSuffix-$guid"
-        New-GitHubRepository -Name $repo -AllowSquashMerge
-        Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
-    }
-    AfterAll {
-        Remove-GitHubRepository -Owner $owner -Name $repo -Confirm:$false
-        Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
-    }
-    Context 'Variables' {
-        Context 'Repository' {
-            It 'Set-GitHubVariable' {
-                $param = @{
-                    Name  = 'TestVariable'
-                    Value = 'TestValue'
-                }
-                $result = Set-GitHubVariable @param -Owner $owner -Repository $repo
-                $result = Set-GitHubVariable @param -Owner $owner -Repository $repo
-                $result | Should -Not -BeNullOrEmpty
-
-                $result | Remove-GitHubVariable
-            }
-        }
-
-        Context 'Environment' {
-            It 'Set-GitHubVariable' {
-                $param = @{
-                    Name  = 'TestVariable'
-                    Value = 'TestValue'
-                }
-                $result = Set-GitHubVariable @param -Owner $owner -Repository $repo -Environment $environmentName
-                $result = Set-GitHubVariable @param -Owner $owner -Repository $repo -Environment $environmentName
-                $result | Should -Not -BeNullOrEmpty
-
-                $result | Remove-GitHubVariable
-            }
-        }
-    }
-}
-
-Describe 'As a user - Fine-grained PAT token - organization account access (ORG_FG_PAT)' {
-    BeforeAll {
-        Connect-GitHubAccount -Token $env:TEST_USER_ORG_FG_PAT
-        $owner = 'psmodule-test-org2'
-        $os = Get-GitHubRunnerData | Select-Object -ExpandProperty OS
-        $prefix = $os + 'ORG_FG_PAT'
         $guid = [guid]::NewGuid().ToString()
         $repo = "$repoSuffix-$guid"
         New-GitHubRepository -Owner $owner -Name $repo -AllowSquashMerge
@@ -75,76 +31,251 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         Remove-GitHubRepository -Owner $owner -Name $repo -Confirm:$false
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
-    Context 'Variables' {
-        Context 'Organization' {
-            It 'Set-GitHubVariable' {
-                $param = @{
-                    Name  = "$prefix`TestVariable"
-                    Value = 'TestValue'
-                }
-                $result = Set-GitHubVariable @param -Owner $owner
-                $result = Set-GitHubVariable @param -Owner $owner
-                $result | Should -Not -BeNullOrEmpty
-            }
-
-            It 'Update-GitHubVariable' {
-                $param = @{
-                    Name       = "$prefix`TestVariable"
-                    Value      = 'TestValue123'
-                    Visibility = 'all'
-                }
-                $result = Update-GitHubVariable @param -Owner $owner
-                $result | Should -Not -BeNullOrEmpty
-            }
-
-            It 'New-GitHubVariable' {
-                $param = @{
-                    Name  = "$prefix`TestVariable2"
-                    Value = 'TestValue123'
-                }
-                $result = New-GitHubVariable @param -Owner $owner
-                $result | Should -Not -BeNullOrEmpty
-            }
-
-            It 'Get-GitHubVariable' {
-                $result = Get-GitHubVariable -Owner $owner
-                $result | Should -Not -BeNullOrEmpty
-            }
-
-            It 'Remove-GitHubVariable' {
-                Get-GitHubVariable -Owner $owner | Remove-GitHubVariable
-                Get-GitHubVariable -Owner $owner | Should -BeNullOrEmpty
+    Context 'Repository' {
+        BeforeAll {
+            $scope = @{
+                Owner      = $owner
+                Repository = $repo
             }
         }
-
-        Context 'Repository' {
-            It 'Set-GitHubVariable' {
-                $param = @{
-                    Name  = "$prefix`TestVariable"
-                    Value = 'TestValue'
-                }
-                $result = Set-GitHubVariable @param -Owner $owner -Repository $repo
-                $result = Set-GitHubVariable @param -Owner $owner -Repository $repo
-                $result | Should -Not -BeNullOrEmpty
-
-                $result | Remove-GitHubVariable
+        It 'Set-GitHubVariable' {
+            $param = @{
+                Name  = "$prefix`TestVariable"
+                Value = 'TestValue'
             }
-        }
-        Context 'Environment' {
-            It 'Set-GitHubVariable' {
-                $param = @{
-                    Name  = "$prefix`TestVariable"
-                    Value = 'TestValue'
-                }
-                $result = Set-GitHubVariable @param -Owner $owner -Repository $repo -Environment $environmentName
-                $result = Set-GitHubVariable @param -Owner $owner -Repository $repo -Environment $environmentName
-                $result | Should -Not -BeNullOrEmpty
-
-                $result | Remove-GitHubVariable
-            }
+            $result = Set-GitHubVariable @param @scope
+            $result = Set-GitHubVariable @param @scope
+            $result | Should -Not -BeNullOrEmpty
         }
 
+        It 'Update-GitHubVariable' {
+            $param = @{
+                Name       = "$prefix`TestVariable"
+                Value      = 'TestValue123'
+                Visibility = 'all'
+            }
+            $result = Update-GitHubVariable @param @scope -PassThru
+            $result | Should -Not -BeNullOrEmpty
+        }
 
+        It 'New-GitHubVariable' {
+            $param = @{
+                Name  = "$prefix`TestVariable2"
+                Value = 'TestValue123'
+            }
+            $result = New-GitHubVariable @param @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Get-GitHubVariable' {
+            $result = Get-GitHubVariable @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Remove-GitHubVariable' {
+            Get-GitHubVariable @scope | Remove-GitHubVariable
+            Get-GitHubVariable @scope | Should -BeNullOrEmpty
+        }
+    }
+    Context 'Environment' {
+        BeforeAll {
+            $scope = @{
+                Owner       = $owner
+                Repository  = $repo
+                Environment = $environmentName
+            }
+        }
+        It 'Set-GitHubVariable' {
+            $param = @{
+                Name  = "$prefix`TestVariable"
+                Value = 'TestValue'
+            }
+            $result = Set-GitHubVariable @param @scope
+            $result = Set-GitHubVariable @param @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Update-GitHubVariable' {
+            $param = @{
+                Name       = "$prefix`TestVariable"
+                Value      = 'TestValue123'
+                Visibility = 'all'
+            }
+            $result = Update-GitHubVariable @param @scope -PassThru
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'New-GitHubVariable' {
+            $param = @{
+                Name  = "$prefix`TestVariable2"
+                Value = 'TestValue123'
+            }
+            $result = New-GitHubVariable @param @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Get-GitHubVariable' {
+            $result = Get-GitHubVariable @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Remove-GitHubVariable' {
+            Get-GitHubVariable @scope | Remove-GitHubVariable
+            Get-GitHubVariable @scope | Should -BeNullOrEmpty
+        }
+    }
+}
+
+Describe 'As a user - Fine-grained PAT token - organization account access (ORG_FG_PAT)' {
+    BeforeAll {
+        Connect-GitHubAccount -Token $env:TEST_USER_ORG_FG_PAT
+        $owner = 'psmodule-test-org2'
+        $guid = [guid]::NewGuid().ToString()
+        $repo = "$repoSuffix-$guid"
+        New-GitHubRepository -Owner $owner -Name $repo -AllowSquashMerge
+        Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
+    }
+    AfterAll {
+        Remove-GitHubRepository -Owner $owner -Name $repo -Confirm:$false
+        Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+    }
+    Context 'Organization' {
+        BeforeAll {
+            $scope = @{
+                Owner = $owner
+            }
+        }
+        It 'Set-GitHubVariable' {
+            $param = @{
+                Name  = "$prefix`TestVariable"
+                Value = 'TestValue'
+            }
+            $result = Set-GitHubVariable @param @scope
+            $result = Set-GitHubVariable @param @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Update-GitHubVariable' {
+            $param = @{
+                Name       = "$prefix`TestVariable"
+                Value      = 'TestValue123'
+                Visibility = 'all'
+            }
+            $result = Update-GitHubVariable @param @scope -PassThru
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'New-GitHubVariable' {
+            $param = @{
+                Name  = "$prefix`TestVariable2"
+                Value = 'TestValue123'
+            }
+            $result = New-GitHubVariable @param @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Get-GitHubVariable' {
+            $result = Get-GitHubVariable @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Remove-GitHubVariable' {
+            Get-GitHubVariable @scope | Remove-GitHubVariable
+            Get-GitHubVariable @scope | Should -BeNullOrEmpty
+        }
+    }
+    Context 'Repository' {
+        BeforeAll {
+            $scope = @{
+                Owner      = $owner
+                Repository = $repo
+            }
+        }
+        It 'Set-GitHubVariable' {
+            $param = @{
+                Name  = "$prefix`TestVariable"
+                Value = 'TestValue'
+            }
+            $result = Set-GitHubVariable @param @scope
+            $result = Set-GitHubVariable @param @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Update-GitHubVariable' {
+            $param = @{
+                Name       = "$prefix`TestVariable"
+                Value      = 'TestValue123'
+                Visibility = 'all'
+            }
+            $result = Update-GitHubVariable @param @scope -PassThru
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'New-GitHubVariable' {
+            $param = @{
+                Name  = "$prefix`TestVariable2"
+                Value = 'TestValue123'
+            }
+            $result = New-GitHubVariable @param @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Get-GitHubVariable' {
+            $result = Get-GitHubVariable @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Remove-GitHubVariable' {
+            Get-GitHubVariable @scope | Remove-GitHubVariable
+            Get-GitHubVariable @scope | Should -BeNullOrEmpty
+        }
+    }
+    Context 'Environment' {
+        BeforeAll {
+            $scope = @{
+                Owner       = $owner
+                Repository  = $repo
+                Environment = $environmentName
+            }
+        }
+        It 'Set-GitHubVariable' {
+            $param = @{
+                Name  = "$prefix`TestVariable"
+                Value = 'TestValue'
+            }
+            $result = Set-GitHubVariable @param @scope
+            $result = Set-GitHubVariable @param @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Update-GitHubVariable' {
+            $param = @{
+                Name       = "$prefix`TestVariable"
+                Value      = 'TestValue123'
+                Visibility = 'all'
+            }
+            $result = Update-GitHubVariable @param @scope -PassThru
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'New-GitHubVariable' {
+            $param = @{
+                Name  = "$prefix`TestVariable2"
+                Value = 'TestValue123'
+            }
+            $result = New-GitHubVariable @param @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Get-GitHubVariable' {
+            $result = Get-GitHubVariable @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Remove-GitHubVariable' {
+            Get-GitHubVariable @scope | Remove-GitHubVariable
+            Get-GitHubVariable @scope | Should -BeNullOrEmpty
+        }
     }
 }
 
@@ -161,29 +292,142 @@ Describe 'As a user - Classic PAT token (PAT)' {
         Remove-GitHubRepository -Owner $owner -Name $repo -Confirm:$false
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
-    Context 'Variables' {
-        It 'Set-GitHubVariable - Repository' {
+    Context 'Organization' {
+        BeforeAll {
+            $scope = @{
+                Owner = $owner
+            }
+        }
+        It 'Set-GitHubVariable' {
             $param = @{
-                Name  = 'TestVariable'
+                Name  = "$prefix`TestVariable"
                 Value = 'TestValue'
             }
-            $result = Set-GitHubVariable @param -Owner $owner -Repository $repo
-            $result = Set-GitHubVariable @param -Owner $owner -Repository $repo
+            $result = Set-GitHubVariable @param @scope
+            $result = Set-GitHubVariable @param @scope
             $result | Should -Not -BeNullOrEmpty
-
-            $result | Remove-GitHubVariable
         }
 
-        It 'Set-GitHubVariable - Environment' {
+        It 'Update-GitHubVariable' {
             $param = @{
-                Name  = 'TestVariable'
+                Name       = "$prefix`TestVariable"
+                Value      = 'TestValue123'
+                Visibility = 'all'
+            }
+            $result = Update-GitHubVariable @param @scope -PassThru
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'New-GitHubVariable' {
+            $param = @{
+                Name  = "$prefix`TestVariable2"
+                Value = 'TestValue123'
+            }
+            $result = New-GitHubVariable @param @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Get-GitHubVariable' {
+            $result = Get-GitHubVariable @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Remove-GitHubVariable' {
+            Get-GitHubVariable @scope | Remove-GitHubVariable
+            Get-GitHubVariable @scope | Should -BeNullOrEmpty
+        }
+    }
+    Context 'Repository' {
+        BeforeAll {
+            $scope = @{
+                Owner      = $owner
+                Repository = $repo
+            }
+        }
+        It 'Set-GitHubVariable' {
+            $param = @{
+                Name  = "$prefix`TestVariable"
                 Value = 'TestValue'
             }
-            $result = Set-GitHubVariable @param -Owner $owner -Repository $repo -Environment $environmentName
-            $result = Set-GitHubVariable @param -Owner $owner -Repository $repo -Environment $environmentName
+            $result = Set-GitHubVariable @param @scope
+            $result = Set-GitHubVariable @param @scope
             $result | Should -Not -BeNullOrEmpty
+        }
 
-            $result | Remove-GitHubVariable
+        It 'Update-GitHubVariable' {
+            $param = @{
+                Name       = "$prefix`TestVariable"
+                Value      = 'TestValue123'
+                Visibility = 'all'
+            }
+            $result = Update-GitHubVariable @param @scope -PassThru
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'New-GitHubVariable' {
+            $param = @{
+                Name  = "$prefix`TestVariable2"
+                Value = 'TestValue123'
+            }
+            $result = New-GitHubVariable @param @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Get-GitHubVariable' {
+            $result = Get-GitHubVariable @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Remove-GitHubVariable' {
+            Get-GitHubVariable @scope | Remove-GitHubVariable
+            Get-GitHubVariable @scope | Should -BeNullOrEmpty
+        }
+    }
+    Context 'Environment' {
+        BeforeAll {
+            $scope = @{
+                Owner       = $owner
+                Repository  = $repo
+                Environment = $environmentName
+            }
+        }
+        It 'Set-GitHubVariable' {
+            $param = @{
+                Name  = "$prefix`TestVariable"
+                Value = 'TestValue'
+            }
+            $result = Set-GitHubVariable @param @scope
+            $result = Set-GitHubVariable @param @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Update-GitHubVariable' {
+            $param = @{
+                Name       = "$prefix`TestVariable"
+                Value      = 'TestValue123'
+                Visibility = 'all'
+            }
+            $result = Update-GitHubVariable @param @scope -PassThru
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'New-GitHubVariable' {
+            $param = @{
+                Name  = "$prefix`TestVariable2"
+                Value = 'TestValue123'
+            }
+            $result = New-GitHubVariable @param @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Get-GitHubVariable' {
+            $result = Get-GitHubVariable @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Remove-GitHubVariable' {
+            Get-GitHubVariable @scope | Remove-GitHubVariable
+            Get-GitHubVariable @scope | Should -BeNullOrEmpty
         }
     }
 }
@@ -204,9 +448,9 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
     BeforeAll {
         Connect-GitHubAccount -ClientID $env:TEST_APP_ENT_CLIENT_ID -PrivateKey $env:TEST_APP_ENT_PRIVATE_KEY
         $owner = 'psmodule-test-org3'
+        Connect-GitHubApp -Organization $owner -Default
         $guid = [guid]::NewGuid().ToString()
         $repo = "$repoSuffix-$guid"
-        Connect-GitHubApp -Organization $owner -Default
         New-GitHubRepository -Owner $owner -Name $repo -AllowSquashMerge
         Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
     }
@@ -214,41 +458,142 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         Remove-GitHubRepository -Owner $owner -Name $repo -Confirm:$false
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
-    Context 'Variables' {
-        It 'Set-GitHubVariable - Organization' {
+    Context 'Organization' {
+        BeforeAll {
+            $scope = @{
+                Owner = $owner
+            }
+        }
+        It 'Set-GitHubVariable' {
             $param = @{
-                Name  = 'TestVariable'
+                Name  = "$prefix`TestVariable"
                 Value = 'TestValue'
             }
-            $result = Set-GitHubVariable @param -Owner $owner
-            $result = Set-GitHubVariable @param -Owner $owner
+            $result = Set-GitHubVariable @param @scope
+            $result = Set-GitHubVariable @param @scope
             $result | Should -Not -BeNullOrEmpty
-
-            $result | Remove-GitHubVariable
         }
 
-        It 'Set-GitHubVariable - Repository' {
+        It 'Update-GitHubVariable' {
             $param = @{
-                Name  = 'TestVariable'
-                Value = 'TestValue'
+                Name       = "$prefix`TestVariable"
+                Value      = 'TestValue123'
+                Visibility = 'all'
             }
-            $result = Set-GitHubVariable @param -Owner $owner -Repository $repo
-            $result = Set-GitHubVariable @param -Owner $owner -Repository $repo
+            $result = Update-GitHubVariable @param @scope -PassThru
             $result | Should -Not -BeNullOrEmpty
-
-            $result | Remove-GitHubVariable
         }
 
-        It 'Set-GitHubVariable - Environment' {
+        It 'New-GitHubVariable' {
             $param = @{
-                Name  = 'TestVariable'
+                Name  = "$prefix`TestVariable2"
+                Value = 'TestValue123'
+            }
+            $result = New-GitHubVariable @param @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Get-GitHubVariable' {
+            $result = Get-GitHubVariable @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Remove-GitHubVariable' {
+            Get-GitHubVariable @scope | Remove-GitHubVariable
+            Get-GitHubVariable @scope | Should -BeNullOrEmpty
+        }
+    }
+    Context 'Repository' {
+        BeforeAll {
+            $scope = @{
+                Owner      = $owner
+                Repository = $repo
+            }
+        }
+        It 'Set-GitHubVariable' {
+            $param = @{
+                Name  = "$prefix`TestVariable"
                 Value = 'TestValue'
             }
-            $result = Set-GitHubVariable @param -Owner $owner -Repository $repo -Environment $environmentName
-            $result = Set-GitHubVariable @param -Owner $owner -Repository $repo -Environment $environmentName
+            $result = Set-GitHubVariable @param @scope
+            $result = Set-GitHubVariable @param @scope
             $result | Should -Not -BeNullOrEmpty
+        }
 
-            $result | Remove-GitHubVariable
+        It 'Update-GitHubVariable' {
+            $param = @{
+                Name       = "$prefix`TestVariable"
+                Value      = 'TestValue123'
+                Visibility = 'all'
+            }
+            $result = Update-GitHubVariable @param @scope -PassThru
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'New-GitHubVariable' {
+            $param = @{
+                Name  = "$prefix`TestVariable2"
+                Value = 'TestValue123'
+            }
+            $result = New-GitHubVariable @param @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Get-GitHubVariable' {
+            $result = Get-GitHubVariable @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Remove-GitHubVariable' {
+            Get-GitHubVariable @scope | Remove-GitHubVariable
+            Get-GitHubVariable @scope | Should -BeNullOrEmpty
+        }
+    }
+    Context 'Environment' {
+        BeforeAll {
+            $scope = @{
+                Owner       = $owner
+                Repository  = $repo
+                Environment = $environmentName
+            }
+        }
+        It 'Set-GitHubVariable' {
+            $param = @{
+                Name  = "$prefix`TestVariable"
+                Value = 'TestValue'
+            }
+            $result = Set-GitHubVariable @param @scope
+            $result = Set-GitHubVariable @param @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Update-GitHubVariable' {
+            $param = @{
+                Name       = "$prefix`TestVariable"
+                Value      = 'TestValue123'
+                Visibility = 'all'
+            }
+            $result = Update-GitHubVariable @param @scope -PassThru
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'New-GitHubVariable' {
+            $param = @{
+                Name  = "$prefix`TestVariable2"
+                Value = 'TestValue123'
+            }
+            $result = New-GitHubVariable @param @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Get-GitHubVariable' {
+            $result = Get-GitHubVariable @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Remove-GitHubVariable' {
+            Get-GitHubVariable @scope | Remove-GitHubVariable
+            Get-GitHubVariable @scope | Should -BeNullOrEmpty
         }
     }
 }
@@ -257,9 +602,9 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
     BeforeAll {
         Connect-GitHubAccount -ClientID $env:TEST_APP_ORG_CLIENT_ID -PrivateKey $env:TEST_APP_ORG_PRIVATE_KEY
         $owner = 'psmodule-test-org'
+        Connect-GitHubApp -Organization $owner -Default
         $guid = [guid]::NewGuid().ToString()
         $repo = "$repoSuffix-$guid"
-        Connect-GitHubApp -Organization $owner -Default
         New-GitHubRepository -Owner $owner -Name $repo -AllowSquashMerge
         Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
     }
@@ -267,41 +612,142 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         Remove-GitHubRepository -Owner $owner -Name $repo -Confirm:$false
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
-    Context 'Variables' {
-        It 'Set-GitHubVariable - Organization' {
+    Context 'Organization' {
+        BeforeAll {
+            $scope = @{
+                Owner = $owner
+            }
+        }
+        It 'Set-GitHubVariable' {
             $param = @{
-                Name  = 'TestVariable'
+                Name  = "$prefix`TestVariable"
                 Value = 'TestValue'
             }
-            $result = Set-GitHubVariable @param -Owner $owner
-            $result = Set-GitHubVariable @param -Owner $owner
+            $result = Set-GitHubVariable @param @scope
+            $result = Set-GitHubVariable @param @scope
             $result | Should -Not -BeNullOrEmpty
-
-            $result | Remove-GitHubVariable
         }
 
-        It 'Set-GitHubVariable - Repository' {
+        It 'Update-GitHubVariable' {
             $param = @{
-                Name  = 'TestVariable'
-                Value = 'TestValue'
+                Name       = "$prefix`TestVariable"
+                Value      = 'TestValue123'
+                Visibility = 'all'
             }
-            $result = Set-GitHubVariable @param -Owner $owner -Repository $repo
-            $result = Set-GitHubVariable @param -Owner $owner -Repository $repo
+            $result = Update-GitHubVariable @param @scope -PassThru
             $result | Should -Not -BeNullOrEmpty
-
-            $result | Remove-GitHubVariable
         }
 
-        It 'Set-GitHubVariable - Environment' {
+        It 'New-GitHubVariable' {
             $param = @{
-                Name  = 'TestVariable'
+                Name  = "$prefix`TestVariable2"
+                Value = 'TestValue123'
+            }
+            $result = New-GitHubVariable @param @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Get-GitHubVariable' {
+            $result = Get-GitHubVariable @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Remove-GitHubVariable' {
+            Get-GitHubVariable @scope | Remove-GitHubVariable
+            Get-GitHubVariable @scope | Should -BeNullOrEmpty
+        }
+    }
+    Context 'Repository' {
+        BeforeAll {
+            $scope = @{
+                Owner      = $owner
+                Repository = $repo
+            }
+        }
+        It 'Set-GitHubVariable' {
+            $param = @{
+                Name  = "$prefix`TestVariable"
                 Value = 'TestValue'
             }
-            $result = Set-GitHubVariable @param -Owner $owner -Repository $repo -Environment $environmentName
-            $result = Set-GitHubVariable @param -Owner $owner -Repository $repo -Environment $environmentName
+            $result = Set-GitHubVariable @param @scope
+            $result = Set-GitHubVariable @param @scope
             $result | Should -Not -BeNullOrEmpty
+        }
 
-            $result | Remove-GitHubVariable
+        It 'Update-GitHubVariable' {
+            $param = @{
+                Name       = "$prefix`TestVariable"
+                Value      = 'TestValue123'
+                Visibility = 'all'
+            }
+            $result = Update-GitHubVariable @param @scope -PassThru
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'New-GitHubVariable' {
+            $param = @{
+                Name  = "$prefix`TestVariable2"
+                Value = 'TestValue123'
+            }
+            $result = New-GitHubVariable @param @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Get-GitHubVariable' {
+            $result = Get-GitHubVariable @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Remove-GitHubVariable' {
+            Get-GitHubVariable @scope | Remove-GitHubVariable
+            Get-GitHubVariable @scope | Should -BeNullOrEmpty
+        }
+    }
+    Context 'Environment' {
+        BeforeAll {
+            $scope = @{
+                Owner       = $owner
+                Repository  = $repo
+                Environment = $environmentName
+            }
+        }
+        It 'Set-GitHubVariable' {
+            $param = @{
+                Name  = "$prefix`TestVariable"
+                Value = 'TestValue'
+            }
+            $result = Set-GitHubVariable @param @scope
+            $result = Set-GitHubVariable @param @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Update-GitHubVariable' {
+            $param = @{
+                Name       = "$prefix`TestVariable"
+                Value      = 'TestValue123'
+                Visibility = 'all'
+            }
+            $result = Update-GitHubVariable @param @scope -PassThru
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'New-GitHubVariable' {
+            $param = @{
+                Name  = "$prefix`TestVariable2"
+                Value = 'TestValue123'
+            }
+            $result = New-GitHubVariable @param @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Get-GitHubVariable' {
+            $result = Get-GitHubVariable @scope
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Remove-GitHubVariable' {
+            Get-GitHubVariable @scope | Remove-GitHubVariable
+            Get-GitHubVariable @scope | Should -BeNullOrEmpty
         }
     }
 }
