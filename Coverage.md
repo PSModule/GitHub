@@ -9,15 +9,15 @@
     </tr>
     <tr>
         <td>Covered functions</td>
-        <td>180</td>
+        <td>181</td>
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>843</td>
+        <td>842</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>17.6%</td>
+        <td>17.69%</td>
     </tr>
 </table>
 
@@ -298,7 +298,7 @@
 | `/repos/{owner}/{repo}/actions/jobs/{job_id}/rerun`                                                                       |                    |                    |                    | :x:                |                    |
 | `/repos/{owner}/{repo}/actions/oidc/customization/sub`                                                                    |                    | :x:                |                    |                    | :x:                |
 | `/repos/{owner}/{repo}/actions/organization-secrets`                                                                      |                    | :x:                |                    |                    |                    |
-| `/repos/{owner}/{repo}/actions/organization-variables`                                                                    |                    | :x:                |                    |                    |                    |
+| `/repos/{owner}/{repo}/actions/organization-variables`                                                                    |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/permissions`                                                                               |                    | :x:                |                    |                    | :x:                |
 | `/repos/{owner}/{repo}/actions/permissions/access`                                                                        |                    | :x:                |                    |                    | :x:                |
 | `/repos/{owner}/{repo}/actions/permissions/selected-actions`                                                              |                    | :x:                |                    |                    | :x:                |
