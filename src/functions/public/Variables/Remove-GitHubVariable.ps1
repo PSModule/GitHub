@@ -115,6 +115,7 @@ function Remove-GitHubVariable {
                         if (-not $variable) { break }
                     }
                 }
+                return
             }
             'Organization' {
                 $params = @{
@@ -123,6 +124,7 @@ function Remove-GitHubVariable {
                     Context = $Context
                 }
                 Remove-GitHubVariableOnOwner @params
+                break
             }
             'Repository' {
                 $params = @{
@@ -132,6 +134,7 @@ function Remove-GitHubVariable {
                     Context    = $Context
                 }
                 Remove-GitHubVariableOnRepository @params
+                break
             }
             'Environment' {
                 $params = @{
@@ -142,8 +145,10 @@ function Remove-GitHubVariable {
                     Context     = $Context
                 }
                 Remove-GitHubVariableOnEnvironment @params
+                break
             }
         }
+
         $scopeParam = @{
             Owner       = $Owner
             Repository  = $Repository

@@ -45,7 +45,7 @@
         $return = ($Context.Token | ConvertFrom-SecureString -AsPlainText | gh auth login --with-token --hostname $Context.HostName) 2>&1
 
         if ($LASTEXITCODE -ne 0) {
-            Write-Warning $return
+            Write-Warning "$($return -join '`n')"
             Write-Warning "Unable to log on with the GitHub Cli. ($LASTEXITCODE)"
             $Global:LASTEXITCODE = 0
             Write-Debug "Resetting LASTEXITCODE: $LASTEXITCODE"
