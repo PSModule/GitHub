@@ -23,7 +23,7 @@ BeforeAll {
 Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)' {
     BeforeAll {
         Connect-GitHubAccount -Token $env:TEST_USER_USER_FG_PAT
-        LogGroup 'Context' { Write-Host "$(Get-GitHubContext | Format-List)" }
+        LogGroup 'Context' { Write-Host "$(Get-GitHubContext | Format-List | Out-String)" }
         $owner = 'psmodule-user'
         $testType = 'USER_FG_PAT'
         $repoName = "$testName-$os-$testType"
@@ -80,10 +80,10 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
 
         It 'Remove-GitHubVariable' {
             $before = Get-GitHubVariable @scope -Name "*$os*"
-            Write-Host "$($before | Format-Table)"
+            Write-Host "$($before | Format-Table | Out-String)"
             $before | Remove-GitHubVariable
             $after = Get-GitHubVariable @scope -Name "*$os*"
-            Write-Host "$($after | Format-Table)"
+            Write-Host "$($after | Format-Table | Out-String)"
             $after.Count | Should -Be 0
         }
     }
@@ -133,10 +133,10 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
 
         It 'Remove-GitHubVariable' {
             $before = Get-GitHubVariable @scope -Name "*$os*"
-            Write-Host "$($before | Format-Table)"
+            Write-Host "$($before | Format-Table | Out-String)"
             $before | Remove-GitHubVariable
             $after = Get-GitHubVariable @scope -Name "*$os*"
-            Write-Host "$($after | Format-Table)"
+            Write-Host "$($after | Format-Table | Out-String)"
             $after.Count | Should -Be 0
         }
     }
@@ -145,7 +145,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
 Describe 'As a user - Fine-grained PAT token - organization account access (ORG_FG_PAT)' {
     BeforeAll {
         Connect-GitHubAccount -Token $env:TEST_USER_ORG_FG_PAT
-        LogGroup 'Context' { Write-Host "$(Get-GitHubContext | Format-List)" }
+        LogGroup 'Context' { Write-Host "$(Get-GitHubContext | Format-List | Out-String)" }
         $owner = 'psmodule-test-org2'
         $testType = 'ORG_FG_PAT'
         $repoName = "$testName-$os-$testType"
@@ -209,10 +209,10 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
 
         It 'Remove-GitHubVariable' {
             $before = Get-GitHubVariable @scope -Name "*$os*"
-            Write-Host "$($before | Format-Table)"
+            Write-Host "$($before | Format-Table | Out-String)"
             $before | Remove-GitHubVariable
             $after = Get-GitHubVariable @scope -Name "*$os*"
-            Write-Host "$($after | Format-Table)"
+            Write-Host "$($after | Format-Table | Out-String)"
             $after.Count | Should -Be 0
         }
     }
@@ -266,10 +266,10 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
 
         It 'Remove-GitHubVariable' {
             $before = Get-GitHubVariable @scope -Name "*$os*"
-            Write-Host "$($before | Format-Table)"
+            Write-Host "$($before | Format-Table | Out-String)"
             $before | Remove-GitHubVariable
             $after = Get-GitHubVariable @scope -Name "*$os*"
-            Write-Host "$($after | Format-Table)"
+            Write-Host "$($after | Format-Table | Out-String)"
             $after.Count | Should -Be 0
         }
     }
@@ -325,10 +325,10 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
 
         It 'Remove-GitHubVariable' {
             $before = Get-GitHubVariable @scope -Name "*$os*"
-            Write-Host "$($before | Format-Table)"
+            Write-Host "$($before | Format-Table | Out-String)"
             $before | Remove-GitHubVariable
             $after = Get-GitHubVariable @scope -Name "*$os*"
-            Write-Host "$($after | Format-Table)"
+            Write-Host "$($after | Format-Table | Out-String)"
             $after.Count | Should -Be 0
         }
     }
@@ -337,7 +337,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
 Describe 'As a user - Classic PAT token (PAT)' {
     BeforeAll {
         Connect-GitHubAccount -Token $env:TEST_USER_PAT
-        LogGroup 'Context' { Write-Host "$(Get-GitHubContext | Format-List)" }
+        LogGroup 'Context' { Write-Host "$(Get-GitHubContext | Format-List | Out-String)" }
         $owner = 'psmodule-test-org2'
         $testType = 'PAT'
         $repoName = "$testName-$os-$testType"
@@ -401,10 +401,10 @@ Describe 'As a user - Classic PAT token (PAT)' {
 
         It 'Remove-GitHubVariable' {
             $before = Get-GitHubVariable @scope -Name "*$os*"
-            Write-Host "$($before | Format-Table)"
+            Write-Host "$($before | Format-Table | Out-String)"
             $before | Remove-GitHubVariable
             $after = Get-GitHubVariable @scope -Name "*$os*"
-            Write-Host "$($after | Format-Table)"
+            Write-Host "$($after | Format-Table | Out-String)"
             $after.Count | Should -Be 0
         }
     }
@@ -458,10 +458,10 @@ Describe 'As a user - Classic PAT token (PAT)' {
 
         It 'Remove-GitHubVariable' {
             $before = Get-GitHubVariable @scope -Name "*$os*"
-            Write-Host "$($before | Format-Table)"
+            Write-Host "$($before | Format-Table | Out-String)"
             $before | Remove-GitHubVariable
             $after = Get-GitHubVariable @scope -Name "*$os*"
-            Write-Host "$($after | Format-Table)"
+            Write-Host "$($after | Format-Table | Out-String)"
             $after.Count | Should -Be 0
         }
     }
@@ -517,10 +517,10 @@ Describe 'As a user - Classic PAT token (PAT)' {
 
         It 'Remove-GitHubVariable' {
             $before = Get-GitHubVariable @scope -Name "*$os*"
-            Write-Host "$($before | Format-Table)"
+            Write-Host "$($before | Format-Table | Out-String)"
             $before | Remove-GitHubVariable
             $after = Get-GitHubVariable @scope -Name "*$os*"
-            Write-Host "$($after | Format-Table)"
+            Write-Host "$($after | Format-Table | Out-String)"
             $after.Count | Should -Be 0
         }
     }
@@ -529,7 +529,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
 Describe 'As GitHub Actions (GHA)' {
     BeforeAll {
         Connect-GitHubAccount
-        LogGroup 'Context' { Write-Host "$(Get-GitHubContext | Format-List)" }
+        LogGroup 'Context' { Write-Host "$(Get-GitHubContext | Format-List | Out-String)" }
     }
     AfterAll {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
@@ -542,10 +542,10 @@ Describe 'As GitHub Actions (GHA)' {
 Describe 'As a GitHub App - Enterprise (APP_ENT)' {
     BeforeAll {
         Connect-GitHubAccount -ClientID $env:TEST_APP_ENT_CLIENT_ID -PrivateKey $env:TEST_APP_ENT_PRIVATE_KEY
-        LogGroup 'Context' { Write-Host "$(Get-GitHubContext | Format-List)" }
+        LogGroup 'Context' { Write-Host "$(Get-GitHubContext | Format-List | Out-String)" }
         $owner = 'psmodule-test-org3'
         Connect-GitHubApp -Organization $owner -Default
-        LogGroup 'Context' { Write-Host "$(Get-GitHubContext | Format-List)" }
+        LogGroup 'Context' { Write-Host "$(Get-GitHubContext | Format-List | Out-String)" }
         $testType = 'APP_ENT'
         $repoName = "$testName-$os-$testType"
         $varName = "$testName`_$os`_$testType"
@@ -609,10 +609,10 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
 
         It 'Remove-GitHubVariable' {
             $before = Get-GitHubVariable @scope -Name "*$os*"
-            Write-Host "$($before | Format-Table)"
+            Write-Host "$($before | Format-Table | Out-String)"
             $before | Remove-GitHubVariable
             $after = Get-GitHubVariable @scope -Name "*$os*"
-            Write-Host "$($after | Format-Table)"
+            Write-Host "$($after | Format-Table | Out-String)"
             $after.Count | Should -Be 0
         }
     }
@@ -666,10 +666,10 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
 
         It 'Remove-GitHubVariable' {
             $before = Get-GitHubVariable @scope -Name "*$os*"
-            Write-Host "$($before | Format-Table)"
+            Write-Host "$($before | Format-Table | Out-String)"
             $before | Remove-GitHubVariable
             $after = Get-GitHubVariable @scope -Name "*$os*"
-            Write-Host "$($after | Format-Table)"
+            Write-Host "$($after | Format-Table | Out-String)"
             $after.Count | Should -Be 0
         }
     }
@@ -725,10 +725,10 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
 
         It 'Remove-GitHubVariable' {
             $before = Get-GitHubVariable @scope -Name "*$os*"
-            Write-Host "$($before | Format-Table)"
+            Write-Host "$($before | Format-Table | Out-String)"
             $before | Remove-GitHubVariable
             $after = Get-GitHubVariable @scope -Name "*$os*"
-            Write-Host "$($after | Format-Table)"
+            Write-Host "$($after | Format-Table | Out-String)"
             $after.Count | Should -Be 0
         }
     }
@@ -737,10 +737,10 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
 Describe 'As a GitHub App - Organization (APP_ORG)' {
     BeforeAll {
         Connect-GitHubAccount -ClientID $env:TEST_APP_ORG_CLIENT_ID -PrivateKey $env:TEST_APP_ORG_PRIVATE_KEY
-        LogGroup 'Context' { Write-Host "$(Get-GitHubContext | Format-List)" }
+        LogGroup 'Context' { Write-Host "$(Get-GitHubContext | Format-List | Out-String)" }
         $owner = 'psmodule-test-org'
         Connect-GitHubApp -Organization $owner -Default
-        LogGroup 'Context' { Write-Host "$(Get-GitHubContext | Format-List)" }
+        LogGroup 'Context' { Write-Host "$(Get-GitHubContext | Format-List | Out-String)" }
         $testType = 'APP_ORG'
         $repoName = "$testName-$os-$testType"
         $varName = "$testName`_$os`_$testType"
@@ -803,10 +803,10 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
 
         It 'Remove-GitHubVariable' {
             $before = Get-GitHubVariable @scope -Name "*$os*"
-            Write-Host "$($before | Format-Table)"
+            Write-Host "$($before | Format-Table | Out-String)"
             $before | Remove-GitHubVariable
             $after = Get-GitHubVariable @scope -Name "*$os*"
-            Write-Host "$($after | Format-Table)"
+            Write-Host "$($after | Format-Table | Out-String)"
             $after.Count | Should -Be 0
         }
     }
@@ -860,10 +860,10 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
 
         It 'Remove-GitHubVariable' {
             $before = Get-GitHubVariable @scope -Name "*$os*"
-            Write-Host "$($before | Format-Table)"
+            Write-Host "$($before | Format-Table | Out-String)"
             $before | Remove-GitHubVariable
             $after = Get-GitHubVariable @scope -Name "*$os*"
-            Write-Host "$($after | Format-Table)"
+            Write-Host "$($after | Format-Table | Out-String)"
             $after.Count | Should -Be 0
         }
     }
@@ -919,10 +919,10 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
 
         It 'Remove-GitHubVariable' {
             $before = Get-GitHubVariable @scope -Name "*$os*"
-            Write-Host "$($before | Format-Table)"
+            Write-Host "$($before | Format-Table | Out-String)"
             $before | Remove-GitHubVariable
             $after = Get-GitHubVariable @scope -Name "*$os*"
-            Write-Host "$($after | Format-Table)"
+            Write-Host "$($after | Format-Table | Out-String)"
             $after.Count | Should -Be 0
         }
     }
