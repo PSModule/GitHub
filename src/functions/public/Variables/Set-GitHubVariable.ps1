@@ -90,7 +90,6 @@ function Set-GitHubVariable {
             Owner       = $Owner
             Repository  = $Repository
             Environment = $Environment
-            Name        = $Name
             Context     = $Context
         }
         $getParams | Remove-HashtableEntry -NullOrEmptyValues
@@ -110,7 +109,7 @@ function Set-GitHubVariable {
         }
         $params | Remove-HashtableEntry -NullOrEmptyValues
 
-        $variable = Get-GitHubVariable @getParams -ErrorAction SilentlyContinue
+        $variable = Get-GitHubVariable @getParams | Where-Object { $_.Name -eq $Name }
 
         if ($variable) {
             $null = Update-GitHubVariable @params
@@ -118,7 +117,7 @@ function Set-GitHubVariable {
             $null = New-GitHubVariable @params
         }
 
-        Get-GitHubVariable @getParams
+        Get-GitHubVariable @getParams -Name $Name
     }
 
     end {
