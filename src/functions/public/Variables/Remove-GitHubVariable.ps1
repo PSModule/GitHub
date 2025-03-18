@@ -107,9 +107,10 @@ function Remove-GitHubVariable {
                         Owner       = $item.Owner
                         Repository  = $item.Repository
                         Environment = $item.Environment
+                        Context     = $Context
                     }
                     $scopeParam | Remove-HashtableEntry -NullOrEmptyValues
-                    for ($i = 0; ($i -le 10); $i++) {
+                    for ($i = 0; $i -le 10; $i++) {
                         Start-Sleep -Seconds 1
                         $variable = Get-GitHubVariable @scopeParam | Where-Object { $_.Name -eq $Name }
                         if (-not $variable) { break }
@@ -155,7 +156,7 @@ function Remove-GitHubVariable {
             Environment = $Environment
         }
         $scopeParam | Remove-HashtableEntry -NullOrEmptyValues
-        for ($i = 0; ($i -le 10); $i++) {
+        for ($i = 0; $i -le 10; $i++) {
             Start-Sleep -Seconds 1
             $variable = Get-GitHubVariable @scopeParam | Where-Object { $_.Name -eq $Name }
             if (-not $variable) { break }
