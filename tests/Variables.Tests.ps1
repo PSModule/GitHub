@@ -64,6 +64,8 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
     BeforeAll {
         Connect-GitHubAccount -Token $env:TEST_USER_ORG_FG_PAT
         $owner = 'psmodule-test-org2'
+        $os = Get-GitHubRunnerData | Select-Object -ExpandProperty OS
+        $prefix = $os + 'ORG_FG_PAT'
         $guid = [guid]::NewGuid().ToString()
         $repo = "$repoSuffix-$guid"
         New-GitHubRepository -Owner $owner -Name $repo -AllowSquashMerge
@@ -77,7 +79,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         Context 'Organization' {
             It 'Set-GitHubVariable' {
                 $param = @{
-                    Name  = 'TestVariable'
+                    Name  = "$prefix`TestVariable"
                     Value = 'TestValue'
                 }
                 $result = Set-GitHubVariable @param -Owner $owner
@@ -87,7 +89,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
 
             It 'Update-GitHubVariable' {
                 $param = @{
-                    Name       = 'TestVariable'
+                    Name       = "$prefix`TestVariable"
                     Value      = 'TestValue123'
                     Visibility = 'all'
                 }
@@ -97,7 +99,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
 
             It 'New-GitHubVariable' {
                 $param = @{
-                    Name  = 'TestVariable2'
+                    Name  = "$prefix`TestVariable2"
                     Value = 'TestValue123'
                 }
                 $result = New-GitHubVariable @param -Owner $owner
@@ -118,7 +120,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         Context 'Repository' {
             It 'Set-GitHubVariable' {
                 $param = @{
-                    Name  = 'TestVariable'
+                    Name  = "$prefix`TestVariable"
                     Value = 'TestValue'
                 }
                 $result = Set-GitHubVariable @param -Owner $owner -Repository $repo
@@ -131,7 +133,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         Context 'Environment' {
             It 'Set-GitHubVariable' {
                 $param = @{
-                    Name  = 'TestVariable'
+                    Name  = "$prefix`TestVariable"
                     Value = 'TestValue'
                 }
                 $result = Set-GitHubVariable @param -Owner $owner -Repository $repo -Environment $environmentName
