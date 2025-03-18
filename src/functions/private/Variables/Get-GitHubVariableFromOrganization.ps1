@@ -40,7 +40,7 @@ function Get-GitHubVariableFromOrganization {
         Environment          :
         CreatedAt            : 3/17/2025 10:56:05 AM
         UpdatedAt            : 3/17/2025 10:56:05 AM
-        Visibility           : 
+        Visibility           :
         SelectedRepositories :
         ```
 
@@ -82,12 +82,12 @@ function Get-GitHubVariableFromOrganization {
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             $_.Response.variables | ForEach-Object {
                 [GitHubVariable]@{
-                    Name                 = $_.name
-                    Value                = $_.value
-                    CreatedAt            = $_.created_at
-                    UpdatedAt            = $_.updated_at
-                    Owner                = $Owner
-                    Visibility           = $_.visibility
+                    Name       = $_.name
+                    Value      = $_.value
+                    CreatedAt  = $_.created_at
+                    UpdatedAt  = $_.updated_at
+                    Owner      = $Owner
+                    Visibility = $_.visibility
                 }
             }
         }

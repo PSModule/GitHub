@@ -8,6 +8,10 @@
     'PSAvoidUsingConvertToSecureStringWithPlainText', '',
     Justification = 'Used to create a secure string for testing.'
 )]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+    'PSAvoidUsingWriteHost', '',
+    Justification = 'Outputs into logs from the tests.'
+)]
 [CmdletBinding()]
 param()
 
@@ -67,15 +71,15 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
         }
 
         It 'Get-GitHubVariable' {
-            $result = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $result = Get-GitHubVariable @scope -Name "*$os*"
             $result | Should -Not -BeNullOrEmpty
         }
 
         It 'Remove-GitHubVariable' {
-            $before = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $before = Get-GitHubVariable @scope -Name "*$os*"
             Write-Host "$($before | Out-String)"
             $before | Remove-GitHubVariable
-            $after = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $after = Get-GitHubVariable @scope -Name "*$os*"
             Write-Host "$($after | Out-String)"
             $after.Count | Should -Be 0
         }
@@ -117,15 +121,15 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
         }
 
         It 'Get-GitHubVariable' {
-            $result = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $result = Get-GitHubVariable @scope -Name "*$os*"
             $result | Should -Not -BeNullOrEmpty
         }
 
         It 'Remove-GitHubVariable' {
-            $before = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $before = Get-GitHubVariable @scope -Name "*$os*"
             Write-Host "$($before | Out-String)"
             $before | Remove-GitHubVariable
-            $after = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $after = Get-GitHubVariable @scope -Name "*$os*"
             Write-Host "$($after | Out-String)"
             $after.Count | Should -Be 0
         }
@@ -183,15 +187,15 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         }
 
         It 'Get-GitHubVariable' {
-            $result = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $result = Get-GitHubVariable @scope -Name "*$os*"
             $result | Should -Not -BeNullOrEmpty
         }
 
         It 'Remove-GitHubVariable' {
-            $before = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $before = Get-GitHubVariable @scope -Name "*$os*"
             Write-Host "$($before | Out-String)"
             $before | Remove-GitHubVariable
-            $after = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $after = Get-GitHubVariable @scope -Name "*$os*"
             Write-Host "$($after | Out-String)"
             $after.Count | Should -Be 0
         }
@@ -232,15 +236,15 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         }
 
         It 'Get-GitHubVariable' {
-            $result = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $result = Get-GitHubVariable @scope -Name "*$os*"
             $result | Should -Not -BeNullOrEmpty
         }
 
         It 'Remove-GitHubVariable' {
-            $before = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $before = Get-GitHubVariable @scope -Name "*$os*"
             Write-Host "$($before | Out-String)"
             $before | Remove-GitHubVariable
-            $after = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $after = Get-GitHubVariable @scope -Name "*$os*"
             Write-Host "$($after | Out-String)"
             $after.Count | Should -Be 0
         }
@@ -282,15 +286,15 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         }
 
         It 'Get-GitHubVariable' {
-            $result = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $result = Get-GitHubVariable @scope -Name "*$os*"
             $result | Should -Not -BeNullOrEmpty
         }
 
         It 'Remove-GitHubVariable' {
-            $before = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $before = Get-GitHubVariable @scope -Name "*$os*"
             Write-Host "$($before | Out-String)"
             $before | Remove-GitHubVariable
-            $after = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $after = Get-GitHubVariable @scope -Name "*$os*"
             Write-Host "$($after | Out-String)"
             $after.Count | Should -Be 0
         }
@@ -348,15 +352,15 @@ Describe 'As a user - Classic PAT token (PAT)' {
         }
 
         It 'Get-GitHubVariable' {
-            $result = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $result = Get-GitHubVariable @scope -Name "*$os*"
             $result | Should -Not -BeNullOrEmpty
         }
 
         It 'Remove-GitHubVariable' {
-            $before = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $before = Get-GitHubVariable @scope -Name "*$os*"
             Write-Host "$($before | Out-String)"
             $before | Remove-GitHubVariable
-            $after = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $after = Get-GitHubVariable @scope -Name "*$os*"
             Write-Host "$($after | Out-String)"
             $after.Count | Should -Be 0
         }
@@ -397,15 +401,15 @@ Describe 'As a user - Classic PAT token (PAT)' {
         }
 
         It 'Get-GitHubVariable' {
-            $result = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $result = Get-GitHubVariable @scope -Name "*$os*"
             $result | Should -Not -BeNullOrEmpty
         }
 
         It 'Remove-GitHubVariable' {
-            $before = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $before = Get-GitHubVariable @scope -Name "*$os*"
             Write-Host "$($before | Out-String)"
             $before | Remove-GitHubVariable
-            $after = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $after = Get-GitHubVariable @scope -Name "*$os*"
             Write-Host "$($after | Out-String)"
             $after.Count | Should -Be 0
         }
@@ -447,15 +451,15 @@ Describe 'As a user - Classic PAT token (PAT)' {
         }
 
         It 'Get-GitHubVariable' {
-            $result = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $result = Get-GitHubVariable @scope -Name "*$os*"
             $result | Should -Not -BeNullOrEmpty
         }
 
         It 'Remove-GitHubVariable' {
-            $before = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $before = Get-GitHubVariable @scope -Name "*$os*"
             Write-Host "$($before | Out-String)"
             $before | Remove-GitHubVariable
-            $after = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $after = Get-GitHubVariable @scope -Name "*$os*"
             Write-Host "$($after | Out-String)"
             $after.Count | Should -Be 0
         }
@@ -526,15 +530,15 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         }
 
         It 'Get-GitHubVariable' {
-            $result = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $result = Get-GitHubVariable @scope -Name "*$os*"
             $result | Should -Not -BeNullOrEmpty
         }
 
         It 'Remove-GitHubVariable' {
-            $before = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $before = Get-GitHubVariable @scope -Name "*$os*"
             Write-Host "$($before | Out-String)"
             $before | Remove-GitHubVariable
-            $after = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $after = Get-GitHubVariable @scope -Name "*$os*"
             Write-Host "$($after | Out-String)"
             $after.Count | Should -Be 0
         }
@@ -575,15 +579,15 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         }
 
         It 'Get-GitHubVariable' {
-            $result = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $result = Get-GitHubVariable @scope -Name "*$os*"
             $result | Should -Not -BeNullOrEmpty
         }
 
         It 'Remove-GitHubVariable' {
-            $before = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $before = Get-GitHubVariable @scope -Name "*$os*"
             Write-Host "$($before | Out-String)"
             $before | Remove-GitHubVariable
-            $after = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $after = Get-GitHubVariable @scope -Name "*$os*"
             Write-Host "$($after | Out-String)"
             $after.Count | Should -Be 0
         }
@@ -625,15 +629,15 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         }
 
         It 'Get-GitHubVariable' {
-            $result = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $result = Get-GitHubVariable @scope -Name "*$os*"
             $result | Should -Not -BeNullOrEmpty
         }
 
         It 'Remove-GitHubVariable' {
-            $before = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $before = Get-GitHubVariable @scope -Name "*$os*"
             Write-Host "$($before | Out-String)"
             $before | Remove-GitHubVariable
-            $after = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $after = Get-GitHubVariable @scope -Name "*$os*"
             Write-Host "$($after | Out-String)"
             $after.Count | Should -Be 0
         }
@@ -692,15 +696,15 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         }
 
         It 'Get-GitHubVariable' {
-            $result = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $result = Get-GitHubVariable @scope -Name "*$os*"
             $result | Should -Not -BeNullOrEmpty
         }
 
         It 'Remove-GitHubVariable' {
-            $before = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $before = Get-GitHubVariable @scope -Name "*$os*"
             Write-Host "$($before | Out-String)"
             $before | Remove-GitHubVariable
-            $after = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $after = Get-GitHubVariable @scope -Name "*$os*"
             Write-Host "$($after | Out-String)"
             $after.Count | Should -Be 0
         }
@@ -741,15 +745,15 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         }
 
         It 'Get-GitHubVariable' {
-            $result = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $result = Get-GitHubVariable @scope -Name "*$os*"
             $result | Should -Not -BeNullOrEmpty
         }
 
         It 'Remove-GitHubVariable' {
-            $before = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $before = Get-GitHubVariable @scope -Name "*$os*"
             Write-Host "$($before | Out-String)"
             $before | Remove-GitHubVariable
-            $after = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $after = Get-GitHubVariable @scope -Name "*$os*"
             Write-Host "$($after | Out-String)"
             $after.Count | Should -Be 0
         }
@@ -791,15 +795,15 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         }
 
         It 'Get-GitHubVariable' {
-            $result = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $result = Get-GitHubVariable @scope -Name "*$os*"
             $result | Should -Not -BeNullOrEmpty
         }
 
         It 'Remove-GitHubVariable' {
-            $before = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $before = Get-GitHubVariable @scope -Name "*$os*"
             Write-Host "$($before | Out-String)"
             $before | Remove-GitHubVariable
-            $after = Get-GitHubVariable @scope | Where-Object { $_.Name -Like "*$os*" }
+            $after = Get-GitHubVariable @scope -Name "*$os*"
             Write-Host "$($after | Out-String)"
             $after.Count | Should -Be 0
         }
