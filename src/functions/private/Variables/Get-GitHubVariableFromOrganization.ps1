@@ -76,6 +76,9 @@ function Get-GitHubVariableFromOrganization {
         $inputObject = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/actions/organization-variables"
+            Body        = @{
+                per_page = 30
+            }
             Context     = $Context
         }
 

@@ -180,7 +180,7 @@ function Get-GitHubVariable {
             'Environment' {
                 if ($All) {
                     $variables += Get-GitHubVariableFromOrganization -Owner $Owner -Repository $Repository -Context $Context
-                    $variables += Get-GitHubVariableRepositoryList -Owner $Owner -Repository $Repository -Context
+                    $variables += Get-GitHubVariableRepositoryList -Owner $Owner -Repository $Repository -Context $Context
                 }
                 $variables += Get-GitHubVariableEnvironmentList -Owner $Owner -Repository $Repository -Environment $Environment -Context $Context
                 break
