@@ -300,7 +300,7 @@ filter Invoke-GitHubAPI {
             $APICall.Headers = $APICall.Headers | ConvertTo-Json
             $APICall.Method = $APICall.Method.ToString()
 
-            Write-Warning @"
+            $exception = @"
 
 ----------------------------------
 Error details:
@@ -311,7 +311,7 @@ $($errorResult | Format-List | Out-String -Stream | ForEach-Object { "    $_`n" 
 
             $PSCmdlet.ThrowTerminatingError(
                 [System.Management.Automation.ErrorRecord]::new(
-                    [System.Exception]::new('GitHub API call failed. See error details above.'),
+                    [System.Exception]::new($exception),
                     'GitHubAPIError',
                     [System.Management.Automation.ErrorCategory]::InvalidOperation,
                     $errorResult
