@@ -145,7 +145,8 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         $owner = 'psmodule-test-org2'
         $testType = 'ORG_FG_PAT'
         $repoName = "$testName-$os-$testType"
-        $variablePrefix = "$testName`_$os`_$testType`_"
+        $varName = "$testName`_$os`_$testType"
+        $variablePrefix = "$varName`_"
         $environmentName = "$testName-$os-$testType"
         $repo = New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
     }
@@ -314,7 +315,8 @@ Describe 'As a user - Classic PAT token (PAT)' {
         $owner = 'psmodule-test-org2'
         $testType = 'PAT'
         $repoName = "$testName-$os-$testType"
-        $variablePrefix = "$testName`_$os`_$testType`_"
+        $varName = "$testName`_$os`_$testType"
+        $variablePrefix = "$varName`_"
         $environmentName = "$testName-$os-$testType"
         $repo = New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
     }
@@ -496,7 +498,8 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         Connect-GitHubApp -Organization $owner -Default
         $testType = 'APP_ENT'
         $repoName = "$testName-$os-$testType"
-        $variablePrefix = "$testName`_$os`_$testType`_"
+        $varName = "$testName`_$os`_$testType"
+        $variablePrefix = "$varName`_"
         $environmentName = "$testName-$os-$testType"
         $repo = New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
     }
@@ -666,7 +669,8 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         Connect-GitHubApp -Organization $owner -Default
         $testType = 'APP_ORG'
         $repoName = "$testName-$os-$testType"
-        $variablePrefix = "$testName`_$os`_$testType`_"
+        $varName = "$testName`_$os`_$testType"
+        $variablePrefix = "$varName`_"
         $environmentName = "$testName-$os-$testType"
         $repo = New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
     }
