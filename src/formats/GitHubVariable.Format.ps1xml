@@ -7,7 +7,6 @@
                 <TypeName>GitHubVariable</TypeName>
             </ViewSelectedBy>
             <TableControl>
-                <AutoSize />
                 <TableHeaders>
                     <TableColumnHeader>
                         <Label>Name</Label>
