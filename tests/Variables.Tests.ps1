@@ -161,6 +161,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         $repo = "$repoSuffix-$guid"
         Connect-GitHubApp -Organization $owner -Default
         New-GitHubRepository -Owner $owner -Name $repo -AllowSquashMerge
+        Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
     }
     AfterAll {
         Remove-GitHubRepository -Owner $owner -Name $repo -Confirm:$false
@@ -210,6 +211,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         $repo = "$repoSuffix-$guid"
         Connect-GitHubApp -Organization $owner -Default
         New-GitHubRepository -Owner $owner -Name $repo -AllowSquashMerge
+        Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
     }
     AfterAll {
         Remove-GitHubRepository -Owner $owner -Name $repo -Confirm:$false
