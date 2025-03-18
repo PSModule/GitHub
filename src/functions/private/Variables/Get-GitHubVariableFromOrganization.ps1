@@ -73,9 +73,6 @@ function Get-GitHubVariableFromOrganization {
     }
 
     process {
-        if ($Context.Type -ne 'User') {
-            return
-        }
         $inputObject = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/actions/organization-variables"

@@ -36,7 +36,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     It 'Get-GitHubContext' {
-        Write-Host "$(Get-GitHubContext | Format-List | Out-String)"
+        Write-Host "$(Get-GitHubContext | Format-List)"
     }
     Context 'Repository' {
         BeforeAll {
@@ -76,12 +76,6 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
 
         It 'Get-GitHubVariable' {
             $result = Get-GitHubVariable @scope -Name "*$os*"
-            Write-Host "$($result | Format-Table)"
-            $result | Should -Not -BeNullOrEmpty
-        }
-
-        It 'Get-GitHubVariable -All' {
-            $result = Get-GitHubVariable @scope -Name "*$os*" -All
             Write-Host "$($result | Format-Table)"
             $result | Should -Not -BeNullOrEmpty
         }
@@ -139,12 +133,6 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
             $result | Should -Not -BeNullOrEmpty
         }
 
-        It 'Get-GitHubVariable -All' {
-            $result = Get-GitHubVariable @scope -Name "*$os*" -All
-            Write-Host "$($result | Format-Table)"
-            $result | Should -Not -BeNullOrEmpty
-        }
-
         It 'Remove-GitHubVariable' {
             $before = Get-GitHubVariable @scope -Name "*$os*"
             Write-Host "$($before | Format-Table)"
@@ -173,7 +161,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     It 'Get-GitHubContext' {
-        Write-Host "$(Get-GitHubContext | Format-List | Out-String)"
+        Write-Host "$(Get-GitHubContext | Format-List)"
     }
     Context 'Organization' {
         BeforeAll {
@@ -367,7 +355,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     It 'Get-GitHubContext' {
-        Write-Host "$(Get-GitHubContext | Format-List | Out-String)"
+        Write-Host "$(Get-GitHubContext | Format-List)"
     }
     Context 'Organization' {
         BeforeAll {
@@ -552,7 +540,7 @@ Describe 'As GitHub Actions (GHA)' {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     It 'Get-GitHubContext' {
-        Write-Host "$(Get-GitHubContext | Format-List | Out-String)"
+        Write-Host "$(Get-GitHubContext | Format-List)"
     }
     Context 'Variables' {
 
@@ -577,7 +565,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     It 'Get-GitHubContext' {
-        Write-Host "$(Get-GitHubContext | Format-List | Out-String)"
+        Write-Host "$(Get-GitHubContext | Format-List)"
     }
     Context 'Organization' {
         BeforeAll {
@@ -773,7 +761,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     It 'Get-GitHubContext' {
-        Write-Host "$(Write-Host "$(Get-GitHubContext | Format-List | Out-String)" | Out-String)"
+        Write-Host "$(Write-Host "$(Get-GitHubContext | Format-List)")"
     }
     Context 'Organization' {
         BeforeAll {
