@@ -36,7 +36,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     It 'Get-GitHubContext' {
-        Get-GitHubContext | Format-List
+        Write-Host "$(Get-GitHubContext | Format-List | Out-String)"
     }
     Context 'Repository' {
         BeforeAll {
@@ -173,7 +173,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     It 'Get-GitHubContext' {
-        Get-GitHubContext | Format-List
+        Write-Host "$(Get-GitHubContext | Format-List | Out-String)"
     }
     Context 'Organization' {
         BeforeAll {
@@ -367,7 +367,7 @@ Describe 'As a user - Classic PAT token (PAT)' {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     It 'Get-GitHubContext' {
-        Get-GitHubContext | Format-List
+        Write-Host "$(Get-GitHubContext | Format-List | Out-String)"
     }
     Context 'Organization' {
         BeforeAll {
@@ -552,7 +552,7 @@ Describe 'As GitHub Actions (GHA)' {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     It 'Get-GitHubContext' {
-        Get-GitHubContext | Format-List
+        Write-Host "$(Get-GitHubContext | Format-List | Out-String)"
     }
     Context 'Variables' {
 
@@ -577,7 +577,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     It 'Get-GitHubContext' {
-        Get-GitHubContext | Format-List
+        Write-Host "$(Get-GitHubContext | Format-List | Out-String)"
     }
     Context 'Organization' {
         BeforeAll {
@@ -773,7 +773,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     It 'Get-GitHubContext' {
-        Get-GitHubContext | Format-List
+        Write-Host "$(Write-Host "$(Get-GitHubContext | Format-List | Out-String)" | Out-String)"
     }
     Context 'Organization' {
         BeforeAll {
