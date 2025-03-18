@@ -172,14 +172,14 @@ function Get-GitHubVariable {
             }
             'Repository' {
                 if ($All) {
-                    $variables += Get-GitHubVariableFromOrganization -Owner $Owner -Context $Context
+                    $variables += Get-GitHubVariableFromOrganization -Owner $Owner -Repository $Repository -Context $Context
                 }
                 $variables += Get-GitHubVariableRepositoryList -Owner $Owner -Repository $Repository -Context $Context
                 break
             }
             'Environment' {
                 if ($All) {
-                    $variables += Get-GitHubVariableFromOrganization -Owner $Owner -Context $Context
+                    $variables += Get-GitHubVariableFromOrganization -Owner $Owner -Repository $Repository -Context $Context
                     $variables += Get-GitHubVariableRepositoryList -Owner $Owner -Repository $Repository -Context
                 }
                 $variables += Get-GitHubVariableEnvironmentList -Owner $Owner -Repository $Repository -Environment $Environment -Context $Context
