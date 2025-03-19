@@ -49,6 +49,7 @@
                 Write-Debug $return
             } else {
                 Write-Warning "Unable to log on with the GitHub Cli. ($LASTEXITCODE)"
+                Write-Warning "$($return)"
             }
             $Global:LASTEXITCODE = 0
             Write-Debug "Resetting LASTEXITCODE: $LASTEXITCODE"
