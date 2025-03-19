@@ -26,6 +26,12 @@
     # The default value for the 'per_page' API parameter used in 'GET' functions that support paging.
     [int] $PerPage
 
+    # The default value for retry count.
+    [int] $RetryCount
+
+    # The default value for retry interval in seconds.
+    [int] $RetryInterval
+
     # Simple parameterless constructor
     GitHubConfig() {}
 

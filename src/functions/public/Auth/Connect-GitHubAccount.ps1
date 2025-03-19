@@ -320,7 +320,6 @@
     clean {
         Remove-Variable -Name tokenResponse -ErrorAction SilentlyContinue
         Remove-Variable -Name context -ErrorAction SilentlyContinue
-        Remove-Variable -Name contextData -ErrorAction SilentlyContinue
         Remove-Variable -Name Token -ErrorAction SilentlyContinue
         [System.GC]::Collect()
     }
