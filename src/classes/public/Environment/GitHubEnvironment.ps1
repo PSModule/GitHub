@@ -2,6 +2,12 @@
     # The name of the environment.
     [string] $Name
 
+    # The repository where the environment is.
+    [string] $Repository
+
+    # The owner of the environment.
+    [string] $Owner
+
     # The ID of the environment.
     [UInt64] $DatabaseID
 
@@ -10,12 +16,6 @@
 
     # URL of the environment.
     [string] $Url
-
-    # The owner of the environment.
-    [string] $Owner
-
-    # The repository where the environment is.
-    [string] $Repository
 
     # The date and time the environment was created.
     [datetime] $CreatedAt
