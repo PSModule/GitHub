@@ -14,6 +14,7 @@ param()
 BeforeAll {
     $repoSuffix = 'EnvironmentTest'
     $environmentName = 'production'
+    $os = $env:RUNNER_OS
 }
 
 Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)' {
@@ -44,6 +45,13 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be $environmentName
             $result.protection_rules.wait_timer | Should -Be 10
+        }
+
+        It 'Set-GitHubEnvironment - creates an environment with a slash in the name' {
+            $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os"
+            $result | Should -Not -BeNullOrEmpty
+            $result.Name | Should -Be "$environmentName/$os"
+            Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Should -Not -BeNullOrEmpty
         }
 
         It 'Get-GitHubEnvironment - retrieves a specific environment' {
@@ -96,6 +104,13 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be $environmentName
             $result.protection_rules.wait_timer | Should -Be 10
+        }
+
+        It 'Set-GitHubEnvironment - creates an environment with a slash in the name' {
+            $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os"
+            $result | Should -Not -BeNullOrEmpty
+            $result.Name | Should -Be "$environmentName/$os"
+            Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Should -Not -BeNullOrEmpty
         }
 
         It 'Get-GitHubEnvironment - retrieves a specific environment' {
@@ -155,6 +170,13 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
             $result.protection_rules.wait_timer | Should -Be 10
         }
 
+        It 'Set-GitHubEnvironment - creates an environment with a slash in the name' {
+            $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os"
+            $result | Should -Not -BeNullOrEmpty
+            $result.Name | Should -Be "$environmentName/$os"
+            Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Should -Not -BeNullOrEmpty
+        }
+
         It 'Get-GitHubEnvironment - retrieves a specific environment' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
             $result | Should -Not -BeNullOrEmpty
@@ -206,6 +228,13 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be $environmentName
             $result.protection_rules.wait_timer | Should -Be 10
+        }
+
+        It 'Set-GitHubEnvironment - creates an environment with a slash in the name' {
+            $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os"
+            $result | Should -Not -BeNullOrEmpty
+            $result.Name | Should -Be "$environmentName/$os"
+            Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Should -Not -BeNullOrEmpty
         }
 
         It 'Get-GitHubEnvironment - retrieves a specific environment' {
