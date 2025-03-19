@@ -22,7 +22,6 @@ filter Set-GitHubEnvironment {
             WaitTimer              = 30
             Reviewers              = @{ type = $user.Type; id = $user.id }, @{ type = 'team'; id = $team.DatabaseID }
             DeploymentBranchPolicy = 'CustomBranchPolicies'
-        }
         Set-GitHubEnvironment @params
 
         Output:
@@ -51,9 +50,6 @@ filter Set-GitHubEnvironment {
 
         .LINK
         https://psmodule.io/GitHub/Functions/Environments/Set-GitHubEnvironment/
-
-        .LINK
-        [Create or update an environment](https://docs.github.com/rest/deployments/environments#create-or-update-an-environment)
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName = 'Default')]
@@ -215,10 +211,9 @@ filter Set-GitHubEnvironment {
             $body['prevent_self_review'] = [bool]$PreventSelfReview
         }
 
-        $encodedName = [System.Uri]::EscapeDataString($Name)
         $inputObject = @{
             Method      = 'PUT'
-            APIEndpoint = "/repos/$Owner/$Repository/environments/$encodedName"
+            APIEndpoint = "/repos/$Owner/$Repository/environments/$Name"
             Body        = $body
             Context     = $Context
         }

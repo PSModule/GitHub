@@ -5,7 +5,7 @@
 <table>
     <tr>
         <td>Available functions</td>
-        <td>1023</td>
+        <td>1019</td>
     </tr>
     <tr>
         <td>Covered functions</td>
@@ -13,11 +13,11 @@
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>859</td>
+        <td>855</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>16.03%</td>
+        <td>16.09%</td>
     </tr>
 </table>
 
@@ -191,8 +191,6 @@
 | `/orgs/{org}/invitations`                                                                                                 |                    | :white_check_mark: |                    | :white_check_mark: |                    |
 | `/orgs/{org}/invitations/{invitation_id}`                                                                                 | :white_check_mark: |                    |                    |                    |                    |
 | `/orgs/{org}/invitations/{invitation_id}/teams`                                                                           |                    | :x:                |                    |                    |                    |
-| `/orgs/{org}/issue-types`                                                                                                 |                    | :x:                |                    | :x:                |                    |
-| `/orgs/{org}/issue-types/{issue_type_id}`                                                                                 | :x:                |                    |                    |                    | :x:                |
 | `/orgs/{org}/issues`                                                                                                      |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/members`                                                                                                     |                    | :white_check_mark: |                    |                    |                    |
 | `/orgs/{org}/members/{username}`                                                                                          | :x:                | :x:                |                    |                    |                    |

@@ -80,10 +80,9 @@ filter Get-GitHubEnvironmentByName {
     }
 
     process {
-        $encodedName = [System.Uri]::EscapeDataString($Name)
         $inputObject = @{
             Method      = 'GET'
-            APIEndpoint = "/repos/$Owner/$Repository/environments/$encodedName"
+            APIEndpoint = "/repos/$Owner/$Repository/environments/$Name"
             Context     = $Context
         }
 
