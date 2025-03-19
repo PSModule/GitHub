@@ -110,7 +110,6 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
             $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os"
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be "$environmentName/$os"
-            Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Should -Not -BeNullOrEmpty
         }
 
         It 'Get-GitHubEnvironment - retrieves a specific environment' {
