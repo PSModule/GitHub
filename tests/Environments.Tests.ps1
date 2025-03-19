@@ -55,7 +55,9 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
         }
 
         It 'Remove-GitHubEnvironment - deletes an environment with a slash in the name' {
-            { Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Remove-GitHubEnvironment -Confirm:$false } | Should -Not -Throw
+            {
+                Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Remove-GitHubEnvironment -Confirm:$false
+            } | Should -Not -Throw
             Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Should -BeNullOrEmpty
         }
 
@@ -118,7 +120,9 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         }
 
         It 'Remove-GitHubEnvironment - deletes an environment with a slash in the name' {
-            { Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Remove-GitHubEnvironment -Confirm:$false } | Should -Not -Throw
+            {
+                Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Remove-GitHubEnvironment -Confirm:$false
+            } | Should -Not -Throw
             Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Should -BeNullOrEmpty
         }
 
@@ -187,7 +191,9 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         }
 
         It 'Remove-GitHubEnvironment - deletes an environment with a slash in the name' {
-            { Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Remove-GitHubEnvironment -Confirm:$false } | Should -Not -Throw
+            {
+                Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Remove-GitHubEnvironment -Confirm:$false
+            } | Should -Not -Throw
             Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Should -BeNullOrEmpty
         }
 
@@ -252,7 +258,9 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         }
 
         It 'Remove-GitHubEnvironment - deletes an environment with a slash in the name' {
-            { Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Remove-GitHubEnvironment -Confirm:$false } | Should -Not -Throw
+            {
+                Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Remove-GitHubEnvironment -Confirm:$false
+            } | Should -Not -Throw
             Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Should -BeNullOrEmpty
         }
 
