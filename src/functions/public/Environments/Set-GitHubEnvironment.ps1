@@ -22,6 +22,7 @@ filter Set-GitHubEnvironment {
             WaitTimer              = 30
             Reviewers              = @{ type = $user.Type; id = $user.id }, @{ type = 'team'; id = $team.DatabaseID }
             DeploymentBranchPolicy = 'CustomBranchPolicies'
+        }
         Set-GitHubEnvironment @params
 
         Output:
@@ -43,15 +44,18 @@ filter Set-GitHubEnvironment {
         Creates or updates the "staging" environment with a 30-minute wait timer.
 
         .OUTPUTS
-        PSCustomObject
+        GitHubEnvironment
 
         .NOTES
         Returns the response object from the GitHub API call.
 
         .LINK
         https://psmodule.io/GitHub/Functions/Environments/Set-GitHubEnvironment/
+
+        .LINK
+        [Create or update an environment](https://docs.github.com/rest/deployments/environments#create-or-update-an-environment)
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([GitHubEnvironment])]
     [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName = 'Default')]
     param(
         # The name of the organization.
@@ -211,16 +215,31 @@ filter Set-GitHubEnvironment {
             $body['prevent_self_review'] = [bool]$PreventSelfReview
         }
 
+        $encodedName = [System.Uri]::EscapeDataString($Name)
         $inputObject = @{
-            Method      = 'PUT'
-            APIEndpoint = "/repos/$Owner/$Repository/environments/$Name"
-            Body        = $body
-            Context     = $Context
+            Method  = 'PUT'
+            Uri     = $Context.ApiBaseUri + "/repos/$Owner/$Repository/environments/$encodedName"
+            Body    = $body
+            Context = $Context
         }
 
         if ($PSCmdlet.ShouldProcess("Environment [$Owner/$Repository/$Name]", 'Set')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
+                Write-Output $_.Response | ForEach-Object {
+                    [GitHubEnvironment]@{
+                        Name                   = $_.name
+                        DatabaseID             = $_.id
+                        NodeID                 = $_.node_id
+                        Url                    = $_.html_url
+                        Owner                  = $Owner
+                        Repository             = $Repository
+                        CreatedAt              = $_.created_at
+                        UpdatedAt              = $_.updated_at
+                        CanAdminsBypass        = $_.can_admins_bypass
+                        ProtectionRules        = $_.protection_rules
+                        DeploymentBranchPolicy = $_.deployment_branch_policy
+                    }
+                }
             }
         }
     }
