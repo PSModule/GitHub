@@ -217,10 +217,10 @@ filter Set-GitHubEnvironment {
 
         $encodedName = [System.Uri]::EscapeDataString($Name)
         $inputObject = @{
-            Method      = 'PUT'
-            APIEndpoint = "/repos/$Owner/$Repository/environments/$encodedName"
-            Body        = $body
-            Context     = $Context
+            Method  = 'PUT'
+            Uri     = $Context.ApiBaseUri + "/repos/$Owner/$Repository/environments/$encodedName"
+            Body    = $body
+            Context = $Context
         }
 
         if ($PSCmdlet.ShouldProcess("Environment [$Owner/$Repository/$Name]", 'Set')) {
