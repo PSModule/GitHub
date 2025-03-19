@@ -9,7 +9,7 @@
     </tr>
     <tr>
         <td>Covered functions</td>
-        <td>181</td>
+        <td>164</td>
     </tr>
     <tr>
         <td>Missing functions</td>
@@ -131,9 +131,9 @@
 | `/orgs/{org}/actions/secrets/{secret_name}`                                                                               | :x:                | :x:                |                    |                    | :x:                |
 | `/orgs/{org}/actions/secrets/{secret_name}/repositories`                                                                  |                    | :x:                |                    |                    | :x:                |
 | `/orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}`                                                  | :x:                |                    |                    |                    | :x:                |
-| `/orgs/{org}/actions/variables`                                                                                           |                    | :white_check_mark: |                    | :white_check_mark: |                    |
-| `/orgs/{org}/actions/variables/{name}`                                                                                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
-| `/orgs/{org}/actions/variables/{name}/repositories`                                                                       |                    | :white_check_mark: |                    |                    | :x:                |
+| `/orgs/{org}/actions/variables`                                                                                           |                    | :x:                |                    | :x:                |                    |
+| `/orgs/{org}/actions/variables/{name}`                                                                                    | :x:                | :x:                | :x:                |                    |                    |
+| `/orgs/{org}/actions/variables/{name}/repositories`                                                                       |                    | :x:                |                    |                    | :x:                |
 | `/orgs/{org}/actions/variables/{name}/repositories/{repository_id}`                                                       | :x:                |                    |                    |                    | :x:                |
 | `/orgs/{org}/attestations/{subject_digest}`                                                                               |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/blocks`                                                                                                      |                    | :white_check_mark: |                    |                    |                    |
@@ -298,7 +298,7 @@
 | `/repos/{owner}/{repo}/actions/jobs/{job_id}/rerun`                                                                       |                    |                    |                    | :x:                |                    |
 | `/repos/{owner}/{repo}/actions/oidc/customization/sub`                                                                    |                    | :x:                |                    |                    | :x:                |
 | `/repos/{owner}/{repo}/actions/organization-secrets`                                                                      |                    | :x:                |                    |                    |                    |
-| `/repos/{owner}/{repo}/actions/organization-variables`                                                                    |                    | :white_check_mark: |                    |                    |                    |
+| `/repos/{owner}/{repo}/actions/organization-variables`                                                                    |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/permissions`                                                                               |                    | :x:                |                    |                    | :x:                |
 | `/repos/{owner}/{repo}/actions/permissions/access`                                                                        |                    | :x:                |                    |                    | :x:                |
 | `/repos/{owner}/{repo}/actions/permissions/selected-actions`                                                              |                    | :x:                |                    |                    | :x:                |
@@ -331,8 +331,8 @@
 | `/repos/{owner}/{repo}/actions/secrets`                                                                                   |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/secrets/public-key`                                                                        |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/secrets/{secret_name}`                                                                     | :x:                | :x:                |                    |                    | :x:                |
-| `/repos/{owner}/{repo}/actions/variables`                                                                                 |                    | :white_check_mark: |                    | :white_check_mark: |                    |
-| `/repos/{owner}/{repo}/actions/variables/{name}`                                                                          | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
+| `/repos/{owner}/{repo}/actions/variables`                                                                                 |                    | :x:                |                    | :x:                |                    |
+| `/repos/{owner}/{repo}/actions/variables/{name}`                                                                          | :x:                | :x:                | :x:                |                    |                    |
 | `/repos/{owner}/{repo}/actions/workflows`                                                                                 |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/workflows/{workflow_id}`                                                                   |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable`                                                           |                    |                    |                    |                    | :white_check_mark: |
@@ -438,8 +438,8 @@
 | `/repos/{owner}/{repo}/environments/{environment_name}/secrets`                                                           |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/environments/{environment_name}/secrets/public-key`                                                |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}`                                             | :x:                | :x:                |                    |                    | :x:                |
-| `/repos/{owner}/{repo}/environments/{environment_name}/variables`                                                         |                    | :white_check_mark: |                    | :white_check_mark: |                    |
-| `/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}`                                                  | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
+| `/repos/{owner}/{repo}/environments/{environment_name}/variables`                                                         |                    | :x:                |                    | :x:                |                    |
+| `/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}`                                                  | :x:                | :x:                | :x:                |                    |                    |
 | `/repos/{owner}/{repo}/events`                                                                                            |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/forks`                                                                                             |                    | :white_check_mark: |                    | :white_check_mark: |                    |
 | `/repos/{owner}/{repo}/git/blobs`                                                                                         |                    |                    |                    | :x:                |                    |
