@@ -54,6 +54,11 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
             Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Should -Not -BeNullOrEmpty
         }
 
+        It 'Remove-GitHubEnvironment - deletes an environment with a slash in the name' {
+            { Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Remove-GitHubEnvironment -Confirm:$false } | Should -Not -Throw
+            Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Should -BeNullOrEmpty
+        }
+
         It 'Get-GitHubEnvironment - retrieves a specific environment' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
             $result | Should -Not -BeNullOrEmpty
@@ -110,6 +115,11 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
             $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os"
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be "$environmentName/$os"
+        }
+
+        It 'Remove-GitHubEnvironment - deletes an environment with a slash in the name' {
+            { Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Remove-GitHubEnvironment -Confirm:$false } | Should -Not -Throw
+            Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Should -BeNullOrEmpty
         }
 
         It 'Get-GitHubEnvironment - retrieves a specific environment' {
@@ -176,6 +186,11 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
             Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Should -Not -BeNullOrEmpty
         }
 
+        It 'Remove-GitHubEnvironment - deletes an environment with a slash in the name' {
+            { Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Remove-GitHubEnvironment -Confirm:$false } | Should -Not -Throw
+            Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Should -BeNullOrEmpty
+        }
+
         It 'Get-GitHubEnvironment - retrieves a specific environment' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
             $result | Should -Not -BeNullOrEmpty
@@ -234,6 +249,11 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be "$environmentName/$os"
             Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Remove-GitHubEnvironment - deletes an environment with a slash in the name' {
+            { Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Remove-GitHubEnvironment -Confirm:$false } | Should -Not -Throw
+            Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Should -BeNullOrEmpty
         }
 
         It 'Get-GitHubEnvironment - retrieves a specific environment' {
