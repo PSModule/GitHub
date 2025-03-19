@@ -16,6 +16,8 @@
 param()
 
 BeforeAll {
+    $DebugPreference = 'Continue'
+    $VerbosePreference = 'Continue'
     $testName = 'VariableTest'
     $os = Get-GitHubRunnerData | Select-Object -ExpandProperty OS
 }
