@@ -81,12 +81,9 @@ filter Get-GitHubEnvironment {
         [string] $Repository,
 
         # The name of the environment.
-        [Parameter(
-            Mandatory,
-            ValueFromPipelineByPropertyName
-        )]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [SupportsWildcards()]
-        [string] $Name,
+        [string] $Name = '*',
 
         # The maximum number of environments to return per request.
         [Parameter()]
@@ -107,12 +104,8 @@ filter Get-GitHubEnvironment {
     }
 
     process {
-        if ($Name.Contains('*')) {
-            Get-GitHubEnvironmentList -Owner $Owner -Repository $Repository -PerPage $PerPage -Context $Context |
-                Where-Object { $_ -like $Name }
-        } else {
-            Get-GitHubEnvironmentByName -Owner $Owner -Repository $Repository -Name $Name -Context $Context
-        }
+        Get-GitHubEnvironmentList -Owner $Owner -Repository $Repository -PerPage $PerPage -Context $Context |
+            Where-Object { $_ -like $Name }
     }
 
     end {
