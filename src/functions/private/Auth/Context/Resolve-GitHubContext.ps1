@@ -29,7 +29,6 @@
             Mandatory,
             ValueFromPipeline
         )]
-        [AllowNull()]
         [object] $Context
     )
 
