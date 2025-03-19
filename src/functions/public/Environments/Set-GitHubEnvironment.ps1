@@ -213,7 +213,7 @@ filter Set-GitHubEnvironment {
 
         $inputObject = @{
             Method      = 'PUT'
-            APIEndpoint = "/repos/$Owner/$Repository/environments/$Name"
+            Uri         = $Context.ApiBaseUri + "/repos/$Owner/$Repository/environments/$Name"
             Body        = $body
             Context     = $Context
         }
