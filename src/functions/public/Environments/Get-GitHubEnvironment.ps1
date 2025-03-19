@@ -105,7 +105,7 @@ filter Get-GitHubEnvironment {
 
     process {
         Get-GitHubEnvironmentList -Owner $Owner -Repository $Repository -PerPage $PerPage -Context $Context |
-            Where-Object { $_ -like $Name }
+            Where-Object { $_.Name -like $Name }
     }
 
     end {
