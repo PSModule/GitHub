@@ -13,11 +13,11 @@
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>859</td>
+        <td>842</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>16.03%</td>
+        <td>17.69%</td>
     </tr>
 </table>
 
