@@ -14,6 +14,7 @@ param()
 BeforeAll {
     $repoSuffix = 'EnvironmentTest'
     $environmentName = 'production'
+    $os = $env:RUNNER_OS
 }
 
 Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)' {
@@ -43,7 +44,21 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
             $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -WaitTimer 10
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be $environmentName
-            $result.protection_rules.wait_timer | Should -Be 10
+            $result.ProtectionRules.wait_timer | Should -Be 10
+        }
+
+        It 'Set-GitHubEnvironment - creates an environment with a slash in the name' {
+            $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os"
+            $result | Should -Not -BeNullOrEmpty
+            $result.Name | Should -Be "$environmentName/$os"
+            Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Remove-GitHubEnvironment - deletes an environment with a slash in the name' {
+            {
+                Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Remove-GitHubEnvironment -Confirm:$false
+            } | Should -Not -Throw
+            Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Should -BeNullOrEmpty
         }
 
         It 'Get-GitHubEnvironment - retrieves a specific environment' {
@@ -95,7 +110,20 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
             $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -WaitTimer 10
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be $environmentName
-            $result.protection_rules.wait_timer | Should -Be 10
+            $result.ProtectionRules.wait_timer | Should -Be 10
+        }
+
+        It 'Set-GitHubEnvironment - creates an environment with a slash in the name' {
+            $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os"
+            $result | Should -Not -BeNullOrEmpty
+            $result.Name | Should -Be "$environmentName/$os"
+        }
+
+        It 'Remove-GitHubEnvironment - deletes an environment with a slash in the name' {
+            {
+                Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Remove-GitHubEnvironment -Confirm:$false
+            } | Should -Not -Throw
+            Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Should -BeNullOrEmpty
         }
 
         It 'Get-GitHubEnvironment - retrieves a specific environment' {
@@ -152,7 +180,21 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
             $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -WaitTimer 10
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be $environmentName
-            $result.protection_rules.wait_timer | Should -Be 10
+            $result.ProtectionRules.wait_timer | Should -Be 10
+        }
+
+        It 'Set-GitHubEnvironment - creates an environment with a slash in the name' {
+            $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os"
+            $result | Should -Not -BeNullOrEmpty
+            $result.Name | Should -Be "$environmentName/$os"
+            Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Remove-GitHubEnvironment - deletes an environment with a slash in the name' {
+            {
+                Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Remove-GitHubEnvironment -Confirm:$false
+            } | Should -Not -Throw
+            Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Should -BeNullOrEmpty
         }
 
         It 'Get-GitHubEnvironment - retrieves a specific environment' {
@@ -205,7 +247,21 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
             $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -WaitTimer 10
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be $environmentName
-            $result.protection_rules.wait_timer | Should -Be 10
+            $result.ProtectionRules.wait_timer | Should -Be 10
+        }
+
+        It 'Set-GitHubEnvironment - creates an environment with a slash in the name' {
+            $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os"
+            $result | Should -Not -BeNullOrEmpty
+            $result.Name | Should -Be "$environmentName/$os"
+            Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Remove-GitHubEnvironment - deletes an environment with a slash in the name' {
+            {
+                Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Remove-GitHubEnvironment -Confirm:$false
+            } | Should -Not -Throw
+            Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Should -BeNullOrEmpty
         }
 
         It 'Get-GitHubEnvironment - retrieves a specific environment' {

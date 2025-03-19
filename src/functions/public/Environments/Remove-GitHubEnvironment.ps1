@@ -57,10 +57,11 @@ filter Remove-GitHubEnvironment {
     }
 
     process {
+        $encodedName = [System.Uri]::EscapeDataString($Name)
         $inputObject = @{
-            Method      = 'DELETE'
-            APIEndpoint = "/repos/$Owner/$Repository/environments/$Name"
-            Context     = $Context
+            Method  = 'DELETE'
+            Uri     = $Context.ApiBaseUri + "/repos/$Owner/$Repository/environments/$encodedName"
+            Context = $Context
         }
 
         if ($PSCmdlet.ShouldProcess("Environment [$Owner/$Repository/$Name]", 'Delete')) {
