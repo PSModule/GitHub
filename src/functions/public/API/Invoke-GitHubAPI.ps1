@@ -122,7 +122,7 @@ filter Invoke-GitHubAPI {
         $headers = @{
             Accept                 = $Accept
             'X-GitHub-Api-Version' = $ApiVersion
-            'User-Agent'           = 'PSModule.GitHub'
+            'User-Agent'           = "PSModule.GitHub $($script:PSModuleInfo.ModuleVersion)"
         }
         $headers | Remove-HashtableEntry -NullOrEmptyValues
 
