@@ -163,9 +163,7 @@
                 if ($script:GitHub.EnvironmentType -eq 'GHA') {
                     $green = $PSStyle.Foreground.Green
                     $reset = $PSStyle.Reset
-                    Set-GitHubLogGroup "$green✓$reset Connected $name!" {
-                        Write-Host ($contextObj | Format-List | Out-String)
-                    }
+                    Write-Host "$green✓$reset Connected $name!"
                 } else {
                     Write-Host '✓ ' -ForegroundColor Green -NoNewline
                     Write-Host "Connected $name!"

@@ -296,9 +296,7 @@
                 if ($script:GitHub.EnvironmentType -eq 'GHA') {
                     $green = $PSStyle.Foreground.Green
                     $reset = $PSStyle.Reset
-                    Set-GitHubLogGroup "$green✓$reset Logged in as $name!" {
-                        Write-Host ($contextObj | Format-List | Out-String)
-                    }
+                    Write-Host "$green✓$reset Logged in as $name!"
                 } else {
                     Write-Host '✓ ' -ForegroundColor Green -NoNewline
                     Write-Host "Logged in as $name!"
