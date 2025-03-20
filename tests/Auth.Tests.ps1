@@ -16,7 +16,7 @@
 param()
 
 Describe 'Auth' {
-    $authCases = . "$PSScriptRoot/AuthCases.ps1"
+    $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 
     Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
         It 'Connect-GitHubAccount - Connects using the provided credentials' {
@@ -52,6 +52,7 @@ Describe 'Auth' {
             $context | Should -Not -BeNullOrEmpty
         }
 
+        # Tests for APP goes here
         if ($AuthType -eq 'APP') {
             It 'Connect-GitHubAccount - Connects using the provided credentials + AutoloadInstallations' {
                 $context = Connect-GitHubAccount @connectParams -PassThru -Silent -AutoloadInstallations
@@ -78,6 +79,10 @@ Describe 'Auth' {
             }
         }
 
+        # Tests for runners goes here
+        if ($Type -eq 'GitHub Actions') {}
+
+        # Tests for IAT UAT and PAT goes here
         It 'Connect-GitHubAccount - Connects to GitHub CLI on runners' {
             [string]::IsNullOrEmpty($(gh auth token)) | Should -Be $false
         }
@@ -109,4 +114,8 @@ Describe 'Auth' {
             (Get-GitHubContext -ListAvailable).count | Should -Be 0
         }
     }
+}
+
+AfterAll {
+    Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
 }

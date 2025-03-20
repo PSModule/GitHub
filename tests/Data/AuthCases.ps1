@@ -35,6 +35,7 @@
         Case          = 'GITHUB_TOKEN'
         Target        = 'this repository (GitHub)'
         Owner         = 'PSModule'
+        Repo          = 'GitHub'
         ConnectParams = @{
             Token = $env:GITHUB_TOKEN
         }
