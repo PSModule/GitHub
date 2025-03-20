@@ -105,7 +105,7 @@ Describe 'Auth' {
         }
 
         It 'Disconnect-GitHubAccount - Disconnects all contexts' {
-            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent -WarningAction SilentlyContinue
+            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
             (Get-GitHubContext -ListAvailable).count | Should -Be 0
         }
     }
