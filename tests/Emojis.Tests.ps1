@@ -45,16 +45,14 @@ Describe 'Emojies' {
 
         # Tests for IAT UAT and PAT goes here
         It 'Get-GitHubEmoji - Gets a list of all emojis' {
-            {
-                $emojies = Get-GitHubEmoji
-                LogGroup 'Emojies' {
-                    Write-Host ($emojies | Format-Table | Out-String)
-                }
-            } | Should -Not -Throw
+            $emojies = Get-GitHubEmoji
+            LogGroup 'Emojies' {
+                Write-Host ($emojies | Format-Table | Out-String)
+            }
             $emojies | Should -Not -BeNullOrEmpty
         }
         It 'Get-GitHubEmoji - Downloads all emojis' {
-            { Get-GitHubEmoji -Path $Home } | Should -Not -Throw
+            Get-GitHubEmoji -Path $Home
             LogGroup 'Emojies' {
                 $emojies = Get-ChildItem -Path $Home -File
                 Write-Host ($emojies | Format-Table | Out-String)
