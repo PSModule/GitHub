@@ -17,23 +17,26 @@ Describe 'Auth' {
     Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
         It 'Connect-GitHubAccount - Connects using the provided credentials' {
             $context = Connect-GitHubAccount @connectParams -PassThru
-            Write-Host ($context | Format-List | Out-String)
             $context | Should -Not -BeNullOrEmpty
         }
         if ($AuthType -eq 'APP') {
             It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
                 $context = Connect-GitHubApp @connectAppParams -PassThru -Default
-                Write-Host ($context | Format-List | Out-String)
                 $context | Should -Not -BeNullOrEmpty
             }
         }
 
         It 'Get-GitHubViewer - Gets the logged in context' {
-            Get-GitHubViewer | Should -Not -BeNullOrEmpty
+            $viewer = Get-GitHubViewer
+            LogGroup 'Viewer' {
+                Write-Host ($viewer | Format-List | Out-String)
+            }
+            $viewer | Should -Not -BeNullOrEmpty
         }
 
-        It 'Get-GitHubContext - Gets the logged in context' {
+        It 'Disconnect-GitHubAccount - Disconnects all contexts' {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+            (Get-GitHubContext -ListAvailable).count | Should -Be 0
         }
     }
 }

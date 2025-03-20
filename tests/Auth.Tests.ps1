@@ -12,8 +12,6 @@
 param()
 
 Describe 'Auth' {
-    $tests = . "$PSScriptRoot/AuthCases.ps1"
-
     Context 'Auth' {
         It 'Connect-GitHubAccount - Connects GitHub Actions without parameters' {
             { Connect-GitHubAccount } | Should -Not -Throw

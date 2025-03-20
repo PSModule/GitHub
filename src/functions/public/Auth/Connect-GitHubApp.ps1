@@ -160,8 +160,14 @@
             Write-Verbose ($contextObj | Format-List | Out-String)
             if (-not $Silent) {
                 $name = $contextObj.name
-                Write-Host '✓ ' -ForegroundColor Green -NoNewline
-                Write-Host "Connected $name!"
+                if ($script:GitHub.EnvironmentType -eq 'GHA') {
+                    Set-GitHubLogGroup "✓ Connected $name!" {
+                        Write-Host ($contextObj | Format-List | Out-String)
+                    }
+                } else {
+                    Write-Host '✓ ' -ForegroundColor Green -NoNewline
+                    Write-Host "Connected $name!"
+                }
             }
             if ($PassThru) {
                 Write-Debug "Passing context [$contextObj] to the pipeline."
