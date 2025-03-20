@@ -16,12 +16,12 @@ Describe 'Auth' {
 
     Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
         It 'Connect-GitHubAccount - Connects using the provided credentials' {
-            $context = Connect-GitHubAccount @connectParams -PassThru
+            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
             $context | Should -Not -BeNullOrEmpty
         }
         if ($AuthType -eq 'APP') {
             It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
-                $context = Connect-GitHubApp @connectAppParams -PassThru -Default
+                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
                 $context | Should -Not -BeNullOrEmpty
             }
         }
@@ -35,7 +35,7 @@ Describe 'Auth' {
         }
 
         It 'Disconnect-GitHubAccount - Disconnects all contexts' {
-            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
             (Get-GitHubContext -ListAvailable).count | Should -Be 0
         }
     }
