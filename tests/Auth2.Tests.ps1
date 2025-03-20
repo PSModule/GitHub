@@ -15,13 +15,13 @@ Describe 'Auth' {
     $authCases = . "$PSScriptRoot/AuthCases.ps1"
 
     Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
-        It 'Connect-GitHubAccount - Connects GitHub Actions without parameters' {
+        It 'Connect-GitHubAccount - Connects using the provided credentials' {
             $context = Connect-GitHubAccount @connectParams -PassThru
             Write-Host ($context | Format-List | Out-String)
             $context | Should -Not -BeNullOrEmpty
         }
-        if ($context.AuthType -eq 'APP') {
-            It 'Connect-GitHubApp - Connects the app to <Owner>' {
+        if ($AuthType -eq 'APP') {
+            It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
                 $context = Connect-GitHubApp @connectAppParams -PassThru -Default
                 Write-Host ($context | Format-List | Out-String)
                 $context | Should -Not -BeNullOrEmpty

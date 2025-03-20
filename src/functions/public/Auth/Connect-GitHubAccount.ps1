@@ -294,7 +294,7 @@
             if (-not $Silent) {
                 $name = $contextObj.Username
                 if ($script.GitHub.EnvironmentType -eq 'GHA') {
-                    LogGroup "✓ Logged in as $name!" {
+                    Set-GitHubLogGroup "✓ Logged in as $name!" {
                         Write-Host ($contextObj | Format-List | Out-String)
                     }
                 } else {

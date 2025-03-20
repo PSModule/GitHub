@@ -1,5 +1,6 @@
 ﻿@(
     @{
+        AuthType      = 'PAT'
         Type          = 'a user'
         Case          = 'Fine-grained PAT token'
         Target        = 'it self (user account)'
@@ -9,6 +10,7 @@
         }
     }
     @{
+        AuthType      = 'PAT'
         Type          = 'a user'
         Case          = 'Fine-grained PAT token'
         Target        = 'organization account'
@@ -18,6 +20,7 @@
         }
     }
     @{
+        AuthType      = 'PAT'
         Type          = 'a user'
         Case          = 'Classic PAT token'
         Target        = 'user account'
@@ -27,6 +30,7 @@
         }
     }
     @{
+        AuthType      = 'IAT'
         Type          = 'GitHub Actions'
         Case          = 'GITHUB_TOKEN'
         Target        = 'this repository (GitHub)'
@@ -36,6 +40,7 @@
         }
     }
     @{
+        AuthType         = 'App'
         Type             = 'a GitHub App from an Enterprise'
         Case             = 'PEM + IAT'
         Target           = 'organization account'
@@ -49,6 +54,7 @@
         }
     }
     @{
+        AuthType         = 'App'
         Type             = 'a GitHub App from an Organization'
         Case             = 'PEM + IAT'
         Target           = 'organization account'
