@@ -52,7 +52,7 @@ Describe 'Environments' {
         if ($Type -ne 'GitHub Actions') {
             # Tests for IAT UAT and PAT goes here
             It 'Prep - New-GitHubRepository' {
-                if ($type -eq 'a user') {
+                if ($OwnerType -eq 'user') {
                     New-GitHubRepository -Name $repo -AllowSquashMerge
                 } else {
                     New-GitHubRepository -Owner $owner -Name $repo -AllowSquashMerge
