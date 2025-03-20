@@ -51,7 +51,7 @@ Describe 'Emojies' {
                     Write-Host ($emojies | Format-Table | Out-String)
                 }
             } | Should -Not -Throw
-            $emojies| Should -Not -BeNullOrEmpty
+            $emojies | Should -Not -BeNullOrEmpty
         }
         It 'Get-GitHubEmoji - Downloads all emojis' {
             { Get-GitHubEmoji -Path $Home } | Should -Not -Throw
