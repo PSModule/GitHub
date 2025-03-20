@@ -19,7 +19,7 @@ BeforeAll {
     # DEFAULTS ACCROSS ALL TESTS
 }
 
-Describe 'Template' {
+Describe 'Emojies' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 
     Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {

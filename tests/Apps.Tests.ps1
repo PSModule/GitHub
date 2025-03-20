@@ -34,7 +34,7 @@ Describe 'Apps' {
             Context 'GitHub Apps' {
                 It 'Get-GitHubApp - Can get app details' {
                     $app = Get-GitHubApp
-                    LgGroup 'App' {
+                    LogGroup 'App' {
                         Write-Host ($app | Format-Table | Out-String)
                     }
                     $app | Should -Not -BeNullOrEmpty
