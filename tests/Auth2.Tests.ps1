@@ -28,7 +28,7 @@ Describe 'Auth' {
         }
         if ($AuthType -eq 'APP') {
             It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
-                $contexts = Connect-GitHubApp @connectAppParams -PassThru -Silent
+                $contexts = Connect-GitHubApp -PassThru -Silent
                 LogGroup 'Contexts' {
                     Write-Host ($contexts | Format-List | Out-String)
                 }
