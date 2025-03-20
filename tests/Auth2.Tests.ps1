@@ -24,19 +24,19 @@ Describe 'Auth' {
         }
         if ($AuthType -eq 'APP') {
             It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
-                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
-                LogGroup 'Context' {
-                    Write-Host ($context | Format-List | Out-String)
-                }
-                $context | Should -Not -BeNullOrEmpty
-            }
-
-            It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
                 $contexts = Connect-GitHubApp @connectAppParams -PassThru -Silent
                 LogGroup 'Contexts' {
                     Write-Host ($contexts | Format-List | Out-String)
                 }
                 $contexts | Should -Not -BeNullOrEmpty
+            }
+
+            It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
+                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
+                LogGroup 'Context' {
+                    Write-Host ($context | Format-List | Out-String)
+                }
+                $context | Should -Not -BeNullOrEmpty
             }
         }
 
