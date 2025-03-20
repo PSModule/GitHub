@@ -60,6 +60,7 @@ Describe 'Auth' {
                 }
                 $context | Should -Not -BeNullOrEmpty
             }
+            
             It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
                 $contexts = Connect-GitHubApp -PassThru -Silent
                 LogGroup 'Contexts' {

@@ -309,7 +309,7 @@
 
             if ($authType -eq 'App' -and $AutoloadInstallations) {
                 Write-Verbose 'Loading GitHub App Installation contexts...'
-                Connect-GitHubApp
+                Connect-GitHubApp -Silent:$Silent
             }
 
         } catch {
