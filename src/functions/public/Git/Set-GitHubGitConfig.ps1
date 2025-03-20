@@ -28,7 +28,7 @@
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
-        Assert-GitHubContext -Context $Context -AuthType IAT
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 
     process {
