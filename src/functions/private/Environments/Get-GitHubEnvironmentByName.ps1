@@ -86,23 +86,26 @@ filter Get-GitHubEnvironmentByName {
             Uri     = $Context.ApiBaseUri + "/repos/$Owner/$Repository/environments/$encodedName"
             Context = $Context
         }
-
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response | ForEach-Object {
-                [GitHubEnvironment]@{
-                    Name                   = $_.name
-                    DatabaseID             = $_.id
-                    NodeID                 = $_.node_id
-                    Url                    = $_.html_url
-                    Owner                  = $Owner
-                    Repository             = $Repository
-                    CreatedAt              = $_.created_at
-                    UpdatedAt              = $_.updated_at
-                    CanAdminsBypass        = $_.can_admins_bypass
-                    ProtectionRules        = $_.protection_rules
-                    DeploymentBranchPolicy = $_.deployment_branch_policy
+        try {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response | ForEach-Object {
+                    [GitHubEnvironment]@{
+                        Name                   = $_.name
+                        DatabaseID             = $_.id
+                        NodeID                 = $_.node_id
+                        Url                    = $_.html_url
+                        Owner                  = $Owner
+                        Repository             = $Repository
+                        CreatedAt              = $_.created_at
+                        UpdatedAt              = $_.updated_at
+                        CanAdminsBypass        = $_.can_admins_bypass
+                        ProtectionRules        = $_.protection_rules
+                        DeploymentBranchPolicy = $_.deployment_branch_policy
+                    }
                 }
             }
+        } catch {
+            return
         }
     }
 
