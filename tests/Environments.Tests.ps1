@@ -32,7 +32,6 @@ Describe 'Environments' {
             }
             $guid = [guid]::NewGuid().ToString()
             $repo = "$repoSuffix-$guid"
-            New-GitHubRepository -Name $repo -AllowSquashMerge
         }
 
         AfterAll {
@@ -52,6 +51,13 @@ Describe 'Environments' {
         # Tests for runners goes here
         if ($Type -ne 'GitHub Actions') {
             # Tests for IAT UAT and PAT goes here
+            It 'Prep - New-GitHubRepository' {
+                if ($type -eq 'a user') {
+                    New-GitHubRepository -Name $repo -AllowSquashMerge
+                } else {
+                    New-GitHubRepository -Owner $owner -Name $repo -AllowSquashMerge
+                }
+            }
             It 'Get-GitHubEnvironment - should return an empty list when no environments exist' {
                 $result = Get-GitHubEnvironment -Owner $owner -Repository $repo
                 LogGroup "Environment" {
