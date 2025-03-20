@@ -15,99 +15,55 @@
 [CmdletBinding()]
 param()
 
-Describe 'Emoji' {
-    Context 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)' {
+BeforeAll {
+    # DEFAULTS ACCROSS ALL TESTS
+}
+
+Describe 'Template' {
+    $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
+
+    Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
         BeforeAll {
-            Connect-GitHubAccount -Token $env:TEST_USER_USER_FG_PAT
-        }
-        AfterAll {
-            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
+            LogGroup 'Context' {
+                Write-Host ($context | Format-List | Out-String)
+            }
         }
 
+        # Tests for APP goes here
+        if ($AuthType -eq 'APP') {
+            It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
+                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
+                LogGroup 'Context' {
+                    Write-Host ($context | Format-List | Out-String)
+                }
+            }
+        }
+
+        # Tests for runners goes here
+        if ($Type -eq 'GitHub Actions') {}
+
+        # Tests for IAT UAT and PAT goes here
         It 'Get-GitHubEmoji - Gets a list of all emojis' {
-            { Get-GitHubEmoji } | Should -Not -Throw
+            {
+                $emojies = Get-GitHubEmoji
+                LogGroup 'Emojies' {
+                    Write-Host ($emojies | Format-Table | Out-String)
+                }
+            } | Should -Not -Throw
+            $emojies| Should -Not -BeNullOrEmpty
         }
         It 'Get-GitHubEmoji - Downloads all emojis' {
             { Get-GitHubEmoji -Path $Home } | Should -Not -Throw
+            LogGroup 'Emojies' {
+                $emojies = Get-ChildItem -Path $Home -File
+                Write-Host ($emojies | Format-Table | Out-String)
+            }
+            $emojies | Should -Not -BeNullOrEmpty
         }
     }
+}
 
-    Context 'As a user - Fine-grained PAT token - organization account access (ORG_FG_PAT)' {
-        BeforeAll {
-            Connect-GitHubAccount -Token $env:TEST_USER_ORG_FG_PAT
-        }
-        AfterAll {
-            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
-        }
-        It 'Get-GitHubEmoji - Gets a list of all emojis' {
-            { Get-GitHubEmoji } | Should -Not -Throw
-        }
-        It 'Get-GitHubEmoji - Downloads all emojis' {
-            { Get-GitHubEmoji -Path $Home } | Should -Not -Throw
-        }
-    }
-
-    Context 'As a user - Classic PAT token (PAT)' {
-        BeforeAll {
-            Connect-GitHubAccount -Token $env:TEST_USER_PAT
-        }
-        AfterAll {
-            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
-        }
-        It 'Get-GitHubEmoji - Gets a list of all emojis' {
-            { Get-GitHubEmoji } | Should -Not -Throw
-        }
-        It 'Get-GitHubEmoji - Downloads all emojis' {
-            { Get-GitHubEmoji -Path $Home } | Should -Not -Throw
-        }
-
-    }
-
-    Context 'As GitHub Actions (GHA)' {
-        BeforeAll {
-            Connect-GitHubAccount
-        }
-        AfterAll {
-            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
-        }
-        It 'Get-GitHubEmoji - Gets a list of all emojis' {
-            { Get-GitHubEmoji } | Should -Not -Throw
-        }
-        It 'Get-GitHubEmoji - Downloads all emojis' {
-            { Get-GitHubEmoji -Path $Home } | Should -Not -Throw
-        }
-
-    }
-
-    Context 'As a GitHub App - Enterprise (APP_ENT)' {
-        BeforeAll {
-            Connect-GitHubAccount -ClientID $env:TEST_APP_ENT_CLIENT_ID -PrivateKey $env:TEST_APP_ENT_PRIVATE_KEY
-            Connect-GitHubApp -Organization 'psmodule-test-org3' -Default
-        }
-        AfterAll {
-            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
-        }
-        It 'Get-GitHubEmoji - Gets a list of all emojis' {
-            { Get-GitHubEmoji } | Should -Not -Throw
-        }
-        It 'Get-GitHubEmoji - Downloads all emojis' {
-            { Get-GitHubEmoji -Path $Home } | Should -Not -Throw
-        }
-    }
-
-    Context 'As a GitHub App - Organization (APP_ORG)' {
-        BeforeAll {
-            Connect-GitHubAccount -ClientID $env:TEST_APP_ORG_CLIENT_ID -PrivateKey $env:TEST_APP_ORG_PRIVATE_KEY
-            Connect-GitHubApp -Organization 'psmodule-test-org' -Default
-        }
-        AfterAll {
-            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
-        }
-        It 'Get-GitHubEmoji - Gets a list of all emojis (APP_ORG)' {
-            { Get-GitHubEmoji } | Should -Not -Throw
-        }
-        It 'Get-GitHubEmoji - Downloads all emojis (APP_ORG)' {
-            { Get-GitHubEmoji -Path $Home } | Should -Not -Throw
-        }
-    }
+AfterAll {
+    Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
 }
