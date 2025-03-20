@@ -26,6 +26,7 @@ Describe 'Auth' {
             }
             $context | Should -Not -BeNullOrEmpty
         }
+
         It 'Connect-GitHubAccount - Connects using the provided credentials - Double' {
             $context = Connect-GitHubAccount @connectParams -PassThru -Silent
             $context = Connect-GitHubAccount @connectParams -PassThru -Silent
@@ -34,6 +35,7 @@ Describe 'Auth' {
             }
             $context | Should -Not -BeNullOrEmpty
         }
+
         It 'Connect-GitHubAccount - Connects using the provided credentials - Relog' {
             Disconnect-GitHub -Silent
             $context = Connect-GitHubAccount @connectParams -PassThru -Silent
@@ -42,6 +44,14 @@ Describe 'Auth' {
             }
             $context | Should -Not -BeNullOrEmpty
         }
+
+        It 'Switch-GitHubContext - Sets the default context' {
+            $context = Get-GitHubContext
+            Switch-GitHubContext -Context $context
+            $context = Get-GitHubContext
+            $context | Should -Not -BeNullOrEmpty
+        }
+
         if ($AuthType -eq 'APP') {
             It 'Connect-GitHubAccount - Connects using the provided credentials + AutoloadInstallations' {
                 $context = Connect-GitHubAccount @connectParams -PassThru -Silent -AutoloadInstallations
