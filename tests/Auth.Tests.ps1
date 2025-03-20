@@ -134,53 +134,6 @@ Describe 'Auth' {
         }
     }
 
-    Context 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)' {
-        BeforeAll {
-            Connect-GitHubAccount -Token $env:TEST_USER_USER_FG_PAT
-        }
-        AfterAll {
-            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
-        }
-        It 'Get-GitHubViewer - Gets the logged in context (USER_FG_PAT)' {
-            Get-GitHubViewer | Should -Not -BeNullOrEmpty
-        }
-    }
-
-    Context 'As a user - Fine-grained PAT token - organization account access (ORG_FG_PAT)' {
-        BeforeAll {
-            Connect-GitHubAccount -Token $env:TEST_USER_ORG_FG_PAT
-        }
-        AfterAll {
-            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
-        }
-        It 'Get-GitHubViewer - Gets the logged in context (ORG_FG_PAT)' {
-            Get-GitHubViewer | Should -Not -BeNullOrEmpty
-        }
-    }
-
-    Context 'As a user - Classic PAT token (PAT)' {
-        BeforeAll {
-            Connect-GitHubAccount -Token $env:TEST_USER_PAT
-        }
-        AfterAll {
-            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
-        }
-        It 'Get-GitHubViewer - Gets the logged in context (PAT)' {
-            Get-GitHubViewer | Should -Not -BeNullOrEmpty
-        }
-    }
-
-    Context 'As GitHub Actions (GHA)' {
-        BeforeAll {
-            Connect-GitHubAccount
-        }
-        AfterAll {
-            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
-        }
-        It 'Get-GitHubViewer - Gets the logged in context (GHA)' {
-            Get-GitHubViewer | Should -Not -BeNullOrEmpty
-        }
-    }
 
     Context 'As a GitHub App - Enterprise (APP_ENT)' {
         BeforeAll {

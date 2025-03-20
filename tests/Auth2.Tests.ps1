@@ -17,12 +17,26 @@ Describe 'Auth' {
     Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
         It 'Connect-GitHubAccount - Connects using the provided credentials' {
             $context = Connect-GitHubAccount @connectParams -PassThru -Silent
+            LogGroup 'Context' {
+                Write-Host ($context | Format-List | Out-String)
+            }
             $context | Should -Not -BeNullOrEmpty
         }
         if ($AuthType -eq 'APP') {
             It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
                 $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
+                LogGroup 'Context' {
+                    Write-Host ($context | Format-List | Out-String)
+                }
                 $context | Should -Not -BeNullOrEmpty
+            }
+
+            It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
+                $contexts = Connect-GitHubApp @connectAppParams -PassThru -Silent
+                LogGroup 'Contexts' {
+                    Write-Host ($contexts | Format-List | Out-String)
+                }
+                $contexts | Should -Not -BeNullOrEmpty
             }
         }
 
