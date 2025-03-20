@@ -30,12 +30,12 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     Context 'Environments' {
-        It 'Get-GitHubEnvironment - lists all environments' {
+        It 'Get-GitHubEnvironment - lists all environments - retrieves none' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo
             $result | Should -BeNullOrEmpty
         }
 
-        It 'Get-GitHubEnvironment - retrieves a specific environment that does not exist yet' {
+        It 'Get-GitHubEnvironment - retrieves a specific environment that does not exist' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
             $result | Should -BeNullOrEmpty
         }
@@ -105,7 +105,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     Context 'Environments' {
-        It 'Get-GitHubEnvironment - lists all environments' {
+        It 'Get-GitHubEnvironment - lists all environments - retrieves none' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo
             $result | Should -BeNullOrEmpty
         }
@@ -185,7 +185,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     Context 'Environments' {
-        It 'Get-GitHubEnvironment - lists all environments' {
+        It 'Get-GitHubEnvironment - lists all environments - retrieves none' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo
             $result | Should -BeNullOrEmpty
         }
@@ -261,7 +261,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
     }
     Context 'Environments' {
-        It 'Get-GitHubEnvironment - lists all environments' {
+        It 'Get-GitHubEnvironment - lists all environments - retrieves none' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo
             $result | Should -BeNullOrEmpty
         }
