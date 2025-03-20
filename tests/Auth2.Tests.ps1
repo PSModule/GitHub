@@ -12,9 +12,9 @@
 param()
 
 Describe 'Auth' {
-    $tests = . "$PSScriptRoot/AuthCases.ps1"
+    $authCases = . "$PSScriptRoot/AuthCases.ps1"
 
-    Context 'As <Type> using <Case> on <Target>' {
+    Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
         It 'Connect-GitHubAccount - Connects GitHub Actions without parameters' {
             $context = Connect-GitHubAccount @connectParams -PassThru
             $context | Should -Not -BeNullOrEmpty
@@ -25,12 +25,14 @@ Describe 'Auth' {
                 $context | Should -Not -BeNullOrEmpty
             }
         }
+        
         It 'Get-GitHubViewer - Gets the logged in context' {
             Get-GitHubViewer | Should -Not -BeNullOrEmpty
         }
+
+        It 'Get-GitHubContext - Gets the logged in context' {
+            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+        }
     }
 
-    AfterEach {
-        Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
-    }
 }
