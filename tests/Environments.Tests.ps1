@@ -36,7 +36,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
         }
 
         It 'Get-GitHubEnvironment - retrieves a specific environment that does not exist yet' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo | Where-Object { $_.Name -eq $environmentName }
+            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
             $result | Should -BeNullOrEmpty
         }
 
@@ -45,6 +45,12 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be $environmentName
             $result.ProtectionRules.wait_timer | Should -Be 10
+        }
+
+        It 'Get-GitHubEnvironment - retrieves a specific environment that does exist' {
+            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
+            $result | Should -Not -BeNullOrEmpty
+            $result.Name | Should -Be $environmentName
         }
 
         It 'Set-GitHubEnvironment - creates an environment with a slash in the name' {
@@ -58,13 +64,12 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
             {
                 Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Remove-GitHubEnvironment -Confirm:$false
             } | Should -Not -Throw
-            Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Should -BeNullOrEmpty
         }
 
-        It 'Get-GitHubEnvironment - retrieves a specific environment' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
+        It 'Get-GitHubEnvironment - retrieves a specific environment that does exist' {
+            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os"
             $result | Should -Not -BeNullOrEmpty
-            $result.Name | Should -Be $environmentName
+            $result.Name | Should -Be "$environmentName/$os"
         }
 
         It 'Get-GitHubEnvironment - lists all environments' {
@@ -77,7 +82,7 @@ Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)
         }
 
         It 'Get-GitHubEnvironment - retrieves a specific environment that does not exist yet' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo | Where-Object { $_.Name -eq $environmentName }
+            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
             $result | Should -BeNullOrEmpty
         }
     }
@@ -102,7 +107,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         }
 
         It 'Get-GitHubEnvironment - retrieves a specific environment that does not exist yet' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo | Where-Object { $_.Name -eq $environmentName }
+            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
             $result | Should -BeNullOrEmpty
         }
 
@@ -111,6 +116,12 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be $environmentName
             $result.ProtectionRules.wait_timer | Should -Be 10
+        }
+
+        It 'Get-GitHubEnvironment - retrieves a specific environment that does exist' {
+            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
+            $result | Should -Not -BeNullOrEmpty
+            $result.Name | Should -Be $environmentName
         }
 
         It 'Set-GitHubEnvironment - creates an environment with a slash in the name' {
@@ -123,13 +134,12 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
             {
                 Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Remove-GitHubEnvironment -Confirm:$false
             } | Should -Not -Throw
-            Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Should -BeNullOrEmpty
         }
 
-        It 'Get-GitHubEnvironment - retrieves a specific environment' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
+        It 'Get-GitHubEnvironment - retrieves a specific environment that does exist' {
+            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os"
             $result | Should -Not -BeNullOrEmpty
-            $result.Name | Should -Be $environmentName
+            $result.Name | Should -Be "$environmentName/$os"
         }
 
         It 'Get-GitHubEnvironment - lists all environments' {
@@ -142,7 +152,7 @@ Describe 'As a user - Fine-grained PAT token - organization account access (ORG_
         }
 
         It 'Get-GitHubEnvironment - retrieves a specific environment that does not exist yet' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo | Where-Object { $_.Name -eq $environmentName }
+            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
             $result | Should -BeNullOrEmpty
         }
     }
@@ -172,7 +182,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         }
 
         It 'Get-GitHubEnvironment - retrieves a specific environment that does not exist yet' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo | Where-Object { $_.Name -eq $environmentName }
+            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
             $result | Should -BeNullOrEmpty
         }
 
@@ -181,6 +191,12 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be $environmentName
             $result.ProtectionRules.wait_timer | Should -Be 10
+        }
+
+        It 'Get-GitHubEnvironment - retrieves a specific environment that does exist' {
+            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
+            $result | Should -Not -BeNullOrEmpty
+            $result.Name | Should -Be $environmentName
         }
 
         It 'Set-GitHubEnvironment - creates an environment with a slash in the name' {
@@ -194,13 +210,12 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
             {
                 Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Remove-GitHubEnvironment -Confirm:$false
             } | Should -Not -Throw
-            Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Should -BeNullOrEmpty
         }
 
-        It 'Get-GitHubEnvironment - retrieves a specific environment' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
+        It 'Get-GitHubEnvironment - retrieves a specific environment that does exist' {
+            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os"
             $result | Should -Not -BeNullOrEmpty
-            $result.Name | Should -Be $environmentName
+            $result.Name | Should -Be "$environmentName/$os"
         }
 
         It 'Get-GitHubEnvironment - lists all environments' {
@@ -213,7 +228,7 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
         }
 
         It 'Get-GitHubEnvironment - retrieves a specific environment that does not exist yet' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo | Where-Object { $_.Name -eq $environmentName }
+            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
             $result | Should -BeNullOrEmpty
         }
     }
@@ -239,7 +254,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         }
 
         It 'Get-GitHubEnvironment - retrieves a specific environment that does not exist yet' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo | Where-Object { $_.Name -eq $environmentName }
+            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
             $result | Should -BeNullOrEmpty
         }
 
@@ -248,6 +263,12 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be $environmentName
             $result.ProtectionRules.wait_timer | Should -Be 10
+        }
+
+        It 'Get-GitHubEnvironment - retrieves a specific environment that does exist' {
+            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
+            $result | Should -Not -BeNullOrEmpty
+            $result.Name | Should -Be $environmentName
         }
 
         It 'Set-GitHubEnvironment - creates an environment with a slash in the name' {
@@ -261,13 +282,12 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
             {
                 Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Remove-GitHubEnvironment -Confirm:$false
             } | Should -Not -Throw
-            Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Should -BeNullOrEmpty
         }
 
-        It 'Get-GitHubEnvironment - retrieves a specific environment' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
+        It 'Get-GitHubEnvironment - retrieves a specific environment that does exist' {
+            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os"
             $result | Should -Not -BeNullOrEmpty
-            $result.Name | Should -Be $environmentName
+            $result.Name | Should -Be "$environmentName/$os"
         }
 
         It 'Get-GitHubEnvironment - lists all environments' {
@@ -280,7 +300,7 @@ Describe 'As a GitHub App - Organization (APP_ORG)' {
         }
 
         It 'Get-GitHubEnvironment - retrieves a specific environment that does not exist yet' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo | Where-Object { $_.Name -eq $environmentName }
+            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
             $result | Should -BeNullOrEmpty
         }
     }
