@@ -52,8 +52,14 @@
             }
 
             if (-not $Silent) {
-                Write-Host '✓ ' -ForegroundColor Green -NoNewline
-                Write-Host "Logged out of GitHub! [$contextItem]"
+                if ($script:GitHub.EnvironmentType -eq 'GHA') {
+                    $green = $PSStyle.Foreground.Green
+                    $reset = $PSStyle.Reset
+                    Write-Host "$green✓$reset Logged out of GitHub! [$contextItem]"
+                } else {
+                    Write-Host '✓ ' -ForegroundColor Green -NoNewline
+                    Write-Host "Logged out of GitHub! [$contextItem]"
+                }
             }
         }
     }

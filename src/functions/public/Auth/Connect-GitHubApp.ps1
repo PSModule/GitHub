@@ -161,7 +161,9 @@
             if (-not $Silent) {
                 $name = $contextObj.name
                 if ($script:GitHub.EnvironmentType -eq 'GHA') {
-                    Set-GitHubLogGroup "✓ Connected $name!" {
+                    $green = $PSStyle.Foreground.Green
+                    $reset = $PSStyle.Reset
+                    Set-GitHubLogGroup "$green✓$reset Connected $name!" {
                         Write-Host ($contextObj | Format-List | Out-String)
                     }
                 } else {
