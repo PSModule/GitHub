@@ -8,6 +8,10 @@
     'PSAvoidUsingConvertToSecureStringWithPlainText', '',
     Justification = 'Used to create a secure string for testing.'
 )]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+    'PSAvoidUsingWriteHost', '',
+    Justification = 'Log outputs to GitHub Actions logs.'
+)]
 [CmdletBinding()]
 param()
 
