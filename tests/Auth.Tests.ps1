@@ -11,7 +11,9 @@
 [CmdletBinding()]
 param()
 
-Describe 'GitHub' {
+Describe 'Auth' {
+    $tests = . "$PSScriptRoot/AuthCases.ps1"
+
     Context 'Auth' {
         It 'Connect-GitHubAccount - Connects GitHub Actions without parameters' {
             { Connect-GitHubAccount } | Should -Not -Throw
@@ -133,72 +135,62 @@ Describe 'GitHub' {
             Get-GitHubContext -ListAvailable | Should -HaveCount 0
         }
     }
-}
 
-Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)' {
-    BeforeAll {
-        Connect-GitHubAccount -Token $env:TEST_USER_USER_FG_PAT
-    }
-    AfterAll {
-        Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
-    }
-    Context 'Auth' {
+    Context 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)' {
+        BeforeAll {
+            Connect-GitHubAccount -Token $env:TEST_USER_USER_FG_PAT
+        }
+        AfterAll {
+            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+        }
         It 'Get-GitHubViewer - Gets the logged in context (USER_FG_PAT)' {
             Get-GitHubViewer | Should -Not -BeNullOrEmpty
         }
     }
-}
 
-Describe 'As a user - Fine-grained PAT token - organization account access (ORG_FG_PAT)' {
-    BeforeAll {
-        Connect-GitHubAccount -Token $env:TEST_USER_ORG_FG_PAT
-    }
-    AfterAll {
-        Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
-    }
-    Context 'Auth' {
+    Context 'As a user - Fine-grained PAT token - organization account access (ORG_FG_PAT)' {
+        BeforeAll {
+            Connect-GitHubAccount -Token $env:TEST_USER_ORG_FG_PAT
+        }
+        AfterAll {
+            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+        }
         It 'Get-GitHubViewer - Gets the logged in context (ORG_FG_PAT)' {
             Get-GitHubViewer | Should -Not -BeNullOrEmpty
         }
     }
-}
 
-Describe 'As a user - Classic PAT token (PAT)' {
-    BeforeAll {
-        Connect-GitHubAccount -Token $env:TEST_USER_PAT
-    }
-    AfterAll {
-        Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
-    }
-    Context 'Auth' {
+    Context 'As a user - Classic PAT token (PAT)' {
+        BeforeAll {
+            Connect-GitHubAccount -Token $env:TEST_USER_PAT
+        }
+        AfterAll {
+            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+        }
         It 'Get-GitHubViewer - Gets the logged in context (PAT)' {
             Get-GitHubViewer | Should -Not -BeNullOrEmpty
         }
     }
-}
 
-Describe 'As GitHub Actions (GHA)' {
-    BeforeAll {
-        Connect-GitHubAccount
-    }
-    AfterAll {
-        Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
-    }
-    Context 'Auth' {
+    Context 'As GitHub Actions (GHA)' {
+        BeforeAll {
+            Connect-GitHubAccount
+        }
+        AfterAll {
+            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+        }
         It 'Get-GitHubViewer - Gets the logged in context (GHA)' {
             Get-GitHubViewer | Should -Not -BeNullOrEmpty
         }
     }
-}
 
-Describe 'As a GitHub App - Enterprise (APP_ENT)' {
-    BeforeAll {
-        Connect-GitHubAccount -ClientID $env:TEST_APP_ENT_CLIENT_ID -PrivateKey $env:TEST_APP_ENT_PRIVATE_KEY
-    }
-    AfterAll {
-        Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
-    }
-    Context 'Auth' {
+    Context 'As a GitHub App - Enterprise (APP_ENT)' {
+        BeforeAll {
+            Connect-GitHubAccount -ClientID $env:TEST_APP_ENT_CLIENT_ID -PrivateKey $env:TEST_APP_ENT_PRIVATE_KEY
+        }
+        AfterAll {
+            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+        }
         It 'Connect-GitHubApp - Connects one enterprise installation for the authenticated GitHub App (APP_ENT)' {
             $context = Get-GitHubContext
             { Connect-GitHubApp -Enterprise msx -Context $context } | Should -Not -Throw
@@ -214,16 +206,14 @@ Describe 'As a GitHub App - Enterprise (APP_ENT)' {
             Get-GitHubContext -ListAvailable | Should -HaveCount 3
         }
     }
-}
 
-Describe 'As a GitHub App - Organization (APP_ORG)' {
-    BeforeAll {
-        Connect-GitHubAccount -ClientID $env:TEST_APP_ORG_CLIENT_ID -PrivateKey $env:TEST_APP_ORG_PRIVATE_KEY
-    }
-    AfterAll {
-        Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
-    }
-    Context 'Auth' {
+    Context 'As a GitHub App - Organization (APP_ORG)' {
+        BeforeAll {
+            Connect-GitHubAccount -ClientID $env:TEST_APP_ORG_CLIENT_ID -PrivateKey $env:TEST_APP_ORG_PRIVATE_KEY
+        }
+        AfterAll {
+            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+        }
         It 'Connect-GitHubApp - Connects one user installation for the authenticated GitHub App (APP_ORG)' {
             $context = Get-GitHubContext
             { Connect-GitHubApp -User 'psmodule-user' -Context $context } | Should -Not -Throw

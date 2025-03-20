@@ -2,7 +2,7 @@
 
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
     'PSUseDeclaredVarsMoreThanAssignments', '',
-    Justification = 'Pester grouping syntax: known issue.'
+    Justification = 'Pester grouping syntax - known issue.'
 )]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
     'PSAvoidUsingConvertToSecureStringWithPlainText', '',
@@ -31,52 +31,52 @@ Describe 'Environments' {
             Remove-GitHubRepository -Owner $owner -Name $repo -Confirm:$false
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
         }
-        It 'Get-GitHubEnvironment: should return an empty list when no environments exist' {
+        It 'Get-GitHubEnvironment - should return an empty list when no environments exist' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo
             $result | Should -BeNullOrEmpty
         }
-        It 'Get-GitHubEnvironment: should return null when retrieving a non-existent environment' {
+        It 'Get-GitHubEnvironment - should return null when retrieving a non-existent environment' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
             $result | Should -BeNullOrEmpty
         }
-        It 'Set-GitHubEnvironment: should successfully create an environment with a wait timer of 10' {
+        It 'Set-GitHubEnvironment - should successfully create an environment with a wait timer of 10' {
             $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -WaitTimer 10
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be $environmentName
             $result.ProtectionRules.wait_timer | Should -Be 10
         }
-        It 'Get-GitHubEnvironment: should retrieve the environment that was created' {
+        It 'Get-GitHubEnvironment - should retrieve the environment that was created' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be $environmentName
         }
-        It 'Set-GitHubEnvironment: should successfully create an environment with a slash in its name' {
+        It 'Set-GitHubEnvironment - should successfully create an environment with a slash in its name' {
             $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os"
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be "$environmentName/$os"
         }
-        It 'Get-GitHubEnvironment: should retrieve the environment with a slash in its name' {
+        It 'Get-GitHubEnvironment - should retrieve the environment with a slash in its name' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os"
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be "$environmentName/$os"
         }
-        It 'Remove-GitHubEnvironment: should delete the environment with a slash in its name without errors' {
+        It 'Remove-GitHubEnvironment - should delete the environment with a slash in its name without errors' {
             {
                 Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Remove-GitHubEnvironment -Confirm:$false
             } | Should -Not -Throw
         }
-        It 'Get-GitHubEnvironment: should return null when retrieving the deleted environment with a slash in its name' {
+        It 'Get-GitHubEnvironment - should return null when retrieving the deleted environment with a slash in its name' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os"
             $result | Should -BeNullOrEmpty
         }
-        It 'Get-GitHubEnvironment: should list one remaining environment' {
+        It 'Get-GitHubEnvironment - should list one remaining environment' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo
             $result.Count | Should -Be 1
         }
-        It 'Remove-GitHubEnvironment: should delete the remaining environment without errors' {
+        It 'Remove-GitHubEnvironment - should delete the remaining environment without errors' {
             { Remove-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -Confirm:$false } | Should -Not -Throw
         }
-        It 'Get-GitHubEnvironment: should return null when retrieving an environment that does not exist' {
+        It 'Get-GitHubEnvironment - should return null when retrieving an environment that does not exist' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
             $result | Should -BeNullOrEmpty
         }
@@ -94,52 +94,52 @@ Describe 'Environments' {
             Remove-GitHubRepository -Owner $owner -Name $repo -Confirm:$false
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
         }
-        It 'Get-GitHubEnvironment: should return an empty list when no environments exist' {
+        It 'Get-GitHubEnvironment - should return an empty list when no environments exist' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo
             $result | Should -BeNullOrEmpty
         }
-        It 'Get-GitHubEnvironment: should return null when retrieving a non-existent environment' {
+        It 'Get-GitHubEnvironment - should return null when retrieving a non-existent environment' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
             $result | Should -BeNullOrEmpty
         }
-        It 'Set-GitHubEnvironment: should successfully create an environment with a wait timer of 10' {
+        It 'Set-GitHubEnvironment - should successfully create an environment with a wait timer of 10' {
             $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -WaitTimer 10
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be $environmentName
             $result.ProtectionRules.wait_timer | Should -Be 10
         }
-        It 'Get-GitHubEnvironment: should retrieve the environment that was created' {
+        It 'Get-GitHubEnvironment - should retrieve the environment that was created' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be $environmentName
         }
-        It 'Set-GitHubEnvironment: should successfully create an environment with a slash in its name' {
+        It 'Set-GitHubEnvironment - should successfully create an environment with a slash in its name' {
             $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os"
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be "$environmentName/$os"
         }
-        It 'Get-GitHubEnvironment: should retrieve the environment with a slash in its name' {
+        It 'Get-GitHubEnvironment - should retrieve the environment with a slash in its name' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os"
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be "$environmentName/$os"
         }
-        It 'Remove-GitHubEnvironment: should delete the environment with a slash in its name without errors' {
+        It 'Remove-GitHubEnvironment - should delete the environment with a slash in its name without errors' {
             {
                 Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Remove-GitHubEnvironment -Confirm:$false
             } | Should -Not -Throw
         }
-        It 'Get-GitHubEnvironment: should return null when retrieving the deleted environment with a slash in its name' {
+        It 'Get-GitHubEnvironment - should return null when retrieving the deleted environment with a slash in its name' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os"
             $result | Should -BeNullOrEmpty
         }
-        It 'Get-GitHubEnvironment: should list one remaining environment' {
+        It 'Get-GitHubEnvironment - should list one remaining environment' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo
             $result.Count | Should -Be 1
         }
-        It 'Remove-GitHubEnvironment: should delete the remaining environment without errors' {
+        It 'Remove-GitHubEnvironment - should delete the remaining environment without errors' {
             { Remove-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -Confirm:$false } | Should -Not -Throw
         }
-        It 'Get-GitHubEnvironment: should return null when retrieving an environment that does not exist' {
+        It 'Get-GitHubEnvironment - should return null when retrieving an environment that does not exist' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
             $result | Should -BeNullOrEmpty
         }
@@ -162,52 +162,52 @@ Describe 'Environments' {
             Remove-GitHubRepository -Owner $owner -Name $repo -Confirm:$false
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
         }
-        It 'Get-GitHubEnvironment: should return an empty list when no environments exist' {
+        It 'Get-GitHubEnvironment - should return an empty list when no environments exist' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo
             $result | Should -BeNullOrEmpty
         }
-        It 'Get-GitHubEnvironment: should return null when retrieving a non-existent environment' {
+        It 'Get-GitHubEnvironment - should return null when retrieving a non-existent environment' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
             $result | Should -BeNullOrEmpty
         }
-        It 'Set-GitHubEnvironment: should successfully create an environment with a wait timer of 10' {
+        It 'Set-GitHubEnvironment - should successfully create an environment with a wait timer of 10' {
             $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -WaitTimer 10
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be $environmentName
             $result.ProtectionRules.wait_timer | Should -Be 10
         }
-        It 'Get-GitHubEnvironment: should retrieve the environment that was created' {
+        It 'Get-GitHubEnvironment - should retrieve the environment that was created' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be $environmentName
         }
-        It 'Set-GitHubEnvironment: should successfully create an environment with a slash in its name' {
+        It 'Set-GitHubEnvironment - should successfully create an environment with a slash in its name' {
             $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os"
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be "$environmentName/$os"
         }
-        It 'Get-GitHubEnvironment: should retrieve the environment with a slash in its name' {
+        It 'Get-GitHubEnvironment - should retrieve the environment with a slash in its name' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os"
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be "$environmentName/$os"
         }
-        It 'Remove-GitHubEnvironment: should delete the environment with a slash in its name without errors' {
+        It 'Remove-GitHubEnvironment - should delete the environment with a slash in its name without errors' {
             {
                 Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Remove-GitHubEnvironment -Confirm:$false
             } | Should -Not -Throw
         }
-        It 'Get-GitHubEnvironment: should return null when retrieving the deleted environment with a slash in its name' {
+        It 'Get-GitHubEnvironment - should return null when retrieving the deleted environment with a slash in its name' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os"
             $result | Should -BeNullOrEmpty
         }
-        It 'Get-GitHubEnvironment: should list one remaining environment' {
+        It 'Get-GitHubEnvironment - should list one remaining environment' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo
             $result.Count | Should -Be 1
         }
-        It 'Remove-GitHubEnvironment: should delete the remaining environment without errors' {
+        It 'Remove-GitHubEnvironment - should delete the remaining environment without errors' {
             { Remove-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -Confirm:$false } | Should -Not -Throw
         }
-        It 'Get-GitHubEnvironment: should return null when retrieving an environment that does not exist' {
+        It 'Get-GitHubEnvironment - should return null when retrieving an environment that does not exist' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
             $result | Should -BeNullOrEmpty
         }
@@ -226,52 +226,52 @@ Describe 'Environments' {
             Remove-GitHubRepository -Owner $owner -Name $repo -Confirm:$false
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
         }
-        It 'Get-GitHubEnvironment: should return an empty list when no environments exist' {
+        It 'Get-GitHubEnvironment - should return an empty list when no environments exist' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo
             $result | Should -BeNullOrEmpty
         }
-        It 'Get-GitHubEnvironment: should return null when retrieving a non-existent environment' {
+        It 'Get-GitHubEnvironment - should return null when retrieving a non-existent environment' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
             $result | Should -BeNullOrEmpty
         }
-        It 'Set-GitHubEnvironment: should successfully create an environment with a wait timer of 10' {
+        It 'Set-GitHubEnvironment - should successfully create an environment with a wait timer of 10' {
             $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -WaitTimer 10
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be $environmentName
             $result.ProtectionRules.wait_timer | Should -Be 10
         }
-        It 'Get-GitHubEnvironment: should retrieve the environment that was created' {
+        It 'Get-GitHubEnvironment - should retrieve the environment that was created' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be $environmentName
         }
-        It 'Set-GitHubEnvironment: should successfully create an environment with a slash in its name' {
+        It 'Set-GitHubEnvironment - should successfully create an environment with a slash in its name' {
             $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os"
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be "$environmentName/$os"
         }
-        It 'Get-GitHubEnvironment: should retrieve the environment with a slash in its name' {
+        It 'Get-GitHubEnvironment - should retrieve the environment with a slash in its name' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os"
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be "$environmentName/$os"
         }
-        It 'Remove-GitHubEnvironment: should delete the environment with a slash in its name without errors' {
+        It 'Remove-GitHubEnvironment - should delete the environment with a slash in its name without errors' {
             {
                 Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Remove-GitHubEnvironment -Confirm:$false
             } | Should -Not -Throw
         }
-        It 'Get-GitHubEnvironment: should return null when retrieving the deleted environment with a slash in its name' {
+        It 'Get-GitHubEnvironment - should return null when retrieving the deleted environment with a slash in its name' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os"
             $result | Should -BeNullOrEmpty
         }
-        It 'Get-GitHubEnvironment: should list one remaining environment' {
+        It 'Get-GitHubEnvironment - should list one remaining environment' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo
             $result.Count | Should -Be 1
         }
-        It 'Remove-GitHubEnvironment: should delete the remaining environment without errors' {
+        It 'Remove-GitHubEnvironment - should delete the remaining environment without errors' {
             { Remove-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -Confirm:$false } | Should -Not -Throw
         }
-        It 'Get-GitHubEnvironment: should return null when retrieving an environment that does not exist' {
+        It 'Get-GitHubEnvironment - should return null when retrieving an environment that does not exist' {
             $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
             $result | Should -BeNullOrEmpty
         }
