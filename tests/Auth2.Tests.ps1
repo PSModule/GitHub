@@ -36,5 +36,4 @@ Describe 'Auth' {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
         }
     }
-
 }

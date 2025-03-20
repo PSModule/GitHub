@@ -293,8 +293,14 @@
             Write-Verbose ($contextObj | Format-List | Out-String)
             if (-not $Silent) {
                 $name = $contextObj.Username
-                Write-Host '✓ ' -ForegroundColor Green -NoNewline
-                Write-Host "Logged in as $name!"
+                if ($script.GitHub.EnvironmentType -eq 'GHA') {
+                    LogGroup "✓ Logged in as $name!" {
+                        Write-Host ($contextObj | Format-List | Out-String)
+                    }
+                } else {
+                    Write-Host '✓ ' -ForegroundColor Green -NoNewline
+                    Write-Host "Logged in as $name!"
+                }
             }
             if ($PassThru) {
                 Write-Debug "Passing context [$contextObj] to the pipeline."
