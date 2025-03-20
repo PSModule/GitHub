@@ -27,6 +27,13 @@ Describe 'Auth' {
             $context | Should -Not -BeNullOrEmpty
         }
         if ($AuthType -eq 'APP') {
+            It 'Connect-GitHubAccount - Connects using the provided credentials' {
+                $context = Connect-GitHubAccount @connectParams -PassThru -Silent -AutoloadInstallations
+                LogGroup 'Context' {
+                    Write-Host ($context | Format-List | Out-String)
+                }
+                $context | Should -Not -BeNullOrEmpty
+            }
             It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
                 $contexts = Connect-GitHubApp -PassThru -Silent
                 LogGroup 'Contexts' {
@@ -50,6 +57,21 @@ Describe 'Auth' {
                 Write-Host ($viewer | Format-List | Out-String)
             }
             $viewer | Should -Not -BeNullOrEmpty
+        }
+
+        It 'GetGitHubContext - Gets the default context' {
+            $context = Get-GitHubContext
+            LogGroup 'Default context' {
+                Write-Host ($viewer | Format-List | Out-String)
+            }
+        }
+
+        It 'GetGitHubContext - List all contexts' {
+            $contexts = Get-GitHubContext -ListAvailable
+            LogGroup 'Contexts' {
+                Write-Host ($contexts | Format-List | Out-String)
+            }
+            $contexts.count | Should -BeGreaterThan 2
         }
 
         It 'Disconnect-GitHubAccount - Disconnects all contexts' {
