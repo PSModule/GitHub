@@ -23,7 +23,7 @@ BeforeAll {
 Describe 'Template' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 
-    Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
+    Get-Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
         BeforeAll {
             $context = Connect-GitHubAccount @connectParams -PassThru -Silent
             LogGroup 'Context' {
@@ -57,26 +57,28 @@ Describe 'Template' {
                     New-GitHubRepository -Owner $Owner -Name $repo -AllowSquashMerge
                 }
             }
-            It "Get-GitHubRepository - Gets the authenticated user's repositories" {
-                $repos = Get-GitHubRepository
-                LogGroup 'Repositories' {
-                    Write-Host ($repos | Format-List | Out-String)
+            if ($OwnerType -eq 'user') {
+                It "Get-GitHubRepository - Gets the authenticated user's repositories" {
+                    $repos = Get-GitHubRepository
+                    LogGroup 'Repositories' {
+                        Write-Host ($repos | Format-List | Out-String)
+                    }
+                    $repos | Should -Not -BeNullOrEmpty
                 }
-                $repos | Should -Not -BeNullOrEmpty
-            }
-            It "Get-GitHubRepository - Gets the authenticated user's public repositories" {
-                $repos = Get-GitHubRepository -Type 'public'
-                LogGroup 'Repositories' {
-                    Write-Host ($repos | Format-List | Out-String)
+                It "Get-GitHubRepository - Gets the authenticated user's public repositories" {
+                    $repos = Get-GitHubRepository -Type 'public'
+                    LogGroup 'Repositories' {
+                        Write-Host ($repos | Format-List | Out-String)
+                    }
+                    $repos | Should -Not -BeNullOrEmpty
                 }
-                $repos | Should -Not -BeNullOrEmpty
-            }
-            It 'Get-GitHubRepository - Gets the public repos where the authenticated user is owner' {
-                $repos = Get-GitHubRepository -Visibility 'public' -Affiliation 'owner'
-                LogGroup 'Repositories' {
-                    Write-Host ($repos | Format-List | Out-String)
+                It 'Get-GitHubRepository - Gets the public repos where the authenticated user is owner' {
+                    $repos = Get-GitHubRepository -Visibility 'public' -Affiliation 'owner'
+                    LogGroup 'Repositories' {
+                        Write-Host ($repos | Format-List | Out-String)
+                    }
+                    $repos | Should -Not -BeNullOrEmpty
                 }
-                $repos | Should -Not -BeNullOrEmpty
             }
             It 'Get-GitHubRepository - Gets a specific repository' {
                 $repo = Get-GitHubRepository -Owner 'PSModule' -Name 'GitHub'
