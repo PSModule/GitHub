@@ -100,7 +100,7 @@ Describe 'Template' {
                 $repos | Should -Not -BeNullOrEmpty
             }
             It 'Remove-GitHubRepository - Removes all repositories' {
-                $repos = Get-GitHubRepository -Username $Owner -Name $repo
+                $repos = Get-GitHubRepository -Owner $Owner -Name $repo
                 LogGroup 'Repositories' {
                     Write-Host ($repos | Format-Table | Out-String)
                 }
