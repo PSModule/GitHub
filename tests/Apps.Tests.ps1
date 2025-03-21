@@ -29,6 +29,10 @@ Describe 'Apps' {
             }
         }
 
+        AfterAll {
+            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+        }
+
         # Tests for APP goes here
         if ($AuthType -eq 'APP') {
             Context 'GitHub Apps' {
@@ -121,8 +125,4 @@ Describe 'Apps' {
 
         # Tests for IAT UAT and PAT goes here
     }
-}
-
-AfterAll {
-    Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
 }

@@ -30,6 +30,9 @@ Describe 'Template' {
             }
             $context | Should -Not -BeNullOrEmpty
         }
+        AfterAll {
+            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+        }
 
         # Tests for APP goes here
         if ($AuthType -eq 'APP') {

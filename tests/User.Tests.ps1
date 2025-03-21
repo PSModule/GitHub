@@ -25,6 +25,9 @@ Context 'User' {
                 Write-Host ($context | Format-List | Out-String)
             }
         }
+        AfterAll {
+            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+        }
 
         # Tests for APP goes here
         if ($AuthType -eq 'APP') {
@@ -78,8 +81,4 @@ Context 'User' {
             }
         }
     }
-}
-
-AfterAll {
-    Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
 }

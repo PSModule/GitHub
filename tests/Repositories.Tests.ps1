@@ -25,6 +25,10 @@ Describe 'Template' {
                 Write-Host ($context | Format-List | Out-String)
             }
         }
+        AfterAll {
+            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+        }
+
 
         # Tests for APP goes here
         if ($AuthType -eq 'APP') {
@@ -84,8 +88,4 @@ Describe 'Template' {
             $repo | Should -Not -BeNullOrEmpty
         }
     }
-}
-
-AfterAll {
-    Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
 }

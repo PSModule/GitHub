@@ -19,6 +19,10 @@ Describe 'Auth' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 
     Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
+        AfterAll {
+            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+        }
+
         It 'Connect-GitHubAccount - Connects using the provided credentials' {
             $context = Connect-GitHubAccount @connectParams -PassThru -Silent
             LogGroup 'Context' {
@@ -114,8 +118,4 @@ Describe 'Auth' {
             (Get-GitHubContext -ListAvailable).count | Should -Be 0
         }
     }
-}
-
-AfterAll {
-    Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
 }

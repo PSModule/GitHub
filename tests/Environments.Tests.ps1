@@ -36,7 +36,9 @@ Describe 'Environments' {
 
         AfterAll {
             Remove-GitHubRepository -Owner $owner -Name $repo -Confirm:$false
+            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
         }
+
 
         # Tests for APP goes here
         if ($AuthType -eq 'APP') {
@@ -60,7 +62,7 @@ Describe 'Environments' {
             }
             It 'Get-GitHubEnvironment - should return an empty list when no environments exist' {
                 $result = Get-GitHubEnvironment -Owner $owner -Repository $repo
-                LogGroup "Environment" {
+                LogGroup 'Environment' {
                     Write-Host ($result | Format-Table | Out-String)
                 }
                 $result | Should -BeNullOrEmpty
@@ -137,8 +139,4 @@ Describe 'Environments' {
             }
         }
     }
-}
-
-AfterAll {
-    Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
 }
