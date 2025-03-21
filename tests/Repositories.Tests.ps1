@@ -60,51 +60,53 @@ Describe 'Template' {
             It "Get-GitHubRepository - Gets the authenticated user's repositories" {
                 $repos = Get-GitHubRepository
                 LogGroup 'Repositories' {
-                    Write-Host ($repos | Format-Table | Out-String)
+                    Write-Host ($repos | Format-List | Out-String)
                 }
                 $repos | Should -Not -BeNullOrEmpty
             }
             It "Get-GitHubRepository - Gets the authenticated user's public repositories" {
                 $repos = Get-GitHubRepository -Type 'public'
                 LogGroup 'Repositories' {
-                    Write-Host ($repos | Format-Table | Out-String)
+                    Write-Host ($repos | Format-List | Out-String)
                 }
                 $repos | Should -Not -BeNullOrEmpty
             }
             It 'Get-GitHubRepository - Gets the public repos where the authenticated user is owner' {
                 $repos = Get-GitHubRepository -Visibility 'public' -Affiliation 'owner'
                 LogGroup 'Repositories' {
-                    Write-Host ($repos | Format-Table | Out-String)
+                    Write-Host ($repos | Format-List | Out-String)
                 }
                 $repos | Should -Not -BeNullOrEmpty
             }
             It 'Get-GitHubRepository - Gets a specific repository' {
                 $repo = Get-GitHubRepository -Owner 'PSModule' -Name 'GitHub'
                 LogGroup 'Repository' {
-                    Write-Host ($repo | Format-Table | Out-String)
+                    Write-Host ($repo | Format-List | Out-String)
                 }
                 $repo | Should -Not -BeNullOrEmpty
             }
             It 'Get-GitHubRepository - Gets all repositories from a organization' {
                 $repos = Get-GitHubRepository -Owner 'PSModule'
                 LogGroup 'Repositories' {
-                    Write-Host ($repos | Format-Table | Out-String)
+                    Write-Host ($repos | Format-List | Out-String)
                 }
                 $repos | Should -Not -BeNullOrEmpty
             }
             It 'Get-GitHubRepository - Gets all repositories from a user' {
                 $repos = Get-GitHubRepository -Username 'MariusStorhaug'
                 LogGroup 'Repositories' {
-                    Write-Host ($repos | Format-Table | Out-String)
+                    Write-Host ($repos | Format-List | Out-String)
                 }
                 $repos | Should -Not -BeNullOrEmpty
             }
             It 'Remove-GitHubRepository - Removes all repositories' {
                 $repos = Get-GitHubRepository -Owner $Owner -Name $repo
                 LogGroup 'Repositories' {
-                    Write-Host ($repos | Format-Table | Out-String)
+                    Write-Host ($repos | Format-List | Out-String)
                 }
-                $repos | Remove-GitHubRepository -Confirm:$false
+                $repos | ForEach-Object {
+                    Remove-GitHubRepository -Owner $_.owner.login -Name $_.name -Confirm:$false
+                }
             }
         }
     }
