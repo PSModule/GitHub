@@ -33,7 +33,6 @@ Describe 'Template' {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
         }
 
-
         # Tests for APP goes here
         if ($AuthType -eq 'APP') {
             It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {

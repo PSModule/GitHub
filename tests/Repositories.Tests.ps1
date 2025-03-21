@@ -29,7 +29,6 @@ Describe 'Template' {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
         }
 
-
         # Tests for APP goes here
         if ($AuthType -eq 'APP') {
             It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
@@ -41,51 +40,52 @@ Describe 'Template' {
         }
 
         # Tests for runners goes here
-        if ($Type -eq 'GitHub Actions') {}
+        if ($Type -ne 'GitHub Actions') {
 
-        # Tests for IAT UAT and PAT goes here
+            # Tests for IAT UAT and PAT goes here
 
-        It "Get-GitHubRepository - Gets the authenticated user's repositories (USER_FG_PAT)" {
-            $repo = Get-GitHubRepository
-            LogGroup 'Repository' {
-                Write-Host ($repo | Format-Table | Out-String)
+            It "Get-GitHubRepository - Gets the authenticated user's repositories" {
+                $repo = Get-GitHubRepository
+                LogGroup 'Repository' {
+                    Write-Host ($repo | Format-Table | Out-String)
+                }
+                $repo | Should -Not -BeNullOrEmpty
             }
-            $repo | Should -Not -BeNullOrEmpty
-        }
-        It "Get-GitHubRepository - Gets the authenticated user's public repositories (USER_FG_PAT)" {
-            $repo = Get-GitHubRepository -Type 'public'
-            LogGroup 'Repository' {
-                Write-Host ($repo | Format-Table | Out-String)
+            It "Get-GitHubRepository - Gets the authenticated user's public repositories" {
+                $repo = Get-GitHubRepository -Type 'public'
+                LogGroup 'Repository' {
+                    Write-Host ($repo | Format-Table | Out-String)
+                }
+                $repo | Should -Not -BeNullOrEmpty
             }
-            $repo | Should -Not -BeNullOrEmpty
-        }
-        It 'Get-GitHubRepository - Gets the public repos where the authenticated user is owner (USER_FG_PAT)' {
-            $repo = Get-GitHubRepository -Visibility 'public' -Affiliation 'owner'
-            LogGroup 'Repository' {
-                Write-Host ($repo | Format-Table | Out-String)
+            It 'Get-GitHubRepository - Gets the public repos where the authenticated user is owner' {
+                $repo = Get-GitHubRepository -Visibility 'public' -Affiliation 'owner'
+                LogGroup 'Repository' {
+                    Write-Host ($repo | Format-Table | Out-String)
+                }
+                $repo | Should -Not -BeNullOrEmpty
             }
-            $repo | Should -Not -BeNullOrEmpty
-        }
-        It 'Get-GitHubRepository - Gets a specific repository (USER_FG_PAT)' {
-            $repo = Get-GitHubRepository -Owner 'PSModule' -Name 'GitHub'
-            LogGroup 'Repository' {
-                Write-Host ($repo | Format-Table | Out-String)
+            It 'Get-GitHubRepository - Gets a specific repository' {
+                $repo = Get-GitHubRepository -Owner 'PSModule' -Name 'GitHub'
+                LogGroup 'Repository' {
+                    Write-Host ($repo | Format-Table | Out-String)
+                }
+                $repo | Should -Not -BeNullOrEmpty
             }
-            $repo | Should -Not -BeNullOrEmpty
-        }
-        It 'Get-GitHubRepository - Gets all repositories from a organization (USER_FG_PAT)' {
-            $repo = Get-GitHubRepository -Owner 'PSModule'
-            LogGroup 'Repository' {
-                Write-Host ($repo | Format-Table | Out-String)
+            It 'Get-GitHubRepository - Gets all repositories from a organization' {
+                $repo = Get-GitHubRepository -Owner 'PSModule'
+                LogGroup 'Repository' {
+                    Write-Host ($repo | Format-Table | Out-String)
+                }
+                $repo | Should -Not -BeNullOrEmpty
             }
-            $repo | Should -Not -BeNullOrEmpty
-        }
-        It 'Get-GitHubRepository - Gets all repositories from a user (USER_FG_PAT)' {
-            $repo = Get-GitHubRepository -Username 'MariusStorhaug'
-            LogGroup 'Repository' {
-                Write-Host ($repo | Format-Table | Out-String)
+            It 'Get-GitHubRepository - Gets all repositories from a user' {
+                $repo = Get-GitHubRepository -Username 'MariusStorhaug'
+                LogGroup 'Repository' {
+                    Write-Host ($repo | Format-Table | Out-String)
+                }
+                $repo | Should -Not -BeNullOrEmpty
             }
-            $repo | Should -Not -BeNullOrEmpty
         }
     }
 }

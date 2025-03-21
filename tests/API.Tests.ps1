@@ -236,7 +236,3 @@ Describe 'Template' {
         }
     }
 }
-
-AfterAll {
-    Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
-}
