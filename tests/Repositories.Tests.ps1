@@ -15,6 +15,11 @@
 [CmdletBinding()]
 param()
 
+BeforeAll {
+    $repoSuffix = 'EnvironmentTest'
+    $environmentName = 'production'
+    $os = $env:RUNNER_OS
+}
 Describe 'Template' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 
@@ -43,7 +48,15 @@ Describe 'Template' {
         if ($Type -ne 'GitHub Actions') {
 
             # Tests for IAT UAT and PAT goes here
-
+            It 'New-GitHubRepository - Creates a new repository' {
+                $guid = [guid]::NewGuid().ToString()
+                $repo = "$repoSuffix-$guid"
+                if ($OwnerType -eq 'user') {
+                    New-GitHubRepository -Name $repo -AllowSquashMerge
+                } else {
+                    New-GitHubRepository -Owner $Owner -Name $repo -AllowSquashMerge
+                }
+            }
             It "Get-GitHubRepository - Gets the authenticated user's repositories" {
                 $repo = Get-GitHubRepository
                 LogGroup 'Repository' {
@@ -85,6 +98,9 @@ Describe 'Template' {
                     Write-Host ($repo | Format-Table | Out-String)
                 }
                 $repo | Should -Not -BeNullOrEmpty
+            }
+            It 'Remove-GitHubRepository - Removes all repositories' {
+                Remove-GitHubRepository -Owner $owner -Name $repo -Confirm:$false
             }
         }
     }
