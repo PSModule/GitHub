@@ -101,7 +101,7 @@ Describe 'Template' {
             }
             It 'Remove-GitHubRepository - Removes all repositories' {
                 if ($OwnerType -eq 'user') {
-                    $repos = Get-GitHubRepository -Name $repo
+                    $repos = Get-GitHubRepository -Username $Owner -Name $repo
                 } else {
                     $repos = Get-GitHubRepository -Owner $Owner -Name $repo
                 }
