@@ -16,7 +16,7 @@
 param()
 
 BeforeAll {
-    $repoSuffix = 'EnvironmentTest'
+    $repoPrefix = 'EnvironmentTest'
     $environmentName = 'production'
     $os = $env:RUNNER_OS
 }
@@ -29,6 +29,8 @@ Describe 'Template' {
             LogGroup 'Context' {
                 Write-Host ($context | Format-List | Out-String)
             }
+            $guid = [guid]::NewGuid().ToString()
+            $repo = "$repoPrefix-$os-$guid"
         }
         AfterAll {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
@@ -49,8 +51,6 @@ Describe 'Template' {
 
             # Tests for IAT UAT and PAT goes here
             It 'New-GitHubRepository - Creates a new repository' {
-                $guid = [guid]::NewGuid().ToString()
-                $repo = "$repoSuffix-$os-$guid"
                 if ($OwnerType -eq 'user') {
                     New-GitHubRepository -Name $repo -AllowSquashMerge
                 } else {
@@ -58,25 +58,25 @@ Describe 'Template' {
                 }
             }
             It "Get-GitHubRepository - Gets the authenticated user's repositories" {
-                $repo = Get-GitHubRepository
-                LogGroup 'Repository' {
-                    Write-Host ($repo | Format-Table | Out-String)
+                $repos = Get-GitHubRepository
+                LogGroup 'Repositories' {
+                    Write-Host ($repos | Format-Table | Out-String)
                 }
-                $repo | Should -Not -BeNullOrEmpty
+                $repos | Should -Not -BeNullOrEmpty
             }
             It "Get-GitHubRepository - Gets the authenticated user's public repositories" {
-                $repo = Get-GitHubRepository -Type 'public'
-                LogGroup 'Repository' {
-                    Write-Host ($repo | Format-Table | Out-String)
+                $repos = Get-GitHubRepository -Type 'public'
+                LogGroup 'Repositories' {
+                    Write-Host ($repos | Format-Table | Out-String)
                 }
-                $repo | Should -Not -BeNullOrEmpty
+                $repos | Should -Not -BeNullOrEmpty
             }
             It 'Get-GitHubRepository - Gets the public repos where the authenticated user is owner' {
-                $repo = Get-GitHubRepository -Visibility 'public' -Affiliation 'owner'
-                LogGroup 'Repository' {
-                    Write-Host ($repo | Format-Table | Out-String)
+                $repos = Get-GitHubRepository -Visibility 'public' -Affiliation 'owner'
+                LogGroup 'Repositories' {
+                    Write-Host ($repos | Format-Table | Out-String)
                 }
-                $repo | Should -Not -BeNullOrEmpty
+                $repos | Should -Not -BeNullOrEmpty
             }
             It 'Get-GitHubRepository - Gets a specific repository' {
                 $repo = Get-GitHubRepository -Owner 'PSModule' -Name 'GitHub'
@@ -86,21 +86,29 @@ Describe 'Template' {
                 $repo | Should -Not -BeNullOrEmpty
             }
             It 'Get-GitHubRepository - Gets all repositories from a organization' {
-                $repo = Get-GitHubRepository -Owner 'PSModule'
-                LogGroup 'Repository' {
-                    Write-Host ($repo | Format-Table | Out-String)
+                $repos = Get-GitHubRepository -Owner 'PSModule'
+                LogGroup 'Repositories' {
+                    Write-Host ($repos | Format-Table | Out-String)
                 }
-                $repo | Should -Not -BeNullOrEmpty
+                $repos | Should -Not -BeNullOrEmpty
             }
             It 'Get-GitHubRepository - Gets all repositories from a user' {
-                $repo = Get-GitHubRepository -Username 'MariusStorhaug'
-                LogGroup 'Repository' {
-                    Write-Host ($repo | Format-Table | Out-String)
+                $repos = Get-GitHubRepository -Username 'MariusStorhaug'
+                LogGroup 'Repositories' {
+                    Write-Host ($repos | Format-Table | Out-String)
                 }
-                $repo | Should -Not -BeNullOrEmpty
+                $repos | Should -Not -BeNullOrEmpty
             }
             It 'Remove-GitHubRepository - Removes all repositories' {
-                Remove-GitHubRepository -Owner $owner -Name $repo -Confirm:$false
+                if ($OwnerType -eq 'user') {
+                    $repos = Get-GitHubRepository -Name $repo
+                } else {
+                    $repos = Get-GitHubRepository -Owner $Owner -Name $repo
+                }
+                LogGroup 'Repositories' {
+                    Write-Host ($repos | Format-Table | Out-String)
+                }
+                $repos | Remove-GitHubRepository -Confirm:$false
             }
         }
     }
