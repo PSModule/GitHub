@@ -50,7 +50,7 @@ Describe 'Template' {
             # Tests for IAT UAT and PAT goes here
             It 'New-GitHubRepository - Creates a new repository' {
                 $guid = [guid]::NewGuid().ToString()
-                $repo = "$repoSuffix-$guid"
+                $repo = "$repoSuffix-$os-$guid"
                 if ($OwnerType -eq 'user') {
                     New-GitHubRepository -Name $repo -AllowSquashMerge
                 } else {
