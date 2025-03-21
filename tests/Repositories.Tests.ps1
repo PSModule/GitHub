@@ -23,7 +23,7 @@ BeforeAll {
 Describe 'Template' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 
-    Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
+    Get-Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
         BeforeAll {
             $context = Connect-GitHubAccount @connectParams -PassThru -Silent
             LogGroup 'Context' {
@@ -100,11 +100,7 @@ Describe 'Template' {
                 $repos | Should -Not -BeNullOrEmpty
             }
             It 'Remove-GitHubRepository - Removes all repositories' {
-                if ($OwnerType -eq 'user') {
-                    $repos = Get-GitHubRepository -Username $Owner -Name $repo
-                } else {
-                    $repos = Get-GitHubRepository -Owner $Owner -Name $repo
-                }
+                $repos = Get-GitHubRepository -Username $Owner -Name $repo
                 LogGroup 'Repositories' {
                     Write-Host ($repos | Format-Table | Out-String)
                 }
