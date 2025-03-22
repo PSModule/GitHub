@@ -29,10 +29,10 @@ Describe 'Variables' {
             LogGroup 'Context' {
                 Write-Host ($context | Format-List | Out-String)
             }
-            $repoName = "$testName-$os-$testType"
-            $varName = "$testName`_$os`_$testType"
+            $repoName = "$testName-$os-$TokenType"
+            $varName = "$testName`_$os`_$TokenType"
             $variablePrefix = "$varName`_"
-            $environmentName = "$testName-$os-$testType"
+            $environmentName = "$testName-$os-$TokenType"
         }
         AfterAll {
             Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
