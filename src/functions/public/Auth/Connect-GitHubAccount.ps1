@@ -293,8 +293,14 @@
             Write-Verbose ($contextObj | Format-List | Out-String)
             if (-not $Silent) {
                 $name = $contextObj.Username
-                Write-Host '✓ ' -ForegroundColor Green -NoNewline
-                Write-Host "Logged in as $name!"
+                if ($script:GitHub.EnvironmentType -eq 'GHA') {
+                    $green = $PSStyle.Foreground.Green
+                    $reset = $PSStyle.Reset
+                    Write-Host "$green✓$reset Logged in as $name!"
+                } else {
+                    Write-Host '✓ ' -ForegroundColor Green -NoNewline
+                    Write-Host "Logged in as $name!"
+                }
             }
             if ($PassThru) {
                 Write-Debug "Passing context [$contextObj] to the pipeline."
@@ -303,7 +309,7 @@
 
             if ($authType -eq 'App' -and $AutoloadInstallations) {
                 Write-Verbose 'Loading GitHub App Installation contexts...'
-                Connect-GitHubApp
+                Connect-GitHubApp -Silent:$Silent
             }
 
         } catch {

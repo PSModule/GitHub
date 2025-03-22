@@ -1,4 +1,4 @@
-﻿function Set-GitHubDefaultContext {
+﻿function Switch-GitHubContext {
     <#
         .SYNOPSIS
         Set the default context.
@@ -7,8 +7,9 @@
         Set the default context for the GitHub module.
 
         .EXAMPLE
-        Set-GitHubDefaultContext -Context 'github.com/Octocat'
+        Switch-GitHubContext -Context 'github.com/Octocat'
     #>
+    [Alias('Set-GitHubDefaultContext')]
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The context to run the command in. Used to get the details for the API call.
