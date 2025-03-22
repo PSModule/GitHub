@@ -33,15 +33,6 @@ Describe 'Variables' {
             $varName = "$testName`_$os`_$testType"
             $variablePrefix = "$varName`_"
             $environmentName = "$testName-$os-$testType"
-            if ($OwnerType -eq 'organization') {
-                $repo = New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
-                Set-GitHubVariable -Owner $owner -Name $varName -Value 'organization' -Visibility selected -SelectedRepositories $repo.id
-            } else {
-                $repo = New-GitHubRepository -Name $repoName -AllowSquashMerge
-            }
-            LogGroup "Repository" {
-                Write-Host ($repo | Format-List | Out-String)
-            }
         }
         AfterAll {
             Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
@@ -57,6 +48,20 @@ Describe 'Variables' {
                 $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
                 LogGroup 'Context' {
                     Write-Host ($context | Format-List | Out-String)
+                }
+            }
+        }
+
+        Context 'Prep' {
+            BeforeAll {
+                if ($OwnerType -eq 'organization') {
+                    $repo = New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
+                    Set-GitHubVariable -Owner $owner -Name $varName -Value 'organization' -Visibility selected -SelectedRepositories $repo.id
+                } else {
+                    $repo = New-GitHubRepository -Name $repoName -AllowSquashMerge
+                }
+                LogGroup 'Repository' {
+                    Write-Host ($repo | Format-List | Out-String)
                 }
             }
         }
