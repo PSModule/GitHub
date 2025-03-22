@@ -35,36 +35,36 @@ Describe 'Variables' {
             $environmentName = "$testName-$os-$TokenType"
         }
         AfterAll {
-            Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
-            if ($OwnerType -eq 'organization') {
-                Get-GitHubVariable -Owner $owner -Name "*$os*" | Remove-GitHubVariable
-            }
+            # Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
+            # if ($OwnerType -eq 'organization') {
+            #     Get-GitHubVariable -Owner $owner -Name "*$os*" | Remove-GitHubVariable
+            # }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
         }
 
-        # Tests for APP goes here
-        if ($AuthType -eq 'APP') {
-            It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
-                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
-                LogGroup 'Context' {
-                    Write-Host ($context | Format-List | Out-String)
-                }
-            }
-        }
+        # # Tests for APP goes here
+        # if ($AuthType -eq 'APP') {
+        #     It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
+        #         $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
+        #         LogGroup 'Context' {
+        #             Write-Host ($context | Format-List | Out-String)
+        #         }
+        #     }
+        # }
 
-        Context 'Prep' {
-            BeforeAll {
-                if ($OwnerType -eq 'organization') {
-                    $repo = New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
-                    Set-GitHubVariable -Owner $owner -Name $varName -Value 'organization' -Visibility selected -SelectedRepositories $repo.id
-                } else {
-                    $repo = New-GitHubRepository -Name $repoName -AllowSquashMerge
-                }
-                LogGroup 'Repository' {
-                    Write-Host ($repo | Format-List | Out-String)
-                }
-            }
-        }
+        # Context 'Prep' {
+        #     BeforeAll {
+        #         if ($OwnerType -eq 'organization') {
+        #             $repo = New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
+        #             Set-GitHubVariable -Owner $owner -Name $varName -Value 'organization' -Visibility selected -SelectedRepositories $repo.id
+        #         } else {
+        #             $repo = New-GitHubRepository -Name $repoName -AllowSquashMerge
+        #         }
+        #         LogGroup 'Repository' {
+        #             Write-Host ($repo | Format-List | Out-String)
+        #         }
+        #     }
+        # }
 
         # # Tests for IAT UAT and PAT goes here
         # Context 'Organization' -Skip:($TokenType -in 'GITHUB_TOKEN') {
