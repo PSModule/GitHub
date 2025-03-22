@@ -16,7 +16,7 @@
 param()
 
 BeforeAll {
-    $repoPrefix = 'RepositoryTest'
+    $testPrefix = 'RepositoryTest'
     $os = $env:RUNNER_OS
 }
 
@@ -30,7 +30,8 @@ Describe 'Template' {
                 Write-Host ($context | Format-List | Out-String)
             }
             $guid = [guid]::NewGuid().ToString()
-            $repo = "$repoPrefix-$os-$guid"
+            $repoPrefix = "$testPrefix-$os"
+            $repo = "$repoPrefix-$guid"
         }
         AfterAll {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
@@ -110,9 +111,9 @@ Describe 'Template' {
             }
             It 'Get-GitHubRepository - Gets none repositories after removal' {
                 if ($OwnerType -eq 'user') {
-                    $repos = Get-GitHubRepository -Username $Owner
+                    $repos = Get-GitHubRepository -Username $Owner | Where-Object { $_.name -like "$repoPrefix*" }
                 } else {
-                    $repos = Get-GitHubRepository -Owner $Owner
+                    $repos = Get-GitHubRepository -Owner $Owner | Where-Object { $_.name -like "$repoPrefix*" }
                 }
                 LogGroup 'Repositories' {
                     Write-Host ($repos | Format-List | Out-String)
