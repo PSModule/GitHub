@@ -104,8 +104,12 @@ filter Get-GitHubEnvironment {
     }
 
     process {
-        Get-GitHubEnvironmentList -Owner $Owner -Repository $Repository -PerPage $PerPage -Context $Context |
-            Where-Object { $_.Name -like $Name }
+        if ($Name.Contains('*')) {
+            Get-GitHubEnvironmentList -Owner $Owner -Repository $Repository -PerPage $PerPage -Context $Context |
+                Where-Object { $_.Name -like $Name }
+        } else {
+            Get-GitHubEnvironmentByName -Owner $Owner -Repository $Repository -Name $Name -Context $Context
+        }
     }
 
     end {
