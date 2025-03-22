@@ -95,7 +95,7 @@
                 Get-GitHubAllOrganization -Since $Since -PerPage $PerPage -Context $Context
             }
             default {
-                Get-GitHubMyOrganization -PerPage $PerPage -Context $Context | Get-GitHubOrganizationByName -Context $Context
+                Get-GitHubMyOrganization -PerPage $PerPage -Context $Context
             }
         }
     }
