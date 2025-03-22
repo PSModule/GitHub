@@ -16,10 +16,10 @@
 param()
 
 BeforeAll {
-    $repoPrefix = 'EnvironmentTest'
-    $environmentName = 'production'
+    $repoPrefix = 'RepositoryTest'
     $os = $env:RUNNER_OS
 }
+
 Describe 'Template' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 
@@ -46,9 +46,7 @@ Describe 'Template' {
             }
         }
 
-        # Tests for runners goes here
         if ($Type -ne 'GitHub Actions') {
-
             # Tests for IAT UAT and PAT goes here
             It 'New-GitHubRepository - Creates a new repository' {
                 if ($OwnerType -eq 'user') {
