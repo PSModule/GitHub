@@ -39,9 +39,6 @@ Context 'User' {
             }
         }
 
-        # Tests for runners goes here
-        if ($Type -eq 'GitHub Actions') {}
-
         # Tests for IAT UAT and PAT goes here
         It 'Get-GitHubUser - Get the specified user' {
             { Get-GitHubUser -Username 'Octocat' } | Should -Not -Throw
