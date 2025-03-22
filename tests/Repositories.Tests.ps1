@@ -23,7 +23,7 @@ BeforeAll {
 Describe 'Template' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 
-    Get-Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
+    Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
         BeforeAll {
             $context = Connect-GitHubAccount @connectParams -PassThru -Silent
             LogGroup 'Context' {
