@@ -108,6 +108,17 @@ Describe 'Template' {
                     Remove-GitHubRepository -Owner $_.owner.login -Name $_.name -Confirm:$false
                 }
             }
+            It 'Get-GitHubRepository - Gets none repositories after removal' {
+                if ($OwnerType -eq 'user') {
+                    $repos = Get-GitHubRepository -Username $Owner
+                } else {
+                    $repos = Get-GitHubRepository -Owner $Owner
+                }
+                LogGroup 'Repositories' {
+                    Write-Host ($repos | Format-List | Out-String)
+                }
+                $repos | Should -BeNullOrEmpty
+            }
         }
     }
 }
