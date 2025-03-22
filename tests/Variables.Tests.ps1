@@ -16,10 +16,8 @@
 param()
 
 BeforeAll {
-    $DebugPreference = 'Continue'
-    $VerbosePreference = 'Continue'
     $testName = 'VariableTest'
-    $os = Get-GitHubRunnerData | Select-Object -ExpandProperty OS
+    $os = $env:RUNNER_OS
 }
 
 Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)' {
