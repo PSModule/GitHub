@@ -61,6 +61,13 @@ Describe 'Organizations' {
             }
             $organizations | Should -Not -BeNullOrEmpty
         }
+        It 'Get-GitHubOrganizationMember - Gets the members of a specific organization' {
+            $members = Get-GitHubOrganizationMember -Organization $owner
+            LogGroup 'Members' {
+                Write-Host ($members | Format-Table | Out-String)
+            }
+            $members | Should -Not -BeNullOrEmpty
+        }
 
         # Tests for IAT UAT and PAT goes here
         if ($OwnerType -eq 'user') {
