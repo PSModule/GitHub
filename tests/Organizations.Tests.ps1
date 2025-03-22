@@ -61,6 +61,15 @@ Describe 'Organizations' {
             }
             $organizations | Should -Not -BeNullOrEmpty
         }
+        if ($OwnerType -ne 'user') {
+            It "Get-GitHubOrganization - Gets the authenticated user's organizations" {
+                $organizations = Get-GitHubOrganization
+                LogGroup 'Organization' {
+                    Write-Host ($organizations | Format-Table | Out-String)
+                }
+                $organizations | Should -Not -BeNullOrEmpty
+            }
+        }
         It 'Get-GitHubOrganizationMember - Gets the members of a specific organization' {
             $members = Get-GitHubOrganizationMember -Organization $owner
             LogGroup 'Members' {
