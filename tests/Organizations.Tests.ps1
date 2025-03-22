@@ -69,25 +69,25 @@ Describe 'Organizations' {
             }
         }
 
-        # if ($OwnerType -eq 'organization') {
-        #     It 'Update-GitHubOrganization - Sets the organization configuration' {
-        #         { Update-GitHubOrganization -Organization $owner -Company 'ABC' } | Should -Not -Throw
-        #         {
-        #             $email = (New-Guid).Guid + '@psmodule.io'
-        #             Update-GitHubOrganization -Organization $owner -BillingEmail $email
-        #         } | Should -Not -Throw
-        #         {
-        #             $email = (New-Guid).Guid + '@psmodule.io'
-        #             Update-GitHubOrganization -Organization $owner -Email $email
-        #         } | Should -Not -Throw
-        #         { Update-GitHubOrganization -Organization $owner -TwitterUsername 'PSModule' } | Should -Not -Throw
-        #         { Update-GitHubOrganization -Organization $owner -Location 'USA' } | Should -Not -Throw
-        #         { Update-GitHubOrganization -Organization $owner -Description 'Test Organization' } | Should -Not -Throw
-        #         { Update-GitHubOrganization -Organization $owner -DefaultRepositoryPermission read } | Should -Not -Throw
-        #         { Update-GitHubOrganization -Organization $owner -MembersCanCreateRepositories $true } | Should -Not -Throw
-        #         { Update-GitHubOrganization -Organization $owner -Blog 'https://psmodule.io' } | Should -Not -Throw
-        #     }
-        # }
+        if ($OwnerType -eq 'organization') {
+            It 'Update-GitHubOrganization - Sets the organization configuration' {
+                { Update-GitHubOrganization -Organization $owner -Company 'ABC' } | Should -Not -Throw
+                {
+                    $email = (New-Guid).Guid + '@psmodule.io'
+                    Update-GitHubOrganization -Organization $owner -BillingEmail $email
+                } | Should -Not -Throw
+                {
+                    $email = (New-Guid).Guid + '@psmodule.io'
+                    Update-GitHubOrganization -Organization $owner -Email $email
+                } | Should -Not -Throw
+                { Update-GitHubOrganization -Organization $owner -TwitterUsername 'PSModule' } | Should -Not -Throw
+                { Update-GitHubOrganization -Organization $owner -Location 'USA' } | Should -Not -Throw
+                { Update-GitHubOrganization -Organization $owner -Description 'Test Organization' } | Should -Not -Throw
+                { Update-GitHubOrganization -Organization $owner -DefaultRepositoryPermission read } | Should -Not -Throw
+                { Update-GitHubOrganization -Organization $owner -MembersCanCreateRepositories $true } | Should -Not -Throw
+                { Update-GitHubOrganization -Organization $owner -Blog 'https://psmodule.io' } | Should -Not -Throw
+            }
+        }
 
         # Context 'Invitations' {
         #     It 'New-GitHubOrganizationInvitation - Invites a user to an organization' {
