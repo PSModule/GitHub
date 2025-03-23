@@ -43,9 +43,9 @@ Describe 'Environments' {
 
             if ($Type -ne 'GitHub Actions') {
                 if ($OwnerType -eq 'user') {
-                    New-GitHubRepository -Name $repoName -AllowSquashMerge
+                    $repo = New-GitHubRepository -Name $repoName -AllowSquashMerge
                 } else {
-                    New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
+                    $repo = New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
                 }
             }
         }
