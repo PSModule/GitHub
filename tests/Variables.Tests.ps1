@@ -31,7 +31,7 @@ Describe 'Environments' {
                 Write-Host ($context | Format-List | Out-String)
             }
             $guid = [guid]::NewGuid().ToString()
-            $repo = "$repoSuffix-$guid"
+            $repoName = "$repoSuffix-$guid"
         }
 
         AfterAll {
@@ -49,8 +49,16 @@ Describe 'Environments' {
             }
         }
 
-        It 'New-GitHubVariable - should create a new organization variable' -Skip:($OwnerType -ne 'organization') {
-            $result = New-GitHubVariable -Owner $owner -Name "$os-$repo" -Value 'Test'
+        It 'Prep - New-GitHubRepository' -Skip:($Type -eq 'GitHub Actions') {
+            if ($OwnerType -eq 'user') {
+                New-GitHubRepository -Name $repo -AllowSquashMerge
+            } else {
+                New-GitHubRepository -Owner $owner -Name $repo -AllowSquashMerge
+            }
+        }
+
+        It 'Set-GitHubVariable - should ensure existance of a organization variable' -Skip:($OwnerType -ne 'organization') {
+            Set-GitHubVariable -Owner $owner -Name $varName -Value 'organization' -Visibility selected -SelectedRepositories $repo.id
             LogGroup 'Variable' {
                 Write-Host ($result | Format-Table | Out-String)
             }
@@ -148,7 +156,7 @@ Describe 'Environments' {
         #     }
         # }
 
-        It 'Remove-GitHubVariable - should delete the organization variable' -Skip:($OwnerType -eq 'organization') {
+        It 'Remove-GitHubVariable - should delete the organization variable' -Skip:($OwnerType -ne 'organization') {
             $result = Get-GitHubVariable -Owner $owner -Name "*$os*"
             LogGroup 'Variable' {
                 Write-Host ($result | Format-Table | Out-String)
