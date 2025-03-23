@@ -15,11 +15,6 @@
 [CmdletBinding()]
 param()
 
-BeforeAll {
-    $testName = 'VariableTest'
-    $os = $env:RUNNER_OS
-}
-
 Describe 'Variables' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 

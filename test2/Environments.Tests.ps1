@@ -16,7 +16,7 @@
 param()
 
 BeforeAll {
-    $repoSuffix = 'EnvironmentTest'
+    $testName = 'EnvironmentTest'
     $environmentName = 'production'
     $os = $env:RUNNER_OS
 }
@@ -31,7 +31,7 @@ Describe 'Environments' {
                 Write-Host ($context | Format-List | Out-String)
             }
             $guid = [guid]::NewGuid().ToString()
-            $repo = "$repoSuffix-$guid"
+            $repo = "$testName-$guid"
         }
 
         AfterAll {

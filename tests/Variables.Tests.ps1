@@ -16,8 +16,7 @@
 param()
 
 BeforeAll {
-    $repoSuffix = 'EnvironmentTest'
-    $environmentName = 'production'
+    $testName = 'VariableTest'
     $os = $env:RUNNER_OS
 }
 
@@ -30,31 +29,32 @@ Describe 'Environments' {
             LogGroup 'Context' {
                 Write-Host ($context | Format-List | Out-String)
             }
-            $guid = [guid]::NewGuid().ToString()
-            $repoName = "$repoSuffix-$guid"
-        }
-
-        AfterAll {
-            Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
-            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
-        }
-
-        # Tests for APP goes here
-        if ($AuthType -eq 'APP') {
-            It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
+            if ($AuthType -eq 'APP') {
                 $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
-                LogGroup 'Context' {
+                LogGroup 'Context - Installation' {
                     Write-Host ($context | Format-List | Out-String)
+                }
+            }
+            $repoName = "$testName-$guid"
+            $repoName = "$testName-$os-$TokenType"
+            $varName = "$testName`_$os`_$TokenType"
+            $variablePrefix = "$varName`_"
+            $environmentName = "$testName-$os-$TokenType"
+
+            if ($Type -ne 'GitHub Actions') {
+                if ($OwnerType -eq 'user') {
+                    New-GitHubRepository -Name $repoName -AllowSquashMerge
+                } else {
+                    New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
                 }
             }
         }
 
-        It 'Prep - New-GitHubRepository' -Skip:($Type -eq 'GitHub Actions') {
-            if ($OwnerType -eq 'user') {
-                New-GitHubRepository -Name $repoName -AllowSquashMerge
-            } else {
-                New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
+        AfterAll {
+            if ($Type -ne 'GitHub Actions') {
+                Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
             }
+            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
         }
 
         It 'Set-GitHubVariable - should ensure existance of a organization variable' -Skip:($OwnerType -ne 'organization') {
@@ -157,7 +157,7 @@ Describe 'Environments' {
         # }
 
         It 'Remove-GitHubVariable - should delete the organization variable' -Skip:($OwnerType -ne 'organization') {
-            $result = Get-GitHubVariable -Owner $owner -Name "*$os*"
+            $result = Get-GitHubVariable -Owner $owner -Name "$varName*"
             LogGroup 'Variable' {
                 Write-Host ($result | Format-Table | Out-String)
             }
