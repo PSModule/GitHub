@@ -2,7 +2,7 @@
 
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
     'PSUseDeclaredVarsMoreThanAssignments', '',
-    Justification = 'Pester grouping syntax: known issue.'
+    Justification = 'Pester grouping syntax - known issue.'
 )]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
     'PSAvoidUsingConvertToSecureStringWithPlainText', '',
@@ -10,17 +10,18 @@
 )]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
     'PSAvoidUsingWriteHost', '',
-    Justification = 'Outputs into logs from the tests.'
+    Justification = 'Log outputs to GitHub Actions logs.'
 )]
 [CmdletBinding()]
 param()
 
 BeforeAll {
-    $testName = 'VariableTest'
+    $repoSuffix = 'EnvironmentTest'
+    $environmentName = 'production'
     $os = $env:RUNNER_OS
 }
 
-Describe 'Variables' {
+Describe 'Environments' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 
     Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
@@ -29,214 +30,131 @@ Describe 'Variables' {
             LogGroup 'Context' {
                 Write-Host ($context | Format-List | Out-String)
             }
-            $repoName = "$testName-$os-$TokenType"
-            $varName = "$testName`_$os`_$TokenType"
-            $variablePrefix = "$varName`_"
-            $environmentName = "$testName-$os-$TokenType"
+            $guid = [guid]::NewGuid().ToString()
+            $repo = "$repoSuffix-$guid"
         }
+
         AfterAll {
-            Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
-            if ($OwnerType -eq 'organization') {
-                Get-GitHubVariable -Owner $owner -Name "*$os*" | Remove-GitHubVariable
-            }
+            Remove-GitHubRepository -Owner $owner -Name $repo -Confirm:$false
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
         }
 
-        Context 'Prep' {
-            BeforeAll {
-                if ($AuthType -eq 'APP') {
-                    $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
-                    LogGroup 'Context' {
-                        Write-Host ($context | Format-List | Out-String)
-                    }
-                }
-                if ($OwnerType -eq 'organization') {
-                    $repo = New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
-                    Set-GitHubVariable -Owner $owner -Name $varName -Value 'organization' -Visibility selected -SelectedRepositories $repo.id
-                } else {
-                    $repo = New-GitHubRepository -Name $repoName -AllowSquashMerge
-                }
-                LogGroup 'Repository' {
-                    Write-Host ($repo | Format-List | Out-String)
+        # Tests for APP goes here
+        if ($AuthType -eq 'APP') {
+            It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
+                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
+                LogGroup 'Context' {
+                    Write-Host ($context | Format-List | Out-String)
                 }
             }
         }
 
-        # # Tests for IAT UAT and PAT goes here
-        # Context 'Organization' -Skip:($TokenType -in 'GITHUB_TOKEN') {
-        #     It 'Set-GitHubVariable' {
-        #         $param = @{
-        #             Name  = "$variablePrefix`TestVariable"
-        #             Value = 'TestValue'
+        It 'New-GitHubVariable - should create a new organization variable' -Skip:($OwnerType -eq 'organization') {
+            $result = New-GitHubVariable -Owner $owner -Name "$os-$repo" -Value 'Test' -Visibility Organization
+            LogGroup 'Variable' {
+                Write-Host ($result | Format-Table | Out-String)
+            }
+            $result | Should -Not -BeNullOrEmpty
+            $result | Should -BeOfType [GitHubVariable]
+            $result.Name | Should -Be "$os-$repo"
+        }
+
+        # # Tests for runners goes here
+        # if ($Type -ne 'GitHub Actions') {
+        #     # Tests for IAT UAT and PAT goes here
+        #     It 'Prep - New-GitHubRepository' {
+        #         if ($OwnerType -eq 'user') {
+        #             New-GitHubRepository -Name $repo -AllowSquashMerge
+        #         } else {
+        #             New-GitHubRepository -Owner $owner -Name $repo -AllowSquashMerge
         #         }
-        #         $result = Set-GitHubVariable @param @scope
-        #         $result = Set-GitHubVariable @param @scope
-        #         $result | Should -Not -BeNullOrEmpty
         #     }
-
-        #     It 'Update-GitHubVariable' {
-        #         $param = @{
-        #             Name       = "$variablePrefix`TestVariable"
-        #             Value      = 'TestValue1234'
-        #             Visibility = 'all'
+        #     It 'Get-GitHubEnvironment - should return an empty list when no environments exist' {
+        #         $result = Get-GitHubEnvironment -Owner $owner -Repository $repo
+        #         LogGroup 'Environment' {
+        #             Write-Host ($result | Format-Table | Out-String)
         #         }
-        #         $result = Update-GitHubVariable @param @scope -PassThru
-        #         $result | Should -Not -BeNullOrEmpty
+        #         $result | Should -BeNullOrEmpty
         #     }
-
-        #     It 'New-GitHubVariable' {
-        #         $param = @{
-        #             Name  = "$variablePrefix`TestVariable2"
-        #             Value = 'TestValue123'
+        #     It 'Get-GitHubEnvironment - should return null when retrieving a non-existent environment' {
+        #         $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
+        #         LogGroup 'Environment' {
+        #             Write-Host ($result | Format-Table | Out-String)
         #         }
-        #         $result = New-GitHubVariable @param @scope
-        #         $result | Should -Not -BeNullOrEmpty
+        #         $result | Should -BeNullOrEmpty
         #     }
-
-        #     It 'Get-GitHubVariable' {
-        #         $result = Get-GitHubVariable @scope -Name "*$os*"
-        #         Write-Host "$($result | Format-Table | Out-String)"
+        #     It 'Set-GitHubEnvironment - should successfully create an environment with a wait timer of 10' {
+        #         $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -WaitTimer 10
+        #         LogGroup 'Environment' {
+        #             Write-Host ($result | Format-List | Out-String)
+        #         }
         #         $result | Should -Not -BeNullOrEmpty
+        #         $result | Should -BeOfType [GitHubEnvironment]
+        #         $result.Name | Should -Be $environmentName
+        #         $result.ProtectionRules.wait_timer | Should -Be 10
         #     }
-
-        #     It 'Get-GitHubVariable -All' {
-        #         $result = Get-GitHubVariable @scope -Name "*$os*" -All
-        #         Write-Host "$($result | Format-Table | Out-String)"
+        #     It 'Get-GitHubEnvironment - should retrieve the environment that was created' {
+        #         $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
+        #         LogGroup 'Environment' {
+        #             Write-Host ($result | Format-List | Out-String)
+        #         }
         #         $result | Should -Not -BeNullOrEmpty
+        #         $result.Name | Should -Be $environmentName
         #     }
-
-        #     It 'Remove-GitHubVariable' {
-        #         $before = Get-GitHubVariable @scope -Name "*$os*"
-        #         Write-Host "$($before | Format-Table | Out-String)"
-        #         $before | Remove-GitHubVariable
-        #         $after = Get-GitHubVariable @scope -Name "*$os*"
-        #         Write-Host "$($after | Format-Table | Out-String)"
-        #         $after.Count | Should -Be 0
+        #     It 'Set-GitHubEnvironment - should successfully create an environment with a slash in its name' {
+        #         $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os"
+        #         LogGroup 'Environment' {
+        #             Write-Host ($result | Format-List | Out-String)
+        #         }
+        #         $result | Should -Not -BeNullOrEmpty
+        #         $result.Name | Should -Be "$environmentName/$os"
+        #     }
+        #     It 'Get-GitHubEnvironment - should retrieve the environment with a slash in its name' {
+        #         $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os"
+        #         LogGroup 'Environment' {
+        #             Write-Host ($result | Format-Table | Out-String)
+        #         }
+        #         $result | Should -Not -BeNullOrEmpty
+        #         $result.Name | Should -Be "$environmentName/$os"
+        #     }
+        #     It 'Remove-GitHubEnvironment - should delete the environment with a slash in its name without errors' {
+        #         {
+        #             Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os" | Remove-GitHubEnvironment -Confirm:$false
+        #         } | Should -Not -Throw
+        #     }
+        #     It 'Get-GitHubEnvironment - should return null when retrieving the deleted environment with a slash in its name' {
+        #         $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name "$environmentName/$os"
+        #         LogGroup 'Environment' {
+        #             Write-Host ($result | Format-Table | Out-String)
+        #         }
+        #         $result | Should -BeNullOrEmpty
+        #     }
+        #     It 'Get-GitHubEnvironment - should list one remaining environment' {
+        #         $result = Get-GitHubEnvironment -Owner $owner -Repository $repo
+        #         LogGroup 'Environment' {
+        #             Write-Host ($result | Format-Table | Out-String)
+        #         }
+        #         $result.Count | Should -Be 1
+        #     }
+        #     It 'Remove-GitHubEnvironment - should delete the remaining environment without errors' {
+        #         { Remove-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -Confirm:$false } | Should -Not -Throw
+        #     }
+        #     It 'Get-GitHubEnvironment - should return null when retrieving an environment that does not exist' {
+        #         $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
+        #         LogGroup 'Environment' {
+        #             Write-Host ($result | Format-Table | Out-String)
+        #         }
+        #         $result | Should -BeNullOrEmpty
         #     }
         # }
-        # Context 'Repository' {
-        #     BeforeAll {
-        #         $scope = @{
-        #             Owner      = $owner
-        #             Repository = $repoName
-        #         }
-        #         Set-GitHubVariable @scope -Name $varName -Value 'repository'
-        #     }
-        #     It 'Set-GitHubVariable' {
-        #         $param = @{
-        #             Name  = "$variablePrefix`TestVariable"
-        #             Value = 'TestValue'
-        #         }
-        #         $result = Set-GitHubVariable @param @scope
-        #         $result = Set-GitHubVariable @param @scope
-        #         $result | Should -Not -BeNullOrEmpty
-        #     }
 
-        #     It 'Update-GitHubVariable' {
-        #         $param = @{
-        #             Name  = "$variablePrefix`TestVariable"
-        #             Value = 'TestValue1234'
-        #         }
-        #         $result = Update-GitHubVariable @param @scope -PassThru
-        #         $result | Should -Not -BeNullOrEmpty
-        #     }
-
-        #     It 'New-GitHubVariable' {
-        #         $param = @{
-        #             Name  = "$variablePrefix`TestVariable2"
-        #             Value = 'TestValue123'
-        #         }
-        #         $result = New-GitHubVariable @param @scope
-        #         $result | Should -Not -BeNullOrEmpty
-        #     }
-
-        #     It 'Get-GitHubVariable' {
-        #         $result = Get-GitHubVariable @scope -Name "*$os*"
-        #         LogGroup 'Variables' {
-        #             Write-Host "$($result | Format-Table | Out-String)"
-        #         }
-        #         $result | Should -Not -BeNullOrEmpty
-        #     }
-
-        #     It 'Get-GitHubVariable -All' {
-        #         $result = Get-GitHubVariable @scope -Name "*$os*" -All
-        #         LogGroup 'Variables' {
-        #             Write-Host "$($result | Format-Table | Out-String)"
-        #         }
-        #         $result | Should -Not -BeNullOrEmpty
-        #     }
-
-        #     It 'Remove-GitHubVariable' {
-        #         $before = Get-GitHubVariable @scope -Name "*$os*"
-        #         LogGroup 'Variables - Before' {
-        #             Write-Host "$($before | Format-Table | Out-String)"
-        #         }
-        #         $before | Remove-GitHubVariable
-        #         $after = Get-GitHubVariable @scope -Name "*$os*"
-        #         LogGroup 'Variables -After' {
-        #             Write-Host "$($after | Format-Table | Out-String)"
-        #         }
-        #         $after.Count | Should -Be 0
-        #     }
-        # }
-        # Context 'Environment' {
-        #     BeforeAll {
-        #         $scope = @{
-        #             Owner       = $owner
-        #             Repository  = $repoName
-        #             Environment = $environmentName
-        #         }
-        #         Set-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName
-        #         Set-GitHubVariable @scope -Name $varName -Value 'environment'
-        #     }
-        #     It 'Set-GitHubVariable' {
-        #         $param = @{
-        #             Name  = "$variablePrefix`TestVariable"
-        #             Value = 'TestValue'
-        #         }
-        #         $result = Set-GitHubVariable @param @scope
-        #         $result = Set-GitHubVariable @param @scope
-        #         $result | Should -Not -BeNullOrEmpty
-        #     }
-
-        #     It 'Update-GitHubVariable' {
-        #         $param = @{
-        #             Name  = "$variablePrefix`TestVariable"
-        #             Value = 'TestValue1234'
-        #         }
-        #         $result = Update-GitHubVariable @param @scope -PassThru
-        #         $result | Should -Not -BeNullOrEmpty
-        #     }
-
-        #     It 'New-GitHubVariable' {
-        #         $param = @{
-        #             Name  = "$variablePrefix`TestVariable2"
-        #             Value = 'TestValue123'
-        #         }
-        #         $result = New-GitHubVariable @param @scope
-        #         $result | Should -Not -BeNullOrEmpty
-        #     }
-
-        #     It 'Get-GitHubVariable' {
-        #         $result = Get-GitHubVariable @scope -Name "*$os*"
-        #         Write-Host "$($result | Format-Table | Out-String)"
-        #         $result | Should -Not -BeNullOrEmpty
-        #     }
-
-        #     It 'Get-GitHubVariable -All' {
-        #         $result = Get-GitHubVariable @scope -Name "*$os*" -All
-        #         Write-Host "$($result | Format-Table | Out-String)"
-        #         $result | Should -Not -BeNullOrEmpty
-        #     }
-
-        #     It 'Remove-GitHubVariable' {
-        #         $before = Get-GitHubVariable @scope -Name "*$os*"
-        #         Write-Host "$($before | Format-Table | Out-String)"
-        #         $before | Remove-GitHubVariable
-        #         $after = Get-GitHubVariable @scope -Name "*$os*"
-        #         Write-Host "$($after | Format-Table | Out-String)"
-        #         $after.Count | Should -Be 0
-        #     }
-        # }
+        It 'Remove-GitHubVariable - should delete the organization variable' -Skip:($OwnerType -eq 'organization') {
+            $result = Get-GitHubVariable -Owner $owner -Name "*$os*"
+            LogGroup 'Variable' {
+                Write-Host ($result | Format-Table | Out-String)
+            }
+            $result | Should -Not -BeNullOrEmpty
+            $result | Remove-GitHubVariable
+        }
     }
 }
