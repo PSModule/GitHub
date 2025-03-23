@@ -57,7 +57,7 @@ Describe 'Environments' {
             }
         }
 
-        It 'Set-GitHubVariable - should ensure existance of a organization variable' -Skip:($OwnerType -ne 'organization') {
+        It 'Set-GitHubVariable - should ensure existance of a organization variable' -Skip:($OwnerType -eq 'organization') {
             Set-GitHubVariable -Owner $owner -Name $varName -Value 'organization' -Visibility selected -SelectedRepositories $repo.id
             LogGroup 'Variable' {
                 Write-Host ($result | Format-Table | Out-String)
@@ -156,7 +156,7 @@ Describe 'Environments' {
         #     }
         # }
 
-        It 'Remove-GitHubVariable - should delete the organization variable' -Skip:($OwnerType -ne 'organization') {
+        It 'Remove-GitHubVariable - should delete the organization variable' -Skip:($OwnerType -eq 'organization') {
             $result = Get-GitHubVariable -Owner $owner -Name "*$os*"
             LogGroup 'Variable' {
                 Write-Host ($result | Format-Table | Out-String)
