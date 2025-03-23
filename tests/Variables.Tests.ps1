@@ -49,8 +49,8 @@ Describe 'Environments' {
             }
         }
 
-        It 'New-GitHubVariable - should create a new organization variable' -Skip:($OwnerType -eq 'organization') {
-            $result = New-GitHubVariable -Owner $owner -Name "$os-$repo" -Value 'Test' -Visibility Organization
+        It 'New-GitHubVariable - should create a new organization variable' -Skip:($OwnerType -ne 'organization') {
+            $result = New-GitHubVariable -Owner $owner -Name "$os-$repo" -Value 'Test'
             LogGroup 'Variable' {
                 Write-Host ($result | Format-Table | Out-String)
             }
