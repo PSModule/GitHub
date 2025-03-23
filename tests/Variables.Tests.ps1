@@ -35,7 +35,7 @@ Describe 'Environments' {
         }
 
         AfterAll {
-            Remove-GitHubRepository -Owner $owner -Name $repo -Confirm:$false
+            Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
         }
 
@@ -51,9 +51,9 @@ Describe 'Environments' {
 
         It 'Prep - New-GitHubRepository' -Skip:($Type -eq 'GitHub Actions') {
             if ($OwnerType -eq 'user') {
-                New-GitHubRepository -Name $repo -AllowSquashMerge
+                New-GitHubRepository -Name $repoName -AllowSquashMerge
             } else {
-                New-GitHubRepository -Owner $owner -Name $repo -AllowSquashMerge
+                New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
             }
         }
 
