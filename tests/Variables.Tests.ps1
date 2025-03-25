@@ -42,12 +42,12 @@ Describe 'Environments' {
             $environmentName = "$testName-$os-$TokenType"
 
             if ($Type -ne 'GitHub Actions') {
-                if ($OwnerType -eq 'user') {
-                    $repo = New-GitHubRepository -Name $repoName -AllowSquashMerge
-                } else {
-                    $repo = New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
-                }
                 LogGroup 'Repository' {
+                    if ($OwnerType -eq 'user') {
+                        $repo = New-GitHubRepository -Name $repoName -AllowSquashMerge
+                    } else {
+                        $repo = New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
+                    }
                     Write-Host ($repo | Format-List | Out-String)
                 }
             }
@@ -61,11 +61,8 @@ Describe 'Environments' {
         }
 
         It 'Set-GitHubVariable - should ensure existance of a organization variable' -Skip:($OwnerType -ne 'organization') {
-            Write-Debug "Test to see if Debug is working"
-            Write-Verbose 'Test to see if Verbose is working'
-            Write-Verbose 'Test to see if Verbose is working with switch' -Verbose
             LogGroup 'Variable' {
-                Set-GitHubVariable -Owner $owner -Name $varName -Value 'organization' -Visibility selected -SelectedRepositories $repo.id -Verbose -Debug
+                $result = Set-GitHubVariable -Owner $owner -Name $varName -Value 'organization' -Visibility selected -SelectedRepositories $repo.id
                 Write-Host ($result | Format-Table | Out-String)
             }
             $result | Should -Not -BeNullOrEmpty
