@@ -54,7 +54,7 @@ Describe 'Environments' {
             if ($OwnerType -eq 'organization') {
                 LogGroup "Org variable - [$varName]" {
                     $result = Set-GitHubVariable -Owner $owner -Name $varName -Value 'organization' -Visibility selected -SelectedRepositories $repo.id
-                    Write-Host ($result | Format-Table | Out-String)
+                    Write-Host ($result | Select-Object * | Format-Table | Out-String)
                 }
             }
         }
@@ -82,7 +82,7 @@ Describe 'Environments' {
                         Visibility = 'private'
                     }
                     $result = Set-GitHubVariable @param @scope
-                    Write-Host ($result | Format-Table | Out-String)
+                    Write-Host ($result | Select-Object * | Format-Table | Out-String)
                 }
                 $result | Should -Not -BeNullOrEmpty
                 $result | Should -BeOfType [GitHubVariable]
@@ -100,7 +100,7 @@ Describe 'Environments' {
                         Visibility = 'all'
                     }
                     $result = Set-GitHubVariable @param @scope
-                    Write-Host ($result | Format-Table | Out-String)
+                    Write-Host ($result | Select-Object * | Format-Table | Out-String)
                 }
                 $result | Should -Not -BeNullOrEmpty
                 $result | Should -BeOfType [GitHubVariable]
@@ -117,7 +117,7 @@ Describe 'Environments' {
                         Value = 'TestValue1234'
                     }
                     $result = Update-GitHubVariable @param @scope -PassThru
-                    Write-Host ($result | Format-Table | Out-String)
+                    Write-Host ($result | Select-Object * | Format-Table | Out-String)
                 }
                 $result | Should -Not -BeNullOrEmpty
                 $result | Should -BeOfType [GitHubVariable]
@@ -134,7 +134,7 @@ Describe 'Environments' {
                         Value = 'TestValue123'
                     }
                     $result = New-GitHubVariable @param @scope
-                    Write-Host ($result | Format-Table | Out-String)
+                    Write-Host ($result | Select-Object * | Format-Table | Out-String)
                 }
                 $result | Should -Not -BeNullOrEmpty
                 $result | Should -BeOfType [GitHubVariable]
@@ -152,7 +152,7 @@ Describe 'Environments' {
                     }
                     {
                         $result = New-GitHubVariable @param @scope
-                        Write-Host ($result | Format-Table | Out-String)
+                        Write-Host ($result | Select-Object * | Format-Table | Out-String)
                     } | Should -Throw
                 }
             }
@@ -160,7 +160,7 @@ Describe 'Environments' {
             It 'Get-GitHubVariable' {
                 $result = Get-GitHubVariable @scope -Name "*$os*"
                 LogGroup 'Variables' {
-                    Write-Host "$($result | Format-Table | Out-String)"
+                    Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
                 }
                 $result | Should -Not -BeNullOrEmpty
             }
@@ -218,7 +218,7 @@ Describe 'Environments' {
     #     It 'Get-GitHubVariable' {
     #         $result = Get-GitHubVariable @scope -Name "*$os*"
     #         LogGroup 'Variables' {
-    #             Write-Host "$($result | Format-Table | Out-String)"
+    #             Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
     #         }
     #         $result | Should -Not -BeNullOrEmpty
     #     }
@@ -226,7 +226,7 @@ Describe 'Environments' {
     #     It 'Get-GitHubVariable -IncludeInherited' {
     #         $result = Get-GitHubVariable @scope -Name "*$os*" -IncludeInherited
     #         LogGroup 'Variables' {
-    #             Write-Host "$($result | Format-Table | Out-String)"
+    #             Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
     #         }
     #         $result | Should -Not -BeNullOrEmpty
     #     }
@@ -284,13 +284,13 @@ Describe 'Environments' {
 
     #     It 'Get-GitHubVariable' {
     #         $result = Get-GitHubVariable @scope -Name "*$os*"
-    #         Write-Host "$($result | Format-Table | Out-String)"
+    #         Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
     #         $result | Should -Not -BeNullOrEmpty
     #     }
 
     #     It 'Get-GitHubVariable -IncludeInherited' {
     #         $result = Get-GitHubVariable @scope -Name "*$os*" -IncludeInherited
-    #         Write-Host "$($result | Format-Table | Out-String)"
+    #         Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
     #         $result | Should -Not -BeNullOrEmpty
     #     }
 
@@ -307,7 +307,7 @@ Describe 'Environments' {
     It 'Remove-GitHubVariable - should delete the organization variable' -Skip:($OwnerType -ne 'organization') {
         $result = Get-GitHubVariable -Owner $owner -Name "$varName*"
         LogGroup 'Variable' {
-            Write-Host ($result | Format-Table | Out-String)
+            Write-Host ($result | Select-Object * | Format-Table | Out-String)
         }
         $result | Should -Not -BeNullOrEmpty
         $result | Remove-GitHubVariable
