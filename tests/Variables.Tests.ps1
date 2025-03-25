@@ -82,7 +82,7 @@ Describe 'Environments' {
                         Visibility = 'private'
                     }
                     $result = Set-GitHubVariable @param @scope
-                    Write-Host ($result | Select-Object * | Format-Table | Out-String)
+                    Write-Host ($result | Select-Object * | Format-List | Out-String)
                 }
                 $result | Should -Not -BeNullOrEmpty
                 $result | Should -BeOfType [GitHubVariable]
@@ -100,7 +100,7 @@ Describe 'Environments' {
                         Visibility = 'all'
                     }
                     $result = Set-GitHubVariable @param @scope
-                    Write-Host ($result | Select-Object * | Format-Table | Out-String)
+                    Write-Host ($result | Select-Object * | Format-List | Out-String)
                 }
                 $result | Should -Not -BeNullOrEmpty
                 $result | Should -BeOfType [GitHubVariable]
@@ -117,7 +117,7 @@ Describe 'Environments' {
                         Value = 'TestValue1234'
                     }
                     $result = Update-GitHubVariable @param @scope -PassThru
-                    Write-Host ($result | Select-Object * | Format-Table | Out-String)
+                    Write-Host ($result | Select-Object * | Format-List | Out-String)
                 }
                 $result | Should -Not -BeNullOrEmpty
                 $result | Should -BeOfType [GitHubVariable]
@@ -134,7 +134,7 @@ Describe 'Environments' {
                         Value = 'TestValue123'
                     }
                     $result = New-GitHubVariable @param @scope
-                    Write-Host ($result | Select-Object * | Format-Table | Out-String)
+                    Write-Host ($result | Select-Object * | Format-List | Out-String)
                 }
                 $result | Should -Not -BeNullOrEmpty
                 $result | Should -BeOfType [GitHubVariable]
@@ -152,7 +152,7 @@ Describe 'Environments' {
                     }
                     {
                         $result = New-GitHubVariable @param @scope
-                        Write-Host ($result | Select-Object * | Format-Table | Out-String)
+                        Write-Host ($result | Select-Object * | Format-List | Out-String)
                     } | Should -Throw
                 }
             }
@@ -160,7 +160,7 @@ Describe 'Environments' {
             It 'Get-GitHubVariable' {
                 $result = Get-GitHubVariable @scope -Name "*$os*"
                 LogGroup 'Variables' {
-                    Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
+                    Write-Host "$($result | Select-Object * | Format-List | Out-String)"
                 }
                 $result | Should -Not -BeNullOrEmpty
             }
@@ -168,12 +168,12 @@ Describe 'Environments' {
             It 'Remove-GitHubVariable' {
                 $before = Get-GitHubVariable @scope -Name "*$os*"
                 LogGroup 'Before remove' {
-                    Write-Host "$($before | Format-Table | Out-String)"
+                    Write-Host "$($before | Format-List | Out-String)"
                     $before | Remove-GitHubVariable
                 }
                 LogGroup 'After remove' {
                     $after = Get-GitHubVariable @scope -Name "*$os*"
-                    Write-Host "$($after | Format-Table | Out-String)"
+                    Write-Host "$($after | Format-List | Out-String)"
                 }
                 $after.Count | Should -Be 0
             }
