@@ -11,7 +11,7 @@ function Get-GitHubVariable {
         `admin:org` for organizations, and collaborator access for environments.
 
         .EXAMPLE
-        Get-GitHubVariable -Owner 'octocat' -Name 'HOST_NAME' -Context $GitHubContext
+        Get-GitHubVariable -Owner 'octocat' -Name 'HOST_NAME'
 
         Output:
         ```powershell
@@ -25,7 +25,7 @@ function Get-GitHubVariable {
         Retrieves the specified variable from the organization level.
 
         .EXAMPLE
-        Get-GitHubVariable -Owner 'octocat' -Repository 'Hello-World' -Name 'GUID' -Context $GitHubContext
+        Get-GitHubVariable -Owner 'octocat' -Repository 'Hello-World' -Name 'GUID'
 
         Output:
         ```powershell
@@ -39,7 +39,7 @@ function Get-GitHubVariable {
         Retrieves the specified variable from the repository level.
 
         .EXAMPLE
-        Get-GitHubVariable -Owner 'octocat' -Repository 'Hello-World' -Environment 'dev' -Name 'DB_SERVER' -Context $GitHubContext
+        Get-GitHubVariable -Owner 'octocat' -Repository 'Hello-World' -Environment 'dev' -Name 'DB_SERVER'
 
         Output:
         ```powershell
@@ -53,7 +53,7 @@ function Get-GitHubVariable {
         Retrieves the specified variable from the environment level within a repository.
 
         .EXAMPLE
-        Get-GitHubVariable -Owner 'octocat' -Context $GitHubContext
+        Get-GitHubVariable -Owner 'octocat'
 
         Output:
         ```powershell
@@ -73,7 +73,7 @@ function Get-GitHubVariable {
         Retrieves all variables available at the organization level.
 
         .EXAMPLE
-        Get-GitHubVariable -Owner 'octocat' -Repository 'Hello-World' -Context $GitHubContext
+        Get-GitHubVariable -Owner 'octocat' -Repository 'Hello-World'
 
         Output:
         ```powershell
@@ -93,7 +93,7 @@ function Get-GitHubVariable {
         Retrieves all variables available at the repository level.
 
         .EXAMPLE
-        Get-GitHubVariable -Owner 'octocat' -Repository 'Hello-World' -Environment 'staging' -Context $GitHubContext
+        Get-GitHubVariable -Owner 'octocat' -Repository 'Hello-World' -Environment 'staging'
 
         Output:
         ```powershell
