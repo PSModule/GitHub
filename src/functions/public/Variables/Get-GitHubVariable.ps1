@@ -214,6 +214,7 @@ function Get-GitHubVariable {
                 break
             }
         }
+        $variables
     }
 
     end {
