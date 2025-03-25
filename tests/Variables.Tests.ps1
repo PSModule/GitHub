@@ -35,7 +35,6 @@ Describe 'Environments' {
                     Write-Host ($context | Format-List | Out-String)
                 }
             }
-            $repoName = "$testName-$guid"
             $repoName = "$testName-$os-$TokenType"
             $varName = "$testName`_$os`_$TokenType"
             $variablePrefix = "$varName`_"
@@ -67,7 +66,7 @@ Describe 'Environments' {
             }
             $result | Should -Not -BeNullOrEmpty
             $result | Should -BeOfType [GitHubVariable]
-            $result.Name | Should -Be "$os-$repo"
+            $result.Name | Should -Be $varName
         }
 
         # # Tests for runners goes here
