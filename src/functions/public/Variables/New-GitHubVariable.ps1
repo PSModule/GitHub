@@ -100,7 +100,7 @@ function New-GitHubVariable {
             ErrorAction          = 'Stop'
         }
         $params | Remove-HashtableEntry -NullOrEmptyValues
-        switch ($PSCmdlet.ParameterSetName) {
+        $null = switch ($PSCmdlet.ParameterSetName) {
             'Organization' {
                 $params.Visibility = $Visibility
                 New-GitHubVariableOnOwner @params

@@ -79,9 +79,7 @@ function New-GitHubVariableOnOwner {
         }
 
         if ($PSCmdlet.ShouldProcess("variable [$Name] on [$Owner]", 'Create')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
+            $null = Invoke-GitHubAPI @inputObject
         }
     }
 

@@ -73,9 +73,7 @@ function New-GitHubVariableOnEnvironment {
         }
 
         if ($PSCmdlet.ShouldProcess("variable [$Name] on [$Owner/$Repository/$Environment]", 'Create')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
+            $null = Invoke-GitHubAPI @inputObject
         }
     }
 
