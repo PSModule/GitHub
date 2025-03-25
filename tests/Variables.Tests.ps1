@@ -75,7 +75,7 @@ Describe 'Environments' {
             }
             It 'Set-GitHubVariable - should ensure existance of a organization variable' {
                 $name = "$variablePrefix`TestVariable"
-                LogGroup "Variable - [$varName]" {
+                LogGroup "Variable - [$name]" {
                     $param = @{
                         Name       = $name
                         Value      = 'TestValue1234'
@@ -93,7 +93,7 @@ Describe 'Environments' {
 
             It 'Set-GitHubVariable - should update an existing organization variable' {
                 $name = "$variablePrefix`TestVariable"
-                LogGroup "Variable - [$varName]" {
+                LogGroup "Variable - [$name]" {
                     $param = @{
                         Name       = $name
                         Value      = 'TestValue123456789'
@@ -111,7 +111,7 @@ Describe 'Environments' {
 
             It 'Update-GitHubVariable - should update an existing organization variable' {
                 $name = "$variablePrefix`TestVariable"
-                LogGroup "Variable - [$varName]" {
+                LogGroup "Variable - [$name]" {
                     $param = @{
                         Name  = $name
                         Value = 'TestValue1234'
@@ -128,7 +128,7 @@ Describe 'Environments' {
 
             It 'New-GitHubVariable - should create a new organization variable' {
                 $name = "$variablePrefix`TestVariable2"
-                LogGroup "Variable - [$varName]" {
+                LogGroup "Variable - [$name]" {
                     $param = @{
                         Name  = $name
                         Value = 'TestValue123'

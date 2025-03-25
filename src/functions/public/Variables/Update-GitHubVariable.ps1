@@ -68,7 +68,7 @@ function Update-GitHubVariable {
         # Can be `private`, `selected`, or `all`.
         [Parameter(ParameterSetName = 'Organization')]
         [ValidateSet('private', 'selected', 'all')]
-        [string] $Visibility = 'private',
+        [string] $Visibility,
 
         # The IDs of the repositories to which the variable is available.
         # Used only when the `-Visibility` parameter is set to `selected`.
