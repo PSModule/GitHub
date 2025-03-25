@@ -47,6 +47,9 @@ Describe 'Environments' {
                 } else {
                     $repo = New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
                 }
+                LogGroup 'Repository' {
+                    Write-Host ($repo | Format-List | Out-String)
+                }
             }
         }
 
