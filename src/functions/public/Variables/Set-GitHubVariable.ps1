@@ -93,6 +93,7 @@ function Set-GitHubVariable {
             Context     = $Context
         }
         $getParams | Remove-HashtableEntry -NullOrEmptyValues
+        $variable = Get-GitHubVariable @getParams | Where-Object { $_.Name -eq $Name }
 
         $params = @{
             Owner                = $Owner
@@ -105,11 +106,9 @@ function Set-GitHubVariable {
             ErrorAction          = 'Stop'
         }
         if ($PSCmdlet.ParameterSetName -eq 'Organization') {
-            $params.Visibility = $Visibility
+            $params['Visibility'] = $Visibility
         }
         $params | Remove-HashtableEntry -NullOrEmptyValues
-
-        $variable = Get-GitHubVariable @getParams | Where-Object { $_.Name -eq $Name }
 
         if ($variable) {
             $null = Update-GitHubVariable @params -PassThru

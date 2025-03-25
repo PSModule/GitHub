@@ -41,9 +41,9 @@ function Get-GitHubVariableVisibilityList {
     )
 
     begin {
-        # $stackPath = Get-PSCallStackPath
-        # Write-Debug "[$stackPath] - Start"
-        # Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 
     process {
