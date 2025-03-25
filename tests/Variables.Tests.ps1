@@ -313,4 +313,3 @@ Describe 'Environments' {
         $result | Remove-GitHubVariable
     }
 }
-}
