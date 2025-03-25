@@ -43,7 +43,7 @@
         Target        = 'this repository (GitHub)'
         Owner         = 'PSModule'
         Repo          = 'GitHub'
-        OwnerType     = 'organization'
+        OwnerType     = 'repository'
         ConnectParams = @{
             Token = $env:GITHUB_TOKEN
         }
