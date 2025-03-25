@@ -156,27 +156,27 @@ Describe 'Environments' {
                     } | Should -Throw
                 }
             }
-        }
 
-        It 'Get-GitHubVariable' {
-            $result = Get-GitHubVariable @scope -Name "*$os*"
-            LogGroup 'Variables' {
-                Write-Host "$($result | Format-Table | Out-String)"
+            It 'Get-GitHubVariable' {
+                $result = Get-GitHubVariable @scope -Name "*$os*"
+                LogGroup 'Variables' {
+                    Write-Host "$($result | Format-Table | Out-String)"
+                }
+                $result | Should -Not -BeNullOrEmpty
             }
-            $result | Should -Not -BeNullOrEmpty
-        }
 
-        It 'Remove-GitHubVariable' {
-            $before = Get-GitHubVariable @scope -Name "*$os*"
-            LogGroup 'Before remove' {
-                Write-Host "$($before | Format-Table | Out-String)"
-                $before | Remove-GitHubVariable
+            It 'Remove-GitHubVariable' {
+                $before = Get-GitHubVariable @scope -Name "*$os*"
+                LogGroup 'Before remove' {
+                    Write-Host "$($before | Format-Table | Out-String)"
+                    $before | Remove-GitHubVariable
+                }
+                LogGroup 'After remove' {
+                    $after = Get-GitHubVariable @scope -Name "*$os*"
+                    Write-Host "$($after | Format-Table | Out-String)"
+                }
+                $after.Count | Should -Be 0
             }
-            LogGroup 'After remove' {
-                $after = Get-GitHubVariable @scope -Name "*$os*"
-                Write-Host "$($after | Format-Table | Out-String)"
-            }
-            $after.Count | Should -Be 0
         }
     }
     # Context 'Repository' {
