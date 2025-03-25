@@ -64,7 +64,7 @@ Describe 'Environments' {
             Write-Debug "Test to see if Debug is working"
             Write-Verbose 'Test to see if Verbose is working'
             Write-Verbose 'Test to see if Verbose is working with switch' -Verbose
-            Set-GitHubVariable -Owner $owner -Name $varName -Value 'organization' -Visibility selected -SelectedRepositories $repo.id -Verbose
+            Set-GitHubVariable -Owner $owner -Name $varName -Value 'organization' -Visibility selected -SelectedRepositories $repo.id -Verbose -Debug
             LogGroup 'Variable' {
                 Write-Host ($result | Format-Table | Out-String)
             }
