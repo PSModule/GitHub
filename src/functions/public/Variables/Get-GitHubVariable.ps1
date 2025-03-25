@@ -148,7 +148,7 @@ function Get-GitHubVariable {
 
         # List all variables that are inherited.
         [Parameter()]
-        [switch] $All,
+        [switch] $IncludeInherited,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -165,28 +165,55 @@ function Get-GitHubVariable {
 
     process {
         $variables = @()
+        $params = @{
+            Context = $Context
+            Owner   = $Owner
+        }
         switch ($PSCmdlet.ParameterSetName) {
             'Organization' {
-                $variables += Get-GitHubVariableOwnerList -Owner $Owner -Context $Context
+                if ($Name.Contains('*')) {
+                    $variables += Get-GitHubVariableOwnerList @params |
+                        Where-Object { $_.Name -like $Name }
+                } else {
+                    $variables += Get-GitHubVariableOwnerByName @params -Name $Name
+                }
                 break
             }
             'Repository' {
-                if ($All) {
-                    $variables += Get-GitHubVariableFromOrganization -Owner $Owner -Repository $Repository -Context $Context
+                $params['Repository'] = $Repository
+                if ($IncludeInherited) {
+                    $variables += Get-GitHubVariableFromOrganization @params |
+                        Where-Object { $_.Name -like $Name }
                 }
-                $variables += Get-GitHubVariableRepositoryList -Owner $Owner -Repository $Repository -Context $Context
+                if ($Name.Contains('*')) {
+                    $variables += Get-GitHubVariableRepositoryList @params |
+                        Where-Object { $_.Name -like $Name }
+                } else {
+                    $variables += Get-GitHubVariableRepositoryByName @params -Name $Name
+                }
                 break
             }
             'Environment' {
-                if ($All) {
-                    $variables += Get-GitHubVariableFromOrganization -Owner $Owner -Repository $Repository -Context $Context
-                    $variables += Get-GitHubVariableRepositoryList -Owner $Owner -Repository $Repository -Context $Context
+                if ($IncludeInherited) {
+                    $variables += Get-GitHubVariableFromOrganization @params |
+                        Where-Object { $_.Name -like $Name }
+                    if ($Name.Contains('*')) {
+                        $variables += Get-GitHubVariableRepositoryList @params |
+                            Where-Object { $_.Name -like $Name }
+                    } else {
+                        $variables += Get-GitHubVariableRepositoryByName @params -Name $Name
+                    }
                 }
-                $variables += Get-GitHubVariableEnvironmentList -Owner $Owner -Repository $Repository -Environment $Environment -Context $Context
+                $params['Environment'] = $Environment
+                if ($Name.Contains('*')) {
+                    $variables += Get-GitHubVariableEnvironmentList @params |
+                        Where-Object { $_.Name -like $Name }
+                } else {
+                    $variables += Get-GitHubVariableEnvironmentByName @params -Name $Name
+                }
                 break
             }
         }
-        $variables | Where-Object { $_.Name -like $Name }
     }
 
     end {

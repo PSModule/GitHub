@@ -5,3 +5,6 @@ Test:
     Skip: true
   CodeCoverage:
     PercentTarget: 50
+Build:
+  Docs:
+    Skip: true

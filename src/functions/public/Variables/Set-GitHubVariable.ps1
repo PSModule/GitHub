@@ -112,7 +112,7 @@ function Set-GitHubVariable {
         $variable = Get-GitHubVariable @getParams | Where-Object { $_.Name -eq $Name }
 
         if ($variable) {
-            $null = Update-GitHubVariable @params
+            $null = Update-GitHubVariable @params -PassThru
         } else {
             $null = New-GitHubVariable @params
         }

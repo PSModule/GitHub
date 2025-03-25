@@ -128,10 +128,12 @@ function Update-GitHubVariable {
                 Context     = $Context
             }
             $params | Remove-HashtableEntry -NullOrEmptyValues
-            $tmp = $script:GitHub.Config.RetryCount
-            $script:GitHub.Config.RetryCount = 5
-            Get-GitHubVariable @params
-            $script:GitHub.Config.RetryCount = $tmp
+            for ($i = 0; $i -le 5; $i++) {
+                Start-Sleep -Seconds 1
+                $result = Get-GitHubVariable @params
+                if ($result) { break }
+            }
+            $result
         }
     }
 
