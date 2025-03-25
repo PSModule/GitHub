@@ -1,0 +1,7 @@
+Test:
+  SourceCode:
+    Skip: true
+  PSModule:
+    Skip: true
+  CodeCoverage:
+    PercentTarget: 50
