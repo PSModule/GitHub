@@ -305,9 +305,9 @@ Describe 'Environments' {
         # }
 
         It 'Remove-GitHubVariable - should delete the organization variable' -Skip:($OwnerType -ne 'organization') {
-            $result = Get-GitHubVariable -Owner $owner -Name "$varName*"
+            $result = Get-GitHubVariable -Owner $owner
             LogGroup 'Variable' {
-                Write-Host ($result | Select-Object * | Format-Table | Out-String)
+                Write-Host ($result | Select-Object * | Format-List | Out-String)
             }
             $result | Should -Not -BeNullOrEmpty
             $result | Remove-GitHubVariable
