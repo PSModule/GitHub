@@ -106,7 +106,9 @@ function Update-GitHubVariable {
         $params | Remove-HashtableEntry -NullOrEmptyValues
         switch ($PSCmdlet.ParameterSetName) {
             'Organization' {
-                $params.Visibility = $Visibility
+                if ($PSBoundParameters.ContainsKey('Visibility') -and -not [string]::IsNullOrEmpty($Visibility)) {
+                    $params.Visibility = $Visibility
+                }
                 Update-GitHubVariableOnOwner @params
                 break
             }
