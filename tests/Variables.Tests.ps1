@@ -166,10 +166,12 @@ Describe 'Environments' {
             }
 
             It 'Remove-GitHubVariable' {
-                $before = Get-GitHubVariable @scope -Name "*$os*"
                 LogGroup 'Before remove' {
+                    $before = Get-GitHubVariable @scope -Name "*$os*"
                     Write-Host "$($before | Format-List | Out-String)"
-                    $before | Remove-GitHubVariable
+                }
+                LogGroup 'Remove' {
+                    $before | Remove-GitHubVariable -Debug -Verbose
                 }
                 LogGroup 'After remove' {
                     $after = Get-GitHubVariable @scope -Name "*$os*"
