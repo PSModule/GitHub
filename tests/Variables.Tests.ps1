@@ -158,7 +158,7 @@ Describe 'Environments' {
             }
 
             It 'Get-GitHubVariable' {
-                $result = Get-GitHubVariable @scope -Name "*$os*"
+                $result = Get-GitHubVariable @scope -Name "$variablePrefix*"
                 LogGroup 'Variables' {
                     Write-Host "$($result | Select-Object * | Format-List | Out-String)"
                 }
@@ -166,6 +166,7 @@ Describe 'Environments' {
             }
 
             It 'Remove-GitHubVariable' {
+                $before = Get-GitHubVariable @scope -Name "$variablePrefix*"
                 LogGroup 'Before remove' {
                     $before = Get-GitHubVariable @scope -Name "*$os*"
                     Write-Host "$($before | Format-List | Out-String)"
@@ -174,7 +175,7 @@ Describe 'Environments' {
                     $before | Remove-GitHubVariable -Debug -Verbose
                 }
                 LogGroup 'After remove' {
-                    $after = Get-GitHubVariable @scope -Name "*$os*"
+                    $after = Get-GitHubVariable @scope -Name "$variablePrefix*"
                     Write-Host "$($after | Format-List | Out-String)"
                 }
                 $after.Count | Should -Be 0
