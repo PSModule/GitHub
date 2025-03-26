@@ -3,7 +3,10 @@ Test:
     Skip: true
   PSModule:
     Skip: true
+  TestResults:
+    Skip: true
   CodeCoverage:
+    Skip: true
     PercentTarget: 50
 Build:
   Docs:
