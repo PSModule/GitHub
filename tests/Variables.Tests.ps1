@@ -260,6 +260,11 @@ Describe 'Environments' {
         Context 'Environment' -Skip:($Type -eq 'GitHub Actions') {
             BeforeAll {
                 $scope = @{
+                    Owner      = $owner
+                    Repository = $repoName
+                }
+                Set-GitHubVariable @scope -Name $varName -Value 'repository'
+                $scope = @{
                     Owner       = $owner
                     Repository  = $repoName
                     Environment = $environmentName

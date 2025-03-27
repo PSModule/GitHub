@@ -182,7 +182,7 @@ function Get-GitHubVariable {
             'Repository' {
                 $params['Repository'] = $Repository
                 if ($IncludeInherited) {
-                    $variables += Get-GitHubVariableFromOrganization @params |
+                        $variables += Get-GitHubVariableFromOrganization @params -ErrorAction SilentlyContinue |
                         Where-Object { $_.Name -like $Name }
                 }
                 if ($Name.Contains('*')) {
@@ -196,7 +196,7 @@ function Get-GitHubVariable {
             'Environment' {
                 $params['Repository'] = $Repository
                 if ($IncludeInherited) {
-                    $variables += Get-GitHubVariableFromOrganization @params |
+                    $variables += Get-GitHubVariableFromOrganization @params -ErrorAction SilentlyContinue |
                         Where-Object { $_.Name -like $Name }
                     if ($Name.Contains('*')) {
                         $variables += Get-GitHubVariableRepositoryList @params |
