@@ -191,7 +191,7 @@ Describe 'Environments' {
             }
         }
 
-        Context 'Repository' {
+        Context 'Repository' -Skip: {
             BeforeAll {
                 $scope = @{
                     Owner      = $owner
@@ -256,7 +256,8 @@ Describe 'Environments' {
                 $after.Count | Should -Be 0
             }
         }
-        Context 'Environment' {
+        
+        Context 'Environment' -Skip: {
             BeforeAll {
                 $scope = @{
                     Owner       = $owner

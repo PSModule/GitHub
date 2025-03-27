@@ -194,6 +194,7 @@ function Get-GitHubVariable {
                 break
             }
             'Environment' {
+                $params['Repository'] = $Repository
                 if ($IncludeInherited) {
                     $variables += Get-GitHubVariableFromOrganization @params |
                         Where-Object { $_.Name -like $Name }
