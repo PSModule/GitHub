@@ -53,7 +53,14 @@ Describe 'Environments' {
 
             if ($OwnerType -eq 'organization') {
                 LogGroup "Org variable - [$varName]" {
-                    $result = Set-GitHubVariable -Owner $owner -Name $varName -Value 'organization' -Visibility selected -SelectedRepositories $repo.id
+                    $params = @{
+                        Owner                = $owner
+                        Name                 = $varName
+                        Value                = 'organization'
+                        Visibility           = 'selected'
+                        SelectedRepositories = $repo.id
+                    }
+                    $result = Set-GitHubVariable @params
                     Write-Host ($result | Select-Object * | Format-Table | Out-String)
                 }
             }
@@ -184,129 +191,129 @@ Describe 'Environments' {
             }
         }
 
-        # Context 'Repository' {
-        #     BeforeAll {
-        #         $scope = @{
-        #             Owner      = $owner
-        #             Repository = $repoName
-        #         }
-        #         Set-GitHubVariable @scope -Name $varName -Value 'repository'
-        #     }
-        #     It 'Set-GitHubVariable' {
-        #         $param = @{
-        #             Name  = "$variablePrefix`TestVariable"
-        #             Value = 'TestValue'
-        #         }
-        #         $result = Set-GitHubVariable @param @scope
-        #         $result = Set-GitHubVariable @param @scope
-        #         $result | Should -Not -BeNullOrEmpty
-        #     }
+        Context 'Repository' {
+            BeforeAll {
+                $scope = @{
+                    Owner      = $owner
+                    Repository = $repoName
+                }
+                Set-GitHubVariable @scope -Name $varName -Value 'repository'
+            }
+            It 'Set-GitHubVariable' {
+                $param = @{
+                    Name  = "$variablePrefix`TestVariable"
+                    Value = 'TestValue'
+                }
+                $result = Set-GitHubVariable @param @scope
+                $result = Set-GitHubVariable @param @scope
+                $result | Should -Not -BeNullOrEmpty
+            }
 
-        #     It 'Update-GitHubVariable' {
-        #         $param = @{
-        #             Name  = "$variablePrefix`TestVariable"
-        #             Value = 'TestValue1234'
-        #         }
-        #         $result = Update-GitHubVariable @param @scope -PassThru
-        #         $result | Should -Not -BeNullOrEmpty
-        #     }
+            It 'Update-GitHubVariable' {
+                $param = @{
+                    Name  = "$variablePrefix`TestVariable"
+                    Value = 'TestValue1234'
+                }
+                $result = Update-GitHubVariable @param @scope -PassThru
+                $result | Should -Not -BeNullOrEmpty
+            }
 
-        #     It 'New-GitHubVariable' {
-        #         $param = @{
-        #             Name  = "$variablePrefix`TestVariable2"
-        #             Value = 'TestValue123'
-        #         }
-        #         $result = New-GitHubVariable @param @scope
-        #         $result | Should -Not -BeNullOrEmpty
-        #     }
+            It 'New-GitHubVariable' {
+                $param = @{
+                    Name  = "$variablePrefix`TestVariable2"
+                    Value = 'TestValue123'
+                }
+                $result = New-GitHubVariable @param @scope
+                $result | Should -Not -BeNullOrEmpty
+            }
 
-        #     It 'Get-GitHubVariable' {
-        #         $result = Get-GitHubVariable @scope -Name "*$os*"
-        #         LogGroup 'Variables' {
-        #             Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
-        #         }
-        #         $result | Should -Not -BeNullOrEmpty
-        #     }
+            It 'Get-GitHubVariable' {
+                $result = Get-GitHubVariable @scope -Name "*$os*"
+                LogGroup 'Variables' {
+                    Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
+                }
+                $result | Should -Not -BeNullOrEmpty
+            }
 
-        #     It 'Get-GitHubVariable -IncludeInherited' {
-        #         $result = Get-GitHubVariable @scope -Name "*$os*" -IncludeInherited
-        #         LogGroup 'Variables' {
-        #             Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
-        #         }
-        #         $result | Should -Not -BeNullOrEmpty
-        #     }
+            It 'Get-GitHubVariable -IncludeInherited' {
+                $result = Get-GitHubVariable @scope -Name "*$os*" -IncludeInherited
+                LogGroup 'Variables' {
+                    Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
+                }
+                $result | Should -Not -BeNullOrEmpty
+            }
 
-        #     It 'Remove-GitHubVariable' {
-        #         $before = Get-GitHubVariable @scope -Name "*$os*"
-        #         LogGroup 'Variables - Before' {
-        #             Write-Host "$($before | Format-Table | Out-String)"
-        #         }
-        #         $before | Remove-GitHubVariable
-        #         $after = Get-GitHubVariable @scope -Name "*$os*"
-        #         LogGroup 'Variables -After' {
-        #             Write-Host "$($after | Format-Table | Out-String)"
-        #         }
-        #         $after.Count | Should -Be 0
-        #     }
-        # }
-        # Context 'Environment' {
-        #     BeforeAll {
-        #         $scope = @{
-        #             Owner       = $owner
-        #             Repository  = $repoName
-        #             Environment = $environmentName
-        #         }
-        #         Set-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName
-        #         Set-GitHubVariable @scope -Name $varName -Value 'environment'
-        #     }
-        #     It 'Set-GitHubVariable' {
-        #         $param = @{
-        #             Name  = "$variablePrefix`TestVariable"
-        #             Value = 'TestValue'
-        #         }
-        #         $result = Set-GitHubVariable @param @scope
-        #         $result = Set-GitHubVariable @param @scope
-        #         $result | Should -Not -BeNullOrEmpty
-        #     }
+            It 'Remove-GitHubVariable' {
+                $before = Get-GitHubVariable @scope -Name "*$os*"
+                LogGroup 'Variables - Before' {
+                    Write-Host "$($before | Format-Table | Out-String)"
+                }
+                $before | Remove-GitHubVariable
+                $after = Get-GitHubVariable @scope -Name "*$os*"
+                LogGroup 'Variables -After' {
+                    Write-Host "$($after | Format-Table | Out-String)"
+                }
+                $after.Count | Should -Be 0
+            }
+        }
+        Context 'Environment' {
+            BeforeAll {
+                $scope = @{
+                    Owner       = $owner
+                    Repository  = $repoName
+                    Environment = $environmentName
+                }
+                Set-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName
+                Set-GitHubVariable @scope -Name $varName -Value 'environment'
+            }
+            It 'Set-GitHubVariable' {
+                $param = @{
+                    Name  = "$variablePrefix`TestVariable"
+                    Value = 'TestValue'
+                }
+                $result = Set-GitHubVariable @param @scope
+                $result = Set-GitHubVariable @param @scope
+                $result | Should -Not -BeNullOrEmpty
+            }
 
-        #     It 'Update-GitHubVariable' {
-        #         $param = @{
-        #             Name  = "$variablePrefix`TestVariable"
-        #             Value = 'TestValue1234'
-        #         }
-        #         $result = Update-GitHubVariable @param @scope -PassThru
-        #         $result | Should -Not -BeNullOrEmpty
-        #     }
+            It 'Update-GitHubVariable' {
+                $param = @{
+                    Name  = "$variablePrefix`TestVariable"
+                    Value = 'TestValue1234'
+                }
+                $result = Update-GitHubVariable @param @scope -PassThru
+                $result | Should -Not -BeNullOrEmpty
+            }
 
-        #     It 'New-GitHubVariable' {
-        #         $param = @{
-        #             Name  = "$variablePrefix`TestVariable2"
-        #             Value = 'TestValue123'
-        #         }
-        #         $result = New-GitHubVariable @param @scope
-        #         $result | Should -Not -BeNullOrEmpty
-        #     }
+            It 'New-GitHubVariable' {
+                $param = @{
+                    Name  = "$variablePrefix`TestVariable2"
+                    Value = 'TestValue123'
+                }
+                $result = New-GitHubVariable @param @scope
+                $result | Should -Not -BeNullOrEmpty
+            }
 
-        #     It 'Get-GitHubVariable' {
-        #         $result = Get-GitHubVariable @scope -Name "*$os*"
-        #         Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
-        #         $result | Should -Not -BeNullOrEmpty
-        #     }
+            It 'Get-GitHubVariable' {
+                $result = Get-GitHubVariable @scope -Name "*$os*"
+                Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
+                $result | Should -Not -BeNullOrEmpty
+            }
 
-        #     It 'Get-GitHubVariable -IncludeInherited' {
-        #         $result = Get-GitHubVariable @scope -Name "*$os*" -IncludeInherited
-        #         Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
-        #         $result | Should -Not -BeNullOrEmpty
-        #     }
+            It 'Get-GitHubVariable -IncludeInherited' {
+                $result = Get-GitHubVariable @scope -Name "*$os*" -IncludeInherited
+                Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
+                $result | Should -Not -BeNullOrEmpty
+            }
 
-        #     It 'Remove-GitHubVariable' {
-        #         $before = Get-GitHubVariable @scope -Name "*$os*"
-        #         Write-Host "$($before | Format-Table | Out-String)"
-        #         $before | Remove-GitHubVariable
-        #         $after = Get-GitHubVariable @scope -Name "*$os*"
-        #         Write-Host "$($after | Format-Table | Out-String)"
-        #         $after.Count | Should -Be 0
-        #     }
-        # }
+            It 'Remove-GitHubVariable' {
+                $before = Get-GitHubVariable @scope -Name "*$os*"
+                Write-Host "$($before | Format-Table | Out-String)"
+                $before | Remove-GitHubVariable
+                $after = Get-GitHubVariable @scope -Name "*$os*"
+                Write-Host "$($after | Format-Table | Out-String)"
+                $after.Count | Should -Be 0
+            }
+        }
     }
 }
