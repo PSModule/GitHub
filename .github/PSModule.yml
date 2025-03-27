@@ -3,6 +3,11 @@ Test:
     Skip: true
   PSModule:
     Skip: true
+  Module:
+    MacOS:
+      Skip: true
+    Windows:
+      Skip: true
   TestResults:
     Skip: true
   CodeCoverage:
