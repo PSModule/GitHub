@@ -60,7 +60,7 @@ Describe 'Environments' {
         }
 
         AfterAll {
-            if ($OwnerType -ne 'organization') {
+            if ($OwnerType -eq 'organization') {
                 Get-GitHubVariable -Owner $owner | Remove-GitHubVariable
             }
             if ($Type -ne 'GitHub Actions') {
