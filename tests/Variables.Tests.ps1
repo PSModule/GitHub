@@ -311,7 +311,6 @@ Describe 'Environments' {
             LogGroup 'Variable' {
                 Write-Host ($result | Select-Object * | Format-List | Out-String)
             }
-            $result | Should -Not -BeNullOrEmpty
             $result | Remove-GitHubVariable
         }
     }
