@@ -60,6 +60,9 @@ Describe 'Environments' {
         }
 
         AfterAll {
+            if ($OwnerType -ne 'organization') {
+                Get-GitHubVariable -Owner $owner | Remove-GitHubVariable
+            }
             if ($Type -ne 'GitHub Actions') {
                 Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
             }
@@ -171,7 +174,7 @@ Describe 'Environments' {
                     Write-Host "$($before | Format-List | Out-String)"
                 }
                 LogGroup 'Remove' {
-                    $before | Remove-GitHubVariable -Debug -Verbose
+                    $before | Remove-GitHubVariable
                 }
                 LogGroup 'After remove' {
                     $after = Get-GitHubVariable @scope -Name "$variablePrefix*"
@@ -305,13 +308,5 @@ Describe 'Environments' {
         #         $after.Count | Should -Be 0
         #     }
         # }
-
-        It 'Remove-GitHubVariable - should delete the organization variable' -Skip:($OwnerType -ne 'organization') {
-            $result = Get-GitHubVariable -Owner $owner
-            LogGroup 'Variable' {
-                Write-Host ($result | Select-Object * | Format-List | Out-String)
-            }
-            $result | Remove-GitHubVariable
-        }
     }
 }
