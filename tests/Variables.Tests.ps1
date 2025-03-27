@@ -191,7 +191,7 @@ Describe 'Environments' {
             }
         }
 
-        Context 'Repository' -Skip: {
+        Context 'Repository' -Skip:($Type -eq 'GitHub Actions') {
             BeforeAll {
                 $scope = @{
                     Owner      = $owner
@@ -256,8 +256,8 @@ Describe 'Environments' {
                 $after.Count | Should -Be 0
             }
         }
-        
-        Context 'Environment' -Skip: {
+
+        Context 'Environment' -Skip:($Type -eq 'GitHub Actions') {
             BeforeAll {
                 $scope = @{
                     Owner       = $owner
