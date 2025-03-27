@@ -5,7 +5,7 @@
 <table>
     <tr>
         <td>Available functions</td>
-        <td>1023</td>
+        <td>1021</td>
     </tr>
     <tr>
         <td>Covered functions</td>
@@ -13,11 +13,11 @@
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>842</td>
+        <td>840</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>17.69%</td>
+        <td>17.73%</td>
     </tr>
 </table>
 
@@ -159,7 +159,6 @@
 | `/orgs/{org}/copilot/billing/selected_teams`                                                                              | :x:                |                    |                    | :x:                |                    |
 | `/orgs/{org}/copilot/billing/selected_users`                                                                              | :x:                |                    |                    | :x:                |                    |
 | `/orgs/{org}/copilot/metrics`                                                                                             |                    | :x:                |                    |                    |                    |
-| `/orgs/{org}/copilot/usage`                                                                                               |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/dependabot/alerts`                                                                                           |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/dependabot/secrets`                                                                                          |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/dependabot/secrets/public-key`                                                                               |                    | :x:                |                    |                    |                    |
@@ -255,7 +254,6 @@
 | `/orgs/{org}/settings/network-configurations/{network_configuration_id}`                                                  | :x:                | :x:                | :x:                |                    |                    |
 | `/orgs/{org}/settings/network-settings/{network_settings_id}`                                                             |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/team/{team_slug}/copilot/metrics`                                                                            |                    | :x:                |                    |                    |                    |
-| `/orgs/{org}/team/{team_slug}/copilot/usage`                                                                              |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/teams`                                                                                                       |                    | :white_check_mark: |                    | :white_check_mark: |                    |
 | `/orgs/{org}/teams/{team_slug}`                                                                                           | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
 | `/orgs/{org}/teams/{team_slug}/discussions`                                                                               |                    | :x:                |                    | :x:                |                    |
