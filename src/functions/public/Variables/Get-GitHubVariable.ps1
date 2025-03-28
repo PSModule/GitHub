@@ -185,7 +185,7 @@ function Get-GitHubVariable {
                     try {
                         $variables += Get-GitHubVariableFromOrganization @params |
                             Where-Object { $_.Name -like $Name }
-                    } finally {}
+                    } catch {}
                 }
                 if ($Name.Contains('*')) {
                     $variables += Get-GitHubVariableRepositoryList @params |
@@ -201,7 +201,7 @@ function Get-GitHubVariable {
                     try {
                         $variables += Get-GitHubVariableFromOrganization @params |
                             Where-Object { $_.Name -like $Name }
-                    } finally {}
+                    } catch {}
                     if ($Name.Contains('*')) {
                         $variables += Get-GitHubVariableRepositoryList @params |
                             Where-Object { $_.Name -like $Name }
