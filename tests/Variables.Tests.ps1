@@ -235,7 +235,7 @@ Describe 'Environments' {
                 $result | Should -Not -BeNullOrEmpty
             }
 
-            It 'Get-GitHubVariable -IncludeInherited' {
+            It 'Get-GitHubVariable -IncludeInherited' -Skip:($OwnerType -ne 'organization') {
                 $result = Get-GitHubVariable @scope -Name "*$os*" -IncludeInherited
                 LogGroup 'Variables' {
                     Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
@@ -306,7 +306,7 @@ Describe 'Environments' {
                 $result | Should -Not -BeNullOrEmpty
             }
 
-            It 'Get-GitHubVariable -IncludeInherited' {
+            It 'Get-GitHubVariable -IncludeInherited' -Skip:($OwnerType -ne 'organization') {
                 $result = Get-GitHubVariable @scope -Name "*$os*" -IncludeInherited
                 Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
                 $result | Should -Not -BeNullOrEmpty
