@@ -67,11 +67,11 @@ Describe 'Environments' {
         }
 
         AfterAll {
-            if ($OwnerType -eq 'organization') {
-                Get-GitHubVariable -Owner $owner | Remove-GitHubVariable
-            }
             if ($Type -ne 'GitHub Actions') {
                 Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
+            }
+            if ($OwnerType -eq 'organization') {
+                Get-GitHubVariable -Owner $owner | Remove-GitHubVariable
             }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
         }
@@ -235,7 +235,7 @@ Describe 'Environments' {
                 $result | Should -Not -BeNullOrEmpty
             }
 
-            It 'Get-GitHubVariable -IncludeInherited' -Skip:($OwnerType -ne 'organization') {
+            It 'Get-GitHubVariable -IncludeInherited' {
                 $result = Get-GitHubVariable @scope -Name "*$os*" -IncludeInherited
                 LogGroup 'Variables' {
                     Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
@@ -306,7 +306,7 @@ Describe 'Environments' {
                 $result | Should -Not -BeNullOrEmpty
             }
 
-            It 'Get-GitHubVariable -IncludeInherited' -Skip:($OwnerType -ne 'organization') {
+            It 'Get-GitHubVariable -IncludeInherited' {
                 $result = Get-GitHubVariable @scope -Name "*$os*" -IncludeInherited
                 Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
                 $result | Should -Not -BeNullOrEmpty
