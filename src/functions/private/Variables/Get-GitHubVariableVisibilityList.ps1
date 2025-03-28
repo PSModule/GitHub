@@ -12,6 +12,12 @@ function Get-GitHubVariableVisibilityList {
         .EXAMPLE
         Get-GitHubVariableVisibilityList -Owner 'PSModule' -Name 'SELECTEDVAR' -Context (Get-GitHubContext)
 
+        .OUTPUTS
+        GitHubRepository
+
+        .NOTES
+        Returns a list of GitHubRepository objects that represent the repositories that can access the variable.
+
         .LINK
         [List selected repositories for an organization variable](https://docs.github.com/rest/actions/variables#list-selected-repositories-for-an-organization-variable)
     #>
@@ -19,7 +25,7 @@ function Get-GitHubVariableVisibilityList {
         'PSAvoidLongLines', '',
         Justification = 'Long links'
     )]
-    [OutputType([pscustomobject])]
+    [OutputType([GitHubRepository])]
     [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
@@ -33,16 +39,7 @@ function Get-GitHubVariableVisibilityList {
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter(Mandatory)]
-        [object] $Context,
-
-        # The output format. Can be `json`, `pscustomobject`, `class`, or `raw`.
-        # `json` - Returns the output as a JSON string.
-        # `pscustomobject` - Returns the output as a PowerShell custom object.
-        # `class` - Returns the output as a PowerShell class object.
-        # `raw` - Returns the raw output from the API call.
-        [Parameter()]
-        [ValidateSet('json', 'pscustomobject', 'class', 'raw')]
-        [string] $Output = 'class'
+        [object] $Context
     )
 
     begin {
@@ -59,34 +56,15 @@ function Get-GitHubVariableVisibilityList {
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            $apiReturn = $_
-            $repositories = $apiReturn.Response.repositories
-            switch ($Output) {
-                'raw' {
-                    $apiReturn
-                    break
-                }
-                'json' {
-                    $repositories | ConvertTo-Json -Depth 5
-                    break
-                }
-                'pscustomobject' {
-                    $repositories
-                    break
-                }
-                'class' {
-                    $repositories | ForEach-Object {
-                        [GitHubRepository]@{
-                            Name        = $_.name
-                            FullName    = $_.full_name
-                            NodeID      = $_.node_id
-                            DatabaseID  = $_.id
-                            Description = $_.description
-                            Owner       = $_.owner.login
-                            URL         = $_.html_url
-                        }
-                    }
-                    break
+            $_.Response.repositories | ForEach-Object {
+                [GitHubRepository]@{
+                    Name        = $_.name
+                    FullName    = $_.full_name
+                    NodeID      = $_.node_id
+                    DatabaseID  = $_.id
+                    Description = $_.description
+                    Owner       = $_.owner.login
+                    URL         = $_.html_url
                 }
             }
         }
