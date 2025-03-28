@@ -28,6 +28,13 @@ function Set-GitHubVariable {
 
         Creates or updates an environment variable named `HOST_NAME` with the value `github.com` in the specified environment.
 
+        .OUTPUTS
+        GitHubVariable
+
+        .NOTES
+        Returns an GitHubVariable object containing details about the environment variable,
+        including its name, value, associated repository, and environment details.
+
         .LINK
         https://psmodule.io/GitHub/Functions/Variables/Set-GitHubVariable/
     #>

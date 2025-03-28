@@ -35,6 +35,11 @@ function Get-GitHubVariableVisibilityList {
         [Parameter(Mandatory)]
         [object] $Context,
 
+        # The output format. Can be `json`, `pscustomobject`, `class`, or `raw`.
+        # `json` - Returns the output as a JSON string.
+        # `pscustomobject` - Returns the output as a PowerShell custom object.
+        # `class` - Returns the output as a PowerShell class object.
+        # `raw` - Returns the raw output from the API call.
         [Parameter()]
         [ValidateSet('json', 'pscustomobject', 'class', 'raw')]
         [string] $Output = 'class'

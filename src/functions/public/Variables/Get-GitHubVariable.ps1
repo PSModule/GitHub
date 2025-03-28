@@ -116,7 +116,7 @@ function Get-GitHubVariable {
         GitHubVariable
 
         .NOTES
-        An object representing the GitHub variable, containing Name, Value, Owner,
+        An object or array of objects representing the GitHub variable, containing Name, Value, Owner,
         Repository, and Environment details.
 
         .LINK
@@ -185,7 +185,7 @@ function Get-GitHubVariable {
                     try {
                         $variables += Get-GitHubVariableFromOrganization @params |
                             Where-Object { $_.Name -like $Name }
-                    } catch {}
+                    } finally {}
                 }
                 if ($Name.Contains('*')) {
                     $variables += Get-GitHubVariableRepositoryList @params |
@@ -201,7 +201,7 @@ function Get-GitHubVariable {
                     try {
                         $variables += Get-GitHubVariableFromOrganization @params |
                             Where-Object { $_.Name -like $Name }
-                    } catch {}
+                    } finally {}
                     if ($Name.Contains('*')) {
                         $variables += Get-GitHubVariableRepositoryList @params |
                             Where-Object { $_.Name -like $Name }
