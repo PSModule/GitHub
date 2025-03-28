@@ -29,11 +29,11 @@ function Get-GitHubVariableRepositoryList {
         Retrieves all variables for the specified repository.
 
         .OUTPUTS
-        GitHubVariable
+        GitHubVariable[]
 
         .NOTES
-        Returns an GitHubVariable object containing details about the environment variable,
-        including its name, value, associated repository, and environment details.
+        An array of GitHubVariable objects representing the environment variables.
+        Each object contains Name, Value, CreatedAt, UpdatedAt, Owner, Repository, and Environment properties.
 
         .LINK
         [List repository variables](https://docs.github.com/rest/actions/variables#list-repository-variables)

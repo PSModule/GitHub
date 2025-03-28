@@ -86,7 +86,7 @@ function Remove-GitHubVariable {
                             Name        = $item.Name
                             Context     = $Context
                         }
-                        Remove-GitHubVariableOnEnvironment @params
+                        Remove-GitHubVariableFromEnvironment @params
                     } elseif ($item.Repository) {
                         $params = @{
                             Owner      = $item.Owner
@@ -94,14 +94,14 @@ function Remove-GitHubVariable {
                             Name       = $item.Name
                             Context    = $Context
                         }
-                        Remove-GitHubVariableOnRepository @params
+                        Remove-GitHubVariableFromRepository @params
                     } else {
                         $params = @{
                             Owner   = $item.Owner
                             Name    = $item.Name
                             Context = $Context
                         }
-                        Remove-GitHubVariableOnOwner @params
+                        Remove-GitHubVariableFromOwner @params
                     }
                     $scopeParam = @{
                         Owner       = $item.Owner
@@ -124,7 +124,7 @@ function Remove-GitHubVariable {
                     Name    = $Name
                     Context = $Context
                 }
-                Remove-GitHubVariableOnOwner @params
+                Remove-GitHubVariableFromOwner @params
                 break
             }
             'Repository' {
@@ -134,7 +134,7 @@ function Remove-GitHubVariable {
                     Name       = $Name
                     Context    = $Context
                 }
-                Remove-GitHubVariableOnRepository @params
+                Remove-GitHubVariableFromRepository @params
                 break
             }
             'Environment' {
@@ -145,7 +145,7 @@ function Remove-GitHubVariable {
                     Name        = $Name
                     Context     = $Context
                 }
-                Remove-GitHubVariableOnEnvironment @params
+                Remove-GitHubVariableFromEnvironment @params
                 break
             }
         }

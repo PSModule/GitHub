@@ -29,11 +29,14 @@ function Get-GitHubVariableEnvironmentList {
         Retrieves all variables for the specified environment.
 
         .OUTPUTS
-        GitHubVariable[]. An array of GitHubVariable objects representing the environment variables.
+        GitHubVariable[]
+
+        .NOTES
+        An array of GitHubVariable objects representing the environment variables.
         Each object contains Name, Value, CreatedAt, UpdatedAt, Owner, Repository, and Environment properties.
 
         .LINK
-        https://psmodule.io/GitHub/Functions/Get-GitHubVariableEnvironmentList
+        [List environment variables](https://docs.github.com/rest/actions/variables#list-environment-variables)
     #>
     [OutputType([GitHubVariable[]])]
     [CmdletBinding()]

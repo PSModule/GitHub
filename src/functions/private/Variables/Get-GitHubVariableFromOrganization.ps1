@@ -46,6 +46,13 @@ function Get-GitHubVariableFromOrganization {
 
         Lists the variables visible from 'PSModule' to the 'GitHub' repository.
 
+        .OUTPUTS
+        GitHubVariable[]
+
+        .NOTES
+        An array of GitHubVariable objects representing the environment variables.
+        Each object contains Name, Value, CreatedAt, UpdatedAt, Owner, Repository, and Environment properties.
+
         .LINK
         [List repository organization variables](https://docs.github.com/rest/actions/variables#list-repository-organization-variables)
     #>

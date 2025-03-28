@@ -47,8 +47,15 @@ function Get-GitHubVariableOwnerList {
 
         Retrieves all variables from the specified organization.
 
+        .OUTPUTS
+        GitHubVariable[]
+
+        .NOTES
+        An array of GitHubVariable objects representing the environment variables.
+        Each object contains Name, Value, CreatedAt, UpdatedAt, Owner, Repository, and Environment properties.
+
         .LINK
-        List organization variables](https://docs.github.com/rest/actions/variables#list-organization-variables)
+        [List organization variables](https://docs.github.com/rest/actions/variables#list-organization-variables)
     #>
     [OutputType([GitHubVariable[]])]
     [CmdletBinding()]
