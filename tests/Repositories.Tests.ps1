@@ -39,13 +39,10 @@ Describe 'Template' {
                 }
             }
             $repoName = "$testName-$os-$TokenType"
-            if ($OwnerType -ne 'repository') {
-                Get-GitHubRepository -Owner $Owner | Where-Object { $_.name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-            }
         }
         AfterAll {
             if ($OwnerType -ne 'repository') {
-                Get-GitHubRepository -Owner $Owner | Where-Object { $_.name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                Remove-GitHubRepository -Owner $Owner -Name $repoName -Confirm:$false
             }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
         }
@@ -105,19 +102,17 @@ Describe 'Template' {
                 $repos | Should -Not -BeNullOrEmpty
             }
             It 'Remove-GitHubRepository - Removes all repositories' {
-                $repos = Get-GitHubRepository -Owner $Owner -Name $repoName
                 LogGroup 'Repositories' {
+                    $repos = Get-GitHubRepository -Owner $Owner -Name $repoName
                     Write-Host ($repos | Format-List | Out-String)
                 }
-                $repos | ForEach-Object {
-                    Remove-GitHubRepository -Owner $_.owner.login -Name $_.name -Confirm:$false
-                }
+                Remove-GitHubRepository -Owner $Owner -Name $repoName -Confirm:$false
             }
             It 'Get-GitHubRepository - Gets none repositories after removal' {
                 if ($OwnerType -eq 'user') {
-                    $repos = Get-GitHubRepository -Username $Owner | Where-Object { $_.name -like "$repoPrefix*" }
+                    $repos = Get-GitHubRepository -Username $Owner | Where-Object { $_.name -like "$repoName*" }
                 } else {
-                    $repos = Get-GitHubRepository -Owner $Owner | Where-Object { $_.name -like "$repoPrefix*" }
+                    $repos = Get-GitHubRepository -Owner $Owner | Where-Object { $_.name -like "$repoName*" }
                 }
                 LogGroup 'Repositories' {
                     Write-Host ($repos | Format-List | Out-String)
