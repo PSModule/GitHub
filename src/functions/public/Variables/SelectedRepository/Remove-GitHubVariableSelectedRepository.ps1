@@ -66,7 +66,7 @@
     }
 
     process {
-        $existingSelectedRepositories = Get-GitHubVariableSelectedRepository -Owner $Owner -Name $Name
+        $existingSelectedRepositories = Get-GitHubVariableSelectedRepository -Owner $Owner -Name $Name -Context $Context
         $existingSelectedRepositories | Format-List | Out-String
         Write-Host "What to check for"
         Write-Host "$($existingSelectedRepositories.id)"
