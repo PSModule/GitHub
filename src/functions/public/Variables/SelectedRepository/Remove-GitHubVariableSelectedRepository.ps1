@@ -67,6 +67,11 @@
 
     process {
         $existingSelectedRepositories = Get-GitHubVariableSelectedRepository -Owner $Owner -Name $Name
+        $existingSelectedRepositories | Format-List | Out-String
+        Write-Host "What to check for"
+        Write-Host "$($existingSelectedRepositories.id)"
+        Write-Host "What to delete"
+        Write-Host "$($RepositoryID)"
         $repoIsNotSelected = $existingSelectedRepositories.id -notcontains $RepositoryID
         if ($repoIsNotSelected) {
             Write-Host 'Repo is not selected, returning'
