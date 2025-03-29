@@ -87,7 +87,7 @@ function Get-GitHubVariableOwnerList {
             $_.Response.variables | ForEach-Object {
                 $selectedRepositories = @()
                 if ($_.visibility -eq 'selected') {
-                    $selectedRepositories = Get-GitHubVariableVisibilityList -Owner $Owner -Name $_.name -Context $Context
+                    $selectedRepositories = Get-GitHubVariableSelectedRepository -Owner $Owner -Name $_.name -Context $Context
                 }
                 [GitHubVariable]@{
                     Name                 = $_.name

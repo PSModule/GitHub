@@ -1,4 +1,4 @@
-function Get-GitHubVariableVisibilityList {
+function Get-GitHubVariableSelectedRepository {
     <#
         .SYNOPSIS
         List selected repositories for an organization variable.
@@ -10,13 +10,16 @@ function Get-GitHubVariableVisibilityList {
         the `repo` scope is also required.
 
         .EXAMPLE
-        Get-GitHubVariableVisibilityList -Owner 'PSModule' -Name 'SELECTEDVAR' -Context (Get-GitHubContext)
+        Get-GitHubVariableSelectedRepository -Owner 'PSModule' -Name 'SELECTEDVAR' -Context (Get-GitHubContext)
 
         .OUTPUTS
         GitHubRepository
 
         .NOTES
         Returns a list of GitHubRepository objects that represent the repositories that can access the variable.
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Variables/Get-GitHubVariable
 
         .LINK
         [List selected repositories for an organization variable](https://docs.github.com/rest/actions/variables#list-selected-repositories-for-an-organization-variable)
