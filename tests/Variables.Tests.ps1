@@ -52,6 +52,18 @@ Describe 'Environments' {
                             $repo = New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
                             $repo2 = New-GitHubRepository -Owner $owner -Name "$repoName-2" -AllowSquashMerge
                             $repo3 = New-GitHubRepository -Owner $owner -Name "$repoName-3" -AllowSquashMerge
+
+                            LogGroup "Org variable - [$varName]" {
+                                $params = @{
+                                    Owner                = $owner
+                                    Name                 = $varName
+                                    Value                = 'organization'
+                                    Visibility           = 'selected'
+                                    SelectedRepositories = $repo.id
+                                }
+                                $result = Set-GitHubVariable @params
+                                Write-Host ($result | Select-Object * | Format-Table | Out-String)
+                            }
                         }
                     }
                     Write-Host ($repo | Format-List | Out-String)
@@ -59,30 +71,19 @@ Describe 'Environments' {
                     Write-Host ($repo3 | Format-List | Out-String)
                 }
             }
-
-            if ($OwnerType -eq 'organization') {
-                LogGroup "Org variable - [$varName]" {
-                    $params = @{
-                        Owner                = $owner
-                        Name                 = $varName
-                        Value                = 'organization'
-                        Visibility           = 'selected'
-                        SelectedRepositories = $repo.id
-                    }
-                    $result = Set-GitHubVariable @params
-                    Write-Host ($result | Select-Object * | Format-Table | Out-String)
-                }
-            }
         }
 
         AfterAll {
-            if ($Type -ne 'GitHub Actions') {
-                Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
-            }
-            if ($OwnerType -eq 'organization') {
-                Get-GitHubVariable -Owner $owner | Remove-GitHubVariable
-                Remove-GitHubRepository -Owner $owner -Name "$repoName-2" -Confirm:$false
-                Remove-GitHubRepository -Owner $owner -Name "$repoName-3" -Confirm:$false
+            switch ($OwnerType) {
+                'user' {
+                    Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
+                }
+                'organization' {
+                    Get-GitHubVariable -Owner $owner | Remove-GitHubVariable
+                    Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
+                    Remove-GitHubRepository -Owner $owner -Name "$repoName-2" -Confirm:$false
+                    Remove-GitHubRepository -Owner $owner -Name "$repoName-3" -Confirm:$false
+                }
             }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
         }
