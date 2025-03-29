@@ -18,6 +18,7 @@ param()
 BeforeAll {
     $testName = 'VariableTest'
     $os = $env:RUNNER_OS
+    $guid = [guid]::NewGuid().ToString()
 }
 
 Describe 'Environments' {
@@ -35,7 +36,7 @@ Describe 'Environments' {
                     Write-Host ($context | Format-List | Out-String)
                 }
             }
-            $repoName = "$testName-$os-$TokenType"
+            $repoName = "$testName-$os-$TokenType-$guid"
             $varName = "$testName`_$os`_$TokenType"
             $variablePrefix = "$varName`_"
             $environmentName = "$testName-$os-$TokenType"

@@ -19,6 +19,7 @@ BeforeAll {
     $testName = 'EnvironmentTest'
     $environmentName = 'production'
     $os = $env:RUNNER_OS
+    $guid = [guid]::NewGuid().ToString()
 }
 
 Describe 'Environments' {
@@ -36,7 +37,7 @@ Describe 'Environments' {
                     Write-Host ($context | Format-List | Out-String)
                 }
             }
-            $repoName = "$testName-$os-$TokenType"
+            $repoName = "$testName-$os-$TokenType-$guid"
             switch ($OwnerType) {
                 'user' {
                     New-GitHubRepository -Name $repoName -AllowSquashMerge

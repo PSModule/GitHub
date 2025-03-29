@@ -18,6 +18,7 @@ param()
 BeforeAll {
     $testName = 'RepositoryTest'
     $os = $env:RUNNER_OS
+    $guid = [guid]::NewGuid().ToString()
 }
 
 Describe 'Repositories' {
@@ -35,7 +36,7 @@ Describe 'Repositories' {
                     Write-Host ($context | Format-List | Out-String)
                 }
             }
-            $repoName = "$testName-$os-$TokenType"
+            $repoName = "$testName-$os-$TokenType-$guid"
         }
 
         AfterAll {
