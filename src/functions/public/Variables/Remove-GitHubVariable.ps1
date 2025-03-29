@@ -85,7 +85,7 @@ function Remove-GitHubVariable {
                             Environment = $item.Environment
                             Context     = $Context
                         }
-                        $existingVariables = Get-GitHubVariableEnvironemntList @params
+                        $existingVariables = Get-GitHubVariableEnvironmentList @params
                         $variableExists = $item.Name -in $existingVariables.Name
                         if (-not $variableExists) { continue }
                         Remove-GitHubVariableFromEnvironment @params -Name $item.Name
@@ -157,7 +157,7 @@ function Remove-GitHubVariable {
                     Name        = $Name
                     Context     = $Context
                 }
-                $existingVariables = Get-GitHubVariableEnvironemntList @params
+                $existingVariables = Get-GitHubVariableEnvironmentList @params
                 $variableExists = $Name -in $existingVariables.Name
                 if (-not $variableExists) { continue }
                 Remove-GitHubVariableFromEnvironment @params -Name $Name
