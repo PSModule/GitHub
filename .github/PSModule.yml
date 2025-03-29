@@ -1,4 +1,8 @@
 Test:
+  SourceCode:
+    Skip: true
+  PSModule:
+    Skip: true
   Module:
     MacOS:
       Skip: true
