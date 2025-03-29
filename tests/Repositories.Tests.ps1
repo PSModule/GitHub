@@ -16,7 +16,7 @@
 param()
 
 BeforeAll {
-    $testPrefix = 'RepositoryTest'
+    $testName = 'RepositoryTest'
     $os = $env:RUNNER_OS
 }
 
@@ -39,7 +39,7 @@ Describe 'Template' {
                 }
             }
             $guid = [guid]::NewGuid().ToString()
-            $repoPrefix = "$testPrefix-$os"
+            $repoPrefix = "$testName-$os-$TokenType"
             $repo = "$repoPrefix-$guid"
             if ($OwnerType -ne 'repository') {
                 Get-GitHubRepository -Owner $Owner | Where-Object { $_.name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
