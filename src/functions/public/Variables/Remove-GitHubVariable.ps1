@@ -83,25 +83,31 @@ function Remove-GitHubVariable {
                             Owner       = $item.Owner
                             Repository  = $item.Repository
                             Environment = $item.Environment
-                            Name        = $item.Name
                             Context     = $Context
                         }
-                        Remove-GitHubVariableFromEnvironment @params
+                        $existingVariables = Get-GitHubVariableEnvironemntList @params
+                        $variableExists = $item.Name -in $existingVariables.Name
+                        if (-not $variableExists) { continue }
+                        Remove-GitHubVariableFromEnvironment @params -Name $item.Name
                     } elseif ($item.Repository) {
                         $params = @{
                             Owner      = $item.Owner
                             Repository = $item.Repository
-                            Name       = $item.Name
                             Context    = $Context
                         }
-                        Remove-GitHubVariableFromRepository @params
+                        $existingVariables = Get-GitHubVariableRepositoryList @params
+                        $variableExists = $item.Name -in $existingVariables.Name
+                        if (-not $variableExists) { continue }
+                        Remove-GitHubVariableFromRepository @params -Name $item.Name
                     } else {
                         $params = @{
                             Owner   = $item.Owner
-                            Name    = $item.Name
                             Context = $Context
                         }
-                        Remove-GitHubVariableFromOwner @params
+                        $existingVariables = Get-GitHubVariableOwnerList @params
+                        $variableExists = $item.Name -in $existingVariables.Name
+                        if (-not $variableExists) { continue }
+                        Remove-GitHubVariableFromOwner @params -Name $item.Name
                     }
                     $scopeParam = @{
                         Owner       = $item.Owner
@@ -124,7 +130,10 @@ function Remove-GitHubVariable {
                     Name    = $Name
                     Context = $Context
                 }
-                Remove-GitHubVariableFromOwner @params
+                $existingVariables = Get-GitHubVariableOwnerList @params
+                $variableExists = $Name -in $existingVariables.Name
+                if (-not $variableExists) { continue }
+                Remove-GitHubVariableFromOwner @params -Name $Name
                 break
             }
             'Repository' {
@@ -134,7 +143,10 @@ function Remove-GitHubVariable {
                     Name       = $Name
                     Context    = $Context
                 }
-                Remove-GitHubVariableFromRepository @params
+                $existingVariables = Get-GitHubVariableRepositoryList @params
+                $variableExists = $Name -in $existingVariables.Name
+                if (-not $variableExists) { continue }
+                Remove-GitHubVariableFromRepository @params -Name $Name
                 break
             }
             'Environment' {
@@ -145,7 +157,10 @@ function Remove-GitHubVariable {
                     Name        = $Name
                     Context     = $Context
                 }
-                Remove-GitHubVariableFromEnvironment @params
+                $existingVariables = Get-GitHubVariableEnvironemntList @params
+                $variableExists = $Name -in $existingVariables.Name
+                if (-not $variableExists) { continue }
+                Remove-GitHubVariableFromEnvironment @params -Name $Name
                 break
             }
         }
