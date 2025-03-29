@@ -61,7 +61,7 @@
         $existingSelectedRepositories = Get-GitHubVariableSelectedRepository -Owner $Owner -Name $Name -Context $Context
         $repoIsSelected = $existingSelectedRepositories.DatabaseID -contains $RepositoryID
         if ($repoIsSelected) {
-            Write-Host 'Repo is already selected, returning'
+            Write-Debug 'Repo is already selected, returning'
             return
         }
         $inputObject = @{

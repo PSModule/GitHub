@@ -1,4 +1,7 @@
-Test:
+Build:
+  Docs:
+    Skip: true
+    Test:
   SourceCode:
     Skip: true
   PSModule:
@@ -13,6 +16,3 @@ Test:
     PercentTarget: 50
   TestResults:
     Skip: true
-  Build:
-    Docs:
-      Skip: true
