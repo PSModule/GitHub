@@ -41,7 +41,7 @@
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('DatabaseID')]
+        [Alias('DatabaseID', 'ID')]
         [UInt64] $RepositoryID,
 
         # The context to run the command in. Used to get the details for the API call.

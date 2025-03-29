@@ -21,8 +21,7 @@
         Removes repository with ID 123456 from the organization variable 'ENV_SECRET' in 'my-org'.
 
         .OUTPUTS
-        void. The function performs a deletion operation and does not return any output.
-        The response will be HTTP 204 if successful, or HTTP 409 if the variable visibility is not 'selected'.
+        void
 
         .LINK
         https://psmodule.io/GitHub/Functions/Variables/SelectedRepository/Remove-GitHubVariableSelectedRepository
@@ -50,7 +49,7 @@
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('DatabaseID')]
+        [Alias('DatabaseID', 'ID')]
         [UInt64] $RepositoryID,
 
         # The context to run the command in. Used to get the details for the API call.
