@@ -38,9 +38,7 @@ Describe 'Template' {
                     }
                 }
             }
-            $guid = [guid]::NewGuid().ToString()
-            $repoPrefix = "$testName-$os-$TokenType"
-            $repo = "$repoPrefix-$guid"
+            $repoName = "$testName-$os-$TokenType"
             if ($OwnerType -ne 'repository') {
                 Get-GitHubRepository -Owner $Owner | Where-Object { $_.name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
             }
@@ -57,9 +55,9 @@ Describe 'Template' {
             # Tests for IAT UAT and PAT goes here
             It 'New-GitHubRepository - Creates a new repository' {
                 if ($OwnerType -eq 'user') {
-                    New-GitHubRepository -Name $repo -AllowSquashMerge
+                    New-GitHubRepository -Name $repoName -AllowSquashMerge
                 } else {
-                    New-GitHubRepository -Owner $Owner -Name $repo -AllowSquashMerge
+                    New-GitHubRepository -Owner $Owner -Name $repoName -AllowSquashMerge
                 }
             }
             if ($OwnerType -eq 'user') {
@@ -107,7 +105,7 @@ Describe 'Template' {
                 $repos | Should -Not -BeNullOrEmpty
             }
             It 'Remove-GitHubRepository - Removes all repositories' {
-                $repos = Get-GitHubRepository -Owner $Owner -Name $repo
+                $repos = Get-GitHubRepository -Owner $Owner -Name $repoName
                 LogGroup 'Repositories' {
                     Write-Host ($repos | Format-List | Out-String)
                 }
