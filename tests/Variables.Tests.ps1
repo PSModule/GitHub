@@ -44,6 +44,8 @@ Describe 'Environments' {
             switch ($OwnerType) {
                 'user' {
                     $repo = New-GitHubRepository -Name $repoName -AllowSquashMerge
+                    $repo2 = New-GitHubRepository -Name "$repoName-2" -AllowSquashMerge
+                    $repo3 = New-GitHubRepository -Name "$repoName-3" -AllowSquashMerge
                 }
                 'organization' {
                     $repo = New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
