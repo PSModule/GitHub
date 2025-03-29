@@ -84,7 +84,6 @@ Describe 'Environments' {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
         }
 
-        # Tests for IAT UAT and PAT goes here
         Context 'Organization' -Skip:($OwnerType -ne 'organization') {
             BeforeAll {
                 $scope = @{
