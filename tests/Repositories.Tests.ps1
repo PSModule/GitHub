@@ -32,8 +32,10 @@ Describe 'Template' {
             $guid = [guid]::NewGuid().ToString()
             $repoPrefix = "$testPrefix-$os"
             $repo = "$repoPrefix-$guid"
+            Get-GitHubRepository -Owner $Owner | Where-Object { $_.name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
         }
         AfterAll {
+            Get-GitHubRepository -Owner $Owner | Where-Object { $_.name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
         }
 

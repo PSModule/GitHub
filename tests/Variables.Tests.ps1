@@ -42,6 +42,7 @@ Describe 'Environments' {
 
             if ($Type -ne 'GitHub Actions') {
                 LogGroup "Repository - [$repoName]" {
+                    Get-GitHubRepository -Owner $Owner | Where-Object { $_.name -like "$repoName*" } | Remove-GitHubRepository -Confirm:$false
                     switch ($OwnerType) {
                         'user' {
                             $repo = New-GitHubRepository -Name $repoName -AllowSquashMerge
