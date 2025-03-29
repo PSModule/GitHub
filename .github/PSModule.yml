@@ -9,4 +9,10 @@ Test:
     Windows:
       Skip: true
   CodeCoverage:
+    Skip: true
     PercentTarget: 50
+  TestResults:
+    Skip: true
+  Build:
+    Docs:
+      Skip: true

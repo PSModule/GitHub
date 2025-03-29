@@ -217,7 +217,7 @@ Describe 'Environments' {
                 }
                 It 'Add-GitHubVariableSelectedRepository - adds a repository to the list of selected repositories using pipeline' {
                     LogGroup 'Repo3' {
-                        $repo3 | Format-List | Out-String
+                        Write-Host "$($repo3 | Format-List | Out-String)"
                     }
                     { $repo3 | Add-GitHubVariableSelectedRepository -Owner $owner -Name $varName } | Should -Not -Throw
                 }
@@ -238,7 +238,7 @@ Describe 'Environments' {
                 }
                 It 'Remove-GitHubVariableSelectedRepository - removes a repository from the list of selected repositories using pipeline' {
                     LogGroup 'Repo3' {
-                        $repo3 | Format-List | Out-String
+                        Write-Host "$($repo3 | Format-List | Out-String)"
                     }
                     { $repo3 | Remove-GitHubVariableSelectedRepository -Owner $owner -Name $varName } | Should -Not -Throw
                 }
