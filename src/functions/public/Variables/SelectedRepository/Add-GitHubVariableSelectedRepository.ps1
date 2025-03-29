@@ -5,13 +5,23 @@
 
         .DESCRIPTION
         Adds a repository to an organization variable that is available to selected repositories.
-        Organization variables that are available to selected repositories have their `visibility` field set to `selected`.
-        Authenticated users must have collaborator access to a repository to create, update, or read secrets.
-        OAuth tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint. If the repository is private,
-        OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
+        Organization variables that are available to selected repositories have their visibility field set to 'selected'.
+        Authenticated users must have collaborator access to the repository to create, update, or read secrets.
+        OAuth and classic personal access tokens require the 'admin:org' scope. For private repositories, the 'repo' scope is also required.
+        Fine-grained tokens must have 'Variables' organization permission (write) and 'Metadata' repository permission (read).
 
         .EXAMPLE
+        Add-GitHubVariableSelectedRepository -Owner 'my-org' -Name 'API_KEY' -RepositoryID '654321' -Context $GitHubContext
 
+        Output:
+        ```powershell
+        Name        : test-repo
+        Id          : 654321
+        FullName    : my-org/test-repo
+        Private     : True
+        ```
+
+        Adds the repository 'test-repo' to the 'API_KEY' variable in the organization 'my-org'.
 
         .LINK
         https://psmodule.io/GitHub/Functions/Variables/SelectedRepository/Add-GitHubVariableSelectedRepository
@@ -23,7 +33,7 @@
         'PSAvoidLongLines', '',
         Justification = 'Long links'
     )]
-    [OutputType([GitHubRepository])]
+    [OutputType([void])]
     [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
