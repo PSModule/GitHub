@@ -29,25 +29,27 @@ Describe 'Template' {
             LogGroup 'Context' {
                 Write-Host ($context | Format-List | Out-String)
             }
+            # Tests for APP goes here
+            if ($AuthType -eq 'APP') {
+                It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
+                    $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
+                    LogGroup 'Context' {
+                        Write-Host ($context | Format-List | Out-String)
+                    }
+                }
+            }
             $guid = [guid]::NewGuid().ToString()
             $repoPrefix = "$testPrefix-$os"
             $repo = "$repoPrefix-$guid"
-            Get-GitHubRepository -Owner $Owner | Where-Object { $_.name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+            if ($OwnerType -ne 'repo') {
+                Get-GitHubRepository -Owner $Owner | Where-Object { $_.name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+            }
         }
         AfterAll {
             Get-GitHubRepository -Owner $Owner | Where-Object { $_.name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
         }
 
-        # Tests for APP goes here
-        if ($AuthType -eq 'APP') {
-            It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
-                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
-                LogGroup 'Context' {
-                    Write-Host ($context | Format-List | Out-String)
-                }
-            }
-        }
 
         if ($Type -ne 'GitHub Actions') {
             # Tests for IAT UAT and PAT goes here
