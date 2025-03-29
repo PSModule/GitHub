@@ -219,7 +219,7 @@ Describe 'Environments' {
                     LogGroup 'Repo3' {
                         $repo3 | Format-List | Out-String
                     }
-                    { $repo3 | Add-GitHubVariableSelectedRepository -Owner $owner -Name $varName -Debug -Verbose } | Should -Not -Throw
+                    { $repo3 | Add-GitHubVariableSelectedRepository -Owner $owner -Name $varName } | Should -Not -Throw
                 }
                 It 'Get-GitHubVariableSelectedRepository - gets 3 repositories' {
                     $result = Get-GitHubVariableSelectedRepository -Owner $owner -Name $varName
@@ -240,7 +240,7 @@ Describe 'Environments' {
                     LogGroup 'Repo3' {
                         $repo3 | Format-List | Out-String
                     }
-                    { $repo3 | Remove-GitHubVariableSelectedRepository -Owner $owner -Name $varName -Debug -Verbose } | Should -Not -Throw
+                    { $repo3 | Remove-GitHubVariableSelectedRepository -Owner $owner -Name $varName } | Should -Not -Throw
                 }
                 It 'Get-GitHubVariableSelectedRepository - gets 1 repository' {
                     $result = Get-GitHubVariableSelectedRepository -Owner $owner -Name $varName
