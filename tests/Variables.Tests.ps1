@@ -216,7 +216,7 @@ Describe 'Environments' {
                     }
                 }
                 It 'Add-GitHubVariableSelectedRepository - adds a repository to the list of selected repositories using pipeline' {
-                    { $repo3 | Add-GitHubVariableSelectedRepository -Owner $owner -Name $varName } | Should -Not -Throw
+                    { $repo3 | Add-GitHubVariableSelectedRepository -Owner $owner -Name $varName -Debug -Verbose } | Should -Not -Throw
                 }
                 It 'Get-GitHubVariableSelectedRepository - gets 3 repositories' {
                     $result = Get-GitHubVariableSelectedRepository -Owner $owner -Name $varName
@@ -231,7 +231,7 @@ Describe 'Environments' {
                     { Remove-GitHubVariableSelectedRepository -Owner $owner -Name $varName -RepositoryID $repo2.id } | Should -Not -Throw
                 }
                 It 'Remove-GitHubVariableSelectedRepository - removes a repository from the list of selected repositories using pipeline' {
-                    { $repo3 | Remove-GitHubVariableSelectedRepository -Owner $owner -Name $varName } | Should -Not -Throw
+                    { $repo3 | Remove-GitHubVariableSelectedRepository -Owner $owner -Name $varName -Debug -Verbose } | Should -Not -Throw
                 }
                 It 'Get-GitHubVariableSelectedRepository - gets 1 repository' {
                     $result = Get-GitHubVariableSelectedRepository -Owner $owner -Name $varName
