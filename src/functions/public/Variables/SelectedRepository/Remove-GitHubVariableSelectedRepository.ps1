@@ -34,7 +34,7 @@
         Justification = 'Long links'
     )]
     [OutputType([void])]
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Low')]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
@@ -68,9 +68,9 @@
     process {
         $existingSelectedRepositories = Get-GitHubVariableSelectedRepository -Owner $Owner -Name $Name -Context $Context
         Write-Host "$($existingSelectedRepositories | Format-List | Out-String)"
-        Write-Host "What to check for"
+        Write-Host 'What to check for'
         Write-Host "$($existingSelectedRepositories.DatabaseID)"
-        Write-Host "What to delete"
+        Write-Host 'What to delete'
         Write-Host "$($RepositoryID)"
         $repoIsNotSelected = $existingSelectedRepositories.DatabaseID -notcontains $RepositoryID
         if ($repoIsNotSelected) {

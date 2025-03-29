@@ -228,7 +228,7 @@ Describe 'Environments' {
                     }
                     $result | Should -Not -BeNullOrEmpty
                     $result[0] | Should -BeOfType [GitHubRepository]
-                    $result | Should -HaveCount 2
+                    $result | Should -HaveCount 3
                 }
                 It 'Remove-GitHubVariableSelectedRepository - removes a repository from the list of selected repositories' {
                     { Remove-GitHubVariableSelectedRepository -Owner $owner -Name $varName -RepositoryID $repo2.id } | Should -Not -Throw
