@@ -40,36 +40,32 @@ Describe 'Environments' {
             $variablePrefix = "$varName`_"
             $environmentName = "$testName-$os-$TokenType"
 
-            if ($Type -ne 'GitHub Actions') {
-                LogGroup "Repository - [$repoName]" {
-                    switch ($OwnerType) {
-                        'user' {
-                            Get-GitHubRepository -Owner $Owner | Where-Object { $_.name -like "$repoName*" } | Remove-GitHubRepository -Confirm:$false
-                            $repo = New-GitHubRepository -Name $repoName -AllowSquashMerge
-                        }
-                        'organization' {
-                            Get-GitHubRepository -Owner $Owner | Where-Object { $_.name -like "$repoName*" } | Remove-GitHubRepository -Confirm:$false
-                            $repo = New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
-                            $repo2 = New-GitHubRepository -Owner $owner -Name "$repoName-2" -AllowSquashMerge
-                            $repo3 = New-GitHubRepository -Owner $owner -Name "$repoName-3" -AllowSquashMerge
-
-                            LogGroup "Org variable - [$varName]" {
-                                $params = @{
-                                    Owner                = $owner
-                                    Name                 = $varName
-                                    Value                = 'organization'
-                                    Visibility           = 'selected'
-                                    SelectedRepositories = $repo.id
-                                }
-                                $result = Set-GitHubVariable @params
-                                Write-Host ($result | Select-Object * | Format-Table | Out-String)
-                            }
-                        }
-                    }
-                    Write-Host ($repo | Format-List | Out-String)
-                    Write-Host ($repo2 | Format-List | Out-String)
-                    Write-Host ($repo3 | Format-List | Out-String)
+            switch ($OwnerType) {
+                'user' {
+                    $repo = New-GitHubRepository -Name $repoName -AllowSquashMerge
                 }
+                'organization' {
+                    $repo = New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
+                    $repo2 = New-GitHubRepository -Owner $owner -Name "$repoName-2" -AllowSquashMerge
+                    $repo3 = New-GitHubRepository -Owner $owner -Name "$repoName-3" -AllowSquashMerge
+
+                    LogGroup "Org variable - [$varName]" {
+                        $params = @{
+                            Owner                = $owner
+                            Name                 = $varName
+                            Value                = 'organization'
+                            Visibility           = 'selected'
+                            SelectedRepositories = $repo.id
+                        }
+                        $result = Set-GitHubVariable @params
+                        Write-Host ($result | Select-Object * | Format-Table | Out-String)
+                    }
+                }
+            }
+            LogGroup "Repository - [$repoName]" {
+                Write-Host ($repo | Format-List | Out-String)
+                Write-Host ($repo2 | Format-List | Out-String)
+                Write-Host ($repo3 | Format-List | Out-String)
             }
         }
 
@@ -274,7 +270,7 @@ Describe 'Environments' {
             }
         }
 
-        Context 'Repository' -Skip:($Type -eq 'GitHub Actions') {
+        Context 'Repository' -Skip:($OwnerType -eq 'repository') {
             BeforeAll {
                 $scope = @{
                     Owner      = $owner
@@ -340,7 +336,7 @@ Describe 'Environments' {
             }
         }
 
-        Context 'Environment' -Skip:($Type -eq 'GitHub Actions') {
+        Context 'Environment' -Skip:($OwnerType -eq 'repository') {
             BeforeAll {
                 $scope = @{
                     Owner      = $owner
