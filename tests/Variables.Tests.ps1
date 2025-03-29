@@ -76,11 +76,11 @@ Describe 'Environments' {
         AfterAll {
             if ($Type -ne 'GitHub Actions') {
                 Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
-                Remove-GitHubRepository -Owner $owner -Name "$repoName-2" -Confirm:$false
-                Remove-GitHubRepository -Owner $owner -Name "$repoName-3" -Confirm:$false
             }
             if ($OwnerType -eq 'organization') {
                 Get-GitHubVariable -Owner $owner | Remove-GitHubVariable
+                Remove-GitHubRepository -Owner $owner -Name "$repoName-2" -Confirm:$false
+                Remove-GitHubRepository -Owner $owner -Name "$repoName-3" -Confirm:$false
             }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
         }
