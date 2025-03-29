@@ -67,7 +67,7 @@
 
     process {
         $existingSelectedRepositories = Get-GitHubVariableSelectedRepository -Owner $Owner -Name $Name
-        $repoIsSelected = $Name -in $existingSelectedRepositories.Name
+        $repoIsSelected = $existingSelectedRepositories.id -contains $RepositoryID
         if (-not $repoIsSelected) { return }
         $inputObject = @{
             Method      = 'DELETE'
