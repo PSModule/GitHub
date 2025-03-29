@@ -67,8 +67,11 @@
 
     process {
         $existingSelectedRepositories = Get-GitHubVariableSelectedRepository -Owner $Owner -Name $Name
-        $repoIsSelected = $existingSelectedRepositories.id -contains $RepositoryID
-        if (-not $repoIsSelected) { return }
+        $repoIsNotSelected = $existingSelectedRepositories.id -notcontains $RepositoryID
+        if ($repoIsNotSelected) {
+            Write-Host 'Repo is not selected, returning'
+            return
+        }
         $inputObject = @{
             Method      = 'DELETE'
             APIEndpoint = "/orgs/$Owner/actions/variables/$Name/repositories/$RepositoryID"
