@@ -42,12 +42,19 @@ Describe 'Environments' {
 
             if ($Type -ne 'GitHub Actions') {
                 LogGroup "Repository - [$repoName]" {
-                    if ($OwnerType -eq 'user') {
-                        $repo = New-GitHubRepository -Name $repoName -AllowSquashMerge
-                    } else {
-                        $repo = New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
+                    switch ($OwnerType) {
+                        'user' {
+                            $repo = New-GitHubRepository -Name $repoName -AllowSquashMerge
+                        }
+                        'organization' {
+                            $repo = New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
+                            $repo2 = New-GitHubRepository -Owner $owner -Name "$repoName-2" -AllowSquashMerge
+                            $repo3 = New-GitHubRepository -Owner $owner -Name "$repoName-3" -AllowSquashMerge
+                        }
                     }
                     Write-Host ($repo | Format-List | Out-String)
+                    Write-Host ($repo2 | Format-List | Out-String)
+                    Write-Host ($repo3 | Format-List | Out-String)
                 }
             }
 
@@ -69,6 +76,8 @@ Describe 'Environments' {
         AfterAll {
             if ($Type -ne 'GitHub Actions') {
                 Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
+                Remove-GitHubRepository -Owner $owner -Name "$repoName-2" -Confirm:$false
+                Remove-GitHubRepository -Owner $owner -Name "$repoName-3" -Confirm:$false
             }
             if ($OwnerType -eq 'organization') {
                 Get-GitHubVariable -Owner $owner | Remove-GitHubVariable
@@ -155,7 +164,7 @@ Describe 'Environments' {
 
             It 'New-GitHubVariable - should throw if creating an organization variable that exists' {
                 $name = "$variablePrefix`TestVariable2"
-                LogGroup "Variable - [$varName]" {
+                LogGroup "Variable - [$name]" {
                     $param = @{
                         Name  = $name
                         Value = 'TestValue123'
@@ -188,6 +197,65 @@ Describe 'Environments' {
                     Write-Host "$($after | Format-List | Out-String)"
                 }
                 $after.Count | Should -Be 0
+            }
+
+            Context 'SelectedRepository' {
+                It 'Get-GitHubVariableSelectedRepository - gets a list of selected repositories' {
+                    $result = Get-GitHubVariableSelectedRepository -Owner $owner -Name $varName
+                    LogGroup "SelectedRepositories - [$varName]" {
+                        Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
+                    }
+                    $result | Should -Not -BeNullOrEmpty
+                    $result[0] | Should -BeOfType [GitHubRepository]
+                    $result | Should -HaveCount 1
+                }
+                It 'Add-GitHubVariableSelectedRepository - adds a repository to the list of selected repositories' {
+                    Add-GitHubVariableSelectedRepository -Owner $owner -Name $varName -RepositoryID $repo2.id
+                    LogGroup "SelectedRepository - [$varName]" {
+                        Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
+                    }
+                }
+                It 'Add-GitHubVariableSelectedRepository - adds a repository to the list of selected repositories using pipeline' {
+                    { $repo3 | Add-GitHubVariableSelectedRepository -Owner $owner -Name $varName } | Should -Not -Throw
+                }
+                It 'Get-GitHubVariableSelectedRepository - gets 3 repositories' {
+                    $result = Get-GitHubVariableSelectedRepository -Owner $owner -Name $varName
+                    LogGroup "SelectedRepositories - [$varName]" {
+                        Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
+                    }
+                    $result | Should -Not -BeNullOrEmpty
+                    $result[0] | Should -BeOfType [GitHubRepository]
+                    $result | Should -HaveCount 3
+                }
+                It 'Remove-GitHubVariableSelectedRepository - removes a repository from the list of selected repositories' {
+                    { Remove-GitHubVariableSelectedRepository -Owner $owner -Name $varName -RepositoryID $repo2.id } | Should -Not -Throw
+                }
+                It 'Remove-GitHubVariableSelectedRepository - removes a repository from the list of selected repositories using pipeline' {
+                    { $repo3 | Remove-GitHubVariableSelectedRepository -Owner $owner -Name $varName } | Should -Not -Throw
+                }
+                It 'Get-GitHubVariableSelectedRepository - gets 1 repository' {
+                    $result = Get-GitHubVariableSelectedRepository -Owner $owner -Name $varName
+                    LogGroup "SelectedRepositories - [$varName]" {
+                        Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
+                    }
+                    $result | Should -Not -BeNullOrEmpty
+                    $result[0] | Should -BeOfType [GitHubRepository]
+                    $result | Should -HaveCount 1
+                }
+                It 'Set-GitHubVariableSelectedRepository - should set the selected repositories for the variable' {
+                    { Set-GitHubVariableSelectedRepository -Owner $owner -Name $varName -RepositoryID $repo.id, $repo2.id, $repo3.id } |
+                        Should -Not -Throw
+                }
+
+                It 'Get-GitHubVariableSelectedRepository - gets 3 repository' {
+                    $result = Get-GitHubVariableSelectedRepository -Owner $owner -Name $varName
+                    LogGroup "SelectedRepositories - [$varName]" {
+                        Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
+                    }
+                    $result | Should -Not -BeNullOrEmpty
+                    $result[0] | Should -BeOfType [GitHubRepository]
+                    $result | Should -HaveCount 3
+                }
             }
         }
 

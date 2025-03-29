@@ -11,15 +11,7 @@
         Fine-grained tokens must have 'Variables' organization permission (write) and 'Metadata' repository permission (read).
 
         .EXAMPLE
-        Add-GitHubVariableSelectedRepository -Owner 'my-org' -Name 'API_KEY' -RepositoryID '654321' -Context $GitHubContext
-
-        Output:
-        ```powershell
-        Name        : test-repo
-        Id          : 654321
-        FullName    : my-org/test-repo
-        Private     : True
-        ```
+        Add-GitHubVariableSelectedRepository -Owner 'my-org' -Name 'API_KEY' -RepositoryID '654321'
 
         Adds the repository 'test-repo' to the 'API_KEY' variable in the organization 'my-org'.
 
@@ -45,30 +37,30 @@
         [string] $Name,
 
         # The ID of the repository to add to the variable.
-        [Parameter(Mandatory)]
-        [string] $RepositoryID,
+        [Parameter(,
+            Mandatory,
+            ValueFromPipelineByPropertyName
+        )]
+        [Alias('DatabaseID')]
+        [UInt64] $RepositoryID,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter(Mandatory)]
-        [object] $Context
+        [Parameter()]
+        [object] $Context = (Get-GitHubContext)
     )
 
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 
     process {
-        $body = @{
-            repository_id = $RepositoryID
-        }
-
         $inputObject = @{
             Method      = 'PUT'
-            APIEndpoint = "/orgs/$Owner/actions/variables/$Name/repositories"
-            Body        = $body
+            APIEndpoint = "/orgs/$Owner/actions/variables/$Name/repositories/$RepositoryID"
             Context     = $Context
         }
 
