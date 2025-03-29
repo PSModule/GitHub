@@ -212,11 +212,11 @@ Describe 'Environments' {
                 It 'Add-GitHubVariableSelectedRepository - adds a repository to the list of selected repositories' {
                     { Add-GitHubVariableSelectedRepository -Owner $owner -Name $varName -RepositoryID $repo2.id } | Should -Not -Throw
                 }
-                It 'Add-GitHubVariableSelectedRepository - adds a repository to the list of selected repositories - idempotent test' {
+                It 'Add-GitHubVariableSelectedRepository - adds a repository to the list of selected repositories - idempotency test' {
                     { Add-GitHubVariableSelectedRepository -Owner $owner -Name $varName -RepositoryID $repo2.id } | Should -Not -Throw
                 }
                 It 'Add-GitHubVariableSelectedRepository - adds a repository to the list of selected repositories using pipeline' {
-                    { $repo3 | Add-GitHubVariableSelectedRepository -Owner $owner -Name $varName -Debug -Verbose } | Should -Not -Throw
+                    { $repo2 | Add-GitHubVariableSelectedRepository -Owner $owner -Name $varName -Debug -Verbose } | Should -Not -Throw
                 }
                 It 'Get-GitHubVariableSelectedRepository - gets 3 repositories' {
                     $result = Get-GitHubVariableSelectedRepository -Owner $owner -Name $varName
@@ -225,16 +225,16 @@ Describe 'Environments' {
                     }
                     $result | Should -Not -BeNullOrEmpty
                     $result[0] | Should -BeOfType [GitHubRepository]
-                    $result | Should -HaveCount 3
+                    $result | Should -HaveCount 2
                 }
                 It 'Remove-GitHubVariableSelectedRepository - removes a repository from the list of selected repositories' {
                     { Remove-GitHubVariableSelectedRepository -Owner $owner -Name $varName -RepositoryID $repo2.id } | Should -Not -Throw
                 }
-                It 'Remove-GitHubVariableSelectedRepository - removes a repository from the list of selected repositories - idempotent test' {
+                It 'Remove-GitHubVariableSelectedRepository - removes a repository from the list of selected repositories - idempotency test' {
                     { Remove-GitHubVariableSelectedRepository -Owner $owner -Name $varName -RepositoryID $repo2.id } | Should -Not -Throw
                 }
                 It 'Remove-GitHubVariableSelectedRepository - removes a repository from the list of selected repositories using pipeline' {
-                    { $repo3 | Remove-GitHubVariableSelectedRepository -Owner $owner -Name $varName -Debug -Verbose } | Should -Not -Throw
+                    { $repo2 | Remove-GitHubVariableSelectedRepository -Owner $owner -Name $varName -Debug -Verbose } | Should -Not -Throw
                 }
                 It 'Get-GitHubVariableSelectedRepository - gets 1 repository' {
                     $result = Get-GitHubVariableSelectedRepository -Owner $owner -Name $varName
@@ -249,7 +249,7 @@ Describe 'Environments' {
                     { Set-GitHubVariableSelectedRepository -Owner $owner -Name $varName -RepositoryID $repo.id, $repo2.id, $repo3.id } |
                         Should -Not -Throw
                 }
-                It 'Set-GitHubVariableSelectedRepository - should set the selected repositories for the variable - idempotent test' {
+                It 'Set-GitHubVariableSelectedRepository - should set the selected repositories for the variable - idempotency test' {
                     { Set-GitHubVariableSelectedRepository -Owner $owner -Name $varName -RepositoryID $repo.id, $repo2.id, $repo3.id } |
                         Should -Not -Throw
                 }
