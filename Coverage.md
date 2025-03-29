@@ -9,15 +9,15 @@
     </tr>
     <tr>
         <td>Covered functions</td>
-        <td>181</td>
+        <td>184</td>
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>840</td>
+        <td>837</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>17.73%</td>
+        <td>18.02%</td>
     </tr>
 </table>
 
@@ -133,8 +133,8 @@
 | `/orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}`                                                  | :x:                |                    |                    |                    | :x:                |
 | `/orgs/{org}/actions/variables`                                                                                           |                    | :white_check_mark: |                    | :white_check_mark: |                    |
 | `/orgs/{org}/actions/variables/{name}`                                                                                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
-| `/orgs/{org}/actions/variables/{name}/repositories`                                                                       |                    | :white_check_mark: |                    |                    | :x:                |
-| `/orgs/{org}/actions/variables/{name}/repositories/{repository_id}`                                                       | :x:                |                    |                    |                    | :x:                |
+| `/orgs/{org}/actions/variables/{name}/repositories`                                                                       |                    | :white_check_mark: |                    |                    | :white_check_mark: |
+| `/orgs/{org}/actions/variables/{name}/repositories/{repository_id}`                                                       | :white_check_mark: |                    |                    |                    | :white_check_mark: |
 | `/orgs/{org}/attestations/{subject_digest}`                                                                               |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/blocks`                                                                                                      |                    | :white_check_mark: |                    |                    |                    |
 | `/orgs/{org}/blocks/{username}`                                                                                           | :white_check_mark: | :white_check_mark: |                    |                    | :white_check_mark: |
