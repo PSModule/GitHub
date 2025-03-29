@@ -204,7 +204,7 @@ string
     }
     Context 'IssueParser' {
         BeforeAll {
-            $issueTestFilePath = Join-Path -Path $PSScriptRoot -ChildPath 'IssueForm.md'
+            $issueTestFilePath = Join-Path -Path $PSScriptRoot -ChildPath 'Data/IssueForm.md'
             Write-Verbose "Reading from $issueTestFilePath" -Verbose
             $content = Get-Content -Path $issueTestFilePath -Raw
             Write-Verbose ($content | Out-String) -Verbose

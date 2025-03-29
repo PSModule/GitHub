@@ -16,7 +16,7 @@
 param()
 
 BeforeAll {
-    $testPrefix = 'RepositoryTest'
+    $testName = 'RepositoryTest'
     $os = $env:RUNNER_OS
 }
 
@@ -29,31 +29,35 @@ Describe 'Template' {
             LogGroup 'Context' {
                 Write-Host ($context | Format-List | Out-String)
             }
-            $guid = [guid]::NewGuid().ToString()
-            $repoPrefix = "$testPrefix-$os"
-            $repo = "$repoPrefix-$guid"
+            # Tests for APP goes here
+            if ($AuthType -eq 'APP') {
+                It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
+                    $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
+                    LogGroup 'Context' {
+                        Write-Host ($context | Format-List | Out-String)
+                    }
+                }
+            }
+            $repoName = "$testName-$os-$TokenType"
+            if ($OwnerType -ne 'repository') {
+                Get-GitHubRepository -Owner $Owner | Where-Object { $_.name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+            }
         }
         AfterAll {
+            if ($OwnerType -ne 'repository') {
+                Get-GitHubRepository -Owner $Owner | Where-Object { $_.name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+            }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
         }
 
-        # Tests for APP goes here
-        if ($AuthType -eq 'APP') {
-            It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
-                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
-                LogGroup 'Context' {
-                    Write-Host ($context | Format-List | Out-String)
-                }
-            }
-        }
 
         if ($Type -ne 'GitHub Actions') {
             # Tests for IAT UAT and PAT goes here
             It 'New-GitHubRepository - Creates a new repository' {
                 if ($OwnerType -eq 'user') {
-                    New-GitHubRepository -Name $repo -AllowSquashMerge
+                    New-GitHubRepository -Name $repoName -AllowSquashMerge
                 } else {
-                    New-GitHubRepository -Owner $Owner -Name $repo -AllowSquashMerge
+                    New-GitHubRepository -Owner $Owner -Name $repoName -AllowSquashMerge
                 }
             }
             if ($OwnerType -eq 'user') {
@@ -101,7 +105,7 @@ Describe 'Template' {
                 $repos | Should -Not -BeNullOrEmpty
             }
             It 'Remove-GitHubRepository - Removes all repositories' {
-                $repos = Get-GitHubRepository -Owner $Owner -Name $repo
+                $repos = Get-GitHubRepository -Owner $Owner -Name $repoName
                 LogGroup 'Repositories' {
                     Write-Host ($repos | Format-List | Out-String)
                 }

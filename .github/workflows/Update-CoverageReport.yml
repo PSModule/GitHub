@@ -22,4 +22,4 @@ jobs:
       - name: Update-CoverageReport
         uses: PSModule/GitHub-Script@v1
         with:
-          Script: . '.\scripts\Update-CoverageReport.ps1'
+          Script: scripts/Update-CoverageReport.ps1
