@@ -1,6 +1,7 @@
 function Get-GitHubArtifactFromWorkflowRun {
     <#
-
+        $response = Invoke-GitHubAPI -ApiEndpoint /repos/PSModule/GitHub/actions/runs/14158268722/artifacts
+        Get-GitHubArtifactFromWorkflowRun -Owner PSModule -Repository GitHub -RunID 14158268722 -Context (Get-GitHubContext)
     #>
     [OutputType([GitHubArtifact[]])]
     [CmdletBinding()]
