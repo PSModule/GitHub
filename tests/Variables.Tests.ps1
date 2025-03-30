@@ -37,8 +37,8 @@ Describe 'Environments' {
                 }
             }
             $repoName = "$testName-$os-$TokenType-$guid"
-            $variablePrefix = "$testName`_$os`_$TokenType" -replace '-', '_'
-            $varName = "$variablePrefix`_$guid" -replace '-', '_'
+            $variablePrefix = ("$testName`_$os`_$TokenType" -replace '-', '_').ToUpper()
+            $varName = ("$variablePrefix`_$guid" -replace '-', '_').ToUpper()
             $environmentName = "$testName-$os-$TokenType-$guid"
 
             switch ($OwnerType) {
@@ -207,8 +207,8 @@ Describe 'Environments' {
                     }
                 }
                 It 'Get-GitHubVariableSelectedRepository - gets a list of selected repositories' {
-                    $result = Get-GitHubVariableSelectedRepository -Owner $owner -Name $varName
                     LogGroup "SelectedRepositories - [$varName]" {
+                        $result = Get-GitHubVariableSelectedRepository -Owner $owner -Name $varName
                         Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
                     }
                     $result | Should -Not -BeNullOrEmpty
@@ -228,8 +228,8 @@ Describe 'Environments' {
                     { $repo3 | Add-GitHubVariableSelectedRepository -Owner $owner -Name $varName } | Should -Not -Throw
                 }
                 It 'Get-GitHubVariableSelectedRepository - gets 3 repositories' {
-                    $result = Get-GitHubVariableSelectedRepository -Owner $owner -Name $varName
                     LogGroup "SelectedRepositories - [$varName]" {
+                        $result = Get-GitHubVariableSelectedRepository -Owner $owner -Name $varName
                         Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
                     }
                     $result | Should -Not -BeNullOrEmpty
