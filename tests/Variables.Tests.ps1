@@ -38,7 +38,7 @@ Describe 'Environments' {
             }
             $repoName = "$testName-$os-$TokenType-$guid"
             $variablePrefix = "$testName`_$os`_$TokenType`_"
-            $varName = "$variablePrefix`_$guid"
+            $varName = "$variablePrefix`_$guid" -replace '-', '_'
             $environmentName = "$testName-$os-$TokenType-$guid"
 
             switch ($OwnerType) {
