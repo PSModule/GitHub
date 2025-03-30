@@ -12,7 +12,7 @@
         Cancels the workflow run with the ID 123456789 from the 'Hello-World' repository owned by 'octocat'
 
         .NOTES
-        [Cancel a workflow run](https://docs.github.com/en/rest/actions/workflow-runs#cancel-a-workflow-run)
+        [Cancel a workflow run](https://docs.github.com/rest/actions/workflow-runs#cancel-a-workflow-run)
     #>
     [CmdletBinding(SupportsShouldProcess)]
     [alias('Cancel-GitHubWorkflowRun')]

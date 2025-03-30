@@ -12,7 +12,7 @@
         Gets the currently authenticated user.
 
         .NOTES
-        [GraphQL API - Queries - Viewer](https://docs.github.com/en/graphql/reference/queries#viewer)
+        [GraphQL API - Queries - Viewer](https://docs.github.com/graphql/reference/queries#viewer)
     #>
     [CmdletBinding()]
     param(

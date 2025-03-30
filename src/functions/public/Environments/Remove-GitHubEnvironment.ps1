@@ -16,7 +16,7 @@ filter Remove-GitHubEnvironment {
         https://psmodule.io/GitHub/Functions/Environments/Remove-GitHubEnvironment/
 
         .LINK
-        [Delete environments](https://docs.github.com/en/rest/deployments/environments?#delete-an-environment)
+        [Delete environments](https://docs.github.com/rest/deployments/environments?#delete-an-environment)
     #>
     [OutputType([void])]
     [CmdletBinding(SupportsShouldProcess)]

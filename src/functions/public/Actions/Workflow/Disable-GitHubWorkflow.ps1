@@ -1,7 +1,7 @@
 ﻿filter Disable-GitHubWorkflow {
     <#
         .NOTES
-        [Disable a workflow](https://docs.github.com/en/rest/actions/workflows#disable-a-workflow)
+        [Disable a workflow](https://docs.github.com/rest/actions/workflows#disable-a-workflow)
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param(

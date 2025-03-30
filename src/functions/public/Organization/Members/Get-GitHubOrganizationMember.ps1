@@ -8,7 +8,7 @@
         If the authenticated user is also a member of this organization then both concealed and public members will be returned.
 
         .NOTES
-        [List organization members](https://docs.github.com/en/rest/orgs/members?apiVersion=2022-11-28#list-organization-members)
+        [List organization members](https://docs.github.com/rest/orgs/members#list-organization-members)
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]
