@@ -5,9 +5,9 @@ Test:
     Skip: true
   Module:
     MacOS:
-      Skip: true
+      Skip: false
     Windows:
-      Skip: true
+      Skip: false
   CodeCoverage:
     Skip: true
     PercentTarget: 50
