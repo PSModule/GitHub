@@ -159,7 +159,6 @@ filter Invoke-GitHubAPI {
             Token             = $Token
             ContentType       = $ContentType
             InFile            = $UploadFilePath
-            OutFile           = $DownloadFilePath
             HttpVersion       = [string]$HttpVersion
             MaximumRetryCount = $RetryCount
             RetryIntervalSec  = $RetryInterval
@@ -253,6 +252,15 @@ filter Invoke-GitHubAPI {
                         [byte[]]$byteArray = $response.Content
                         $results = [System.Text.Encoding]::UTF8.GetString($byteArray)
                     }
+                    'zip' {
+                        if (-not $DownloadFilePath) {
+                            Write-Warning 'Specify -DownloadFilePath parameter to download the ZIP file.'
+                            $results = $response
+                        } else {
+                            [System.IO.File]::WriteAllBytes($DownloadFilePath, $response.Content)
+                            $results = Get-Item -Path $DownloadFilePath
+                        }
+                    }
                     default {
                         if (-not $response.Content) {
                             $results = $null
@@ -264,6 +272,7 @@ filter Invoke-GitHubAPI {
                         $results = [System.Text.Encoding]::UTF8.GetString($byteArray)
                     }
                 }
+
                 [pscustomobject]@{
                     Request           = $APICall
                     Response          = $results
