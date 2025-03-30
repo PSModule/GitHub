@@ -51,6 +51,17 @@ Describe 'Environments' {
                     $repo = New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
                     $repo2 = New-GitHubRepository -Owner $owner -Name "$repoName-2" -AllowSquashMerge
                     $repo3 = New-GitHubRepository -Owner $owner -Name "$repoName-3" -AllowSquashMerge
+                    LogGroup "Org variable - [$varName]" {
+                        $params = @{
+                            Owner                = $owner
+                            Name                 = $varName
+                            Value                = 'organization'
+                            Visibility           = 'selected'
+                            SelectedRepositories = $repo.id
+                        }
+                        $result = Set-GitHubVariable @params
+                        Write-Host ($result | Select-Object * | Format-Table | Out-String)
+                    }
                 }
             }
             LogGroup "Repository - [$repoName]" {
@@ -174,34 +185,22 @@ Describe 'Environments' {
             }
 
             It 'Remove-GitHubVariable' {
+                $testVarName = "$variablePrefix`TestVariable*"
                 LogGroup 'Before remove' {
-                    $before = Get-GitHubVariable @scope -Name "$variablePrefix*"
+                    $before = Get-GitHubVariable @scope -Name $testVarName
                     Write-Host "$($before | Format-List | Out-String)"
                 }
                 LogGroup 'Remove' {
                     $before | Remove-GitHubVariable
                 }
                 LogGroup 'After remove' {
-                    $after = Get-GitHubVariable @scope -Name "$variablePrefix*"
+                    $after = Get-GitHubVariable @scope -Name $testVarName
                     Write-Host "$($after | Format-List | Out-String)"
                 }
                 $after.Count | Should -Be 0
             }
 
             Context 'SelectedRepository' {
-                BeforeAll {
-                    LogGroup "Org variable - [$varName]" {
-                        $params = @{
-                            Owner                = $owner
-                            Name                 = $varName
-                            Value                = 'organization'
-                            Visibility           = 'selected'
-                            SelectedRepositories = $repo.id
-                        }
-                        $result = Set-GitHubVariable @params
-                        Write-Host ($result | Select-Object * | Format-Table | Out-String)
-                    }
-                }
                 BeforeEach {
                     LogGroup 'Sleep 15 seconds' {
                         Start-Sleep -Seconds 15
