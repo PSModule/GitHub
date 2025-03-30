@@ -15,6 +15,111 @@
 [CmdletBinding()]
 param()
 
+Describe 'Auth' {
+    $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
+
+    Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
+        AfterAll {
+            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+        }
+
+        It 'Connect-GitHubAccount - Connects using the provided credentials' {
+            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
+            LogGroup 'Context' {
+                Write-Host ($context | Format-List | Out-String)
+            }
+            $context | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Connect-GitHubAccount - Connects using the provided credentials - Double' {
+            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
+            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
+            LogGroup 'Context' {
+                Write-Host ($context | Format-List | Out-String)
+            }
+            $context | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Connect-GitHubAccount - Connects using the provided credentials - Relog' {
+            Disconnect-GitHub -Silent
+            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
+            LogGroup 'Context' {
+                Write-Host ($context | Format-List | Out-String)
+            }
+            $context | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Switch-GitHubContext - Sets the default context' {
+            $context = Get-GitHubContext
+            Switch-GitHubContext -Context $context
+            $context = Get-GitHubContext
+            $context | Should -Not -BeNullOrEmpty
+        }
+
+        # Tests for APP goes here
+        if ($AuthType -eq 'APP') {
+            It 'Connect-GitHubAccount - Connects using the provided credentials + AutoloadInstallations' {
+                $context = Connect-GitHubAccount @connectParams -PassThru -Silent -AutoloadInstallations
+                LogGroup 'Context' {
+                    Write-Host ($context | Format-List | Out-String)
+                }
+                $context | Should -Not -BeNullOrEmpty
+            }
+
+            It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
+                $contexts = Connect-GitHubApp -PassThru -Silent
+                LogGroup 'Contexts' {
+                    Write-Host ($contexts | Format-List | Out-String)
+                }
+                $contexts | Should -Not -BeNullOrEmpty
+            }
+
+            It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
+                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
+                LogGroup 'Context' {
+                    Write-Host ($context | Format-List | Out-String)
+                }
+                $context | Should -Not -BeNullOrEmpty
+            }
+        }
+
+        # Tests for runners goes here
+        if ($Type -eq 'GitHub Actions') {}
+
+        # Tests for IAT UAT and PAT goes here
+        It 'Connect-GitHubAccount - Connects to GitHub CLI on runners' {
+            [string]::IsNullOrEmpty($(gh auth token)) | Should -Be $false
+        }
+        It 'Get-GitHubViewer - Gets the logged in context' {
+            $viewer = Get-GitHubViewer
+            LogGroup 'Viewer' {
+                Write-Host ($viewer | Format-List | Out-String)
+            }
+            $viewer | Should -Not -BeNullOrEmpty
+        }
+
+        It 'GetGitHubContext - Gets the default context' {
+            $context = Get-GitHubContext
+            LogGroup 'Default context' {
+                Write-Host ($viewer | Format-List | Out-String)
+            }
+        }
+
+        It 'GetGitHubContext - List all contexts' {
+            $contexts = Get-GitHubContext -ListAvailable
+            LogGroup 'Contexts' {
+                Write-Host ($contexts | Format-List | Out-String)
+            }
+            $contexts.count | Should -BeGreaterOrEqual 1
+        }
+
+        It 'Disconnect-GitHubAccount - Disconnects all contexts' {
+            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+            (Get-GitHubContext -ListAvailable).count | Should -Be 0
+        }
+    }
+}
+
 Describe 'GitHub' {
     Context 'Config' {
         It 'Get-GitHubConfig - Gets the module configuration' {
@@ -204,7 +309,7 @@ string
     }
     Context 'IssueParser' {
         BeforeAll {
-            $issueTestFilePath = Join-Path -Path $PSScriptRoot -ChildPath 'IssueForm.md'
+            $issueTestFilePath = Join-Path -Path $PSScriptRoot -ChildPath 'Data/IssueForm.md'
             Write-Verbose "Reading from $issueTestFilePath" -Verbose
             $content = Get-Content -Path $issueTestFilePath -Raw
             Write-Verbose ($content | Out-String) -Verbose
@@ -246,6 +351,379 @@ line
             $dataHashtable['OS'].Windows | Should -BeTrue
             $dataHashtable['OS'].Linux | Should -BeTrue
             $dataHashtable['OS'].Mac | Should -BeFalse
+        }
+    }
+}
+
+Describe 'Apps' {
+    $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
+
+    Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
+        BeforeAll {
+            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
+            LogGroup 'Context' {
+                Write-Host ($context | Format-List | Out-String)
+            }
+        }
+
+        AfterAll {
+            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+        }
+
+        # Tests for APP goes here
+        if ($AuthType -eq 'APP') {
+            Context 'GitHub Apps' {
+                It 'Get-GitHubApp - Can get app details' {
+                    $app = Get-GitHubApp
+                    LogGroup 'App' {
+                        Write-Host ($app | Format-Table | Out-String)
+                    }
+                    $app | Should -Not -BeNullOrEmpty
+                }
+
+                It 'Get-GitHubAppJSONWebToken - Can get a JWT for the app' {
+                    $jwt = Get-GitHubAppJSONWebToken @connectParams
+                    LogGroup 'JWT' {
+                        Write-Host ($jwt | Format-Table | Out-String)
+                    }
+                    $jwt | Should -Not -BeNullOrEmpty
+                }
+
+                It 'Get-GitHubAppInstallation - Can get app installations' {
+                    $installations = Get-GitHubAppInstallation
+                    LogGroup 'Installations' {
+                        Write-Host ($installations | Format-Table | Out-String)
+                    }
+                    $installations | Should -Not -BeNullOrEmpty
+                }
+                It 'New-GitHubAppInstallationAccessToken - Can get app installation access tokens' {
+                    $installations = Get-GitHubAppInstallation
+                    $installations | ForEach-Object {
+                        $token = New-GitHubAppInstallationAccessToken -InstallationID $_.id
+                        LogGroup 'Token' {
+                            Write-Host ($token | Format-Table | Out-String)
+                        }
+                        $token | Should -Not -BeNullOrEmpty
+                    }
+                }
+            }
+
+            Context 'Webhooks' {
+                It 'Get-GitHubAppWebhookConfiguration - Can get the webhook configuration' {
+                    $webhookConfig = Get-GitHubAppWebhookConfiguration
+                    LogGroup 'Webhook config' {
+                        Write-Host ($webhookConfig | Format-Table | Out-String)
+                    }
+                    $webhookConfig | Should -Not -BeNullOrEmpty
+                }
+
+                It 'Update-GitHubAppWebhookConfiguration - Can update the webhook configuration' {
+                    { Update-GitHubAppWebhookConfiguration -ContentType 'form' } | Should -Not -Throw
+                    $webhookConfig = Get-GitHubAppWebhookConfiguration
+                    LogGroup 'Webhook config - form' {
+                        Write-Host ($webhookConfig | Format-Table | Out-String)
+                    }
+                    { Update-GitHubAppWebhookConfiguration -ContentType 'json' } | Should -Not -Throw
+                    $webhookConfig = Get-GitHubAppWebhookConfiguration
+                    LogGroup 'Webhook config - json' {
+                        Write-Host ($webhookConfig | Format-Table | Out-String)
+                    }
+                }
+
+                It 'Get-GitHubAppWebhookDelivery - Can get webhook deliveries' {
+                    $deliveries = Get-GitHubAppWebhookDelivery
+                    LogGroup 'Deliveries' {
+                        Write-Host ($deliveries | Format-Table | Out-String)
+                    }
+                    $deliveries | Should -Not -BeNullOrEmpty
+                }
+
+                It 'Get-GitHubAppWebhookDelivery - Can redeliver a webhook delivery' {
+                    $deliveries = Get-GitHubAppWebhookDelivery | Select-Object -First 1
+                    LogGroup 'Delivery - redeliver' {
+                        Write-Host ($deliveries | Format-Table | Out-String)
+                    }
+                    { Invoke-GitHubAppWebhookReDelivery -ID $deliveries.id } | Should -Not -Throw
+                    LogGroup 'Delivery - redeliver' {
+                        Write-Host ($deliveries | Format-Table | Out-String)
+                    }
+                }
+            }
+            It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
+                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
+                LogGroup 'Context' {
+                    Write-Host ($context | Format-List | Out-String)
+                }
+            }
+        }
+
+        # Tests for runners goes here
+        if ($Type -eq 'GitHub Actions') {}
+
+        # Tests for IAT UAT and PAT goes here
+    }
+}
+
+Describe 'API' {
+    $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
+
+    Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
+        BeforeAll {
+            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
+            LogGroup 'Context' {
+                Write-Host ($context | Format-List | Out-String)
+            }
+            $context | Should -Not -BeNullOrEmpty
+        }
+        AfterAll {
+            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+        }
+
+        # Tests for APP goes here
+        if ($AuthType -eq 'APP') {
+            It 'Invoke-GitHubAPI - Gets the app details' {
+                {
+                    $app = Invoke-GitHubAPI -ApiEndpoint '/app'
+                    LogGroup 'App' {
+                        Write-Host ($app | Format-Table | Out-String)
+                    }
+                } | Should -Not -Throw
+            }
+
+            It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
+                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
+                LogGroup 'Context' {
+                    Write-Host ($context | Format-List | Out-String)
+                }
+                $context | Should -Not -BeNullOrEmpty
+            }
+        }
+
+        # Tests for runners goes here
+        if ($Type -eq 'GitHub Actions') {}
+
+        # Tests for IAT UAT and PAT goes here
+        Context 'API' {
+            It 'Invoke-GitHubAPI - Gets the rate limits directly using APIEndpoint' {
+                {
+                    $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit'
+                    LogGroup 'RateLimit' {
+                        Write-Host ($rateLimit | Format-Table | Out-String)
+                    }
+                } | Should -Not -Throw
+            }
+
+            It 'Invoke-GitHubAPI - Gets the rate limits directly using Uri' {
+                {
+                    $rateLimit = Invoke-GitHubAPI -Uri ($context.ApiBaseUri + '/rate_limit')
+                    LogGroup 'RateLimit' {
+                        Write-Host ($rateLimit | Format-Table | Out-String)
+                    }
+                } | Should -Not -Throw
+            }
+
+            It 'Invoke-GitHubGraphQLQuery - Gets the viewer' {
+                {
+                    $viewer = Invoke-GitHubGraphQLQuery -Query 'query { viewer { login } }'
+                    LogGroup 'Viewer' {
+                        Write-Host ($viewer | Format-Table | Out-String)
+                    }
+                } | Should -Not -Throw
+            }
+        }
+
+        Context 'Meta' {
+            It 'Get-GitHubRoot - Gets the GitHub API Root' {
+                $root = Get-GitHubRoot
+                LogGroup 'Root' {
+                    Write-Host ($root | Format-Table | Out-String)
+                }
+                $root | Should -Not -BeNullOrEmpty
+            }
+            It 'Get-GitHubApiVersion - Gets all API versions' {
+                $apiVersion = Get-GitHubApiVersion
+                LogGroup 'ApiVersion' {
+                    Write-Host ($apiVersion | Format-Table | Out-String)
+                }
+                $apiVersion | Should -Not -BeNullOrEmpty
+            }
+            It 'Get-GitHubMeta - Gets GitHub meta information' {
+                $meta = Get-GitHubMeta
+                LogGroup 'Meta' {
+                    Write-Host ($meta | Format-Table | Out-String)
+                }
+                $meta | Should -Not -BeNullOrEmpty
+            }
+            It 'Get-GitHubOctocat - Gets the Octocat' {
+                $octocat = Get-GitHubOctocat
+                LogGroup 'Octocat' {
+                    Write-Host ($octocat | Format-Table | Out-String)
+                }
+                $octocat | Should -Not -BeNullOrEmpty
+            }
+            It 'Get-GitHubZen - Gets the Zen of GitHub' {
+                $zen = Get-GitHubZen
+                LogGroup 'Zen' {
+                    Write-Host ($zen | Format-Table | Out-String)
+                }
+                $zen | Should -Not -BeNullOrEmpty
+            }
+        }
+
+        Context 'Rate-Limit' {
+            It 'Get-GitHubRateLimit - Gets the rate limit status for the authenticated user' {
+                $rateLimit = Get-GitHubRateLimit
+                LogGroup 'RateLimit' {
+                    Write-Host ($rateLimit | Format-Table | Out-String)
+                }
+                $rateLimit | Should -Not -BeNullOrEmpty
+            }
+        }
+
+        Context 'License' {
+            It 'Get-GitHubLicense - Gets a list of all popular license templates' {
+                $licenseList = Get-GitHubLicense
+                LogGroup 'Licenses' {
+                    Write-Host ($licenseList | Format-Table | Out-String)
+                }
+                $licenseList | Should -Not -BeNullOrEmpty
+            }
+            It 'Get-GitHubLicense - Gets a spesific license' {
+                $mitLicense = Get-GitHubLicense -Name 'mit'
+                LogGroup 'MIT License' {
+                    Write-Host ($mitLicense | Format-Table | Out-String)
+                }
+                $mitLicense | Should -Not -BeNullOrEmpty
+            }
+            It 'Get-GitHubLicense - Gets a license from a repository' {
+                $githubLicense = Get-GitHubLicense -Owner 'PSModule' -Repository 'GitHub'
+                LogGroup 'GitHub License' {
+                    Write-Host ($githubLicense | Format-Table | Out-String)
+                }
+                $githubLicense | Should -Not -BeNullOrEmpty
+            }
+        }
+
+        Context 'GitIgnore' {
+            It 'Get-GitHubGitignore - Gets a list of all gitignore templates names' {
+                $gitIgnoreList = Get-GitHubGitignore
+                LogGroup 'GitIgnoreList' {
+                    Write-Host ($gitIgnoreList | Format-Table | Out-String)
+                }
+                $gitIgnoreList | Should -Not -BeNullOrEmpty
+            }
+            It 'Get-GitHubGitignore - Gets a gitignore template' {
+                $vsGitIgnore = Get-GitHubGitignore -Name 'VisualStudio'
+                LogGroup 'Visual Studio GitIgnore' {
+                    Write-Host ($vsGitIgnore | Format-Table | Out-String)
+                }
+                $vsGitIgnore | Should -Not -BeNullOrEmpty
+            }
+        }
+
+        Context 'Markdown' {
+            It 'Get-GitHubMarkdown - Gets the rendered markdown for provided text' {
+                $markdown = Get-GitHubMarkdown -Text 'Hello, World!'
+                LogGroup 'Markdown' {
+                    Write-Host ($markdown | Format-Table | Out-String)
+                }
+                $markdown | Should -Not -BeNullOrEmpty
+            }
+            It 'Get-GitHubMarkdown - Gets the rendered markdown for provided text using GitHub Formated Markdown' {
+                $gfmMarkdown = Get-GitHubMarkdown -Text 'Hello, World!' -Mode gfm
+                LogGroup 'GFM Markdown' {
+                    Write-Host ($gfmMarkdown | Format-Table | Out-String)
+                }
+                $gfmMarkdown | Should -Not -BeNullOrEmpty
+            }
+            It 'Get-GitHubMarkdownRaw - Gets the raw rendered markdown for provided text' {
+                $rawMarkdown = Get-GitHubMarkdownRaw -Text 'Hello, World!'
+                LogGroup 'Raw Markdown' {
+                    Write-Host ($rawMarkdown | Format-Table | Out-String)
+                }
+                $rawMarkdown | Should -Not -BeNullOrEmpty
+            }
+        }
+
+        Context 'Git' {
+            It "Get-GitHubGitConfig gets the 'local' (default) Git configuration" {
+                $gitConfig = Get-GitHubGitConfig
+                LogGroup 'GitConfig' {
+                    Write-Host ($gitConfig | Format-List | Out-String)
+                }
+                $gitConfig | Should -Not -BeNullOrEmpty
+            }
+            It "Get-GitHubGitConfig gets the 'global' Git configuration" {
+                git config --global advice.pushfetchfirst false
+                $gitConfig = Get-GitHubGitConfig -Scope 'global'
+                LogGroup 'GitConfig - Global' {
+                    Write-Host ($gitConfig | Format-List | Out-String)
+                }
+                $gitConfig | Should -Not -BeNullOrEmpty
+            }
+            It "Get-GitHubGitConfig gets the 'system' Git configuration" {
+                $gitConfig = Get-GitHubGitConfig -Scope 'system'
+                LogGroup 'GitConfig - System' {
+                    Write-Host ($gitConfig | Format-List | Out-String)
+                }
+                $gitConfig | Should -Not -BeNullOrEmpty
+            }
+            It 'Set-GitHubGitConfig sets the Git configuration' {
+                { Set-GitHubGitConfig } | Should -Not -Throw
+                $gitConfig = Get-GitHubGitConfig -Scope 'global'
+                LogGroup 'GitConfig - Global' {
+                    Write-Host ($gitConfig | Format-List | Out-String)
+                }
+                $gitConfig | Should -Not -BeNullOrEmpty
+                $gitConfig.'user.name' | Should -Not -BeNullOrEmpty
+                $gitConfig.'user.email' | Should -Not -BeNullOrEmpty
+            }
+        }
+    }
+}
+
+Describe 'Emojis' {
+    $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
+
+    Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
+        BeforeAll {
+            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
+            LogGroup 'Context' {
+                Write-Host ($context | Format-List | Out-String)
+            }
+        }
+        AfterAll {
+            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+        }
+
+        # Tests for APP goes here
+        if ($AuthType -eq 'APP') {
+            It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
+                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
+                LogGroup 'Context' {
+                    Write-Host ($context | Format-List | Out-String)
+                }
+            }
+        }
+
+        # Tests for runners goes here
+        if ($Type -eq 'GitHub Actions') {}
+
+        # Tests for IAT UAT and PAT goes here
+        It 'Get-GitHubEmoji - Gets a list of all emojis' {
+            $emojis = Get-GitHubEmoji
+            LogGroup 'emojis' {
+                Write-Host ($emojis | Format-Table | Out-String)
+            }
+            $emojis | Should -Not -BeNullOrEmpty
+        }
+        It 'Get-GitHubEmoji - Downloads all emojis' {
+            Get-GitHubEmoji -Path $Home
+            LogGroup 'emojis' {
+                $emojis = Get-ChildItem -Path $Home -File
+                Write-Host ($emojis | Format-Table | Out-String)
+            }
+            $emojis | Should -Not -BeNullOrEmpty
         }
     }
 }

@@ -23,7 +23,7 @@
         visibility set to 'closed', notifications enabled, permission set to 'pull', and the parent team ID set to 123456.
 
         .NOTES
-        [Update a team](https://docs.github.com/en/rest/teams/teams?apiVersion=2022-11-28#update-a-team)
+        [Update a team](https://docs.github.com/rest/teams/teams#update-a-team)
     #>
     [OutputType([GitHubTeam])]
     [CmdletBinding(SupportsShouldProcess)]
@@ -92,8 +92,9 @@
             name                 = $NewName
             description          = $Description
             privacy              = $PSBoundParameters.ContainsKey('Visible') ? ($Visible ? 'closed' : 'secret') : $null
-            notification_setting = $PSBoundParameters.ContainsKey('Notifications') ?
-                    ($Notifications ? 'notifications_enabled' : 'notifications_disabled') : $null
+            notification_setting = $PSBoundParameters.ContainsKey('Notifications') ? (
+                $Notifications ? 'notifications_enabled' : 'notifications_disabled'
+            ) : $null
             permission           = $Permission
             parent_team_id       = $ParentTeamID -eq 0 ? $null : $ParentTeamID
         }
