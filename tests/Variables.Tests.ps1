@@ -51,18 +51,6 @@ Describe 'Environments' {
                     $repo = New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
                     $repo2 = New-GitHubRepository -Owner $owner -Name "$repoName-2" -AllowSquashMerge
                     $repo3 = New-GitHubRepository -Owner $owner -Name "$repoName-3" -AllowSquashMerge
-
-                    LogGroup "Org variable - [$varName]" {
-                        $params = @{
-                            Owner                = $owner
-                            Name                 = $varName
-                            Value                = 'organization'
-                            Visibility           = 'selected'
-                            SelectedRepositories = $repo.id
-                        }
-                        $result = Set-GitHubVariable @params
-                        Write-Host ($result | Select-Object * | Format-Table | Out-String)
-                    }
                 }
             }
             LogGroup "Repository - [$repoName]" {
@@ -201,6 +189,19 @@ Describe 'Environments' {
             }
 
             Context 'SelectedRepository' {
+                BeforeAll {
+                    LogGroup "Org variable - [$varName]" {
+                        $params = @{
+                            Owner                = $owner
+                            Name                 = $varName
+                            Value                = 'organization'
+                            Visibility           = 'selected'
+                            SelectedRepositories = $repo.id
+                        }
+                        $result = Set-GitHubVariable @params
+                        Write-Host ($result | Select-Object * | Format-Table | Out-String)
+                    }
+                }
                 BeforeEach {
                     LogGroup 'Sleep 15 seconds' {
                         Start-Sleep -Seconds 15
