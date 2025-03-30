@@ -37,9 +37,9 @@ Describe 'Environments' {
                 }
             }
             $repoName = "$testName-$os-$TokenType-$guid"
-            $varName = "$testName`_$os`_$TokenType"
-            $variablePrefix = "$varName`_"
-            $environmentName = "$testName-$os-$TokenType"
+            $variablePrefix = "$testName`_$os`_$TokenType`_"
+            $varName = "$variablePrefix`_$guid"
+            $environmentName = "$testName-$os-$TokenType-$guid"
 
             switch ($OwnerType) {
                 'user' {
