@@ -9,15 +9,15 @@
     </tr>
     <tr>
         <td>Covered functions</td>
-        <td>184</td>
+        <td>186</td>
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>837</td>
+        <td>835</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>18.02%</td>
+        <td>18.22%</td>
     </tr>
 </table>
 
@@ -310,10 +310,10 @@
 | `/repos/{owner}/{repo}/actions/runners/{runner_id}/labels`                                                                | :x:                | :x:                |                    | :x:                | :x:                |
 | `/repos/{owner}/{repo}/actions/runners/{runner_id}/labels/{name}`                                                         | :x:                |                    |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/runs`                                                                                      |                    | :white_check_mark: |                    |                    |                    |
-| `/repos/{owner}/{repo}/actions/runs/{run_id}`                                                                             | :x:                | :x:                |                    |                    |                    |
+| `/repos/{owner}/{repo}/actions/runs/{run_id}`                                                                             | :x:                | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/runs/{run_id}/approvals`                                                                   |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/runs/{run_id}/approve`                                                                     |                    |                    |                    | :x:                |                    |
-| `/repos/{owner}/{repo}/actions/runs/{run_id}/artifacts`                                                                   |                    | :x:                |                    |                    |                    |
+| `/repos/{owner}/{repo}/actions/runs/{run_id}/artifacts`                                                                   |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}`                                                   |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/jobs`                                              |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/logs`                                              |                    | :x:                |                    |                    |                    |
