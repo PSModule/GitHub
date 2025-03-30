@@ -9,15 +9,15 @@
     </tr>
     <tr>
         <td>Covered functions</td>
-        <td>186</td>
+        <td>189</td>
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>835</td>
+        <td>832</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>18.22%</td>
+        <td>18.51%</td>
     </tr>
 </table>
 
@@ -285,9 +285,9 @@
 | `/projects/{project_id}/columns`                                                                                          |                    | :x:                |                    | :x:                |                    |
 | `/rate_limit`                                                                                                             |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}`                                                                                                   | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
-| `/repos/{owner}/{repo}/actions/artifacts`                                                                                 |                    | :x:                |                    |                    |                    |
-| `/repos/{owner}/{repo}/actions/artifacts/{artifact_id}`                                                                   | :x:                | :x:                |                    |                    |                    |
-| `/repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}`                                                  |                    | :x:                |                    |                    |                    |
+| `/repos/{owner}/{repo}/actions/artifacts`                                                                                 |                    | :white_check_mark: |                    |                    |                    |
+| `/repos/{owner}/{repo}/actions/artifacts/{artifact_id}`                                                                   | :x:                | :white_check_mark: |                    |                    |                    |
+| `/repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}`                                                  |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/cache/usage`                                                                               |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/caches`                                                                                    | :x:                | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/caches/{cache_id}`                                                                         | :x:                |                    |                    |                    |                    |
