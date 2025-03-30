@@ -157,7 +157,7 @@ Describe 'Environments' {
                     Write-Host ($result | Select-Object * | Format-List | Out-String)
                 }
                 $result | Should -Not -BeNullOrEmpty
-                # $result | Should -BeOfType [GitHubVariable]
+                $result | Should -BeOfType [GitHubVariable]
                 $result.Name | Should -Be $name
                 $result.Value | Should -Be 'TestValue123'
                 $result.Visibility | Should -Be 'private'
