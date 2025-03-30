@@ -37,8 +37,8 @@ Describe 'Environments' {
                 }
             }
             $repoName = "$testName-$os-$TokenType-$guid"
-            $variablePrefix = "$testName`_$os`_$TokenType`_"
-            $varName = "$variablePrefix`_$guid" -replace '-', '_'
+            $variablePrefix = "$testName`_$os`_$TokenType" -replace '-', '_'
+            $varName = "$variablePrefix-$guid" -replace '-', '_'
             $environmentName = "$testName-$os-$TokenType-$guid"
 
             switch ($OwnerType) {
@@ -202,7 +202,7 @@ Describe 'Environments' {
 
             Context 'SelectedRepository' {
                 BeforeEach {
-                    LogGroup "Sleep 10 seconds" {
+                    LogGroup 'Sleep 15 seconds' {
                         Start-Sleep -Seconds 15
                     }
                 }
