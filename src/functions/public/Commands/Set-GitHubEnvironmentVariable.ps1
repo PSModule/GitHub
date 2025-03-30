@@ -10,7 +10,7 @@
         Set-GitHubEnv -Name 'MyVariable' -Value 'MyValue'
 
         .NOTES
-        [Setting an environment variable](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions#setting-an-environment-variable)
+        [Setting an environment variable](https://docs.github.com/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions#setting-an-environment-variable)
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSAvoidLongLines', '', Scope = 'Function',

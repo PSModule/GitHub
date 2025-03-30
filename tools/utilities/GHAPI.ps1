@@ -1,9 +1,9 @@
 ﻿# API Authorization
-# https://docs.github.com/en/rest/overview/other-authentication-methods
+# https://docs.github.com/rest/overview/other-authentication-methods
 
 
-# https://docs.github.com/en/rest/overview/resources-in-the-rest-api
-# https://docs.github.com/en/rest/reference
+# https://docs.github.com/rest/overview/resources-in-the-rest-api
+# https://docs.github.com/rest/reference
 
 $GHOwner = 'Org'
 $GHRepo = 'RepoA'
@@ -16,7 +16,7 @@ Function Get-GHActionRun {
     param()
 
     # API Reference
-    # https://docs.github.com/en/rest/reference/actions#list-workflow-runs-for-a-repository
+    # https://docs.github.com/rest/reference/actions#list-workflow-runs-for-a-repository
     $APICall = @{
         Uri     = "$GHAPIBaseURI/repos/$GHOwner/$GHRepo/actions/runs"
         Headers = @{

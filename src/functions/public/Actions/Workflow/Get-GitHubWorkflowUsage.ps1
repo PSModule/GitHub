@@ -10,7 +10,7 @@
         An example
 
         .NOTES
-        [Get workflow usage](https://docs.github.com/en/rest/actions/workflows#get-workflow-usage)
+        [Get workflow usage](https://docs.github.com/rest/actions/workflows#get-workflow-usage)
     #>
     [CmdletBinding()]
     param(

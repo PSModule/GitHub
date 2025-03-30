@@ -19,7 +19,7 @@
         Gets the 'hello-world.yml' workflow in the 'octocat/hello-world' repository.
 
         .NOTES
-        [List repository workflows](https://docs.github.com/rest/actions/workflows?apiVersion=2022-11-28#list-repository-workflows)
+        [List repository workflows](https://docs.github.com/rest/actions/workflows#list-repository-workflows)
     #>
     [CmdletBinding()]
     param(

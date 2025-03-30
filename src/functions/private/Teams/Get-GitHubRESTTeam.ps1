@@ -20,7 +20,7 @@
 
         .NOTES
         [List teams](https://docs.github.com/rest/teams/teams#list-teams)
-        [Get team by name](https://docs.github.com/en/rest/teams/teams#get-a-team-by-name)
+        [Get team by name](https://docs.github.com/rest/teams/teams#get-a-team-by-name)
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
