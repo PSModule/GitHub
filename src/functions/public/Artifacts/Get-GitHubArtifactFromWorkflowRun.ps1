@@ -64,8 +64,11 @@ function Get-GitHubArtifactFromWorkflowRun {
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter(Mandatory)]
-        [object] $Context
+        [Parameter()]
+        [object] $Context = (Get-GitHubContext)
+
+        # [Parameter(Mandatory)]
+        # [object] $Context
     )
 
     begin {
