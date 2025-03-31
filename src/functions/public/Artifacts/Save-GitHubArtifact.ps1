@@ -87,3 +87,26 @@ function Save-GitHubArtifact {
         Write-Debug "[$stackPath] - End"
     }
 }
+
+
+<#
+Get-GitHubArtifactFromRepository -Owner PSModule -Repository Github
+Get-GitHubArtifactFromRepository -Owner PSModule -Repository Ast -AllVersions
+$run = Get-GitHubArtifactFromWorkflowRun -Owner PSModule -Repository Github -RunId 14161074591
+$run.count
+$run | Format-Table
+
+Get-GitHubArtifactFromWorkflowRun -Owner PSModule -Repository Github -RunId 14161074591 -AllVersions | Sort-Object Name
+$run = Get-GitHubArtifactFromWorkflowRun -Owner PSModule -Repository Github -RunId 14161074591 -AllVersions -Name Variables-Windows-TestResults
+$run.count
+$run | Format-Table
+
+Get-GitHubArtifactById -Owner PSModule -Repository Github -ArtifactId 2847820614 | Remove-GitHubArtifact
+
+Get-GitHubArtifactFromWorkflowRun -Owner PSModule -Repository Github -RunId 14161074591 -AllVersions | Sort-Object Name | Save-GitHubArtifact
+
+Get-GitHubArtifactFromWorkflowRun -Owner PSModule -Repository Github -RunId 14161074591 -AllVersions -Name Variables-Windows-TestResults | Save-GitHubArtifact -Debug
+
+Save-GitHubArtifact -Owner PSModule -Repository Github -ID 2850482667 -Debug
+
+#>
