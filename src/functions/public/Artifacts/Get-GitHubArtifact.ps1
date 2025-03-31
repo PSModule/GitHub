@@ -122,7 +122,7 @@ function Get-GitHubArtifact {
                 Get-GitHubArtifactFromWorkflowRun @params -ID $ID -Name $Name -AllVersions:$AllVersions
             }
             'FromRepository' {
-                Get-GitHubArtifactFromRepository @params -Name $Name -AllVersions $AllVersions
+                Get-GitHubArtifactFromRepository @params -Name $Name -AllVersions:$AllVersions
             }
         }
     }
