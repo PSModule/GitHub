@@ -94,8 +94,8 @@ Describe 'Actions' {
                 Repository = $Repository
                 Name       = $ArtifactName
             }
-            $result = Get-GitHubArtifact @params | Save-GitHubArtifact
             LogGroup 'Result' {
+                $result = Get-GitHubArtifact @params | Save-GitHubArtifact -Debug -Verbose
                 Write-Host ($result | Format-List | Out-String)
             }
             $result | Should -Not -BeNullOrEmpty
@@ -108,8 +108,8 @@ Describe 'Actions' {
                 Repository = $Repository
                 Name       = $ArtifactName
             }
-            $result = Get-GitHubArtifact @params | Save-GitHubArtifact -Expand -Cleanup
             LogGroup 'Result' {
+                $result = Get-GitHubArtifact @params | Save-GitHubArtifact -Expand -Cleanup -Debug -Verbose
                 Write-Host ($result | Format-List | Out-String)
             }
             $result | Should -Not -BeNullOrEmpty
@@ -122,8 +122,8 @@ Describe 'Actions' {
                 Repository = $Repository
                 Name       = $ArtifactName
             }
-            $result = Get-GitHubArtifact @params | Save-GitHubArtifact -Path .\testfolder -Expand -Cleanup -Debug -Verbose
             LogGroup 'Result' {
+                $result = Get-GitHubArtifact @params | Save-GitHubArtifact -Path .\testfolder -Expand -Cleanup -Debug -Verbose
                 Write-Host ($result | Format-List | Out-String)
             }
             $result | Should -Not -BeNullOrEmpty
