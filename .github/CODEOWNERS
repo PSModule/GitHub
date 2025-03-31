@@ -1,4 +1,4 @@
-# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+# https://docs.github.com/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
 # Each line is a file pattern followed by one or more owners.
 
 # These owners will be the default owners for everything in

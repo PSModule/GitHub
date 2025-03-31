@@ -15,7 +15,7 @@
         }
 
         .NOTES
-        [Create a workflow dispatch event](https://docs.github.com/en/rest/actions/workflows#create-a-workflow-dispatch-event)
+        [Create a workflow dispatch event](https://docs.github.com/rest/actions/workflows#create-a-workflow-dispatch-event)
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param(

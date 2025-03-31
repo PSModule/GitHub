@@ -17,7 +17,7 @@
         Get the GitHub App with the slug 'github-actions'.
 
         .NOTES
-        [Get an app](https://docs.github.com/en/rest/apps/apps?apiVersion=2022-11-28#get-an-app)
+        [Get an app](https://docs.github.com/rest/apps/apps#get-an-app)
         [Get the authenticated app | GitHub Docs](https://docs.github.com/rest/apps/apps#get-the-authenticated-app)
     #>
     [OutputType([pscustomobject])]

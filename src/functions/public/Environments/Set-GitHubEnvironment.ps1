@@ -5,12 +5,12 @@ filter Set-GitHubEnvironment {
 
         .DESCRIPTION
         Create or update an environment with protection rules, such as required reviewers. For more information about
-        environment protection rules, see "[Environments](https://docs.github.com/en/actions/reference/environments#environment-protection-rules)."
+        environment protection rules, see "[Environments](https://docs.github.com/actions/reference/environments#environment-protection-rules)."
 
         To create or update name patterns that branches must match in order to deploy to this environment, see
-        "[Deployment branch policies](https://docs.github.com/en/rest/deployments/branch-policies)."
+        "[Deployment branch policies](https://docs.github.com/rest/deployments/branch-policies)."
 
-        To create or update secrets for an environment, see "[GitHub Actions secrets](https://docs.github.com/en/rest/actions/secrets)."
+        To create or update secrets for an environment, see "[GitHub Actions secrets](https://docs.github.com/rest/actions/secrets)."
 
         OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
