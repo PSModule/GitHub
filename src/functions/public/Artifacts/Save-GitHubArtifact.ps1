@@ -79,7 +79,16 @@ function Save-GitHubArtifact {
         }
 
         Invoke-GitHubAPI @inputObject -DownloadFilePath $Path | ForEach-Object {
-            Write-Output $_.Response
+            $_.Response
+
+            # Write-Debug "Downloading ZIP file to [$DownloadFilePath]"
+            # if ([string]::IsNullOrEmpty($DownloadFilePath)) {
+            #     Write-Warning 'Specify -DownloadFilePath parameter to download the ZIP file.'
+            #     $results = $response
+            # } else {
+            #     [System.IO.File]::WriteAllBytes($DownloadFilePath, $response.Content)
+            #     $results = Get-Item -Path $DownloadFilePath
+            # }
         }
     }
 
