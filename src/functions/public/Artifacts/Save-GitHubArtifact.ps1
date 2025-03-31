@@ -85,7 +85,6 @@ function Save-GitHubArtifact {
             Context     = $Context
         }
 
-        # Call the GitHub API (this returns a stream response)
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             $headers = $_.Headers
             $filename = $null
@@ -94,30 +93,32 @@ function Save-GitHubArtifact {
                 $filename = $matches['filename']
             }
 
-            # If the path is an existing directory, or a non-existent path with no extension, treat it as a folder
+            Write-Debug "Artifact filename: [$filename]"
             if (Test-Path -LiteralPath $Path -PathType Container) {
-                # $Path is an existing directory
+                Write-Debug "Path [$Path] is a directory."
                 if (-not $filename) {
                     $filename = "artifact-$ID.zip"
                 }
                 $resolvedPath = Join-Path -Path $Path -ChildPath $filename
             } elseif (-not (Test-Path -LiteralPath $Path) -and [string]::IsNullOrEmpty([IO.Path]::GetExtension($Path))) {
-                # $Path doesn't exist but has no extension -> treat as a folder
+                Write-Debug "Path [$Path] is a file without an extension."
                 if (-not $filename) {
                     $filename = "artifact-$ID.zip"
                 }
                 $resolvedPath = Join-Path -Path $Path -ChildPath $filename
             } else {
-                # $Path is a file path (existing or not) or has an extension; use it directly
+                Write-Debug "Path [$Path] is a file."
                 $resolvedPath = $Path
             }
 
-            # Ensure the directory portion of $resolvedPath exists
+            Write-Debug "Resolved path: [$resolvedPath]"
             $directory = Split-Path -Path $resolvedPath -Parent
             if ([string]::IsNullOrEmpty($directory)) {
+                Write-Debug "No directory specified. Using current directory [$($PWD.Path)]."
                 $directory = $PWD.Path
             }
             if (-not (Test-Path -LiteralPath $directory -PathType Container)) {
+                Write-Debug "Creating directory [$directory] because it does not exist."
                 New-Item -ItemType Directory -Path $directory -Force | Out-Null
             }
 
