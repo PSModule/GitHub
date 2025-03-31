@@ -37,7 +37,7 @@
                                 <PropertyName>Name</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <ScriptBlock>[math]::Round($_.SizeInBytes / 1KB, 2)</ScriptBlock>
+                                <ScriptBlock>[math]::Round($_.Size / 1KB, 2)</ScriptBlock>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Expired</PropertyName>

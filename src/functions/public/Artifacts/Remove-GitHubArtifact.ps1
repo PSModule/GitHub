@@ -69,7 +69,7 @@ function Remove-GitHubArtifact {
         }
 
         if ($PSCmdlet.ShouldProcess("artifact [$Owner/$Repository/$ID]", 'Remove')) {
-            Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @inputObject
         }
     }
 
