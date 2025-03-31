@@ -253,7 +253,7 @@ filter Invoke-GitHubAPI {
                         $results = [System.Text.Encoding]::UTF8.GetString($byteArray)
                     }
                     'zip' {
-                        $response.Content
+                        $results = $response.Content
                     }
                     default {
                         if (-not $response.Content) {
@@ -262,8 +262,7 @@ filter Invoke-GitHubAPI {
                         }
                         Write-Warning "Unknown content type: $($headers.'Content-Type')"
                         Write-Warning 'Please report this issue!'
-                        [byte[]]$byteArray = $response.Content
-                        $results = [System.Text.Encoding]::UTF8.GetString($byteArray)
+                        $results = $response.Content
                     }
                 }
 
