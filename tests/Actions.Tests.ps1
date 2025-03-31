@@ -45,14 +45,41 @@ Describe 'Actions' {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
         }
 
+        It 'Get-GitHubArtifact - Gets the artifacts for a repository' {
+            $params = @{
+                Owner      = $env:GITHUB_REPOSITORY_OWNER
+                Repository = $env:GITHUB_REPOSITORY_NAME
+                Name       = 'module'
+            }
+            $result = Get-GitHubArtifact @params
+            LogGroup 'Result' {
+                Write-Host ($result | Format-List | Out-String)
+            }
+            $result | Should -HaveCount 1
+        }
+
         It 'Get-GitHubArtifact - Gets the artifact for the workflow run' {
             $params = @{
                 Owner      = $env:GITHUB_REPOSITORY_OWNER
                 Repository = $env:GITHUB_REPOSITORY_NAME
-                RunID      = $env:GITHUB_RUN_ID
+                ID         = $env:GITHUB_RUN_ID
                 Name       = 'module'
             }
-            $result = Get-GitHubArtifact @params -PassThru -ErrorAction SilentlyContinue
+            $result = Get-GitHubArtifact @params
+            LogGroup 'Result' {
+                Write-Host ($result | Format-List | Out-String)
+            }
+            $result | Should -HaveCount 1
+        }
+
+        It 'Get-GitHubArtifact - Gets a specific artifact' {
+            $params = @{
+                Owner      = $env:GITHUB_REPOSITORY_OWNER
+                Repository = $env:GITHUB_REPOSITORY_NAME
+                ArtifactID = $env:GITHUB_RUN_ID
+                Name       = 'module'
+            }
+            $result = Get-GitHubArtifact @params -Name 'module'
             LogGroup 'Result' {
                 Write-Host ($result | Format-List | Out-String)
             }
