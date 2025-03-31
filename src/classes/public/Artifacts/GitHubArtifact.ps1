@@ -8,6 +8,12 @@
     # The name of the artifact.
     [string] $Name
 
+    # The name of the organization or user the variable is associated with.
+    [string] $Owner
+
+    # The name of the repository the variable is associated with.
+    [string] $Repository
+
     # The size of the artifact in bytes.
     [int64] $Size
 

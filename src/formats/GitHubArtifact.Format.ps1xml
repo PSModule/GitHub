@@ -10,33 +10,21 @@
                 <TableHeaders>
                     <TableColumnHeader>
                         <Label>ID</Label>
-                        <Width>15</Width>
-                        <Alignment>Left</Alignment>
                     </TableColumnHeader>
                     <TableColumnHeader>
                         <Label>Name</Label>
-                        <Width>30</Width>
-                        <Alignment>Left</Alignment>
                     </TableColumnHeader>
                     <TableColumnHeader>
                         <Label>Size (KB)</Label>
-                        <Width>12</Width>
-                        <Alignment>Right</Alignment>
                     </TableColumnHeader>
                     <TableColumnHeader>
                         <Label>Expired</Label>
-                        <Width>8</Width>
-                        <Alignment>Center</Alignment>
                     </TableColumnHeader>
                     <TableColumnHeader>
                         <Label>Created At</Label>
-                        <Width>25</Width>
-                        <Alignment>Left</Alignment>
                     </TableColumnHeader>
                     <TableColumnHeader>
                         <Label>Expires At</Label>
-                        <Width>25</Width>
-                        <Alignment>Left</Alignment>
                     </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
