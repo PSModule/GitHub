@@ -94,15 +94,25 @@ function Save-GitHubArtifact {
                 $filename = $matches['filename']
             }
 
+            # If the path is an existing directory, or a non-existent path with no extension, treat it as a folder
             if (Test-Path -LiteralPath $Path -PathType Container) {
+                # $Path is an existing directory
+                if (-not $filename) {
+                    $filename = "artifact-$ID.zip"
+                }
+                $resolvedPath = Join-Path -Path $Path -ChildPath $filename
+            } elseif (-not (Test-Path -LiteralPath $Path) -and [string]::IsNullOrEmpty([IO.Path]::GetExtension($Path))) {
+                # $Path doesn't exist but has no extension -> treat as a folder
                 if (-not $filename) {
                     $filename = "artifact-$ID.zip"
                 }
                 $resolvedPath = Join-Path -Path $Path -ChildPath $filename
             } else {
+                # $Path is a file path (existing or not) or has an extension; use it directly
                 $resolvedPath = $Path
             }
 
+            # Ensure the directory portion of $resolvedPath exists
             $directory = Split-Path -Path $resolvedPath -Parent
             if ([string]::IsNullOrEmpty($directory)) {
                 $directory = $PWD.Path
