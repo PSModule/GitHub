@@ -68,7 +68,7 @@ function Get-GitHubArtifactById {
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject -DownloadFilePath $Path | ForEach-Object {
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
             [GitHubArtifact]@{
                 DatabaseID         = $_.Response.id
                 NodeID             = $_.Response.node_id
