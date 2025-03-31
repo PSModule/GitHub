@@ -20,7 +20,10 @@
 param()
 
 BeforeAll {
-    # DEFAULTS ACCROSS ALL TESTS
+    $Owner = $env:GITHUB_REPOSITORY_OWNER
+    $Repository = $env:GITHUB_REPOSITORY_NAME
+    $ID = $env:GITHUB_RUN_ID
+    $ArtifactName = 'module'
 }
 
 Describe 'Actions' {
@@ -45,9 +48,9 @@ Describe 'Actions' {
 
         It 'Get-GitHubArtifact - Gets the artifacts for a repository' {
             $params = @{
-                Owner      = $env:GITHUB_REPOSITORY_OWNER
-                Repository = $env:GITHUB_REPOSITORY_NAME
-                Name       = 'module'
+                Owner      = $Owner
+                Repository = $Repository
+                Name       = $ArtifactName
             }
             $result = Get-GitHubArtifact @params
             LogGroup 'Result' {
@@ -58,10 +61,10 @@ Describe 'Actions' {
 
         It 'Get-GitHubArtifact - Gets the artifact for the workflow run' {
             $params = @{
-                Owner      = $env:GITHUB_REPOSITORY_OWNER
-                Repository = $env:GITHUB_REPOSITORY_NAME
-                ID         = $env:GITHUB_RUN_ID
-                Name       = 'module'
+                Owner      = $Owner
+                Repository = $Repository
+                ID         = $ID
+                Name       = $ArtifactName
             }
             $result = Get-GitHubArtifact @params
             LogGroup 'Result' {
@@ -72,16 +75,16 @@ Describe 'Actions' {
 
         It 'Get-GitHubArtifact - Gets a specific artifact' {
             $params = @{
-                Owner      = $env:GITHUB_REPOSITORY_OWNER
-                Repository = $env:GITHUB_REPOSITORY_NAME
-                ID         = $env:GITHUB_RUN_ID
-                Name       = 'module'
+                Owner      = $Owner
+                Repository = $Repository
+                ID         = $ID
+                Name       = $ArtifactName
             }
             $artifact = Get-GitHubArtifact @params
             LogGroup 'Artifact' {
                 Write-Host ($artifact | Format-List | Out-String)
             }
-            $result = Get-GitHubArtifact -Owner $env:GITHUB_REPOSITORY_OWNER -Repository $env:GITHUB_REPOSITORY_NAME -ArtifactID $artifact.DatabaseID
+            $result = Get-GitHubArtifact -Owner $Owner -Repository $Repository -ArtifactID $artifact.DatabaseID
             LogGroup 'Result' {
                 Write-Host ($result | Format-List | Out-String)
             }
@@ -90,9 +93,9 @@ Describe 'Actions' {
 
         It 'Save-GitHubArtifact - Saves the artifact to disk' {
             $params = @{
-                Owner      = $env:GITHUB_REPOSITORY_OWNER
-                Repository = $env:GITHUB_REPOSITORY_NAME
-                Name       = 'module'
+                Owner      = $Owner
+                Repository = $Repository
+                Name       = $ArtifactName
             }
             $result = Get-GitHubArtifact @params | Save-GitHubArtifact
             LogGroup 'Result' {
@@ -100,6 +103,43 @@ Describe 'Actions' {
             }
             $result | Should -Not -BeNullOrEmpty
             $result | Should -BeOfType [System.IO.FileInfo]
+        }
+
+        It 'Save-GitHubArtifact - Saves the artifact to disk, extract and cleanup' {
+            $params = @{
+                Owner      = $Owner
+                Repository = $Repository
+                Name       = $ArtifactName
+            }
+            $result = Get-GitHubArtifact @params | Save-GitHubArtifact -Expand -Cleanup
+            LogGroup 'Result' {
+                Write-Host ($result | Format-List | Out-String)
+            }
+            $result | Should -Not -BeNullOrEmpty
+            $result | Should -BeOfType [System.IO.FileInfo]
+        }
+
+        It 'Save-GitHubArtifact - Saves the artifact to disk, extract and cleanup to a specific path' {
+            $params = @{
+                Owner      = $Owner
+                Repository = $Repository
+                Name       = $ArtifactName
+            }
+            $result = Get-GitHubArtifact @params | Save-GitHubArtifact -Path $env:TEMP -Expand -Cleanup
+            LogGroup 'Result' {
+                Write-Host ($result | Format-List | Out-String)
+            }
+            $result | Should -Not -BeNullOrEmpty
+            $result | Should -BeOfType [System.IO.FileInfo]
+        }
+
+        It 'Remove-GitHubArtifact - Removes the artifact from the repository' {
+            $params = @{
+                Owner      = $Owner
+                Repository = $Repository
+                Name       = $ArtifactName
+            }
+            { Get-GitHubArtifact @params | Remove-GitHubArtifact -WhatIf } | Should -Not -Throw
         }
     }
 }
