@@ -253,7 +253,8 @@ filter Invoke-GitHubAPI {
                         $results = [System.Text.Encoding]::UTF8.GetString($byteArray)
                     }
                     'zip' {
-                        if (-not $DownloadFilePath) {
+                        Write-Debug "Downloading ZIP file to [$DownloadFilePath]"
+                        if ([string]::IsNullOrEmpty($DownloadFilePath)) {
                             Write-Warning 'Specify -DownloadFilePath parameter to download the ZIP file.'
                             $results = $response
                         } else {

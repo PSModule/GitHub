@@ -46,9 +46,11 @@
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>CreatedAt</PropertyName>
+                                <Alignment>Right</Alignment>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>ExpiresAt</PropertyName>
+                                <Alignment>Right</Alignment>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
