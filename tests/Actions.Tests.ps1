@@ -81,7 +81,7 @@ Describe 'Actions' {
             LogGroup 'Artifact' {
                 Write-Host ($artifact | Format-List | Out-String)
             }
-            $result = Get-GitHubArtifact -Owner $Owner -Repository $env:GITHUB_REPOSITORY_NAME -ArtifactID $artifact.DatabaseID
+            $result = Get-GitHubArtifact -Owner $env:GITHUB_REPOSITORY_OWNER -Repository $env:GITHUB_REPOSITORY_NAME -ArtifactID $artifact.DatabaseID
             LogGroup 'Result' {
                 Write-Host ($result | Format-List | Out-String)
             }
