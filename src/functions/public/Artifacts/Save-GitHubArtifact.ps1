@@ -126,7 +126,6 @@ function Save-GitHubArtifact {
             [System.IO.File]::WriteAllBytes($resolvedPath, $_.Response)
 
             if ($Expand) {
-                # Resolve both ZIP path and directory to absolute paths (important cross-platform)
                 $fullZipPath = Resolve-Path -LiteralPath $resolvedPath
                 $fullDestPath = Resolve-Path -LiteralPath $directory
                 Write-Debug "Expanding artifact ZIP [$fullZipPath] to [$fullDestPath]"
