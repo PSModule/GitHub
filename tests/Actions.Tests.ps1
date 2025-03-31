@@ -19,13 +19,6 @@
 [CmdletBinding()]
 param()
 
-BeforeAll {
-    $Owner = $env:GITHUB_REPOSITORY_OWNER
-    $Repository = $env:GITHUB_REPOSITORY_NAME
-    $ID = $env:GITHUB_RUN_ID
-    $ArtifactName = 'module'
-}
-
 Describe 'Actions' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 
@@ -41,6 +34,10 @@ Describe 'Actions' {
                     Write-Host ($context | Format-List | Out-String)
                 }
             }
+            $Owner = $env:GITHUB_REPOSITORY_OWNER
+            $Repository = $env:GITHUB_REPOSITORY_NAME
+            $ID = $env:GITHUB_RUN_ID
+            $ArtifactName = 'module'
         }
         AfterAll {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
