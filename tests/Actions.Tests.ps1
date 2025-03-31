@@ -122,7 +122,7 @@ Describe 'Actions' {
                 Repository = $Repository
                 Name       = $ArtifactName
             }
-            $result = Get-GitHubArtifact @params | Save-GitHubArtifact -Path .\testfolder -Expand -Cleanup
+            $result = Get-GitHubArtifact @params | Save-GitHubArtifact -Path .\testfolder -Expand -Cleanup -Debug -Verbose
             LogGroup 'Result' {
                 Write-Host ($result | Format-List | Out-String)
             }

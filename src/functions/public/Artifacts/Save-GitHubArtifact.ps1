@@ -93,7 +93,8 @@ function Save-GitHubArtifact {
                 $filename = $matches['filename']
             }
             if (-not $filename) {
-                $filename = "artifact-$ID.zip"
+                $artifactName = (Get-GitHubArtifact -Owner $Owner -Repository $Repository -ID $ID -Context $Context).Name
+                $filename = "$artifactName.zip"
             }
 
             # Determine if $Path is absolute, and if it has an extension
