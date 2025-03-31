@@ -124,6 +124,8 @@ function Save-GitHubArtifact {
             if ($Expand) {
                 $destPath = Split-Path $resolvedPath -Parent
                 Write-Debug "Expanding artifact ZIP [$resolvedPath] to [$destPath]"
+                $resolvedPath = Resolve-Path -Path $resolvedPath | Select-Object -ExpandProperty Path
+                $destPath = Resolve-Path -Path $destPath | Select-Object -ExpandProperty Path
                 Expand-Archive -LiteralPath $resolvedPath -DestinationPath $destPath -Force -PassThru
 
                 if ($Cleanup) {
