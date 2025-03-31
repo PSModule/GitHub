@@ -116,13 +116,12 @@ function Save-GitHubArtifact {
 
             if ($Expand) {
                 Write-Debug "Expanding artifact ZIP [$resolvedPath] to [$directory]"
-                Expand-Archive -LiteralPath $resolvedPath -DestinationPath $directory -Force
+                Expand-Archive -LiteralPath $resolvedPath -DestinationPath $directory -Force -PassThru
 
                 if ($Cleanup) {
                     Write-Debug "Removing downloaded ZIP [$resolvedPath]"
                     Remove-Item -LiteralPath $resolvedPath -Force
                 }
-                Get-ChildItem -Path $directory -Recurse
             } else {
                 Get-Item -Path $resolvedPath
             }
