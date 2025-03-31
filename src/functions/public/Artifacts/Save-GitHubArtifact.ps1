@@ -93,7 +93,7 @@ function Save-GitHubArtifact {
                 $filename = $matches['filename']
             }
 
-            Write-Debug "Artifact filename: [$filename]"
+            Write-Debug "Artifact filename from Header.'Content-Disposition': [$filename]"
             if (Test-Path -LiteralPath $Path -PathType Container) {
                 Write-Debug "Path [$Path] is a directory."
                 if (-not $filename) {
@@ -101,20 +101,20 @@ function Save-GitHubArtifact {
                 }
                 $resolvedPath = Join-Path -Path $Path -ChildPath $filename
             } elseif (-not (Test-Path -LiteralPath $Path) -and [string]::IsNullOrEmpty([IO.Path]::GetExtension($Path))) {
-                Write-Debug "Path [$Path] is a file without an extension."
+                Write-Debug "Path [$Path] does not exist and has no extension => treat as folder."
                 if (-not $filename) {
                     $filename = "artifact-$ID.zip"
                 }
                 $resolvedPath = Join-Path -Path $Path -ChildPath $filename
             } else {
-                Write-Debug "Path [$Path] is a file."
+                Write-Debug "Path [$Path] is a file path."
                 $resolvedPath = $Path
             }
 
-            Write-Debug "Resolved path: [$resolvedPath]"
+            Write-Debug "Resolved download path: [$resolvedPath]"
             $directory = Split-Path -Path $resolvedPath -Parent
             if ([string]::IsNullOrEmpty($directory)) {
-                Write-Debug "No directory specified. Using current directory [$($PWD.Path)]."
+                Write-Debug "No directory portion provided; using current dir [$($PWD.Path)]."
                 $directory = $PWD.Path
             }
             if (-not (Test-Path -LiteralPath $directory -PathType Container)) {
@@ -122,12 +122,15 @@ function Save-GitHubArtifact {
                 New-Item -ItemType Directory -Path $directory -Force | Out-Null
             }
 
-            Write-Debug "Downloading artifact ZIP to [$resolvedPath]"
+            Write-Debug "Downloading artifact as ZIP to [$resolvedPath]"
             [System.IO.File]::WriteAllBytes($resolvedPath, $_.Response)
 
             if ($Expand) {
-                Write-Debug "Expanding artifact ZIP [$resolvedPath] to [$directory]"
-                Expand-Archive -LiteralPath $resolvedPath -DestinationPath $directory -Force -PassThru
+                # Resolve both ZIP path and directory to absolute paths (important cross-platform)
+                $fullZipPath = Resolve-Path -LiteralPath $resolvedPath
+                $fullDestPath = Resolve-Path -LiteralPath $directory
+                Write-Debug "Expanding artifact ZIP [$fullZipPath] to [$fullDestPath]"
+                Expand-Archive -LiteralPath $fullZipPath -DestinationPath $fullDestPath -Force -PassThru
 
                 if ($Cleanup) {
                     Write-Debug "Removing downloaded ZIP [$resolvedPath]"
