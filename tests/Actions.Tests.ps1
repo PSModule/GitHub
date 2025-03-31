@@ -74,14 +74,30 @@ Describe 'Actions' {
             $params = @{
                 Owner      = $env:GITHUB_REPOSITORY_OWNER
                 Repository = $env:GITHUB_REPOSITORY_NAME
-                ArtifactID = $env:GITHUB_RUN_ID
+                ID         = $env:GITHUB_RUN_ID
                 Name       = 'module'
             }
-            $result = Get-GitHubArtifact @params -Name 'module'
+            $artifact = Get-GitHubArtifact @params
+
+            $result = Get-GitHubArtifact -Owner $Owner -Repository $env:GITHUB_REPOSITORY_NAME -ArtifactID $artifact.DatabaseID
             LogGroup 'Result' {
                 Write-Host ($result | Format-List | Out-String)
             }
             $result | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Save-GitHubArtifact - Saves the artifact to disk' {
+            $params = @{
+                Owner      = $env:GITHUB_REPOSITORY_OWNER
+                Repository = $env:GITHUB_REPOSITORY_NAME
+                Name       = 'module'
+            }
+            $result = Get-GitHubArtifact @params | Save-GitHubArtifact
+            LogGroup 'Result' {
+                Write-Host ($result | Format-List | Out-String)
+            }
+            $result | Should -Not -BeNullOrEmpty
+            $result | Should -BeOfType [System.IO.FileInfo]
         }
     }
 }
