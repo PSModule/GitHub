@@ -18,7 +18,7 @@ function Save-GitHubArtifact {
 
         Mode                 LastWriteTime         Length Name
         ----                 -------------         ------ ----
-        d-----        03/31/2025     12:00                artifact-123456
+        d-----        03/31/2025     12:00                artifact-123456.zip
         ```
 
         Downloads artifact ID 123456 from the 'Hello-World' repository owned by 'octocat' to the specified path.
@@ -56,18 +56,25 @@ function Save-GitHubArtifact {
         [Parameter()]
         [string] $Path = $PWD.Path,
 
+        # When specified, the ZIP file is extracted to the same directory it was downloaded to.
+        [Parameter()]
+        [Alias('Extract')]
+        [switch] $Expand,
+
+        # When specified (and only meaningful if -Expand is also used), removes the ZIP file after extracting.
+        [Parameter()]
+        [switch] $Cleanup,
+
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
         [object] $Context = (Get-GitHubContext)
-
-        # [Parameter(Mandatory)]
-        # [object] $Context
     )
 
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 
@@ -83,13 +90,10 @@ function Save-GitHubArtifact {
             $headers = $_.Headers
             $filename = $null
 
-            # Extract filename from Content-Disposition if present
             if ($headers.'Content-Disposition' -match 'filename="(?<filename>[^"]+)"') {
                 $filename = $matches['filename']
             }
 
-            # If -Path is an existing directory, join with either the artifact’s original filename
-            # or a default name. If not, treat -Path as the full file path.
             if (Test-Path -LiteralPath $Path -PathType Container) {
                 if (-not $filename) {
                     $filename = "artifact-$ID.zip"
@@ -99,7 +103,6 @@ function Save-GitHubArtifact {
                 $resolvedPath = $Path
             }
 
-            # Ensure the directory part of $resolvedPath exists
             $directory = Split-Path -Path $resolvedPath -Parent
             if ([string]::IsNullOrEmpty($directory)) {
                 $directory = $PWD.Path
@@ -111,7 +114,18 @@ function Save-GitHubArtifact {
             Write-Debug "Downloading artifact ZIP to [$resolvedPath]"
             [System.IO.File]::WriteAllBytes($resolvedPath, $_.Response)
 
-            Get-Item -Path $resolvedPath
+            if ($Expand) {
+                Write-Debug "Expanding artifact ZIP [$resolvedPath] to [$directory]"
+                Expand-Archive -LiteralPath $resolvedPath -DestinationPath $directory -Force
+
+                if ($Cleanup) {
+                    Write-Debug "Removing downloaded ZIP [$resolvedPath]"
+                    Remove-Item -LiteralPath $resolvedPath -Force
+                }
+                Get-ChildItem -Path $directory -Recurse
+            } else {
+                Get-Item -Path $resolvedPath
+            }
         }
     }
 
