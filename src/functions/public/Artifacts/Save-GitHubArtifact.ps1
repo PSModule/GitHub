@@ -52,7 +52,7 @@ function Save-GitHubArtifact {
         [Alias('ArtifactID', 'DatabaseID')]
         [string] $ID,
 
-        # Path to the file to download. If not specified, the artifact will be downloaded to the current directory.
+        # Path to the file or folder for the download. Accepts relative or absolute paths.
         [Parameter()]
         [string] $Path = $PWD.Path,
 
@@ -92,44 +92,39 @@ function Save-GitHubArtifact {
             if ($headers.'Content-Disposition' -match 'filename="(?<filename>[^"]+)"') {
                 $filename = $matches['filename']
             }
+            if (-not $filename) {
+                $filename = "artifact-$ID.zip"
+            }
 
-            Write-Debug "Artifact filename from Header.'Content-Disposition': [$filename]"
-            if (Test-Path -LiteralPath $Path -PathType Container) {
-                Write-Debug "Path [$Path] is a directory."
-                if (-not $filename) {
-                    $filename = "artifact-$ID.zip"
+            # Determine if $Path is absolute, and if it has an extension
+            $isAbsolute = [System.IO.Path]::IsPathFullyQualified($Path)
+            $isFile = [System.IO.Path]::HasExtension($Path)
+
+            # If $Path is not absolute, resolve it to a full path using the current location
+            if (-not $isAbsolute) {
+                $Path = Join-Path -Path $PWD.Path -ChildPath $Path
+            }
+
+            if ($isFile) {
+                $directory = Split-Path $Path -Parent
+                if (-not (Test-Path -LiteralPath $directory)) {
+                    $null = New-Item -Path $directory -ItemType Directory -Force
                 }
-                $resolvedPath = Join-Path -Path $Path -ChildPath $filename
-            } elseif (-not (Test-Path -LiteralPath $Path) -and [string]::IsNullOrEmpty([IO.Path]::GetExtension($Path))) {
-                Write-Debug "Path [$Path] does not exist and has no extension => treat as folder."
-                if (-not $filename) {
-                    $filename = "artifact-$ID.zip"
-                }
-                $resolvedPath = Join-Path -Path $Path -ChildPath $filename
-            } else {
-                Write-Debug "Path [$Path] is a file path."
                 $resolvedPath = $Path
+            } else {
+                if (-not (Test-Path -LiteralPath $Path)) {
+                    $null = New-Item -Path $Path -ItemType Directory -Force
+                }
+                $resolvedPath = Join-Path -Path $Path -ChildPath $filename
             }
 
-            Write-Debug "Resolved download path: [$resolvedPath]"
-            $directory = Split-Path -Path $resolvedPath -Parent
-            if ([string]::IsNullOrEmpty($directory)) {
-                Write-Debug "No directory portion provided; using current dir [$($PWD.Path)]."
-                $directory = $PWD.Path
-            }
-            if (-not (Test-Path -LiteralPath $directory -PathType Container)) {
-                Write-Debug "Creating directory [$directory] because it does not exist."
-                New-Item -ItemType Directory -Path $directory -Force | Out-Null
-            }
-
-            Write-Debug "Downloading artifact as ZIP to [$resolvedPath]"
+            Write-Debug "Resolved final download path: [$resolvedPath]"
             [System.IO.File]::WriteAllBytes($resolvedPath, $_.Response)
 
             if ($Expand) {
-                $fullZipPath = Resolve-Path -LiteralPath $resolvedPath
-                $fullDestPath = Resolve-Path -LiteralPath $directory
-                Write-Debug "Expanding artifact ZIP [$fullZipPath] to [$fullDestPath]"
-                Expand-Archive -LiteralPath $fullZipPath -DestinationPath $fullDestPath -Force -PassThru
+                $destPath = Split-Path $resolvedPath -Parent
+                Write-Debug "Expanding artifact ZIP [$resolvedPath] to [$destPath]"
+                Expand-Archive -LiteralPath $resolvedPath -DestinationPath $destPath -Force -PassThru
 
                 if ($Cleanup) {
                     Write-Debug "Removing downloaded ZIP [$resolvedPath]"
