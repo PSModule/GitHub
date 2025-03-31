@@ -16,7 +16,6 @@
                     </TableColumnHeader>
                     <TableColumnHeader>
                         <Label>Size (KB)</Label>
-                        <Alignment>Right</Alignment>
                     </TableColumnHeader>
                     <TableColumnHeader>
                         <Label>Expired</Label>
@@ -38,11 +37,12 @@
                                 <PropertyName>Name</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <ScriptBlock>[math]::Round($_.Size / 1KB, 2)</ScriptBlock>
+                                <ScriptBlock>'{0:F2}' -f ($_.Size / 1KB)</ScriptBlock>
                                 <Alignment>Right</Alignment>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Expired</PropertyName>
+                                <Alignment>Right</Alignment>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>CreatedAt</PropertyName>
