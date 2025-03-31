@@ -54,7 +54,7 @@ function Save-GitHubArtifact {
 
         # Path to the file to download. If not specified, the artifact will be downloaded to the current directory.
         [Parameter()]
-        [string] $Path = (Get-Location).Path,
+        [string] $Path = $PWD.Path,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -100,7 +100,10 @@ function Save-GitHubArtifact {
             }
 
             # Ensure the directory part of $resolvedPath exists
-            $directory = Split-Path -Path $resolvedPath
+            $directory = Split-Path -Path $resolvedPath -Parent
+            if ([string]::IsNullOrEmpty($directory)) {
+                $directory = $PWD.Path
+            }
             if (-not (Test-Path -LiteralPath $directory -PathType Container)) {
                 New-Item -ItemType Directory -Path $directory -Force | Out-Null
             }
@@ -116,26 +119,3 @@ function Save-GitHubArtifact {
         Write-Debug "[$stackPath] - End"
     }
 }
-
-
-<#
-Get-GitHubArtifactFromRepository -Owner PSModule -Repository Github
-Get-GitHubArtifactFromRepository -Owner PSModule -Repository Ast -AllVersions
-$run = Get-GitHubArtifactFromWorkflowRun -Owner PSModule -Repository Github -RunId 14161074591
-$run.count
-$run | Format-Table
-
-Get-GitHubArtifactFromWorkflowRun -Owner PSModule -Repository Github -RunId 14161074591 -AllVersions | Sort-Object Name
-$run = Get-GitHubArtifactFromWorkflowRun -Owner PSModule -Repository Github -RunId 14161074591 -AllVersions -Name Variables-Windows-TestResults
-$run.count
-$run | Format-Table
-
-Get-GitHubArtifactById -Owner PSModule -Repository Github -ArtifactId 2847820614 | Remove-GitHubArtifact
-
-Get-GitHubArtifactFromWorkflowRun -Owner PSModule -Repository Github -RunId 14161074591 -AllVersions | Sort-Object Name | Save-GitHubArtifact
-
-Get-GitHubArtifactFromWorkflowRun -Owner PSModule -Repository Github -RunId 14161074591 -AllVersions -Name Variables-Windows-TestResults | Save-GitHubArtifact -Debug
-
-Save-GitHubArtifact -Owner PSModule -Repository Github -ID 2850482667 -Debug
-
-#>
