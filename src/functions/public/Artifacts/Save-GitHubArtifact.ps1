@@ -88,6 +88,8 @@ function Save-GitHubArtifact {
                 $filename = $matches['filename']
             }
 
+            # If -Path is an existing directory, join with either the artifact’s original filename
+            # or a default name. If not, treat -Path as the full file path.
             if (Test-Path -LiteralPath $Path -PathType Container) {
                 if (-not $filename) {
                     $filename = "artifact-$ID.zip"
@@ -97,7 +99,7 @@ function Save-GitHubArtifact {
                 $resolvedPath = $Path
             }
 
-            # Ensure the directory exists
+            # Ensure the directory part of $resolvedPath exists
             $directory = Split-Path -Path $resolvedPath
             if (-not (Test-Path -LiteralPath $directory -PathType Container)) {
                 New-Item -ItemType Directory -Path $directory -Force | Out-Null
@@ -105,6 +107,7 @@ function Save-GitHubArtifact {
 
             Write-Debug "Downloading artifact ZIP to [$resolvedPath]"
             [System.IO.File]::WriteAllBytes($resolvedPath, $_.Response)
+
             Get-Item -Path $resolvedPath
         }
     }
