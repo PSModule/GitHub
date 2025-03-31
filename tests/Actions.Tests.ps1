@@ -78,7 +78,9 @@ Describe 'Actions' {
                 Name       = 'module'
             }
             $artifact = Get-GitHubArtifact @params
-
+            LogGroup 'Artifact' {
+                Write-Host ($artifact | Format-List | Out-String)
+            }
             $result = Get-GitHubArtifact -Owner $Owner -Repository $env:GITHUB_REPOSITORY_NAME -ArtifactID $artifact.DatabaseID
             LogGroup 'Result' {
                 Write-Host ($result | Format-List | Out-String)
