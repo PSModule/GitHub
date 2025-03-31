@@ -87,54 +87,39 @@ function Save-GitHubArtifact {
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             $headers = $_.Headers
-            $filename = $null
-
-            if ($headers.'Content-Disposition' -match 'filename="(?<filename>[^"]+)"') {
-                $filename = $matches['filename']
-            }
-            if (-not $filename) {
-                $artifactName = (Get-GitHubArtifact -Owner $Owner -Repository $Repository -ID $ID -Context $Context).Name
-                $filename = "$artifactName.zip"
-            }
-
-            # Determine if $Path is absolute, and if it has an extension
+            $itemType = [System.IO.Path]::HasExtension($Path) ? 'File' : 'Directory'
             $isAbsolute = [System.IO.Path]::IsPathFullyQualified($Path)
-            $isFile = [System.IO.Path]::HasExtension($Path)
+            Write-Debug "Path:        [$Path]"
+            Write-Debug "Type:        [$itemType]"
+            Write-Debug "Is absolute: [$isAbsolute]"
 
-            # If $Path is not absolute, resolve it to a full path using the current location
-            if (-not $isAbsolute) {
-                $Path = Join-Path -Path $PWD.Path -ChildPath $Path
-            }
-
-            if ($isFile) {
-                $directory = Split-Path $Path -Parent
-                if (-not (Test-Path -LiteralPath $directory)) {
-                    $null = New-Item -Path $directory -ItemType Directory -Force
+            if ($itemType -eq 'Directory') {
+                if ($headers.'Content-Disposition' -match 'filename="(?<filename>[^"]+)"') {
+                    $filename = $matches['filename']
+                } else {
+                    Write-Debug 'No filename found in Content-Disposition header. Getting artifact name.'
+                    $artifactName = (Get-GitHubArtifact -Owner $Owner -Repository $Repository -ID $ID -Context $Context).Name
+                    $filename = "$artifactName.zip"
                 }
-                $resolvedPath = $Path
-            } else {
-                if (-not (Test-Path -LiteralPath $Path)) {
-                    $null = New-Item -Path $Path -ItemType Directory -Force
-                }
-                $resolvedPath = Join-Path -Path $Path -ChildPath $filename
+                $Path = Join-Path -Path $Path -ChildPath $filename
             }
+            $zipFilePath = New-Item -Path $Path -ItemType $itemType -Force
 
-            Write-Debug "Resolved final download path: [$resolvedPath]"
-            [System.IO.File]::WriteAllBytes($resolvedPath, $_.Response)
+            Write-Debug "Resolved final download path: [$zipFilePath]"
+            [System.IO.File]::WriteAllBytes($zipFilePath, $_.Response)
 
             if ($Expand) {
-                $destPath = Split-Path $resolvedPath -Parent
-                Write-Debug "Expanding artifact ZIP [$resolvedPath] to [$destPath]"
-                $resolvedPath = Resolve-Path -Path $resolvedPath | Select-Object -ExpandProperty Path
-                $destPath = Resolve-Path -Path $destPath | Select-Object -ExpandProperty Path
-                Expand-Archive -LiteralPath $resolvedPath -DestinationPath $destPath -Force -PassThru
+                $parentFolder = [System.IO.Path]::GetDirectoryName($zipFilePath)
+                $destFolder = Join-Path -Path $parentFolder -ChildPath ([System.IO.Path]::GetFileNameWithoutExtension($zipFilePath))
+                Write-Debug "Expanding artifact [$zipFilePath] to [$destFolder]"
+                Expand-Archive -LiteralPath $zipFilePath -DestinationPath $destFolder -Force -PassThru
 
                 if ($Cleanup) {
-                    Write-Debug "Removing downloaded ZIP [$resolvedPath]"
-                    Remove-Item -LiteralPath $resolvedPath -Force
+                    Write-Debug "Removing downloaded ZIP [$zipFilePath]"
+                    Remove-Item -LiteralPath $zipFilePath -Force
                 }
             } else {
-                Get-Item -Path $resolvedPath
+                Get-Item -Path $zipFilePath
             }
         }
     }
