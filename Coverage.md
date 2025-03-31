@@ -9,15 +9,15 @@
     </tr>
     <tr>
         <td>Covered functions</td>
-        <td>189</td>
+        <td>190</td>
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>832</td>
+        <td>831</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>18.51%</td>
+        <td>18.61%</td>
     </tr>
 </table>
 
@@ -286,7 +286,7 @@
 | `/rate_limit`                                                                                                             |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}`                                                                                                   | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
 | `/repos/{owner}/{repo}/actions/artifacts`                                                                                 |                    | :white_check_mark: |                    |                    |                    |
-| `/repos/{owner}/{repo}/actions/artifacts/{artifact_id}`                                                                   | :x:                | :white_check_mark: |                    |                    |                    |
+| `/repos/{owner}/{repo}/actions/artifacts/{artifact_id}`                                                                   | :white_check_mark: | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}`                                                  |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/cache/usage`                                                                               |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/caches`                                                                                    | :x:                | :x:                |                    |                    |                    |
