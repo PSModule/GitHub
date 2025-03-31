@@ -1,4 +1,4 @@
-function Export-GitHubArtifact {
+function Save-GitHubArtifact {
     <#
         .SYNOPSIS
         Get an artifact.
@@ -9,6 +9,7 @@ function Export-GitHubArtifact {
         If the repository is private, OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        Save-GitHubArtifact
 
         .OUTPUTS
         System.IO.FileSystemInfo[]
