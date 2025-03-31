@@ -78,18 +78,35 @@ function Save-GitHubArtifact {
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject
-        #  | ForEach-Object {            $_.Response
+        # Call the GitHub API (this returns a stream response)
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            $headers = $_.Headers
+            $filename = $null
 
-            # Write-Debug "Downloading ZIP file to [$Path]"
-            # if ([string]::IsNullOrEmpty($Path)) {
-            #     Write-Warning 'Specify -Path parameter to download the ZIP file.'
-            #     $results = $response
-            # } else {
-            #     [System.IO.File]::WriteAllBytes($Path, $response.Content)
-            #     $results = Get-Item -Path $Path
-            # }
-        # }
+            # Extract filename from Content-Disposition if present
+            if ($headers.'Content-Disposition' -match 'filename="(?<filename>[^"]+)"') {
+                $filename = $matches['filename']
+            }
+
+            if (Test-Path -LiteralPath $Path -PathType Container) {
+                if (-not $filename) {
+                    $filename = "artifact-$ID.zip"
+                }
+                $resolvedPath = Join-Path -Path $Path -ChildPath $filename
+            } else {
+                $resolvedPath = $Path
+            }
+
+            # Ensure the directory exists
+            $directory = Split-Path -Path $resolvedPath
+            if (-not (Test-Path -LiteralPath $directory -PathType Container)) {
+                New-Item -ItemType Directory -Path $directory -Force | Out-Null
+            }
+
+            Write-Debug "Downloading artifact ZIP to [$resolvedPath]"
+            [System.IO.File]::WriteAllBytes($resolvedPath, $_.Response)
+            Get-Item -Path $resolvedPath
+        }
     }
 
     end {
