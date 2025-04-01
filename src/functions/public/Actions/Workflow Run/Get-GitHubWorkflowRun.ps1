@@ -32,10 +32,17 @@
         Gets all workflow runs for the workflow with the name `nightly.yml` in the repository `Hello-World` owned by `octocat` that were triggered by
         the user `octocat` on the branch `main` and have the status `success`.
 
+        .INPUTS
+        GitHubWorkflow
+
+        .OUTPUTS
+        GitHubWorkflowRun
+
         .NOTES
         [List workflow runs for a workflow](https://docs.github.com/rest/actions/workflow-runs#list-workflow-runs-for-a-workflow)
         [List workflow runs for a repository](https://docs.github.com/rest/actions/workflow-runs#list-workflow-runs-for-a-repository)
     #>
+    [OutputType([GitHubWorkflowRun])]
     [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidAssignmentToAutomaticVariable', 'Event',
@@ -46,8 +53,6 @@
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('Organization')]
-        [Alias('User')]
         [string] $Owner,
 
         # The name of the repository. The name is not case sensitive.
@@ -62,7 +67,7 @@
             Mandatory,
             ParameterSetName = 'ByID'
         )]
-        [Alias('workflow_id', 'WorkflowID')]
+        [Alias('DatabaseID', 'WorkflowID')]
         [string] $ID,
 
         # The name of the workflow.
@@ -90,8 +95,8 @@
         # Can be one of: `completed`, `action_required`, `cancelled`, `failure`, `neutral`, `skipped`, `stale`, `success`, `timed_out`, `in_progress`,
         # `queued`, `requested`, `waiting`, `pending`.
         [Parameter()]
-        [ValidateSet('completed', 'action_required', 'cancelled', 'failure', 'neutral', 'skipped', 'stale', 'success', 'timed_out', 'in_progress',
-            'queued', 'requested', 'waiting', 'pending')]
+        # [ValidateSet('completed', 'action_required', 'cancelled', 'failure', 'neutral', 'skipped', 'stale', 'success', 'timed_out', 'in_progress',
+        #     'queued', 'requested', 'waiting', 'pending')]
         [string] $Status,
 
         # Returns workflow runs created within the given date-time range. For more information on the syntax, see
@@ -105,7 +110,7 @@
 
         # Returns workflow runs with the check_suite_id that you specify.
         [Parameter()]
-        [int] $CheckSuiteID,
+        [System.Nullable[UInt64]] $CheckSuiteID,
 
         # Only returns workflow runs that are associated with the specified head_sha.
         [Parameter()]
@@ -114,7 +119,7 @@
         # The number of results per page (max 100).
         [Parameter()]
         [ValidateRange(0, 100)]
-        [int] $PerPage,
+        [System.Nullable[int]] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -138,12 +143,15 @@
             Event               = $Event
             Status              = $Status
             Created             = $Created
-            ExcludePullRequests = $ExcludePullRequests
+            ExcludePullRequests = [bool] $ExcludePullRequests
             CheckSuiteID        = $CheckSuiteID
             HeadSHA             = $HeadSHA
             PerPage             = $PerPage
+            Context             = $Context
         }
+        $params | Remove-HashtableEntry -NullOrEmptyValues
 
+        Write-Debug "ParameterSet: $($PSCmdlet.ParameterSetName)"
         switch ($PSCmdlet.ParameterSetName) {
             'ByID' {
                 $params['ID'] = $ID
@@ -151,7 +159,7 @@
             }
 
             'ByName' {
-                $params['ID'] = (Get-GitHubWorkflow -Owner $Owner -Repository $Repository -Name $Name).id
+                $params['ID'] = (Get-GitHubWorkflow -Owner $Owner -Repository $Repository -Name $Name -Context $Context).DatabaseID
                 Get-GitHubWorkflowRunByWorkflow @params
             }
 

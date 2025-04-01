@@ -21,8 +21,6 @@
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('Organization')]
-        [Alias('User')]
         [string] $Owner,
 
         [Parameter(
@@ -35,7 +33,7 @@
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('workflow_id', 'WorkflowID')]
+        [Alias('DatabaseID')]
         [string] $ID,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -61,6 +59,7 @@
         if ($PSCmdlet.ShouldProcess("$Owner/$Repository/$ID", 'Cancel/Stop workflow run')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
+                Write-Verbose "Cancelled workflow run [$ID] in [$Owner/$Repository]"
             }
         }
     }

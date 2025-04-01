@@ -159,7 +159,6 @@ filter Invoke-GitHubAPI {
             Token             = $Token
             ContentType       = $ContentType
             InFile            = $UploadFilePath
-            OutFile           = $DownloadFilePath
             HttpVersion       = [string]$HttpVersion
             MaximumRetryCount = $RetryCount
             RetryIntervalSec  = $RetryInterval
@@ -220,17 +219,17 @@ filter Invoke-GitHubAPI {
                 if ($headers.'x-ratelimit-reset') {
                     $headers.'x-ratelimit-reset' = [DateTime]::UnixEpoch.AddSeconds(
                         $headers.'x-ratelimit-reset'
-                    ).ToString('s')
+                    ).ToLocalTime().ToString('s')
                 }
                 if ($headers.'Date') {
                     $headers.'Date' = [DateTime]::Parse(
                         ($headers.'Date').Replace('UTC', '').Trim()
-                    ).ToString('s')
+                    ).ToLocalTime().ToString('s')
                 }
                 if ($headers.'github-authentication-token-expiration') {
                     $headers.'github-authentication-token-expiration' = [DateTime]::Parse(
                         ($headers.'github-authentication-token-expiration').Replace('UTC', '').Trim()
-                    ).ToString('s')
+                    ).ToLocalTime().ToString('s')
                 }
                 Write-Debug '----------------------------------'
                 Write-Debug 'Response headers:'
@@ -253,6 +252,9 @@ filter Invoke-GitHubAPI {
                         [byte[]]$byteArray = $response.Content
                         $results = [System.Text.Encoding]::UTF8.GetString($byteArray)
                     }
+                    'zip' {
+                        $results = $response.Content
+                    }
                     default {
                         if (-not $response.Content) {
                             $results = $null
@@ -260,10 +262,10 @@ filter Invoke-GitHubAPI {
                         }
                         Write-Warning "Unknown content type: $($headers.'Content-Type')"
                         Write-Warning 'Please report this issue!'
-                        [byte[]]$byteArray = $response.Content
-                        $results = [System.Text.Encoding]::UTF8.GetString($byteArray)
+                        $results = $response.Content
                     }
                 }
+
                 [pscustomobject]@{
                     Request           = $APICall
                     Response          = $results
@@ -283,17 +285,17 @@ filter Invoke-GitHubAPI {
             if ($headers.'x-ratelimit-reset') {
                 $headers.'x-ratelimit-reset' = [DateTime]::UnixEpoch.AddSeconds(
                     $headers.'x-ratelimit-reset'
-                ).ToString('s')
+                ).ToLocalTime().ToString('s')
             }
             if ($headers.'Date') {
                 $headers.'Date' = [DateTime]::Parse(
                     ($headers.'Date').Replace('UTC', '').Trim()
-                ).ToString('s')
+                ).ToLocalTime().ToString('s')
             }
             if ($headers.'github-authentication-token-expiration') {
                 $headers.'github-authentication-token-expiration' = [DateTime]::Parse(
                     ($headers.'github-authentication-token-expiration').Replace('UTC', '').Trim()
-                ).ToString('s')
+                ).ToLocalTime().ToString('s')
             }
             $sortedProperties = $headers.PSObject.Properties.Name | Sort-Object
             $headers = $headers | Select-Object $sortedProperties

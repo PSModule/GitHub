@@ -23,8 +23,6 @@
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('Organization')]
-        [Alias('User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
@@ -39,7 +37,7 @@
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('run_id', 'RunID')]
+        [Alias('DatabaseID')]
         [string] $ID,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -65,6 +63,7 @@
         if ($PSCmdlet.ShouldProcess("$Owner/$Repository/$ID", 'Delete workflow run')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
+                Write-Verbose "Deleted workflow run [$ID] in [$Owner/$Repository]"
             }
         }
     }

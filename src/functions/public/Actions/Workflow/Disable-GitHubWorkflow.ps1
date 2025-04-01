@@ -1,6 +1,18 @@
 ﻿filter Disable-GitHubWorkflow {
     <#
-        .NOTES
+        .SYNOPSIS
+        Disable a workflow.
+
+        .DESCRIPTION
+        Disables a workflow and sets the `state` of the workflow to `disabled_manually`. You can replace `workflow_id` with the workflow filename.
+        For example, you could use `main.yaml`. OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
+
+        .EXAMPLE
+
+        .INPUTS
+        GitHubWorkflow
+
+        .LINK
         [Disable a workflow](https://docs.github.com/rest/actions/workflows#disable-a-workflow)
     #>
     [CmdletBinding(SupportsShouldProcess)]
@@ -10,8 +22,6 @@
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('Organization')]
-        [Alias('User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
@@ -26,7 +36,8 @@
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [string[]] $ID,
+        [Alias('DatabaseID', 'WorkflowID')]
+        [UInt64] $ID,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -49,7 +60,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("$Owner/$Repository/$ID", 'Disable workflow')) {
-            Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @inputObject
         }
     }
 
