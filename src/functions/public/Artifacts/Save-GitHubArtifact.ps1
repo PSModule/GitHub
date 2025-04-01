@@ -103,23 +103,22 @@ function Save-GitHubArtifact {
                 }
                 $Path = Join-Path -Path $Path -ChildPath $filename
             }
-            $zipFilePath = New-Item -Path $Path -ItemType $itemType -Force
 
-            Write-Debug "Resolved final download path: [$zipFilePath]"
-            [System.IO.File]::WriteAllBytes($zipFilePath, $_.Response)
+            Write-Debug "Resolved final download path: [$Path]"
+            [System.IO.File]::WriteAllBytes($Path, $_.Response)
 
             if ($Expand) {
-                $parentFolder = [System.IO.Path]::GetDirectoryName($zipFilePath)
-                $destFolder = Join-Path -Path $parentFolder -ChildPath ([System.IO.Path]::GetFileNameWithoutExtension($zipFilePath))
-                Write-Debug "Expanding artifact [$zipFilePath] to [$destFolder]"
-                Expand-Archive -LiteralPath $zipFilePath -DestinationPath $destFolder -Force -PassThru
+                $parentFolder = [System.IO.Path]::GetDirectoryName($Path)
+                $destFolder = Join-Path -Path $parentFolder -ChildPath ([System.IO.Path]::GetFileNameWithoutExtension($Path))
+                Write-Debug "Expanding artifact [$Path] to [$destFolder]"
+                Expand-Archive -LiteralPath $Path -DestinationPath $destFolder -Force -PassThru
 
                 if ($Cleanup) {
-                    Write-Debug "Removing downloaded ZIP [$zipFilePath]"
-                    Remove-Item -LiteralPath $zipFilePath -Force
+                    Write-Debug "Removing downloaded ZIP [$Path]"
+                    Remove-Item -LiteralPath $Path -Force
                 }
             } else {
-                Get-Item -Path $zipFilePath
+                Get-Item -Path $Path
             }
         }
     }
