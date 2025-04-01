@@ -1,28 +1,30 @@
-﻿filter Get-GitHubWorkflowRunByRepo {
+﻿filter Get-GitHubWorkflowRunByWorkflow {
     <#
         .SYNOPSIS
-        List workflow runs for a repository
+        List workflow runs for a workflow
 
         .DESCRIPTION
-        Lists all workflow runs for a repository. You can use parameters to narrow the list of results. For more information about using parameters,
-        see [Parameters](https://docs.github.com/rest/guides/getting-started-with-the-rest-api#parameters).
-        Anyone with read access to the repository can use this endpoint.
+        List all workflow runs for a workflow. You can replace `workflow_id` with the workflow filename. For example, you could use `main.yaml`.
+        You can use parameters to narrow the list of results. For more information about using parameters, see
+        [Parameters](https://docs.github.com/rest/guides/getting-started-with-the-rest-api#parameters).
+        Anyone with read access to the repository can use this endpoint
         OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint with a private repository.
         This endpoint will return up to 1,000 results for each search when using the following parameters: `actor`, `branch`, `check_suite_id`,
         `created`, `event`, `head_sha`, `status`.
 
         .EXAMPLE
-        Get-GitHubWorkflowRunByRepo -Owner 'owner' -Repository 'repo'
+        Get-GitHubWorkflowRunByWorkflow -Owner 'octocat' -Repository 'Hello-World' -ID '42'
 
-        Lists all workflow runs for a repository.
+        Gets all workflow runs for the workflow with the ID `42` in the repository `Hello-World` owned by `octocat`.
 
         .EXAMPLE
-        Get-GitHubWorkflowRunByRepo -Owner 'owner' -Repository 'repo' -Actor 'octocat' -Branch 'main' -Event 'push' -Status 'success'
+        Get-GitHubWorkflowRunByWorkflow -Owner 'octocat' -Repository 'Hello-World' -ID '42' -Actor 'octocat' -Branch 'main' -Event 'push' -Status 'success'
 
-        Lists all workflow runs for a repository with the specified actor, branch, event, and status.
+        Gets all workflow runs for the workflow with the ID `42` in the repository `Hello-World` owned by `octocat` that were triggered by the user
+        `octocat` on the branch `main` and have the status `success`.
 
         .NOTES
-        [List workflow runs for a repository](https://docs.github.com/rest/actions/workflow-runs#list-workflow-runs-for-a-repository)
+        [List workflow runs for a workflow](https://docs.github.com/rest/actions/workflow-runs#list-workflow-runs-for-a-workflow)
     #>
     [CmdletBinding()]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
@@ -36,6 +38,11 @@
         # The name of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
         [string] $Repository,
+
+        # The ID of the workflow. You can also pass the workflow filename as a string.
+        [Parameter(Mandatory)]
+        [Alias('DatabaseID', 'WorkflowID')]
+        [string] $ID,
 
         # Returns someone's workflow runs. Use the login for the user who created the push associated with the check suite or workflow run.
         [Parameter()]
@@ -106,15 +113,54 @@
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
         $inputObject = @{
-            Method      = 'GET'
-            APIEndpoint = "/repos/$Owner/$Repository/actions/runs"
-            Body        = $body
-            PerPage     = $PerPage
             Context     = $Context
+            APIEndpoint = "/repos/$Owner/$Repository/actions/workflows/$ID/runs"
+            Method      = 'GET'
+            PerPage     = $PerPage
+            Body        = $body
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response.workflow_runs
+            $_.Response.workflow_runs | ForEach-Object {
+                [GitHubWorkflowRun]@{
+                    DatabaseID          = $_.id
+                    Name                = $_.name
+                    Owner               = $Owner
+                    Repository          = $Repository
+                    NodeID              = $_.node_id
+                    CheckSuiteID        = $_.check_suite_id
+                    CheckSuiteNodeID    = $_.check_suite_node_id
+                    HeadBranch          = $_.head_branch
+                    HeadSha             = $_.head_sha
+                    Path                = $_.path
+                    RunNumber           = $_.run_number
+                    RunAttempt          = $_.run_attempt
+                    ReferencedWorkflows = $_.referenced_workflows
+                    Event               = $_.event
+                    Status              = $_.status
+                    Conclusion          = $_.conclusion
+                    WorkflowID          = $_.workflow_id
+                    Url                 = $_.url
+                    HtmlUrl             = $_.html_url
+                    PullRequests        = $_.pull_requests
+                    CreatedAt           = $_.created_at
+                    UpdatedAt           = $_.updated_at
+                    Actor               = $_.actor
+                    TriggeringActor     = $_.triggering_actor
+                    RunStartedAt        = $_.run_started_at
+                    JobsUrl             = $_.jobs_url
+                    LogsUrl             = $_.logs_url
+                    CheckSuiteUrl       = $_.check_suite_url
+                    ArtifactsUrl        = $_.artifacts_url
+                    CancelUrl           = $_.cancel_url
+                    RerunUrl            = $_.rerun_url
+                    PreviousAttemptUrl  = $_.previous_attempt_url
+                    WorkflowUrl         = $_.workflow_url
+                    HeadCommit          = $_.head_commit
+                    HeadRepository      = $_.head_repository
+                    DisplayTitle        = $_.display_title
+                }
+            }
         }
     }
 

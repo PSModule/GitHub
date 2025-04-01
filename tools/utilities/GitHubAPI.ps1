@@ -48,6 +48,15 @@ $response.components.responses # HTTP status descriptions
 $path = '/repos/{owner}/{repo}/actions/runs'
 $method = 'get'
 $response.components.schemas.'issue-comment'
+$response.components.schemas.'workflow-run' | ConvertTo-Json -Depth 10 | Clip
+$response.components.schemas.'workflow-run'.properties.PSObject.Properties | ForEach-Object {
+    [pscustomobject]@{
+        Name        = $_.Name
+        Type        = $_.Value.format ?? $_.Value.type
+        Example     = $_.Value.example
+        Description = $_.Value.description
+    }
+} | Format-Table -AutoSize
 
 
 

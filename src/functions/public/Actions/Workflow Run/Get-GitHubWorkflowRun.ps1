@@ -42,7 +42,7 @@
         [List workflow runs for a workflow](https://docs.github.com/rest/actions/workflow-runs#list-workflow-runs-for-a-workflow)
         [List workflow runs for a repository](https://docs.github.com/rest/actions/workflow-runs#list-workflow-runs-for-a-repository)
     #>
-    # [OutputType([GitHubWorkflowRun])]
+    [OutputType([GitHubWorkflowRun])]
     [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidAssignmentToAutomaticVariable', 'Event',
@@ -67,7 +67,7 @@
             Mandatory,
             ParameterSetName = 'ByID'
         )]
-        [Alias('workflow_id', 'WorkflowID')]
+        [Alias('DatabaseID', 'WorkflowID')]
         [string] $ID,
 
         # The name of the workflow.
