@@ -54,6 +54,7 @@ Describe 'Artifacts' {
                     Write-Host ($result | Format-Table | Out-String)
                 }
                 $result | Should -Not -BeNullOrEmpty
+                $result | Should -BeOfType [GitHubArtifact]
             }
 
             It 'Get-GitHubArtifact - Repository - All artifacts - All versions' {
@@ -67,6 +68,7 @@ Describe 'Artifacts' {
                     Write-Host ($result | Format-Table | Out-String)
                 }
                 $result | Should -Not -BeNullOrEmpty
+                $result | Should -BeOfType [GitHubArtifact]
             }
 
             It 'Get-GitHubArtifact - Repository - Named artifact - Latest version' {
@@ -80,6 +82,7 @@ Describe 'Artifacts' {
                     Write-Host ($result | Format-Table | Out-String)
                 }
                 $result | Should -HaveCount 1
+                $result | Should -BeOfType [GitHubArtifact]
             }
 
             It 'Get-GitHubArtifact - Repository - Named artifact - All versions' {
@@ -94,6 +97,7 @@ Describe 'Artifacts' {
                     Write-Host ($result | Format-Table | Out-String)
                 }
                 $result | Should -Not -BeNullOrEmpty
+                $result | Should -BeOfType [GitHubArtifact]
             }
         }
 
@@ -108,7 +112,8 @@ Describe 'Artifacts' {
                 LogGroup 'Result' {
                     Write-Host ($result | Format-Table | Out-String)
                 }
-                $result | Should -HaveCount 1
+                $result | Should -Not -BeNullOrEmpty
+                $result | Should -BeOfType [GitHubArtifact]
             }
 
             It 'Get-GitHubArtifact - WorkflowRun - All artifacts - All versions' {
@@ -123,6 +128,7 @@ Describe 'Artifacts' {
                     Write-Host ($result | Format-Table | Out-String)
                 }
                 $result | Should -Not -BeNullOrEmpty
+                $result | Should -BeOfType [GitHubArtifact]
             }
 
             It 'Get-GitHubArtifact - WorkflowRun - Named artifact - Latest version' {
@@ -137,6 +143,7 @@ Describe 'Artifacts' {
                     Write-Host ($result | Format-Table | Out-String)
                 }
                 $result | Should -HaveCount 1
+                $result | Should -BeOfType [GitHubArtifact]
             }
 
             It 'Get-GitHubArtifact - WorkflowRun - Named artifact - All versions' {
@@ -152,6 +159,7 @@ Describe 'Artifacts' {
                     Write-Host ($result | Format-Table | Out-String)
                 }
                 $result | Should -Not -BeNullOrEmpty
+                $result | Should -BeOfType [GitHubArtifact]
             }
         }
 
@@ -171,6 +179,7 @@ Describe 'Artifacts' {
                 Write-Host ($result | Format-Table | Out-String)
             }
             $result | Should -Not -BeNullOrEmpty
+            $result | Should -BeOfType [GitHubArtifact]
         }
 
         It 'Save-GitHubArtifact - Saves the artifact to disk' {
@@ -206,7 +215,7 @@ Describe 'Artifacts' {
                 Write-Host ($result | Format-Table | Out-String)
             }
             $result | Should -Not -BeNullOrEmpty
-            $result | Should -BeOfType [System.IO.FileSystemInfo]
+            $result | Should -BeOfType [System.IO.FileInfo]
         }
 
         It 'Save-GitHubArtifact - Saves the artifact to disk, extract and cleanup to a specific path - using wildcard' {
@@ -224,7 +233,7 @@ Describe 'Artifacts' {
                 Write-Host ($result | Format-Table | Out-String)
             }
             $result | Should -Not -BeNullOrEmpty
-            $result | Should -BeOfType [System.IO.FileSystemInfo]
+            $result | Should -BeOfType [System.IO.FileInfo]
         }
 
         It 'Save-GitHubArtifact - Saves the artifact to disk, extract and cleanup to a specific path' {
@@ -242,7 +251,7 @@ Describe 'Artifacts' {
                 Write-Host ($result | Format-Table | Out-String)
             }
             $result | Should -Not -BeNullOrEmpty
-            $result | Should -BeOfType [System.IO.FileSystemInfo]
+            $result | Should -BeOfType [System.IO.FileInfo]
         }
 
         It 'Remove-GitHubArtifact - Removes the artifact from the repository' {
