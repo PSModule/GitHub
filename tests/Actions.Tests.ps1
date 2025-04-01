@@ -26,12 +26,12 @@ Describe 'Actions' {
         BeforeAll {
             $context = Connect-GitHubAccount @connectParams -PassThru -Silent
             LogGroup 'Context' {
-                Write-Host ($context | Format-List | Out-String)
+                Write-Host ($context | Format-Table | Out-String)
             }
             if ($AuthType -eq 'APP') {
                 LogGroup 'Context - Installation' {
                     $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
-                    Write-Host ($context | Format-List | Out-String)
+                    Write-Host ($context | Format-Table | Out-String)
                 }
             }
             $Owner = $env:GITHUB_REPOSITORY_OWNER
@@ -51,7 +51,7 @@ Describe 'Actions' {
             }
             $result = Get-GitHubArtifact @params
             LogGroup 'Result' {
-                Write-Host ($result | Format-List | Out-String)
+                Write-Host ($result | Format-Table | Out-String)
             }
             $result | Should -HaveCount 1
         }
@@ -65,7 +65,7 @@ Describe 'Actions' {
             }
             $result = Get-GitHubArtifact @params
             LogGroup 'Result' {
-                Write-Host ($result | Format-List | Out-String)
+                Write-Host ($result | Format-Table | Out-String)
             }
             $result | Should -HaveCount 1
         }
@@ -79,11 +79,11 @@ Describe 'Actions' {
             }
             $artifact = Get-GitHubArtifact @params
             LogGroup 'Artifact' {
-                Write-Host ($artifact | Format-List | Out-String)
+                Write-Host ($artifact | Format-Table | Out-String)
             }
             $result = Get-GitHubArtifact -Owner $Owner -Repository $Repository -ArtifactID $artifact.DatabaseID
             LogGroup 'Result' {
-                Write-Host ($result | Format-List | Out-String)
+                Write-Host ($result | Format-Table | Out-String)
             }
             $result | Should -Not -BeNullOrEmpty
         }
@@ -96,11 +96,11 @@ Describe 'Actions' {
             }
             LogGroup 'Artifact' {
                 $artifact = Get-GitHubArtifact @params
-                Write-Host ($artifact | Format-List | Out-String)
+                Write-Host ($artifact | Format-Table | Out-String)
             }
             LogGroup 'Result' {
                 $result = $artifact | Save-GitHubArtifact
-                Write-Host ($result | Format-List | Out-String)
+                Write-Host ($result | Format-Table | Out-String)
             }
             $result | Should -Not -BeNullOrEmpty
             $result | Should -BeOfType [System.IO.FileInfo]
@@ -114,11 +114,11 @@ Describe 'Actions' {
             }
             LogGroup 'Artifact' {
                 $artifact = Get-GitHubArtifact @params
-                Write-Host ($artifact | Format-List | Out-String)
+                Write-Host ($artifact | Format-Table | Out-String)
             }
             LogGroup 'Result' {
                 $result = $artifact | Save-GitHubArtifact -Expand -Cleanup
-                Write-Host ($result | Format-List | Out-String)
+                Write-Host ($result | Format-Table | Out-String)
             }
             $result | Should -Not -BeNullOrEmpty
             $result | Should -BeOfType [System.IO.FileSystemInfo]
@@ -128,15 +128,15 @@ Describe 'Actions' {
             $params = @{
                 Owner      = $Owner
                 Repository = $Repository
-                Name       = 'mo*'
+                Name       = 'm*ule'
             }
             LogGroup 'Artifact' {
                 $artifact = Get-GitHubArtifact @params
-                Write-Host ($artifact | Format-List | Out-String)
+                Write-Host ($artifact | Format-Table | Out-String)
             }
             LogGroup 'Result' {
                 $result = $artifact | Save-GitHubArtifact -Path .\testfolder -Expand -Cleanup
-                Write-Host ($result | Format-List | Out-String)
+                Write-Host ($result | Format-Table | Out-String)
             }
             $result | Should -Not -BeNullOrEmpty
             $result | Should -BeOfType [System.IO.FileSystemInfo]
@@ -150,11 +150,11 @@ Describe 'Actions' {
             }
             LogGroup 'Artifact' {
                 $artifact = Get-GitHubArtifact @params
-                Write-Host ($artifact | Format-List | Out-String)
+                Write-Host ($artifact | Format-Table | Out-String)
             }
             LogGroup 'Result' {
                 $result = $artifact | Save-GitHubArtifact -Path .\testfolder -Expand -Cleanup
-                Write-Host ($result | Format-List | Out-String)
+                Write-Host ($result | Format-Table | Out-String)
             }
             $result | Should -Not -BeNullOrEmpty
             $result | Should -BeOfType [System.IO.FileSystemInfo]
@@ -168,7 +168,7 @@ Describe 'Actions' {
             }
             LogGroup 'Artifact' {
                 $artifact = Get-GitHubArtifact @params
-                Write-Host ($artifact | Format-List | Out-String)
+                Write-Host ($artifact | Format-Table | Out-String)
             }
             { $artifact | Remove-GitHubArtifact -WhatIf } | Should -Not -Throw
         }
