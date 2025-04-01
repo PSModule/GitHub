@@ -25,7 +25,7 @@ function Remove-GitHubArtifact {
         It performs a delete operation against the GitHub REST API and is silent on success.
 
         .LINK
-        https://psmodule.io/GitHub/Functions/Remove-GitHubArtifact
+        https://psmodule.io/GitHub/Functions/Actions/Remove-GitHubArtifact/
 
         .LINK
         [Delete an artifact](https://docs.github.com/rest/actions/artifacts#delete-an-artifact)

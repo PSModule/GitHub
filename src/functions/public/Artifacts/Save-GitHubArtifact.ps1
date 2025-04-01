@@ -34,6 +34,9 @@ function Save-GitHubArtifact {
         This output can include directories or files depending on the artifact content.
 
         .LINK
+        https://psmodule.io/GitHub/Functions/Artifacts/Save-GitHubArtifact/
+
+        .LINK
         [Get an artifact](https://docs.github.com/rest/actions/artifacts#get-an-artifact)
     #>
     [OutputType([System.IO.FileSystemInfo[]])]
