@@ -21,8 +21,6 @@
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('Organization')]
-        [Alias('User')]
         [string] $Owner,
 
         [Parameter(
@@ -35,7 +33,7 @@
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('workflow_id', 'WorkflowID')]
+        [Alias('DatabaseID')]
         [string] $ID,
 
         # The context to run the command in. Used to get the details for the API call.

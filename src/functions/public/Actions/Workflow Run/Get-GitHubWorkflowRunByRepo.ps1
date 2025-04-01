@@ -70,7 +70,7 @@
 
         # Returns workflow runs with the check_suite_id that you specify.
         [Parameter()]
-        [int] $CheckSuiteID,
+        [System.Nullable[UInt64]] $CheckSuiteID,
 
         # Only returns workflow runs that are associated with the specified head_sha.
         [Parameter()]
@@ -79,7 +79,7 @@
         # The number of results per page (max 100).
         [Parameter()]
         [ValidateRange(0, 100)]
-        [int] $PerPage,
+        [System.Nullable[int]] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.
         [Parameter(Mandatory)]
@@ -99,16 +99,17 @@
             event                 = $Event
             status                = $Status
             created               = $Created
-            exclude_pull_requests = $ExcludePullRequests
+            exclude_pull_requests = [bool]$ExcludePullRequests
             check_suite_id        = $CheckSuiteID
             head_sha              = $HeadSHA
-            per_page              = $PerPage
         }
+        $body | Remove-HashtableEntry -NullOrEmptyValues
 
         $inputObject = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/actions/runs"
             Body        = $body
+            PerPage     = $PerPage
             Context     = $Context
         }
 

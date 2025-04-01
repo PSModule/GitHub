@@ -110,7 +110,7 @@
 
         # Returns workflow runs with the check_suite_id that you specify.
         [Parameter()]
-        [int] $CheckSuiteID,
+        [System.Nullable[UInt64]] $CheckSuiteID,
 
         # Only returns workflow runs that are associated with the specified head_sha.
         [Parameter()]
@@ -119,7 +119,7 @@
         # The number of results per page (max 100).
         [Parameter()]
         [ValidateRange(0, 100)]
-        [int] $PerPage,
+        [System.Nullable[int]] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -143,7 +143,7 @@
             Event               = $Event
             Status              = $Status
             Created             = $Created
-            ExcludePullRequests = $ExcludePullRequests
+            ExcludePullRequests = [bool] $ExcludePullRequests
             CheckSuiteID        = $CheckSuiteID
             HeadSHA             = $HeadSHA
             PerPage             = $PerPage
