@@ -3,7 +3,11 @@ Build:
     Skip: true
 Test:
   SourceCode:
-    Skip: true
+    Skip: false
+    Windows:
+      Skip: true
+    MacOS:
+      Skip: true
   PSModule:
     Skip: true
   Module:
