@@ -87,8 +87,8 @@ function Save-GitHubArtifact {
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             $headers = $_.Headers
-            $itemType = [System.IO.Path]::HasExtension($Path) ? 'File' : 'Directory'
-            $isAbsolute = [System.IO.Path]::IsPathFullyQualified($Path)
+            $itemType = $Path.EndsWith('.zip') ? 'File' : 'Directory'
+            $isAbsolute = [System.IO.Path]::IsPathRooted($Path)
             Write-Debug "Path:        [$Path]"
             Write-Debug "Type:        [$itemType]"
             Write-Debug "Is absolute: [$isAbsolute]"
