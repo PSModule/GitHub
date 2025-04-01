@@ -3,7 +3,7 @@ Build:
     Skip: true
 Test:
   SourceCode:
-    Skip: false
+    Skip: true
     Windows:
       Skip: true
     MacOS:

@@ -147,6 +147,7 @@
             CheckSuiteID        = $CheckSuiteID
             HeadSHA             = $HeadSHA
             PerPage             = $PerPage
+            Context             = $Context
         }
         $params | Remove-HashtableEntry -NullOrEmptyValues
 
@@ -158,7 +159,7 @@
             }
 
             'ByName' {
-                $params['ID'] = (Get-GitHubWorkflow -Owner $Owner -Repository $Repository -Name $Name).DatabaseID
+                $params['ID'] = (Get-GitHubWorkflow -Owner $Owner -Repository $Repository -Name $Name -Context $Context).DatabaseID
                 Get-GitHubWorkflowRunByWorkflow @params
             }
 
