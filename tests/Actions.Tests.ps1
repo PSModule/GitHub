@@ -120,6 +120,20 @@ Describe 'Actions' {
             $params = @{
                 Owner      = $Owner
                 Repository = $Repository
+                Name       = 'mo*'
+            }
+            LogGroup 'Result' {
+                $result = Get-GitHubArtifact @params | Save-GitHubArtifact -Path .\testfolder -Expand -Cleanup -Debug -Verbose
+                Write-Host ($result | Format-List | Out-String)
+            }
+            $result | Should -Not -BeNullOrEmpty
+            $result | Should -BeOfType [System.IO.FileSystemInfo]
+        }
+
+        It 'Save-GitHubArtifact - Saves the artifact to disk, extract and cleanup to a specific path' {
+            $params = @{
+                Owner      = $Owner
+                Repository = $Repository
                 Name       = $ArtifactName
             }
             LogGroup 'Result' {
