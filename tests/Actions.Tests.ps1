@@ -109,8 +109,9 @@ Describe 'Actions' {
                 Name       = $ArtifactName
             }
             LogGroup 'Result' {
-                $result = Get-GitHubArtifact @params | Save-GitHubArtifact -Expand -Cleanup -Debug -Verbose
+                $result = Get-GitHubArtifact @params
                 Write-Host ($result | Format-List | Out-String)
+                $result | Save-GitHubArtifact -Expand -Cleanup -Debug -Verbose
             }
             $result | Should -Not -BeNullOrEmpty
             $result | Should -BeOfType [System.IO.FileSystemInfo]
@@ -123,8 +124,9 @@ Describe 'Actions' {
                 Name       = 'mo*'
             }
             LogGroup 'Result' {
-                $result = Get-GitHubArtifact @params | Save-GitHubArtifact -Path .\testfolder -Expand -Cleanup -Debug -Verbose
+                $result = Get-GitHubArtifact @params
                 Write-Host ($result | Format-List | Out-String)
+                $result | Save-GitHubArtifact -Path .\testfolder -Expand -Cleanup -Debug -Verbose
             }
             $result | Should -Not -BeNullOrEmpty
             $result | Should -BeOfType [System.IO.FileSystemInfo]
@@ -137,8 +139,9 @@ Describe 'Actions' {
                 Name       = $ArtifactName
             }
             LogGroup 'Result' {
-                $result = Get-GitHubArtifact @params | Save-GitHubArtifact -Path .\testfolder -Expand -Cleanup -Debug -Verbose
+                $result = Get-GitHubArtifact @params
                 Write-Host ($result | Format-List | Out-String)
+                $result | Save-GitHubArtifact -Path .\testfolder -Expand -Cleanup -Debug -Verbose
             }
             $result | Should -Not -BeNullOrEmpty
             $result | Should -BeOfType [System.IO.FileSystemInfo]
@@ -150,7 +153,11 @@ Describe 'Actions' {
                 Repository = $Repository
                 Name       = $ArtifactName
             }
-            { Get-GitHubArtifact @params | Remove-GitHubArtifact -WhatIf } | Should -Not -Throw
+            LogGroup 'Result' {
+                $result = Get-GitHubArtifact @params
+                Write-Host ($result | Format-List | Out-String)
+            }
+            { $result | Remove-GitHubArtifact -WhatIf } | Should -Not -Throw
         }
     }
 }
