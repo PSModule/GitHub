@@ -197,7 +197,7 @@ Describe 'Artifacts' {
                 Write-Host ($result | Format-Table | Out-String)
             }
             $result | Should -Not -BeNullOrEmpty
-            $result | Should -BeOfType [System.IO.FileInfo]
+            $result | Should -BeOfType [System.IO.FileSystemInfo]
         }
 
         It 'Save-GitHubArtifact - Saves the artifact to disk, extract and cleanup' {
@@ -215,7 +215,7 @@ Describe 'Artifacts' {
                 Write-Host ($result | Format-Table | Out-String)
             }
             $result | Should -Not -BeNullOrEmpty
-            $result | Should -BeOfType [System.IO.FileInfo]
+            $result | Should -BeOfType [System.IO.FileSystemInfo]
         }
 
         It 'Save-GitHubArtifact - Saves the artifact to disk, extract and cleanup to a specific path - using wildcard' {
@@ -233,7 +233,7 @@ Describe 'Artifacts' {
                 Write-Host ($result | Format-Table | Out-String)
             }
             $result | Should -Not -BeNullOrEmpty
-            $result | Should -BeOfType [System.IO.FileInfo]
+            $result | Should -BeOfType [System.IO.FileSystemInfo]
         }
 
         It 'Save-GitHubArtifact - Saves the artifact to disk, extract and cleanup to a specific path' {
@@ -251,7 +251,7 @@ Describe 'Artifacts' {
                 Write-Host ($result | Format-Table | Out-String)
             }
             $result | Should -Not -BeNullOrEmpty
-            $result | Should -BeOfType [System.IO.FileInfo]
+            $result | Should -BeOfType [System.IO.FileSystemInfo]
         }
 
         It 'Remove-GitHubArtifact - Removes the artifact from the repository' {
