@@ -95,8 +95,8 @@
         # Can be one of: `completed`, `action_required`, `cancelled`, `failure`, `neutral`, `skipped`, `stale`, `success`, `timed_out`, `in_progress`,
         # `queued`, `requested`, `waiting`, `pending`.
         [Parameter()]
-        [ValidateSet('completed', 'action_required', 'cancelled', 'failure', 'neutral', 'skipped', 'stale', 'success', 'timed_out', 'in_progress',
-            'queued', 'requested', 'waiting', 'pending')]
+        # [ValidateSet('completed', 'action_required', 'cancelled', 'failure', 'neutral', 'skipped', 'stale', 'success', 'timed_out', 'in_progress',
+        #     'queued', 'requested', 'waiting', 'pending')]
         [string] $Status,
 
         # Returns workflow runs created within the given date-time range. For more information on the syntax, see
@@ -148,7 +148,9 @@
             HeadSHA             = $HeadSHA
             PerPage             = $PerPage
         }
+        $params | Remove-HashtableEntry -NullOrEmptyValues
 
+        Write-Debug "ParameterSet: $($PSCmdlet.ParameterSetName)"
         switch ($PSCmdlet.ParameterSetName) {
             'ByID' {
                 $params['ID'] = $ID
@@ -156,7 +158,7 @@
             }
 
             'ByName' {
-                $params['ID'] = (Get-GitHubWorkflow -Owner $Owner -Repository $Repository -Name $Name).id
+                $params['ID'] = (Get-GitHubWorkflow -Owner $Owner -Repository $Repository -Name $Name).DatabaseID
                 Get-GitHubWorkflowRunByWorkflow @params
             }
 

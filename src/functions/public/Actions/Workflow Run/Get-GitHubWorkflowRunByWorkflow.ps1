@@ -109,13 +109,14 @@
             exclude_pull_requests = $ExcludePullRequests
             check_suite_id        = $CheckSuiteID
             head_sha              = $HeadSHA
-            per_page              = $PerPage
         }
+        $body | Remove-HashtableEntry -NullOrEmptyValues
 
         $inputObject = @{
             Context     = $Context
             APIEndpoint = "/repos/$Owner/$Repository/actions/workflows/$ID/runs"
             Method      = 'GET'
+            PerPage     = $PerPage
             Body        = $body
         }
 
