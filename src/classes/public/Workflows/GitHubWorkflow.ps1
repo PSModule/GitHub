@@ -26,6 +26,9 @@
     # The timestamp when the workflow was last updated.
     [datetime] $UpdatedAt
 
+    # The timestamp when the workflow was last updated.
+    [datetime] $DeletedAt
+
     # The GitHub URL for viewing the workflow.
     [string] $Url
 

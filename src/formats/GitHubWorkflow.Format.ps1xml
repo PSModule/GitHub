@@ -36,12 +36,13 @@
                             <TableColumnItem>
                                 <ScriptBlock>
                                     switch -Wildcard ($_.State) {
-                                    "active" { "✅" }
-                                    "deleted" { "❌" }
-                                    "disabled*" { "⚠️" }
+                                    "active" { "✅" + [char]0x200B }
+                                    "deleted" { "❌" + [char]0x200B }
+                                    "disabled*" { "⛔" + [char]0x200B }
                                     default { $_.State }
                                     }
                                 </ScriptBlock>
+
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Name</PropertyName>

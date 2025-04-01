@@ -32,10 +32,17 @@
         Gets all workflow runs for the workflow with the name `nightly.yml` in the repository `Hello-World` owned by `octocat` that were triggered by
         the user `octocat` on the branch `main` and have the status `success`.
 
+        .INPUTS
+        GitHubWorkflow
+
+        .OUTPUTS
+        GitHubWorkflowRun
+
         .NOTES
         [List workflow runs for a workflow](https://docs.github.com/rest/actions/workflow-runs#list-workflow-runs-for-a-workflow)
         [List workflow runs for a repository](https://docs.github.com/rest/actions/workflow-runs#list-workflow-runs-for-a-repository)
     #>
+    [OutputType([GitHubWorkflowRun])]
     [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidAssignmentToAutomaticVariable', 'Event',
@@ -46,8 +53,6 @@
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('Organization')]
-        [Alias('User')]
         [string] $Owner,
 
         # The name of the repository. The name is not case sensitive.

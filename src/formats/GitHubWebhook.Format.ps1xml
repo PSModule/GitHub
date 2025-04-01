@@ -39,10 +39,9 @@
                             <!-- S(tatus) column -->
                             <TableColumnItem>
                                 <ScriptBlock>
-                                    if ($_.Status -eq 'ok') {
-                                    [char]0x2705 + [char]0x200B
-                                    } else {
-                                    [char]0x274C + [char]0x200B
+                                    switch ($_.Status) {
+                                    'ok' { "✅" + [char]0x200B }
+                                    default { "❌" + [char]0x200B }
                                     }
                                 </ScriptBlock>
                             </TableColumnItem>
