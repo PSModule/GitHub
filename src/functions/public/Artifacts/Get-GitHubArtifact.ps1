@@ -88,6 +88,7 @@ function Get-GitHubArtifact {
         # Retrieves artifacts by name or all artifacts across a repo.
         [Parameter(ParameterSetName = 'FromRepository')]
         [Parameter(ParameterSetName = 'FromWorkflowRun')]
+        [SupportsWildcards()]
         [string] $Name,
 
         # Return all versions of artifacts.
@@ -119,10 +120,20 @@ function Get-GitHubArtifact {
                 Get-GitHubArtifactById @params -ID $ArtifactID
             }
             'FromWorkflowRun' {
-                Get-GitHubArtifactFromWorkflowRun @params -ID $ID -Name $Name -AllVersions:$AllVersions
+                if ($Name.Contains('*')) {
+                    Get-GitHubArtifactFromWorkflowRun @params -ID $ID -AllVersions:$AllVersions |
+                        Where-Object { $_.Name -like $Name }
+                } else {
+                    Get-GitHubArtifactFromWorkflowRun @params -ID $ID -Name $Name -AllVersions:$AllVersions
+                }
             }
             'FromRepository' {
-                Get-GitHubArtifactFromRepository @params -Name $Name -AllVersions:$AllVersions
+                if ($Name.Contains('*')) {
+                    Get-GitHubArtifactFromRepository @params -AllVersions:$AllVersions |
+                        Where-Object { $_.Name -like $Name }
+                } else {
+                    Get-GitHubArtifactFromRepository @params -Name $Name -AllVersions:$AllVersions
+                }
             }
         }
     }
