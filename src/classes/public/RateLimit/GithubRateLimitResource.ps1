@@ -1,4 +1,4 @@
-﻿Class GitHubRateLimitResource {
+﻿class GitHubRateLimitResource {
     # The name of the resource.
     [string] $Name
 
