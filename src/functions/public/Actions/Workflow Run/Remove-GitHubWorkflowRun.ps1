@@ -63,6 +63,7 @@
         if ($PSCmdlet.ShouldProcess("$Owner/$Repository/$ID", 'Delete workflow run')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
+                Write-Verbose "Deleted workflow run [$ID] in [$Owner/$Repository]"
             }
         }
     }

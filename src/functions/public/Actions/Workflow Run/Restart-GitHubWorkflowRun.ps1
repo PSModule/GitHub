@@ -59,6 +59,7 @@
         if ($PSCmdlet.ShouldProcess("workflow with ID [$ID] in [$Owner/$Repository]", 'Re-run')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
+                Write-Verbose "Re-run workflow [$ID] in [$Owner/$Repository]"
             }
         }
     }
