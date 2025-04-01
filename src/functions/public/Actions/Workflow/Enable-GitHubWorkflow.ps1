@@ -1,29 +1,40 @@
 ﻿filter Enable-GitHubWorkflow {
     <#
-        .NOTES
+        .SYNOPSIS
+
+        .DESCRIPTION
+
+        .EXAMPLE
+
+        .INPUTS
+        GitHubWorkflow
+
+        .LINK
         [Enable a workflow](https://docs.github.com/rest/actions/workflows#enable-a-workflow)
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param(
+        # The account owner of the repository. The name is not case sensitive.
         [Parameter(
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('Organization')]
-        [Alias('User')]
         [string] $Owner,
 
+        # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
         [string] $Repository,
 
+        # The ID of the workflow. You can also pass the workflow filename as a string.
         [Parameter(
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [string[]] $ID,
+        [Alias('DatabaseID', 'WorkflowID')]
+        [UInt64] $ID,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -46,7 +57,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("$Owner/$Repository/$ID", 'Enable workflow')) {
-            Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @inputObject
         }
     }
 

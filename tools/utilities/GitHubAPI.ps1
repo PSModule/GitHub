@@ -22,8 +22,8 @@ $response = Invoke-RestMethod -Uri $APIDocURI -Method Get
 # @{n = 'PUT'; e = { (($_.value.psobject.Properties.Name) -contains 'PUT') } }, `
 # @{n = 'PATCH'; e = { (($_.value.psobject.Properties.Name) -contains 'PATCH') } } | Format-Table
 
-$path = '/repos/{owner}/{repo}/actions/artifacts/{artifact_id}'
-$method = 'get'
+$path = '/repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable'
+$method = 'put'
 $response.paths.$path.$method
 $response.paths.$path.$method.tags | clip                             # -> Namespace/foldername
 $response.paths.$path.$method.operationId | clip                      # -> FunctionName
