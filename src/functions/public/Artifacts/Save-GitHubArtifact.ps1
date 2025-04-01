@@ -104,12 +104,13 @@ function Save-GitHubArtifact {
                 $Path = Join-Path -Path $Path -ChildPath $filename
             }
 
+            $folderPath = [System.IO.Path]::GetDirectoryName($Path)
+            $folder = New-Item -Path $folderPath -ItemType Directory -Force
             Write-Debug "Resolved final download path: [$Path]"
             [System.IO.File]::WriteAllBytes($Path, $_.Response)
 
             if ($Expand) {
-                $parentFolder = [System.IO.Path]::GetDirectoryName($Path)
-                $destFolder = Join-Path -Path $parentFolder -ChildPath ([System.IO.Path]::GetFileNameWithoutExtension($Path))
+                $destFolder = Join-Path -Path $folder -ChildPath ([System.IO.Path]::GetFileNameWithoutExtension($Path))
                 Write-Debug "Expanding artifact [$Path] to [$destFolder]"
                 Expand-Archive -LiteralPath $Path -DestinationPath $destFolder -Force -PassThru
 
