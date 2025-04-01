@@ -97,7 +97,7 @@
 
     # The start time of the latest run. Resets on re-run.
     # Example: "2023-01-01T12:01:00Z"
-    [System.Nullable[string]] $RunStartedAt
+    [string] $RunStartedAt
 
     # The URL to the jobs for the workflow run.
     # Example: "https://api.github.com/repos/github/hello-world/actions/runs/5/jobs"
@@ -125,7 +125,7 @@
 
     # The URL to the previous attempted run of this workflow, if one exists.
     # Example: "https://api.github.com/repos/github/hello-world/actions/runs/5/attempts/3"
-    [System.Nullable[string]] $PreviousAttemptUrl
+    [string] $PreviousAttemptUrl
 
     # The URL to the workflow definition.
     # Example: "https://api.github.com/repos/github/hello-world/actions/workflows/main.yaml"
