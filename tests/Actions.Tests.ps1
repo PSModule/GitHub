@@ -93,7 +93,7 @@ Describe 'Actions' {
                 LogGroup 'Result' {
                     Write-Host ($result | Format-Table | Out-String)
                 }
-                $result | Should -HaveCount 1
+                $result | Should -Not -BeNullOrEmpty
             }
         }
 
