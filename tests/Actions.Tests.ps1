@@ -43,31 +43,116 @@ Describe 'Actions' {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
         }
 
-        It 'Get-GitHubArtifact - Gets the artifacts for a repository' {
-            $params = @{
-                Owner      = $Owner
-                Repository = $Repository
-                Name       = $ArtifactName
+        Context 'Repository' {
+            It 'Get-GitHubArtifact - Repository - All artifacts - Latest version' {
+                $params = @{
+                    Owner      = $Owner
+                    Repository = $Repository
+                }
+                $result = Get-GitHubArtifact @params
+                LogGroup 'Result' {
+                    Write-Host ($result | Format-Table | Out-String)
+                }
+                $result | Should -Not -BeNullOrEmpty
             }
-            $result = Get-GitHubArtifact @params
-            LogGroup 'Result' {
-                Write-Host ($result | Format-Table | Out-String)
+
+            It 'Get-GitHubArtifact - Repository - All artifacts - All versions' {
+                $params = @{
+                    Owner       = $Owner
+                    Repository  = $Repository
+                    AllVersions = $true
+                }
+                $result = Get-GitHubArtifact @params
+                LogGroup 'Result' {
+                    Write-Host ($result | Format-Table | Out-String)
+                }
+                $result | Should -Not -BeNullOrEmpty
             }
-            $result | Should -HaveCount 1
+
+            It 'Get-GitHubArtifact - Repository - Named artifact - Latest version' {
+                $params = @{
+                    Owner      = $Owner
+                    Repository = $Repository
+                    Name       = $ArtifactName
+                }
+                $result = Get-GitHubArtifact @params
+                LogGroup 'Result' {
+                    Write-Host ($result | Format-Table | Out-String)
+                }
+                $result | Should -HaveCount 1
+            }
+
+            It 'Get-GitHubArtifact - Repository - Named artifact - All versions' {
+                $params = @{
+                    Owner       = $Owner
+                    Repository  = $Repository
+                    Name        = $ArtifactName
+                    AllVersions = $true
+                }
+                $result = Get-GitHubArtifact @params
+                LogGroup 'Result' {
+                    Write-Host ($result | Format-Table | Out-String)
+                }
+                $result | Should -HaveCount 1
+            }
         }
 
-        It 'Get-GitHubArtifact - Gets the artifact for the workflow run' {
-            $params = @{
-                Owner      = $Owner
-                Repository = $Repository
-                ID         = $ID
-                Name       = $ArtifactName
+        Context 'WorkflowRun' {
+            It 'Get-GitHubArtifact - WorkflowRun - All artifacts - Latest version' {
+                $params = @{
+                    Owner      = $Owner
+                    Repository = $Repository
+                    ID         = $ID
+                }
+                $result = Get-GitHubArtifact @params
+                LogGroup 'Result' {
+                    Write-Host ($result | Format-Table | Out-String)
+                }
+                $result | Should -HaveCount 1
             }
-            $result = Get-GitHubArtifact @params
-            LogGroup 'Result' {
-                Write-Host ($result | Format-Table | Out-String)
+
+            It 'Get-GitHubArtifact - WorkflowRun - All artifacts - All versions' {
+                $params = @{
+                    Owner       = $Owner
+                    Repository  = $Repository
+                    ID          = $ID
+                    AllVersions = $true
+                }
+                $result = Get-GitHubArtifact @params
+                LogGroup 'Result' {
+                    Write-Host ($result | Format-Table | Out-String)
+                }
+                $result | Should -Not -BeNullOrEmpty
             }
-            $result | Should -HaveCount 1
+
+            It 'Get-GitHubArtifact - WorkflowRun - Named artifact - Latest version' {
+                $params = @{
+                    Owner      = $Owner
+                    Repository = $Repository
+                    ID         = $ID
+                    Name       = $ArtifactName
+                }
+                $result = Get-GitHubArtifact @params
+                LogGroup 'Result' {
+                    Write-Host ($result | Format-Table | Out-String)
+                }
+                $result | Should -HaveCount 1
+            }
+
+            It 'Get-GitHubArtifact - WorkflowRun - Named artifact - All versions' {
+                $params = @{
+                    Owner       = $Owner
+                    Repository  = $Repository
+                    ID          = $ID
+                    Name        = $ArtifactName
+                    AllVersions = $true
+                }
+                $result = Get-GitHubArtifact @params
+                LogGroup 'Result' {
+                    Write-Host ($result | Format-Table | Out-String)
+                }
+                $result | Should -Not -BeNullOrEmpty
+            }
         }
 
         It 'Get-GitHubArtifact - Gets a specific artifact' {

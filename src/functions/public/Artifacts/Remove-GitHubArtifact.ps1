@@ -15,7 +15,7 @@ function Remove-GitHubArtifact {
         Deletes the artifact with ID 123456 from the repository 'demo-repo' owned by 'octocat'.
 
         .INPUTS
-        [GitHubArtifact]
+        GitHubArtifact
 
         .OUTPUTS
         void
