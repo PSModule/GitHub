@@ -1,7 +1,8 @@
-Build:
-  Docs:
-    Skip: true
 Test:
-  Skip: true
+  Module:
+    Windows:
+      Skip: true
+    MacOS:
+      Skip: true
   CodeCoverage:
     PercentTarget: 50

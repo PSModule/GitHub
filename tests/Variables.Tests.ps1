@@ -201,11 +201,6 @@ Describe 'Environments' {
             }
 
             Context 'SelectedRepository' {
-                BeforeEach {
-                    LogGroup 'Sleep 15 seconds' {
-                        Start-Sleep -Seconds 15
-                    }
-                }
                 It 'Get-GitHubVariableSelectedRepository - gets a list of selected repositories' {
                     LogGroup "SelectedRepositories - [$varName]" {
                         $result = Get-GitHubVariableSelectedRepository -Owner $owner -Name $varName

@@ -183,7 +183,9 @@ function Get-GitHubVariable {
                     $variables += Get-GitHubVariableOwnerList @params |
                         Where-Object { $_.Name -like $Name }
                 } else {
-                    $variables += Get-GitHubVariableOwnerByName @params -Name $Name
+                    try {
+                        $variables += Get-GitHubVariableOwnerByName @params -Name $Name
+                    } catch { $null }
                 }
                 break
             }
@@ -197,7 +199,9 @@ function Get-GitHubVariable {
                     $variables += Get-GitHubVariableRepositoryList @params |
                         Where-Object { $_.Name -like $Name }
                 } else {
-                    $variables += Get-GitHubVariableRepositoryByName @params -Name $Name
+                    try {
+                        $variables += Get-GitHubVariableRepositoryByName @params -Name $Name
+                    } catch { $null }
                 }
                 break
             }
@@ -210,7 +214,9 @@ function Get-GitHubVariable {
                         $variables += Get-GitHubVariableRepositoryList @params |
                             Where-Object { $_.Name -like $Name }
                     } else {
-                        $variables += Get-GitHubVariableRepositoryByName @params -Name $Name
+                        try {
+                            $variables += Get-GitHubVariableRepositoryByName @params -Name $Name
+                        } catch { $null }
                     }
                 }
                 $params['Environment'] = $Environment
@@ -218,7 +224,9 @@ function Get-GitHubVariable {
                     $variables += Get-GitHubVariableEnvironmentList @params |
                         Where-Object { $_.Name -like $Name }
                 } else {
-                    $variables += Get-GitHubVariableEnvironmentByName @params -Name $Name
+                    try {
+                        $variables += Get-GitHubVariableEnvironmentByName @params -Name $Name
+                    } catch { $null }
                 }
                 break
             }
