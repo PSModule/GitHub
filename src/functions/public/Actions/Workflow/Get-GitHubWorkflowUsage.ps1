@@ -34,7 +34,7 @@
             ValueFromPipelineByPropertyName
         )]
         [Alias('DatabaseID', 'WorkflowID')]
-        [UInt64] $ID,
+        [string] $ID,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
