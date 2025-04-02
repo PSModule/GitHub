@@ -1,5 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '6.0.0' }
-#Requires -Modules @{ ModuleName = 'Microsoft.PowerShell.SecretManagement'; RequiredVersion = '1.1.2' }
+﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '7.0.2' }
 
 ###
 ### CONNECTING
@@ -49,9 +48,8 @@ Set-GitHubDefaultContext -Context 'msx.ghe.com/MariusStorhaug'
 Get-GitHubContext -Context 'github.com/MariusStorhaug' | Set-GitHubDefaultContext
 
 # Abstraction layers on GitHubContexts
-Get-GitHubContext -Context 'msx.ghe.com/MariusStorhaug' # Only manages secrets prefixed with 'Context:PSModule.GitHub/'
-Get-Context -ID 'PSModule.GitHub/msx.ghe.com/MariusStorhaug' # Only manages secrets prefixed with 'Context:', handles conversion to/from JSON
-Get-Secret -Name 'Context:PSModule.GitHub/msx.ghe.com/MariusStorhaug' # Only manages secrets storage on the system
+Get-GitHubContext -Context 'msx.ghe.com/MariusStorhaug'
+Get-Context -ID 'PSModule.GitHub/msx.ghe.com/MariusStorhaug'
 
 ###
 ### DISCONNECTING

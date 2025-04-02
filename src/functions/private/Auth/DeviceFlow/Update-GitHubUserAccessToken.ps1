@@ -17,7 +17,7 @@
         This will update the GitHub access token for the context 'github.com/mojombo'.
 
         .NOTES
-        [Refreshing user access tokens](https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/refreshing-user-access-tokens)
+        [Refreshing user access tokens](https://docs.github.com/apps/creating-github-apps/authenticating-with-a-github-app/refreshing-user-access-tokens)
     #>
     [CmdletBinding(SupportsShouldProcess)]
     [OutputType([securestring])]
@@ -98,4 +98,4 @@
         Write-Debug "[$stackPath] - End"
     }
 }
-#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '6.0.0' }
+#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '7.0.2' }

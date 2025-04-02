@@ -89,7 +89,7 @@ filter Get-GitHubRepository {
             Mandatory,
             ParameterSetName = 'ByName'
         )]
-        [string] $Repository,
+        [string] $Name,
 
         # The handle for the GitHub user account.
         [Parameter(
@@ -203,9 +203,9 @@ filter Get-GitHubRepository {
             }
             'ByName' {
                 $params = @{
-                    Context    = $Context
-                    Owner      = $Owner
-                    Repository = $Repository
+                    Context = $Context
+                    Owner   = $Owner
+                    Name    = $Name
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues
                 Write-Verbose ($params | Format-List | Out-String)
@@ -253,5 +253,3 @@ filter Get-GitHubRepository {
         Write-Debug "[$stackPath] - End"
     }
 }
-
-#SkipTest:FunctionTest:Will add a test for this function in a future PR

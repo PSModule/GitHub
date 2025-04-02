@@ -109,7 +109,7 @@ filter New-GitHubRepositoryUser {
         # The ID of the team that will be granted access to this repository. This is only valid when creating a repository in an organization.
         [Parameter()]
         [Alias('team_id')]
-        [int] $TeamId,
+        [System.Nullable[int]] $TeamId,
 
         # Pass true to create an initial commit with empty README.
         [Parameter()]
@@ -188,7 +188,7 @@ filter New-GitHubRepositoryUser {
             Name                   = 'GitignoreTemplate'
             Alias                  = 'gitignore_template'
             Type                   = [string]
-            ValidateSet            = Get-GitHubGitignoreList
+            ValidateSet            = Get-GitHubGitignore
             DynamicParamDictionary = $DynamicParamDictionary
         }
         New-DynamicParam @dynParam
@@ -197,7 +197,7 @@ filter New-GitHubRepositoryUser {
             Name                   = 'LicenseTemplate'
             Alias                  = 'license_template'
             Type                   = [string]
-            ValidateSet            = Get-GitHubLicenseList | Select-Object -ExpandProperty key
+            ValidateSet            = Get-GitHubLicense | Select-Object -ExpandProperty key
             DynamicParamDictionary = $DynamicParamDictionary
         }
         New-DynamicParam @dynParam2
@@ -218,25 +218,25 @@ filter New-GitHubRepositoryUser {
             name                        = $Name
             description                 = $Description
             homepage                    = $Homepage
-            visibility                  = $Visibility
-            has_issues                  = $HasIssues
-            has_projects                = $HasProjects
-            has_wiki                    = $HasWiki
-            has_downloads               = $HasDownloads
-            is_template                 = $IsTemplate
+            has_issues                  = [bool]$HasIssues
+            has_projects                = [bool]$HasProjects
+            has_wiki                    = [bool]$HasWiki
+            has_downloads               = [bool]$HasDownloads
+            is_template                 = [bool]$IsTemplate
             team_id                     = $TeamId
-            auto_init                   = $AutoInit
-            allow_squash_merge          = $AllowSquashMerge
-            allow_merge_commit          = $AllowMergeCommit
-            allow_rebase_merge          = $AllowRebaseMerge
-            allow_auto_merge            = $AllowAutoMerge
-            delete_branch_on_merge      = $DeleteBranchOnMerge
+            auto_init                   = [bool]$AutoInit
+            allow_squash_merge          = [bool]$AllowSquashMerge
+            allow_merge_commit          = [bool]$AllowMergeCommit
+            allow_rebase_merge          = [bool]$AllowRebaseMerge
+            allow_auto_merge            = [bool]$AllowAutoMerge
+            delete_branch_on_merge      = [bool]$DeleteBranchOnMerge
             squash_merge_commit_title   = $SquashMergeCommitTitle
             squash_merge_commit_message = $SquashMergeCommitMessage
             merge_commit_title          = $MergeCommitTitle
             merge_commit_message        = $MergeCommitMessage
             private                     = $Visibility -eq 'private'
         }
+        $body | Remove-HashtableEntry -NullOrEmptyValues
 
         $inputObject = @{
             Method      = 'POST'

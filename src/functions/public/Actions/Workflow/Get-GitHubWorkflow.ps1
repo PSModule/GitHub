@@ -18,24 +18,36 @@
 
         Gets the 'hello-world.yml' workflow in the 'octocat/hello-world' repository.
 
+        .OUTPUTS
+        GitHubWorkflow
+
         .NOTES
-        [List repository workflows](https://docs.github.com/rest/actions/workflows?apiVersion=2022-11-28#list-repository-workflows)
+        A GitHubWorkflow object.
+
+        .LINK
+        [List repository workflows](https://docs.github.com/rest/actions/workflows#list-repository-workflows)
     #>
+    [OutputType([GitHubWorkflow])]
     [CmdletBinding()]
     param(
+        # The account owner of the repository. The name is not case sensitive.
         [Parameter(
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('Organization')]
-        [Alias('User')]
         [string] $Owner,
 
+        # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
         [string] $Repository,
+
+        # The name of the workflow to get.
+        [Parameter()]
+        [SupportsWildcards()]
+        [string] $Name = '*',
 
         # The number of results per page (max 100).
         [Parameter()]
@@ -56,19 +68,30 @@
     }
 
     process {
-        $body = @{
-            per_page = $PerPage
-        }
-
         $inputObject = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/actions/workflows"
             Body        = $body
+            PerPage     = $PerPage
             Context     = $Context
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            Write-Output $_.Response.workflows | Where-Object { $_.name -like $Name } | ForEach-Object {
+                [GitHubWorkflow]@{
+                    DatabaseID = $_.id
+                    NodeID     = $_.node_id
+                    Name       = $_.name
+                    Owner      = $Owner
+                    Repository = $Repository
+                    Path       = $_.path
+                    State      = $_.state
+                    CreatedAt  = $_.created_at
+                    UpdatedAt  = $_.updated_at
+                    Url        = $_.html_url
+                    BadgeUrl   = $_.badge_url
+                }
+            }
         }
     }
 

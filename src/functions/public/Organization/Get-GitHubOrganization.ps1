@@ -81,11 +81,6 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
     }
 
     process {
@@ -100,7 +95,7 @@
                 Get-GitHubAllOrganization -Since $Since -PerPage $PerPage -Context $Context
             }
             default {
-                Get-GitHubMyOrganization -PerPage $PerPage -Context $Context | Get-GitHubOrganizationByName -Context $Context
+                Get-GitHubMyOrganization -PerPage $PerPage -Context $Context
             }
         }
     }

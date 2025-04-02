@@ -5,19 +5,19 @@
 <table>
     <tr>
         <td>Available functions</td>
-        <td>1015</td>
+        <td>1021</td>
     </tr>
     <tr>
         <td>Covered functions</td>
-        <td>176</td>
+        <td>190</td>
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>839</td>
+        <td>831</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>17.34%</td>
+        <td>18.61%</td>
     </tr>
 </table>
 
@@ -131,10 +131,10 @@
 | `/orgs/{org}/actions/secrets/{secret_name}`                                                                               | :x:                | :x:                |                    |                    | :x:                |
 | `/orgs/{org}/actions/secrets/{secret_name}/repositories`                                                                  |                    | :x:                |                    |                    | :x:                |
 | `/orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}`                                                  | :x:                |                    |                    |                    | :x:                |
-| `/orgs/{org}/actions/variables`                                                                                           |                    | :x:                |                    | :x:                |                    |
-| `/orgs/{org}/actions/variables/{name}`                                                                                    | :x:                | :x:                | :x:                |                    |                    |
-| `/orgs/{org}/actions/variables/{name}/repositories`                                                                       |                    | :x:                |                    |                    | :x:                |
-| `/orgs/{org}/actions/variables/{name}/repositories/{repository_id}`                                                       | :x:                |                    |                    |                    | :x:                |
+| `/orgs/{org}/actions/variables`                                                                                           |                    | :white_check_mark: |                    | :white_check_mark: |                    |
+| `/orgs/{org}/actions/variables/{name}`                                                                                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
+| `/orgs/{org}/actions/variables/{name}/repositories`                                                                       |                    | :white_check_mark: |                    |                    | :white_check_mark: |
+| `/orgs/{org}/actions/variables/{name}/repositories/{repository_id}`                                                       | :white_check_mark: |                    |                    |                    | :white_check_mark: |
 | `/orgs/{org}/attestations/{subject_digest}`                                                                               |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/blocks`                                                                                                      |                    | :white_check_mark: |                    |                    |                    |
 | `/orgs/{org}/blocks/{username}`                                                                                           | :white_check_mark: | :white_check_mark: |                    |                    | :white_check_mark: |
@@ -159,7 +159,6 @@
 | `/orgs/{org}/copilot/billing/selected_teams`                                                                              | :x:                |                    |                    | :x:                |                    |
 | `/orgs/{org}/copilot/billing/selected_users`                                                                              | :x:                |                    |                    | :x:                |                    |
 | `/orgs/{org}/copilot/metrics`                                                                                             |                    | :x:                |                    |                    |                    |
-| `/orgs/{org}/copilot/usage`                                                                                               |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/dependabot/alerts`                                                                                           |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/dependabot/secrets`                                                                                          |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/dependabot/secrets/public-key`                                                                               |                    | :x:                |                    |                    |                    |
@@ -191,6 +190,8 @@
 | `/orgs/{org}/invitations`                                                                                                 |                    | :white_check_mark: |                    | :white_check_mark: |                    |
 | `/orgs/{org}/invitations/{invitation_id}`                                                                                 | :white_check_mark: |                    |                    |                    |                    |
 | `/orgs/{org}/invitations/{invitation_id}/teams`                                                                           |                    | :x:                |                    |                    |                    |
+| `/orgs/{org}/issue-types`                                                                                                 |                    | :x:                |                    | :x:                |                    |
+| `/orgs/{org}/issue-types/{issue_type_id}`                                                                                 | :x:                |                    |                    |                    | :x:                |
 | `/orgs/{org}/issues`                                                                                                      |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/members`                                                                                                     |                    | :white_check_mark: |                    |                    |                    |
 | `/orgs/{org}/members/{username}`                                                                                          | :x:                | :x:                |                    |                    |                    |
@@ -240,6 +241,8 @@
 | `/orgs/{org}/rulesets/rule-suites`                                                                                        |                    | :white_check_mark: |                    |                    |                    |
 | `/orgs/{org}/rulesets/rule-suites/{rule_suite_id}`                                                                        |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/rulesets/{ruleset_id}`                                                                                       | :x:                | :white_check_mark: |                    |                    | :x:                |
+| `/orgs/{org}/rulesets/{ruleset_id}/history`                                                                               |                    | :x:                |                    |                    |                    |
+| `/orgs/{org}/rulesets/{ruleset_id}/history/{version_id}`                                                                  |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/secret-scanning/alerts`                                                                                      |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/security-advisories`                                                                                         |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/security-managers`                                                                                           |                    | :x:                |                    |                    |                    |
@@ -251,7 +254,6 @@
 | `/orgs/{org}/settings/network-configurations/{network_configuration_id}`                                                  | :x:                | :x:                | :x:                |                    |                    |
 | `/orgs/{org}/settings/network-settings/{network_settings_id}`                                                             |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/team/{team_slug}/copilot/metrics`                                                                            |                    | :x:                |                    |                    |                    |
-| `/orgs/{org}/team/{team_slug}/copilot/usage`                                                                              |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/teams`                                                                                                       |                    | :white_check_mark: |                    | :white_check_mark: |                    |
 | `/orgs/{org}/teams/{team_slug}`                                                                                           | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
 | `/orgs/{org}/teams/{team_slug}/discussions`                                                                               |                    | :x:                |                    | :x:                |                    |
@@ -283,9 +285,9 @@
 | `/projects/{project_id}/columns`                                                                                          |                    | :x:                |                    | :x:                |                    |
 | `/rate_limit`                                                                                                             |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}`                                                                                                   | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
-| `/repos/{owner}/{repo}/actions/artifacts`                                                                                 |                    | :x:                |                    |                    |                    |
-| `/repos/{owner}/{repo}/actions/artifacts/{artifact_id}`                                                                   | :x:                | :x:                |                    |                    |                    |
-| `/repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}`                                                  |                    | :x:                |                    |                    |                    |
+| `/repos/{owner}/{repo}/actions/artifacts`                                                                                 |                    | :white_check_mark: |                    |                    |                    |
+| `/repos/{owner}/{repo}/actions/artifacts/{artifact_id}`                                                                   | :white_check_mark: | :white_check_mark: |                    |                    |                    |
+| `/repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}`                                                  |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/cache/usage`                                                                               |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/caches`                                                                                    | :x:                | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/caches/{cache_id}`                                                                         | :x:                |                    |                    |                    |                    |
@@ -293,8 +295,8 @@
 | `/repos/{owner}/{repo}/actions/jobs/{job_id}/logs`                                                                        |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/jobs/{job_id}/rerun`                                                                       |                    |                    |                    | :x:                |                    |
 | `/repos/{owner}/{repo}/actions/oidc/customization/sub`                                                                    |                    | :x:                |                    |                    | :x:                |
-| `/repos/{owner}/{repo}/actions/organization-secrets`                                                                      |                    | :white_check_mark: |                    |                    |                    |
-| `/repos/{owner}/{repo}/actions/organization-variables`                                                                    |                    | :x:                |                    |                    |                    |
+| `/repos/{owner}/{repo}/actions/organization-secrets`                                                                      |                    | :x:                |                    |                    |                    |
+| `/repos/{owner}/{repo}/actions/organization-variables`                                                                    |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/permissions`                                                                               |                    | :x:                |                    |                    | :x:                |
 | `/repos/{owner}/{repo}/actions/permissions/access`                                                                        |                    | :x:                |                    |                    | :x:                |
 | `/repos/{owner}/{repo}/actions/permissions/selected-actions`                                                              |                    | :x:                |                    |                    | :x:                |
@@ -308,10 +310,10 @@
 | `/repos/{owner}/{repo}/actions/runners/{runner_id}/labels`                                                                | :x:                | :x:                |                    | :x:                | :x:                |
 | `/repos/{owner}/{repo}/actions/runners/{runner_id}/labels/{name}`                                                         | :x:                |                    |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/runs`                                                                                      |                    | :white_check_mark: |                    |                    |                    |
-| `/repos/{owner}/{repo}/actions/runs/{run_id}`                                                                             | :x:                | :x:                |                    |                    |                    |
+| `/repos/{owner}/{repo}/actions/runs/{run_id}`                                                                             | :x:                | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/runs/{run_id}/approvals`                                                                   |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/runs/{run_id}/approve`                                                                     |                    |                    |                    | :x:                |                    |
-| `/repos/{owner}/{repo}/actions/runs/{run_id}/artifacts`                                                                   |                    | :x:                |                    |                    |                    |
+| `/repos/{owner}/{repo}/actions/runs/{run_id}/artifacts`                                                                   |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}`                                                   |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/jobs`                                              |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/logs`                                              |                    | :x:                |                    |                    |                    |
@@ -327,8 +329,8 @@
 | `/repos/{owner}/{repo}/actions/secrets`                                                                                   |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/secrets/public-key`                                                                        |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/secrets/{secret_name}`                                                                     | :x:                | :x:                |                    |                    | :x:                |
-| `/repos/{owner}/{repo}/actions/variables`                                                                                 |                    | :x:                |                    | :x:                |                    |
-| `/repos/{owner}/{repo}/actions/variables/{name}`                                                                          | :x:                | :x:                | :x:                |                    |                    |
+| `/repos/{owner}/{repo}/actions/variables`                                                                                 |                    | :white_check_mark: |                    | :white_check_mark: |                    |
+| `/repos/{owner}/{repo}/actions/variables/{name}`                                                                          | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
 | `/repos/{owner}/{repo}/actions/workflows`                                                                                 |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/workflows/{workflow_id}`                                                                   |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable`                                                           |                    |                    |                    |                    | :white_check_mark: |
@@ -433,9 +435,9 @@
 | `/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}`                  | :x:                | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/environments/{environment_name}/secrets`                                                           |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/environments/{environment_name}/secrets/public-key`                                                |                    | :x:                |                    |                    |                    |
-| `/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}`                                             | :white_check_mark: | :x:                |                    |                    | :white_check_mark: |
-| `/repos/{owner}/{repo}/environments/{environment_name}/variables`                                                         |                    | :x:                |                    | :x:                |                    |
-| `/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}`                                                  | :x:                | :x:                | :x:                |                    |                    |
+| `/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}`                                             | :x:                | :x:                |                    |                    | :x:                |
+| `/repos/{owner}/{repo}/environments/{environment_name}/variables`                                                         |                    | :white_check_mark: |                    | :white_check_mark: |                    |
+| `/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}`                                                  | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
 | `/repos/{owner}/{repo}/events`                                                                                            |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/forks`                                                                                             |                    | :white_check_mark: |                    | :white_check_mark: |                    |
 | `/repos/{owner}/{repo}/git/blobs`                                                                                         |                    |                    |                    | :x:                |                    |
@@ -546,6 +548,8 @@
 | `/repos/{owner}/{repo}/rulesets/rule-suites`                                                                              |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/rulesets/rule-suites/{rule_suite_id}`                                                              |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/rulesets/{ruleset_id}`                                                                             | :x:                | :white_check_mark: |                    |                    | :x:                |
+| `/repos/{owner}/{repo}/rulesets/{ruleset_id}/history`                                                                     |                    | :x:                |                    |                    |                    |
+| `/repos/{owner}/{repo}/rulesets/{ruleset_id}/history/{version_id}`                                                        |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/secret-scanning/alerts`                                                                            |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}`                                                             |                    | :x:                | :x:                |                    |                    |
 | `/repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations`                                                   |                    | :x:                |                    |                    |                    |

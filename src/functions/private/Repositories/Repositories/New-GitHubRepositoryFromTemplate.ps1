@@ -88,7 +88,7 @@
             owner                = $Owner
             name                 = $Name
             description          = $Description
-            include_all_branches = $IncludeAllBranches
+            include_all_branches = [bool]$IncludeAllBranches
             private              = $Private
         }
 

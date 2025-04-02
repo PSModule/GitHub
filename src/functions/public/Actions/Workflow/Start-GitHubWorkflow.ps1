@@ -15,7 +15,7 @@
         }
 
         .NOTES
-        [Create a workflow dispatch event](https://docs.github.com/en/rest/actions/workflows#create-a-workflow-dispatch-event)
+        [Create a workflow dispatch event](https://docs.github.com/rest/actions/workflows#create-a-workflow-dispatch-event)
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param(
@@ -24,8 +24,6 @@
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('Organization')]
-        [Alias('User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
@@ -35,19 +33,17 @@
         )]
         [string] $Repository,
 
-        # The ID of the workflow.
-        [Alias('workflow_id', 'WorkflowID')]
+        # The ID of the workflow. You can also pass the workflow filename as a string.
         [Parameter(
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [string] $ID,
+        [Alias('DatabaseID', 'WorkflowID')]
+        [UInt64] $ID,
 
         # The reference of the workflow run. The reference can be a branch, tag, or a commit SHA.
-        [Parameter(
-            ValueFromPipelineByPropertyName
-        )]
-        [Alias('branch', 'tag')]
+        [Parameter()]
+        [Alias('Branch', 'Tag')]
         [string] $Ref = 'main',
 
         # Input parameters for the workflow run. You can use the inputs and payload keys to pass custom data to your workflow.

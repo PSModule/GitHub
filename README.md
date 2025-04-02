@@ -10,8 +10,8 @@ and GitHub enthusiasts who want to use PowerShell to integrate or manage GitHub 
   with multiple accounts; be that GitHub (public, github.com), GitHub Enterprise Cloud (GHEC, including GHE.com) and GitHub Enterprise Server (GHES).
 - **A great GitHub Action Workflow companion**
   The module is built to be a companion in GitHub Actions. It comes with PowerShell-flavored
-  [workflow-commands](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions) and
-  is [context aware](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/accessing-contextual-information-about-workflow-runs).
+  [workflow-commands](https://docs.github.com/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions) and
+  is [context aware](https://docs.github.com/actions/writing-workflows/choosing-what-your-workflow-does/accessing-contextual-information-about-workflow-runs).
   So it detects how it is being used and loads available information dynamically. You can provide it the `GITHUB_TOKEN`, a client ID and private key
   for a GitHub App, or a user access token (fine-grained or classic). In addition to be a great local scripting companion, it also understands when
   its run in GitHub Actions where it will automatically detect the event that triggered the workflow and provide the necessary context to commands. So
@@ -56,7 +56,7 @@ This is the recommended method for authentication due to access tokens being sho
 It opens a browser window and prompts you to log in to GitHub. Once you log in, you will be provided with
 a code that you need to paste into the PowerShell console. The command already puts the code in your clipboard.
 It uses a GitHub App to authenticate, which is more secure than using a personal access token. The GitHub App
-is only granted access to the organizations or repositories you install it on. Visit the [GitHub Apps documentation](https://docs.github.com/en/developers/apps/about-apps)
+is only granted access to the organizations or repositories you install it on. Visit the [GitHub Apps documentation](https://docs.github.com/developers/apps/about-apps)
 to read more about GitHub Apps. You can also use a different GitHub App to issue user access tokens, check the section on
 [Using a different GitHub App for issuing User access tokens](#using-a-different-github-app-for-issuing-user-access-tokens) for more information.
 
@@ -103,7 +103,7 @@ Connect-GitHubAccount
 
 This uses the same flow as above, but instead of using the GitHub App, it uses an OAuth app with long lived tokens.
 During the signing you can also authorize the app to access your private repositories.
-Visit the [OAuth apps documentation](https://docs.github.com/en/developers/apps/about-apps) to read more about OAuth apps on GitHub.
+Visit the [OAuth apps documentation](https://docs.github.com/developers/apps/about-apps) to read more about OAuth apps on GitHub.
 
 ```powershell
 Connect-GitHubAccount -Mode OAuth
@@ -148,7 +148,7 @@ Connect-GitHubAccount -Token '...'
 If you are using a GitHub App, you can use the `Connect-GitHubAccount` command to authenticate using the client ID and private key.
 
 ```powershell
-Connect-GitHubAccount -ClientId 'lv123456789' -PrivateKey '-----BEGIN PRIVATE KEY----- ... -----END PRIVATE KEY-----'
+Connect-GitHubAccount -ClientId $ClientID -PrivateKey $PrivateKey
 ✓ Logged in as my-github-app!
 ```
 
@@ -204,21 +204,10 @@ Get-Command -Module GitHub
 
 - [Generic HTTP Status Codes (MDN)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
 
-### Inspiration Behind the Project
+### Alternative GitHub PowerShell Modules
 
 - [Microsoft's PowerShellForGitHub](https://github.com/microsoft/PowerShellForGitHub)
 - [PSGitHub by pcgeek86](https://github.com/pcgeek86/PSGitHub)
-- [PSSodium by TylerLeonhardt](https://github.com/TylerLeonhardt/PSSodium)
-- [libsodium NuGet Package](https://www.nuget.org/packages/Sodium.Core/)
 - [GitHubActions by ebekker](https://github.com/ebekker/pwsh-github-action-tools)
 - [powershell-devops by smokedlinq](https://github.com/smokedlinq/powershell-devops)
 - [GitHubActionsToolkit by hugoalh-studio](https://github.com/hugoalh-studio/ghactions-toolkit-powershell)
-
-### Authentication and Login
-
-- [PowerShell for GitHub on GitHub Marketplace](https://github.com/apps/powershell-for-github)
-- [Building a CLI with a GitHub App](https://docs.github.com/en/apps/creating-github-apps/writing-code-for-a-github-app/building-a-cli-with-a-github-app)
-
-### Module Configuration and Environment
-
-- [GH Environment for GitHub CLI](https://cli.github.com/manual/gh_help_environment)

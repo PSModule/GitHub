@@ -71,13 +71,17 @@
             Write-Debug 'Property value:'
             Write-Debug ($InputObject | Out-String)
 
-            # Convert hashtable or PSCustomObject to compressed JSON
-            if ($value -is [hashtable] -or $value -is [PSCustomObject]) {
-                Write-Debug 'Converting property value to JSON'
+            # For each property value:
+            if ($value -is [string]) {
+                if (Test-Json $value -ErrorAction SilentlyContinue) {
+                    # Normalize valid JSON strings to a consistent format.
+                    $value = ($value | ConvertFrom-Json) | ConvertTo-Json -Compress -Depth 100
+                }
+            } else {
+                # For non-string values, convert to JSON.
                 $value = $value | ConvertTo-Json -Compress -Depth 100
-                Write-Debug 'Property value:'
-                Write-Debug $value
             }
+
 
             $guid = [Guid]::NewGuid().ToString()
             $EOFMarker = "EOF_$guid"

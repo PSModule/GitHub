@@ -20,14 +20,20 @@
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(Mandatory)]
+        [Parameter(
+            Mandatory,
+            ValueFromPipelineByPropertyName
+        )]
         [Alias('Organization')]
         [Alias('User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter(Mandatory)]
-        [string] $Repository,
+        [Parameter(
+            Mandatory,
+            ValueFromPipelineByPropertyName
+        )]
+        [string] $Name,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -45,11 +51,11 @@
     process {
         $inputObject = @{
             Method      = 'DELETE'
-            APIEndpoint = "/repos/$Owner/$Repository"
+            APIEndpoint = "/repos/$Owner/$Name"
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("repo [$Owner/$Repository]", 'DELETE')) {
+        if ($PSCmdlet.ShouldProcess("repo [$Owner/$Name]", 'DELETE')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }
@@ -60,5 +66,3 @@
         Write-Debug "[$stackPath] - End"
     }
 }
-
-#SkipTest:FunctionTest:Will add a test for this function in a future PR

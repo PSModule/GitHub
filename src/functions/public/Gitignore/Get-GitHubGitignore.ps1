@@ -40,10 +40,6 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-        if ([string]::IsNullOrEmpty($Enterprise)) {
-            $Enterprise = $Context.Enterprise
-        }
-        Write-Debug "Enterprise: [$Enterprise]"
     }
 
     process {
@@ -65,7 +61,7 @@
 Register-ArgumentCompleter -CommandName Get-GitHubGitignore -ParameterName Name -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter
-    Get-GitHubGitignoreList -Context $fakeBoundParameter.Context | Where-Object { $_ -like "$wordToComplete*" } | ForEach-Object {
+    Get-GitHubGitignore | Where-Object { $_ -like "$wordToComplete*" } | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
     }
 }
