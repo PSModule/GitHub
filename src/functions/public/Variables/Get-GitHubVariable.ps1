@@ -150,6 +150,14 @@ function Get-GitHubVariable {
         [Parameter()]
         [switch] $IncludeInherited,
 
+        # List all variables, including those that are overwritten by inheritance.
+        [Parameter()]
+        [switch] $All,
+
+        # Set the environment variables locally for the current session.
+        [Parameter()]
+        [switch] $SetLocalEnvironment,
+
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
@@ -175,7 +183,9 @@ function Get-GitHubVariable {
                     $variables += Get-GitHubVariableOwnerList @params |
                         Where-Object { $_.Name -like $Name }
                 } else {
-                    $variables += Get-GitHubVariableOwnerByName @params -Name $Name
+                    try {
+                        $variables += Get-GitHubVariableOwnerByName @params -Name $Name
+                    } catch { $null }
                 }
                 break
             }
@@ -189,7 +199,9 @@ function Get-GitHubVariable {
                     $variables += Get-GitHubVariableRepositoryList @params |
                         Where-Object { $_.Name -like $Name }
                 } else {
-                    $variables += Get-GitHubVariableRepositoryByName @params -Name $Name
+                    try {
+                        $variables += Get-GitHubVariableRepositoryByName @params -Name $Name
+                    } catch { $null }
                 }
                 break
             }
@@ -202,7 +214,9 @@ function Get-GitHubVariable {
                         $variables += Get-GitHubVariableRepositoryList @params |
                             Where-Object { $_.Name -like $Name }
                     } else {
-                        $variables += Get-GitHubVariableRepositoryByName @params -Name $Name
+                        try {
+                            $variables += Get-GitHubVariableRepositoryByName @params -Name $Name
+                        } catch { $null }
                     }
                 }
                 $params['Environment'] = $Environment
@@ -210,9 +224,36 @@ function Get-GitHubVariable {
                     $variables += Get-GitHubVariableEnvironmentList @params |
                         Where-Object { $_.Name -like $Name }
                 } else {
-                    $variables += Get-GitHubVariableEnvironmentByName @params -Name $Name
+                    try {
+                        $variables += Get-GitHubVariableEnvironmentByName @params -Name $Name
+                    } catch { $null }
                 }
                 break
+            }
+        }
+
+        if ($IncludeInherited -and -not $All) {
+            $variables = $variables | Group-Object -Property Name | ForEach-Object {
+                $group = $_.Group
+                $envVar = $group | Where-Object { $_.Environment }
+                if ($envVar) {
+                    $envVar
+                } else {
+                    $repoVar = $group | Where-Object { $_.Repository -and (-not $_.Environment) }
+                    if ($repoVar) {
+                        $repoVar
+                    } else {
+                        $group | Where-Object { (-not $_.Repository) -and (-not $_.Environment) }
+                    }
+                }
+            }
+        }
+
+        if ($SetLocalEnvironment) {
+            Write-Debug 'Set local environment variables:'
+            $variables | ForEach-Object {
+                [System.Environment]::SetEnvironmentVariable($_.Name, $_.Value, 'Process')
+                Write-Debug "$($_.Name) = $($_.Value)"
             }
         }
         $variables
