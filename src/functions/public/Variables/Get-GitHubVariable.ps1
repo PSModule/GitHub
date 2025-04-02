@@ -150,6 +150,10 @@ function Get-GitHubVariable {
         [Parameter()]
         [switch] $IncludeInherited,
 
+        # List all variables, including those that are overwritten by inheritance.
+        [Parameter()]
+        [switch] $All,
+
         # Set the environment variables locally for the current session.
         [Parameter()]
         [switch] $SetLocalEnvironment,
@@ -220,7 +224,7 @@ function Get-GitHubVariable {
             }
         }
 
-        if ($IncludeInherited) {
+        if ($IncludeInherited -and -not $All) {
             $variables = $variables | Group-Object -Property Name | ForEach-Object {
                 $group = $_.Group
                 $envVar = $group | Where-Object { $_.Environment }
