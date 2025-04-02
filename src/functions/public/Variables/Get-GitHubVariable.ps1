@@ -150,6 +150,10 @@ function Get-GitHubVariable {
         [Parameter()]
         [switch] $IncludeInherited,
 
+        # Set the environment variables locally for the current session.
+        [Parameter()]
+        [switch] $SetLocalEnvironment,
+
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
@@ -213,6 +217,31 @@ function Get-GitHubVariable {
                     $variables += Get-GitHubVariableEnvironmentByName @params -Name $Name
                 }
                 break
+            }
+        }
+
+        if ($IncludeInherited) {
+            $variables = $variables | Group-Object -Property Name | ForEach-Object {
+                $group = $_.Group
+                $envVar = $group | Where-Object { $_.Environment }
+                if ($envVar) {
+                    $envVar
+                } else {
+                    $repoVar = $group | Where-Object { $_.Repository -and (-not $_.Environment) }
+                    if ($repoVar) {
+                        $repoVar
+                    } else {
+                        $group | Where-Object { (-not $_.Repository) -and (-not $_.Environment) }
+                    }
+                }
+            }
+        }
+
+        if ($SetLocalEnvironment) {
+            Write-Debug 'Set local environment variables:'
+            $variables | ForEach-Object {
+                [System.Environment]::SetEnvironmentVariable($_.Name, $_.Value, 'Process')
+                Write-Debug "$($_.Name) = $($_.Value)"
             }
         }
         $variables
