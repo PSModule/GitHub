@@ -9,15 +9,15 @@
     </tr>
     <tr>
         <td>Covered functions</td>
-        <td>190</td>
+        <td>202</td>
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>831</td>
+        <td>819</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>18.61%</td>
+        <td>19.78%</td>
     </tr>
 </table>
 
@@ -295,7 +295,7 @@
 | `/repos/{owner}/{repo}/actions/jobs/{job_id}/logs`                                                                        |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/jobs/{job_id}/rerun`                                                                       |                    |                    |                    | :x:                |                    |
 | `/repos/{owner}/{repo}/actions/oidc/customization/sub`                                                                    |                    | :x:                |                    |                    | :x:                |
-| `/repos/{owner}/{repo}/actions/organization-secrets`                                                                      |                    | :x:                |                    |                    |                    |
+| `/repos/{owner}/{repo}/actions/organization-secrets`                                                                      |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/organization-variables`                                                                    |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/permissions`                                                                               |                    | :x:                |                    |                    | :x:                |
 | `/repos/{owner}/{repo}/actions/permissions/access`                                                                        |                    | :x:                |                    |                    | :x:                |
@@ -435,7 +435,7 @@
 | `/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}`                  | :x:                | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/environments/{environment_name}/secrets`                                                           |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/environments/{environment_name}/secrets/public-key`                                                |                    | :x:                |                    |                    |                    |
-| `/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}`                                             | :x:                | :x:                |                    |                    | :x:                |
+| `/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}`                                             | :white_check_mark: | :x:                |                    |                    | :white_check_mark: |
 | `/repos/{owner}/{repo}/environments/{environment_name}/variables`                                                         |                    | :white_check_mark: |                    | :white_check_mark: |                    |
 | `/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}`                                                  | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
 | `/repos/{owner}/{repo}/events`                                                                                            |                    | :x:                |                    |                    |                    |
