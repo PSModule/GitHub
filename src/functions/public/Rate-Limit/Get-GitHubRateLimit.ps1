@@ -64,6 +64,15 @@
                     Reset     = [DateTime]::UnixEpoch.AddSeconds($_.Value.reset).ToLocalTime()
                 }
             }
+            if ($_.Response.Rate) {
+                [GitHubRateLimitResource]@{
+                    Name      = 'rate'
+                    Limit     = $_.Response.Rate.limit
+                    Used      = $_.Response.Rate.used
+                    Remaining = $_.Response.Rate.remaining
+                    Reset     = [DateTime]::UnixEpoch.AddSeconds($_.Response.Rate.reset).ToLocalTime()
+                }
+            }
         }
     }
 
