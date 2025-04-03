@@ -1,5 +1,5 @@
-﻿$owner = 'PSModule'
-$repo = 'GitHub'
+﻿$owner = 'marius-test2'
+$repo = 'internal'
 $environment = 'test'
 
 Set-GitHubEnvironment -Owner $Owner -Repository $Repo -Name $environment
@@ -14,4 +14,9 @@ Set-GitHubVariable -Owner $Owner -Repository $Repo -Environment $environment -Na
 Get-GitHubVariable -Owner $Owner -Repository $Repo -Environment $environment -IncludeInherited # Should have the value 'Environment'
 Get-GitHubVariable -Owner $Owner -Repository $Repo -Environment $environment -IncludeInherited -All
 
+$env:TESTVARIABLE
+Get-GitHubVariable -Owner $Owner -Repository $Repo -Environment $environment -IncludeInherited -SetLocalEnvironment
+$env:TESTVARIABLE
+
 Get-GitHubVariable -Owner $Owner -Repository $Repo -Environment $environment -IncludeInherited -All -Name 'Test*' | Remove-GitHubVariable
+Get-GitHubEnvironment -Owner $Owner -Repository $Repo -Name $environment | Remove-GitHubEnvironment
