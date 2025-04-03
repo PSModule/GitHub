@@ -39,7 +39,7 @@
             ValueFromPipelineByPropertyName
         )]
         [Alias('DatabaseID', 'WorkflowID')]
-        [UInt64] $ID,
+        [string] $ID,
 
         # The reference of the workflow run. The reference can be a branch, tag, or a commit SHA.
         [Parameter()]
