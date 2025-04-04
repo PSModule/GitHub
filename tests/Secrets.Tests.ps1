@@ -92,7 +92,7 @@ Describe 'Secrets' {
             }
 
             It 'Get-GitHubPublicKey - Codespaces' {
-                $result = Get-GitHubPublicKey @scope -Type codespaces
+                $result = Get-GitHubPublicKey -Type codespaces
                 LogGroup 'PublicKey - Codespaces' {
                     Write-Host "$($result | Select-Object * | Format-Table -AutoSize | Out-String)"
                 }
