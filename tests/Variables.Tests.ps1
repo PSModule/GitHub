@@ -184,6 +184,15 @@ Describe 'Variables' {
                 $result | Should -Not -BeNullOrEmpty
             }
 
+            It 'Export-GitHubVariable' {
+                Get-GitHubVariable @scope -IncludeInherited | Export-GitHubVariable
+                $result = Get-ChildItem -Path env: | Where-Object { $_.Name -like "$variablePrefix*" }
+                LogGroup 'Variables' {
+                    Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
+                }
+                $result | Should -Not -BeNullOrEmpty
+            }
+
             It 'Remove-GitHubVariable' {
                 $testVarName = "$variablePrefix`TestVariable*"
                 LogGroup 'Before remove' {
@@ -324,6 +333,15 @@ Describe 'Variables' {
                 $result | Should -Not -BeNullOrEmpty
             }
 
+            It 'Export-GitHubVariable' {
+                Get-GitHubVariable @scope -IncludeInherited | Export-GitHubVariable
+                $result = Get-ChildItem -Path env: | Where-Object { $_.Name -like "$variablePrefix*" }
+                LogGroup 'Variables' {
+                    Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
+                }
+                $result | Should -Not -BeNullOrEmpty
+            }
+
             It 'Remove-GitHubVariable' {
                 $before = Get-GitHubVariable @scope -Name "*$os*"
                 LogGroup 'Variables - Before' {
@@ -400,6 +418,15 @@ Describe 'Variables' {
 
             It 'Get-GitHubVariable -IncludeInherited' {
                 $result = Get-GitHubVariable @scope -Name "*$os*" -IncludeInherited
+                LogGroup 'Variables' {
+                    Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
+                }
+                $result | Should -Not -BeNullOrEmpty
+            }
+
+            It 'Export-GitHubVariable' {
+                Get-GitHubVariable @scope -IncludeInherited | Export-GitHubVariable
+                $result = Get-ChildItem -Path env: | Where-Object { $_.Name -like "$variablePrefix*" }
                 LogGroup 'Variables' {
                     Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
                 }
