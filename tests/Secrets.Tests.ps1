@@ -91,9 +91,9 @@ Describe 'Secrets' {
                 { Get-GitHubPublicKey } | Should -Throw
             }
 
-            It 'Get-GitHubPublicKey - Codespace' {
-                $result = Get-GitHubPublicKey @scope -Type codespace
-                LogGroup 'PublicKey - Codespace' {
+            It 'Get-GitHubPublicKey - Codespaces' {
+                $result = Get-GitHubPublicKey @scope -Type codespaces
+                LogGroup 'PublicKey - Codespaces' {
                     Write-Host "$($result | Select-Object * | Format-Table -AutoSize | Out-String)"
                 }
                 $result | Should -Not -BeNullOrEmpty
@@ -114,8 +114,8 @@ Describe 'Secrets' {
                 $result | Should -Not -BeNullOrEmpty
             }
 
-            It 'Get-GitHubPublicKey - Codespace' {
-                $result = Get-GitHubPublicKey @scope -Type codespace
+            It 'Get-GitHubPublicKey - Codespaces' {
+                $result = Get-GitHubPublicKey @scope -Type codespaces
                 LogGroup 'PublicKey' {
                     Write-Host "$($result | Select-Object * | Format-Table -AutoSize | Out-String)"
                 }
@@ -319,8 +319,8 @@ Describe 'Secrets' {
                 $result | Should -Not -BeNullOrEmpty
             }
 
-            It 'Get-GitHubPublicKey - Codespace' {
-                $result = Get-GitHubPublicKey @scope -Type codespace
+            It 'Get-GitHubPublicKey - Codespaces' {
+                $result = Get-GitHubPublicKey @scope -Type codespaces
                 LogGroup 'PublicKey' {
                     Write-Host "$($result | Select-Object * | Format-Table -AutoSize | Out-String)"
                 }
@@ -409,8 +409,8 @@ Describe 'Secrets' {
                 $result | Should -Not -BeNullOrEmpty
             }
 
-            It 'Get-GitHubPublicKey - Codespace' {
-                { Get-GitHubPublicKey @scope -Type codespace } | Should -Throw
+            It 'Get-GitHubPublicKey - Codespaces' {
+                { Get-GitHubPublicKey @scope -Type codespaces } | Should -Throw
             }
 
             # It 'Set-GitHubVariable' {
