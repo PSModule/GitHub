@@ -311,10 +311,18 @@ Describe 'Secrets' {
                 # Set-GitHubVariable @scope -Name $varName -Value 'repository'
             }
 
-            It 'Get-GitHubPublicKey' {
+            It 'Get-GitHubPublicKey - Action' {
                 $result = Get-GitHubPublicKey @scope
                 LogGroup 'PublicKey' {
-                    Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
+                    Write-Host "$($result | Select-Object * | Format-Table -AutoSize| Out-String)"
+                }
+                $result | Should -Not -BeNullOrEmpty
+            }
+
+            It 'Get-GitHubPublicKey - Codespace' {
+                $result = Get-GitHubPublicKey @scope -Type codespace
+                LogGroup 'PublicKey' {
+                    Write-Host "$($result | Select-Object * | Format-Table -AutoSize | Out-String)"
                 }
                 $result | Should -Not -BeNullOrEmpty
             }
@@ -393,13 +401,18 @@ Describe 'Secrets' {
                 # Set-GitHubVariable @scope -Name $varName -Value 'environment'
             }
 
-            It 'Get-GitHubPublicKey' {
+            It 'Get-GitHubPublicKey - Action' {
                 $result = Get-GitHubPublicKey @scope
                 LogGroup 'PublicKey' {
-                    Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
+                    Write-Host "$($result | Select-Object * | Format-Table -AutoSize| Out-String)"
                 }
                 $result | Should -Not -BeNullOrEmpty
             }
+
+            It 'Get-GitHubPublicKey - Codespace' {
+                { Get-GitHubPublicKey @scope -Type codespace } | Should -Throw
+            }
+
             # It 'Set-GitHubVariable' {
             #     $param = @{
             #         Name  = "$variablePrefix`TestVariable"
