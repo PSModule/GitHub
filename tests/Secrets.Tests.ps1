@@ -120,11 +120,18 @@ Describe 'Secrets' {
             }
 
             It 'Get-GitHubPublicKey - Codespaces' {
-                $result = Get-GitHubPublicKey @scope -Type codespaces
-                LogGroup 'PublicKey' {
-                    Write-Host "$($result | Select-Object * | Format-Table -AutoSize | Out-String)"
+                switch ($org.plan.name) {
+                    'free' {
+                        { Get-GitHubPublicKey @scope -Type codespaces } | Should -Throw
+                    }
+                    default {
+                        $result = Get-GitHubPublicKey @scope -Type codespaces
+                        LogGroup 'PublicKey' {
+                            Write-Host "$($result | Select-Object * | Format-Table -AutoSize | Out-String)"
+                        }
+                        $result | Should -Not -BeNullOrEmpty
+                    }
                 }
-                $result | Should -Not -BeNullOrEmpty
             }
 
             # It 'Set-GitHubVariable - should ensure existance of a organization variable' {
