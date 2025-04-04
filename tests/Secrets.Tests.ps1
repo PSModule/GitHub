@@ -297,7 +297,7 @@ Describe 'Secrets' {
                 }
                 $result | Should -Not -BeNullOrEmpty
             }
-            
+
             # It 'Set-GitHubVariable' {
             #     $param = @{
             #         Name  = "$variablePrefix`TestVariable"
@@ -445,5 +445,6 @@ Describe 'Secrets' {
             #     $after.Count | Should -Be 0
             # }
         }
+        
     }
 }
