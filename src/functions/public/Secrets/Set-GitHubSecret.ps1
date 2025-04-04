@@ -43,20 +43,20 @@
 
     [CmdletBinding(DefaultParameterSetName = 'AuthenticatedUser', SupportsShouldProcess, ConfirmImpact = 'Low')]
     param (
-        # The account owner of the repository. The name is not case-sensitive.
-        [Parameter(ParameterSetName = 'Organization', Mandatory)]
-        [Parameter(ParameterSetName = 'Environment', Mandatory)]
-        [Parameter(ParameterSetName = 'Repository', Mandatory)]
+        # The account owner of the repository. The name is not case sensitive.
+        [Parameter(Mandatory, ParameterSetName = 'Organization')]
+        [Parameter(Mandatory, ParameterSetName = 'Repository')]
+        [Parameter(Mandatory, ParameterSetName = 'Environment')]
         [Alias('Organization', 'User')]
         [string] $Owner,
 
-        # The name of the repository. The name is not case-sensitive.
-        [Parameter(ParameterSetName = 'Environment', Mandatory)]
-        [Parameter(ParameterSetName = 'Repository', Mandatory)]
+        # The name of the repository. The name is not case sensitive.
+        [Parameter(Mandatory, ParameterSetName = 'Repository')]
+        [Parameter(Mandatory, ParameterSetName = 'Environment')]
         [string] $Repository,
 
         # The name of the repository environment.
-        [Parameter(ParameterSetName = 'Environment', Mandatory)]
+        [Parameter(Mandatory, ParameterSetName = 'Environment')]
         [string] $Environment,
 
         # The name of the secret to be updated.
@@ -67,18 +67,20 @@
         [ValidateSet('actions', 'codespaces')]
         [string] $Type = 'actions',
 
-        # Set visibility to private (only applicable at the organization level).
+        # The visibility of the variable when updating an organization variable.
+        # Can be `private`, `selected`, or `all`.
         [Parameter(ParameterSetName = 'Organization')]
-        [switch] $Private,
+        [ValidateSet('private', 'selected', 'all')]
+        [string] $Visibility = 'private',
 
-        # List of numeric repository IDs where the secret should be visible.
-        [Parameter(ParameterSetName = 'AuthenticatedUser')]
+        # The IDs of the repositories to which the variable is available.
+        # Used only when the `-Visibility` parameter is set to `selected`.
         [Parameter(ParameterSetName = 'Organization')]
-        [int[]] $SelectedRepositoryIDs,
+        [UInt64[]] $SelectedRepositories,
 
         # The secret value to be stored, provided as a SecureString.
         [Parameter(Mandatory)]
-        [SecureString] $Value,
+        [object] $Value,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
