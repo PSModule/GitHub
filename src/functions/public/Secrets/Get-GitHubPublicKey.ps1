@@ -111,7 +111,7 @@
                         throw "AuthenticatedUser is not supported for actions. Specify -Type 'codespaces'"
                     }
                     'codespaces' {
-                        Get-GitHubPublicKeyForCodespacesOnUser
+                        Get-GitHubPublicKeyForCodespacesOnUser -Context $Context
                     }
                 }
                 break
