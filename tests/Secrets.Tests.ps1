@@ -59,8 +59,8 @@ Describe 'Secrets' {
                             Visibility           = 'selected'
                             SelectedRepositories = $repo.id
                         }
-                        $result = Set-GitHubVariable @params
-                        Write-Host ($result | Select-Object * | Format-Table | Out-String)
+                        # $result = Set-GitHubVariable @params
+                        # Write-Host ($result | Select-Object * | Format-Table | Out-String)
                     }
                 }
             }
@@ -290,6 +290,14 @@ Describe 'Secrets' {
                 # Set-GitHubVariable @scope -Name $varName -Value 'repository'
             }
 
+            It 'Get-GitHubPublicKey' {
+                $result = Get-GitHubPublicKey @scope
+                LogGroup 'PublicKey' {
+                    Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
+                }
+                $result | Should -Not -BeNullOrEmpty
+            }
+            
             # It 'Set-GitHubVariable' {
             #     $param = @{
             #         Name  = "$variablePrefix`TestVariable"
