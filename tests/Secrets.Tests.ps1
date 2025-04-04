@@ -99,10 +99,15 @@ Describe 'Secrets' {
                 $result | Should -Not -BeNullOrEmpty
             }
         }
+
         Context 'Organization' -Skip:($OwnerType -ne 'organization') {
             BeforeAll {
                 $scope = @{
                     Owner = $owner
+                }
+                LogGroup 'Organization' {
+                    $org = Get-GitHubOrganization -Organization $owner
+                    Write-Host ($org | Format-List | Out-String)
                 }
             }
 
