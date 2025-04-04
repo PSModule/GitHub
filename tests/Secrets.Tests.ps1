@@ -86,6 +86,19 @@ Describe 'Secrets' {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
         }
 
+        Context 'User' -Skip:($OwnerType -ne 'user') {
+            It 'Get-GitHubPublicKey - Action' {
+                { Get-GitHubPublicKey } | Should -Throw
+            }
+
+            It 'Get-GitHubPublicKey - Codespace' {
+                $result = Get-GitHubPublicKey @scope -Type codespace
+                LogGroup 'PublicKey - Codespace' {
+                    Write-Host "$($result | Select-Object * | Format-Table -AutoSize | Out-String)"
+                }
+                $result | Should -Not -BeNullOrEmpty
+            }
+        }
         Context 'Organization' -Skip:($OwnerType -ne 'organization') {
             BeforeAll {
                 $scope = @{
@@ -93,10 +106,18 @@ Describe 'Secrets' {
                 }
             }
 
-            It 'Get-GitHubPublicKey' {
+            It 'Get-GitHubPublicKey - Action' {
                 $result = Get-GitHubPublicKey @scope
                 LogGroup 'PublicKey' {
-                    Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
+                    Write-Host "$($result | Select-Object * | Format-Table -AutoSize| Out-String)"
+                }
+                $result | Should -Not -BeNullOrEmpty
+            }
+
+            It 'Get-GitHubPublicKey - Codespace' {
+                $result = Get-GitHubPublicKey @scope -Type codespace
+                LogGroup 'PublicKey' {
+                    Write-Host "$($result | Select-Object * | Format-Table -AutoSize | Out-String)"
                 }
                 $result | Should -Not -BeNullOrEmpty
             }
@@ -445,6 +466,6 @@ Describe 'Secrets' {
             #     $after.Count | Should -Be 0
             # }
         }
-        
+
     }
 }
