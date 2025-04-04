@@ -17,7 +17,7 @@ function Export-GitHubVariable {
         Exports the variables retrieved from the GitHub API to the local environment.
 
         .INPUTS
-        GitHubVariable. Accepts objects representing GitHub variables via pipeline input.
+        GitHubVariable
 
         .OUTPUTS
         void
