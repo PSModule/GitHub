@@ -4,7 +4,7 @@
         Gets a public key.
 
         .DESCRIPTION
-        Gets your public key, which you need to encrypt secrets. You need to encrypt a secret before you can create or update secrets.
+        Gets your public key, which you need to encrypt secrets.
 
         .EXAMPLE
         Get-GitHubPublicKey
@@ -31,12 +31,14 @@
     [CmdletBinding(DefaultParameterSetName = 'AuthenticatedUser')]
     param (
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(ParameterSetName = 'Repository', Mandatory)]
         [Parameter(ParameterSetName = 'Organization', Mandatory)]
+        [Parameter(ParameterSetName = 'Repository', Mandatory)]
+        [Parameter(ParameterSetName = 'Environment', Mandatory)]
         [string] $Owner,
 
         # The name of the repository. The name is not case sensitive.
         [Parameter(ParameterSetName = 'Repository', Mandatory)]
+        [Parameter(ParameterSetName = 'Environment', Mandatory)]
         [string] $Repository,
 
         # The name of the repository environment.
@@ -57,37 +59,45 @@
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 
     process {
+        $scope = @{
+            Context = $Context
+            Owner   = $Owner
+        }
         switch ($PSCmdlet.ParameterSetName) {
             'Organization' {
                 switch ($Type) {
                     'actions' {
-                        Get-GitHubPublicKeyForActionOnOrganization -Owner $Owner -Context $Context
+                        Get-GitHubPublicKeyForActionOnOrganization @scope
                     }
                     'codespaces' {
-                        Get-GitHubPublicKeyForCodespacesOnOrganization -Owner $Owner -Context $Context
+                        Get-GitHubPublicKeyForCodespacesOnOrganization @scope
                     }
                 }
                 break
             }
             'Repository' {
+                $scope['Repository'] = $Repository
                 switch ($Type) {
                     'actions' {
-                        Get-GitHubPublicKeyForActionOnRepository -Owner $Owner -Repository $Repository -Context $Context
+                        Get-GitHubPublicKeyForActionOnRepository @scope
                     }
                     'codespaces' {
-                        Get-GitHubPublicKeyForCodespacesOnRepository -Owner $Owner -Repository $Repository -Context $Context
+                        Get-GitHubPublicKeyForCodespacesOnRepository @scope
                     }
                 }
                 break
             }
             'Environment' {
+                $scope['Repository'] = $Repository
+                $scope['Environment'] = $Environment
                 switch ($Type) {
                     'actions' {
-                        Get-GitHubPublicKeyForActionOnEnvironment -Owner $Owner -Repository $Repository -Environment $Environment -Context $Context
+                        Get-GitHubPublicKeyForActionOnEnvironment @scope
                     }
                     'codespaces' {
                         throw 'Environment is not supported for codespaces.'
@@ -98,7 +108,7 @@
             'AuthenticatedUser' {
                 switch ($Type) {
                     'actions' {
-                        throw 'AuthenticatedUser is not supported for actions.'
+                        throw "AuthenticatedUser is not supported for actions. Specify -Type 'codespaces'"
                     }
                     'codespaces' {
                         Get-GitHubPublicKeyForCodespacesOnUser
