@@ -14,6 +14,18 @@
     # The name of the environment the Public Key is associated with.
     [string] $Environment
 
+    # The date and time the variable was created.
+    [datetime] $CreatedAt
+
+    # The date and time the variable was last updated.
+    [datetime] $UpdatedAt
+
+    # The visibility of the variable.
+    [string] $Visibility
+
+    # The ids of the repositories that the variable is visible to.
+    [GitHubRepository[]] $SelectedRepositories
+
     # Simple parameterless constructor
     GitHubSecret() {}
 
