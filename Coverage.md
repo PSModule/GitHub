@@ -9,15 +9,15 @@
     </tr>
     <tr>
         <td>Covered functions</td>
-        <td>218</td>
+        <td>225</td>
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>803</td>
+        <td>796</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>21.35%</td>
+        <td>22.04%</td>
     </tr>
 </table>
 
@@ -128,9 +128,9 @@
 | `/orgs/{org}/actions/runners/{runner_id}/labels/{name}`                                                                   | :x:                |                    |                    |                    |                    |
 | `/orgs/{org}/actions/secrets`                                                                                             |                    | :white_check_mark: |                    |                    |                    |
 | `/orgs/{org}/actions/secrets/public-key`                                                                                  |                    | :white_check_mark: |                    |                    |                    |
-| `/orgs/{org}/actions/secrets/{secret_name}`                                                                               | :x:                | :white_check_mark: |                    |                    | :x:                |
-| `/orgs/{org}/actions/secrets/{secret_name}/repositories`                                                                  |                    | :x:                |                    |                    | :x:                |
-| `/orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}`                                                  | :x:                |                    |                    |                    | :x:                |
+| `/orgs/{org}/actions/secrets/{secret_name}`                                                                               | :white_check_mark: | :white_check_mark: |                    |                    | :white_check_mark: |
+| `/orgs/{org}/actions/secrets/{secret_name}/repositories`                                                                  |                    | :white_check_mark: |                    |                    | :white_check_mark: |
+| `/orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}`                                                  | :x:                |                    |                    |                    | :white_check_mark: |
 | `/orgs/{org}/actions/variables`                                                                                           |                    | :white_check_mark: |                    | :white_check_mark: |                    |
 | `/orgs/{org}/actions/variables/{name}`                                                                                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
 | `/orgs/{org}/actions/variables/{name}/repositories`                                                                       |                    | :white_check_mark: |                    |                    | :white_check_mark: |
@@ -328,7 +328,7 @@
 | `/repos/{owner}/{repo}/actions/runs/{run_id}/timing`                                                                      |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/secrets`                                                                                   |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/secrets/public-key`                                                                        |                    | :white_check_mark: |                    |                    |                    |
-| `/repos/{owner}/{repo}/actions/secrets/{secret_name}`                                                                     | :x:                | :white_check_mark: |                    |                    | :x:                |
+| `/repos/{owner}/{repo}/actions/secrets/{secret_name}`                                                                     | :white_check_mark: | :white_check_mark: |                    |                    | :white_check_mark: |
 | `/repos/{owner}/{repo}/actions/variables`                                                                                 |                    | :white_check_mark: |                    | :white_check_mark: |                    |
 | `/repos/{owner}/{repo}/actions/variables/{name}`                                                                          | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
 | `/repos/{owner}/{repo}/actions/workflows`                                                                                 |                    | :white_check_mark: |                    |                    |                    |
