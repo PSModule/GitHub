@@ -16,12 +16,12 @@
 param()
 
 BeforeAll {
-    $testName = 'VariableTest'
+    $testName = 'VariablesTest'
     $os = $env:RUNNER_OS
     $guid = [guid]::NewGuid().ToString()
 }
 
-Describe 'Environments' {
+Describe 'Variables' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 
     Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
