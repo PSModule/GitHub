@@ -1,31 +1,29 @@
-function Get-GitHubVariableRepositoryByName {
+function Get-GitHubSecretRepositoryByName {
     <#
         .SYNOPSIS
-        Get a repository variable
+        Get a repository secret.
 
         .DESCRIPTION
-        Gets a specific variable in a repository.
-        The authenticated user must have collaborator access to the repository to use this endpoint.
-        OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
+        Gets a single repository secret without revealing its encrypted value. The authenticated user must have collaborator access to the repository
+        to use this endpoint. OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
-        Get-GitHubVariableRepositoryByName -Owner 'PSModule' -Repository 'Hello-World' -Name 'EMAIL' -Context (Get-GitHubContext)
+        Get-GitHubSecretRepositoryByName -Owner 'octocat' -Repository 'Hello-World' -Name 'SECRET1' -Context (Get-GitHubContext)
 
         Output:
         ```powershell
-        Name                 : EMAIL
-        Value                : John.Doe@example.com
+        Name                 : SECRET1
         Owner                : octocat
         Repository           : Hello-World
         Environment          :
         ```
 
-        Retrieves the specified variable from the specified repository.
+        Retrieves the specified secret from the specified repository.
 
         .LINK
-        [Get a repository variable](https://docs.github.com/rest/actions/variables#get-a-repository-variable)
+        [Get a repository secret](https://docs.github.com/rest/actions/secrets#get-a-repository-secret)
     #>
-    [OutputType([GitHubVariable])]
+    [OutputType([GitHubSecret])]
     [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
@@ -36,7 +34,7 @@ function Get-GitHubVariableRepositoryByName {
         [Parameter(Mandatory)]
         [string] $Repository,
 
-        # The name of the variable.
+        # The name of the secret.
         [Parameter(Mandatory)]
         [string] $Name,
 
@@ -55,14 +53,13 @@ function Get-GitHubVariableRepositoryByName {
     process {
         $inputObject = @{
             Method      = 'GET'
-            APIEndpoint = "/repos/$Owner/$Repository/actions/variables/$Name"
+            APIEndpoint = "/repos/$Owner/$Repository/actions/secrets/$Name"
             Context     = $Context
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            [GitHubVariable]@{
+            [GitHubSecret]@{
                 Name       = $_.Response.name
-                Value      = $_.Response.value
                 CreatedAt  = $_.Response.created_at
                 UpdatedAt  = $_.Response.updated_at
                 Owner      = $Owner

@@ -1,43 +1,44 @@
-function Get-GitHubVariableOwnerByName {
+function Get-GitHubSecretOwnerByName {
     <#
         .SYNOPSIS
-        Get an organization variable.
+        Create or update an organization secret.
 
         .DESCRIPTION
-        Gets a specific variable in an organization.
-        The authenticated user must have collaborator access to a repository to create, update, or read variables.
-        OAuth tokens and personal access tokens (classic) need the`admin:org` scope to use this endpoint. If the repository is private,
-        OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
+        Creates or updates an organization secret with an encrypted value. Encrypt your secret using
+        [LibSodium](https://libsodium.gitbook.io/doc/bindings_for_other_languages). For more information, see
+        "[Encrypting secrets for the REST API](https://docs.github.com/rest/guides/encrypting-secrets-for-the-rest-api)."
+        Authenticated users must have collaborator access to a repository to create, update, or read secrets. OAuth tokens and personal access tokens
+        (classic) need the`admin:org` scope to use this endpoint. If the repository is private, OAuth tokens and personal access tokens (classic) need
+        the `repo` scope to use this endpoint.
 
         .EXAMPLE
-        Get-GitHubVariableOwnerByName -Owner 'PSModule' -Name 'SELECTEDVAR' -Context (Get-GitHubContext)
+        Get-GitHubSecretOwnerByName -Owner 'octocat' -Name 'SECRET_THING' -Context (Get-GitHubContext)
 
         Output:
         ```powershell
-        Name                 : SELECTEDVAR
-        Value                : Varselected
-        Owner                : PSModule
+        Name                 : SECRET_THING
+        Owner                : octocat
         Repository           :
         Environment          :
         CreatedAt            : 3/17/2025 10:56:39 AM
         UpdatedAt            : 3/17/2025 10:56:39 AM
         Visibility           : selected
-        SelectedRepositories : {Build-PSModule, Test-PSModule}
+        SelectedRepositories : {hello-world, profile-repo}
         ```
 
-        Retrieves the specified variable from the specified organization.
+        Retrieves the specified secret from the specified organization.
 
         .LINK
-        [Get an organization variable](https://docs.github.com/rest/actions/variables#get-an-organization-variable)
+        [Create or update an organization secret](https://docs.github.com/rest/actions/secrets#create-or-update-an-organization-secret)
     #>
-    [OutputType([GitHubVariable])]
+    [OutputType([GitHubSecret])]
     [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
         [string] $Owner,
 
-        # The name of the variable.
+        # The name of the secret.
         [Parameter(Mandatory)]
         [string] $Name,
 
@@ -56,7 +57,7 @@ function Get-GitHubVariableOwnerByName {
     process {
         $inputObject = @{
             Method      = 'GET'
-            APIEndpoint = "/orgs/$Owner/actions/variables/$Name"
+            APIEndpoint = "/orgs/$Owner/actions/secrets/$Name"
             Context     = $Context
         }
 
@@ -64,11 +65,10 @@ function Get-GitHubVariableOwnerByName {
             $_.Response | ForEach-Object {
                 $selectedRepositories = @()
                 if ($_.visibility -eq 'selected') {
-                    $selectedRepositories = Get-GitHubVariableSelectedRepository -Owner $Owner -Name $_.name -Context $Context
+                    $selectedRepositories = Get-GitHubSecretSelectedRepository -Owner $Owner -Name $_.name -Context $Context
                 }
-                [GitHubVariable]@{
+                [GitHubSecret]@{
                     Name                 = $_.name
-                    Value                = $_.value
                     CreatedAt            = $_.created_at
                     UpdatedAt            = $_.updated_at
                     Owner                = $Owner

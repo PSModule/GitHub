@@ -1,11 +1,13 @@
-function New-GitHubVariableOnEnvironment {
+function Set-GitHubSecretOnEnvironment {
     <#
         .SYNOPSIS
-        Create an environment variable.
+        Create or update an environment secret.
 
         .DESCRIPTION
-        Create an environment variable that you can reference in a GitHub Actions workflow.
-        Authenticated users must have collaborator access to a repository to create, update, or read variables.
+        Creates or updates an environment secret with an encrypted value. Encrypt your secret using
+        [LibSodium](https://libsodium.gitbook.io/doc/bindings_for_other_languages). For more information, see
+        "[Encrypting secrets for the REST API](https://docs.github.com/rest/guides/encrypting-secrets-for-the-rest-api)."
+        Authenticated users must have collaborator access to a repository to create, update, or read secrets.
         OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
@@ -13,16 +15,16 @@ function New-GitHubVariableOnEnvironment {
             Owner       = 'octocat'
             Repository  = 'Hello-World'
             Environment = 'dev'
-            Name        = 'HOST_NAME'
-            Value       = 'github.com'
+            Name        = 'SECRET1'
+            Value       = 'secret_value
             Context     = $GitHubContext
         }
-        New-GitHubVariableOnEnvironment @params
+        Set-GitHubSecretOnEnvironment @params
 
-        Creates a new environment variable named `HOST_NAME` with the value `github.com` in the specified environment.
+        Creates a new environment secret named `SECRET1` with the value `secret_value` in the specified environment.
 
         .LINK
-        [Create an environment variable](https://docs.github.com/rest/actions/variables#create-an-environment-variable)
+        [Create or update an environment secret](https://docs.github.com/rest/actions/secrets#create-or-update-an-environment-secret)
     #>
     [OutputType([void])]
     [CmdletBinding(SupportsShouldProcess)]
@@ -39,13 +41,17 @@ function New-GitHubVariableOnEnvironment {
         [Parameter(Mandatory)]
         [string] $Environment,
 
-        # The name of the variable.
+        # The name of the secret.
         [Parameter(Mandatory)]
         [string] $Name,
 
-        # The value of the variable.
+        # The value of the secret.
         [Parameter(Mandatory)]
         [string] $Value,
+
+        # ID of the key you used to encrypt the secret.
+        [Parameter(Mandatory)]
+        [string] $KeyID,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -61,18 +67,18 @@ function New-GitHubVariableOnEnvironment {
 
     process {
         $body = @{
-            name  = $Name
-            value = $Value
+            encrypted_value = $Value
+            key_id          = $KeyID
         }
 
         $inputObject = @{
             Method      = 'POST'
-            APIEndpoint = "/repos/$Owner/$Repository/environments/$Environment/variables"
+            APIEndpoint = "/repos/$Owner/$Repository/environments/$Environment/secrets/$Name"
             Body        = $body
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("variable [$Name] on [$Owner/$Repository/$Environment]", 'Create')) {
+        if ($PSCmdlet.ShouldProcess("secret [$Name] on [$Owner/$Repository/$Environment]", 'Set')) {
             $null = Invoke-GitHubAPI @inputObject
         }
     }

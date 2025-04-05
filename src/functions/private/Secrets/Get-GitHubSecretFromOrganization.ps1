@@ -1,21 +1,20 @@
-function Get-GitHubVariableFromOrganization {
+function Get-GitHubSecretFromOrganization {
     <#
         .SYNOPSIS
-        List repository organization variables.
+        List repository organization secrets.
 
         .DESCRIPTION
-        Lists all organization variables shared with a repository.
-        Authenticated users must have collaborator access to a repository to create, update, or read variables.
-        OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
+        Lists all organization secrets shared with a repository without revealing their encrypted values. Authenticated users must have collaborator
+        access to a repository to create, update, or read secrets. OAuth app tokens and personal access tokens (classic) need the `repo` scope to use
+        this endpoint.
 
         .EXAMPLE
-        Get-GitHubVariableFromOrganization -Owner 'PSModule' -Repository 'GitHub' -Context (Get-GitHubContext)
+        Get-GitHubSecretFromOrganization -Owner 'octocat' -Repository 'helloworld' -Context (Get-GitHubContext)
 
         Output:
         ```powershell
-        Name                 : AVAILVAR
-        Value                : ValueVar
-        Owner                : PSModule
+        Name                 : SECRET1
+        Owner                : octocat
         Repository           :
         Environment          :
         CreatedAt            : 3/17/2025 10:56:22 AM
@@ -23,9 +22,8 @@ function Get-GitHubVariableFromOrganization {
         Visibility           :
         SelectedRepositories :
 
-        Name                 : SELECTEDVAR
-        Value                : Varselected
-        Owner                : PSModule
+        Name                 : SECRET2
+        Owner                : octocat
         Repository           :
         Environment          :
         CreatedAt            : 3/17/2025 10:56:39 AM
@@ -33,9 +31,8 @@ function Get-GitHubVariableFromOrganization {
         Visibility           :
         SelectedRepositories :
 
-        Name                 : TESTVAR
-        Value                : VarTest
-        Owner                : PSModule
+        Name                 : TESTSECRET
+        Owner                : octocat
         Repository           :
         Environment          :
         CreatedAt            : 3/17/2025 10:56:05 AM
@@ -44,19 +41,19 @@ function Get-GitHubVariableFromOrganization {
         SelectedRepositories :
         ```
 
-        Lists the variables visible from 'PSModule' to the 'GitHub' repository.
+        Lists the secrets visible from 'octocat' to the 'helloworld' repository.
 
         .OUTPUTS
-        GitHubVariable[]
+        GitHubSecret[]
 
         .NOTES
-        An array of GitHubVariable objects representing the environment variables.
-        Each object contains Name, Value, CreatedAt, UpdatedAt, Owner, Repository, and Environment properties.
+        An array of GitHubSecret objects representing the environment secrets.
+        Each object contains Name, CreatedAt, UpdatedAt, Owner, Repository, and Environment properties.
 
         .LINK
-        [List repository organization variables](https://docs.github.com/rest/actions/variables#list-repository-organization-variables)
+        [List repository organization secrets](https://docs.github.com/rest/actions/secrets#list-repository-organization-secrets)
     #>
-    [OutputType([GitHubVariable[]])]
+    [OutputType([GitHubSecret[]])]
     [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
@@ -82,17 +79,16 @@ function Get-GitHubVariableFromOrganization {
     process {
         $inputObject = @{
             Method      = 'GET'
-            APIEndpoint = "/repos/$Owner/$Repository/actions/organization-variables"
+            APIEndpoint = "/repos/$Owner/$Repository/actions/organization-secrets"
             PerPage     = 30
             Context     = $Context
         }
 
         try {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
-                $_.Response.variables | ForEach-Object {
-                    [GitHubVariable]@{
+                $_.Response.secrets | ForEach-Object {
+                    [GitHubSecret]@{
                         Name       = $_.name
-                        Value      = $_.value
                         CreatedAt  = $_.created_at
                         UpdatedAt  = $_.updated_at
                         Owner      = $Owner

@@ -30,27 +30,26 @@
     #>
     [CmdletBinding(DefaultParameterSetName = 'AuthenticatedUser', SupportsShouldProcess)]
     param (
-        # The organization name. The name is not case-sensitive.
-        [Parameter(ParameterSetName = 'Organization', Mandatory)]
-        [string]$Organization,
+        # The account owner of the repository. The name is not case sensitive.
+        [Parameter(Mandatory, ParameterSetName = 'Organization')]
+        [Parameter(Mandatory, ParameterSetName = 'Repository')]
+        [Parameter(Mandatory, ParameterSetName = 'Environment')]
+        [Alias('Organization', 'User')]
+        [string] $Owner,
 
-        # The account owner of the repository. The name is not case-sensitive.
-        [Parameter(ParameterSetName = 'Environment', Mandatory)]
-        [Parameter(ParameterSetName = 'Repository', Mandatory)]
-        [string]$Owner,
+        # The name of the repository without the .git extension. The name is not case sensitive.
+        [Parameter(Mandatory, ParameterSetName = 'Repository')]
+        [Parameter(Mandatory, ParameterSetName = 'Environment')]
+        [string] $Repository,
 
-        # The name of the repository. The name is not case-sensitive.
-        [Parameter(ParameterSetName = 'Environment', Mandatory)]
-        [Parameter(ParameterSetName = 'Repository', Mandatory)]
-        [string]$Repository,
+        # The name of the environment.
+        [Parameter(Mandatory, ParameterSetName = 'Environment')]
+        [string] $Environment,
 
-        # The name of the repository environment.
-        [Parameter(ParameterSetName = 'Environment', Mandatory)]
-        [string]$Environment,
-
-        # The name of the secret to delete.
-        [Parameter(Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName)]
-        [string]$Name,
+        # The name of the variable.
+        [Parameter()]
+        [SupportsWildcards()]
+        [string] $Name = '*',
 
         # Specifies whether the secret is for Actions or Codespaces.
         [ValidateSet('actions', 'codespaces')]

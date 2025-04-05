@@ -1,44 +1,42 @@
-function Get-GitHubVariableRepositoryList {
+function Get-GitHubSecretRepositoryList {
     <#
         .SYNOPSIS
-        List repository variables.
+        List repository secrets.
 
         .DESCRIPTION
-        Lists all repository variables.
-        Authenticated users must have collaborator access to a repository to create, update, or read variables.
-        OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
+        Lists all secrets available in a repository without revealing their encrypted values. Authenticated users must have collaborator access to a
+        repository to create, update, or read secrets. OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this
+        endpoint.
 
         .EXAMPLE
-        Get-GitHubVariableRepositoryList -Owner 'PSModule' -Repository 'Hello-World' -Context (Get-GitHubContext)
+        Get-GitHubSecretRepositoryList -Owner 'octocat' -Repository 'Hello-World' -Context (Get-GitHubContext)
 
         Output:
         ```powershell
-        Name                 : NAME
-        Value                : John Doe
+        Name                 : SECRET1
         Owner                : octocat
         Repository           : Hello-World
         Environment          :
 
-        Name                 : EMAIL
-        Value                : John.Doe@example.com
+        Name                 : SECRET2
         Owner                : octocat
         Repository           : Hello-World
         Environment          :
         ```
 
-        Retrieves all variables for the specified repository.
+        Retrieves all secrets for the specified repository.
 
         .OUTPUTS
-        GitHubVariable[]
+        GitHubSecret[]
 
         .NOTES
-        An array of GitHubVariable objects representing the environment variables.
-        Each object contains Name, Value, CreatedAt, UpdatedAt, Owner, Repository, and Environment properties.
+        An array of GitHubSecret objects representing the environment secrets.
+        Each object contains Name, CreatedAt, UpdatedAt, Owner, Repository, and Environment properties.
 
         .LINK
-        [List repository variables](https://docs.github.com/rest/actions/variables#list-repository-variables)
+        [List repository secrets](https://docs.github.com/rest/actions/secrets#list-repository-secrets)
     #>
-    [OutputType([GitHubVariable[]])]
+    [OutputType([GitHubSecret[]])]
     [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
@@ -64,15 +62,14 @@ function Get-GitHubVariableRepositoryList {
     process {
         $inputObject = @{
             Method      = 'GET'
-            APIEndpoint = "/repos/$Owner/$Repository/actions/variables"
+            APIEndpoint = "/repos/$Owner/$Repository/actions/secrets"
             Context     = $Context
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            $_.Response.variables | ForEach-Object {
-                [GitHubVariable]@{
+            $_.Response.secrets | ForEach-Object {
+                [GitHubSecret]@{
                     Name       = $_.name
-                    Value      = $_.value
                     CreatedAt  = $_.created_at
                     UpdatedAt  = $_.updated_at
                     Owner      = $Owner

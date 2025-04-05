@@ -1,20 +1,19 @@
-function Remove-GitHubVariableFromEnvironment {
+function Remove-GitHubSecretFromRepository {
     <#
         .SYNOPSIS
-        Delete an environment variable.
+        Delete a repository secret.
 
         .DESCRIPTION
-        Deletes an environment variable using the variable name.
-        Authenticated users must have collaborator access to a repository to create, update, or read variables.
-        OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
+        Deletes a secret in a repository using the secret name. Authenticated users must have collaborator access to a repository to create, update,
+        or read secrets. OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
-        Remove-GitHubVariableFromEnvironment -Owner 'octocat' -Repository 'Hello-World' -Environment 'dev' -Name 'HOST_NAME' -Context $GitHubContext
+        Remove-GitHubSecretFromRepository -Owner 'octocat' -Repository 'Hello-World' -Name 'SECRET1' -Context $GitHubContext
 
-        Deletes the specified variable from the specified environment.
+        Deletes the specified secret from the specified repository.
 
         .LINK
-        [Delete an environment variable](https://docs.github.com/rest/actions/variables#delete-an-environment-variable)
+        [Delete a repository secret](https://docs.github.com/rest/actions/secrets#delete-a-repository-secret)
     #>
     [OutputType([void])]
     [CmdletBinding(SupportsShouldProcess)]
@@ -27,11 +26,7 @@ function Remove-GitHubVariableFromEnvironment {
         [Parameter(Mandatory)]
         [string] $Repository,
 
-        # The name of the repository environment.
-        [Parameter(Mandatory)]
-        [string] $Environment,
-
-        # The name of the variable.
+        # The name of the secret.
         [Parameter(Mandatory)]
         [string] $Name,
 
@@ -50,11 +45,11 @@ function Remove-GitHubVariableFromEnvironment {
     process {
         $inputObject = @{
             Method      = 'DELETE'
-            APIEndpoint = "/repos/$Owner/$Repository/environments/$Environment/variables/$Name"
+            APIEndpoint = "/repos/$Owner/$Repository/actions/secrets/$Name"
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("variable [$Name] on [$Owner/$Repository/$Environment]", 'Delete')) {
+        if ($PSCmdlet.ShouldProcess("secret [$Name] on [$Owner/$Repository]", 'Delete')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }

@@ -1,7 +1,7 @@
 ﻿function Get-GitHubSecret {
     <#
         .SYNOPSIS
-        Retrieve GitHub Secret(s) without revealing encrypted value(s).
+        Retrieve GitHub secret(s) without revealing encrypted value(s).
 
         .DESCRIPTION
         Retrieves GitHub secrets from a repository, organization, or environment without exposing
@@ -26,38 +26,39 @@
         Retrieves all secrets for the 'Staging' environment in the 'Demo' repository under 'PSModule'.
 
         .OUTPUTS
-        [PSObject[]]
+        GitHubSecret[]
 
         .LINK
         https://psmodule.io/GitHub/Functions/Secrets/Get-GitHubSecret/
     #>
-    [OutputType([psobject[]])]
-    [CmdletBinding(DefaultParameterSetName = 'AuthorizedUser', SupportsPaging)]
+    [OutputType([GitHubSecret[]])]
+    [CmdletBinding(DefaultParameterSetName = 'AuthorizedUser')]
     param (
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(ParameterSetName = 'Environment')]
-        [Parameter(ParameterSetName = 'Organization', Mandatory)]
-        [Parameter(ParameterSetName = 'Repository', Mandatory)]
+        [Parameter(Mandatory, ParameterSetName = 'Organization')]
+        [Parameter(Mandatory, ParameterSetName = 'Repository')]
+        [Parameter(Mandatory, ParameterSetName = 'Environment')]
         [Alias('Organization', 'User')]
         [string] $Owner,
 
-        # The name of the repository. The name is not case sensitive.
-        [Parameter(ParameterSetName = 'Environment', Mandatory)]
-        [Parameter(ParameterSetName = 'Repository', Mandatory)]
+        # The name of the repository without the .git extension. The name is not case sensitive.
+        [Parameter(Mandatory, ParameterSetName = 'Repository')]
+        [Parameter(Mandatory, ParameterSetName = 'Environment')]
         [string] $Repository,
 
-        # The name of the repository environment.
-        [Parameter(ParameterSetName = 'Environment', Mandatory)]
+        # The name of the environment.
+        [Parameter(Mandatory, ParameterSetName = 'Environment')]
         [string] $Environment,
 
-        # The name of the secret.
+        # The name of the variable.
         [Parameter()]
-        [string] $Name,
+        [SupportsWildcards()]
+        [string] $Name = '*',
 
         # The type of secret to retrieve.
         # Can be either 'actions', 'codespaces', or 'organization'.
         [Parameter()]
-        [ValidateSet('actions', 'codespaces', 'organization')]
+        [ValidateSet('actions', 'codespaces')]
         [string] $Type = 'actions',
 
         # The context to run the command in. Used to get the details for the API call.
@@ -69,42 +70,25 @@
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        # $Context = Resolve-GitHubContext -Context $Context
-        # Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 
     process {
-        $inputObject = @{
-            Method      = 'GET'
-            APIEndpoint = switch ($PSCmdlet.ParameterSetName) {
-                'Environment' {
-                    "/repos/$Owner/$Repository/environments/$Environment/secrets"
-                    break
-                }
-                'Organization' {
-                    "/orgs/$Owner/$Type/secrets"
-                    break
-                }
-                'Repository' {
-                    $Type -eq 'organization' ?
-                    "/repos/$Owner/$Repository/actions/organization-secrets" :
-                    "/repos/$Owner/$Repository/$Type/secrets"
-                    break
-                }
-                'AuthorizedUser' {
-                    'user/codespaces/secrets'
-                }
+        switch ($PSCmdlet.ParameterSetName) {
+            'Environment' {
+                break
             }
-            Context     = $Context
-        }
+            'Organization' {
+                break
+            }
+            'Repository' {
+                break
+            }
+            'AuthorizedUser' {
 
-        # There is no endpoint for /repos/$Owner/$Repository/actions/organization-secrets/$Name
-        if ($Type -ne 'organization' -and -not [string]::IsNullOrWhiteSpace($Name)) {
-            $inputObject.APIEndpoint += "/$Name"
+            }
         }
-
-        $response = Invoke-GitHubAPI @inputObject | Select-Object -ExpandProperty Response
-        [bool]$response.PSObject.Properties['secrets'] ? $response.secrets : $response
     }
 
     end {

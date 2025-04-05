@@ -1,38 +1,36 @@
-function Get-GitHubVariableEnvironmentByName {
+function Get-GitHubSecretEnvironmentByName {
     <#
         .SYNOPSIS
-        Retrieves a specific variable from a GitHub repository.
+        Get an environment secret.
 
         .DESCRIPTION
-        Gets a specific variable in an environment of a repository on GitHub.
-        Authenticated users must have collaborator access to a repository to create, update, or read variables.
-        OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
+        Gets a single environment secret without revealing its encrypted value. Authenticated users must have collaborator access to a repository to
+        create, update, or read secrets. OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
-        Get-GitHubVariableEnvironmentByName -Owner 'octocat' -Repository 'Hello-World' -Environment 'dev' -Name 'NAME' -Context $GitHubContext
+        Get-GitHubSecretEnvironmentByName -Owner 'octocat' -Repository 'Hello-World' -Environment 'dev' -Name 'SECRET1' -Context $GitHubContext
 
         Output:
         ```powershell
-        Name                 : NAME
-        Value                : John Doe
+        Name                 : SECRET1
         Owner                : octocat
         Repository           : Hello-World
         Environment          : dev
         ```
 
-        Retrieves the specified variable from the specified environment.
+        Retrieves the specified secret from the specified environment.
 
         .OUTPUTS
-        GitHubVariable
+        GitHubSecret
 
         .NOTES
-        Returns an GitHubVariable object containing details about the environment variable,
-        including its name, value, associated repository, and environment details.
+        Returns an GitHubSecret object containing details about the environment Secret,
+        including its name, associated repository, and environment details.
 
         .LINK
-        [Get an environment variable](https://docs.github.com/rest/actions/variables#get-an-environment-variable)
+        [Get an environment secret](https://docs.github.com/rest/actions/secrets#get-an-environment-secret)
     #>
-    [OutputType([GitHubVariable])]
+    [OutputType([GitHubSecret])]
     [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
@@ -47,7 +45,7 @@ function Get-GitHubVariableEnvironmentByName {
         [Parameter(Mandatory)]
         [string] $Environment,
 
-        # The name of the variable.
+        # The name of the Secret.
         [Parameter(Mandatory)]
         [string] $Name,
 
@@ -66,14 +64,13 @@ function Get-GitHubVariableEnvironmentByName {
     process {
         $inputObject = @{
             Method      = 'GET'
-            APIEndpoint = "/repos/$Owner/$Repository/environments/$Environment/variables/$Name"
+            APIEndpoint = "/repos/$Owner/$Repository/environments/$Environment/secrets/$Name"
             Context     = $Context
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            [GitHubVariable]@{
+            [GitHubSecret]@{
                 Name        = $_.Response.name
-                Value       = $_.Response.value
                 CreatedAt   = $_.Response.created_at
                 UpdatedAt   = $_.Response.updated_at
                 Owner       = $Owner

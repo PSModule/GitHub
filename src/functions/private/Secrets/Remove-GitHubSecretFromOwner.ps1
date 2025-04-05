@@ -1,21 +1,20 @@
-function Remove-GitHubVariableFromOwner {
+function Remove-GitHubSecretFromOwner {
     <#
         .SYNOPSIS
-        Delete an organization variable.
+        Delete an organization secret.
 
         .DESCRIPTION
-        Deletes an organization variable using the variable name.
-        Authenticated users must have collaborator access to a repository to create, update, or read variables.
-        OAuth tokens and personal access tokens (classic) need the`admin:org` scope to use this endpoint. If the repository is private,
-        OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
+        Deletes a secret in an organization using the secret name. Authenticated users must have collaborator access to a repository to create,
+        update, or read secrets. OAuth tokens and personal access tokens (classic) need the`admin:org` scope to use this endpoint. If the repository
+        is private, OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
-        Remove-GitHubVariableFromOwner -Owner 'octocat' -Name 'HOST_NAME' -Context $GitHubContext
+        Remove-GitHubSecretFromOwner -Owner 'octocat' -Name 'HOST_NAME' -Context $GitHubContext
 
-        Deletes the specified variable from the specified organization.
+        Deletes the specified secret from the specified organization.
 
         .LINK
-        [Delete an organization variable](https://docs.github.com/rest/actions/variables#delete-an-organization-variable)
+        [Delete an organization secret](https://docs.github.com/rest/actions/secrets#delete-an-organization-secret)
     #>
     [OutputType([void])]
     [CmdletBinding(SupportsShouldProcess)]
@@ -24,7 +23,7 @@ function Remove-GitHubVariableFromOwner {
         [Parameter(Mandatory)]
         [string] $Owner,
 
-        # The name of the variable.
+        # The name of the secret.
         [Parameter(Mandatory)]
         [string] $Name,
 
@@ -43,11 +42,11 @@ function Remove-GitHubVariableFromOwner {
     process {
         $inputObject = @{
             Method      = 'DELETE'
-            APIEndpoint = "/orgs/$Owner/actions/variables/$Name"
+            APIEndpoint = "/orgs/$Owner/actions/secrets/$Name"
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("variable [$Name] on [$Owner]", 'Delete')) {
+        if ($PSCmdlet.ShouldProcess("secret [$Name] on [$Owner]", 'Delete')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }
