@@ -78,7 +78,7 @@ Describe 'Secrets' {
                     Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
                 }
                 'organization' {
-                    # Get-GitHubSecret -Owner $owner -Debug -Verbose | Remove-GitHubSecret -Debug -Verbose
+                    Get-GitHubSecret -Owner $owner -Debug -Verbose | Remove-GitHubSecret -Debug -Verbose
                     Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
                     Remove-GitHubRepository -Owner $owner -Name "$repoName-2" -Confirm:$false
                     Remove-GitHubRepository -Owner $owner -Name "$repoName-3" -Confirm:$false
