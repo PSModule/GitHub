@@ -136,6 +136,8 @@
                 break
             }
         }
+
+        Get-GitHubSecret @publicKeyParams -Name $Name
     }
 
     end {
