@@ -115,7 +115,7 @@
             SelectedRepositories = $SelectedRepositories
             Name                 = $Name
             Value                = $encryptedValue
-            KeyID                = $publicKey.KeyID
+            KeyID                = $publicKey.ID
         }
         $params | Remove-HashtableEntry -NullOrEmptyValues
 
