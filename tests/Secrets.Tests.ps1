@@ -59,7 +59,7 @@ Describe 'Secrets' {
                             SelectedRepositories = $repo.id
                         }
                         $result = @()
-                        $result += Set-GitHubSecret @params -Name "$secretName`_1"
+                        $result += Set-GitHubSecret @params -Name "$secretName"
                         $result += Set-GitHubSecret @params -Name "$secretName`_2"
                         $result += Set-GitHubSecret @params -Name "$secretName`_3"
                         Write-Host ($result | Select-Object * | Format-Table | Out-String)
