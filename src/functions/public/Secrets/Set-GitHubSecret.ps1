@@ -40,7 +40,10 @@
         .LINK
         https://psmodule.io/GitHub/Functions/Secrets/Set-GitHubSecret/
     #>
-
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSShouldProcess', '', Scope = 'Function',
+        Justification = 'This check is performed in the private functions.'
+    )]
     [CmdletBinding(DefaultParameterSetName = 'AuthenticatedUser', SupportsShouldProcess, ConfirmImpact = 'Low')]
     param (
         # The account owner of the repository. The name is not case sensitive.
@@ -80,7 +83,7 @@
 
         # The secret value to be stored, provided as a SecureString.
         [Parameter(Mandatory)]
-        [object] $Value,
+        [string] $Value,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -96,70 +99,46 @@
     }
 
     process {
-        $apiEndPoint = switch ($PSCmdlet.ParameterSetName) {
-            'Environment' {
-                "/repos/$Owner/$Repository/environments/$Environment/secrets/$Name"
-                break
-            }
+        $publicKeyParams = @{
+            Owner       = $Owner
+            Repository  = $Repository
+            Environment = $Environment
+            Type        = $Type
+            Context     = $Context
+        }
+        $publicKeyParams | Remove-HashtableEntry -NullOrEmptyValues
+        $publicKey = Get-GitHubPublicKey @publicKeyParams
+        $encryptedValue = ConvertTo-SodiumSealedBox -PublicKey $publicKey.Key -Message $Value
+
+        $params = $publicKeyParams + @{
+            Owner                = $Owner
+            Repository           = $Repository
+            Environment          = $Environment
+            Visibility           = $Visibility
+            SelectedRepositories = $SelectedRepositories
+            Name                 = $Name
+            Value                = $encryptedValue
+            KeyID                = $publicKey.KeyID
+            Context              = $Context
+        }
+        $params | Remove-HashtableEntry -NullOrEmptyValues
+
+        switch ($PSCmdlet.ParameterSetName) {
             'Organization' {
-                "/orgs/$Owner/$Type/secrets/$Name"
+                Set-GitHubSecretOnOwner @params
                 break
             }
             'Repository' {
-                "/repos/$Owner/$Repository/$Type/secrets/$Name"
+                Set-GitHubSecretOnRepository @params
+                break
+            }
+            'Environment' {
+                Set-GitHubSecretOnEnvironment @params
                 break
             }
             'AuthenticatedUser' {
-                "/user/codespaces/secrets/$Name"
                 break
             }
-        }
-        if ($PSCmdLet.ShouldProcess(
-                "Updating GitHub secret [$Name]",
-                "Are you sure you want to update GitHub secret [$apiEndPoint]?",
-                'Update secret'
-            )) {
-            # Get the Organization, Repository, or AuthenticatedUser public key for encryption
-            $getPublicKeyParams = switch ($PSCmdlet.ParameterSetName) {
-                'Organization' {
-                    @{
-                        Organization = $Owner
-                        Type         = $Type
-                    }
-                    break
-                }
-                'AuthenticatedUser' {
-                    @{ }
-                    break
-                }
-                default {
-                    @{
-                        Owner      = $Owner
-                        Repository = $Repository
-                        Type       = $Type
-                    }
-                }
-            }
-            $publicKey = Get-GitHubPublicKey @getPublicKeyParams
-            $body = @{
-                encrypted_value = ConvertTo-SodiumEncryptedString -Secret (ConvertFrom-SecureString $Value -AsPlainText) -PublicKey $publicKey.key
-                key_id          = $publicKey.key_id
-            }
-            if ($PSCmdlet.ParameterSetName -in 'AuthenticatedUser', 'Organization') {
-                if ($Private.IsPresent -and $PSCmdlet.ParameterSetName -eq 'Organization') {
-                    $body['visibility'] = 'private'
-                } elseif ($PSBoundParameters.ContainsKey('SelectedRepositoryIDs')) {
-                    $body['selected_repository_ids'] = @($SelectedRepositoryIDs)
-                    $body['visibility'] = 'selected'
-                }
-            }
-            $putParams = @{
-                APIEndpoint = $apiEndPoint
-                Body        = [PSCustomObject] $body | ConvertTo-Json
-                Context     = $Context
-                Method      = 'PUT'
-            }
-            Invoke-GitHubAPI @putParams | Select-Object -ExpandProperty Response
         }
     }
 

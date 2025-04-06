@@ -33,7 +33,7 @@ function Set-GitHubSecretOnRepository {
         [Parameter(Mandatory)]
         [string] $Name,
 
-        # The value of the secret.
+        # The encrypted value of the secret.
         [Parameter(Mandatory)]
         [string] $Value,
 

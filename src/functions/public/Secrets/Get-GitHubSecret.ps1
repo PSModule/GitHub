@@ -50,16 +50,16 @@
         [Parameter(Mandatory, ParameterSetName = 'Environment')]
         [string] $Environment,
 
-        # The name of the variable.
+        # The name of the secret.
         [Parameter()]
         [SupportsWildcards()]
         [string] $Name = '*',
 
-        # The type of secret to retrieve.
-        # Can be either 'actions', 'codespaces', or 'organization'.
-        [Parameter()]
-        [ValidateSet('actions', 'codespaces')]
-        [string] $Type = 'actions',
+        # # The type of secret to retrieve.
+        # # Can be either 'actions', 'codespaces'.
+        # [Parameter()]
+        # [ValidateSet('actions', 'codespaces')]
+        # [string] $Type = 'actions',
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -75,18 +75,64 @@
     }
 
     process {
+        $secrets = @()
+        $params = @{
+            Context = $Context
+            Owner   = $Owner
+        }
+
         switch ($PSCmdlet.ParameterSetName) {
-            'Environment' {
-                break
-            }
             'Organization' {
+                if ($Name.Contains('*')) {
+                    $secrets += Get-GitHubSecretOwnerList @params |
+                        Where-Object { $_.Name -like $Name }
+                } else {
+                    try {
+                        $secrets += Get-GitHubSecretOwnerByName @params -Name $Name
+                    } catch { $null }
+                }
                 break
             }
             'Repository' {
+                $params['Repository'] = $Repository
+                if ($IncludeInherited) {
+                    $secrets += Get-GitHubSecretFromOrganization @params |
+                        Where-Object { $_.Name -like $Name }
+                }
+                if ($Name.Contains('*')) {
+                    $secrets += Get-GitHubSecretRepositoryList @params |
+                        Where-Object { $_.Name -like $Name }
+                } else {
+                    try {
+                        $secrets += Get-GitHubSecretRepositoryByName @params -Name $Name
+                    } catch { $null }
+                }
                 break
             }
-            'AuthorizedUser' {
-
+            'Environment' {
+                $params['Repository'] = $Repository
+                if ($IncludeInherited) {
+                    $secrets += Get-GitHubSecretFromOrganization @params |
+                        Where-Object { $_.Name -like $Name }
+                    if ($Name.Contains('*')) {
+                        $secrets += Get-GitHubSecretRepositoryList @params |
+                            Where-Object { $_.Name -like $Name }
+                    } else {
+                        try {
+                            $secrets += Get-GitHubSecretRepositoryByName @params -Name $Name
+                        } catch { $null }
+                    }
+                }
+                $params['Environment'] = $Environment
+                if ($Name.Contains('*')) {
+                    $secrets += Get-GitHubSecretEnvironmentList @params |
+                        Where-Object { $_.Name -like $Name }
+                } else {
+                    try {
+                        $secrets += Get-GitHubSecretEnvironmentByName @params -Name $Name
+                    } catch { $null }
+                }
+                break
             }
         }
     }

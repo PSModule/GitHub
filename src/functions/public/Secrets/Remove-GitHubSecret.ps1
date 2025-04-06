@@ -28,7 +28,11 @@
         .LINK
         https://psmodule.io/GitHub/Functions/Secrets/Remove-GitHubSecret/
     #>
-    [CmdletBinding(DefaultParameterSetName = 'AuthenticatedUser', SupportsShouldProcess)]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSShouldProcess', '', Scope = 'Function',
+        Justification = 'This check is performed in the private functions.'
+    )]
+    [CmdletBinding(DefaultParameterSetName = 'AuthenticatedUser')]
     param (
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory, ParameterSetName = 'Organization')]
@@ -51,14 +55,14 @@
         [SupportsWildcards()]
         [string] $Name = '*',
 
-        # Specifies whether the secret is for Actions or Codespaces.
-        [ValidateSet('actions', 'codespaces')]
-        [string]$Type = 'actions',
+        # # Specifies whether the secret is for Actions or Codespaces.
+        # [ValidateSet('actions', 'codespaces')]
+        # [string] $Type = 'actions',
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [object]$Context = (Get-GitHubContext)
+        [object] $Context = (Get-GitHubContext)
     )
 
     begin {
@@ -69,35 +73,27 @@
     }
 
     process {
-        $inputObject = @{
-            Method      = 'DELETE'
-            APIEndpoint = switch ($PSCmdlet.ParameterSetName) {
-                'Environment' {
-                    "/repos/$Owner/$Repository/environments/$Environment/secrets/$Name"
-                    break
-                }
-                'Organization' {
-                    "/orgs/$Organization/$Type/secrets/$Name"
-                    break
-                }
-                'Repository' {
-                    "/repos/$Owner/$Repository/$Type/secrets/$Name"
-                    break
-                }
-                'AuthenticatedUser' {
-                    "/user/codespaces/secrets/$Name"
-                    break
-                }
-            }
-            Context     = $Context
+        $params = @{
+            Owner   = $Owner
+            Name    = $Name
+            Context = $Context
         }
-
-        if ($PSCmdLet.ShouldProcess(
-                "Deleting GitHub $Type secret [$Name]",
-                "Are you sure you want to delete $($inputObject.APIEndpoint)?",
-                'Delete secret'
-            )) {
-            Invoke-GitHubAPI @inputObject
+        switch ($PSCmdlet.ParameterSetName) {
+            'Organization' {
+                Remove-GitHubSecretFromOwner @params
+                break
+            }
+            'Repository' {
+                Remove-GitHubSecretFromRepository @params -Repository $Repository
+                break
+            }
+            'Environment' {
+                Remove-GitHubSecretFromEnvironment @params -Repository $Repository -Environment $Environment
+                break
+            }
+            'AuthenticatedUser' {
+                break
+            }
         }
     }
 
