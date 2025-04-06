@@ -35,19 +35,19 @@
     [CmdletBinding(DefaultParameterSetName = 'AuthenticatedUser')]
     param (
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(Mandatory, ParameterSetName = 'Organization', ValueFromPipelineByPropertyName)]
-        [Parameter(Mandatory, ParameterSetName = 'Repository', ValueFromPipelineByPropertyName)]
-        [Parameter(Mandatory, ParameterSetName = 'Environment', ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ParameterSetName = 'Organization', ValueFromPipeline, ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ParameterSetName = 'Repository', ValueFromPipeline, ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ParameterSetName = 'Environment', ValueFromPipeline, ValueFromPipelineByPropertyName)]
         [Alias('Organization', 'User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter(Mandatory, ParameterSetName = 'Repository', ValueFromPipelineByPropertyName)]
-        [Parameter(Mandatory, ParameterSetName = 'Environment', ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ParameterSetName = 'Repository', ValueFromPipeline, ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ParameterSetName = 'Environment', ValueFromPipeline, ValueFromPipelineByPropertyName)]
         [string] $Repository,
 
         # The name of the environment.
-        [Parameter(Mandatory, ParameterSetName = 'Environment', ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ParameterSetName = 'Environment', ValueFromPipeline, ValueFromPipelineByPropertyName)]
         [string] $Environment,
 
         # The name of the secret.
@@ -61,10 +61,7 @@
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [object] $Context = (Get-GitHubContext),
-
-        [Parameter(Mandatory, ParameterSetName = 'ArrayInput', ValueFromPipeline)]
-        [GitHubSecret[]] $InputObject
+        [object] $Context = (Get-GitHubContext)
     )
 
     begin {
@@ -79,54 +76,54 @@
         Write-Debug 'Parameters:'
         Get-FunctionParameter | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
         switch ($PSCmdlet.ParameterSetName) {
-            'ArrayInput' {
-                foreach ($item in $InputObject) {
-                    if ($item.Environment) {
-                        $params = @{
-                            Owner       = $item.Owner
-                            Repository  = $item.Repository
-                            Environment = $item.Environment
-                            Context     = $Context
-                        }
-                        $existingSecrets = Get-GitHubSecretEnvironmentList @params
-                        $secretExists = $item.Name -in $existingSecrets.Name
-                        if (-not $secretExists) { continue }
-                        Remove-GitHubSecretFromEnvironment @params -Name $item.Name
-                    } elseif ($item.Repository) {
-                        $params = @{
-                            Owner      = $item.Owner
-                            Repository = $item.Repository
-                            Context    = $Context
-                        }
-                        $existingSecrets = Get-GitHubSecretRepositoryList @params
-                        $secretExists = $item.Name -in $existingSecrets.Name
-                        if (-not $secretExists) { continue }
-                        Remove-GitHubSecretFromRepository @params -Name $item.Name
-                    } else {
-                        $params = @{
-                            Owner   = $item.Owner
-                            Context = $Context
-                        }
-                        $existingSecrets = Get-GitHubSecretOwnerList @params
-                        $secretExists = $item.Name -in $existingSecrets.Name
-                        if (-not $secretExists) { continue }
-                        Remove-GitHubSecretFromOwner @params -Name $item.Name
-                    }
-                    $scopeParam = @{
-                        Owner       = $item.Owner
-                        Repository  = $item.Repository
-                        Environment = $item.Environment
-                        Context     = $Context
-                    }
-                    $scopeParam | Remove-HashtableEntry -NullOrEmptyValues
-                    for ($i = 0; $i -le 10; $i++) {
-                        Start-Sleep -Seconds 1
-                        $secret = Get-GitHubSecret @scopeParam | Where-Object { $_.Name -eq $Name }
-                        if (-not $secret) { break }
-                    }
-                }
-                return
-            }
+            # 'ArrayInput' {
+            #     foreach ($item in $InputObject) {
+            #         if ($item.Environment) {
+            #             $params = @{
+            #                 Owner       = $item.Owner
+            #                 Repository  = $item.Repository
+            #                 Environment = $item.Environment
+            #                 Context     = $Context
+            #             }
+            #             $existingSecrets = Get-GitHubSecretEnvironmentList @params
+            #             $secretExists = $item.Name -in $existingSecrets.Name
+            #             if (-not $secretExists) { continue }
+            #             Remove-GitHubSecretFromEnvironment @params -Name $item.Name
+            #         } elseif ($item.Repository) {
+            #             $params = @{
+            #                 Owner      = $item.Owner
+            #                 Repository = $item.Repository
+            #                 Context    = $Context
+            #             }
+            #             $existingSecrets = Get-GitHubSecretRepositoryList @params
+            #             $secretExists = $item.Name -in $existingSecrets.Name
+            #             if (-not $secretExists) { continue }
+            #             Remove-GitHubSecretFromRepository @params -Name $item.Name
+            #         } else {
+            #             $params = @{
+            #                 Owner   = $item.Owner
+            #                 Context = $Context
+            #             }
+            #             $existingSecrets = Get-GitHubSecretOwnerList @params
+            #             $secretExists = $item.Name -in $existingSecrets.Name
+            #             if (-not $secretExists) { continue }
+            #             Remove-GitHubSecretFromOwner @params -Name $item.Name
+            #         }
+            #         $scopeParam = @{
+            #             Owner       = $item.Owner
+            #             Repository  = $item.Repository
+            #             Environment = $item.Environment
+            #             Context     = $Context
+            #         }
+            #         $scopeParam | Remove-HashtableEntry -NullOrEmptyValues
+            #         for ($i = 0; $i -le 10; $i++) {
+            #             Start-Sleep -Seconds 1
+            #             $secret = Get-GitHubSecret @scopeParam | Where-Object { $_.Name -eq $Name }
+            #             if (-not $secret) { break }
+            #         }
+            #     }
+            #     return
+            # }
             'Organization' {
                 $params = @{
                     Owner   = $Owner
