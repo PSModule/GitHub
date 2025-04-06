@@ -77,7 +77,7 @@ Describe 'Secrets' {
                     Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
                 }
                 'organization' {
-                    # Get-GitHubSecret -Owner $owner | Remove-GitHubSecret
+                    Get-GitHubSecret -Owner $owner | Remove-GitHubSecret
                     Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
                     Remove-GitHubRepository -Owner $owner -Name "$repoName-2" -Confirm:$false
                     Remove-GitHubRepository -Owner $owner -Name "$repoName-3" -Confirm:$false
@@ -324,7 +324,7 @@ Describe 'Secrets' {
                     Owner      = $owner
                     Repository = $repoName
                 }
-                # Set-GitHubSecret @scope -Name $secretName -Value 'repository'
+                Set-GitHubSecret @scope -Name $secretName -Value 'repository'
             }
 
             Context 'PublicKey' {
@@ -409,14 +409,14 @@ Describe 'Secrets' {
                     Owner      = $owner
                     Repository = $repoName
                 }
-                # Set-GitHubSecret @scope -Name $secretName -Value 'repository'
+                Set-GitHubSecret @scope -Name $secretName -Value 'repository'
                 $scope = @{
                     Owner       = $owner
                     Repository  = $repoName
                     Environment = $environmentName
                 }
                 Set-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName
-                # Set-GitHubSecret @scope -Name $secretName -Value 'environment'
+                Set-GitHubSecret @scope -Name $secretName -Value 'environment'
             }
 
             Context 'PublicKey' {

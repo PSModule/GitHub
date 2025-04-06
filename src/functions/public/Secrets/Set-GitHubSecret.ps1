@@ -47,9 +47,9 @@
     [CmdletBinding(DefaultParameterSetName = 'AuthenticatedUser', SupportsShouldProcess, ConfirmImpact = 'Low')]
     param (
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(Mandatory, ParameterSetName = 'Organization')]
-        [Parameter(Mandatory, ParameterSetName = 'Repository')]
-        [Parameter(Mandatory, ParameterSetName = 'Environment')]
+        [Parameter(Mandatory, ParameterSetName = 'Organization', ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ParameterSetName = 'Repository', ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ParameterSetName = 'Environment', ValueFromPipelineByPropertyName)]
         [Alias('Organization', 'User')]
         [string] $Owner,
 
