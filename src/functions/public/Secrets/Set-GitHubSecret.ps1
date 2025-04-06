@@ -111,16 +111,15 @@
         $encryptedValue = ConvertTo-SodiumSealedBox -PublicKey $publicKey.Key -Message $Value
 
         $params = $publicKeyParams + @{
-            Visibility           = $Visibility
-            SelectedRepositories = $SelectedRepositories
             Name                 = $Name
             Value                = $encryptedValue
             KeyID                = $publicKey.ID
         }
-        $params | Remove-HashtableEntry -NullOrEmptyValues
 
         switch ($PSCmdlet.ParameterSetName) {
             'Organization' {
+                $params['Visibility'] = $Visibility
+                $params['SelectedRepositories'] = $SelectedRepositories
                 Set-GitHubSecretOnOwner @params
                 break
             }
