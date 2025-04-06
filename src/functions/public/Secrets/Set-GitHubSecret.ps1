@@ -66,9 +66,9 @@
         [Parameter(Mandatory)]
         [string] $Name,
 
-        # The type of secret, either 'actions' or 'codespaces'.
-        [ValidateSet('actions', 'codespaces')]
-        [string] $Type = 'actions',
+        # # The type of secret, either 'actions' or 'codespaces'.
+        # [ValidateSet('actions', 'codespaces')]
+        # [string] $Type = 'actions',
 
         # The visibility of the variable when updating an organization variable.
         # Can be `private`, `selected`, or `all`.
@@ -103,7 +103,7 @@
             Owner       = $Owner
             Repository  = $Repository
             Environment = $Environment
-            Type        = $Type
+            # Type        = $Type
             Context     = $Context
         }
         $publicKeyParams | Remove-HashtableEntry -NullOrEmptyValues
@@ -111,15 +111,11 @@
         $encryptedValue = ConvertTo-SodiumSealedBox -PublicKey $publicKey.Key -Message $Value
 
         $params = $publicKeyParams + @{
-            Owner                = $Owner
-            Repository           = $Repository
-            Environment          = $Environment
             Visibility           = $Visibility
             SelectedRepositories = $SelectedRepositories
             Name                 = $Name
             Value                = $encryptedValue
             KeyID                = $publicKey.KeyID
-            Context              = $Context
         }
         $params | Remove-HashtableEntry -NullOrEmptyValues
 
