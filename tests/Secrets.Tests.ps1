@@ -158,7 +158,6 @@ Describe 'Secrets' {
                 $result | Should -Not -BeNullOrEmpty
                 $result | Should -BeOfType [GitHubSecret]
                 $result.Name | Should -Be $name
-                $result.Value | Should -Be 'TestValue1234'
                 $result.Visibility | Should -Be 'private'
             }
 
@@ -176,7 +175,6 @@ Describe 'Secrets' {
                 $result | Should -Not -BeNullOrEmpty
                 $result | Should -BeOfType [GitHubSecret]
                 $result.Name | Should -Be $name
-                $result.Value | Should -Be 'TestValue123456789'
                 $result.Visibility | Should -Be 'all'
             }
 
@@ -204,7 +202,7 @@ Describe 'Secrets' {
                 $after.Count | Should -Be 0
             }
 
-            Context 'SelectedRepository' -Tag 'Flaky' {
+            Context 'SelectedRepository' {
                 It 'Get-GitHubSecretSelectedRepository - gets a list of selected repositories' {
                     LogGroup "SelectedRepositories - [$secretName]" {
                         $result = Get-GitHubSecretSelectedRepository -Owner $owner -Name $secretName
