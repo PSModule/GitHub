@@ -13,7 +13,7 @@
         .EXAMPLE
         Add-GitHubSecretSelectedRepository -Owner 'my-org' -Name 'API_KEY' -RepositoryID '654321'
 
-        Adds the repository 'test-repo' to the 'API_KEY' variable in the organization 'my-org'.
+        Adds the repository 'test-repo' to the 'API_KEY' secret in the organization 'my-org'.
 
         .LINK
         https://psmodule.io/GitHub/Functions/Secrets/SelectedRepository/Add-GitHubSecretSelectedRepository

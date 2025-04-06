@@ -12,7 +12,7 @@
         .EXAMPLE
         Remove-GitHubSecretSelectedRepository -Owner 'my-org' -Name 'ENV_SECRET' -RepositoryID 123456
 
-        Removes repository with ID 123456 from the organization variable 'ENV_SECRET' in 'my-org'.
+        Removes repository with ID 123456 from the organization secret 'ENV_SECRET' in 'my-org'.
 
         .OUTPUTS
         void
@@ -34,11 +34,11 @@
         [Parameter(Mandatory)]
         [string] $Owner,
 
-        # The name of the variable.
+        # The name of the secret.
         [Parameter(Mandatory)]
         [string] $Name,
 
-        # The ID of the repository to remove to the variable.
+        # The ID of the repository to remove to the secret.
         [Parameter(,
             Mandatory,
             ValueFromPipelineByPropertyName
@@ -68,11 +68,11 @@
         }
         $inputObject = @{
             Method      = 'DELETE'
-            APIEndpoint = "/orgs/$Owner/actions/variables/$Name/repositories/$RepositoryID"
+            APIEndpoint = "/orgs/$Owner/actions/secrets/$Name/repositories/$RepositoryID"
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("access to variable [$Owner/$Name] for repository [$RepositoryID]", 'Remove')) {
+        if ($PSCmdlet.ShouldProcess("access to secret [$Owner/$Name] for repository [$RepositoryID]", 'Remove')) {
             $null = Invoke-GitHubAPI @inputObject
         }
     }

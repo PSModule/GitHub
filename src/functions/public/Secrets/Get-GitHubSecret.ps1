@@ -61,11 +61,11 @@
         # [ValidateSet('actions', 'codespaces')]
         # [string] $Type = 'actions',
 
-        # List all variables that are inherited.
+        # List all secrets that are inherited.
         [Parameter()]
         [switch] $IncludeInherited,
 
-        # List all variables, including those that are overwritten by inheritance.
+        # List all secrets, including those that are overwritten by inheritance.
         [Parameter()]
         [switch] $All,
 

@@ -78,13 +78,13 @@
         # [ValidateSet('actions', 'codespaces')]
         # [string] $Type = 'actions',
 
-        # The visibility of the variable when updating an organization variable.
+        # The visibility of the secret when updating an organization secret.
         # Can be `private`, `selected`, or `all`.
         [Parameter(ParameterSetName = 'Organization')]
         [ValidateSet('private', 'selected', 'all')]
         [string] $Visibility = 'private',
 
-        # The IDs of the repositories to which the variable is available.
+        # The IDs of the repositories to which the secret is available.
         # Used only when the `-Visibility` parameter is set to `selected`.
         [Parameter(ParameterSetName = 'Organization')]
         [UInt64[]] $SelectedRepositories,
