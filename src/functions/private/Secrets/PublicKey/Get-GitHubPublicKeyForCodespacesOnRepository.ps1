@@ -13,7 +13,7 @@
         Outputs:
         ```powershell
         ID          : 3380189982652154440
-        Key         : xPliIrAF7uHC+hM=
+        Key         : xPliIrAsVlPub63sB1cnvx/CKt5FGb5rjlbF7uHC+hM=                    #gitleaks:allow
         Type        : codespaces
         Owner       : octocat
         Repository  : hello-world

@@ -14,7 +14,7 @@
         Outputs:
         ```powershell
         ID          : 3380204578043523366
-        Key         : ypK8X3uSE=
+        Key         : ypK8XbFOtcXsCaqJOfdWjpCNumPmF3sfAbbv7x+3uSE=                    #gitleaks:allow
         Type        : actions
         Owner       : octocat
         Repository  : hello-world
