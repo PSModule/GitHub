@@ -79,6 +79,9 @@ Describe 'Secrets' {
                 }
                 'organization' {
                     $orgSecrets = Get-GitHubSecret -Owner $owner
+                    LogGroup "Secrets to remove" {
+                        Write-Host "$($orgSecrets | Format-List | Out-String)"
+                    }
                     $orgSecrets | Remove-GitHubSecret -Debug -Verbose
                     Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
                     Remove-GitHubRepository -Owner $owner -Name "$repoName-2" -Confirm:$false
