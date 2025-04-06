@@ -61,6 +61,14 @@
         # [ValidateSet('actions', 'codespaces')]
         # [string] $Type = 'actions',
 
+        # List all variables that are inherited.
+        [Parameter()]
+        [switch] $IncludeInherited,
+
+        # List all variables, including those that are overwritten by inheritance.
+        [Parameter()]
+        [switch] $All,
+
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
@@ -135,6 +143,23 @@
                 break
             }
         }
+        if ($IncludeInherited -and -not $All) {
+            $secrets = $secrets | Group-Object -Property Name | ForEach-Object {
+                $group = $_.Group
+                $envSecret = $group | Where-Object { $_.Environment }
+                if ($envSecret) {
+                    $envSecret
+                } else {
+                    $repoSecret = $group | Where-Object { $_.Repository -and (-not $_.Environment) }
+                    if ($repoSecret) {
+                        $repoSecret
+                    } else {
+                        $group | Where-Object { (-not $_.Repository) -and (-not $_.Environment) }
+                    }
+                }
+            }
+        }
+        $secrets
     }
 
     end {
