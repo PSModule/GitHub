@@ -14,7 +14,7 @@
         Outputs:
         ```powershell
         ID          : 3380204578043523366
-        Key         : WkwZZ0xWbxZMqWrfUxLgvnALbrfdZSWxrhBcfTKshDY=
+        Key         : WkwZZ0xWKshDY=
         Type        : actions
         Owner       : octocat
         Repository  : hello-world
