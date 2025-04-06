@@ -2,22 +2,17 @@
 $Repository = 'GitHub'
 $Environment = 'test'
 
+# Create a new environment
 Set-GitHubEnvironment -Owner $Owner -Repository $Repository -Name $Environment
 
-$publicKeys = @()
-$publicKeys += Get-GitHubPublicKey -Owner $Owner
-$publicKeys += Get-GitHubPublicKey -Owner $Owner -Repository $Repository
-$publicKeys += Get-GitHubPublicKey -Owner $Owner -Repository $Repository -Environment $Environment
+# Create new secrets on organization, repository and environment level
+Set-GitHubSecret -Owner $Owner -Name 'TestSecret' -Value 'Organization' -Visibility all
+Set-GitHubSecret -Owner $Owner -Repository $Repository -Name 'TestSecret' -Value 'Repository'
+Set-GitHubSecret -Owner $Owner -Repository $Repository -Environment $Environment -Name 'TestSecret' -Value 'Environment'
 
-$publicKeys += Get-GitHubPublicKey -Owner $Owner -Type codespaces
-$publicKeys += Get-GitHubPublicKey -Owner $Owner -Repository $Repository -Type codespaces
-$publicKeys += Get-GitHubPublicKey -Type codespaces
+# Get the secret objects (without the value)
+Get-GitHubSecret -Owner $Owner -Repository $Repository -Environment $Environment -IncludeInherited -All
 
-$publicKeys | Format-Table
-
-
-Set-GitHubSecret -Owner $Owner -Name 'TestSecret' -Value 'TestValue'
-Set-GitHubSecret -Owner $Owner -Repository $Repository -Name 'TestSecret' -Value 'TestValue'
-Set-GitHubSecret -Owner $Owner -Repository $Repository -Environment $Environment -Name 'TestSecret' -Value 'TestValue'
-
-Get-GitHubSecret -Owner $Owner -Repository $Repository -Environment $Environment -IncludeInherited | 
+# Cleanup
+Get-GitHubSecret -Owner $Owner -Repository $Repository -Environment $environment -IncludeInherited -All -Name 'Test*' | Remove-GitHubSecret
+Get-GitHubEnvironment -Owner $Owner -Repository $Repo -Name $environment | Remove-GitHubEnvironment
