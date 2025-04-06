@@ -70,6 +70,8 @@
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
         Write-Debug "ParameterSet: $($PSCmdlet.ParameterSetName)"
+        Write-Debug 'Parameters:'
+        Get-FunctionParameter | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
     }
 
     process {
