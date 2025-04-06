@@ -78,25 +78,87 @@
         Write-Debug "ParameterSet: $($PSCmdlet.ParameterSetName)"
         Write-Debug 'Parameters:'
         Get-FunctionParameter | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
-        $params = @{
-            Owner   = $Owner
-            Name    = $Name
-            Context = $Context
-        }
         switch ($PSCmdlet.ParameterSetName) {
+            'ArrayInput' {
+                foreach ($item in $InputObject) {
+                    if ($item.Environment) {
+                        $params = @{
+                            Owner       = $item.Owner
+                            Repository  = $item.Repository
+                            Environment = $item.Environment
+                            Context     = $Context
+                        }
+                        $existingSecrets = Get-GitHubSecretEnvironmentList @params
+                        $secretExists = $item.Name -in $existingSecrets.Name
+                        if (-not $secretExists) { continue }
+                        Remove-GitHubSecretFromEnvironment @params -Name $item.Name
+                    } elseif ($item.Repository) {
+                        $params = @{
+                            Owner      = $item.Owner
+                            Repository = $item.Repository
+                            Context    = $Context
+                        }
+                        $existingSecrets = Get-GitHubSecretRepositoryList @params
+                        $secretExists = $item.Name -in $existingSecrets.Name
+                        if (-not $secretExists) { continue }
+                        Remove-GitHubSecretFromRepository @params -Name $item.Name
+                    } else {
+                        $params = @{
+                            Owner   = $item.Owner
+                            Context = $Context
+                        }
+                        $existingSecrets = Get-GitHubSecretOwnerList @params
+                        $secretExists = $item.Name -in $existingSecrets.Name
+                        if (-not $secretExists) { continue }
+                        Remove-GitHubSecretFromOwner @params -Name $item.Name
+                    }
+                    $scopeParam = @{
+                        Owner       = $item.Owner
+                        Repository  = $item.Repository
+                        Environment = $item.Environment
+                        Context     = $Context
+                    }
+                    $scopeParam | Remove-HashtableEntry -NullOrEmptyValues
+                    for ($i = 0; $i -le 10; $i++) {
+                        Start-Sleep -Seconds 1
+                        $secret = Get-GitHubSecret @scopeParam | Where-Object { $_.Name -eq $Name }
+                        if (-not $secret) { break }
+                    }
+                }
+                return
+            }
             'Organization' {
+                $params = @{
+                    Owner   = $Owner
+                    Name    = $Name
+                    Context = $Context
+                }
                 Remove-GitHubSecretFromOwner @params
                 break
             }
             'Repository' {
-                Remove-GitHubSecretFromRepository @params -Repository $Repository
+                $params = @{
+                    Owner      = $Owner
+                    Repository = $Repository
+                    Name       = $Name
+                    Context    = $Context
+                }
+                Remove-GitHubSecretFromRepository @params
                 break
             }
             'Environment' {
-                Remove-GitHubSecretFromEnvironment @params -Repository $Repository -Environment $Environment
+                $params = @{
+                    Owner       = $Owner
+                    Repository  = $Repository
+                    Environment = $Environment
+                    Name        = $Name
+                    Context     = $Context
+                }
+                Remove-GitHubSecretFromEnvironment @params
                 break
             }
             'AuthenticatedUser' {
+                throw 'Authenticated user: Not supported'
                 break
             }
         }
