@@ -84,7 +84,7 @@ Describe 'Secrets' {
                     LogGroup 'Secrets to remove' {
                         Write-Host "$($orgSecrets | Format-List | Out-String)"
                     }
-                    $orgSecrets | Remove-GitHubSecret -Debug -Verbose
+                    $orgSecrets | Remove-GitHubSecret
                     Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
                     Remove-GitHubRepository -Owner $owner -Name "$repoName-2" -Confirm:$false
                     Remove-GitHubRepository -Owner $owner -Name "$repoName-3" -Confirm:$false
@@ -144,184 +144,136 @@ Describe 'Secrets' {
                 }
             }
 
-            # It 'Set-GitHubSecret - should ensure existance of a organization secret' {
-            #     $name = "$secretPrefix`TestSecret"
-            #     LogGroup "Secret - [$name]" {
-            #         $param = @{
-            #             Name       = $name
-            #             Value      = 'TestValue1234'
-            #             Visibility = 'private'
-            #         }
-            #         $result = Set-GitHubSecret @param @scope
-            #         Write-Host ($result | Select-Object * | Format-List | Out-String)
-            #     }
-            #     $result | Should -Not -BeNullOrEmpty
-            #     $result | Should -BeOfType [GitHubSecret]
-            #     $result.Name | Should -Be $name
-            #     $result.Value | Should -Be 'TestValue1234'
-            #     $result.Visibility | Should -Be 'private'
-            # }
+            It 'Set-GitHubSecret - should ensure existance of a organization secret' {
+                $name = "$secretPrefix`TestSecret"
+                LogGroup "Secret - [$name]" {
+                    $param = @{
+                        Name       = $name
+                        Value      = 'TestValue1234'
+                        Visibility = 'private'
+                    }
+                    $result = Set-GitHubSecret @param @scope
+                    Write-Host ($result | Select-Object * | Format-List | Out-String)
+                }
+                $result | Should -Not -BeNullOrEmpty
+                $result | Should -BeOfType [GitHubSecret]
+                $result.Name | Should -Be $name
+                $result.Value | Should -Be 'TestValue1234'
+                $result.Visibility | Should -Be 'private'
+            }
 
-            # It 'Set-GitHubSecret - should update an existing organization secret' {
-            #     $name = "$secretPrefix`TestSecret"
-            #     LogGroup "Secret - [$name]" {
-            #         $param = @{
-            #             Name       = $name
-            #             Value      = 'TestValue123456789'
-            #             Visibility = 'all'
-            #         }
-            #         $result = Set-GitHubSecret @param @scope
-            #         Write-Host ($result | Select-Object * | Format-List | Out-String)
-            #     }
-            #     $result | Should -Not -BeNullOrEmpty
-            #     $result | Should -BeOfType [GitHubSecret]
-            #     $result.Name | Should -Be $name
-            #     $result.Value | Should -Be 'TestValue123456789'
-            #     $result.Visibility | Should -Be 'all'
-            # }
+            It 'Set-GitHubSecret - should update an existing organization secret' {
+                $name = "$secretPrefix`TestSecret"
+                LogGroup "Secret - [$name]" {
+                    $param = @{
+                        Name       = $name
+                        Value      = 'TestValue123456789'
+                        Visibility = 'all'
+                    }
+                    $result = Set-GitHubSecret @param @scope
+                    Write-Host ($result | Select-Object * | Format-List | Out-String)
+                }
+                $result | Should -Not -BeNullOrEmpty
+                $result | Should -BeOfType [GitHubSecret]
+                $result.Name | Should -Be $name
+                $result.Value | Should -Be 'TestValue123456789'
+                $result.Visibility | Should -Be 'all'
+            }
 
-            # It 'Update-GitHubSecret - should update an existing organization secret' {
-            #     $name = "$secretPrefix`TestSecret"
-            #     LogGroup "Secret - [$name]" {
-            #         $param = @{
-            #             Name  = $name
-            #             Value = 'TestValue1234'
-            #         }
-            #         $result = Update-GitHubSecret @param @scope -PassThru
-            #         Write-Host ($result | Select-Object * | Format-List | Out-String)
-            #     }
-            #     $result | Should -Not -BeNullOrEmpty
-            #     $result | Should -BeOfType [GitHubSecret]
-            #     $result.Name | Should -Be $name
-            #     $result.Value | Should -Be 'TestValue1234'
-            #     $result.Visibility | Should -Be 'all'
-            # }
+            It 'Get-GitHubSecret' {
+                $result = Get-GitHubSecret @scope -Name "$secretPrefix*"
+                LogGroup 'Secrets' {
+                    Write-Host "$($result | Select-Object * | Format-List | Out-String)"
+                }
+                $result | Should -Not -BeNullOrEmpty
+            }
 
-            # It 'New-GitHubSecret - should create a new organization secret' {
-            #     $name = "$secretPrefix`TestSecret2"
-            #     LogGroup "Secret - [$name]" {
-            #         $param = @{
-            #             Name  = $name
-            #             Value = 'TestValue123'
-            #         }
-            #         $result = New-GitHubSecret @param @scope
-            #         Write-Host ($result | Select-Object * | Format-List | Out-String)
-            #     }
-            #     $result | Should -Not -BeNullOrEmpty
-            #     $result | Should -BeOfType [GitHubSecret]
-            #     $result.Name | Should -Be $name
-            #     $result.Value | Should -Be 'TestValue123'
-            #     $result.Visibility | Should -Be 'private'
-            # }
+            It 'Remove-GitHubSecret' {
+                $testSecretName = "$secretPrefix`TestSecret*"
+                LogGroup 'Before remove' {
+                    $before = Get-GitHubSecret @scope -Name $testSecretName
+                    Write-Host "$($before | Format-List | Out-String)"
+                }
+                LogGroup 'Remove' {
+                    $before | Remove-GitHubSecret
+                }
+                LogGroup 'After remove' {
+                    $after = Get-GitHubSecret @scope -Name $testSecretName
+                    Write-Host "$($after | Format-List | Out-String)"
+                }
+                $after.Count | Should -Be 0
+            }
 
-            # It 'New-GitHubSecret - should throw if creating an organization secret that exists' {
-            #     $name = "$secretPrefix`TestSecret2"
-            #     LogGroup "Secret - [$name]" {
-            #         $param = @{
-            #             Name  = $name
-            #             Value = 'TestValue123'
-            #         }
-            #         {
-            #             $result = New-GitHubSecret @param @scope
-            #             Write-Host ($result | Select-Object * | Format-List | Out-String)
-            #         } | Should -Throw
-            #     }
-            # }
-
-            # It 'Get-GitHubSecret' {
-            #     $result = Get-GitHubSecret @scope -Name "$secretPrefix*"
-            #     LogGroup 'Secrets' {
-            #         Write-Host "$($result | Select-Object * | Format-List | Out-String)"
-            #     }
-            #     $result | Should -Not -BeNullOrEmpty
-            # }
-
-            # It 'Remove-GitHubSecret' {
-            #     $testSecretName = "$secretPrefix`TestSecret*"
-            #     LogGroup 'Before remove' {
-            #         $before = Get-GitHubSecret @scope -Name $testSecretName
-            #         Write-Host "$($before | Format-List | Out-String)"
-            #     }
-            #     LogGroup 'Remove' {
-            #         $before | Remove-GitHubSecret
-            #     }
-            #     LogGroup 'After remove' {
-            #         $after = Get-GitHubSecret @scope -Name $testSecretName
-            #         Write-Host "$($after | Format-List | Out-String)"
-            #     }
-            #     $after.Count | Should -Be 0
-            # }
-
-            # Context 'SelectedRepository' -Tag 'Flaky' {
-            #     It 'Get-GitHubSecretSelectedRepository - gets a list of selected repositories' {
-            #         LogGroup "SelectedRepositories - [$secretName]" {
-            #             $result = Get-GitHubSecretSelectedRepository -Owner $owner -Name $secretName
-            #             Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
-            #         }
-            #         $result | Should -Not -BeNullOrEmpty
-            #         $result[0] | Should -BeOfType [GitHubRepository]
-            #         $result | Should -HaveCount 1
-            #     }
-            #     It 'Add-GitHubSecretSelectedRepository - adds a repository to the list of selected repositories' {
-            #         { Add-GitHubSecretSelectedRepository -Owner $owner -Name $secretName -RepositoryID $repo2.id } | Should -Not -Throw
-            #     }
-            #     It 'Add-GitHubSecretSelectedRepository - adds a repository to the list of selected repositories - idempotency test' {
-            #         { Add-GitHubSecretSelectedRepository -Owner $owner -Name $secretName -RepositoryID $repo2.id } | Should -Not -Throw
-            #     }
-            #     It 'Add-GitHubSecretSelectedRepository - adds a repository to the list of selected repositories using pipeline' {
-            #         LogGroup 'Repo3' {
-            #             Write-Host "$($repo3 | Format-List | Out-String)"
-            #         }
-            #         { $repo3 | Add-GitHubSecretSelectedRepository -Owner $owner -Name $secretName } | Should -Not -Throw
-            #     }
-            #     It 'Get-GitHubSecretSelectedRepository - gets 3 repositories' {
-            #         LogGroup "SelectedRepositories - [$secretName]" {
-            #             $result = Get-GitHubSecretSelectedRepository -Owner $owner -Name $secretName
-            #             Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
-            #         }
-            #         $result | Should -Not -BeNullOrEmpty
-            #         $result[0] | Should -BeOfType [GitHubRepository]
-            #         $result | Should -HaveCount 3
-            #     }
-            #     It 'Remove-GitHubSecretSelectedRepository - removes a repository from the list of selected repositories' {
-            #         { Remove-GitHubSecretSelectedRepository -Owner $owner -Name $secretName -RepositoryID $repo2.id } | Should -Not -Throw
-            #     }
-            #     It 'Remove-GitHubSecretSelectedRepository - removes a repository from the list of selected repositories - idempotency test' {
-            #         { Remove-GitHubSecretSelectedRepository -Owner $owner -Name $secretName -RepositoryID $repo2.id } | Should -Not -Throw
-            #     }
-            #     It 'Remove-GitHubSecretSelectedRepository - removes a repository from the list of selected repositories using pipeline' {
-            #         LogGroup 'Repo3' {
-            #             Write-Host "$($repo3 | Format-List | Out-String)"
-            #         }
-            #         { $repo3 | Remove-GitHubSecretSelectedRepository -Owner $owner -Name $secretName } | Should -Not -Throw
-            #     }
-            #     It 'Get-GitHubSecretSelectedRepository - gets 1 repository' {
-            #         LogGroup "SelectedRepositories - [$secretName]" {
-            #             $result = Get-GitHubSecretSelectedRepository -Owner $owner -Name $secretName
-            #             Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
-            #         }
-            #         $result | Should -Not -BeNullOrEmpty
-            #         $result[0] | Should -BeOfType [GitHubRepository]
-            #         $result | Should -HaveCount 1
-            #     }
-            #     It 'Set-GitHubSecretSelectedRepository - should set the selected repositories for the secret' {
-            #         { Set-GitHubSecretSelectedRepository -Owner $owner -Name $secretName -RepositoryID $repo.id, $repo2.id, $repo3.id } |
-            #             Should -Not -Throw
-            #     }
-            #     It 'Set-GitHubSecretSelectedRepository - should set the selected repositories for the secret - idempotency test' {
-            #         { Set-GitHubSecretSelectedRepository -Owner $owner -Name $secretName -RepositoryID $repo.id, $repo2.id, $repo3.id } |
-            #             Should -Not -Throw
-            #     }
-            #     It 'Get-GitHubSecretSelectedRepository - gets 3 repository' {
-            #         $result = Get-GitHubSecretSelectedRepository -Owner $owner -Name $secretName
-            #         LogGroup "SelectedRepositories - [$secretName]" {
-            #             Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
-            #         }
-            #         $result | Should -Not -BeNullOrEmpty
-            #         $result[0] | Should -BeOfType [GitHubRepository]
-            #         $result | Should -HaveCount 3
-            #     }
-            # }
+            Context 'SelectedRepository' -Tag 'Flaky' {
+                It 'Get-GitHubSecretSelectedRepository - gets a list of selected repositories' {
+                    LogGroup "SelectedRepositories - [$secretName]" {
+                        $result = Get-GitHubSecretSelectedRepository -Owner $owner -Name $secretName
+                        Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
+                    }
+                    $result | Should -Not -BeNullOrEmpty
+                    $result[0] | Should -BeOfType [GitHubRepository]
+                    $result | Should -HaveCount 1
+                }
+                It 'Add-GitHubSecretSelectedRepository - adds a repository to the list of selected repositories' {
+                    { Add-GitHubSecretSelectedRepository -Owner $owner -Name $secretName -RepositoryID $repo2.id } | Should -Not -Throw
+                }
+                It 'Add-GitHubSecretSelectedRepository - adds a repository to the list of selected repositories - idempotency test' {
+                    { Add-GitHubSecretSelectedRepository -Owner $owner -Name $secretName -RepositoryID $repo2.id } | Should -Not -Throw
+                }
+                It 'Add-GitHubSecretSelectedRepository - adds a repository to the list of selected repositories using pipeline' {
+                    LogGroup 'Repo3' {
+                        Write-Host "$($repo3 | Format-List | Out-String)"
+                    }
+                    { $repo3 | Add-GitHubSecretSelectedRepository -Owner $owner -Name $secretName } | Should -Not -Throw
+                }
+                It 'Get-GitHubSecretSelectedRepository - gets 3 repositories' {
+                    LogGroup "SelectedRepositories - [$secretName]" {
+                        $result = Get-GitHubSecretSelectedRepository -Owner $owner -Name $secretName
+                        Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
+                    }
+                    $result | Should -Not -BeNullOrEmpty
+                    $result[0] | Should -BeOfType [GitHubRepository]
+                    $result | Should -HaveCount 3
+                }
+                It 'Remove-GitHubSecretSelectedRepository - removes a repository from the list of selected repositories' {
+                    { Remove-GitHubSecretSelectedRepository -Owner $owner -Name $secretName -RepositoryID $repo2.id } | Should -Not -Throw
+                }
+                It 'Remove-GitHubSecretSelectedRepository - removes a repository from the list of selected repositories - idempotency test' {
+                    { Remove-GitHubSecretSelectedRepository -Owner $owner -Name $secretName -RepositoryID $repo2.id } | Should -Not -Throw
+                }
+                It 'Remove-GitHubSecretSelectedRepository - removes a repository from the list of selected repositories using pipeline' {
+                    LogGroup 'Repo3' {
+                        Write-Host "$($repo3 | Format-List | Out-String)"
+                    }
+                    { $repo3 | Remove-GitHubSecretSelectedRepository -Owner $owner -Name $secretName } | Should -Not -Throw
+                }
+                It 'Get-GitHubSecretSelectedRepository - gets 1 repository' {
+                    LogGroup "SelectedRepositories - [$secretName]" {
+                        $result = Get-GitHubSecretSelectedRepository -Owner $owner -Name $secretName
+                        Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
+                    }
+                    $result | Should -Not -BeNullOrEmpty
+                    $result[0] | Should -BeOfType [GitHubRepository]
+                    $result | Should -HaveCount 1
+                }
+                It 'Set-GitHubSecretSelectedRepository - should set the selected repositories for the secret' {
+                    { Set-GitHubSecretSelectedRepository -Owner $owner -Name $secretName -RepositoryID $repo.id, $repo2.id, $repo3.id } |
+                        Should -Not -Throw
+                }
+                It 'Set-GitHubSecretSelectedRepository - should set the selected repositories for the secret - idempotency test' {
+                    { Set-GitHubSecretSelectedRepository -Owner $owner -Name $secretName -RepositoryID $repo.id, $repo2.id, $repo3.id } |
+                        Should -Not -Throw
+                }
+                It 'Get-GitHubSecretSelectedRepository - gets 3 repository' {
+                    $result = Get-GitHubSecretSelectedRepository -Owner $owner -Name $secretName
+                    LogGroup "SelectedRepositories - [$secretName]" {
+                        Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
+                    }
+                    $result | Should -Not -BeNullOrEmpty
+                    $result[0] | Should -BeOfType [GitHubRepository]
+                    $result | Should -HaveCount 3
+                }
+            }
 
         }
 
