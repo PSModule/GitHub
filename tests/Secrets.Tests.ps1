@@ -59,7 +59,7 @@ Describe 'Secrets' {
                             Visibility           = 'selected'
                             SelectedRepositories = $repo.id
                         }
-                        $result = Set-GitHubSecret @params
+                        $result = Set-GitHubSecret @params -Verbose -Debug
                         Write-Host ($result | Select-Object * | Format-Table | Out-String)
                     }
                 }

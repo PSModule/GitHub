@@ -37,6 +37,9 @@
 
         Updates the secret `MySecret` in the `Production` environment of the `MyRepo` repository for `MyUser`.
 
+        .OUTPUTS
+        GitHubSecret
+
         .LINK
         https://psmodule.io/GitHub/Functions/Secrets/Set-GitHubSecret/
     #>
@@ -44,6 +47,7 @@
         'PSShouldProcess', '', Scope = 'Function',
         Justification = 'This check is performed in the private functions.'
     )]
+    [OutputType([GitHubSecret])]
     [CmdletBinding(DefaultParameterSetName = 'AuthenticatedUser', SupportsShouldProcess, ConfirmImpact = 'Low')]
     param (
         # The account owner of the repository. The name is not case sensitive.
@@ -54,17 +58,21 @@
         [string] $Owner,
 
         # The name of the repository. The name is not case sensitive.
-        [Parameter(Mandatory, ParameterSetName = 'Repository')]
-        [Parameter(Mandatory, ParameterSetName = 'Environment')]
+        [Parameter(Mandatory, ParameterSetName = 'Repository', ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ParameterSetName = 'Environment', ValueFromPipelineByPropertyName)]
         [string] $Repository,
 
         # The name of the repository environment.
-        [Parameter(Mandatory, ParameterSetName = 'Environment')]
+        [Parameter(Mandatory, ParameterSetName = 'Environment', ValueFromPipelineByPropertyName)]
         [string] $Environment,
 
         # The name of the secret to be updated.
         [Parameter(Mandatory)]
         [string] $Name,
+
+        # The secret value to be stored, provided as a SecureString.
+        [Parameter(Mandatory)]
+        [string] $Value,
 
         # # The type of secret, either 'actions' or 'codespaces'.
         # [ValidateSet('actions', 'codespaces')]
@@ -80,10 +88,6 @@
         # Used only when the `-Visibility` parameter is set to `selected`.
         [Parameter(ParameterSetName = 'Organization')]
         [UInt64[]] $SelectedRepositories,
-
-        # The secret value to be stored, provided as a SecureString.
-        [Parameter(Mandatory)]
-        [string] $Value,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -111,9 +115,9 @@
         $encryptedValue = ConvertTo-SodiumSealedBox -PublicKey $publicKey.Key -Message $Value
 
         $params = $publicKeyParams + @{
-            Name                 = $Name
-            Value                = $encryptedValue
-            KeyID                = $publicKey.ID
+            Name  = $Name
+            Value = $encryptedValue
+            KeyID = $publicKey.ID
         }
 
         switch ($PSCmdlet.ParameterSetName) {
