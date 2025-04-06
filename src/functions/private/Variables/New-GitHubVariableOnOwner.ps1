@@ -20,6 +20,7 @@ function New-GitHubVariableOnOwner {
     [OutputType([void])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
+        # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
         [string] $Owner,
 

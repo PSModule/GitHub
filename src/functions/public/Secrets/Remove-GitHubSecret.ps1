@@ -1,49 +1,39 @@
-function Remove-GitHubVariable {
+﻿function Remove-GitHubSecret {
     <#
         .SYNOPSIS
-        Deletes a GitHub variable from an organization, repository, or environment.
+        Deletes a secret from GitHub.
 
         .DESCRIPTION
-        Deletes a GitHub variable based on the provided scope (organization, repository, or environment).
-
-        Supports pipeline input from Get-GitHubVariable or direct array input.
-
-        Authenticated users must have collaborator access to a repository to manage variables.
-        OAuth tokens and personal access tokens (classic) require specific scopes:
-        - `admin:org` for organization-level variables.
-        - `repo` for repository and environment-level variables.
+        Removes a secret from a specified GitHub repository, environment, organization, or authenticated user.
+        Supports both Actions and Codespaces secrets and requires appropriate authentication.
 
         .EXAMPLE
-        Get-GitHubVariable -Owner 'octocat' -Repository 'Hello-World' | Remove-GitHubVariable
+        Remove-GitHubSecret -Owner PSModule -Repository Demo -Type actions -Name TEST
 
-        Removes all variables retrieved from the specified repository.
-
-        .EXAMPLE
-        Remove-GitHubVariable -Owner 'octocat' -Name 'HOST_NAME' -Context $GitHubContext
-
-        Deletes the specified variable from the specified organization.
+        Deletes the secret named 'TEST' from the 'Demo' repository in the 'PSModule' organization.
 
         .EXAMPLE
-        Remove-GitHubVariable -Variable $variablesArray
+        Remove-GitHubSecret -Organization MyOrg -Type actions -Name API_KEY
 
-        Removes all variables provided in the array.
+        Deletes the secret 'API_KEY' from the organization 'MyOrg'.
 
-        .INPUTS
-        GitHubVariable
+        .EXAMPLE
+        Remove-GitHubSecret -Owner MyUser -Repository MyRepo -Environment Production -Name DB_PASSWORD
 
-        .OUTPUTS
-        void
+        Deletes the 'DB_PASSWORD' secret from the 'Production' environment in the 'MyRepo' repository.
+
+        .NOTES
+        Supports authentication using GitHub App tokens (IAT), Personal Access Tokens (PAT), or User Access Tokens (UAT).
 
         .LINK
-        https://psmodule.io/GitHub/Functions/Variables/Remove-GitHubVariable/
+        https://psmodule.io/GitHub/Functions/Secrets/Remove-GitHubSecret/
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSShouldProcess', '', Scope = 'Function',
         Justification = 'This check is performed in the private functions.'
     )]
-    [OutputType([void])]
-    [CmdletBinding(SupportsShouldProcess)]
-    param(
+    [CmdletBinding(DefaultParameterSetName = 'AuthenticatedUser', SupportsShouldProcess)]
+    param (
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory, ParameterSetName = 'Organization', ValueFromPipelineByPropertyName)]
         [Parameter(Mandatory, ParameterSetName = 'Repository', ValueFromPipelineByPropertyName)]
@@ -60,9 +50,13 @@ function Remove-GitHubVariable {
         [Parameter(Mandatory, ParameterSetName = 'Environment', ValueFromPipelineByPropertyName)]
         [string] $Environment,
 
-        # The name of the variable.
+        # The name of the secret.
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Name,
+
+        # # Specifies whether the secret is for Actions or Codespaces.
+        # [ValidateSet('actions', 'codespaces')]
+        # [string] $Type = 'actions',
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -70,7 +64,7 @@ function Remove-GitHubVariable {
         [object] $Context = (Get-GitHubContext),
 
         [Parameter(Mandatory, ParameterSetName = 'ArrayInput', ValueFromPipeline)]
-        [GitHubVariable[]] $InputObject
+        [GitHubSecret[]] $InputObject
     )
 
     begin {
@@ -81,6 +75,9 @@ function Remove-GitHubVariable {
     }
 
     process {
+        Write-Debug "ParameterSet: $($PSCmdlet.ParameterSetName)"
+        Write-Debug 'Parameters:'
+        Get-FunctionParameter | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
         switch ($PSCmdlet.ParameterSetName) {
             'ArrayInput' {
                 foreach ($item in $InputObject) {
@@ -91,29 +88,29 @@ function Remove-GitHubVariable {
                             Environment = $item.Environment
                             Context     = $Context
                         }
-                        $existingVariables = Get-GitHubVariableEnvironmentList @params
-                        $variableExists = $item.Name -in $existingVariables.Name
-                        if (-not $variableExists) { continue }
-                        Remove-GitHubVariableFromEnvironment @params -Name $item.Name
+                        $existingSecrets = Get-GitHubSecretEnvironmentList @params
+                        $secretExists = $item.Name -in $existingSecrets.Name
+                        if (-not $secretExists) { continue }
+                        Remove-GitHubSecretFromEnvironment @params -Name $item.Name
                     } elseif ($item.Repository) {
                         $params = @{
                             Owner      = $item.Owner
                             Repository = $item.Repository
                             Context    = $Context
                         }
-                        $existingVariables = Get-GitHubVariableRepositoryList @params
-                        $variableExists = $item.Name -in $existingVariables.Name
-                        if (-not $variableExists) { continue }
-                        Remove-GitHubVariableFromRepository @params -Name $item.Name
+                        $existingSecrets = Get-GitHubSecretRepositoryList @params
+                        $secretExists = $item.Name -in $existingSecrets.Name
+                        if (-not $secretExists) { continue }
+                        Remove-GitHubSecretFromRepository @params -Name $item.Name
                     } else {
                         $params = @{
                             Owner   = $item.Owner
                             Context = $Context
                         }
-                        $existingVariables = Get-GitHubVariableOwnerList @params
-                        $variableExists = $item.Name -in $existingVariables.Name
-                        if (-not $variableExists) { continue }
-                        Remove-GitHubVariableFromOwner @params -Name $item.Name
+                        $existingSecrets = Get-GitHubSecretOwnerList @params
+                        $secretExists = $item.Name -in $existingSecrets.Name
+                        if (-not $secretExists) { continue }
+                        Remove-GitHubSecretFromOwner @params -Name $item.Name
                     }
                 }
                 return
@@ -124,10 +121,7 @@ function Remove-GitHubVariable {
                     Name    = $Name
                     Context = $Context
                 }
-                $existingVariables = Get-GitHubVariableOwnerList @params
-                $variableExists = $Name -in $existingVariables.Name
-                if (-not $variableExists) { continue }
-                Remove-GitHubVariableFromOwner @params -Name $Name
+                Remove-GitHubSecretFromOwner @params
                 break
             }
             'Repository' {
@@ -137,10 +131,7 @@ function Remove-GitHubVariable {
                     Name       = $Name
                     Context    = $Context
                 }
-                $existingVariables = Get-GitHubVariableRepositoryList @params
-                $variableExists = $Name -in $existingVariables.Name
-                if (-not $variableExists) { continue }
-                Remove-GitHubVariableFromRepository @params -Name $Name
+                Remove-GitHubSecretFromRepository @params
                 break
             }
             'Environment' {
@@ -151,24 +142,13 @@ function Remove-GitHubVariable {
                     Name        = $Name
                     Context     = $Context
                 }
-                $existingVariables = Get-GitHubVariableEnvironmentList @params
-                $variableExists = $Name -in $existingVariables.Name
-                if (-not $variableExists) { continue }
-                Remove-GitHubVariableFromEnvironment @params -Name $Name
+                Remove-GitHubSecretFromEnvironment @params
                 break
             }
-        }
-
-        $scopeParam = @{
-            Owner       = $Owner
-            Repository  = $Repository
-            Environment = $Environment
-        }
-        $scopeParam | Remove-HashtableEntry -NullOrEmptyValues
-        for ($i = 0; $i -le 10; $i++) {
-            Start-Sleep -Seconds 1
-            $variable = Get-GitHubVariable @scopeParam | Where-Object { $_.Name -eq $Name }
-            if (-not $variable) { break }
+            'AuthenticatedUser' {
+                throw 'Authenticated user: Not supported'
+                break
+            }
         }
     }
 
