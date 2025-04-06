@@ -54,12 +54,15 @@ Describe 'Secrets' {
                     LogGroup "Org secret - [$secretName]" {
                         $params = @{
                             Owner                = $owner
-                            Name                 = $secretName
                             Value                = 'organization'
                             Visibility           = 'selected'
                             SelectedRepositories = $repo.id
                         }
-                        $result = Set-GitHubSecret @params
+                        $result = @(
+                            Set-GitHubSecret @params -Name "$secretName-1",
+                            Set-GitHubSecret @params -Name "$secretName-2",
+                            Set-GitHubSecret @params -Name "$secretName-3"
+                        )
                         Write-Host ($result | Select-Object * | Format-Table | Out-String)
                     }
                 }
@@ -72,14 +75,14 @@ Describe 'Secrets' {
         }
 
         AfterAll {
-            Write-Host "After all"
+            Write-Host 'After all'
             switch ($OwnerType) {
                 'user' {
                     Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
                 }
                 'organization' {
                     $orgSecrets = Get-GitHubSecret -Owner $owner
-                    LogGroup "Secrets to remove" {
+                    LogGroup 'Secrets to remove' {
                         Write-Host "$($orgSecrets | Format-List | Out-String)"
                     }
                     $orgSecrets | Remove-GitHubSecret -Debug -Verbose
