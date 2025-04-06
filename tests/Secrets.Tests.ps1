@@ -58,11 +58,10 @@ Describe 'Secrets' {
                             Visibility           = 'selected'
                             SelectedRepositories = $repo.id
                         }
-                        $result = @(
-                            Set-GitHubSecret @params -Name "$secretName-1",
-                            Set-GitHubSecret @params -Name "$secretName-2",
-                            Set-GitHubSecret @params -Name "$secretName-3"
-                        )
+                        $result = @()
+                        $result += Set-GitHubSecret @params -Name "$secretName`_1"
+                        $result += Set-GitHubSecret @params -Name "$secretName`_2"
+                        $result += Set-GitHubSecret @params -Name "$secretName`_3"
                         Write-Host ($result | Select-Object * | Format-Table | Out-String)
                     }
                 }
