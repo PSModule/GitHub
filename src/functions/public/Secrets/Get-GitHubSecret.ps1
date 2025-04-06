@@ -159,7 +159,7 @@
                 }
             }
         }
-        $secrets
+        $secrets | ForEach-Object { Write-Output $_ }
     }
 
     end {
