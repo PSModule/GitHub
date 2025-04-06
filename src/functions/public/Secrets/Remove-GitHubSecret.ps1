@@ -77,6 +77,7 @@
             Name    = $Name
             Context = $Context
         }
+        Write-Debug "ParameterSet: $($PSCmdlet.ParameterSetName)"
         switch ($PSCmdlet.ParameterSetName) {
             'Organization' {
                 Remove-GitHubSecretFromOwner @params
