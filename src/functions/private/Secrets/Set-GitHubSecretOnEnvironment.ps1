@@ -72,7 +72,7 @@ function Set-GitHubSecretOnEnvironment {
         }
 
         $inputObject = @{
-            Method      = 'POST'
+            Method      = 'PUT'
             APIEndpoint = "/repos/$Owner/$Repository/environments/$Environment/secrets/$Name"
             Body        = $body
             Context     = $Context

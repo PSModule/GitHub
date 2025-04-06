@@ -77,7 +77,7 @@ Describe 'Secrets' {
                     Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
                 }
                 'organization' {
-                    Get-GitHubSecret -Owner $owner | Remove-GitHubSecret
+                    # Get-GitHubSecret -Owner $owner | Remove-GitHubSecret
                     Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
                     Remove-GitHubRepository -Owner $owner -Name "$repoName-2" -Confirm:$false
                     Remove-GitHubRepository -Owner $owner -Name "$repoName-3" -Confirm:$false
@@ -87,16 +87,18 @@ Describe 'Secrets' {
         }
 
         Context 'User' -Skip:($OwnerType -ne 'user') {
-            It 'Get-GitHubPublicKey - Action' {
-                { Get-GitHubPublicKey } | Should -Throw
-            }
-
-            It 'Get-GitHubPublicKey - Codespaces' {
-                $result = Get-GitHubPublicKey -Type codespaces
-                LogGroup 'PublicKey - Codespaces' {
-                    Write-Host "$($result | Select-Object * | Format-Table -AutoSize | Out-String)"
+            Context 'PublicKey' {
+                It 'Get-GitHubPublicKey - Action' {
+                    { Get-GitHubPublicKey } | Should -Throw
                 }
-                $result | Should -Not -BeNullOrEmpty
+
+                It 'Get-GitHubPublicKey - Codespaces' {
+                    $result = Get-GitHubPublicKey -Type codespaces
+                    LogGroup 'PublicKey - Codespaces' {
+                        Write-Host "$($result | Select-Object * | Format-Table -AutoSize | Out-String)"
+                    }
+                    $result | Should -Not -BeNullOrEmpty
+                }
             }
         }
 
@@ -110,26 +112,27 @@ Describe 'Secrets' {
                     Write-Host ($org | Format-List | Out-String)
                 }
             }
-
-            It 'Get-GitHubPublicKey - Action' {
-                $result = Get-GitHubPublicKey @scope
-                LogGroup 'PublicKey' {
-                    Write-Host "$($result | Select-Object * | Format-Table -AutoSize| Out-String)"
-                }
-                $result | Should -Not -BeNullOrEmpty
-            }
-
-            It 'Get-GitHubPublicKey - Codespaces' {
-                switch ($org.plan.name) {
-                    'free' {
-                        { Get-GitHubPublicKey @scope -Type codespaces } | Should -Throw
+            Context 'PublicKey' {
+                It 'Get-GitHubPublicKey - Action' {
+                    $result = Get-GitHubPublicKey @scope
+                    LogGroup 'PublicKey' {
+                        Write-Host "$($result | Select-Object * | Format-Table -AutoSize| Out-String)"
                     }
-                    default {
-                        $result = Get-GitHubPublicKey @scope -Type codespaces
-                        LogGroup 'PublicKey' {
-                            Write-Host "$($result | Select-Object * | Format-Table -AutoSize | Out-String)"
+                    $result | Should -Not -BeNullOrEmpty
+                }
+
+                It 'Get-GitHubPublicKey - Codespaces' {
+                    switch ($org.plan.name) {
+                        'free' {
+                            { Get-GitHubPublicKey @scope -Type codespaces } | Should -Throw
                         }
-                        $result | Should -Not -BeNullOrEmpty
+                        default {
+                            $result = Get-GitHubPublicKey @scope -Type codespaces
+                            LogGroup 'PublicKey' {
+                                Write-Host "$($result | Select-Object * | Format-Table -AutoSize | Out-String)"
+                            }
+                            $result | Should -Not -BeNullOrEmpty
+                        }
                     }
                 }
             }
@@ -312,6 +315,7 @@ Describe 'Secrets' {
             #         $result | Should -HaveCount 3
             #     }
             # }
+
         }
 
         Context 'Repository' -Skip:($OwnerType -eq 'repository') {
@@ -323,20 +327,22 @@ Describe 'Secrets' {
                 # Set-GitHubSecret @scope -Name $secretName -Value 'repository'
             }
 
-            It 'Get-GitHubPublicKey - Action' {
-                $result = Get-GitHubPublicKey @scope
-                LogGroup 'PublicKey' {
-                    Write-Host "$($result | Select-Object * | Format-Table -AutoSize| Out-String)"
+            Context 'PublicKey' {
+                It 'Get-GitHubPublicKey - Action' {
+                    $result = Get-GitHubPublicKey @scope
+                    LogGroup 'PublicKey' {
+                        Write-Host "$($result | Select-Object * | Format-Table -AutoSize| Out-String)"
+                    }
+                    $result | Should -Not -BeNullOrEmpty
                 }
-                $result | Should -Not -BeNullOrEmpty
-            }
 
-            It 'Get-GitHubPublicKey - Codespaces' {
-                $result = Get-GitHubPublicKey @scope -Type codespaces
-                LogGroup 'PublicKey' {
-                    Write-Host "$($result | Select-Object * | Format-Table -AutoSize | Out-String)"
+                It 'Get-GitHubPublicKey - Codespaces' {
+                    $result = Get-GitHubPublicKey @scope -Type codespaces
+                    LogGroup 'PublicKey' {
+                        Write-Host "$($result | Select-Object * | Format-Table -AutoSize | Out-String)"
+                    }
+                    $result | Should -Not -BeNullOrEmpty
                 }
-                $result | Should -Not -BeNullOrEmpty
             }
 
             # It 'Set-GitHubSecret' {
@@ -413,16 +419,18 @@ Describe 'Secrets' {
                 # Set-GitHubSecret @scope -Name $secretName -Value 'environment'
             }
 
-            It 'Get-GitHubPublicKey - Action' {
-                $result = Get-GitHubPublicKey @scope
-                LogGroup 'PublicKey' {
-                    Write-Host "$($result | Select-Object * | Format-Table -AutoSize| Out-String)"
+            Context 'PublicKey' {
+                It 'Get-GitHubPublicKey - Action' {
+                    $result = Get-GitHubPublicKey @scope
+                    LogGroup 'PublicKey' {
+                        Write-Host "$($result | Select-Object * | Format-Table -AutoSize| Out-String)"
+                    }
+                    $result | Should -Not -BeNullOrEmpty
                 }
-                $result | Should -Not -BeNullOrEmpty
-            }
 
-            It 'Get-GitHubPublicKey - Codespaces' {
-                { Get-GitHubPublicKey @scope -Type codespaces } | Should -Throw
+                It 'Get-GitHubPublicKey - Codespaces' {
+                    { Get-GitHubPublicKey @scope -Type codespaces } | Should -Throw
+                }
             }
 
             # It 'Set-GitHubSecret' {
@@ -491,6 +499,5 @@ Describe 'Secrets' {
             #     $after.Count | Should -Be 0
             # }
         }
-
     }
 }
