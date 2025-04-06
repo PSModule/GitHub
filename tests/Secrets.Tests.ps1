@@ -311,15 +311,6 @@ Describe 'Secrets' {
                 $result | Should -Not -BeNullOrEmpty
             }
 
-            It 'Update-GitHubSecret' {
-                $param = @{
-                    Name  = "$secretPrefix`TestSecret"
-                    Value = 'TestValue1234'
-                }
-                $result = Update-GitHubSecret @param @scope -PassThru
-                $result | Should -Not -BeNullOrEmpty
-            }
-
             It 'Set-GitHubSecret' {
                 $param = @{
                     Name  = "$secretPrefix`TestSecret2"
@@ -396,18 +387,6 @@ Describe 'Secrets' {
                 }
                 $result = Set-GitHubSecret @param @scope
                 $result = Set-GitHubSecret @param @scope
-                LogGroup 'Secrets' {
-                    Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
-                }
-                $result | Should -Not -BeNullOrEmpty
-            }
-
-            It 'Update-GitHubSecret' {
-                $param = @{
-                    Name  = "$secretPrefix`TestSecret"
-                    Value = 'TestValue1234'
-                }
-                $result = Update-GitHubSecret @param @scope -PassThru
                 LogGroup 'Secrets' {
                     Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
                 }
