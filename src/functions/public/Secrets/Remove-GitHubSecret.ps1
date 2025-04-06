@@ -112,18 +112,6 @@
                         if (-not $secretExists) { continue }
                         Remove-GitHubSecretFromOwner @params -Name $item.Name
                     }
-                    $scopeParam = @{
-                        Owner       = $item.Owner
-                        Repository  = $item.Repository
-                        Environment = $item.Environment
-                        Context     = $Context
-                    }
-                    $scopeParam | Remove-HashtableEntry -NullOrEmptyValues
-                    for ($i = 0; $i -le 10; $i++) {
-                        Start-Sleep -Seconds 1
-                        $secret = Get-GitHubSecret @scopeParam | Where-Object { $_.Name -eq $Name }
-                        if (-not $secret) { break }
-                    }
                 }
                 return
             }
