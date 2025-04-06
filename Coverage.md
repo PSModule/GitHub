@@ -9,15 +9,15 @@
     </tr>
     <tr>
         <td>Covered functions</td>
-        <td>221</td>
+        <td>222</td>
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>800</td>
+        <td>799</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>21.65%</td>
+        <td>21.74%</td>
     </tr>
 </table>
 
@@ -435,7 +435,7 @@
 | `/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}`                  | :x:                | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/environments/{environment_name}/secrets`                                                           |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/environments/{environment_name}/secrets/public-key`                                                |                    | :white_check_mark: |                    |                    |                    |
-| `/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}`                                             | :white_check_mark: | :white_check_mark: |                    |                    | :x:                |
+| `/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}`                                             | :white_check_mark: | :white_check_mark: |                    |                    | :white_check_mark: |
 | `/repos/{owner}/{repo}/environments/{environment_name}/variables`                                                         |                    | :white_check_mark: |                    | :white_check_mark: |                    |
 | `/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}`                                                  | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
 | `/repos/{owner}/{repo}/events`                                                                                            |                    | :x:                |                    |                    |                    |
