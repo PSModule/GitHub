@@ -9,15 +9,15 @@
     </tr>
     <tr>
         <td>Covered functions</td>
-        <td>225</td>
+        <td>221</td>
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>796</td>
+        <td>800</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>22.04%</td>
+        <td>21.65%</td>
     </tr>
 </table>
 
@@ -435,7 +435,7 @@
 | `/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}`                  | :x:                | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/environments/{environment_name}/secrets`                                                           |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/environments/{environment_name}/secrets/public-key`                                                |                    | :white_check_mark: |                    |                    |                    |
-| `/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}`                                             | :white_check_mark: | :white_check_mark: |                    |                    | :white_check_mark: |
+| `/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}`                                             | :white_check_mark: | :white_check_mark: |                    |                    | :x:                |
 | `/repos/{owner}/{repo}/environments/{environment_name}/variables`                                                         |                    | :white_check_mark: |                    | :white_check_mark: |                    |
 | `/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}`                                                  | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
 | `/repos/{owner}/{repo}/events`                                                                                            |                    | :x:                |                    |                    |                    |
@@ -613,10 +613,10 @@
 | `/user/codespaces`                                                                                                        |                    | :white_check_mark: |                    | :x:                |                    |
 | `/user/codespaces/secrets`                                                                                                |                    | :white_check_mark: |                    |                    |                    |
 | `/user/codespaces/secrets/public-key`                                                                                     |                    | :white_check_mark: |                    |                    |                    |
-| `/user/codespaces/secrets/{secret_name}`                                                                                  | :white_check_mark: | :white_check_mark: |                    |                    | :white_check_mark: |
+| `/user/codespaces/secrets/{secret_name}`                                                                                  | :x:                | :white_check_mark: |                    |                    | :x:                |
 | `/user/codespaces/secrets/{secret_name}/repositories`                                                                     |                    | :x:                |                    |                    | :x:                |
 | `/user/codespaces/secrets/{secret_name}/repositories/{repository_id}`                                                     | :x:                |                    |                    |                    | :x:                |
-| `/user/codespaces/{codespace_name}`                                                                                       | :white_check_mark: | :white_check_mark: | :x:                |                    |                    |
+| `/user/codespaces/{codespace_name}`                                                                                       | :x:                | :white_check_mark: | :x:                |                    |                    |
 | `/user/codespaces/{codespace_name}/exports`                                                                               |                    |                    |                    | :x:                |                    |
 | `/user/codespaces/{codespace_name}/exports/{export_id}`                                                                   |                    | :x:                |                    |                    |                    |
 | `/user/codespaces/{codespace_name}/machines`                                                                              |                    | :x:                |                    |                    |                    |
