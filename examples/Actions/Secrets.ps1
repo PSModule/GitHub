@@ -1,15 +1,23 @@
 ﻿$Owner = 'PSModule'
 $Repository = 'GitHub'
 $Environment = 'test'
-$Context = Get-GitHubContext
 
-$privateKeys = @()
-$privateKeys += Get-GitHubPublicKeyForActionOnOrganization -Owner $Owner -Context $Context
-$privateKeys += Get-GitHubPublicKeyForActionOnRepository -Owner $Owner -Repository $Repository -Context $Context
-$privateKeys += Get-GitHubPublicKeyForActionOnEnvironment -Owner $Owner -Repository $Repository -Environment $Environment -Context $Context
+Set-GitHubEnvironment -Owner $Owner -Repository $Repository -Name $Environment
 
-$privateKeys += Get-GitHubPublicKeyForCodespacesOnOrganization -Owner $Owner -Context $Context
-$privateKeys += Get-GitHubPublicKeyForCodespacesOnRepository -Owner $Owner -Repository $Repository -Context $Context
-$privateKeys += Get-GitHubPublicKeyForCodespacesOnUser -Context $Context
+$publicKeys = @()
+$publicKeys += Get-GitHubPublicKey -Owner $Owner
+$publicKeys += Get-GitHubPublicKey -Owner $Owner -Repository $Repository
+$publicKeys += Get-GitHubPublicKey -Owner $Owner -Repository $Repository -Environment $Environment
 
-$privateKeys | Format-Table
+$publicKeys += Get-GitHubPublicKey -Owner $Owner -Type codespaces
+$publicKeys += Get-GitHubPublicKey -Owner $Owner -Repository $Repository -Type codespaces
+$publicKeys += Get-GitHubPublicKey -Type codespaces
+
+$publicKeys | Format-Table
+
+
+Set-GitHubSecret -Owner $Owner -Name 'TestSecret' -Value 'TestValue'
+Set-GitHubSecret -Owner $Owner -Repository $Repository -Name 'TestSecret' -Value 'TestValue'
+Set-GitHubSecret -Owner $Owner -Repository $Repository -Environment $Environment -Name 'TestSecret' -Value 'TestValue'
+
+Get-GitHubSecret -Owner $Owner -Repository $Repository -Environment $Environment -IncludeInherited | 

@@ -36,7 +36,8 @@ Describe 'Secrets' {
                     Write-Host ($context | Format-List | Out-String)
                 }
             }
-            $repoName = "$testName-$os-$TokenType-$guid"
+            $repoPrefix = "$testName-$os-$TokenType"
+            $repoName = "$repoPrefix-$guid"
             $secretPrefix = ("$testName`_$os`_$TokenType" -replace '-', '_').ToUpper()
             $secretName = ("$secretPrefix`_$guid" -replace '-', '_').ToUpper()
             $environmentName = "$testName-$os-$TokenType-$guid"
