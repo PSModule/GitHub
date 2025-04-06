@@ -9,15 +9,15 @@
     </tr>
     <tr>
         <td>Covered functions</td>
-        <td>222</td>
+        <td>223</td>
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>799</td>
+        <td>798</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>21.74%</td>
+        <td>21.84%</td>
     </tr>
 </table>
 
@@ -130,7 +130,7 @@
 | `/orgs/{org}/actions/secrets/public-key`                                                                                  |                    | :white_check_mark: |                    |                    |                    |
 | `/orgs/{org}/actions/secrets/{secret_name}`                                                                               | :white_check_mark: | :white_check_mark: |                    |                    | :white_check_mark: |
 | `/orgs/{org}/actions/secrets/{secret_name}/repositories`                                                                  |                    | :white_check_mark: |                    |                    | :white_check_mark: |
-| `/orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}`                                                  | :x:                |                    |                    |                    | :white_check_mark: |
+| `/orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}`                                                  | :white_check_mark: |                    |                    |                    | :white_check_mark: |
 | `/orgs/{org}/actions/variables`                                                                                           |                    | :white_check_mark: |                    | :white_check_mark: |                    |
 | `/orgs/{org}/actions/variables/{name}`                                                                                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
 | `/orgs/{org}/actions/variables/{name}/repositories`                                                                       |                    | :white_check_mark: |                    |                    | :white_check_mark: |
