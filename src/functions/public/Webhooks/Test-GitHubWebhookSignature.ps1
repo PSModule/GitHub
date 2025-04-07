@@ -10,7 +10,7 @@
         whether the signature is valid.
 
         .EXAMPLE
-        Test-GitHubWebhookSignature -Secret 'mysecret' -Body '{"action":"opened"}' -Signature 'sha256=abc123...'
+        Test-GitHubWebhookSignature -Secret $env:WEBHOOK_SECRET -Body $Request.RawBody -Signature $Request.Headers['X-Hub-Signature-256']
 
         Output:
         ```powershell
@@ -20,7 +20,10 @@
         Validates the provided webhook payload against the HMAC SHA-256 signature using the given secret.
 
         .OUTPUTS
-        bool. Returns True if the webhook signature is valid, otherwise False. Indicates whether the signature
+        bool
+
+        .NOTES
+        Returns True if the webhook signature is valid, otherwise False. Indicates whether the signature
         matches the computed value based on the payload and secret.
 
         .LINK
@@ -33,15 +36,18 @@
     [CmdletBinding()]
     param (
         # The secret key used to compute the HMAC hash.
+        # Example: 'mysecret'
         [Parameter(Mandatory)]
         [string] $Secret,
 
         # The JSON body of the GitHub webhook request.
         # This must be the compressed JSON payload received from GitHub.
+        # Example: '{"action":"opened"}'
         [Parameter(Mandatory)]
         [string] $Body,
 
         # The signature received from GitHub to compare against.
+        # Example: 'sha256=abc123...'
         [Parameter(Mandatory)]
         [string] $Signature
     )
@@ -49,14 +55,13 @@
     $keyBytes = [Text.Encoding]::UTF8.GetBytes($Secret)
     $payloadBytes = [Text.Encoding]::UTF8.GetBytes($Body)
 
-    $hmac = New-Object System.Security.Cryptography.HMACSHA256
+    $hmac = [System.Security.Cryptography.HMACSHA256]::new()
     $hmac.Key = $keyBytes
     $hashBytes = $hmac.ComputeHash($payloadBytes)
     $computedSignature = 'sha256=' + (($hashBytes | ForEach-Object { $_.ToString('x2') }) -join '')
 
-    $valid = [System.Security.Cryptography.CryptographicOperations]::FixedTimeEquals(
+    [System.Security.Cryptography.CryptographicOperations]::FixedTimeEquals(
         [Text.Encoding]::UTF8.GetBytes($computedSignature),
         [Text.Encoding]::UTF8.GetBytes($Signature)
     )
-    return $valid
 }
