@@ -37,6 +37,7 @@
         [string] $Secret,
 
         # The JSON body of the GitHub webhook request.
+        # This must be the compressed JSON payload received from GitHub.
         [Parameter(Mandatory)]
         [string] $Body,
 
