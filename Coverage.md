@@ -5,7 +5,7 @@
 <table>
     <tr>
         <td>Available functions</td>
-        <td>1021</td>
+        <td>1026</td>
     </tr>
     <tr>
         <td>Covered functions</td>
@@ -13,11 +13,11 @@
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>798</td>
+        <td>803</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>21.84%</td>
+        <td>21.73%</td>
     </tr>
 </table>
 
@@ -138,6 +138,8 @@
 | `/orgs/{org}/attestations/{subject_digest}`                                                                               |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/blocks`                                                                                                      |                    | :white_check_mark: |                    |                    |                    |
 | `/orgs/{org}/blocks/{username}`                                                                                           | :white_check_mark: | :white_check_mark: |                    |                    | :white_check_mark: |
+| `/orgs/{org}/campaigns`                                                                                                   |                    | :x:                |                    | :x:                |                    |
+| `/orgs/{org}/campaigns/{campaign_number}`                                                                                 | :x:                | :x:                | :x:                |                    |                    |
 | `/orgs/{org}/code-scanning/alerts`                                                                                        |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/code-security/configurations`                                                                                |                    | :x:                |                    | :x:                |                    |
 | `/orgs/{org}/code-security/configurations/defaults`                                                                       |                    | :x:                |                    |                    |                    |
