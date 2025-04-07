@@ -19,11 +19,16 @@
 
         Returns the webhook delivery with the ID `123456` for the authenticated app.
 
-        .NOTES
+        .OUTPUTS
+        GitHubWebhookDelivery
+
+        .LINK
         [Get a delivery for an app webhook](https://docs.github.com/rest/apps/webhooks#get-a-delivery-for-an-app-webhook)
+
+        .LINK
         [Get a webhook configuration for an app](https://docs.github.com/rest/apps/webhooks#get-a-webhook-configuration-for-an-app)
     #>
-    [OutputType([GitHubWebhook[]])]
+    [OutputType([GitHubWebhookDelivery[]])]
     [CmdletBinding(DefaultParameterSetName = 'ByList')]
     param(
         # The ID of the delivery.

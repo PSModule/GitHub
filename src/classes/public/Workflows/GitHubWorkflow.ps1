@@ -1,10 +1,4 @@
-﻿class GitHubWorkflow {
-    # The workflow's database identifier.
-    [int64] $DatabaseID
-
-    # The node identifier of the workflow.
-    [string] $NodeID
-
+﻿class GitHubWorkflow : GitHubNode {
     # The name of the workflow.
     [string] $Name
 

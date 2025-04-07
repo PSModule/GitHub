@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Types>
     <Type>
-        <Name>GitHubOwner</Name>
+        <Name>GitHubNode</Name>
         <Members>
             <ScriptProperty>
-                <Name>ID</Name>
-                <GetScriptBlock>$this.DatabaseID</GetScriptBlock>
+                <Name>DatabaseID</Name>
+                <GetScriptBlock>$this.ID</GetScriptBlock>
             </ScriptProperty>
         </Members>
     </Type>

@@ -1,15 +1,7 @@
-﻿class GitHubWorkflowRun {
-    # The ID of the workflow run.
-    # Example: 5
-    [UInt64] $DatabaseID
-
+﻿class GitHubWorkflowRun : GitHubNode {
     # The name of the workflow run.
     # Example: "Build"
     [string] $Name
-
-    # The node ID of the workflow run.
-    # Example: "MDEwOkNoZWNrU3VpdGU1"
-    [string] $NodeID
 
     # The name of the organization or user the variable is associated with.
     # Example: "octocat"

@@ -1,12 +1,4 @@
-﻿class GitHubRepository {
-    # Unique identifier of the repository.
-    # Example: 42
-    [UInt64] $DatabaseID
-
-    # Unique node identifier of the repository.
-    # Example: MDEwOlJlcG9zaXRvcnkxMjk2MjY5
-    [string] $NodeId
-
+﻿class GitHubRepository : GitHubNode {
     # The name of the repository.
     # Example: Team Environment
     [string] $Name

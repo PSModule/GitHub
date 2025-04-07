@@ -15,10 +15,13 @@
 
         Returns the webhook configuration for the authenticated app.
 
-        .NOTES
+        .OUTPUTS
+        GitHubWebhookDelivery
+
+        .LINK
         [Get a delivery for an app webhook](https://docs.github.com/rest/apps/webhooks#get-a-delivery-for-an-app-webhook)
     #>
-    [OutputType([GitHubWebhook])]
+    [OutputType([GitHubWebhookDelivery])]
     [CmdletBinding()]
     param(
         # The ID of the delivery.
@@ -45,25 +48,23 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            [GitHubWebhook](
-                @{
-                    ID             = $_.id
-                    GUID           = $_.guid
-                    DeliveredAt    = $_.delivered_at
-                    Redelivery     = $_.redelivery
-                    Duration       = $_.duration
-                    Status         = $_.status
-                    StatusCode     = $_.status_code
-                    Event          = $_.event
-                    Action         = $_.action
-                    InstallationID = $_.installation.id
-                    RepositoryID   = $_.repository.id
-                    ThrottledAt    = $_.throttled_at
-                    URL            = $_.url
-                    Request        = $_.request
-                    Response       = $_.response
-                }
-            )
+            [GitHubWebhookDelivery]@{
+                ID             = $_.id
+                GUID           = $_.guid
+                DeliveredAt    = $_.delivered_at
+                Redelivery     = $_.redelivery
+                Duration       = $_.duration
+                Status         = $_.status
+                StatusCode     = $_.status_code
+                Event          = $_.event
+                Action         = $_.action
+                InstallationID = $_.installation.id
+                RepositoryID   = $_.repository.id
+                ThrottledAt    = $_.throttled_at
+                URL            = $_.url
+                Request        = $_.request
+                Response       = $_.response
+            }
         }
     }
 

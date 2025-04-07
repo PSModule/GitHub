@@ -39,7 +39,7 @@
         Get-GitHubAppWebhookDeliveryByList -Context $Context -PerPage $PerPage | Where-Object { $_.DeliveredAt -gt $checkPoint } |
             Group-Object -Property GUID | Where-Object { $_.Group.Status -notcontains 'OK' } | ForEach-Object {
                 $refObject = $_.Group | Sort-Object -Property DeliveredAt
-                [GitHubWebhookRedelivery]@{
+                [GitHubWebhookDelivery]@{
                     Attempts       = $_.Count
                     GUID           = $_.Name
                     Status         = $refObject.Status

@@ -61,7 +61,7 @@
                                 <PropertyName>Name</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>DatabaseID</PropertyName>
+                                <PropertyName>ID</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>NodeID</PropertyName>

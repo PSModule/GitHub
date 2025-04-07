@@ -1,10 +1,4 @@
-﻿class GitHubArtifact {
-    # The artifact's database identifier.
-    [int64] $DatabaseID
-
-    # The node identifier of the artifact.
-    [string] $NodeID
-
+﻿class GitHubArtifact : GitHubNode {
     # The name of the artifact.
     [string] $Name
 

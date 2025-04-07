@@ -1,4 +1,4 @@
-﻿class GitHubEnvironment {
+﻿class GitHubEnvironment : GitHubNode {
     # The name of the environment.
     [string] $Name
 
@@ -7,12 +7,6 @@
 
     # The owner of the environment.
     [string] $Owner
-
-    # The ID of the environment.
-    [UInt64] $DatabaseID
-
-    # The Node ID of the environment.
-    [string] $NodeID
 
     # URL of the environment.
     [string] $Url

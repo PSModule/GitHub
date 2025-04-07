@@ -1,4 +1,4 @@
-﻿class GitHubWebhook {
+﻿class GitHubWebhookDelivery {
     # Unique identifier of the delivery.
     [uint64] $ID
 
@@ -44,18 +44,21 @@
     # The response from the delivery.
     [object] $Response
 
+    # Number of attempts to deliver the webhook.
+    [Nullable[int]] $Attempts
+
     # Simple parameterless constructor
-    GitHubWebhook() {}
+    GitHubWebhookDelivery() {}
 
     # Creates a context object from a hashtable of key-vaule pairs.
-    GitHubWebhook([hashtable]$Properties) {
+    GitHubWebhookDelivery([hashtable]$Properties) {
         foreach ($Property in $Properties.Keys) {
             $this.$Property = $Properties.$Property
         }
     }
 
     # Creates a context object from a PSCustomObject.
-    GitHubWebhook([PSCustomObject]$Object) {
+    GitHubWebhookDelivery([PSCustomObject]$Object) {
         $Object.PSObject.Properties | ForEach-Object {
             $this.($_.Name) = $_.Value
         }

@@ -2,17 +2,17 @@
 <Configuration>
     <ViewDefinitions>
         <View>
-            <Name>GitHubWebhookRedeliveryTable</Name>
+            <Name>GitHubWebhookDeliveryTable</Name>
             <ViewSelectedBy>
-                <TypeName>GitHubWebhookRedelivery</TypeName>
+                <TypeName>GitHubWebhookDelivery</TypeName>
             </ViewSelectedBy>
             <TableControl>
                 <TableHeaders>
                     <TableColumnHeader>
-                        <Label>A </Label>
+                        <Label>S </Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>ID</Label>
+                        <Label>R </Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
                         <Label>GUID</Label>
@@ -34,10 +34,19 @@
                     <TableRowEntry>
                         <TableColumnItems>
                             <TableColumnItem>
-                                <PropertyName>Attempts</PropertyName>
+                                <ScriptBlock>
+                                    switch ($_.Status) {
+                                    'ok' { "✅" + [char]0x200B }
+                                    default { "❌" + [char]0x200B }
+                                    }
+                                </ScriptBlock>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>ID</PropertyName>
+                                <ScriptBlock>
+                                    if ($_.Redelivery -eq 'true') {
+                                    "`u{1F504}"
+                                    }
+                                </ScriptBlock>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>GUID</PropertyName>
@@ -60,18 +69,14 @@
             </TableControl>
         </View>
         <View>
-            <Name>GitHubWebhookRedeliveryList</Name>
+            <Name>GitHubWebhookDeliveryList</Name>
             <ViewSelectedBy>
-                <TypeName>GitHubWebhookRedelivery</TypeName>
+                <TypeName>GitHubWebhookDelivery</TypeName>
             </ViewSelectedBy>
             <ListControl>
                 <ListEntries>
                     <ListEntry>
                         <ListItems>
-                            <ListItem>
-                                <Label>Attempts</Label>
-                                <PropertyName>Attempts</PropertyName>
-                            </ListItem>
                             <ListItem>
                                 <Label>ID</Label>
                                 <PropertyName>ID</PropertyName>

@@ -3,14 +3,6 @@
     # Example: octocat
     [string] $Name
 
-    # The unique identifier of the owner.
-    # Example: 42
-    [System.Nullable[UInt64]] $DatabaseID
-
-    # The node ID of the owner.
-    # Example: MDQ6VXNlcjE=
-    [string] $NodeID
-
     # The name of the organization.
     # Example: github
     [string] $DisplayName
