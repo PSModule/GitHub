@@ -34,7 +34,7 @@ filter Get-GitHubEnvironmentByName {
         Retrieves details of the "test" environment in the specified repository.
 
         .OUTPUTS
-        PSCustomObject
+        GitHubEnvironment
 
         .NOTES
         Contains environment details, including name, URL, and protection settings.
@@ -42,7 +42,7 @@ filter Get-GitHubEnvironmentByName {
         .LINK
         https://psmodule.io/GitHub/Functions/Get-GitHubEnvironmentByName/
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([GitHubEnvironment])]
     [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
@@ -80,14 +80,32 @@ filter Get-GitHubEnvironmentByName {
     }
 
     process {
+        $encodedName = [System.Uri]::EscapeDataString($Name)
         $inputObject = @{
-            Method      = 'GET'
-            APIEndpoint = "/repos/$Owner/$Repository/environments/$Name"
-            Context     = $Context
+            Method  = 'GET'
+            Uri     = $Context.ApiBaseUri + "/repos/$Owner/$Repository/environments/$encodedName"
+            Context = $Context
         }
-
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+        try {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response | ForEach-Object {
+                    [GitHubEnvironment]@{
+                        Name                   = $_.name
+                        DatabaseID             = $_.id
+                        NodeID                 = $_.node_id
+                        Url                    = $_.html_url
+                        Owner                  = $Owner
+                        Repository             = $Repository
+                        CreatedAt              = $_.created_at
+                        UpdatedAt              = $_.updated_at
+                        CanAdminsBypass        = $_.can_admins_bypass
+                        ProtectionRules        = $_.protection_rules
+                        DeploymentBranchPolicy = $_.deployment_branch_policy
+                    }
+                }
+            }
+        } catch {
+            return
         }
     }
 

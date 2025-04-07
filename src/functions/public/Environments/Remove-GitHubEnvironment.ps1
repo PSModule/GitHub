@@ -16,7 +16,7 @@ filter Remove-GitHubEnvironment {
         https://psmodule.io/GitHub/Functions/Environments/Remove-GitHubEnvironment/
 
         .LINK
-        [Delete environments](https://docs.github.com/en/rest/deployments/environments?#delete-an-environment)
+        [Delete environments](https://docs.github.com/rest/deployments/environments?#delete-an-environment)
     #>
     [OutputType([void])]
     [CmdletBinding(SupportsShouldProcess)]
@@ -57,10 +57,11 @@ filter Remove-GitHubEnvironment {
     }
 
     process {
+        $encodedName = [System.Uri]::EscapeDataString($Name)
         $inputObject = @{
-            Method      = 'DELETE'
-            APIEndpoint = "/repos/$Owner/$Repository/environments/$Name"
-            Context     = $Context
+            Method  = 'DELETE'
+            Uri     = $Context.ApiBaseUri + "/repos/$Owner/$Repository/environments/$encodedName"
+            Context = $Context
         }
 
         if ($PSCmdlet.ShouldProcess("Environment [$Owner/$Repository/$Name]", 'Delete')) {

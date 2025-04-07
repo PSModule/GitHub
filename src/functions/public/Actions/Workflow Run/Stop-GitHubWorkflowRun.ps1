@@ -12,7 +12,7 @@
         Cancels the workflow run with the ID 123456789 from the 'Hello-World' repository owned by 'octocat'
 
         .NOTES
-        [Cancel a workflow run](https://docs.github.com/en/rest/actions/workflow-runs#cancel-a-workflow-run)
+        [Cancel a workflow run](https://docs.github.com/rest/actions/workflow-runs#cancel-a-workflow-run)
     #>
     [CmdletBinding(SupportsShouldProcess)]
     [alias('Cancel-GitHubWorkflowRun')]
@@ -21,8 +21,6 @@
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('Organization')]
-        [Alias('User')]
         [string] $Owner,
 
         [Parameter(
@@ -35,7 +33,7 @@
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('workflow_id', 'WorkflowID')]
+        [Alias('DatabaseID')]
         [string] $ID,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -61,6 +59,7 @@
         if ($PSCmdlet.ShouldProcess("$Owner/$Repository/$ID", 'Cancel/Stop workflow run')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
+                Write-Verbose "Cancelled workflow run [$ID] in [$Owner/$Repository]"
             }
         }
     }

@@ -146,13 +146,11 @@ function Set-GitHubContext {
                 Write-Debug "Saving context: [$($script:GitHub.Config.ID)/$($contextObj['Name'])]"
                 Set-Context -ID "$($script:GitHub.Config.ID)/$($contextObj['Name'])" -Context $contextObj
                 if ($Default) {
-                    Set-GitHubDefaultContext -Context $contextObj['Name']
+                    Switch-GitHubContext -Context $contextObj['Name']
                 }
                 if ($script:GitHub.EnvironmentType -eq 'GHA') {
-                    if ($contextObj['AuthType'] -eq 'IAT') {
-                        Set-GitHubGitConfig -Context $contextObj['Name']
-                    }
                     if ($contextObj['AuthType'] -ne 'APP') {
+                        Set-GitHubGitConfig -Context $contextObj['Name']
                         Connect-GitHubCli -Context $contextObj
                     }
                 }

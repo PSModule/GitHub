@@ -10,7 +10,7 @@
         Start-GitHubWorkflowReRun -Owner 'octocat' -Repository 'Hello-World' -ID 123456789
 
         .NOTES
-        [Re-run a workflow](https://docs.github.com/en/rest/actions/workflow-runs#re-run-a-workflow)
+        [Re-run a workflow](https://docs.github.com/rest/actions/workflow-runs#re-run-a-workflow)
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param(
@@ -19,8 +19,6 @@
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('Organization')]
-        [Alias('User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
@@ -31,11 +29,11 @@
         [string] $Repository,
 
         # The unique identifier of the workflow run.
-        [Alias('workflow_id')]
         [Parameter(
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
+        [Alias('DatabaseID')]
         [string] $ID,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -61,6 +59,7 @@
         if ($PSCmdlet.ShouldProcess("workflow with ID [$ID] in [$Owner/$Repository]", 'Re-run')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
+                Write-Verbose "Re-run workflow [$ID] in [$Owner/$Repository]"
             }
         }
     }

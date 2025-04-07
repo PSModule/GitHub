@@ -22,7 +22,7 @@
         Uses the alias 'LogGroup' to create a new log group named 'MyGroup' and writes 'Hello, World!' to the output.
 
         .NOTES
-        [GitHub - Grouping log lines](https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#grouping-log-lines)
+        [GitHub - Grouping log lines](https://docs.github.com/actions/using-workflows/workflow-commands-for-github-actions#grouping-log-lines)
     #>
     [Alias('LogGroup')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(

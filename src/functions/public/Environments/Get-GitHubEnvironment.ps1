@@ -63,7 +63,7 @@ filter Get-GitHubEnvironment {
         https://psmodule.io/GitHub/Functions/Environments/Get-GitHubEnvironment/
     #>
     [OutputType([pscustomobject])]
-    [CmdletBinding(DefaultParameterSetName = 'List')]
+    [CmdletBinding()]
     param(
         # The name of the organization.
         [Parameter(
@@ -81,15 +81,12 @@ filter Get-GitHubEnvironment {
         [string] $Repository,
 
         # The name of the environment.
-        [Parameter(
-            Mandatory,
-            ParameterSetName = 'ByName',
-            ValueFromPipelineByPropertyName
-        )]
-        [string] $Name,
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [SupportsWildcards()]
+        [string] $Name = '*',
 
         # The maximum number of environments to return per request.
-        [Parameter(ParameterSetName = 'List')]
+        [Parameter()]
         [ValidateRange(0, 100)]
         [int] $PerPage,
 
@@ -107,13 +104,11 @@ filter Get-GitHubEnvironment {
     }
 
     process {
-        switch ($PSCmdlet.ParameterSetName) {
-            'ByName' {
-                Get-GitHubEnvironmentByName -Owner $Owner -Repository $Repository -Name $Name -Context $Context
-            }
-            'List' {
-                Get-GitHubEnvironmentList -Owner $Owner -Repository $Repository -PerPage $PerPage -Context $Context
-            }
+        if ($Name.Contains('*')) {
+            Get-GitHubEnvironmentList -Owner $Owner -Repository $Repository -PerPage $PerPage -Context $Context |
+                Where-Object { $_.Name -like $Name }
+        } else {
+            Get-GitHubEnvironmentByName -Owner $Owner -Repository $Repository -Name $Name -Context $Context
         }
     }
 

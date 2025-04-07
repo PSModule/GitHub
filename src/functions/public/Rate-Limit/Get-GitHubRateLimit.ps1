@@ -55,7 +55,24 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response.Resources
+            $_.Response.Resources.PSObject.Properties | ForEach-Object {
+                [GitHubRateLimitResource]@{
+                    Name      = $_.Name
+                    Limit     = $_.Value.limit
+                    Used      = $_.Value.used
+                    Remaining = $_.Value.remaining
+                    Reset     = [DateTime]::UnixEpoch.AddSeconds($_.Value.reset).ToLocalTime()
+                }
+            }
+            if ($_.Response.Rate) {
+                [GitHubRateLimitResource]@{
+                    Name      = 'rate'
+                    Limit     = $_.Response.Rate.limit
+                    Used      = $_.Response.Rate.used
+                    Remaining = $_.Response.Rate.remaining
+                    Reset     = [DateTime]::UnixEpoch.AddSeconds($_.Response.Rate.reset).ToLocalTime()
+                }
+            }
         }
     }
 

@@ -2,229 +2,136 @@
 
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
     'PSUseDeclaredVarsMoreThanAssignments', '',
-    Justification = 'Pester grouping syntax: known issue.'
+    Justification = 'Pester grouping syntax - known issue.'
 )]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
     'PSAvoidUsingConvertToSecureStringWithPlainText', '',
     Justification = 'Used to create a secure string for testing.'
 )]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+    'PSAvoidUsingWriteHost', '',
+    Justification = 'Log outputs to GitHub Actions logs.'
+)]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+    'PSAvoidLongLines', '',
+    Justification = 'Long test descriptions and skip switches'
+)]
 [CmdletBinding()]
 param()
 
 BeforeAll {
-    $repoSuffix = 'EnvironmentTest'
+    $testName = 'EnvironmentTest'
     $environmentName = 'production'
+    $os = $env:RUNNER_OS
+    $guid = [guid]::NewGuid().ToString()
 }
 
-Describe 'As a user - Fine-grained PAT token - user account access (USER_FG_PAT)' {
-    BeforeAll {
-        Connect-GitHubAccount -Token $env:TEST_USER_USER_FG_PAT
-        $owner = 'psmodule-user'
-        $guid = [guid]::NewGuid().ToString()
-        $repo = "$repoSuffix-$guid"
-        New-GitHubRepository -Name $repo -AllowSquashMerge
-    }
-    AfterAll {
-        Remove-GitHubRepository -Owner $owner -Name $repo -Confirm:$false
-        Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
-    }
-    Context 'Environments' {
-        It 'Get-GitHubEnvironment - lists all environments' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo
+Describe 'Environments' {
+    $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
+
+    Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
+        BeforeAll {
+            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
+            LogGroup 'Context' {
+                Write-Host ($context | Format-List | Out-String)
+            }
+            if ($AuthType -eq 'APP') {
+                LogGroup 'Context - Installation' {
+                    $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
+                    Write-Host ($context | Format-List | Out-String)
+                }
+            }
+            $repoName = "$testName-$os-$TokenType-$guid"
+            switch ($OwnerType) {
+                'user' {
+                    New-GitHubRepository -Name $repoName -AllowSquashMerge
+                }
+                'organization' {
+                    New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
+                }
+            }
+        }
+
+        AfterAll {
+            Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
+            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+        }
+
+        It 'Get-GitHubEnvironment - should return an empty list when no environments exist' -Skip:($OwnerType -eq 'repository') {
+            $result = Get-GitHubEnvironment -Owner $owner -Repository $repoName
+            LogGroup 'Environment' {
+                Write-Host ($result | Format-Table | Out-String)
+            }
             $result | Should -BeNullOrEmpty
         }
-
-        It 'Get-GitHubEnvironment - retrieves a specific environment that does not exist yet' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo | Where-Object { $_.Name -eq $environmentName }
+        It 'Get-GitHubEnvironment - should return null when retrieving a non-existent environment' -Skip:($OwnerType -eq 'repository') {
+            $result = Get-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName
+            LogGroup 'Environment' {
+                Write-Host ($result | Format-Table | Out-String)
+            }
             $result | Should -BeNullOrEmpty
         }
-
-        It 'Set-GitHubEnvironment - creates an environment' {
-            $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -WaitTimer 10
+        It 'Set-GitHubEnvironment - should successfully create an environment with a wait timer of 10' -Skip:($OwnerType -eq 'repository') {
+            $result = Set-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName -WaitTimer 10
+            LogGroup 'Environment' {
+                Write-Host ($result | Format-List | Out-String)
+            }
+            $result | Should -Not -BeNullOrEmpty
+            $result | Should -BeOfType [GitHubEnvironment]
+            $result.Name | Should -Be $environmentName
+            $result.ProtectionRules.wait_timer | Should -Be 10
+        }
+        It 'Get-GitHubEnvironment - should retrieve the environment that was created' -Skip:($OwnerType -eq 'repository') {
+            $result = Get-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName
+            LogGroup 'Environment' {
+                Write-Host ($result | Format-List | Out-String)
+            }
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -Be $environmentName
-            $result.protection_rules.wait_timer | Should -Be 10
         }
-
-        It 'Get-GitHubEnvironment - retrieves a specific environment' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
+        It 'Set-GitHubEnvironment - should successfully create an environment with a slash in its name' -Skip:($OwnerType -eq 'repository') {
+            $result = Set-GitHubEnvironment -Owner $owner -Repository $repoName -Name "$environmentName/$os"
+            LogGroup 'Environment' {
+                Write-Host ($result | Format-List | Out-String)
+            }
             $result | Should -Not -BeNullOrEmpty
-            $result.Name | Should -Be $environmentName
+            $result.Name | Should -Be "$environmentName/$os"
         }
-
-        It 'Get-GitHubEnvironment - lists all environments' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo
+        It 'Get-GitHubEnvironment - should retrieve the environment with a slash in its name' -Skip:($OwnerType -eq 'repository') {
+            $result = Get-GitHubEnvironment -Owner $owner -Repository $repoName -Name "$environmentName/$os"
+            LogGroup 'Environment' {
+                Write-Host ($result | Format-Table | Out-String)
+            }
+            $result | Should -Not -BeNullOrEmpty
+            $result.Name | Should -Be "$environmentName/$os"
+        }
+        It 'Remove-GitHubEnvironment - should delete the environment with a slash in its name without errors' -Skip:($OwnerType -eq 'repository') {
+            {
+                Get-GitHubEnvironment -Owner $owner -Repository $repoName -Name "$environmentName/$os" | Remove-GitHubEnvironment -Confirm:$false
+            } | Should -Not -Throw
+        }
+        It 'Get-GitHubEnvironment - should return null when retrieving the deleted environment with a slash in its name' -Skip:($OwnerType -eq 'repository') {
+            $result = Get-GitHubEnvironment -Owner $owner -Repository $repoName -Name "$environmentName/$os"
+            LogGroup 'Environment' {
+                Write-Host ($result | Format-Table | Out-String)
+            }
+            $result | Should -BeNullOrEmpty
+        }
+        It 'Get-GitHubEnvironment - should list one remaining environment' -Skip:($OwnerType -eq 'repository') {
+            $result = Get-GitHubEnvironment -Owner $owner -Repository $repoName
+            LogGroup 'Environment' {
+                Write-Host ($result | Format-Table | Out-String)
+            }
             $result.Count | Should -Be 1
         }
-
-        It 'Remove-GitHubEnvironment - deletes an environment' {
-            { Remove-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -Confirm:$false } | Should -Not -Throw
+        It 'Remove-GitHubEnvironment - should delete the remaining environment without errors' -Skip:($OwnerType -eq 'repository') {
+            { Remove-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName -Confirm:$false } | Should -Not -Throw
         }
-
-        It 'Get-GitHubEnvironment - retrieves a specific environment that does not exist yet' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo | Where-Object { $_.Name -eq $environmentName }
-            $result | Should -BeNullOrEmpty
-        }
-    }
-}
-
-Describe 'As a user - Fine-grained PAT token - organization account access (ORG_FG_PAT)' {
-    BeforeAll {
-        Connect-GitHubAccount -Token $env:TEST_USER_ORG_FG_PAT
-        $owner = 'psmodule-test-org2'
-        $guid = [guid]::NewGuid().ToString()
-        $repo = "$repoSuffix-$guid"
-        New-GitHubRepository -Owner $owner -Name $repo -AllowSquashMerge
-    }
-    AfterAll {
-        Remove-GitHubRepository -Owner $owner -Name $repo -Confirm:$false
-        Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
-    }
-    Context 'Environments' {
-        It 'Get-GitHubEnvironment - lists all environments' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo
-            $result | Should -BeNullOrEmpty
-        }
-
-        It 'Get-GitHubEnvironment - retrieves a specific environment that does not exist yet' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo | Where-Object { $_.Name -eq $environmentName }
-            $result | Should -BeNullOrEmpty
-        }
-
-        It 'Set-GitHubEnvironment - creates an environment' {
-            $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -WaitTimer 10
-            $result | Should -Not -BeNullOrEmpty
-            $result.Name | Should -Be $environmentName
-            $result.protection_rules.wait_timer | Should -Be 10
-        }
-
-        It 'Get-GitHubEnvironment - retrieves a specific environment' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
-            $result | Should -Not -BeNullOrEmpty
-            $result.Name | Should -Be $environmentName
-        }
-
-        It 'Get-GitHubEnvironment - lists all environments' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo
-            $result.Count | Should -Be 1
-        }
-
-        It 'Remove-GitHubEnvironment - deletes an environment' {
-            { Remove-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -Confirm:$false } | Should -Not -Throw
-        }
-
-        It 'Get-GitHubEnvironment - retrieves a specific environment that does not exist yet' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo | Where-Object { $_.Name -eq $environmentName }
-            $result | Should -BeNullOrEmpty
-        }
-    }
-}
-
-Describe 'As a user - Classic PAT token (PAT)' -Skip {}
-
-Describe 'As GitHub Actions (GHA)' -Skip {}
-
-Describe 'As a GitHub App - Enterprise (APP_ENT)' {
-    BeforeAll {
-        Connect-GitHubAccount -ClientID $env:TEST_APP_ENT_CLIENT_ID -PrivateKey $env:TEST_APP_ENT_PRIVATE_KEY
-        $owner = 'psmodule-test-org3'
-        $guid = [guid]::NewGuid().ToString()
-        $repo = "$repoSuffix-$guid"
-        Connect-GitHubApp -Organization $owner -Default
-        New-GitHubRepository -Owner $owner -Name $repo -AllowSquashMerge
-    }
-    AfterAll {
-        Remove-GitHubRepository -Owner $owner -Name $repo -Confirm:$false
-        Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
-    }
-    Context 'Environments' {
-        It 'Get-GitHubEnvironment - lists all environments' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo
-            $result | Should -BeNullOrEmpty
-        }
-
-        It 'Get-GitHubEnvironment - retrieves a specific environment that does not exist yet' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo | Where-Object { $_.Name -eq $environmentName }
-            $result | Should -BeNullOrEmpty
-        }
-
-        It 'Set-GitHubEnvironment - creates an environment' {
-            $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -WaitTimer 10
-            $result | Should -Not -BeNullOrEmpty
-            $result.Name | Should -Be $environmentName
-            $result.protection_rules.wait_timer | Should -Be 10
-        }
-
-        It 'Get-GitHubEnvironment - retrieves a specific environment' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
-            $result | Should -Not -BeNullOrEmpty
-            $result.Name | Should -Be $environmentName
-        }
-
-        It 'Get-GitHubEnvironment - lists all environments' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo
-            $result.Count | Should -Be 1
-        }
-
-        It 'Remove-GitHubEnvironment - deletes an environment' {
-            { Remove-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -Confirm:$false } | Should -Not -Throw
-        }
-
-        It 'Get-GitHubEnvironment - retrieves a specific environment that does not exist yet' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo | Where-Object { $_.Name -eq $environmentName }
-            $result | Should -BeNullOrEmpty
-        }
-    }
-}
-
-Describe 'As a GitHub App - Organization (APP_ORG)' {
-    BeforeAll {
-        Connect-GitHubAccount -ClientID $env:TEST_APP_ORG_CLIENT_ID -PrivateKey $env:TEST_APP_ORG_PRIVATE_KEY
-        $owner = 'psmodule-test-org'
-        $guid = [guid]::NewGuid().ToString()
-        $repo = "$repoSuffix-$guid"
-        Connect-GitHubApp -Organization $owner -Default
-        New-GitHubRepository -Owner $owner -Name $repo -AllowSquashMerge
-    }
-    AfterAll {
-        Remove-GitHubRepository -Owner $owner -Name $repo -Confirm:$false
-        Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
-    }
-    Context 'Environments' {
-        It 'Get-GitHubEnvironment - lists all environments' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo
-            $result | Should -BeNullOrEmpty
-        }
-
-        It 'Get-GitHubEnvironment - retrieves a specific environment that does not exist yet' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo | Where-Object { $_.Name -eq $environmentName }
-            $result | Should -BeNullOrEmpty
-        }
-
-        It 'Set-GitHubEnvironment - creates an environment' {
-            $result = Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -WaitTimer 10
-            $result | Should -Not -BeNullOrEmpty
-            $result.Name | Should -Be $environmentName
-            $result.protection_rules.wait_timer | Should -Be 10
-        }
-
-        It 'Get-GitHubEnvironment - retrieves a specific environment' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
-            $result | Should -Not -BeNullOrEmpty
-            $result.Name | Should -Be $environmentName
-        }
-
-        It 'Get-GitHubEnvironment - lists all environments' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo
-            $result.Count | Should -Be 1
-        }
-
-        It 'Remove-GitHubEnvironment - deletes an environment' {
-            { Remove-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName -Confirm:$false } | Should -Not -Throw
-        }
-
-        It 'Get-GitHubEnvironment - retrieves a specific environment that does not exist yet' {
-            $result = Get-GitHubEnvironment -Owner $owner -Repository $repo | Where-Object { $_.Name -eq $environmentName }
+        It 'Get-GitHubEnvironment - should return null when retrieving an environment that does not exist' -Skip:($OwnerType -eq 'repository') {
+            $result = Get-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName
+            LogGroup 'Environment' {
+                Write-Host ($result | Format-Table | Out-String)
+            }
             $result | Should -BeNullOrEmpty
         }
     }
