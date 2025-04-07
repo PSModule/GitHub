@@ -76,6 +76,7 @@ function Get-GitHubVariableEnvironmentByName {
                 Value       = $_.Response.value
                 CreatedAt   = $_.Response.created_at
                 UpdatedAt   = $_.Response.updated_at
+                Scope       = 'Environment'
                 Owner       = $Owner
                 Repository  = $Repository
                 Environment = $Environment

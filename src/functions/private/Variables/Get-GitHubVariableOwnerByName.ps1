@@ -71,6 +71,7 @@ function Get-GitHubVariableOwnerByName {
                     Value                = $_.value
                     CreatedAt            = $_.created_at
                     UpdatedAt            = $_.updated_at
+                    Scope                = 'Organization'
                     Owner                = $Owner
                     Visibility           = $_.visibility
                     SelectedRepositories = $selectedRepositories

@@ -62,6 +62,7 @@ function Get-GitHubSecretOwnerList {
                     Name                 = $_.name
                     CreatedAt            = $_.created_at
                     UpdatedAt            = $_.updated_at
+                    Scope                = 'Organization'
                     Owner                = $Owner
                     Visibility           = $_.visibility
                     SelectedRepositories = $selectedRepositories

@@ -15,6 +15,9 @@
                         <Label>Value</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
+                        <Label>Scope</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
                         <Label>Owner</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
@@ -32,6 +35,9 @@
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Value</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Scope</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Owner</PropertyName>
@@ -61,6 +67,9 @@
                             </ListItem>
                             <ListItem>
                                 <PropertyName>Value</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Scope</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>Owner</PropertyName>
