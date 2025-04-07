@@ -314,10 +314,10 @@ string
             $content = Get-Content -Path $issueTestFilePath -Raw
             Write-Verbose ($content | Out-String) -Verbose
             $dataObject = $content | ConvertFrom-IssueForm -Verbose
-            Write-Verbose "As PSCustomObject" -Verbose
+            Write-Verbose 'As PSCustomObject' -Verbose
             Write-Verbose ($dataObject | Format-List | Out-String) -Verbose
             $dataHashtable = $content | ConvertFrom-IssueForm -AsHashtable -Verbose
-            Write-Verbose "As Hashtable" -Verbose
+            Write-Verbose 'As Hashtable' -Verbose
             Write-Verbose ($dataHashtable | Out-String) -Verbose
         }
 
@@ -725,5 +725,15 @@ Describe 'Emojis' {
             }
             $emojis | Should -Not -BeNullOrEmpty
         }
+    }
+}
+
+Describe 'Webhooks' {
+    It 'Test-GitHubWebhookSignature - Validates the webhook payload using known correct signature' {
+        $secret = "It's a Secret to Everybody"
+        $payload = 'Hello, World!'
+        $signature = 'sha256=757107ea0eb2509fc211221cce984b8a37570b6d7586c22c46f4379c8b043e17'
+        $result = Test-GitHubWebhookSignature -Secret $secret -Body $payload -Signature $signature
+        $result | Should -Be $true
     }
 }
