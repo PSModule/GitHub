@@ -22,13 +22,7 @@
                         <Label>Company</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>Email</Label>
-                    </TableColumnHeader>
-                    <TableColumnHeader>
-                        <Label>Location</Label>
-                    </TableColumnHeader>
-                    <TableColumnHeader>
-                        <Label>CreatedAt</Label>
+                        <Label>Plan</Label>
                     </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
@@ -38,19 +32,16 @@
                                 <PropertyName>Name</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
+                                <PropertyName>ID</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
                                 <PropertyName>Type</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Company</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>Email</PropertyName>
-                            </TableColumnItem>
-                            <TableColumnItem>
-                                <PropertyName>Location</PropertyName>
-                            </TableColumnItem>
-                            <TableColumnItem>
-                                <PropertyName>CreatedAt</PropertyName>
+                                <PropertyName>Plan</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
@@ -109,7 +100,6 @@
                                 <PropertyName>UpdatedAt</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <Label>Plan</Label>
                                 <PropertyName>Plan</PropertyName>
                             </ListItem>
                         </ListItems>
