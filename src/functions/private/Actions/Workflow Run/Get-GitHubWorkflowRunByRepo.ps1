@@ -116,7 +116,7 @@
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             $_.Response.workflow_runs | ForEach-Object {
                 [GitHubWorkflowRun]@{
-                    DatabaseID          = $_.id
+                    ID                  = $_.id
                     Name                = $_.name
                     Owner               = $Owner
                     Repository          = $Repository

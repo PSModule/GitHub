@@ -161,10 +161,11 @@ All function documentation follows standard PowerShell help conventions, with so
    - Each class that you return should have a consistent interface.
    - Remove any properties that are purely “API wrapper” fields (e.g., raw HTTP artifacts that aren’t relevant to the user).
 
-- Classes should have ID as the main resource ID, this is the databaseID. The node_id is spesifically in the NodeID property
+- Classes should have ID as the main resource ID, this is the databaseID. The node_id is spesifically in the NodeID property.
+- Classes that use nodeid and databaseid should extend the class called GitHubNode.
 - Objects that belong inside another scope, has the parts of the scope in properties of the class, i.e. Enterprise, Owner/Organization/Account,
   Repository, Environment, etc.
----
+
 
 ## Additional Notes
 

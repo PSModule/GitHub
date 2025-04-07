@@ -20,7 +20,7 @@ filter Set-GitHubEnvironment {
             Repository             = "my-repo"
             Name                   = "staging"
             WaitTimer              = 30
-            Reviewers              = @{ type = $user.Type; id = $user.id }, @{ type = 'team'; id = $team.DatabaseID }
+            Reviewers              = @{ type = $user.Type; id = $user.ID }, @{ type = 'team'; id = $team.ID }
             DeploymentBranchPolicy = 'CustomBranchPolicies'
         }
         Set-GitHubEnvironment @params
@@ -228,7 +228,7 @@ filter Set-GitHubEnvironment {
                 Write-Output $_.Response | ForEach-Object {
                     [GitHubEnvironment]@{
                         Name                   = $_.name
-                        DatabaseID             = $_.id
+                        ID                     = $_.id
                         NodeID                 = $_.node_id
                         Url                    = $_.html_url
                         Owner                  = $Owner

@@ -65,7 +65,7 @@ function Get-GitHubVariableSelectedRepository {
                     Name        = $_.name
                     FullName    = $_.full_name
                     NodeID      = $_.node_id
-                    DatabaseID  = $_.id
+                    ID          = $_.id
                     Description = $_.description
                     Owner       = $_.owner.login
                     URL         = $_.html_url

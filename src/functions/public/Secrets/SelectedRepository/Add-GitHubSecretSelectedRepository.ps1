@@ -59,7 +59,7 @@
 
     process {
         $existingSelectedRepositories = Get-GitHubSecretSelectedRepository -Owner $Owner -Name $Name -Context $Context
-        $repoIsSelected = $existingSelectedRepositories.DatabaseID -contains $RepositoryID
+        $repoIsSelected = $existingSelectedRepositories.ID -contains $RepositoryID
         if ($repoIsSelected) {
             Write-Debug 'Repo is already selected, returning'
             return

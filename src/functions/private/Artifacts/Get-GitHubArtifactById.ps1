@@ -70,7 +70,7 @@ function Get-GitHubArtifactById {
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             [GitHubArtifact]@{
-                DatabaseID         = $_.Response.id
+                ID                 = $_.Response.id
                 NodeID             = $_.Response.node_id
                 Name               = $_.Response.name
                 Owner              = $Owner

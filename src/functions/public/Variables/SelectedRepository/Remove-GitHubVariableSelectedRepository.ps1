@@ -67,7 +67,7 @@
 
     process {
         $existingSelectedRepositories = Get-GitHubVariableSelectedRepository -Owner $Owner -Name $Name -Context $Context
-        $repoIsNotSelected = $existingSelectedRepositories.DatabaseID -notcontains $RepositoryID
+        $repoIsNotSelected = $existingSelectedRepositories.ID -notcontains $RepositoryID
         if ($repoIsNotSelected) {
             Write-Debug 'Repo is not selected, returning'
             return

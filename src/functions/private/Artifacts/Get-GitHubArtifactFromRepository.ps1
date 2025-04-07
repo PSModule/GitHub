@@ -89,7 +89,7 @@ function Get-GitHubArtifactFromRepository {
 
         $artifacts | ForEach-Object {
             [GitHubArtifact]@{
-                DatabaseID         = $_.id
+                ID                 = $_.id
                 NodeID             = $_.node_id
                 Name               = $_.name
                 Owner              = $Owner

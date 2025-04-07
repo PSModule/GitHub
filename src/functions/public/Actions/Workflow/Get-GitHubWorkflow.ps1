@@ -79,7 +79,7 @@
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             Write-Output $_.Response.workflows | Where-Object { $_.name -like $Name } | ForEach-Object {
                 [GitHubWorkflow]@{
-                    DatabaseID = $_.id
+                    ID         = $_.id
                     NodeID     = $_.node_id
                     Name       = $_.name
                     Owner      = $Owner

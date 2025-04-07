@@ -91,7 +91,7 @@ filter Get-GitHubEnvironmentByName {
                 Write-Output $_.Response | ForEach-Object {
                     [GitHubEnvironment]@{
                         Name                   = $_.name
-                        DatabaseID             = $_.id
+                        ID                     = $_.id
                         NodeID                 = $_.node_id
                         Url                    = $_.html_url
                         Owner                  = $Owner

@@ -92,7 +92,7 @@ filter Get-GitHubEnvironmentList {
                     Name                   = $_.name
                     Repository             = $Repository
                     Owner                  = $Owner
-                    DatabaseID             = $_.id
+                    ID                     = $_.id
                     NodeID                 = $_.node_id
                     Url                    = $_.html_url
                     CreatedAt              = $_.created_at

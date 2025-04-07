@@ -159,7 +159,7 @@
             }
 
             'ByName' {
-                $params['ID'] = (Get-GitHubWorkflow -Owner $Owner -Repository $Repository -Name $Name -Context $Context).DatabaseID
+                $params['ID'] = (Get-GitHubWorkflow -Owner $Owner -Repository $Repository -Name $Name -Context $Context).ID
                 Get-GitHubWorkflowRunByWorkflow @params
             }
 

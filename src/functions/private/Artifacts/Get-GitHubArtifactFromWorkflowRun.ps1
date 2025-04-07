@@ -13,7 +13,7 @@ function Get-GitHubArtifactFromWorkflowRun {
 
         Output:
         ```powershell
-        DatabaseID         : 10
+        ID                 : 10
         NodeID             : MDEwOkFydGlmYWN0MQ==
         Name               : build-logs
         Size               : 24576
@@ -101,7 +101,7 @@ function Get-GitHubArtifactFromWorkflowRun {
 
         $artifacts | ForEach-Object {
             [GitHubArtifact]@{
-                DatabaseID         = $_.id
+                ID                 = $_.id
                 NodeID             = $_.node_id
                 Name               = $_.name
                 Owner              = $Owner
