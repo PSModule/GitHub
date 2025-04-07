@@ -72,6 +72,7 @@ function Get-GitHubSecretRepositoryList {
                     Name       = $_.name
                     CreatedAt  = $_.created_at
                     UpdatedAt  = $_.updated_at
+                    Scope      = 'Repository'
                     Owner      = $Owner
                     Repository = $Repository
                 }

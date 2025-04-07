@@ -5,6 +5,9 @@
     # The type of Public Key.
     [string] $Type
 
+    # The scope of the variable, organization, repository, or environment.
+    [string] $Scope
+
     # The name of the organization or user the Public Key is associated with.
     [string] $Owner
 

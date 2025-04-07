@@ -5,6 +5,9 @@
     # The value of the variable.
     [string] $Value
 
+    # The scope of the variable, organization, repository, or environment.
+    [string] $Scope
+
     # The name of the organization or user the variable is associated with.
     [string] $Owner
 

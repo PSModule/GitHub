@@ -107,6 +107,7 @@ Describe 'Variables' {
                 $result | Should -BeOfType [GitHubVariable]
                 $result.Name | Should -Be $name
                 $result.Value | Should -Be 'TestValue1234'
+                $result.Scope | Should -Be 'Organization'
                 $result.Visibility | Should -Be 'private'
             }
 
@@ -125,6 +126,7 @@ Describe 'Variables' {
                 $result | Should -BeOfType [GitHubVariable]
                 $result.Name | Should -Be $name
                 $result.Value | Should -Be 'TestValue123456789'
+                $result.Scope | Should -Be 'Organization'
                 $result.Visibility | Should -Be 'all'
             }
 
@@ -142,6 +144,7 @@ Describe 'Variables' {
                 $result | Should -BeOfType [GitHubVariable]
                 $result.Name | Should -Be $name
                 $result.Value | Should -Be 'TestValue1234'
+                $result.Scope | Should -Be 'Organization'
                 $result.Visibility | Should -Be 'all'
             }
 
@@ -159,6 +162,7 @@ Describe 'Variables' {
                 $result | Should -BeOfType [GitHubVariable]
                 $result.Name | Should -Be $name
                 $result.Value | Should -Be 'TestValue123'
+                $result.Scope | Should -Be 'Organization'
                 $result.Visibility | Should -Be 'private'
             }
 
@@ -290,13 +294,23 @@ Describe 'Variables' {
                 Set-GitHubVariable @scope -Name $varName -Value 'repository'
             }
             It 'Set-GitHubVariable' {
+                $name = "$variablePrefix`TestVariable"
+                $value = 'TestValue'
                 $param = @{
-                    Name  = "$variablePrefix`TestVariable"
-                    Value = 'TestValue'
+                    Name  = $name
+                    Value = $value
                 }
                 $result = Set-GitHubVariable @param @scope
                 $result = Set-GitHubVariable @param @scope
+                LogGroup 'Variable' {
+                    Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
+                }
                 $result | Should -Not -BeNullOrEmpty
+                $result | Should -BeOfType [GitHubVariable]
+                $result.Name | Should -Be $name
+                $result.Value | Should -Be $value
+                $result.Scope | Should -Be 'Repository'
+                $result.Visibility | Should -BeNullOrEmpty
             }
 
             It 'Update-GitHubVariable' {
@@ -305,16 +319,29 @@ Describe 'Variables' {
                     Value = 'TestValue1234'
                 }
                 $result = Update-GitHubVariable @param @scope -PassThru
+                LogGroup 'Variable' {
+                    Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
+                }
                 $result | Should -Not -BeNullOrEmpty
             }
 
             It 'New-GitHubVariable' {
+                $name = "$variablePrefix`TestVariable2"
+                $value = 'TestValue123'
                 $param = @{
-                    Name  = "$variablePrefix`TestVariable2"
-                    Value = 'TestValue123'
+                    Name  = $name
+                    Value = $value
                 }
                 $result = New-GitHubVariable @param @scope
+                LogGroup 'Variable' {
+                    Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
+                }
                 $result | Should -Not -BeNullOrEmpty
+                $result | Should -BeOfType [GitHubVariable]
+                $result.Name | Should -Be $name
+                $result.Value | Should -Be $value
+                $result.Scope | Should -Be 'Repository'
+                $result.Visibility | Should -BeNullOrEmpty
             }
 
             It 'Get-GitHubVariable' {
@@ -372,16 +399,23 @@ Describe 'Variables' {
                 Set-GitHubVariable @scope -Name $varName -Value 'environment'
             }
             It 'Set-GitHubVariable' {
+                $name = "$variablePrefix`TestVariable"
+                $value = 'TestValue'
                 $param = @{
-                    Name  = "$variablePrefix`TestVariable"
-                    Value = 'TestValue'
+                    Name  = $name
+                    Value = $value
                 }
                 $result = Set-GitHubVariable @param @scope
                 $result = Set-GitHubVariable @param @scope
-                LogGroup 'Variables' {
+                LogGroup 'Variable' {
                     Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
                 }
                 $result | Should -Not -BeNullOrEmpty
+                $result | Should -BeOfType [GitHubVariable]
+                $result.Name | Should -Be $name
+                $result.Value | Should -Be $value
+                $result.Scope | Should -Be 'Environment'
+                $result.Visibility | Should -BeNullOrEmpty
             }
 
             It 'Update-GitHubVariable' {
@@ -397,15 +431,23 @@ Describe 'Variables' {
             }
 
             It 'New-GitHubVariable' {
+                $name = "$variablePrefix`TestVariable2"
+                $value = 'TestValue123'
                 $param = @{
-                    Name  = "$variablePrefix`TestVariable2"
-                    Value = 'TestValue123'
+                    Name  = $name
+                    Value = $value
                 }
-                $result = New-GitHubVariable @param @scope
+                $result = Set-GitHubVariable @param @scope
+                $result = Set-GitHubVariable @param @scope
                 LogGroup 'Variables' {
                     Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
                 }
                 $result | Should -Not -BeNullOrEmpty
+                $result | Should -BeOfType [GitHubVariable]
+                $result.Name | Should -Be $name
+                $result.Value | Should -Be $value
+                $result.Scope | Should -Be 'Environment'
+                $result.Visibility | Should -BeNullOrEmpty
             }
 
             It 'Get-GitHubVariable' {

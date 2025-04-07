@@ -159,6 +159,7 @@ Describe 'Secrets' {
                 $result | Should -Not -BeNullOrEmpty
                 $result | Should -BeOfType [GitHubSecret]
                 $result.Name | Should -Be $name
+                $result.Scope | Should -Be 'Organization'
                 $result.Visibility | Should -Be 'private'
             }
 
@@ -176,6 +177,7 @@ Describe 'Secrets' {
                 $result | Should -Not -BeNullOrEmpty
                 $result | Should -BeOfType [GitHubSecret]
                 $result.Name | Should -Be $name
+                $result.Scope | Should -Be 'Organization'
                 $result.Visibility | Should -Be 'all'
             }
 
@@ -310,6 +312,8 @@ Describe 'Secrets' {
                 $result = Set-GitHubSecret @param @scope
                 $result = Set-GitHubSecret @param @scope
                 $result | Should -Not -BeNullOrEmpty
+                $result | Should -BeOfType [GitHubSecret]
+                $result.Scope | Should -Be 'Repository'
             }
 
             It 'Set-GitHubSecret' {
@@ -319,6 +323,8 @@ Describe 'Secrets' {
                 }
                 $result = Set-GitHubSecret @param @scope
                 $result | Should -Not -BeNullOrEmpty
+                $result | Should -BeOfType [GitHubSecret]
+                $result.Scope | Should -Be 'Repository'
             }
 
             It 'Get-GitHubSecret' {
@@ -392,6 +398,8 @@ Describe 'Secrets' {
                     Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
                 }
                 $result | Should -Not -BeNullOrEmpty
+                $result | Should -BeOfType [GitHubSecret]
+                $result.Scope | Should -Be 'Environment'
             }
 
             It 'Set-GitHubSecret' {
@@ -404,6 +412,8 @@ Describe 'Secrets' {
                     Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
                 }
                 $result | Should -Not -BeNullOrEmpty
+                $result | Should -BeOfType [GitHubSecret]
+                $result.Scope | Should -Be 'Environment'
             }
 
             It 'Get-GitHubSecret' {

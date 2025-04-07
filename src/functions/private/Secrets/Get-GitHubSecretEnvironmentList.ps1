@@ -76,6 +76,7 @@ function Get-GitHubSecretEnvironmentList {
                     Name        = $_.name
                     CreatedAt   = $_.created_at
                     UpdatedAt   = $_.updated_at
+                    Scope       = 'Environment'
                     Owner       = $Owner
                     Repository  = $Repository
                     Environment = $Environment
