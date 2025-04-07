@@ -22,8 +22,8 @@
 
         Get the 'octocat' user.
 
-        .NOTES
-        https://docs.github.com/rest/users/users#get-a-user
+        .LINK
+        [Get a user](https://docs.github.com/rest/users/users#get-a-user)
     #>
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]

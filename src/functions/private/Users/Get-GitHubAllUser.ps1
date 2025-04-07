@@ -15,10 +15,9 @@
 
         Get a list of users, starting with the user 'MariusStorhaug'.
 
-        .NOTES
-        https://docs.github.com/rest/users/users#list-users
+        .LINK
+        [List users](https://docs.github.com/rest/users/users#list-users)
     #>
-    [Alias('Get-GitHubAllUsers')]
     [OutputType([pscustomobject])]
     [CmdletBinding()]
     param(

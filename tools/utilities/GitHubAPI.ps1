@@ -47,6 +47,9 @@ $response.components.responses # HTTP status descriptions
 
 $path = '/repos/{owner}/{repo}/actions/runs'
 $method = 'get'
+
+
+$specs = $response.components.schemas.PSObject.Properties | Sort-Object Name | ForEach-Object { [pscustomobject]@{ Name = $_.Name; Value = $_.Value } }
 $response.components.schemas.'issue-comment'
 $response.components.schemas.'workflow-run' | ConvertTo-Json -Depth 10 | Clip
 $response.components.schemas.'workflow-run'.properties.PSObject.Properties | ForEach-Object {

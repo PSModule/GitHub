@@ -14,8 +14,8 @@
 
         Get the authenticated user
 
-        .NOTES
-        https://docs.github.com/rest/users/users#get-the-authenticated-user
+        .LINK
+        [Get the authenticated user](https://docs.github.com/rest/users/users#get-the-authenticated-user)
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]
