@@ -46,18 +46,14 @@
         [string] $Signature
     )
 
-    # Compute HMAC SHA-256 hash using the secret and payload
     $keyBytes = [Text.Encoding]::UTF8.GetBytes($Secret)
     $payloadBytes = [Text.Encoding]::UTF8.GetBytes($Body)
 
     $hmac = New-Object System.Security.Cryptography.HMACSHA256
     $hmac.Key = $keyBytes
     $hashBytes = $hmac.ComputeHash($payloadBytes)
-
-    # Convert hash to hex string
     $computedSignature = 'sha256=' + (($hashBytes | ForEach-Object { $_.ToString('x2') }) -join '')
 
-    # Use constant-time comparison to avoid timing attacks
     $valid = [System.Security.Cryptography.CryptographicOperations]::FixedTimeEquals(
         [Text.Encoding]::UTF8.GetBytes($computedSignature),
         [Text.Encoding]::UTF8.GetBytes($Signature)
