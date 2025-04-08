@@ -18,7 +18,7 @@
                         <Label>Visibility</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>Size (KB)</Label>
+                        <Label>Size (MB)</Label>
                     </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
@@ -35,7 +35,7 @@
                             </TableColumnItem>
                             <TableColumnItem>
                                 <ScriptBlock>
-                                    [math]::Round($_.Size / 1024, 2)
+                                    [math]::Round($($_.Size)KB / 1MB, 2)
                                 </ScriptBlock>
                             </TableColumnItem>
                         </TableColumnItems>

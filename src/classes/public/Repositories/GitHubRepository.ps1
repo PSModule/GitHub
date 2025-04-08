@@ -31,7 +31,7 @@
     # Example: https://github.com
     [string] $Homepage
 
-    # The size of the repository in kilobytes.
+    # The size of the repository, in kilobytes.
     # Example: 108
     [System.Nullable[uint]] $Size
 
