@@ -5,7 +5,7 @@
 
     # The owner of the repository.
     # Example: octocat
-    [GitHubOrganization] $Owner
+    [GitHubOwner] $Owner
 
     # The HTML URL of the repository.
     # Example: https://github.com/octocat/Hello-World

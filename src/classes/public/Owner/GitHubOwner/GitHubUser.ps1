@@ -51,7 +51,6 @@
         $this.UpdatedAt = $Object.updated_at
         $this.Plan = [GitHubPlan]::New($Object.plan)
     }
-    }
 
     [string] ToString() {
         return $this.Name
