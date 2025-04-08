@@ -89,7 +89,7 @@
     process {
         switch ($PSCmdlet.ParameterSetName) {
             'NamedOrg' {
-                Get-GitHubOrganizationByName -Organization $Organization -Context $Context
+                Get-GitHubOrganizationByName -Name $Name -Context $Context
             }
             'NamedUser' {
                 Get-GitHubUserOrganization -Username $Username -Context $Context
