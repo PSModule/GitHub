@@ -175,21 +175,55 @@
     # Custom properties for the repository.
     [PSCustomObject] $CustomProperties
 
-    # Simple parameterless constructor
     GitHubRepository() {}
 
-    # Creates an object from a hashtable of key-value pairs.
-    GitHubRepository([hashtable]$Properties) {
-        foreach ($Property in $Properties.Keys) {
-            $this.$Property = $Properties.$Property
-        }
-    }
-
-    # Creates an object from a PSCustomObject.
     GitHubRepository([PSCustomObject]$Object) {
-        $Object.PSObject.Properties | ForEach-Object {
-            $this.($_.Name) = $_.Value
-        }
+        $this.ID = $_.id
+        $this.NodeID = $_.node_id
+        $this.Name = $_.name
+        $this.Owner = [GitHubOwner]::New($_.owner)
+        $this.Visibility = $_.visibility
+        $this.Description = $_.description
+        $this.Homepage = $_.homepage
+        $this.Url = $_.html_url
+        $this.Size = $_.size
+        $this.Language = $_.language
+        $this.License = $_.lisence
+        $this.IsFork = $_.fork
+        $this.IsArchived = $_.archived
+        $this.IsDisabled = $_.disabled
+        $this.IsTemplate = $_.is_template
+        $this.AllowForking = $_.allow_forking
+        $this.HasIssues = $_.has_issues
+        $this.HasProjects = $_.has_projects
+        $this.HasWiki = $_.has_wiki
+        $this.HasDiscussions = $_.has_discussions
+        $this.HasPages = $_.has_pages
+        $this.RequireWebCommitSignoff = $_.web_commit_signoff_required
+        $this.CreatedAt = $_.created_at
+        $this.UpdatedAt = $_.created_at
+        $this.PushedAt = $_.pushed_at
+        $this.Topics = $_.topics
+        $this.Forks = $_.forks_count
+        $this.OpenIssues = $_.open_issues_count
+        $this.Watchers = $_.watchers_count
+        $this.Stargazers = $_.stargazers_count
+        $this.DefaultBranch = $_.default_branch
+        $this.Permissions = [GitHubRepositoryPermissions]::New($_.permissions)
+        $this.AllowSquashMerge = $_.allow_squash_merge
+        $this.AllowMergeCommit = $_.allow_merge_commit
+        $this.AllowRebaseMerge = $_.allow_rebase_merge
+        $this.AllowAutoMerge = $_.allow_auto_merge
+        $this.DeleteBranchOnMerge = $_.delete_branch_on_merge
+        $this.AllowUpdateBranch = $_.allow_update_branch
+        $this.SquashMergeCommitMessage = $_.squash_merge_commit_message
+        $this.SquashMergeCommitTitle = $_.squash_merge_commit_title
+        $this.MergeCommitMessage = $_.merge_commit_message
+        $this.MergeCommitTitle = $_.merge_commit_title
+        $this.CustomProperties = $_.custom_properties
+        $this.ForkParent = [GitHubRepository]::New($_.parent)
+        $this.ForkSource = [GitHubRepository]::New($_.source)
+        $this.TemplateRepository = [GitHubRepository]::New($_.template_repository)
     }
 
     [string] ToString() {

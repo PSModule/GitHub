@@ -23,21 +23,15 @@
     # Example: 7
     [System.Nullable[uint]] $FilledSeats
 
-    # Simple parameterless constructor
     GitHubPlan() {}
 
-    # Creates an object from a hashtable of key-value pairs.
-    GitHubPlan([hashtable]$Properties) {
-        foreach ($Property in $Properties.Keys) {
-            $this.$Property = $Properties.$Property
-        }
-    }
-
-    # Creates an object from a PSCustomObject.
     GitHubPlan([PSCustomObject]$Object) {
-        $Object.PSObject.Properties | ForEach-Object {
-            $this.($_.Name) = $_.Value
-        }
+        $this.Name = $Object.name
+        $this.PrivateRepos = $Object.private_repos
+        $this.Collaborators = $Object.collaborators
+        $this.Space = $Object.space
+        $this.Seats = $Object.seats
+        $this.FilledSeats = $Object.filled_seats
     }
 
     [string] ToString() {

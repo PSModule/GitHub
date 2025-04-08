@@ -254,7 +254,9 @@ filter New-GitHubRepositoryOrg {
 
         if ($PSCmdlet.ShouldProcess("Repository [$Name] in organization [$Owner]", 'Create')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
+                $_.Response | ForEach-Object {
+                    [GitHubRepository]::New($_)
+                }
             }
         }
     }

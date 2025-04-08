@@ -151,52 +151,7 @@
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             $_.Response | ForEach-Object {
-                [GitHubRepository]@{
-                    ID                      = $_.id
-                    NodeID                  = $_.node_id
-                    Name                    = $_.name
-                    Owner                   = [GitHubOrganization]@{
-                        ID     = $_.owner.id
-                        NodeID = $_.owner.node_id
-                        Name   = $_.owner.login
-                        Type   = $_.owner.type
-                        Url    = $_.owner.html_url
-                    }
-                    Visibility              = $_.visibility
-                    Description             = $_.description
-                    Homepage                = $_.homepage
-                    Url                     = $_.html_url
-                    Size                    = $_.size
-                    Language                = $_.language
-                    License                 = $_.lisence
-                    IsFork                  = $_.fork
-                    IsArchived              = $_.archived
-                    IsDisabled              = $_.disabled
-                    IsTemplate              = $_.is_template
-                    AllowForking            = $_.allow_forking
-                    HasIssues               = $_.has_issues
-                    HasProjects             = $_.has_projects
-                    HasWiki                 = $_.has_wiki
-                    HasDiscussions          = $_.has_discussions
-                    HasPages                = $_.has_pages
-                    RequireWebCommitSignoff = $_.web_commit_signoff_required
-                    CreatedAt               = $_.created_at
-                    UpdatedAt               = $_.created_at
-                    PushedAt                = $_.pushed_at
-                    Topics                  = $_.topics
-                    Forks                   = $_.forks_count
-                    OpenIssues              = $_.open_issues_count
-                    Watchers                = $_.watchers_count
-                    Stargazers              = $_.stargazers_count
-                    DefaultBranch           = $_.default_branch
-                    Permissions             = [GitHubRepositoryPermissions]@{
-                        Admin    = $_.permissions.admin
-                        Maintain = $_.permissions.maintain
-                        Push     = $_.permissions.push
-                        Triage   = $_.permissions.triage
-                        Pull     = $_.permissions.pull
-                    }
-                }
+                [GitHubRepository]::New($_)
             }
         }
     }

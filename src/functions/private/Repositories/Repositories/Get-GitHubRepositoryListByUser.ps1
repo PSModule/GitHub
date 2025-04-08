@@ -86,7 +86,9 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            $_.Response | ForEach-Object {
+                [GitHubRepository]::New($_)
+            }
         }
     }
 

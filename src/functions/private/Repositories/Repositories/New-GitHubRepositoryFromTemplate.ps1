@@ -101,7 +101,9 @@
 
         if ($PSCmdlet.ShouldProcess("Repository [$Owner/$Name] from template [$TemplateOwner/$TemplateRepo]", 'Create')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
+                $_.Response | ForEach-Object {
+                    [GitHubRepository]::New($_)
+                }
             }
         }
     }

@@ -15,4 +15,14 @@
     # Can view and clone the repository. Cannot push code or manage issues and pull requests.
     # Alias "Read"
     [System.Nullable[bool]] $Pull
+
+    GitHubRepositoryPermissions() {}
+
+    GitHubRepositoryPermissions([PSCustomObject]$Object) {
+        $this.Admin = $Object.admin
+        $this.Maintain = $Object.maintain
+        $this.Push = $Object.push
+        $this.Triage = $Object.triage
+        $this.Pull = $Object.pull
+    }
 }
