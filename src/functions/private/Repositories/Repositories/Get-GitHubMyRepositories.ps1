@@ -152,13 +152,31 @@
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             $_.Response | ForEach-Object {
                 [GitHubRepository]@{
-                    ID = $_.id
-                    NodeID = $_.node_id
-                    Name = $_.name
-                    FullName = $_.full_name
-                    Owner = [GitHubOrganization]@{
-                        ID = $_.owner.id
+                    ID          = $_.id
+                    NodeID      = $_.node_id
+                    Name        = $_.name
+                    FullName    = $_.full_name
+                    Owner       = [GitHubOrganization]@{
+                        ID     = $_.owner.id
                         NodeID = $_.owner.node_id
+                        Name   = $_.owner.login
+                    }
+                    Visibility  = $_.visibility
+                    Description = $_.description
+                    Url         = $_.html_url
+                    IsFork      = $_.fork
+                    IsArchived  = $_.archived
+                    IsDisabled  = $_.disabled
+                    CreatedAt   = $_.created_at
+                    UpdatedAt   = $_.created_at
+                    PushedAt    = $_.pushed_at
+                    Topics      = $_.topics
+                    Permissions = [GitHubRepositoryPermissions]@{
+                        Admin    = $_.permissions.admin
+                        Maintain = $_.permissions.maintain
+                        Push     = $_.permissions.push
+                        Triage   = $_.permissions.triage
+                        Pull     = $_.permissions.pull
                     }
                 }
             }
