@@ -14,9 +14,9 @@
         $params = @{
             Owner       = 'octocat'
             Repo        = 'Hello-World'
-            name        = 'Hello-World-Repository
-            description = 'This is your first repository'
-            homepage    = 'https://github.com'
+            NewName     = 'Hello-World-Repository'
+            Description = 'This is your first repository'
+            Homepage    = 'https://github.com'
         }
         Update-GitHubRepository @params
 
@@ -33,11 +33,11 @@
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [string] $Repository,
+        [string] $Name,
 
         # The name of the repository.
         [Parameter()]
-        [string] $Name,
+        [string] $NewName,
 
         # A short description of the repository.
         [Parameter()]
@@ -49,7 +49,7 @@
 
         # The visibility of the repository.
         [Parameter()]
-        [ValidateSet('public', 'private')]
+        [ValidateSet('public', 'private', 'internal')]
         [string] $Visibility,
 
         # Use the status property to enable or disable GitHub Advanced Security for this repository.
@@ -69,58 +69,47 @@
 
         # Whether issues are enabled.
         [Parameter()]
-        [Alias('has_issues')]
         [switch] $HasIssues,
 
         # Whether projects are enabled.
         [Parameter()]
-        [Alias('has_projects')]
         [switch] $HasProjects,
 
         # Whether the wiki is enabled.
         [Parameter()]
-        [Alias('has_wiki')]
         [switch] $HasWiki,
 
         # Whether this repository acts as a template that can be used to generate new repositories.
         [Parameter()]
-        [Alias('is_template')]
         [switch] $IsTemplate,
 
         # Updates the default branch for this repository.
         [Parameter()]
-        [Alias('default_branch')]
         [string] $DefaultBranch,
 
         # Whether to allow squash merges for pull requests.
         [Parameter()]
-        [Alias('allow_squash_merge')]
         [switch] $AllowSquashMerge,
 
         # Whether to allow merge commits for pull requests.
         [Parameter()]
-        [Alias('allow_merge_commit')]
         [switch] $AllowMergeCommit,
 
         # Whether to allow rebase merges for pull requests.
         [Parameter()]
-        [Alias('allow_rebase_merge')]
         [switch] $AllowRebaseMerge,
 
         # Whether to allow Auto-merge to be used on pull requests.
         [Parameter()]
-        [Alias('allow_auto_merge')]
         [switch] $AllowAutoMerge,
 
         # Whether to delete head branches when pull requests are merged
         [Parameter()]
-        [Alias('delete_branch_on_merge')]
         [switch] $DeleteBranchOnMerge,
 
         # Either true to always allow a pull request head branch that is behind its base branch
         # to be updated even if it is not required to be up to date before merging, or false otherwise.
         [Parameter()]
-        [Alias('allow_update_branch')]
         [switch] $AllowUpdateMerge,
 
         # The default value for a squash merge commit title:
@@ -128,7 +117,6 @@
         # - COMMIT_OR_PR_TITLE - default to the commit's title (if only one commit) or the pull request's title (when more than one commit).
         [Parameter()]
         [ValidateSet('PR_TITLE', 'COMMIT_OR_PR_TITLE')]
-        [Alias('squash_merge_commit_title')]
         [string] $SquashMergeCommitTitle,
 
         # The default value for a squash merge commit message:
@@ -137,7 +125,6 @@
         # - BLANK - default to a blank commit message.
         [Parameter()]
         [ValidateSet('PR_BODY', 'COMMIT_MESSAGES', 'BLANK')]
-        [Alias('squash_merge_commit_message')]
         [string] $SquashMergeCommitMessage,
 
         # The default value for a merge commit title.
@@ -145,7 +132,6 @@
         # - MERGE_MESSAGE - default to the classic title for a merge message (e.g.,Merge pull request #123 from branch-name).
         [Parameter()]
         [ValidateSet('PR_TITLE', 'MERGE_MESSAGE')]
-        [Alias('merge_commit_title')]
         [string] $MergeCommitTitle,
 
         # The default value for a merge commit message.
@@ -154,7 +140,6 @@
         # - BLANK - default to a blank commit message.
         [Parameter()]
         [ValidateSet('PR_BODY', 'PR_TITLE', 'BLANK')]
-        [Alias('merge_commit_message')]
         [string] $MergeCommitMessage,
 
         # Whether to archive this repository. false will unarchive a previously archived repository.
@@ -163,13 +148,11 @@
 
         # Either true to allow private forks, or false to prevent private forks.
         [Parameter()]
-        [Alias('allow_forking')]
         [switch] $AllowForking,
 
         # Either true to require contributors to sign off on web-based commits,
         # or false to not require contributors to sign off on web-based commits.
         [Parameter()]
-        [Alias('web_commit_signoff_required')]
         [switch] $WebCommitSignoffRequired,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -187,7 +170,7 @@
 
     process {
         $body = @{
-            name                            = $Name
+            name                            = $NewName
             description                     = $Description
             homepage                        = $Homepage
             visibility                      = $Visibility
@@ -224,12 +207,12 @@
 
         $inputObject = @{
             Method      = 'PATCH'
-            APIEndpoint = "/repos/$Owner/$Repository"
+            APIEndpoint = "/repos/$Owner/$Name"
             Body        = $body
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("Repository [$Owner/$Repository]", 'Update')) {
+        if ($PSCmdlet.ShouldProcess("Repository [$Owner/$Name]", 'Update')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }

@@ -37,9 +37,12 @@ filter Get-GitHubRepository {
         Gets the repositories with an ID equals and greater than 123456789.
 
         .EXAMPLE
-        Get-GitHubRepository -Owner 'github' -Repository 'octocat'
+        Get-GitHubRepository -Owner 'github' -Name 'octocat'
 
         Gets the specified repository.
+
+        .OUTPUTS
+        GithubRepository
 
         .NOTES
         [List repositories for the authenticated user](https://docs.github.com/rest/repos/repos#list-repositories-for-the-authenticated-user)
@@ -48,6 +51,7 @@ filter Get-GitHubRepository {
         [List organization repositories](https://docs.github.com/rest/repos/repos#list-organization-repositories)
         [List repositories for a user](https://docs.github.com/rest/repos/repos#list-repositories-for-a-user)
     #>
+    [OutputType([GitHubRepository])]
     [CmdletBinding(DefaultParameterSetName = 'MyRepos_Type')]
     param(
         #Limit results to repositories with the specified visibility.

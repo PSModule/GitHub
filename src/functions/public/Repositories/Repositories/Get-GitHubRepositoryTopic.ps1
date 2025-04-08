@@ -21,7 +21,7 @@
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [string] $Repository,
+        [string] $Name,
 
         # The number of results per page (max 100).
         [Parameter()]
@@ -48,7 +48,7 @@
 
         $inputObject = @{
             Method      = 'GET'
-            APIEndpoint = "/repos/$Owner/$Repository/topics"
+            APIEndpoint = "/repos/$Owner/$Name/topics"
             Body        = $body
             Context     = $Context
         }

@@ -10,7 +10,7 @@
         repositories, you will get a `403 Forbidden` response.
 
         .EXAMPLE
-        Remove-GitHubRepository -Owner 'PSModule' -Repository 'Hello-World'
+        Remove-GitHubRepository -Owner 'PSModule' -Name 'Hello-World'
 
         Deletes the repository `Hello-World` in the `PSModule` organization.
 
@@ -56,9 +56,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("repo [$Owner/$Name]", 'DELETE')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
+            $null = Invoke-GitHubAPI @inputObject
         }
     }
 

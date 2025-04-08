@@ -11,7 +11,7 @@
         For more information, see "[Managing security managers in your organization](https://docs.github.com/organizations/managing-peoples-access-to-your-organization-with-roles/managing-security-managers-in-your-organization)."
 
         .EXAMPLE
-        Get-GitHubRepositoryByName -Owner 'octocat' -Repository 'Hello-World'
+        Get-GitHubRepositoryByName -Owner 'octocat' -Name 'Hello-World'
 
         Gets the repository 'Hello-World' for the organization 'octocat'.
 
