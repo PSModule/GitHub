@@ -21,7 +21,6 @@
     param(
         # The license keyword, license name, or license SPDX ID. For example, mit or mpl-2.0.
         [Parameter(Mandatory)]
-        [Alias('license')]
         [string] $Name,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -45,7 +44,7 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            [GitHubLicense]::New($_.Response)
         }
     }
 
