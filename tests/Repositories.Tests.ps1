@@ -54,21 +54,21 @@ Describe 'Repositories' {
         It "Get-GitHubRepository - Gets the authenticated user's repositories" -Skip:($OwnerType -ne 'user') {
             $repos = Get-GitHubRepository
             LogGroup 'Repositories' {
-                Write-Host ($repos | Format-List | Out-String)
+                Write-Host ($repos | Format-Table | Out-String)
             }
             $repos | Should -Not -BeNullOrEmpty
         }
         It "Get-GitHubRepository - Gets the authenticated user's public repositories" -Skip:($OwnerType -ne 'user') {
             $repos = Get-GitHubRepository -Type 'public'
             LogGroup 'Repositories' {
-                Write-Host ($repos | Format-List | Out-String)
+                Write-Host ($repos | Format-Table | Out-String)
             }
             $repos | Should -Not -BeNullOrEmpty
         }
         It 'Get-GitHubRepository - Gets the public repos where the authenticated user is owner' -Skip:($OwnerType -ne 'user') {
             $repos = Get-GitHubRepository -Visibility 'public' -Affiliation 'owner'
             LogGroup 'Repositories' {
-                Write-Host ($repos | Format-List | Out-String)
+                Write-Host ($repos | Format-Table | Out-String)
             }
             $repos | Should -Not -BeNullOrEmpty
         }
@@ -82,14 +82,14 @@ Describe 'Repositories' {
         It 'Get-GitHubRepository - Gets all repositories from a organization' -Skip:($OwnerType -eq 'repository') {
             $repos = Get-GitHubRepository -Owner 'PSModule'
             LogGroup 'Repositories' {
-                Write-Host ($repos | Format-List | Out-String)
+                Write-Host ($repos | Format-Table | Out-String)
             }
             $repos | Should -Not -BeNullOrEmpty
         }
         It 'Get-GitHubRepository - Gets all repositories from a user' -Skip:($OwnerType -eq 'repository') {
             $repos = Get-GitHubRepository -Username 'MariusStorhaug'
             LogGroup 'Repositories' {
-                Write-Host ($repos | Format-List | Out-String)
+                Write-Host ($repos | Format-Table | Out-String)
             }
             $repos | Should -Not -BeNullOrEmpty
         }
