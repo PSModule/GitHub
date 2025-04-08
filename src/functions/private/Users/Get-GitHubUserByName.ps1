@@ -18,7 +18,7 @@
         For more information, see "[Emails API](https://docs.github.com/rest/users/emails)".
 
         .EXAMPLE
-        Get-GitHubUserByName -Username 'octocat'
+        Get-GitHubUserByName -Name 'octocat'
 
         Get the 'octocat' user.
 
@@ -38,7 +38,6 @@
             ValueFromPipeline,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('login', 'Username')]
         [string] $Name,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -56,7 +55,7 @@
     process {
         $inputObject = @{
             Method      = 'GET'
-            APIEndpoint = "/users/$Username"
+            APIEndpoint = "/users/$Name"
             Context     = $Context
         }
 

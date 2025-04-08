@@ -59,7 +59,7 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            [GitHubUser]::New($_.Response)
+            $_.Response | ForEach-Object { [GitHubUser]::New($_) }
         }
     }
 
