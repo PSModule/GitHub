@@ -172,7 +172,13 @@
     [string] $MergeCommitTitle
 
     # The template repository that this repository was created from
-    [GithubRepository] $TemplateRepository
+    [System.Nullable[GithubRepository]] $TemplateRepository
+
+    # The repository this repository was forked from.
+    [GithubRepository] $ForkParent
+
+    # The ultimate source for the fork network.
+    [GithubRepository] $ForkSource
 
     # Custom properties for the repository.
     [PSCustomObject] $CustomProperties
