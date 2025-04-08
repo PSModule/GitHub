@@ -39,10 +39,9 @@
         # The handle for the GitHub user account.
         [Parameter(
             Mandatory,
-            ParameterSetName = 'NamedUser',
+            ParameterSetName = 'ByName',
             ValueFromPipelineByPropertyName
         )]
-        [Alias('login', 'Username')]
         [string] $Name,
 
         # List all users. Use '-Since' to start at a specific user ID.
@@ -76,20 +75,14 @@
 
     process {
         switch ($PSCmdlet.ParameterSetName) {
-            'NamedUser' {
-                $user = Get-GitHubUserByName -Name $Username -Context $Context
-                $social_accounts = Get-GitHubUserSocialsByName -Username $Username -Context $Context
-                $user | Add-Member -MemberType NoteProperty -Name 'social_accounts' -Value $social_accounts -Force
-                $user
+            'ByName' {
+                Get-GitHubUserByName -Name $Name -Context $Context
             }
             'AllUsers' {
                 Get-GitHubAllUser -Since $Since -PerPage $PerPage -Context $Context
             }
             default {
-                $user = Get-GitHubMyUser -Context $Context
-                $social_accounts = Get-GitHubMyUserSocials -Context $Context
-                $user | Add-Member -MemberType NoteProperty -Name 'social_accounts' -Value $social_accounts -Force
-                $user
+                Get-GitHubMyUser -Context $Context
             }
         }
     }
