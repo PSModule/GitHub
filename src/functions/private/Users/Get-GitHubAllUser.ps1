@@ -59,15 +59,7 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            [GitHubUser]@{
-                Name         = $_.Response.login
-                ID           = $_.Response.id
-                NodeID       = $_.Response.node_id
-                AvatarUrl    = $_.Response.avatar_url
-                Url          = $_.Response.html_url
-                Type         = $_.Response.type
-                UserViewType = $_.Response.user_view_type
-            }
+            [GitHubUser]::New($_.Response)
         }
     }
 

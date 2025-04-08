@@ -61,29 +61,7 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            [GitHubUser]@{
-                Name            = $_.Response.login
-                ID              = $_.Response.id
-                NodeID          = $_.Response.node_id
-                AvatarUrl       = $_.Response.avatar_url
-                Url             = $_.Response.html_url
-                Type            = $_.Response.type
-                UserViewType    = $_.Response.user_view_type
-                DisplayName     = $_.Response.name
-                Company         = $_.Response.company
-                Blog            = $_.Response.blog
-                Location        = $_.Response.location
-                Email           = $_.Response.email
-                Hireable        = $_.Response.hireable
-                Bio             = $_.Response.bio
-                TwitterUsername = $_.Response.twitter_username
-                PublicRepos     = $_.Response.public_repos
-                PublicGists     = $_.Response.public_gists
-                Followers       = $_.Response.followers
-                Following       = $_.Response.following
-                CreatedAt       = $_.Response.created_at
-                UpdatedAt       = $_.Response.updated_at
-            }
+            [GitHubUser]::New($_.Response)
         }
     }
 
