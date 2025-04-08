@@ -181,7 +181,7 @@
         $this.ID = $_.id
         $this.NodeID = $_.node_id
         $this.Name = $_.name
-        $this.Owner = [GitHubOwner]::New($_.owner)
+        # $this.Owner = [GitHubOwner]::New($_.owner)
         $this.Visibility = $_.visibility
         $this.Description = $_.description
         $this.Homepage = $_.homepage
@@ -209,7 +209,7 @@
         $this.Watchers = $_.watchers_count
         $this.Stargazers = $_.stargazers_count
         $this.DefaultBranch = $_.default_branch
-        $this.Permissions = [GitHubRepositoryPermissions]::New($_.permissions)
+        # $this.Permissions = [GitHubRepositoryPermissions]::New($_.permissions)
         $this.AllowSquashMerge = $_.allow_squash_merge
         $this.AllowMergeCommit = $_.allow_merge_commit
         $this.AllowRebaseMerge = $_.allow_rebase_merge
@@ -221,9 +221,9 @@
         $this.MergeCommitMessage = $_.merge_commit_message
         $this.MergeCommitTitle = $_.merge_commit_title
         $this.CustomProperties = $_.custom_properties
-        $this.ForkParent = [GitHubRepository]::New($_.parent)
-        $this.ForkSource = [GitHubRepository]::New($_.source)
-        $this.TemplateRepository = [GitHubRepository]::New($_.template_repository)
+        # $this.ForkParent = [GitHubRepository]::New($_.parent)
+        # $this.ForkSource = [GitHubRepository]::New($_.source)
+        # $this.TemplateRepository = [GitHubRepository]::New($_.template_repository)
     }
 
     [string] ToString() {
