@@ -165,6 +165,7 @@ All function documentation follows standard PowerShell help conventions, with so
 - Classes that use nodeid and databaseid should extend the class called GitHubNode.
 - Objects that belong inside another scope, has the parts of the scope in properties of the class, i.e. Enterprise, Owner/Organization/Account,
   Repository, Environment, etc.
+- To make a property alias, use types files to copy one property into another named property.
 
 
 ## Additional Notes
