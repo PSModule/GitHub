@@ -35,7 +35,7 @@
                             </TableColumnItem>
                             <TableColumnItem>
                                 <ScriptBlock>
-                                    [math]::Round($($_.Size)KB / 1MB, 2)
+                                    [math]::Round($_.Size / 1MB, 2)
                                 </ScriptBlock>
                             </TableColumnItem>
                         </TableColumnItems>
