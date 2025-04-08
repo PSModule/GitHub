@@ -15,42 +15,6 @@
     # Example: $true
     [System.Nullable[bool]] $HasRepositoryProjects
 
-    # The public repository count.
-    # Example: 2
-    [System.Nullable[uint]] $PublicRepos
-
-    # The public gist count.
-    # Example: 1
-    [System.Nullable[uint]] $PublicGists
-
-    # The number of followers.
-    # Example: 20
-    [System.Nullable[uint]] $Followers
-
-    # The number of accounts the organization is following.
-    # Example: 0
-    [System.Nullable[uint]] $Following
-
-    # The number of total private repositories.
-    # Example: 100
-    [System.Nullable[uint]] $TotalPrivateRepos
-
-    # The number of owned private repositories.
-    # Example: 100
-    [System.Nullable[uint]] $OwnedPrivateRepos
-
-    # The number of private gists.
-    # Example: 81
-    [System.Nullable[uint]] $PrivateGists
-
-    # The disk usage in kilobytes.
-    # Example: 10000
-    [System.Nullable[uint]] $DiskUsage
-
-    # The number of collaborators on private repositories.
-    # Example: 8
-    [System.Nullable[uint]] $Collaborators
-
     # The billing email address for the organization.
     # Example: org@example.com
     [string] $BillingEmail

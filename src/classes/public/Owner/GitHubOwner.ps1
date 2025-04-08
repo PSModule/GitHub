@@ -1,4 +1,4 @@
-﻿class GitHubOwner {
+﻿class GitHubOwner : GitHubNode {
     # The username/login of the owner.
     # Example: octocat
     [string] $Name
@@ -38,6 +38,42 @@
     # The blog URL of the account.
     # Example: https://github.com/blog
     [string] $Blog
+
+    # The number of followers.
+    # Example: 20
+    [System.Nullable[uint]] $Followers
+
+    # The number of accounts this account is following.
+    # Example: 0
+    [System.Nullable[uint]] $Following
+
+    # The number of public repositories.
+    # Example: 2
+    [System.Nullable[uint]] $PublicRepos
+
+    # The number of public gists.
+    # Example: 1
+    [System.Nullable[uint]] $PublicGists
+
+    # The number of private gists.
+    # Example: 81
+    [System.Nullable[uint]] $PrivateGists
+
+    # The number of total private repositories.
+    # Example: 100
+    [System.Nullable[uint]] $TotalPrivateRepos
+
+    # The number of owned private repositories.
+    # Example: 100
+    [System.Nullable[uint]] $OwnedPrivateRepos
+
+    # The disk usage in kilobytes.
+    # Example: 10000
+    [System.Nullable[uint]] $DiskUsage
+
+    # The number of collaborators on private repositories.
+    # Example: 8
+    [System.Nullable[uint]] $Collaborators
 
     # The creation date of the account.
     # Example: 2008-01-14T04:33:35Z
