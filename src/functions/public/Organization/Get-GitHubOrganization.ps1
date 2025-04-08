@@ -29,10 +29,13 @@
 
         Get the organization 'PSModule'.
 
-        .NOTES
-        [List organizations](https://docs.github.com/rest/orgs/orgs)
+        .OUTPUTS
+        GitHubOrganization
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Organization/Get-GitHubOrganization
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([GitHubOrganization])]
     [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'All', Justification = 'Required for parameter set')]
     param(
@@ -42,7 +45,7 @@
             ParameterSetName = 'NamedOrg',
             ValueFromPipelineByPropertyName
         )]
-        [string] $Organization,
+        [string] $Name,
 
         # The handle for the GitHub user account.
         [Parameter(

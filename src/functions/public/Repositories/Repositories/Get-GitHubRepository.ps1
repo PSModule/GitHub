@@ -98,7 +98,6 @@ filter Get-GitHubRepository {
             ValueFromPipelineByPropertyName,
             ParameterSetName = 'ListByUser'
         )]
-        [Alias('login')]
         [string] $Username,
 
         # The property to sort the results by.

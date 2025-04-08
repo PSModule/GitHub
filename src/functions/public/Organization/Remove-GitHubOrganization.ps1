@@ -14,10 +14,16 @@
 
         Deletes the organization 'GitHub' and all its repositories.
 
-        .NOTES
+        .INPUTS
+        GitHubOrganization
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Organization/Remove-GitHubOrganization
+
+        .LINK
         [Delete an organization](https://docs.github.com/rest/orgs/orgs#delete-an-organization)
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([void])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The organization name. The name is not case sensitive.
@@ -26,7 +32,7 @@
             ValueFromPipeline,
             ValueFromPipelineByPropertyName
         )]
-        [string] $Organization,
+        [string] $Name,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -44,14 +50,12 @@
     process {
         $inputObject = @{
             Method      = 'DELETE'
-            APIEndpoint = "/orgs/$Organization"
+            APIEndpoint = "/orgs/$Name"
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("organization [$Organization]", 'DELETE')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
+        if ($PSCmdlet.ShouldProcess("organization [$Name]", 'DELETE')) {
+            $null = Invoke-GitHubAPI @inputObject
         }
     }
 

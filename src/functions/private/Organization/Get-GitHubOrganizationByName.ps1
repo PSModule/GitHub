@@ -15,14 +15,17 @@
         for details. For an example response, see 'Response with GitHub plan information' below."
 
         .EXAMPLE
-        Get-GitHubOrganizationByName -Organization 'github'
+        Get-GitHubOrganizationByName -Name 'github'
 
         Get the 'GitHub' organization
 
-        .NOTES
-        https://docs.github.com/rest/orgs/orgs#get-an-organization
+        .OUTPUTS
+        GitHubOrganization
+
+        .LINK
+        [Get an organization](https://docs.github.com/rest/orgs/orgs#get-an-organization)
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([GitHubOrganization])]
     [CmdletBinding()]
     param(
         # The organization name. The name is not case sensitive.
@@ -31,8 +34,7 @@
             ValueFromPipeline,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('login')]
-        [string] $Organization,
+        [string] $Name,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -49,12 +51,12 @@
     process {
         $inputObject = @{
             Method      = 'GET'
-            APIEndpoint = "/orgs/$Organization"
+            APIEndpoint = "/orgs/$Name"
             Context     = $Context
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            [GitHubOrganization]::new($_.Response)
         }
     }
     end {

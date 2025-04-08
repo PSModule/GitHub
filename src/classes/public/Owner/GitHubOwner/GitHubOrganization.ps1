@@ -3,6 +3,26 @@
     # Example: A great organization
     [string] $Description
 
+    # The number of private gists.
+    # Example: 81
+    [System.Nullable[uint]] $PrivateGists
+
+    # The number of total private repositories.
+    # Example: 100
+    [System.Nullable[uint]] $TotalPrivateRepos
+
+    # The number of owned private repositories.
+    # Example: 100
+    [System.Nullable[uint]] $OwnedPrivateRepos
+
+    # The disk usage in kilobytes.
+    # Example: 10000
+    [System.Nullable[uint]] $DiskUsage
+
+    # The number of collaborators on private repositories.
+    # Example: 8
+    [System.Nullable[uint]] $Collaborators
+
     # Whether the organization is verified.
     # Example: $true
     [System.Nullable[bool]] $IsVerified
@@ -114,49 +134,42 @@
     # The date and time when the organization was archived, if applicable.
     [System.Nullable[datetime]] $ArchivedAt
 
-    # Simple parameterless constructor
     GitHubOrganization() {}
 
-    # Creates an object from a hashtable of key-value pairs.
-    GitHubOrganization([hashtable]$Properties) {
-        foreach ($Property in $Properties.Keys) {
-            $this.$Property = $Properties.$Property
-        }
-    }
-
-    # Creates an object from a PSCustomObject.
     GitHubOrganization([PSCustomObject]$Object) {
+        # From GitHubNode
         $this.ID = $Object.id
         $this.NodeID = $Object.node_id
+
+        # From GitHubOwner
         $this.Name = $Object.login
         $this.DisplayName = $Object.name
         $this.AvatarUrl = $Object.avatar_url
         $this.Url = $Object.html_url
         $this.Type = $Object.type
         $this.Company = $Object.company
+        $this.Blog = $Object.blog
         $this.Location = $Object.location
         $this.Email = $Object.email
         $this.TwitterUsername = $Object.twitter_username
-        $this.Blog = $Object.blog
-        $this.Followers = $Object.followers
-        $this.Following = $Object.following
         $this.PublicRepos = $Object.public_repos
         $this.PublicGists = $Object.public_gists
+        $this.Followers = $Object.followers
+        $this.Following = $Object.following
+        $this.CreatedAt = $Object.created_at
+        $this.UpdatedAt = $Object.updated_at
+        $this.Plan = [GitHubPlan]::New($Object.plan)
+
+        # From GitHubOrganization
+        $this.Description = $Object.description
         $this.PrivateGists = $Object.total_private_gists
         $this.TotalPrivateRepos = $Object.total_private_repos
         $this.OwnedPrivateRepos = $Object.owned_private_repos
         $this.DiskUsage = $Object.disk_usage
         $this.Collaborators = $Object.collaborators
-        $this.CreatedAt = $Object.created_at
-        $this.UpdatedAt = $Object.updated_at
-        $this.Plan = [GitHubPlan]::New($Object.plan)
-
-        ## Organization specific properties
-        $this.Description = $Object.description
         $this.IsVerified = $Object.is_verified
         $this.HasOrganizationProjects = $Object.has_organization_projects
         $this.HasRepositoryProjects = $Object.has_repository_projects
-        $this.ArchivedAt = $Object.archived_at
         $this.BillingEmail = $Object.billing_email
         $this.DefaultRepositoryPermission = $Object.default_repository_permission
         $this.MembersCanCreateRepositories = $Object.members_can_create_repositories
@@ -181,6 +194,7 @@
         $this.SecretScanningPushProtectionCustomLinkEnabled = $Object.secret_scanning_push_protection_custom_link_enabled
         $this.SecretScanningPushProtectionCustomLink = $Object.secret_scanning_push_protection_custom_link
         $this.SecretScanningValidityChecksEnabled = $Object.secret_scanning_validity_checks_enabled
+        $this.ArchivedAt = $Object.archived_at
     }
 
     [string] ToString() {
