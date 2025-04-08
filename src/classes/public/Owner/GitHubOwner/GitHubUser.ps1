@@ -3,9 +3,6 @@
     # Example: There once was...
     [string] $Bio
 
-    # The type of user view.
-    [string] $UserViewType
-
     # The notification email address of the user.
     # Example: octocat@github.com
     [string] $NotificationEmail
