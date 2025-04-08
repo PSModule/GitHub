@@ -155,12 +155,12 @@
                     ID                      = $_.id
                     NodeID                  = $_.node_id
                     Name                    = $_.name
-                    FullName                = $_.full_name
                     Owner                   = [GitHubOrganization]@{
                         ID     = $_.owner.id
                         NodeID = $_.owner.node_id
                         Name   = $_.owner.login
                         Type   = $_.owner.type
+                        Url    = $_.owner.html_url
                     }
                     Visibility              = $_.visibility
                     Description             = $_.description
@@ -168,6 +168,7 @@
                     Url                     = $_.html_url
                     Size                    = $_.size
                     Language                = $_.language
+                    License                 = $_.lisence
                     IsFork                  = $_.fork
                     IsArchived              = $_.archived
                     IsDisabled              = $_.disabled

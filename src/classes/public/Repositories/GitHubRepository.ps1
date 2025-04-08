@@ -3,10 +3,6 @@
     # Example: Team Environment
     [string] $Name
 
-    # The full name of the repository.
-    # Example: octocat/Hello-World
-    [string] $FullName
-
     # The owner of the repository.
     # Example: octocat
     [GitHubOrganization] $Owner
@@ -62,10 +58,6 @@
     # Whether discussions are enabled.
     # Example: true
     [System.Nullable[bool]] $HasDiscussions
-
-    # Indicates whether the repository is private.
-    # Example: false
-    [System.Nullable[bool]] $IsPrivate
 
     # Indicates whether the repository is archived.
     # Example: false
