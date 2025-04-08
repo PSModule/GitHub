@@ -47,5 +47,34 @@
                 </TableRowEntries>
             </TableControl>
         </View>
+        <View>
+            <Name>GitHubLicenseListView</Name>
+            <ViewSelectedBy>
+                <TypeName>GitHubLicense</TypeName>
+            </ViewSelectedBy>
+            <ListControl>
+                <ListEntries>
+                    <ListEntry>
+                        <ListItems>
+                            <ListItem>
+                                <PropertyName>Key</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Name</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>SpdxId</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>ApiUrl</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>NodeID</PropertyName>
+                            </ListItem>
+                        </ListItems>
+                    </ListEntry>
+                </ListEntries>
+            </ListControl>
+        </View>
     </ViewDefinitions>
 </Configuration>
