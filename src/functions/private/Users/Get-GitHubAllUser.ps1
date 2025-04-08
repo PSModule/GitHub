@@ -15,10 +15,13 @@
 
         Get a list of users, starting with the user 'MariusStorhaug'.
 
+        .OUTPUTS
+        GitHubUser
+
         .LINK
         [List users](https://docs.github.com/rest/users/users#list-users)
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([GitHubUser])]
     [CmdletBinding()]
     param(
         # A user ID. Only return users with an ID greater than this ID.
@@ -56,7 +59,15 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            [GitHubUser]@{
+                Name         = $_.Response.login
+                ID           = $_.Response.id
+                NodeID       = $_.Response.node_id
+                AvatarUrl    = $_.Response.avatar_url
+                Url          = $_.Response.html_url
+                Type         = $_.Response.type
+                UserViewType = $_.Response.user_view_type
+            }
         }
     }
 

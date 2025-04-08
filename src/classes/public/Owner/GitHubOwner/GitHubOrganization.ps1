@@ -76,6 +76,6 @@
     }
 
     [string] ToString() {
-        return $this.Login
+        return $this.Name
     }
 }
