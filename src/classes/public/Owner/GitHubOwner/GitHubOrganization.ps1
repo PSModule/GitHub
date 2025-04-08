@@ -19,6 +19,98 @@
     # Example: org@example.com
     [string] $BillingEmail
 
+    # The default permission level members have for organization repositories.
+    # Example: read
+    [string] $DefaultRepositoryPermission
+
+    # Whether members can create repositories.
+    # Example: $true
+    [System.Nullable[bool]] $MembersCanCreateRepositories
+
+    # Whether two-factor authentication is required for members.
+    # Example: $true
+    [System.Nullable[bool]] $TwoFactorRequirementEnabled
+
+    # The type of repositories members can create.
+    # Example: all
+    [string] $MembersAllowedRepositoryCreationType
+
+    # Whether members can create public repositories.
+    # Example: $true
+    [System.Nullable[bool]] $MembersCanCreatePublicRepositories
+
+    # Whether members can create private repositories.
+    # Example: $true
+    [System.Nullable[bool]] $MembersCanCreatePrivateRepositories
+
+    # Whether members can create internal repositories.
+    # Example: $true
+    [System.Nullable[bool]] $MembersCanCreateInternalRepositories
+
+    # Whether members can invite collaborators to repositories.
+    # Example: $true
+    [System.Nullable[bool]] $MembersCanInviteCollaborators
+
+    # Whether members can create GitHub Pages sites.
+    # Example: $true
+    [System.Nullable[bool]] $MembersCanCreatePages
+
+    # Whether members can fork private repositories.
+    # Example: $false
+    [System.Nullable[bool]] $MembersCanForkPrivateRepositories
+
+    # Whether commit signoff is required on the web.
+    # Example: $true
+    [System.Nullable[bool]] $RequireWebCommitSignoff
+
+    # Whether deploy keys are enabled for all repositories.
+    # Example: $true
+    [System.Nullable[bool]] $DeployKeysEnabledForRepositories
+
+    # Whether members can create public GitHub Pages sites.
+    # Example: $true
+    [System.Nullable[bool]] $MembersCanCreatePublicPages
+
+    # Whether members can create private GitHub Pages sites.
+    # Example: $true
+    [System.Nullable[bool]] $MembersCanCreatePrivatePages
+
+    # Whether advanced security is enabled by default for new repositories.
+    # Example: $true
+    [System.Nullable[bool]] $AdvancedSecurityEnabledForNewRepositories
+
+    # Whether Dependabot alerts are enabled by default for new repositories.
+    # Example: $true
+    [System.Nullable[bool]] $DependabotAlertsEnabledForNewRepositories
+
+    # Whether Dependabot security updates are enabled by default for new repositories.
+    # Example: $true
+    [System.Nullable[bool]] $DependabotSecurityUpdatesEnabledForNewRepositories
+
+    # Whether the dependency graph is enabled by default for new repositories.
+    # Example: $true
+    [System.Nullable[bool]] $DependencyGraphEnabledForNewRepositories
+
+    # Whether secret scanning is enabled by default for new repositories.
+    # Example: $true
+    [System.Nullable[bool]] $SecretScanningEnabledForNewRepositories
+
+    # Whether push protection for secret scanning is enabled by default for new repositories.
+    # Example: $true
+    [System.Nullable[bool]] $SecretScanningPushProtectionEnabledForNewRepositories
+
+    # Whether a custom link is enabled for push protection in secret scanning.
+    # Example: $true
+    [System.Nullable[bool]] $SecretScanningPushProtectionCustomLinkEnabled
+
+    # The custom link used for push protection in secret scanning.
+    # Example: https://docs.example.com/secrets
+    [string] $SecretScanningPushProtectionCustomLink
+
+    # Whether secret scanning validity checks are enabled.
+    # Example: $true
+    [System.Nullable[bool]] $SecretScanningValidityChecksEnabled
+
     # The date and time when the organization was archived, if applicable.
     [System.Nullable[datetime]] $ArchivedAt
 
