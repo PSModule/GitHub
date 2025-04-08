@@ -7,10 +7,6 @@
     # Example: octocat/Hello-World
     [string] $FullName
 
-    # Indicates whether the repository is private.
-    # Example: false
-    [System.Nullable[bool]] $IsPrivate
-
     # The owner of the repository.
     # Example: octocat
     [GitHubOrganization] $Owner
@@ -67,9 +63,9 @@
     # Example: true
     [System.Nullable[bool]] $HasDiscussions
 
-    # The number of forks.
-    # Example: 9
-    [System.Nullable[uint]] $Forks
+    # Indicates whether the repository is private.
+    # Example: false
+    [System.Nullable[bool]] $IsPrivate
 
     # Indicates whether the repository is archived.
     # Example: false
@@ -79,6 +75,14 @@
     # Example: false
     [System.Nullable[bool]] $IsDisabled
 
+    # Indicates whether the repository acts as a template.
+    # Example: true
+    [System.Nullable[bool]] $IsTemplate
+
+    # Indicates whether the repository is a fork.
+    # Example: false
+    [System.Nullable[bool]] $IsFork
+
     # License information for the repository.
     # Example: 'MIT License', 'Mozilla Public License 2.0'
     [string] $License
@@ -86,10 +90,6 @@
     # Whether to allow forking this repository.
     # Example: true
     [System.Nullable[bool]] $AllowForking
-
-    # Indicates whether the repository acts as a template.
-    # Example: true
-    [System.Nullable[bool]] $IsTemplate
 
     # Whether to require contributors to sign off on web-based commits
     # Example: false
@@ -114,6 +114,10 @@
     # The number of watchers.
     # Example: 80
     [System.Nullable[uint]] $Watchers
+
+    # The number of forks.
+    # Example: 9
+    [System.Nullable[uint]] $Forks
 
     # The default branch of the repository.
     # Example: main
