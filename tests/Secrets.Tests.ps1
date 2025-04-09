@@ -113,7 +113,7 @@ Describe 'Secrets' {
                     Owner = $owner
                 }
                 LogGroup 'Organization' {
-                    $org = Get-GitHubOrganization -Organization $owner
+                    $org = Get-GitHubOrganization -Name $owner
                     Write-Host ($org | Format-List | Out-String)
                 }
             }
@@ -121,7 +121,7 @@ Describe 'Secrets' {
                 It 'Get-GitHubPublicKey - Action' {
                     $result = Get-GitHubPublicKey @scope
                     LogGroup 'PublicKey' {
-                        Write-Host "$($result | Select-Object * | Format-Table -AutoSize| Out-String)"
+                        Write-Host "$($result | Select-Object * | Format-Table -AutoSize | Out-String)"
                     }
                     $result | Should -Not -BeNullOrEmpty
                 }
