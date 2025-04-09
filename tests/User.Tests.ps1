@@ -51,7 +51,7 @@ Context 'User' {
             It 'Update-GitHubUser - Can set configuration on a user' {
                 $guid = (New-Guid).Guid
                 $user = Get-GitHubUser
-                { Update-GitHubUser -Name 'Octocat' } | Should -Not -Throw
+                { Update-GitHubUser -DisplayName 'Octocat' } | Should -Not -Throw
                 { Update-GitHubUser -Blog 'https://psmodule.io' } | Should -Not -Throw
                 { Update-GitHubUser -TwitterUsername 'PSModule' } | Should -Not -Throw
                 { Update-GitHubUser -Company 'PSModule' } | Should -Not -Throw
