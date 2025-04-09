@@ -12,13 +12,13 @@
     [string] $Url
 
     # The date and time the environment was created.
-    [datetime] $CreatedAt
+    [System.Nullable[datetime]] $CreatedAt
 
     # The date and time the environment was last updated.
-    [datetime] $UpdatedAt
+    [System.Nullable[datetime]] $UpdatedAt
 
     # Whether admins can bypass protection rules.
-    [bool] $CanAdminsBypass
+    [System.Nullable[bool]] $CanAdminsBypass
 
     # Protection rules associated with the environment.
     [object[]] $ProtectionRules
