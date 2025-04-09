@@ -29,9 +29,9 @@
     [OutputType([void])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
-        # The new name of the user.
+        # The display name of the user.
         [Parameter()]
-        [string] $Name,
+        [string] $DisplayName,
 
         # The publicly visible email address of the user.
         [Parameter()]
@@ -76,7 +76,7 @@
 
     process {
         $body = @{
-            name             = $Name
+            name             = $DisplayName
             email            = $Email
             blog             = $Blog
             twitter_username = $TwitterUsername

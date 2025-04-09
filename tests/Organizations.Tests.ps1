@@ -48,7 +48,7 @@ Describe 'Organizations' {
         if ($Type -eq 'GitHub Actions') {}
 
         It "Get-GitHubOrganization - Gets a specific organization 'PSModule'" {
-            $organization = Get-GitHubOrganization -Organization 'PSModule'
+            $organization = Get-GitHubOrganization -Name 'PSModule'
             LogGroup 'Organization' {
                 Write-Host ($organization | Format-Table | Out-String)
             }
@@ -63,7 +63,7 @@ Describe 'Organizations' {
         }
         if ($OwnerType -ne 'user') {
             It 'Get-GitHubOrganizationMember - Gets the members of a specific organization' {
-                $members = Get-GitHubOrganizationMember -Organization $owner
+                $members = Get-GitHubOrganizationMember -Name $owner
                 LogGroup 'Members' {
                     Write-Host ($members | Format-Table | Out-String)
                 }
@@ -80,21 +80,21 @@ Describe 'Organizations' {
 
         if ($OwnerType -eq 'organization' -and $Type -ne 'GitHub Actions') {
             It 'Update-GitHubOrganization - Sets the organization configuration' {
-                { Update-GitHubOrganization -Organization $owner -Company 'ABC' } | Should -Not -Throw
+                { Update-GitHubOrganization -Name $owner -Company 'ABC' } | Should -Not -Throw
                 {
                     $email = (New-Guid).Guid + '@psmodule.io'
-                    Update-GitHubOrganization -Organization $owner -BillingEmail $email
+                    Update-GitHubOrganization -Name $owner -BillingEmail $email
                 } | Should -Not -Throw
                 {
                     $email = (New-Guid).Guid + '@psmodule.io'
-                    Update-GitHubOrganization -Organization $owner -Email $email
+                    Update-GitHubOrganization -Name $owner -Email $email
                 } | Should -Not -Throw
-                { Update-GitHubOrganization -Organization $owner -TwitterUsername 'PSModule' } | Should -Not -Throw
-                { Update-GitHubOrganization -Organization $owner -Location 'USA' } | Should -Not -Throw
-                { Update-GitHubOrganization -Organization $owner -Description 'Test Organization' } | Should -Not -Throw
-                { Update-GitHubOrganization -Organization $owner -DefaultRepositoryPermission read } | Should -Not -Throw
-                { Update-GitHubOrganization -Organization $owner -MembersCanCreateRepositories $true } | Should -Not -Throw
-                { Update-GitHubOrganization -Organization $owner -Blog 'https://psmodule.io' } | Should -Not -Throw
+                { Update-GitHubOrganization -Name $owner -TwitterUsername 'PSModule' } | Should -Not -Throw
+                { Update-GitHubOrganization -Name $owner -Location 'USA' } | Should -Not -Throw
+                { Update-GitHubOrganization -Name $owner -Description 'Test Organization' } | Should -Not -Throw
+                { Update-GitHubOrganization -Name $owner -DefaultRepositoryPermission read } | Should -Not -Throw
+                { Update-GitHubOrganization -Name $owner -MembersCanCreateRepositories $true } | Should -Not -Throw
+                { Update-GitHubOrganization -Name $owner -Blog 'https://psmodule.io' } | Should -Not -Throw
             }
         }
 

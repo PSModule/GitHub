@@ -41,7 +41,7 @@ Context 'User' {
 
         # Tests for IAT UAT and PAT goes here
         It 'Get-GitHubUser - Get the specified user' {
-            { Get-GitHubUser -Username 'Octocat' } | Should -Not -Throw
+            { Get-GitHubUser -Name 'Octocat' } | Should -Not -Throw
         }
 
         if ($OwnerType -eq 'user') {
@@ -58,12 +58,12 @@ Context 'User' {
                 { Update-GitHubUser -Location 'USA' } | Should -Not -Throw
                 { Update-GitHubUser -Bio 'I love programming' } | Should -Not -Throw
                 $tmpUser = Get-GitHubUser
-                $tmpUser.name | Should -Be 'Octocat'
-                $tmpUser.blog | Should -Be 'https://psmodule.io'
-                $tmpUser.twitter_username | Should -Be 'PSModule'
-                $tmpUser.company | Should -Be 'PSModule'
-                $tmpUser.location | Should -Be 'USA'
-                $tmpUser.bio | Should -Be 'I love programming'
+                $tmpUser.DisplayName | Should -Be 'Octocat'
+                $tmpUser.Blog | Should -Be 'https://psmodule.io'
+                $tmpUser.TwitterUsername | Should -Be 'PSModule'
+                $tmpUser.Company | Should -Be 'PSModule'
+                $tmpUser.Location | Should -Be 'USA'
+                $tmpUser.Bio | Should -Be 'I love programming'
             }
             Context 'Email' {
                 It 'Get-GitHubUserEmail - Gets all email addresses for the authenticated user' {

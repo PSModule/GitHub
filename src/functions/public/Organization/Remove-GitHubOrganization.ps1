@@ -10,7 +10,7 @@
         regarding account deletion before using this endpoint.
 
         .EXAMPLE
-        Remove-GitHubOrganization -Organization 'GitHub'
+        Remove-GitHubOrganization -Name 'GitHub'
 
         Deletes the organization 'GitHub' and all its repositories.
 
