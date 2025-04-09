@@ -15,7 +15,7 @@
 [CmdletBinding()]
 param()
 
-Context 'User' {
+Describe 'Users' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 
     Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
