@@ -2,9 +2,6 @@
     # The key ID of the public key.
     [string] $Name
 
-    # The type of Public Key.
-    [string] $Type
-
     # The scope of the variable, organization, repository, or environment.
     [string] $Scope
 
@@ -33,10 +30,9 @@
 
     GitHubSecret([PSCustomObject]$Object, [string]$Owner, [string]$Repository, [string]$Environment) {
         $this.Name = $Object.name
-        $this.Type = $Object.type
-        $this.Owner = $Object.owner
-        $this.Repository = $Object.repository
-        $this.Environment = $Object.environment
+        $this.Owner = $Owner
+        $this.Repository = $Repository
+        $this.Environment = $Environment
         $this.CreatedAt = [datetime]$Object.created_at
         $this.UpdatedAt = [datetime]$Object.updated_at
         $this.Visibility = $Object.visibility
@@ -47,11 +43,11 @@
             }
         }
         #Set scope based on provided values in Owner, Repository, Environment
-        $this.Scope = if ($this.Owner -and $this.Repository -and $this.Environment) {
+        $this.Scope = if ($Owner -and $Repository -and $Environment) {
             'Environment'
-        } elseif ($this.Owner -and $this.Repository) {
+        } elseif ($Owner -and $Repository) {
             'Repository'
-        } elseif ($this.Owner) {
+        } elseif ($Owner) {
             'Organization'
         } else {
             'Unknown'

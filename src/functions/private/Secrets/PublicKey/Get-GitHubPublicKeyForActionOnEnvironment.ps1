@@ -67,9 +67,8 @@
             [GitHubPublicKey]::new($_.Response, 'actions', $Owner, $Repository, $Environment)
         }
     }
-}
 
-end {
-    Write-Debug "[$stackPath] - End"
-}
+    end {
+        Write-Debug "[$stackPath] - End"
+    }
 }

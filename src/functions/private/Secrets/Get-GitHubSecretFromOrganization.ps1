@@ -87,14 +87,7 @@ function Get-GitHubSecretFromOrganization {
         try {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 $_.Response.secrets | ForEach-Object {
-                    [GitHubSecret]@{
-                        Name       = $_.name
-                        CreatedAt  = $_.created_at
-                        UpdatedAt  = $_.updated_at
-                        Scope      = 'Organization'
-                        Owner      = $Owner
-                        Visibility = $_.visibility
-                    }
+                    [GitHubSecret]::new($_.Response, $Owner, $null, $null)
                 }
             }
         } catch {

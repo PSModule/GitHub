@@ -74,10 +74,6 @@
         [Parameter(Mandatory)]
         [string] $Value,
 
-        # # The type of secret, either 'actions' or 'codespaces'.
-        # [ValidateSet('actions', 'codespaces')]
-        # [string] $Type = 'actions',
-
         # The visibility of the secret when updating an organization secret.
         # Can be `private`, `selected`, or `all`.
         [Parameter(ParameterSetName = 'Organization')]
@@ -107,7 +103,6 @@
             Owner       = $Owner
             Repository  = $Repository
             Environment = $Environment
-            # Type        = $Type
             Context     = $Context
         }
         $publicKeyParams | Remove-HashtableEntry -NullOrEmptyValues
