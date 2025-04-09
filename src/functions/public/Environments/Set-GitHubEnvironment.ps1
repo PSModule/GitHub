@@ -225,7 +225,7 @@ filter Set-GitHubEnvironment {
 
         if ($PSCmdlet.ShouldProcess("Environment [$Owner/$Repository/$Name]", 'Set')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
-                [GitHubEnvironment]::new($_, $Owner, $Repository)
+                [GitHubEnvironment]::new($_.Response, $Owner, $Repository)
             }
         }
     }
