@@ -63,7 +63,7 @@ Describe 'Organizations' {
         }
         if ($OwnerType -ne 'user') {
             It 'Get-GitHubOrganizationMember - Gets the members of a specific organization' {
-                $members = Get-GitHubOrganizationMember -Name $owner
+                $members = Get-GitHubOrganizationMember -Organization $owner
                 LogGroup 'Members' {
                     Write-Host ($members | Format-Table | Out-String)
                 }
