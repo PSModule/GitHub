@@ -66,9 +66,9 @@ Describe 'Variables' {
                 }
             }
             LogGroup "Repository - [$repoName]" {
-                Write-Host ($repo | Format-List | Out-String)
-                Write-Host ($repo2 | Format-List | Out-String)
-                Write-Host ($repo3 | Format-List | Out-String)
+                Write-Host ($repo | Format-Table | Out-String)
+                Write-Host ($repo2 | Format-Table | Out-String)
+                Write-Host ($repo3 | Format-Table | Out-String)
             }
         }
 
