@@ -29,20 +29,32 @@
     # The ids of the repositories that the variable is visible to.
     [GitHubRepository[]] $SelectedRepositories
 
-    # Simple parameterless constructor
     GitHubSecret() {}
 
-    # Creates a object from a hashtable of key-vaule pairs.
-    GitHubSecret([hashtable]$Properties) {
-        foreach ($Property in $Properties.Keys) {
-            $this.$Property = $Properties.$Property
+    GitHubSecret([PSCustomObject]$Object, [string]$Owner, [string]$Repository, [string]$Environment) {
+        $this.Name = $Object.name
+        $this.Type = $Object.type
+        $this.Owner = $Object.owner
+        $this.Repository = $Object.repository
+        $this.Environment = $Object.environment
+        $this.CreatedAt = [datetime]$Object.created_at
+        $this.UpdatedAt = [datetime]$Object.updated_at
+        $this.Visibility = $Object.visibility
+        $this.SelectedRepositories = @()
+        if ($Object.visibility -eq 'selected') {
+            foreach ($repo in $Object.selected_repositories) {
+                $this.SelectedRepositories += [GitHubRepository]::new($repo)
+            }
         }
-    }
-
-    # Creates a object from a PSCustomObject.
-    GitHubSecret([PSCustomObject]$Object) {
-        $Object.PSObject.Properties | ForEach-Object {
-            $this.($_.Name) = $_.Value
+        #Set scope based on provided values in Owner, Repository, Environment
+        $this.Scope = if ($this.Owner -and $this.Repository -and $this.Environment) {
+            'Environment'
+        } elseif ($this.Owner -and $this.Repository) {
+            'Repository'
+        } elseif ($this.Owner) {
+            'Organization'
+        } else {
+            'Unknown'
         }
     }
 }

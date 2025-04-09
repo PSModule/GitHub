@@ -57,12 +57,7 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            [GitHubPublicKey]@{
-                ID    = $_.Response.key_id
-                Key   = $_.Response.key
-                Type  = 'actions'
-                Owner = $Owner
-            }
+            [GitHubPublicKey]::new($_.Response, 'actions', $Owner, $null, $null)
         }
     }
 

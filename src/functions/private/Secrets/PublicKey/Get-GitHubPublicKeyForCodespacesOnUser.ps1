@@ -52,12 +52,7 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            [GitHubPublicKey]@{
-                ID    = $_.Response.key_id
-                Key   = $_.Response.key
-                Type  = 'codespaces'
-                Owner = $Context.UserName
-            }
+            [GitHubPublicKey]::new($_.Response, 'codespaces', $Context.UserName, $null, $null)
         }
     }
 
