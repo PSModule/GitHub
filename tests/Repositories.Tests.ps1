@@ -41,16 +41,26 @@ Describe 'Repositories' {
         }
 
         AfterAll {
-            Get-GitHubRepository -Owner $owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+            switch ($OwnerType) {
+                'user' {
+                    Get-GitHubRepository -Affiliation owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                }
+                'organization' {
+                    Get-GitHubRepository -Owner $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                }
+            }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
         }
 
         # Tests for IAT UAT and PAT goes here
         It 'New-GitHubRepository - Creates a new repository' -Skip:($OwnerType -eq 'repository') {
-            if ($OwnerType -eq 'user') {
-                New-GitHubRepository -Name $repoName -AllowSquashMerge
-            } else {
-                New-GitHubRepository -Owner $Owner -Name $repoName -AllowSquashMerge
+            switch ($OwnerType) {
+                'user' {
+                    New-GitHubRepository -Name $repoName -AllowSquashMerge
+                }
+                'organization' {
+                    New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
+                }
             }
         }
         It "Get-GitHubRepository - Gets the authenticated user's repositories" -Skip:($OwnerType -ne 'user') {

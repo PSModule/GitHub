@@ -35,20 +35,22 @@
     # Information about the associated workflow run.
     [PSCustomObject] $WorkflowRun
 
-    # Simple parameterless constructor.
     GitHubArtifact() {}
 
-    # Creates an object from a hashtable of key-value pairs.
-    GitHubArtifact([hashtable]$Properties) {
-        foreach ($Property in $Properties.Keys) {
-            $this.$Property = $Properties.$Property
-        }
-    }
-
-    # Creates an object from a PSCustomObject.
-    GitHubArtifact([PSCustomObject]$Object) {
-        $Object.PSObject.Properties | ForEach-Object {
-            $this.($_.Name) = $_.Value
-        }
+    GitHubArtifact([PSCustomObject]$Object, [string]$Owner, [string]$Repository) {
+        $this.ID = $_.Response.id
+        $this.NodeID = $_.Response.node_id
+        $this.Name = $_.Response.name
+        $this.Owner = $Owner
+        $this.Repository = $Repository
+        $this.Size = $_.Response.size_in_bytes
+        $this.Url = $_.Response.url
+        $this.ArchiveDownloadUrl = $_.Response.archive_download_url
+        $this.Expired = $_.Response.expired
+        $this.Digest = $_.Response.digest
+        $this.CreatedAt = $_.Response.created_at
+        $this.UpdatedAt = $_.Response.updated_at
+        $this.ExpiresAt = $_.Response.expires_at
+        $this.WorkflowRun = $_.Response.workflow_run
     }
 }

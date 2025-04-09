@@ -25,4 +25,22 @@
         $this.Triage = $Object.triage
         $this.Pull = $Object.pull
     }
+
+    # Output the highest permission level as a string.
+    # The order of permissions is: Admin > Maintain > Push > Triage > Pull
+    [string] ToString() {
+        if ($this.Admin) {
+            return 'Admin'
+        } elseif ($this.Maintain) {
+            return 'Maintain'
+        } elseif ($this.Push) {
+            return 'Push'
+        } elseif ($this.Triage) {
+            return 'Triage'
+        } elseif ($this.Pull) {
+            return 'Pull'
+        } else {
+            return 'No Access'
+        }
+    }
 }

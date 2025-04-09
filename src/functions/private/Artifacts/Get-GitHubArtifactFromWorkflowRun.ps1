@@ -100,22 +100,7 @@ function Get-GitHubArtifactFromWorkflowRun {
         }
 
         $artifacts | ForEach-Object {
-            [GitHubArtifact]@{
-                ID                 = $_.id
-                NodeID             = $_.node_id
-                Name               = $_.name
-                Owner              = $Owner
-                Repository         = $Repository
-                Size               = $_.size_in_bytes
-                Url                = $_.url
-                ArchiveDownloadUrl = $_.archive_download_url
-                Expired            = $_.expired
-                Digest             = $_.digest
-                CreatedAt          = $_.created_at
-                UpdatedAt          = $_.updated_at
-                ExpiresAt          = $_.expires_at
-                WorkflowRun        = $_.workflow_run
-            }
+            [GitHubArtifact]::new($_, $Owner, $Repository)
         }
     }
 
