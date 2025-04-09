@@ -21,9 +21,6 @@
         .OUTPUTS
         GitHubWorkflow
 
-        .NOTES
-        A GitHubWorkflow object.
-
         .LINK
         [List repository workflows](https://docs.github.com/rest/actions/workflows#list-repository-workflows)
     #>
@@ -78,19 +75,7 @@
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             Write-Output $_.Response.workflows | Where-Object { $_.name -like $Name } | ForEach-Object {
-                [GitHubWorkflow]@{
-                    ID         = $_.id
-                    NodeID     = $_.node_id
-                    Name       = $_.name
-                    Owner      = $Owner
-                    Repository = $Repository
-                    Path       = $_.path
-                    State      = $_.state
-                    CreatedAt  = $_.created_at
-                    UpdatedAt  = $_.updated_at
-                    Url        = $_.html_url
-                    BadgeUrl   = $_.badge_url
-                }
+                [GitHubWorkflow]::new($_, $Owner, $Repository)
             }
         }
     }

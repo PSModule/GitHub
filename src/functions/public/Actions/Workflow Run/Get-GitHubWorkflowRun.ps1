@@ -65,7 +65,8 @@
         # The ID of the workflow. You can also pass the workflow filename as a string.
         [Parameter(
             Mandatory,
-            ParameterSetName = 'ByID'
+            ParameterSetName = 'ByID',
+            ValueFromPipelineByPropertyName
         )]
         [Alias('DatabaseID', 'WorkflowID')]
         [string] $ID,

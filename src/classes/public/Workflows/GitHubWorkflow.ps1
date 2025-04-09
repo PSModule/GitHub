@@ -15,13 +15,13 @@
     [string] $State
 
     # The timestamp when the workflow was created.
-    [datetime] $CreatedAt
+    [System.Nullable[datetime]] $CreatedAt
 
     # The timestamp when the workflow was last updated.
-    [datetime] $UpdatedAt
+    [System.Nullable[datetime]] $UpdatedAt
 
     # The timestamp when the workflow was last updated.
-    [datetime] $DeletedAt
+    [System.Nullable[datetime]] $DeletedAt
 
     # The GitHub URL for viewing the workflow.
     [string] $Url
@@ -29,21 +29,20 @@
     # The badge URL for this workflow's status.
     [string] $BadgeUrl
 
-    # Simple parameterless constructor.
-    GitHubWorkflow() {
-    }
+    GitHubWorkflow() {}
 
-    # Creates an object from a hashtable of key-value pairs.
-    GitHubWorkflow([hashtable] $Properties) {
-        foreach ($Property in $Properties.Keys) {
-            $this.$Property = $Properties.$Property
-        }
-    }
-
-    # Creates an object from a PSCustomObject.
-    GitHubWorkflow([PSCustomObject] $Object) {
-        $Object.PSObject.Properties | ForEach-Object {
-            $this.($_.Name) = $_.Value
-        }
+    GitHubWorkflow([PSCustomObject] $Object, [string] $Owner, [string] $Repository) {
+        $this.ID = $Object.id
+        $this.NodeID = $Object.node_id
+        $this.Name = $Object.name
+        $this.Owner = $Owner
+        $this.Repository = $Repository
+        $this.Path = $Object.path
+        $this.State = $Object.state
+        $this.CreatedAt = $Object.created_at
+        $this.UpdatedAt = $Object.updated_at
+        $this.DeletedAt = $Object.deleted_at
+        $this.Url = $Object.html_url
+        $this.BadgeUrl = $Object.badge_url
     }
 }

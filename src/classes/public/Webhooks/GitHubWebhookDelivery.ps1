@@ -6,13 +6,13 @@
     [string] $GUID
 
     # Time when the delivery was delivered.
-    [Nullable[datetime]] $DeliveredAt
+    [System.Nullable[datetime]] $DeliveredAt
 
     # Whether the delivery is a redelivery.
-    [Nullable[boolean]] $Redelivery
+    [System.Nullable[boolean]] $Redelivery
 
     # Time spent delivering, in seconds.
-    [Nullable[double]] $Duration
+    [System.Nullable[double]] $Duration
 
     # Description of the status of the attempted delivery
     [string] $Status
@@ -27,16 +27,16 @@
     [string] $Action
 
     # The id of the GitHub App installation associated with this event.
-    [Nullable[uint64]] $InstallationID
+    [System.Nullable[uint64]] $InstallationID
 
     # The id of the repository associated with this event.
-    [Nullable[uint64]] $RepositoryID
+    [System.Nullable[uint64]] $RepositoryID
 
     # Time when the webhook delivery was throttled.
-    [Nullable[datetime]] $ThrottledAt
+    [System.Nullable[datetime]] $ThrottledAt
 
     # The URL target of the delivery.
-    [string] $URL
+    [string] $Url
 
     # The request for the delivery.
     [object] $Request
@@ -45,22 +45,26 @@
     [object] $Response
 
     # Number of attempts to deliver the webhook.
-    [Nullable[int]] $Attempts
+    [System.Nullable[int]] $Attempts
 
-    # Simple parameterless constructor
     GitHubWebhookDelivery() {}
 
-    # Creates a context object from a hashtable of key-vaule pairs.
-    GitHubWebhookDelivery([hashtable]$Properties) {
-        foreach ($Property in $Properties.Keys) {
-            $this.$Property = $Properties.$Property
-        }
-    }
-
-    # Creates a context object from a PSCustomObject.
     GitHubWebhookDelivery([PSCustomObject]$Object) {
-        $Object.PSObject.Properties | ForEach-Object {
-            $this.($_.Name) = $_.Value
-        }
+        $this.ID = $Object.id
+        $this.GUID = $Object.guid
+        $this.DeliveredAt = $Object.delivered_at
+        $this.Redelivery = $Object.redelivery
+        $this.Duration = $Object.duration
+        $this.Status = $Object.status
+        $this.StatusCode = $Object.status_code
+        $this.Event = $Object.event
+        $this.Action = $Object.action
+        $this.InstallationID = $Object.installation.id
+        $this.RepositoryID = $Object.repository.id
+        $this.ThrottledAt = $Object.throttled_at
+        $this.Url = $Object.url
+        $this.Request = $Object.request
+        $this.Response = $Object.response
+
     }
 }

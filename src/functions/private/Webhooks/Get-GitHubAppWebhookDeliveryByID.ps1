@@ -26,7 +26,6 @@
     param(
         # The ID of the delivery.
         [Parameter(Mandatory)]
-        [Alias('delivery_id', 'DeliveryID')]
         [string] $ID,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -48,23 +47,7 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            [GitHubWebhookDelivery]@{
-                ID             = $_.id
-                GUID           = $_.guid
-                DeliveredAt    = $_.delivered_at
-                Redelivery     = $_.redelivery
-                Duration       = $_.duration
-                Status         = $_.status
-                StatusCode     = $_.status_code
-                Event          = $_.event
-                Action         = $_.action
-                InstallationID = $_.installation.id
-                RepositoryID   = $_.repository.id
-                ThrottledAt    = $_.throttled_at
-                URL            = $_.url
-                Request        = $_.request
-                Response       = $_.response
-            }
+            [GitHubWebhookDelivery]::new($_.Response)
         }
     }
 

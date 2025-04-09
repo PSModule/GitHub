@@ -23,6 +23,9 @@
         GitHubWebhookDelivery
 
         .LINK
+        https://psmodule.io/GitHub/Functions/Apps/Webhooks/Get-GitHubAppWebhookDelivery/
+
+        .LINK
         [Get a delivery for an app webhook](https://docs.github.com/rest/apps/webhooks#get-a-delivery-for-an-app-webhook)
 
         .LINK
@@ -36,7 +39,6 @@
             Mandatory,
             ParameterSetName = 'ByID'
         )]
-        [Alias('delivery_id', 'DeliveryID')]
         [string] $ID,
 
         # Only the ones to redeliver.
@@ -69,6 +71,7 @@
     }
 
     process {
+        Write-Debug "ParameterSetName: [$($PSCmdlet.ParameterSetName)]"
         switch ($PSCmdlet.ParameterSetName) {
             'ByID' {
                 Write-Debug "ByID: [$ID]"

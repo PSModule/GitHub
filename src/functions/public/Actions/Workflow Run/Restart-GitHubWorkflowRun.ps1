@@ -9,7 +9,10 @@
         .EXAMPLE
         Start-GitHubWorkflowReRun -Owner 'octocat' -Repository 'Hello-World' -ID 123456789
 
-        .NOTES
+        .INPUTS
+        GitHubWorkflowRun
+
+        .LINK
         [Re-run a workflow](https://docs.github.com/rest/actions/workflow-runs#re-run-a-workflow)
     #>
     [CmdletBinding(SupportsShouldProcess)]

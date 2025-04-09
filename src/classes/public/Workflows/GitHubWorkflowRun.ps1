@@ -91,38 +91,6 @@
     # Example: "2023-01-01T12:01:00Z"
     [string] $RunStartedAt
 
-    # The URL to the jobs for the workflow run.
-    # Example: "https://api.github.com/repos/github/hello-world/actions/runs/5/jobs"
-    [string] $JobsUrl
-
-    # The URL to download the logs for the workflow run.
-    # Example: "https://api.github.com/repos/github/hello-world/actions/runs/5/logs"
-    [string] $LogsUrl
-
-    # The URL to the associated check suite.
-    # Example: "https://api.github.com/repos/github/hello-world/check-suites/12"
-    [string] $CheckSuiteUrl
-
-    # The URL to the artifacts for the workflow run.
-    # Example: "https://api.github.com/repos/github/hello-world/actions/runs/5/rerun/artifacts"
-    [string] $ArtifactsUrl
-
-    # The URL to cancel the workflow run.
-    # Example: "https://api.github.com/repos/github/hello-world/actions/runs/5/cancel"
-    [string] $CancelUrl
-
-    # The URL to rerun the workflow run.
-    # Example: "https://api.github.com/repos/github/hello-world/actions/runs/5/rerun"
-    [string] $RerunUrl
-
-    # The URL to the previous attempted run of this workflow, if one exists.
-    # Example: "https://api.github.com/repos/github/hello-world/actions/runs/5/attempts/3"
-    [string] $PreviousAttemptUrl
-
-    # The URL to the workflow definition.
-    # Example: "https://api.github.com/repos/github/hello-world/actions/workflows/main.yaml"
-    [string] $WorkflowUrl
-
     # The head commit details.
     # Example: (nullable-simple-commit object)
     [PSCustomObject] $HeadCommit
@@ -135,22 +103,35 @@
     # Example: "Simple Workflow"
     [string] $DisplayTitle
 
+    GitHubWorkflowRun() {}
 
-    # Simple parameterless constructor.
-    GitHubWorkflowRun() {
-    }
-
-    # Creates an object from a hashtable of key-value pairs.
-    GitHubWorkflowRun([hashtable] $Properties) {
-        foreach ($Property in $Properties.Keys) {
-            $this.$Property = $Properties.$Property
-        }
-    }
-
-    # Creates an object from a PSCustomObject.
     GitHubWorkflowRun([PSCustomObject] $Object) {
-        $Object.PSObject.Properties | ForEach-Object {
-            $this.($_.Name) = $_.Value
-        }
+        $this.ID = $_.id
+        $this.Name = $_.name
+        $this.Owner = [GitHubOwner]::new($Object.repository.owner)
+        $this.Repository = [GitHubRepository]::new($Object.repository)
+        $this.NodeID = $_.node_id
+        $this.CheckSuiteID = $_.check_suite_id
+        $this.CheckSuiteNodeID = $_.check_suite_node_id
+        $this.HeadBranch = $_.head_branch
+        $this.HeadSha = $_.head_sha
+        $this.Path = $_.path
+        $this.RunNumber = $_.run_number
+        $this.RunAttempt = $_.run_attempt
+        $this.ReferencedWorkflows = $_.referenced_workflows
+        $this.Event = $_.event
+        $this.Status = $_.status
+        $this.Conclusion = $_.conclusion
+        $this.WorkflowID = $_.workflow_id
+        $this.Url = $_.html_url
+        $this.PullRequests = $_.pull_requests
+        $this.CreatedAt = $_.created_at
+        $this.UpdatedAt = $_.updated_at
+        $this.RunStartedAt = $_.run_started_at
+        $this.Actor = [GitHubUser]::new($_.actor)
+        $this.TriggeringActor = [GitHubUser]::new($_.triggering_actor)
+        $this.HeadCommit = $_.head_commit
+        $this.HeadRepository = [GitHubRepository]::new($_.head_repository)
+        $this.DisplayTitle = $_.display_title
     }
 }

@@ -1,7 +1,7 @@
 ﻿filter Get-GitHubWorkflowRunByRepo {
     <#
         .SYNOPSIS
-        List workflow runs for a repository
+        List workflow runs for a repository.
 
         .DESCRIPTION
         Lists all workflow runs for a repository. You can use parameters to narrow the list of results. For more information about using parameters,
@@ -21,9 +21,13 @@
 
         Lists all workflow runs for a repository with the specified actor, branch, event, and status.
 
-        .NOTES
+        .OUTPUTS
+        GitHubWorkflowRun
+
+        .LINK
         [List workflow runs for a repository](https://docs.github.com/rest/actions/workflow-runs#list-workflow-runs-for-a-repository)
     #>
+    [OutputType([GitHubWorkflowRun])]
     [CmdletBinding()]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidAssignmentToAutomaticVariable', 'Event',
@@ -115,44 +119,7 @@
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             $_.Response.workflow_runs | ForEach-Object {
-                [GitHubWorkflowRun]@{
-                    ID                  = $_.id
-                    Name                = $_.name
-                    Owner               = $Owner
-                    Repository          = $Repository
-                    NodeID              = $_.node_id
-                    CheckSuiteID        = $_.check_suite_id
-                    CheckSuiteNodeID    = $_.check_suite_node_id
-                    HeadBranch          = $_.head_branch
-                    HeadSha             = $_.head_sha
-                    Path                = $_.path
-                    RunNumber           = $_.run_number
-                    RunAttempt          = $_.run_attempt
-                    ReferencedWorkflows = $_.referenced_workflows
-                    Event               = $_.event
-                    Status              = $_.status
-                    Conclusion          = $_.conclusion
-                    WorkflowID          = $_.workflow_id
-                    Url                 = $_.url
-                    HtmlUrl             = $_.html_url
-                    PullRequests        = $_.pull_requests
-                    CreatedAt           = $_.created_at
-                    UpdatedAt           = $_.updated_at
-                    Actor               = $_.actor
-                    TriggeringActor     = $_.triggering_actor
-                    RunStartedAt        = $_.run_started_at
-                    JobsUrl             = $_.jobs_url
-                    LogsUrl             = $_.logs_url
-                    CheckSuiteUrl       = $_.check_suite_url
-                    ArtifactsUrl        = $_.artifacts_url
-                    CancelUrl           = $_.cancel_url
-                    RerunUrl            = $_.rerun_url
-                    PreviousAttemptUrl  = $_.previous_attempt_url
-                    WorkflowUrl         = $_.workflow_url
-                    HeadCommit          = $_.head_commit
-                    HeadRepository      = $_.head_repository
-                    DisplayTitle        = $_.display_title
-                }
+                [GitHubWorkflowRun]::new($_, $Owner, $Repository)
             }
         }
     }

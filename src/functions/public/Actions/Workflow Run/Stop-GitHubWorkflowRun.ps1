@@ -9,9 +9,12 @@
         .EXAMPLE
         Stop-GitHubWorkflowRun -Owner 'octocat' -Repository 'Hello-World' -ID 123456789
 
-        Cancels the workflow run with the ID 123456789 from the 'Hello-World' repository owned by 'octocat'
+        Cancels the workflow run with the ID 123456789 from the 'Hello-World' repository owned by 'octocat'.
 
-        .NOTES
+        .INPUTS
+        GitHubWorkflowRun
+
+        .LINK
         [Cancel a workflow run](https://docs.github.com/rest/actions/workflow-runs#cancel-a-workflow-run)
     #>
     [CmdletBinding(SupportsShouldProcess)]
