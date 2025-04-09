@@ -98,25 +98,23 @@ Describe 'Organizations' {
             }
         }
 
-        if ($Owner -in 'psmodule-test-org', 'psmodule-test-org2') {
-            Context 'Invitations' {
-                It 'New-GitHubOrganizationInvitation - Invites a user to an organization' {
-                    {
-                        $email = (New-Guid).Guid + '@psmodule.io'
-                        New-GitHubOrganizationInvitation -Organization $owner -Email $email -Role 'admin'
-                    } | Should -Not -Throw
-                }
-                It 'Get-GitHubOrganizationPendingInvitation - Gets the pending invitations for a specific organization' {
-                    { Get-GitHubOrganizationPendingInvitation -Organization $owner } | Should -Not -Throw
-                    { Get-GitHubOrganizationPendingInvitation -Organization $owner -Role 'admin' } | Should -Not -Throw
-                    { Get-GitHubOrganizationPendingInvitation -Organization $owner -InvitationSource 'member' } | Should -Not -Throw
-                }
-                It 'Remove-GitHubOrganizationInvitation - Removes a user invitation from an organization' {
-                    {
-                        $invitation = Get-GitHubOrganizationPendingInvitation -Organization $owner | Select-Object -First 1
-                        Remove-GitHubOrganizationInvitation -Organization $owner -ID $invitation.id
-                    } | Should -Not -Throw
-                }
+        Context 'Invitations' -Skip:($Owner -notin 'psmodule-test-org', 'psmodule-test-org2') {
+            It 'New-GitHubOrganizationInvitation - Invites a user to an organization' {
+                {
+                    $email = (New-Guid).Guid + '@psmodule.io'
+                    New-GitHubOrganizationInvitation -Organization $owner -Email $email -Role 'admin'
+                } | Should -Not -Throw
+            }
+            It 'Get-GitHubOrganizationPendingInvitation - Gets the pending invitations for a specific organization' {
+                { Get-GitHubOrganizationPendingInvitation -Organization $owner } | Should -Not -Throw
+                { Get-GitHubOrganizationPendingInvitation -Organization $owner -Role 'admin' } | Should -Not -Throw
+                { Get-GitHubOrganizationPendingInvitation -Organization $owner -InvitationSource 'member' } | Should -Not -Throw
+            }
+            It 'Remove-GitHubOrganizationInvitation - Removes a user invitation from an organization' {
+                {
+                    $invitation = Get-GitHubOrganizationPendingInvitation -Organization $owner | Select-Object -First 1
+                    Remove-GitHubOrganizationInvitation -Organization $owner -ID $invitation.id
+                } | Should -Not -Throw
             }
         }
     }
