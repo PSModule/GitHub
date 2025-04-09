@@ -119,7 +119,7 @@
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             $_.Response.workflow_runs | ForEach-Object {
-                [GitHubWorkflowRun]::new($_, $Owner, $Repository)
+                [GitHubWorkflowRun]::new($_)
             }
         }
     }
