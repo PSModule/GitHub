@@ -54,7 +54,7 @@ filter Get-GitHubEnvironment {
         Lists all environments available in the "EnvironmentTest" repository owned by "PSModule".
 
         .OUTPUTS
-        PSCustomObject
+        GitHubEnvironment[]
 
         .NOTES
         Returns details of a GitHub environment or a list of environments for a repository.
@@ -62,7 +62,7 @@ filter Get-GitHubEnvironment {
         .LINK
         https://psmodule.io/GitHub/Functions/Environments/Get-GitHubEnvironment/
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([GitHubEnvironment[]])]
     [CmdletBinding()]
     param(
         # The name of the organization.

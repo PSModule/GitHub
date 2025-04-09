@@ -26,20 +26,19 @@
     # Deployment branch policy details.
     [object] $DeploymentBranchPolicy
 
-    # Simple parameterless constructor
     GitHubEnvironment() {}
 
-    # Constructor that initializes the class from a hashtable
-    GitHubEnvironment([hashtable]$Properties) {
-        foreach ($Property in $Properties.Keys) {
-            $this.$Property = $Properties.$Property
-        }
-    }
-
-    # Constructor that initializes the class from a PSCustomObject
-    GitHubEnvironment([PSCustomObject]$Object) {
-        $Object.PSObject.Properties | ForEach-Object {
-            $this.($_.Name) = $_.Value
-        }
+    GitHubEnvironment([PSCustomObject]$Object, [string]$Owner, [string]$Repository) {
+        $this.ID = $Object.id
+        $this.NodeID = $Object.node_id
+        $this.Name = $Object.name
+        $this.Url = $Object.html_url
+        $this.Owner = $Owner
+        $this.Repository = $Repository
+        $this.CreatedAt = $Object.created_at
+        $this.UpdatedAt = $Object.updated_at
+        $this.CanAdminsBypass = $Object.can_admins_bypass
+        $this.ProtectionRules = $Object.protection_rules
+        $this.DeploymentBranchPolicy = $Object.deployment_branch_policy
     }
 }

@@ -54,7 +54,14 @@ Describe 'Environments' {
         }
 
         AfterAll {
-            Get-GitHubRepository -Owner $owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+            switch ($OwnerType) {
+                'user' {
+                    Get-GitHubRepository -Affiliation owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                }
+                'organization' {
+                    Get-GitHubRepository -Owner $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                }
+            }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
         }
 

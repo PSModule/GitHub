@@ -88,21 +88,7 @@ filter Get-GitHubEnvironmentByName {
         }
         try {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response | ForEach-Object {
-                    [GitHubEnvironment]@{
-                        Name                   = $_.name
-                        ID                     = $_.id
-                        NodeID                 = $_.node_id
-                        Url                    = $_.html_url
-                        Owner                  = $Owner
-                        Repository             = $Repository
-                        CreatedAt              = $_.created_at
-                        UpdatedAt              = $_.updated_at
-                        CanAdminsBypass        = $_.can_admins_bypass
-                        ProtectionRules        = $_.protection_rules
-                        DeploymentBranchPolicy = $_.deployment_branch_policy
-                    }
-                }
+                [GitHubEnvironment]::new($_.Response, $Owner, $Repository)
             }
         } catch {
             return
