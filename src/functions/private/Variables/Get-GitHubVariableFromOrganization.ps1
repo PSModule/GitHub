@@ -90,15 +90,7 @@ function Get-GitHubVariableFromOrganization {
         try {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 $_.Response.variables | ForEach-Object {
-                    [GitHubVariable]@{
-                        Name       = $_.name
-                        Value      = $_.value
-                        CreatedAt  = $_.created_at
-                        UpdatedAt  = $_.updated_at
-                        Scope      = 'Organization'
-                        Owner      = $Owner
-                        Visibility = $_.visibility
-                    }
+                    [GitHubVariable]::new($_, $Owner, $null, $null, $null)
                 }
             }
         } catch {

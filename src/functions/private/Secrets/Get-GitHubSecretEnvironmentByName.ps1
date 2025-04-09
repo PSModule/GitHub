@@ -69,7 +69,7 @@ function Get-GitHubSecretEnvironmentByName {
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            [GitHubSecret]::new($_.Response, $Owner, $Repository, $Environment)
+            [GitHubSecret]::new($_.Response, $Owner, $Repository, $Environment, $null)
         }
     }
 

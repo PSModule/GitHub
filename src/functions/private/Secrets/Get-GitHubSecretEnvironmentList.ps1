@@ -72,7 +72,7 @@ function Get-GitHubSecretEnvironmentList {
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             $_.Response.secrets | ForEach-Object {
-                [GitHubSecret]::new($_, $Owner, $Repository, $Environment)
+                [GitHubSecret]::new($_, $Owner, $Repository, $Environment, $null)
             }
         }
     }

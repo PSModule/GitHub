@@ -113,7 +113,7 @@ function Get-GitHubVariable {
         Retrieves all variables available in the 'staging' environment within the repository.
 
         .OUTPUTS
-        GitHubVariable
+        GitHubVariable[]
 
         .NOTES
         An object or array of objects representing the GitHub variable, containing Name, Value, Owner,
@@ -122,7 +122,7 @@ function Get-GitHubVariable {
         .LINK
         https://psmodule.io/GitHub/Functions/Variables/Get-GitHubVariable
     #>
-    [OutputType([GitHubVariable])]
+    [OutputType([GitHubVariable[]])]
     [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.

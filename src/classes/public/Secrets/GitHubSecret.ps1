@@ -28,20 +28,15 @@
 
     GitHubSecret() {}
 
-    GitHubSecret([PSCustomObject]$Object, [string]$Owner, [string]$Repository, [string]$Environment) {
+    GitHubSecret([PSCustomObject]$Object, [string]$Owner, [string]$Repository, [string]$Environment, [GitHubRepository[]]$SelectedRepositories) {
         $this.Name = $Object.name
         $this.Owner = $Owner
         $this.Repository = $Repository
         $this.Environment = $Environment
-        $this.CreatedAt = [datetime]$Object.created_at
-        $this.UpdatedAt = [datetime]$Object.updated_at
+        $this.CreatedAt = $Object.created_at
+        $this.UpdatedAt = $Object.updated_at
         $this.Visibility = $Object.visibility
-        $this.SelectedRepositories = @()
-        if ($Object.visibility -eq 'selected') {
-            foreach ($repo in $Object.selected_repositories) {
-                $this.SelectedRepositories += [GitHubRepository]::new($repo)
-            }
-        }
+        $this.SelectedRepositories = $SelectedRepositories
         #Set scope based on provided values in Owner, Repository, Environment
         $this.Scope = if ($Owner -and $Repository -and $Environment) {
             'Environment'

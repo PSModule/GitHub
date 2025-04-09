@@ -74,16 +74,7 @@ function Get-GitHubVariableEnvironmentList {
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             $_.Response.variables | ForEach-Object {
-                [GitHubVariable]@{
-                    Name        = $_.name
-                    Value       = $_.value
-                    CreatedAt   = $_.created_at
-                    UpdatedAt   = $_.updated_at
-                    Scope       = 'Environment'
-                    Owner       = $Owner
-                    Repository  = $Repository
-                    Environment = $Environment
-                }
+                [GitHubVariable]::new($_, $Owner, $Repository, $Environment, $null)
             }
         }
     }

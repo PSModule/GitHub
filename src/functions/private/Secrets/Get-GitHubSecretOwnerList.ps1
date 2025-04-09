@@ -58,15 +58,7 @@ function Get-GitHubSecretOwnerList {
                 if ($_.visibility -eq 'selected') {
                     $selectedRepositories = Get-GitHubSecretSelectedRepository -Owner $Owner -Name $_.name -Context $Context
                 }
-                [GitHubSecret]@{
-                    Name                 = $_.name
-                    CreatedAt            = $_.created_at
-                    UpdatedAt            = $_.updated_at
-                    Scope                = 'Organization'
-                    Owner                = $Owner
-                    Visibility           = $_.visibility
-                    SelectedRepositories = $selectedRepositories
-                }
+                [GitHubSecret]::new($_, $Owner, $null, $null, $selectedRepositories)
             }
         }
     }

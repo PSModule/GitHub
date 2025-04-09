@@ -40,9 +40,25 @@
     }
 
     # Creates a object from a PSCustomObject.
-    GitHubVariable([PSCustomObject]$Object) {
-        $Object.PSObject.Properties | ForEach-Object {
-            $this.($_.Name) = $_.Value
+    GitHubVariable([PSCustomObject]$Object, [string]$Owner, [string]$Repository, [string]$Environment, [GitHubRepository[]]$SelectedRepositories) {
+        $this.Name = $Object.name
+        $this.Value = $Object.value
+        $this.Owner = $Owner
+        $this.Repository = $Repository
+        $this.Environment = $Environment
+        $this.CreatedAt = $Object.created_at
+        $this.UpdatedAt = $Object.updated_at
+        $this.Visibility = $Object.visibility
+        $this.SelectedRepositories = $SelectedRepositories
+        #Set scope based on provided values in Owner, Repository, Environment
+        $this.Scope = if ($Owner -and $Repository -and $Environment) {
+            'Environment'
+        } elseif ($Owner -and $Repository) {
+            'Repository'
+        } elseif ($Owner) {
+            'Organization'
+        } else {
+            'Unknown'
         }
     }
 }
