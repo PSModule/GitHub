@@ -38,19 +38,19 @@
     GitHubArtifact() {}
 
     GitHubArtifact([PSCustomObject]$Object, [string]$Owner, [string]$Repository) {
-        $this.ID = $_.Response.id
-        $this.NodeID = $_.Response.node_id
-        $this.Name = $_.Response.name
+        $this.ID = $Object.id
+        $this.NodeID = $Object.node_id
+        $this.Name = $Object.name
         $this.Owner = $Owner
         $this.Repository = $Repository
-        $this.Size = $_.Response.size_in_bytes
-        $this.Url = $_.Response.url
-        $this.ArchiveDownloadUrl = $_.Response.archive_download_url
-        $this.Expired = $_.Response.expired
-        $this.Digest = $_.Response.digest
-        $this.CreatedAt = $_.Response.created_at
-        $this.UpdatedAt = $_.Response.updated_at
-        $this.ExpiresAt = $_.Response.expires_at
-        $this.WorkflowRun = $_.Response.workflow_run
+        $this.Size = $Object.size_in_bytes
+        $this.Url = $Object.url
+        $this.ArchiveDownloadUrl = $Object.archive_download_url
+        $this.Expired = $Object.expired
+        $this.Digest = $Object.digest
+        $this.CreatedAt = $Object.created_at
+        $this.UpdatedAt = $Object.updated_at
+        $this.ExpiresAt = $Object.expires_at
+        $this.WorkflowRun = $Object.workflow_run
     }
 }

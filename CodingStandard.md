@@ -166,7 +166,7 @@ All function documentation follows standard PowerShell help conventions, with so
 - Objects that belong inside another scope, has the parts of the scope in properties of the class, i.e. Enterprise, Owner/Organization/Account,
   Repository, Environment, etc.
 - To make a property alias, use types files to copy one property into another named property.
-
+- All properties that reference size on disk, should be converted to store bytes, and be called Size.
 
 ## Additional Notes
 
