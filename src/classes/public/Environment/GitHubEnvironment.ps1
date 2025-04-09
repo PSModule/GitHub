@@ -18,7 +18,7 @@
     [System.Nullable[datetime]] $UpdatedAt
 
     # Whether admins can bypass protection rules.
-    [System.Nullable[bool]] $CanAdminsBypass
+    [System.Nullable[bool]] $AdminsCanBypass
 
     # Protection rules associated with the environment.
     [object[]] $ProtectionRules
@@ -37,7 +37,7 @@
         $this.Repository = $Repository
         $this.CreatedAt = $Object.created_at
         $this.UpdatedAt = $Object.updated_at
-        $this.CanAdminsBypass = $Object.can_admins_bypass
+        $this.AdminsCanBypass = $Object.can_admins_bypass
         $this.ProtectionRules = $Object.protection_rules
         $this.DeploymentBranchPolicy = $Object.deployment_branch_policy
     }
