@@ -16,7 +16,7 @@
 param()
 
 BeforeAll {
-    $testName = ((Get-Item $MyInvocation.MyCommand.Path).BaseName).Replace('.', '')
+    $testName = 'RepositoriesTests'
     $os = $env:RUNNER_OS
     $guid = [guid]::NewGuid().ToString()
 }
