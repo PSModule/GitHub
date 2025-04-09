@@ -74,12 +74,14 @@ Describe 'Variables' {
 
         AfterAll {
             switch ($OwnerType) {
-                'user' {}
+                'user' {
+                    Get-GitHubRepository -Affiliation owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                }
                 'organization' {
                     Get-GitHubVariable -Owner $owner | Remove-GitHubVariable
+                    Get-GitHubRepository -Owner $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
                 }
             }
-            Get-GitHubRepository -Owner $owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
         }
 
