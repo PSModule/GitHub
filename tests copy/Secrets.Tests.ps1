@@ -16,7 +16,7 @@
 param()
 
 BeforeAll {
-    $testName = 'SecretsTest'
+    $testName = ([System.IO.Path]::GetFileNameWithoutExtension($MyInvocation.MyCommand.Path)) -Replace '\.'
     $os = $env:RUNNER_OS
     $guid = [guid]::NewGuid().ToString()
 }

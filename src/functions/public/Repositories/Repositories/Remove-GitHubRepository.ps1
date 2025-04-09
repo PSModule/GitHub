@@ -56,7 +56,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("repo [$Owner/$Name]", 'DELETE')) {
-            $null = Invoke-GitHubAPI @inputObject
+            Invoke-GitHubAPI @inputObject
         }
     }
 
