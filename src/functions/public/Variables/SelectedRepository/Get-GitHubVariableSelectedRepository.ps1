@@ -61,15 +61,7 @@ function Get-GitHubVariableSelectedRepository {
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             $_.Response.repositories | ForEach-Object {
-                [GitHubRepository]@{
-                    Name        = $_.name
-                    FullName    = $_.full_name
-                    NodeID      = $_.node_id
-                    ID          = $_.id
-                    Description = $_.description
-                    Owner       = $_.owner.login
-                    URL         = $_.html_url
-                }
+                [GitHubRepository]::New($_)
             }
         }
     }
