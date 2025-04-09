@@ -36,7 +36,8 @@ Describe 'Variables' {
                     Write-Host ($context | Format-List | Out-String)
                 }
             }
-            $repoName = "$testName-$os-$TokenType-$guid"
+            $repoPrefix = "$testName-$os-$TokenType"
+            $repoName = "$repoPrefix-$guid"
             $variablePrefix = ("$testName`_$os`_$TokenType" -replace '-', '_').ToUpper()
             $varName = ("$variablePrefix`_$guid" -replace '-', '_').ToUpper()
             $environmentName = "$testName-$os-$TokenType-$guid"
@@ -73,16 +74,12 @@ Describe 'Variables' {
 
         AfterAll {
             switch ($OwnerType) {
-                'user' {
-                    Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
-                }
+                'user' {}
                 'organization' {
                     Get-GitHubVariable -Owner $owner | Remove-GitHubVariable
-                    Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
-                    Remove-GitHubRepository -Owner $owner -Name "$repoName-2" -Confirm:$false
-                    Remove-GitHubRepository -Owner $owner -Name "$repoName-3" -Confirm:$false
                 }
             }
+            Get-GitHubRepository -Owner $owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
         }
 

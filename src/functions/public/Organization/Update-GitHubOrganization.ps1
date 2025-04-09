@@ -27,6 +27,9 @@
         .INPUTS
         GitHubOrganization
 
+        .OUTPUTS
+        GitHubOrganization
+
         .LINK
         https://psmodule.io/GitHub/Functions/Organization/Update-GitHubOrganization
 

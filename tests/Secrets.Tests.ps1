@@ -77,20 +77,16 @@ Describe 'Secrets' {
         AfterAll {
             Write-Host 'After all'
             switch ($OwnerType) {
-                'user' {
-                    Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
-                }
+                'user' {}
                 'organization' {
                     $orgSecrets = Get-GitHubSecret -Owner $owner
                     LogGroup 'Secrets to remove' {
                         Write-Host "$($orgSecrets | Format-List | Out-String)"
                     }
                     $orgSecrets | Remove-GitHubSecret
-                    Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
-                    Remove-GitHubRepository -Owner $owner -Name "$repoName-2" -Confirm:$false
-                    Remove-GitHubRepository -Owner $owner -Name "$repoName-3" -Confirm:$false
                 }
             }
+            Get-GitHubRepository -Owner $owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
         }
 
