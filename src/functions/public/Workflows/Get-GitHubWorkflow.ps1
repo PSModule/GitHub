@@ -22,6 +22,9 @@
         GitHubWorkflow
 
         .LINK
+        https://psmodule.io/GitHub/Functions/Actions/Workflows/Get-GitHubWorkflow/
+
+        .LINK
         [List repository workflows](https://docs.github.com/rest/actions/workflows#list-repository-workflows)
     #>
     [OutputType([GitHubWorkflow])]

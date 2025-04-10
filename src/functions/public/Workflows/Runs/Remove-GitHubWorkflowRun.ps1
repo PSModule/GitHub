@@ -1,16 +1,26 @@
-﻿filter Enable-GitHubWorkflow {
+﻿filter Remove-GitHubWorkflowRun {
     <#
         .SYNOPSIS
+        Delete a workflow run
 
         .DESCRIPTION
+        Delete a specific workflow run. Anyone with write access to the repository can use this endpoint. If the repository is
+        private you must use an access token with the `repo` scope. GitHub Apps must have the `actions:write` permission to use
+        this endpoint.
 
         .EXAMPLE
+        Remove-GitHubWorkflowRun -Owner 'octocat' -Repository 'Hello-World' -ID 123456789
+
+        Deletes the workflow run with the ID 123456789 from the 'Hello-World' repository owned by 'octocat'
 
         .INPUTS
-        GitHubWorkflow
+        GitHubWorkflowRun
 
         .LINK
-        [Enable a workflow](https://docs.github.com/rest/actions/workflows#enable-a-workflow)
+        https://psmodule.io/GitHub/Functions/Actions/Workflows/Runs/Remove-GitHubWorkflowRun/
+
+        .LINK
+        [Delete a workflow run](https://docs.github.com/rest/actions/workflow-runs#delete-a-workflow-run)
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param(
@@ -28,7 +38,7 @@
         )]
         [string] $Repository,
 
-        # The ID of the workflow. You can also pass the workflow filename as a string.
+        # The unique identifier of the workflow run.
         [Parameter(
             Mandatory,
             ValueFromPipelineByPropertyName
@@ -50,12 +60,13 @@
 
     process {
         $inputObject = @{
-            Method      = 'PUT'
-            APIEndpoint = "/repos/$Owner/$Repository/actions/workflows/$ID/enable"
+            Method      = 'DELETE'
+            APIEndpoint = "repos/$Owner/$Repository/actions/runs/$ID"
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("$Owner/$Repository/$ID", 'Enable workflow')) {
+        if ($PSCmdlet.ShouldProcess("$Owner/$Repository/$ID", 'Delete workflow run')) {
+            Write-Verbose "Deleted workflow run [$ID] in [$Owner/$Repository]"
             $null = Invoke-GitHubAPI @inputObject
         }
     }

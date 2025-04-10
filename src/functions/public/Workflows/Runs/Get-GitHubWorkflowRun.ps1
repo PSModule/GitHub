@@ -38,8 +38,13 @@
         .OUTPUTS
         GitHubWorkflowRun
 
-        .NOTES
+        .LINK
+        https://psmodule.io/GitHub/Functions/Actions/Workflows/Runs/Get-GitHubWorkflowRun/
+
+        .LINK
         [List workflow runs for a workflow](https://docs.github.com/rest/actions/workflow-runs#list-workflow-runs-for-a-workflow)
+
+        .LINK
         [List workflow runs for a repository](https://docs.github.com/rest/actions/workflow-runs#list-workflow-runs-for-a-repository)
     #>
     [OutputType([GitHubWorkflowRun])]
@@ -68,7 +73,6 @@
             ParameterSetName = 'ByID',
             ValueFromPipelineByPropertyName
         )]
-        [Alias('DatabaseID', 'WorkflowID')]
         [string] $ID,
 
         # The name of the workflow.

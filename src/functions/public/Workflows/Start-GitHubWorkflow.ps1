@@ -14,7 +14,10 @@
             prerelease = $false
         }
 
-        .NOTES
+        .LINK
+        https://psmodule.io/GitHub/Functions/Actions/Workflows/Start-GitHubWorkflow/
+
+        .LINK
         [Create a workflow dispatch event](https://docs.github.com/rest/actions/workflows#create-a-workflow-dispatch-event)
     #>
     [CmdletBinding(SupportsShouldProcess)]

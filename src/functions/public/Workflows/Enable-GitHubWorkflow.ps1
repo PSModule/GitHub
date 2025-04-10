@@ -1,42 +1,41 @@
-﻿filter Stop-GitHubWorkflowRun {
+﻿filter Enable-GitHubWorkflow {
     <#
         .SYNOPSIS
-        Cancel a workflow run
 
         .DESCRIPTION
-        Cancels a workflow run using its `run_id`. You can use this endpoint to cancel a workflow run that is in progress or waiting
 
         .EXAMPLE
-        Stop-GitHubWorkflowRun -Owner 'octocat' -Repository 'Hello-World' -ID 123456789
-
-        Cancels the workflow run with the ID 123456789 from the 'Hello-World' repository owned by 'octocat'.
 
         .INPUTS
-        GitHubWorkflowRun
+        GitHubWorkflow
 
         .LINK
-        [Cancel a workflow run](https://docs.github.com/rest/actions/workflow-runs#cancel-a-workflow-run)
+        https://psmodule.io/GitHub/Functions/Actions/Workflows/Enable-GitHubWorkflow/
+
+        .LINK
+        [Enable a workflow](https://docs.github.com/rest/actions/workflows#enable-a-workflow)
     #>
     [CmdletBinding(SupportsShouldProcess)]
-    [alias('Cancel-GitHubWorkflowRun')]
     param(
+        # The account owner of the repository. The name is not case sensitive.
         [Parameter(
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
         [string] $Owner,
 
+        # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
         [string] $Repository,
 
+        # The ID of the workflow. You can also pass the workflow filename as a string.
         [Parameter(
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('DatabaseID')]
         [string] $ID,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -54,16 +53,13 @@
 
     process {
         $inputObject = @{
-            Method      = 'POST'
-            APIEndpoint = "/repos/$Owner/$Repository/actions/runs/$ID/cancel"
+            Method      = 'PUT'
+            APIEndpoint = "/repos/$Owner/$Repository/actions/workflows/$ID/enable"
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("$Owner/$Repository/$ID", 'Cancel/Stop workflow run')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-                Write-Verbose "Cancelled workflow run [$ID] in [$Owner/$Repository]"
-            }
+        if ($PSCmdlet.ShouldProcess("$Owner/$Repository/$ID", 'Enable workflow')) {
+            $null = Invoke-GitHubAPI @inputObject
         }
     }
 

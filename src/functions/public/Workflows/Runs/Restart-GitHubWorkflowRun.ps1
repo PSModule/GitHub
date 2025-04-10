@@ -13,6 +13,9 @@
         GitHubWorkflowRun
 
         .LINK
+        https://psmodule.io/GitHub/Functions/Actions/Workflows/Runs/Restart-GitHubWorkflowRun/
+
+        .LINK
         [Re-run a workflow](https://docs.github.com/rest/actions/workflow-runs#re-run-a-workflow)
     #>
     [CmdletBinding(SupportsShouldProcess)]
@@ -36,7 +39,6 @@
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('DatabaseID')]
         [string] $ID,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -60,10 +62,8 @@
         }
 
         if ($PSCmdlet.ShouldProcess("workflow with ID [$ID] in [$Owner/$Repository]", 'Re-run')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-                Write-Verbose "Re-run workflow [$ID] in [$Owner/$Repository]"
-            }
+            Write-Verbose "Re-run workflow [$ID] in [$Owner/$Repository]"
+            $null = Invoke-GitHubAPI @inputObject
         }
     }
 

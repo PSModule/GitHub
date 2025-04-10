@@ -1,21 +1,21 @@
-﻿filter Disable-GitHubWorkflow {
+﻿filter Get-GitHubWorkflowUsage {
     <#
         .SYNOPSIS
-        Disable a workflow.
+        Short description
 
         .DESCRIPTION
-        Disables a workflow and sets the `state` of the workflow to `disabled_manually`. You can replace `workflow_id` with the workflow filename.
-        For example, you could use `main.yaml`. OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
+        Long description
 
         .EXAMPLE
-
-        .INPUTS
-        GitHubWorkflow
+        An example
 
         .LINK
-        [Disable a workflow](https://docs.github.com/rest/actions/workflows#disable-a-workflow)
+        https://psmodule.io/GitHub/Functions/Actions/Workflows/Get-GitHubWorkflowUsage/
+
+        .LINK
+        [Get workflow usage](https://docs.github.com/rest/actions/workflows#get-workflow-usage)
     #>
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(
@@ -53,13 +53,13 @@
 
     process {
         $inputObject = @{
-            Method      = 'PUT'
-            APIEndpoint = "/repos/$Owner/$Repository/actions/workflows/$ID/disable"
+            Method      = 'GET'
+            APIEndpoint = "/repos/$Owner/$Repository/actions/workflows/$ID/timing"
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("$Owner/$Repository/$ID", 'Disable workflow')) {
-            $null = Invoke-GitHubAPI @inputObject
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response.billable
         }
     }
 
