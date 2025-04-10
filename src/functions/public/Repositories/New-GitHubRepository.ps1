@@ -86,10 +86,6 @@ filter New-GitHubRepository {
         Creates a new repository named `MyNewRepo` as a fork of `Hello-World` owned by `octocat`.
         Only the default branch will be forked.
 
-        .NOTES
-        https://docs.github.com/rest/repos/repos#create-a-repository-using-a-template
-
-
         .PARAMETER GitignoreTemplate
         Desired language or platform .gitignore template to apply. Use the name of the template without the extension. For example, "Haskell".
 
