@@ -9,15 +9,15 @@
     </tr>
     <tr>
         <td>Covered functions</td>
-        <td>222</td>
+        <td>221</td>
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>804</td>
+        <td>805</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>21.64%</td>
+        <td>21.54%</td>
     </tr>
 </table>
 
@@ -339,7 +339,7 @@
 | `/repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches`                                                        |                    |                    |                    | :white_check_mark: |                    |
 | `/repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable`                                                            |                    |                    |                    |                    | :white_check_mark: |
 | `/repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs`                                                              |                    | :white_check_mark: |                    |                    |                    |
-| `/repos/{owner}/{repo}/actions/workflows/{workflow_id}/timing`                                                            |                    | :white_check_mark: |                    |                    |                    |
+| `/repos/{owner}/{repo}/actions/workflows/{workflow_id}/timing`                                                            |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/activity`                                                                                          |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/assignees`                                                                                         |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/assignees/{assignee}`                                                                              |                    | :x:                |                    |                    |                    |
