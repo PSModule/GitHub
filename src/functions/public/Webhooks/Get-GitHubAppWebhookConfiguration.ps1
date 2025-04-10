@@ -44,7 +44,7 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            [GitHubWebhookConfiguration]::new($_.Response)
         }
     }
 

@@ -14,7 +14,10 @@
 
         Redelivers the delivery with the ID `12345`.
 
-        .NOTES
+        .LINK
+        https://psmodule.io/GitHub/Functions/Webhooks/Invoke-GitHubAppWebhookReDelivery
+
+        .LINK
         [Redeliver a delivery for an app webhook](https://docs.github.com/rest/apps/webhooks#redeliver-a-delivery-for-an-app-webhook)
     #>
     [OutputType([void])]
@@ -28,7 +31,6 @@
         # The ID of the delivery.
         [Parameter(
             Mandatory,
-            ValueFromPipeline,
             ValueFromPipelineByPropertyName
         )]
         [string] $ID,

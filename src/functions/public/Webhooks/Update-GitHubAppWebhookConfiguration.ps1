@@ -11,22 +11,36 @@
         to access this endpoint.
 
         .EXAMPLE
-        Update-GitHubAppWebhookConfiguration -URL 'https://example.com' -ContentType 'json' -Secret 'mysecret' -InsecureSSL
+        Update-GitHubAppWebhookConfiguration -URL 'https://example.com' -ContentType 'json' -Secret 'mysecret' -EnableSsl
+
+        Output:
+        ```powershell
+        ContentType: json
+        UseSsl:      True
+        Secret:      mysecret
+        Url:         https://example.com
+        ```
 
         Updates the webhook configuration for the authenticated app to deliver payloads to `https://example.com` with a `json` content type
-        and a secret of `mysecret` disabling SSL verification when delivering payloads.
+        and a secret of `mysecret` enabling SSL verification when delivering payloads.
 
-        .NOTES
+        .OUTPUTS
+        GitHubWebhookConfiguration
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Webhooks/Update-GitHubAppWebhookConfiguration
+
+        .LINK
         [Update a webhook configuration for an app](https://docs.github.com/rest/apps/webhooks#update-a-webhook-configuration-for-an-app)
     #>
-    [OutputType([void])]
+    [OutputType([GitHubWebhookConfiguration])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The URL to which the payloads will be delivered.
         [Parameter()]
-        [string] $URL,
+        [string] $Url,
 
-        # The media type used to serialize the payloads. Supported values include `json` and `form`.
+        # The media type used to serialize the payloads.
         [Parameter()]
         [ValidateSet('json', 'form')]
         [string] $ContentType,
@@ -35,10 +49,13 @@
         [Parameter()]
         [string] $Secret,
 
-        # Determines whether the SSL certificate of the host for URL will be verified when delivering payloads.
-        # We strongly recommend not setting this as you are subject to man-in-the-middle and other attacks.
+        # Disable SSL verification when delivering payloads.
         [Parameter()]
-        [switch] $InsecureSSL,
+        [switch] $DisableSsl,
+
+        # Enables SSL verification when delivering payloads.
+        [Parameter()]
+        [switch] $EnableSsl,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -55,7 +72,7 @@
 
     process {
         $body = @{
-            url          = $URL
+            url          = $Url
             content_type = $ContentType
             secret       = $Secret
             insecure_ssl = $PSBoundParameters.ContainsKey($InsecureSSL) ? ($InsecureSSL ? 1 : 0) : $null
