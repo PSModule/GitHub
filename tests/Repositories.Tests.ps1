@@ -16,7 +16,7 @@
 param()
 
 BeforeAll {
-    $testName = 'RepositoryTest'
+    $testName = 'RepositoriesTests'
     $os = $env:RUNNER_OS
     $guid = [guid]::NewGuid().ToString()
 }
@@ -36,39 +36,51 @@ Describe 'Repositories' {
                     Write-Host ($context | Format-List | Out-String)
                 }
             }
-            $repoName = "$testName-$os-$TokenType-$guid"
+            $repoPrefix = "$testName-$os-$TokenType"
+            $repoName = "$repoPrefix-$guid"
         }
 
         AfterAll {
+            switch ($OwnerType) {
+                'user' {
+                    Get-GitHubRepository -Affiliation owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                }
+                'organization' {
+                    Get-GitHubRepository -Owner $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                }
+            }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
         }
 
         # Tests for IAT UAT and PAT goes here
         It 'New-GitHubRepository - Creates a new repository' -Skip:($OwnerType -eq 'repository') {
-            if ($OwnerType -eq 'user') {
-                New-GitHubRepository -Name $repoName -AllowSquashMerge
-            } else {
-                New-GitHubRepository -Owner $Owner -Name $repoName -AllowSquashMerge
+            switch ($OwnerType) {
+                'user' {
+                    New-GitHubRepository -Name $repoName -AllowSquashMerge
+                }
+                'organization' {
+                    New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
+                }
             }
         }
         It "Get-GitHubRepository - Gets the authenticated user's repositories" -Skip:($OwnerType -ne 'user') {
             $repos = Get-GitHubRepository
             LogGroup 'Repositories' {
-                Write-Host ($repos | Format-List | Out-String)
+                Write-Host ($repos | Format-Table | Out-String)
             }
             $repos | Should -Not -BeNullOrEmpty
         }
         It "Get-GitHubRepository - Gets the authenticated user's public repositories" -Skip:($OwnerType -ne 'user') {
             $repos = Get-GitHubRepository -Type 'public'
             LogGroup 'Repositories' {
-                Write-Host ($repos | Format-List | Out-String)
+                Write-Host ($repos | Format-Table | Out-String)
             }
             $repos | Should -Not -BeNullOrEmpty
         }
         It 'Get-GitHubRepository - Gets the public repos where the authenticated user is owner' -Skip:($OwnerType -ne 'user') {
             $repos = Get-GitHubRepository -Visibility 'public' -Affiliation 'owner'
             LogGroup 'Repositories' {
-                Write-Host ($repos | Format-List | Out-String)
+                Write-Host ($repos | Format-Table | Out-String)
             }
             $repos | Should -Not -BeNullOrEmpty
         }
@@ -82,14 +94,14 @@ Describe 'Repositories' {
         It 'Get-GitHubRepository - Gets all repositories from a organization' -Skip:($OwnerType -eq 'repository') {
             $repos = Get-GitHubRepository -Owner 'PSModule'
             LogGroup 'Repositories' {
-                Write-Host ($repos | Format-List | Out-String)
+                Write-Host ($repos | Format-Table | Out-String)
             }
             $repos | Should -Not -BeNullOrEmpty
         }
         It 'Get-GitHubRepository - Gets all repositories from a user' -Skip:($OwnerType -eq 'repository') {
             $repos = Get-GitHubRepository -Username 'MariusStorhaug'
             LogGroup 'Repositories' {
-                Write-Host ($repos | Format-List | Out-String)
+                Write-Host ($repos | Format-Table | Out-String)
             }
             $repos | Should -Not -BeNullOrEmpty
         }

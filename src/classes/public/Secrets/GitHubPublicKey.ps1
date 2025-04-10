@@ -17,20 +17,14 @@
     # The name of the environment the Public Key is associated with.
     [string] $Environment
 
-    # Simple parameterless constructor
     GitHubPublicKey() {}
 
-    # Creates a object from a hashtable of key-vaule pairs.
-    GitHubPublicKey([hashtable]$Properties) {
-        foreach ($Property in $Properties.Keys) {
-            $this.$Property = $Properties.$Property
-        }
-    }
-
-    # Creates a object from a PSCustomObject.
-    GitHubPublicKey([PSCustomObject]$Object) {
-        $Object.PSObject.Properties | ForEach-Object {
-            $this.($_.Name) = $_.Value
-        }
+    GitHubPublicKey([PSCustomObject]$Object, [string]$Type, [string]$Owner, [string]$Repository, [string]$Environment) {
+        $this.ID = $Object.key_id
+        $this.Key = $Object.key
+        $this.Type = $Type
+        $this.Owner = $Owner
+        $this.Repository = $Repository
+        $this.Environment = $Environment
     }
 }

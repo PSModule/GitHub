@@ -50,9 +50,7 @@ function Remove-GitHubSecretFromRepository {
         }
 
         if ($PSCmdlet.ShouldProcess("secret [$Name] on [$Owner/$Repository]", 'Delete')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
+            $null = Invoke-GitHubAPI @inputObject
         }
     }
 

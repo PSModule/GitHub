@@ -5,6 +5,7 @@
     ],
     "ignore": [
         "**/tests/**",
+        "**/src/classes/**",
         "**/src/functions/**",
         "**/tools/utilities/**",
         "**/.github/workflows/Nightly-Run.yml",

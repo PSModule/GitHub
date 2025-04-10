@@ -9,7 +9,7 @@
         "[Configuring automated security fixes](https://docs.github.com/articles/configuring-automated-security-fixes)".
 
         .EXAMPLE
-        Enable-GitHubRepositorySecurityFix -Owner 'PSModule' -Repository 'GitHub'
+        Enable-GitHubRepositorySecurityFix -Owner 'PSModule' -Name 'GitHub'
 
         Enables automated security fixes for the repository.
 
@@ -21,13 +21,11 @@
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [Alias('Organization')]
-        [Alias('User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [string] $Repository,
+        [string] $Name,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -45,11 +43,11 @@
     process {
         $inputObject = @{
             Method      = 'PUT'
-            APIEndpoint = "/repos/$Owner/$Repository/automated-security-fixes"
+            APIEndpoint = "/repos/$Owner/$Name/automated-security-fixes"
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("Security Fixes for [$Owner/$Repository]", 'Enable')) {
+        if ($PSCmdlet.ShouldProcess("Security Fixes for [$Owner/$Name]", 'Enable')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }

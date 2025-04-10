@@ -14,10 +14,13 @@
 
         Get the authenticated user
 
-        .NOTES
-        https://docs.github.com/rest/users/users#get-the-authenticated-user
+        .OUTPUTS
+        GitHubUser
+
+        .LINK
+        [Get the authenticated user](https://docs.github.com/rest/users/users#get-the-authenticated-user)
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([GitHubUser])]
     [CmdletBinding()]
     param(
         # The context to run the command in. Used to get the details for the API call.
@@ -40,7 +43,7 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            [GitHubUser]::New($_.Response)
         }
     }
 

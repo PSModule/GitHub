@@ -10,7 +10,7 @@
         see "[About code owners](https://docs.github.com/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners)."
 
         .EXAMPLE
-        Get-GitHubRepositoryCodeownersError -Owner 'PSModule' -Repository 'GitHub'
+        Get-GitHubRepositoryCodeownersError -Owner 'PSModule' -Name 'GitHub'
 
         Gets the CODEOWNERS errors for the repository.
 
@@ -28,7 +28,7 @@
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [string] $Repository,
+        [string] $Name,
 
         # A branch, tag or commit name used to determine which version of the CODEOWNERS file to use.
         # Default: the repository's default branch (e.g. main)
@@ -56,7 +56,7 @@
 
         $inputObject = @{
             Method      = 'GET'
-            APIEndpoint = "/repos/$Owner/$Repository/codeowners/errors"
+            APIEndpoint = "/repos/$Owner/$Name/codeowners/errors"
             Body        = $body
             Context     = $Context
         }

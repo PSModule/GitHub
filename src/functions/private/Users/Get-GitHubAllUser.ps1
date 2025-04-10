@@ -15,11 +15,13 @@
 
         Get a list of users, starting with the user 'MariusStorhaug'.
 
-        .NOTES
-        https://docs.github.com/rest/users/users#list-users
+        .OUTPUTS
+        GitHubUser
+
+        .LINK
+        [List users](https://docs.github.com/rest/users/users#list-users)
     #>
-    [Alias('Get-GitHubAllUsers')]
-    [OutputType([pscustomobject])]
+    [OutputType([GitHubUser])]
     [CmdletBinding()]
     param(
         # A user ID. Only return users with an ID greater than this ID.
@@ -57,7 +59,7 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            $_.Response | ForEach-Object { [GitHubUser]::New($_) }
         }
     }
 

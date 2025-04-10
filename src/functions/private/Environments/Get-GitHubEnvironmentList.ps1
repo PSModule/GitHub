@@ -31,7 +31,7 @@ filter Get-GitHubEnvironmentList {
         Lists all environments available in the "EnvironmentTest" repository owned by "PSModule".
 
         .OUTPUTS
-        GitHubEnvironment
+        GitHubEnvironment[]
 
         .NOTES
         Contains details of each environment in the repository, including its name and protection settings.
@@ -39,7 +39,7 @@ filter Get-GitHubEnvironmentList {
         .LINK
         [List environments](https://docs.github.com/rest/deployments/environments#list-environments)
     #>
-    [OutputType([GitHubEnvironment])]
+    [OutputType([GitHubEnvironment[]])]
     [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
@@ -87,20 +87,8 @@ filter Get-GitHubEnvironmentList {
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response.environments | ForEach-Object {
-                [GitHubEnvironment]@{
-                    Name                   = $_.name
-                    Repository             = $Repository
-                    Owner                  = $Owner
-                    DatabaseID             = $_.id
-                    NodeID                 = $_.node_id
-                    Url                    = $_.html_url
-                    CreatedAt              = $_.created_at
-                    UpdatedAt              = $_.updated_at
-                    CanAdminsBypass        = $_.can_admins_bypass
-                    ProtectionRules        = $_.protection_rules
-                    DeploymentBranchPolicy = $_.deployment_branch_policy
-                }
+            $_.Response.environments | ForEach-Object {
+                [GitHubEnvironment]::new($_, $Owner, $Repository)
             }
         }
     }

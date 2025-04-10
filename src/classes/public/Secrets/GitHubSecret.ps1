@@ -2,9 +2,6 @@
     # The key ID of the public key.
     [string] $Name
 
-    # The type of Public Key.
-    [string] $Type
-
     # The scope of the variable, organization, repository, or environment.
     [string] $Scope
 
@@ -29,20 +26,26 @@
     # The ids of the repositories that the variable is visible to.
     [GitHubRepository[]] $SelectedRepositories
 
-    # Simple parameterless constructor
     GitHubSecret() {}
 
-    # Creates a object from a hashtable of key-vaule pairs.
-    GitHubSecret([hashtable]$Properties) {
-        foreach ($Property in $Properties.Keys) {
-            $this.$Property = $Properties.$Property
-        }
-    }
-
-    # Creates a object from a PSCustomObject.
-    GitHubSecret([PSCustomObject]$Object) {
-        $Object.PSObject.Properties | ForEach-Object {
-            $this.($_.Name) = $_.Value
+    GitHubSecret([PSCustomObject]$Object, [string]$Owner, [string]$Repository, [string]$Environment, [GitHubRepository[]]$SelectedRepositories) {
+        $this.Name = $Object.name
+        $this.Owner = $Owner
+        $this.Repository = $Repository
+        $this.Environment = $Environment
+        $this.CreatedAt = $Object.created_at
+        $this.UpdatedAt = $Object.updated_at
+        $this.Visibility = $Object.visibility
+        $this.SelectedRepositories = $SelectedRepositories
+        #Set scope based on provided values in Owner, Repository, Environment
+        $this.Scope = if ($Owner -and $Repository -and $Environment) {
+            'Environment'
+        } elseif ($Owner -and $Repository) {
+            'Repository'
+        } elseif ($Owner) {
+            'Organization'
+        } else {
+            'Unknown'
         }
     }
 }

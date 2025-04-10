@@ -14,11 +14,13 @@
 
         List organizations, starting with PSModule
 
-        .NOTES
-        https://docs.github.com/rest/orgs/orgs#list-organizations
+        .OUTPUTS
+        GitHubOrganization
 
+        .LINK
+        [List organizations](https://docs.github.com/rest/orgs/orgs#list-organizations)
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([GitHubOrganization])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [CmdletBinding()]
     param(
@@ -45,19 +47,19 @@
 
     process {
         $body = @{
-            since    = $Since
-            per_page = $PerPage
+            since = $Since
         }
 
         $inputObject = @{
             Method      = 'GET'
             APIEndpoint = '/organizations'
             Body        = $body
+            PerPage     = $PerPage
             Context     = $Context
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            $_.Response | ForEach-Object { [GitHubOrganization]::new($_) }
         }
     }
     end {

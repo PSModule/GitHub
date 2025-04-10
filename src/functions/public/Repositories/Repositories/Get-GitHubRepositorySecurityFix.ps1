@@ -9,7 +9,7 @@
         "[Configuring automated security fixes](https://docs.github.com/articles/configuring-automated-security-fixes)".
 
         .EXAMPLE
-        Get-GitHubRepositorySecurityFix -Owner 'PSModule' -Repository 'GitHub'
+        Get-GitHubRepositorySecurityFix -Owner 'PSModule' -Name 'GitHub'
 
         Gets the automated security fixes status for the GitHub repository.
 
@@ -28,7 +28,7 @@
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [string] $Repository,
+        [string] $Name,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -46,7 +46,7 @@
     process {
         $inputObject = @{
             Method      = 'GET'
-            APIEndpoint = "/repos/$Owner/$Repository/automated-security-fixes"
+            APIEndpoint = "/repos/$Owner/$Name/automated-security-fixes"
             Context     = $Context
         }
 

@@ -16,7 +16,7 @@
 param()
 
 BeforeAll {
-    $testName = 'VariablesTest'
+    $testName = 'VariablesTests'
     $os = $env:RUNNER_OS
     $guid = [guid]::NewGuid().ToString()
 }
@@ -36,7 +36,8 @@ Describe 'Variables' {
                     Write-Host ($context | Format-List | Out-String)
                 }
             }
-            $repoName = "$testName-$os-$TokenType-$guid"
+            $repoPrefix = "$testName-$os-$TokenType"
+            $repoName = "$repoPrefix-$guid"
             $variablePrefix = ("$testName`_$os`_$TokenType" -replace '-', '_').ToUpper()
             $varName = ("$variablePrefix`_$guid" -replace '-', '_').ToUpper()
             $environmentName = "$testName-$os-$TokenType-$guid"
@@ -65,22 +66,20 @@ Describe 'Variables' {
                 }
             }
             LogGroup "Repository - [$repoName]" {
-                Write-Host ($repo | Format-List | Out-String)
-                Write-Host ($repo2 | Format-List | Out-String)
-                Write-Host ($repo3 | Format-List | Out-String)
+                Write-Host ($repo | Format-Table | Out-String)
+                Write-Host ($repo2 | Format-Table | Out-String)
+                Write-Host ($repo3 | Format-Table | Out-String)
             }
         }
 
         AfterAll {
             switch ($OwnerType) {
                 'user' {
-                    Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
+                    Get-GitHubRepository -Affiliation owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
                 }
                 'organization' {
                     Get-GitHubVariable -Owner $owner | Remove-GitHubVariable
-                    Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
-                    Remove-GitHubRepository -Owner $owner -Name "$repoName-2" -Confirm:$false
-                    Remove-GitHubRepository -Owner $owner -Name "$repoName-3" -Confirm:$false
+                    Get-GitHubRepository -Owner $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
                 }
             }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent

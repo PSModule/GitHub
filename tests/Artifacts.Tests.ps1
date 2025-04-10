@@ -174,7 +174,7 @@ Describe 'Artifacts' {
             LogGroup 'Artifact' {
                 Write-Host ($artifact | Format-Table | Out-String)
             }
-            $result = Get-GitHubArtifact -Owner $Owner -Repository $Repository -ArtifactID $artifact.DatabaseID
+            $result = Get-GitHubArtifact -Owner $Owner -Repository $Repository -ArtifactID $artifact.ID
             LogGroup 'Result' {
                 Write-Host ($result | Format-Table | Out-String)
             }

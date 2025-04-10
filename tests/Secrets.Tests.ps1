@@ -16,7 +16,7 @@
 param()
 
 BeforeAll {
-    $testName = 'SecretsTest'
+    $testName = 'SecretsTests'
     $os = $env:RUNNER_OS
     $guid = [guid]::NewGuid().ToString()
 }
@@ -75,10 +75,9 @@ Describe 'Secrets' {
         }
 
         AfterAll {
-            Write-Host 'After all'
             switch ($OwnerType) {
                 'user' {
-                    Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
+                    Get-GitHubRepository -Affiliation owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
                 }
                 'organization' {
                     $orgSecrets = Get-GitHubSecret -Owner $owner
@@ -86,9 +85,7 @@ Describe 'Secrets' {
                         Write-Host "$($orgSecrets | Format-List | Out-String)"
                     }
                     $orgSecrets | Remove-GitHubSecret
-                    Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
-                    Remove-GitHubRepository -Owner $owner -Name "$repoName-2" -Confirm:$false
-                    Remove-GitHubRepository -Owner $owner -Name "$repoName-3" -Confirm:$false
+                    Get-GitHubRepository -Owner $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
                 }
             }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
@@ -116,7 +113,7 @@ Describe 'Secrets' {
                     Owner = $owner
                 }
                 LogGroup 'Organization' {
-                    $org = Get-GitHubOrganization -Organization $owner
+                    $org = Get-GitHubOrganization -Name $owner
                     Write-Host ($org | Format-List | Out-String)
                 }
             }
@@ -124,7 +121,7 @@ Describe 'Secrets' {
                 It 'Get-GitHubPublicKey - Action' {
                     $result = Get-GitHubPublicKey @scope
                     LogGroup 'PublicKey' {
-                        Write-Host "$($result | Select-Object * | Format-Table -AutoSize| Out-String)"
+                        Write-Host "$($result | Select-Object * | Format-Table -AutoSize | Out-String)"
                     }
                     $result | Should -Not -BeNullOrEmpty
                 }

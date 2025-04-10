@@ -69,22 +69,7 @@ function Get-GitHubArtifactById {
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            [GitHubArtifact]@{
-                DatabaseID         = $_.Response.id
-                NodeID             = $_.Response.node_id
-                Name               = $_.Response.name
-                Owner              = $Owner
-                Repository         = $Repository
-                Size               = $_.Response.size_in_bytes
-                Url                = $_.Response.url
-                ArchiveDownloadUrl = $_.Response.archive_download_url
-                Expired            = $_.Response.expired
-                Digest             = $_.Response.digest
-                CreatedAt          = $_.Response.created_at
-                UpdatedAt          = $_.Response.updated_at
-                ExpiresAt          = $_.Response.expires_at
-                WorkflowRun        = $_.Response.workflow_run
-            }
+            [GitHubArtifact]::new($_.Response, $Owner, $Repository)
         }
     }
 

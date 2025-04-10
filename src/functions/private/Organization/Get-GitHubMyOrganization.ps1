@@ -19,10 +19,13 @@
 
         List organizations for the authenticated user.
 
-        .NOTES
-        https://docs.github.com/rest/orgs/orgs#list-organizations-for-the-authenticated-user
+        .OUTPUTS
+        GitHubOrganization
+
+        .LINK
+        [List organizations for the authenticated user](https://docs.github.com/rest/orgs/orgs#list-organizations-for-the-authenticated-user)
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([GitHubOrganization])]
     [CmdletBinding()]
     param(
         # The number of results per page (max 100).
@@ -43,19 +46,15 @@
     }
 
     process {
-        $body = @{
-            per_page = $PerPage
-        }
-
         $inputObject = @{
             Method      = 'GET'
             APIEndpoint = '/user/orgs'
-            Body        = $body
+            PerPage     = $PerPage
             Context     = $Context
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            $_.Response | ForEach-Object { [GitHubOrganization]::new($_) }
         }
     }
 

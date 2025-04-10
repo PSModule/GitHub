@@ -68,14 +68,7 @@ function Get-GitHubSecretRepositoryList {
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             $_.Response.secrets | ForEach-Object {
-                [GitHubSecret]@{
-                    Name       = $_.name
-                    CreatedAt  = $_.created_at
-                    UpdatedAt  = $_.updated_at
-                    Scope      = 'Repository'
-                    Owner      = $Owner
-                    Repository = $Repository
-                }
+                [GitHubSecret]::new($_, $Owner, $Repository, $null, $null)
             }
         }
     }

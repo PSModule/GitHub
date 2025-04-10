@@ -97,7 +97,7 @@ query(`$org: String!, `$after: String) {
                         Slug          = $_.slug
                         NodeID        = $_.id
                         CombinedSlug  = $_.combinedSlug
-                        DatabaseId    = $_.databaseId
+                        ID            = $_.databaseId
                         Description   = $_.description
                         Notifications = $_.notificationSetting -eq 'NOTIFICATIONS_ENABLED' ? $true : $false
                         Visible       = $_.privacy -eq 'VISIBLE' ? $true : $false

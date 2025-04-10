@@ -116,7 +116,7 @@
                         Slug          = $team.slug
                         NodeID        = $team.node_id
                         CombinedSlug  = $Organization + '/' + $team.slug
-                        DatabaseId    = $team.id
+                        ID            = $team.id
                         Description   = $team.description
                         Notifications = $team.notification_setting -eq 'notifications_enabled' ? $true : $false
                         Visible       = $team.privacy -eq 'closed' ? $true : $false

@@ -1,10 +1,4 @@
-﻿class GitHubArtifact {
-    # The artifact's database identifier.
-    [int64] $DatabaseID
-
-    # The node identifier of the artifact.
-    [string] $NodeID
-
+﻿class GitHubArtifact : GitHubNode {
     # The name of the artifact.
     [string] $Name
 
@@ -41,20 +35,22 @@
     # Information about the associated workflow run.
     [PSCustomObject] $WorkflowRun
 
-    # Simple parameterless constructor.
     GitHubArtifact() {}
 
-    # Creates an object from a hashtable of key-value pairs.
-    GitHubArtifact([hashtable]$Properties) {
-        foreach ($Property in $Properties.Keys) {
-            $this.$Property = $Properties.$Property
-        }
-    }
-
-    # Creates an object from a PSCustomObject.
-    GitHubArtifact([PSCustomObject]$Object) {
-        $Object.PSObject.Properties | ForEach-Object {
-            $this.($_.Name) = $_.Value
-        }
+    GitHubArtifact([PSCustomObject]$Object, [string]$Owner, [string]$Repository) {
+        $this.ID = $Object.id
+        $this.NodeID = $Object.node_id
+        $this.Name = $Object.name
+        $this.Owner = $Owner
+        $this.Repository = $Repository
+        $this.Size = $Object.size_in_bytes
+        $this.Url = $Object.url
+        $this.ArchiveDownloadUrl = $Object.archive_download_url
+        $this.Expired = $Object.expired
+        $this.Digest = $Object.digest
+        $this.CreatedAt = $Object.created_at
+        $this.UpdatedAt = $Object.updated_at
+        $this.ExpiresAt = $Object.expires_at
+        $this.WorkflowRun = $Object.workflow_run
     }
 }

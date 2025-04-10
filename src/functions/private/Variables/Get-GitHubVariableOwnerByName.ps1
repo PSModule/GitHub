@@ -61,22 +61,11 @@ function Get-GitHubVariableOwnerByName {
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            $_.Response | ForEach-Object {
-                $selectedRepositories = @()
-                if ($_.visibility -eq 'selected') {
-                    $selectedRepositories = Get-GitHubVariableSelectedRepository -Owner $Owner -Name $_.name -Context $Context
-                }
-                [GitHubVariable]@{
-                    Name                 = $_.name
-                    Value                = $_.value
-                    CreatedAt            = $_.created_at
-                    UpdatedAt            = $_.updated_at
-                    Scope                = 'Organization'
-                    Owner                = $Owner
-                    Visibility           = $_.visibility
-                    SelectedRepositories = $selectedRepositories
-                }
+            $selectedRepositories = @()
+            if ($_.Response.visibility -eq 'selected') {
+                $selectedRepositories = Get-GitHubVariableSelectedRepository -Owner $Owner -Name $_.Response.name -Context $Context
             }
+            [GitHubVariable]::new($_.Response, $Owner, $Repository, $Environment, $selectedRepositories)
         }
     }
 

@@ -23,7 +23,10 @@
         Gets all workflow runs for the workflow with the ID `42` in the repository `Hello-World` owned by `octocat` that were triggered by the user
         `octocat` on the branch `main` and have the status `success`.
 
-        .NOTES
+        .OUTPUTS
+        GitHubWorkflowRun
+
+        .LINK
         [List workflow runs for a workflow](https://docs.github.com/rest/actions/workflow-runs#list-workflow-runs-for-a-workflow)
     #>
     [CmdletBinding()]
@@ -122,44 +125,7 @@
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             $_.Response.workflow_runs | ForEach-Object {
-                [GitHubWorkflowRun]@{
-                    DatabaseID          = $_.id
-                    Name                = $_.name
-                    Owner               = $Owner
-                    Repository          = $Repository
-                    NodeID              = $_.node_id
-                    CheckSuiteID        = $_.check_suite_id
-                    CheckSuiteNodeID    = $_.check_suite_node_id
-                    HeadBranch          = $_.head_branch
-                    HeadSha             = $_.head_sha
-                    Path                = $_.path
-                    RunNumber           = $_.run_number
-                    RunAttempt          = $_.run_attempt
-                    ReferencedWorkflows = $_.referenced_workflows
-                    Event               = $_.event
-                    Status              = $_.status
-                    Conclusion          = $_.conclusion
-                    WorkflowID          = $_.workflow_id
-                    Url                 = $_.url
-                    HtmlUrl             = $_.html_url
-                    PullRequests        = $_.pull_requests
-                    CreatedAt           = $_.created_at
-                    UpdatedAt           = $_.updated_at
-                    Actor               = $_.actor
-                    TriggeringActor     = $_.triggering_actor
-                    RunStartedAt        = $_.run_started_at
-                    JobsUrl             = $_.jobs_url
-                    LogsUrl             = $_.logs_url
-                    CheckSuiteUrl       = $_.check_suite_url
-                    ArtifactsUrl        = $_.artifacts_url
-                    CancelUrl           = $_.cancel_url
-                    RerunUrl            = $_.rerun_url
-                    PreviousAttemptUrl  = $_.previous_attempt_url
-                    WorkflowUrl         = $_.workflow_url
-                    HeadCommit          = $_.head_commit
-                    HeadRepository      = $_.head_repository
-                    DisplayTitle        = $_.display_title
-                }
+                [GitHubWorkflowRun]::new($_)
             }
         }
     }

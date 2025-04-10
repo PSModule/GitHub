@@ -62,21 +62,11 @@ function Get-GitHubSecretOwnerByName {
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            $_.Response | ForEach-Object {
-                $selectedRepositories = @()
-                if ($_.visibility -eq 'selected') {
-                    $selectedRepositories = Get-GitHubSecretSelectedRepository -Owner $Owner -Name $_.name -Context $Context
-                }
-                [GitHubSecret]@{
-                    Name                 = $_.name
-                    CreatedAt            = $_.created_at
-                    UpdatedAt            = $_.updated_at
-                    Scope                = 'Organization'
-                    Owner                = $Owner
-                    Visibility           = $_.visibility
-                    SelectedRepositories = $selectedRepositories
-                }
+            $selectedRepositories = @()
+            if ($_.Response.visibility -eq 'selected') {
+                $selectedRepositories = Get-GitHubSecretSelectedRepository -Owner $Owner -Name $_.Response.name -Context $Context
             }
+            [GitHubSecret]::new($_.Response, $Owner, $null, $null, $selectedRepositories)
         }
     }
 

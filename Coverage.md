@@ -9,15 +9,15 @@
     </tr>
     <tr>
         <td>Covered functions</td>
-        <td>223</td>
+        <td>221</td>
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>803</td>
+        <td>805</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>21.73%</td>
+        <td>21.54%</td>
     </tr>
 </table>
 
@@ -339,7 +339,7 @@
 | `/repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches`                                                        |                    |                    |                    | :white_check_mark: |                    |
 | `/repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable`                                                            |                    |                    |                    |                    | :white_check_mark: |
 | `/repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs`                                                              |                    | :white_check_mark: |                    |                    |                    |
-| `/repos/{owner}/{repo}/actions/workflows/{workflow_id}/timing`                                                            |                    | :white_check_mark: |                    |                    |                    |
+| `/repos/{owner}/{repo}/actions/workflows/{workflow_id}/timing`                                                            |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/activity`                                                                                          |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/assignees`                                                                                         |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/assignees/{assignee}`                                                                              |                    | :x:                |                    |                    |                    |
@@ -681,7 +681,7 @@
 | `/users/{username}/following/{target_user}`                                                                               |                    | :white_check_mark: |                    |                    |                    |
 | `/users/{username}/gists`                                                                                                 |                    | :x:                |                    |                    |                    |
 | `/users/{username}/gpg_keys`                                                                                              |                    | :white_check_mark: |                    |                    |                    |
-| `/users/{username}/hovercard`                                                                                             |                    | :white_check_mark: |                    |                    |                    |
+| `/users/{username}/hovercard`                                                                                             |                    | :x:                |                    |                    |                    |
 | `/users/{username}/installation`                                                                                          |                    | :x:                |                    |                    |                    |
 | `/users/{username}/keys`                                                                                                  |                    | :white_check_mark: |                    |                    |                    |
 | `/users/{username}/orgs`                                                                                                  |                    | :white_check_mark: |                    |                    |                    |

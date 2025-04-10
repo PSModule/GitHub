@@ -70,15 +70,7 @@ function Get-GitHubVariableRepositoryList {
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             $_.Response.variables | ForEach-Object {
-                [GitHubVariable]@{
-                    Name       = $_.name
-                    Value      = $_.value
-                    CreatedAt  = $_.created_at
-                    UpdatedAt  = $_.updated_at
-                    Scope      = 'Repository'
-                    Owner      = $Owner
-                    Repository = $Repository
-                }
+                [GitHubVariable]::new($_, $Owner, $Repository, $null, $null)
             }
         }
     }

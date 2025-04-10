@@ -20,7 +20,7 @@
 param()
 
 BeforeAll {
-    $testName = 'EnvironmentTest'
+    $testName = 'EnvironmentsTests'
     $environmentName = 'production'
     $os = $env:RUNNER_OS
     $guid = [guid]::NewGuid().ToString()
@@ -41,7 +41,8 @@ Describe 'Environments' {
                     Write-Host ($context | Format-List | Out-String)
                 }
             }
-            $repoName = "$testName-$os-$TokenType-$guid"
+            $repoPrefix = "$testName-$os-$TokenType"
+            $repoName = "$repoPrefix-$guid"
             switch ($OwnerType) {
                 'user' {
                     New-GitHubRepository -Name $repoName -AllowSquashMerge
@@ -53,7 +54,14 @@ Describe 'Environments' {
         }
 
         AfterAll {
-            Remove-GitHubRepository -Owner $owner -Name $repoName -Confirm:$false
+            switch ($OwnerType) {
+                'user' {
+                    Get-GitHubRepository -Affiliation owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                }
+                'organization' {
+                    Get-GitHubRepository -Owner $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                }
+            }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
         }
 

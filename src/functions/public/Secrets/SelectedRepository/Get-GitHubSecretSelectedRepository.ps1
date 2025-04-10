@@ -14,9 +14,8 @@ function Get-GitHubSecretSelectedRepository {
         Outputs:
         ```powershell
         Name        : hello-world
-        FullName    : octocat/hello-world
         NodeID      : m_MDXNcwMAwMMA
-        DatabaseID  : 123456789
+        ID          : 123456789
         Description : A test repo for hello-world.
         Owner       : octocat
         Url         : https://github.com/octocat/hello-world
@@ -24,9 +23,8 @@ function Get-GitHubSecretSelectedRepository {
         UpdatedAt   :
 
         Name        : hello-world2
-        FullName    : octocat/hello-world2
         NodeID      : n_NEYOdxNBxNNB
-        DatabaseID  : 987654321
+        ID          : 987654321
         Description : A test repo for hello-world.
         Owner       : octocat
         Url         : https://github.com/octocat/hello-world2
@@ -85,15 +83,7 @@ function Get-GitHubSecretSelectedRepository {
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             $_.Response.repositories | ForEach-Object {
-                [GitHubRepository]@{
-                    Name        = $_.name
-                    FullName    = $_.full_name
-                    NodeID      = $_.node_id
-                    DatabaseID  = $_.id
-                    Description = $_.description
-                    Owner       = $_.owner.login
-                    URL         = $_.html_url
-                }
+                [GitHubRepository]::New($_)
             }
         }
     }
