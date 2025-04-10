@@ -17,10 +17,13 @@
 
         Gets the repositories with an ID equals and greater than 123456789.
 
-        .NOTES
-        https://docs.github.com/rest/repos/repos#list-public-repositories
+        .OUTPUTS
+        GitHubRepository
 
+        .LINK
+        [List public repositories](https://docs.github.com/rest/repos/repos#list-public-repositories)
     #>
+    [OutputType([GitHubRepository])]
     [CmdletBinding()]
     param(
         # A repository ID. Only return repositories with an ID greater than this ID.

@@ -20,15 +20,20 @@
         }
         Update-GitHubRepository @params
 
-        .NOTES
+        .OUTPUTS
+        GitHubRepository
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Repositories/Update-GitHubRepository/
+
+        .LINK
         [Update a repository](https://docs.github.com/rest/repos/repos#update-a-repository)
     #>
+    [OutputType([GitHubRepository])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [Alias('Organization')]
-        [Alias('User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.

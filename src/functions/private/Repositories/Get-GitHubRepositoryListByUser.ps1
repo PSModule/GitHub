@@ -22,10 +22,13 @@
 
         Gets the repositories for the user 'octocat' sorted by creation date in ascending order.
 
-        .NOTES
-        https://docs.github.com/rest/repos/repos#list-repositories-for-a-user
+        .OUTPUTS
+        GitHubRepository
 
+        .LINK
+        [List repositories for a user](https://docs.github.com/rest/repos/repos#list-repositories-for-a-user)
     #>
+    [OutputType([GitHubRepository])]
     [CmdletBinding()]
     param(
         # The handle for the GitHub user account.

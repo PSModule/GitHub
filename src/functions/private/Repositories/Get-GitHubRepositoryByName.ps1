@@ -15,10 +15,13 @@
 
         Gets the repository 'Hello-World' for the organization 'octocat'.
 
-        .NOTES
-        https://docs.github.com/rest/repos/repos#get-a-repository
+        .OUTPUTS
+        GitHubRepository
 
+        .LINK
+        [Get a repository](https://docs.github.com/rest/repos/repos#get-a-repository)
     #>
+    [OutputType([GitHubRepository])]
     [CmdletBinding()]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     param(
@@ -50,9 +53,7 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            $_.Response | ForEach-Object {
-                [GitHubRepository]::New($_)
-            }
+            [GitHubRepository]::New($_.Response)
         }
     }
 

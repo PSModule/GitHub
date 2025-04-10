@@ -16,15 +16,20 @@
 
         Moves the GitHub repository to the PSModule organization and renames it to GitHub.
 
-        .NOTES
+        .OUTPUTS
+        GitHubRepository
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Repositories/Move-GitHubRepository/
+
+        .LINK
         [Transfer a repository](https://docs.github.com/rest/repos/repos#transfer-a-repository)
     #>
+    [OutputType([GitHubRepository])]
     [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [Alias('Organization')]
-        [Alias('User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
@@ -33,17 +38,14 @@
 
         # The username or organization name the repository will be transferred to.
         [Parameter(Mandatory)]
-        [Alias('new_owner')]
         [string] $NewOwner,
 
         # The new name to be given to the repository.
         [Parameter()]
-        [Alias('new_name')]
         [string] $NewName,
 
         # ID of the team or teams to add to the repository. Teams can only be added to organization-owned repositories.
         [Parameter()]
-        [Alias('team_ids')]
         [int[]] $TeamIds,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -75,7 +77,7 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            [GitHubRepository]::New($_.Response)
         }
     }
 

@@ -1,22 +1,23 @@
 ﻿#Requires -Modules @{ ModuleName = 'DynamicParams'; RequiredVersion = '1.1.8' }
 
-filter New-GitHubRepositoryUser {
+filter New-GitHubRepositoryOrg {
     <#
         .SYNOPSIS
-        Create a repository for the authenticated user
+        Create an organization repository
 
         .DESCRIPTION
-        Creates a new repository for the authenticated user.
+        Creates a new repository in the specified organization. The authenticated user must be a member of the organization.
 
         **OAuth scope requirements**
 
         When using [OAuth](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/), authorizations must include:
 
         * `public_repo` scope or `repo` scope to create a public repository. Note: For GitHub AE, use `repo` scope to create an internal repository.
-        * `repo` scope to create a private repository.
+        * `repo` scope to create a private repository
 
         .EXAMPLE
         $params = @{
+            Owner                    = 'PSModule'
             Name                     = 'Hello-World'
             Description              = 'This is your first repository'
             Homepage                 = 'https://github.com'
@@ -32,20 +33,25 @@ filter New-GitHubRepositoryUser {
             SquashMergeCommitTitle   = 'PR_TITLE'
             SquashMergeCommitMessage = 'PR_BODY'
         }
-        New-GitHubRepositoryUser @params
+        New-GitHubRepositoryOrg @params
 
-        Creates a new public repository named "Hello-World" owned by the authenticated user.
+        Creates a new public repository named "Hello-World" owned by the organization "PSModule".
 
         .PARAMETER GitignoreTemplate
-        The desired language or platform to apply to the .gitignore.
+        Desired language or platform .gitignore template to apply. Use the name of the template without the extension. For example, "Haskell".
 
         .PARAMETER LicenseTemplate
-        The license keyword of the open source license for this repository.
+        Choose an open source license template that best suits your needs, and then use the license keyword as the license_template string.
+        For example, "mit" or "mpl-2.0".
 
-        .NOTES
-        https://docs.github.com/rest/repos/repos#create-a-repository-for-the-authenticated-user
+        .OUTPUTS
+        GitHubRepository
+
+        .LINK
+        [Create an organization repository](https://docs.github.com/rest/repos/repos#create-an-organization-repository)
 
     #>
+    [OutputType([GitHubRepository])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSUseDeclaredVarsMoreThanAssignments',
         'GitignoreTemplate',
@@ -58,6 +64,12 @@ filter New-GitHubRepositoryUser {
     )]
     [CmdletBinding(SupportsShouldProcess)]
     param(
+        # The account owner of the repository. The name is not case sensitive.
+        [Parameter(Mandatory)]
+        [Alias('Organization')]
+        [Alias('User')]
+        [string] $Owner,
+
         # The name of the repository.
         [Parameter(Mandatory)]
         [string] $Name,
@@ -76,32 +88,29 @@ filter New-GitHubRepositoryUser {
         [ValidateSet('public', 'private')]
         [string] $Visibility = 'public',
 
-        # Whether issues are enabled.
+        # Either true to enable issues for this repository or false to disable them.
         [Parameter()]
         [Alias('has_issues')]
         [switch] $HasIssues,
 
-        # Whether projects are enabled.
+        # Either true to enable projects for this repository or false to disable them.
+        # Note: If you're creating a repository in an organization that has disabled repository projects, the default is false,
+        # and if you pass true, the API returns an error.
         [Parameter()]
         [Alias('has_projects')]
         [switch] $HasProjects,
 
-        # Whether the wiki is enabled.
+        # Either true to enable the wiki for this repository or false to disable it.
         [Parameter()]
         [Alias('has_wiki')]
         [switch] $HasWiki,
-
-        # Whether discussions are enabled.
-        [Parameter()]
-        [Alias('has_discussions')]
-        [switch] $HasDiscussions,
 
         # Whether downloads are enabled.
         [Parameter()]
         [Alias('has_downloads')]
         [switch] $HasDownloads,
 
-        # Whether this repository acts as a template that can be used to generate new repositories.
+        # Either true to make this repo available as a template repository or false to prevent it.
         [Parameter()]
         [Alias('is_template')]
         [switch] $IsTemplate,
@@ -116,27 +125,28 @@ filter New-GitHubRepositoryUser {
         [Alias('auto_init')]
         [switch] $AutoInit,
 
-        # Whether to allow squash merges for pull requests.
+        # Either true to allow squash-merging pull requests, or false to prevent squash-merging.
         [Parameter()]
         [Alias('allow_squash_merge')]
         [switch] $AllowSquashMerge,
 
-        # Whether to allow merge commits for pull requests.
+        # Either true to allow merging pull requests with a merge commit, or false to prevent merging pull requests with merge commits.
         [Parameter()]
         [Alias('allow_merge_commit')]
         [switch] $AllowMergeCommit,
 
-        # Whether to allow rebase merges for pull requests.
+        # Either true to allow rebase-merging pull requests, or false to prevent rebase-merging.
         [Parameter()]
         [Alias('allow_rebase_merge')]
         [switch] $AllowRebaseMerge,
 
-        # Whether to allow Auto-merge to be used on pull requests.
+        # Either true to allow auto-merge on pull requests, or false to disallow auto-merge.
         [Parameter()]
         [Alias('allow_auto_merge')]
         [switch] $AllowAutoMerge,
 
-        # Whether to delete head branches when pull requests are merged
+        # Either true to allow automatically deleting head branches when pull requests are merged, or false to prevent automatic deletion.
+        # The authenticated user must be an organization owner to set this property to true.
         [Parameter()]
         [Alias('delete_branch_on_merge')]
         [switch] $DeleteBranchOnMerge,
@@ -209,11 +219,11 @@ filter New-GitHubRepositoryUser {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-        $GitignoreTemplate = $PSBoundParameters['GitignoreTemplate']
-        $LicenseTemplate = $PSBoundParameters['LicenseTemplate']
     }
 
     process {
+        $GitignoreTemplate = $PSBoundParameters['GitignoreTemplate']
+        $LicenseTemplate = $PSBoundParameters['LicenseTemplate']
         $body = @{
             name                        = $Name
             description                 = $Description
@@ -240,14 +250,14 @@ filter New-GitHubRepositoryUser {
 
         $inputObject = @{
             Method      = 'POST'
-            APIEndpoint = '/user/repos'
+            APIEndpoint = "/orgs/$Owner/repos"
             Body        = $body
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess('Repository for user', 'Create')) {
+        if ($PSCmdlet.ShouldProcess("Repository [$Name] in organization [$Owner]", 'Create')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
+                [GitHubRepository]::New($_.Response)
             }
         }
     }

@@ -44,12 +44,8 @@ filter Get-GitHubRepository {
         .OUTPUTS
         GithubRepository
 
-        .NOTES
-        [List repositories for the authenticated user](https://docs.github.com/rest/repos/repos#list-repositories-for-the-authenticated-user)
-        [Get a repository](https://docs.github.com/rest/repos/repos#get-a-repository)
-        [List public repositories](https://docs.github.com/rest/repos/repos#list-public-repositories)
-        [List organization repositories](https://docs.github.com/rest/repos/repos#list-organization-repositories)
-        [List repositories for a user](https://docs.github.com/rest/repos/repos#list-repositories-for-a-user)
+        .LINK
+        https://psmodule.io/GitHub/Functions/Repositories/Get-GitHubRepository/
     #>
     [OutputType([GitHubRepository])]
     [CmdletBinding(DefaultParameterSetName = 'MyRepos_Type')]

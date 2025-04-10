@@ -31,11 +31,13 @@
 
         Creates a new private repository named `MyNewRepo` from the `octocat` template repository owned by `GitHub`.
 
-        .NOTES
-        https://docs.github.com/rest/repos/repos#create-a-repository-using-a-template
+        .OUTPUTS
+        GitHubRepository
 
+        .LINK
+        [Create a repository using a template](https://docs.github.com/rest/repos/repos#create-a-repository-using-a-template)
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([GitHubRepository])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the template repository. The name is not case sensitive.
@@ -101,9 +103,7 @@
 
         if ($PSCmdlet.ShouldProcess("Repository [$Owner/$Name] from template [$TemplateOwner/$TemplateRepo]", 'Create')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
-                $_.Response | ForEach-Object {
-                    [GitHubRepository]::New($_)
-                }
+                [GitHubRepository]::New($_.Response)
             }
         }
     }

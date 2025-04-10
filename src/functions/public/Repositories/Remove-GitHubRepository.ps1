@@ -14,7 +14,10 @@
 
         Deletes the repository `Hello-World` in the `PSModule` organization.
 
-        .NOTES
+        .LINK
+        https://psmodule.io/GitHub/Functions/Repositories/Remove-GitHubRepository/
+
+        .LINK
         [Delete a repository](https://docs.github.com/rest/repos/repos#delete-a-repository)
     #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
@@ -24,8 +27,6 @@
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('Organization')]
-        [Alias('User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.

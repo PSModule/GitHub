@@ -24,10 +24,13 @@
 
         Gets the repositories for the organization 'octocat' sorted by creation date in ascending order.
 
-        .NOTES
-        https://docs.github.com/rest/repos/repos#list-organization-repositories
+        .OUTPUTS
+        GitHubRepository
 
+        .LINK
+        [List organization repositories](https://docs.github.com/rest/repos/repos#list-organization-repositories)
     #>
+    [OutputType([GitHubRepository])]
     [CmdletBinding()]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     param(

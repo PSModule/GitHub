@@ -33,11 +33,13 @@
 
         Fork the repository `Hello-World` owned by `github` for the authenticated user, forking only the default branch.
 
-        .NOTES
-        https://docs.github.com/rest/repos/forks#create-a-fork
+        .OUTPUTS
+        GitHubRepository
 
+        .LINK
+        [Create a fork](https://docs.github.com/rest/repos/forks#create-a-fork)
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([GitHubRepository])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.
@@ -90,7 +92,7 @@
 
         if ($PSCmdlet.ShouldProcess("Repository [$Organization/$Name] as fork of [$Owner/$Repository]", 'Create')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
+                [GitHubRepository]::New($_.Response)
             }
         }
     }

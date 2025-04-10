@@ -1,7 +1,7 @@
 ﻿filter Get-GitHubMyRepositories {
     <#
         .SYNOPSIS
-        List repositories for the authenticated user
+        List repositories for the authenticated user.
 
         .DESCRIPTION
         Lists repositories that the authenticated user has explicit permission (`:read`, `:write`, or `:admin`) to access.
@@ -50,10 +50,13 @@
 
         Gets the repositories for the authenticated user that are owned by an organization.
 
-        .NOTES
-        https://docs.github.com/rest/repos/repos#list-repositories-for-the-authenticated-user
+        .OUTPUTS
+        GitHubRepository
 
+        .LINK
+        [List repositories for the authenticated user](https://docs.github.com/rest/repos/repos#list-repositories-for-the-authenticated-user)
     #>
+    [OutputType([GitHubRepository])]
     [CmdletBinding(DefaultParameterSetName = 'Type')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Private function, not exposed to user.')]
     param(
