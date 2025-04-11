@@ -203,7 +203,9 @@ filter Get-GitHubRepository {
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues
                 Write-Verbose ($params | Format-List | Out-String)
-                Get-GitHubRepositoryByName @params
+                try {
+                    Get-GitHubRepositoryByName @params
+                } catch { $null }
             }
             'ListByID' {
                 $params = @{
