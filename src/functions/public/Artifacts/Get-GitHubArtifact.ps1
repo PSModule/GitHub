@@ -5,7 +5,7 @@ function Get-GitHubArtifact {
         .DESCRIPTION
 
         .EXAMPLE
-        Get-GitHubArtifact -Owner 'octocat' -Repository 'Hello-World' -ArtifactID '123456'
+        Get-GitHubArtifact -Owner 'octocat' -Repository 'Hello-World' -ID '123456'
 
         Output:
         ```powershell
@@ -15,10 +15,10 @@ function Get-GitHubArtifact {
         CreatedAt   : 2024-12-01T10:00:00Z
         ```
 
-        Retrieves a single GitHub Actions artifact using its unique ArtifactID.
+        Retrieves a single GitHub Actions artifact using its unique artifact ID.
 
         .EXAMPLE
-        Get-GitHubArtifact -Owner 'octocat' -Repository 'Hello-World' -ID '987654321' -AllVersions
+        Get-GitHubArtifact -Owner 'octocat' -Repository 'Hello-World' -WorkflowRunID '987654321'
 
         Output:
         ```powershell
@@ -28,7 +28,25 @@ function Get-GitHubArtifact {
         CreatedAt   : 2025-01-15T15:25:00Z
         ```
 
-        Retrieves all versions of artifacts from the specified workflow run.
+        Retrieves the latest version of all artifacts from the specified workflow run.
+
+        .EXAMPLE
+        Get-GitHubArtifact -Owner 'octocat' -Repository 'Hello-World' -WorkflowRunID '987654321' -AllVersions
+
+        Output:
+        ```powershell
+        Name        : test-results
+        ID          : 4564584673
+        SizeInBytes : 4096
+        CreatedAt   : 2025-01-15T14:25:00Z
+
+        Name        : test-results
+        ID          : 4564584674
+        SizeInBytes : 4096
+        CreatedAt   : 2025-01-15T15:25:00Z
+        ```
+
+        Retrieves the latest version of all artifacts from the specified workflow run.
 
         .EXAMPLE
         Get-GitHubArtifact -Owner 'octocat' -Repository 'Hello-World'
@@ -57,33 +75,25 @@ function Get-GitHubArtifact {
     [CmdletBinding(DefaultParameterSetName = 'FromRepository')]
     param(
         # The owner of the repository (GitHub user or org name).
-        [Parameter(Mandatory, ParameterSetName = 'ById')]
+        [Parameter(Mandatory, ParameterSetName = 'ById', ValueFromPipelineByPropertyName)]
         [Parameter(Mandatory, ParameterSetName = 'FromWorkflowRun', ValueFromPipelineByPropertyName)]
-        [Parameter(Mandatory, ParameterSetName = 'FromRepository')]
+        [Parameter(Mandatory, ParameterSetName = 'FromRepository', ValueFromPipelineByPropertyName)]
         [string] $Owner,
 
         # The name of the repository without the .git extension.
-        [Parameter(Mandatory, ParameterSetName = 'ById')]
+        [Parameter(Mandatory, ParameterSetName = 'ById', ValueFromPipelineByPropertyName)]
         [Parameter(Mandatory, ParameterSetName = 'FromWorkflowRun', ValueFromPipelineByPropertyName)]
-        [Parameter(Mandatory, ParameterSetName = 'FromRepository')]
+        [Parameter(Mandatory, ParameterSetName = 'FromRepository', ValueFromPipelineByPropertyName)]
         [string] $Repository,
 
         # Retrieves a single artifact by its unique ID.
-        [Parameter(
-            Mandatory,
-            ParameterSetName = 'ById',
-            ValueFromPipelineByPropertyName
-        )]
-        [string] $ArtifactID,
+        [Parameter(Mandatory, ParameterSetName = 'ById', ValueFromPipelineByPropertyName)]
+        [string] $ID,
 
         # Retrieves artifacts from a specific workflow run.
-        [Parameter(
-            Mandatory,
-            ParameterSetName = 'FromWorkflowRun',
-            ValueFromPipelineByPropertyName
-        )]
-        [Alias('WorkflowRunID', 'RunID', 'DatabaseID')]
-        [string] $ID,
+        [Parameter(Mandatory, ParameterSetName = 'FromWorkflowRun', ValueFromPipelineByPropertyName)]
+        [Alias('WorkflowRun')]
+        [string] $WorkflowRunId,
 
         # Retrieves artifacts by name or all artifacts across a repo.
         [Parameter(ParameterSetName = 'FromRepository')]
