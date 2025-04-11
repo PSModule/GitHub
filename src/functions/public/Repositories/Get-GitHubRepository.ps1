@@ -95,7 +95,6 @@ filter Get-GitHubRepository {
         [Parameter(Mandatory, ParameterSetName = 'ByName')]
         [string] $Name,
 
-
         # The property to sort the results by.
         [Parameter(ParameterSetName = 'MyRepos_Type')]
         [Parameter(ParameterSetName = 'MyRepos_Aff-Vis')]
