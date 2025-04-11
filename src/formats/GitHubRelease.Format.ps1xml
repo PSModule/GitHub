@@ -12,7 +12,7 @@
                         <Label>Name</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>TagName</Label>
+                        <Label>Tag</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
                         <Label>Author</Label>
@@ -40,7 +40,7 @@
                                 <PropertyName>Name</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>TagName</PropertyName>
+                                <PropertyName>Tag</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Author</PropertyName>
@@ -78,7 +78,7 @@
                                 <PropertyName>Name</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>TagName</PropertyName>
+                                <PropertyName>Tag</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>Latest</PropertyName>

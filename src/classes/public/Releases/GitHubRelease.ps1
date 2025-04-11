@@ -50,7 +50,7 @@ class GitHubRelease : GitHubNode {
 
     # The name of the tag
     # Example: "v0.22.1"
-    [string] $TagName
+    [string] $Tag
 
     # Specifies the commitish value that determines where the Git tag is created from
     # Example: "main"
@@ -106,7 +106,7 @@ class GitHubRelease : GitHubNode {
         $this.NodeID = $Object.node_id
         $this.Url = $Object.html_url
         $this.Author = [GitHubUser]::new($Object.author)
-        $this.TagName = $Object.tag_name
+        $this.Tag = $Object.tag_name
         $this.TargetCommitish = $Object.target_commitish
         $this.Name = $Object.name
         $this.Latest = $Latest
