@@ -228,7 +228,7 @@ filter Get-GitHubRepository {
                 Write-Verbose ($params | Format-List | Out-String)
                 try {
                     Get-GitHubRepositoryByName @params
-                } catch { $null }
+                } catch { return }
             }
             'ListByID' {
                 $params = @{
