@@ -53,7 +53,7 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            [GitHubRelease]::new($_.Response)
+            [GitHubRelease]::new($_.Response, $true)
         }
     }
 
