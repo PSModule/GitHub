@@ -13,11 +13,17 @@
 
         Gets all the releases for the repository 'hello-world' owned by 'octocat'.
 
-        .NOTES
-        https://docs.github.com/rest/releases/releases#list-releases
+        .INPUTS
+        GitHubRepository
 
+        .OUTPUTS
+        GitHubRelease
+
+        .LINK
+        [List releases](https://docs.github.com/rest/releases/releases#list-releases)
     #>
-    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
+    [OutputType([GitHubRelease])]
+    [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
@@ -28,7 +34,7 @@
         [string] $Repository,
 
         # The number of results per page (max 100).
-        [Parameter(ParameterSetName = 'AllUsers')]
+        [Parameter()]
         [ValidateRange(0, 100)]
         [int] $PerPage,
 
@@ -45,19 +51,16 @@
     }
 
     process {
-        $body = @{
-            per_page = $PerPage
-        }
-
         $inputObject = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/releases"
             Body        = $body
+            PerPage     = $PerPage
             Context     = $Context
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            $_.Response | ForEach-Object { [GitHubRelease]::new($_) }
         }
     }
     end {

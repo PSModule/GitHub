@@ -60,13 +60,13 @@
         $body = @{
             role              = $Role
             invitation_source = $InvitationSource
-            per_page          = $PerPage
         }
 
         $inputObject = @{
             Method      = 'GET'
             APIEndpoint = "/orgs/$Organization/invitations"
             Body        = $body
+            PerPage     = $PerPage
             Context     = $Context
         }
 

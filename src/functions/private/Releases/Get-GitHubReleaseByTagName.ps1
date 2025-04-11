@@ -11,10 +11,16 @@
 
         Gets the release with the tag 'v1.0.0' for the repository 'hello-world' owned by 'octocat'.
 
-        .NOTES
-        https://docs.github.com/rest/releases/releases#get-a-release-by-tag-name
+        .INPUTS
+        GitHubRepository
 
+        .OUTPUTS
+        GitHubRelease
+
+        .LINK
+        [Get a release by tag name](https://docs.github.com/rest/releases/releases#get-a-release-by-tag-name)
     #>
+    [OutputType([GitHubRelease])]
     [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
@@ -27,7 +33,6 @@
 
         # The name of the tag to get a release from.
         [Parameter(Mandatory)]
-        [Alias('tag_name')]
         [string] $Tag,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -50,7 +55,7 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            [GitHubRelease]::new($_.Response)
         }
     }
 
