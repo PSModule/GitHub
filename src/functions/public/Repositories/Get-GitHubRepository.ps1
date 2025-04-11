@@ -212,9 +212,16 @@ filter Get-GitHubRepository {
                 Get-GitHubMyRepositories @params
             }
             'ByName' {
+                $owner = if ($PSBoundParameters.ContainsKey('Username')) {
+                    $Username
+                } elseif ($PSBoundParameters.ContainsKey('Organization')) {
+                    $Organization
+                } else {
+                    (Get-GitHubUser -Context $Context).Name
+                }
                 $params = @{
                     Context = $Context
-                    Owner   = $Organization ?? $Username
+                    Owner   = $owner
                     Name    = $Name
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues
