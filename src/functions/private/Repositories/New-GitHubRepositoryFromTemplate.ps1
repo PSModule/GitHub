@@ -42,12 +42,10 @@
     param(
         # The account owner of the template repository. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [Alias('template_owner')]
         [string] $TemplateOwner,
 
         # The name of the template repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [Alias('template_repo')]
         [string] $TemplateRepo,
 
         # The organization or person who will own the new repository.
@@ -66,7 +64,6 @@
         # Set to true to include the directory structure and files from all branches in the template repository,
         # and not just the default branch.
         [Parameter()]
-        [Alias('include_all_branches')]
         [switch] $IncludeAllBranches,
 
         # Either true to create a new private repository or false to create a new public one.

@@ -26,7 +26,7 @@ filter New-GitHubRepository {
             HasDiscussions           = $true
             HasDownloads             = $true
             IsTemplate               = $true
-            AutoInit                 = $true
+            AddReadme                = $true
             AllowSquashMerge         = $true
             AllowAutoMerge           = $true
             DeleteBranchOnMerge      = $true
@@ -48,7 +48,7 @@ filter New-GitHubRepository {
             HasWiki                  = $true
             HasDownloads             = $true
             IsTemplate               = $true
-            AutoInit                 = $true
+            AddReadme                = $true
             AllowSquashMerge         = $true
             AllowAutoMerge           = $true
             DeleteBranchOnMerge      = $true
@@ -86,12 +86,11 @@ filter New-GitHubRepository {
         Creates a new repository named `MyNewRepo` as a fork of `Hello-World` owned by `octocat`.
         Only the default branch will be forked.
 
-        .PARAMETER GitignoreTemplate
-        Desired language or platform .gitignore template to apply. Use the name of the template without the extension. For example, "Haskell".
+        .PARAMETER Gitignore
+        The desired language or platform to apply to the .gitignore.
 
-        .PARAMETER LicenseTemplate
-        Choose an open source license template that best suits your needs, and then use the license keyword as the license_template string.
-        For example, "mit" or "mpl-2.0".
+        .PARAMETER License
+        The license keyword of the open source license for this repository.
 
         .OUTPUTS
         GitHubRepository
@@ -106,10 +105,7 @@ filter New-GitHubRepository {
         [Create an organization repository](https://docs.github.com/rest/repos/repos#create-an-organization-repository)
     #>
     [OutputType([GitHubRepository])]
-    [CmdletBinding(
-        SupportsShouldProcess,
-        DefaultParameterSetName = 'user'
-    )]
+    [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName = 'user')]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(ParameterSetName = 'org')]
@@ -128,18 +124,15 @@ filter New-GitHubRepository {
         [string] $TemplateOwner,
 
         # The name of the template repository without the .git extension. The name is not case sensitive.
-        [Parameter(Mandatory, ParameterSetName = 'template'
-        )]
+        [Parameter(Mandatory, ParameterSetName = 'template')]
         [string] $TemplateRepository,
 
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(Mandatory, ParameterSetName = 'fork'
-        )]
+        [Parameter(Mandatory, ParameterSetName = 'fork')]
         [string] $ForkOwner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter(Mandatory, ParameterSetName = 'fork'
-        )]
+        [Parameter(Mandatory, ParameterSetName = 'fork')]
         [string] $ForkRepo,
 
         # When forking from an existing repository, fork with only the default branch.
@@ -304,8 +297,6 @@ filter New-GitHubRepository {
     }
 
     process {
-        $GitignoreTemplate = $PSBoundParameters['GitignoreTemplate']
-        $LicenseTemplate = $PSBoundParameters['LicenseTemplate']
         Write-Verbose "ParameterSetName: $($PSCmdlet.ParameterSetName)"
         switch ($PSCmdlet.ParameterSetName) {
             'user' {
@@ -322,7 +313,7 @@ filter New-GitHubRepository {
                     HasDownloads             = $HasDownloads
                     IsTemplate               = $IsTemplate
                     TeamId                   = $TeamId
-                    AutoInit                 = $AutoInit
+                    AddReadme                = $AddReadme
                     AllowSquashMerge         = $AllowSquashMerge
                     AllowMergeCommit         = $AllowMergeCommit
                     AllowRebaseMerge         = $AllowRebaseMerge
@@ -332,8 +323,8 @@ filter New-GitHubRepository {
                     SquashMergeCommitMessage = $SquashMergeCommitMessage
                     MergeCommitTitle         = $MergeCommitTitle
                     MergeCommitMessage       = $MergeCommitMessage
-                    GitignoreTemplate        = $GitignoreTemplate
-                    LicenseTemplate          = $LicenseTemplate
+                    Gitignore                = $PSBoundParameters['Gitignore']
+                    License                  = $PSBoundParameters['License']
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues
                 if ($PSCmdlet.ShouldProcess("repository for user [$Name]", 'Create')) {
@@ -354,7 +345,7 @@ filter New-GitHubRepository {
                     HasDownloads             = $HasDownloads
                     IsTemplate               = $IsTemplate
                     TeamId                   = $TeamId
-                    AutoInit                 = $AutoInit
+                    AddReadme                = $AddReadme
                     AllowSquashMerge         = $AllowSquashMerge
                     AllowMergeCommit         = $AllowMergeCommit
                     AllowRebaseMerge         = $AllowRebaseMerge
@@ -364,8 +355,8 @@ filter New-GitHubRepository {
                     SquashMergeCommitMessage = $SquashMergeCommitMessage
                     MergeCommitTitle         = $MergeCommitTitle
                     MergeCommitMessage       = $MergeCommitMessage
-                    GitignoreTemplate        = $GitignoreTemplate
-                    LicenseTemplate          = $LicenseTemplate
+                    Gitignore                = $PSBoundParameters['Gitignore']
+                    License                  = $PSBoundParameters['License']
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues
                 if ($PSCmdlet.ShouldProcess("repository for organization [$Owner/$Name]", 'Create')) {
@@ -395,8 +386,8 @@ filter New-GitHubRepository {
                 if ($PSCmdlet.ShouldProcess("repository [$Owner/$Name] as fork from [$ForkOwner/$ForkRepo]", 'Create')) {
                     $params = @{
                         Context           = $Context
-                        Owner             = $ForkOwner
-                        Repo              = $ForkRepo
+                        ForkOwner         = $ForkOwner
+                        ForkRepo          = $ForkRepo
                         Organization      = $Owner
                         Name              = $Name
                         DefaultBranchOnly = $DefaultBranchOnly
