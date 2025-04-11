@@ -164,7 +164,22 @@ filter Get-GitHubRepository {
     }
 
     process {
-        $Type = $PSBoundParameters['Type']
+        $Type = if ($null -eq $PSBoundParameters['Type']) {
+            switch ($PSCmdlet.ParameterSetName) {
+                'MyRepos_Type' {
+                    'owner'
+                }
+                'ListByOrg' {
+                    'all'
+                }
+                'ListByUser' {
+                    'owner'
+                }
+            }
+        } else {
+            $PSBoundParameters['Type']
+        }
+
         Write-Debug "ParamSet: [$($PSCmdlet.ParameterSetName)]"
         switch ($PSCmdlet.ParameterSetName) {
             'MyRepos_Type' {
