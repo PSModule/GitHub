@@ -1,21 +1,18 @@
-﻿filter Get-GitHubReleaseLatest {
+﻿filter Get-GitHubBranchList {
     <#
         .SYNOPSIS
-        Get the latest release
+        List branches
 
         .DESCRIPTION
-        View the latest published full release for the repository.
-        The latest release is the most recent non-prerelease, non-draft release, sorted by the `created_at` attribute.
-        The `created_at` attribute is the date of the commit used for the release, and not the date when the release was drafted or published.
+        Lists all branches from a repository
 
         .EXAMPLE
-        Get-GitHubReleaseLatest -Owner 'octocat' -Repository 'hello-world'
+        Get-GitHubBranchList -Owner 'octocat' -Repository 'Hello-World'
 
-        Gets the latest releases for the repository 'hello-world' owned by 'octocat'.
+        Gets all the branches from the 'Hello-World' repository owned by 'octocat'
 
         .NOTES
-        https://docs.github.com/rest/releases/releases#get-the-latest-release
-
+        [List branches](https://docs.github.com/rest/branches/branches#list-branches)
     #>
     [CmdletBinding()]
     param(
@@ -42,7 +39,7 @@
     process {
         $inputObject = @{
             Method      = 'GET'
-            APIEndpoint = "/repos/$Owner/$Repository/releases/latest"
+            APIEndpoint = "/repos/$Owner/$Repository/branches"
             Context     = $Context
         }
 

@@ -1,7 +1,7 @@
 ﻿filter Get-GitHubRepositoryListByOrg {
     <#
         .SYNOPSIS
-        List organization repositories
+        List organization repositories.
 
         .DESCRIPTION
         Lists repositories for the specified organization.
@@ -10,17 +10,17 @@
         For more information, see "[Managing security managers in your organization](https://docs.github.com/organizations/managing-peoples-access-to-your-organization-with-roles/managing-security-managers-in-your-organization)."
 
         .EXAMPLE
-        Get-GitHubRepositoryListByOrg -Owner 'octocat'
+        Get-GitHubRepositoryListByOrg -Organization 'octocat'
 
         Gets the repositories for the organization 'octocat'.
 
         .EXAMPLE
-        Get-GitHubRepositoryListByOrg -Owner 'octocat' -Type 'public'
+        Get-GitHubRepositoryListByOrg -Organization 'octocat' -Type 'public'
 
         Gets the public repositories for the organization 'octocat'.
 
         .EXAMPLE
-        Get-GitHubRepositoryListByOrg -Owner 'octocat' -Sort 'created' -Direction 'asc'
+        Get-GitHubRepositoryListByOrg -Organization 'octocat' -Sort 'created' -Direction 'asc'
 
         Gets the repositories for the organization 'octocat' sorted by creation date in ascending order.
 
@@ -36,7 +36,7 @@
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [string] $Owner,
+        [string] $Organization,
 
         # Specifies the types of repositories you want returned.
         [Parameter()]
@@ -81,7 +81,7 @@
 
         $inputObject = @{
             Method      = 'GET'
-            APIEndpoint = "/orgs/$Owner/repos"
+            APIEndpoint = "/orgs/$Organization/repos"
             Body        = $body
             Context     = $Context
         }

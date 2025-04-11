@@ -32,28 +32,23 @@
     [CmdletBinding()]
     param(
         # The handle for the GitHub user account.
-        [Parameter(
-            Mandatory,
-            ValueFromPipeline,
-            ValueFromPipelineByPropertyName
-        )]
-        [Alias('login')]
+        [Parameter(Mandatory)]
         [string] $Username,
 
         # Specifies the types of repositories you want returned.
         [Parameter()]
-        [validateSet('all', 'owner', 'member')]
+        [ValidateSet('all', 'owner', 'member')]
         [string] $Type = 'all',
 
         # The property to sort the results by.
         [Parameter()]
-        [validateSet('created', 'updated', 'pushed', 'full_name')]
+        [ValidateSet('created', 'updated', 'pushed', 'full_name')]
         [string] $Sort = 'created',
 
         # The order to sort by.
         # Default: asc when using full_name, otherwise desc.
         [Parameter()]
-        [validateSet('asc', 'desc')]
+        [ValidateSet('asc', 'desc')]
         [string] $Direction,
 
         # The number of results per page (max 100).

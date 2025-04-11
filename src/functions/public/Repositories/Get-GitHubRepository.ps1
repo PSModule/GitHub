@@ -37,9 +37,12 @@ filter Get-GitHubRepository {
         Gets the repositories with an ID equals and greater than 123456789.
 
         .EXAMPLE
-        Get-GitHubRepository -Owner 'github' -Name 'octocat'
+        Get-GitHubRepository -Organization 'github' -Name 'octocat'
 
         Gets the specified repository.
+
+        .INPUTS
+        GitHubOwner
 
         .OUTPUTS
         GithubRepository
@@ -63,7 +66,7 @@ filter Get-GitHubRepository {
         # Default: owner, collaborator, organization_member
         [Parameter(ParameterSetName = 'MyRepos_Aff-Vis')]
         [ValidateSet('owner', 'collaborator', 'organization_member')]
-        [string[]] $Affiliation = @('owner', 'collaborator', 'organization_member'),
+        [string[]] $Affiliation = 'owner',
 
         # A repository ID. Only return repositories with an ID greater than this ID.
         [Parameter(ParameterSetName = 'ListByID')]
@@ -80,25 +83,18 @@ filter Get-GitHubRepository {
         [datetime] $Before,
 
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(ParameterSetName = 'ByName')]
-        [Parameter(ParameterSetName = 'ListByOrg')]
-        [string] $Owner,
-
-        # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter(
-            Mandatory,
-            ParameterSetName = 'ByName'
-        )]
-        [string] $Name,
+        [Parameter(ParameterSetName = 'ByName', ValueFromPipelineByPropertyName)]
+        [Parameter(ParameterSetName = 'ListByOrg', ValueFromPipelineByPropertyName)]
+        [string] $Organization,
 
         # The handle for the GitHub user account.
-        [Parameter(
-            Mandatory,
-            ValueFromPipeline,
-            ValueFromPipelineByPropertyName,
-            ParameterSetName = 'ListByUser'
-        )]
+        [Parameter(ParameterSetName = 'ByName', ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ParameterSetName = 'ListByUser', ValueFromPipelineByPropertyName)]
         [string] $Username,
+
+        # The name of the repository without the .git extension. The name is not case sensitive.
+        [Parameter(Mandatory, ParameterSetName = 'ByName')]
+        [string] $Name,
 
         # The property to sort the results by.
         [Parameter(ParameterSetName = 'MyRepos_Type')]
@@ -168,7 +164,22 @@ filter Get-GitHubRepository {
     }
 
     process {
-        $Type = $PSBoundParameters['Type']
+        $Type = if ($null -eq $PSBoundParameters['Type']) {
+            switch ($PSCmdlet.ParameterSetName) {
+                'MyRepos_Type' {
+                    'owner'
+                }
+                'ListByOrg' {
+                    'all'
+                }
+                'ListByUser' {
+                    'owner'
+                }
+            }
+        } else {
+            $PSBoundParameters['Type']
+        }
+
         Write-Debug "ParamSet: [$($PSCmdlet.ParameterSetName)]"
         switch ($PSCmdlet.ParameterSetName) {
             'MyRepos_Type' {
@@ -201,14 +212,23 @@ filter Get-GitHubRepository {
                 Get-GitHubMyRepositories @params
             }
             'ByName' {
+                $owner = if ($PSBoundParameters.ContainsKey('Username')) {
+                    $Username
+                } elseif ($PSBoundParameters.ContainsKey('Organization')) {
+                    $Organization
+                } else {
+                    (Get-GitHubUser -Context $Context).Name
+                }
                 $params = @{
                     Context = $Context
-                    Owner   = $Owner
+                    Owner   = $owner
                     Name    = $Name
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues
                 Write-Verbose ($params | Format-List | Out-String)
-                Get-GitHubRepositoryByName @params
+                try {
+                    Get-GitHubRepositoryByName @params
+                } catch { return }
             }
             'ListByID' {
                 $params = @{
@@ -221,12 +241,12 @@ filter Get-GitHubRepository {
             }
             'ListByOrg' {
                 $params = @{
-                    Context   = $Context
-                    Owner     = $Owner
-                    Type      = $Type
-                    Sort      = $Sort
-                    Direction = $Direction
-                    PerPage   = $PerPage
+                    Context      = $Context
+                    Organization = $Organization
+                    Type         = $Type
+                    Sort         = $Sort
+                    Direction    = $Direction
+                    PerPage      = $PerPage
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues
                 Write-Verbose ($params | Format-List | Out-String)
