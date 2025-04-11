@@ -49,10 +49,10 @@
                                 <PropertyName>Draft</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <ScriptBlock>CreatedAt</ScriptBlock>
+                                <PropertyName>CreatedAt</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <ScriptBlock>PublishedAt</ScriptBlock>
+                                <PropertyName>PublishedAt</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
@@ -69,67 +69,51 @@
                     <ListEntry>
                         <ListItems>
                             <ListItem>
-                                <Label>Name</Label>
                                 <PropertyName>Name</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <Label>TagName</Label>
                                 <PropertyName>TagName</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <Label>Url</Label>
                                 <PropertyName>Url</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <Label>Author</Label>
                                 <PropertyName>Author</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <Label>TargetCommitish</Label>
                                 <PropertyName>TargetCommitish</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <Label>Draft</Label>
                                 <PropertyName>Draft</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <Label>Prerelease</Label>
                                 <PropertyName>Prerelease</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <Label>CreatedAt</Label>
-                                <ScriptBlock>CreatedAt</ScriptBlock>
+                                <PropertyName>CreatedAt</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <Label>PublishedAt</Label>
-                                <ScriptBlock>PublishedAt</ScriptBlock>
+                                <PropertyName>PublishedAt</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <Label>TarballUrl</Label>
                                 <PropertyName>TarballUrl</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <Label>ZipballUrl</Label>
                                 <PropertyName>ZipballUrl</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <Label>Assets</Label>
                                 <PropertyName>Assets</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <Label>Body</Label>
                                 <PropertyName>Body</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <Label>Mentions</Label>
                                 <PropertyName>Mentions</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <Label>ID</Label>
                                 <PropertyName>ID</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <Label>NodeID</Label>
                                 <PropertyName>NodeID</PropertyName>
                             </ListItem>
                         </ListItems>
