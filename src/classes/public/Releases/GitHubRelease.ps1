@@ -84,6 +84,9 @@ class GitHubRelease : GitHubNode {
     # Example: "https://api.github.com/repos/PSModule/GitHub/zipball/v0.22.1"
     [string] $ZipballUrl
 
+    # Assets that are uploaded to the release.
+    [GitHubReleaseAsset[]] $Assets
+
     # Release notes or changelog, can be null
     # Example: "## What's Changed\n### Other Changes\n* Fix: Enhance repository deletion feedback and fix typo..."
     [string] $Body
