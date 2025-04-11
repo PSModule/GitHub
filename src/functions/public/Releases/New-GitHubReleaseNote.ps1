@@ -48,7 +48,10 @@
         The release notes will be based on the changes between the tags 'v0.9.2' and 'v1.0.0' and generated based on the
         configuration file located in the repository at '.github/custom_release_config.yml'.
 
-        .NOTES
+        .LINK
+        https://psmodule.io/GitHub/Functions/Releases/New-GitHubReleaseNote/
+
+        .LINK
         [Generate release notes content for a release](https://docs.github.com/rest/releases/releases#list-releases)
     #>
     [OutputType([pscustomobject])]
@@ -68,20 +71,17 @@
 
         # The tag name for the release. This can be an existing tag or a new one.
         [Parameter(Mandatory)]
-        [Alias('tag_name')]
         [string] $TagName,
 
         # Specifies the commitish value that will be the target for the release's tag.
         # Required if the supplied tag_name does not reference an existing tag.
         # Ignored if the tag_name already exists.
         [Parameter()]
-        [Alias('target_commitish')]
         [string] $TargetCommitish,
 
         # The name of the previous tag to use as the starting point for the release notes.
         # Use to manually specify the range for the set of changes considered as part this release.
         [Parameter()]
-        [Alias('previous_tag_name')]
         [string] $PreviousTagName,
 
 
@@ -89,7 +89,6 @@
         # If unspecified, the configuration file located in the repository at '.github/release.yml' or '.github/release.yaml' will be used.
         # If that is not present, the default configuration will be used.
         [Parameter()]
-        [Alias('configuration_file_path')]
         [string] $ConfigurationFilePath,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -120,7 +119,7 @@
             Body        = $body
         }
 
-        if ($PSCmdlet.ShouldProcess("$Owner/$Repository", 'Create release notes')) {
+        if ($PSCmdlet.ShouldProcess("release notes for release on $Owner/$Repository", 'Create')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }

@@ -124,30 +124,21 @@ filter New-GitHubRepository {
         [string] $Name,
 
         # The account owner of the template repository. The name is not case sensitive.
-        [Parameter(
-            Mandatory,
-            ParameterSetName = 'template'
-        )]
+        [Parameter(Mandatory, ParameterSetName = 'template')]
         [string] $TemplateOwner,
 
         # The name of the template repository without the .git extension. The name is not case sensitive.
-        [Parameter(
-            Mandatory,
-            ParameterSetName = 'template'
+        [Parameter(Mandatory, ParameterSetName = 'template'
         )]
         [string] $TemplateRepository,
 
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(
-            Mandatory,
-            ParameterSetName = 'fork'
+        [Parameter(Mandatory, ParameterSetName = 'fork'
         )]
         [string] $ForkOwner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter(
-            Mandatory,
-            ParameterSetName = 'fork'
+        [Parameter(Mandatory, ParameterSetName = 'fork'
         )]
         [string] $ForkRepo,
 
@@ -216,7 +207,7 @@ filter New-GitHubRepository {
         # Pass true to create an initial commit with empty README.
         [Parameter(ParameterSetName = 'user')]
         [Parameter(ParameterSetName = 'org')]
-        [switch] $AutoInit,
+        [switch] $AddReadme,
 
         # Whether to allow squash merges for pull requests.
         [Parameter(ParameterSetName = 'user')]
@@ -287,8 +278,7 @@ filter New-GitHubRepository {
         $DynamicParamDictionary = New-DynamicParamDictionary
 
         $dynParam = @{
-            Name                   = 'GitignoreTemplate'
-            Alias                  = 'gitignore_template'
+            Name                   = 'Gitignore'
             Type                   = [string]
             ValidateSet            = Get-GitHubGitignore
             DynamicParamDictionary = $DynamicParamDictionary
@@ -296,8 +286,7 @@ filter New-GitHubRepository {
         New-DynamicParam @dynParam
 
         $dynParam2 = @{
-            Name                   = 'LicenseTemplate'
-            Alias                  = 'license_template'
+            Name                   = 'License'
             Type                   = [string]
             ValidateSet            = Get-GitHubLicense | Select-Object -ExpandProperty key
             DynamicParamDictionary = $DynamicParamDictionary

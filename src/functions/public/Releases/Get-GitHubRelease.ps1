@@ -28,7 +28,9 @@
 
         Gets the release with the ID '1234567' for the repository 'hello-world' owned by 'octocat'.
 
-        .NOTES
+        .LINK
+        https://psmodule.io/GitHub/Functions/Releases/Get-GitHubRelease/
+
         [List releases](https://docs.github.com/rest/releases/releases#list-releases)
         [Get the latest release](https://docs.github.com/rest/releases/releases#get-the-latest-release)
     #>
@@ -37,8 +39,6 @@
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [Alias('Organization')]
-        [Alias('User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
@@ -62,7 +62,6 @@
             Mandatory,
             ParameterSetName = 'Tag'
         )]
-        [Alias('tag_name')]
         [string] $Tag,
 
         # The unique identifier of the release.
@@ -70,7 +69,6 @@
             Mandatory,
             ParameterSetName = 'ID'
         )]
-        [Alias('release_id')]
         [string] $ID,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -101,7 +99,6 @@
                 Get-GitHubReleaseByID -Owner $Owner -Repository $Repository -ID $ID -Context $Context
             }
         }
-
     }
 
     end {

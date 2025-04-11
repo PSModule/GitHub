@@ -63,7 +63,7 @@ filter Get-GitHubRepository {
         # Default: owner, collaborator, organization_member
         [Parameter(ParameterSetName = 'MyRepos_Aff-Vis')]
         [ValidateSet('owner', 'collaborator', 'organization_member')]
-        [string[]] $Affiliation = @('owner', 'collaborator', 'organization_member'),
+        [string[]] $Affiliation = 'owner',
 
         # A repository ID. Only return repositories with an ID greater than this ID.
         [Parameter(ParameterSetName = 'ListByID')]
