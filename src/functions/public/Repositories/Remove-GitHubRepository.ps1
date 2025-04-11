@@ -56,8 +56,9 @@
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("repo [$Owner/$Name]", 'DELETE')) {
-            Invoke-GitHubAPI @inputObject
+        if ($PSCmdlet.ShouldProcess("repo [$Owner/$Name]", 'Delete')) {
+            $null = Invoke-GitHubAPI @inputObject
+            Write-Verbose "Repository [$Owner/$Name] deleted."
         }
     }
 
