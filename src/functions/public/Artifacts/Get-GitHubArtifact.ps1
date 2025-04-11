@@ -87,7 +87,7 @@ function Get-GitHubArtifact {
         [string] $Repository,
 
         # Retrieves a single artifact by its unique ID.
-        [Parameter(Mandatory, ParameterSetName = 'ById', ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ParameterSetName = 'ById')]
         [string] $ID,
 
         # Retrieves artifacts from a specific workflow run.
