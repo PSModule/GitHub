@@ -49,6 +49,8 @@
     }
 
     process {
+        $latest = Get-GitHubReleaseLatest -Owner $Owner -Repository $Repository -Context $Context
+
         $inputObject = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/releases/$ID"
@@ -56,7 +58,8 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            [GitHubRelease]::new($_.Response)
+            $isLatest = $_.Response.id -eq $latest.id
+            [GitHubRelease]::new($_.Response, $isLatest)
         }
     }
 

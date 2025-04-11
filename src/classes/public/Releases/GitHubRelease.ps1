@@ -60,6 +60,10 @@ class GitHubRelease : GitHubNode {
     # Example: "v0.22.1"
     [string] $Name
 
+    # True if the release is the latest release on the repo.
+    # Example: true
+    [bool] $Latest
+
     # True to create a draft (unpublished) release, false to create a published one
     # Example: false
     [bool] $Draft
@@ -97,7 +101,7 @@ class GitHubRelease : GitHubNode {
 
     GitHubRelease() {}
 
-    GitHubRelease([PSCustomObject] $Object) {
+    GitHubRelease([PSCustomObject] $Object, [bool] $Latest) {
         $this.ID = $Object.id
         $this.NodeID = $Object.node_id
         $this.Url = $Object.html_url
@@ -105,6 +109,7 @@ class GitHubRelease : GitHubNode {
         $this.TagName = $Object.tag_name
         $this.TargetCommitish = $Object.target_commitish
         $this.Name = $Object.name
+        $this.Latest = $Latest
         $this.Draft = $Object.draft
         $this.Prerelease = $Object.prerelease
         $this.CreatedAt = $Object.created_at

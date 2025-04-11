@@ -18,6 +18,9 @@
                         <Label>Author</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
+                        <Label>Latest</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
                         <Label>Prerelease</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
@@ -41,6 +44,9 @@
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Author</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Latest</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Prerelease</PropertyName>
@@ -73,6 +79,9 @@
                             </ListItem>
                             <ListItem>
                                 <PropertyName>TagName</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Latest</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>Url</PropertyName>
