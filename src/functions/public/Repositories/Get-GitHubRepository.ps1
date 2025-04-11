@@ -88,6 +88,7 @@ filter Get-GitHubRepository {
         [string] $Organization,
 
         # The handle for the GitHub user account.
+        [Parameter(ParameterSetName = 'ByName', ValueFromPipelineByPropertyName)]
         [Parameter(Mandatory, ParameterSetName = 'ListByUser', ValueFromPipelineByPropertyName)]
         [string] $Username,
 
