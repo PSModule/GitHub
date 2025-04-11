@@ -1,4 +1,4 @@
-﻿class ReleaseAsset : GitHubNode {
+﻿class GitHubReleaseAsset : GitHubNode {
     # Description: URL for downloading the asset
     # Example: "https://github.com/PSModule/GitHub/releases/download/v0.22.1/asset.zip"
     [string] $Url
