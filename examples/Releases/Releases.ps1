@@ -21,9 +21,8 @@ $repo | New-GitHubRelease -Tag 'v1.1' -Latest -GenerateReleaseNotes -Notes 'Rele
 $repo | New-GitHubRelease -Tag 'v1.2' -Latest -GenerateReleaseNotes -Notes 'Release notes' -Name 'test'
 $repo | New-GitHubRelease -Tag 'v1.3' -Latest -GenerateReleaseNotes -Notes 'Release notes' -Name 'test'
 $repo | Get-GitHubRelease -All
-$repo | New-GitHubRelease -Tag 'v1.4' -Draft
-$repo | Get-GitHubRelease -Tag 'v1.4' -Debug
-$repo | Update-GitHubRelease -Tag 'v1.3' -Draft -Prerelease
+$repo | New-GitHubRelease -Tag 'v1.4' -Draft -Name 'test'
+$repo | Get-GitHubRelease -Tag 'v1.4' | Update-GitHubRelease -Prerelease -Draft:$false
 
 $repo | Get-GitHubRelease -All | Remove-GitHubRelease
 
