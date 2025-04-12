@@ -15,6 +15,12 @@
 
         Creates a release for the repository 'octocat/hello-world' with the tag 'v1.0.0' and the target commitish 'main'.
 
+        .INPUTS
+        GitHubRepository
+
+        .OUTPUTS
+        GitHubRelease
+
         .LINK
         https://psmodule.io/GitHub/Functions/Releases/New-GitHubRelease/
 
@@ -26,30 +32,30 @@
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Repository,
 
         # The name of the tag.
         [Parameter(Mandatory)]
-        [string] $TagName,
+        [string] $Tag,
 
-        # Specifies the commitish value that determines where the Git tag is created from.
+        # Specifies the reference value that determines where the Git tag is created from.
         # Can be any branch or commit SHA. Unused if the Git tag already exists.
         # API Default: the repository's default branch.
         [Parameter()]
-        [string] $TargetCommitish = 'main',
+        [string] $Target = 'main',
 
         # The name of the release.
         [Parameter()]
-        [string] $Name,
+        [string] $Title,
 
         # Text describing the contents of the tag.
         [Parameter()]
-        [string] $Body,
+        [string] $Notes,
 
         # Whether the release is a draft.
         [Parameter()]
@@ -71,11 +77,11 @@
         [switch] $GenerateReleaseNotes,
 
         # Specifies whether this release should be set as the latest release for the repository. Drafts and prereleases cannot be set as latest.
-        # Defaults to true for newly published releases. legacy specifies that the latest release should be determined based on the release creation
-        # date and higher semantic version.
+        # If not specified the latest release is determined based on the release creation date and higher semantic version.
+        # If set to true, the release will be set as the latest release for the repository.
+        # If set to false, the release will not be set as the latest release for the repository.
         [Parameter()]
-        [ValidateSet('true', 'false', 'legacy')]
-        [string] $Latest = 'true',
+        [switch] $Latest,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -91,13 +97,14 @@
     }
 
     process {
+        $latestString = ($PSBoundParameters.ContainsKey('Latest') ? [string]$Latest : 'legacy').ToLower()
         $body = @{
-            tag_name                 = $TagName
-            target_commitish         = $TargetCommitish
-            name                     = $Name
-            body                     = $Body
+            tag_name                 = $Tag
+            target_commitish         = $Target
+            name                     = $Title
+            body                     = $Notes
             discussion_category_name = $DiscussionCategoryName
-            make_latest              = $Latest
+            make_latest              = $latestString
             generate_release_notes   = [bool]$GenerateReleaseNotes
             draft                    = [bool]$Draft
             prerelease               = [bool]$Prerelease

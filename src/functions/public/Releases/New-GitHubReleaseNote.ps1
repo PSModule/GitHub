@@ -11,9 +11,9 @@
 
         .EXAMPLE
         $params = @{
-            Owner                 = 'octocat'
-            Repo                  = 'hello-world'
-            TagName               = 'v1.0.0'
+            Owner   = 'octocat'
+            Repo    = 'hello-world'
+            TagName = 'v1.0.0'
         }
         New-GitHubReleaseNote @params
 
@@ -23,10 +23,10 @@
 
         .EXAMPLE
         $params = @{
-            Owner                 = 'octocat'
-            Repo                  = 'hello-world'
-            TagName               = 'v1.0.0'
-            TargetCommitish       = 'main'
+            Owner           = 'octocat'
+            Repo            = 'hello-world'
+            TagName         = 'v1.0.0'
+            TargetCommitish = 'main'
         }
         New-GitHubReleaseNote @params
 

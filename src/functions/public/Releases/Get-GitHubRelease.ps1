@@ -40,12 +40,15 @@
         [List releases](https://docs.github.com/rest/releases/releases#list-releases)
         [Get the latest release](https://docs.github.com/rest/releases/releases#get-the-latest-release)
     #>
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSReviewUnusedParameter', 'All',
+        Justification = 'Using the ParameterSetName to determine the context of the command.'
+    )]
     [OutputType([GitHubRelease])]
     [CmdletBinding(DefaultParameterSetName = 'Latest')]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
-        [Alias('Organization', 'User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
