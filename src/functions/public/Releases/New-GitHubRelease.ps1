@@ -97,7 +97,7 @@
     }
 
     process {
-        $latestString = ($PSBoundParameters.ContainsKey('Latest') ? [string]$Latest : 'legacy').ToLower()
+        $latestString = $Latest ? 'true' : 'false'
         $body = @{
             tag_name                 = $Tag
             target_commitish         = $Target
@@ -120,7 +120,7 @@
 
         if ($PSCmdlet.ShouldProcess("$Owner/$Repository", 'Create a release')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
-                [GitHubRelease]::new($_.Response)
+                [GitHubRelease]::new($_.Response , $Owner, $Repository, $Latest)
             }
         }
     }
