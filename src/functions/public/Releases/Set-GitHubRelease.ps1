@@ -85,28 +85,54 @@
             Context    = $Context
         }
 
-        $params = @{
-            Tag                    = $Tag
-            Target                 = $Target
-            Name                   = $Name
-            Notes                  = $Notes
-            DiscussionCategoryName = $DiscussionCategoryName
-        }
-
-        switch ($PSCmdlet.ParameterSetName) {
-            'Set latest' {
-                $params['Latest'] = [bool]$Latest
-            }
-            'Not latest' {
-                $params['Draft'] = [bool]$Draft
-                $params['Prerelease'] = [bool]$Prerelease
-            }
-        }
-
         $release = Get-GitHubRelease @scope -Tag $Tag
         if ($release) {
-            $null = Update-GitHubRelease @scope @params -ID $release.ID
+            $ID = $release.ID
+            $body = @{
+                tag_name                 = $Tag
+                target_commitish         = $Target
+                name                     = $Name
+                body                     = $Notes
+                discussion_category_name = $DiscussionCategoryName
+                make_latest              = $PSBoundParameters.ContainsKey('Latest') ? [bool]$Latest.ToString().ToLower() : $null
+                draft                    = $PSBoundParameters.ContainsKey('Draft') ? [bool]$Draft : $null
+                prerelease               = $PSBoundParameters.ContainsKey('Prerelease') ? [bool]$Prerelease : $null
+            }
+
+            if ($PSBoundParameters.ContainsKey('Latest') -and [bool]$Latest) {
+                $body['Draft'] = $false
+                $body['Prerelease'] = $false
+            }
+
+            $inputObject = @{
+                Method      = 'PATCH'
+                APIEndpoint = "/repos/$Owner/$Repository/releases/$ID"
+                Body        = $body
+                Context     = $Context
+            }
+
+            if ($PSCmdlet.ShouldProcess("release with ID [$ID] in [$Owner/$Repository]", 'Update')) {
+                $null = Invoke-GitHubAPI @inputObject
+            }
         } else {
+            $params = @{
+                Tag                    = $Tag
+                Target                 = $Target
+                Name                   = $Name
+                Notes                  = $Notes
+                DiscussionCategoryName = $DiscussionCategoryName
+            }
+
+            switch ($PSCmdlet.ParameterSetName) {
+                'Set latest' {
+                    $params['Latest'] = [bool]$Latest
+                }
+                'Not latest' {
+                    $params['Draft'] = [bool]$Draft
+                    $params['Prerelease'] = [bool]$Prerelease
+                }
+            }
+
             $null = New-GitHubRelease @scope @params
         }
 

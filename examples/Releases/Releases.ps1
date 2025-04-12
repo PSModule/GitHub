@@ -25,7 +25,7 @@ $repo | Set-GitHubRelease -Tag 'v1.4' -Draft -Name 'test2'
 $repo | Set-GitHubRelease -Tag 'v1.4' -Prerelease -Draft:$false
 $repo | Set-GitHubRelease -Tag 'v1.4' -Latest
 
-$repo | Get-GitHubRelease -Tag 'v1.4' | Select-Object * | Format-Table
+$repo | Get-GitHubRelease -Tag 'v1.4' | Select-Object *
 
 $repo | Set-GitHubRelease -Tag 'v1.4' -Notes @'
 ## This is a test release.
