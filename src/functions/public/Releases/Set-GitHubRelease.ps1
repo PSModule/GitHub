@@ -106,7 +106,7 @@
 
         if ($PSCmdlet.ShouldProcess("release with ID [$ID] in [$Owner/$Repository]", 'Update')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
-                [GitHubRelease]::new($_.Response)
+                [GitHubRelease]::new($_.Response, $Owner, $Repository, $Latest)
             }
         }
     }

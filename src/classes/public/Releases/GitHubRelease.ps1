@@ -107,7 +107,7 @@ class GitHubRelease : GitHubNode {
 
     GitHubRelease() {}
 
-    GitHubRelease([PSCustomObject] $Object, [string]$Repository, [string] $Owner, [bool] $Latest) {
+    GitHubRelease([PSCustomObject] $Object, [string] $Owner, [string] $Repository, [bool] $Latest) {
         $this.ID = $Object.id
         $this.NodeID = $Object.node_id
         $this.Name = $Object.name
