@@ -9,10 +9,16 @@
             <TableControl>
                 <TableHeaders>
                     <TableColumnHeader>
+                        <Label>Tag</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
                         <Label>Name</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>Tag</Label>
+                        <Label>Owner</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Repository</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
                         <Label>Author</Label>
@@ -26,12 +32,6 @@
                     <TableColumnHeader>
                         <Label>Draft</Label>
                     </TableColumnHeader>
-                    <TableColumnHeader>
-                        <Label>CreatedAt</Label>
-                    </TableColumnHeader>
-                    <TableColumnHeader>
-                        <Label>PublishedAt</Label>
-                    </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
                     <TableRowEntry>
@@ -41,6 +41,12 @@
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Tag</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Owner</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Repository</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Author</PropertyName>
@@ -53,12 +59,6 @@
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Draft</PropertyName>
-                            </TableColumnItem>
-                            <TableColumnItem>
-                                <PropertyName>CreatedAt</PropertyName>
-                            </TableColumnItem>
-                            <TableColumnItem>
-                                <PropertyName>PublishedAt</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
@@ -82,6 +82,12 @@
                             </ListItem>
                             <ListItem>
                                 <PropertyName>Latest</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Owner</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Repository</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>Url</PropertyName>
