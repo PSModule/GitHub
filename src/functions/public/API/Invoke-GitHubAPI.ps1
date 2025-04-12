@@ -327,14 +327,8 @@ $($errorResult | Format-List | Out-String -Stream | ForEach-Object { "    $_`n" 
 
 "@
 
-            $PSCmdlet.ThrowTerminatingError(
-                [System.Management.Automation.ErrorRecord]::new(
-                    [System.Exception]::new($exception),
-                    'GitHubAPIError',
-                    [System.Management.Automation.ErrorCategory]::InvalidOperation,
-                    $errorResult
-                )
-            )
+            throw $exception
+
         }
     }
 
