@@ -43,7 +43,7 @@ This is a test release.
 | Row 5 | Row 6 |
 
 '@
-$repo | Set-GitHubRelease -Tag 'v1.4' -Prerelease:$false -Draft
+$repo | Set-GitHubRelease -Tag 'v1.4' -Prerelease -Draft
 $repo | Set-GitHubRelease -Tag 'v1.4' -Latest
 
 $repo | Get-GitHubRelease -All | Remove-GitHubRelease

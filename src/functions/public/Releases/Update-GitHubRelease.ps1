@@ -81,11 +81,6 @@
     }
 
     process {
-        if ($Latest) {
-            $Draft = $false
-            $Prerelease = $false
-        }
-
         $body = @{
             tag_name                 = $Tag
             target_commitish         = $Target
@@ -97,6 +92,11 @@
             prerelease               = $PSBoundParameters.ContainsKey('Prerelease') ? [bool]$Prerelease : $null
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
+
+        if ($PSBoundParameters.ContainsKey('Latest') -and [bool]$Latest) {
+            $body['Draft'] = $false
+            $body['Prerelease'] = $false
+        }
 
         $inputObject = @{
             Method      = 'PATCH'
