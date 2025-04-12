@@ -322,7 +322,7 @@ filter Invoke-GitHubAPI {
 
 ----------------------------------
 Error details:
-$($errorResult | Format-List | Out-String -Stream | ForEach-Object { "    $_`n" })
+$($errorResult | Format-List | Out-String -Stream)
 ----------------------------------
 
 "@
