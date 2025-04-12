@@ -128,5 +128,4 @@ class GitHubRelease : GitHubNode {
         $this.ZipballUrl = $Object.zipball_url
         $this.Mentions = $Object.mentions_count
     }
-
 }
