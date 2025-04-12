@@ -12,5 +12,4 @@ Get-GitHubUser | Get-GitHubRepository -Name mytest | Get-GitHubRelease
 
 Get-GitHubRelease -Owner PSModule -Repository GitHub
 
-
-Get-GitHubUser
+Get-GitHubUser | Get-GitHubRepository -Name mytest | New-GitHubRelease -Tag 'v1.0' -Title 'mytest' -Notes 'Initial release'

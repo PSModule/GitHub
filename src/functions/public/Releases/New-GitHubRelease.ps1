@@ -11,9 +11,9 @@
         and "[Dealing with secondary rate limits](https://docs.github.com/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
 
         .EXAMPLE
-        New-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -TagName 'v1.0.0' -TargetCommitish 'main' -Body 'Release notes'
+        New-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -Tag 'v1.0.0' -Target 'main' -Notes 'Release notes'
 
-        Creates a release for the repository 'octocat/hello-world' with the tag 'v1.0.0' and the target commitish 'main'.
+        Creates a release for the repository 'octocat/hello-world' on the 'main' branch with the tag 'v1.0.0'.
 
         .INPUTS
         GitHubRepository
@@ -27,7 +27,7 @@
         .LINK
         [Create a release](https://docs.github.com/rest/releases/releases#create-a-release)
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([GitHubRelease])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [CmdletBinding(SupportsShouldProcess)]
     param(
@@ -51,7 +51,7 @@
 
         # The name of the release.
         [Parameter()]
-        [string] $Title,
+        [string] $Name,
 
         # Text describing the contents of the tag.
         [Parameter()]
@@ -101,7 +101,7 @@
         $body = @{
             tag_name                 = $Tag
             target_commitish         = $Target
-            name                     = $Title
+            name                     = $Name
             body                     = $Notes
             discussion_category_name = $DiscussionCategoryName
             make_latest              = $latestString
@@ -120,7 +120,7 @@
 
         if ($PSCmdlet.ShouldProcess("$Owner/$Repository", 'Create a release')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
+                [GitHubRelease]::new($_.Response)
             }
         }
     }

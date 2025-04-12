@@ -55,9 +55,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("Release with ID [$ID] in [$Owner/$Repository]", 'DELETE')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
+            $null = Invoke-GitHubAPI @inputObject
         }
     }
 

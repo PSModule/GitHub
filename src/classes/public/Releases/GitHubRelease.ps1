@@ -41,24 +41,27 @@
 }
 
 class GitHubRelease : GitHubNode {
-    # GitHub URL for the release
-    # Example: "https://github.com/PSModule/GitHub/releases/tag/v0.22.1"
-    [string] $Url
+    # Name of the release, can be null
+    # Example: "v0.22.1"
+    [string] $Name
 
-    # User who authored the release
-    [GitHubUser] $Author
+    # The repository where the environment is.
+    [string] $Repository
+
+    # The owner of the environment.
+    [string] $Owner
 
     # The name of the tag
     # Example: "v0.22.1"
     [string] $Tag
 
+    # Release notes or changelog, can be null
+    # Example: "## What's Changed\n### Other Changes\n* Fix: Enhance repository deletion feedback and fix typo..."
+    [string] $Notes
+
     # Specifies the commitish value that determines where the Git tag is created from
     # Example: "main"
-    [string] $TargetCommitish
-
-    # Name of the release, can be null
-    # Example: "v0.22.1"
-    [string] $Name
+    [string] $Target
 
     # True if the release is the latest release on the repo.
     # Example: true
@@ -71,6 +74,13 @@ class GitHubRelease : GitHubNode {
     # Whether to identify the release as a prerelease or a full release
     # Example: false
     [bool] $Prerelease
+
+    # GitHub URL for the release
+    # Example: "https://github.com/PSModule/GitHub/releases/tag/v0.22.1"
+    [string] $Url
+
+    # User who authored the release
+    [GitHubUser] $Author
 
     # Timestamp when the release was created
     # Example: "2025-04-11T09:03:38Z"
@@ -91,24 +101,23 @@ class GitHubRelease : GitHubNode {
     # Assets that are uploaded to the release.
     [GitHubReleaseAsset[]] $Assets
 
-    # Release notes or changelog, can be null
-    # Example: "## What's Changed\n### Other Changes\n* Fix: Enhance repository deletion feedback and fix typo..."
-    [string] $Body
-
     # Number of mentions in the release notes
     # Example: 1
     [int] $Mentions
 
     GitHubRelease() {}
 
-    GitHubRelease([PSCustomObject] $Object, [bool] $Latest) {
+    GitHubRelease([PSCustomObject] $Object, [string]$Repository, [string] $Owner, [bool] $Latest) {
         $this.ID = $Object.id
         $this.NodeID = $Object.node_id
+        $this.Name = $Object.name
+        $this.Repository = $Repository
+        $this.Owner = $Owner
+        $this.Notes = $Object.body
         $this.Url = $Object.html_url
         $this.Author = [GitHubUser]::new($Object.author)
         $this.Tag = $Object.tag_name
-        $this.TargetCommitish = $Object.target_commitish
-        $this.Name = $Object.name
+        $this.Target = $Object.target_commitish
         $this.Latest = $Latest
         $this.Draft = $Object.draft
         $this.Prerelease = $Object.prerelease
@@ -117,7 +126,6 @@ class GitHubRelease : GitHubNode {
         $this.Assets = $Object.assets | ForEach-Object { [GitHubReleaseAsset]::new($_) }
         $this.TarballUrl = $Object.tarball_url
         $this.ZipballUrl = $Object.zipball_url
-        $this.Body = $Object.body
         $this.Mentions = $Object.mentions_count
     }
 

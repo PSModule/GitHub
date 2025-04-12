@@ -1,4 +1,4 @@
-﻿filter Set-GitHubRelease {
+﻿filter Update-GitHubRelease {
     <#
         .SYNOPSIS
         Update a release
@@ -7,7 +7,7 @@
         Users with push access to the repository can edit a release.
 
         .EXAMPLE
-        Set-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -ID '1234567' -Body 'Release notes'
+        Update-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -ID '1234567' -Body 'Release notes'
 
         Updates the release with the ID '1234567' for the repository 'octocat/hello-world' with the body 'Release notes'.
 
@@ -30,20 +30,17 @@
 
         # The unique identifier of the release.
         [Parameter(Mandatory)]
-        [Alias('release_id')]
         [string] $ID,
 
         # The name of the tag.
         [Parameter()]
-        [Alias('tag_name')]
-        [string] $TagName,
+        [string] $Tag,
 
         # Specifies the commitish value that determines where the Git tag is created from.
         # Can be any branch or commit SHA. Unused if the Git tag already exists.
         # API Default: the repository's default branch.
         [Parameter()]
-        [Alias('target_commitish')]
-        [string] $TargetCommitish,
+        [string] $Target,
 
         # The name of the release.
         [Parameter()]
@@ -51,7 +48,7 @@
 
         # Text describing the contents of the tag.
         [Parameter()]
-        [string] $Body,
+        [string] $Notes,
 
         # Whether the release is a draft.
         [Parameter()]
@@ -65,16 +62,14 @@
         # The value must be a category that already exists in the repository.
         # For more information, see [Managing categories for discussions in your repository](https://docs.github.com/discussions/managing-discussions-for-your-community/managing-categories-for-discussions-in-your-repository).
         [Parameter()]
-        [Alias('discussion_category_name')]
         [string] $DiscussionCategoryName,
 
         # Specifies whether this release should be set as the latest release for the repository. Drafts and prereleases cannot be set as latest.
-        # Defaults to true for newly published releases. legacy specifies that the latest release should be determined based on the release creation
-        # date and higher semantic version.
+        # If not specified the latest release is determined based on the release creation date and higher semantic version.
+        # If set to true, the release will be set as the latest release for the repository.
+        # If set to false, the release will not be set as the latest release for the repository.
         [Parameter()]
-        [Alias('make_latest')]
-        [ValidateSet('true', 'false', 'legacy')]
-        [string] $MakeLatest = 'true',
+        [switch] $Latest,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -91,12 +86,12 @@
 
     process {
         $body = @{
-            tag_name                 = $TagName
-            target_commitish         = $TargetCommitish
+            tag_name                 = $Tag
+            target_commitish         = $Target
             name                     = $Name
-            body                     = $Body
+            body                     = $Notes
             discussion_category_name = $DiscussionCategoryName
-            make_latest              = $MakeLatest
+            make_latest              = $Latest
             draft                    = $Draft
             prerelease               = $Prerelease
         }
@@ -111,7 +106,7 @@
 
         if ($PSCmdlet.ShouldProcess("release with ID [$ID] in [$Owner/$Repository]", 'Update')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
+                [GitHubRelease]::new($_.Response)
             }
         }
     }
