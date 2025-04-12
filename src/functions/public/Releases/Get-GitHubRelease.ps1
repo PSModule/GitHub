@@ -94,7 +94,12 @@
                 Get-GitHubReleaseAll @params -PerPage $PerPage
             }
             'Tag' {
-                Get-GitHubReleaseByTagName @params -Tag $Tag
+                $release = Get-GitHubReleaseByTagName @params -Tag $Tag
+                if ($release) {
+                    $release
+                } else {
+                    Get-GithubReleaseAll @params -PerPage $PerPage | Where-Object { $_.TagName -eq $Tag }
+                }
             }
             'ID' {
                 Get-GitHubReleaseByID @params -ID $ID
