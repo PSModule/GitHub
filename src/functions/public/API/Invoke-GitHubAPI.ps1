@@ -323,8 +323,6 @@ filter Invoke-GitHubAPI {
 $($errorResult | Format-List | Out-String)
 ----------------------------------
 "@
-            $PSCmdlet.WriteError($exception)
-            
             $PSCmdlet.ThrowTerminatingError(
                 [System.Management.Automation.ErrorRecord]::new(
                     [System.Exception]::new($exception),
