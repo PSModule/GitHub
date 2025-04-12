@@ -92,7 +92,6 @@
             Notes                  = $Notes
             DiscussionCategoryName = $DiscussionCategoryName
         }
-        $params | Remove-HashtableEntry -NullOrEmptyValues
 
         switch ($PSCmdlet.ParameterSetName) {
             'Set latest' {
@@ -103,7 +102,7 @@
                 $params['Prerelease'] = [bool]$Prerelease
             }
         }
-        
+
         $release = Get-GitHubRelease @scope -Tag $Tag
         if ($release) {
             $null = Update-GitHubRelease @scope @params -ID $release.ID
