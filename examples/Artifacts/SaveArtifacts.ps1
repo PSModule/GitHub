@@ -10,8 +10,8 @@ Get-GitHubOrganization -Name PSModule | Get-GitHubRepository -Name GitHub | Get-
 
 
 
-Get-GitHubOrganization | Get-GitHubRepository -Name GitHub | Get-GitHubRelease
-Get-GitHubUser | Get-GitHubRepository -Name mytest | Get-GitHubRelease
+Get-GitHubOrganization | Get-GitHubRepository | Get-GitHubRelease
+Get-GitHubUser | Get-GitHubRepository | Get-GitHubRelease
 
 Get-GitHubRelease -Owner PSModule -Repository GitHub
 
