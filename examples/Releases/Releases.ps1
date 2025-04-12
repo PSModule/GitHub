@@ -23,6 +23,7 @@ $repo | New-GitHubRelease -Tag 'v1.3' -Latest -GenerateReleaseNotes -Notes 'Rele
 $repo | Get-GitHubRelease -All | Where-Object Tag -EQ 'v1.4' | Select-Object ID
 $repo | Set-GitHubRelease -Tag 'v1.4' -Draft -Name 'test'
 $repo | Set-GitHubRelease -Tag 'v1.4' -Prerelease -Draft:$false
+$repo | Set-GitHubRelease -Tag 'v1.4' -Latest
 
 $repo | Set-GitHubRelease -Tag 'v1.4' -Notes @'
 ## This is a test release.

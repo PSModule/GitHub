@@ -91,7 +91,7 @@
             Name                   = $Name
             Notes                  = $Notes
             DiscussionCategoryName = $DiscussionCategoryName
-            Latest                 = ([bool]$Latest).ToString().ToLower()
+            Latest                 = [bool]$Latest
             Draft                  = [bool]$Draft
             Prerelease             = [bool]$Prerelease
         }
