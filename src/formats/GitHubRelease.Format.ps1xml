@@ -12,13 +12,13 @@
                         <Label>Tag</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>Name</Label>
-                    </TableColumnHeader>
-                    <TableColumnHeader>
                         <Label>Owner</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
                         <Label>Repository</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Url</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
                         <Label>Latest</Label>
@@ -29,16 +29,10 @@
                     <TableColumnHeader>
                         <Label>Draft</Label>
                     </TableColumnHeader>
-                    <TableColumnHeader>
-                        <Label>Url</Label>
-                    </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
                     <TableRowEntry>
                         <TableColumnItems>
-                            <TableColumnItem>
-                                <PropertyName>Name</PropertyName>
-                            </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Tag</PropertyName>
                             </TableColumnItem>
@@ -49,6 +43,9 @@
                                 <PropertyName>Repository</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
+                                <PropertyName>Url</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
                                 <PropertyName>Latest</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
@@ -56,9 +53,6 @@
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Draft</PropertyName>
-                            </TableColumnItem>
-                            <TableColumnItem>
-                                <PropertyName>Url</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
@@ -75,13 +69,7 @@
                     <ListEntry>
                         <ListItems>
                             <ListItem>
-                                <PropertyName>Name</PropertyName>
-                            </ListItem>
-                            <ListItem>
                                 <PropertyName>Tag</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>Latest</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>Owner</PropertyName>
@@ -96,7 +84,10 @@
                                 <PropertyName>Author</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>TargetCommitish</PropertyName>
+                                <PropertyName>Target</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Latest</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>Draft</PropertyName>
@@ -111,25 +102,13 @@
                                 <PropertyName>PublishedAt</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>TarballUrl</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>ZipballUrl</PropertyName>
-                            </ListItem>
-                            <ListItem>
                                 <PropertyName>Assets</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>Body</PropertyName>
+                                <PropertyName>Name</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>Mentions</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>ID</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>NodeID</PropertyName>
+                                <PropertyName>Notes</PropertyName>
                             </ListItem>
                         </ListItems>
                     </ListEntry>
