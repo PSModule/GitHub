@@ -83,12 +83,12 @@
     }
 
     process {
-        Write-Debug "ParameterSet: $($PSCmdlet.ParameterSetName)"
         $params = @{
             Owner      = $Owner
             Repository = $Repository
             Context    = $Context
         }
+        Write-Debug "ParameterSet: $($PSCmdlet.ParameterSetName)"
         switch ($PSCmdlet.ParameterSetName) {
             'All' {
                 Get-GitHubReleaseAll @params -PerPage $PerPage

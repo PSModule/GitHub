@@ -56,10 +56,12 @@
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
-            $isLatest = $_.Response.id -eq $latest.id
-            [GitHubRelease]::new($_.Response, $isLatest)
-        }
+        try {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                $isLatest = $_.Response.id -eq $latest.id
+                [GitHubRelease]::new($_.Response, $isLatest)
+            }
+        } catch { return }
     }
 
     end {

@@ -52,9 +52,11 @@
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
-            [GitHubRelease]::new($_.Response, $true)
-        }
+        try {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                [GitHubRelease]::new($_.Response, $true)
+            }
+        } catch { return }
     }
 
     end {
