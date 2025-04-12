@@ -321,8 +321,7 @@ filter Invoke-GitHubAPI {
             $exception = @"
 
 ----------------------------------
-Error details:
-$($errorResult | Format-List | Out-String -Stream)
+$($errorResult | Format-List | Out-String)
 ----------------------------------
 
 "@
