@@ -36,9 +36,6 @@
 
         .LINK
         https://psmodule.io/GitHub/Functions/Releases/Get-GitHubRelease/
-
-        [List releases](https://docs.github.com/rest/releases/releases#list-releases)
-        [Get the latest release](https://docs.github.com/rest/releases/releases#get-the-latest-release)
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSReviewUnusedParameter', 'All',
