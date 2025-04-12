@@ -16,7 +16,7 @@
     #>
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName = 'Not latest')]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
@@ -49,11 +49,11 @@
         [string] $Notes,
 
         # Whether the release is a draft.
-        [Parameter()]
+        [Parameter(ParameterSetName = 'Not latest')]
         [switch] $Draft,
 
         # Whether to identify the release as a prerelease.
-        [Parameter()]
+        [Parameter(ParameterSetName = 'Not latest')]
         [switch] $Prerelease,
 
         # If specified, a discussion of the specified category is created and linked to the release.
@@ -64,7 +64,7 @@
 
         # Specifies whether this release should be set as the latest release for the repository. If the release is a draft or a prerelease, setting
         # this parameters will promote the release to a release, setting the draft and prerelease parameters to false.
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'Set latest')]
         [switch] $Latest,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -87,7 +87,7 @@
             name                     = $Name
             body                     = $Notes
             discussion_category_name = $DiscussionCategoryName
-            make_latest              = $PSBoundParameters.ContainsKey('Latest') ? [bool]$Latest : $null
+            make_latest              = $PSBoundParameters.ContainsKey('Latest') ? [bool]$Latest.ToString().ToLower() : $null
             draft                    = $PSBoundParameters.ContainsKey('Draft') ? [bool]$Draft : $null
             prerelease               = $PSBoundParameters.ContainsKey('Prerelease') ? [bool]$Prerelease : $null
         }

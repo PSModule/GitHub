@@ -29,7 +29,7 @@
     #>
     [OutputType([GitHubRelease])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName = 'Not latest')]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
@@ -58,11 +58,11 @@
         [string] $Notes,
 
         # Whether the release is a draft.
-        [Parameter()]
+        [Parameter(ParameterSetName = 'Not latest')]
         [switch] $Draft,
 
         # Whether to identify the release as a prerelease.
-        [Parameter()]
+        [Parameter(ParameterSetName = 'Not latest')]
         [switch] $Prerelease,
 
         # If specified, a discussion of the specified category is created and linked to the release.
@@ -80,7 +80,7 @@
         # If not specified the latest release is determined based on the release creation date and higher semantic version.
         # If set to true, the release will be set as the latest release for the repository.
         # If set to false, the release will not be set as the latest release for the repository.
-        [Parameter()]
+        [Parameter(ParameterSetName = 'Set latest')]
         [switch] $Latest,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -97,14 +97,13 @@
     }
 
     process {
-        $latestString = $Latest ? 'true' : 'false'
         $body = @{
             tag_name                 = $Tag
             target_commitish         = $Target
             name                     = $Name
             body                     = $Notes
             discussion_category_name = $DiscussionCategoryName
-            make_latest              = $latestString
+            make_latest              = ([bool]$Latest).ToString().ToLower()
             generate_release_notes   = [bool]$GenerateReleaseNotes
             draft                    = [bool]$Draft
             prerelease               = [bool]$Prerelease

@@ -19,7 +19,7 @@
         https://psmodule.io/GitHub/Functions/Releases/Set-GitHubRelease/
     #>
     [OutputType([GitHubRelease])]
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName = 'Not latest')]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
@@ -48,11 +48,11 @@
         [string] $Notes,
 
         # Whether the release is a draft.
-        [Parameter()]
+        [Parameter(ParameterSetName = 'Not latest')]
         [switch] $Draft,
 
         # Whether to identify the release as a prerelease.
-        [Parameter()]
+        [Parameter(ParameterSetName = 'Not latest')]
         [switch] $Prerelease,
 
         # If specified, a discussion of the specified category is created and linked to the release.
@@ -62,7 +62,7 @@
 
         # Specifies whether this release should be set as the latest release for the repository. If the release is a draft or a prerelease, setting
         # this parameters will promote the release to a release, setting the draft and prerelease parameters to false.
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'Set latest')]
         [switch] $Latest,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -91,9 +91,9 @@
             Name                   = $Name
             Notes                  = $Notes
             DiscussionCategoryName = $DiscussionCategoryName
-            Latest                 = $PSBoundParameters.ContainsKey('Latest') ? [bool]$Latest : $null
-            Draft                  = $PSBoundParameters.ContainsKey('Draft') ? [bool]$Draft : $null
-            Prerelease             = $PSBoundParameters.ContainsKey('Prerelease') ? [bool]$Prerelease : $null
+            Latest                 = ([bool]$Latest).ToString().ToLower()
+            Draft                  = [bool]$Draft
+            Prerelease             = [bool]$Prerelease
         }
         $params | Remove-HashtableEntry -NullOrEmptyValues
 
