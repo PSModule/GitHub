@@ -98,7 +98,7 @@
                 if ($release) {
                     $release
                 } else {
-                    Get-GithubReleaseAll @params -PerPage $PerPage | Where-Object { $_.TagName -eq $Tag }
+                    Get-GithubReleaseAll @params -PerPage $PerPage | Where-Object { $_.Tag -eq $Tag }
                 }
             }
             'ID' {
