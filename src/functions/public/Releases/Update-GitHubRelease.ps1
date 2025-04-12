@@ -19,17 +19,15 @@
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(Mandatory)]
-        [Alias('Organization')]
-        [Alias('User')]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Repository,
 
         # The unique identifier of the release.
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $ID,
 
         # The name of the tag.
@@ -91,9 +89,9 @@
             name                     = $Name
             body                     = $Notes
             discussion_category_name = $DiscussionCategoryName
-            make_latest              = $Latest
-            draft                    = $Draft
-            prerelease               = $Prerelease
+            make_latest              = $PSBoundParameters.ContainsKey('Latest') ? [bool]$Latest : $null
+            draft                    = $PSBoundParameters.ContainsKey('Draft') ? [bool]$Draft : $null
+            prerelease               = $PSBoundParameters.ContainsKey('Prerelease') ? [bool]$Prerelease : $null
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
@@ -105,10 +103,9 @@
         }
 
         if ($PSCmdlet.ShouldProcess("release with ID [$ID] in [$Owner/$Repository]", 'Update')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                [GitHubRelease]::new($_.Response, $Owner, $Repository, $Latest)
-            }
+            Invoke-GitHubAPI @inputObject
         }
+        Get-GitHubReleaseByID -Owner $Owner -Repository $Repository -ID $ID -Context $Context
     }
 
     end {
