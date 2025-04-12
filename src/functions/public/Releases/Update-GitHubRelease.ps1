@@ -62,10 +62,8 @@
         [Parameter()]
         [string] $DiscussionCategoryName,
 
-        # Specifies whether this release should be set as the latest release for the repository. Drafts and prereleases cannot be set as latest.
-        # If not specified the latest release is determined based on the release creation date and higher semantic version.
-        # If set to true, the release will be set as the latest release for the repository.
-        # If set to false, the release will not be set as the latest release for the repository.
+        # Specifies whether this release should be set as the latest release for the repository. If the release is a draft or a prerelease, setting
+        # this parameters will promote the release to a release, setting the draft and prerelease parameters to false.
         [Parameter()]
         [switch] $Latest,
 
@@ -83,6 +81,11 @@
     }
 
     process {
+        if ($Latest) {
+            $Draft = $false
+            $Prerelease = $false
+        }
+
         $body = @{
             tag_name                 = $Tag
             target_commitish         = $Target

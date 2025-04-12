@@ -20,9 +20,31 @@ $repo | New-GitHubRelease -Tag 'v1.0' -Latest -GenerateReleaseNotes -Notes 'Rele
 $repo | New-GitHubRelease -Tag 'v1.1' -Latest -GenerateReleaseNotes -Notes 'Release notes' -Name 'test'
 $repo | New-GitHubRelease -Tag 'v1.2' -Latest -GenerateReleaseNotes -Notes 'Release notes' -Name 'test'
 $repo | New-GitHubRelease -Tag 'v1.3' -Latest -GenerateReleaseNotes -Notes 'Release notes' -Name 'test'
-$repo | Get-GitHubRelease -All | Where-Object Tag -eq 'v1.4' | Select ID
+$repo | Get-GitHubRelease -All | Where-Object Tag -EQ 'v1.4' | Select-Object ID
 $repo | Set-GitHubRelease -Tag 'v1.4' -Draft -Name 'test'
 $repo | Set-GitHubRelease -Tag 'v1.4' -Prerelease -Draft:$false
+
+$repo | Set-GitHubRelease -Tag 'v1.4' -Notes @'
+## This is a test release.
+
+This is a test release.
+This is a test release.
+
+## This is a test release.
+
+This is a test release.
+This is a test release.
+This is a test release.
+
+| Header 1 | Header 2 |
+|---------|---------|
+| Row 1 | Row 2 |
+| Row 3 | Row 4 |
+| Row 5 | Row 6 |
+
+'@
+$repo | Set-GitHubRelease -Tag 'v1.4' -Prerelease:$false -Draft
+$repo | Set-GitHubRelease -Tag 'v1.4' -Latest
 
 $repo | Get-GitHubRelease -All | Remove-GitHubRelease
 
