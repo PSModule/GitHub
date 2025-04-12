@@ -91,12 +91,19 @@
             Name                   = $Name
             Notes                  = $Notes
             DiscussionCategoryName = $DiscussionCategoryName
-            Latest                 = [bool]$Latest
-            Draft                  = [bool]$Draft
-            Prerelease             = [bool]$Prerelease
         }
         $params | Remove-HashtableEntry -NullOrEmptyValues
 
+        switch ($PSCmdlet.ParameterSetName) {
+            'Set latest' {
+                $params['Latest'] = [bool]$Latest
+            }
+            'Not latest' {
+                $params['Draft'] = [bool]$Draft
+                $params['Prerelease'] = [bool]$Prerelease
+            }
+        }
+        
         $release = Get-GitHubRelease @scope -Tag $Tag
         if ($release) {
             $null = Update-GitHubRelease @scope @params -ID $release.ID

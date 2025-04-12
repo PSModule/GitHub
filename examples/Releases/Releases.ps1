@@ -21,7 +21,7 @@ $repo | New-GitHubRelease -Tag 'v1.1' -Latest -GenerateReleaseNotes -Notes 'Rele
 $repo | New-GitHubRelease -Tag 'v1.2' -Latest -GenerateReleaseNotes -Notes 'Release notes' -Name 'test'
 $repo | New-GitHubRelease -Tag 'v1.3' -Latest -GenerateReleaseNotes -Notes 'Release notes' -Name 'test'
 $repo | Get-GitHubRelease -All | Where-Object Tag -EQ 'v1.4' | Select-Object ID
-$repo | Set-GitHubRelease -Tag 'v1.4' -Draft -Name 'test'
+$repo | Set-GitHubRelease -Tag 'v1.4' -Draft -Name 'test2'
 $repo | Set-GitHubRelease -Tag 'v1.4' -Prerelease -Draft:$false
 $repo | Set-GitHubRelease -Tag 'v1.4' -Latest
 
