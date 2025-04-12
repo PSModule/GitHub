@@ -104,11 +104,12 @@
         }
         $params | Remove-HashtableEntry -NullOrEmptyValues
 
-        if (Get-GitHubRelease @scope -Tag $Tag) {
+        $release = Get-GitHubRelease @scope -Tag $Tag
+        if ($release) {
             if ($PSBoundParameters.ContainsKey('GenerateReleaseNotes')) {
                 $params['GenerateReleaseNotes'] = $GenerateReleaseNotes
             }
-            $null = Update-GitHubRelease @scope @params
+            $null = Update-GitHubRelease @scope @params -ID $release.ID
         } else {
             $null = New-GitHubRelease @scope @params
         }
