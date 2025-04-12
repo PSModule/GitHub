@@ -319,15 +319,21 @@ filter Invoke-GitHubAPI {
             $APICall.Method = $APICall.Method.ToString()
 
             $exception = @"
-
 ----------------------------------
 $($errorResult | Format-List | Out-String)
 ----------------------------------
-
 "@
-
-            throw $exception
-
+            $tmpErrorView = $ErrorView
+            $ErrorView = 'NormalView'
+            $PSCmdlet.ThrowTerminatingError(
+                [System.Management.Automation.ErrorRecord]::new(
+                    [System.Exception]::new($exception),
+                    'GitHubAPIError',
+                    [System.Management.Automation.ErrorCategory]::InvalidOperation,
+                    $errorResult
+                )
+            )
+            $ErrorView = $tmpErrorView
         }
     }
 
