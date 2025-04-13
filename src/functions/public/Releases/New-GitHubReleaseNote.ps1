@@ -1,19 +1,18 @@
 ﻿filter New-GitHubReleaseNote {
     <#
         .SYNOPSIS
-        List releases
+        Generate release notes content for a release.
 
         .DESCRIPTION
-        Generate a name and body describing a [release](https://docs.github.com/rest/releases/releases#get-a-release).
-        The body content will be Markdown formatted and contain information like
-        the changes since last release and users who contributed. The generated release notes are not saved anywhere. They are
-        intended to be generated and used when creating a new release.
+        Generate a name and body describing a [release](https://docs.github.com/rest/releases/releases#get-a-release). The body content will be
+        markdown formatted and contain information like the changes since last release and users who contributed. The generated release notes are not
+        saved anywhere. They are intended to be generated and used when creating a new release.
 
         .EXAMPLE
         $params = @{
-            Owner   = 'octocat'
-            Repo    = 'hello-world'
-            TagName = 'v1.0.0'
+            Owner = 'octocat'
+            Repo  = 'hello-world'
+            Tag   = 'v1.0.0'
         }
         New-GitHubReleaseNote @params
 
@@ -23,10 +22,10 @@
 
         .EXAMPLE
         $params = @{
-            Owner           = 'octocat'
-            Repo            = 'hello-world'
-            TagName         = 'v1.0.0'
-            TargetCommitish = 'main'
+            Owner  = 'octocat'
+            Repo   = 'hello-world'
+            Tag    = 'v1.0.0'
+            Target = 'main'
         }
         New-GitHubReleaseNote @params
 
@@ -37,9 +36,9 @@
         $params = @{
             Owner                 = 'octocat'
             Repo                  = 'hello-world'
-            TagName               = 'v1.0.0'
-            TargetCommitish       = 'main'
-            PreviousTagName       = 'v0.9.2'
+            Tag                   = 'v1.0.0'
+            Target                = 'main'
+            PreviousTag           = 'v0.9.2'
             ConfigurationFilePath = '.github/custom_release_config.yml'
         }
         New-GitHubReleaseNote @params
@@ -117,6 +116,7 @@
             Method      = 'POST'
             APIEndpoint = "/repos/$Owner/$Repository/releases/generate-notes"
             Body        = $body
+            Context     = $Context
         }
 
         if ($PSCmdlet.ShouldProcess("release notes for release on $Owner/$Repository", 'Create')) {

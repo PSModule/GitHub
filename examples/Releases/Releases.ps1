@@ -29,35 +29,18 @@ $repo | New-GitHubRelease -Tag 'v1.2' -Latest -Name 'test' -Notes 'Release notes
 $repo | Set-GitHubRelease -Tag 'v1.5' -Latest -Name 'test' -Notes 'Release notes' | Select-Object *
 $repo | Get-GitHubRelease -Tag 'v1.4' | Select-Object Tag, Name, Latest, Prerelease, Draft
 $repo | Set-GitHubRelease -Tag 'v1.4' | Select-Object Tag, Name, Latest, Prerelease, Draft
-$repo | Set-GitHubRelease -Tag 'v1.4' -Name 'test2' | Select-Object Tag, Name, Latest, Prerelease, Draft
 $repo | Set-GitHubRelease -Tag 'v1.4' -Name 'test2' -Draft | Select-Object Tag, Name, Latest, Prerelease, Draft
 $repo | Set-GitHubRelease -Tag 'v1.4' -Name 'test2' -Draft -Prerelease | Select-Object Tag, Name, Latest, Prerelease, Draft
 $repo | Set-GitHubRelease -Tag 'v1.4' -Name 'test2' -Prerelease | Select-Object Tag, Name, Latest, Prerelease, Draft
 $repo | Set-GitHubRelease -Tag 'v1.4' -Name 'test2' -Latest | Select-Object Tag, Name, Latest, Prerelease, Draft
+$repo | Set-GitHubRelease -Tag 'v1.4' -Name 'test2' | Select-Object Tag, Name, Latest, Prerelease, Draft
 
 $repo | Get-GitHubRelease -Tag 'v1.4' | Select-Object *
 
-$repo | Set-GitHubRelease -Tag 'v1.4' -Notes @'
-## This is a test release.
+$repo | Set-GitHubRelease -Tag 'v1.4' -Name 'test2' -Notes 'Release notes'
 
-This is a test release.
-This is a test release.
 
-## This is a test release.
-
-This is a test release.
-This is a test release.
-This is a test release.
-
-| Header 1 | Header 2 |
-|---------|---------|
-| Row 1 | Row 2 |
-| Row 3 | Row 4 |
-| Row 5 | Row 6 |
-
-'@
-$repo | Set-GitHubRelease -Tag 'v1.4' -Prerelease -Draft
-$repo | Set-GitHubRelease -Tag 'v1.4' -Latest
+New-GitHubReleaseNote -Owner PSModule -Repository GitHub -Tag 'v0.22.0' -Target 'main' -PreviousTag 'v0.20.0'
 
 $repo | Get-GitHubRelease | Remove-GitHubRelease
 
