@@ -7,10 +7,6 @@
                 <Name>User</Name>
                 <GetScriptBlock>$this.Name</GetScriptBlock>
             </ScriptProperty>
-            <ScriptProperty>
-                <Name>Username</Name>
-                <GetScriptBlock>$this.Name</GetScriptBlock>
-            </ScriptProperty>
         </Members>
     </Type>
 </Types>
