@@ -386,8 +386,8 @@ filter New-GitHubRepository {
                 if ($PSCmdlet.ShouldProcess("repository [$Owner/$Name] as fork from [$ForkOwner/$ForkRepository]", 'Create')) {
                     $params = @{
                         Context           = $Context
-                        ForkOwner         = $ForkOwner
-                        ForkRepo          = $ForkRepo
+                        Owner             = $ForkOwner
+                        Repository        = $ForkRepository
                         Organization      = $Owner
                         Name              = $Name
                         DefaultBranchOnly = $DefaultBranchOnly

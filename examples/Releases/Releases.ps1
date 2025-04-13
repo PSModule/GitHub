@@ -19,7 +19,7 @@ Get-GitHubRelease -Owner PSModule -Repository GitHub -Latest
 
 # Create a new release for a specific repository
 $repoName = 'mytest'
-New-GitHubRepository -ForkOwner 'PSModule' -ForkRepository 'Template-PSModule' -Name $repoName -Private
+New-GitHubRepository -ForkOwner 'PSModule' -ForkRepository 'Template-PSModule'
 
 $repo = Get-GitHubUser | Get-GitHubRepository -Name $repoName
 $repo | Get-GitHubRelease
