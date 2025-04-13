@@ -30,6 +30,7 @@ $repo | Get-GitHubRelease -Tag 'v1.3' | Format-List
 
 $repo | New-GitHubRelease -Tag 'v1.3.1' -Latest -GenerateReleaseNotes
 $repo | Get-GitHubRelease -Tag 'v1.3.1' | Format-List
+$repo | Set-GitHubRelease -Tag 'v1.3.1' -Latest -GenerateReleaseNotes
 $repo | Set-GitHubRelease -Tag 'v1.3.1' -Latest -GenerateReleaseNotes -Notes 'Release notes'
 $repo | Get-GitHubRelease -Tag 'v1.3.1' | Format-List
 

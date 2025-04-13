@@ -95,8 +95,8 @@
 
         if ($GenerateReleaseNotes) {
             $generated = New-GitHubReleaseNote -Owner $Owner -Repository $Repository -Tag $Tag -Context $Context
-            $Name = $PSBoundParameters.ContainsKey('Name') ? $Name : $generated.Name
-            $Notes = $PSBoundParameters.ContainsKey('Notes') ? $Notes, $generated.Body -join "`n" : $generated.Body
+            $Name = -not [string]::IsNullOrEmpty($Name) ? $Name : $generated.Name
+            $Notes = -not [string]::IsNullOrEmpty($Notes) ? $Notes, $generated.Notes -join "`n" : $generated.Notes
         }
 
         $body = @{
