@@ -62,6 +62,11 @@
         [Parameter()]
         [string] $DiscussionCategoryName,
 
+        # Whether to automatically generate the name and body for this release. If name is specified, the specified name will be used; otherwise,
+        # a name will be automatically generated. If body is specified, the body will be pre-pended to the automatically generated notes.
+        [Parameter()]
+        [switch] $GenerateReleaseNotes,
+
         # Specifies whether this release should be set as the latest release for the repository. If the release is a draft or a prerelease, setting
         # this parameters will promote the release to a release, setting the draft and prerelease parameters to false.
         [Parameter(Mandatory, ParameterSetName = 'Set latest')]
@@ -88,10 +93,11 @@
     process {
         $repo = Get-GitHubRepositoryByName -Owner $Owner -Name $Repository -Context $Context
         $body = @{
-            tag_name         = $Tag
-            target_commitish = $Target
-            name             = $Name
-            body             = $Notes
+            tag_name               = $Tag
+            target_commitish       = $Target
+            name                   = $Name
+            body                   = $Notes
+            generate_release_notes = [bool]$GenerateReleaseNotes
         }
         if ($repo.HasDiscussions) {
             $body['discussion_category_name'] = $DiscussionCategoryName

@@ -48,7 +48,12 @@
         configuration file located in the repository at '.github/custom_release_config.yml'.
 
         .OUTPUTS
-        GitHubReleaseNote
+        pscustomobject
+
+        .NOTES
+        The returned object contains the following properties:
+        - Name: The name of the release.
+        - Notes: The body of the release notes.
 
         .LINK
         https://psmodule.io/GitHub/Functions/Releases/New-GitHubReleaseNote/
@@ -56,7 +61,7 @@
         .LINK
         [Generate release notes content for a release](https://docs.github.com/rest/releases/releases#generate-release-notes-content-for-a-release)
     #>
-    [OutputType([GitHubReleaseNote])]
+    [OutputType([pscustomobject])]
     [Alias('Generate-GitHubReleaseNotes')]
     [Alias('New-GitHubReleaseNotes')]
     [CmdletBinding(SupportsShouldProcess)]
@@ -121,7 +126,10 @@
 
         if ($PSCmdlet.ShouldProcess("release notes for release on $Owner/$Repository", 'Create')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
-                [GitHubReleaseNote]::($_.Response)
+                [PSCustomObject]@{
+                    Name  = $_.Response.name
+                    Notes = $_.Response.body
+                }
             }
         }
     }

@@ -90,6 +90,7 @@
             Target                 = $Target
             Name                   = $Name
             Notes                  = $Notes
+            GenerateReleaseNotes   = [bool]$GenerateReleaseNotes
             DiscussionCategoryName = $DiscussionCategoryName
         }
 
