@@ -103,8 +103,8 @@
             name                     = $Name
             body                     = $Notes
             discussion_category_name = $DiscussionCategoryName
-            make_latest              = ([bool]$Latest).ToString().ToLower()
             generate_release_notes   = [bool]$GenerateReleaseNotes
+            make_latest              = ([bool]$Latest).ToString().ToLower()
             draft                    = [bool]$Draft
             prerelease               = [bool]$Prerelease
         }

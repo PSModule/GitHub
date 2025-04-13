@@ -67,6 +67,11 @@
         [Parameter(Mandatory, ParameterSetName = 'Set latest')]
         [switch] $Latest,
 
+        # Takes all parameters and updates the release with the provided _AND_ the default values of the non-provided parameters.
+        # Used for Set-GitHubRelease.
+        [Parameter()]
+        [switch] $Declare,
+
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
@@ -81,21 +86,32 @@
     }
 
     process {
+        $repo = Get-GitHubRepositoryByName -Owner $Owner -Name $Repository -Context $Context
         $body = @{
             tag_name                 = $Tag
             target_commitish         = $Target
             name                     = $Name
             body                     = $Notes
             discussion_category_name = $DiscussionCategoryName
-            make_latest              = $PSBoundParameters.ContainsKey('Latest') ? [bool]$Latest.ToString().ToLower() : $null
-            draft                    = $PSBoundParameters.ContainsKey('Draft') ? [bool]$Draft : $null
-            prerelease               = $PSBoundParameters.ContainsKey('Prerelease') ? [bool]$Prerelease : $null
         }
-        $body | Remove-HashtableEntry -NullOrEmptyValues
+        if ($repo.HasDiscussions) {
+            $body['discussion_category_name'] = $DiscussionCategoryName
+        }
+        if (-not $Declare) {
+            $body | Remove-HashtableEntry -NullOrEmptyValues
+        }
 
-        if ($PSBoundParameters.ContainsKey('Latest') -and [bool]$Latest) {
-            $body['Draft'] = $false
-            $body['Prerelease'] = $false
+        switch ($PSCmdlet.ParameterSetName) {
+            'Set latest' {
+                $body['make_latest'] = [bool]$Latest.ToString().ToLower()
+                $body['prerelease'] = $null
+                $body['draft'] = $null
+            }
+            'Not latest' {
+                $body['make_latest'] = $null
+                $body['prerelease'] = [bool]$Prerelease
+                $body['draft'] = [bool]$Draft
+            }
         }
 
         $inputObject = @{
