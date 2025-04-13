@@ -41,11 +41,11 @@
 
         # The name of the release.
         [Parameter()]
-        [string] $Name,
+        [string] $Name = '',
 
         # Text describing the contents of the tag.
         [Parameter()]
-        [string] $Notes,
+        [string] $Notes = '',
 
         # Whether the release is a draft.
         [Parameter(ParameterSetName = 'Not latest')]

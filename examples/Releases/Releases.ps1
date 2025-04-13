@@ -19,11 +19,14 @@ $repo | Get-GitHubRelease
 $repo | New-GitHubRelease -Tag 'v1.0' -Latest
 $repo | New-GitHubRelease -Tag 'v1.1' -Latest -Name 'test'
 $repo | New-GitHubRelease -Tag 'v1.2' -Latest -Name 'test' -Notes 'Release notes'
-$repo | Set-GitHubRelease -Tag 'v1.5' -Latest -Name 'test' -Notes 'Release notes' -DiscussionCategoryName 123 | Select-Object *
-$repo | Get-GitHubRelease -Tag 'v1.4'
-$repo | Set-GitHubRelease -Tag 'v1.4' -Name 'test2' -Draft | Select-Object *
-$repo | Set-GitHubRelease -Tag 'v1.4' -Prerelease | Select-Object *
-$repo | Set-GitHubRelease -Tag 'v1.4' -Latest
+$repo | Set-GitHubRelease -Tag 'v1.5' -Latest -Name 'test' -Notes 'Release notes' | Select-Object *
+$repo | Get-GitHubRelease -Tag 'v1.4' | Select-Object Tag, Name, Latest, Prerelease, Draft
+$repo | Set-GitHubRelease -Tag 'v1.4' | Select-Object Tag, Name, Latest, Prerelease, Draft
+$repo | Set-GitHubRelease -Tag 'v1.4' -Name 'test2' | Select-Object Tag, Name, Latest, Prerelease, Draft
+$repo | Set-GitHubRelease -Tag 'v1.4' -Name 'test2' -Draft | Select-Object Tag, Name, Latest, Prerelease, Draft
+$repo | Set-GitHubRelease -Tag 'v1.4' -Name 'test2' -Draft -Prerelease | Select-Object Tag, Name, Latest, Prerelease, Draft
+$repo | Set-GitHubRelease -Tag 'v1.4' -Name 'test2' -Prerelease | Select-Object Tag, Name, Latest, Prerelease, Draft
+$repo | Set-GitHubRelease -Tag 'v1.4' -Name 'test2' -Latest | Select-Object Tag, Name, Latest, Prerelease, Draft
 
 $repo | Get-GitHubRelease -Tag 'v1.4' | Select-Object *
 
