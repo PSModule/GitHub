@@ -88,11 +88,10 @@
     process {
         $repo = Get-GitHubRepositoryByName -Owner $Owner -Name $Repository -Context $Context
         $body = @{
-            tag_name                 = $Tag
-            target_commitish         = $Target
-            name                     = $Name
-            body                     = $Notes
-            discussion_category_name = $DiscussionCategoryName
+            tag_name         = $Tag
+            target_commitish = $Target
+            name             = $Name
+            body             = $Notes
         }
         if ($repo.HasDiscussions) {
             $body['discussion_category_name'] = $DiscussionCategoryName

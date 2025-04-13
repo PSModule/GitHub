@@ -59,7 +59,7 @@ This is a test release.
 $repo | Set-GitHubRelease -Tag 'v1.4' -Prerelease -Draft
 $repo | Set-GitHubRelease -Tag 'v1.4' -Latest
 
-$repo | Get-GitHubRelease -All | Remove-GitHubRelease
+$repo | Get-GitHubRelease | Remove-GitHubRelease
 
 
 $repo | Remove-GitHubRepository -Confirm:$false
