@@ -90,6 +90,7 @@ filter Get-GitHubRepository {
         # The handle for the GitHub user account.
         [Parameter(ParameterSetName = 'ByName', ValueFromPipelineByPropertyName)]
         [Parameter(Mandatory, ParameterSetName = 'ListByUser', ValueFromPipelineByPropertyName)]
+        [Alias('User')]
         [string] $Username,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
