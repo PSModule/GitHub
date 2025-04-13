@@ -38,11 +38,11 @@
         https://psmodule.io/GitHub/Functions/Releases/Get-GitHubRelease/
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-        'PSReviewUnusedParameter', 'All',
+        'PSReviewUnusedParameter', 'Latest',
         Justification = 'Using the ParameterSetName to determine the context of the command.'
     )]
     [OutputType([GitHubRelease])]
-    [CmdletBinding(DefaultParameterSetName = 'Latest')]
+    [CmdletBinding(DefaultParameterSetName = 'All')]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
@@ -57,9 +57,9 @@
         [ValidateRange(0, 100)]
         [int] $PerPage,
 
-        # Get all releases.
-        [Parameter(Mandatory, ParameterSetName = 'All')]
-        [switch] $All,
+        # Get the latest release.
+        [Parameter(Mandatory, ParameterSetName = 'Latest')]
+        [switch] $Latest,
 
         # The name of the tag to get a release from.
         [Parameter(Mandatory, ParameterSetName = 'Tag')]
