@@ -107,9 +107,9 @@
         if ($release) {
             $ID = $release.ID
             $params['ID'] = $ID
-            Update-GitHubRelease @scope @params -ErrorAction Stop
+            Update-GitHubRelease @scope @params -Declare
         } else {
-            New-GitHubRelease @scope @params -ErrorAction Stop
+            New-GitHubRelease @scope @params
         }
     }
 

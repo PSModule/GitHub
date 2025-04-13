@@ -8,7 +8,14 @@ Get-GitHubRelease -Owner PSModule -Repository GitHub -Latest
 'PSModule' | Get-GitHubOrganization | Get-GitHubRepository | Get-GitHubRelease
 
 # Get the latest releases for all repos in the organization
-Get-GitHubOrganization -Name PSModule | Get-GitHubRepository | Get-GitHubRelease -Latest
+'PSModule' | Get-GitHubOrganization | Get-GitHubRepository | ForEach-Object -ThrottleLimit ([Environment]::ProcessorCount) -Parallel {
+    do {
+        Import-Module -Name GitHub
+    } until ($? -eq $true)
+    $_ | Get-GitHubRelease -Latest
+} -UseNewRunspace
+
+'PSModule' | Get-GitHubOrganization | Get-GitHubRepository | Get-GitHubRelease -Latest
 
 # Create a new release for a specific repository
 $repoName = 'mytest'
