@@ -92,12 +92,18 @@
 
     process {
         $repo = Get-GitHubRepositoryByName -Owner $Owner -Name $Repository -Context $Context
+
+        if ($GenerateReleaseNotes) {
+            $notes = New-GitHubReleaseNote -Owner $Owner -Repository $Repository -Tag $Tag -Context $Context
+            $Name = $PSBoundParameters.ContainsKey('Name') ? $Name : $notes.Name
+            $Notes = $PSBoundParameters.ContainsKey('Notes') ? $Notes, $notes.Body -join "`n" : $notes.Body
+        }
+
         $body = @{
-            tag_name               = $Tag
-            target_commitish       = $Target
-            name                   = $Name
-            body                   = $Notes
-            generate_release_notes = [bool]$GenerateReleaseNotes
+            tag_name         = $Tag
+            target_commitish = $Target
+            name             = $Name
+            body             = $Notes
         }
         if ($repo.HasDiscussions) {
             $body['discussion_category_name'] = $DiscussionCategoryName
