@@ -27,7 +27,7 @@
         [string] $Repository,
 
         # The unique identifier of the release.
-        [Parameter(ValueFromPipelineByPropertyName)]
+        [Parameter()]
         [string] $ID,
 
         # The name of the tag.

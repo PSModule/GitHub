@@ -27,7 +27,7 @@ $repo | New-GitHubRelease -Tag 'v1.1' -Latest -Name 'test'
 $repo | New-GitHubRelease -Tag 'v1.2' -Latest -Name 'test' -Notes 'Release notes'
 $repo | New-GitHubRelease -Tag 'v1.3' -Latest -Name 'test' -GenerateReleaseNotes
 $repo | Get-GitHubRelease -Tag 'v1.3' | Format-List
-$repo | Get-GitHubRelease -Tag 'v1.3' | Update-GithubRelease -Notes 'Release notes' -Debug
+$repo | Get-GitHubRelease -Tag 'v1.3' | Update-GithubRelease -Notes 'Release notes'
 $repo | Update-GitHubRelease -Tag 'v1.3' -Name 'test123' -Debug
 
 $repo | New-GitHubRelease -Tag 'v1.3.1' -Latest -GenerateReleaseNotes
