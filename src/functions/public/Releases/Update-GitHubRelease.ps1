@@ -27,7 +27,7 @@
         [string] $Repository,
 
         # The unique identifier of the release.
-        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string] $ID,
 
         # The name of the tag.
@@ -91,6 +91,15 @@
     }
 
     process {
+        if (-not $PSBoundParameters.ContainsKey('ID') -and -not $PSBoundParameters.ContainsKey('Tag')) {
+            throw 'You must specify either the ID or the Tag parameter.'
+        }
+
+        if (-not $PSBoundParameters.ContainsKey('ID') -and $PSBoundParameters.ContainsKey('Tag')) {
+            $release = Get-GitHubRelease -Owner $Owner -Repository $Repository -Tag $Tag -Context $Context
+            $ID = $release.ID
+        }
+
         $repo = Get-GitHubRepositoryByName -Owner $Owner -Name $Repository -Context $Context
 
         if ($GenerateReleaseNotes) {
