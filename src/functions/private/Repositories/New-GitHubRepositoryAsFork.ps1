@@ -53,7 +53,7 @@
         # The organization or person who will own the new repository.
         # To create a new repository in an organization, the authenticated user must be a member of the specified organization.
         [Parameter()]
-        [string] $Owner,
+        [string] $Organization,
 
         # The name of the new repository.
         [Parameter()]
@@ -77,10 +77,11 @@
 
     process {
         $body = @{
-            organization        = $Owner
+            organization        = $Organization
             name                = $Name
             default_branch_only = $DefaultBranchOnly
         }
+        $body | Remove-HashtableEntry -NullOrEmptyValues
 
         $inputObject = @{
             Method      = 'POST'
@@ -89,7 +90,7 @@
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("Repository [$Owner/$Name] as fork of [$ForkOwner/$ForkRepository]", 'Create')) {
+        if ($PSCmdlet.ShouldProcess("Repository [$Organization/$Name] as fork of [$ForkOwner/$ForkRepository]", 'Create')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 [GitHubRepository]::New($_.Response)
             }
