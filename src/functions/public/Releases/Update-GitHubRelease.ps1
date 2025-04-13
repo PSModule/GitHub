@@ -104,11 +104,11 @@
         switch ($PSCmdlet.ParameterSetName) {
             'Set latest' {
                 $body['make_latest'] = [bool]$Latest.ToString().ToLower()
-                $body['prerelease'] = $null
-                $body['draft'] = $null
+                $body['prerelease'] = $false
+                $body['draft'] = $false
             }
             'Not latest' {
-                $body['make_latest'] = $null
+                $body['make_latest'] = $false
                 $body['prerelease'] = [bool]$Prerelease
                 $body['draft'] = [bool]$Draft
             }
