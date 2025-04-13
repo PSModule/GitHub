@@ -101,8 +101,11 @@
             $Notes = -not [string]::IsNullOrEmpty($Notes) ? $Notes, $generated.Notes -join "`n" : $generated.Notes
         }
 
-        if (-not $ID -and $Tag) {
+        if ([string]::IsNullOrEmpty($ID) -and -not [string]::IsNullOrEmpty($Tag)) {
             $release = Get-GitHubRelease -Owner $Owner -Repository $Repository -Tag $Tag -Context $Context
+            if (-not $release) {
+                throw "Release with tag [$Tag] not found in [$Owner/$Repository]."
+            }
             $ID = $release.ID
             $Tag = $null
         }
