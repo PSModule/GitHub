@@ -94,9 +94,9 @@
         $repo = Get-GitHubRepositoryByName -Owner $Owner -Name $Repository -Context $Context
 
         if ($GenerateReleaseNotes) {
-            $notes = New-GitHubReleaseNote -Owner $Owner -Repository $Repository -Tag $Tag -Context $Context
-            $Name = $PSBoundParameters.ContainsKey('Name') ? $Name : $notes.Name
-            $Notes = $PSBoundParameters.ContainsKey('Notes') ? $Notes, $notes.Body -join "`n" : $notes.Body
+            $generated = New-GitHubReleaseNote -Owner $Owner -Repository $Repository -Tag $Tag -Context $Context
+            $Name = $PSBoundParameters.ContainsKey('Name') ? $Name : $generated.Name
+            $Notes = $PSBoundParameters.ContainsKey('Notes') ? $Notes, $generated.Body -join "`n" : $generated.Body
         }
 
         $body = @{
