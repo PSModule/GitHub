@@ -101,21 +101,22 @@
             $Notes = -not [string]::IsNullOrEmpty($Notes) ? $Notes, $generated.Notes -join "`n" : $generated.Notes
         }
 
-        if ([string]::IsNullOrEmpty($ID) -and -not [string]::IsNullOrEmpty($Tag)) {
-            $release = Get-GitHubRelease -Owner $Owner -Repository $Repository -Tag $Tag -Context $Context
-            if (-not $release) {
-                throw "Release with tag [$Tag] not found in [$Owner/$Repository]."
-            }
-            $ID = $release.ID
-            $Tag = $null
-        }
-
         $body = @{
             tag_name         = $Tag
             target_commitish = $Target
             name             = $Name
             body             = $Notes
         }
+
+        if ([string]::IsNullOrEmpty($ID) -and -not [string]::IsNullOrEmpty($Tag)) {
+            $release = Get-GitHubRelease -Owner $Owner -Repository $Repository -Tag $Tag -Context $Context
+            if (-not $release) {
+                throw "Release with tag [$Tag] not found in [$Owner/$Repository]."
+            }
+            $ID = $release.ID
+            $body.Remove('tag_name')
+        }
+
         $repo = Get-GitHubRepositoryByName -Owner $Owner -Name $Repository -Context $Context
         if ($repo.HasDiscussions) {
             $body['discussion_category_name'] = $DiscussionCategoryName
