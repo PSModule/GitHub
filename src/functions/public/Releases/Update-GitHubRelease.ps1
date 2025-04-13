@@ -122,9 +122,10 @@
         }
 
         if ($PSCmdlet.ShouldProcess("release with ID [$ID] in [$Owner/$Repository]", 'Update')) {
-            $null = Invoke-GitHubAPI @inputObject
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                [GitHubRelease]::new($_.Response , $Owner, $Repository, $Latest)
+            }
         }
-        Get-GitHubReleaseByID -Owner $Owner -Repository $Repository -ID $ID -Context $Context
     }
 
     end {
