@@ -98,6 +98,7 @@
         if (-not $PSBoundParameters.ContainsKey('ID') -and $PSBoundParameters.ContainsKey('Tag')) {
             $release = Get-GitHubRelease -Owner $Owner -Repository $Repository -Tag $Tag -Context $Context
             $ID = $release.ID
+            $Tag = $null
         }
 
         $repo = Get-GitHubRepositoryByName -Owner $Owner -Name $Repository -Context $Context
