@@ -43,6 +43,7 @@
         [Parameter(
             Mandatory,
             ParameterSetName = 'NamedOrg',
+            ValueFromPipeline,
             ValueFromPipelineByPropertyName
         )]
         [string] $Name,

@@ -41,6 +41,7 @@
         [Parameter(
             Mandatory,
             ParameterSetName = 'By name',
+            ValueFromPipeline,
             ValueFromPipelineByPropertyName
         )]
         [string] $Name,
