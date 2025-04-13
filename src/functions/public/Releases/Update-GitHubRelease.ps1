@@ -91,22 +91,20 @@
     }
 
     process {
-        if (-not $PSBoundParameters.ContainsKey('ID') -and -not $PSBoundParameters.ContainsKey('Tag')) {
+        if (-not $ID -and -not $Tag) {
             throw 'You must specify either the ID or the Tag parameter.'
         }
-
-        if (-not $PSBoundParameters.ContainsKey('ID') -and $PSBoundParameters.ContainsKey('Tag')) {
-            $release = Get-GitHubRelease -Owner $Owner -Repository $Repository -Tag $Tag -Context $Context
-            $ID = $release.ID
-            $Tag = $null
-        }
-
-        $repo = Get-GitHubRepositoryByName -Owner $Owner -Name $Repository -Context $Context
 
         if ($GenerateReleaseNotes) {
             $generated = New-GitHubReleaseNote -Owner $Owner -Repository $Repository -Tag $Tag -Context $Context
             $Name = -not [string]::IsNullOrEmpty($Name) ? $Name : $generated.Name
             $Notes = -not [string]::IsNullOrEmpty($Notes) ? $Notes, $generated.Notes -join "`n" : $generated.Notes
+        }
+
+        if (-not $ID -and $Tag) {
+            $release = Get-GitHubRelease -Owner $Owner -Repository $Repository -Tag $Tag -Context $Context
+            $ID = $release.ID
+            $Tag = $null
         }
 
         $body = @{
@@ -115,6 +113,7 @@
             name             = $Name
             body             = $Notes
         }
+        $repo = Get-GitHubRepositoryByName -Owner $Owner -Name $Repository -Context $Context
         if ($repo.HasDiscussions) {
             $body['discussion_category_name'] = $DiscussionCategoryName
         }
@@ -122,17 +121,15 @@
             $body | Remove-HashtableEntry -NullOrEmptyValues
         }
 
-        switch ($PSCmdlet.ParameterSetName) {
-            'Set latest' {
-                $body['make_latest'] = [bool]$Latest.ToString().ToLower()
-                $body['prerelease'] = $false
-                $body['draft'] = $false
-            }
-            'Not latest' {
-                $body['make_latest'] = $false
-                $body['prerelease'] = [bool]$Prerelease
-                $body['draft'] = [bool]$Draft
-            }
+        if ($Latest) {
+            $body['make_latest'] = [bool]$Latest.ToString().ToLower()
+            $body['prerelease'] = $false
+            $body['draft'] = $false
+        }
+        if ($Draft -or $Prerelease) {
+            $body['make_latest'] = $false
+            $body['prerelease'] = [bool]$Prerelease
+            $body['draft'] = [bool]$Draft
         }
 
         $inputObject = @{
