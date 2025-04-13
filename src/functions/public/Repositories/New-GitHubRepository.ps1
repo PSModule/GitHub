@@ -133,7 +133,7 @@ filter New-GitHubRepository {
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory, ParameterSetName = 'fork')]
-        [string] $ForkRepo,
+        [string] $ForkRepository,
 
         # When forking from an existing repository, fork with only the default branch.
         [Parameter(ParameterSetName = 'fork')]
@@ -381,9 +381,9 @@ filter New-GitHubRepository {
             }
             'fork' {
                 if ([string]::IsNullorEmpty($Name)) {
-                    $Name = $ForkRepo
+                    $Name = $ForkRepository
                 }
-                if ($PSCmdlet.ShouldProcess("repository [$Owner/$Name] as fork from [$ForkOwner/$ForkRepo]", 'Create')) {
+                if ($PSCmdlet.ShouldProcess("repository [$Owner/$Name] as fork from [$ForkOwner/$ForkRepository]", 'Create')) {
                     $params = @{
                         Context           = $Context
                         ForkOwner         = $ForkOwner

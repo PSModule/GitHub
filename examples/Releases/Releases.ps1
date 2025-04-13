@@ -19,13 +19,14 @@ Get-GitHubRelease -Owner PSModule -Repository GitHub -Latest
 
 # Create a new release for a specific repository
 $repoName = 'mytest'
-New-GitHubRepository -Name $repoName -AllowSquashMerge -AddReadme -License mit -Gitignore VisualStudio
+New-GitHubRepository -ForkOwner 'PSModule' -ForkRepository 'Template-PSModule' -Name $repoName -Private
 
 $repo = Get-GitHubUser | Get-GitHubRepository -Name $repoName
 $repo | Get-GitHubRelease
 $repo | New-GitHubRelease -Tag 'v1.0' -Latest
 $repo | New-GitHubRelease -Tag 'v1.1' -Latest -Name 'test'
 $repo | New-GitHubRelease -Tag 'v1.2' -Latest -Name 'test' -Notes 'Release notes'
+$repo | New-GitHubRelease -Tag 'v1.3' -Latest -Name 'test' -GenerateReleaseNotes
 $repo | Set-GitHubRelease -Tag 'v1.5' -Latest -Name 'test' -Notes 'Release notes' | Select-Object *
 $repo | Get-GitHubRelease -Tag 'v1.4' | Select-Object Tag, Name, Latest, Prerelease, Draft
 $repo | Set-GitHubRelease -Tag 'v1.4' | Select-Object Tag, Name, Latest, Prerelease, Draft
@@ -37,7 +38,7 @@ $repo | Set-GitHubRelease -Tag 'v1.4' -Name 'test2' | Select-Object Tag, Name, L
 
 $repo | Get-GitHubRelease -Tag 'v1.4' | Select-Object *
 
-$repo | Set-GitHubRelease -Tag 'v1.4' -Name 'test2' -Notes 'Release notes'
+$repo | Set-GitHubRelease -Tag 'v1.4' -Name 'test2'
 
 
 New-GitHubReleaseNote -Owner PSModule -Repository GitHub -Tag 'v0.22.0' -Target 'main' -PreviousTag 'v0.20.0'
