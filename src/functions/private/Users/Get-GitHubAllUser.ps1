@@ -59,7 +59,17 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            $_.Response | ForEach-Object { [GitHubUser]::New($_) }
+            switch ($_.Response.Type) {
+                'Organization' {
+                    [GitHubOrganization]::New($_.Response)
+                }
+                'User' {
+                    [GitHubUser]::New($_.Response)
+                }
+                default {
+                    [GitHubOwner]::New($_.Response)
+                }
+            }
         }
     }
 
