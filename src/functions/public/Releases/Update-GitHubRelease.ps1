@@ -77,6 +77,10 @@
         [Parameter()]
         [switch] $Declare,
 
+        # The release to update
+        [Parameter(ValueFromPipeline)]
+        [GitHubRelease] $InputObject,
+
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
@@ -91,6 +95,8 @@
     }
 
     process {
+        $ID = $InputObject.ID
+
         if (-not $ID -and -not $Tag) {
             throw 'You must specify either the ID or the Tag parameter.'
         }
