@@ -84,19 +84,22 @@
             Repository = $Repository
             Context    = $Context
         }
-
+        $repo = Get-GitHubRepositoryByName -Owner $Owner -Name $Repository -Context $Context
         $release = Get-GitHubRelease @scope -Tag $Tag
         if ($release) {
             $ID = $release.ID
             $body = @{
-                tag_name                 = $Tag
-                target_commitish         = $Target
-                name                     = $Name
-                body                     = $Notes
-                discussion_category_name = $DiscussionCategoryName
-                make_latest              = $PSBoundParameters.ContainsKey('Latest') ? [bool]$Latest.ToString().ToLower() : $null
-                draft                    = $PSBoundParameters.ContainsKey('Draft') ? [bool]$Draft : $null
-                prerelease               = $PSBoundParameters.ContainsKey('Prerelease') ? [bool]$Prerelease : $null
+                tag_name         = $Tag
+                target_commitish = $Target
+                name             = $Name
+                body             = $Notes
+                make_latest      = $PSBoundParameters.ContainsKey('Latest') ? [bool]$Latest.ToString().ToLower() : $null
+                draft            = $PSBoundParameters.ContainsKey('Draft') ? [bool]$Draft : $null
+                prerelease       = $PSBoundParameters.ContainsKey('Prerelease') ? [bool]$Prerelease : $null
+            }
+
+            if ($repo.HasDiscussions) {
+                $body['discussion_category_name'] = $DiscussionCategoryName
             }
 
             if ($PSBoundParameters.ContainsKey('Latest') -and [bool]$Latest) {
