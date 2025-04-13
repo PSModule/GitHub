@@ -26,6 +26,13 @@ $repo | New-GitHubRelease -Tag 'v1.0' -Latest
 $repo | New-GitHubRelease -Tag 'v1.1' -Latest -Name 'test'
 $repo | New-GitHubRelease -Tag 'v1.2' -Latest -Name 'test' -Notes 'Release notes'
 $repo | New-GitHubRelease -Tag 'v1.3' -Latest -Name 'test' -GenerateReleaseNotes
+$repo | Get-GitHubRelease -Tag 'v1.3' | Format-List
+
+$repo | New-GitHubRelease -Tag 'v1.3.1' -Latest -GenerateReleaseNotes
+$repo | Get-GitHubRelease -Tag 'v1.3.1' | Format-List
+$repo | Set-GitHubRelease -Tag 'v1.3.1' -Latest -GenerateReleaseNotes -Notes 'Release notes'
+$repo | Get-GitHubRelease -Tag 'v1.3.1' | Format-List
+
 $repo | Set-GitHubRelease -Tag 'v1.5' -Latest -Name 'test' -Notes 'Release notes' | Select-Object *
 $repo | Get-GitHubRelease -Tag 'v1.4' | Select-Object Tag, Name, Latest, Prerelease, Draft
 $repo | Set-GitHubRelease -Tag 'v1.4' | Select-Object Tag, Name, Latest, Prerelease, Draft
@@ -40,7 +47,7 @@ $repo | Get-GitHubRelease -Tag 'v1.4' | Select-Object *
 $repo | Set-GitHubRelease -Tag 'v1.4' -Name 'test2'
 
 
-New-GitHubReleaseNote -Owner PSModule -Repository GitHub -Tag 'v0.22.0' -Target 'main' -PreviousTag 'v0.20.0'
+New-GitHubReleaseNote -Owner PSModule -Repository GitHub -Tag 'v0.22.0' -Target 'main' -PreviousTag 'v0.20.0' | Format-List
 
 $repo | Get-GitHubRelease | Remove-GitHubRelease
 
