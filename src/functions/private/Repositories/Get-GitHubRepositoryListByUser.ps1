@@ -38,12 +38,12 @@
         # Specifies the types of repositories you want returned.
         [Parameter()]
         [ValidateSet('all', 'owner', 'member')]
-        [string] $Type = 'all',
+        [string] $Type = 'owner',
 
         # The property to sort the results by.
         [Parameter()]
         [ValidateSet('created', 'updated', 'pushed', 'full_name')]
-        [string] $Sort = 'created',
+        [string] $Sort = 'pushed',
 
         # The order to sort by.
         # Default: asc when using full_name, otherwise desc.

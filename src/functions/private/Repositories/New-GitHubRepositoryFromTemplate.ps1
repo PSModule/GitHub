@@ -61,8 +61,7 @@
         [Parameter()]
         [string] $Description,
 
-        # Set to true to include the directory structure and files from all branches in the template repository,
-        # and not just the default branch.
+        # Include all branches from the source repository.
         [Parameter()]
         [switch] $IncludeAllBranches,
 

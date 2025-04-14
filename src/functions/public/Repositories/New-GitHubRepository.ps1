@@ -109,7 +109,7 @@ filter New-GitHubRepository {
         [Parameter(ParameterSetName = 'org')]
         [Parameter(ParameterSetName = 'fork')]
         [Parameter(ParameterSetName = 'template')]
-        [string] $Owner,
+        [string] $Organization,
 
         # The name of the repository.
         [Parameter(ParameterSetName = 'fork')]
@@ -140,8 +140,7 @@ filter New-GitHubRepository {
         [Parameter(ParameterSetName = 'template')]
         [string] $Description,
 
-        # Set to true to include the directory structure and files from all branches in the template repository,
-        # and not just the default branch.
+        # Include all branches from the source repository.
         [Parameter(ParameterSetName = 'template')]
         [Parameter(ParameterSetName = 'fork')]
         [switch] $IncludeAllBranches,
@@ -374,12 +373,12 @@ filter New-GitHubRepository {
             'fork' {
                 if ($PSCmdlet.ShouldProcess("repository [$Owner/$Name] as fork from [$ForkOwner/$ForkRepository]", 'Create')) {
                     $params = @{
-                        Context           = $Context
-                        Owner             = $ForkOwner
-                        Repository        = $ForkRepository
-                        Organization      = $Owner
-                        Name              = $Name
-                        DefaultBranchOnly = -not $IncludeAllBranches
+                        Context            = $Context
+                        Owner              = $ForkOwner
+                        Repository         = $ForkRepository
+                        Organization       = $Owner
+                        Name               = $Name
+                        IncludeAllBranches = $IncludeAllBranches
                     }
                     $params | Remove-HashtableEntry -NullOrEmptyValues
                     New-GitHubRepositoryAsFork @params

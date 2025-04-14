@@ -29,9 +29,9 @@
         Fork the repository `Hello-World` owned by `github` for the organization `octocat`, naming the resulting repository `Hello-World`.
 
         .EXAMPLE
-        New-GitHubRepositoryAsFork -ForkOwner 'github' -ForkRepository 'Hello-World' -DefaultBranchOnly
+        New-GitHubRepositoryAsFork -ForkOwner 'github' -ForkRepository 'Hello-World' -IncludeAllBranches
 
-        Fork the repository `Hello-World` owned by `github` for the authenticated user, forking only the default branch.
+        Fork the repository `Hello-World` owned by `github` for the authenticated user, including all the branches from the source.
 
         .OUTPUTS
         GitHubRepository
@@ -59,9 +59,9 @@
         [Parameter()]
         [string] $Name,
 
-        # When forking from an existing repository, fork with only the default branch.
+        # Include all branches from the source repository.
         [Parameter()]
-        [switch] $DefaultBranchOnly,
+        [switch] $IncludeAllBranches,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
