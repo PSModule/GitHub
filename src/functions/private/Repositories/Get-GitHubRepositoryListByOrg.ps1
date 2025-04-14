@@ -76,13 +76,13 @@
             sort      = $Sort
             type      = $Type
             direction = $Direction
-            per_page  = $PerPage
         }
 
         $inputObject = @{
             Method      = 'GET'
             APIEndpoint = "/orgs/$Organization/repos"
             Body        = $body
+            PerPage     = $PerPage
             Context     = $Context
         }
 

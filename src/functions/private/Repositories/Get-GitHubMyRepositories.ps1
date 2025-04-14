@@ -63,7 +63,7 @@
         # Limit results to repositories with the specified visibility.
         [Parameter(ParameterSetName = 'Aff-Vis')]
         [ValidateSet('all', 'public', 'private')]
-        [string] $Visibility,
+        [string] $Visibility = 'all',
 
         # Comma-separated list of values. Can include:
         # - owner: Repositories that are owned by the authenticated user.
@@ -73,17 +73,17 @@
         # Default: owner, collaborator, organization_member
         [Parameter(ParameterSetName = 'Aff-Vis')]
         [ValidateSet('owner', 'collaborator', 'organization_member')]
-        [string[]] $Affiliation,
+        [string[]] $Affiliation = 'owner',
 
         # Specifies the types of repositories you want returned.
         [Parameter(ParameterSetName = 'Type')]
         [ValidateSet('all', 'owner', 'public', 'private', 'member')]
-        [string] $Type,
+        [string] $Type = 'owner',
 
         # The property to sort the results by.
         [Parameter()]
         [ValidateSet('created', 'updated', 'pushed', 'full_name')]
-        [string] $Sort,
+        [string] $Sort = 'pushed',
 
         # The order to sort by.
         # Default: asc when using full_name, otherwise desc.
