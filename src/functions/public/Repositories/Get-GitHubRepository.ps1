@@ -53,35 +53,6 @@ filter Get-GitHubRepository {
     [OutputType([GitHubRepository])]
     [CmdletBinding(DefaultParameterSetName = 'MyRepos_Type')]
     param(
-        #Limit results to repositories with the specified visibility.
-        [Parameter(ParameterSetName = 'MyRepos_Aff-Vis')]
-        [ValidateSet('all', 'public', 'private')]
-        [string] $Visibility = 'all',
-
-        # Comma-separated list of values. Can include:
-        # - owner: Repositories that are owned by the authenticated user.
-        # - collaborator: Repositories that the user has been added to as a collaborator.
-        # - organization_member: Repositories that the user has access to through being a member of an organization.
-        #   This includes every repository on every team that the user is on.
-        # Default: owner, collaborator, organization_member
-        [Parameter(ParameterSetName = 'MyRepos_Aff-Vis')]
-        [ValidateSet('owner', 'collaborator', 'organization_member')]
-        [string[]] $Affiliation = @('owner', 'collaborator', 'organization_member'),
-
-        # A repository ID. Only return repositories with an ID greater than this ID.
-        [Parameter(ParameterSetName = 'ListByID')]
-        [int] $SinceID = 0,
-
-        # Only show repositories updated after the given time.
-        [Parameter(ParameterSetName = 'MyRepos_Type')]
-        [Parameter(ParameterSetName = 'MyRepos_Aff-Vis')]
-        [datetime] $Since,
-
-        # Only show repositories updated before the given time.
-        [Parameter(ParameterSetName = 'MyRepos_Type')]
-        [Parameter(ParameterSetName = 'MyRepos_Aff-Vis')]
-        [datetime] $Before,
-
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(ParameterSetName = 'ByName', ValueFromPipelineByPropertyName)]
         [Parameter(ParameterSetName = 'ListByOrg', ValueFromPipelineByPropertyName)]
@@ -97,22 +68,6 @@ filter Get-GitHubRepository {
         [Parameter(Mandatory, ParameterSetName = 'ByName')]
         [string] $Name,
 
-        # The property to sort the results by.
-        [Parameter(ParameterSetName = 'MyRepos_Type')]
-        [Parameter(ParameterSetName = 'MyRepos_Aff-Vis')]
-        [Parameter(ParameterSetName = 'ListByOrg')]
-        [Parameter(ParameterSetName = 'ListByUser')]
-        [ValidateSet('created', 'updated', 'pushed', 'full_name')]
-        [string] $Sort = 'created',
-
-        # The order to sort by.
-        # Default: asc when using full_name, otherwise desc.
-        [Parameter(ParameterSetName = 'MyRepos')]
-        [Parameter(ParameterSetName = 'ListByOrg')]
-        [Parameter(ParameterSetName = 'ListByUser')]
-        [ValidateSet('asc', 'desc')]
-        [string] $Direction = 'asc',
-
         # The number of results per page (max 100).
         [Parameter(ParameterSetName = 'MyRepos')]
         [Parameter(ParameterSetName = 'ListByOrg')]
@@ -126,37 +81,6 @@ filter Get-GitHubRepository {
         [object] $Context = (Get-GitHubContext)
     )
 
-    dynamicparam {
-        $DynamicParamDictionary = New-DynamicParamDictionary
-
-        if ($PSCmdlet.ParameterSetName -in 'MyRepos_Type', 'ListByOrg', 'ListByUser') {
-
-            switch ($PSCmdlet.ParameterSetName) {
-                'MyRepos_Type' {
-                    $ValidateSet = 'all', 'owner', 'public', 'private', 'member'
-                }
-                'ListByOrg' {
-                    $ValidateSet = 'all', 'public', 'private', 'forks', 'sources', 'member'
-                }
-                'ListByUser' {
-                    $ValidateSet = 'all', 'owner', 'member'
-                }
-            }
-
-            $dynParam = @{
-                Name                   = 'Type'
-                ParameterSetName       = $PSCmdlet.ParameterSetName
-                Type                   = [string]
-                Mandatory              = $false
-                ValidateSet            = $ValidateSet
-                DynamicParamDictionary = $DynamicParamDictionary
-            }
-            New-DynamicParam @dynParam
-        }
-
-        return $DynamicParamDictionary
-    }
-
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
@@ -165,22 +89,6 @@ filter Get-GitHubRepository {
     }
 
     process {
-        $Type = if ($null -eq $PSBoundParameters['Type']) {
-            switch ($PSCmdlet.ParameterSetName) {
-                'MyRepos_Type' {
-                    'owner'
-                }
-                'ListByOrg' {
-                    'all'
-                }
-                'ListByUser' {
-                    'owner'
-                }
-            }
-        } else {
-            $PSBoundParameters['Type']
-        }
-
         Write-Debug "ParamSet: [$($PSCmdlet.ParameterSetName)]"
         switch ($PSCmdlet.ParameterSetName) {
             'MyRepos_Type' {

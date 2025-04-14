@@ -110,13 +110,14 @@ filter New-GitHubRepository {
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(ParameterSetName = 'org')]
         [Parameter(ParameterSetName = 'fork')]
+        [Parameter(ParameterSetName = 'template')]
         [string] $Owner,
 
         # The name of the repository.
         [Parameter(ParameterSetName = 'fork')]
+        [Parameter(ParameterSetName = 'template')]
         [Parameter(Mandatory, ParameterSetName = 'user')]
         [Parameter(Mandatory, ParameterSetName = 'org')]
-        [Parameter(Mandatory, ParameterSetName = 'template')]
         [string] $Name,
 
         # The account owner of the template repository. The name is not case sensitive.
@@ -135,10 +136,6 @@ filter New-GitHubRepository {
         [Parameter(Mandatory, ParameterSetName = 'fork')]
         [string] $ForkRepository,
 
-        # When forking from an existing repository, fork with only the default branch.
-        [Parameter(ParameterSetName = 'fork')]
-        [switch] $DefaultBranchOnly,
-
         # A short description of the new repository.
         [Parameter(ParameterSetName = 'user')]
         [Parameter(ParameterSetName = 'org')]
@@ -148,6 +145,7 @@ filter New-GitHubRepository {
         # Set to true to include the directory structure and files from all branches in the template repository,
         # and not just the default branch.
         [Parameter(ParameterSetName = 'template')]
+        [Parameter(ParameterSetName = 'fork')]
         [switch] $IncludeAllBranches,
 
         # A URL with more information about the repository.
@@ -297,6 +295,9 @@ filter New-GitHubRepository {
     }
 
     process {
+        if (-not $PSBoundParameters.ContainsKey('Owner')) {
+            $Owner = $Context.UserName
+        }
         Write-Verbose "ParameterSetName: $($PSCmdlet.ParameterSetName)"
         switch ($PSCmdlet.ParameterSetName) {
             'user' {
@@ -380,9 +381,6 @@ filter New-GitHubRepository {
                 }
             }
             'fork' {
-                if ([string]::IsNullorEmpty($Name)) {
-                    $Name = $ForkRepository
-                }
                 if ($PSCmdlet.ShouldProcess("repository [$Owner/$Name] as fork from [$ForkOwner/$ForkRepository]", 'Create')) {
                     $params = @{
                         Context           = $Context
@@ -390,7 +388,7 @@ filter New-GitHubRepository {
                         Repository        = $ForkRepository
                         Organization      = $Owner
                         Name              = $Name
-                        DefaultBranchOnly = $DefaultBranchOnly
+                        DefaultBranchOnly = -not $IncludeAllBranches
                     }
                     $params | Remove-HashtableEntry -NullOrEmptyValues
                     New-GitHubRepositoryAsFork @params

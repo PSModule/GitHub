@@ -7,6 +7,10 @@
     # Example: octocat
     [GitHubOwner] $Owner
 
+    # The full name of the repository, including the owner.
+    # Example: octocat/Hello-World
+    [string] $FullName
+
     # The HTML URL of the repository.
     # Example: https://github.com/octocat/Hello-World
     [string] $Url
@@ -175,6 +179,18 @@
     # Custom properties for the repository.
     [PSCustomObject] $CustomProperties
 
+    # The clone URL of the repository.
+    # Example: git://github.com/octocat/Hello-World.git
+    [string] $CloneUrl
+
+    # The SSH URL of the repository.
+    # Example: git@github.com:octocat/Hello-World.git
+    [string] $SshUrl
+
+    # The Git URL of the repository.
+    # Example: https://github.com/octocat/Hello-World.git
+    [string] $GitUrl
+
     GitHubRepository() {}
 
     GitHubRepository([PSCustomObject]$Object) {
@@ -182,6 +198,7 @@
         $this.NodeID = $Object.node_id
         $this.Name = $Object.name
         $this.Owner = [GitHubOwner]::New($Object.owner)
+        $this.FullName = $Object.full_name
         $this.Visibility = $Object.visibility
         $this.Description = $Object.description
         $this.Homepage = $Object.homepage
@@ -221,9 +238,12 @@
         $this.MergeCommitMessage = $Object.merge_commit_message
         $this.MergeCommitTitle = $Object.merge_commit_title
         $this.CustomProperties = $Object.custom_properties
+        $this.TemplateRepository = $null -ne $Object.template_repository ? [GitHubRepository]::New($Object.template_repository) : $null
         $this.ForkParent = $null -ne $Object.parent ? [GitHubRepository]::New($Object.parent) : $null
         $this.ForkSource = $null -ne $Object.source ? [GitHubRepository]::New($Object.source) : $null
-        $this.TemplateRepository = $null -ne $Object.template_repository ? [GitHubRepository]::New($Object.template_repository) : $null
+        $this.CloneUrl = $Object.clone_url
+        $this.SshUrl = $Object.ssh_url
+        $this.GitUrl = $Object.git_url
     }
 
     [string] ToString() {
