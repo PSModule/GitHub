@@ -42,7 +42,7 @@
     [OutputType([GitHubRepository])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
-        # The account ForkOwner of the repository. The name is not case sensitive.
+        # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
         [string] $Owner,
 

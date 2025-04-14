@@ -35,6 +35,7 @@ $repo | Get-GitHubRelease -Tag 'v1.3.1' | Format-List
 $repo | Set-GitHubRelease -Tag 'v1.3.1' -Latest -GenerateReleaseNotes -Debug
 $repo | Set-GitHubRelease -Tag 'v1.3.1' -Latest -GenerateReleaseNotes -Notes 'Release notes'
 $repo | Get-GitHubRelease -Tag 'v1.3.1' | Format-List
+Get-GitHubReleaseAsset -Owner MariusStorhaug -Repository mytest -ReleaseID
 
 $repo | Set-GitHubRelease -Tag 'v1.5' -Latest -Name 'test' -Notes 'Release notes' | Select-Object *
 $repo | Get-GitHubRelease -Tag 'v1.4' | Select-Object Tag, Name, Latest, Prerelease, Draft
