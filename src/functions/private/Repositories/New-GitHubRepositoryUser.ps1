@@ -21,7 +21,6 @@
             HasIssues                = $true
             HasProjects              = $true
             HasWiki                  = $true
-            HasDownloads             = $true
             IsTemplate               = $true
             AddReadme                = $true
             AllowSquashMerge         = $true
@@ -76,10 +75,6 @@
         # Whether discussions are enabled.
         [Parameter()]
         [switch] $HasDiscussions,
-
-        # Whether downloads are enabled.
-        [Parameter()]
-        [switch] $HasDownloads,
 
         # Whether this repository acts as a template that can be used to generate new repositories.
         [Parameter()]
@@ -171,7 +166,6 @@
             has_issues                  = [bool]$HasIssues
             has_projects                = [bool]$HasProjects
             has_wiki                    = [bool]$HasWiki
-            has_downloads               = [bool]$HasDownloads
             is_template                 = [bool]$IsTemplate
             team_id                     = $TeamId
             auto_init                   = [bool]$AddReadme

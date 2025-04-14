@@ -24,7 +24,6 @@ filter New-GitHubRepository {
             HasProjects              = $true
             HasWiki                  = $true
             HasDiscussions           = $true
-            HasDownloads             = $true
             IsTemplate               = $true
             AddReadme                = $true
             AllowSquashMerge         = $true
@@ -46,7 +45,6 @@ filter New-GitHubRepository {
             HasIssues                = $true
             HasProjects              = $true
             HasWiki                  = $true
-            HasDownloads             = $true
             IsTemplate               = $true
             AddReadme                = $true
             AllowSquashMerge         = $true
@@ -180,11 +178,6 @@ filter New-GitHubRepository {
         [Parameter(ParameterSetName = 'user')]
         [switch] $HasDiscussions,
 
-        # Whether downloads are enabled.
-        [Parameter(ParameterSetName = 'user')]
-        [Parameter(ParameterSetName = 'org')]
-        [switch] $HasDownloads,
-
         # Whether this repository acts as a template that can be used to generate new repositories.
         [Parameter(ParameterSetName = 'user')]
         [Parameter(ParameterSetName = 'org')]
@@ -311,7 +304,6 @@ filter New-GitHubRepository {
                     HasProjects              = $HasProjects
                     HasWiki                  = $HasWiki
                     HasDiscussions           = $HasDiscussions
-                    HasDownloads             = $HasDownloads
                     IsTemplate               = $IsTemplate
                     TeamId                   = $TeamId
                     AddReadme                = $AddReadme
@@ -343,7 +335,6 @@ filter New-GitHubRepository {
                     HasIssues                = $HasIssues
                     HasProjects              = $HasProjects
                     HasWiki                  = $HasWiki
-                    HasDownloads             = $HasDownloads
                     IsTemplate               = $IsTemplate
                     TeamId                   = $TeamId
                     AddReadme                = $AddReadme

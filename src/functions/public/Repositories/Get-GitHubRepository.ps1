@@ -6,35 +6,21 @@ filter Get-GitHubRepository {
         Gets a specific repository or list of repositories.
 
         .DESCRIPTION
-        Gets a specific repository or list of repositories based on parameter sets.
+        Gets a specific repository or list of repositories.
         If no parameters are specified, the authenticated user's repositories are returned.
-        If a Username parameter is specified, the specified user's public repositories are returned.
-        If the SinceId parameter is specified, the repositories with an ID greater than the specified ID are returned.
-        If an Owner and Repo parameters are specified, the specified repository is returned.
-        If the Owner and Repo parameters are specified, the specified repository is returned.
-
-        .PARAMETER Type
-        Specifies the types of repositories you want returned.
+        If a username is specified, the user's public repositories are returned.
+        If an organization is specified, the organization's public repositories are returned.
+        Can also be used with the name parameter to get a specific repository.
 
         .EXAMPLE
         Get-GitHubRepository
 
-        Gets the repositories for the authenticated user.
-
-        .EXAMPLE
-        Get-GitHubRepository -Type 'owner'
-
-        Gets the repositories owned by the authenticated user.
+        Gets the  authenticated user's repositories.
 
         .EXAMPLE
         Get-GitHubRepository -Username 'octocat'
 
         Gets the repositories for the specified user.
-
-        .EXAMPLE
-        Get-GitHubRepository -SinceID 123456789
-
-        Gets the repositories with an ID equals and greater than 123456789.
 
         .EXAMPLE
         Get-GitHubRepository -Organization 'github' -Name 'octocat'
@@ -51,7 +37,7 @@ filter Get-GitHubRepository {
         https://psmodule.io/GitHub/Functions/Repositories/Get-GitHubRepository/
     #>
     [OutputType([GitHubRepository])]
-    [CmdletBinding(DefaultParameterSetName = 'MyRepos_Type')]
+    [CmdletBinding(DefaultParameterSetName = 'MyRepos')]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(ParameterSetName = 'ByName', ValueFromPipelineByPropertyName)]
@@ -91,30 +77,10 @@ filter Get-GitHubRepository {
     process {
         Write-Debug "ParamSet: [$($PSCmdlet.ParameterSetName)]"
         switch ($PSCmdlet.ParameterSetName) {
-            'MyRepos_Type' {
+            'MyRepos' {
                 $params = @{
-                    Context   = $Context
-                    Type      = $Type
-                    Sort      = $Sort
-                    Direction = $Direction
-                    PerPage   = $PerPage
-                    Since     = $Since
-                    Before    = $Before
-                }
-                $params | Remove-HashtableEntry -NullOrEmptyValues
-                Write-Verbose ($params | Format-List | Out-String)
-                Get-GitHubMyRepositories @params
-            }
-            'MyRepos_Aff-Vis' {
-                $params = @{
-                    Context     = $Context
-                    Visibility  = $Visibility
-                    Affiliation = $Affiliation
-                    Sort        = $Sort
-                    Direction   = $Direction
-                    PerPage     = $PerPage
-                    Since       = $Since
-                    Before      = $Before
+                    Context = $Context
+                    PerPage = $PerPage
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues
                 Write-Verbose ($params | Format-List | Out-String)
@@ -139,22 +105,10 @@ filter Get-GitHubRepository {
                     Get-GitHubRepositoryByName @params
                 } catch { return }
             }
-            'ListByID' {
-                $params = @{
-                    Context = $Context
-                    Since   = $SinceID
-                }
-                $params | Remove-HashtableEntry -NullOrEmptyValues
-                Write-Verbose ($params | Format-List | Out-String)
-                Get-GitHubRepositoryListByID @params
-            }
             'ListByOrg' {
                 $params = @{
                     Context      = $Context
                     Organization = $Organization
-                    Type         = $Type
-                    Sort         = $Sort
-                    Direction    = $Direction
                     PerPage      = $PerPage
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues
@@ -163,12 +117,9 @@ filter Get-GitHubRepository {
             }
             'ListByUser' {
                 $params = @{
-                    Context   = $Context
-                    Username  = $Username
-                    Type      = $Type
-                    Sort      = $Sort
-                    Direction = $Direction
-                    PerPage   = $PerPage
+                    Context  = $Context
+                    Username = $Username
+                    PerPage  = $PerPage
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues
                 Write-Verbose ($params | Format-List | Out-String)

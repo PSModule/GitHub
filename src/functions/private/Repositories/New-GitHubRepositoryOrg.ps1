@@ -22,7 +22,6 @@
             HasIssues                = $true
             HasProjects              = $true
             HasWiki                  = $true
-            HasDownloads             = $true
             IsTemplate               = $true
             AddReadme                = $true
             AllowSquashMerge         = $true
@@ -78,10 +77,6 @@
         # Either true to enable the wiki for this repository or false to disable it.
         [Parameter()]
         [switch] $HasWiki,
-
-        # Whether downloads are enabled.
-        [Parameter()]
-        [switch] $HasDownloads,
 
         # Either true to make this repo available as a template repository or false to prevent it.
         [Parameter()]
@@ -174,7 +169,6 @@
             has_issues                  = [bool]$HasIssues
             has_projects                = [bool]$HasProjects
             has_wiki                    = [bool]$HasWiki
-            has_downloads               = [bool]$HasDownloads
             is_template                 = [bool]$IsTemplate
             team_id                     = $TeamId
             auto_init                   = [bool]$AddReadme

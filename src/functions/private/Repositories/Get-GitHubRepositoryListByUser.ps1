@@ -49,7 +49,7 @@
         # Default: asc when using full_name, otherwise desc.
         [Parameter()]
         [ValidateSet('asc', 'desc')]
-        [string] $Direction,
+        [string] $Direction = 'asc',
 
         # The number of results per page (max 100).
         [Parameter()]
