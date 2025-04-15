@@ -106,6 +106,8 @@ query($releaseId: ID!, $assetCursor: String, $perPage: Int!) {
   }
 }
 '@
+
+        $PerPage = $PSBoundParameters.ContainsKey('PerPage') ? $PerPage : $Context.PerPage
     }
 
     process {
