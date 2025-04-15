@@ -22,6 +22,10 @@
     [OutputType([string])]
     [CmdletBinding()]
     param(
+        # If specified, makes an anonymous request to the GitHub API without authentication.
+        [Parameter()]
+        [switch] $Anonymous,
+
         # The words to show in Octocat's speech bubble
         [Parameter()]
         [string] $Saying,
@@ -48,6 +52,7 @@
             Method      = 'GET'
             APIEndpoint = '/octocat'
             Body        = $body
+            Anonymous   = $Anonymous
             Context     = $Context
         }
 

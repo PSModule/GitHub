@@ -98,7 +98,7 @@ filter Invoke-GitHubAPI {
         [Parameter()]
         [System.Nullable[int]] $PerPage,
 
-        # If specified, ignores all tokens and makes an unauthenticated call
+        # If specified, makes an anonymous request to the GitHub API without authentication.
         [Parameter()]
         [switch] $Anonymous,
 
@@ -183,7 +183,7 @@ filter Invoke-GitHubAPI {
 
         if (-not $Anonymous) {
             $APICall['Authentication'] = 'Bearer'
-            $APICall['Token']          = $Token
+            $APICall['Token'] = $Token
         }
 
         if ($Method -eq 'GET') {
@@ -192,15 +192,6 @@ filter Invoke-GitHubAPI {
             }
 
             $Body['per_page'] = Resolve-GitHubContextSetting -Name 'PerPage' -Value $PerPage -Context $Context
-            # if ($PSBoundParameters.ContainsKey('PerPage')) {
-            #     Write-Debug "Using provided PerPage parameter value [$PerPage]."
-            #     $Body['per_page'] = $PerPage
-            # } elseif (-not $Body.ContainsKey('per_page') -or $Body['per_page'] -eq 0) {
-            #     Write-Debug "Setting per_page to the default value in context [$($Context.PerPage)]."
-            #     $Body['per_page'] = $Context.PerPage
-            # } else {
-            #     $Body['per_page'] = $script:GitHub.Config.PerPage
-            # }
 
             $APICall.Uri = New-Uri -BaseUri $Uri -Query $Body -AsString
         } elseif ($Body) {

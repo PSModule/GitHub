@@ -29,6 +29,10 @@
         )]
         [string] $Name,
 
+        # If specified, makes an anonymous request to the GitHub API without authentication.
+        [Parameter()]
+        [switch] $Anonymous,
+
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
@@ -43,12 +47,16 @@
     }
 
     process {
+        $params = @{
+            Anonymous = $Anonymous
+            Context   = $Context
+        }
         switch ($PSCmdlet.ParameterSetName) {
             'List' {
-                Get-GitHubGitignoreList -Context $Context
+                Get-GitHubGitignoreList @params
             }
             'Name' {
-                Get-GitHubGitignoreByName -Name $Name -Context $Context
+                Get-GitHubGitignoreByName @params -Name $Name
             }
         }
     }

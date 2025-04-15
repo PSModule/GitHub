@@ -45,6 +45,10 @@
         [Parameter(ParameterSetName = 'Name')]
         [string] $Name,
 
+        # If specified, makes an anonymous request to the GitHub API without authentication.
+        [Parameter()]
+        [switch] $Anonymous,
+
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
@@ -59,15 +63,19 @@
     }
 
     process {
+        $params = @{
+            Anonymous = $Anonymous
+            Context   = $Context
+        }
         switch ($PSCmdlet.ParameterSetName) {
             'List' {
-                Get-GitHubLicenseList -Context $Context
+                Get-GitHubLicenseList @params
             }
             'Name' {
-                Get-GitHubLicenseByName -Name $Name -Context $Context
+                Get-GitHubLicenseByName @params -Name $Name
             }
             'Repository' {
-                Get-GitHubRepositoryLicense -Owner $Owner -Repository $Repository -Context $Context
+                Get-GitHubRepositoryLicense @params -Owner $Owner -Repository $Repository
             }
         }
     }
@@ -80,7 +88,7 @@
 Register-ArgumentCompleter -CommandName Get-GitHubLicense -ParameterName Name -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter
-    Get-GitHubLicense | Select-Object -ExpandProperty Name | Where-Object { $_ -like "$wordToComplete*" } | ForEach-Object {
+    Get-GitHubLicense -Anonymous | Select-Object -ExpandProperty Name | Where-Object { $_ -like "$wordToComplete*" } | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
     }
 }
