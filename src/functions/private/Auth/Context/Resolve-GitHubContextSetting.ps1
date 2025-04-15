@@ -62,7 +62,7 @@
         Write-Debug "[$Name] - [$Value] - Provided value"
         return $Value
     }
-    if ($PSBoundParameters.ContainsKey('Context')) {
+    if ($PSBoundParameters.ContainsKey('Context') -and $null -ne $Context) {
         if ($Context.PSObject.Properties.GetEnumerator().Name -contains $Name) {
             Write-Debug "[$Name] - [$Context] - Context value"
             return $Context.$Name
