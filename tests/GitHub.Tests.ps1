@@ -469,7 +469,7 @@ Describe 'API' {
 
     Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
         BeforeAll {
-            $context = Connect-GitHubAccount @connectParams -PassThru -Silent -Debug
+            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
             LogGroup 'Context' {
                 Write-Host ($context | Format-List | Out-String)
             }
@@ -483,7 +483,7 @@ Describe 'API' {
         if ($AuthType -eq 'APP') {
             It 'Invoke-GitHubAPI - Gets the app details' {
                 {
-                    $app = Invoke-GitHubAPI -ApiEndpoint '/app' -Debug
+                    $app = Invoke-GitHubAPI -ApiEndpoint '/app'
                     LogGroup 'App' {
                         Write-Host ($app | Format-Table | Out-String)
                     }
@@ -491,7 +491,7 @@ Describe 'API' {
             }
 
             It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
-                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent -Debug
+                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
                 LogGroup 'Context' {
                     Write-Host ($context | Format-List | Out-String)
                 }
