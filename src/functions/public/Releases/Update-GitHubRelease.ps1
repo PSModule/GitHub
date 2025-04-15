@@ -7,9 +7,9 @@
         Users with push access to the repository can edit a release.
 
         .EXAMPLE
-        Update-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -ID '1234567' -Body 'Release notes'
+        Update-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -ID '1234567' -Notes 'Release notes'
 
-        Updates the release with the ID '1234567' for the repository 'octocat/hello-world' with the body 'Release notes'.
+        Updates the release with the ID '1234567' for the repository 'octocat/hello-world' with the note 'Release notes'.
 
         .NOTES
         [Update a release](https://docs.github.com/rest/releases/releases#update-a-release)
