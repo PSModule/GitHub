@@ -65,7 +65,11 @@ query($owner: String!, $repository: String!, $releaseCursor: String, $perPage: I
           nodes {
             name
             downloadCount
+            downloadUrl
             contentType
+            createdAt
+            updatedAt
+            uploadedBy
             size
             url
             id
