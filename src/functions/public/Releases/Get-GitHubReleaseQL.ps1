@@ -123,40 +123,16 @@ query($releaseId: ID!, $assetCursor: String, $perPage: Int!) {
             $result = Invoke-GitHubGraphQLQuery -Query $releaseQuery -Variables $releaseVariables -Context $Context
             if (-not $result) { break }
 
-            $repositoryData = $result.data.repository
+            $repositoryData = $result.repository
             if (-not $repositoryData) { break }
 
             $releases = $repositoryData.releases
             if (-not $releases) { break }
 
             # Process each release in current page
-            foreach ($releaseNode in $releases.nodes) {
-                $releaseId = $releaseNode.id
-                $assets = @($releaseNode.releaseAssets.nodes)
-                $assetPageInfo = $releaseNode.releaseAssets.pageInfo
-
-                # Paginate through remaining asset pages
-                while ($assetPageInfo.hasNextPage) {
-                    $assetVariables = @{
-                        releaseId   = $releaseId
-                        assetCursor = $assetPageInfo.endCursor
-                        perPage     = $PerPage
-                    }
-
-                    $assetResult = Invoke-GitHubGraphQLQuery -Query $assetQuery -Variables $assetVariables -Context $Context
-                    if (-not $assetResult) { break }
-
-                    $releaseAssets = $assetResult.data.node.releaseAssets
-                    if (-not $releaseAssets) { break }
-
-                    $assets += $releaseAssets.nodes
-                    $assetPageInfo = $releaseAssets.pageInfo
-                }
-
-                # Create complete release object with all assets
-                $releaseNode.releaseAssets.nodes = $assets
-                # [GitHubRelease]::new($releaseNode)
-                $releaseNode
+            $releases.nodes | ForEach-Object {
+                $_
+                # [GitHubRelease]::new($_)
             }
 
             # Update release cursor for next page
