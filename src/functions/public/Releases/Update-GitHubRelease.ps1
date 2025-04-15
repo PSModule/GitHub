@@ -79,7 +79,7 @@
 
         # The release to update
         [Parameter(ValueFromPipeline)]
-        [GitHubRelease] $InputObject,
+        [GitHubRelease] $ReleaseObject,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -95,7 +95,7 @@
     }
 
     process {
-        $ID = $InputObject.ID
+        $ID = $ReleaseObject.ID
 
         if (-not $ID -and -not $Tag) {
             throw 'You must specify either the ID or the Tag parameter.'
@@ -115,7 +115,11 @@
         }
 
         if ([string]::IsNullOrEmpty($ID) -and -not [string]::IsNullOrEmpty($Tag)) {
-            $release = Get-GitHubRelease -Owner $Owner -Repository $Repository -Tag $Tag -Context $Context
+            $release = if ($ReleaseObject) {
+                $ReleaseObject
+            } else {
+                Get-GitHubRelease -Owner $Owner -Repository $Repository -Tag $Tag -Context $Context
+            }
             if (-not $release) {
                 throw "Release with tag [$Tag] not found in [$Owner/$Repository]."
             }
