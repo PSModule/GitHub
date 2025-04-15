@@ -62,20 +62,20 @@
         Write-Debug "[$Name] - [$Value] - Provided value"
         return $Value
     }
-    if ($PSBoundParameters.ContainsKey('Context') -and $null -ne $Context) {
+    if ($PSBoundParameters.ContainsKey('Context') -and -not [string]::IsNullOrEmpty($Context)) {
         if ($Context.PSObject.Properties.GetEnumerator().Name -contains $Name) {
             Write-Debug "[$Name] - [$Context] - Context value"
             return $Context.$Name
         }
     }
-    if ($Script:GitHub.Config.$Name) {
+    if (-not [string]::IsNullOrEmpty($Script:GitHub.Config.$Name)) {
         Write-Debug "[$Name] - [$($script:GitHub.Config.$Name)] - Default value from GitHub.Config"
         return $script:GitHub.Config.$Name
     }
-    if ($Script:GitHub.DefaultConfig.$Name) {
+    if (-not [string]::IsNullOrEmpty($Script:GitHub.DefaultConfig.$Name)) {
         Write-Debug "[$Name] - [$($script:GitHub.DefaultConfig.$Name)] - Default value from GitHub.DefaultConfig"
         return $script:GitHub.DefaultConfig.$Name
     }
-    Write-Debug "[$Name] - [$($script:GitHub.Config.$Name)] - No value found, returning"
+    Write-Debug "[$Name] - No value found, returning"
     return $null
 }
