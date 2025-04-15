@@ -69,7 +69,7 @@
                     [GitHubRelease]::new($item, $Owner, $Repository, $isLatest)
                 }
             }
-        } catch { return }
+        } finally {}
     }
 
     end {
