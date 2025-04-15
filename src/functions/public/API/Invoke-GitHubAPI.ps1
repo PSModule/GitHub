@@ -86,17 +86,25 @@ filter Invoke-GitHubAPI {
 
         # Specifies how many times PowerShell retries a connection when a failure code between 400 and 599, inclusive or 304 is received.
         [Parameter()]
-        [int] $RetryCount = $script:GitHub.Config.RetryCount,
+        [int] $RetryCount,
 
         # Specifies the interval between retries for the connection when a failure code between 400 and 599, inclusive or 304 is received.
         # When the failure code is 429 and the response includes the Retry-After property in its headers, the cmdlet uses that value for the retry
         # interval, even if this parameter is specified.
         [Parameter()]
-        [int] $RetryInterval = $script:GitHub.Config.RetryInterval,
+        [int] $RetryInterval,
 
         # The number of results per page for paginated GitHub API responses.
         [Parameter()]
-        [int] $PerPage,
+        [System.Nullable[int]] $PerPage,
+
+        # Ad-hoc token (overrides context token if provided, unless -Anonymous is used)
+        [Parameter()]
+        [string] $Token,
+
+        # If specified, ignores all tokens and makes an unauthenticated call
+        [Parameter()]
+        [switch] $Anonymous,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -116,11 +124,17 @@ filter Invoke-GitHubAPI {
     }
 
     process {
-        $Token = $Context.Token
+        if (-not $Anonymous) {
+            if (-not $PSBoundParameters.ContainsKey('Token')) {
+                $Token = $Context.Token
+            }
+        }
 
         $HttpVersion = Resolve-GitHubContextSetting -Name 'HttpVersion' -Value $HttpVersion -Context $Context
         $ApiBaseUri = Resolve-GitHubContextSetting -Name 'ApiBaseUri' -Value $ApiBaseUri -Context $Context
         $ApiVersion = Resolve-GitHubContextSetting -Name 'ApiVersion' -Value $ApiVersion -Context $Context
+        $RetryCount = Resolve-GitHubContextSetting -Name 'RetryCount' -Value $RetryCount -Context $Context
+        $RetryInterval = Resolve-GitHubContextSetting -Name 'RetryInterval' -Value $RetryInterval -Context $Context
         $TokenType = Resolve-GitHubContextSetting -Name 'TokenType' -Value $TokenType -Context $Context
         [pscustomobject]@{
             Token       = $Token
@@ -179,6 +193,8 @@ filter Invoke-GitHubAPI {
             } elseif (-not $Body.ContainsKey('per_page') -or $Body['per_page'] -eq 0) {
                 Write-Debug "Setting per_page to the default value in context [$($Context.PerPage)]."
                 $Body['per_page'] = $Context.PerPage
+            } else {
+                $Body['per_page'] = $script:GitHub.Config.PerPage
             }
 
             $APICall.Uri = New-Uri -BaseUri $Uri -Query $Body -AsString
