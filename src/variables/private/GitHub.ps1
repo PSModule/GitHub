@@ -10,6 +10,7 @@
     DefaultConfig      = [GitHubConfig]@{
         ID                            = 'PSModule.GitHub'
         HostName                      = ($env:GITHUB_SERVER_URL ?? 'github.com') -replace '^https?://'
+        $ApiBaseUri                   = "https://api.$(($env:GITHUB_SERVER_URL ?? 'github.com') -replace '^https?://')"
         AccessTokenGracePeriodInHours = 4
         GitHubAppClientID             = 'Iv1.f26b61bc99e69405'
         OAuthAppClientID              = '7204ae9b0580f2cb8288'
