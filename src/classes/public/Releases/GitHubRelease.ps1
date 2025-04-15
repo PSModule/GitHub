@@ -107,7 +107,7 @@ class GitHubRelease : GitHubNode {
 
     GitHubRelease() {}
 
-    GitHubRelease([PSCustomObject] $Object, [string] $Owner, [string] $Repository) {
+    GitHubRelease([PSCustomObject] $Object, [string] $Owner, [string] $Repository, [bool] $Latest) {
         # From GitHubNode
         if ($Object.databaseId) {
             $this.ID = $Object.databaseId
