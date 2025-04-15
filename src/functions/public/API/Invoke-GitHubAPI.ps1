@@ -65,10 +65,6 @@ filter Invoke-GitHubAPI {
         [Parameter()]
         [string] $UploadFilePath,
 
-        # The file path to be used for the API response. This is used for downloading files.
-        [Parameter()]
-        [string] $DownloadFilePath,
-
         # The full URI for the API request. This is used for custom API calls.
         [Parameter(
             Mandatory,
