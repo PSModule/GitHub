@@ -98,10 +98,6 @@ filter Invoke-GitHubAPI {
         [Parameter()]
         [System.Nullable[int]] $PerPage,
 
-        # Ad-hoc token (overrides context token if provided, unless -Anonymous is used)
-        [Parameter()]
-        [string] $Token,
-
         # If specified, ignores all tokens and makes an unauthenticated call
         [Parameter()]
         [switch] $Anonymous,
