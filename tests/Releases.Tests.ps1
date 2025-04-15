@@ -62,13 +62,23 @@ Describe 'Artifacts' {
         AfterAll {
             switch ($OwnerType) {
                 'user' {
-                    Get-GitHubRepository -Affiliation owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                    Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
                 }
                 'organization' {
                     Get-GitHubRepository -Owner $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
                 }
             }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+        }
+
+        Context "Releases" {
+            It 'New-GitHubRelease - Creates a new release' {
+                $item = New-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.0' -Latest
+                LogGroup "Release" {
+                    Write-Host ($item | Format-Table | Out-String)
+                }
+                $item | Should -Not -BeNullOrEmpty
+            }
         }
     }
 }
