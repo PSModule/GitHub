@@ -64,12 +64,11 @@
         try {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 $_.Response | ForEach-Object {
-                    $item = $_
-                    $isLatest = $item.id -eq $latest.id
-                    [GitHubRelease]::new($item, $Owner, $Repository, $isLatest)
+                    $isLatest = $_.id -eq $latest.id
+                    [GitHubRelease]::new($_, $Owner, $Repository, $isLatest)
                 }
             }
-        } finally {}
+        } catch { return }
     }
 
     end {
