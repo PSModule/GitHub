@@ -1,7 +1,7 @@
 ﻿filter Get-GitHubRelease {
     <#
         .SYNOPSIS
-        List releases.
+        List releases
 
         .DESCRIPTION
         This returns a list of releases, which does not include regular Git tags that have not been associated with a release.
@@ -14,9 +14,9 @@
         Gets the releases for the repository 'hello-world' owned by 'octocat'.
 
         .EXAMPLE
-        Get-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -All
+        Get-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -Latest
 
-        Gets all releases for the repository 'hello-world' owned by 'octocat'.
+        Gets the latest releases for the repository 'hello-world' owned by 'octocat'.
 
         .EXAMPLE
         Get-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -Tag 'v1.0.0'
@@ -28,28 +28,21 @@
 
         Gets the release with the ID '1234567' for the repository 'hello-world' owned by 'octocat'.
 
-        .INPUTS
-        GitHubRepository
-
-        .OUTPUTS
-        GitHubRelease
-
-        .LINK
-        https://psmodule.io/GitHub/Functions/Releases/Get-GitHubRelease/
+        .NOTES
+        [List releases](https://docs.github.com/rest/releases/releases#list-releases)
+        [Get the latest release](https://docs.github.com/rest/releases/releases#get-the-latest-release)
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-        'PSReviewUnusedParameter', 'Latest',
-        Justification = 'Using the ParameterSetName to determine the context of the command.'
-    )]
-    [OutputType([GitHubRelease])]
     [CmdletBinding(DefaultParameterSetName = 'All')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'Latest', Justification = 'Required for parameter set')]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory)]
+        [Alias('Organization')]
+        [Alias('User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory)]
         [string] $Repository,
 
         # The number of results per page (max 100).
@@ -57,16 +50,27 @@
         [ValidateRange(0, 100)]
         [int] $PerPage,
 
-        # Get the latest release.
-        [Parameter(Mandatory, ParameterSetName = 'Latest')]
+        # Get the latest release only
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'Latest'
+        )]
         [switch] $Latest,
 
         # The name of the tag to get a release from.
-        [Parameter(Mandatory, ParameterSetName = 'Tag')]
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'Tag'
+        )]
+        [Alias('tag_name')]
         [string] $Tag,
 
         # The unique identifier of the release.
-        [Parameter(Mandatory, ParameterSetName = 'ID')]
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'ID'
+        )]
+        [Alias('release_id')]
         [string] $ID,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -83,31 +87,21 @@
     }
 
     process {
-        $params = @{
-            Owner      = $Owner
-            Repository = $Repository
-            Context    = $Context
-        }
-        Write-Debug "ParameterSet: $($PSCmdlet.ParameterSetName)"
         switch ($PSCmdlet.ParameterSetName) {
             'All' {
-                Get-GitHubReleaseAll @params -PerPage $PerPage
-            }
-            'Tag' {
-                $release = Get-GitHubReleaseByTagName @params -Tag $Tag
-                if ($release) {
-                    $release
-                } else {
-                    Get-GithubReleaseAll @params -PerPage $PerPage | Where-Object { $_.Tag -eq $Tag }
-                }
-            }
-            'ID' {
-                Get-GitHubReleaseByID @params -ID $ID
+                Get-GitHubReleaseAll -Owner $Owner -Repository $Repository -PerPage $PerPage -Context $Context
             }
             'Latest' {
-                Get-GitHubReleaseLatest @params
+                Get-GitHubReleaseLatest -Owner $Owner -Repository $Repository -Context $Context
+            }
+            'Tag' {
+                Get-GitHubReleaseByTagName -Owner $Owner -Repository $Repository -Tag $Tag -Context $Context
+            }
+            'ID' {
+                Get-GitHubReleaseByID -Owner $Owner -Repository $Repository -ID $ID -Context $Context
             }
         }
+
     }
 
     end {

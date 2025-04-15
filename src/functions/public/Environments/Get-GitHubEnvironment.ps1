@@ -53,9 +53,6 @@ filter Get-GitHubEnvironment {
 
         Lists all environments available in the "EnvironmentTest" repository owned by "PSModule".
 
-        .INPUTS
-        GitHubRepository
-
         .OUTPUTS
         GitHubEnvironment[]
 
@@ -69,12 +66,18 @@ filter Get-GitHubEnvironment {
     [CmdletBinding()]
     param(
         # The name of the organization.
-        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
+        [Parameter(
+            Mandatory,
+            ValueFromPipelineByPropertyName
+        )]
         [Alias('Organization', 'User')]
         [string] $Owner,
 
         # The name of the Repository.
-        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
+        [Parameter(
+            Mandatory,
+            ValueFromPipelineByPropertyName
+        )]
         [string] $Repository,
 
         # The name of the environment.

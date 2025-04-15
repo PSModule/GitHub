@@ -24,7 +24,7 @@
         [Delete an organization](https://docs.github.com/rest/orgs/orgs#delete-an-organization)
     #>
     [OutputType([void])]
-    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         # The organization name. The name is not case sensitive.
         [Parameter(

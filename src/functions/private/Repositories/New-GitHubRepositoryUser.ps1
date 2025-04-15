@@ -1,4 +1,6 @@
-﻿filter New-GitHubRepositoryUser {
+﻿#Requires -Modules @{ ModuleName = 'DynamicParams'; RequiredVersion = '1.1.8' }
+
+filter New-GitHubRepositoryUser {
     <#
         .SYNOPSIS
         Create a repository for the authenticated user
@@ -21,8 +23,9 @@
             HasIssues                = $true
             HasProjects              = $true
             HasWiki                  = $true
+            HasDownloads             = $true
             IsTemplate               = $true
-            AddReadme                = $true
+            AutoInit                 = $true
             AllowSquashMerge         = $true
             AllowAutoMerge           = $true
             DeleteBranchOnMerge      = $true
@@ -33,12 +36,28 @@
 
         Creates a new public repository named "Hello-World" owned by the authenticated user.
 
+        .PARAMETER GitignoreTemplate
+        The desired language or platform to apply to the .gitignore.
+
+        .PARAMETER LicenseTemplate
+        The license keyword of the open source license for this repository.
+
         .OUTPUTS
         GitHubRepository
 
         .LINK
         [Create a repository for the authenticated user](https://docs.github.com/rest/repos/repos#create-a-repository-for-the-authenticated-user)
     #>
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSUseDeclaredVarsMoreThanAssignments',
+        'GitignoreTemplate',
+        Justification = 'Parameter is used in dynamic parameter validation.'
+    )]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSUseDeclaredVarsMoreThanAssignments',
+        'LicenseTemplate',
+        Justification = 'Parameter is used in dynamic parameter validation.'
+    )]
     [OutputType([GitHubRepository])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
@@ -76,6 +95,10 @@
         [Parameter()]
         [switch] $HasDiscussions,
 
+        # Whether downloads are enabled.
+        [Parameter()]
+        [switch] $HasDownloads,
+
         # Whether this repository acts as a template that can be used to generate new repositories.
         [Parameter()]
         [switch] $IsTemplate,
@@ -86,15 +109,7 @@
 
         # Pass true to create an initial commit with empty README.
         [Parameter()]
-        [switch] $AddReadme,
-
-        # The desired language or platform to apply to the .gitignore.
-        [Parameter()]
-        [string] $Gitignore,
-
-        #The license keyword of the open source license for this repository.
-        [Parameter()]
-        [string] $License,
+        [switch] $AutoInit,
 
         # Whether to allow squash merges for pull requests.
         [Parameter()]
@@ -152,6 +167,30 @@
         [object] $Context
     )
 
+    dynamicparam {
+        $DynamicParamDictionary = New-DynamicParamDictionary
+
+        $dynParam = @{
+            Name                   = 'GitignoreTemplate'
+            Alias                  = 'gitignore_template'
+            Type                   = [string]
+            ValidateSet            = Get-GitHubGitignore
+            DynamicParamDictionary = $DynamicParamDictionary
+        }
+        New-DynamicParam @dynParam
+
+        $dynParam2 = @{
+            Name                   = 'LicenseTemplate'
+            Alias                  = 'license_template'
+            Type                   = [string]
+            ValidateSet            = Get-GitHubLicense | Select-Object -ExpandProperty key
+            DynamicParamDictionary = $DynamicParamDictionary
+        }
+        New-DynamicParam @dynParam2
+
+        return $DynamicParamDictionary
+    }
+
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
@@ -159,6 +198,8 @@
     }
 
     process {
+        $GitignoreTemplate = $PSBoundParameters['GitignoreTemplate']
+        $LicenseTemplate = $PSBoundParameters['LicenseTemplate']
         $body = @{
             name                        = $Name
             description                 = $Description
@@ -166,11 +207,10 @@
             has_issues                  = [bool]$HasIssues
             has_projects                = [bool]$HasProjects
             has_wiki                    = [bool]$HasWiki
+            has_downloads               = [bool]$HasDownloads
             is_template                 = [bool]$IsTemplate
             team_id                     = $TeamId
-            auto_init                   = [bool]$AddReadme
-            gitignore_template          = $Gitignore
-            license_template            = $License
+            auto_init                   = [bool]$AutoInit
             allow_squash_merge          = [bool]$AllowSquashMerge
             allow_merge_commit          = [bool]$AllowMergeCommit
             allow_rebase_merge          = [bool]$AllowRebaseMerge

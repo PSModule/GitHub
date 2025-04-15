@@ -43,12 +43,16 @@ function Remove-GitHubArtifact {
 
         # The unique identifier of the artifact.
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
+        [Alias('ArtifactID', 'DatabaseID')]
         [string] $ID,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
         [object] $Context = (Get-GitHubContext)
+
+        # [Parameter(Mandatory)]
+        # [object] $Context
     )
 
     begin {

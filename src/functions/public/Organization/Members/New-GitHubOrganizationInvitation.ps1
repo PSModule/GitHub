@@ -28,7 +28,7 @@
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The organization name. The name is not case sensitive.
-        [Parameter(Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory)]
         [string] $Organization,
 
         # GitHub user ID for the person you are inviting.
@@ -36,8 +36,8 @@
             Mandatory,
             ParameterSetName = 'UserID'
         )]
-        [Alias('invitee_id', 'user_id', 'InviteeID')]
-        [System.Nullable[int]] $ID,
+        [Alias('invitee_id', 'user_id', 'ID')]
+        [Nullable[int]] $InviteeID,
 
         # Email address of the person you are inviting, which can be an existing GitHub user.
         [Parameter(
@@ -77,7 +77,7 @@
 
     process {
         $body = @{
-            invitee_id = $PSBoundParameters.ContainsKey('ID') ? $ID : $null
+            invitee_id = $PSBoundParameters.ContainsKey('InviteeID') ? $InviteeID : $null
             email      = $Email
             role       = $Role
             team_ids   = $TeamIDs

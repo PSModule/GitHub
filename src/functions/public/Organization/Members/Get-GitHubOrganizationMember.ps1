@@ -20,7 +20,7 @@
     [CmdletBinding()]
     param(
         # The organization name. The name is not case sensitive.
-        [Parameter(Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory)]
         [string] $Organization,
 
         # Filter members returned in the list.

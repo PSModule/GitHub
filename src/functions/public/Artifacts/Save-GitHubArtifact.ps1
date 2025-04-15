@@ -1,12 +1,13 @@
 function Save-GitHubArtifact {
     <#
         .SYNOPSIS
-        Downloads a GitHub Actions artifact.
+        Downloads a GitHub Actions artifact from a workflow run.
 
         .DESCRIPTION
-        Downloads an artifact from a repository. The artifact is downloaded as a ZIP file to the specified path
-        or the current directory by default. Users must have read access to the repository. For private repositories,
-        personal access tokens (classic) or OAuth tokens with the `repo` scope are required.
+        Retrieves a specific artifact associated with a workflow run in the specified GitHub repository.
+        The artifact is downloaded as a ZIP file to the specified path or the current directory by default.
+        Users must have read access to the repository. For private repositories, personal access tokens (classic)
+        or OAuth tokens with the `repo` scope are required.
 
         .EXAMPLE
         Save-GitHubArtifact -Owner 'octocat' -Repository 'Hello-World' -ID '123456' -Path 'C:\Artifacts'
@@ -20,22 +21,7 @@ function Save-GitHubArtifact {
         d-----        03/31/2025     12:00                artifact-123456.zip
         ```
 
-        Downloads artifact ID '123456' from the 'Hello-World' repository owned by 'octocat' to the specified path.
-
-        .EXAMPLE
-        Save-GitHubArtifact -Owner 'octocat' -Repository 'Hello-World' -Name 'module' -Path 'C:\Artifacts\module' -Expand -Cleanup -Force
-
-        Output:
-        ```powershell
-        Directory: C:\Artifacts
-
-        Mode                 LastWriteTime         Length Name
-        ----                 -------------         ------ ----
-        d-----        03/31/2025     12:00                artifact-123456.zip
-        ```
-
-        Downloads artifact ID 123456 from the 'Hello-World' repository owned by 'octocat' to the specified path,
-        overwriting existing files during download and extraction.
+        Downloads artifact ID 123456 from the 'Hello-World' repository owned by 'octocat' to the specified path.
 
         .INPUTS
         GitHubArtifact
@@ -66,6 +52,7 @@ function Save-GitHubArtifact {
 
         # The unique identifier of the artifact.
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
+        [Alias('ArtifactID', 'DatabaseID')]
         [string] $ID,
 
         # Path to the file or folder for the download. Accepts relative or absolute paths.
@@ -77,13 +64,9 @@ function Save-GitHubArtifact {
         [Alias('Extract')]
         [switch] $Expand,
 
-        # When specified, overwrites existing files during download and extraction.
+        # When specified (and only meaningful if -Expand is also used), removes the ZIP file after extracting.
         [Parameter()]
-        [switch] $Force,
-
-        # When specified, the zip file or the folder where the zip file was extracted to is returned.
-        [Parameter()]
-        [switch] $PassThru,
+        [switch] $Cleanup,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -130,16 +113,16 @@ function Save-GitHubArtifact {
             [System.IO.File]::WriteAllBytes($Path, $_.Response)
 
             if ($Expand) {
-                Write-Debug "Expanding artifact to [$folder]"
-                Expand-Archive -LiteralPath $Path -DestinationPath $folder -Force:$Force
-                Write-Debug "Removing downloaded ZIP [$Path]"
-                Remove-Item -LiteralPath $Path -Force
-                if ($PassThru) {
-                    return $folder
+                $destFolder = Join-Path -Path $folder -ChildPath ([System.IO.Path]::GetFileNameWithoutExtension($Path))
+                Write-Debug "Expanding artifact [$Path] to [$destFolder]"
+                Expand-Archive -LiteralPath $Path -DestinationPath $destFolder -Force -PassThru
+
+                if ($Cleanup) {
+                    Write-Debug "Removing downloaded ZIP [$Path]"
+                    Remove-Item -LiteralPath $Path -Force
                 }
-            }
-            if ($PassThru) {
-                return Get-Item -Path $Path
+            } else {
+                Get-Item -Path $Path
             }
         }
     }

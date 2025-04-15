@@ -106,19 +106,11 @@
     GitHubWorkflowRun() {}
 
     GitHubWorkflowRun([PSCustomObject] $Object) {
-        # From GitHubNode
-        if ($Object.databaseId) {
-            $this.ID = $Object.databaseId
-            $this.NodeID = $Object.id
-        } else {
-            $this.ID = $Object.id
-            $this.NodeID = $Object.node_id
-        }
-
-        # From GitHubWorkflowRun
+        $this.ID = $_.id
         $this.Name = $_.name
         $this.Owner = [GitHubOwner]::new($Object.repository.owner)
         $this.Repository = [GitHubRepository]::new($Object.repository)
+        $this.NodeID = $_.node_id
         $this.CheckSuiteID = $_.check_suite_id
         $this.CheckSuiteNodeID = $_.check_suite_node_id
         $this.HeadBranch = $_.head_branch

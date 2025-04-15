@@ -25,7 +25,7 @@
     [CmdletBinding()]
     param(
         # The organization name. The name is not case sensitive.
-        [Parameter(Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory)]
         [string] $Organization,
 
         # Filter invitations by their member role.
@@ -60,13 +60,13 @@
         $body = @{
             role              = $Role
             invitation_source = $InvitationSource
+            per_page          = $PerPage
         }
 
         $inputObject = @{
             Method      = 'GET'
             APIEndpoint = "/orgs/$Organization/invitations"
             Body        = $body
-            PerPage     = $PerPage
             Context     = $Context
         }
 

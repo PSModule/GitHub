@@ -79,7 +79,7 @@ query(`$org: String!, `$after: String) {
         $hasNextPage = $true
         $after = $null
 
-        do {
+        while ($hasNextPage) {
             # Update the cursor for pagination
             $variables['after'] = $after
 
@@ -113,7 +113,7 @@ query(`$org: String!, `$after: String) {
             # Check if there's another page to fetch
             $hasNextPage = $teams.pageInfo.hasNextPage
             $after = $teams.pageInfo.endCursor
-        } while ($hasNextPage)
+        }
     }
 
     end {

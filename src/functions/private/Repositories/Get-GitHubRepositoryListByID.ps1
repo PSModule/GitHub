@@ -1,7 +1,7 @@
 ﻿filter Get-GitHubRepositoryListByID {
     <#
         .SYNOPSIS
-        List public repositories.
+        List public repositories
 
         .DESCRIPTION
         Lists all public repositories in the order that they were created.
@@ -13,7 +13,7 @@
         to get the URL for the next page of repositories.
 
         .EXAMPLE
-        Get-GitHubRepositoryListByID -Since 123456789
+        Get-GitHubRepositoryListByID -Since '123456789
 
         Gets the repositories with an ID equals and greater than 123456789.
 

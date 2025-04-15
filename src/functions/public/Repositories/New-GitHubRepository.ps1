@@ -1,4 +1,6 @@
-﻿filter New-GitHubRepository {
+﻿#Requires -Modules @{ ModuleName = 'DynamicParams'; RequiredVersion = '1.1.8' }
+
+filter New-GitHubRepository {
     <#
         .SYNOPSIS
         Create a repository for a user or an organization.
@@ -22,8 +24,9 @@
             HasProjects              = $true
             HasWiki                  = $true
             HasDiscussions           = $true
+            HasDownloads             = $true
             IsTemplate               = $true
-            AddReadme                = $true
+            AutoInit                 = $true
             AllowSquashMerge         = $true
             AllowAutoMerge           = $true
             DeleteBranchOnMerge      = $true
@@ -43,8 +46,9 @@
             HasIssues                = $true
             HasProjects              = $true
             HasWiki                  = $true
+            HasDownloads             = $true
             IsTemplate               = $true
-            AddReadme                = $true
+            AutoInit                 = $true
             AllowSquashMerge         = $true
             AllowAutoMerge           = $true
             DeleteBranchOnMerge      = $true
@@ -82,11 +86,12 @@
         Creates a new repository named `MyNewRepo` as a fork of `Hello-World` owned by `octocat`.
         Only the default branch will be forked.
 
-        .PARAMETER Gitignore
-        The desired language or platform to apply to the .gitignore.
+        .PARAMETER GitignoreTemplate
+        Desired language or platform .gitignore template to apply. Use the name of the template without the extension. For example, "Haskell".
 
-        .PARAMETER License
-        The license keyword of the open source license for this repository.
+        .PARAMETER LicenseTemplate
+        Choose an open source license template that best suits your needs, and then use the license keyword as the license_template string.
+        For example, "mit" or "mpl-2.0".
 
         .OUTPUTS
         GitHubRepository
@@ -101,36 +106,54 @@
         [Create an organization repository](https://docs.github.com/rest/repos/repos#create-an-organization-repository)
     #>
     [OutputType([GitHubRepository])]
-    [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName = 'user')]
+    [CmdletBinding(
+        SupportsShouldProcess,
+        DefaultParameterSetName = 'user'
+    )]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(ParameterSetName = 'org')]
         [Parameter(ParameterSetName = 'fork')]
-        [Parameter(ParameterSetName = 'template')]
-        [string] $Organization,
+        [string] $Owner,
 
         # The name of the repository.
         [Parameter(ParameterSetName = 'fork')]
-        [Parameter(ParameterSetName = 'template')]
         [Parameter(Mandatory, ParameterSetName = 'user')]
         [Parameter(Mandatory, ParameterSetName = 'org')]
+        [Parameter(Mandatory, ParameterSetName = 'template')]
         [string] $Name,
 
         # The account owner of the template repository. The name is not case sensitive.
-        [Parameter(Mandatory, ParameterSetName = 'template')]
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'template'
+        )]
         [string] $TemplateOwner,
 
         # The name of the template repository without the .git extension. The name is not case sensitive.
-        [Parameter(Mandatory, ParameterSetName = 'template')]
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'template'
+        )]
         [string] $TemplateRepository,
 
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(Mandatory, ParameterSetName = 'fork')]
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'fork'
+        )]
         [string] $ForkOwner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter(Mandatory, ParameterSetName = 'fork')]
-        [string] $ForkRepository,
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'fork'
+        )]
+        [string] $ForkRepo,
+
+        # When forking from an existing repository, fork with only the default branch.
+        [Parameter(ParameterSetName = 'fork')]
+        [switch] $DefaultBranchOnly,
 
         # A short description of the new repository.
         [Parameter(ParameterSetName = 'user')]
@@ -138,9 +161,9 @@
         [Parameter(ParameterSetName = 'template')]
         [string] $Description,
 
-        # Include all branches from the source repository.
+        # Set to true to include the directory structure and files from all branches in the template repository,
+        # and not just the default branch.
         [Parameter(ParameterSetName = 'template')]
-        [Parameter(ParameterSetName = 'fork')]
         [switch] $IncludeAllBranches,
 
         # A URL with more information about the repository.
@@ -175,6 +198,11 @@
         [Parameter(ParameterSetName = 'user')]
         [switch] $HasDiscussions,
 
+        # Whether downloads are enabled.
+        [Parameter(ParameterSetName = 'user')]
+        [Parameter(ParameterSetName = 'org')]
+        [switch] $HasDownloads,
+
         # Whether this repository acts as a template that can be used to generate new repositories.
         [Parameter(ParameterSetName = 'user')]
         [Parameter(ParameterSetName = 'org')]
@@ -188,7 +216,7 @@
         # Pass true to create an initial commit with empty README.
         [Parameter(ParameterSetName = 'user')]
         [Parameter(ParameterSetName = 'org')]
-        [switch] $AddReadme,
+        [switch] $AutoInit,
 
         # Whether to allow squash merges for pull requests.
         [Parameter(ParameterSetName = 'user')]
@@ -254,6 +282,30 @@
         [Parameter()]
         [object] $Context = (Get-GitHubContext)
     )
+    #TODO: Move this to argument completers that are linked to all params with this name.
+    dynamicparam {
+        $DynamicParamDictionary = New-DynamicParamDictionary
+
+        $dynParam = @{
+            Name                   = 'GitignoreTemplate'
+            Alias                  = 'gitignore_template'
+            Type                   = [string]
+            ValidateSet            = Get-GitHubGitignore
+            DynamicParamDictionary = $DynamicParamDictionary
+        }
+        New-DynamicParam @dynParam
+
+        $dynParam2 = @{
+            Name                   = 'LicenseTemplate'
+            Alias                  = 'license_template'
+            Type                   = [string]
+            ValidateSet            = Get-GitHubLicense | Select-Object -ExpandProperty key
+            DynamicParamDictionary = $DynamicParamDictionary
+        }
+        New-DynamicParam @dynParam2
+
+        return $DynamicParamDictionary
+    }
 
     begin {
         $stackPath = Get-PSCallStackPath
@@ -263,9 +315,8 @@
     }
 
     process {
-        if (-not $PSBoundParameters.ContainsKey('Owner')) {
-            $Owner = $Context.UserName
-        }
+        $GitignoreTemplate = $PSBoundParameters['GitignoreTemplate']
+        $LicenseTemplate = $PSBoundParameters['LicenseTemplate']
         Write-Verbose "ParameterSetName: $($PSCmdlet.ParameterSetName)"
         switch ($PSCmdlet.ParameterSetName) {
             'user' {
@@ -279,9 +330,10 @@
                     HasProjects              = $HasProjects
                     HasWiki                  = $HasWiki
                     HasDiscussions           = $HasDiscussions
+                    HasDownloads             = $HasDownloads
                     IsTemplate               = $IsTemplate
                     TeamId                   = $TeamId
-                    AddReadme                = $AddReadme
+                    AutoInit                 = $AutoInit
                     AllowSquashMerge         = $AllowSquashMerge
                     AllowMergeCommit         = $AllowMergeCommit
                     AllowRebaseMerge         = $AllowRebaseMerge
@@ -291,8 +343,8 @@
                     SquashMergeCommitMessage = $SquashMergeCommitMessage
                     MergeCommitTitle         = $MergeCommitTitle
                     MergeCommitMessage       = $MergeCommitMessage
-                    Gitignore                = $PSBoundParameters['Gitignore']
-                    License                  = $PSBoundParameters['License']
+                    GitignoreTemplate        = $GitignoreTemplate
+                    LicenseTemplate          = $LicenseTemplate
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues
                 if ($PSCmdlet.ShouldProcess("repository for user [$Name]", 'Create')) {
@@ -310,9 +362,10 @@
                     HasIssues                = $HasIssues
                     HasProjects              = $HasProjects
                     HasWiki                  = $HasWiki
+                    HasDownloads             = $HasDownloads
                     IsTemplate               = $IsTemplate
                     TeamId                   = $TeamId
-                    AddReadme                = $AddReadme
+                    AutoInit                 = $AutoInit
                     AllowSquashMerge         = $AllowSquashMerge
                     AllowMergeCommit         = $AllowMergeCommit
                     AllowRebaseMerge         = $AllowRebaseMerge
@@ -322,8 +375,8 @@
                     SquashMergeCommitMessage = $SquashMergeCommitMessage
                     MergeCommitTitle         = $MergeCommitTitle
                     MergeCommitMessage       = $MergeCommitMessage
-                    Gitignore                = $PSBoundParameters['Gitignore']
-                    License                  = $PSBoundParameters['License']
+                    GitignoreTemplate        = $GitignoreTemplate
+                    LicenseTemplate          = $LicenseTemplate
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues
                 if ($PSCmdlet.ShouldProcess("repository for organization [$Owner/$Name]", 'Create')) {
@@ -347,14 +400,17 @@
                 }
             }
             'fork' {
-                if ($PSCmdlet.ShouldProcess("repository [$Owner/$Name] as fork from [$ForkOwner/$ForkRepository]", 'Create')) {
+                if ([string]::IsNullorEmpty($Name)) {
+                    $Name = $ForkRepo
+                }
+                if ($PSCmdlet.ShouldProcess("repository [$Owner/$Name] as fork from [$ForkOwner/$ForkRepo]", 'Create')) {
                     $params = @{
-                        Context            = $Context
-                        Owner              = $ForkOwner
-                        Repository         = $ForkRepository
-                        Organization       = $Owner
-                        Name               = $Name
-                        IncludeAllBranches = $IncludeAllBranches
+                        Context           = $Context
+                        Owner             = $ForkOwner
+                        Repo              = $ForkRepo
+                        Organization      = $Owner
+                        Name              = $Name
+                        DefaultBranchOnly = $DefaultBranchOnly
                     }
                     $params | Remove-HashtableEntry -NullOrEmptyValues
                     New-GitHubRepositoryAsFork @params

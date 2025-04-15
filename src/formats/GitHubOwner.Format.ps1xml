@@ -23,9 +23,6 @@
                     <TableColumnHeader>
                         <Label>Plan</Label>
                     </TableColumnHeader>
-                    <TableColumnHeader>
-                        <Label>Url</Label>
-                    </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
                     <TableRowEntry>
@@ -44,9 +41,6 @@
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Plan</PropertyName>
-                            </TableColumnItem>
-                            <TableColumnItem>
-                                <PropertyName>Url</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>

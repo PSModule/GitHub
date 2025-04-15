@@ -13,17 +13,11 @@
 
         Gets all the releases for the repository 'hello-world' owned by 'octocat'.
 
-        .INPUTS
-        GitHubRepository
+        .NOTES
+        https://docs.github.com/rest/releases/releases#list-releases
 
-        .OUTPUTS
-        GitHubRelease
-
-        .LINK
-        [List releases](https://docs.github.com/rest/releases/releases#list-releases)
     #>
-    [OutputType([GitHubRelease])]
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
@@ -34,7 +28,7 @@
         [string] $Repository,
 
         # The number of results per page (max 100).
-        [Parameter()]
+        [Parameter(ParameterSetName = 'AllUsers')]
         [ValidateRange(0, 100)]
         [int] $PerPage,
 
@@ -51,26 +45,21 @@
     }
 
     process {
-        $latest = Get-GitHubReleaseLatest -Owner $Owner -Repository $Repository -Context $Context
+        $body = @{
+            per_page = $PerPage
+        }
 
         $inputObject = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/releases"
             Body        = $body
-            PerPage     = $PerPage
             Context     = $Context
         }
 
-        try {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                $_.Response | ForEach-Object {
-                    $isLatest = $_.id -eq $latest.id
-                    [GitHubRelease]::new($_, $Owner, $Repository, $isLatest)
-                }
-            }
-        } catch { return }
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
+        }
     }
-
     end {
         Write-Debug "[$stackPath] - End"
     }

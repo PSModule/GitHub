@@ -43,7 +43,6 @@
         [Parameter(
             Mandatory,
             ParameterSetName = 'NamedOrg',
-            ValueFromPipeline,
             ValueFromPipelineByPropertyName
         )]
         [string] $Name,
@@ -54,7 +53,6 @@
             ParameterSetName = 'NamedUser',
             ValueFromPipelineByPropertyName
         )]
-        [Alias('User')]
         [string] $Username,
 
         # List all organizations. Use '-Since' to start at a specific organization ID.

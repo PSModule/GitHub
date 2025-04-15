@@ -13,25 +13,25 @@
         repositories and on the source account with access to the source repository.
 
         .EXAMPLE
-        New-GitHubRepositoryAsFork -ForkOwner 'github' -ForkRepository 'Hello-World'
+        New-GitHubRepositoryAsFork -ForkOwner 'github' -ForkRepo 'Hello-World'
 
         Fork the repository `Hello-World` owned by `github` for the authenticated user.
         Repo will be named `Hello-World`, and all branches and tags will be forked.
 
         .EXAMPLE
-        New-GitHubRepositoryAsFork -ForkOwner 'github' -ForkRepository 'Hello-World' -Name 'Hello-World-2'
+        New-GitHubRepositoryAsFork -ForkOwner 'github' -ForkRepo 'Hello-World' -Name 'Hello-World-2'
 
         Fork the repository `Hello-World` owned by `github` for the authenticated user, naming the resulting repository `Hello-World-2`.
 
         .EXAMPLE
-        New-GitHubRepositoryAsFork -ForkOwner 'github' -ForkRepository 'Hello-World' -Owner 'octocat'
+        New-GitHubRepositoryAsFork -ForkOwner 'github' -ForkRepo 'Hello-World' -Organization 'octocat'
 
         Fork the repository `Hello-World` owned by `github` for the organization `octocat`, naming the resulting repository `Hello-World`.
 
         .EXAMPLE
-        New-GitHubRepositoryAsFork -ForkOwner 'github' -ForkRepository 'Hello-World' -IncludeAllBranches
+        New-GitHubRepositoryAsFork -ForkOwner 'github' -ForkRepo 'Hello-World' -DefaultBranchOnly
 
-        Fork the repository `Hello-World` owned by `github` for the authenticated user, including all the branches from the source.
+        Fork the repository `Hello-World` owned by `github` for the authenticated user, forking only the default branch.
 
         .OUTPUTS
         GitHubRepository
@@ -52,16 +52,17 @@
 
         # The organization or person who will own the new repository.
         # To create a new repository in an organization, the authenticated user must be a member of the specified organization.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [string] $Organization,
 
         # The name of the new repository.
         [Parameter()]
         [string] $Name,
 
-        # Include all branches from the source repository.
+        # When forking from an existing repository, fork with only the default branch.
         [Parameter()]
-        [switch] $IncludeAllBranches,
+        [Alias('default_branch_only')]
+        [switch] $DefaultBranchOnly,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -81,7 +82,6 @@
             name                = $Name
             default_branch_only = $DefaultBranchOnly
         }
-        $body | Remove-HashtableEntry -NullOrEmptyValues
 
         $inputObject = @{
             Method      = 'POST'
