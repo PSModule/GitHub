@@ -59,10 +59,13 @@
     )
 
     if ($Value) {
+        Write-Debug "[$Name] - [$Value] - Provided value"
         return $Value
     }
     if ($Context) {
+        Write-Debug "[$Name] - [$Context] - Context value"
         return $Context.$Name
     }
+    Write-Debug "[$Name] - [$($script:GitHub.Config.$Name)] - Default value"
     return $script:GitHub.Config.$Name
 }
