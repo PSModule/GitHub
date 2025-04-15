@@ -177,8 +177,6 @@ filter Invoke-GitHubAPI {
             Uri               = $Uri
             Method            = [string]$Method
             Headers           = $Headers
-            Authentication    = 'Bearer'
-            Token             = $Token
             ContentType       = $ContentType
             InFile            = $UploadFilePath
             HttpVersion       = [string]$HttpVersion
@@ -186,6 +184,11 @@ filter Invoke-GitHubAPI {
             RetryIntervalSec  = $RetryInterval
         }
         $APICall | Remove-HashtableEntry -NullOrEmptyValues
+
+        if (-not $Anonymous) {
+            $APICall['Authentication'] = 'Bearer'
+            $APICall['Token']          = $Token
+        }
 
         if ($Method -eq 'GET') {
             if (-not $Body) {
