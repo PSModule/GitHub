@@ -32,7 +32,9 @@
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
+        if (-not $Anonymous) {
+            Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
+        }
     }
 
     process {
