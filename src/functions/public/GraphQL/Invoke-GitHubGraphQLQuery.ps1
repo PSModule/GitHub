@@ -1,22 +1,27 @@
-﻿filter Get-GitHubApiVersion {
+﻿function Invoke-GitHubGraphQLQuery {
     <#
         .SYNOPSIS
-        Get all API versions.
+        Invoke a GraphQL query against the GitHub GraphQL API
 
         .DESCRIPTION
-        Get all supported GitHub API versions.
+        Use this function to invoke a GraphQL query against the GitHub GraphQL API.
 
         .EXAMPLE
-        Get-GitHubApiVersion
-
-        Get all supported GitHub API versions.
+        Invoke-GitHubGraphQLQuery -Query $query -Variables $Variables
 
         .NOTES
-        [Get all API versions](https://docs.github.com/rest/meta/meta#get-all-api-versions)
+        [GitHub GraphQL API documentation](https://docs.github.com/graphql)
     #>
-    [OutputType([string[]])]
     [CmdletBinding()]
     param(
+        # The GraphQL query to execute.
+        [Parameter(Mandatory)]
+        [string] $Query,
+
+        # The variables to pass to the query.
+        [Parameter()]
+        [hashtable] $Variables,
+
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
@@ -31,9 +36,15 @@
     }
 
     process {
+        $body = @{
+            'query'     = $Query
+            'variables' = $Variables
+        }
+
         $inputObject = @{
-            Method      = 'GET'
-            ApiEndpoint = '/versions'
+            Method      = 'POST'
+            APIEndpoint = '/graphql'
+            Body        = $body
             Context     = $Context
         }
 

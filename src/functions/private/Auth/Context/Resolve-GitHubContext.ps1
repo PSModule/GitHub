@@ -25,7 +25,10 @@
     param(
         # The context to resolve into an object. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter(Mandatory, ValueFromPipeline)]
+        [Parameter(
+            Mandatory,
+            ValueFromPipeline
+        )]
         [object] $Context
     )
 

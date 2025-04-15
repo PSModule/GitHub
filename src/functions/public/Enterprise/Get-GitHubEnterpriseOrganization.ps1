@@ -61,15 +61,20 @@ query(`$enterpriseSlug: String!, `$first: Int = 100, `$after: String) {
 
         # Loop through pages to retrieve all organizations
         do {
-            $data = Invoke-GitHubGraphQLQuery -Query $query -Variables $variables -Context $Context
+            $response = Invoke-GitHubGraphQLQuery -Query $query -Variables $variables -Context $Context
+            # Check for errors
+            if ($response.errors) {
+                Write-Error "Error: $($response.errors[0].message)"
+                break
+            }
 
             # Extract organization names and add to the list
-            foreach ($org in $data.enterprise.organizations.edges) {
+            foreach ($org in $response.data.enterprise.organizations.edges) {
                 $allOrgs += $org.node.name
             }
 
             # Update pagination cursor
-            $pageInfo = $data.enterprise.organizations.pageInfo
+            $pageInfo = $response.data.enterprise.organizations.pageInfo
             $variables.after = $pageInfo.endCursor
 
         } while ($pageInfo.hasNextPage -eq $true)
