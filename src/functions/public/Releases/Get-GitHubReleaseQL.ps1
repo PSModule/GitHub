@@ -61,6 +61,16 @@ query($owner: String!, $repository: String!, $releaseCursor: String, $perPage: I
           id
           databaseId
         }
+        releaseAssets(first: $perPage) {
+          nodes {
+            name
+            downloadCount
+            contentType
+            size
+            url
+            id
+          }
+        }
       }
       pageInfo {
         hasNextPage
