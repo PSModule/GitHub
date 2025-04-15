@@ -61,46 +61,10 @@ query($owner: String!, $repository: String!, $releaseCursor: String, $perPage: I
           id
           databaseId
         }
-        releaseAssets(first: $perPage) {
-          nodes {
-            name
-            downloadCount
-            contentType
-            size
-            url
-            id
-          }
-          pageInfo {
-            hasNextPage
-            endCursor
-          }
-        }
       }
       pageInfo {
         hasNextPage
         endCursor
-      }
-    }
-  }
-}
-'@
-        $assetQuery = @'
-query($releaseId: ID!, $assetCursor: String, $perPage: Int!) {
-  node(id: $releaseId) {
-    ... on Release {
-      releaseAssets(first: $perPage, after: $assetCursor) {
-        nodes {
-          name
-          downloadCount
-          contentType
-          size
-          url
-          id
-        }
-        pageInfo {
-          hasNextPage
-          endCursor
-        }
       }
     }
   }
