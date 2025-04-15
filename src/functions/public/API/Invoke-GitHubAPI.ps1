@@ -115,12 +115,7 @@ filter Invoke-GitHubAPI {
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        if ($Anonymous) {
-            Initialize-GitHubConfig
-            $Context = $null
-        } else {
-            $Context = Resolve-GitHubContext -Context $Context
-        }
+        $Context = $Anonymous ? $null : (Resolve-GitHubContext -Context $Context)
         Write-Debug 'Invoking GitHub API...'
         Write-Debug 'Parent function parameters:'
         Get-FunctionParameter -Scope 1 | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }

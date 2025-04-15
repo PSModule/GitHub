@@ -70,6 +70,10 @@
         Write-Debug "[$Name] - [$($script:GitHub.Config.$Name)] - Default value from GitHub.Config"
         return $script:GitHub.Config.$Name
     }
+    if ($Script:GitHub.DefaultConfig.$Name) {
+        Write-Debug "[$Name] - [$($script:GitHub.DefaultConfig.$Name)] - Default value from GitHub.DefaultConfig"
+        return $script:GitHub.DefaultConfig.$Name
+    }
     Write-Debug "[$Name] - [$($script:GitHub.Config.$Name)] - No value found, returning"
     return $null
 }
