@@ -192,15 +192,16 @@ filter Invoke-GitHubAPI {
                 $Body = @{}
             }
 
-            if ($PSBoundParameters.ContainsKey('PerPage')) {
-                Write-Debug "Using provided PerPage parameter value [$PerPage]."
-                $Body['per_page'] = $PerPage
-            } elseif (-not $Body.ContainsKey('per_page') -or $Body['per_page'] -eq 0) {
-                Write-Debug "Setting per_page to the default value in context [$($Context.PerPage)]."
-                $Body['per_page'] = $Context.PerPage
-            } else {
-                $Body['per_page'] = $script:GitHub.Config.PerPage
-            }
+            $Body['per_page'] = Resolve-GitHubContextSetting -Name 'PerPage' -Value $PerPage -Context $Context
+            # if ($PSBoundParameters.ContainsKey('PerPage')) {
+            #     Write-Debug "Using provided PerPage parameter value [$PerPage]."
+            #     $Body['per_page'] = $PerPage
+            # } elseif (-not $Body.ContainsKey('per_page') -or $Body['per_page'] -eq 0) {
+            #     Write-Debug "Setting per_page to the default value in context [$($Context.PerPage)]."
+            #     $Body['per_page'] = $Context.PerPage
+            # } else {
+            #     $Body['per_page'] = $script:GitHub.Config.PerPage
+            # }
 
             $APICall.Uri = New-Uri -BaseUri $Uri -Query $Body -AsString
         } elseif ($Body) {

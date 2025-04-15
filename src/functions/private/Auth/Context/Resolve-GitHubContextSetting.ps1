@@ -58,13 +58,15 @@
         [object] $Context
     )
 
-    if ($Value) {
+    if ($PSBoundParameters.ContainsKey('Value')) {
         Write-Debug "[$Name] - [$Value] - Provided value"
         return $Value
     }
-    if ($Context) {
-        Write-Debug "[$Name] - [$Context] - Context value"
-        return $Context.$Name
+    if ($PSBoundParameters.ContainsKey('Context')) {
+        if ($Context.PSObject.Properties.GetEnumerator().Name -contains $Name) {
+            Write-Debug "[$Name] - [$Context] - Context value"
+            return $Context.$Name
+        }
     }
     if ($Script:GitHub.Config.$Name) {
         Write-Debug "[$Name] - [$($script:GitHub.Config.$Name)] - Default value from GitHub.Config"
