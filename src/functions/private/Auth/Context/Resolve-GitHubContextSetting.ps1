@@ -58,7 +58,7 @@
         [object] $Context
     )
 
-    if ($PSBoundParameters.ContainsKey('Value')) {
+    if ($Value) {
         Write-Debug "[$Name] - [$Value] - Provided value"
         return $Value
     }
