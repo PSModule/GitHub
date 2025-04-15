@@ -51,7 +51,7 @@ filter Invoke-GitHubAPI {
         # The body of the API request. This can be a hashtable or a string. If a hashtable is provided, it will be converted to JSON.
         [Parameter()]
         [Alias('Query')]
-        [Object] $Body,
+        [object] $Body,
 
         # The 'Accept' header for the API request. If not provided, the default will be used by GitHub's API.
         [Parameter()]
@@ -82,13 +82,13 @@ filter Invoke-GitHubAPI {
 
         # Specifies how many times PowerShell retries a connection when a failure code between 400 and 599, inclusive or 304 is received.
         [Parameter()]
-        [int] $RetryCount,
+        [System.Nullable[int]] $RetryCount,
 
         # Specifies the interval between retries for the connection when a failure code between 400 and 599, inclusive or 304 is received.
         # When the failure code is 429 and the response includes the Retry-After property in its headers, the cmdlet uses that value for the retry
         # interval, even if this parameter is specified.
         [Parameter()]
-        [int] $RetryInterval,
+        [System.Nullable[int]] $RetryInterval,
 
         # The number of results per page for paginated GitHub API responses.
         [Parameter()]
