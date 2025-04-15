@@ -58,7 +58,7 @@
         [object] $Context
     )
 
-    if ($Value) {
+    if ($PSBoundParameters.ContainsKey('Value') -and -not [string]::IsNullOrEmpty($Value)) {
         Write-Debug "[$Name] - [$Value] - Provided value"
         return $Value
     }

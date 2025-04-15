@@ -116,6 +116,7 @@ filter Invoke-GitHubAPI {
             $Context = $null
         } else {
             $Context = Resolve-GitHubContext -Context $Context
+            $Token = $Context.Token
         }
         Write-Debug 'Invoking GitHub API...'
         Write-Debug 'Parent function parameters:'
@@ -125,12 +126,6 @@ filter Invoke-GitHubAPI {
     }
 
     process {
-        if (-not $Anonymous) {
-            if (-not $PSBoundParameters.ContainsKey('Token')) {
-                $Token = $Context.Token
-            }
-        }
-
         $HttpVersion = Resolve-GitHubContextSetting -Name 'HttpVersion' -Value $HttpVersion -Context $Context
         $ApiBaseUri = Resolve-GitHubContextSetting -Name 'ApiBaseUri' -Value $ApiBaseUri -Context $Context
         $ApiVersion = Resolve-GitHubContextSetting -Name 'ApiVersion' -Value $ApiVersion -Context $Context
