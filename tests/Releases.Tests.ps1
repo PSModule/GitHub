@@ -25,7 +25,7 @@ BeforeAll {
     $guid = [guid]::NewGuid().ToString()
 }
 
-Describe 'Artifacts' {
+Describe 'Releases' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 
     Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
@@ -48,10 +48,10 @@ Describe 'Artifacts' {
 
             switch ($OwnerType) {
                 'user' {
-                    $repo = New-GitHubRepository -Name $repoName -AllowSquashMerge
+                    $repo = New-GitHubRepository -Name $repoName -AllowSquashMerge -AddReadme -License mit -Gitignore VisualStudio
                 }
                 'organization' {
-                    $repo = New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
+                    $repo = New-GitHubRepository -Organization $owner -Name $repoName -AllowSquashMerge
                 }
             }
             LogGroup "Repository - [$repoName]" {
@@ -71,10 +71,10 @@ Describe 'Artifacts' {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
         }
 
-        Context "Releases" {
+        Context 'Releases' {
             It 'New-GitHubRelease - Creates a new release' {
                 $item = New-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.0' -Latest
-                LogGroup "Release" {
+                LogGroup 'Release' {
                     Write-Host ($item | Format-Table | Out-String)
                 }
                 $item | Should -Not -BeNullOrEmpty

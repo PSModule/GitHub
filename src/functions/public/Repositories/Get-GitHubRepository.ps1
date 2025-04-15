@@ -1,6 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'DynamicParams'; RequiredVersion = '1.1.8' }
-
-filter Get-GitHubRepository {
+﻿filter Get-GitHubRepository {
     <#
         .SYNOPSIS
         Gets a specific repository or list of repositories.

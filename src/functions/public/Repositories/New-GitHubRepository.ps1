@@ -1,6 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'DynamicParams'; RequiredVersion = '1.1.8' }
-
-filter New-GitHubRepository {
+﻿filter New-GitHubRepository {
     <#
         .SYNOPSIS
         Create a repository for a user or an organization.
@@ -256,28 +254,6 @@ filter New-GitHubRepository {
         [Parameter()]
         [object] $Context = (Get-GitHubContext)
     )
-    #TODO: Move this to argument completers that are linked to all params with this name.
-    dynamicparam {
-        $DynamicParamDictionary = New-DynamicParamDictionary
-
-        $dynParam = @{
-            Name                   = 'Gitignore'
-            Type                   = [string]
-            ValidateSet            = Get-GitHubGitignore
-            DynamicParamDictionary = $DynamicParamDictionary
-        }
-        New-DynamicParam @dynParam
-
-        $dynParam2 = @{
-            Name                   = 'License'
-            Type                   = [string]
-            ValidateSet            = Get-GitHubLicense | Select-Object -ExpandProperty key
-            DynamicParamDictionary = $DynamicParamDictionary
-        }
-        New-DynamicParam @dynParam2
-
-        return $DynamicParamDictionary
-    }
 
     begin {
         $stackPath = Get-PSCallStackPath
