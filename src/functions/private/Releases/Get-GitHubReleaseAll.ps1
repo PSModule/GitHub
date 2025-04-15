@@ -63,10 +63,11 @@
 
         try {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
-                $_.Response | ForEach-Object {
-                    $isLatest = $_.id -eq $latest.id
-                    [GitHubRelease]::new($_, $Owner, $Repository, $isLatest)
-                }
+                $_.Response
+                # $_.Response | ForEach-Object {
+                #     $isLatest = $_.id -eq $latest.id
+                #     [GitHubRelease]::new($_, $Owner, $Repository, $isLatest)
+                # }
             }
         } catch { return }
     }

@@ -30,7 +30,6 @@
         Write-Debug "[$stackPath] - Start"
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
 
-        # Initialize pagination state
         $releaseCursor = $null
         $releaseQuery = @'
 query($owner: String!, $repository: String!, $releaseCursor: String, $perPage: Int!) {
@@ -95,7 +94,6 @@ query($owner: String!, $repository: String!, $releaseCursor: String, $perPage: I
 
     process {
         do {
-            # Get page of releases with first page of assets
             $releaseVariables = @{
                 owner         = $Owner
                 repository    = $Repository
@@ -112,13 +110,10 @@ query($owner: String!, $repository: String!, $releaseCursor: String, $perPage: I
             $releases = $repositoryData.releases
             if (-not $releases) { break }
 
-            # Process each release in current page
             $releases.nodes | ForEach-Object {
-                $_
                 # [GitHubRelease]::new($_)
             }
 
-            # Update release cursor for next page
             $releaseCursor = $releases.pageInfo.endCursor
         } while ($releases.pageInfo.hasNextPage)
     }

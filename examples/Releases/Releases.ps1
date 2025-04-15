@@ -16,12 +16,13 @@ Get-GitHubRelease -Owner PSModule -Repository GitHub -Latest
 }
 
 'PSModule' | Get-GitHubOrganization | Get-GitHubRepository | Get-GitHubRelease -Latest
+Get-GitHubUser | Get-GitHubRepository | Get-GitHubRelease -Latest
 
 # Create a new release for a specific repository
 $repoName = 'mytest'
 
 $repo = Get-GitHubUser | Get-GitHubRepository -Name $repoName
-$repo | Get-GitHubRelease
+$repo | Get-GitHubRelease -Debug
 $repo | New-GitHubRelease -Tag 'v1.0' -Latest
 $repo | New-GitHubRelease -Tag 'v1.1' -Latest -Name 'test'
 $repo | New-GitHubRelease -Tag 'v1.2' -Latest -Name 'test' -Notes 'Release notes'
