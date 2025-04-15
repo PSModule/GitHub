@@ -29,8 +29,16 @@
     GitHubEnvironment() {}
 
     GitHubEnvironment([PSCustomObject]$Object, [string]$Owner, [string]$Repository) {
-        $this.ID = $Object.id
-        $this.NodeID = $Object.node_id
+        # From GitHubNode
+        if ($Object.databaseId) {
+            $this.ID = $Object.databaseId
+            $this.NodeID = $Object.id
+        } else {
+            $this.ID = $Object.id
+            $this.NodeID = $Object.node_id
+        }
+
+        # From GitHubEnvironment
         $this.Name = $Object.name
         $this.Url = $Object.html_url
         $this.Owner = $Owner

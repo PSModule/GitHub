@@ -107,9 +107,17 @@ class GitHubRelease : GitHubNode {
 
     GitHubRelease() {}
 
-    GitHubRelease([PSCustomObject] $Object, [string] $Owner, [string] $Repository, [bool] $Latest) {
-        $this.ID = $Object.id
-        $this.NodeID = $Object.node_id
+    GitHubRelease([PSCustomObject] $Object, [string] $Owner, [string] $Repository) {
+        # From GitHubNode
+        if ($Object.databaseId) {
+            $this.ID = $Object.databaseId
+            $this.NodeID = $Object.id
+        } else {
+            $this.ID = $Object.id
+            $this.NodeID = $Object.node_id
+        }
+
+        # From GitHubRelease
         $this.Name = $Object.name
         $this.Repository = $Repository
         $this.Owner = $Owner
@@ -124,8 +132,33 @@ class GitHubRelease : GitHubNode {
         $this.CreatedAt = $Object.created_at
         $this.PublishedAt = $Object.published_at
         $this.Assets = $Object.assets | ForEach-Object { [GitHubReleaseAsset]::new($_) }
-        $this.TarballUrl = $Object.tarball_url
-        $this.ZipballUrl = $Object.zipball_url
-        $this.Mentions = $Object.mentions_count
     }
 }
+
+# DatabaseID : 211843249
+# Name : v0.22.1
+# Repository : GitHub
+# Owner : PSModule
+# Tag : v0.22.1
+# Notes : Release notes generated using configuration in .github/release.yml at main -->
+
+# ## What's Changed
+# ### Other Changes
+# * 🪲 [Fix]: Enhance repository deletion feedback and fix typo by @MariusStorhaug in https://github.com/PSModule/GitHub/pull/345
+
+
+# **Full Changelog**: https://github.com/PSModule/GitHub/compare/v0.22.0...v0.22.1
+# Target : main
+# Latest : True
+# Draft : False
+# Prerelease : False
+# Url : https://github.com/PSModule/GitHub/releases/tag/v0.22.1
+# Author : github-actions[bot]
+# CreatedAt : 11.04.2025 09:03:38
+# PublishedAt : 11.04.2025 13:41:34
+# TarballUrl : https://api.github.com/repos/PSModule/GitHub/tarball/v0.22.1
+# ZipballUrl : https://api.github.com/repos/PSModule/GitHub/zipball/v0.22.1
+# Assets :
+# Mentions : 1
+# ID : 211843249
+# NodeID : RE_kwDOGiyhrc4MoHix
