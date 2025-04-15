@@ -69,7 +69,12 @@ query($owner: String!, $repository: String!, $releaseCursor: String, $perPage: I
             contentType
             createdAt
             updatedAt
-            uploadedBy
+            uploadedBy {
+              login
+              name
+              id
+              databaseId
+            }
             size
             url
             id
