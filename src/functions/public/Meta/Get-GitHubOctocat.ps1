@@ -22,6 +22,10 @@
     [OutputType([string])]
     [CmdletBinding()]
     param(
+        # If specified, makes an anonymous request to the GitHub API without authentication.
+        [Parameter()]
+        [switch] $Anonymous,
+
         # The words to show in Octocat's speech bubble
         [Parameter()]
         [string] $Saying,
@@ -35,8 +39,10 @@
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $Context = Resolve-GitHubContext -Context $Context
-        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
+        if (-not $Anonymous) {
+            $Context = Resolve-GitHubContext -Context $Context
+            Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
+        }
     }
 
     process {
@@ -48,6 +54,7 @@
             Method      = 'GET'
             APIEndpoint = '/octocat'
             Body        = $body
+            Anonymous   = $Anonymous
             Context     = $Context
         }
 
