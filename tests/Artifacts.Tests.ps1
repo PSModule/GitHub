@@ -193,7 +193,7 @@ Describe 'Artifacts' {
                 Write-Host ($artifact | Format-Table | Out-String)
             }
             LogGroup 'Result' {
-                $result = $artifact | Save-GitHubArtifact
+                $result = $artifact | Save-GitHubArtifact -PassThru
                 Write-Host ($result | Format-Table | Out-String)
             }
             $result | Should -Not -BeNullOrEmpty
@@ -211,7 +211,7 @@ Describe 'Artifacts' {
                 Write-Host ($artifact | Format-Table | Out-String)
             }
             LogGroup 'Result' {
-                $result = $artifact | Save-GitHubArtifact -Expand
+                $result = $artifact | Save-GitHubArtifact -Expand -PassThru
                 Write-Host ($result | Format-Table | Out-String)
             }
             $result | Should -Not -BeNullOrEmpty
@@ -229,7 +229,7 @@ Describe 'Artifacts' {
                 Write-Host ($artifact | Format-Table | Out-String)
             }
             LogGroup 'Result' {
-                $result = $artifact | Save-GitHubArtifact -Path .\testfolder -Expand -Cleanup
+                $result = $artifact | Save-GitHubArtifact -Path .\testfolder -Expand -PassThru
                 Write-Host ($result | Format-Table | Out-String)
             }
             $result | Should -Not -BeNullOrEmpty
@@ -247,7 +247,7 @@ Describe 'Artifacts' {
                 Write-Host ($artifact | Format-Table | Out-String)
             }
             LogGroup 'Result' {
-                $result = $artifact | Save-GitHubArtifact -Path .\testfolder -Expand -Cleanup
+                $result = $artifact | Save-GitHubArtifact -Path .\testfolder -Expand -PassThru
                 Write-Host ($result | Format-Table | Out-String)
             }
             $result | Should -Not -BeNullOrEmpty
