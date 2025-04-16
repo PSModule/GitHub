@@ -16,6 +16,9 @@
 
         Moves the GitHub repository to the PSModule organization and renames it to GitHub.
 
+        .INPUTS
+        GitHubRepository
+
         .OUTPUTS
         GitHubRepository
 
@@ -29,11 +32,11 @@
     [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Name,
 
         # The username or organization name the repository will be transferred to.
