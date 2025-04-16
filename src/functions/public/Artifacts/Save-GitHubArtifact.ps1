@@ -23,7 +23,7 @@ function Save-GitHubArtifact {
         Downloads artifact ID '123456' from the 'Hello-World' repository owned by 'octocat' to the specified path.
 
         .EXAMPLE
-        Save-GitHubArtifact -Owner 'octocat' -Repository 'Hello-World' -Name 'module' -Path 'C:\Artifacts\module' -Expand -Cleanup -Force
+        Save-GitHubArtifact -Owner 'octocat' -Repository 'Hello-World' -Name 'module' -Path 'C:\Artifacts\module' -Expand -Force
 
         Output:
         ```powershell
