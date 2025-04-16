@@ -61,6 +61,9 @@ function Get-GitHubArtifact {
 
         Retrieves the latest artifacts from the entire repository.
 
+        .INPUTS
+        GitHubWorkflowRun
+
         .OUTPUTS
         GitHubArtifact[]
 
@@ -93,7 +96,7 @@ function Get-GitHubArtifact {
         # Retrieves artifacts from a specific workflow run.
         [Parameter(Mandatory, ParameterSetName = 'FromWorkflowRun', ValueFromPipelineByPropertyName)]
         [Alias('WorkflowRun')]
-        [string] $WorkflowRunId,
+        [string] $WorkflowRunID,
 
         # Retrieves artifacts by name or all artifacts across a repo.
         [Parameter(ParameterSetName = 'FromRepository')]
@@ -131,10 +134,10 @@ function Get-GitHubArtifact {
             }
             'FromWorkflowRun' {
                 if ($Name.Contains('*')) {
-                    Get-GitHubArtifactFromWorkflowRun @params -ID $WorkflowRunId -AllVersions:$AllVersions |
+                    Get-GitHubArtifactFromWorkflowRun @params -ID $WorkflowRunID -AllVersions:$AllVersions |
                         Where-Object { $_.Name -like $Name }
                 } else {
-                    Get-GitHubArtifactFromWorkflowRun @params -ID $WorkflowRunId -Name $Name -AllVersions:$AllVersions
+                    Get-GitHubArtifactFromWorkflowRun @params -ID $WorkflowRunID -Name $Name -AllVersions:$AllVersions
                 }
             }
             'FromRepository' {
