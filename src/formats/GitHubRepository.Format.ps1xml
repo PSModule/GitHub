@@ -18,6 +18,9 @@
                         <Label>Visibility</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
+                        <Label>Url</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
                         <Label>Size (MB)</Label>
                     </TableColumnHeader>
                 </TableHeaders>
@@ -32,6 +35,9 @@
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Visibility</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Url</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <ScriptBlock>

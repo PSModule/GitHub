@@ -60,7 +60,13 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            [GitHubUser]::New($_.Response)
+            if ($_.Response.type -eq 'Organization') {
+                [GitHubOrganization]::New($_.Response)
+            } elseif ($_.Response.type -eq 'User') {
+                [GitHubUser]::New($_.Response)
+            } else {
+                [GitHubOwner]::New($_.Response)
+            }
         }
     }
 
