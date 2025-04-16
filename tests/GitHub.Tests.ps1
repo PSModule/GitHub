@@ -680,6 +680,56 @@ Describe 'API' {
             }
         }
     }
+    Context 'Repository' {
+        Context 'Content' {
+            BeforeEach {
+                Connect-GitHubApp -Organization 'psmodule-test-org' -Default
+            }
+            AfterEach {
+                Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount
+            }
+            It 'Get-GitHubRepositoryContent - retrieves README.md from main branch' {
+                $Owner = 'github'
+                $Repository = 'rest-api-description'
+                $Path = 'README.md'
+                $Ref = 'main'
+
+                $Result = Get-GitHubRepositoryContent -Owner $Owner -Repository $Repository -Path $Path -Ref $Ref
+
+                $Result | Should -Not -BeNullOrEmpty
+                $Result | Should -BeOfType 'System.Object'
+                $result | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+                $Result.name | Should -Be 'README.md'
+            }
+            It 'Get-GitHubRepositoryContent - retrieves root directory contents' {
+                $Owner = 'github'
+                $Repository = 'rest-api-description'
+
+                $Result = Get-GitHubRepositoryContent -Owner $Owner -Repository $Repository
+                $result | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+                $Result | Should -Not -BeNullOrEmpty
+                $Result | Should -BeOfType 'System.Object'
+            }
+            It 'Get-GitHubRepositoryContent - returns error for non-existent file' {
+                $Owner = 'github'
+                $Repository = 'rest-api-description'
+                $Path = 'nonexistentfile.md'
+
+                { Get-GitHubRepositoryContent -Owner $Owner -Repository $Repository -Path $Path } | Should -Throw
+            }
+            It 'Get-GitHubRepositoryContent - retrieves content from a feature branch' {
+                $Owner = 'github'
+                $Repository = 'rest-api-description'
+                $Path = 'README.md'
+                $Ref = 'feature-branch'
+
+                $Result = Get-GitHubRepositoryContent -Owner $Owner -Repository $Repository -Path $Path -Ref $Ref
+                $result | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+                $Result | Should -Not -BeNullOrEmpty
+                $Result | Should -BeOfType 'System.Object'
+            }
+        }
+    }
 }
 
 Describe 'Emojis' {

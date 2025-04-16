@@ -33,53 +33,28 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Enterprise)) {
-            $Enterprise = $Context.Enterprise
-        }
-        Write-Debug "Enterprise : [$($Context.Enterprise)]"
-
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner : [$($Context.Owner)]"
-
-        if ([string]::IsNullOrEmpty($Repo)) {
-            $Repo = $Context.Repo
-        }
-        Write-Debug "Repo : [$($Context.Repo)]"
     }
 
     process {
-        try {
-            $body = @{
-                per_page = $PerPage
-            }
+        $body = @{
+            per_page = $PerPage
+        }
 
-            $inputObject = @{
-                Context     = $Context
-                APIEndpoint = "/orgs/$OrganizationName/blocks"
-                Method      = 'GET'
-                Body        = $body
-            }
+        $inputObject = @{
+            Method      = 'GET'
+            APIEndpoint = "/orgs/$OrganizationName/blocks"
+            Body        = $body
+            Context     = $Context
+        }
 
-            if ($PSCmdlet.ShouldProcess('Target', 'Operation')) {
-                Invoke-GitHubAPI @inputObject | ForEach-Object {
-                    Write-Output $_.Response
-                }
+        if ($PSCmdlet.ShouldProcess('Target', 'Operation')) {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                Write-Output $_.Response
             }
-        } catch {
-            Write-Debug "Error: $_"
-        } finally {
-            Write-Debug 'Finally'
         }
     }
 
     end {
         Write-Debug "[$stackPath] - End"
-    }
-
-    clean {
-        Write-Debug 'Clean'
     }
 }
