@@ -40,9 +40,9 @@ query {
   }
 }
 "@
-        $results = Invoke-GitHubGraphQLQuery -Query $query -Context $Context
+        $data = Invoke-GitHubGraphQLQuery -Query $query -Context $Context
 
-        $results.data.viewer
+        $data.viewer
     }
 
     end {

@@ -56,7 +56,14 @@
                 $errorMessages = $graphQLResponse.errors | ForEach-Object {
                     "GraphQL Error [$($_.type)]: $($_.message)`nPath: $($_.path -join '/')`nLocations: $($_.locations.line):$($_.locations.column)"
                 }
-                throw "GraphQL errors occurred:`n$($errorMessages -join "`n`n")"
+                $PSCmdlet.ThrowTerminatingError(
+                    [System.Management.Automation.ErrorRecord]::new(
+                        [System.Exception]::new("GraphQL errors occurred:`n$($errorMessages -join "`n`n")"),
+                        "GraphQLError",
+                        [System.Management.Automation.ErrorCategory]::InvalidOperation,
+                        $graphQLResponse
+                    )
+                )
             }
 
             $graphQLResponse.data
