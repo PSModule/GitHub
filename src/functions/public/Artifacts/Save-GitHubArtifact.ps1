@@ -4,7 +4,7 @@ function Save-GitHubArtifact {
         Downloads a GitHub Actions artifact.
 
         .DESCRIPTION
-        Downloads an artifact from a repository. The artifact is downloaded as a zip file to the specified path
+        Downloads an artifact from a repository. The artifact is downloaded as a ZIP file to the specified path
         or the current directory by default. Users must have read access to the repository. For private repositories,
         personal access tokens (classic) or OAuth tokens with the `repo` scope are required.
 
@@ -72,7 +72,7 @@ function Save-GitHubArtifact {
         [Parameter()]
         [string] $Path = $PWD.Path,
 
-        # When specified, the zip file is extracted to the same directory it was downloaded to.
+        # When specified, the ZIP file is extracted to the same directory it was downloaded to.
         [Parameter()]
         [Alias('Extract')]
         [switch] $Expand,
@@ -81,7 +81,7 @@ function Save-GitHubArtifact {
         [Parameter()]
         [switch] $Force,
 
-        # When specified, the zip file or the folder where the zip file was extracted to is returned.
+        # When specified, the ZIP file or the folder where the ZIP file was extracted to is returned.
         [Parameter()]
         [switch] $PassThru,
 
@@ -132,7 +132,7 @@ function Save-GitHubArtifact {
             if ($Expand) {
                 Write-Debug "Expanding artifact to [$folder]"
                 Expand-Archive -LiteralPath $Path -DestinationPath $folder -Force:$Force
-                Write-Debug "Removing zip file [$Path]"
+                Write-Debug "Removing ZIP file [$Path]"
                 Remove-Item -LiteralPath $Path -Force
                 if ($PassThru) {
                     return $folder
