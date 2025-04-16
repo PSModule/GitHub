@@ -14,8 +14,13 @@
 
     GitHubUser([PSCustomObject]$Object) {
         # From GitHubNode
-        $this.ID = $Object.id
-        $this.NodeID = $Object.node_id
+        if ($Object.databaseId) {
+            $this.ID = $Object.databaseId
+            $this.NodeID = $Object.id
+        } else {
+            $this.ID = $Object.id
+            $this.NodeID = $Object.node_id
+        }
 
         # From GitHubOwner
         $this.Name = $Object.login

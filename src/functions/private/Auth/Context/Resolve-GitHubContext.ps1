@@ -42,9 +42,9 @@
             $Context = Get-GitHubContext -Context $contextName
         }
 
-        if (-not $Context) {
-            throw "Please provide a valid context or log in using 'Connect-GitHub'."
-        }
+        # if (-not $Context) {
+        #     throw "Please provide a valid context or log in using 'Connect-GitHub'."
+        # }
 
         # TODO: Implement App installation context resolution
         # switch ($Context.Type) {

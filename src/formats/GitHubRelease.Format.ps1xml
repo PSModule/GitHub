@@ -2,51 +2,57 @@
 <Configuration>
     <ViewDefinitions>
         <View>
-            <Name>GitHubOwnerTable</Name>
+            <Name>GitHubReleaseTable</Name>
             <ViewSelectedBy>
-                <TypeName>GitHubOwner</TypeName>
+                <TypeName>GitHubRelease</TypeName>
             </ViewSelectedBy>
             <TableControl>
                 <TableHeaders>
                     <TableColumnHeader>
-                        <Label>Name</Label>
+                        <Label>Tag</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>ID</Label>
+                        <Label>Owner</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>Type</Label>
-                    </TableColumnHeader>
-                    <TableColumnHeader>
-                        <Label>Company</Label>
-                    </TableColumnHeader>
-                    <TableColumnHeader>
-                        <Label>Plan</Label>
+                        <Label>Repository</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
                         <Label>Url</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Latest</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Prerelease</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Draft</Label>
                     </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
                     <TableRowEntry>
                         <TableColumnItems>
                             <TableColumnItem>
-                                <PropertyName>Name</PropertyName>
+                                <PropertyName>Tag</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>ID</PropertyName>
+                                <PropertyName>Owner</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>Type</PropertyName>
-                            </TableColumnItem>
-                            <TableColumnItem>
-                                <PropertyName>Company</PropertyName>
-                            </TableColumnItem>
-                            <TableColumnItem>
-                                <PropertyName>Plan</PropertyName>
+                                <PropertyName>Repository</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Url</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Latest</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Prerelease</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Draft</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
@@ -54,58 +60,55 @@
             </TableControl>
         </View>
         <View>
-            <Name>GitHubOwnerList</Name>
+            <Name>GitHubReleaseList</Name>
             <ViewSelectedBy>
-                <TypeName>GitHubOwner</TypeName>
+                <TypeName>GitHubRelease</TypeName>
             </ViewSelectedBy>
             <ListControl>
                 <ListEntries>
                     <ListEntry>
                         <ListItems>
                             <ListItem>
-                                <PropertyName>Name</PropertyName>
+                                <PropertyName>Tag</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>ID</PropertyName>
+                                <PropertyName>Owner</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>NodeID</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>DisplayName</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>AvatarUrl</PropertyName>
+                                <PropertyName>Repository</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>Url</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>Type</PropertyName>
+                                <PropertyName>Author</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>Company</PropertyName>
+                                <PropertyName>Target</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>Location</PropertyName>
+                                <PropertyName>Latest</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>Email</PropertyName>
+                                <PropertyName>Draft</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>TwitterUsername</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>Blog</PropertyName>
+                                <PropertyName>Prerelease</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>CreatedAt</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>UpdatedAt</PropertyName>
+                                <PropertyName>PublishedAt</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>Plan</PropertyName>
+                                <PropertyName>Assets</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Name</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Notes</PropertyName>
                             </ListItem>
                         </ListItems>
                     </ListEntry>

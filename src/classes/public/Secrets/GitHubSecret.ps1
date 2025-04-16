@@ -37,6 +37,7 @@
         $this.UpdatedAt = $Object.updated_at
         $this.Visibility = $Object.visibility
         $this.SelectedRepositories = $SelectedRepositories
+        
         #Set scope based on provided values in Owner, Repository, Environment
         $this.Scope = if ($Owner -and $Repository -and $Environment) {
             'Environment'

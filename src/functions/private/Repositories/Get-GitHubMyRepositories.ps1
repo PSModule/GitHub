@@ -61,9 +61,7 @@
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Private function, not exposed to user.')]
     param(
         # Limit results to repositories with the specified visibility.
-        [Parameter(
-            ParameterSetName = 'Aff-Vis'
-        )]
+        [Parameter(ParameterSetName = 'Aff-Vis')]
         [ValidateSet('all', 'public', 'private')]
         [string] $Visibility = 'all',
 
@@ -73,23 +71,19 @@
         # - organization_member: Repositories that the user has access to through being a member of an organization.
         #   This includes every repository on every team that the user is on.
         # Default: owner, collaborator, organization_member
-        [Parameter(
-            ParameterSetName = 'Aff-Vis'
-        )]
+        [Parameter(ParameterSetName = 'Aff-Vis')]
         [ValidateSet('owner', 'collaborator', 'organization_member')]
-        [string[]] $Affiliation = @('owner', 'collaborator', 'organization_member'),
+        [string[]] $Affiliation = 'owner',
 
         # Specifies the types of repositories you want returned.
-        [Parameter(
-            ParameterSetName = 'Type'
-        )]
+        [Parameter(ParameterSetName = 'Type')]
         [ValidateSet('all', 'owner', 'public', 'private', 'member')]
-        [string] $Type = 'all',
+        [string] $Type = 'owner',
 
         # The property to sort the results by.
         [Parameter()]
         [ValidateSet('created', 'updated', 'pushed', 'full_name')]
-        [string] $Sort = 'created',
+        [string] $Sort = 'pushed',
 
         # The order to sort by.
         # Default: asc when using full_name, otherwise desc.
