@@ -8,7 +8,7 @@
         bytes of code written in that language.
 
         .EXAMPLE
-        Get-GitHubRepositoryLanguage -Owner 'octocat' -Repository 'hello-world'
+        Get-GitHubRepositoryLanguage -Owner 'octocat' -Name 'hello-world'
 
         Gets the languages for the 'hello-world' repository owned by 'octocat'.
 
@@ -26,7 +26,7 @@
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [string] $Repository,
+        [string] $Name,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -44,7 +44,7 @@
     process {
         $inputObject = @{
             Method      = 'GET'
-            APIEndpoint = "/repos/$Owner/$Repository/languages"
+            APIEndpoint = "/repos/$Owner/$Name/languages"
             Context     = $Context
         }
 

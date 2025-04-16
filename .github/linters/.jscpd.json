@@ -1,0 +1,15 @@
+{
+    "threshold": 0,
+    "reporters": [
+        "consoleFull"
+    ],
+    "ignore": [
+        "**/tests/**",
+        "**/src/classes/**",
+        "**/src/functions/**",
+        "**/tools/utilities/**",
+        "**/.github/workflows/Nightly-Run.yml",
+        "**/.github/workflows/Process-PSModule.yml"
+    ],
+    "absolute": true
+}

@@ -1,4 +1,4 @@
-﻿filter Get-GitHubUser {
+﻿function Get-GitHubUser {
     <#
         .SYNOPSIS
         List user(s)
@@ -14,7 +14,7 @@
         Get the authenticated user.
 
         .EXAMPLE
-        Get-GitHubUser -Username 'octocat'
+        Get-GitHubUser -Name 'octocat'
 
         Get the 'octocat' user.
 
@@ -23,13 +23,15 @@
 
         Get a list of users, starting with the user 'MariusStorhaug'.
 
+        .OUTPUTS
+        GitHubUser
+
         .NOTES
         [Get the authenticated user](https://docs.github.com/rest/users/users)
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([GitHubUser])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-        'PSReviewUnusedParameter',
-        'All',
+        'PSReviewUnusedParameter', 'All',
         Justification = 'Parameter is used in dynamic parameter validation.'
     )]
     [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
@@ -37,10 +39,10 @@
         # The handle for the GitHub user account.
         [Parameter(
             Mandatory,
-            ParameterSetName = 'NamedUser',
+            ParameterSetName = 'ByName',
             ValueFromPipelineByPropertyName
         )]
-        [string] $Username,
+        [string] $Name,
 
         # List all users. Use '-Since' to start at a specific user ID.
         [Parameter(
@@ -73,20 +75,14 @@
 
     process {
         switch ($PSCmdlet.ParameterSetName) {
-            'NamedUser' {
-                $user = Get-GitHubUserByName -Username $Username -Context $Context
-                $social_accounts = Get-GitHubUserSocialsByName -Username $Username -Context $Context
-                $user | Add-Member -MemberType NoteProperty -Name 'social_accounts' -Value $social_accounts -Force
-                $user
+            'ByName' {
+                Get-GitHubUserByName -Name $Name -Context $Context
             }
             'AllUsers' {
                 Get-GitHubAllUser -Since $Since -PerPage $PerPage -Context $Context
             }
             default {
-                $user = Get-GitHubMyUser -Context $Context
-                $social_accounts = Get-GitHubMyUserSocials -Context $Context
-                $user | Add-Member -MemberType NoteProperty -Name 'social_accounts' -Value $social_accounts -Force
-                $user
+                Get-GitHubMyUser -Context $Context
             }
         }
     }

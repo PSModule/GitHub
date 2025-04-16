@@ -47,13 +47,21 @@
             $isDefaultContext = $contextItem.Name -eq $script:GitHub.Config.DefaultContext
             if ($isDefaultContext) {
                 Remove-GitHubConfig -Name 'DefaultContext'
-                Write-Warning 'There is no longer a default context!'
-                Write-Warning "Please set a new default context using 'Set-GitHubDefaultContext -Name <context>'"
+                if (-not $Silent) {
+                    Write-Warning 'There is no longer a default context!'
+                    Write-Warning "Please set a new default context using 'Set-GitHubDefaultContext -Name <context>'"
+                }
             }
 
             if (-not $Silent) {
-                Write-Host '✓ ' -ForegroundColor Green -NoNewline
-                Write-Host "Logged out of GitHub! [$contextItem]"
+                if ($script:GitHub.EnvironmentType -eq 'GHA') {
+                    $green = $PSStyle.Foreground.Green
+                    $reset = $PSStyle.Reset
+                    Write-Host "$green✓$reset Logged out of GitHub! [$contextItem]"
+                } else {
+                    Write-Host '✓ ' -ForegroundColor Green -NoNewline
+                    Write-Host "Logged out of GitHub! [$contextItem]"
+                }
             }
         }
     }

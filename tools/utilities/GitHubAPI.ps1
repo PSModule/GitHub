@@ -22,8 +22,8 @@ $response = Invoke-RestMethod -Uri $APIDocURI -Method Get
 # @{n = 'PUT'; e = { (($_.value.psobject.Properties.Name) -contains 'PUT') } }, `
 # @{n = 'PATCH'; e = { (($_.value.psobject.Properties.Name) -contains 'PATCH') } } | Format-Table
 
-$path = '/markdown/raw'
-$method = 'post'
+$path = '/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}'
+$method = 'delete'
 $response.paths.$path.$method
 $response.paths.$path.$method.tags | clip                             # -> Namespace/foldername
 $response.paths.$path.$method.operationId | clip                      # -> FunctionName
@@ -47,7 +47,19 @@ $response.components.responses # HTTP status descriptions
 
 $path = '/repos/{owner}/{repo}/actions/runs'
 $method = 'get'
+
+
+$specs = $response.components.schemas.PSObject.Properties | Sort-Object Name | ForEach-Object { [pscustomobject]@{ Name = $_.Name; Value = $_.Value } }
 $response.components.schemas.'issue-comment'
+$response.components.schemas.'workflow-run' | ConvertTo-Json -Depth 10 | Clip
+$response.components.schemas.'workflow-run'.properties.PSObject.Properties | ForEach-Object {
+    [pscustomobject]@{
+        Name        = $_.Name
+        Type        = $_.Value.format ?? $_.Value.type
+        Example     = $_.Value.example
+        Description = $_.Value.description
+    }
+} | Format-Table -AutoSize
 
 
 

@@ -10,7 +10,7 @@
 
         Job summaries support GitHub flavored Markdown, and you can add your Markdown content for a step to the `GITHUB_STEP_SUMMARY`
         environment file. `GITHUB_STEP_SUMMARY` is unique for each step in a job. For more information about the per-step file that
-        `GITHUB_STEP_SUMMARY` references, see [Environment files](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions?utm_source=chatgpt.com#environment-files).
+        `GITHUB_STEP_SUMMARY` references, see [Environment files](https://docs.github.com/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions?utm_source=chatgpt.com#environment-files).
 
         When a job finishes, the summaries for all steps in a job are grouped together into a single job summary and are shown on the
         workflow run summary page. If multiple jobs generate summaries, the job summaries are ordered by job completion time.
@@ -19,7 +19,7 @@
         Set-GitHubStepSummary -Summary 'Hello, World!'
 
         .NOTES
-        [Adding a job summary](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions?utm_source=chatgpt.com#adding-a-job-summary)
+        [Adding a job summary](https://docs.github.com/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions?utm_source=chatgpt.com#adding-a-job-summary)
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSAvoidLongLines', '', Scope = 'Function',
@@ -34,7 +34,10 @@
     [CmdletBinding()]
     param(
         # Summary of the step
-        [Parameter(Mandatory)]
+        [Parameter(
+            Mandatory,
+            ValueFromPipeline
+        )]
         [AllowNull()]
         [string] $Summary,
 

@@ -12,12 +12,14 @@
 
         Get all commonly used licenses.
 
-        .NOTES
-        https://docs.github.com/rest/licenses/licenses#get-all-commonly-used-licenses
+        .OUTPUTS
+        GitHubLicense[]
 
+        .LINK
+        [Get all commonly used licenses](https://docs.github.com/rest/licenses/licenses#get-all-commonly-used-licenses)
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
-    [OutputType([string[]])]
+    [OutputType([GitHubLicense[]])]
     [CmdletBinding()]
     param(
         # The context to run the command in. Used to get the details for the API call.
@@ -40,7 +42,7 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            $_.Response | ForEach-Object { [GitHubLicense]::New($_) }
         }
     }
 

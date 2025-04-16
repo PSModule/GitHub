@@ -18,14 +18,17 @@
         For more information, see "[Emails API](https://docs.github.com/rest/users/emails)".
 
         .EXAMPLE
-        Get-GitHubUserByName -Username 'octocat'
+        Get-GitHubUserByName -Name 'octocat'
 
         Get the 'octocat' user.
 
-        .NOTES
-        https://docs.github.com/rest/users/users#get-a-user
+        .OUTPUTS
+        GitHubUser
+
+        .LINK
+        [Get a user](https://docs.github.com/rest/users/users#get-a-user)
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([GitHubUser])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [CmdletBinding()]
     param(
@@ -35,8 +38,7 @@
             ValueFromPipeline,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('login')]
-        [string] $Username,
+        [string] $Name,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -53,12 +55,12 @@
     process {
         $inputObject = @{
             Method      = 'GET'
-            APIEndpoint = "/users/$Username"
+            APIEndpoint = "/users/$Name"
             Context     = $Context
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            [GitHubUser]::New($_.Response)
         }
     }
 

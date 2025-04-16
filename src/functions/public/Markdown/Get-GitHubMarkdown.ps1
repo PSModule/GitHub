@@ -13,7 +13,7 @@
         Renders the Markdown text "Hello **world**" to HTML.
 
         .NOTES
-        [Render a Markdown document](https://docs.github.com/en/rest/markdown/markdown#render-a-markdown-document)
+        [Render a Markdown document](https://docs.github.com/rest/markdown/markdown#render-a-markdown-document)
     #>
     [OutputType([string])]
     [CmdletBinding()]

@@ -75,10 +75,10 @@ query(`$org: String!, `$teamSlug: String!) {
         }
 
         # Send the request to the GitHub GraphQL API
-        $response = Invoke-GitHubGraphQLQuery -Query $query -Variables $variables -Context $Context
+        $data = Invoke-GitHubGraphQLQuery -Query $query -Variables $variables -Context $Context
 
         # Extract team data
-        $team = $response.data.organization.team
+        $team = $data.organization.team
 
         # Output the team object
         if (-not $team) {
@@ -91,7 +91,7 @@ query(`$org: String!, `$teamSlug: String!) {
                 Slug          = $team.slug
                 NodeID        = $team.id
                 CombinedSlug  = $team.CombinedSlug
-                DatabaseID    = $team.DatabaseId
+                ID            = $team.DatabaseId
                 Description   = $team.description
                 Notifications = $team.notificationSetting -eq 'NOTIFICATIONS_ENABLED' ? $true : $false
                 Visible       = $team.privacy -eq 'VISIBLE' ? $true : $false

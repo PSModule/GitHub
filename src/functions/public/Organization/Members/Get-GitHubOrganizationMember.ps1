@@ -7,10 +7,16 @@
         List all users who are members of an organization.
         If the authenticated user is also a member of this organization then both concealed and public members will be returned.
 
-        .NOTES
-        [List organization members](https://docs.github.com/en/rest/orgs/members?apiVersion=2022-11-28#list-organization-members)
+        .OUTPUTS
+        GitHubUser
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Organization/Members/Get-GitHubOrganizationMember
+
+        .LINK
+        [List organization members](https://docs.github.com/rest/orgs/members#list-organization-members)
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([GitHubUser])]
     [CmdletBinding()]
     param(
         # The organization name. The name is not case sensitive.
@@ -49,20 +55,20 @@
 
     process {
         $body = @{
-            filter   = $Filter
-            role     = $Role
-            per_page = $PerPage
+            filter = $Filter
+            role   = $Role
         }
 
         $inputObject = @{
             Method      = 'GET'
             APIEndpoint = "/orgs/$Organization/members"
             Body        = $body
+            PerPage     = $PerPage
             Context     = $Context
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            $_.Response | ForEach-Object { [GitHubUser]::new($_) }
         }
     }
 

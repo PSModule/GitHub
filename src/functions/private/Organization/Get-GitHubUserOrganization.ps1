@@ -17,10 +17,13 @@
 
         List public organizations for the user 'octocat'.
 
-        .NOTES
-        https://docs.github.com/rest/orgs/orgs#list-organizations-for-a-user
+        .OUTPUTS
+        GitHubOrganization
+
+        .LINK
+        [List organizations for a user](https://docs.github.com/rest/orgs/orgs#list-organizations-for-a-user)
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([GitHubOrganization])]
     [CmdletBinding()]
     param(
         # The handle for the GitHub user account.
@@ -45,19 +48,15 @@
     }
 
     process {
-        $body = @{
-            per_page = $PerPage
-        }
-
         $inputObject = @{
             Method      = 'GET'
             APIEndpoint = "/users/$Username/orgs"
-            Body        = $body
+            PerPage     = $PerPage
             Context     = $Context
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            $_.Response | ForEach-Object { [GitHubOrganization]::new($_) }
         }
     }
     end {

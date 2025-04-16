@@ -1,4 +1,4 @@
-﻿class GitHubTeam {
+﻿class GitHubTeam : GitHubNode {
     # The name of the team.
     [string] $Name
 
@@ -10,12 +10,6 @@
 
     # The combined slug of the team.
     [string] $CombinedSlug
-
-    # The ID of the team.
-    [string] $NodeID
-
-    # The database ID of the team.
-    [string] $DatabaseID
 
     # The description of the team.
     [string] $Description

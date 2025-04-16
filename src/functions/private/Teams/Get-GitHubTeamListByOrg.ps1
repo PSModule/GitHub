@@ -84,10 +84,10 @@ query(`$org: String!, `$after: String) {
             $variables['after'] = $after
 
             # Send the request to the GitHub GraphQL API
-            $response = Invoke-GitHubGraphQLQuery -Query $query -Variables $variables -Context $Context
+            $data = Invoke-GitHubGraphQLQuery -Query $query -Variables $variables -Context $Context
 
             # Extract team data
-            $teams = $response.data.organization.teams
+            $teams = $data.organization.teams
 
             # Accumulate the teams in results
             $teams.nodes | ForEach-Object {
@@ -97,7 +97,7 @@ query(`$org: String!, `$after: String) {
                         Slug          = $_.slug
                         NodeID        = $_.id
                         CombinedSlug  = $_.combinedSlug
-                        DatabaseId    = $_.databaseId
+                        ID            = $_.databaseId
                         Description   = $_.description
                         Notifications = $_.notificationSetting -eq 'NOTIFICATIONS_ENABLED' ? $true : $false
                         Visible       = $_.privacy -eq 'VISIBLE' ? $true : $false

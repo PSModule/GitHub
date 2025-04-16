@@ -29,10 +29,13 @@
 
         Get the organization 'PSModule'.
 
-        .NOTES
-        [List organizations](https://docs.github.com/rest/orgs/orgs)
+        .OUTPUTS
+        GitHubOrganization
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Organization/Get-GitHubOrganization
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([GitHubOrganization])]
     [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'All', Justification = 'Required for parameter set')]
     param(
@@ -42,7 +45,7 @@
             ParameterSetName = 'NamedOrg',
             ValueFromPipelineByPropertyName
         )]
-        [string] $Organization,
+        [string] $Name,
 
         # The handle for the GitHub user account.
         [Parameter(
@@ -81,17 +84,12 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Owner)) {
-            $Owner = $Context.Owner
-        }
-        Write-Debug "Owner: [$Owner]"
     }
 
     process {
         switch ($PSCmdlet.ParameterSetName) {
             'NamedOrg' {
-                Get-GitHubOrganizationByName -Organization $Organization -Context $Context
+                Get-GitHubOrganizationByName -Name $Name -Context $Context
             }
             'NamedUser' {
                 Get-GitHubUserOrganization -Username $Username -Context $Context
@@ -100,7 +98,7 @@
                 Get-GitHubAllOrganization -Since $Since -PerPage $PerPage -Context $Context
             }
             default {
-                Get-GitHubMyOrganization -PerPage $PerPage -Context $Context | Get-GitHubOrganizationByName -Context $Context
+                Get-GitHubMyOrganization -PerPage $PerPage -Context $Context
             }
         }
     }

@@ -14,10 +14,13 @@
 
         Get the license for the Hello-World repository from the octocat account.
 
-        .NOTES
-        [Get the license for a repository](https://docs.github.com/rest/licenses/licenses#get-the-license-for-a-repository)
+        .OUTPUTS
+        GitHubLicense
 
+        .LINK
+        [Get the license for a repository](https://docs.github.com/rest/licenses/licenses#get-the-license-for-a-repository)
     #>
+    [OutputType([GitHubLicense])]
     [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.

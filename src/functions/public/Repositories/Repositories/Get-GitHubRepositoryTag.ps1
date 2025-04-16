@@ -7,7 +7,7 @@
         List repository tags
 
         .EXAMPLE
-        Get-GitHubRepositoryTag -Owner 'PSModule' -Repository 'GitHub'
+        Get-GitHubRepositoryTag -Owner 'PSModule' -Name 'GitHub'
 
         Gets all tags of the GitHub repository.
 
@@ -25,7 +25,7 @@
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [string] $Repository,
+        [string] $Name,
 
         # The number of results per page (max 100).
         [Parameter()]
@@ -52,7 +52,7 @@
 
         $inputObject = @{
             Method      = 'GET'
-            APIEndpoint = "/repos/$Owner/$Repository/tags"
+            APIEndpoint = "/repos/$Owner/$Name/tags"
             Body        = $body
             Context     = $Context
         }

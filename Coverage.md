@@ -5,19 +5,19 @@
 <table>
     <tr>
         <td>Available functions</td>
-        <td>1015</td>
+        <td>1026</td>
     </tr>
     <tr>
         <td>Covered functions</td>
-        <td>162</td>
+        <td>221</td>
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>853</td>
+        <td>805</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>15.96%</td>
+        <td>21.54%</td>
     </tr>
 </table>
 
@@ -126,18 +126,20 @@
 | `/orgs/{org}/actions/runners/{runner_id}`                                                                                 | :x:                | :x:                |                    |                    |                    |
 | `/orgs/{org}/actions/runners/{runner_id}/labels`                                                                          | :x:                | :x:                |                    | :x:                | :x:                |
 | `/orgs/{org}/actions/runners/{runner_id}/labels/{name}`                                                                   | :x:                |                    |                    |                    |                    |
-| `/orgs/{org}/actions/secrets`                                                                                             |                    | :x:                |                    |                    |                    |
-| `/orgs/{org}/actions/secrets/public-key`                                                                                  |                    | :x:                |                    |                    |                    |
-| `/orgs/{org}/actions/secrets/{secret_name}`                                                                               | :x:                | :x:                |                    |                    | :x:                |
-| `/orgs/{org}/actions/secrets/{secret_name}/repositories`                                                                  |                    | :x:                |                    |                    | :x:                |
-| `/orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}`                                                  | :x:                |                    |                    |                    | :x:                |
-| `/orgs/{org}/actions/variables`                                                                                           |                    | :x:                |                    | :x:                |                    |
-| `/orgs/{org}/actions/variables/{name}`                                                                                    | :x:                | :x:                | :x:                |                    |                    |
-| `/orgs/{org}/actions/variables/{name}/repositories`                                                                       |                    | :x:                |                    |                    | :x:                |
-| `/orgs/{org}/actions/variables/{name}/repositories/{repository_id}`                                                       | :x:                |                    |                    |                    | :x:                |
+| `/orgs/{org}/actions/secrets`                                                                                             |                    | :white_check_mark: |                    |                    |                    |
+| `/orgs/{org}/actions/secrets/public-key`                                                                                  |                    | :white_check_mark: |                    |                    |                    |
+| `/orgs/{org}/actions/secrets/{secret_name}`                                                                               | :white_check_mark: | :white_check_mark: |                    |                    | :white_check_mark: |
+| `/orgs/{org}/actions/secrets/{secret_name}/repositories`                                                                  |                    | :white_check_mark: |                    |                    | :white_check_mark: |
+| `/orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}`                                                  | :white_check_mark: |                    |                    |                    | :white_check_mark: |
+| `/orgs/{org}/actions/variables`                                                                                           |                    | :white_check_mark: |                    | :white_check_mark: |                    |
+| `/orgs/{org}/actions/variables/{name}`                                                                                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
+| `/orgs/{org}/actions/variables/{name}/repositories`                                                                       |                    | :white_check_mark: |                    |                    | :white_check_mark: |
+| `/orgs/{org}/actions/variables/{name}/repositories/{repository_id}`                                                       | :white_check_mark: |                    |                    |                    | :white_check_mark: |
 | `/orgs/{org}/attestations/{subject_digest}`                                                                               |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/blocks`                                                                                                      |                    | :white_check_mark: |                    |                    |                    |
 | `/orgs/{org}/blocks/{username}`                                                                                           | :white_check_mark: | :white_check_mark: |                    |                    | :white_check_mark: |
+| `/orgs/{org}/campaigns`                                                                                                   |                    | :x:                |                    | :x:                |                    |
+| `/orgs/{org}/campaigns/{campaign_number}`                                                                                 | :x:                | :x:                | :x:                |                    |                    |
 | `/orgs/{org}/code-scanning/alerts`                                                                                        |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/code-security/configurations`                                                                                |                    | :x:                |                    | :x:                |                    |
 | `/orgs/{org}/code-security/configurations/defaults`                                                                       |                    | :x:                |                    |                    |                    |
@@ -146,12 +148,12 @@
 | `/orgs/{org}/code-security/configurations/{configuration_id}/attach`                                                      |                    |                    |                    | :x:                |                    |
 | `/orgs/{org}/code-security/configurations/{configuration_id}/defaults`                                                    |                    |                    |                    |                    | :x:                |
 | `/orgs/{org}/code-security/configurations/{configuration_id}/repositories`                                                |                    | :x:                |                    |                    |                    |
-| `/orgs/{org}/codespaces`                                                                                                  |                    | :x:                |                    |                    |                    |
+| `/orgs/{org}/codespaces`                                                                                                  |                    | :white_check_mark: |                    |                    |                    |
 | `/orgs/{org}/codespaces/access`                                                                                           |                    |                    |                    |                    | :x:                |
 | `/orgs/{org}/codespaces/access/selected_users`                                                                            | :x:                |                    |                    | :x:                |                    |
-| `/orgs/{org}/codespaces/secrets`                                                                                          |                    | :x:                |                    |                    |                    |
-| `/orgs/{org}/codespaces/secrets/public-key`                                                                               |                    | :x:                |                    |                    |                    |
-| `/orgs/{org}/codespaces/secrets/{secret_name}`                                                                            | :x:                | :x:                |                    |                    | :x:                |
+| `/orgs/{org}/codespaces/secrets`                                                                                          |                    | :white_check_mark: |                    |                    |                    |
+| `/orgs/{org}/codespaces/secrets/public-key`                                                                               |                    | :white_check_mark: |                    |                    |                    |
+| `/orgs/{org}/codespaces/secrets/{secret_name}`                                                                            | :x:                | :white_check_mark: |                    |                    | :x:                |
 | `/orgs/{org}/codespaces/secrets/{secret_name}/repositories`                                                               |                    | :x:                |                    |                    | :x:                |
 | `/orgs/{org}/codespaces/secrets/{secret_name}/repositories/{repository_id}`                                               | :x:                |                    |                    |                    | :x:                |
 | `/orgs/{org}/copilot/billing`                                                                                             |                    | :x:                |                    |                    |                    |
@@ -159,7 +161,6 @@
 | `/orgs/{org}/copilot/billing/selected_teams`                                                                              | :x:                |                    |                    | :x:                |                    |
 | `/orgs/{org}/copilot/billing/selected_users`                                                                              | :x:                |                    |                    | :x:                |                    |
 | `/orgs/{org}/copilot/metrics`                                                                                             |                    | :x:                |                    |                    |                    |
-| `/orgs/{org}/copilot/usage`                                                                                               |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/dependabot/alerts`                                                                                           |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/dependabot/secrets`                                                                                          |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/dependabot/secrets/public-key`                                                                               |                    | :x:                |                    |                    |                    |
@@ -191,6 +192,8 @@
 | `/orgs/{org}/invitations`                                                                                                 |                    | :white_check_mark: |                    | :white_check_mark: |                    |
 | `/orgs/{org}/invitations/{invitation_id}`                                                                                 | :white_check_mark: |                    |                    |                    |                    |
 | `/orgs/{org}/invitations/{invitation_id}/teams`                                                                           |                    | :x:                |                    |                    |                    |
+| `/orgs/{org}/issue-types`                                                                                                 |                    | :x:                |                    | :x:                |                    |
+| `/orgs/{org}/issue-types/{issue_type_id}`                                                                                 | :x:                |                    |                    |                    | :x:                |
 | `/orgs/{org}/issues`                                                                                                      |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/members`                                                                                                     |                    | :white_check_mark: |                    |                    |                    |
 | `/orgs/{org}/members/{username}`                                                                                          | :x:                | :x:                |                    |                    |                    |
@@ -240,6 +243,8 @@
 | `/orgs/{org}/rulesets/rule-suites`                                                                                        |                    | :white_check_mark: |                    |                    |                    |
 | `/orgs/{org}/rulesets/rule-suites/{rule_suite_id}`                                                                        |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/rulesets/{ruleset_id}`                                                                                       | :x:                | :white_check_mark: |                    |                    | :x:                |
+| `/orgs/{org}/rulesets/{ruleset_id}/history`                                                                               |                    | :x:                |                    |                    |                    |
+| `/orgs/{org}/rulesets/{ruleset_id}/history/{version_id}`                                                                  |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/secret-scanning/alerts`                                                                                      |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/security-advisories`                                                                                         |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/security-managers`                                                                                           |                    | :x:                |                    |                    |                    |
@@ -251,7 +256,6 @@
 | `/orgs/{org}/settings/network-configurations/{network_configuration_id}`                                                  | :x:                | :x:                | :x:                |                    |                    |
 | `/orgs/{org}/settings/network-settings/{network_settings_id}`                                                             |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/team/{team_slug}/copilot/metrics`                                                                            |                    | :x:                |                    |                    |                    |
-| `/orgs/{org}/team/{team_slug}/copilot/usage`                                                                              |                    | :x:                |                    |                    |                    |
 | `/orgs/{org}/teams`                                                                                                       |                    | :white_check_mark: |                    | :white_check_mark: |                    |
 | `/orgs/{org}/teams/{team_slug}`                                                                                           | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
 | `/orgs/{org}/teams/{team_slug}/discussions`                                                                               |                    | :x:                |                    | :x:                |                    |
@@ -283,9 +287,9 @@
 | `/projects/{project_id}/columns`                                                                                          |                    | :x:                |                    | :x:                |                    |
 | `/rate_limit`                                                                                                             |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}`                                                                                                   | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
-| `/repos/{owner}/{repo}/actions/artifacts`                                                                                 |                    | :x:                |                    |                    |                    |
-| `/repos/{owner}/{repo}/actions/artifacts/{artifact_id}`                                                                   | :x:                | :x:                |                    |                    |                    |
-| `/repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}`                                                  |                    | :x:                |                    |                    |                    |
+| `/repos/{owner}/{repo}/actions/artifacts`                                                                                 |                    | :white_check_mark: |                    |                    |                    |
+| `/repos/{owner}/{repo}/actions/artifacts/{artifact_id}`                                                                   | :white_check_mark: | :white_check_mark: |                    |                    |                    |
+| `/repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}`                                                  |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/cache/usage`                                                                               |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/caches`                                                                                    | :x:                | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/caches/{cache_id}`                                                                         | :x:                |                    |                    |                    |                    |
@@ -293,8 +297,8 @@
 | `/repos/{owner}/{repo}/actions/jobs/{job_id}/logs`                                                                        |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/jobs/{job_id}/rerun`                                                                       |                    |                    |                    | :x:                |                    |
 | `/repos/{owner}/{repo}/actions/oidc/customization/sub`                                                                    |                    | :x:                |                    |                    | :x:                |
-| `/repos/{owner}/{repo}/actions/organization-secrets`                                                                      |                    | :x:                |                    |                    |                    |
-| `/repos/{owner}/{repo}/actions/organization-variables`                                                                    |                    | :x:                |                    |                    |                    |
+| `/repos/{owner}/{repo}/actions/organization-secrets`                                                                      |                    | :white_check_mark: |                    |                    |                    |
+| `/repos/{owner}/{repo}/actions/organization-variables`                                                                    |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/permissions`                                                                               |                    | :x:                |                    |                    | :x:                |
 | `/repos/{owner}/{repo}/actions/permissions/access`                                                                        |                    | :x:                |                    |                    | :x:                |
 | `/repos/{owner}/{repo}/actions/permissions/selected-actions`                                                              |                    | :x:                |                    |                    | :x:                |
@@ -308,10 +312,10 @@
 | `/repos/{owner}/{repo}/actions/runners/{runner_id}/labels`                                                                | :x:                | :x:                |                    | :x:                | :x:                |
 | `/repos/{owner}/{repo}/actions/runners/{runner_id}/labels/{name}`                                                         | :x:                |                    |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/runs`                                                                                      |                    | :white_check_mark: |                    |                    |                    |
-| `/repos/{owner}/{repo}/actions/runs/{run_id}`                                                                             | :x:                | :x:                |                    |                    |                    |
+| `/repos/{owner}/{repo}/actions/runs/{run_id}`                                                                             | :x:                | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/runs/{run_id}/approvals`                                                                   |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/runs/{run_id}/approve`                                                                     |                    |                    |                    | :x:                |                    |
-| `/repos/{owner}/{repo}/actions/runs/{run_id}/artifacts`                                                                   |                    | :x:                |                    |                    |                    |
+| `/repos/{owner}/{repo}/actions/runs/{run_id}/artifacts`                                                                   |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}`                                                   |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/jobs`                                              |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/logs`                                              |                    | :x:                |                    |                    |                    |
@@ -324,18 +328,18 @@
 | `/repos/{owner}/{repo}/actions/runs/{run_id}/rerun`                                                                       |                    |                    |                    | :white_check_mark: |                    |
 | `/repos/{owner}/{repo}/actions/runs/{run_id}/rerun-failed-jobs`                                                           |                    |                    |                    | :x:                |                    |
 | `/repos/{owner}/{repo}/actions/runs/{run_id}/timing`                                                                      |                    | :x:                |                    |                    |                    |
-| `/repos/{owner}/{repo}/actions/secrets`                                                                                   |                    | :x:                |                    |                    |                    |
-| `/repos/{owner}/{repo}/actions/secrets/public-key`                                                                        |                    | :x:                |                    |                    |                    |
-| `/repos/{owner}/{repo}/actions/secrets/{secret_name}`                                                                     | :x:                | :x:                |                    |                    | :x:                |
-| `/repos/{owner}/{repo}/actions/variables`                                                                                 |                    | :x:                |                    | :x:                |                    |
-| `/repos/{owner}/{repo}/actions/variables/{name}`                                                                          | :x:                | :x:                | :x:                |                    |                    |
+| `/repos/{owner}/{repo}/actions/secrets`                                                                                   |                    | :white_check_mark: |                    |                    |                    |
+| `/repos/{owner}/{repo}/actions/secrets/public-key`                                                                        |                    | :white_check_mark: |                    |                    |                    |
+| `/repos/{owner}/{repo}/actions/secrets/{secret_name}`                                                                     | :white_check_mark: | :white_check_mark: |                    |                    | :white_check_mark: |
+| `/repos/{owner}/{repo}/actions/variables`                                                                                 |                    | :white_check_mark: |                    | :white_check_mark: |                    |
+| `/repos/{owner}/{repo}/actions/variables/{name}`                                                                          | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
 | `/repos/{owner}/{repo}/actions/workflows`                                                                                 |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/workflows/{workflow_id}`                                                                   |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable`                                                           |                    |                    |                    |                    | :white_check_mark: |
 | `/repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches`                                                        |                    |                    |                    | :white_check_mark: |                    |
 | `/repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable`                                                            |                    |                    |                    |                    | :white_check_mark: |
 | `/repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs`                                                              |                    | :white_check_mark: |                    |                    |                    |
-| `/repos/{owner}/{repo}/actions/workflows/{workflow_id}/timing`                                                            |                    | :white_check_mark: |                    |                    |                    |
+| `/repos/{owner}/{repo}/actions/workflows/{workflow_id}/timing`                                                            |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/activity`                                                                                          |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/assignees`                                                                                         |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/assignees/{assignee}`                                                                              |                    | :x:                |                    |                    |                    |
@@ -383,14 +387,14 @@
 | `/repos/{owner}/{repo}/code-scanning/sarifs/{sarif_id}`                                                                   |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/code-security-configuration`                                                                       |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/codeowners/errors`                                                                                 |                    | :white_check_mark: |                    |                    |                    |
-| `/repos/{owner}/{repo}/codespaces`                                                                                        |                    | :x:                |                    | :x:                |                    |
+| `/repos/{owner}/{repo}/codespaces`                                                                                        |                    | :white_check_mark: |                    | :x:                |                    |
 | `/repos/{owner}/{repo}/codespaces/devcontainers`                                                                          |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/codespaces/machines`                                                                               |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/codespaces/new`                                                                                    |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/codespaces/permissions_check`                                                                      |                    | :x:                |                    |                    |                    |
-| `/repos/{owner}/{repo}/codespaces/secrets`                                                                                |                    | :x:                |                    |                    |                    |
-| `/repos/{owner}/{repo}/codespaces/secrets/public-key`                                                                     |                    | :x:                |                    |                    |                    |
-| `/repos/{owner}/{repo}/codespaces/secrets/{secret_name}`                                                                  | :x:                | :x:                |                    |                    | :x:                |
+| `/repos/{owner}/{repo}/codespaces/secrets`                                                                                |                    | :white_check_mark: |                    |                    |                    |
+| `/repos/{owner}/{repo}/codespaces/secrets/public-key`                                                                     |                    | :white_check_mark: |                    |                    |                    |
+| `/repos/{owner}/{repo}/codespaces/secrets/{secret_name}`                                                                  | :x:                | :white_check_mark: |                    |                    | :x:                |
 | `/repos/{owner}/{repo}/collaborators`                                                                                     |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/collaborators/{username}`                                                                          | :x:                | :x:                |                    |                    | :x:                |
 | `/repos/{owner}/{repo}/collaborators/{username}/permission`                                                               |                    | :x:                |                    |                    |                    |
@@ -424,18 +428,18 @@
 | `/repos/{owner}/{repo}/deployments/{deployment_id}/statuses`                                                              |                    | :x:                |                    | :x:                |                    |
 | `/repos/{owner}/{repo}/deployments/{deployment_id}/statuses/{status_id}`                                                  |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/dispatches`                                                                                        |                    |                    |                    | :white_check_mark: |                    |
-| `/repos/{owner}/{repo}/environments`                                                                                      |                    | :x:                |                    |                    |                    |
-| `/repos/{owner}/{repo}/environments/{environment_name}`                                                                   | :x:                | :x:                |                    |                    | :x:                |
+| `/repos/{owner}/{repo}/environments`                                                                                      |                    | :white_check_mark: |                    |                    |                    |
+| `/repos/{owner}/{repo}/environments/{environment_name}`                                                                   | :white_check_mark: | :white_check_mark: |                    |                    | :white_check_mark: |
 | `/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies`                                        |                    | :x:                |                    | :x:                |                    |
 | `/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}`                     | :x:                | :x:                |                    |                    | :x:                |
 | `/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules`                                       |                    | :x:                |                    | :x:                |                    |
 | `/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/apps`                                  |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}`                  | :x:                | :x:                |                    |                    |                    |
-| `/repos/{owner}/{repo}/environments/{environment_name}/secrets`                                                           |                    | :x:                |                    |                    |                    |
-| `/repos/{owner}/{repo}/environments/{environment_name}/secrets/public-key`                                                |                    | :x:                |                    |                    |                    |
-| `/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}`                                             | :x:                | :x:                |                    |                    | :x:                |
-| `/repos/{owner}/{repo}/environments/{environment_name}/variables`                                                         |                    | :x:                |                    | :x:                |                    |
-| `/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}`                                                  | :x:                | :x:                | :x:                |                    |                    |
+| `/repos/{owner}/{repo}/environments/{environment_name}/secrets`                                                           |                    | :white_check_mark: |                    |                    |                    |
+| `/repos/{owner}/{repo}/environments/{environment_name}/secrets/public-key`                                                |                    | :white_check_mark: |                    |                    |                    |
+| `/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}`                                             | :white_check_mark: | :white_check_mark: |                    |                    | :white_check_mark: |
+| `/repos/{owner}/{repo}/environments/{environment_name}/variables`                                                         |                    | :white_check_mark: |                    | :white_check_mark: |                    |
+| `/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}`                                                  | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
 | `/repos/{owner}/{repo}/events`                                                                                            |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/forks`                                                                                             |                    | :white_check_mark: |                    | :white_check_mark: |                    |
 | `/repos/{owner}/{repo}/git/blobs`                                                                                         |                    |                    |                    | :x:                |                    |
@@ -546,6 +550,8 @@
 | `/repos/{owner}/{repo}/rulesets/rule-suites`                                                                              |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/rulesets/rule-suites/{rule_suite_id}`                                                              |                    | :white_check_mark: |                    |                    |                    |
 | `/repos/{owner}/{repo}/rulesets/{ruleset_id}`                                                                             | :x:                | :white_check_mark: |                    |                    | :x:                |
+| `/repos/{owner}/{repo}/rulesets/{ruleset_id}/history`                                                                     |                    | :x:                |                    |                    |                    |
+| `/repos/{owner}/{repo}/rulesets/{ruleset_id}/history/{version_id}`                                                        |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/secret-scanning/alerts`                                                                            |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}`                                                             |                    | :x:                | :x:                |                    |                    |
 | `/repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations`                                                   |                    | :x:                |                    |                    |                    |
@@ -606,13 +612,13 @@
 | `/user`                                                                                                                   |                    | :white_check_mark: | :white_check_mark: |                    |                    |
 | `/user/blocks`                                                                                                            |                    | :white_check_mark: |                    |                    |                    |
 | `/user/blocks/{username}`                                                                                                 | :white_check_mark: | :white_check_mark: |                    |                    | :white_check_mark: |
-| `/user/codespaces`                                                                                                        |                    | :x:                |                    | :x:                |                    |
-| `/user/codespaces/secrets`                                                                                                |                    | :x:                |                    |                    |                    |
-| `/user/codespaces/secrets/public-key`                                                                                     |                    | :x:                |                    |                    |                    |
-| `/user/codespaces/secrets/{secret_name}`                                                                                  | :x:                | :x:                |                    |                    | :x:                |
+| `/user/codespaces`                                                                                                        |                    | :white_check_mark: |                    | :x:                |                    |
+| `/user/codespaces/secrets`                                                                                                |                    | :white_check_mark: |                    |                    |                    |
+| `/user/codespaces/secrets/public-key`                                                                                     |                    | :white_check_mark: |                    |                    |                    |
+| `/user/codespaces/secrets/{secret_name}`                                                                                  | :x:                | :white_check_mark: |                    |                    | :x:                |
 | `/user/codespaces/secrets/{secret_name}/repositories`                                                                     |                    | :x:                |                    |                    | :x:                |
 | `/user/codespaces/secrets/{secret_name}/repositories/{repository_id}`                                                     | :x:                |                    |                    |                    | :x:                |
-| `/user/codespaces/{codespace_name}`                                                                                       | :x:                | :x:                | :x:                |                    |                    |
+| `/user/codespaces/{codespace_name}`                                                                                       | :x:                | :white_check_mark: | :x:                |                    |                    |
 | `/user/codespaces/{codespace_name}/exports`                                                                               |                    |                    |                    | :x:                |                    |
 | `/user/codespaces/{codespace_name}/exports/{export_id}`                                                                   |                    | :x:                |                    |                    |                    |
 | `/user/codespaces/{codespace_name}/machines`                                                                              |                    | :x:                |                    |                    |                    |
@@ -675,7 +681,7 @@
 | `/users/{username}/following/{target_user}`                                                                               |                    | :white_check_mark: |                    |                    |                    |
 | `/users/{username}/gists`                                                                                                 |                    | :x:                |                    |                    |                    |
 | `/users/{username}/gpg_keys`                                                                                              |                    | :white_check_mark: |                    |                    |                    |
-| `/users/{username}/hovercard`                                                                                             |                    | :white_check_mark: |                    |                    |                    |
+| `/users/{username}/hovercard`                                                                                             |                    | :x:                |                    |                    |                    |
 | `/users/{username}/installation`                                                                                          |                    | :x:                |                    |                    |                    |
 | `/users/{username}/keys`                                                                                                  |                    | :white_check_mark: |                    |                    |                    |
 | `/users/{username}/orgs`                                                                                                  |                    | :white_check_mark: |                    |                    |                    |
