@@ -127,14 +127,14 @@ function Get-GitHubArtifact {
         }
         switch ($PSCmdlet.ParameterSetName) {
             'ById' {
-                Get-GitHubArtifactById @params -ID $ArtifactID
+                Get-GitHubArtifactById @params -ID $ID
             }
             'FromWorkflowRun' {
                 if ($Name.Contains('*')) {
-                    Get-GitHubArtifactFromWorkflowRun @params -ID $ID -AllVersions:$AllVersions |
+                    Get-GitHubArtifactFromWorkflowRun @params -ID $WorkflowRunId -AllVersions:$AllVersions |
                         Where-Object { $_.Name -like $Name }
                 } else {
-                    Get-GitHubArtifactFromWorkflowRun @params -ID $ID -Name $Name -AllVersions:$AllVersions
+                    Get-GitHubArtifactFromWorkflowRun @params -ID $WorkflowRunId -Name $Name -AllVersions:$AllVersions
                 }
             }
             'FromRepository' {
