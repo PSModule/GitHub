@@ -29,17 +29,8 @@
     # The ids of the repositories that the variable is visible to.
     [GitHubRepository[]] $SelectedRepositories
 
-    # Simple parameterless constructor
     GitHubVariable() {}
 
-    # Creates a object from a hashtable of key-vaule pairs.
-    GitHubVariable([hashtable]$Properties) {
-        foreach ($Property in $Properties.Keys) {
-            $this.$Property = $Properties.$Property
-        }
-    }
-
-    # Creates a object from a PSCustomObject.
     GitHubVariable([PSCustomObject]$Object, [string]$Owner, [string]$Repository, [string]$Environment, [GitHubRepository[]]$SelectedRepositories) {
         $this.Name = $Object.name
         $this.Value = $Object.value
@@ -50,6 +41,7 @@
         $this.UpdatedAt = $Object.updated_at
         $this.Visibility = $Object.visibility
         $this.SelectedRepositories = $SelectedRepositories
+        
         #Set scope based on provided values in Owner, Repository, Environment
         $this.Scope = if ($Owner -and $Repository -and $Environment) {
             'Environment'
