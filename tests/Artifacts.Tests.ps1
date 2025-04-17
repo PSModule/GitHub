@@ -36,7 +36,7 @@ Describe 'Artifacts' {
             }
             $Owner = $env:GITHUB_REPOSITORY_OWNER
             $Repository = $env:GITHUB_REPOSITORY_NAME
-            $ID = $env:GITHUB_RUN_ID
+            $WorkflowRunId = $env:GITHUB_RUN_ID
             $ArtifactName = 'module'
         }
         AfterAll {
@@ -104,9 +104,9 @@ Describe 'Artifacts' {
         Context 'WorkflowRun' {
             It 'Get-GitHubArtifact - WorkflowRun - All artifacts - Latest version' {
                 $params = @{
-                    Owner      = $Owner
-                    Repository = $Repository
-                    ID         = $ID
+                    Owner         = $Owner
+                    Repository    = $Repository
+                    WorkflowRunId = $WorkflowRunId
                 }
                 $result = Get-GitHubArtifact @params
                 LogGroup 'Result' {
@@ -118,10 +118,10 @@ Describe 'Artifacts' {
 
             It 'Get-GitHubArtifact - WorkflowRun - All artifacts - All versions' {
                 $params = @{
-                    Owner       = $Owner
-                    Repository  = $Repository
-                    ID          = $ID
-                    AllVersions = $true
+                    Owner         = $Owner
+                    Repository    = $Repository
+                    WorkflowRunId = $WorkflowRunId
+                    AllVersions   = $true
                 }
                 $result = Get-GitHubArtifact @params
                 LogGroup 'Result' {
@@ -133,10 +133,10 @@ Describe 'Artifacts' {
 
             It 'Get-GitHubArtifact - WorkflowRun - Named artifact - Latest version' {
                 $params = @{
-                    Owner      = $Owner
-                    Repository = $Repository
-                    ID         = $ID
-                    Name       = $ArtifactName
+                    Owner         = $Owner
+                    Repository    = $Repository
+                    WorkflowRunId = $WorkflowRunId
+                    Name          = $ArtifactName
                 }
                 $result = Get-GitHubArtifact @params
                 LogGroup 'Result' {
@@ -148,11 +148,11 @@ Describe 'Artifacts' {
 
             It 'Get-GitHubArtifact - WorkflowRun - Named artifact - All versions' {
                 $params = @{
-                    Owner       = $Owner
-                    Repository  = $Repository
-                    ID          = $ID
-                    Name        = $ArtifactName
-                    AllVersions = $true
+                    Owner         = $Owner
+                    Repository    = $Repository
+                    WorkflowRunId = $WorkflowRunId
+                    Name          = $ArtifactName
+                    AllVersions   = $true
                 }
                 $result = Get-GitHubArtifact @params
                 LogGroup 'Result' {
@@ -165,16 +165,16 @@ Describe 'Artifacts' {
 
         It 'Get-GitHubArtifact - Gets a specific artifact' {
             $params = @{
-                Owner      = $Owner
-                Repository = $Repository
-                ID         = $ID
-                Name       = $ArtifactName
+                Owner         = $Owner
+                Repository    = $Repository
+                WorkflowRunId = $WorkflowRunId
+                Name          = $ArtifactName
             }
             $artifact = Get-GitHubArtifact @params
             LogGroup 'Artifact' {
                 Write-Host ($artifact | Format-Table | Out-String)
             }
-            $result = Get-GitHubArtifact -Owner $Owner -Repository $Repository -ArtifactID $artifact.ID
+            $result = Get-GitHubArtifact -Owner $Owner -Repository $Repository -ID $artifact.ID
             LogGroup 'Result' {
                 Write-Host ($result | Format-Table | Out-String)
             }
@@ -193,7 +193,7 @@ Describe 'Artifacts' {
                 Write-Host ($artifact | Format-Table | Out-String)
             }
             LogGroup 'Result' {
-                $result = $artifact | Save-GitHubArtifact
+                $result = $artifact | Save-GitHubArtifact -PassThru -Force
                 Write-Host ($result | Format-Table | Out-String)
             }
             $result | Should -Not -BeNullOrEmpty
@@ -211,7 +211,7 @@ Describe 'Artifacts' {
                 Write-Host ($artifact | Format-Table | Out-String)
             }
             LogGroup 'Result' {
-                $result = $artifact | Save-GitHubArtifact -Expand -Cleanup
+                $result = $artifact | Save-GitHubArtifact -Expand -PassThru -Force
                 Write-Host ($result | Format-Table | Out-String)
             }
             $result | Should -Not -BeNullOrEmpty
@@ -229,7 +229,7 @@ Describe 'Artifacts' {
                 Write-Host ($artifact | Format-Table | Out-String)
             }
             LogGroup 'Result' {
-                $result = $artifact | Save-GitHubArtifact -Path .\testfolder -Expand -Cleanup
+                $result = $artifact | Save-GitHubArtifact -Path .\testfolder -Expand -PassThru -Force
                 Write-Host ($result | Format-Table | Out-String)
             }
             $result | Should -Not -BeNullOrEmpty
@@ -247,7 +247,7 @@ Describe 'Artifacts' {
                 Write-Host ($artifact | Format-Table | Out-String)
             }
             LogGroup 'Result' {
-                $result = $artifact | Save-GitHubArtifact -Path .\testfolder -Expand -Cleanup
+                $result = $artifact | Save-GitHubArtifact -Path .\testfolder -Expand -PassThru -Force
                 Write-Host ($result | Format-Table | Out-String)
             }
             $result | Should -Not -BeNullOrEmpty
