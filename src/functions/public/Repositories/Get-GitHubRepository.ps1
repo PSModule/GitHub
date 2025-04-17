@@ -13,7 +13,7 @@
         .EXAMPLE
         Get-GitHubRepository
 
-        Gets the  authenticated user's repositories.
+        Gets the authenticated user's repositories.
 
         .EXAMPLE
         Get-GitHubRepository -Username 'octocat'
