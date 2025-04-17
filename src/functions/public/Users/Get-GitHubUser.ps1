@@ -24,22 +24,24 @@
         Get a list of users, starting with the user 'MariusStorhaug'.
 
         .OUTPUTS
-        GitHubUser
+        GitHubOwner
 
         .NOTES
         [Get the authenticated user](https://docs.github.com/rest/users/users)
     #>
-    [OutputType([GitHubUser])]
+    [OutputType([GitHubOwner])]
+    [Alias('Get-GitHubOwner')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSReviewUnusedParameter', 'All',
         Justification = 'Parameter is used in dynamic parameter validation.'
     )]
-    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
+    [CmdletBinding(DefaultParameterSetName = 'Authenticated user')]
     param(
         # The handle for the GitHub user account.
         [Parameter(
             Mandatory,
-            ParameterSetName = 'ByName',
+            ParameterSetName = 'By name',
+            ValueFromPipeline,
             ValueFromPipelineByPropertyName
         )]
         [string] $Name,
@@ -47,16 +49,16 @@
         # List all users. Use '-Since' to start at a specific user ID.
         [Parameter(
             Mandatory,
-            ParameterSetName = 'AllUsers'
+            ParameterSetName = 'All users'
         )]
         [switch] $All,
 
         # A user ID. Only return users with an ID greater than this ID.
-        [Parameter(ParameterSetName = 'AllUsers')]
+        [Parameter(ParameterSetName = 'All users')]
         [int] $Since = 0,
 
         # The number of results per page (max 100).
-        [Parameter(ParameterSetName = 'AllUsers')]
+        [Parameter(ParameterSetName = 'All users')]
         [ValidateRange(0, 100)]
         [int] $PerPage,
 
@@ -75,10 +77,10 @@
 
     process {
         switch ($PSCmdlet.ParameterSetName) {
-            'ByName' {
+            'By name' {
                 Get-GitHubUserByName -Name $Name -Context $Context
             }
-            'AllUsers' {
+            'All users' {
                 Get-GitHubAllUser -Since $Since -PerPage $PerPage -Context $Context
             }
             default {

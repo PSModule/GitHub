@@ -14,9 +14,6 @@
     # The default host name.
     [string] $HostName
 
-    # The default base URI for the GitHub API, which is used to make API calls.
-    [string] $ApiBaseUri
-
     # The default OAuth app client ID.
     [string] $OAuthAppClientID
 
