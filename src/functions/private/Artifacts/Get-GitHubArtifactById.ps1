@@ -45,8 +45,7 @@ function Get-GitHubArtifactById {
         [string] $Repository,
 
         # The unique identifier of the artifact.
-        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
-        [Alias('ArtifactID', 'DatabaseID')]
+        [Parameter(Mandatory)]
         [string] $ID,
 
         # The context to run the command in. Used to get the details for the API call.

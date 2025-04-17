@@ -147,6 +147,9 @@ All function documentation follows standard PowerShell help conventions, with so
      - or `Select-Object -ExpandProperty Response`
    - Choose which pattern best fits your scenario, but be consistent within a function.
 
+- Functions that get versioned objects, gets the latest version if nothing else is specified.
+  - Functions can specify -Name or -AllVersions to change the behavior.
+
 ---
 
 ## Classes
@@ -160,12 +163,15 @@ All function documentation follows standard PowerShell help conventions, with so
 3. **Return Types / Interfaces**
    - Each class that you return should have a consistent interface.
    - Remove any properties that are purely “API wrapper” fields (e.g., raw HTTP artifacts that aren’t relevant to the user).
+   - Cl
 
 - Classes should have ID as the main resource ID, this is the databaseID. The node_id is spesifically in the NodeID property.
 - Classes that use nodeid and databaseid should extend the class called GitHubNode.
 - Objects that belong inside another scope, has the parts of the scope in properties of the class, i.e. Enterprise, Owner/Organization/Account,
   Repository, Environment, etc.
 - To make a property alias, use types files to copy one property into another named property.
+- Classes have their class name as a property with the value set as the property that is typically used in commands.
+  - Examples to this is, GitHubRepository, has `Repository` as a "alias" property using types, and its value is the `Name` property.
 - All properties that reference size on disk, should be converted to store bytes, and be called Size.
 
 ## Additional Notes

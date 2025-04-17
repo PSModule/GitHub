@@ -44,7 +44,6 @@
 
         # The ID of the workflow. You can also pass the workflow filename as a string.
         [Parameter(Mandatory)]
-        [Alias('DatabaseID', 'WorkflowID')]
         [string] $ID,
 
         # Returns someone's workflow runs. Use the login for the user who created the push associated with the check suite or workflow run.

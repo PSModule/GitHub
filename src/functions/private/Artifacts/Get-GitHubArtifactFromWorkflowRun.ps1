@@ -52,7 +52,6 @@ function Get-GitHubArtifactFromWorkflowRun {
 
         # The unique identifier of the workflow run.
         [Parameter(Mandatory)]
-        [Alias('WorkflowRunID', 'RunID', 'DatabaseID')]
         [string] $ID,
 
         # The name field of an artifact. When specified, only artifacts with this name will be returned.

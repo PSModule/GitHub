@@ -8,20 +8,28 @@
 
         This endpoint triggers [notifications](https://docs.github.com/github/managing-subscriptions-and-notifications-on-github/about-notifications).
 
-
         .EXAMPLE
         Remove-GitHubOrganizationInvitation -Organization 'github' -InvitationID '12345678'
 
         Cancel the invitation with the ID '12345678' for the organization `github`.
 
-        .NOTES
+        .INPUTS
+        GitHubOrganization
+
+        .OUTPUTS
+        void
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Organization/Members/Remove-GitHubOrganizationInvitation
+
+        .LINK
         [Cancel an organization invitation](https://docs.github.com/rest/orgs/members#cancel-an-organization-invitation)
     #>
-    [OutputType([bool])]
+    [OutputType([void])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The organization name. The name is not case sensitive.
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName)]
         [string] $Organization,
 
         # The unique identifier of the invitation.
@@ -50,7 +58,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess('GitHub Organization invitation', 'Remove')) {
-            Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @inputObject
         }
     }
 
