@@ -167,7 +167,7 @@ filter Invoke-GitHubAPI {
         }
         $APICall | Remove-HashtableEntry -NullOrEmptyValues
 
-        if (-not $Anonymous -and $Context -ne 'Anonymous' -and $null -ne $Context) {
+        if (-not $Anonymous -and $Context -ne 'Anonymous' -and -not [string]::IsNullOrEmpty($Context)) {
             $APICall['Authentication'] = 'Bearer'
             $APICall['Token'] = $Token
         }
