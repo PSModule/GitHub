@@ -135,11 +135,11 @@ function Save-GitHubArtifact {
                 Write-Debug "Removing ZIP file [$Path]"
                 Remove-Item -LiteralPath $Path -Force
                 if ($PassThru) {
-                    return $folder
+                    $folder
                 }
             }
             if ($PassThru) {
-                return Get-Item -Path $Path
+                Get-Item -Path $Path
             }
         }
     }
