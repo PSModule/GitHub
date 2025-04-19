@@ -107,7 +107,7 @@ filter Invoke-GitHubAPI {
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        if ($Anonymous) {
+        if ($Anonymous -or $Context -eq 'Anonymous' -or $null -eq $Context) {
             Initialize-GitHubConfig
             $Context = $null
         } else {
