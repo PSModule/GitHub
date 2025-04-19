@@ -107,13 +107,8 @@ filter Invoke-GitHubAPI {
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        if ($Anonymous -or $Context -eq 'Anonymous' -or $null -eq $Context) {
-            Initialize-GitHubConfig
-            $Context = $null
-        } else {
-            $Context = Resolve-GitHubContext -Context $Context
-            $Token = $Context.Token
-        }
+        $Context = Resolve-GitHubContext -Context $Context
+        $Token = $Context.Token
         Write-Debug 'Invoking GitHub API...'
         Write-Debug 'Parent function parameters:'
         Get-FunctionParameter -Scope 1 | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
@@ -172,7 +167,7 @@ filter Invoke-GitHubAPI {
         }
         $APICall | Remove-HashtableEntry -NullOrEmptyValues
 
-        if (-not $Anonymous) {
+        if (-not $Anonymous -and $Context -ne 'Anonymous' -and $null -ne $Context) {
             $APICall['Authentication'] = 'Bearer'
             $APICall['Token'] = $Token
         }
