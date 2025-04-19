@@ -30,10 +30,8 @@
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        if (-not $Anonymous) {
-            $Context = Resolve-GitHubContext -Context $Context
-            Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-        }
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT, Anonymous
     }
 
     process {
