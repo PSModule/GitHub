@@ -50,6 +50,7 @@
             APIEndpoint = '/markdown/raw'
             ContentType = 'text/plain'
             Body        = $body
+            Anonymous   = $Anonymous
             Context     = $Context
         }
 

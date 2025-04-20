@@ -64,6 +64,7 @@
             Method      = 'POST'
             APIEndpoint = '/markdown'
             Body        = $body
+            Anonymous   = $Anonymous
             Context     = $Context
         }
 
