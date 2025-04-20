@@ -1,6 +1,6 @@
 ﻿Register-ArgumentCompleter -CommandName ($script:PSModuleInfo.FunctionsToExport) -ParameterName Context -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
-    $null = $commandName, $parameterName, $wordToComplete, $fakeBoundParameter
+    $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter
 
     $contexts = @()
     $hasAnonymousParameter = $false
