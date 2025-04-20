@@ -82,13 +82,13 @@ filter Invoke-GitHubAPI {
 
         # Specifies how many times PowerShell retries a connection when a failure code between 400 and 599, inclusive or 304 is received.
         [Parameter()]
-        [int] $RetryCount = $script:GitHub.Config.RetryCount,
+        [System.Nullable[int]] $RetryCount,
 
         # Specifies the interval between retries for the connection when a failure code between 400 and 599, inclusive or 304 is received.
         # When the failure code is 429 and the response includes the Retry-After property in its headers, the cmdlet uses that value for the retry
         # interval, even if this parameter is specified.
         [Parameter()]
-        [int] $RetryInterval = $script:GitHub.Config.RetryInterval,
+        [System.Nullable[int]] $RetryInterval,
 
         # The number of results per page for paginated GitHub API responses.
         [Parameter()]
@@ -117,6 +117,8 @@ filter Invoke-GitHubAPI {
         $HttpVersion = Resolve-GitHubContextSetting -Name 'HttpVersion' -Value $HttpVersion -Context $Context
         $ApiBaseUri = Resolve-GitHubContextSetting -Name 'ApiBaseUri' -Value $ApiBaseUri -Context $Context
         $ApiVersion = Resolve-GitHubContextSetting -Name 'ApiVersion' -Value $ApiVersion -Context $Context
+        $RetryCount = Resolve-GitHubContextSetting -Name 'RetryCount' -Value $RetryCount -Context $Context
+        $RetryInterval = Resolve-GitHubContextSetting -Name 'RetryInterval' -Value $RetryInterval -Context $Context
         $TokenType = Resolve-GitHubContextSetting -Name 'TokenType' -Value $TokenType -Context $Context
         [pscustomobject]@{
             Token       = $Token
@@ -206,7 +208,7 @@ filter Invoke-GitHubAPI {
                         }
                     }
                 }
-                $response = Invoke-WebRequest @APICall
+                $response = Invoke-WebRequest @APICall -ProgressAction 'SilentlyContinue'
 
                 $headers = @{}
                 foreach ($item in $response.Headers.GetEnumerator()) {

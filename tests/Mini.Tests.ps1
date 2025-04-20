@@ -24,26 +24,26 @@ Describe 'Auth' {
         }
 
         It 'Connect-GitHubAccount - Connects using the provided credentials' {
-            $context = Connect-GitHubAccount @connectParams -PassThru -Silent -Verbose -Debug
             LogGroup 'Context' {
+                $context = Connect-GitHubAccount @connectParams -PassThru -Silent -Verbose -Debug
                 Write-Host ($context | Format-List | Out-String)
             }
             $context | Should -Not -BeNullOrEmpty
         }
 
         It 'Connect-GitHubAccount - Connects using the provided credentials - Double' {
-            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
-            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
             LogGroup 'Context' {
+                $context = Connect-GitHubAccount @connectParams -PassThru -Silent
+                $context = Connect-GitHubAccount @connectParams -PassThru -Silent
                 Write-Host ($context | Format-List | Out-String)
             }
             $context | Should -Not -BeNullOrEmpty
         }
 
         It 'Connect-GitHubAccount - Connects using the provided credentials - Relog' {
-            Disconnect-GitHub -Silent
-            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
             LogGroup 'Context' {
+                Disconnect-GitHub -Silent
+                $context = Connect-GitHubAccount @connectParams -PassThru -Silent
                 Write-Host ($context | Format-List | Out-String)
             }
             $context | Should -Not -BeNullOrEmpty
@@ -59,24 +59,24 @@ Describe 'Auth' {
         # Tests for APP goes here
         if ($AuthType -eq 'APP') {
             It 'Connect-GitHubAccount - Connects using the provided credentials + AutoloadInstallations' {
-                $context = Connect-GitHubAccount @connectParams -PassThru -Silent -AutoloadInstallations
                 LogGroup 'Context' {
+                    $context = Connect-GitHubAccount @connectParams -PassThru -Silent -AutoloadInstallations
                     Write-Host ($context | Format-List | Out-String)
                 }
                 $context | Should -Not -BeNullOrEmpty
             }
 
             It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
-                $contexts = Connect-GitHubApp -PassThru -Silent
                 LogGroup 'Contexts' {
+                    $contexts = Connect-GitHubApp -PassThru -Silent
                     Write-Host ($contexts | Format-List | Out-String)
                 }
                 $contexts | Should -Not -BeNullOrEmpty
             }
 
             It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
-                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
                 LogGroup 'Context' {
+                    $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
                     Write-Host ($context | Format-List | Out-String)
                 }
                 $context | Should -Not -BeNullOrEmpty
@@ -91,23 +91,23 @@ Describe 'Auth' {
             [string]::IsNullOrEmpty($(gh auth token)) | Should -Be $false
         }
         It 'Get-GitHubViewer - Gets the logged in context' {
-            $viewer = Get-GitHubViewer
             LogGroup 'Viewer' {
+                $viewer = Get-GitHubViewer
                 Write-Host ($viewer | Format-List | Out-String)
             }
             $viewer | Should -Not -BeNullOrEmpty
         }
 
-        It 'GetGitHubContext - Gets the default context' {
-            $context = Get-GitHubContext
+        It 'Get-GitHubContext - Gets the default context' {
             LogGroup 'Default context' {
+                $context = Get-GitHubContext
                 Write-Host ($viewer | Format-List | Out-String)
             }
         }
 
-        It 'GetGitHubContext - List all contexts' {
-            $contexts = Get-GitHubContext -ListAvailable
+        It 'Get-GitHubContext - List all contexts' {
             LogGroup 'Contexts' {
+                $contexts = Get-GitHubContext -ListAvailable
                 Write-Host ($contexts | Format-List | Out-String)
             }
             $contexts.count | Should -BeGreaterOrEqual 1
