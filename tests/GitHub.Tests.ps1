@@ -98,14 +98,14 @@ Describe 'Auth' {
             $viewer | Should -Not -BeNullOrEmpty
         }
 
-        It 'GetGitHubContext - Gets the default context' {
+        It 'Get-GitHubContext - Gets the default context' {
             $context = Get-GitHubContext
             LogGroup 'Default context' {
                 Write-Host ($viewer | Format-List | Out-String)
             }
         }
 
-        It 'GetGitHubContext - List all contexts' {
+        It 'Get-GitHubContext - List all contexts' {
             $contexts = Get-GitHubContext -ListAvailable
             LogGroup 'Contexts' {
                 Write-Host ($contexts | Format-List | Out-String)
@@ -735,5 +735,66 @@ Describe 'Webhooks' {
         $signature = 'sha256=757107ea0eb2509fc211221cce984b8a37570b6d7586c22c46f4379c8b043e17'
         $result = Test-GitHubWebhookSignature -Secret $secret -Body $payload -Signature $signature
         $result | Should -Be $true
+    }
+}
+
+Describe 'Anonymous - Functions that can run anonymously' {
+    It 'Get-GithubRateLimit' {
+        $rateLimit = Get-GitHubRateLimit -Anonymous
+        LogGroup 'Rate Limit' {
+            Write-Host ($rateLimit | Format-List | Out-String)
+        }
+        $rateLimit | Should -Not -BeNullOrEmpty
+    }
+    It 'Invoke-GitHubAPI - Using -Anonymous' {
+        $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit' -Anonymous
+
+        LogGroup 'Rate Limit' {
+            Write-Host ($rateLimit | Format-List | Out-String)
+        }
+        $rateLimit | Should -Not -BeNullOrEmpty
+    }
+    It 'Invoke-GitHubAPI - Using -Context Anonymous' {
+        $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit' -Context Anonymous
+
+        LogGroup 'Rate Limit' {
+            Write-Host ($rateLimit | Format-List | Out-String)
+        }
+        $rateLimit | Should -Not -BeNullOrEmpty
+    }
+    It 'Get-GithubMeta' {
+        $meta = Get-GitHubMeta -Anonymous
+        LogGroup 'Meta' {
+            Write-Host ($meta | Format-List | Out-String)
+        }
+        $meta | Should -Not -BeNullOrEmpty
+    }
+    It 'Get-GithubOctocat' {
+        $octocat = Get-GitHubOctocat -Anonymous
+        LogGroup 'Octocat' {
+            Write-Host ($octocat | Format-List | Out-String)
+        }
+        $octocat | Should -Not -BeNullOrEmpty
+    }
+    It 'Get-GithubZen' {
+        $zen = Get-GitHubZen -Anonymous
+        LogGroup 'Zen' {
+            Write-Host ($zen | Format-List | Out-String)
+        }
+        $zen | Should -Not -BeNullOrEmpty
+    }
+    It 'Get-GithubGitignore' {
+        $gitIgnore = Get-GitHubGitignore -Anonymous
+        LogGroup 'GitIgnore' {
+            Write-Host ($gitIgnore | Format-List | Out-String)
+        }
+        $gitIgnore | Should -Not -BeNullOrEmpty
+    }
+    It 'Get-GithubLicense' {
+        $license = Get-GitHubLicense -Anonymous
+        LogGroup 'License' {
+            Write-Host ($license | Format-List | Out-String)
+        }
+        $license | Should -Not -BeNullOrEmpty
     }
 }

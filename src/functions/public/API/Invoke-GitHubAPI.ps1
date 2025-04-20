@@ -24,6 +24,9 @@ filter Invoke-GitHubAPI {
         Invoke-GitHubAPI -ApiEndpoint '/repos/user/repo/pulls' -Method GET -Body @{ state = 'open' } -Accept 'application/vnd.github.v3+json'
 
         Gets all open pull requests for the specified repository, filtered by the 'state' parameter, and using the specified 'Accept' header.
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/API/Invoke-GitHubAPI
     #>
     [CmdletBinding(DefaultParameterSetName = 'ApiEndpoint')]
     param(
@@ -48,7 +51,7 @@ filter Invoke-GitHubAPI {
         # The body of the API request. This can be a hashtable or a string. If a hashtable is provided, it will be converted to JSON.
         [Parameter()]
         [Alias('Query')]
-        [Object] $Body,
+        [object] $Body,
 
         # The 'Accept' header for the API request. If not provided, the default will be used by GitHub's API.
         [Parameter()]
@@ -61,10 +64,6 @@ filter Invoke-GitHubAPI {
         # The file path to be used for the API request. This is used for uploading files.
         [Parameter()]
         [string] $UploadFilePath,
-
-        # The file path to be used for the API response. This is used for downloading files.
-        [Parameter()]
-        [string] $DownloadFilePath,
 
         # The full URI for the API request. This is used for custom API calls.
         [Parameter(
@@ -83,17 +82,21 @@ filter Invoke-GitHubAPI {
 
         # Specifies how many times PowerShell retries a connection when a failure code between 400 and 599, inclusive or 304 is received.
         [Parameter()]
-        [int] $RetryCount = $script:GitHub.Config.RetryCount,
+        [System.Nullable[int]] $RetryCount,
 
         # Specifies the interval between retries for the connection when a failure code between 400 and 599, inclusive or 304 is received.
         # When the failure code is 429 and the response includes the Retry-After property in its headers, the cmdlet uses that value for the retry
         # interval, even if this parameter is specified.
         [Parameter()]
-        [int] $RetryInterval = $script:GitHub.Config.RetryInterval,
+        [System.Nullable[int]] $RetryInterval,
 
         # The number of results per page for paginated GitHub API responses.
         [Parameter()]
-        [int] $PerPage,
+        [System.Nullable[int]] $PerPage,
+
+        # If specified, makes an anonymous request to the GitHub API without authentication.
+        [Parameter()]
+        [switch] $Anonymous,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -118,6 +121,8 @@ filter Invoke-GitHubAPI {
         $HttpVersion = Resolve-GitHubContextSetting -Name 'HttpVersion' -Value $HttpVersion -Context $Context
         $ApiBaseUri = Resolve-GitHubContextSetting -Name 'ApiBaseUri' -Value $ApiBaseUri -Context $Context
         $ApiVersion = Resolve-GitHubContextSetting -Name 'ApiVersion' -Value $ApiVersion -Context $Context
+        $RetryCount = Resolve-GitHubContextSetting -Name 'RetryCount' -Value $RetryCount -Context $Context
+        $RetryInterval = Resolve-GitHubContextSetting -Name 'RetryInterval' -Value $RetryInterval -Context $Context
         $TokenType = Resolve-GitHubContextSetting -Name 'TokenType' -Value $TokenType -Context $Context
         [pscustomobject]@{
             Token       = $Token
@@ -155,8 +160,6 @@ filter Invoke-GitHubAPI {
             Uri               = $Uri
             Method            = [string]$Method
             Headers           = $Headers
-            Authentication    = 'Bearer'
-            Token             = $Token
             ContentType       = $ContentType
             InFile            = $UploadFilePath
             HttpVersion       = [string]$HttpVersion
@@ -165,18 +168,17 @@ filter Invoke-GitHubAPI {
         }
         $APICall | Remove-HashtableEntry -NullOrEmptyValues
 
+        if (-not $Anonymous -and $Context -ne 'Anonymous' -and -not [string]::IsNullOrEmpty($Context)) {
+            $APICall['Authentication'] = 'Bearer'
+            $APICall['Token'] = $Token
+        }
+
         if ($Method -eq 'GET') {
             if (-not $Body) {
                 $Body = @{}
             }
 
-            if ($PSBoundParameters.ContainsKey('PerPage')) {
-                Write-Debug "Using provided PerPage parameter value [$PerPage]."
-                $Body['per_page'] = $PerPage
-            } elseif (-not $Body.ContainsKey('per_page') -or $Body['per_page'] -eq 0) {
-                Write-Debug "Setting per_page to the default value in context [$($Context.PerPage)]."
-                $Body['per_page'] = $Context.PerPage
-            }
+            $Body['per_page'] = Resolve-GitHubContextSetting -Name 'PerPage' -Value $PerPage -Context $Context
 
             $APICall.Uri = New-Uri -BaseUri $Uri -Query $Body -AsString
         } elseif ($Body) {
@@ -207,7 +209,7 @@ filter Invoke-GitHubAPI {
                         }
                     }
                 }
-                $response = Invoke-WebRequest @APICall
+                $response = Invoke-WebRequest @APICall -ProgressAction 'SilentlyContinue'
 
                 $headers = @{}
                 foreach ($item in $response.Headers.GetEnumerator()) {
@@ -319,14 +321,10 @@ filter Invoke-GitHubAPI {
             $APICall.Method = $APICall.Method.ToString()
 
             $exception = @"
-
 ----------------------------------
-Error details:
-$($errorResult | Format-List | Out-String -Stream | ForEach-Object { "    $_`n" })
+$($errorResult | Format-List | Out-String)
 ----------------------------------
-
 "@
-
             $PSCmdlet.ThrowTerminatingError(
                 [System.Management.Automation.ErrorRecord]::new(
                     [System.Exception]::new($exception),
