@@ -92,7 +92,11 @@ filter Invoke-GitHubAPI {
 
         # The number of results per page for paginated GitHub API responses.
         [Parameter()]
-        [int] $PerPage,
+        [System.Nullable[int]] $PerPage,
+
+        # If specified, makes an anonymous request to the GitHub API without authentication.
+        [Parameter()]
+        [switch] $Anonymous,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -156,8 +160,6 @@ filter Invoke-GitHubAPI {
             Uri               = $Uri
             Method            = [string]$Method
             Headers           = $Headers
-            Authentication    = 'Bearer'
-            Token             = $Token
             ContentType       = $ContentType
             InFile            = $UploadFilePath
             HttpVersion       = [string]$HttpVersion
@@ -166,18 +168,17 @@ filter Invoke-GitHubAPI {
         }
         $APICall | Remove-HashtableEntry -NullOrEmptyValues
 
+        if (-not $Anonymous -and $Context -ne 'Anonymous' -and -not [string]::IsNullOrEmpty($Context)) {
+            $APICall['Authentication'] = 'Bearer'
+            $APICall['Token'] = $Token
+        }
+
         if ($Method -eq 'GET') {
             if (-not $Body) {
                 $Body = @{}
             }
 
-            if ($PSBoundParameters.ContainsKey('PerPage')) {
-                Write-Debug "Using provided PerPage parameter value [$PerPage]."
-                $Body['per_page'] = $PerPage
-            } elseif (-not $Body.ContainsKey('per_page') -or $Body['per_page'] -eq 0) {
-                Write-Debug "Setting per_page to the default value in context [$($Context.PerPage)]."
-                $Body['per_page'] = $Context.PerPage
-            }
+            $Body['per_page'] = Resolve-GitHubContextSetting -Name 'PerPage' -Value $PerPage -Context $Context
 
             $APICall.Uri = New-Uri -BaseUri $Uri -Query $Body -AsString
         } elseif ($Body) {
@@ -320,14 +321,10 @@ filter Invoke-GitHubAPI {
             $APICall.Method = $APICall.Method.ToString()
 
             $exception = @"
-
 ----------------------------------
-Error details:
-$($errorResult | Format-List | Out-String -Stream | ForEach-Object { "    $_`n" })
+$($errorResult | Format-List | Out-String)
 ----------------------------------
-
 "@
-
             $PSCmdlet.ThrowTerminatingError(
                 [System.Management.Automation.ErrorRecord]::new(
                     [System.Exception]::new($exception),
