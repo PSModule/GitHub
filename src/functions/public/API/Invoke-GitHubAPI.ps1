@@ -24,6 +24,9 @@ filter Invoke-GitHubAPI {
         Invoke-GitHubAPI -ApiEndpoint '/repos/user/repo/pulls' -Method GET -Body @{ state = 'open' } -Accept 'application/vnd.github.v3+json'
 
         Gets all open pull requests for the specified repository, filtered by the 'state' parameter, and using the specified 'Accept' header.
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/API/Invoke-GitHubAPI
     #>
     [CmdletBinding(DefaultParameterSetName = 'ApiEndpoint')]
     param(
@@ -48,7 +51,7 @@ filter Invoke-GitHubAPI {
         # The body of the API request. This can be a hashtable or a string. If a hashtable is provided, it will be converted to JSON.
         [Parameter()]
         [Alias('Query')]
-        [Object] $Body,
+        [object] $Body,
 
         # The 'Accept' header for the API request. If not provided, the default will be used by GitHub's API.
         [Parameter()]
@@ -61,10 +64,6 @@ filter Invoke-GitHubAPI {
         # The file path to be used for the API request. This is used for uploading files.
         [Parameter()]
         [string] $UploadFilePath,
-
-        # The file path to be used for the API response. This is used for downloading files.
-        [Parameter()]
-        [string] $DownloadFilePath,
 
         # The full URI for the API request. This is used for custom API calls.
         [Parameter(
