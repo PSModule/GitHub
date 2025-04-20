@@ -14,8 +14,10 @@
     [CmdletBinding()]
     param(
         # The context to run the command in.
-        [Parameter(Mandatory, ValueFromPipeline)]
-        [AllowNull()]
+        [Parameter(
+            Mandatory,
+            ValueFromPipeline
+        )]
         [object] $Context,
 
         # The required authtypes for the command.
@@ -36,32 +38,9 @@
     process {
         $command = (Get-PSCallStack)[1].Command
 
-        if ($Context) {
-            if ($Context.AuthType -in $AuthType) {
-                return
-            }
-            $PSCmdlet.ThrowTerminatingError(
-                [System.Management.Automation.ErrorRecord]::new(
-                    [System.Exception]::new("The context '$($Context.Name)' does not match the required AuthTypes [$AuthType] for [$command]."),
-                    "InvalidContextAuthType",
-                    [System.Management.Automation.ErrorCategory]::InvalidArgument,
-                    $Context
-                )
-            )
-        } else {
-            if ('Anonymous' -in $AuthType) {
-                return
-            }
-            $PSCmdlet.ThrowTerminatingError(
-                [System.Management.Automation.ErrorRecord]::new(
-                    [System.Exception]::new("Please provide a valid context or log in using 'Connect-GitHub'."),
-                    "InvalidContext",
-                    [System.Management.Automation.ErrorCategory]::InvalidArgument,
-                    $Context
-                )
-            )
+        if ($Context.AuthType -notin $AuthType) {
+            throw "The context '$($Context.Name)' does not match the required AuthTypes [$AuthType] for [$command]."
         }
-
         # TODO: Implement permission check
         # if ($Context.AuthType -in 'IAT' -and $Context.Permission -notin $Permission) {
         #     throw "The context '$($Context.Name)' does not match the required Permission [$Permission] for [$command]."

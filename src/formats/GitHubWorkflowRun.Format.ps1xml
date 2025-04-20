@@ -40,13 +40,7 @@
                                     "failure" { "❌" + [char]0x200B }
                                     "cancelled" { "⛔" + [char]0x200B }
                                     "skipped" { "⚠️" + [char]0x200B }
-                                    default {
-                                    switch ($_.Status) {
-                                    "in_progress" { "⏳" + [char]0x200B }
-                                    "queued" { "🕐" + [char]0x200B }
-                                    default { "❓" + [char]0x200B }
-                                    }
-                                    }
+                                    default { $_.Conclusion }
                                     }
                                 </ScriptBlock>
                             </TableColumnItem>

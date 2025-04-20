@@ -5,18 +5,8 @@
 
         .DESCRIPTION
         This function retrieves a setting value from the specified GitHub context. If a value is provided, it
-        returns that value; otherwise, it will extract the value from the given context object if provided. As a last resort,
-        it will return the default value from the GitHub configuration. This is useful for resolving API-related settings dynamically.
-
-        .EXAMPLE
-        Resolve-GitHubContextSetting -Name 'Repository' -Value 'MyRepo'
-
-        Output:
-        ```powershell
-        MyRepo
-        ```
-
-        Returns the provided value 'MyRepo' for the 'Repository' setting.
+        returns that value; otherwise, it extracts the value from the given context object. This is useful for
+        resolving API-related settings dynamically.
 
         .EXAMPLE
         Resolve-GitHubContextSetting -Name 'Repository' -Context $GitHubContext
@@ -27,16 +17,6 @@
         ```
 
         Retrieves the 'Repository' setting from the provided GitHub context object.
-
-        .EXAMPLE
-        Resolve-GitHubContextSetting -Name 'ApiBaseUrl'
-
-        Output:
-        ```powershell
-        https://api.github.com
-        ```
-
-        Returns the default value for the 'ApiBaseUrl' setting from the GitHub configuration when no value or context is provided.
 
         .LINK
         https://psmodule.io/GitHub/Functions/Resolve-GitHubContextSetting
@@ -50,32 +30,16 @@
 
         # The value to use for the setting. If not provided, the value will be resolved from the context.
         [Parameter()]
-        [object] $Value,
+        [string] $Value,
 
         # The context to resolve into an object. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [object] $Context
     )
 
-    if ($PSBoundParameters.ContainsKey('Value') -and -not [string]::IsNullOrEmpty($Value)) {
-        Write-Debug "[$Name] - [$Value] - Provided value"
-        return $Value
+    if ([string]::IsNullOrEmpty($Value)) {
+        $Value = $Context.$Name
     }
-    if ($PSBoundParameters.ContainsKey('Context') -and -not [string]::IsNullOrEmpty($Context)) {
-        if ($Context.PSObject.Properties.GetEnumerator().Name -contains $Name) {
-            Write-Debug "[$Name] - [$Context] - Context value"
-            return $Context.$Name
-        }
-    }
-    if (-not [string]::IsNullOrEmpty($Script:GitHub.Config.$Name)) {
-        Write-Debug "[$Name] - [$($script:GitHub.Config.$Name)] - Default value from GitHub.Config"
-        return $script:GitHub.Config.$Name
-    }
-    if (-not [string]::IsNullOrEmpty($Script:GitHub.DefaultConfig.$Name)) {
-        Write-Debug "[$Name] - [$($script:GitHub.DefaultConfig.$Name)] - Default value from GitHub.DefaultConfig"
-        return $script:GitHub.DefaultConfig.$Name
-    }
-    Write-Debug "[$Name] - No value found, returning"
-    return $null
+    return $Value
 }
