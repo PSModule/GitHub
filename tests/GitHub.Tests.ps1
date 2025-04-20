@@ -746,6 +746,22 @@ Describe 'Anonymous - Functions that can run anonymously' {
         }
         $rateLimit | Should -Not -BeNullOrEmpty
     }
+    It 'Invoke-GitHubAPI - Using -Anonymous' {
+        $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit' -Anonymous
+
+        LogGroup 'Rate Limit' {
+            Write-Host ($rateLimit | Format-List | Out-String)
+        }
+        $rateLimit | Should -Not -BeNullOrEmpty
+    }
+    It 'Invoke-GitHubAPI - Using -Context Anonymous' {
+        $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit' -Context Anonymous
+
+        LogGroup 'Rate Limit' {
+            Write-Host ($rateLimit | Format-List | Out-String)
+        }
+        $rateLimit | Should -Not -BeNullOrEmpty
+    }
     It 'Get-GithubMeta' {
         $meta = Get-GitHubMeta -Anonymous
         LogGroup 'Meta' {

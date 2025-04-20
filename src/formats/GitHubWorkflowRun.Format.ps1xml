@@ -35,19 +35,13 @@
                         <TableColumnItems>
                             <TableColumnItem>
                                 <ScriptBlock>
-                                    switch -Wildcard ($_.Conclusion) {
-                                    "success" { "✅" + [char]0x200B }
-                                    "failure" { "❌" + [char]0x200B }
-                                    "cancelled" { "⛔" + [char]0x200B }
-                                    "skipped" { "⚠️" + [char]0x200B }
-                                    default {
-                                    switch ($_.Status) {
-                                    "in_progress" { "⏳" + [char]0x200B }
-                                    "queued" { "🕐" + [char]0x200B }
-                                    default { "❓" + [char]0x200B }
-                                    }
-                                    }
-                                    }
+                                    if ($_.Conclusion -eq "success") { "✅" + [char]0x200B }
+                                    elseif ($_.Conclusion -eq "failure") { "❌" + [char]0x200B }
+                                    elseif ($_.Conclusion -eq "cancelled") { "⛔" + [char]0x200B }
+                                    elseif ($_.Conclusion -eq "skipped") { "⚠️" + [char]0x200B }
+                                    elseif ($_.Status -eq "in_progress") { "⏳" + [char]0x200B }
+                                    elseif ($_.Status -eq "queued") { "🕐" + [char]0x200B }
+                                    else { "❓" + [char]0x200B }
                                 </ScriptBlock>
                             </TableColumnItem>
                             <TableColumnItem>
