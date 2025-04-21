@@ -172,8 +172,8 @@
             is_template                 = [bool]$IsTemplate
             team_id                     = $TeamId
             auto_init                   = [bool]$AddReadme
-            gitignore_template          = $Gitignore
-            license_template            = $License
+            # gitignore_template          = $Gitignore
+            # license_template            = $License
             allow_squash_merge          = [bool]$AllowSquashMerge
             allow_merge_commit          = [bool]$AllowMergeCommit
             allow_rebase_merge          = [bool]$AllowRebaseMerge
