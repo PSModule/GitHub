@@ -59,7 +59,7 @@
 
         # Specifies the types of repositories you want returned.
         [Parameter(ParameterSetName = 'List repositories for the authenticated user by type')]
-        [string] $Type,
+        [string] $Type = 'owner',
 
         # Limit results to repositories with the specified visibility.
         [Parameter(ParameterSetName = 'List repositories for the authenticated user by affiliation and visibility')]
@@ -101,11 +101,10 @@
             'List repositories for the authenticated user by type' {
                 $params = @{
                     Context = $Context
+                    Type    = $Type
                     PerPage = $PerPage
                 }
-                $params['Affiliation'] = $Affiliation
-                $params['Visibility'] = $Visibility
-                $params['Type'] = $Type
+                $params | Remove-HashtableEntry -NullOrEmptyValues
                 Write-Verbose ($params | Format-List | Out-String)
                 Get-GitHubMyRepositories @params
             }

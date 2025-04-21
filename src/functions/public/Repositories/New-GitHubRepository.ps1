@@ -36,7 +36,7 @@
 
         .EXAMPLE
         $params = @{
-            Owner                    = 'PSModule'
+            Organization                    = 'PSModule'
             Name                     = 'Hello-World'
             Description              = 'This is your first repository'
             Homepage                 = 'https://github.com'
@@ -59,7 +59,7 @@
         $params = @{
             TemplateOwner      = 'GitHub'
             TemplateRepository = 'octocat'
-            Owner              = 'PSModule'
+            Organization              = 'PSModule'
             Name               = 'MyNewRepo'
             IncludeAllBranches = $true
             Description        = 'My new repo'
@@ -73,7 +73,7 @@
         $params = @{
             ForkOwner         = 'octocat'
             ForkRepo          = 'Hello-World'
-            Owner             = 'PSModule'
+            Organization             = 'PSModule'
             Name              = 'MyNewRepo'
             DefaultBranchOnly = $true
         }
@@ -306,7 +306,7 @@
             'org' {
                 $params = @{
                     Context                  = $Context
-                    Owner                    = $Owner
+                    Organization             = $Owner
                     Name                     = $Name
                     Description              = $Description
                     Homepage                 = $Homepage
