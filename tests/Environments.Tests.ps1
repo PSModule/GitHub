@@ -45,10 +45,10 @@ Describe 'Environments' {
             $repoName = "$repoPrefix-$guid"
             switch ($OwnerType) {
                 'user' {
-                    New-GitHubRepository -Name $repoName -AllowSquashMerge -Debug
+                    New-GitHubRepository -Name $repoName -AllowSquashMerge -Debug -Confirm:$false
                 }
                 'organization' {
-                    New-GitHubRepository -Organization $owner -Name $repoName -AllowSquashMerge -Debug
+                    New-GitHubRepository -Organization $owner -Name $repoName -AllowSquashMerge -Debug -Confirm:$false
                 }
             }
         }
