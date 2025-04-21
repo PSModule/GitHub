@@ -79,7 +79,7 @@
         $body = @{
             organization        = $Organization
             name                = $Name
-            default_branch_only = $DefaultBranchOnly
+            default_branch_only = -not $IncludeAllBranches
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
