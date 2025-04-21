@@ -306,7 +306,7 @@
             'org' {
                 $params = @{
                     Context                  = $Context
-                    Organization             = $Owner
+                    Organization             = $Organization
                     Name                     = $Name
                     Description              = $Description
                     Homepage                 = $Homepage
