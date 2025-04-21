@@ -48,7 +48,7 @@ Describe 'Environments' {
                     New-GitHubRepository -Name $repoName -AllowSquashMerge
                 }
                 'organization' {
-                    New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
+                    New-GitHubRepository -Organization $owner -Name $repoName -AllowSquashMerge
                 }
             }
         }
@@ -59,7 +59,7 @@ Describe 'Environments' {
                     Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
                 }
                 'organization' {
-                    Get-GitHubRepository -Owner $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
                 }
             }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent

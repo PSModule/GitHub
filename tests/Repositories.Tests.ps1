@@ -46,7 +46,7 @@ Describe 'Repositories' {
                     Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
                 }
                 'organization' {
-                    Get-GitHubRepository -Owner $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
                 }
             }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
@@ -59,7 +59,7 @@ Describe 'Repositories' {
                     New-GitHubRepository -Name $repoName -AllowSquashMerge
                 }
                 'organization' {
-                    New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
+                    New-GitHubRepository -Organization $owner -Name $repoName -AllowSquashMerge
                 }
             }
         }
@@ -85,14 +85,14 @@ Describe 'Repositories' {
             $repos | Should -Not -BeNullOrEmpty
         }
         It 'Get-GitHubRepository - Gets a specific repository' -Skip:($OwnerType -eq 'repository') {
-            $repo = Get-GitHubRepository -Owner 'PSModule' -Name 'GitHub'
+            $repo = Get-GitHubRepository -Organization 'PSModule' -Name 'GitHub'
             LogGroup 'Repository' {
                 Write-Host ($repo | Format-List | Out-String)
             }
             $repo | Should -Not -BeNullOrEmpty
         }
         It 'Get-GitHubRepository - Gets all repositories from a organization' -Skip:($OwnerType -eq 'repository') {
-            $repos = Get-GitHubRepository -Owner 'PSModule'
+            $repos = Get-GitHubRepository -Organization 'PSModule'
             LogGroup 'Repositories' {
                 Write-Host ($repos | Format-Table | Out-String)
             }
@@ -107,7 +107,7 @@ Describe 'Repositories' {
         }
         It 'Remove-GitHubRepository - Removes all repositories' -Skip:($OwnerType -eq 'repository') {
             LogGroup 'Repositories' {
-                $repos = Get-GitHubRepository -Owner $Owner -Name $repoName
+                $repos = Get-GitHubRepository -Organization $Owner -Name $repoName
                 Write-Host ($repos | Format-List | Out-String)
             }
             Remove-GitHubRepository -Owner $Owner -Name $repoName -Confirm:$false
@@ -116,7 +116,7 @@ Describe 'Repositories' {
             if ($OwnerType -eq 'user') {
                 $repos = Get-GitHubRepository -Username $Owner | Where-Object { $_.name -like "$repoName*" }
             } else {
-                $repos = Get-GitHubRepository -Owner $Owner | Where-Object { $_.name -like "$repoName*" }
+                $repos = Get-GitHubRepository -Organization $Owner | Where-Object { $_.name -like "$repoName*" }
             }
             LogGroup 'Repositories' {
                 Write-Host ($repos | Format-List | Out-String)
