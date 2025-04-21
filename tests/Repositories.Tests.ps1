@@ -43,7 +43,7 @@ Describe 'Repositories' {
         AfterAll {
             switch ($OwnerType) {
                 'user' {
-                    Get-GitHubRepository -Affiliation owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                    Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
                 }
                 'organization' {
                     Get-GitHubRepository -Owner $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
@@ -78,7 +78,7 @@ Describe 'Repositories' {
             $repos | Should -Not -BeNullOrEmpty
         }
         It 'Get-GitHubRepository - Gets the public repos where the authenticated user is owner' -Skip:($OwnerType -ne 'user') {
-            $repos = Get-GitHubRepository -Visibility 'public' -Affiliation 'owner'
+            $repos = Get-GitHubRepository -Visibility 'public'
             LogGroup 'Repositories' {
                 Write-Host ($repos | Format-Table | Out-String)
             }

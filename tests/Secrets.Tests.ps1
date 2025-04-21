@@ -77,7 +77,7 @@ Describe 'Secrets' {
         AfterAll {
             switch ($OwnerType) {
                 'user' {
-                    Get-GitHubRepository -Affiliation owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                    Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
                 }
                 'organization' {
                     $orgSecrets = Get-GitHubSecret -Owner $owner

@@ -57,7 +57,7 @@
         [List repositories for the authenticated user](https://docs.github.com/rest/repos/repos#list-repositories-for-the-authenticated-user)
     #>
     [OutputType([GitHubRepository])]
-    [CmdletBinding(DefaultParameterSetName = 'Type')]
+    [CmdletBinding(DefaultParameterSetName = 'Aff-Vis')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Private function, not exposed to user.')]
     param(
         # Limit results to repositories with the specified visibility.
