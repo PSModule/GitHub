@@ -57,6 +57,10 @@
         [Parameter(Mandatory, ParameterSetName = 'Get a repository by name')]
         [string] $Name,
 
+        # Specifies the types of repositories you want returned.
+        [Parameter(ParameterSetName = 'List repositories for the authenticated user by type')]
+        [string] $Type,
+
         # Limit results to repositories with the specified visibility.
         [Parameter(ParameterSetName = 'List repositories for the authenticated user by affiliation and visibility')]
         [ValidateSet('all', 'public', 'private')]
