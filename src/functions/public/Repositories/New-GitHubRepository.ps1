@@ -58,7 +58,7 @@
         .EXAMPLE
         $params = @{
             TemplateOwner      = 'GitHub'
-            TemplateRepo       = 'octocat'
+            TemplateRepository = 'octocat'
             Owner              = 'PSModule'
             Name               = 'MyNewRepo'
             IncludeAllBranches = $true
@@ -81,13 +81,6 @@
 
         Creates a new repository named `MyNewRepo` as a fork of `Hello-World` owned by `octocat`.
         Only the default branch will be forked.
-
-        .PARAMETER GitignoreTemplate
-        Desired language or platform .gitignore template to apply. Use the name of the template without the extension. For example, "Haskell".
-
-        .PARAMETER LicenseTemplate
-        Choose an open source license template that best suits your needs, and then use the license keyword as the license_template string.
-        For example, "mit" or "mpl-2.0".
 
         .OUTPUTS
         GitHubRepository
@@ -191,6 +184,16 @@
         [Parameter(ParameterSetName = 'org')]
         [switch] $AddReadme,
 
+        # The desired language or platform to apply to the .gitignore.
+        [Parameter(ParameterSetName = 'user')]
+        [Parameter(ParameterSetName = 'org')]
+        [string] $Gitignore,
+
+        # The license keyword of the open source license for this repository.
+        [Parameter(ParameterSetName = 'user')]
+        [Parameter(ParameterSetName = 'org')]
+        [string] $License,
+
         # Whether to allow squash merges for pull requests.
         [Parameter(ParameterSetName = 'user')]
         [Parameter(ParameterSetName = 'org')]
@@ -292,8 +295,8 @@
                     SquashMergeCommitMessage = $SquashMergeCommitMessage
                     MergeCommitTitle         = $MergeCommitTitle
                     MergeCommitMessage       = $MergeCommitMessage
-                    Gitignore                = $PSBoundParameters['Gitignore']
-                    License                  = $PSBoundParameters['License']
+                    Gitignore                = $Gitignore
+                    License                  = $License
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues
                 if ($PSCmdlet.ShouldProcess("repository for user [$Name]", 'Create')) {
@@ -323,8 +326,8 @@
                     SquashMergeCommitMessage = $SquashMergeCommitMessage
                     MergeCommitTitle         = $MergeCommitTitle
                     MergeCommitMessage       = $MergeCommitMessage
-                    Gitignore                = $PSBoundParameters['Gitignore']
-                    License                  = $PSBoundParameters['License']
+                    Gitignore                = $Gitignore
+                    License                  = $License
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues
                 if ($PSCmdlet.ShouldProcess("repository for organization [$Owner/$Name]", 'Create')) {
@@ -336,7 +339,7 @@
                     $params = @{
                         Context            = $Context
                         TemplateOwner      = $TemplateOwner
-                        TemplateRepo       = $TemplateRepository
+                        TemplateRepository = $TemplateRepository
                         Owner              = $Owner
                         Name               = $Name
                         IncludeAllBranches = $IncludeAllBranches

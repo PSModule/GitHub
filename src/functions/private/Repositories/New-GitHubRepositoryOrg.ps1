@@ -94,7 +94,7 @@
         [Parameter()]
         [string] $Gitignore,
 
-        #The license keyword of the open source license for this repository.
+        # The license keyword of the open source license for this repository.
         [Parameter()]
         [string] $License,
 
