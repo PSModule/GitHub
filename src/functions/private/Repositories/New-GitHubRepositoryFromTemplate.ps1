@@ -65,9 +65,10 @@
         [Parameter()]
         [switch] $IncludeAllBranches,
 
-        # Either true to create a new private repository or false to create a new public one.
+        # The visibility of the repository.
         [Parameter()]
-        [switch] $Private,
+        [ValidateSet('public', 'private')]
+        [string] $Visibility = 'public',
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -87,7 +88,7 @@
             name                 = $Name
             description          = $Description
             include_all_branches = [bool]$IncludeAllBranches
-            private              = $Private
+            private              = $Visibility -eq 'private'
         }
 
         $inputObject = @{

@@ -344,7 +344,7 @@
                         Name               = $Name
                         IncludeAllBranches = $IncludeAllBranches
                         Description        = $Description
-                        Private            = $Visibility -eq 'private'
+                        Visibility         = $Visibility
                     }
                     $params | Remove-HashtableEntry -NullOrEmptyValues
                     New-GitHubRepositoryFromTemplate @params
