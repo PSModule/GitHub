@@ -166,6 +166,7 @@
             has_issues                  = [bool]$HasIssues
             has_projects                = [bool]$HasProjects
             has_wiki                    = [bool]$HasWiki
+            has_discussions             = [bool]$HasDiscussions
             is_template                 = [bool]$IsTemplate
             team_id                     = $TeamId
             auto_init                   = [bool]$AddReadme
