@@ -183,7 +183,8 @@
             squash_merge_commit_message = $SquashMergeCommitMessage
             merge_commit_title          = $MergeCommitTitle
             merge_commit_message        = $MergeCommitMessage
-            visibility                  = $Visibility
+            private                     = $Visibility -eq 'private'
+            # visibility                  = $Visibility
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
