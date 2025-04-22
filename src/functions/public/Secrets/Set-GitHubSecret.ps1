@@ -107,7 +107,7 @@
         }
         $publicKeyParams | Remove-HashtableEntry -NullOrEmptyValues
         $publicKey = Get-GitHubPublicKey @publicKeyParams
-        if ($Value -is [secretstring]) {
+        if ($Value -is [securestring]) {
             $Value = $Value | ConvertFrom-SecureString -AsPlainText
         }
         $encryptedValue = ConvertTo-SodiumSealedBox -PublicKey $publicKey.Key -Message $Value
