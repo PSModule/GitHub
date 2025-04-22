@@ -70,7 +70,7 @@
         [Parameter(Mandatory)]
         [string] $Name,
 
-        # The secret value to be stored.
+        # The secret value to be stored, as a SecureString or a plain string (less secure).
         [Parameter()]
         [object] $Value = (Read-Host -AsSecureString -Prompt 'Enter the secret value'),
 
@@ -131,9 +131,6 @@
             }
             'Environment' {
                 Set-GitHubSecretOnEnvironment @params
-                break
-            }
-            'AuthenticatedUser' {
                 break
             }
         }

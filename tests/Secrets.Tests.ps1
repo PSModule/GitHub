@@ -302,10 +302,22 @@ Describe 'Secrets' {
                 }
             }
 
-            It 'Set-GitHubSecret' {
+            It 'Set-GitHubSecret - String' {
                 $param = @{
                     Name  = "$secretPrefix`TestSecret"
                     Value = 'TestValue'
+                }
+                $result = Set-GitHubSecret @param @scope
+                $result = Set-GitHubSecret @param @scope
+                $result | Should -Not -BeNullOrEmpty
+                $result | Should -BeOfType [GitHubSecret]
+                $result.Scope | Should -Be 'Repository'
+            }
+
+            It 'Set-GitHubSecret - SecureString' {
+                $param = @{
+                    Name  = "$secretPrefix`TestSecret"
+                    Value = ConvertTo-SecureString -String 'TestValue' -AsPlainText
                 }
                 $result = Set-GitHubSecret @param @scope
                 $result = Set-GitHubSecret @param @scope
