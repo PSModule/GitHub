@@ -80,13 +80,16 @@ Describe 'Secrets' {
                     Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
                 }
                 'organization' {
-                    $orgSecrets = Get-GitHubSecret -Owner $owner
+                    $orgSecrets = Get-GitHubSecret -Owner $owner | Where-Object { $_.Name -like "$secretPrefix*" }
                     LogGroup 'Secrets to remove' {
                         Write-Host "$($orgSecrets | Format-List | Out-String)"
                     }
                     $orgSecrets | Remove-GitHubSecret
-                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } |
-                        Remove-GitHubRepository -Confirm:$false
+                    LogGroup 'Repos to remove' {
+                        $reposToRemove = Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" }
+                        Write-Host "$($reposToRemove | Format-List | Out-String)"
+                        $reposToRemove | Remove-GitHubRepository -Confirm:$false
+                    }
                 }
             }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
@@ -185,6 +188,27 @@ Describe 'Secrets' {
                     Write-Host "$($result | Select-Object * | Format-List | Out-String)"
                 }
                 $result | Should -Not -BeNullOrEmpty
+            }
+
+            It 'Remove-GitHubSecret by name parameter' {
+                $testSecretName = "$secretPrefix`RemoveByName"
+                LogGroup 'Create secret for removal test' {
+                    $createResult = Set-GitHubSecret @scope -Name $testSecretName -Value 'TestForRemoval'
+                    Write-Host "$($createResult | Format-List | Out-String)"
+                }
+                LogGroup 'Verify secret exists' {
+                    $before = Get-GitHubSecret @scope -Name $testSecretName
+                    Write-Host "$($before | Format-List | Out-String)"
+                    $before | Should -Not -BeNullOrEmpty
+                }
+                LogGroup 'Remove by name' {
+                    Remove-GitHubSecret @scope -Name $testSecretName
+                }
+                LogGroup 'Verify secret removed' {
+                    $after = Get-GitHubSecret @scope -Name $testSecretName
+                    Write-Host "$($after | Format-List | Out-String)"
+                    $after | Should -BeNullOrEmpty
+                }
             }
 
             It 'Remove-GitHubSecret' {
@@ -353,6 +377,27 @@ Describe 'Secrets' {
                 $result | Should -Not -BeNullOrEmpty
             }
 
+            It 'Remove-GitHubSecret by name parameter' {
+                $testSecretName = "$secretPrefix`RemoveByName"
+                LogGroup 'Create secret for removal test' {
+                    $createResult = Set-GitHubSecret @scope -Name $testSecretName -Value 'TestForRemoval'
+                    Write-Host "$($createResult | Format-List | Out-String)"
+                }
+                LogGroup 'Verify secret exists' {
+                    $before = Get-GitHubSecret @scope -Name $testSecretName
+                    Write-Host "$($before | Format-List | Out-String)"
+                    $before | Should -Not -BeNullOrEmpty
+                }
+                LogGroup 'Remove by name' {
+                    Remove-GitHubSecret @scope -Name $testSecretName
+                }
+                LogGroup 'Verify secret removed' {
+                    $after = Get-GitHubSecret @scope -Name $testSecretName
+                    Write-Host "$($after | Format-List | Out-String)"
+                    $after | Should -BeNullOrEmpty
+                }
+            }
+
             It 'Remove-GitHubSecret' {
                 $before = Get-GitHubSecret @scope -Name "*$os*"
                 LogGroup 'Secrets - Before' {
@@ -440,6 +485,27 @@ Describe 'Secrets' {
                     Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
                 }
                 $result | Should -Not -BeNullOrEmpty
+            }
+
+            It 'Remove-GitHubSecret by name parameter' {
+                $testSecretName = "$secretPrefix`RemoveByName"
+                LogGroup 'Create secret for removal test' {
+                    $createResult = Set-GitHubSecret @scope -Name $testSecretName -Value 'TestForRemoval'
+                    Write-Host "$($createResult | Format-List | Out-String)"
+                }
+                LogGroup 'Verify secret exists' {
+                    $before = Get-GitHubSecret @scope -Name $testSecretName
+                    Write-Host "$($before | Format-List | Out-String)"
+                    $before | Should -Not -BeNullOrEmpty
+                }
+                LogGroup 'Remove by name' {
+                    Remove-GitHubSecret @scope -Name $testSecretName
+                }
+                LogGroup 'Verify secret removed' {
+                    $after = Get-GitHubSecret @scope -Name $testSecretName
+                    Write-Host "$($after | Format-List | Out-String)"
+                    $after | Should -BeNullOrEmpty
+                }
             }
 
             It 'Remove-GitHubSecret' {

@@ -78,9 +78,16 @@ Describe 'Variables' {
                     Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
                 }
                 'organization' {
-                    Get-GitHubVariable -Owner $owner | Remove-GitHubVariable
-                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } |
-                        Remove-GitHubRepository -Confirm:$false
+                    $variablesToRemove = Get-GitHubVariable -Owner $owner | Where-Object { $_.Name -like "$variablePrefix*" }
+                    LogGroup 'Secrets to remove' {
+                        Write-Host "$($variablesToRemove | Format-List | Out-String)"
+                    }
+                    $variablesToRemove | Remove-GitHubVariable
+                    LogGroup 'Repos to remove' {
+                        $reposToRemove = Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" }
+                        Write-Host "$($reposToRemove | Format-List | Out-String)"
+                        $reposToRemove | Remove-GitHubRepository -Confirm:$false
+                    }
                 }
             }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
