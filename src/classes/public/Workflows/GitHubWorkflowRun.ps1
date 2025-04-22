@@ -37,7 +37,7 @@
 
     # Attempt number of the run, 1 for first attempt and higher if the workflow was re-run.
     # Example: 1
-    [System.Nullable[int]] $RunAttempt
+    [uint] $RunAttempt
 
     # Array of referenced workflows.
     # Example: (array of objects, nullable)
@@ -59,13 +59,9 @@
     # Example: 5
     [UInt64] $WorkflowID
 
-    # The URL to the workflow run API endpoint.
-    # Example: "https://api.github.com/repos/github/hello-world/actions/runs/5"
-    [string] $Url
-
     # The HTML URL to view the workflow run.
     # Example: "https://github.com/github/hello-world/suites/4"
-    [string] $HtmlUrl
+    [string] $Url
 
     # Pull requests associated with the workflow run.
     # Example: (array of pull request objects, nullable)
@@ -73,23 +69,23 @@
 
     # The creation timestamp of the workflow run.
     # Example: "2023-01-01T12:00:00Z"
-    [string] $CreatedAt
+    [System.Nullable[datetime]] $CreatedAt
 
     # The last updated timestamp of the workflow run.
     # Example: "2023-01-01T12:05:00Z"
-    [string] $UpdatedAt
+    [System.Nullable[datetime]] $UpdatedAt
 
     # The user who triggered the workflow run.
     # Example: (simple-user object)
-    [PSCustomObject] $Actor
+    [GitHubUser] $Actor
 
     # The user who actually triggered the workflow run (may differ from Actor).
     # Example: (simple-user object)
-    [PSCustomObject] $TriggeringActor
+    [GitHubUser] $TriggeringActor
 
     # The start time of the latest run. Resets on re-run.
     # Example: "2023-01-01T12:01:00Z"
-    [string] $RunStartedAt
+    [System.Nullable[datetime]] $RunStartedAt
 
     # The head commit details.
     # Example: (nullable-simple-commit object)
@@ -97,7 +93,7 @@
 
     # The head repository of the workflow run.
     # Example: (minimal-repository object)
-    [PSCustomObject] $HeadRepository
+    [GitHubRepository] $HeadRepository
 
     # The event-specific title associated with the run or the run-name if set.
     # Example: "Simple Workflow"
@@ -106,11 +102,14 @@
     GitHubWorkflowRun() {}
 
     GitHubWorkflowRun([PSCustomObject] $Object) {
+        # From GitHubNode
         $this.ID = $_.id
+        $this.NodeID = $_.node_id
+
+        # From GitHubWorkflowRun
         $this.Name = $_.name
         $this.Owner = [GitHubOwner]::new($Object.repository.owner)
         $this.Repository = [GitHubRepository]::new($Object.repository)
-        $this.NodeID = $_.node_id
         $this.CheckSuiteID = $_.check_suite_id
         $this.CheckSuiteNodeID = $_.check_suite_node_id
         $this.HeadBranch = $_.head_branch

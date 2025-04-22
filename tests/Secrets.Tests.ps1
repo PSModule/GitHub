@@ -49,9 +49,9 @@ Describe 'Secrets' {
                     $repo3 = New-GitHubRepository -Name "$repoName-3" -AllowSquashMerge
                 }
                 'organization' {
-                    $repo = New-GitHubRepository -Owner $owner -Name $repoName -AllowSquashMerge
-                    $repo2 = New-GitHubRepository -Owner $owner -Name "$repoName-2" -AllowSquashMerge
-                    $repo3 = New-GitHubRepository -Owner $owner -Name "$repoName-3" -AllowSquashMerge
+                    $repo = New-GitHubRepository -Organization $owner -Name $repoName -AllowSquashMerge
+                    $repo2 = New-GitHubRepository -Organization $owner -Name "$repoName-2" -AllowSquashMerge
+                    $repo3 = New-GitHubRepository -Organization $owner -Name "$repoName-3" -AllowSquashMerge
                     LogGroup "Org secret - [$secretName]" {
                         $params = @{
                             Owner                = $owner
@@ -77,7 +77,7 @@ Describe 'Secrets' {
         AfterAll {
             switch ($OwnerType) {
                 'user' {
-                    Get-GitHubRepository -Affiliation owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                    Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
                 }
                 'organization' {
                     $orgSecrets = Get-GitHubSecret -Owner $owner
@@ -85,7 +85,8 @@ Describe 'Secrets' {
                         Write-Host "$($orgSecrets | Format-List | Out-String)"
                     }
                     $orgSecrets | Remove-GitHubSecret
-                    Get-GitHubRepository -Owner $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } |
+                        Remove-GitHubRepository -Confirm:$false
                 }
             }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent

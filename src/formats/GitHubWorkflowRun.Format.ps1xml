@@ -58,11 +58,9 @@
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>CreatedAt</PropertyName>
-                                <Alignment>Right</Alignment>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>UpdatedAt</PropertyName>
-                                <Alignment>Right</Alignment>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>

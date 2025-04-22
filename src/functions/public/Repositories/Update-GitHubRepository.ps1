@@ -20,6 +20,9 @@
         }
         Update-GitHubRepository @params
 
+        .INPUTS
+        GitHubRepository
+
         .OUTPUTS
         GitHubRepository
 
@@ -33,11 +36,11 @@
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Name,
 
         # The name of the repository.
@@ -115,7 +118,7 @@
         # Either true to always allow a pull request head branch that is behind its base branch
         # to be updated even if it is not required to be up to date before merging, or false otherwise.
         [Parameter()]
-        [switch] $AllowUpdateMerge,
+        [switch] $AllowUpdateBranch,
 
         # The default value for a squash merge commit title:
         # - PR_TITLE - default to the pull request's title.
@@ -181,10 +184,6 @@
             visibility                      = $Visibility
             private                         = $Visibility -eq 'private'
             default_branch                  = $DefaultBranch
-            squash_merge_commit_title       = $SquashMergeCommitTitle
-            squash_merge_commit_message     = $SquashMergeCommitMessage
-            merge_commit_title              = $MergeCommitTitle
-            merge_commit_message            = $MergeCommitMessage
             advanced_security               = $EnableAdvancedSecurity ? @{
                 status = $EnableAdvancedSecurity ? 'enabled' : 'disabled'
             } : $null
@@ -199,10 +198,14 @@
             has_wiki                        = $HasWiki ? $HasWiki : $null
             is_template                     = $IsTemplate ? $IsTemplate : $null
             allow_squash_merge              = $AllowSquashMerge ? $AllowSquashMerge : $null
+            squash_merge_commit_title       = $SquashMergeCommitTitle
+            squash_merge_commit_message     = $SquashMergeCommitMessage
             allow_merge_commit              = $AllowMergeCommit ? $AllowMergeCommit : $null
+            merge_commit_title              = $MergeCommitTitle
+            merge_commit_message            = $MergeCommitMessage
             allow_rebase_merge              = $AllowRebaseMerge ? $AllowRebaseMerge : $null
             allow_auto_merge                = $AllowAutoMerge ? $AllowAutoMerge : $null
-            allow_update_branch             = $AllowUpdateMerge ? $AllowUpdateMerge : $null
+            allow_update_branch             = $AllowUpdateBranch ? $AllowUpdateBranch : $null
             delete_branch_on_merge          = $DeleteBranchOnMerge ? $DeleteBranchOnMerge : $null
             archived                        = $Archived ? $Archived : $null
             allow_forking                   = $AllowForking ? $AllowForking : $null
