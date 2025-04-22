@@ -197,6 +197,27 @@ Describe 'Variables' {
                 $result | Should -Not -BeNullOrEmpty
             }
 
+            It 'Remove-GitHubVariable by name parameter' {
+                $testVarName = "$variablePrefix`RemoveByName"
+                LogGroup 'Create variable for removal test' {
+                    $createResult = Set-GitHubVariable @scope -Name $testVarName -Value 'TestForRemoval'
+                    Write-Host "$($createResult | Format-List | Out-String)"
+                }
+                LogGroup 'Verify variable exists' {
+                    $before = Get-GitHubVariable @scope -Name $testVarName
+                    Write-Host "$($before | Format-List | Out-String)"
+                    $before | Should -Not -BeNullOrEmpty
+                }
+                LogGroup 'Remove by name' {
+                    Remove-GitHubVariable @scope -Name $testVarName
+                }
+                LogGroup 'Verify variable removed' {
+                    $after = Get-GitHubVariable @scope -Name $testVarName
+                    Write-Host "$($after | Format-List | Out-String)"
+                    $after | Should -BeNullOrEmpty
+                }
+            }
+
             It 'Remove-GitHubVariable' {
                 $testVarName = "$variablePrefix`TestVariable*"
                 LogGroup 'Before remove' {
@@ -369,6 +390,27 @@ Describe 'Variables' {
                 $result | Should -Not -BeNullOrEmpty
             }
 
+            It 'Remove-GitHubVariable by name parameter' {
+                $testVarName = "$variablePrefix`RemoveByName"
+                LogGroup 'Create variable for removal test' {
+                    $createResult = Set-GitHubVariable @scope -Name $testVarName -Value 'TestForRemoval'
+                    Write-Host "$($createResult | Format-List | Out-String)"
+                }
+                LogGroup 'Verify variable exists' {
+                    $before = Get-GitHubVariable @scope -Name $testVarName
+                    Write-Host "$($before | Format-List | Out-String)"
+                    $before | Should -Not -BeNullOrEmpty
+                }
+                LogGroup 'Remove by name' {
+                    Remove-GitHubVariable @scope -Name $testVarName
+                }
+                LogGroup 'Verify variable removed' {
+                    $after = Get-GitHubVariable @scope -Name $testVarName
+                    Write-Host "$($after | Format-List | Out-String)"
+                    $after | Should -BeNullOrEmpty
+                }
+            }
+
             It 'Remove-GitHubVariable' {
                 $before = Get-GitHubVariable @scope -Name "*$os*"
                 LogGroup 'Variables - Before' {
@@ -473,6 +515,27 @@ Describe 'Variables' {
                     Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
                 }
                 $result | Should -Not -BeNullOrEmpty
+            }
+
+            It 'Remove-GitHubVariable by name parameter' {
+                $testVarName = "$variablePrefix`RemoveByName"
+                LogGroup 'Create variable for removal test' {
+                    $createResult = Set-GitHubVariable @scope -Name $testVarName -Value 'TestForRemoval'
+                    Write-Host "$($createResult | Format-List | Out-String)"
+                }
+                LogGroup 'Verify variable exists' {
+                    $before = Get-GitHubVariable @scope -Name $testVarName
+                    Write-Host "$($before | Format-List | Out-String)"
+                    $before | Should -Not -BeNullOrEmpty
+                }
+                LogGroup 'Remove by name' {
+                    Remove-GitHubVariable @scope -Name $testVarName
+                }
+                LogGroup 'Verify variable removed' {
+                    $after = Get-GitHubVariable @scope -Name $testVarName
+                    Write-Host "$($after | Format-List | Out-String)"
+                    $after | Should -BeNullOrEmpty
+                }
             }
 
             It 'Remove-GitHubVariable' {
