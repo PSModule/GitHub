@@ -48,7 +48,7 @@
         Justification = 'This check is performed in the private functions.'
     )]
     [OutputType([GitHubSecret])]
-    [CmdletBinding(DefaultParameterSetName = 'AuthenticatedUser', SupportsShouldProcess, ConfirmImpact = 'Low')]
+    [CmdletBinding(DefaultParameterSetName = 'Organization', SupportsShouldProcess, ConfirmImpact = 'Low')]
     param (
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory, ParameterSetName = 'Organization', ValueFromPipelineByPropertyName)]
@@ -70,9 +70,9 @@
         [Parameter(Mandatory)]
         [string] $Name,
 
-        # The secret value to be stored, provided as a SecureString.
-        [Parameter(Mandatory)]
-        [string] $Value,
+        # The secret value to be stored.
+        [Parameter()]
+        [object] $Value = (Read-Host -AsSecureString -Prompt 'Enter the secret value'),
 
         # The visibility of the secret when updating an organization secret.
         # Can be `private`, `selected`, or `all`.
@@ -107,6 +107,9 @@
         }
         $publicKeyParams | Remove-HashtableEntry -NullOrEmptyValues
         $publicKey = Get-GitHubPublicKey @publicKeyParams
+        if ($Value -is [secretstring]) {
+            $Value = $Value | ConvertFrom-SecureString -AsPlainText
+        }
         $encryptedValue = ConvertTo-SodiumSealedBox -PublicKey $publicKey.Key -Message $Value
 
         $params = $publicKeyParams + @{
