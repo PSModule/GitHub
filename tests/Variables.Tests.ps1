@@ -38,8 +38,7 @@ Describe 'Variables' {
             }
             $repoPrefix = "$testName-$os-$TokenType"
             $repoName = "$repoPrefix-$guid"
-            $variablePrefix = ("$testName`_$os`_$TokenType" -replace '-', '_').ToUpper()
-            $varName = ("$variablePrefix`_$guid" -replace '-', '_').ToUpper()
+            $variablePrefix = ("$testName`_$os`_$TokenType`_$guid" -replace '-', '_').ToUpper()
             $environmentName = "$testName-$os-$TokenType-$guid"
 
             switch ($OwnerType) {
@@ -52,10 +51,10 @@ Describe 'Variables' {
                     $repo = New-GitHubRepository -Organization $owner -Name $repoName -AllowSquashMerge
                     $repo2 = New-GitHubRepository -Organization $owner -Name "$repoName-2" -AllowSquashMerge
                     $repo3 = New-GitHubRepository -Organization $owner -Name "$repoName-3" -AllowSquashMerge
-                    LogGroup "Org variable - [$varName]" {
+                    LogGroup "Org variable - [$variablePrefix]" {
                         $params = @{
                             Owner                = $owner
-                            Name                 = $varName
+                            Name                 = $variablePrefix
                             Value                = 'organization'
                             Visibility           = 'selected'
                             SelectedRepositories = $repo.id
@@ -78,9 +77,16 @@ Describe 'Variables' {
                     Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
                 }
                 'organization' {
-                    Get-GitHubVariable -Owner $owner | Remove-GitHubVariable
-                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } |
-                        Remove-GitHubRepository -Confirm:$false
+                    $variablesToRemove = Get-GitHubVariable -Owner $owner | Where-Object { $_.Name -like "$variablePrefix*" }
+                    LogGroup 'Secrets to remove' {
+                        Write-Host "$($variablesToRemove | Format-List | Out-String)"
+                    }
+                    $variablesToRemove | Remove-GitHubVariable
+                    LogGroup 'Repos to remove' {
+                        $reposToRemove = Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" }
+                        Write-Host "$($reposToRemove | Format-List | Out-String)"
+                        $reposToRemove | Remove-GitHubRepository -Confirm:$false
+                    }
                 }
             }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
@@ -197,6 +203,27 @@ Describe 'Variables' {
                 $result | Should -Not -BeNullOrEmpty
             }
 
+            It 'Remove-GitHubVariable by name parameter' {
+                $testVarName = "$variablePrefix`RemoveByName"
+                LogGroup 'Create variable for removal test' {
+                    $createResult = Set-GitHubVariable @scope -Name $testVarName -Value 'TestForRemoval'
+                    Write-Host "$($createResult | Format-List | Out-String)"
+                }
+                LogGroup 'Verify variable exists' {
+                    $before = Get-GitHubVariable @scope -Name $testVarName
+                    Write-Host "$($before | Format-List | Out-String)"
+                    $before | Should -Not -BeNullOrEmpty
+                }
+                LogGroup 'Remove by name' {
+                    Remove-GitHubVariable @scope -Name $testVarName
+                }
+                LogGroup 'Verify variable removed' {
+                    $after = Get-GitHubVariable @scope -Name $testVarName
+                    Write-Host "$($after | Format-List | Out-String)"
+                    $after | Should -BeNullOrEmpty
+                }
+            }
+
             It 'Remove-GitHubVariable' {
                 $testVarName = "$variablePrefix`TestVariable*"
                 LogGroup 'Before remove' {
@@ -215,8 +242,8 @@ Describe 'Variables' {
 
             Context 'SelectedRepository' -Tag 'Flaky' {
                 It 'Get-GitHubVariableSelectedRepository - gets a list of selected repositories' {
-                    LogGroup "SelectedRepositories - [$varName]" {
-                        $result = Get-GitHubVariableSelectedRepository -Owner $owner -Name $varName
+                    LogGroup "SelectedRepositories - [$variablePrefix]" {
+                        $result = Get-GitHubVariableSelectedRepository -Owner $owner -Name $variablePrefix
                         Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
                     }
                     $result | Should -Not -BeNullOrEmpty
@@ -224,20 +251,20 @@ Describe 'Variables' {
                     $result | Should -HaveCount 1
                 }
                 It 'Add-GitHubVariableSelectedRepository - adds a repository to the list of selected repositories' {
-                    { Add-GitHubVariableSelectedRepository -Owner $owner -Name $varName -RepositoryID $repo2.id } | Should -Not -Throw
+                    { Add-GitHubVariableSelectedRepository -Owner $owner -Name $variablePrefix -RepositoryID $repo2.id } | Should -Not -Throw
                 }
                 It 'Add-GitHubVariableSelectedRepository - adds a repository to the list of selected repositories - idempotency test' {
-                    { Add-GitHubVariableSelectedRepository -Owner $owner -Name $varName -RepositoryID $repo2.id } | Should -Not -Throw
+                    { Add-GitHubVariableSelectedRepository -Owner $owner -Name $variablePrefix -RepositoryID $repo2.id } | Should -Not -Throw
                 }
                 It 'Add-GitHubVariableSelectedRepository - adds a repository to the list of selected repositories using pipeline' {
                     LogGroup 'Repo3' {
                         Write-Host "$($repo3 | Format-List | Out-String)"
                     }
-                    { $repo3 | Add-GitHubVariableSelectedRepository -Owner $owner -Name $varName } | Should -Not -Throw
+                    { $repo3 | Add-GitHubVariableSelectedRepository -Owner $owner -Name $variablePrefix } | Should -Not -Throw
                 }
                 It 'Get-GitHubVariableSelectedRepository - gets 3 repositories' {
-                    LogGroup "SelectedRepositories - [$varName]" {
-                        $result = Get-GitHubVariableSelectedRepository -Owner $owner -Name $varName
+                    LogGroup "SelectedRepositories - [$variablePrefix]" {
+                        $result = Get-GitHubVariableSelectedRepository -Owner $owner -Name $variablePrefix
                         Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
                     }
                     $result | Should -Not -BeNullOrEmpty
@@ -245,20 +272,20 @@ Describe 'Variables' {
                     $result | Should -HaveCount 3
                 }
                 It 'Remove-GitHubVariableSelectedRepository - removes a repository from the list of selected repositories' {
-                    { Remove-GitHubVariableSelectedRepository -Owner $owner -Name $varName -RepositoryID $repo2.id } | Should -Not -Throw
+                    { Remove-GitHubVariableSelectedRepository -Owner $owner -Name $variablePrefix -RepositoryID $repo2.id } | Should -Not -Throw
                 }
                 It 'Remove-GitHubVariableSelectedRepository - removes a repository from the list of selected repositories - idempotency test' {
-                    { Remove-GitHubVariableSelectedRepository -Owner $owner -Name $varName -RepositoryID $repo2.id } | Should -Not -Throw
+                    { Remove-GitHubVariableSelectedRepository -Owner $owner -Name $variablePrefix -RepositoryID $repo2.id } | Should -Not -Throw
                 }
                 It 'Remove-GitHubVariableSelectedRepository - removes a repository from the list of selected repositories using pipeline' {
                     LogGroup 'Repo3' {
                         Write-Host "$($repo3 | Format-List | Out-String)"
                     }
-                    { $repo3 | Remove-GitHubVariableSelectedRepository -Owner $owner -Name $varName } | Should -Not -Throw
+                    { $repo3 | Remove-GitHubVariableSelectedRepository -Owner $owner -Name $variablePrefix } | Should -Not -Throw
                 }
                 It 'Get-GitHubVariableSelectedRepository - gets 1 repository' {
-                    LogGroup "SelectedRepositories - [$varName]" {
-                        $result = Get-GitHubVariableSelectedRepository -Owner $owner -Name $varName
+                    LogGroup "SelectedRepositories - [$variablePrefix]" {
+                        $result = Get-GitHubVariableSelectedRepository -Owner $owner -Name $variablePrefix
                         Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
                     }
                     $result | Should -Not -BeNullOrEmpty
@@ -266,16 +293,16 @@ Describe 'Variables' {
                     $result | Should -HaveCount 1
                 }
                 It 'Set-GitHubVariableSelectedRepository - should set the selected repositories for the variable' {
-                    { Set-GitHubVariableSelectedRepository -Owner $owner -Name $varName -RepositoryID $repo.id, $repo2.id, $repo3.id } |
+                    { Set-GitHubVariableSelectedRepository -Owner $owner -Name $variablePrefix -RepositoryID $repo.id, $repo2.id, $repo3.id } |
                         Should -Not -Throw
                 }
                 It 'Set-GitHubVariableSelectedRepository - should set the selected repositories for the variable - idempotency test' {
-                    { Set-GitHubVariableSelectedRepository -Owner $owner -Name $varName -RepositoryID $repo.id, $repo2.id, $repo3.id } |
+                    { Set-GitHubVariableSelectedRepository -Owner $owner -Name $variablePrefix -RepositoryID $repo.id, $repo2.id, $repo3.id } |
                         Should -Not -Throw
                 }
                 It 'Get-GitHubVariableSelectedRepository - gets 3 repository' {
-                    $result = Get-GitHubVariableSelectedRepository -Owner $owner -Name $varName
-                    LogGroup "SelectedRepositories - [$varName]" {
+                    $result = Get-GitHubVariableSelectedRepository -Owner $owner -Name $variablePrefix
+                    LogGroup "SelectedRepositories - [$variablePrefix]" {
                         Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
                     }
                     $result | Should -Not -BeNullOrEmpty
@@ -291,7 +318,7 @@ Describe 'Variables' {
                     Owner      = $owner
                     Repository = $repoName
                 }
-                Set-GitHubVariable @scope -Name $varName -Value 'repository'
+                Set-GitHubVariable @scope -Name $variablePrefix -Value 'repository'
             }
             It 'Set-GitHubVariable' {
                 $name = "$variablePrefix`TestVariable"
@@ -369,6 +396,27 @@ Describe 'Variables' {
                 $result | Should -Not -BeNullOrEmpty
             }
 
+            It 'Remove-GitHubVariable by name parameter' {
+                $testVarName = "$variablePrefix`RemoveByName"
+                LogGroup 'Create variable for removal test' {
+                    $createResult = Set-GitHubVariable @scope -Name $testVarName -Value 'TestForRemoval'
+                    Write-Host "$($createResult | Format-List | Out-String)"
+                }
+                LogGroup 'Verify variable exists' {
+                    $before = Get-GitHubVariable @scope -Name $testVarName
+                    Write-Host "$($before | Format-List | Out-String)"
+                    $before | Should -Not -BeNullOrEmpty
+                }
+                LogGroup 'Remove by name' {
+                    Remove-GitHubVariable @scope -Name $testVarName
+                }
+                LogGroup 'Verify variable removed' {
+                    $after = Get-GitHubVariable @scope -Name $testVarName
+                    Write-Host "$($after | Format-List | Out-String)"
+                    $after | Should -BeNullOrEmpty
+                }
+            }
+
             It 'Remove-GitHubVariable' {
                 $before = Get-GitHubVariable @scope -Name "*$os*"
                 LogGroup 'Variables - Before' {
@@ -389,14 +437,14 @@ Describe 'Variables' {
                     Owner      = $owner
                     Repository = $repoName
                 }
-                Set-GitHubVariable @scope -Name $varName -Value 'repository'
+                Set-GitHubVariable @scope -Name $variablePrefix -Value 'repository'
                 $scope = @{
                     Owner       = $owner
                     Repository  = $repoName
                     Environment = $environmentName
                 }
                 Set-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName
-                Set-GitHubVariable @scope -Name $varName -Value 'environment'
+                Set-GitHubVariable @scope -Name $variablePrefix -Value 'environment'
             }
             It 'Set-GitHubVariable' {
                 $name = "$variablePrefix`TestVariable"
@@ -473,6 +521,27 @@ Describe 'Variables' {
                     Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
                 }
                 $result | Should -Not -BeNullOrEmpty
+            }
+
+            It 'Remove-GitHubVariable by name parameter' {
+                $testVarName = "$variablePrefix`RemoveByName"
+                LogGroup 'Create variable for removal test' {
+                    $createResult = Set-GitHubVariable @scope -Name $testVarName -Value 'TestForRemoval'
+                    Write-Host "$($createResult | Format-List | Out-String)"
+                }
+                LogGroup 'Verify variable exists' {
+                    $before = Get-GitHubVariable @scope -Name $testVarName
+                    Write-Host "$($before | Format-List | Out-String)"
+                    $before | Should -Not -BeNullOrEmpty
+                }
+                LogGroup 'Remove by name' {
+                    Remove-GitHubVariable @scope -Name $testVarName
+                }
+                LogGroup 'Verify variable removed' {
+                    $after = Get-GitHubVariable @scope -Name $testVarName
+                    Write-Host "$($after | Format-List | Out-String)"
+                    $after | Should -BeNullOrEmpty
+                }
             }
 
             It 'Remove-GitHubVariable' {

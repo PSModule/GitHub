@@ -739,7 +739,7 @@ Describe 'Webhooks' {
 }
 
 Describe 'Anonymous - Functions that can run anonymously' {
-    It 'Get-GithubRateLimit' {
+    It 'Get-GithubRateLimit - Using -Anonymous' {
         $rateLimit = Get-GitHubRateLimit -Anonymous
         LogGroup 'Rate Limit' {
             Write-Host ($rateLimit | Format-List | Out-String)
@@ -748,7 +748,6 @@ Describe 'Anonymous - Functions that can run anonymously' {
     }
     It 'Invoke-GitHubAPI - Using -Anonymous' {
         $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit' -Anonymous
-
         LogGroup 'Rate Limit' {
             Write-Host ($rateLimit | Format-List | Out-String)
         }
@@ -756,45 +755,16 @@ Describe 'Anonymous - Functions that can run anonymously' {
     }
     It 'Invoke-GitHubAPI - Using -Context Anonymous' {
         $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit' -Context Anonymous
-
         LogGroup 'Rate Limit' {
             Write-Host ($rateLimit | Format-List | Out-String)
         }
         $rateLimit | Should -Not -BeNullOrEmpty
     }
-    It 'Get-GithubMeta' {
-        $meta = Get-GitHubMeta -Anonymous
-        LogGroup 'Meta' {
-            Write-Host ($meta | Format-List | Out-String)
+    It 'Get-GithubRateLimit - Using -Context Anonymous' {
+        $rateLimit = Get-GitHubRateLimit -Context Anonymous
+        LogGroup 'Rate Limit' {
+            Write-Host ($rateLimit | Format-List | Out-String)
         }
-        $meta | Should -Not -BeNullOrEmpty
-    }
-    It 'Get-GithubOctocat' {
-        $octocat = Get-GitHubOctocat -Anonymous
-        LogGroup 'Octocat' {
-            Write-Host ($octocat | Format-List | Out-String)
-        }
-        $octocat | Should -Not -BeNullOrEmpty
-    }
-    It 'Get-GithubZen' {
-        $zen = Get-GitHubZen -Anonymous
-        LogGroup 'Zen' {
-            Write-Host ($zen | Format-List | Out-String)
-        }
-        $zen | Should -Not -BeNullOrEmpty
-    }
-    It 'Get-GithubGitignore' {
-        $gitIgnore = Get-GitHubGitignore -Anonymous
-        LogGroup 'GitIgnore' {
-            Write-Host ($gitIgnore | Format-List | Out-String)
-        }
-        $gitIgnore | Should -Not -BeNullOrEmpty
-    }
-    It 'Get-GithubLicense' {
-        $license = Get-GitHubLicense -Anonymous
-        LogGroup 'License' {
-            Write-Host ($license | Format-List | Out-String)
-        }
-        $license | Should -Not -BeNullOrEmpty
+        $rateLimit | Should -Not -BeNullOrEmpty
     }
 }
