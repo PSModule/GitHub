@@ -94,7 +94,7 @@
         [Parameter()]
         [string] $Gitignore,
 
-        #The license keyword of the open source license for this repository.
+        # The license keyword of the open source license for this repository.
         [Parameter()]
         [string] $License,
 
@@ -166,14 +166,13 @@
             name                        = $Name
             description                 = $Description
             homepage                    = $Homepage
+            visibility                  = $Visibility
             has_issues                  = [bool]$HasIssues
             has_projects                = [bool]$HasProjects
             has_wiki                    = [bool]$HasWiki
             is_template                 = [bool]$IsTemplate
             team_id                     = $TeamId
             auto_init                   = [bool]$AddReadme
-            gitignore_template          = $Gitignore
-            license_template            = $License
             allow_squash_merge          = [bool]$AllowSquashMerge
             allow_merge_commit          = [bool]$AllowMergeCommit
             allow_rebase_merge          = [bool]$AllowRebaseMerge
@@ -183,8 +182,9 @@
             squash_merge_commit_message = $SquashMergeCommitMessage
             merge_commit_title          = $MergeCommitTitle
             merge_commit_message        = $MergeCommitMessage
-            private                     = $Visibility -eq 'private'
-            visibility                  = $Visibility
+            gitignore_template          = $Gitignore
+            license_template            = $License
+            # private                     = $Visibility -eq 'private'
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 

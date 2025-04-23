@@ -51,7 +51,7 @@ filter Invoke-GitHubAPI {
         # The body of the API request. This can be a hashtable or a string. If a hashtable is provided, it will be converted to JSON.
         [Parameter()]
         [Alias('Query')]
-        [Object] $Body,
+        [object] $Body,
 
         # The 'Accept' header for the API request. If not provided, the default will be used by GitHub's API.
         [Parameter()]
@@ -64,10 +64,6 @@ filter Invoke-GitHubAPI {
         # The file path to be used for the API request. This is used for uploading files.
         [Parameter()]
         [string] $UploadFilePath,
-
-        # The file path to be used for the API response. This is used for downloading files.
-        [Parameter()]
-        [string] $DownloadFilePath,
 
         # The full URI for the API request. This is used for custom API calls.
         [Parameter(
@@ -86,19 +82,19 @@ filter Invoke-GitHubAPI {
 
         # Specifies how many times PowerShell retries a connection when a failure code between 400 and 599, inclusive or 304 is received.
         [Parameter()]
-        [int] $RetryCount,
+        [System.Nullable[int]] $RetryCount,
 
         # Specifies the interval between retries for the connection when a failure code between 400 and 599, inclusive or 304 is received.
         # When the failure code is 429 and the response includes the Retry-After property in its headers, the cmdlet uses that value for the retry
         # interval, even if this parameter is specified.
         [Parameter()]
-        [int] $RetryInterval,
+        [System.Nullable[int]] $RetryInterval,
 
         # The number of results per page for paginated GitHub API responses.
         [Parameter()]
         [System.Nullable[int]] $PerPage,
 
-        # If specified, ignores all tokens and makes an unauthenticated call
+        # If specified, makes an anonymous request to the GitHub API without authentication.
         [Parameter()]
         [switch] $Anonymous,
 
@@ -181,9 +177,9 @@ filter Invoke-GitHubAPI {
         }
         $APICall | Remove-HashtableEntry -NullOrEmptyValues
 
-        if (-not $Anonymous) {
+        if (-not $Anonymous -and $Context -ne 'Anonymous' -and -not [string]::IsNullOrEmpty($Context)) {
             $APICall['Authentication'] = 'Bearer'
-            $APICall['Token']          = $Token
+            $APICall['Token'] = $Token
         }
 
         if ($Method -eq 'GET') {
@@ -192,15 +188,6 @@ filter Invoke-GitHubAPI {
             }
 
             $Body['per_page'] = Resolve-GitHubContextSetting -Name 'PerPage' -Value $PerPage -Context $Context
-            # if ($PSBoundParameters.ContainsKey('PerPage')) {
-            #     Write-Debug "Using provided PerPage parameter value [$PerPage]."
-            #     $Body['per_page'] = $PerPage
-            # } elseif (-not $Body.ContainsKey('per_page') -or $Body['per_page'] -eq 0) {
-            #     Write-Debug "Setting per_page to the default value in context [$($Context.PerPage)]."
-            #     $Body['per_page'] = $Context.PerPage
-            # } else {
-            #     $Body['per_page'] = $script:GitHub.Config.PerPage
-            # }
 
             $APICall.Uri = New-Uri -BaseUri $Uri -Query $Body -AsString
         } elseif ($Body) {
@@ -231,7 +218,7 @@ filter Invoke-GitHubAPI {
                         }
                     }
                 }
-                $response = Invoke-WebRequest @APICall
+                $response = Invoke-WebRequest @APICall -ProgressAction 'SilentlyContinue'
 
                 $headers = @{}
                 foreach ($item in $response.Headers.GetEnumerator()) {

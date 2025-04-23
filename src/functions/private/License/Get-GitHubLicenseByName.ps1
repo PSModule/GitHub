@@ -23,16 +23,20 @@
         [Parameter(Mandatory)]
         [string] $Name,
 
+        # If specified, makes an anonymous request to the GitHub API without authentication.
+        [Parameter()]
+        [switch] $Anonymous,
+
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter(Mandatory)]
+        [Parameter()]
         [object] $Context
     )
 
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT, Anonymous
     }
 
     process {
@@ -40,6 +44,7 @@
             Method      = 'GET'
             APIEndpoint = "/licenses/$Name"
             Accept      = 'application/vnd.github+json'
+            Anonymous   = $Anonymous
             Context     = $Context
         }
 

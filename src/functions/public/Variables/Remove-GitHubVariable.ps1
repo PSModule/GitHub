@@ -121,7 +121,6 @@ function Remove-GitHubVariable {
             'Organization' {
                 $params = @{
                     Owner   = $Owner
-                    Name    = $Name
                     Context = $Context
                 }
                 $existingVariables = Get-GitHubVariableOwnerList @params
@@ -134,7 +133,6 @@ function Remove-GitHubVariable {
                 $params = @{
                     Owner      = $Owner
                     Repository = $Repository
-                    Name       = $Name
                     Context    = $Context
                 }
                 $existingVariables = Get-GitHubVariableRepositoryList @params
@@ -148,7 +146,6 @@ function Remove-GitHubVariable {
                     Owner       = $Owner
                     Repository  = $Repository
                     Environment = $Environment
-                    Name        = $Name
                     Context     = $Context
                 }
                 $existingVariables = Get-GitHubVariableEnvironmentList @params

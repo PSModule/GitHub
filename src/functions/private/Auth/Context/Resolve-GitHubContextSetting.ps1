@@ -58,16 +58,25 @@
         [object] $Context
     )
 
-    if ($Value) {
+    Write-Debug "Resolving setting [$Name]"
+    [pscustomobject]@{
+        'Name'                 = $Name
+        'Parameter Value'      = $Value
+        'Context Value'        = $Context.$Name
+        'Saved Config Value'   = $script:GitHub.Config.$Name
+        'Default Config Value' = $script:GitHub.DefaultConfig.$Name
+    } | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+
+    if (-not [string]::IsNullOrEmpty($Value)) {
         Write-Debug "[$Name] - [$Value] - Provided value"
         return $Value
     }
-    if ($PSBoundParameters.ContainsKey('Context') -and -not [string]::IsNullOrEmpty($Context)) {
-        if ($Context.PSObject.Properties.GetEnumerator().Name -contains $Name) {
-            Write-Debug "[$Name] - [$Context] - Context value"
-            return $Context.$Name
-        }
+
+    if (-not [string]::IsNullOrEmpty($Context.$Name)) {
+        Write-Debug "[$Name] - [$($Context.$Name)] - Context value"
+        return $Context.$Name
     }
+
     if (-not [string]::IsNullOrEmpty($Script:GitHub.Config.$Name)) {
         Write-Debug "[$Name] - [$($script:GitHub.Config.$Name)] - Default value from GitHub.Config"
         return $script:GitHub.Config.$Name
@@ -76,6 +85,6 @@
         Write-Debug "[$Name] - [$($script:GitHub.DefaultConfig.$Name)] - Default value from GitHub.DefaultConfig"
         return $script:GitHub.DefaultConfig.$Name
     }
-    Write-Debug "[$Name] - No value found, returning"
+    Write-Debug ' - No value found, returning'
     return $null
 }

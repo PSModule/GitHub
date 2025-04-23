@@ -36,7 +36,7 @@
 
         .EXAMPLE
         $params = @{
-            Owner                    = 'PSModule'
+            Organization                    = 'PSModule'
             Name                     = 'Hello-World'
             Description              = 'This is your first repository'
             Homepage                 = 'https://github.com'
@@ -58,8 +58,8 @@
         .EXAMPLE
         $params = @{
             TemplateOwner      = 'GitHub'
-            TemplateRepo       = 'octocat'
-            Owner              = 'PSModule'
+            TemplateRepository = 'octocat'
+            Organization              = 'PSModule'
             Name               = 'MyNewRepo'
             IncludeAllBranches = $true
             Description        = 'My new repo'
@@ -73,7 +73,7 @@
         $params = @{
             ForkOwner         = 'octocat'
             ForkRepo          = 'Hello-World'
-            Owner             = 'PSModule'
+            Organization             = 'PSModule'
             Name              = 'MyNewRepo'
             DefaultBranchOnly = $true
         }
@@ -81,12 +81,6 @@
 
         Creates a new repository named `MyNewRepo` as a fork of `Hello-World` owned by `octocat`.
         Only the default branch will be forked.
-
-        .PARAMETER Gitignore
-        The desired language or platform to apply to the .gitignore.
-
-        .PARAMETER License
-        The license keyword of the open source license for this repository.
 
         .OUTPUTS
         GitHubRepository
@@ -190,6 +184,16 @@
         [Parameter(ParameterSetName = 'org')]
         [switch] $AddReadme,
 
+        # The desired language or platform to apply to the .gitignore.
+        [Parameter(ParameterSetName = 'user')]
+        [Parameter(ParameterSetName = 'org')]
+        [string] $Gitignore,
+
+        # The license keyword of the open source license for this repository.
+        [Parameter(ParameterSetName = 'user')]
+        [Parameter(ParameterSetName = 'org')]
+        [string] $License,
+
         # Whether to allow squash merges for pull requests.
         [Parameter(ParameterSetName = 'user')]
         [Parameter(ParameterSetName = 'org')]
@@ -291,8 +295,8 @@
                     SquashMergeCommitMessage = $SquashMergeCommitMessage
                     MergeCommitTitle         = $MergeCommitTitle
                     MergeCommitMessage       = $MergeCommitMessage
-                    Gitignore                = $PSBoundParameters['Gitignore']
-                    License                  = $PSBoundParameters['License']
+                    Gitignore                = $Gitignore
+                    License                  = $License
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues
                 if ($PSCmdlet.ShouldProcess("repository for user [$Name]", 'Create')) {
@@ -302,7 +306,7 @@
             'org' {
                 $params = @{
                     Context                  = $Context
-                    Owner                    = $Owner
+                    Organization             = $Organization
                     Name                     = $Name
                     Description              = $Description
                     Homepage                 = $Homepage
@@ -322,8 +326,8 @@
                     SquashMergeCommitMessage = $SquashMergeCommitMessage
                     MergeCommitTitle         = $MergeCommitTitle
                     MergeCommitMessage       = $MergeCommitMessage
-                    Gitignore                = $PSBoundParameters['Gitignore']
-                    License                  = $PSBoundParameters['License']
+                    Gitignore                = $Gitignore
+                    License                  = $License
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues
                 if ($PSCmdlet.ShouldProcess("repository for organization [$Owner/$Name]", 'Create')) {
@@ -335,12 +339,12 @@
                     $params = @{
                         Context            = $Context
                         TemplateOwner      = $TemplateOwner
-                        TemplateRepo       = $TemplateRepository
+                        TemplateRepository = $TemplateRepository
                         Owner              = $Owner
                         Name               = $Name
                         IncludeAllBranches = $IncludeAllBranches
                         Description        = $Description
-                        Private            = $Visibility -eq 'private'
+                        Visibility         = $Visibility
                     }
                     $params | Remove-HashtableEntry -NullOrEmptyValues
                     New-GitHubRepositoryFromTemplate @params

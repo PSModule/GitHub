@@ -36,7 +36,6 @@
             Mandatory,
             ParameterSetName = 'UserID'
         )]
-        [Alias('invitee_id', 'user_id', 'InviteeID')]
         [System.Nullable[int]] $ID,
 
         # Email address of the person you are inviting, which can be an existing GitHub user.
@@ -77,7 +76,7 @@
 
     process {
         $body = @{
-            invitee_id = $PSBoundParameters.ContainsKey('ID') ? $ID : $null
+            invitee_id = $ID
             email      = $Email
             role       = $Role
             team_ids   = $TeamIDs

@@ -23,7 +23,7 @@ function Save-GitHubArtifact {
         Downloads artifact ID '123456' from the 'Hello-World' repository owned by 'octocat' to the specified path.
 
         .EXAMPLE
-        Save-GitHubArtifact -Owner 'octocat' -Repository 'Hello-World' -Name 'module' -Path 'C:\Artifacts\module' -Expand -Cleanup -Force
+        Save-GitHubArtifact -Owner 'octocat' -Repository 'Hello-World' -Name 'module' -Path 'C:\Artifacts\module' -Expand -Force
 
         Output:
         ```powershell
@@ -81,7 +81,7 @@ function Save-GitHubArtifact {
         [Parameter()]
         [switch] $Force,
 
-        # When specified, the zip file or the folder where the zip file was extracted to is returned.
+        # When specified, the ZIP file or the folder where the ZIP file was extracted to is returned.
         [Parameter()]
         [switch] $PassThru,
 
@@ -132,7 +132,7 @@ function Save-GitHubArtifact {
             if ($Expand) {
                 Write-Debug "Expanding artifact to [$folder]"
                 Expand-Archive -LiteralPath $Path -DestinationPath $folder -Force:$Force
-                Write-Debug "Removing downloaded ZIP [$Path]"
+                Write-Debug "Removing ZIP file [$Path]"
                 Remove-Item -LiteralPath $Path -Force
                 if ($PassThru) {
                     return $folder

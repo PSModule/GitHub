@@ -1,8 +1,15 @@
 function Get-GitHubArtifact {
     <#
         .SYNOPSIS
+        Retrieves GitHub Actions artifacts from a repository or workflow run.
 
         .DESCRIPTION
+        This function fetches GitHub Actions artifacts by artifact ID, workflow run ID, or directly from a repository.
+        It supports filtering by artifact name (with wildcards) and can optionally retrieve all versions of the artifacts.
+        Artifacts contain metadata such as name, size, ID, and creation date. The function supports multiple parameter sets:
+        - ById: Retrieve a specific artifact by its ID.
+        - FromWorkflowRun: Retrieve artifacts from a specific workflow run.
+        - FromRepository: Retrieve artifacts from a repository, optionally by name or with all versions.
 
         .EXAMPLE
         Get-GitHubArtifact -Owner 'octocat' -Repository 'Hello-World' -ID '123456'
@@ -46,7 +53,7 @@ function Get-GitHubArtifact {
         CreatedAt   : 2025-01-15T15:25:00Z
         ```
 
-        Retrieves the latest version of all artifacts from the specified workflow run.
+        Retrieves all versions of all artifacts from the specified workflow run.
 
         .EXAMPLE
         Get-GitHubArtifact -Owner 'octocat' -Repository 'Hello-World'
@@ -59,18 +66,15 @@ function Get-GitHubArtifact {
         CreatedAt   : 2025-02-01T09:45:00Z
         ```
 
-        Retrieves the latest artifacts from the entire repository.
+        Retrieves the latest version of all artifacts from the specified repository.
 
         .OUTPUTS
         GitHubArtifact[]
 
-        .NOTES
-        An array of GitHub artifact objects, each containing metadata like name, ID, and size.
-        Used for inspecting, downloading, or managing GitHub Actions artifacts in workflows.
-
         .LINK
         https://psmodule.io/GitHub/Functions/Artifacts/Get-GitHubArtifact/
     #>
+
     [OutputType([GitHubArtifact[]])]
     [CmdletBinding(DefaultParameterSetName = 'FromRepository')]
     param(
@@ -93,7 +97,7 @@ function Get-GitHubArtifact {
         # Retrieves artifacts from a specific workflow run.
         [Parameter(Mandatory, ParameterSetName = 'FromWorkflowRun', ValueFromPipelineByPropertyName)]
         [Alias('WorkflowRun')]
-        [string] $WorkflowRunId,
+        [string] $WorkflowRunID,
 
         # Retrieves artifacts by name or all artifacts across a repo.
         [Parameter(ParameterSetName = 'FromRepository')]
@@ -127,14 +131,14 @@ function Get-GitHubArtifact {
         }
         switch ($PSCmdlet.ParameterSetName) {
             'ById' {
-                Get-GitHubArtifactById @params -ID $ArtifactID
+                Get-GitHubArtifactById @params -ID $ID
             }
             'FromWorkflowRun' {
                 if ($Name.Contains('*')) {
-                    Get-GitHubArtifactFromWorkflowRun @params -ID $ID -AllVersions:$AllVersions |
+                    Get-GitHubArtifactFromWorkflowRun @params -ID $WorkflowRunID -AllVersions:$AllVersions |
                         Where-Object { $_.Name -like $Name }
                 } else {
-                    Get-GitHubArtifactFromWorkflowRun @params -ID $ID -Name $Name -AllVersions:$AllVersions
+                    Get-GitHubArtifactFromWorkflowRun @params -ID $WorkflowRunID -Name $Name -AllVersions:$AllVersions
                 }
             }
             'FromRepository' {

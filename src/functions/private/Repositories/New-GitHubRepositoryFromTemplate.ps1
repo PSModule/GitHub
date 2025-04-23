@@ -20,7 +20,7 @@
         .EXAMPLE
         $params = @{
             TemplateOwner      = 'GitHub'
-            TemplateRepo       = 'octocat'
+            TemplateRepository = 'octocat'
             Owner              = 'PSModule'
             Name               = 'MyNewRepo'
             IncludeAllBranches = $true
@@ -46,7 +46,7 @@
 
         # The name of the template repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [string] $TemplateRepo,
+        [string] $TemplateRepository,
 
         # The organization or person who will own the new repository.
         # To create a new repository in an organization, the authenticated user must be a member of the specified organization.
@@ -65,9 +65,10 @@
         [Parameter()]
         [switch] $IncludeAllBranches,
 
-        # Either true to create a new private repository or false to create a new public one.
+        # The visibility of the repository.
         [Parameter()]
-        [switch] $Private,
+        [ValidateSet('public', 'private')]
+        [string] $Visibility = 'public',
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -87,17 +88,17 @@
             name                 = $Name
             description          = $Description
             include_all_branches = [bool]$IncludeAllBranches
-            private              = $Private
+            private              = $Visibility -eq 'private'
         }
 
         $inputObject = @{
             Method      = 'POST'
-            APIEndpoint = "/repos/$TemplateOwner/$TemplateRepo/generate"
+            APIEndpoint = "/repos/$TemplateOwner/$TemplateRepository/generate"
             Body        = $body
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("Repository [$Owner/$Name] from template [$TemplateOwner/$TemplateRepo]", 'Create')) {
+        if ($PSCmdlet.ShouldProcess("Repository [$Owner/$Name] from template [$TemplateOwner/$TemplateRepository]", 'Create')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 [GitHubRepository]::New($_.Response)
             }

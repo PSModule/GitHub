@@ -13,7 +13,12 @@
         .EXAMPLE
         Get-GitHubRepository
 
-        Gets the  authenticated user's repositories.
+        Gets the repositories for the authenticated user.
+
+        .EXAMPLE
+        Get-GitHubRepository -Type all
+
+        Gets the repositories owned by the authenticated user.
 
         .EXAMPLE
         Get-GitHubRepository -Username 'octocat'
@@ -21,7 +26,7 @@
         Gets the repositories for the specified user.
 
         .EXAMPLE
-        Get-GitHubRepository -Organization 'github' -Name 'octocat'
+        Get-GitHubRepository -Owner 'github' -Name 'octocat'
 
         Gets the specified repository.
 
@@ -35,27 +40,45 @@
         https://psmodule.io/GitHub/Functions/Repositories/Get-GitHubRepository/
     #>
     [OutputType([GitHubRepository])]
-    [CmdletBinding(DefaultParameterSetName = 'MyRepos')]
+    [CmdletBinding(DefaultParameterSetName = 'List repositories for the authenticated user by type')]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(ParameterSetName = 'ByName', ValueFromPipelineByPropertyName)]
-        [Parameter(ParameterSetName = 'ListByOrg', ValueFromPipelineByPropertyName)]
+        [Parameter(ParameterSetName = 'Get a repository by name', ValueFromPipelineByPropertyName)]
+        [Parameter(ParameterSetName = 'List organization repositories', ValueFromPipelineByPropertyName)]
         [string] $Organization,
 
         # The handle for the GitHub user account.
-        [Parameter(ParameterSetName = 'ByName', ValueFromPipelineByPropertyName)]
-        [Parameter(Mandatory, ParameterSetName = 'ListByUser', ValueFromPipelineByPropertyName)]
+        [Parameter(ParameterSetName = 'Get a repository by name', ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ParameterSetName = 'List user repositories', ValueFromPipelineByPropertyName)]
         [Alias('User')]
         [string] $Username,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter(Mandatory, ParameterSetName = 'ByName')]
+        [Parameter(Mandatory, ParameterSetName = 'Get a repository by name')]
         [string] $Name,
 
+        # Specifies the types of repositories you want returned.
+        [Parameter(ParameterSetName = 'List repositories for the authenticated user by type')]
+        [string] $Type = 'owner',
+
+        # Limit results to repositories with the specified visibility.
+        [Parameter(ParameterSetName = 'List repositories for the authenticated user by affiliation and visibility')]
+        [ValidateSet('all', 'public', 'private')]
+        [string] $Visibility = 'all',
+
+        # Comma-separated list of values. Can include:
+        # - owner: Repositories that are owned by the authenticated user.
+        # - collaborator: Repositories that the user has been added to as a collaborator.
+        # - organization_member: Repositories that the user has access to through being a member of an organization.
+        #   This includes every repository on every team that the user is on.
+        [Parameter(ParameterSetName = 'List repositories for the authenticated user by affiliation and visibility')]
+        [ValidateSet('owner', 'collaborator', 'organization_member')]
+        [string[]] $Affiliation = 'owner',
+
         # The number of results per page (max 100).
-        [Parameter(ParameterSetName = 'MyRepos')]
-        [Parameter(ParameterSetName = 'ListByOrg')]
-        [Parameter(ParameterSetName = 'ListByUser')]
+        [Parameter(ParameterSetName = 'List repositories for the authenticated user by type')]
+        [Parameter(ParameterSetName = 'List organization repositories')]
+        [Parameter(ParameterSetName = 'List user repositories')]
         [ValidateRange(0, 100)]
         [int] $PerPage,
 
@@ -75,22 +98,34 @@
     process {
         Write-Debug "ParamSet: [$($PSCmdlet.ParameterSetName)]"
         switch ($PSCmdlet.ParameterSetName) {
-            'MyRepos' {
+            'List repositories for the authenticated user by type' {
                 $params = @{
                     Context = $Context
+                    Type    = $Type
                     PerPage = $PerPage
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues
                 Write-Verbose ($params | Format-List | Out-String)
                 Get-GitHubMyRepositories @params
             }
-            'ByName' {
+            'List repositories for the authenticated user by affiliation and visibility' {
+                $params = @{
+                    Context     = $Context
+                    Affiliation = $Affiliation
+                    Visibility  = $Visibility
+                    PerPage     = $PerPage
+                }
+                $params | Remove-HashtableEntry -NullOrEmptyValues
+                Write-Verbose ($params | Format-List | Out-String)
+                Get-GitHubMyRepositories @params
+            }
+            'Get a repository by name' {
                 $owner = if ($PSBoundParameters.ContainsKey('Username')) {
                     $Username
                 } elseif ($PSBoundParameters.ContainsKey('Organization')) {
                     $Organization
                 } else {
-                    (Get-GitHubUser -Context $Context).Name
+                    $Context.UserName
                 }
                 $params = @{
                     Context = $Context
@@ -103,7 +138,7 @@
                     Get-GitHubRepositoryByName @params
                 } catch { return }
             }
-            'ListByOrg' {
+            'List organization repositories' {
                 $params = @{
                     Context      = $Context
                     Organization = $Organization
@@ -113,7 +148,7 @@
                 Write-Verbose ($params | Format-List | Out-String)
                 Get-GitHubRepositoryListByOrg @params
             }
-            'ListByUser' {
+            'List user repositories' {
                 $params = @{
                     Context  = $Context
                     Username = $Username
@@ -128,5 +163,22 @@
 
     end {
         Write-Debug "[$stackPath] - End"
+    }
+}
+
+Register-ArgumentCompleter -CommandName Get-GitHubRepository -ParameterName Type -ScriptBlock {
+    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
+    $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
+
+    $validateSet = if ($fakeBoundParameters.ContainsKey('Organization')) {
+        'all', 'public', 'private', 'forks', 'sources', 'member'
+    } elseif ($fakeBoundParameters.ContainsKey('Username')) {
+        'all', 'owner', 'member'
+    } else {
+        'all', 'owner', 'public', 'private', 'member'
+    }
+
+    $validateSet | Where-Object { $_ -like "$wordToComplete*" } | ForEach-Object {
+        [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
     }
 }
