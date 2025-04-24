@@ -40,31 +40,29 @@
 query($org: String!, $teamSlug: String!) {
   organization(login: $org) {
     team(slug: $teamSlug) {
-      nodes {
-        id
+      id
+      name
+      slug
+      url
+      combinedSlug
+      databaseId
+      description
+      notificationSetting
+      privacy
+      parentTeam {
         name
         slug
-        url
-        combinedSlug
-        databaseId
-        description
-        notificationSetting
-        privacy
-        parentTeam {
-          name
-          slug
-        }
-        organization {
-          login
-        }
-        childTeams(first: 100) {
-          nodes {
-            name
-          }
-        }
-        createdAt
-        updatedAt
       }
+      organization {
+        login
+      }
+      childTeams(first: 100) {
+        nodes {
+          name
+        }
+      }
+      createdAt
+      updatedAt
     }
   }
 }
