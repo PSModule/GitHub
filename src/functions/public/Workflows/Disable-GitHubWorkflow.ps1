@@ -13,9 +13,9 @@
         GitHubWorkflow
 
         .LINK
-        https://psmodule.io/GitHub/Functions/Actions/Workflows/Disable-GitHubWorkflow/
+        https://psmodule.io/GitHub/Functions/Workflows/Disable-GitHubWorkflow/
 
-        .LINK
+        .NOTES
         [Disable a workflow](https://docs.github.com/rest/actions/workflows#disable-a-workflow)
     #>
     [CmdletBinding(SupportsShouldProcess)]

@@ -15,9 +15,9 @@
         }
 
         .LINK
-        https://psmodule.io/GitHub/Functions/Actions/Workflows/Start-GitHubWorkflow/
+        https://psmodule.io/GitHub/Functions/Workflows/Start-GitHubWorkflow/
 
-        .LINK
+        .NOTES
         [Create a workflow dispatch event](https://docs.github.com/rest/actions/workflows#create-a-workflow-dispatch-event)
     #>
     [CmdletBinding(SupportsShouldProcess)]
@@ -79,9 +79,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("$Owner/$Repository/$ID", 'Start workflow')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
+            $null = Invoke-GitHubAPI @inputObject
         }
     }
 
