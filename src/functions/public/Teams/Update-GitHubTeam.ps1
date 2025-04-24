@@ -24,19 +24,21 @@
 
         .NOTES
         [Update a team](https://docs.github.com/rest/teams/teams#update-a-team)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Teams/Update-GitHubTeam
     #>
     [OutputType([GitHubTeam])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
-        # The slug of the team name.
-        [Parameter(Mandatory)]
-        [Alias('team_slug', 'Slug')]
-        [string] $Name,
-
         # The organization name. The name is not case sensitive.
         # If you do not provide this parameter, the command will use the organization from the context.
         [Parameter(Mandatory)]
         [string] $Organization,
+
+        # The slug of the team name.
+        [Parameter(Mandatory)]
+        [string] $Slug,
 
         # The new team name.
         [Parameter()]
@@ -102,12 +104,12 @@
 
         $inputObject = @{
             Method      = 'PATCH'
-            APIEndpoint = "/orgs/$Organization/teams/$Name"
+            APIEndpoint = "/orgs/$Organization/teams/$Slug"
             Body        = $body
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("$Organization/$Name", 'Update')) {
+        if ($PSCmdlet.ShouldProcess("$Organization/$Slug", 'Update')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 $team = $_.Response
                 [GitHubTeam](
@@ -115,6 +117,7 @@
                         Name          = $team.name
                         Slug          = $team.slug
                         NodeID        = $team.node_id
+                        Url           = $team.html_url
                         CombinedSlug  = $Organization + '/' + $team.slug
                         ID            = $team.id
                         Description   = $team.description
@@ -135,5 +138,3 @@
         Write-Debug "[$stackPath] - End"
     }
 }
-
-#SkipTest:FunctionTest:Will add a test for this function in a future PR

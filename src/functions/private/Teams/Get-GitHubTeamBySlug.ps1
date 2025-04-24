@@ -36,13 +36,15 @@
     }
 
     process {
-        $query = @"
-query(`$org: String!, `$teamSlug: String!) {
-  organization(login: `$org) {
-    team(slug: `$teamSlug) {
+        $query = @'
+query($org: String!, $teamSlug: String!) {
+  organization(login: $org) {
+    team(slug: $teamSlug) {
+      nodes {
         id
         name
         slug
+        url
         combinedSlug
         databaseId
         description
@@ -66,7 +68,7 @@ query(`$org: String!, `$teamSlug: String!) {
     }
   }
 }
-"@
+'@
 
         # Variables hash that will be sent with the query
         $variables = @{
@@ -90,6 +92,7 @@ query(`$org: String!, `$teamSlug: String!) {
                 Name          = $team.name
                 Slug          = $team.slug
                 NodeID        = $team.id
+                Url           = $team.url
                 CombinedSlug  = $team.CombinedSlug
                 ID            = $team.DatabaseId
                 Description   = $team.description

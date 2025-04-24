@@ -8,9 +8,6 @@
 
         .EXAMPLE
         Get-GitHubTeamListByOrg -Organization 'github'
-
-        .NOTES
-        [List teams](https://docs.github.com/rest/teams/teams#list-teams)
     #>
     [OutputType([GitHubTeam[]])]
     [CmdletBinding()]
@@ -33,14 +30,15 @@
     }
 
     process {
-        $query = @"
-query(`$org: String!, `$after: String) {
-  organization(login: `$org) {
-    teams(first: 100, after: `$after) {
+        $query = @'
+query($org: String!, $after: String) {
+  organization(login: $org) {
+    teams(first: 100, after: $after) {
       nodes {
         id
         name
         slug
+        url
         combinedSlug
         databaseId
         description
@@ -49,9 +47,6 @@ query(`$org: String!, `$after: String) {
         parentTeam {
           name
           slug
-        }
-        organization {
-          login
         }
         childTeams(first: 100) {
           nodes {
@@ -68,7 +63,7 @@ query(`$org: String!, `$after: String) {
     }
   }
 }
-"@
+'@
 
         # Variables hash that will be sent with the query
         $variables = @{
@@ -96,6 +91,7 @@ query(`$org: String!, `$after: String) {
                         Name          = $_.name
                         Slug          = $_.slug
                         NodeID        = $_.id
+                        Url           = $_.url
                         CombinedSlug  = $_.combinedSlug
                         ID            = $_.databaseId
                         Description   = $_.description
