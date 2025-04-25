@@ -26,7 +26,7 @@
         Gets the repositories for the specified user.
 
         .EXAMPLE
-        Get-GitHubRepository -Owner 'github' -Name 'octocat'
+        Get-GitHubRepository -Organization 'github' -Name 'octocat'
 
         Gets the specified repository.
 
