@@ -321,10 +321,7 @@ filter Invoke-GitHubAPI {
             $exception = @"
 ----------------------------------
 Request
-   Headers:
-$([pscustomobject]$APICall.Headers | Format-List | Out-String)
-   Settings:
-$([pscustomobject]$APICall | Select-Object -ExcludeProperty Headers | Format-List | Out-String)
+$([pscustomobject]$APICall | Format-List -Property Header, HttpVersion, Method, Uri, ContentType, Authentication | Out-String)
 ----------------------------------
 Response Headers:
 $($headers | Format-List | Out-String)
