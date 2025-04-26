@@ -124,7 +124,7 @@ Describe 'GitHub' {
     Context 'Config' {
         It 'Get-GitHubConfig - Gets the module configuration' {
             $config = Get-GitHubConfig
-            Write-Verbose ($config | Format-Table | Out-String) -Verbose
+            Write-Host ($config | Format-Table | Out-String)
             $config | Should -Not -BeNullOrEmpty
         }
         It 'Get-GitHubConfig - Gets a configuration item by name' {
@@ -152,12 +152,12 @@ Describe 'GitHub' {
     Context 'Actions' {
         It 'Get-GitHubEventData - Gets data about the event that triggered the workflow' {
             $workflow = Get-GitHubEventData
-            Write-Verbose ($workflow | Format-List | Out-String) -Verbose
+            Write-Host ($workflow | Format-List | Out-String)
             $workflow | Should -Not -BeNullOrEmpty
         }
         It 'Get-GitHubRunnerData - Gets data about the runner that is running the workflow' {
             $workflow = Get-GitHubRunnerData
-            Write-Verbose ($workflow | Format-List | Out-String) -Verbose
+            Write-Host ($workflow | Format-List | Out-String)
             $workflow | Should -Not -BeNullOrEmpty
         }
     }
@@ -287,7 +287,7 @@ string
             {
                 Get-GitHubOutput
             } | Should -Not -Throw
-            Write-Verbose (Get-GitHubOutput | Format-List | Out-String) -Verbose
+            Write-Host (Get-GitHubOutput | Format-List | Out-String)
         }
         It 'Set-GitHubEnvironmentVariable - Should not throw' {
             {
@@ -310,15 +310,15 @@ string
     Context 'IssueParser' {
         BeforeAll {
             $issueTestFilePath = Join-Path -Path $PSScriptRoot -ChildPath 'Data/IssueForm.md'
-            Write-Verbose "Reading from $issueTestFilePath" -Verbose
+            Write-Host "Reading from $issueTestFilePath"
             $content = Get-Content -Path $issueTestFilePath -Raw
-            Write-Verbose ($content | Out-String) -Verbose
-            $dataObject = $content | ConvertFrom-IssueForm -Verbose
-            Write-Verbose 'As PSCustomObject' -Verbose
-            Write-Verbose ($dataObject | Format-List | Out-String) -Verbose
-            $dataHashtable = $content | ConvertFrom-IssueForm -AsHashtable -Verbose
-            Write-Verbose 'As Hashtable' -Verbose
-            Write-Verbose ($dataHashtable | Out-String) -Verbose
+            Write-Host ($content | Out-String)
+            $dataObject = $content | ConvertFrom-IssueForm
+            Write-Host 'As PSCustomObject'
+            Write-Host ($dataObject | Format-List | Out-String)
+            $dataHashtable = $content | ConvertFrom-IssueForm -AsHashtable
+            Write-Host 'As Hashtable'
+            Write-Host ($dataHashtable | Out-String)
         }
 
         It 'ConvertFrom-IssueForm - Should return a PSCustomObject' {
@@ -330,13 +330,13 @@ string
         }
 
         It "'Type with spaces' should contain 'Action'" {
-            Write-Verbose ($dataHashtable['Type with spaces'] | Out-String) -Verbose
+            Write-Host ($dataHashtable['Type with spaces'] | Out-String)
             $dataHashtable.Keys | Should -Contain 'Type with spaces'
             $dataHashtable['Type with spaces'] | Should -Be 'Action'
         }
 
         It "'Multiline' should contain a multiline string with 3 lines" {
-            Write-Verbose ($dataHashtable['Multiline'] | Out-String) -Verbose
+            Write-Host ($dataHashtable['Multiline'] | Out-String)
             $dataHashtable.Keys | Should -Contain 'Multiline'
             $dataHashtable['Multiline'] | Should -Be @'
 test
@@ -346,7 +346,7 @@ line
         }
 
         It "'OS' should contain a hashtable with 3 items" {
-            Write-Verbose ($dataHashtable['OS'] | Out-String) -Verbose
+            Write-Host ($dataHashtable['OS'] | Out-String)
             $dataHashtable.Keys | Should -Contain 'OS'
             $dataHashtable['OS'].Windows | Should -BeTrue
             $dataHashtable['OS'].Linux | Should -BeTrue

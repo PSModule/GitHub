@@ -21,7 +21,6 @@ param()
 
 BeforeAll {
     $testName = 'EnvironmentsTests'
-    $environmentName = 'production'
     $os = $env:RUNNER_OS
     $guid = [guid]::NewGuid().ToString()
 }
@@ -43,12 +42,13 @@ Describe 'Environments' {
             }
             $repoPrefix = "$testName-$os-$TokenType"
             $repoName = "$repoPrefix-$guid"
+            $environmentName = "$testName-$os-$TokenType-$guid"
             switch ($OwnerType) {
                 'user' {
-                    New-GitHubRepository -Name $repoName -AllowSquashMerge -Debug -Confirm:$false
+                    New-GitHubRepository -Name $repoName -AllowSquashMerge -Confirm:$false
                 }
                 'organization' {
-                    New-GitHubRepository -Organization $owner -Name $repoName -AllowSquashMerge -Debug -Confirm:$false
+                    New-GitHubRepository -Organization $owner -Name $repoName -AllowSquashMerge -Confirm:$false
                 }
             }
         }
