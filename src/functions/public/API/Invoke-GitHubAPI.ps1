@@ -316,14 +316,29 @@ filter Invoke-GitHubAPI {
                 Status      = $failure.Exception.Message
                 StatusCode  = $errordetails.status
             }
-            $APICall.HttpVersion = $APICall.HttpVersion.ToString()
-            $APICall.Headers = $APICall.Headers | ConvertTo-Json
-            $APICall.Method = $APICall.Method.ToString()
+
+            # Format API call details for error message
+            $requestDetails = @{
+                Uri         = $APICall.Uri
+                Method      = $APICall.Method.ToString()
+                Headers     = $APICall.Headers
+                Body        = $APICall.Body
+                HttpVersion = $APICall.HttpVersion.ToString()
+            }
 
             $exception = @"
+
 ----------------------------------
+Request Details:
+$($requestDetails | Format-List | Out-String)
+----------------------------------
+Response Headers:
+$($headers | Format-List | Out-String)
+----------------------------------
+API Error Details:
 $($errorResult | Format-List | Out-String)
 ----------------------------------
+
 "@
             $PSCmdlet.ThrowTerminatingError(
                 [System.Management.Automation.ErrorRecord]::new(
