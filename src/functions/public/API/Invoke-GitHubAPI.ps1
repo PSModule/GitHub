@@ -319,10 +319,12 @@ filter Invoke-GitHubAPI {
             }
 
             $exception = @"
-
 ----------------------------------
-Request Details:
-$($APICall | Format-List | Out-String)
+Request
+   Headers:
+$([pscustomobject]$APICall.Headers | Format-List | Out-String)
+   Settings:
+$([pscustomobject]$APICall | Select-Object -ExcludeProperty Headers | Format-List | Out-String)
 ----------------------------------
 Response Headers:
 $($headers | Format-List | Out-String)
