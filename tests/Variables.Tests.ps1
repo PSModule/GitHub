@@ -315,7 +315,7 @@ Describe 'Variables' {
             BeforeAll {
                 $scope = @{
                     Owner      = $owner
-                    Repository = $repoPrefix
+                    Repository = $repo
                 }
                 Set-GitHubVariable @scope -Name $variablePrefix -Value 'repository'
             }
@@ -434,15 +434,15 @@ Describe 'Variables' {
             BeforeAll {
                 $scope = @{
                     Owner      = $owner
-                    Repository = $repoPrefix
+                    Repository = $repo
                 }
                 Set-GitHubVariable @scope -Name $variablePrefix -Value 'repository'
                 $scope = @{
                     Owner       = $owner
-                    Repository  = $repoPrefix
+                    Repository  = $repo
                     Environment = $environmentName
                 }
-                Set-GitHubEnvironment -Owner $owner -Repository $repoPrefix -Name $environmentName
+                Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
                 Set-GitHubVariable @scope -Name $variablePrefix -Value 'environment'
             }
             It 'Set-GitHubVariable' {

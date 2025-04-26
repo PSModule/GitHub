@@ -301,7 +301,7 @@ Describe 'Secrets' {
             BeforeAll {
                 $scope = @{
                     Owner      = $owner
-                    Repository = $repoPrefix
+                    Repository = $repo
                 }
                 Set-GitHubSecret @scope -Name $secretPrefix -Value 'repository'
             }
@@ -414,15 +414,15 @@ Describe 'Secrets' {
             BeforeAll {
                 $scope = @{
                     Owner      = $owner
-                    Repository = $repoPrefix
+                    Repository = $repo
                 }
                 Set-GitHubSecret @scope -Name $secretPrefix -Value 'repository'
                 $scope = @{
                     Owner       = $owner
-                    Repository  = $repoPrefix
+                    Repository  = $repo
                     Environment = $environmentName
                 }
-                Set-GitHubEnvironment -Owner $owner -Repository $repoPrefix -Name $environmentName
+                Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
                 Set-GitHubSecret @scope -Name $secretPrefix -Value 'environment'
             }
 
