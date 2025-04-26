@@ -320,16 +320,13 @@ filter Invoke-GitHubAPI {
 
             $exception = @"
 ----------------------------------
-Details:
-$($errordetails | Format-List | Out-String)
-----------------------------------
 Request:
 $([pscustomobject]$APICall | Format-List -Property Headers, HttpVersion, Method, Uri, ContentType, Authentication, Token | Out-String)
 ----------------------------------
 Response Headers:
 $($headers | Format-List | Out-String)
 ----------------------------------
-API Error Details:
+Error:
 $($errorResult | Format-List | Out-String)
 ----------------------------------
 
