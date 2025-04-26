@@ -15,7 +15,7 @@
     param(
         # The organization name. The name is not case sensitive.
         # If not provided, the owner from the context will be used.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [string] $Organization,
 
         # The slug of the team name.
@@ -51,9 +51,6 @@ query($org: String!, $teamSlug: String!) {
       parentTeam {
         name
         slug
-      }
-      organization {
-        login
       }
       childTeams(first: 100) {
         nodes {

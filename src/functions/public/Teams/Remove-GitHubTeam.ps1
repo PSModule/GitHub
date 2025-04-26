@@ -21,17 +21,11 @@
     param(
         # The organization name. The name is not case sensitive.
         # If not provided, the organization from the context is used.
-        [Parameter(
-            Mandatory,
-            ValueFromPipelineByPropertyName
-        )]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Organization,
 
         # The slug of the team name.
-        [Parameter(
-            Mandatory,
-            ValueFromPipelineByPropertyName
-        )]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Slug,
 
         # The context to run the command in. Used to get the details for the API call.
