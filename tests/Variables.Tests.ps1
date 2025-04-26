@@ -36,21 +36,20 @@ Describe 'Variables' {
                     Write-Host ($context | Format-List | Out-String)
                 }
             }
-            $repoPrefix = "$testName-$os-$TokenType"
-            $repoName = "$repoPrefix-$guid"
+            $repoPrefix = "$testName-$os-$TokenType-$guid"
             $variablePrefix = ("$testName`_$os`_$TokenType`_$guid" -replace '-', '_').ToUpper()
             $environmentName = "$testName-$os-$TokenType-$guid"
 
             switch ($OwnerType) {
                 'user' {
-                    $repo = New-GitHubRepository -Name $repoName -AllowSquashMerge
-                    $repo2 = New-GitHubRepository -Name "$repoName-2" -AllowSquashMerge
-                    $repo3 = New-GitHubRepository -Name "$repoName-3" -AllowSquashMerge
+                    $repo = New-GitHubRepository -Name "$repoPrefix-1" -AllowSquashMerge
+                    $repo2 = New-GitHubRepository -Name "$repoPrefix-2" -AllowSquashMerge
+                    $repo3 = New-GitHubRepository -Name "$repoPrefix-3" -AllowSquashMerge
                 }
                 'organization' {
-                    $repo = New-GitHubRepository -Organization $owner -Name $repoName -AllowSquashMerge
-                    $repo2 = New-GitHubRepository -Organization $owner -Name "$repoName-2" -AllowSquashMerge
-                    $repo3 = New-GitHubRepository -Organization $owner -Name "$repoName-3" -AllowSquashMerge
+                    $repo = New-GitHubRepository -Organization $owner -Name "$repoPrefix-1" -AllowSquashMerge
+                    $repo2 = New-GitHubRepository -Organization $owner -Name "$repoPrefix-2" -AllowSquashMerge
+                    $repo3 = New-GitHubRepository -Organization $owner -Name "$repoPrefix-3" -AllowSquashMerge
                     LogGroup "Org variable - [$variablePrefix]" {
                         $params = @{
                             Owner                = $owner
@@ -64,7 +63,7 @@ Describe 'Variables' {
                     }
                 }
             }
-            LogGroup "Repository - [$repoName]" {
+            LogGroup "Repository - [$repoPrefix]" {
                 Write-Host ($repo | Format-Table | Out-String)
                 Write-Host ($repo2 | Format-Table | Out-String)
                 Write-Host ($repo3 | Format-Table | Out-String)
@@ -316,7 +315,7 @@ Describe 'Variables' {
             BeforeAll {
                 $scope = @{
                     Owner      = $owner
-                    Repository = $repoName
+                    Repository = $repoPrefix
                 }
                 Set-GitHubVariable @scope -Name $variablePrefix -Value 'repository'
             }
@@ -435,15 +434,15 @@ Describe 'Variables' {
             BeforeAll {
                 $scope = @{
                     Owner      = $owner
-                    Repository = $repoName
+                    Repository = $repoPrefix
                 }
                 Set-GitHubVariable @scope -Name $variablePrefix -Value 'repository'
                 $scope = @{
                     Owner       = $owner
-                    Repository  = $repoName
+                    Repository  = $repoPrefix
                     Environment = $environmentName
                 }
-                Set-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName
+                Set-GitHubEnvironment -Owner $owner -Repository $repoPrefix -Name $environmentName
                 Set-GitHubVariable @scope -Name $variablePrefix -Value 'environment'
             }
             It 'Set-GitHubVariable' {

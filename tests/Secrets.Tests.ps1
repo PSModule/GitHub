@@ -36,21 +36,20 @@ Describe 'Secrets' {
                     Write-Host ($context | Format-List | Out-String)
                 }
             }
-            $repoPrefix = "$testName-$os-$TokenType"
-            $repoName = "$repoPrefix-$guid"
+            $repoPrefix = "$testName-$os-$TokenType-$guid"
             $secretPrefix = ("$testName`_$os`_$TokenType`_$guid" -replace '-', '_').ToUpper()
             $environmentName = "$testName-$os-$TokenType-$guid"
 
             switch ($OwnerType) {
                 'user' {
-                    $repo = New-GitHubRepository -Name $repoName -AllowSquashMerge
-                    $repo2 = New-GitHubRepository -Name "$repoName-2" -AllowSquashMerge
-                    $repo3 = New-GitHubRepository -Name "$repoName-3" -AllowSquashMerge
+                    $repo = New-GitHubRepository -Name "$repoPrefix-1" -AllowSquashMerge
+                    $repo2 = New-GitHubRepository -Name "$repoPrefix-2" -AllowSquashMerge
+                    $repo3 = New-GitHubRepository -Name "$repoPrefix-3" -AllowSquashMerge
                 }
                 'organization' {
-                    $repo = New-GitHubRepository -Organization $owner -Name $repoName -AllowSquashMerge
-                    $repo2 = New-GitHubRepository -Organization $owner -Name "$repoName-2" -AllowSquashMerge
-                    $repo3 = New-GitHubRepository -Organization $owner -Name "$repoName-3" -AllowSquashMerge
+                    $repo = New-GitHubRepository -Organization $owner -Name "$repoPrefix-1" -AllowSquashMerge
+                    $repo2 = New-GitHubRepository -Organization $owner -Name "$repoPrefix-2" -AllowSquashMerge
+                    $repo3 = New-GitHubRepository -Organization $owner -Name "$repoPrefix-3" -AllowSquashMerge
                     LogGroup "Org secret - [$secretPrefix]" {
                         $params = @{
                             Owner                = $owner
@@ -59,14 +58,14 @@ Describe 'Secrets' {
                             SelectedRepositories = $repo.id
                         }
                         $result = @()
-                        $result += Set-GitHubSecret @params -Name "$secretPrefix"
+                        $result += Set-GitHubSecret @params -Name "$secretPrefix`_1"
                         $result += Set-GitHubSecret @params -Name "$secretPrefix`_2"
                         $result += Set-GitHubSecret @params -Name "$secretPrefix`_3"
                         Write-Host ($result | Select-Object * | Format-Table | Out-String)
                     }
                 }
             }
-            LogGroup "Repository - [$repoName]" {
+            LogGroup "Repository - [$repoPrefix]" {
                 Write-Host ($repo | Format-List | Out-String)
                 Write-Host ($repo2 | Format-List | Out-String)
                 Write-Host ($repo3 | Format-List | Out-String)
@@ -79,11 +78,11 @@ Describe 'Secrets' {
                     Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
                 }
                 'organization' {
-                    $orgSecrets = Get-GitHubSecret -Owner $owner | Where-Object { $_.Name -like "$secretPrefix*" }
                     LogGroup 'Secrets to remove' {
+                        $orgSecrets = Get-GitHubSecret -Owner $owner | Where-Object { $_.Name -like "$secretPrefix*" }
                         Write-Host "$($orgSecrets | Format-List | Out-String)"
+                        $orgSecrets | Remove-GitHubSecret
                     }
-                    $orgSecrets | Remove-GitHubSecret
                     LogGroup 'Repos to remove' {
                         $reposToRemove = Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" }
                         Write-Host "$($reposToRemove | Format-List | Out-String)"
@@ -302,7 +301,7 @@ Describe 'Secrets' {
             BeforeAll {
                 $scope = @{
                     Owner      = $owner
-                    Repository = $repoName
+                    Repository = $repoPrefix
                 }
                 Set-GitHubSecret @scope -Name $secretPrefix -Value 'repository'
             }
@@ -415,15 +414,15 @@ Describe 'Secrets' {
             BeforeAll {
                 $scope = @{
                     Owner      = $owner
-                    Repository = $repoName
+                    Repository = $repoPrefix
                 }
                 Set-GitHubSecret @scope -Name $secretPrefix -Value 'repository'
                 $scope = @{
                     Owner       = $owner
-                    Repository  = $repoName
+                    Repository  = $repoPrefix
                     Environment = $environmentName
                 }
-                Set-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName
+                Set-GitHubEnvironment -Owner $owner -Repository $repoPrefix -Name $environmentName
                 Set-GitHubSecret @scope -Name $secretPrefix -Value 'environment'
             }
 
