@@ -124,7 +124,7 @@
                         Notifications = $team.notification_setting -eq 'notifications_enabled' ? $true : $false
                         Visible       = $team.privacy -eq 'closed' ? $true : $false
                         ParentTeam    = $team.parent.slug
-                        Organization  = $team.organization.login
+                        Organization  = $Organization
                         ChildTeams    = @()
                         CreatedAt     = $team.created_at
                         UpdatedAt     = $team.updated_at

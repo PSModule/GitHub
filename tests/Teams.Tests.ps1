@@ -129,7 +129,7 @@ Describe 'Teams' {
                 }
                 $team | Should -Not -BeNullOrEmpty
                 $team.Name | Should -Be $teamName
-                Remove-GitHubTeam @scope -Name $teamName -Confirm:$false
+                Remove-GitHubTeam @scope -Slug $teamName -Confirm:$false
             }
         }
     }

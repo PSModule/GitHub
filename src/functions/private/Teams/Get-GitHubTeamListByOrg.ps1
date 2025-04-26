@@ -98,7 +98,7 @@ query($org: String!, $after: String) {
                         Notifications = $_.notificationSetting -eq 'NOTIFICATIONS_ENABLED' ? $true : $false
                         Visible       = $_.privacy -eq 'VISIBLE' ? $true : $false
                         ParentTeam    = $_.parentTeam.slug
-                        Organization  = $_.organization.login
+                        Organization  = $Organization
                         ChildTeams    = $_.childTeams.nodes.name
                         CreatedAt     = $_.createdAt
                         UpdatedAt     = $_.updatedAt

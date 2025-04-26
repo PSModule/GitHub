@@ -13,15 +13,14 @@
     [OutputType([GitHubTeam])]
     [CmdletBinding()]
     param(
-        # The slug of the team name.
-        [Parameter(Mandatory)]
-        [Alias('team_slug')]
-        [string] $Slug,
-
         # The organization name. The name is not case sensitive.
         # If not provided, the owner from the context will be used.
         [Parameter()]
         [string] $Organization,
+
+        # The slug of the team name.
+        [Parameter(Mandatory)]
+        [string] $Slug,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -97,7 +96,7 @@ query($org: String!, $teamSlug: String!) {
                 Notifications = $team.notificationSetting -eq 'NOTIFICATIONS_ENABLED' ? $true : $false
                 Visible       = $team.privacy -eq 'VISIBLE' ? $true : $false
                 ParentTeam    = $team.parentTeam.slug
-                Organization  = $team.organization.login
+                Organization  = $Organization
                 ChildTeams    = $team.childTeams.nodes.name
                 CreatedAt     = $team.createdAt
                 UpdatedAt     = $team.updatedAt

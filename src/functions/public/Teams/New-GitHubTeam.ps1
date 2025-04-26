@@ -50,7 +50,8 @@
         [Parameter()]
         [string[]] $Maintainers,
 
-        # The full name (e.g., "organization-name/repository-name") of repositories to add the team to.
+        # The full name of repositories to add the team to.
+        # Example: 'github/octocat' or 'octocat/Hello-World'
         [Parameter()]
         [string[]] $RepoNames,
 
@@ -133,7 +134,7 @@
                         Notifications = $team.notification_setting -eq 'notifications_enabled' ? $true : $false
                         Visible       = $team.privacy -eq 'closed' ? $true : $false
                         ParentTeam    = $team.parent.slug
-                        Organization  = $team.organization.login
+                        Organization  = $Organization
                         ChildTeams    = @()
                         CreatedAt     = $team.created_at
                         UpdatedAt     = $team.updated_at
