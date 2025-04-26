@@ -38,6 +38,7 @@ Describe 'Secrets' {
             }
             $repoPrefix = "$testName-$os-$TokenType-$guid"
             $secretPrefix = ("$testName`_$os`_$TokenType`_$guid" -replace '-', '_').ToUpper()
+            $orgSecretName = "$secretPrefix`ORG"
             $environmentName = "$testName-$os-$TokenType-$guid"
 
             switch ($OwnerType) {
@@ -51,7 +52,6 @@ Describe 'Secrets' {
                     $repo2 = New-GitHubRepository -Organization $owner -Name "$repoPrefix-2" -AllowSquashMerge
                     $repo3 = New-GitHubRepository -Organization $owner -Name "$repoPrefix-3" -AllowSquashMerge
                     LogGroup "Org secret - [$secretPrefix]" {
-                        $orgSecretName = "$secretPrefix`ORG"
                         $params = @{
                             Owner                = $owner
                             Name                 = $orgSecretName

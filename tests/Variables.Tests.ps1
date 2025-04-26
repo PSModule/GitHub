@@ -38,6 +38,7 @@ Describe 'Variables' {
             }
             $repoPrefix = "$testName-$os-$TokenType-$guid"
             $variablePrefix = ("$testName`_$os`_$TokenType`_$guid" -replace '-', '_').ToUpper()
+            $orgVariableName = "$variablePrefix`ORG"
             $environmentName = "$testName-$os-$TokenType-$guid"
 
             switch ($OwnerType) {
@@ -51,7 +52,6 @@ Describe 'Variables' {
                     $repo2 = New-GitHubRepository -Organization $owner -Name "$repoPrefix-2" -AllowSquashMerge
                     $repo3 = New-GitHubRepository -Organization $owner -Name "$repoPrefix-3" -AllowSquashMerge
                     LogGroup "Org variable - [$variablePrefix]" {
-                        $orgVariableName = "$variablePrefix`ORG"
                         $params = @{
                             Owner                = $owner
                             Name                 = $orgVariableName
