@@ -35,7 +35,8 @@
     }
 
     process {
-        $query = @'
+        $inputObject = @{
+            Query     = @'
 query($org: String!, $teamSlug: String!) {
   organization(login: $org) {
     team(slug: $teamSlug) {
@@ -63,20 +64,14 @@ query($org: String!, $teamSlug: String!) {
   }
 }
 '@
-
-        # Variables hash that will be sent with the query
-        $variables = @{
-            org      = $Organization
-            teamSlug = $Slug
+            Variables = @{
+                org      = $Organization
+                teamSlug = $Slug
+            }
+            Context   = $Context
         }
-
-        # Send the request to the GitHub GraphQL API
-        $data = Invoke-GitHubGraphQLQuery -Query $query -Variables $variables -Context $Context
-
-        # Extract team data
+        $data = Invoke-GitHubGraphQLQuery @inputObject
         $team = $data.organization.team
-
-        # Output the team object
         if ($team) {
             [GitHubTeam](
                 @{

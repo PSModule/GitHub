@@ -30,7 +30,8 @@
     }
 
     process {
-        $query = @'
+        $inputObject = @{
+            Query     = @'
 query($org: String!, $after: String) {
   organization(login: $org) {
     teams(first: 100, after: $after) {
@@ -64,27 +65,19 @@ query($org: String!, $after: String) {
   }
 }
 '@
-
-        # Variables hash that will be sent with the query
-        $variables = @{
-            org = $Organization
+            Variables = @{
+                org = $Organization
+            }
+            Context   = $Context
         }
-
-        # Prepare to store results and handle pagination
         $hasNextPage = $true
         $after = $null
 
         do {
             # Update the cursor for pagination
-            $variables['after'] = $after
-
-            # Send the request to the GitHub GraphQL API
-            $data = Invoke-GitHubGraphQLQuery -Query $query -Variables $variables -Context $Context
-
-            # Extract team data
+            $inputObject['Variables']['after'] = $after
+            $data = Invoke-GitHubGraphQLQuery @inputObject
             $teams = $data.organization.teams
-
-            # Accumulate the teams in results
             $teams.nodes | ForEach-Object {
                 [GitHubTeam](
                     @{
@@ -105,8 +98,6 @@ query($org: String!, $after: String) {
                     }
                 )
             }
-
-            # Check if there's another page to fetch
             $hasNextPage = $teams.pageInfo.hasNextPage
             $after = $teams.pageInfo.endCursor
         } while ($hasNextPage)
