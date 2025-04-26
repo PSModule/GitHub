@@ -77,28 +77,26 @@ query($org: String!, $teamSlug: String!) {
         $team = $data.organization.team
 
         # Output the team object
-        if (-not $team) {
-            return
+        if ($team) {
+            [GitHubTeam](
+                @{
+                    Name          = $team.name
+                    Slug          = $team.slug
+                    NodeID        = $team.id
+                    Url           = $team.url
+                    CombinedSlug  = $team.CombinedSlug
+                    ID            = $team.DatabaseId
+                    Description   = $team.description
+                    Notifications = $team.notificationSetting -eq 'NOTIFICATIONS_ENABLED' ? $true : $false
+                    Visible       = $team.privacy -eq 'VISIBLE' ? $true : $false
+                    ParentTeam    = $team.parentTeam.slug
+                    Organization  = $Organization
+                    ChildTeams    = $team.childTeams.nodes.name
+                    CreatedAt     = $team.createdAt
+                    UpdatedAt     = $team.updatedAt
+                }
+            )
         }
-
-        [GitHubTeam](
-            @{
-                Name          = $team.name
-                Slug          = $team.slug
-                NodeID        = $team.id
-                Url           = $team.url
-                CombinedSlug  = $team.CombinedSlug
-                ID            = $team.DatabaseId
-                Description   = $team.description
-                Notifications = $team.notificationSetting -eq 'NOTIFICATIONS_ENABLED' ? $true : $false
-                Visible       = $team.privacy -eq 'VISIBLE' ? $true : $false
-                ParentTeam    = $team.parentTeam.slug
-                Organization  = $Organization
-                ChildTeams    = $team.childTeams.nodes.name
-                CreatedAt     = $team.createdAt
-                UpdatedAt     = $team.updatedAt
-            }
-        )
     }
 
     end {
