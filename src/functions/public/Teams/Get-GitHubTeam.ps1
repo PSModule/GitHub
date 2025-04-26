@@ -17,22 +17,24 @@
         Get-GitHubTeam -Organization 'github' -Slug 'my-team-name'
 
         Gets the team with the slug 'my-team-name' in the `github` organization.
+
+        .NOTES
+        [List teams](https://docs.github.com/rest/teams/teams#list-teams)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Teams/Get-GitHubTeam
     #>
     [OutputType([GitHubTeam])]
-    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
+    [CmdletBinding(DefaultParameterSetName = 'List all teams in an organization')]
     param(
-        # The slug of the team name.
-        [Parameter(
-            Mandatory,
-            ParameterSetName = 'BySlug'
-        )]
-        [Alias('team_slug')]
-        [string] $Slug,
-
         # The organization name. The name is not case sensitive.
         # If not provided, the owner from the context will be used.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [string] $Organization,
+
+        # The slug of the team name.
+        [Parameter(Mandatory, ParameterSetName = 'BySlug')]
+        [string] $Slug,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -45,11 +47,6 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if ([string]::IsNullOrEmpty($Organization)) {
-            $Organization = $Context.Owner
-        }
-        Write-Debug "Organization: [$Organization]"
     }
 
     process {
@@ -71,5 +68,3 @@
         Write-Debug "[$stackPath] - End"
     }
 }
-
-#SkipTest:FunctionTest:Will add a test for this function in a future PR

@@ -8,9 +8,6 @@
 
         .EXAMPLE
         Get-GitHubTeamListByOrg -Organization 'github'
-
-        .NOTES
-        [List teams](https://docs.github.com/rest/teams/teams#list-teams)
     #>
     [OutputType([GitHubTeam[]])]
     [CmdletBinding()]
@@ -33,14 +30,16 @@
     }
 
     process {
-        $query = @"
-query(`$org: String!, `$after: String) {
-  organization(login: `$org) {
-    teams(first: 100, after: `$after) {
+        $inputObject = @{
+            Query     = @'
+query($org: String!, $after: String) {
+  organization(login: $org) {
+    teams(first: 100, after: $after) {
       nodes {
         id
         name
         slug
+        url
         combinedSlug
         databaseId
         description
@@ -49,9 +48,6 @@ query(`$org: String!, `$after: String) {
         parentTeam {
           name
           slug
-        }
-        organization {
-          login
         }
         childTeams(first: 100) {
           nodes {
@@ -68,49 +64,40 @@ query(`$org: String!, `$after: String) {
     }
   }
 }
-"@
-
-        # Variables hash that will be sent with the query
-        $variables = @{
-            org = $Organization
+'@
+            Variables = @{
+                org = $Organization
+            }
+            Context   = $Context
         }
-
-        # Prepare to store results and handle pagination
         $hasNextPage = $true
         $after = $null
 
         do {
             # Update the cursor for pagination
-            $variables['after'] = $after
-
-            # Send the request to the GitHub GraphQL API
-            $data = Invoke-GitHubGraphQLQuery -Query $query -Variables $variables -Context $Context
-
-            # Extract team data
+            $inputObject['Variables']['after'] = $after
+            $data = Invoke-GitHubGraphQLQuery @inputObject
             $teams = $data.organization.teams
-
-            # Accumulate the teams in results
             $teams.nodes | ForEach-Object {
                 [GitHubTeam](
                     @{
                         Name          = $_.name
                         Slug          = $_.slug
                         NodeID        = $_.id
+                        Url           = $_.url
                         CombinedSlug  = $_.combinedSlug
                         ID            = $_.databaseId
                         Description   = $_.description
                         Notifications = $_.notificationSetting -eq 'NOTIFICATIONS_ENABLED' ? $true : $false
                         Visible       = $_.privacy -eq 'VISIBLE' ? $true : $false
                         ParentTeam    = $_.parentTeam.slug
-                        Organization  = $_.organization.login
+                        Organization  = $Organization
                         ChildTeams    = $_.childTeams.nodes.name
                         CreatedAt     = $_.createdAt
                         UpdatedAt     = $_.updatedAt
                     }
                 )
             }
-
-            # Check if there's another page to fetch
             $hasNextPage = $teams.pageInfo.hasNextPage
             $after = $teams.pageInfo.endCursor
         } while ($hasNextPage)

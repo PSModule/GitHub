@@ -14,6 +14,10 @@
     # The description of the team.
     [string] $Description
 
+    # The HTML URL of the team.
+    # Example: https://github.com/orgs/github/teams/justice-league
+    [string] $Url
+
     # The notification setting the team has chosen.
     # $true = notifications_enabled - team members receive notifications when the team is @mentioned.
     # $false = notifications_disabled - no one receives notifications.

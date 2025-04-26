@@ -24,20 +24,23 @@
         }
         New-GitHubTeam @params
 
+        .LINK
+        https://psmodule.io/GitHub/Functions/Teams/New-GitHubTeam
+
         .NOTES
         [Create a team](https://docs.github.com/rest/teams/teams#create-a-team)
     #>
     [OutputType([GitHubTeam])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
-        # The name of the team.
-        [Parameter(Mandatory)]
-        [string] $Name,
-
         # The organization name. The name is not case sensitive.
         # If not provided, the organization from the context is used.
         [Parameter(Mandatory)]
         [string] $Organization,
+
+        # The name of the team.
+        [Parameter(Mandatory)]
+        [string] $Name,
 
         # The description of the team.
         [Parameter()]
@@ -47,7 +50,8 @@
         [Parameter()]
         [string[]] $Maintainers,
 
-        # The full name (e.g., "organization-name/repository-name") of repositories to add the team to.
+        # The full name of repositories to add the team to.
+        # Example: 'github/octocat' or 'octocat/Hello-World'
         [Parameter()]
         [string[]] $RepoNames,
 
@@ -76,7 +80,7 @@
 
         # The ID of a team to set as the parent team.
         [Parameter()]
-        [int] $ParentTeamID = 0,
+        [System.Nullable[int]] $ParentTeamID,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -104,7 +108,7 @@
             privacy              = $Visible ? 'closed' : 'secret'
             notification_setting = $Notifications ? 'notifications_enabled' : 'notifications_disabled'
             permission           = $Permission
-            parent_team_id       = $ParentTeamID -eq 0 ? $null : $ParentTeamID
+            parent_team_id       = $ParentTeamID
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
@@ -123,13 +127,14 @@
                         Name          = $team.name
                         Slug          = $team.slug
                         NodeID        = $team.node_id
+                        Url           = $team.html_url
                         CombinedSlug  = $Organization + '/' + $team.slug
                         ID            = $team.id
                         Description   = $team.description
                         Notifications = $team.notification_setting -eq 'notifications_enabled' ? $true : $false
                         Visible       = $team.privacy -eq 'closed' ? $true : $false
                         ParentTeam    = $team.parent.slug
-                        Organization  = $team.organization.login
+                        Organization  = $Organization
                         ChildTeams    = @()
                         CreatedAt     = $team.created_at
                         UpdatedAt     = $team.updated_at
@@ -143,5 +148,3 @@
         Write-Debug "[$stackPath] - End"
     }
 }
-
-#SkipTest:FunctionTest:Will add a test for this function in a future PR

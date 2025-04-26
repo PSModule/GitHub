@@ -13,15 +13,14 @@
     [OutputType([GitHubTeam])]
     [CmdletBinding()]
     param(
-        # The slug of the team name.
-        [Parameter(Mandatory)]
-        [Alias('team_slug')]
-        [string] $Slug,
-
         # The organization name. The name is not case sensitive.
         # If not provided, the owner from the context will be used.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [string] $Organization,
+
+        # The slug of the team name.
+        [Parameter(Mandatory)]
+        [string] $Slug,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -36,72 +35,63 @@
     }
 
     process {
-        $query = @"
-query(`$org: String!, `$teamSlug: String!) {
-  organization(login: `$org) {
-    team(slug: `$teamSlug) {
-        id
+        $inputObject = @{
+            Query     = @'
+query($org: String!, $teamSlug: String!) {
+  organization(login: $org) {
+    team(slug: $teamSlug) {
+      id
+      name
+      slug
+      url
+      combinedSlug
+      databaseId
+      description
+      notificationSetting
+      privacy
+      parentTeam {
         name
         slug
-        combinedSlug
-        databaseId
-        description
-        notificationSetting
-        privacy
-        parentTeam {
-          name
-          slug
-        }
-        organization {
-          login
-        }
-        childTeams(first: 100) {
-          nodes {
-            name
-          }
-        }
-        createdAt
-        updatedAt
       }
+      childTeams(first: 100) {
+        nodes {
+          name
+        }
+      }
+      createdAt
+      updatedAt
     }
   }
 }
-"@
-
-        # Variables hash that will be sent with the query
-        $variables = @{
-            org      = $Organization
-            teamSlug = $Slug
-        }
-
-        # Send the request to the GitHub GraphQL API
-        $data = Invoke-GitHubGraphQLQuery -Query $query -Variables $variables -Context $Context
-
-        # Extract team data
-        $team = $data.organization.team
-
-        # Output the team object
-        if (-not $team) {
-            return
-        }
-
-        [GitHubTeam](
-            @{
-                Name          = $team.name
-                Slug          = $team.slug
-                NodeID        = $team.id
-                CombinedSlug  = $team.CombinedSlug
-                ID            = $team.DatabaseId
-                Description   = $team.description
-                Notifications = $team.notificationSetting -eq 'NOTIFICATIONS_ENABLED' ? $true : $false
-                Visible       = $team.privacy -eq 'VISIBLE' ? $true : $false
-                ParentTeam    = $team.parentTeam.slug
-                Organization  = $team.organization.login
-                ChildTeams    = $team.childTeams.nodes.name
-                CreatedAt     = $team.createdAt
-                UpdatedAt     = $team.updatedAt
+'@
+            Variables = @{
+                org      = $Organization
+                teamSlug = $Slug
             }
-        )
+            Context   = $Context
+        }
+        $data = Invoke-GitHubGraphQLQuery @inputObject
+        $team = $data.organization.team
+        if ($team) {
+            [GitHubTeam](
+                @{
+                    Name          = $team.name
+                    Slug          = $team.slug
+                    NodeID        = $team.id
+                    Url           = $team.url
+                    CombinedSlug  = $team.CombinedSlug
+                    ID            = $team.DatabaseId
+                    Description   = $team.description
+                    Notifications = $team.notificationSetting -eq 'NOTIFICATIONS_ENABLED' ? $true : $false
+                    Visible       = $team.privacy -eq 'VISIBLE' ? $true : $false
+                    ParentTeam    = $team.parentTeam.slug
+                    Organization  = $Organization
+                    ChildTeams    = $team.childTeams.nodes.name
+                    CreatedAt     = $team.createdAt
+                    UpdatedAt     = $team.updatedAt
+                }
+            )
+        }
     }
 
     end {

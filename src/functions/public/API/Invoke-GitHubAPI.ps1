@@ -315,15 +315,21 @@ filter Invoke-GitHubAPI {
                 Information = $errordetails.documentation_url
                 Status      = $failure.Exception.Message
                 StatusCode  = $errordetails.status
+                ErrorTime   = Get-Date -Format 's'
             }
-            $APICall.HttpVersion = $APICall.HttpVersion.ToString()
-            $APICall.Headers = $APICall.Headers | ConvertTo-Json
-            $APICall.Method = $APICall.Method.ToString()
 
             $exception = @"
 ----------------------------------
+Request:
+$([pscustomobject]$APICall | Format-List -Property Headers, HttpVersion, Method, Uri, ContentType, Authentication, Token | Out-String)
+----------------------------------
+Response Headers:
+$($headers | Format-List | Out-String)
+----------------------------------
+Error:
 $($errorResult | Format-List | Out-String)
 ----------------------------------
+
 "@
             $PSCmdlet.ThrowTerminatingError(
                 [System.Management.Automation.ErrorRecord]::new(

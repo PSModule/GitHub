@@ -13,9 +13,9 @@
         GitHubWorkflowRun
 
         .LINK
-        https://psmodule.io/GitHub/Functions/Actions/Workflows/Runs/Restart-GitHubWorkflowRun/
+        https://psmodule.io/GitHub/Functions/Workflows/Runs/Restart-GitHubWorkflowRun/
 
-        .LINK
+        .NOTES
         [Re-run a workflow](https://docs.github.com/rest/actions/workflow-runs#re-run-a-workflow)
     #>
     [CmdletBinding(SupportsShouldProcess)]

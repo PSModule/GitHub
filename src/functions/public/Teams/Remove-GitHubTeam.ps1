@@ -12,25 +12,21 @@
 
         .NOTES
         [Delete a team](https://docs.github.com/rest/teams/teams#delete-a-team)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Teams/Remove-GitHubTeam
     #>
     [OutputType([void])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
-        # The slug of the team name.
-        [Parameter(
-            Mandatory,
-            ValueFromPipelineByPropertyName
-        )]
-        [Alias('team_slug', 'Slug')]
-        [string] $Name,
-
         # The organization name. The name is not case sensitive.
         # If not provided, the organization from the context is used.
-        [Parameter(
-            Mandatory,
-            ValueFromPipelineByPropertyName
-        )]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Organization,
+
+        # The slug of the team name.
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
+        [string] $Slug,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -48,11 +44,11 @@
     process {
         $inputObject = @{
             Method      = 'DELETE'
-            APIEndpoint = "/orgs/$Organization/teams/$Name"
+            APIEndpoint = "/orgs/$Organization/teams/$Slug"
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("$Organization/$Name", 'DELETE')) {
+        if ($PSCmdlet.ShouldProcess("$Organization/$Slug", 'DELETE')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 Write-Output $_.Response
             }
@@ -63,5 +59,3 @@
         Write-Debug "[$stackPath] - End"
     }
 }
-
-#SkipTest:FunctionTest:Will add a test for this function in a future PR

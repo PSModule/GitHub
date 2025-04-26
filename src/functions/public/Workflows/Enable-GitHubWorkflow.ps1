@@ -10,9 +10,9 @@
         GitHubWorkflow
 
         .LINK
-        https://psmodule.io/GitHub/Functions/Actions/Workflows/Enable-GitHubWorkflow/
+        https://psmodule.io/GitHub/Functions/Workflows/Enable-GitHubWorkflow/
 
-        .LINK
+        .NOTES
         [Enable a workflow](https://docs.github.com/rest/actions/workflows#enable-a-workflow)
     #>
     [CmdletBinding(SupportsShouldProcess)]
