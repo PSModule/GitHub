@@ -315,22 +315,14 @@ filter Invoke-GitHubAPI {
                 Information = $errordetails.documentation_url
                 Status      = $failure.Exception.Message
                 StatusCode  = $errordetails.status
-            }
-
-            # Format API call details for error message
-            $requestDetails = @{
-                Uri         = $APICall.Uri
-                Method      = $APICall.Method.ToString()
-                Headers     = $APICall.Headers
-                Body        = $APICall.Body
-                HttpVersion = $APICall.HttpVersion.ToString()
+                ErrorTime   = Get-Date -Format 's'
             }
 
             $exception = @"
 
 ----------------------------------
 Request Details:
-$($requestDetails | Format-List | Out-String)
+$($APICall | Format-List | Out-String)
 ----------------------------------
 Response Headers:
 $($headers | Format-List | Out-String)
