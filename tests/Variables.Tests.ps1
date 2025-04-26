@@ -51,15 +51,16 @@ Describe 'Variables' {
                     $repo2 = New-GitHubRepository -Organization $owner -Name "$repoPrefix-2" -AllowSquashMerge
                     $repo3 = New-GitHubRepository -Organization $owner -Name "$repoPrefix-3" -AllowSquashMerge
                     LogGroup "Org variable - [$variablePrefix]" {
+                        $orgVariableName = "$variablePrefix`ORG"
                         $params = @{
                             Owner                = $owner
-                            Name                 = $variablePrefix
+                            Name                 = $orgVariableName
                             Value                = 'organization'
                             Visibility           = 'selected'
                             SelectedRepositories = $repo.id
                         }
-                        $result = Set-GitHubVariable @params
-                        Write-Host ($result | Select-Object * | Format-Table | Out-String)
+                        $orgVariable = Set-GitHubVariable @params
+                        Write-Host ($orgVariable | Select-Object * | Format-Table | Out-String)
                     }
                 }
             }
@@ -241,8 +242,8 @@ Describe 'Variables' {
 
             Context 'SelectedRepository' -Tag 'Flaky' {
                 It 'Get-GitHubVariableSelectedRepository - gets a list of selected repositories' {
-                    LogGroup "SelectedRepositories - [$variablePrefix]" {
-                        $result = Get-GitHubVariableSelectedRepository -Owner $owner -Name $variablePrefix
+                    LogGroup "SelectedRepositories - [$orgVariableName]" {
+                        $result = Get-GitHubVariableSelectedRepository -Owner $owner -Name $orgVariableName
                         Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
                     }
                     $result | Should -Not -BeNullOrEmpty
@@ -250,20 +251,20 @@ Describe 'Variables' {
                     $result | Should -HaveCount 1
                 }
                 It 'Add-GitHubVariableSelectedRepository - adds a repository to the list of selected repositories' {
-                    { Add-GitHubVariableSelectedRepository -Owner $owner -Name $variablePrefix -RepositoryID $repo2.id } | Should -Not -Throw
+                    { Add-GitHubVariableSelectedRepository -Owner $owner -Name $orgVariableName -RepositoryID $repo2.id } | Should -Not -Throw
                 }
                 It 'Add-GitHubVariableSelectedRepository - adds a repository to the list of selected repositories - idempotency test' {
-                    { Add-GitHubVariableSelectedRepository -Owner $owner -Name $variablePrefix -RepositoryID $repo2.id } | Should -Not -Throw
+                    { Add-GitHubVariableSelectedRepository -Owner $owner -Name $orgVariableName -RepositoryID $repo2.id } | Should -Not -Throw
                 }
                 It 'Add-GitHubVariableSelectedRepository - adds a repository to the list of selected repositories using pipeline' {
                     LogGroup 'Repo3' {
                         Write-Host "$($repo3 | Format-List | Out-String)"
                     }
-                    { $repo3 | Add-GitHubVariableSelectedRepository -Owner $owner -Name $variablePrefix } | Should -Not -Throw
+                    { $repo3 | Add-GitHubVariableSelectedRepository -Owner $owner -Name $orgVariableName } | Should -Not -Throw
                 }
                 It 'Get-GitHubVariableSelectedRepository - gets 3 repositories' {
-                    LogGroup "SelectedRepositories - [$variablePrefix]" {
-                        $result = Get-GitHubVariableSelectedRepository -Owner $owner -Name $variablePrefix
+                    LogGroup "SelectedRepositories - [$orgVariableName]" {
+                        $result = Get-GitHubVariableSelectedRepository -Owner $owner -Name $orgVariableName
                         Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
                     }
                     $result | Should -Not -BeNullOrEmpty
@@ -271,20 +272,20 @@ Describe 'Variables' {
                     $result | Should -HaveCount 3
                 }
                 It 'Remove-GitHubVariableSelectedRepository - removes a repository from the list of selected repositories' {
-                    { Remove-GitHubVariableSelectedRepository -Owner $owner -Name $variablePrefix -RepositoryID $repo2.id } | Should -Not -Throw
+                    { Remove-GitHubVariableSelectedRepository -Owner $owner -Name $orgVariableName -RepositoryID $repo2.id } | Should -Not -Throw
                 }
                 It 'Remove-GitHubVariableSelectedRepository - removes a repository from the list of selected repositories - idempotency test' {
-                    { Remove-GitHubVariableSelectedRepository -Owner $owner -Name $variablePrefix -RepositoryID $repo2.id } | Should -Not -Throw
+                    { Remove-GitHubVariableSelectedRepository -Owner $owner -Name $orgVariableName -RepositoryID $repo2.id } | Should -Not -Throw
                 }
                 It 'Remove-GitHubVariableSelectedRepository - removes a repository from the list of selected repositories using pipeline' {
                     LogGroup 'Repo3' {
                         Write-Host "$($repo3 | Format-List | Out-String)"
                     }
-                    { $repo3 | Remove-GitHubVariableSelectedRepository -Owner $owner -Name $variablePrefix } | Should -Not -Throw
+                    { $repo3 | Remove-GitHubVariableSelectedRepository -Owner $owner -Name $orgVariableName } | Should -Not -Throw
                 }
                 It 'Get-GitHubVariableSelectedRepository - gets 1 repository' {
-                    LogGroup "SelectedRepositories - [$variablePrefix]" {
-                        $result = Get-GitHubVariableSelectedRepository -Owner $owner -Name $variablePrefix
+                    LogGroup "SelectedRepositories - [$orgVariableName]" {
+                        $result = Get-GitHubVariableSelectedRepository -Owner $owner -Name $orgVariableName
                         Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
                     }
                     $result | Should -Not -BeNullOrEmpty
@@ -292,16 +293,16 @@ Describe 'Variables' {
                     $result | Should -HaveCount 1
                 }
                 It 'Set-GitHubVariableSelectedRepository - should set the selected repositories for the variable' {
-                    { Set-GitHubVariableSelectedRepository -Owner $owner -Name $variablePrefix -RepositoryID $repo.id, $repo2.id, $repo3.id } |
+                    { Set-GitHubVariableSelectedRepository -Owner $owner -Name $orgVariableName -RepositoryID $repo.id, $repo2.id, $repo3.id } |
                         Should -Not -Throw
                 }
                 It 'Set-GitHubVariableSelectedRepository - should set the selected repositories for the variable - idempotency test' {
-                    { Set-GitHubVariableSelectedRepository -Owner $owner -Name $variablePrefix -RepositoryID $repo.id, $repo2.id, $repo3.id } |
+                    { Set-GitHubVariableSelectedRepository -Owner $owner -Name $orgVariableName -RepositoryID $repo.id, $repo2.id, $repo3.id } |
                         Should -Not -Throw
                 }
                 It 'Get-GitHubVariableSelectedRepository - gets 3 repository' {
-                    $result = Get-GitHubVariableSelectedRepository -Owner $owner -Name $variablePrefix
-                    LogGroup "SelectedRepositories - [$variablePrefix]" {
+                    $result = Get-GitHubVariableSelectedRepository -Owner $owner -Name $orgVariableName
+                    LogGroup "SelectedRepositories - [$orgVariableName]" {
                         Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
                     }
                     $result | Should -Not -BeNullOrEmpty
@@ -317,7 +318,7 @@ Describe 'Variables' {
                     Owner      = $owner
                     Repository = $repo
                 }
-                Set-GitHubVariable @scope -Name $variablePrefix -Value 'repository'
+                Set-GitHubVariable @scope -Name $orgVariableName -Value 'repository'
             }
             It 'Set-GitHubVariable' {
                 $name = "$variablePrefix`TestVariable"
@@ -436,14 +437,14 @@ Describe 'Variables' {
                     Owner      = $owner
                     Repository = $repo
                 }
-                Set-GitHubVariable @scope -Name $variablePrefix -Value 'repository'
+                Set-GitHubVariable @scope -Name $orgVariableName -Value 'repository'
                 $scope = @{
                     Owner       = $owner
                     Repository  = $repo
                     Environment = $environmentName
                 }
                 Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
-                Set-GitHubVariable @scope -Name $variablePrefix -Value 'environment'
+                Set-GitHubVariable @scope -Name $orgVariableName -Value 'environment'
             }
             It 'Set-GitHubVariable' {
                 $name = "$variablePrefix`TestVariable"

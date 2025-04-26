@@ -51,17 +51,17 @@ Describe 'Secrets' {
                     $repo2 = New-GitHubRepository -Organization $owner -Name "$repoPrefix-2" -AllowSquashMerge
                     $repo3 = New-GitHubRepository -Organization $owner -Name "$repoPrefix-3" -AllowSquashMerge
                     LogGroup "Org secret - [$secretPrefix]" {
+                        $orgSecretName = "$secretPrefix`ORG"
                         $params = @{
                             Owner                = $owner
+                            Name                 = $orgSecretName
                             Value                = 'organization'
                             Visibility           = 'selected'
                             SelectedRepositories = $repo.id
                         }
-                        $result = @()
-                        $result += Set-GitHubSecret @params -Name "$secretPrefix`_1"
-                        $result += Set-GitHubSecret @params -Name "$secretPrefix`_2"
-                        $result += Set-GitHubSecret @params -Name "$secretPrefix`_3"
-                        Write-Host ($result | Select-Object * | Format-Table | Out-String)
+
+                        $orgSecret += Set-GitHubSecret @params
+                        Write-Host ($orgSecret | Select-Object * | Format-Table | Out-String)
                     }
                 }
             }
@@ -227,8 +227,8 @@ Describe 'Secrets' {
 
             Context 'SelectedRepository' {
                 It 'Get-GitHubSecretSelectedRepository - gets a list of selected repositories' {
-                    LogGroup "SelectedRepositories - [$secretPrefix]" {
-                        $result = Get-GitHubSecretSelectedRepository -Owner $owner -Name $secretPrefix
+                    LogGroup "SelectedRepositories - [$orgSecretName]" {
+                        $result = Get-GitHubSecretSelectedRepository -Owner $owner -Name $orgSecretName
                         Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
                     }
                     $result | Should -Not -BeNullOrEmpty
@@ -236,20 +236,20 @@ Describe 'Secrets' {
                     $result | Should -HaveCount 1
                 }
                 It 'Add-GitHubSecretSelectedRepository - adds a repository to the list of selected repositories' {
-                    { Add-GitHubSecretSelectedRepository -Owner $owner -Name $secretPrefix -RepositoryID $repo2.id } | Should -Not -Throw
+                    { Add-GitHubSecretSelectedRepository -Owner $owner -Name $orgSecretName -RepositoryID $repo2.id } | Should -Not -Throw
                 }
                 It 'Add-GitHubSecretSelectedRepository - adds a repository to the list of selected repositories - idempotency test' {
-                    { Add-GitHubSecretSelectedRepository -Owner $owner -Name $secretPrefix -RepositoryID $repo2.id } | Should -Not -Throw
+                    { Add-GitHubSecretSelectedRepository -Owner $owner -Name $orgSecretName -RepositoryID $repo2.id } | Should -Not -Throw
                 }
                 It 'Add-GitHubSecretSelectedRepository - adds a repository to the list of selected repositories using pipeline' {
                     LogGroup 'Repo3' {
                         Write-Host "$($repo3 | Format-List | Out-String)"
                     }
-                    { $repo3 | Add-GitHubSecretSelectedRepository -Owner $owner -Name $secretPrefix } | Should -Not -Throw
+                    { $repo3 | Add-GitHubSecretSelectedRepository -Owner $owner -Name $orgSecretName } | Should -Not -Throw
                 }
                 It 'Get-GitHubSecretSelectedRepository - gets 3 repositories' {
-                    LogGroup "SelectedRepositories - [$secretPrefix]" {
-                        $result = Get-GitHubSecretSelectedRepository -Owner $owner -Name $secretPrefix
+                    LogGroup "SelectedRepositories - [$orgSecretName]" {
+                        $result = Get-GitHubSecretSelectedRepository -Owner $owner -Name $orgSecretName
                         Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
                     }
                     $result | Should -Not -BeNullOrEmpty
@@ -257,20 +257,20 @@ Describe 'Secrets' {
                     $result | Should -HaveCount 3
                 }
                 It 'Remove-GitHubSecretSelectedRepository - removes a repository from the list of selected repositories' {
-                    { Remove-GitHubSecretSelectedRepository -Owner $owner -Name $secretPrefix -RepositoryID $repo2.id } | Should -Not -Throw
+                    { Remove-GitHubSecretSelectedRepository -Owner $owner -Name $orgSecretName -RepositoryID $repo2.id } | Should -Not -Throw
                 }
                 It 'Remove-GitHubSecretSelectedRepository - removes a repository from the list of selected repositories - idempotency test' {
-                    { Remove-GitHubSecretSelectedRepository -Owner $owner -Name $secretPrefix -RepositoryID $repo2.id } | Should -Not -Throw
+                    { Remove-GitHubSecretSelectedRepository -Owner $owner -Name $orgSecretName -RepositoryID $repo2.id } | Should -Not -Throw
                 }
                 It 'Remove-GitHubSecretSelectedRepository - removes a repository from the list of selected repositories using pipeline' {
                     LogGroup 'Repo3' {
                         Write-Host "$($repo3 | Format-List | Out-String)"
                     }
-                    { $repo3 | Remove-GitHubSecretSelectedRepository -Owner $owner -Name $secretPrefix } | Should -Not -Throw
+                    { $repo3 | Remove-GitHubSecretSelectedRepository -Owner $owner -Name $orgSecretName } | Should -Not -Throw
                 }
                 It 'Get-GitHubSecretSelectedRepository - gets 1 repository' {
-                    LogGroup "SelectedRepositories - [$secretPrefix]" {
-                        $result = Get-GitHubSecretSelectedRepository -Owner $owner -Name $secretPrefix
+                    LogGroup "SelectedRepositories - [$orgSecretName]" {
+                        $result = Get-GitHubSecretSelectedRepository -Owner $owner -Name $orgSecretName
                         Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
                     }
                     $result | Should -Not -BeNullOrEmpty
@@ -278,16 +278,16 @@ Describe 'Secrets' {
                     $result | Should -HaveCount 1
                 }
                 It 'Set-GitHubSecretSelectedRepository - should set the selected repositories for the secret' {
-                    { Set-GitHubSecretSelectedRepository -Owner $owner -Name $secretPrefix -RepositoryID $repo.id, $repo2.id, $repo3.id } |
+                    { Set-GitHubSecretSelectedRepository -Owner $owner -Name $orgSecretName -RepositoryID $repo.id, $repo2.id, $repo3.id } |
                         Should -Not -Throw
                 }
                 It 'Set-GitHubSecretSelectedRepository - should set the selected repositories for the secret - idempotency test' {
-                    { Set-GitHubSecretSelectedRepository -Owner $owner -Name $secretPrefix -RepositoryID $repo.id, $repo2.id, $repo3.id } |
+                    { Set-GitHubSecretSelectedRepository -Owner $owner -Name $orgSecretName -RepositoryID $repo.id, $repo2.id, $repo3.id } |
                         Should -Not -Throw
                 }
                 It 'Get-GitHubSecretSelectedRepository - gets 3 repository' {
-                    $result = Get-GitHubSecretSelectedRepository -Owner $owner -Name $secretPrefix
-                    LogGroup "SelectedRepositories - [$secretPrefix]" {
+                    $result = Get-GitHubSecretSelectedRepository -Owner $owner -Name $orgSecretName
+                    LogGroup "SelectedRepositories - [$orgSecretName]" {
                         Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
                     }
                     $result | Should -Not -BeNullOrEmpty
@@ -303,7 +303,7 @@ Describe 'Secrets' {
                     Owner      = $owner
                     Repository = $repo
                 }
-                Set-GitHubSecret @scope -Name $secretPrefix -Value 'repository'
+                Set-GitHubSecret @scope -Name $orgSecretName -Value 'repository'
             }
 
             Context 'PublicKey' {
@@ -416,14 +416,14 @@ Describe 'Secrets' {
                     Owner      = $owner
                     Repository = $repo
                 }
-                Set-GitHubSecret @scope -Name $secretPrefix -Value 'repository'
+                Set-GitHubSecret @scope -Name $orgSecretName -Value 'repository'
                 $scope = @{
                     Owner       = $owner
                     Repository  = $repo
                     Environment = $environmentName
                 }
                 Set-GitHubEnvironment -Owner $owner -Repository $repo -Name $environmentName
-                Set-GitHubSecret @scope -Name $secretPrefix -Value 'environment'
+                Set-GitHubSecret @scope -Name $orgSecretName -Value 'environment'
             }
 
             Context 'PublicKey' {
