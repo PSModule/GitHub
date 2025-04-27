@@ -54,11 +54,11 @@
 
         # Whether the release is a draft.
         [Parameter(ParameterSetName = 'Not latest')]
-        [switch] $Draft,
+        [System.Nullable[switch]] $Draft,
 
         # Whether to identify the release as a prerelease.
         [Parameter(ParameterSetName = 'Not latest')]
-        [switch] $Prerelease,
+        [System.Nullable[switch]] $Prerelease,
 
         # If specified, a discussion of the specified category is created and linked to the release.
         # The value must be a category that already exists in the repository.
@@ -74,7 +74,7 @@
         # Specifies whether this release should be set as the latest release for the repository. If the release is a draft or a prerelease, setting
         # this parameters will promote the release to a release, setting the draft and prerelease parameters to false.
         [Parameter(Mandatory, ParameterSetName = 'Set latest')]
-        [switch] $Latest,
+        [System.Nullable[switch]] $Latest,
 
         # Takes all parameters and updates the release with the provided _AND_ the default values of the non-provided parameters.
         # Used for Set-GitHubRelease.
@@ -158,8 +158,9 @@
         }
 
         if ($PSCmdlet.ShouldProcess("release with ID [$ID] in [$Owner/$Repository]", 'Update')) {
+            $resultLatest = $PSBoundParameters.ContainsKey('Latest') ? $Latest : $release.Latest
             Invoke-GitHubAPI @inputObject | ForEach-Object {
-                [GitHubRelease]::new($_.Response , $Owner, $Repository, $Latest)
+                [GitHubRelease]::new($_.Response , $Owner, $Repository, $resultLatest)
             }
         }
     }

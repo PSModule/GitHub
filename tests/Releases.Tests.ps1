@@ -176,7 +176,7 @@ Describe 'Releases' {
             }
 
             It 'Update-GitHubRelease - Updates a release' {
-                $release = Update-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.3' -Name 'Updated Release' -Notes 'Updated release notes' -Debug -Confirm:$false
+                $release = Update-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.3' -Name 'Updated Release' -Notes 'Updated release notes'
                 LogGroup 'Updated release' {
                     Write-Host ($release | Format-List -Property * | Out-String)
                 }
