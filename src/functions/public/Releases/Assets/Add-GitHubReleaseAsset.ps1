@@ -37,9 +37,20 @@
         the old file before you can re-upload the new asset.
 
         .EXAMPLE
-        Add-GitHubReleaseAsset -Owner 'octocat' -Repository 'hello-world' -ID '7654321' -FilePath 'C:\Users\octocat\Downloads\hello-world.zip'
+        Add-GitHubReleaseAsset -Owner 'octocat' -Repository 'hello-world' -ID '7654321' -Path 'C:\Users\octocat\Downloads\hello-world.zip'
 
         Gets the release assets for the release with the ID '1234567' for the repository 'octocat/hello-world'.
+
+        .EXAMPLE
+        Add-GitHubReleaseAsset -Owner 'octocat' -Repository 'hello-world' -ID '7654321' -Path 'C:\Users\octocat\Projects\MyApp'
+
+        Automatically creates a zip file from the contents of the MyApp directory and uploads it as a release asset.
+
+        .INPUTS
+        GitHubRelease
+
+        .OUTPUTS
+        GitHubReleaseAsset
 
         .NOTES
         [Upload a release asset](https://docs.github.com/rest/releases/assets#upload-a-release-asset)
@@ -47,16 +58,20 @@
     [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [Alias('Organization', 'User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Repository,
 
+        # The name of the tag to get a release from.
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'Tag')]
+        [string] $Tag,
+
         # The unique identifier of the release.
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'ID')]
         [string] $ID,
 
         #The name of the file asset.
@@ -67,14 +82,10 @@
         [Parameter()]
         [string] $Label,
 
-        # The content type of the asset.
-        [Parameter()]
-        [string] $ContentType,
-
         # The path to the asset file.
         [Parameter(Mandatory)]
         [alias('FullName')]
-        [string] $FilePath,
+        [string] $Path,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -87,52 +98,116 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
+
+        # Store if we're using a temporary path for cleanup
+        $TempFilePath = $null
     }
 
     process {
-        # If name is not provided, use the name of the file
-        if (!$Name) {
-            $Name = (Get-Item $FilePath).Name
-        }
+        # Check if the path is a directory
+        $isDirectory = (Test-Path -Path $Path -PathType Container)
 
-        # If label is not provided, use the name of the file
-        if (!$Label) {
-            $Label = (Get-Item $FilePath).Name
-        }
+        $fileToUpload = $Path
 
-        # If content type is not provided, use the file extension
-        if (!$ContentType) {
-            $ContentType = switch ((Get-Item $FilePath).Extension) {
-                '.zip' { 'application/zip' }
-                '.tar' { 'application/x-tar' }
-                '.gz' { 'application/gzip' }
-                '.bz2' { 'application/x-bzip2' }
-                '.xz' { 'application/x-xz' }
-                '.7z' { 'application/x-7z-compressed' }
-                '.rar' { 'application/vnd.rar' }
-                '.tar.gz' { 'application/gzip' }
-                '.tgz' { 'application/gzip' }
-                '.tar.bz2' { 'application/x-bzip2' }
-                '.tar.xz' { 'application/x-xz' }
-                '.tar.7z' { 'application/x-7z-compressed' }
-                '.tar.rar' { 'application/vnd.rar' }
-                '.png' { 'image/png' }
-                '.json' { 'application/json' }
-                '.txt' { 'text/plain' }
-                '.md' { 'text/markdown' }
-                '.html' { 'text/html' }
-                default { 'application/octet-stream' }
+        # If the path is a directory, create a zip file
+        if ($isDirectory) {
+            Write-Verbose 'Path is a directory. Zipping contents...'
+            $dirName = (Get-Item $Path).Name
+            $TempFilePath = [System.IO.Path]::GetTempFileName() + '.zip'
+
+            Write-Verbose "Creating temporary zip file: $TempFilePath"
+
+            # Create a temporary zip file
+            try {
+                Add-Type -AssemblyName System.IO.Compression.FileSystem
+
+                # Delete temp file if it exists (GetTempFileName creates the file)
+                if (Test-Path $TempFilePath) {
+                    Remove-Item -Path $TempFilePath -Force
+                }
+
+                # Create the zip archive
+                [System.IO.Compression.ZipFile]::CreateFromDirectory($Path, $TempFilePath)
+
+                # Use the temp file path for upload
+                $fileToUpload = $TempFilePath
+
+                # Set the name to folder name + .zip if not specified
+                if (!$Name) {
+                    $Name = "$dirName.zip"
+                }
+
+                # Set content type to zip
+                $ContentType = 'application/zip'
+
+                Write-Verbose 'Directory zipped successfully'
+            } catch {
+                if ($TempFilePath -and (Test-Path $TempFilePath)) {
+                    Remove-Item -Path $TempFilePath -Force -ErrorAction SilentlyContinue
+                }
+                throw "Failed to create zip file from directory: $_"
+            }
+        } else {
+            # If name is not provided, use the name of the file
+            if (!$Name) {
+                $Name = (Get-Item $Path).Name
+            }
+
+            # If label is not provided, use the name of the file
+            if (!$Label) {
+                $Label = (Get-Item $Path).Name
+            }
+
+            # If content type is not provided, use the file extension
+            if (!$ContentType) {
+                $ContentType = switch ((Get-Item $Path).Extension) {
+                    '.zip' { 'application/zip' }
+                    '.tar' { 'application/x-tar' }
+                    '.gz' { 'application/gzip' }
+                    '.bz2' { 'application/x-bzip2' }
+                    '.xz' { 'application/x-xz' }
+                    '.7z' { 'application/x-7z-compressed' }
+                    '.rar' { 'application/vnd.rar' }
+                    '.tar.gz' { 'application/gzip' }
+                    '.tgz' { 'application/gzip' }
+                    '.tar.bz2' { 'application/x-bzip2' }
+                    '.tar.xz' { 'application/x-xz' }
+                    '.tar.7z' { 'application/x-7z-compressed' }
+                    '.tar.rar' { 'application/vnd.rar' }
+                    '.png' { 'image/png' }
+                    '.json' { 'application/json' }
+                    '.txt' { 'text/plain' }
+                    '.md' { 'text/markdown' }
+                    '.html' { 'text/html' }
+                    default { 'application/octet-stream' }
+                }
             }
         }
 
-        $release = Get-GitHubRelease -Owner $Owner -Repository $Repository -ID $ID
-        $uploadURI = $release.upload_url -replace '{\?name,label}', "?name=$($Name)&label=$($Label)"
+        switch ($PSCmdlet.ParameterSetName) {
+            'Tag' {
+                $release = Get-GitHubReleaseByTagName -Owner $Owner -Repository $Repository -Tag $Tag -Context $Context
+            }
+            'ID' {
+                $release = Get-GitHubReleaseByID -Owner $Owner -Repository $Repository -ID $ID -Context $Context
+            }
+            default {
+                throw "Invalid parameter set: $($PSCmdlet.ParameterSetName)"
+            }
+        }
+
+        $body = @{
+            name  = $Name
+            label = $Label
+        }
 
         $inputObject = @{
             Method         = 'POST'
-            URI            = $uploadURI
+            ApiEndpoint    = "/repos/$Owner/$Repository/releases/$($release.id)/assets"
             ContentType    = $ContentType
-            UploadFilePath = $FilePath
+            UploadFilePath = $fileToUpload
+            Body           = $body
+            Context        = $Context
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
@@ -141,6 +216,12 @@
     }
 
     end {
+        # Clean up temporary file if created
+        if ($TempFilePath -and (Test-Path $TempFilePath)) {
+            Write-Verbose 'Cleaning up temporary zip file'
+            Remove-Item -Path $TempFilePath -Force -ErrorAction SilentlyContinue
+        }
+
         Write-Debug "[$stackPath] - End"
     }
 }
