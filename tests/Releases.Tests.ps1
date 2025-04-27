@@ -264,11 +264,14 @@ Describe 'Releases' {
                 $release.Count | Should -Be 1
                 $release | Should -BeOfType 'GitHubRelease'
                 $release.Tag | Should -Be 'v1.0'
-                $release.Latest | Should -Be $true
+                $release.Latest | Should -Be $false
                 $release.Draft | Should -Be $false
                 $release.Prerelease | Should -Be $false
 
                 Remove-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.0' -Confirm:$false
+
+                $release = Get-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.0'
+                $release | Should -BeNullOrEmpty
             }
         }
     }
