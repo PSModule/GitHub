@@ -84,6 +84,34 @@ Describe 'Releases' {
                 }
                 $item | Should -Not -BeNullOrEmpty
             }
+
+            It 'New-GitHubRelease - Throws when tag already exists' {
+                { New-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.0' -Latest } | Should -Throw
+            }
+
+            It 'New-GitHubRelease - Creates a new release with a draft' {
+                $item = New-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.2' -Draft
+                LogGroup 'Release' {
+                    Write-Host ($item | Format-Table | Out-String)
+                }
+                $item | Should -Not -BeNullOrEmpty
+            }
+
+            It 'New-GitHubRelease - Creates a new release with a pre-release' {
+                $item = New-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.1' -PreRelease
+                LogGroup 'Release' {
+                    Write-Host ($item | Format-Table | Out-String)
+                }
+                $item | Should -Not -BeNullOrEmpty
+            }
+
+            It 'New-GitHubRelease - Creates a new release with a name' {
+                $item = New-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.3' -Name 'Test Release' -GenerateReleaseNotes
+                LogGroup 'Release' {
+                    Write-Host ($item | Format-Table | Out-String)
+                }
+                $item | Should -Not -BeNullOrEmpty
+            }
         }
     }
 }
