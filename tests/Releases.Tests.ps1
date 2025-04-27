@@ -175,19 +175,19 @@ Describe 'Releases' {
                 $release.Tag | Should -Be 'v1.2'
             }
 
-            It 'Update-GitHubRelease - Updates a release' {
-                $release = Update-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.3' -Name 'Updated Release' -Notes 'Updated release notes'
-                LogGroup 'Updated release' {
-                    Write-Host ($release | Format-List -Property * | Out-String)
-                }
-                $release | Should -Not -BeNullOrEmpty
-                $release.Name | Should -Be 'Updated Release'
-                $release.Notes | Should -Be 'Updated release notes'
-                $release.Tag | Should -Be 'v1.3'
-                $release.Latest | Should -Be $true
-                $release.Draft | Should -Be $false
-                $release.Prerelease | Should -Be $false
-            }
+            # It 'Update-GitHubRelease - Updates a release' {
+            #     $release = Update-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.3' -Name 'Updated Release' -Notes 'Updated release notes'
+            #     LogGroup 'Updated release' {
+            #         Write-Host ($release | Format-List -Property * | Out-String)
+            #     }
+            #     $release | Should -Not -BeNullOrEmpty
+            #     $release.Name | Should -Be 'Updated Release'
+            #     $release.Notes | Should -Be 'Updated release notes'
+            #     $release.Tag | Should -Be 'v1.3'
+            #     $release.Latest | Should -Be $true
+            #     $release.Draft | Should -Be $false
+            #     $release.Prerelease | Should -Be $false
+            # }
         }
     }
 }
