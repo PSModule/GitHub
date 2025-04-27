@@ -11,10 +11,10 @@
         .EXAMPLE
         Get-GitHubRelease -Owner 'octocat' -Repository 'hello-world'
 
-        Gets the releases for the repository 'hello-world' owned by 'octocat'.
+        Gets the latest release for the repository 'hello-world' owned by 'octocat'.
 
         .EXAMPLE
-        Get-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -All
+        Get-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -AllVersions
 
         Gets all releases for the repository 'hello-world' owned by 'octocat'.
 
@@ -38,11 +38,11 @@
         https://psmodule.io/GitHub/Functions/Releases/Get-GitHubRelease/
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-        'PSReviewUnusedParameter', 'Latest',
+        'PSReviewUnusedParameter', 'AllVersions',
         Justification = 'Using the ParameterSetName to determine the context of the command.'
     )]
     [OutputType([GitHubRelease])]
-    [CmdletBinding(DefaultParameterSetName = 'All')]
+    [CmdletBinding(DefaultParameterSetName = 'Latest')]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
@@ -53,14 +53,9 @@
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Repository,
 
-        # The number of results per page (max 100).
-        [Parameter(ParameterSetName = 'All')]
-        [ValidateRange(0, 100)]
-        [int] $PerPage,
-
-        # Get the latest release.
-        [Parameter(Mandatory, ParameterSetName = 'Latest')]
-        [switch] $Latest,
+        # Get all releases instead of just the latest.
+        [Parameter(Mandatory, ParameterSetName = 'AllVersions')]
+        [switch] $AllVersions,
 
         # The name of the tag to get a release from.
         [Parameter(Mandatory, ParameterSetName = 'Tag')]
@@ -69,6 +64,11 @@
         # The unique identifier of the release.
         [Parameter(Mandatory, ParameterSetName = 'ID')]
         [string] $ID,
+
+        # The number of results per page (max 100).
+        [Parameter(ParameterSetName = 'AllVersions')]
+        [ValidateRange(0, 100)]
+        [int] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -91,7 +91,7 @@
         }
         Write-Debug "ParameterSet: $($PSCmdlet.ParameterSetName)"
         switch ($PSCmdlet.ParameterSetName) {
-            'All' {
+            'AllVersions' {
                 Get-GitHubReleaseAll @params -PerPage $PerPage
             }
             'Tag' {

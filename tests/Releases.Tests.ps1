@@ -113,12 +113,20 @@ Describe 'Releases' {
                 $release | Should -Not -BeNullOrEmpty
             }
 
-            It 'Get-GitHubRelease - Gets all releases' {
-                $releases = Get-GitHubRelease -Owner $Owner -Repository $repo -Debug
-                LogGroup 'Releases' {
-                    Write-Host ($releases | Format-List -Property * | Out-String)
+            It 'Get-GitHubRelease - Gets latest release' {
+                $release = Get-GitHubRelease -Owner $Owner -Repository $repo
+                LogGroup 'Latest release' {
+                    Write-Host ($release | Format-List -Property * | Out-String)
                 }
                 $release | Should -Not -BeNullOrEmpty
+            }
+
+            It 'Get-GitHubRelease - Gets all releases' {
+                $releases = Get-GitHubRelease -Owner $Owner -Repository $repo -All
+                LogGroup 'All releases' {
+                    Write-Host ($releases | Format-List -Property * | Out-String)
+                }
+                $releases | Should -Not -BeNullOrEmpty
             }
         }
     }
