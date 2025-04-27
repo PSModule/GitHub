@@ -11,6 +11,9 @@
 
         Updates the release with the ID '1234567' for the repository 'octocat/hello-world' with the note 'Release notes'.
 
+        .LINK
+        https://psmodule.io/github/Functions/Releases/Update-GitHubRelease
+
         .NOTES
         [Update a release](https://docs.github.com/rest/releases/releases#update-a-release)
     #>
@@ -165,5 +168,3 @@
         Write-Debug "[$stackPath] - End"
     }
 }
-
-#SkipTest:FunctionTest:Will add a test for this function in a future PR
