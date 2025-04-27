@@ -106,7 +106,7 @@ Describe 'Releases' {
             }
 
             It 'New-GitHubRelease - Creates a new release with a name' {
-                $release = New-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.3' -Name 'Test Release' -GenerateReleaseNotes
+                $release = New-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.3' -Name 'Test Release' -GenerateReleaseNotes -Latest
                 LogGroup 'Release' {
                     Write-Host ($release | Format-List -Property * | Out-String)
                 }
@@ -119,6 +119,9 @@ Describe 'Releases' {
                     Write-Host ($release | Format-List -Property * | Out-String)
                 }
                 $release | Should -Not -BeNullOrEmpty
+                $release.Count | Should -Be 1
+                $release | Should -BeOfType 'GitHubRelease'
+                $release.Tag | Should -Be 'v1.3'
             }
 
             It 'Get-GitHubRelease - Gets all releases' {
@@ -127,6 +130,52 @@ Describe 'Releases' {
                     Write-Host ($releases | Format-List -Property * | Out-String)
                 }
                 $releases | Should -Not -BeNullOrEmpty
+                $releases.Count | Should -BeGreaterThan 1
+                $releases | Should -BeOfType 'GitHubRelease'
+            }
+
+            It 'Get-GitHubRelease - Gets release by tag' {
+                $release = Get-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.2'
+                LogGroup 'Release' {
+                    Write-Host ($release | Format-List -Property * | Out-String)
+                }
+                $release | Should -Not -BeNullOrEmpty
+                $release.Count | Should -Be 1
+                $release | Should -BeOfType 'GitHubRelease'
+                $release.Tag | Should -Be 'v1.2'
+            }
+
+            It 'Get-GitHubRelease - Gets release by ID' {
+                $specificRelease = Get-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.2'
+                $release = Get-GitHubRelease -Owner $Owner -Repository $repo -ID $specificRelease.ID
+                LogGroup 'Release' {
+                    Write-Host ($release | Format-List -Property * | Out-String)
+                }
+                $release | Should -Not -BeNullOrEmpty
+                $release.Count | Should -Be 1
+                $release | Should -BeOfType 'GitHubRelease'
+                $release.Tag | Should -Be 'v1.2'
+            }
+
+            It 'Get-GitHubRelease - Gets release by ID using Pipeline' {
+                $specificRelease = Get-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.2'
+                $release = $specificRelease | Get-GitHubRelease
+                LogGroup 'Release' {
+                    Write-Host ($release | Format-List -Property * | Out-String)
+                }
+                $release | Should -Not -BeNullOrEmpty
+                $release.Count | Should -Be 1
+                $release | Should -BeOfType 'GitHubRelease'
+                $release.Tag | Should -Be 'v1.2'
+            }
+
+            It 'Update-GitHubRelease - Updates a release' {
+                $release = Update-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.3' -Name 'Updated Release' -Body 'Updated release body.'
+                LogGroup 'Updated release' {
+                    Write-Host ($release | Format-List -Property * | Out-String)
+                }
+                $release | Should -Not -BeNullOrEmpty
+                $release.Name | Should -Be 'Updated Release'
             }
         }
     }
