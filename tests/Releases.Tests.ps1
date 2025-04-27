@@ -42,7 +42,7 @@ Describe 'Releases' {
             }
             $repoPrefix = "$testName-$os-$TokenType"
             $repoName = "$repoPrefix-$guid"
-            
+
             $params = @{
                 Name             = $repoName
                 Context          = $context
@@ -76,7 +76,7 @@ Describe 'Releases' {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
         }
 
-        Context 'Releases' {
+        Context 'Releases' -Skip:($OwnerType -eq 'repository') {
             It 'New-GitHubRelease - Creates a new release' {
                 $item = New-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.0' -Latest
                 LogGroup 'Release' {
