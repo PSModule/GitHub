@@ -18,8 +18,7 @@
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [Alias('Organization')]
-        [Alias('User')]
+        [Alias('Organization', 'User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
@@ -28,7 +27,6 @@
 
         # The unique identifier of the asset.
         [Parameter(Mandatory)]
-        [Alias('asset_id')]
         [string] $ID,
 
         # The context to run the command in. Used to get the details for the API call.

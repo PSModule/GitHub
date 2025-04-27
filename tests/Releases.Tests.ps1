@@ -42,16 +42,21 @@ Describe 'Releases' {
             }
             $repoPrefix = "$testName-$os-$TokenType"
             $repoName = "$repoPrefix-$guid"
-            $variablePrefix = ("$testName`_$os`_$TokenType" -replace '-', '_').ToUpper()
-            $varName = ("$variablePrefix`_$guid" -replace '-', '_').ToUpper()
-            $environmentName = "$testName-$os-$TokenType-$guid"
-
+            
+            $params = @{
+                Name             = $repoName
+                Context          = $context
+                AllowSquashMerge = $true
+                AddReadme        = $true
+                License          = 'mit'
+                Gitignore        = 'VisualStudio'
+            }
             switch ($OwnerType) {
                 'user' {
-                    $repo = New-GitHubRepository -Name $repoName -AllowSquashMerge -AddReadme -License mit -Gitignore VisualStudio
+                    $repo = New-GitHubRepository @params
                 }
                 'organization' {
-                    $repo = New-GitHubRepository -Organization $owner -Name $repoName -AllowSquashMerge
+                    $repo = New-GitHubRepository @params -Organization $owner
                 }
             }
             LogGroup "Repository - [$repoName]" {
@@ -65,7 +70,7 @@ Describe 'Releases' {
                     Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
                 }
                 'organization' {
-                    Get-GitHubRepository -Owner $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
                 }
             }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent

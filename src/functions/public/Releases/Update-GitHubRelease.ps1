@@ -20,6 +20,7 @@
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
+        [Alias('Organization', 'User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.

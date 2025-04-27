@@ -48,8 +48,7 @@
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [Alias('Organization')]
-        [Alias('User')]
+        [Alias('Organization', 'User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
@@ -58,7 +57,6 @@
 
         # The unique identifier of the release.
         [Parameter(Mandatory)]
-        [Alias('release_id')]
         [string] $ID,
 
         #The name of the file asset.
