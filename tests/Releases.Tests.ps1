@@ -78,11 +78,11 @@ Describe 'Releases' {
 
         Context 'Releases' -Skip:($OwnerType -eq 'repository') {
             It 'New-GitHubRelease - Creates a new release' {
-                $item = New-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.0' -Latest
+                $release = New-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.0' -Latest
                 LogGroup 'Release' {
-                    Write-Host ($item | Format-Table | Out-String)
+                    Write-Host ($release | Format-List -Property * | Out-String)
                 }
-                $item | Should -Not -BeNullOrEmpty
+                $release | Should -Not -BeNullOrEmpty
             }
 
             It 'New-GitHubRelease - Throws when tag already exists' {
@@ -90,27 +90,35 @@ Describe 'Releases' {
             }
 
             It 'New-GitHubRelease - Creates a new release with a draft' {
-                $item = New-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.2' -Draft
+                $release = New-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.2' -Draft
                 LogGroup 'Release' {
-                    Write-Host ($item | Format-Table | Out-String)
+                    Write-Host ($release | Format-List -Property * | Out-String)
                 }
-                $item | Should -Not -BeNullOrEmpty
+                $release | Should -Not -BeNullOrEmpty
             }
 
             It 'New-GitHubRelease - Creates a new release with a pre-release' {
-                $item = New-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.1' -PreRelease
+                $release = New-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.1' -PreRelease
                 LogGroup 'Release' {
-                    Write-Host ($item | Format-Table | Out-String)
+                    Write-Host ($release | Format-List -Property * | Out-String)
                 }
-                $item | Should -Not -BeNullOrEmpty
+                $release | Should -Not -BeNullOrEmpty
             }
 
             It 'New-GitHubRelease - Creates a new release with a name' {
-                $item = New-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.3' -Name 'Test Release' -GenerateReleaseNotes
+                $release = New-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.3' -Name 'Test Release' -GenerateReleaseNotes
                 LogGroup 'Release' {
-                    Write-Host ($item | Format-Table | Out-String)
+                    Write-Host ($release | Format-List -Property * | Out-String)
                 }
-                $item | Should -Not -BeNullOrEmpty
+                $release | Should -Not -BeNullOrEmpty
+            }
+
+            It 'Get-GitHubRelease - Gets all releases' {
+                $releases = Get-GitHubRelease -Owner $Owner -Repository $repo
+                LogGroup 'Releases' {
+                    Write-Host ($releases | Format-List -Property * | Out-String)
+                }
+                $release | Should -Not -BeNullOrEmpty
             }
         }
     }
