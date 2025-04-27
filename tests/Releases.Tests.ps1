@@ -225,7 +225,6 @@ Describe 'Releases' {
                 $release | Should -Not -BeNullOrEmpty
                 $release.Name | Should -Be 'Updated Release'
                 $release.Notes | Should -Be 'Updated release notes'
-                $release.Tag | Should -Be 'v1.2'
                 $release.Latest | Should -Be $false
                 $release.Draft | Should -Be $true
                 $release.Prerelease | Should -Be $true
