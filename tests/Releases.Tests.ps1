@@ -175,20 +175,6 @@ Describe 'Releases' {
                 $release.Tag | Should -Be 'v1.2'
             }
 
-            It 'Update-GitHubRelease - Update release v1.3' {
-                $release = Update-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.3' -Name 'Updated Release' -Notes 'Updated release notes'
-                LogGroup 'Updated release' {
-                    Write-Host ($release | Format-List -Property * | Out-String)
-                }
-                $release | Should -Not -BeNullOrEmpty
-                $release.Name | Should -Be 'Updated Release'
-                $release.Notes | Should -Be 'Updated release notes'
-                $release.Tag | Should -Be 'v1.3'
-                $release.Latest | Should -Be $true
-                $release.Draft | Should -Be $false
-                $release.Prerelease | Should -Be $false
-            }
-
             It 'Update-GitHubRelease - Update release v1.0' {
                 $release = Update-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.0' -Name 'Updated Release' -Notes 'Updated release notes'
                 LogGroup 'Updated release' {
@@ -227,7 +213,62 @@ Describe 'Releases' {
                 $release.Notes | Should -Be 'Updated release notes'
                 $release.Latest | Should -Be $false
                 $release.Draft | Should -Be $true
-                $release.Prerelease | Should -Be $true
+                $release.Prerelease | Should -Be $false
+            }
+
+            It 'Update-GitHubRelease - Update release v1.3' {
+                $release = Update-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.3' -Name 'Updated Release' -Notes 'Updated release notes'
+                LogGroup 'Updated release' {
+                    Write-Host ($release | Format-List -Property * | Out-String)
+                }
+                $release | Should -Not -BeNullOrEmpty
+                $release.Name | Should -Be 'Updated Release'
+                $release.Notes | Should -Be 'Updated release notes'
+                $release.Tag | Should -Be 'v1.3'
+                $release.Latest | Should -Be $true
+                $release.Draft | Should -Be $false
+                $release.Prerelease | Should -Be $false
+            }
+
+            It 'Set-GitHubRelease - Sets release v1.0 as latest' {
+                $release = Set-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.0' -Latest -Name 'Updated Release again' -Notes 'Updated release notes to something else'
+                LogGroup 'Set release' {
+                    Write-Host ($release | Format-List -Property * | Out-String)
+                }
+                $release | Should -Not -BeNullOrEmpty
+                $release.Tag | Should -Be 'v1.0'
+                $release.Latest | Should -Be $true
+                $release.Draft | Should -Be $false
+                $release.Prerelease | Should -Be $false
+                $release.Name | Should -Be 'Updated Release again'
+                $release.Notes | Should -Be 'Updated release notes to something else'
+            }
+
+            It 'Set-GitHubRelease - Sets a new release as latest - v1.4' {
+                $release = Set-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.4' -Latest -Name 'New Release' -Notes 'New release notes'
+                LogGroup 'Set release' {
+                    Write-Host ($release | Format-List -Property * | Out-String)
+                }
+                $release | Should -Not -BeNullOrEmpty
+                $release.Tag | Should -Be 'v1.4'
+                $release.Latest | Should -Be $true
+                $release.Draft | Should -Be $false
+                $release.Prerelease | Should -Be $false
+                $release.Name | Should -Be 'New Release'
+                $release.Notes | Should -Be 'New release notes'
+            }
+
+            It 'Remove-GitHubRelease - Removes release v1.0' {
+                $release = Get-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.0'
+                $release | Should -Not -BeNullOrEmpty
+                $release.Count | Should -Be 1
+                $release | Should -BeOfType 'GitHubRelease'
+                $release.Tag | Should -Be 'v1.0'
+                $release.Latest | Should -Be $true
+                $release.Draft | Should -Be $false
+                $release.Prerelease | Should -Be $false
+
+                Remove-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.0' -Confirm:$false
             }
         }
     }
