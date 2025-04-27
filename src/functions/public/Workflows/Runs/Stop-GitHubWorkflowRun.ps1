@@ -15,9 +15,9 @@
         GitHubWorkflowRun
 
         .LINK
-        https://psmodule.io/GitHub/Functions/Actions/Workflows/Runs/Stop-GitHubWorkflowRun/
+        https://psmodule.io/GitHub/Functions/Workflows/Runs/Stop-GitHubWorkflowRun/
 
-        .LINK
+        .NOTES
         [Cancel a workflow run](https://docs.github.com/rest/actions/workflow-runs#cancel-a-workflow-run)
     #>
     [CmdletBinding(SupportsShouldProcess)]

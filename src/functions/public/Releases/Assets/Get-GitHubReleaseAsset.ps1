@@ -17,32 +17,35 @@
 
         Gets the release assets for the release with the ID '7654321' for the repository 'octocat/hello-world'.
 
-        .INPUTS
-        GitHubRelease
-
-        .OUTPUTS
-        GitHubReleaseAsset
-
-        .LINK
-        https://psmodule.io/GitHub/Functions/Releases/Assets/Get-GitHubReleaseAsset
+        .NOTES
+        [Get a release asset](https://docs.github.com/rest/releases/assets#get-a-release-asset)
     #>
-    [OutputType([GitHubReleaseAsset])]
-    [CmdletBinding(DefaultParameterSetName = 'List assets from a release')]
+    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory)]
+        [Alias('Organization')]
+        [Alias('User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory)]
         [string] $Repository,
 
         # The unique identifier of the asset.
-        [Parameter(Mandatory, ParameterSetName = 'Get a specific asset by ID')]
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'ID'
+        )]
+        [Alias('asset_id')]
         [string] $ID,
 
         # The unique identifier of the release.
-        [Parameter(Mandatory, ParameterSetName = 'List assets from a release', ValueFromPipelineByPropertyName)]
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'ReleaseID'
+        )]
+        [Alias('release_id')]
         [string] $ReleaseID,
 
         # The context to run the command in. Used to get the details for the API call.

@@ -101,18 +101,13 @@ filter Invoke-GitHubAPI {
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [object] $Context
+        [object] $Context = (Get-GitHubContext)
     )
 
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        if ($Anonymous) {
-            Initialize-GitHubConfig
-            $Context = $null
-        } else {
-            $Context = Resolve-GitHubContext -Context $Context
-        }
+        $Context = Resolve-GitHubContext -Context $Context
         Write-Debug 'Invoking GitHub API...'
         Write-Debug 'Parent function parameters:'
         Get-FunctionParameter -Scope 1 | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
@@ -121,11 +116,7 @@ filter Invoke-GitHubAPI {
     }
 
     process {
-        if (-not $Anonymous) {
-            if (-not $PSBoundParameters.ContainsKey('Token')) {
-                $Token = $Context.Token
-            }
-        }
+        $Token = $Context.Token
 
         $HttpVersion = Resolve-GitHubContextSetting -Name 'HttpVersion' -Value $HttpVersion -Context $Context
         $ApiBaseUri = Resolve-GitHubContextSetting -Name 'ApiBaseUri' -Value $ApiBaseUri -Context $Context
@@ -324,15 +315,21 @@ filter Invoke-GitHubAPI {
                 Information = $errordetails.documentation_url
                 Status      = $failure.Exception.Message
                 StatusCode  = $errordetails.status
+                ErrorTime   = Get-Date -Format 's'
             }
-            $APICall.HttpVersion = $APICall.HttpVersion.ToString()
-            $APICall.Headers = $APICall.Headers | ConvertTo-Json
-            $APICall.Method = $APICall.Method.ToString()
 
             $exception = @"
 ----------------------------------
+Request:
+$([pscustomobject]$APICall | Format-List -Property Headers, HttpVersion, Method, Uri, ContentType, Authentication, Token | Out-String)
+----------------------------------
+Response Headers:
+$($headers | Format-List | Out-String)
+----------------------------------
+Error:
 $($errorResult | Format-List | Out-String)
 ----------------------------------
+
 "@
             $PSCmdlet.ThrowTerminatingError(
                 [System.Management.Automation.ErrorRecord]::new(

@@ -17,9 +17,9 @@
         GitHubWorkflowRun
 
         .LINK
-        https://psmodule.io/GitHub/Functions/Actions/Workflows/Runs/Remove-GitHubWorkflowRun/
+        https://psmodule.io/GitHub/Functions/Workflows/Runs/Remove-GitHubWorkflowRun/
 
-        .LINK
+        .NOTES
         [Delete a workflow run](https://docs.github.com/rest/actions/workflow-runs#delete-a-workflow-run)
     #>
     [CmdletBinding(SupportsShouldProcess)]

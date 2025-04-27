@@ -39,12 +39,10 @@
         GitHubWorkflowRun
 
         .LINK
-        https://psmodule.io/GitHub/Functions/Actions/Workflows/Runs/Get-GitHubWorkflowRun/
+        https://psmodule.io/GitHub/Functions/Workflows/Runs/Get-GitHubWorkflowRun/
 
-        .LINK
+        .NOTES
         [List workflow runs for a workflow](https://docs.github.com/rest/actions/workflow-runs#list-workflow-runs-for-a-workflow)
-
-        .LINK
         [List workflow runs for a repository](https://docs.github.com/rest/actions/workflow-runs#list-workflow-runs-for-a-repository)
     #>
     [OutputType([GitHubWorkflowRun])]

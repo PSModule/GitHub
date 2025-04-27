@@ -11,43 +11,38 @@
         and "[Dealing with secondary rate limits](https://docs.github.com/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
 
         .EXAMPLE
-        New-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -Tag 'v1.0.0' -Target 'main' -Notes 'Release notes'
+        New-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -TagName 'v1.0.0' -TargetCommitish 'main' -Body 'Release notes'
 
-        Creates a release for the repository 'octocat/hello-world' on the 'main' branch with the tag 'v1.0.0'.
+        Creates a release for the repository 'octocat/hello-world' with the tag 'v1.0.0' and the target commitish 'main'.
 
-        .INPUTS
-        GitHubRepository
-
-        .OUTPUTS
-        GitHubRelease
-
-        .LINK
-        https://psmodule.io/GitHub/Functions/Releases/New-GitHubRelease/
-
-        .LINK
+        .NOTES
         [Create a release](https://docs.github.com/rest/releases/releases#create-a-release)
     #>
-    [OutputType([GitHubRelease])]
+    [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
-    [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName = 'Not latest')]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory)]
+        [Alias('Organization')]
+        [Alias('User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory)]
         [string] $Repository,
 
         # The name of the tag.
         [Parameter(Mandatory)]
-        [string] $Tag,
+        [Alias('tag_name')]
+        [string] $TagName,
 
-        # Specifies the reference value that determines where the Git tag is created from.
+        # Specifies the commitish value that determines where the Git tag is created from.
         # Can be any branch or commit SHA. Unused if the Git tag already exists.
         # API Default: the repository's default branch.
         [Parameter()]
-        [string] $Target = 'main',
+        [Alias('target_commitish')]
+        [string] $TargetCommitish = 'main',
 
         # The name of the release.
         [Parameter()]
@@ -55,33 +50,33 @@
 
         # Text describing the contents of the tag.
         [Parameter()]
-        [string] $Notes,
+        [string] $Body,
 
         # Whether the release is a draft.
-        [Parameter(ParameterSetName = 'Not latest')]
+        [Parameter()]
         [switch] $Draft,
 
         # Whether to identify the release as a prerelease.
-        [Parameter(ParameterSetName = 'Not latest')]
+        [Parameter()]
         [switch] $Prerelease,
 
         # If specified, a discussion of the specified category is created and linked to the release.
         # The value must be a category that already exists in the repository.
         # For more information, see [Managing categories for discussions in your repository](https://docs.github.com/discussions/managing-discussions-for-your-community/managing-categories-for-discussions-in-your-repository).
         [Parameter()]
+        [Alias('discussion_category_name')]
         [string] $DiscussionCategoryName,
 
-        # Whether to automatically generate the name and body for this release. If name is specified, the specified name will be used; otherwise,
-        # a name will be automatically generated. If body is specified, the body will be pre-pended to the automatically generated notes.
+        # Whether to automatically generate the name and body for this release. If name is specified, the specified name will be used; otherwise,a name will be automatically generated. If body is specified, the body will be pre-pended to the automatically generated notes.
         [Parameter()]
+        [Alias('generate_release_notes')]
         [switch] $GenerateReleaseNotes,
 
-        # Specifies whether this release should be set as the latest release for the repository. Drafts and prereleases cannot be set as latest.
-        # If not specified the latest release is determined based on the release creation date and higher semantic version.
-        # If set to true, the release will be set as the latest release for the repository.
-        # If set to false, the release will not be set as the latest release for the repository.
-        [Parameter(ParameterSetName = 'Set latest')]
-        [switch] $Latest,
+        # Specifies whether this release should be set as the latest release for the repository. Drafts and prereleases cannot be set as latest. Defaults to true for newly published releases. legacy specifies that the latest release should be determined based on the release creation date and higher semantic version.
+        [Parameter()]
+        [Alias('make_latest')]
+        [ValidateSet('true', 'false', 'legacy')]
+        [string] $MakeLatest = 'true',
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -98,15 +93,15 @@
 
     process {
         $body = @{
-            tag_name                 = $Tag
-            target_commitish         = $Target
+            tag_name                 = $TagName
+            target_commitish         = $TargetCommitish
             name                     = $Name
-            body                     = $Notes
+            body                     = $Body
             discussion_category_name = $DiscussionCategoryName
-            generate_release_notes   = [bool]$GenerateReleaseNotes
-            make_latest              = ([bool]$Latest).ToString().ToLower()
-            draft                    = [bool]$Draft
-            prerelease               = [bool]$Prerelease
+            make_latest              = $MakeLatest
+            generate_release_notes   = $GenerateReleaseNotes
+            draft                    = $Draft
+            prerelease               = $Prerelease
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
@@ -119,7 +114,7 @@
 
         if ($PSCmdlet.ShouldProcess("$Owner/$Repository", 'Create a release')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
-                [GitHubRelease]::new($_.Response , $Owner, $Repository, $Latest)
+                Write-Output $_.Response
             }
         }
     }

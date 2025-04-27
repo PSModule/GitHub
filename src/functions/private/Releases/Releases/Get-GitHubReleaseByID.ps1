@@ -12,16 +12,10 @@
 
         Gets the release with the ID '1234567' for the repository 'hello-world' owned by 'octocat'.
 
-        .INPUTS
-        GitHubRepository
+        .NOTES
+        https://docs.github.com/rest/releases/releases#get-a-release
 
-        .OUTPUTS
-        GitHubRelease
-
-        .LINK
-        [Get a release](https://docs.github.com/rest/releases/releases#get-a-release)
     #>
-    [OutputType([GitHubRelease])]
     [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
@@ -34,6 +28,7 @@
 
         # The unique identifier of the release.
         [Parameter(Mandatory)]
+        [Alias('release_id')]
         [string] $ID,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -49,20 +44,15 @@
     }
 
     process {
-        $latest = Get-GitHubReleaseLatest -Owner $Owner -Repository $Repository -Context $Context
-
         $inputObject = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/releases/$ID"
             Context     = $Context
         }
 
-        try {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                $isLatest = $_.Response.id -eq $latest.id
-                [GitHubRelease]::new($_.Response, $Owner, $Repository, $isLatest)
-            }
-        } catch { return }
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
+        }
     }
 
     end {
