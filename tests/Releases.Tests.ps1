@@ -175,7 +175,7 @@ Describe 'Releases' {
                 $release.Tag | Should -Be 'v1.2'
             }
 
-            It 'Update-GitHubRelease - Updates a release' {
+            It 'Update-GitHubRelease - Update release v1.3' {
                 $release = Update-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.3' -Name 'Updated Release' -Notes 'Updated release notes'
                 LogGroup 'Updated release' {
                     Write-Host ($release | Format-List -Property * | Out-String)
@@ -187,6 +187,48 @@ Describe 'Releases' {
                 $release.Latest | Should -Be $true
                 $release.Draft | Should -Be $false
                 $release.Prerelease | Should -Be $false
+            }
+
+            It 'Update-GitHubRelease - Update release v1.0' {
+                $release = Update-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.0' -Name 'Updated Release' -Notes 'Updated release notes'
+                LogGroup 'Updated release' {
+                    Write-Host ($release | Format-List -Property * | Out-String)
+                }
+                $release | Should -Not -BeNullOrEmpty
+                $release.Name | Should -Be 'Updated Release'
+                $release.Notes | Should -Be 'Updated release notes'
+                $release.Tag | Should -Be 'v1.0'
+                $release.Latest | Should -Be $false
+                $release.Draft | Should -Be $false
+                $release.Prerelease | Should -Be $false
+            }
+
+            It 'Update-GitHubRelease - Update release v1.1' {
+                $release = Update-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.1' -Name 'Updated Release' -Notes 'Updated release notes'
+                LogGroup 'Updated release' {
+                    Write-Host ($release | Format-List -Property * | Out-String)
+                }
+                $release | Should -Not -BeNullOrEmpty
+                $release.Name | Should -Be 'Updated Release'
+                $release.Notes | Should -Be 'Updated release notes'
+                $release.Tag | Should -Be 'v1.1'
+                $release.Latest | Should -Be $false
+                $release.Draft | Should -Be $false
+                $release.Prerelease | Should -Be $true
+            }
+
+            It 'Update-GitHubRelease - Update release v1.2' {
+                $release = Update-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.2' -Name 'Updated Release' -Notes 'Updated release notes'
+                LogGroup 'Updated release' {
+                    Write-Host ($release | Format-List -Property * | Out-String)
+                }
+                $release | Should -Not -BeNullOrEmpty
+                $release.Name | Should -Be 'Updated Release'
+                $release.Notes | Should -Be 'Updated release notes'
+                $release.Tag | Should -Be 'v1.2'
+                $release.Latest | Should -Be $false
+                $release.Draft | Should -Be $true
+                $release.Prerelease | Should -Be $true
             }
         }
     }
