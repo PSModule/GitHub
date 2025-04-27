@@ -114,7 +114,7 @@ Describe 'Releases' {
             }
 
             It 'Get-GitHubRelease - Gets all releases' {
-                $releases = Get-GitHubRelease -Owner $Owner -Repository $repo
+                $releases = Get-GitHubRelease -Owner $Owner -Repository $repo -Debug
                 LogGroup 'Releases' {
                     Write-Host ($releases | Format-List -Property * | Out-String)
                 }
