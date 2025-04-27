@@ -11,27 +11,28 @@
 
         Deletes the release with the ID '1234567' for the repository 'octocat/hello-world'.
 
-        .NOTES
+        .INPUTS
+        GitHubRelease
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Releases/Get-GitHubRelease/
+
+        .LINK
         [Delete a release](https://docs.github.com/rest/releases/releases#delete-a-release)
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([void])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(Mandatory)]
-        [Alias('Organization')]
-        [Alias('User')]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Repository,
 
         # The unique identifier of the release.
-        [Parameter(
-            Mandatory
-        )]
-        [Alias('release_id')]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $ID,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -54,10 +55,8 @@
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("Release with ID [$ID] in [$Owner/$Repository]", 'DELETE')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
+        if ($PSCmdlet.ShouldProcess("Release with ID [$ID] in [$Owner/$Repository]", 'Delete')) {
+            $null = Invoke-GitHubAPI @inputObject
         }
     }
 

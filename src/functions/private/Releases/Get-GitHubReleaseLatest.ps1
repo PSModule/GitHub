@@ -13,10 +13,16 @@
 
         Gets the latest releases for the repository 'hello-world' owned by 'octocat'.
 
-        .NOTES
-        https://docs.github.com/rest/releases/releases#get-the-latest-release
+        .INPUTS
+        GitHubRepository
 
+        .OUTPUTS
+        GitHubRelease
+
+        .LINK
+        [Get the latest release](https://docs.github.com/rest/releases/releases#get-the-latest-release)
     #>
+    [OutputType([GitHubRelease])]
     [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
@@ -46,9 +52,11 @@
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
-        }
+        try {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                [GitHubRelease]::new($_.Response, $Owner, $Repository, $true)
+            }
+        } catch { return }
     }
 
     end {
