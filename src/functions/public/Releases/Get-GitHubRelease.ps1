@@ -1,7 +1,7 @@
 ﻿filter Get-GitHubRelease {
     <#
         .SYNOPSIS
-        List releases.
+        Retrieves GitHub release information for a repository.
 
         .DESCRIPTION
         This returns a list of releases, which does not include regular Git tags that have not been associated with a release.

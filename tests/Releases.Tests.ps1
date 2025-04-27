@@ -28,7 +28,7 @@ BeforeAll {
 Describe 'Releases' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 
-    Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
+    Get-Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
         BeforeAll {
             $context = Connect-GitHubAccount @connectParams -PassThru -Silent
             LogGroup 'Context' {
@@ -76,7 +76,7 @@ Describe 'Releases' {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
         }
 
-        Context 'Releases' -Skip:($OwnerType -eq 'repository') {
+        Get-Context 'Releases' -Skip:($OwnerType -eq 'repository') {
             It 'New-GitHubRelease - Creates a new release' {
                 $release = New-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.0' -Latest
                 LogGroup 'Release' {
@@ -98,7 +98,7 @@ Describe 'Releases' {
             }
 
             It 'New-GitHubRelease - Creates a new release with a pre-release' {
-                $release = New-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.1' -PreRelease
+                $release = New-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.1' -Prerelease
                 LogGroup 'Release' {
                     Write-Host ($release | Format-List -Property * | Out-String)
                 }
@@ -122,6 +122,7 @@ Describe 'Releases' {
                 $release.Count | Should -Be 1
                 $release | Should -BeOfType 'GitHubRelease'
                 $release.Tag | Should -Be 'v1.3'
+                $release.Latest | Should -Be $true
             }
 
             It 'Get-GitHubRelease - Gets all releases' {
@@ -143,9 +144,26 @@ Describe 'Releases' {
                 $release.Count | Should -Be 1
                 $release | Should -BeOfType 'GitHubRelease'
                 $release.Tag | Should -Be 'v1.2'
+                $release.Latest | Should -Be $false
+                $release.Draft | Should -Be $true
             }
 
             It 'Get-GitHubRelease - Gets release by ID' {
+                $specificRelease = Get-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.0'
+                $release = Get-GitHubRelease -Owner $Owner -Repository $repo -ID $specificRelease.ID
+                LogGroup 'Release' {
+                    Write-Host ($release | Format-List -Property * | Out-String)
+                }
+                $release | Should -Not -BeNullOrEmpty
+                $release.Count | Should -Be 1
+                $release | Should -BeOfType 'GitHubRelease'
+                $release.Tag | Should -Be 'v1.0'
+                $release.Latest | Should -Be $false
+                $release.Draft | Should -Be $false
+                $release.Prerelease | Should -Be $false
+            }
+
+            It 'Get-GitHubRelease - Gets release by ID using Pipeline' {
                 $specificRelease = Get-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.2'
                 $release = Get-GitHubRelease -Owner $Owner -Repository $repo -ID $specificRelease.ID
                 LogGroup 'Release' {
@@ -157,25 +175,18 @@ Describe 'Releases' {
                 $release.Tag | Should -Be 'v1.2'
             }
 
-            It 'Get-GitHubRelease - Gets release by ID using Pipeline' {
-                $specificRelease = Get-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.2'
-                $release = $specificRelease | Get-GitHubRelease
-                LogGroup 'Release' {
-                    Write-Host ($release | Format-List -Property * | Out-String)
-                }
-                $release | Should -Not -BeNullOrEmpty
-                $release.Count | Should -Be 1
-                $release | Should -BeOfType 'GitHubRelease'
-                $release.Tag | Should -Be 'v1.2'
-            }
-
             It 'Update-GitHubRelease - Updates a release' {
-                $release = Update-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.3' -Name 'Updated Release' -Body 'Updated release body.'
+                $release = Update-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.3' -Name 'Updated Release' -Notes 'Updated release notes'
                 LogGroup 'Updated release' {
                     Write-Host ($release | Format-List -Property * | Out-String)
                 }
                 $release | Should -Not -BeNullOrEmpty
                 $release.Name | Should -Be 'Updated Release'
+                $release.Notes | Should -Be 'Updated release notes'
+                $release.Tag | Should -Be 'v1.3'
+                $release.Latest | Should -Be $true
+                $release.Draft | Should -Be $false
+                $release.Prerelease | Should -Be $false
             }
         }
     }
