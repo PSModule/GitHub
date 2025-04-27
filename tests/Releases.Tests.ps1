@@ -268,7 +268,7 @@ Describe 'Releases' {
                 $release.Draft | Should -Be $false
                 $release.Prerelease | Should -Be $false
 
-                Remove-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.0' -Confirm:$false
+                Remove-GitHubRelease -Owner $Owner -Repository $repo -ID $release.ID -Confirm:$false
 
                 $release = Get-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.0'
                 $release | Should -BeNullOrEmpty
