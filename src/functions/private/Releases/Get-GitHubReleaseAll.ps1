@@ -23,7 +23,7 @@
         [List releases](https://docs.github.com/rest/releases/releases#list-releases)
     #>
     [OutputType([GitHubRelease])]
-    [CmdletBinding()]
+    [CmdletBinding(SupportsPaging)]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
@@ -35,8 +35,8 @@
 
         # The number of results per page (max 100).
         [Parameter()]
-        [ValidateRange(0, 100)]
-        [int] $PerPage,
+        [ValidateRange(1, 100)]
+        [System.Nullable[int]] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -53,6 +53,7 @@
     process {
         $hasNextPage = $true
         $after = $null
+        $perPageSetting = Resolve-GitHubContextSetting -Name 'PerPage' -Value $PerPage -Context $Context
 
         do {
             $inputObject = @{
@@ -88,7 +89,7 @@ query($owner: String!, $repository: String!, $perPage: Int, $after: String) {
                 Variables = @{
                     owner      = $Owner
                     repository = $Repository
-                    perPage    = Resolve-GitHubContextSetting -Name 'PerPage' -Value $PerPage -Context $Context
+                    perPage    = $perPageSetting
                     after      = $after
                 }
                 Context   = $Context
@@ -96,8 +97,7 @@ query($owner: String!, $repository: String!, $perPage: Int, $after: String) {
 
             Invoke-GitHubGraphQLQuery @inputObject | ForEach-Object {
                 foreach ($release in $_.repository.releases.nodes) {
-                    $isLatest = $latest.Id -eq $release.Id
-                    [GitHubRelease]::new($release, $Owner, $Repository, $isLatest)
+                    [GitHubRelease]::new($release, $Owner, $Repository, $null)
                 }
                 $hasNextPage = $_.repository.releases.pageInfo.hasNextPage
                 $after = $_.repository.releases.pageInfo.endCursor
