@@ -9,6 +9,6 @@
     }
 
     $orgs | Where-Object { $_.CompletionText -like "$wordToComplete*" } | ForEach-Object {
-        [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
+        [System.Management.Automation.CompletionResult]::new($_, ($_ | Format-Table -HideTableHeaders), 'ParameterValue', $_.Description)
     }
 }
