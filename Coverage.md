@@ -9,15 +9,15 @@
     </tr>
     <tr>
         <td>Covered functions</td>
-        <td>222</td>
+        <td>220</td>
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>804</td>
+        <td>806</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>21.64%</td>
+        <td>21.44%</td>
     </tr>
 </table>
 
@@ -539,8 +539,8 @@
 | `/repos/{owner}/{repo}/releases`                                                                                          |                    | :white_check_mark: |                    | :white_check_mark: |                    |
 | `/repos/{owner}/{repo}/releases/assets/{asset_id}`                                                                        | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
 | `/repos/{owner}/{repo}/releases/generate-notes`                                                                           |                    |                    |                    | :white_check_mark: |                    |
-| `/repos/{owner}/{repo}/releases/latest`                                                                                   |                    | :white_check_mark: |                    |                    |                    |
-| `/repos/{owner}/{repo}/releases/tags/{tag}`                                                                               |                    | :white_check_mark: |                    |                    |                    |
+| `/repos/{owner}/{repo}/releases/latest`                                                                                   |                    | :x:                |                    |                    |                    |
+| `/repos/{owner}/{repo}/releases/tags/{tag}`                                                                               |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/releases/{release_id}`                                                                             | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
 | `/repos/{owner}/{repo}/releases/{release_id}/assets`                                                                      |                    | :white_check_mark: |                    | :white_check_mark: |                    |
 | `/repos/{owner}/{repo}/releases/{release_id}/reactions`                                                                   |                    | :x:                |                    | :x:                |                    |
