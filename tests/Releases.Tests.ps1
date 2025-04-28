@@ -129,7 +129,7 @@ Describe 'Releases' {
                 $release.Count | Should -Be 1
                 $release | Should -BeOfType 'GitHubRelease'
                 $release.Tag | Should -Be 'v1.3'
-                $release.IsLatest | Should -Be $true
+                $release.IsLatest | Should -BeTrue
             }
 
             It 'Get-GitHubRelease - Gets all releases' {
@@ -151,8 +151,8 @@ Describe 'Releases' {
                 $release.Count | Should -Be 1
                 $release | Should -BeOfType 'GitHubRelease'
                 $release.Tag | Should -Be 'v1.2'
-                $release.IsLatest | Should -Be $false
-                $release.IsDraft | Should -Be $true
+                $release.IsLatest | Should -BeFalse
+                $release.IsDraft | Should -BeTrue
             }
 
             It 'Get-GitHubRelease - Gets release by ID' {
@@ -165,9 +165,9 @@ Describe 'Releases' {
                 $release.Count | Should -Be 1
                 $release | Should -BeOfType 'GitHubRelease'
                 $release.Tag | Should -Be 'v1.0'
-                $release.IsLatest | Should -Be $false
-                $release.IsDraft | Should -Be $false
-                $release.IsPrerelease | Should -Be $false
+                $release.IsLatest | Should -BeFalse
+                $release.IsDraft | Should -BeFalse
+                $release.IsPrerelease | Should -BeFalse
             }
 
             It 'Get-GitHubRelease - Gets release by ID using Pipeline' {
@@ -191,9 +191,9 @@ Describe 'Releases' {
                 $release.Name | Should -Be 'Updated Release'
                 $release.Notes | Should -Be 'Updated release notes'
                 $release.Tag | Should -Be 'v1.0'
-                $release.IsLatest | Should -Be $false
-                $release.IsDraft | Should -Be $false
-                $release.IsPrerelease | Should -Be $false
+                $release.IsLatest | Should -BeFalse
+                $release.IsDraft | Should -BeFalse
+                $release.IsPrerelease | Should -BeFalse
             }
 
             It 'Update-GitHubRelease - Update release v1.1' {
@@ -205,9 +205,9 @@ Describe 'Releases' {
                 $release.Name | Should -Be 'Updated Release'
                 $release.Notes | Should -Be 'Updated release notes'
                 $release.Tag | Should -Be 'v1.1'
-                $release.IsLatest | Should -Be $false
-                $release.IsDraft | Should -Be $false
-                $release.IsPrerelease | Should -Be $true
+                $release.IsLatest | Should -BeFalse
+                $release.IsDraft | Should -BeFalse
+                $release.IsPrerelease | Should -BeTrue
             }
 
             It 'Update-GitHubRelease - Update release v1.2' {
@@ -218,9 +218,9 @@ Describe 'Releases' {
                 $release | Should -Not -BeNullOrEmpty
                 $release.Name | Should -Be 'Updated Release'
                 $release.Notes | Should -Be 'Updated release notes'
-                $release.IsLatest | Should -Be $false
-                $release.IsDraft | Should -Be $true
-                $release.IsPrerelease | Should -Be $false
+                $release.IsLatest | Should -BeFalse
+                $release.IsDraft | Should -BeTrue
+                $release.IsPrerelease | Should -BeFalse
             }
 
             It 'Update-GitHubRelease - Update release v1.3' {
@@ -232,9 +232,9 @@ Describe 'Releases' {
                 $release.Name | Should -Be 'Updated Release'
                 $release.Notes | Should -Be 'Updated release notes'
                 $release.Tag | Should -Be 'v1.3'
-                $release.IsLatest | Should -Be $true
-                $release.IsDraft | Should -Be $false
-                $release.IsPrerelease | Should -Be $false
+                $release.IsLatest | Should -BeTrue
+                $release.IsDraft | Should -BeFalse
+                $release.IsPrerelease | Should -BeFalse
             }
 
             It 'Set-GitHubRelease - Sets release v1.0 as latest' {
@@ -244,9 +244,9 @@ Describe 'Releases' {
                 }
                 $release | Should -Not -BeNullOrEmpty
                 $release.Tag | Should -Be 'v1.0'
-                $release.IsLatest | Should -Be $true
-                $release.IsDraft | Should -Be $false
-                $release.IsPrerelease | Should -Be $false
+                $release.IsLatest | Should -BeTrue
+                $release.IsDraft | Should -BeFalse
+                $release.IsPrerelease | Should -BeFalse
                 $release.Name | Should -Be 'Updated Release again'
                 $release.Notes | Should -Be 'Updated release notes to something else'
             }
@@ -258,9 +258,9 @@ Describe 'Releases' {
                 }
                 $release | Should -Not -BeNullOrEmpty
                 $release.Tag | Should -Be 'v1.4'
-                $release.IsLatest | Should -Be $true
-                $release.IsDraft | Should -Be $false
-                $release.IsPrerelease | Should -Be $false
+                $release.IsLatest | Should -BeTrue
+                $release.IsDraft | Should -BeFalse
+                $release.IsPrerelease | Should -BeFalse
                 $release.Name | Should -Be 'New Release'
                 $release.Notes | Should -Be 'New release notes'
             }
@@ -271,9 +271,9 @@ Describe 'Releases' {
                 $release.Count | Should -Be 1
                 $release | Should -BeOfType 'GitHubRelease'
                 $release.Tag | Should -Be 'v1.0'
-                $release.IsLatest | Should -Be $false
-                $release.IsDraft | Should -Be $false
-                $release.IsPrerelease | Should -Be $false
+                $release.IsLatest | Should -BeFalse
+                $release.IsDraft | Should -BeFalse
+                $release.IsPrerelease | Should -BeFalse
 
                 Remove-GitHubRelease -Owner $Owner -Repository $repo -ID $release.ID -Confirm:$false
 
