@@ -46,7 +46,6 @@
             ValueFromPipeline,
             ValueFromPipelineByPropertyName
         )]
-        [ArgummentCompleter({ Get-GitHubOrganizationNameCompleter @args })]
         [string] $Name,
 
         # The handle for the GitHub user account.

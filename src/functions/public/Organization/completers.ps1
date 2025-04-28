@@ -1,11 +1,4 @@
-﻿function Get-GitHubOrganizationNameCompleter {
-    <#
-    .SYNOPSIS
-    Short description
-
-    .DESCRIPTION
-    Long description
-    #>
+﻿Register-ArgumentCompleter -CommandName ($script:PSModuleInfo.FunctionsToExport) -ParameterName Name -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter
 
