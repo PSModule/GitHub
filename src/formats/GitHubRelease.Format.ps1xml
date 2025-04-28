@@ -21,13 +21,13 @@
                         <Label>Url</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>Latest</Label>
+                        <Label>IsLatest</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>Prerelease</Label>
+                        <Label>IsPrerelease</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>Draft</Label>
+                        <Label>IsDraft</Label>
                     </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
@@ -46,13 +46,13 @@
                                 <PropertyName>Url</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>Latest</PropertyName>
+                                <PropertyName>IsLatest</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>Prerelease</PropertyName>
+                                <PropertyName>IsPrerelease</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>Draft</PropertyName>
+                                <PropertyName>IsDraft</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
@@ -87,13 +87,13 @@
                                 <PropertyName>Target</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>Latest</PropertyName>
+                                <PropertyName>IsLatest</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>Draft</PropertyName>
+                                <PropertyName>IsDraft</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>Prerelease</PropertyName>
+                                <PropertyName>IsPrerelease</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>CreatedAt</PropertyName>

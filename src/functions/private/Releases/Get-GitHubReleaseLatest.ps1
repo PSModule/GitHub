@@ -47,16 +47,42 @@
 
     process {
         $inputObject = @{
-            Method      = 'GET'
-            APIEndpoint = "/repos/$Owner/$Repository/releases/latest"
-            Context     = $Context
+            Query     = @'
+query($owner: String!, $repository: String!) {
+  repository(owner: $owner, name: $repository) {
+    latestRelease {
+      id
+      databaseId
+      tagName
+      name
+      description
+      isLatest
+      isDraft
+      isPrerelease
+      url
+      createdAt
+      publishedAt
+      updatedAt
+      author {
+        login
+      }
+    }
+  }
+}
+'@
+            Variables = @{
+                owner      = $Owner
+                repository = $Repository
+            }
+            Context   = $Context
         }
 
-        try {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                [GitHubRelease]::new($_.Response, $Owner, $Repository, $true)
+        Invoke-GitHubGraphQLQuery @inputObject | ForEach-Object {
+            $release = $_.repository.latestRelease
+            if ($release) {
+                [GitHubRelease]::new($release, $Owner, $Repository, $null)
             }
-        } catch { return }
+        }
     }
 
     end {

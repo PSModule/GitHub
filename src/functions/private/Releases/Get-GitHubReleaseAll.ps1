@@ -51,24 +51,58 @@
     }
 
     process {
-        $latest = Get-GitHubReleaseLatest -Owner $Owner -Repository $Repository -Context $Context
+        $hasNextPage = $true
+        $after = $null
 
-        $inputObject = @{
-            Method      = 'GET'
-            APIEndpoint = "/repos/$Owner/$Repository/releases"
-            Body        = $body
-            PerPage     = $PerPage
-            Context     = $Context
+        do {
+            $inputObject = @{
+                Query     = @'
+query($owner: String!, $repository: String!, $perPage: Int, $after: String) {
+  repository(owner: $owner, name: $repository) {
+    releases(first: $perPage, after: $after) {
+      nodes {
+        id
+        databaseId
+        tagName
+        name
+        description
+        isLatest
+        isDraft
+        isPrerelease
+        url
+        createdAt
+        publishedAt
+        updatedAt
+        author {
+          login
         }
-
-        try {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                foreach ($item in $_.Response) {
-                    $isLatest = $item.id -eq $latest.id
-                    [GitHubRelease]::new($item, $Owner, $Repository, $isLatest)
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+    }
+  }
+}
+'@
+                Variables = @{
+                    owner      = $Owner
+                    repository = $Repository
+                    perPage    = Resolve-GitHubContextSetting -Name 'PerPage' -Value $PerPage -Context $Context
+                    after      = $after
                 }
+                Context   = $Context
             }
-        } catch { return }
+
+            Invoke-GitHubGraphQLQuery @inputObject | ForEach-Object {
+                foreach ($release in $_.repository.releases.nodes) {
+                    $isLatest = $latest.Id -eq $release.Id
+                    [GitHubRelease]::new($release, $Owner, $Repository, $isLatest)
+                }
+                $hasNextPage = $_.repository.releases.pageInfo.hasNextPage
+                $after = $_.repository.releases.pageInfo.endCursor
+            }
+        } while ($hasNextPage)
     }
 
     end {
