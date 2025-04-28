@@ -1,4 +1,11 @@
-﻿Register-ArgumentCompleter -CommandName Get-GitHubOrganization -ParameterName Name -ScriptBlock {
+﻿function Get-GitHubOrganizationNameCompleter {
+    <#
+    .SYNOPSIS
+    Short description
+
+    .DESCRIPTION
+    Long description
+    #>
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter
 
