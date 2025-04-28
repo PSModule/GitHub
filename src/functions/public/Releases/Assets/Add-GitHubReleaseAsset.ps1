@@ -70,10 +70,6 @@
         [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'Tag')]
         [string] $Tag,
 
-        # The unique identifier of the release.
-        [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'ID')]
-        [string] $ID,
-
         #The name of the file asset.
         [Parameter()]
         [string] $Name,
@@ -126,15 +122,15 @@
                 Remove-Item -Path $TempFilePath -Force -ErrorAction SilentlyContinue
             }
         }
-        # # If name is not provided, use the name of the file
-        # if (!$Name) {
-        #     $Name = (Get-Item $Path).Name
-        # }
+        # If name is not provided, use the name of the file
+        if (!$Name) {
+            $Name = (Get-Item $Path).Name
+        }
 
-        # # If label is not provided, use the name of the file
-        # if (!$Label) {
-        #     $Label = (Get-Item $Path).Name
-        # }
+        # If label is not provided, use the name of the file
+        if (!$Label) {
+            $Label = (Get-Item $Path).Name
+        }
 
         if (!$ContentType) {
             $ContentType = switch ((Get-Item $fileToUpload).Extension) {
@@ -164,9 +160,6 @@
             'Tag' {
                 $release = Get-GitHubReleaseByTagName -Owner $Owner -Repository $Repository -Tag $Tag -Context $Context
             }
-            'ID' {
-                $release = Get-GitHubReleaseByID -Owner $Owner -Repository $Repository -ID $ID -Context $Context
-            }
             default {
                 throw "Invalid parameter set: $($PSCmdlet.ParameterSetName)"
             }
@@ -185,6 +178,7 @@
             UploadFilePath = $fileToUpload
             Body           = $body
             Context        = $Context
+            HttpVersion    = '1.1'
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
