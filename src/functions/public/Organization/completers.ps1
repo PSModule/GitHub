@@ -2,8 +2,13 @@
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter
 
-    Get-GitHubOrganization -Verbose:$false -Context $fakeBoundParameter.Context |
-        Where-Object { $_.CompletionText -like "$wordToComplete*" } | ForEach-Object {
-            [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
-        }
+    if ($fakeBoundParameter.ContainsKey('Context')) {
+        $orgs = Get-GitHubOrganization -Verbose:$false -Debug:$false -Context $fakeBoundParameter.Context
+    } else {
+        $orgs = Get-GitHubOrganization -Verbose:$false -Debug:$false
+    }
+
+    $orgs | Where-Object { $_.CompletionText -like "$wordToComplete*" } | ForEach-Object {
+        [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
+    }
 }
