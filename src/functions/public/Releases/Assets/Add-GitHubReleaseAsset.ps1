@@ -105,7 +105,6 @@
     }
 
     process {
-        # Check if the path is a directory
         try {
             $item = Get-Item $Path
             $isDirectory = $item.PSIsContainer
@@ -113,7 +112,7 @@
             throw "Error accessing the path: $_"
         }
         $fileToUpload = $Path
-        # If the path is a directory, create a zip file
+        # If the path is a directory, create a zip file from the contents of the folder
         if ($isDirectory) {
             Write-Verbose 'Path is a directory. Zipping contents...'
             $dirName = $item.Name
