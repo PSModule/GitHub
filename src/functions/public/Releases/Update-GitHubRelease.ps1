@@ -158,7 +158,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("release with ID [$ID] in [$Owner/$Repository]", 'Update')) {
-            $resultLatest = $PSBoundParameters.ContainsKey('Latest') ? $Latest : $release.Latest
+            $resultLatest = $PSBoundParameters.ContainsKey('Latest') ? $Latest : $release.IsLatest
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 [GitHubRelease]::new($_.Response , $Owner, $Repository, $resultLatest)
             }
