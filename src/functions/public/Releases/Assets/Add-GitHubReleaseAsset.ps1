@@ -174,7 +174,7 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            [GitHubReleaseAsset]($_.Response)
         }
     }
 

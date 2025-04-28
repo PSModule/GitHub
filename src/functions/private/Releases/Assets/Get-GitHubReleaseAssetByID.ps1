@@ -30,7 +30,6 @@
 
         # The unique identifier of the asset.
         [Parameter(Mandatory)]
-        [Alias('asset_id')]
         [string] $ID,
 
         # The context to run the command in. Used to get the details for the API call.

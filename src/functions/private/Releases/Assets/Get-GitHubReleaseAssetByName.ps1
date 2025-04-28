@@ -1,21 +1,24 @@
-﻿filter Get-GitHubReleaseAssetByReleaseID {
+﻿filter Get-GitHubReleaseAssetByName {
     <#
         .SYNOPSIS
-        List release assets
+        Get a release asset by name
 
         .DESCRIPTION
-        List release assets
+        To download the asset's binary content, set the `Accept` header of the request to
+        [`application/octet-stream`](https://docs.github.com/rest/overview/media-types).
+        The API will either redirect the client to the location, or stream it directly if
+        possible. API clients should handle both a `200` or `302` response.
 
         .EXAMPLE
-        Get-GitHubReleaseAssetByReleaseID -Owner 'octocat' -Repository 'hello-world' -ID '1234567'
+        Get-GitHubReleaseAssetByName -Owner 'octocat' -Repository 'hello-world' -ID '1234567'
 
-        Gets the release assets for the release with the ID '1234567' for the repository 'octocat/hello-world'.
+        Gets the release asset with the ID '1234567' for the repository 'octocat/hello-world'.
 
         .NOTES
-        https://docs.github.com/rest/releases/assets#list-release-assets
+        https://docs.github.com/rest/releases/assets#get-a-release-asset
 
     #>
-    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
+    [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
@@ -25,17 +28,9 @@
         [Parameter(Mandatory)]
         [string] $Repository,
 
-        # The unique identifier of the release.
-        [Parameter(
-            Mandatory,
-            ParameterSetName = 'ID'
-        )]
+        # The unique identifier of the asset.
+        [Parameter(Mandatory)]
         [string] $ID,
-
-        # The number of results per page (max 100).
-        [Parameter()]
-        [ValidateRange(0, 100)]
-        [int] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -50,14 +45,9 @@
     }
 
     process {
-        $body = @{
-            per_page = $PerPage
-        }
-
         $inputObject = @{
             Method      = 'GET'
-            APIEndpoint = "/repos/$Owner/$Repository/releases/$ID/assets"
-            Body        = $body
+            APIEndpoint = "/repos/$Owner/$Repository/releases/assets/$ID"
             Context     = $Context
         }
 
@@ -65,6 +55,7 @@
             Write-Output $_.Response
         }
     }
+
     end {
         Write-Debug "[$stackPath] - End"
     }

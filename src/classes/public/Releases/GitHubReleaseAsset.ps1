@@ -29,28 +29,45 @@
 
     # Description: Timestamp when the asset was created
     # Example: "2025-04-11T09:03:38Z"
-    [datetime] $CreatedAt
+    [System.Nullable[datetime]] $CreatedAt
 
     # Description: Timestamp when the asset was last updated
     # Example: "2025-04-11T09:03:38Z"
-    [datetime] $UpdatedAt
+    [System.Nullable[datetime]] $UpdatedAt
 
     # Description: User who uploaded the asset, can be null
     # Example: GitHubUser object or null
-    [GitHubUser] $Uploader
+    [GitHubUser] $UploadedBy
 
     GitHubReleaseAsset() {}
 
     GitHubReleaseAsset([PSCustomObject]$Object) {
-        $this.Url = $Object.url
-        $this.Name = $Object.name
-        $this.Label = $Object.label
-        $this.State = $Object.state
-        $this.ContentType = $Object.content_type
-        $this.Size = $Object.size
-        $this.Downloads = $Object.downloads
-        $this.CreatedAt = [datetime]::Parse($Object.created_at)
-        $this.UpdatedAt = [datetime]::Parse($Object.updated_at)
-        $this.Uploader = [GitHubUser]::new($Object.uploader)
+        if ($null -ne $Object.node_id) {
+            $this.ID = $Object.id
+            $this.NodeID = $Object.node_id
+            $this.Url = $Object.browser_download_url
+            $this.Name = $Object.name
+            $this.Label = $Object.label
+            $this.State = $Object.state
+            $this.ContentType = $Object.content_type
+            $this.Size = $Object.size
+            $this.Downloads = $Object.download_count
+            $this.CreatedAt = [datetime]::Parse($Object.created_at)
+            $this.UpdatedAt = [datetime]::Parse($Object.updated_at)
+            $this.UploadedBy = [GitHubUser]::new($Object.uploader)
+        } else {
+            $this.ID = $Object.databaseId
+            $this.NodeID = $Object.id
+            $this.Url = $Object.downloadUrl
+            $this.Name = $Object.name
+            $this.Label = $Object.label
+            $this.State = $Object.state
+            $this.ContentType = $Object.contentType
+            $this.Size = $Object.size
+            $this.Downloads = $Object.downloadCount
+            $this.CreatedAt = [datetime]::Parse($Object.createdAt)
+            $this.UpdatedAt = [datetime]::Parse($Object.updatedAt)
+            $this.UploadedBy = [GitHubUser]::new($Object.uploadedBy)
+        }
     }
 }
