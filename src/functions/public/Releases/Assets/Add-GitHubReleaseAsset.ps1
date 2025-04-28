@@ -134,7 +134,7 @@
         # }
 
         if (!$ContentType) {
-            $ContentType = switch ((Get-Item $Path).Extension) {
+            $ContentType = switch ((Get-Item $fileToUpload).Extension) {
                 '.zip' { 'application/zip' }
                 '.tar' { 'application/x-tar' }
                 '.gz' { 'application/gzip' }
