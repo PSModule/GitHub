@@ -2,7 +2,7 @@
 Get-GitHubRelease -Owner PSModule -Repository GitHub
 
 # Get the latest release for a specific repository
-Get-GitHubRelease -Owner PSModule -Repository GitHub -Latest
+Get-GitHubRelease -Owner PSModule -Repository GitHub
 
 # Get all the releases for all repos in the organization
 'PSModule' | Get-GitHubOrganization | Get-GitHubRepository | Get-GitHubRelease
@@ -12,7 +12,7 @@ Get-GitHubRelease -Owner PSModule -Repository GitHub -Latest
     do {
         Import-Module -Name GitHub
     } until ($? -eq $true)
-    $_ | Get-GitHubRelease -Latest
+    $_ | Get-GitHubRelease
 }
 
 'PSModule' | Get-GitHubOrganization | Get-GitHubRepository | Get-GitHubRelease -Latest

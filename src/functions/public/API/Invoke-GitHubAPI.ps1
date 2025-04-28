@@ -279,6 +279,7 @@ filter Invoke-GitHubAPI {
             } while ($APICall['Uri'])
         } catch {
             $failure = $_
+            $failure | Out-String -Stream | ForEach-Object { Write-Debug $_ }
             $headers = @{}
             foreach ($item in $failure.Exception.Response.Headers.GetEnumerator()) {
                 $headers[$item.Key] = ($item.Value).Trim() -join ', '

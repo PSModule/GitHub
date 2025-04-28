@@ -98,89 +98,62 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        # Store if we're using a temporary path for cleanup
-        $TempFilePath = $null
     }
 
     process {
         # Check if the path is a directory
-        $isDirectory = (Test-Path -Path $Path -PathType Container)
-
+        try {
+            $item = Get-Item $Path
+            $isDirectory = $item.PSIsContainer
+        } catch {
+            throw "Error accessing the path: $_"
+        }
         $fileToUpload = $Path
-
         # If the path is a directory, create a zip file
         if ($isDirectory) {
             Write-Verbose 'Path is a directory. Zipping contents...'
-            $dirName = (Get-Item $Path).Name
-            $TempFilePath = [System.IO.Path]::GetTempFileName() + '.zip'
+            $dirName = $item.Name
+            $TempFilePath = "$dirName.zip"
 
             Write-Verbose "Creating temporary zip file: $TempFilePath"
-
-            # Create a temporary zip file
             try {
-                Add-Type -AssemblyName System.IO.Compression.FileSystem
-
-                # Delete temp file if it exists (GetTempFileName creates the file)
-                if (Test-Path $TempFilePath) {
-                    Remove-Item -Path $TempFilePath -Force
-                }
-
-                # Create the zip archive
-                [System.IO.Compression.ZipFile]::CreateFromDirectory($Path, $TempFilePath)
-
-                # Use the temp file path for upload
+                Get-ChildItem -Path $Path | Compress-Archive -DestinationPath $TempFilePath -ErrorAction Stop -Force
                 $fileToUpload = $TempFilePath
-
-                # Set the name to folder name + .zip if not specified
-                if (!$Name) {
-                    $Name = "$dirName.zip"
-                }
-
-                # Set content type to zip
-                $ContentType = 'application/zip'
-
-                Write-Verbose 'Directory zipped successfully'
             } catch {
-                if ($TempFilePath -and (Test-Path $TempFilePath)) {
-                    Remove-Item -Path $TempFilePath -Force -ErrorAction SilentlyContinue
-                }
-                throw "Failed to create zip file from directory: $_"
+                Remove-Item -Path $TempFilePath -Force -ErrorAction SilentlyContinue
             }
-        } else {
-            # If name is not provided, use the name of the file
-            if (!$Name) {
-                $Name = (Get-Item $Path).Name
-            }
+        }
+        # # If name is not provided, use the name of the file
+        # if (!$Name) {
+        #     $Name = (Get-Item $Path).Name
+        # }
 
-            # If label is not provided, use the name of the file
-            if (!$Label) {
-                $Label = (Get-Item $Path).Name
-            }
+        # # If label is not provided, use the name of the file
+        # if (!$Label) {
+        #     $Label = (Get-Item $Path).Name
+        # }
 
-            # If content type is not provided, use the file extension
-            if (!$ContentType) {
-                $ContentType = switch ((Get-Item $Path).Extension) {
-                    '.zip' { 'application/zip' }
-                    '.tar' { 'application/x-tar' }
-                    '.gz' { 'application/gzip' }
-                    '.bz2' { 'application/x-bzip2' }
-                    '.xz' { 'application/x-xz' }
-                    '.7z' { 'application/x-7z-compressed' }
-                    '.rar' { 'application/vnd.rar' }
-                    '.tar.gz' { 'application/gzip' }
-                    '.tgz' { 'application/gzip' }
-                    '.tar.bz2' { 'application/x-bzip2' }
-                    '.tar.xz' { 'application/x-xz' }
-                    '.tar.7z' { 'application/x-7z-compressed' }
-                    '.tar.rar' { 'application/vnd.rar' }
-                    '.png' { 'image/png' }
-                    '.json' { 'application/json' }
-                    '.txt' { 'text/plain' }
-                    '.md' { 'text/markdown' }
-                    '.html' { 'text/html' }
-                    default { 'application/octet-stream' }
-                }
+        if (!$ContentType) {
+            $ContentType = switch ((Get-Item $Path).Extension) {
+                '.zip' { 'application/zip' }
+                '.tar' { 'application/x-tar' }
+                '.gz' { 'application/gzip' }
+                '.bz2' { 'application/x-bzip2' }
+                '.xz' { 'application/x-xz' }
+                '.7z' { 'application/x-7z-compressed' }
+                '.rar' { 'application/vnd.rar' }
+                '.tar.gz' { 'application/gzip' }
+                '.tgz' { 'application/gzip' }
+                '.tar.bz2' { 'application/x-bzip2' }
+                '.tar.xz' { 'application/x-xz' }
+                '.tar.7z' { 'application/x-7z-compressed' }
+                '.tar.rar' { 'application/vnd.rar' }
+                '.png' { 'image/png' }
+                '.json' { 'application/json' }
+                '.txt' { 'text/plain' }
+                '.md' { 'text/markdown' }
+                '.html' { 'text/html' }
+                default { 'application/octet-stream' }
             }
         }
 
@@ -200,6 +173,7 @@
             name  = $Name
             label = $Label
         }
+        $body | Remove-HashtableEntry -NullOrEmptyValues
 
         $inputObject = @{
             Method         = 'POST'
@@ -216,13 +190,15 @@
     }
 
     end {
+        Write-Debug "[$stackPath] - End"
+    }
+
+    clean {
         # Clean up temporary file if created
-        if ($TempFilePath -and (Test-Path $TempFilePath)) {
-            Write-Verbose 'Cleaning up temporary zip file'
+        if ($isDirectory) {
+            Write-Verbose "Cleaning up temporary zip file: $TempFilePath"
             Remove-Item -Path $TempFilePath -Force -ErrorAction SilentlyContinue
         }
-
-        Write-Debug "[$stackPath] - End"
     }
 }
 
