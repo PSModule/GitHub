@@ -87,6 +87,10 @@
         [alias('FullName')]
         [string] $Path,
 
+        # The 'Content-Type' for the payload.
+        [Parameter()]
+        [string] $ContentType,
+
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
