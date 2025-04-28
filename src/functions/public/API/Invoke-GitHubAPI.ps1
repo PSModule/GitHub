@@ -177,9 +177,9 @@ filter Invoke-GitHubAPI {
             if (-not $Body) {
                 $Body = @{}
             }
-
             $Body['per_page'] = Resolve-GitHubContextSetting -Name 'PerPage' -Value $PerPage -Context $Context
-
+            $APICall.Uri = New-Uri -BaseUri $Uri -Query $Body -AsString
+        } elseif (($Method -eq 'POST') -and -not [string]::IsNullOrEmpty($UploadFilePath)) {
             $APICall.Uri = New-Uri -BaseUri $Uri -Query $Body -AsString
         } elseif ($Body) {
             if ($Body -is [hashtable]) {
