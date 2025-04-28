@@ -67,7 +67,7 @@
         [string] $Repository,
 
         # The name of the tag to get a release from.
-        [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'Tag')]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Tag,
 
         #The name of the file asset.
@@ -156,14 +156,7 @@
             }
         }
 
-        switch ($PSCmdlet.ParameterSetName) {
-            'Tag' {
-                $release = Get-GitHubReleaseByTagName -Owner $Owner -Repository $Repository -Tag $Tag -Context $Context
-            }
-            default {
-                throw "Invalid parameter set: $($PSCmdlet.ParameterSetName)"
-            }
-        }
+        $release = Get-GitHubReleaseByTagName -Owner $Owner -Repository $Repository -Tag $Tag -Context $Context
 
         $body = @{
             name  = $Name
@@ -171,14 +164,13 @@
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
+        $uploadUrl = New-Uri -BaseUri "https://uploads.$($Context.HostName)" -Path "/repos/$Owner/$Repository/releases/$($release.id)/assets" -Query $Body
         $inputObject = @{
             Method         = 'POST'
-            ApiEndpoint    = "/repos/$Owner/$Repository/releases/$($release.id)/assets"
+            Uri            = $uploadUrl
             ContentType    = $ContentType
             UploadFilePath = $fileToUpload
-            Body           = $body
             Context        = $Context
-            HttpVersion    = '1.1'
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
