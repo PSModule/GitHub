@@ -1,11 +1,13 @@
 ﻿filter Get-GitHubReleaseAsset {
     <#
         .SYNOPSIS
-        List release assets based on a release ID or asset ID
+        List release assets based on a release ID, asset ID, or asset name
 
         .DESCRIPTION
         If an asset ID is provided, the asset is returned.
         If a release ID is provided, all assets for the release are returned.
+        If a release ID and name are provided, the specific named asset from that release is returned.
+        If a tag and name are provided, the specific named asset from the release with that tag is returned.
 
         .EXAMPLE
         Get-GitHubReleaseAsset -Owner 'octocat' -Repository 'hello-world' -ID '1234567'
@@ -15,7 +17,17 @@
         .EXAMPLE
         Get-GitHubReleaseAsset -Owner 'octocat' -Repository 'hello-world' -ReleaseID '7654321'
 
-        Gets the release assets for the release with the ID '7654321' for the repository 'octocat/hello-world'.
+        Gets all release assets for the release with the ID '7654321' for the repository 'octocat/hello-world'.
+
+        .EXAMPLE
+        Get-GitHubReleaseAsset -Owner 'octocat' -Repository 'hello-world' -ReleaseID '7654321' -Name 'example.zip'
+
+        Gets the release asset named 'example.zip' from the release with ID '7654321' for the repository 'octocat/hello-world'.
+
+        .EXAMPLE
+        Get-GitHubReleaseAsset -Owner 'octocat' -Repository 'hello-world' -Tag 'v1.0.0' -Name 'example.zip'
+
+        Gets the release asset named 'example.zip' from the release tagged as 'v1.0.0' for the repository 'octocat/hello-world'.
 
         .INPUTS
         GitHubRelease
@@ -44,7 +56,17 @@
 
         # The unique identifier of the release.
         [Parameter(Mandatory, ParameterSetName = 'List assets from a release', ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ParameterSetName = 'Get a specific asset by name from a release ID', ValueFromPipelineByPropertyName)]
         [string] $ReleaseID,
+
+        # The tag name of the release.
+        [Parameter(Mandatory, ParameterSetName = 'Get a specific asset by name from a tag')]
+        [string] $Tag,
+
+        # The name of the asset to find.
+        [Parameter(Mandatory, ParameterSetName = 'Get a specific asset by name from a release ID')]
+        [Parameter(Mandatory, ParameterSetName = 'Get a specific asset by name from a tag')]
+        [string] $Name,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -61,11 +83,23 @@
 
     process {
         switch ($PSCmdlet.ParameterSetName) {
-            'ReleaseID' {
+            'List assets from a release' {
                 Get-GitHubReleaseAssetByReleaseID -Owner $Owner -Repository $Repository -ReleaseID $ReleaseID -Context $Context
             }
-            'ID' {
+            'Get a specific asset by ID' {
                 Get-GitHubReleaseAssetByID -Owner $Owner -Repository $Repository -ID $ID -Context $Context
+            }
+            'Get a specific asset by name from a release ID' {
+                $assets = Get-GitHubReleaseAssetByReleaseID -Owner $Owner -Repository $Repository -ReleaseID $ReleaseID -Context $Context
+                $asset = $assets | Where-Object { $_.Name -eq $Name }
+                if ($asset) {
+                    $asset
+                } else {
+                    Write-Warning "Asset with name '$Name' not found in release with ID '$ReleaseID'"
+                }
+            }
+            'Get a specific asset by name from a tag' {
+                Get-GitHubReleaseAssetByTag -Owner $Owner -Repository $Repository -Tag $Tag -Name $Name -Context $Context
             }
         }
     }
