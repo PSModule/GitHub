@@ -283,22 +283,22 @@ Describe 'Releases' {
 
             It 'Add-GitHubReleaseAsset - Creates a new release asset' {
                 # Create a sample file to upload
-                $fileName = "testasset.txt"
+                $fileName = 'testasset.txt'
                 $tempFilePath = Join-Path -Path $env:TEMP -ChildPath $fileName
-                Set-Content -Path $tempFilePath -Value "This is a test file for GitHub release asset testing."
+                Set-Content -Path $tempFilePath -Value 'This is a test file for GitHub release asset testing.'
 
                 # Get the latest release to attach the asset to
                 $release = Get-GitHubRelease -Owner $Owner -Repository $repo
-                
+
                 # Upload the asset
                 $asset = Add-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID -FilePath $tempFilePath
                 LogGroup 'Added asset' {
                     Write-Host ($asset | Format-List -Property * | Out-String)
                 }
-                
+
                 $asset | Should -Not -BeNullOrEmpty
                 $asset.Name | Should -Be $fileName
-                
+
                 # Clean up the temporary file
                 Remove-Item -Path $tempFilePath -Force
             }
@@ -306,13 +306,13 @@ Describe 'Releases' {
             It 'Get-GitHubReleaseAsset - Gets all assets from a release ID' {
                 # Get the latest release to retrieve assets from
                 $release = Get-GitHubRelease -Owner $Owner -Repository $repo
-                
+
                 # Get all assets for the release
                 $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
                 LogGroup 'Release assets by release ID' {
                     Write-Host ($assets | Format-List -Property * | Out-String)
                 }
-                
+
                 $assets | Should -Not -BeNullOrEmpty
                 $assets | Should -BeOfType 'GitHubReleaseAsset'
             }
@@ -320,16 +320,16 @@ Describe 'Releases' {
             It 'Get-GitHubReleaseAsset - Gets a specific asset by ID' {
                 # Get the latest release to retrieve assets from
                 $release = Get-GitHubRelease -Owner $Owner -Repository $repo
-                
+
                 # Get all assets for the release
                 $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
-                
+
                 # Get the first asset by ID
                 $asset = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ID $assets[0].ID
                 LogGroup 'Release asset by asset ID' {
                     Write-Host ($asset | Format-List -Property * | Out-String)
                 }
-                
+
                 $asset | Should -Not -BeNullOrEmpty
                 $asset | Should -BeOfType 'GitHubReleaseAsset'
                 $asset.ID | Should -Be $assets[0].ID
@@ -338,17 +338,17 @@ Describe 'Releases' {
             It 'Get-GitHubReleaseAsset - Gets a specific asset by name from a release ID' {
                 # Get the latest release to retrieve assets from
                 $release = Get-GitHubRelease -Owner $Owner -Repository $repo
-                
+
                 # Get all assets for the release
                 $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
-                
+
                 # Get the first asset by name from the release ID
                 $assetName = $assets[0].Name
                 $asset = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID -Name $assetName
                 LogGroup 'Release asset by name from release ID' {
                     Write-Host ($asset | Format-List -Property * | Out-String)
                 }
-                
+
                 $asset | Should -Not -BeNullOrEmpty
                 $asset | Should -BeOfType 'GitHubReleaseAsset'
                 $asset.Name | Should -Be $assetName
@@ -357,17 +357,17 @@ Describe 'Releases' {
             It 'Get-GitHubReleaseAsset - Gets a specific asset by name from a tag' {
                 # Get the latest release to retrieve assets from
                 $release = Get-GitHubRelease -Owner $Owner -Repository $repo
-                
+
                 # Get all assets for the release
                 $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
-                
+
                 # Get the first asset by name from the release tag
                 $assetName = $assets[0].Name
                 $asset = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -Tag $release.Tag -Name $assetName
                 LogGroup 'Release asset by name from tag' {
                     Write-Host ($asset | Format-List -Property * | Out-String)
                 }
-                
+
                 $asset | Should -Not -BeNullOrEmpty
                 $asset.Name | Should -Be $assetName
             }
@@ -375,17 +375,17 @@ Describe 'Releases' {
             It 'Update-GitHubReleaseAsset - Updates a release asset' {
                 # Get the latest release to retrieve assets from
                 $release = Get-GitHubRelease -Owner $Owner -Repository $repo
-                
+
                 # Get all assets for the release
                 $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
-                
+
                 # Update the first asset
-                $newLabel = "Updated test asset"
+                $newLabel = 'Updated test asset'
                 $asset = Update-GitHubReleaseAsset -Owner $Owner -Repository $repo -ID $assets[0].ID -Label $newLabel
                 LogGroup 'Updated asset' {
                     Write-Host ($asset | Format-List -Property * | Out-String)
                 }
-                
+
                 $asset | Should -Not -BeNullOrEmpty
                 $asset.Label | Should -Be $newLabel
             }
@@ -393,14 +393,14 @@ Describe 'Releases' {
             It 'Remove-GitHubReleaseAsset - Removes a release asset' {
                 # Get the latest release to retrieve assets from
                 $release = Get-GitHubRelease -Owner $Owner -Repository $repo
-                
+
                 # Get all assets for the release
                 $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
-                
+
                 # Remove the first asset
                 $assetID = $assets[0].ID
                 Remove-GitHubReleaseAsset -Owner $Owner -Repository $repo -ID $assetID -Confirm:$false
-                
+
                 # Verify the asset was removed
                 $updatedAssets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
                 $remainingAsset = $updatedAssets | Where-Object { $_.ID -eq $assetID }
