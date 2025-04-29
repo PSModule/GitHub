@@ -290,7 +290,7 @@ Describe 'Releases' {
                 $release = Get-GitHubRelease -Owner $Owner -Repository $repo
 
                 # Upload the asset
-                $asset = Add-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID -FilePath $tempFilePath
+                $asset = Add-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID -Path $tempFilePath
                 LogGroup 'Added asset' {
                     Write-Host ($asset | Format-List -Property * | Out-String)
                 }
@@ -316,7 +316,7 @@ Describe 'Releases' {
                 $label = 'Issue Template Documentation'
 
                 # Upload the asset with custom parameters
-                $asset = Add-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID -FilePath $mdFilePath -Name $customName -ContentType $contentType -Label $label
+                $asset = Add-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID -Path $mdFilePath -Name $customName -ContentType $contentType -Label $label
 
                 LogGroup 'Added markdown asset' {
                     Write-Host ($asset | Format-List -Property * | Out-String)
@@ -334,8 +334,8 @@ Describe 'Releases' {
                 $release = Get-GitHubRelease -Owner $Owner -Repository $repo
 
                 # Create a temporary zip file from the Data folder
-                $path = Join-Path -Path $PSScriptRoot -ChildPath "Data"
-                $label = "Test Data Files"
+                $path = Join-Path -Path $PSScriptRoot -ChildPath 'Data'
+                $label = 'Test Data Files'
 
                 # Upload the zip file as an asset
                 $asset = $release | Add-GitHubReleaseAsset -Owner $Owner -Repository $repo -Label $label -Path $path
