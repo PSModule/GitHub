@@ -283,9 +283,8 @@ Describe 'Releases' {
 
             It 'Add-GitHubReleaseAsset - Creates a new release asset' {
                 # Create a sample file to upload
-                $fileName = 'testasset.txt'
-                $tempFilePath = Join-Path -Path $env:TEMP -ChildPath $fileName
-                Set-Content -Path $tempFilePath -Value 'This is a test file for GitHub release asset testing.'
+                $fileName = 'AuthCases.ps1'
+                $tempFilePath = Join-Path -Path $PSScriptRoot -ChildPath "Data/$fileName"
 
                 # Get the latest release to attach the asset to
                 $release = Get-GitHubRelease -Owner $Owner -Repository $repo
@@ -301,6 +300,60 @@ Describe 'Releases' {
 
                 # Clean up the temporary file
                 Remove-Item -Path $tempFilePath -Force
+            }
+
+            It 'Add-GitHubReleaseAsset - Creates a release asset with custom parameters' {
+                # Use an existing markdown file from the Data folder
+                $mdFileName = 'IssueForm.md'
+                $mdFilePath = Join-Path -Path $PSScriptRoot -ChildPath "Data/$mdFileName"
+
+                # Get a release to attach the asset to
+                $release = Get-GitHubRelease -Owner $Owner -Repository $repo
+
+                # Custom parameters for the asset
+                $customName = 'CustomIssueTemplate.md'
+                $contentType = 'text/markdown'
+                $label = 'Issue Template Documentation'
+
+                # Upload the asset with custom parameters
+                $asset = Add-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID -FilePath $mdFilePath -Name $customName -ContentType $contentType -Label $label
+
+                LogGroup 'Added markdown asset' {
+                    Write-Host ($asset | Format-List -Property * | Out-String)
+                }
+
+                $asset | Should -Not -BeNullOrEmpty
+                $asset.Name | Should -Be $customName
+                $asset.ContentType | Should -Be $contentType
+                $asset.Label | Should -Be $label
+                $asset.Size | Should -BeGreaterThan 0
+            }
+
+            It 'Add-GitHubReleaseAsset - Adds a folder as a zipped asset to a release' {
+                # Get the latest release to attach the asset to
+                $release = Get-GitHubRelease -Owner $Owner -Repository $repo
+
+                # Create a temporary zip file from the Data folder
+                $path = Join-Path -Path $PSScriptRoot -ChildPath "Data"
+                $label = "Test Data Files"
+
+                # Upload the zip file as an asset
+                $asset = $release | Add-GitHubReleaseAsset -Owner $Owner -Repository $repo -Label $label -Path $path
+
+                LogGroup 'Added zip asset' {
+                    Write-Host ($asset | Format-List -Property * | Out-String)
+                }
+
+                # Verify the asset was created correctly
+                $asset | Should -Not -BeNullOrEmpty
+                $asset.Name | Should -Be $zipAssetName
+                $asset.Label | Should -Be $label
+                $asset.Size | Should -BeGreaterThan 0
+
+                # Clean up the temporary zip file
+                if (Test-Path $tempZipPath) {
+                    Remove-Item -Path $tempZipPath -Force
+                }
             }
 
             It 'Get-GitHubReleaseAsset - Gets all assets from a release ID' {
