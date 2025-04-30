@@ -280,81 +280,156 @@ Describe 'Releases' {
                 $release = Get-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.0'
                 $release | Should -BeNullOrEmpty
             }
+        }
+        Context 'Release Assets' -Skip:($OwnerType -eq 'repository') {
+            BeforeAll {
+                $testFolderGuid = [Guid]::NewGuid().ToString().Substring(0, 8)
+                $testFolderName = "GHAssetTest-$testFolderGuid"
+                $testFolderPath = Join-Path -Path $env:TEMP -ChildPath $testFolderName
+                New-Item -Path $testFolderPath -ItemType Directory -Force
+                $testFiles = @{
+                    TextFile     = @{
+                        Name        = 'TextFile.txt'
+                        Path        = Join-Path -Path $testFolderPath -ChildPath 'TextFile.txt'
+                        Content     = @'
+This is a simple text file for testing GitHub release assets
+'@
+                        ContentType = 'text/plain'
+                    }
+                    MarkdownFile = @{
+                        Name        = 'Documentation.md'
+                        Path        = Join-Path -Path $testFolderPath -ChildPath 'Documentation.md'
+                        Content     = @'
+# Test Documentation
+## Introduction
+This is a markdown file used for testing GitHub release assets
+'@
+                        ContentType = 'text/markdown'
+                    }
+                    JsonFile     = @{
+                        Name        = 'Config.json'
+                        Path        = Join-Path -Path $testFolderPath -ChildPath 'Config.json'
+                        Content     = @'
+{
+  "name": "GitHub Release Asset Test",
+  "version": "1.0.0",
+  "description": "Test file for GitHub release assets"
+}
+'@
+                        ContentType = 'application/json'
+                    }
+                    XmlFile      = @{
+                        Name        = 'Data.xml'
+                        Path        = Join-Path -Path $testFolderPath -ChildPath 'Data.xml'
+                        Content     = @'
+<root>
+  <item id="1">
+    <name>Test Item</name>
+    <value>100</value>
+  </item>
+</root>
+'@
+                        ContentType = 'application/xml'
+                    }
+                    CsvFile      = @{
+                        Name        = 'Records.csv'
+                        Path        = Join-Path -Path $testFolderPath -ChildPath 'Records.csv'
+                        Content     = @'
+ID,Name,Value
+1,Item1,100
+2,Item2,200
+3,Item3,300
+'@
+                        ContentType = 'text/csv'
+                    }
+                }
+                foreach ($file in $testFiles.Values) {
+                    Set-Content -Path $file.Path -Value $file.Content
+                }
+
+                # Create a zip file of all test files
+                $zipFileName = "$testFolderName.zip"
+                $zipFilePath = Join-Path -Path $env:TEMP -ChildPath $zipFileName
+                Compress-Archive -Path "$testFolderPath\*" -DestinationPath $zipFilePath -Force
+
+                # Add the zip file to the test files collection
+                $testFiles['ZipFile'] = @{
+                    Name        = $zipFileName
+                    Path        = $zipFilePath
+                    ContentType = 'application/zip'
+                }
+
+                # Get the latest release to use for tests
+                $release = Get-GitHubRelease -Owner $Owner -Repository $repo
+            }
+
+            AfterAll {
+                if (Test-Path $testFolderPath) {
+                    Remove-Item -Path $testFolderPath -Recurse -Force
+                }
+                if (Test-Path $testFiles.ZipFile.Path) {
+                    Remove-Item -Path $testFiles.ZipFile.Path -Force
+                }
+
+                foreach ($file in $testFiles.Values) {
+                    $downloadPath = Join-Path -Path $env:TEMP -ChildPath "Downloaded-$($file.Name)"
+                    if (Test-Path $downloadPath) {
+                        Remove-Item -Path $downloadPath -Force
+                    }
+                }
+            }
 
             It 'Add-GitHubReleaseAsset - Creates a new release asset' {
-                $fileName = 'Test.txt'
-                $tempFilePath = Join-Path -Path $env:TEMP -ChildPath $fileName
-                $file = Set-Content -Path $tempFilePath -Value 'Test content'
-                $release = Get-GitHubRelease -Owner $Owner -Repository $repo
-                $asset = $release | Add-GitHubReleaseAsset -Path $tempFilePath
+                $asset = $release | Add-GitHubReleaseAsset -Path $testFiles.TextFile.Path
                 LogGroup 'Added asset' {
                     Write-Host ($asset | Format-List -Property * | Out-String)
                 }
                 $asset | Should -Not -BeNullOrEmpty
                 $asset | Should -BeOfType 'GitHubReleaseAsset'
-                $asset.Name | Should -Be $fileName
-                $asset.Label | Should -Be $fileName
+                $asset.Name | Should -Be $testFiles.TextFile.Name
+                $asset.Label | Should -Be $testFiles.TextFile.Name
                 $asset.Size | Should -BeGreaterThan 0
-                $asset.ContentType | Should -Be 'text/plain'
-                Invoke-WebRequest -Uri $asset.Url -OutFile "$env:TEMP/$fileName"
-                Get-Content -Path "$env:TEMP/$fileName" | Should -Be 'Test content'
-                Remove-Item -Path $tempFilePath -Force
+                $asset.ContentType | Should -Be $testFiles.TextFile.ContentType
+
+                $downloadPath = Join-Path -Path $env:TEMP -ChildPath "Downloaded-$($testFiles.TextFile.Name)"
+                Invoke-WebRequest -Uri $asset.Url -OutFile $downloadPath
+                Get-Content -Path $downloadPath | Should -Be $testFiles.TextFile.Content
             }
 
             It 'Add-GitHubReleaseAsset - Creates a release asset with custom parameters' {
-                $mdFileName = 'TestMarkdown.md'
-                $mdFilePath = Join-Path -Path $env:TEMP -ChildPath $mdFileName
-                Set-Content -Path $mdFilePath -Value "# Test Markdown File`nTest content"
-                $release = Get-GitHubRelease -Owner $Owner -Repository $repo
-                $customName = 'CustomMarkdownFile.md'
+                $customName = "Custom-$($testFiles.MarkdownFile.Name)"
                 $label = 'Test Markdown Documentation'
-                $asset = $release | Add-GitHubReleaseAsset -Path $mdFilePath -Name $customName -Label $label
+                $asset = $release | Add-GitHubReleaseAsset -Path $testFiles.MarkdownFile.Path -Name $customName -Label $label
                 LogGroup 'Added markdown asset' {
                     Write-Host ($asset | Format-List -Property * | Out-String)
                 }
                 $asset | Should -Not -BeNullOrEmpty
                 $asset | Should -BeOfType 'GitHubReleaseAsset'
                 $asset.Name | Should -Be $customName
-                $asset.ContentType | Should -Be 'text/markdown'
+                $asset.ContentType | Should -Be $testFiles.MarkdownFile.ContentType
                 $asset.Label | Should -Be $label
                 $asset.Size | Should -BeGreaterThan 0
-                $downloadPath = Join-Path -Path $env:TEMP -ChildPath $customName
+
+                $downloadPath = Join-Path -Path $env:TEMP -ChildPath "Downloaded-$customName"
                 Invoke-WebRequest -Uri $asset.Url -OutFile $downloadPath
-                Get-Content -Path $downloadPath | Select-Object -First 1 | Should -Be '# Test Markdown File'
-                Remove-Item -Path $mdFilePath -Force
-                Remove-Item -Path $downloadPath -Force
+                (Get-Content -Path $downloadPath -Raw) | Should -Match '# Test Documentation'
             }
 
             It 'Add-GitHubReleaseAsset - Adds a folder as a zipped asset to a release' {
-                $release = Get-GitHubRelease -Owner $Owner -Repository $repo
-                $tempFolderName = "TestFolder-$([Guid]::NewGuid().ToString())"
-                $tempFolderPath = Join-Path -Path $env:TEMP -ChildPath $tempFolderName
-                New-Item -Path $tempFolderPath -ItemType Directory -Force
-                1..3 | ForEach-Object {
-                    $testFileName = "TestFile$_.txt"
-                    $testFilePath = Join-Path -Path $tempFolderPath -ChildPath $testFileName
-                    Set-Content -Path $testFilePath -Value "Test content for file $_"
-                }
                 $label = 'Test Files Collection'
-                $zipAssetName = "$tempFolderName.zip"
-                $tempZipPath = Join-Path -Path $env:TEMP -ChildPath $zipAssetName
-                Remove-Item -Path $tempZipPath -Force
-                Compress-Archive -Path "$tempFolderPath\*" -DestinationPath $tempZipPath -Force
-                $asset = $release | Add-GitHubReleaseAsset -Label $label -Path $tempZipPath
+                $asset = $release | Add-GitHubReleaseAsset -Label $label -Path $testFiles.ZipFile.Path
                 LogGroup 'Added zip asset' {
                     Write-Host ($asset | Format-List -Property * | Out-String)
                 }
                 $asset | Should -Not -BeNullOrEmpty
-                $asset.Name | Should -Be $zipAssetName
+                $asset.Name | Should -Be $testFiles.ZipFile.Name
                 $asset.Label | Should -Be $label
-                $asset.ContentType | Should -Be 'application/zip'
+                $asset.ContentType | Should -Be $testFiles.ZipFile.ContentType
                 $asset.Size | Should -BeGreaterThan 0
-                $downloadPath = Join-Path -Path $env:TEMP -ChildPath "Downloaded-$zipAssetName"
+
+                $downloadPath = Join-Path -Path $env:TEMP -ChildPath "Downloaded-$($testFiles.ZipFile.Name)"
                 Invoke-WebRequest -Uri $asset.Url -OutFile $downloadPath
                 Test-Path -Path $downloadPath | Should -BeTrue
-                Remove-Item -Path $tempFolderPath -Recurse -Force
-                Remove-Item -Path $tempZipPath -Force
-                Remove-Item -Path $downloadPath -Force
             }
 
             It 'Get-GitHubReleaseAsset - Gets all assets from a release ID' {
