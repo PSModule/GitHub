@@ -282,8 +282,8 @@ Describe 'Releases' {
             }
 
             It 'Add-GitHubReleaseAsset - Creates a new release asset' {
-                $fileName = 'AuthCases.ps1'
-                $tempFilePath = Join-Path -Path $PSScriptRoot -ChildPath "Data/$fileName"
+                $tempFilePath = Join-Path -Path $PSScriptRoot -ChildPath "Data/Test.txt"
+                $file = Set-Content -Path $tempFilePath -Value 'Test content'
                 $release = Get-GitHubRelease -Owner $Owner -Repository $repo
                 $asset = $release | Add-GitHubReleaseAsset -Path $tempFilePath
                 LogGroup 'Added asset' {
