@@ -5,7 +5,7 @@
 <table>
     <tr>
         <td>Available functions</td>
-        <td>1026</td>
+        <td>1027</td>
     </tr>
     <tr>
         <td>Covered functions</td>
@@ -13,11 +13,11 @@
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>806</td>
+        <td>807</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>21.44%</td>
+        <td>21.42%</td>
     </tr>
 </table>
 
@@ -51,6 +51,7 @@
 | `/classrooms/{classroom_id}/assignments`                                                                                  |                    | :x:                |                    |                    |                    |
 | `/codes_of_conduct`                                                                                                       |                    | :x:                |                    |                    |                    |
 | `/codes_of_conduct/{key}`                                                                                                 |                    | :x:                |                    |                    |                    |
+| `/credentials/revoke`                                                                                                     |                    |                    |                    | :x:                |                    |
 | `/emojis`                                                                                                                 |                    | :white_check_mark: |                    |                    |                    |
 | `/enterprises/{enterprise}/code-security/configurations`                                                                  |                    | :x:                |                    | :x:                |                    |
 | `/enterprises/{enterprise}/code-security/configurations/defaults`                                                         |                    | :x:                |                    |                    |                    |
