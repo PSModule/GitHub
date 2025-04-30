@@ -39,7 +39,7 @@
         https://psmodule.io/GitHub/Functions/Releases/Assets/Get-GitHubReleaseAsset
     #>
     [OutputType([GitHubReleaseAsset])]
-    [CmdletBinding(DefaultParameterSetName = 'List assets from a release')]
+    [CmdletBinding(DefaultParameterSetName = 'List assets from the latest release')]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
@@ -68,6 +68,11 @@
         [Parameter(Mandatory, ParameterSetName = 'Get a specific asset by name from a tag')]
         [string] $Name,
 
+        # The number of results per page (max 100).
+        [Parameter()]
+        [ValidateRange(0, 100)]
+        [int] $PerPage,
+
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
@@ -82,15 +87,26 @@
     }
 
     process {
+        $params = @{
+            Owner      = $Owner
+            Repository = $Repository
+            PerPage    = $PerPage
+            Context    = $Context
+        }
+        $params | Remove-HashtableEntry -NullOrEmptyValues
+
         switch ($PSCmdlet.ParameterSetName) {
+            'List assets from the latest release' {
+                Get-GitHubReleaseAssetFromLatest @params
+            }
             'List assets from a release' {
-                Get-GitHubReleaseAssetByReleaseID -Owner $Owner -Repository $Repository -ID $ReleaseID -Context $Context
+                Get-GitHubReleaseAssetByReleaseID @params -ID $ReleaseID
             }
             'Get a specific asset by ID' {
-                Get-GitHubReleaseAssetByID -Owner $Owner -Repository $Repository -ID $ID -Context $Context
+                Get-GitHubReleaseAssetByID @params -ID $ID
             }
             'Get a specific asset by name from a release ID' {
-                $assets = Get-GitHubReleaseAssetByReleaseID -Owner $Owner -Repository $Repository -ID $ReleaseID -Context $Context
+                $assets = Get-GitHubReleaseAssetByReleaseID @params -ID $ReleaseID
                 $asset = $assets | Where-Object { $_.Name -eq $Name }
                 if ($asset) {
                     $asset
@@ -99,7 +115,7 @@
                 }
             }
             'Get a specific asset by name from a tag' {
-                Get-GitHubReleaseAssetByTag -Owner $Owner -Repository $Repository -Tag $Tag -Name $Name -Context $Context
+                Get-GitHubReleaseAssetByTag @params -Tag $Tag -Name $Name
             }
         }
     }

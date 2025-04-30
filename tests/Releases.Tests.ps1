@@ -427,6 +427,15 @@ ID,Name,Value
                 $assets | Should -BeOfType 'GitHubReleaseAsset'
             }
 
+            It 'Get-GitHubReleaseAsset - Gets all assets from the latest release' {
+                $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo
+                LogGroup 'Release assets from latest release' {
+                    Write-Host ($assets | Format-List -Property * | Out-String)
+                }
+                $assets | Should -Not -BeNullOrEmpty
+                $assets | Should -BeOfType 'GitHubReleaseAsset'
+            }
+
             # It 'Get-GitHubReleaseAsset - Gets a specific asset by ID' {
             #     $release = Get-GitHubRelease -Owner $Owner -Repository $repo
             #     $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
