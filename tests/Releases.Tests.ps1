@@ -318,7 +318,7 @@ Describe 'Releases' {
                 $asset.Label | Should -Be $label
                 $asset.Size | Should -BeGreaterThan 0
                 Invoke-WebRequest -Uri $asset.Url -OutFile "$PSScriptRoot/../$customName"
-                Get-Content -Path "$PSScriptRoot/../$customName" | Should -Be 'Test content'
+                Get-Content -Path "$PSScriptRoot/../$customName" | Select-Object -First 1 | Should -Be '<!-- markdownlint-disable -->'
                 Remove-Item -Path $mdFilePath -Force
             }
 
@@ -328,7 +328,7 @@ Describe 'Releases' {
                 $label = 'Test Data Files'
                 $folderName = Split-Path -Path $path -Leaf
                 $zipAssetName = "$folderName.zip"
-                $tempZipPath = Join-Path -Path $env:TEMP -ChildPath $zipAssetName
+                $tempZipPath = Join-Path -Path $PSScriptRoot -ChildPath $zipAssetName
                 Remove-Item -Path $tempZipPath -Force
                 Compress-Archive -Path "$path\*" -DestinationPath $tempZipPath -Force
                 $asset = $release | Add-GitHubReleaseAsset -Owner $Owner -Repository $repo -Label $label -Path $tempZipPath
@@ -341,19 +341,20 @@ Describe 'Releases' {
                 $asset.ContentType | Should -Be 'application/zip'
                 $asset.Size | Should -BeGreaterThan 0
                 Invoke-WebRequest -Uri $asset.Url -OutFile "$PSScriptRoot/../$zipAssetName"
-                Get-Content -Path "$PSScriptRoot/../$zipAssetName" | Should -Be 'Test content'
+                Get-Content -Path "$PSScriptRoot/../$zipAssetName" | Select-Object -First 1 | Should -Be '<!-- markdownlint-disable -->'
                 Remove-Item -Path $tempZipPath -Force
             }
 
-            # It 'Get-GitHubReleaseAsset - Gets all assets from a release ID' {
-            #     $release = Get-GitHubRelease -Owner $Owner -Repository $repo
-            #     $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
-            #     LogGroup 'Release assets by release ID' {
-            #         Write-Host ($assets | Format-List -Property * | Out-String)
-            #     }
-            #     $assets | Should -Not -BeNullOrEmpty
-            #     $assets | Should -BeOfType 'GitHubReleaseAsset'
-            # }
+            It 'Get-GitHubReleaseAsset - Gets all assets from a release ID' {
+                $release = Get-GitHubRelease -Owner $Owner -Repository $repo
+                $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
+                LogGroup 'Release assets by release ID' {
+                    Write-Host ($assets | Format-List -Property * | Out-String)
+                }
+                $assets | Should -Not -BeNullOrEmpty
+                $assets.Count | Should -Be 3
+                $assets | Should -BeOfType 'GitHubReleaseAsset'
+            }
 
             # It 'Get-GitHubReleaseAsset - Gets a specific asset by ID' {
             #     $release = Get-GitHubRelease -Owner $Owner -Repository $repo
