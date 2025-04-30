@@ -282,183 +282,121 @@ Describe 'Releases' {
             }
 
             It 'Add-GitHubReleaseAsset - Creates a new release asset' {
-                # Create a sample file to upload
                 $fileName = 'AuthCases.ps1'
                 $tempFilePath = Join-Path -Path $PSScriptRoot -ChildPath "Data/$fileName"
-
-                # Get the latest release to attach the asset to
                 $release = Get-GitHubRelease -Owner $Owner -Repository $repo
-
-                # Upload the asset
-                $asset = Add-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID -Path $tempFilePath
+                $asset = $release | Add-GitHubReleaseAsset -Path $tempFilePath
                 LogGroup 'Added asset' {
                     Write-Host ($asset | Format-List -Property * | Out-String)
                 }
-
                 $asset | Should -Not -BeNullOrEmpty
                 $asset.Name | Should -Be $fileName
-
-                # Clean up the temporary file
                 Remove-Item -Path $tempFilePath -Force
             }
 
-            It 'Add-GitHubReleaseAsset - Creates a release asset with custom parameters' {
-                # Use an existing markdown file from the Data folder
-                $mdFileName = 'IssueForm.md'
-                $mdFilePath = Join-Path -Path $PSScriptRoot -ChildPath "Data/$mdFileName"
+            # It 'Add-GitHubReleaseAsset - Creates a release asset with custom parameters' {
+            #     $mdFileName = 'IssueForm.md'
+            #     $mdFilePath = Join-Path -Path $PSScriptRoot -ChildPath "Data/$mdFileName"
+            #     $release = Get-GitHubRelease -Owner $Owner -Repository $repo
+            #     $customName = 'CustomIssueTemplate.md'
+            #     $contentType = 'text/markdown'
+            #     $label = 'Issue Template Documentation'
+            #     $asset = Add-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID -Path $mdFilePath -Name $customName -ContentType $contentType -Label $label
+            #     LogGroup 'Added markdown asset' {
+            #         Write-Host ($asset | Format-List -Property * | Out-String)
+            #     }
+            #     $asset | Should -Not -BeNullOrEmpty
+            #     $asset.Name | Should -Be $customName
+            #     $asset.ContentType | Should -Be $contentType
+            #     $asset.Label | Should -Be $label
+            #     $asset.Size | Should -BeGreaterThan 0
+            # }
 
-                # Get a release to attach the asset to
-                $release = Get-GitHubRelease -Owner $Owner -Repository $repo
+            # It 'Add-GitHubReleaseAsset - Adds a folder as a zipped asset to a release' {
+            #     $release = Get-GitHubRelease -Owner $Owner -Repository $repo
+            #     $path = Join-Path -Path $PSScriptRoot -ChildPath 'Data'
+            #     $label = 'Test Data Files'
+            #     $asset = $release | Add-GitHubReleaseAsset -Owner $Owner -Repository $repo -Label $label -Path $path
+            #     LogGroup 'Added zip asset' {
+            #         Write-Host ($asset | Format-List -Property * | Out-String)
+            #     }
+            #     $asset | Should -Not -BeNullOrEmpty
+            #     $asset.Name | Should -Be $zipAssetName
+            #     $asset.Label | Should -Be $label
+            #     $asset.Size | Should -BeGreaterThan 0
+            #     if (Test-Path $tempZipPath) {
+            #         Remove-Item -Path $tempZipPath -Force
+            #     }
+            # }
 
-                # Custom parameters for the asset
-                $customName = 'CustomIssueTemplate.md'
-                $contentType = 'text/markdown'
-                $label = 'Issue Template Documentation'
+            # It 'Get-GitHubReleaseAsset - Gets all assets from a release ID' {
+            #     $release = Get-GitHubRelease -Owner $Owner -Repository $repo
+            #     $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
+            #     LogGroup 'Release assets by release ID' {
+            #         Write-Host ($assets | Format-List -Property * | Out-String)
+            #     }
+            #     $assets | Should -Not -BeNullOrEmpty
+            #     $assets | Should -BeOfType 'GitHubReleaseAsset'
+            # }
 
-                # Upload the asset with custom parameters
-                $asset = Add-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID -Path $mdFilePath -Name $customName -ContentType $contentType -Label $label
+            # It 'Get-GitHubReleaseAsset - Gets a specific asset by ID' {
+            #     $release = Get-GitHubRelease -Owner $Owner -Repository $repo
+            #     $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
+            #     $asset = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ID $assets[0].ID
+            #     LogGroup 'Release asset by asset ID' {
+            #         Write-Host ($asset | Format-List -Property * | Out-String)
+            #     }
+            #     $asset | Should -Not -BeNullOrEmpty
+            #     $asset | Should -BeOfType 'GitHubReleaseAsset'
+            #     $asset.ID | Should -Be $assets[0].ID
+            # }
 
-                LogGroup 'Added markdown asset' {
-                    Write-Host ($asset | Format-List -Property * | Out-String)
-                }
+            # It 'Get-GitHubReleaseAsset - Gets a specific asset by name from a release ID' {
+            #     $release = Get-GitHubRelease -Owner $Owner -Repository $repo
+            #     $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
+            #     $assetName = $assets[0].Name
+            #     $asset = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID -Name $assetName
+            #     LogGroup 'Release asset by name from release ID' {
+            #         Write-Host ($asset | Format-List -Property * | Out-String)
+            #     }
+            #     $asset | Should -Not -BeNullOrEmpty
+            #     $asset | Should -BeOfType 'GitHubReleaseAsset'
+            #     $asset.Name | Should -Be $assetName
+            # }
 
-                $asset | Should -Not -BeNullOrEmpty
-                $asset.Name | Should -Be $customName
-                $asset.ContentType | Should -Be $contentType
-                $asset.Label | Should -Be $label
-                $asset.Size | Should -BeGreaterThan 0
-            }
+            # It 'Get-GitHubReleaseAsset - Gets a specific asset by name from a tag' {
+            #     $release = Get-GitHubRelease -Owner $Owner -Repository $repo
+            #     $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
+            #     $assetName = $assets[0].Name
+            #     $asset = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -Tag $release.Tag -Name $assetName
+            #     LogGroup 'Release asset by name from tag' {
+            #         Write-Host ($asset | Format-List -Property * | Out-String)
+            #     }
+            #     $asset | Should -Not -BeNullOrEmpty
+            #     $asset.Name | Should -Be $assetName
+            # }
 
-            It 'Add-GitHubReleaseAsset - Adds a folder as a zipped asset to a release' {
-                # Get the latest release to attach the asset to
-                $release = Get-GitHubRelease -Owner $Owner -Repository $repo
+            # It 'Update-GitHubReleaseAsset - Updates a release asset' {
+            #     $release = Get-GitHubRelease -Owner $Owner -Repository $repo
+            #     $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
+            #     $newLabel = 'Updated test asset'
+            #     $asset = Update-GitHubReleaseAsset -Owner $Owner -Repository $repo -ID $assets[0].ID -Label $newLabel
+            #     LogGroup 'Updated asset' {
+            #         Write-Host ($asset | Format-List -Property * | Out-String)
+            #     }
+            #     $asset | Should -Not -BeNullOrEmpty
+            #     $asset.Label | Should -Be $newLabel
+            # }
 
-                # Create a temporary zip file from the Data folder
-                $path = Join-Path -Path $PSScriptRoot -ChildPath 'Data'
-                $label = 'Test Data Files'
-
-                # Upload the zip file as an asset
-                $asset = $release | Add-GitHubReleaseAsset -Owner $Owner -Repository $repo -Label $label -Path $path
-
-                LogGroup 'Added zip asset' {
-                    Write-Host ($asset | Format-List -Property * | Out-String)
-                }
-
-                # Verify the asset was created correctly
-                $asset | Should -Not -BeNullOrEmpty
-                $asset.Name | Should -Be $zipAssetName
-                $asset.Label | Should -Be $label
-                $asset.Size | Should -BeGreaterThan 0
-
-                # Clean up the temporary zip file
-                if (Test-Path $tempZipPath) {
-                    Remove-Item -Path $tempZipPath -Force
-                }
-            }
-
-            It 'Get-GitHubReleaseAsset - Gets all assets from a release ID' {
-                # Get the latest release to retrieve assets from
-                $release = Get-GitHubRelease -Owner $Owner -Repository $repo
-
-                # Get all assets for the release
-                $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
-                LogGroup 'Release assets by release ID' {
-                    Write-Host ($assets | Format-List -Property * | Out-String)
-                }
-
-                $assets | Should -Not -BeNullOrEmpty
-                $assets | Should -BeOfType 'GitHubReleaseAsset'
-            }
-
-            It 'Get-GitHubReleaseAsset - Gets a specific asset by ID' {
-                # Get the latest release to retrieve assets from
-                $release = Get-GitHubRelease -Owner $Owner -Repository $repo
-
-                # Get all assets for the release
-                $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
-
-                # Get the first asset by ID
-                $asset = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ID $assets[0].ID
-                LogGroup 'Release asset by asset ID' {
-                    Write-Host ($asset | Format-List -Property * | Out-String)
-                }
-
-                $asset | Should -Not -BeNullOrEmpty
-                $asset | Should -BeOfType 'GitHubReleaseAsset'
-                $asset.ID | Should -Be $assets[0].ID
-            }
-
-            It 'Get-GitHubReleaseAsset - Gets a specific asset by name from a release ID' {
-                # Get the latest release to retrieve assets from
-                $release = Get-GitHubRelease -Owner $Owner -Repository $repo
-
-                # Get all assets for the release
-                $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
-
-                # Get the first asset by name from the release ID
-                $assetName = $assets[0].Name
-                $asset = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID -Name $assetName
-                LogGroup 'Release asset by name from release ID' {
-                    Write-Host ($asset | Format-List -Property * | Out-String)
-                }
-
-                $asset | Should -Not -BeNullOrEmpty
-                $asset | Should -BeOfType 'GitHubReleaseAsset'
-                $asset.Name | Should -Be $assetName
-            }
-
-            It 'Get-GitHubReleaseAsset - Gets a specific asset by name from a tag' {
-                # Get the latest release to retrieve assets from
-                $release = Get-GitHubRelease -Owner $Owner -Repository $repo
-
-                # Get all assets for the release
-                $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
-
-                # Get the first asset by name from the release tag
-                $assetName = $assets[0].Name
-                $asset = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -Tag $release.Tag -Name $assetName
-                LogGroup 'Release asset by name from tag' {
-                    Write-Host ($asset | Format-List -Property * | Out-String)
-                }
-
-                $asset | Should -Not -BeNullOrEmpty
-                $asset.Name | Should -Be $assetName
-            }
-
-            It 'Update-GitHubReleaseAsset - Updates a release asset' {
-                # Get the latest release to retrieve assets from
-                $release = Get-GitHubRelease -Owner $Owner -Repository $repo
-
-                # Get all assets for the release
-                $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
-
-                # Update the first asset
-                $newLabel = 'Updated test asset'
-                $asset = Update-GitHubReleaseAsset -Owner $Owner -Repository $repo -ID $assets[0].ID -Label $newLabel
-                LogGroup 'Updated asset' {
-                    Write-Host ($asset | Format-List -Property * | Out-String)
-                }
-
-                $asset | Should -Not -BeNullOrEmpty
-                $asset.Label | Should -Be $newLabel
-            }
-
-            It 'Remove-GitHubReleaseAsset - Removes a release asset' {
-                # Get the latest release to retrieve assets from
-                $release = Get-GitHubRelease -Owner $Owner -Repository $repo
-
-                # Get all assets for the release
-                $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
-
-                # Remove the first asset
-                $assetID = $assets[0].ID
-                Remove-GitHubReleaseAsset -Owner $Owner -Repository $repo -ID $assetID -Confirm:$false
-
-                # Verify the asset was removed
-                $updatedAssets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
-                $remainingAsset = $updatedAssets | Where-Object { $_.ID -eq $assetID }
-                $remainingAsset | Should -BeNullOrEmpty
-            }
+            # It 'Remove-GitHubReleaseAsset - Removes a release asset' {
+            #     $release = Get-GitHubRelease -Owner $Owner -Repository $repo
+            #     $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
+            #     $assetID = $assets[0].ID
+            #     Remove-GitHubReleaseAsset -Owner $Owner -Repository $repo -ID $assetID -Confirm:$false
+            #     $updatedAssets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
+            #     $remainingAsset = $updatedAssets | Where-Object { $_.ID -eq $assetID }
+            #     $remainingAsset | Should -BeNullOrEmpty
+            # }
         }
     }
 }

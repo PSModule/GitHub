@@ -122,12 +122,9 @@
                 Remove-Item -Path $TempFilePath -Force -ErrorAction SilentlyContinue
             }
         }
-        # If name is not provided, use the name of the file
         if (!$Name) {
             $Name = (Get-Item $Path).Name
         }
-
-        # If label is not provided, use the name of the file
         if (!$Label) {
             $Label = (Get-Item $Path).Name
         }
@@ -164,7 +161,13 @@
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
-        $uploadUrl = New-Uri -BaseUri "https://uploads.$($Context.HostName)" -Path "/repos/$Owner/$Repository/releases/$($release.id)/assets" -Query $Body
+        $urlParams = @{
+            BaseUri = "https://uploads.$($Context.HostName)"
+            Path    = "/repos/$Owner/$Repository/releases/$($release.id)/assets"
+            Query   = $body
+        }
+        $uploadUrl = New-Uri @urlParams
+
         $inputObject = @{
             Method         = 'POST'
             Uri            = $uploadUrl
