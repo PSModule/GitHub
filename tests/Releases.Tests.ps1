@@ -363,22 +363,6 @@ ID,Name,Value
                 $release = Get-GitHubRelease -Owner $Owner -Repository $repo
             }
 
-            AfterAll {
-                if (Test-Path $testFolderPath) {
-                    Remove-Item -Path $testFolderPath -Recurse -Force
-                }
-                if (Test-Path $testFiles.ZipFile.Path) {
-                    Remove-Item -Path $testFiles.ZipFile.Path -Force
-                }
-
-                foreach ($file in $testFiles.Values) {
-                    $downloadPath = Join-Path -Path $env:TEMP -ChildPath "Downloaded-$($file.Name)"
-                    if (Test-Path $downloadPath) {
-                        Remove-Item -Path $downloadPath -Force
-                    }
-                }
-            }
-
             It 'Add-GitHubReleaseAsset - Creates a new release asset' {
                 $asset = $release | Add-GitHubReleaseAsset -Path $testFiles.TextFile.Path
                 LogGroup 'Added asset' {
