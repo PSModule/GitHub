@@ -285,7 +285,7 @@ Describe 'Releases' {
             BeforeAll {
                 $testFolderGuid = [Guid]::NewGuid().ToString().Substring(0, 8)
                 $testFolderName = "GHAssetTest-$testFolderGuid"
-                $testFolderPath = Join-Path -Path $env:TEMP -ChildPath $testFolderName
+                $testFolderPath = Join-Path -Path $PSScriptRoot -ChildPath $testFolderName
                 New-Item -Path $testFolderPath -ItemType Directory -Force
                 $testFiles = @{
                     TextFile     = @{
