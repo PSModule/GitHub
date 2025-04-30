@@ -376,7 +376,7 @@ ID,Name,Value
                 $asset.ContentType | Should -Be $testFiles.TextFile.ContentType
 
                 $downloadPath = Join-Path -Path $PSScriptRoot -ChildPath "Downloaded-$($testFiles.TextFile.Name)"
-                Invoke-WebRequest -Uri $asset.Url -OutFile $downloadPath
+                Invoke-WebRequest -Uri $asset.Url -OutFile $downloadPath -RetryIntervalSec 5 -MaximumRetryCount 5
                 Get-Content -Path $downloadPath | Should -Be $testFiles.TextFile.Content
             }
 
@@ -395,7 +395,7 @@ ID,Name,Value
                 $asset.Size | Should -BeGreaterThan 0
 
                 $downloadPath = Join-Path -Path $PSScriptRoot -ChildPath "Downloaded-$customName"
-                Invoke-WebRequest -Uri $asset.Url -OutFile $downloadPath
+                Invoke-WebRequest -Uri $asset.Url -OutFile $downloadPath -RetryIntervalSec 5 -MaximumRetryCount 5
                 (Get-Content -Path $downloadPath -Raw) | Should -Match '# Test Documentation'
             }
 
@@ -412,7 +412,7 @@ ID,Name,Value
                 $asset.Size | Should -BeGreaterThan 0
 
                 $downloadPath = Join-Path -Path $PSScriptRoot -ChildPath "Downloaded-$($testFiles.ZipFile.Name)"
-                Invoke-WebRequest -Uri $asset.Url -OutFile $downloadPath
+                Invoke-WebRequest -Uri $asset.Url -OutFile $downloadPath -RetryIntervalSec 5 -MaximumRetryCount 5
                 Test-Path -Path $downloadPath | Should -BeTrue
             }
 
