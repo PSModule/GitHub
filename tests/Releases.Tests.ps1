@@ -349,7 +349,7 @@ ID,Name,Value
 
                 # Create a zip file of all test files
                 $zipFileName = "$testFolderName.zip"
-                $zipFilePath = Join-Path -Path $env:TEMP -ChildPath $zipFileName
+                $zipFilePath = Join-Path -Path $PSScriptRoot -ChildPath $zipFileName
                 Compress-Archive -Path "$testFolderPath\*" -DestinationPath $zipFilePath -Force
 
                 # Add the zip file to the test files collection
