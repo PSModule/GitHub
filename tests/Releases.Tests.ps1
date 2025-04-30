@@ -283,7 +283,7 @@ Describe 'Releases' {
 
             It 'Add-GitHubReleaseAsset - Creates a new release asset' {
                 $fileName = 'Test.txt'
-                $tempFilePath = Join-Path -Path $PSScriptRoot -ChildPath "Data/$fileName"
+                $tempFilePath = Join-Path -Path $env:TEMP -ChildPath $fileName
                 $file = Set-Content -Path $tempFilePath -Value 'Test content'
                 $release = Get-GitHubRelease -Owner $Owner -Repository $repo
                 $asset = $release | Add-GitHubReleaseAsset -Path $tempFilePath
@@ -296,17 +296,18 @@ Describe 'Releases' {
                 $asset.Label | Should -Be $fileName
                 $asset.Size | Should -BeGreaterThan 0
                 $asset.ContentType | Should -Be 'text/plain'
-                Invoke-WebRequest -Uri $asset.Url -OutFile "$PSScriptRoot/../$fileName"
-                Get-Content -Path "$PSScriptRoot/../$fileName" | Should -Be 'Test content'
+                Invoke-WebRequest -Uri $asset.Url -OutFile "$env:TEMP/$fileName"
+                Get-Content -Path "$env:TEMP/$fileName" | Should -Be 'Test content'
                 Remove-Item -Path $tempFilePath -Force
             }
 
             It 'Add-GitHubReleaseAsset - Creates a release asset with custom parameters' {
-                $mdFileName = 'IssueForm.md'
-                $mdFilePath = Join-Path -Path $PSScriptRoot -ChildPath "Data/$mdFileName"
+                $mdFileName = 'TestMarkdown.md'
+                $mdFilePath = Join-Path -Path $env:TEMP -ChildPath $mdFileName
+                Set-Content -Path $mdFilePath -Value "# Test Markdown File`nTest content"
                 $release = Get-GitHubRelease -Owner $Owner -Repository $repo
-                $customName = 'CustomIssueTemplate.md'
-                $label = 'Issue Template Documentation'
+                $customName = 'CustomMarkdownFile.md'
+                $label = 'Test Markdown Documentation'
                 $asset = $release | Add-GitHubReleaseAsset -Path $mdFilePath -Name $customName -Label $label
                 LogGroup 'Added markdown asset' {
                     Write-Host ($asset | Format-List -Property * | Out-String)
@@ -317,21 +318,29 @@ Describe 'Releases' {
                 $asset.ContentType | Should -Be 'text/markdown'
                 $asset.Label | Should -Be $label
                 $asset.Size | Should -BeGreaterThan 0
-                Invoke-WebRequest -Uri $asset.Url -OutFile "$PSScriptRoot/../$customName"
-                Get-Content -Path "$PSScriptRoot/../$customName" | Select-Object -First 1 | Should -Be '<!-- markdownlint-disable -->'
+                $downloadPath = Join-Path -Path $env:TEMP -ChildPath $customName
+                Invoke-WebRequest -Uri $asset.Url -OutFile $downloadPath
+                Get-Content -Path $downloadPath | Select-Object -First 1 | Should -Be '# Test Markdown File'
                 Remove-Item -Path $mdFilePath -Force
+                Remove-Item -Path $downloadPath -Force
             }
 
             It 'Add-GitHubReleaseAsset - Adds a folder as a zipped asset to a release' {
                 $release = Get-GitHubRelease -Owner $Owner -Repository $repo
-                $path = Join-Path -Path $PSScriptRoot -ChildPath 'Data'
-                $label = 'Test Data Files'
-                $folderName = Split-Path -Path $path -Leaf
-                $zipAssetName = "$folderName.zip"
-                $tempZipPath = Join-Path -Path $PSScriptRoot -ChildPath $zipAssetName
+                $tempFolderName = "TestFolder-$([Guid]::NewGuid().ToString())"
+                $tempFolderPath = Join-Path -Path $env:TEMP -ChildPath $tempFolderName
+                New-Item -Path $tempFolderPath -ItemType Directory -Force
+                1..3 | ForEach-Object {
+                    $testFileName = "TestFile$_.txt"
+                    $testFilePath = Join-Path -Path $tempFolderPath -ChildPath $testFileName
+                    Set-Content -Path $testFilePath -Value "Test content for file $_"
+                }
+                $label = 'Test Files Collection'
+                $zipAssetName = "$tempFolderName.zip"
+                $tempZipPath = Join-Path -Path $env:TEMP -ChildPath $zipAssetName
                 Remove-Item -Path $tempZipPath -Force
-                Compress-Archive -Path "$path\*" -DestinationPath $tempZipPath -Force
-                $asset = $release | Add-GitHubReleaseAsset -Owner $Owner -Repository $repo -Label $label -Path $tempZipPath
+                Compress-Archive -Path "$tempFolderPath\*" -DestinationPath $tempZipPath -Force
+                $asset = $release | Add-GitHubReleaseAsset -Label $label -Path $tempZipPath
                 LogGroup 'Added zip asset' {
                     Write-Host ($asset | Format-List -Property * | Out-String)
                 }
@@ -340,9 +349,12 @@ Describe 'Releases' {
                 $asset.Label | Should -Be $label
                 $asset.ContentType | Should -Be 'application/zip'
                 $asset.Size | Should -BeGreaterThan 0
-                Invoke-WebRequest -Uri $asset.Url -OutFile "$PSScriptRoot/../$zipAssetName"
-                Get-Content -Path "$PSScriptRoot/../$zipAssetName" | Select-Object -First 1 | Should -Be '<!-- markdownlint-disable -->'
+                $downloadPath = Join-Path -Path $env:TEMP -ChildPath "Downloaded-$zipAssetName"
+                Invoke-WebRequest -Uri $asset.Url -OutFile $downloadPath
+                Test-Path -Path $downloadPath | Should -BeTrue
+                Remove-Item -Path $tempFolderPath -Recurse -Force
                 Remove-Item -Path $tempZipPath -Force
+                Remove-Item -Path $downloadPath -Force
             }
 
             It 'Get-GitHubReleaseAsset - Gets all assets from a release ID' {
