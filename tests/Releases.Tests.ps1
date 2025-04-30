@@ -296,26 +296,27 @@ Describe 'Releases' {
                 $asset.Label | Should -Be $fileName
                 $asset.Size | Should -BeGreaterThan 0
                 Invoke-WebRequest -Uri $asset.Url -OutFile "$PSScriptRoot/../$fileName"
+                Get-Content -Path "$PSScriptRoot/../$fileName" | Should -Be 'Test content'
                 Remove-Item -Path $tempFilePath -Force
             }
 
-            # It 'Add-GitHubReleaseAsset - Creates a release asset with custom parameters' {
-            #     $mdFileName = 'IssueForm.md'
-            #     $mdFilePath = Join-Path -Path $PSScriptRoot -ChildPath "Data/$mdFileName"
-            #     $release = Get-GitHubRelease -Owner $Owner -Repository $repo
-            #     $customName = 'CustomIssueTemplate.md'
-            #     $contentType = 'text/markdown'
-            #     $label = 'Issue Template Documentation'
-            #     $asset = Add-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID -Path $mdFilePath -Name $customName -ContentType $contentType -Label $label
-            #     LogGroup 'Added markdown asset' {
-            #         Write-Host ($asset | Format-List -Property * | Out-String)
-            #     }
-            #     $asset | Should -Not -BeNullOrEmpty
-            #     $asset.Name | Should -Be $customName
-            #     $asset.ContentType | Should -Be $contentType
-            #     $asset.Label | Should -Be $label
-            #     $asset.Size | Should -BeGreaterThan 0
-            # }
+            It 'Add-GitHubReleaseAsset - Creates a release asset with custom parameters' {
+                $mdFileName = 'IssueForm.md'
+                $mdFilePath = Join-Path -Path $PSScriptRoot -ChildPath "Data/$mdFileName"
+                $release = Get-GitHubRelease -Owner $Owner -Repository $repo
+                $customName = 'CustomIssueTemplate.md'
+                $contentType = 'text/markdown'
+                $label = 'Issue Template Documentation'
+                $asset = $release | Add-GitHubReleaseAsset -Path $mdFilePath -Name $customName -ContentType $contentType -Label $label
+                LogGroup 'Added markdown asset' {
+                    Write-Host ($asset | Format-List -Property * | Out-String)
+                }
+                $asset | Should -Not -BeNullOrEmpty
+                $asset.Name | Should -Be $customName
+                $asset.ContentType | Should -Be $contentType
+                $asset.Label | Should -Be $label
+                $asset.Size | Should -BeGreaterThan 0
+            }
 
             # It 'Add-GitHubReleaseAsset - Adds a folder as a zipped asset to a release' {
             #     $release = Get-GitHubRelease -Owner $Owner -Repository $repo
