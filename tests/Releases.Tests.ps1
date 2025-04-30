@@ -290,7 +290,7 @@ Describe 'Releases' {
                     Write-Host ($asset | Format-List -Property * | Out-String)
                 }
                 $asset | Should -Not -BeNullOrEmpty
-                $asset.Name | Should -Be $fileName
+                $asset.Name | Should -Be $tempFilePath
                 Remove-Item -Path $tempFilePath -Force
             }
 
