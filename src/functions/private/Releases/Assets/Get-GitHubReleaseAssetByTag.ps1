@@ -1,23 +1,21 @@
 ﻿filter Get-GitHubReleaseAssetByTag {
     <#
         .SYNOPSIS
-        Get a release asset by name
+        Get release assets by tag name
 
         .DESCRIPTION
-        To download the asset's binary content, set the `Accept` header of the request to
-        [`application/octet-stream`](https://docs.github.com/rest/overview/media-types).
-        The API will either redirect the client to the location, or stream it directly if
-        possible. API clients should handle both a `200` or `302` response.
+        Gets all assets from a release identified by its tag name.
+        Uses pagination to retrieve all assets even if there are more than the maximum per page.
 
         .EXAMPLE
-        Get-GitHubReleaseAssetByTag -Owner 'octocat' -Repository 'hello-world' -ID '1234567'
+        Get-GitHubReleaseAssetByTag -Owner 'octocat' -Repository 'hello-world' -Tag 'v1.0.0'
 
-        Gets the release asset with the ID '1234567' for the repository 'octocat/hello-world'.
+        Gets all release assets for the release with the tag 'v1.0.0' for the repository 'octocat/hello-world'.
 
-        .NOTES
-        https://docs.github.com/rest/releases/assets#get-a-release-asset
-
+        .OUTPUTS
+        GitHubReleaseAsset
     #>
+    [OutputType([GitHubReleaseAsset])]
     [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
@@ -28,9 +26,14 @@
         [Parameter(Mandatory)]
         [string] $Repository,
 
-        # The unique identifier of the asset.
+        # The name of the tag to get a release from.
         [Parameter(Mandatory)]
-        [string] $ID,
+        [string] $Tag,
+
+        # The number of results per page (max 100).
+        [Parameter()]
+        [ValidateRange(0, 100)]
+        [int] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -45,43 +48,63 @@
     }
 
     process {
-        $inputObject = @{
-            Query     = @'
-query($owner: String!, $repository: String!) {
+        $hasNextPage = $true
+        $after = $null
+        $perPageSetting = Resolve-GitHubContextSetting -Name 'PerPage' -Value $PerPage -Context $Context
+
+        do {
+            $inputObject = @{
+                Query     = @'
+query($owner: String!, $repository: String!, $tag: String!, $perPage: Int, $after: String) {
   repository(owner: $owner, name: $repository) {
-    latestRelease {
-      id
-      databaseId
-      tagName
-      name
-      description
-      isLatest
-      isDraft
-      isPrerelease
-      url
-      createdAt
-      publishedAt
-      updatedAt
-      author {
-        login
+    release(tagName: $tag) {
+      releaseAssets(first: $perPage, after: $after) {
+        nodes {
+          id
+          databaseId
+          name
+          label
+          state
+          contentType
+          size
+          downloadCount
+          downloadUrl
+          url
+          createdAt
+          updatedAt
+          uploadedBy {
+            login
+          }
+        }
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
       }
     }
   }
 }
 '@
-            Variables = @{
-                owner      = $Owner
-                repository = $Repository
+                Variables = @{
+                    owner      = $Owner
+                    repository = $Repository
+                    tag        = $Tag
+                    perPage    = $perPageSetting
+                    after      = $after
+                }
+                Context   = $Context
             }
-            Context   = $Context
-        }
 
-        Invoke-GitHubGraphQLQuery @inputObject | ForEach-Object {
-            $release = $_.repository.latestRelease
-            if ($release) {
-                [GitHubRelease]::new($release, $Owner, $Repository, $null)
+            Invoke-GitHubGraphQLQuery @inputObject | ForEach-Object {
+                $release = $_.repository.release
+                $assets = $release.releaseAssets
+                foreach ($asset in $assets.nodes) {
+                    [GitHubReleaseAsset]::new($asset)
+                }
+                $hasNextPage = $assets.pageInfo.hasNextPage
+                $after = $assets.pageInfo.endCursor
             }
-        }
+        } while ($hasNextPage)
     }
 
     end {
