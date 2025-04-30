@@ -84,13 +84,13 @@
     process {
         switch ($PSCmdlet.ParameterSetName) {
             'List assets from a release' {
-                Get-GitHubReleaseAssetByReleaseID -Owner $Owner -Repository $Repository -ReleaseID $ReleaseID -Context $Context
+                Get-GitHubReleaseAssetByReleaseID -Owner $Owner -Repository $Repository -ID $ReleaseID -Context $Context
             }
             'Get a specific asset by ID' {
                 Get-GitHubReleaseAssetByID -Owner $Owner -Repository $Repository -ID $ID -Context $Context
             }
             'Get a specific asset by name from a release ID' {
-                $assets = Get-GitHubReleaseAssetByReleaseID -Owner $Owner -Repository $Repository -ReleaseID $ReleaseID -Context $Context
+                $assets = Get-GitHubReleaseAssetByReleaseID -Owner $Owner -Repository $Repository -ID $ReleaseID -Context $Context
                 $asset = $assets | Where-Object { $_.Name -eq $Name }
                 if ($asset) {
                     $asset
