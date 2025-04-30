@@ -282,7 +282,8 @@ Describe 'Releases' {
             }
 
             It 'Add-GitHubReleaseAsset - Creates a new release asset' {
-                $tempFilePath = Join-Path -Path $PSScriptRoot -ChildPath "Data/Test.txt"
+                $fileName = 'Test.txt'
+                $tempFilePath = Join-Path -Path $PSScriptRoot -ChildPath "Data/$fileName"
                 $file = Set-Content -Path $tempFilePath -Value 'Test content'
                 $release = Get-GitHubRelease -Owner $Owner -Repository $repo
                 $asset = $release | Add-GitHubReleaseAsset -Path $tempFilePath
@@ -290,7 +291,11 @@ Describe 'Releases' {
                     Write-Host ($asset | Format-List -Property * | Out-String)
                 }
                 $asset | Should -Not -BeNullOrEmpty
-                $asset.Name | Should -Be $tempFilePath
+                $asset | Should -BeOfType 'GitHubReleaseAsset'
+                $asset.Name | Should -Be $fileName
+                $asset.Label | Should -Be $fileName
+                $asset.Size | Should -BeGreaterThan 0
+                Invoke-WebRequest -Uri $asset.Url -OutFile "$PSScriptRoot/../$fileName"
                 Remove-Item -Path $tempFilePath -Force
             }
 
