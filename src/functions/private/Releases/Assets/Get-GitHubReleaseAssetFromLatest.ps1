@@ -13,6 +13,11 @@
 
         Gets the assets for the latest release of the repository 'hello-world' owned by 'octocat'.
 
+        .EXAMPLE
+        Get-GitHubReleaseAssetFromLatest -Owner 'octocat' -Repository 'hello-world' -Name 'asset-name'
+
+        Gets the assets for the latest release of the repository 'hello-world' owned by 'octocat'.
+
         .INPUTS
         GitHubRepository
 
@@ -29,6 +34,10 @@
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory)]
         [string] $Repository,
+
+        # The name of the asset to get. If specified, only assets with this name will be returned.
+        [Parameter()]
+        [string] $Name,
 
         # The number of results per page (max 100).
         [Parameter()]
@@ -55,10 +64,10 @@
         do {
             $inputObject = @{
                 Query     = @'
-query($owner: String!, $repository: String!, $perPage: Int, $after: String) {
+query($owner: String!, $repository: String!, $perPage: Int, $after: String, $name: String) {
   repository(owner: $owner, name: $repository) {
     latestRelease {
-      releaseAssets(first: $perPage, after: $after) {
+      releaseAssets(first: $perPage, after: $after, name: $name) {
         nodes {
           id
           name
@@ -85,6 +94,7 @@ query($owner: String!, $repository: String!, $perPage: Int, $after: String) {
                 Variables = @{
                     owner      = $Owner
                     repository = $Repository
+                    name       = $Name
                     perPage    = $perPageSetting
                     after      = $after
                 }

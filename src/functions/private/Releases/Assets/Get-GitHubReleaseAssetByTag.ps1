@@ -12,6 +12,11 @@
 
         Gets all release assets for the release with the tag 'v1.0.0' for the repository 'octocat/hello-world'.
 
+        .EXAMPLE
+        Get-GitHubReleaseAssetByTag -Owner 'octocat' -Repository 'hello-world' -Tag 'v1.0.0' -Name 'app.zip'
+
+        Gets a specific release asset named 'app.zip' from the release with the tag 'v1.0.0' for the repository 'octocat/hello-world'.
+
         .OUTPUTS
         GitHubReleaseAsset
     #>
@@ -29,6 +34,10 @@
         # The name of the tag to get a release from.
         [Parameter(Mandatory)]
         [string] $Tag,
+
+        # The name of the asset to get. If specified, only assets with this name will be returned.
+        [Parameter()]
+        [string] $Name,
 
         # The number of results per page (max 100).
         [Parameter()]
@@ -55,10 +64,10 @@
         do {
             $inputObject = @{
                 Query     = @'
-query($owner: String!, $repository: String!, $tag: String!, $perPage: Int, $after: String) {
+query($owner: String!, $repository: String!, $tag: String!, $perPage: Int, $after: String, $name: String) {
   repository(owner: $owner, name: $repository) {
     release(tagName: $tag) {
-      releaseAssets(first: $perPage, after: $after) {
+      releaseAssets(first: $perPage, after: $after, name: $name) {
         nodes {
           id
           name
@@ -85,6 +94,7 @@ query($owner: String!, $repository: String!, $tag: String!, $perPage: Int, $afte
                 Variables = @{
                     owner      = $Owner
                     repository = $Repository
+                    name       = $Name
                     tag        = $Tag
                     perPage    = $perPageSetting
                     after      = $after

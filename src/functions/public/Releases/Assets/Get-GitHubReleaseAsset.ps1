@@ -63,6 +63,10 @@
         [Parameter(Mandatory, ParameterSetName = 'List assets from a release by tag')]
         [string] $Tag,
 
+        # The name of the asset to get. If specified, only assets with this name will be returned.
+        [Parameter()]
+        [string] $Name,
+
         # The number of results per page (max 100).
         [Parameter(ParameterSetName = 'List assets from the latest release')]
         [Parameter(ParameterSetName = 'List assets from a release by ID')]
@@ -88,6 +92,7 @@
             Owner      = $Owner
             Repository = $Repository
             Context    = $Context
+            Name       = $Name
         }
         $params | Remove-HashtableEntry -NullOrEmptyValues
 
