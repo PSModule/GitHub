@@ -52,6 +52,9 @@
         .OUTPUTS
         GitHubReleaseAsset
 
+        .LINK
+        https://psmodule.io/GitHub/Functions/Releases/Assets/Add-GitHubReleaseAsset/
+
         .NOTES
         [Upload a release asset](https://docs.github.com/rest/releases/assets#upload-a-release-asset)
     #>

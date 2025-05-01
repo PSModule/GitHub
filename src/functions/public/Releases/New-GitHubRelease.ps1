@@ -15,6 +15,27 @@
 
         Creates a release for the repository 'octocat/hello-world' on the 'main' branch with the tag 'v1.0.0'.
 
+        .EXAMPLE
+        New-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -Tag 'v0.9.0' -Name 'Beta Release' -Draft -Prerelease
+
+        Creates a draft prerelease for the repository 'octocat/hello-world' with the tag 'v0.9.0' using the default target branch ('main').
+
+        .EXAMPLE
+        New-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -Tag 'v2.0.0' -Latest
+
+        Creates a release for the repository 'octocat/hello-world' with the tag 'v2.0.0' and marks it as the latest release.
+        Note that when using -Latest, you cannot use -Draft or -Prerelease as they are mutually exclusive.
+
+        .EXAMPLE
+        New-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -Tag 'v1.1.0' -GenerateReleaseNotes
+
+        Creates a release for the repository 'octocat/hello-world' with the tag 'v1.1.0' and automatically generates release notes based on commits since the previous release.
+
+        .EXAMPLE
+        New-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -Tag 'v1.2.0' -DiscussionCategoryName 'Announcements' -Notes 'Major update with new features'
+
+        Creates a release for the repository 'octocat/hello-world' with the tag 'v1.2.0' and creates a discussion in the 'Announcements' category linked to this release.
+
         .INPUTS
         GitHubRepository
 
@@ -24,7 +45,7 @@
         .LINK
         https://psmodule.io/GitHub/Functions/Releases/New-GitHubRelease/
 
-        .LINK
+        .NOTES
         [Create a release](https://docs.github.com/rest/releases/releases#create-a-release)
     #>
     [OutputType([GitHubRelease])]
