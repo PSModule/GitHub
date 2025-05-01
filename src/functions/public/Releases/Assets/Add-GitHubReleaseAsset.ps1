@@ -186,12 +186,9 @@
     }
 
     clean {
-        # Clean up temporary file if created
         if ($isDirectory) {
             Write-Verbose "Cleaning up temporary zip file: $TempFilePath"
             Remove-Item -Path $TempFilePath -Force -ErrorAction SilentlyContinue
         }
     }
 }
-
-#SkipTest:FunctionTest:Will add a test for this function in a future PR

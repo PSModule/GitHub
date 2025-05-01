@@ -280,6 +280,29 @@ Describe 'Releases' {
                 $release = Get-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.0'
                 $release | Should -BeNullOrEmpty
             }
+
+            It 'New-GitHubReleaseNote - Generates release notes' {
+                $notes = New-GitHubReleaseNote -Owner $Owner -Repository $repo -Tag 'v1.4'
+                LogGroup 'Generated release notes' {
+                    Write-Host ($notes | Format-List -Property * | Out-String)
+                }
+                $notes | Should -Not -BeNullOrEmpty
+                $notes.Name | Should -Not -BeNullOrEmpty
+                $notes.Notes | Should -Not -BeNullOrEmpty
+            }
+
+            It 'New-GitHubReleaseNote - Generates release notes with custom parameters' {
+                $releaseTag = 'v1.4'
+                $previousTag = 'v1.3'
+                $notes = New-GitHubReleaseNote -Owner $Owner -Repository $repo -Tag $releaseTag -PreviousTag $previousTag -Target 'main'
+                LogGroup 'Generated release notes with parameters' {
+                    Write-Host ($notes | Format-List -Property * | Out-String)
+                }
+                $notes | Should -Not -BeNullOrEmpty
+                $notes.Name | Should -Not -BeNullOrEmpty
+                $notes.Notes | Should -Not -BeNullOrEmpty
+                $notes.Notes | Should -Match $releaseTag
+            }
         }
         Context 'Release Assets' -Skip:($OwnerType -eq 'repository') {
             BeforeAll {
@@ -400,6 +423,7 @@ ID,Name,Value
                     Write-Host ($asset | Format-List -Property * | Out-String)
                 }
                 $asset | Should -Not -BeNullOrEmpty
+                $asset | Should -BeOfType 'GitHubReleaseAsset'
                 $asset.Name | Should -Be $testFiles.ZipFile.Name
                 $asset.Label | Should -Be $label
                 $asset.ContentType | Should -Be $testFiles.ZipFile.ContentType
