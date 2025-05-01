@@ -36,21 +36,22 @@ Describe 'Secrets' {
                     Write-Host ($context | Format-List | Out-String)
                 }
             }
-            $repoPrefix = "$testName-$os-$TokenType-$guid"
+            $repoPrefix = "$testName-$os-$TokenType"
+            $repoName = "$repoPrefix-$guid"
             $secretPrefix = ("$testName`_$os`_$TokenType`_$guid" -replace '-', '_').ToUpper()
             $orgSecretName = "$secretPrefix`ORG"
             $environmentName = "$testName-$os-$TokenType-$guid"
 
             switch ($OwnerType) {
                 'user' {
-                    $repo = New-GitHubRepository -Name "$repoPrefix-1" -AllowSquashMerge
-                    $repo2 = New-GitHubRepository -Name "$repoPrefix-2" -AllowSquashMerge
-                    $repo3 = New-GitHubRepository -Name "$repoPrefix-3" -AllowSquashMerge
+                    $repo = New-GitHubRepository -Name "$repoName-1" -AllowSquashMerge
+                    $repo2 = New-GitHubRepository -Name "$repoName-2" -AllowSquashMerge
+                    $repo3 = New-GitHubRepository -Name "$repoName-3" -AllowSquashMerge
                 }
                 'organization' {
-                    $repo = New-GitHubRepository -Organization $owner -Name "$repoPrefix-1" -AllowSquashMerge
-                    $repo2 = New-GitHubRepository -Organization $owner -Name "$repoPrefix-2" -AllowSquashMerge
-                    $repo3 = New-GitHubRepository -Organization $owner -Name "$repoPrefix-3" -AllowSquashMerge
+                    $repo = New-GitHubRepository -Organization $owner -Name "$repoName-1" -AllowSquashMerge
+                    $repo2 = New-GitHubRepository -Organization $owner -Name "$repoName-2" -AllowSquashMerge
+                    $repo3 = New-GitHubRepository -Organization $owner -Name "$repoName-3" -AllowSquashMerge
                     LogGroup "Org secret - [$secretPrefix]" {
                         $params = @{
                             Owner                = $owner
@@ -65,7 +66,7 @@ Describe 'Secrets' {
                     }
                 }
             }
-            LogGroup "Repository - [$repoPrefix]" {
+            LogGroup "Repository - [$repoName]" {
                 Write-Host ($repo | Format-List | Out-String)
                 Write-Host ($repo2 | Format-List | Out-String)
                 Write-Host ($repo3 | Format-List | Out-String)

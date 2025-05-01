@@ -459,7 +459,7 @@ ID,Name,Value
                 $release = Get-GitHubRelease -Owner $Owner -Repository $repo
                 $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
                 $assetName = $assets[0].Name
-                $asset = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -Tag $release.Tag -Name $assetName
+                $asset = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -Tag $release.Tag -Name $assetName -Debug
                 LogGroup 'Release asset by name from tag' {
                     Write-Host ($asset | Format-List -Property * | Out-String)
                 }
