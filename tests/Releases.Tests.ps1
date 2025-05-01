@@ -468,7 +468,7 @@ ID,Name,Value
 
                 $asset | Should -Not -BeNullOrEmpty
                 $asset | Should -BeOfType 'GitHubReleaseAsset'
-                $asset.Name | Should -Be "$folderName.zip"
+                $asset.Name | Should -Be $folderName
                 $asset.Label | Should -Be 'Folder Asset Test'
                 $asset.ContentType | Should -Be 'application/zip'
                 $asset.Size | Should -BeGreaterThan 0
@@ -494,7 +494,7 @@ ID,Name,Value
                     Write-Host ($assets | Format-List -Property * | Out-String)
                 }
                 $assets | Should -Not -BeNullOrEmpty
-                $assets.Count | Should -Be 3
+                $assets.Count | Should -Be 4
                 $assets | Should -BeOfType 'GitHubReleaseAsset'
             }
 
