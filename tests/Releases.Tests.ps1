@@ -602,7 +602,6 @@ ID,Name,Value
             }
 
             It 'Save-GitHubReleaseAsset - Downloads and extracts a ZIP release asset' {
-                # Find the ZIP asset
                 $release = Get-GitHubRelease -Owner $Owner -Repository $repo
                 $zipAsset = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID |
                     Where-Object { $_.Name -like '*.zip' } |
@@ -619,9 +618,7 @@ ID,Name,Value
 
                     $extractedItems | Should -Not -BeNullOrEmpty
                     Test-Path -Path $extractPath | Should -BeTrue
-                    # Verify we don't have the zip file in the directory anymore
                     Test-Path -Path (Join-Path -Path $extractPath -ChildPath $zipAsset.Name) | Should -BeFalse
-                    # Verify we have extracted content
                     (Get-ChildItem -Path $extractPath -Recurse).Count | Should -BeGreaterThan 0
                 } else {
                     Set-ItResult -Inconclusive -Because 'No ZIP asset found for testing extraction'

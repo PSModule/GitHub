@@ -39,7 +39,14 @@
         to the specified path, overwriting existing files during download and extraction.
 
         .EXAMPLE
-        Get-GitHubReleaseAsset -Owner 'octocat' -Repository 'Hello-World' -Tag 'v1.0.0' -Name 'binary.zip' | Save-GitHubReleaseAsset -Path 'C:\Assets' -Expand
+        $params = @{
+            Owner         = 'octocat'
+            Repository    = 'Hello-World'
+            ID            = '123456'
+            Tag           = 'v1.0.0'
+            Name          = 'binary.zip'
+        }
+        Get-GitHubReleaseAsset @params | Save-GitHubReleaseAsset -Path 'C:\Assets' -Expand -Force
 
         Pipes a release asset object directly to the Save-GitHubReleaseAsset function, which downloads and extracts it.
 
