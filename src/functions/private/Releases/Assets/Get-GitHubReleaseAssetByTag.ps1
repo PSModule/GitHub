@@ -90,7 +90,7 @@ query($owner: String!, $repository: String!, $tag: String!, $perPage: Int, $afte
     }
   }
 }
-'@ -f (if ($PSBoundParameters.ContainsKey('Name')) { ', name: $name' })
+'@ -f $(if ($PSBoundParameters.ContainsKey('Name')) { ', name: $name' })
                 Variables = @{
                     owner      = $Owner
                     repository = $Repository
