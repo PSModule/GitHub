@@ -59,15 +59,16 @@
     process {
         $hasNextPage = $true
         $after = $null
+        $nameParam = $PSBoundParameters.ContainsKey('Name') ? ", name: $Name" : ''
         $perPageSetting = Resolve-GitHubContextSetting -Name 'PerPage' -Value $PerPage -Context $Context
 
         do {
             $inputObject = @{
-                Query     = @'
-query($owner: String!, $repository: String!, $tag: String!, $perPage: Int, $after: String, $name: String) {
-  repository(owner: $owner, name: $repository) {
-    release(tagName: $tag) {
-      releaseAssets(first: $perPage, after: $after{0}) {
+                Query     = @"
+query(`$owner: String!, `$repository: String!, `$tag: String!, `$perPage: Int, `$after: String, `$name: String) {
+  repository(owner: `$owner, name: `$repository) {
+    release(tagName: `$tag) {
+      releaseAssets(first: `$perPage, after: `$after$nameParam) {
         nodes {
           id
           name
@@ -90,11 +91,10 @@ query($owner: String!, $repository: String!, $tag: String!, $perPage: Int, $afte
     }
   }
 }
-'@ -f $(if ($PSBoundParameters.ContainsKey('Name')) { ', name: $name' } else { '' })
+"@
                 Variables = @{
                     owner      = $Owner
                     repository = $Repository
-                    name       = $Name
                     tag        = $Tag
                     perPage    = $perPageSetting
                     after      = $after
