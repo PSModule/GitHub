@@ -5,7 +5,7 @@
 <table>
     <tr>
         <td>Available functions</td>
-        <td>1027</td>
+        <td>1028</td>
     </tr>
     <tr>
         <td>Covered functions</td>
@@ -13,11 +13,11 @@
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>807</td>
+        <td>808</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>21.42%</td>
+        <td>21.4%</td>
     </tr>
 </table>
 
@@ -699,6 +699,7 @@
 | `/users/{username}/settings/billing/actions`                                                                              |                    | :x:                |                    |                    |                    |
 | `/users/{username}/settings/billing/packages`                                                                             |                    | :x:                |                    |                    |                    |
 | `/users/{username}/settings/billing/shared-storage`                                                                       |                    | :x:                |                    |                    |                    |
+| `/users/{username}/settings/billing/usage`                                                                                |                    | :x:                |                    |                    |                    |
 | `/users/{username}/social_accounts`                                                                                       |                    | :white_check_mark: |                    |                    |                    |
 | `/users/{username}/ssh_signing_keys`                                                                                      |                    | :white_check_mark: |                    |                    |                    |
 | `/users/{username}/starred`                                                                                               |                    | :x:                |                    |                    |                    |
