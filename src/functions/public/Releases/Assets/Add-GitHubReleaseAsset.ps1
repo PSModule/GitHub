@@ -127,10 +127,10 @@
             }
         }
         if (!$Name) {
-            $Name = (Get-Item $Path).Name
+            $Name = $item.Name
         }
         if (!$Label) {
-            $Label = (Get-Item $Path).Name
+            $Label = $item.Name
         }
 
         if (!$ContentType) {
