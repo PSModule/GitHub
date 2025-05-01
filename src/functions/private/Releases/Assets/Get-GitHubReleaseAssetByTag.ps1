@@ -59,7 +59,7 @@
     process {
         $hasNextPage = $true
         $after = $null
-        $nameParam = $PSBoundParameters.ContainsKey('Name') ? ", name: $Name" : ''
+        $nameParam = $PSBoundParameters.ContainsKey('Name') ? ", name: '$Name'" : ''
         $perPageSetting = Resolve-GitHubContextSetting -Name 'PerPage' -Value $PerPage -Context $Context
 
         do {
