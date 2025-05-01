@@ -483,7 +483,7 @@ ID,Name,Value
                 foreach ($file in $fileContents.GetEnumerator()) {
                     $extractedFilePath = Join-Path -Path $extractPath -ChildPath $file.Key
                     Test-Path -Path $extractedFilePath | Should -BeTrue
-                    Get-Content -Path $extractedFilePath -Raw | Should -Be $file.Value
+                    Get-Content -Path $extractedFilePath | Should -Be $file.Value
                 }
             }
 
