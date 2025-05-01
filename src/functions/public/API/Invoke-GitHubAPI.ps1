@@ -244,12 +244,6 @@ filter Invoke-GitHubAPI {
                     'application/.*json' {
                         $results = $response.Content | ConvertFrom-Json
                     }
-                    'text/plain' {
-                        $results = $response.Content
-                    }
-                    'text/html' {
-                        $results = $response.Content
-                    }
                     'application/octocat-stream' {
                         [byte[]]$byteArray = $response.Content
                         $results = [System.Text.Encoding]::UTF8.GetString($byteArray)
@@ -260,10 +254,10 @@ filter Invoke-GitHubAPI {
                     default {
                         if (-not $response.Content) {
                             $results = $null
+                            Write-Warning "Unknown content type: $($headers.'Content-Type')"
+                            Write-Warning 'Please report this issue!'
                             break
                         }
-                        Write-Warning "Unknown content type: $($headers.'Content-Type')"
-                        Write-Warning 'Please report this issue!'
                         $results = $response.Content
                     }
                 }
