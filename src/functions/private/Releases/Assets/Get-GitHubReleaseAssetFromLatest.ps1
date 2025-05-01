@@ -65,7 +65,7 @@
         do {
             $inputObject = @{
                 Query     = @"
-query(`$owner: String!, `$repository: String!, `$perPage: Int, `$after: String, `$name: String) {
+query(`$owner: String!, `$repository: String!, `$perPage: Int, `$after: String) {
   repository(owner: `$owner, name: `$repository) {
     latestRelease {
       releaseAssets(first: `$perPage, after: `$after$nameParam) {
