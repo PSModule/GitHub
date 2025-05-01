@@ -28,7 +28,7 @@ BeforeAll {
 Describe 'Releases' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 
-    Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
+    Get-Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
         BeforeAll {
             $context = Connect-GitHubAccount @connectParams -PassThru -Silent
             LogGroup 'Context' {
@@ -76,13 +76,14 @@ Describe 'Releases' {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
         }
 
-        Context 'Releases' -Skip:($OwnerType -eq 'repository') {
+        Get-Context 'Releases' -Skip:($OwnerType -eq 'repository') {
             It 'New-GitHubRelease - Creates a new release' {
                 $release = New-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.0' -Latest
                 LogGroup 'Release' {
                     Write-Host ($release | Format-List -Property * | Out-String)
                 }
                 $release | Should -Not -BeNullOrEmpty
+                $release | Should -BeOfType 'GitHubRelease'
             }
 
             It 'New-GitHubRelease - Throws when tag already exists' {
@@ -95,6 +96,7 @@ Describe 'Releases' {
                     Write-Host ($release | Format-List -Property * | Out-String)
                 }
                 $release | Should -Not -BeNullOrEmpty
+                $release | Should -BeOfType 'GitHubRelease'
                 $release.IsDraft | Should -BeTrue
                 $release.IsLatest | Should -BeFalse
                 $release.IsPrerelease | Should -BeFalse
@@ -106,6 +108,7 @@ Describe 'Releases' {
                     Write-Host ($release | Format-List -Property * | Out-String)
                 }
                 $release | Should -Not -BeNullOrEmpty
+                $release | Should -BeOfType 'GitHubRelease'
                 $release.Tag | Should -Be 'v1.1'
                 $release.IsDraft | Should -BeFalse
                 $release.IsLatest | Should -BeFalse
@@ -118,6 +121,7 @@ Describe 'Releases' {
                     Write-Host ($release | Format-List -Property * | Out-String)
                 }
                 $release | Should -Not -BeNullOrEmpty
+                $release | Should -BeOfType 'GitHubRelease'
             }
 
             It 'Get-GitHubRelease - Gets latest release' {
@@ -188,6 +192,7 @@ Describe 'Releases' {
                     Write-Host ($release | Format-List -Property * | Out-String)
                 }
                 $release | Should -Not -BeNullOrEmpty
+                $release | Should -BeOfType 'GitHubRelease'
                 $release.Name | Should -Be 'Updated Release'
                 $release.Notes | Should -Be 'Updated release notes'
                 $release.Tag | Should -Be 'v1.0'
@@ -202,6 +207,7 @@ Describe 'Releases' {
                     Write-Host ($release | Format-List -Property * | Out-String)
                 }
                 $release | Should -Not -BeNullOrEmpty
+                $release | Should -BeOfType 'GitHubRelease'
                 $release.Name | Should -Be 'Updated Release'
                 $release.Notes | Should -Be 'Updated release notes'
                 $release.Tag | Should -Be 'v1.1'
@@ -216,6 +222,7 @@ Describe 'Releases' {
                     Write-Host ($release | Format-List -Property * | Out-String)
                 }
                 $release | Should -Not -BeNullOrEmpty
+                $release | Should -BeOfType 'GitHubRelease'
                 $release.Name | Should -Be 'Updated Release'
                 $release.Notes | Should -Be 'Updated release notes'
                 $release.IsLatest | Should -BeFalse
@@ -229,6 +236,7 @@ Describe 'Releases' {
                     Write-Host ($release | Format-List -Property * | Out-String)
                 }
                 $release | Should -Not -BeNullOrEmpty
+                $release | Should -BeOfType 'GitHubRelease'
                 $release.Name | Should -Be 'Updated Release'
                 $release.Notes | Should -Be 'Updated release notes'
                 $release.Tag | Should -Be 'v1.3'
@@ -243,6 +251,7 @@ Describe 'Releases' {
                     Write-Host ($release | Format-List -Property * | Out-String)
                 }
                 $release | Should -Not -BeNullOrEmpty
+                $release | Should -BeOfType 'GitHubRelease'
                 $release.Tag | Should -Be 'v1.0'
                 $release.IsLatest | Should -BeTrue
                 $release.IsDraft | Should -BeFalse
@@ -257,6 +266,7 @@ Describe 'Releases' {
                     Write-Host ($release | Format-List -Property * | Out-String)
                 }
                 $release | Should -Not -BeNullOrEmpty
+                $release | Should -BeOfType 'GitHubRelease'
                 $release.Tag | Should -Be 'v1.4'
                 $release.IsLatest | Should -BeTrue
                 $release.IsDraft | Should -BeFalse
@@ -304,7 +314,7 @@ Describe 'Releases' {
                 $notes.Notes | Should -Match $releaseTag
             }
         }
-        Context 'Release Assets' -Skip:($OwnerType -eq 'repository') {
+        Get-Context 'Release Assets' -Skip:($OwnerType -eq 'repository') {
             BeforeAll {
                 $testFolderGuid = [Guid]::NewGuid().ToString().Substring(0, 8)
                 $testFolderName = "GHAssetTest-$testFolderGuid"
@@ -483,11 +493,12 @@ ID,Name,Value
                 $release = Get-GitHubRelease -Owner $Owner -Repository $repo
                 $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
                 $assetName = $assets[0].Name
-                $asset = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -Tag $release.Tag -Name $assetName -Debug
+                $asset = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -Tag $release.Tag -Name $assetName
                 LogGroup 'Release asset by name from tag' {
                     Write-Host ($asset | Format-List -Property * | Out-String)
                 }
                 $asset | Should -Not -BeNullOrEmpty
+                $asset | Should -BeOfType 'GitHubReleaseAsset'
                 $asset.Name | Should -Be $assetName
             }
 
@@ -500,6 +511,7 @@ ID,Name,Value
                     Write-Host ($asset | Format-List -Property * | Out-String)
                 }
                 $asset | Should -Not -BeNullOrEmpty
+                $asset | Should -BeOfType 'GitHubReleaseAsset'
                 $asset.Label | Should -Be $newLabel
             }
 
