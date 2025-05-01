@@ -155,7 +155,6 @@
         $inputObject = @{
             Method  = 'GET'
             Uri     = $asset.Url
-            Accept  = 'application/octet-stream'
             Context = $Context
         }
 

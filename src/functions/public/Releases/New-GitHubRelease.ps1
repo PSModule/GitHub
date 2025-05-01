@@ -69,7 +69,7 @@
         # Can be any branch or commit SHA. Unused if the Git tag already exists.
         # API Default: the repository's default branch.
         [Parameter()]
-        [string] $Target = 'main',
+        [string] $Target,
 
         # The name of the release.
         [Parameter()]
