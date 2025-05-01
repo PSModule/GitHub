@@ -15,7 +15,7 @@
         GitHubRelease
 
         .OUTPUTS
-        None. This cmdlet returns no output.
+        None
 
         .LINK
         https://psmodule.io/GitHub/Functions/Releases/Get-GitHubRelease/

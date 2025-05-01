@@ -12,12 +12,19 @@
         Updates the release asset with the ID '1234567' for the repository 'octocat/hello-world' with the new name 'new_asset_name' and
         label 'new_asset_label'.
 
+        .INPUTS
+        GitHubReleaseAsset
+
+        .OUTPUTS
+        GitHubReleaseAsset
+
         .LINK
         https://psmodule.io/GitHub/Functions/Releases/Assets/Update-GitHubReleaseAsset
 
         .NOTES
         [Update a release asset](https://docs.github.com/rest/releases/assets#update-a-release-asset)
     #>
+    [OutputType([GitHubReleaseAsset])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.
@@ -76,7 +83,7 @@
 
         if ($PSCmdlet.ShouldProcess("assets for release with ID [$ID] in [$Owner/$Repository]", 'Set')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
+                [GitHubReleaseAsset]($_.Response)
             }
         }
     }

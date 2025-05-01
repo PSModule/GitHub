@@ -58,6 +58,7 @@
         .NOTES
         [Upload a release asset](https://docs.github.com/rest/releases/assets#upload-a-release-asset)
     #>
+    [OutputType([GitHubReleaseAsset])]
     [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.

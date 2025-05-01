@@ -11,6 +11,9 @@
 
         Deletes the release asset with the ID '1234567' for the repository 'octocat/hello-world'.
 
+        .INPUTS
+        GitHubReleaseAsset
+
         .LINK
         https://psmodule.io/GitHub/Functions/Releases/Assets/Remove-GitHubReleaseAsset
 
@@ -53,9 +56,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("Asset with ID [$ID] in [$Owner/$Repository]", 'DELETE')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
+            $null = Invoke-GitHubAPI @inputObject
         }
     }
 

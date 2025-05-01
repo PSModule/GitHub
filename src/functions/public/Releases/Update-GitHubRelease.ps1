@@ -33,10 +33,16 @@
         .LINK
         https://psmodule.io/GitHub/Functions/Releases/Update-GitHubRelease
 
+        .INPUTS
+        GitHubRelease
+
+        .OUTPUTS
+        GitHubRelease
+
         .NOTES
         [Update a release](https://docs.github.com/rest/releases/releases#update-a-release)
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([GitHubRelease])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName = 'Not latest')]
     param(
