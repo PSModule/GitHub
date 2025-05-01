@@ -67,7 +67,7 @@
 query($owner: String!, $repository: String!, $tag: String!, $perPage: Int, $after: String, $name: String) {
   repository(owner: $owner, name: $repository) {
     release(tagName: $tag) {
-      releaseAssets(first: $perPage, after: $after, name: $name) {
+      releaseAssets(first: $perPage, after: $after{0}) {
         nodes {
           id
           name
@@ -90,7 +90,7 @@ query($owner: String!, $repository: String!, $tag: String!, $perPage: Int, $afte
     }
   }
 }
-'@
+'@ -f (if ($PSBoundParameters.ContainsKey('Name')) { ', name: $name' })
                 Variables = @{
                     owner      = $Owner
                     repository = $Repository
