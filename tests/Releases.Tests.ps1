@@ -444,6 +444,49 @@ ID,Name,Value
                 Test-Path -Path $downloadPath | Should -BeTrue
             }
 
+            It 'Add-GitHubReleaseAsset - Adds multiple files from a folder to a release' {
+                $folderName = "FolderAssetTest-$testFolderGuid"
+                $folderPath = Join-Path -Path $PSScriptRoot -ChildPath $folderName
+                New-Item -Path $folderPath -ItemType Directory -Force
+
+                $fileContents = @{
+                    'config.json' = '{"name": "Test Config", "version": "1.0.0"}'
+                    'readme.md'   = '# Test Folder\nThis is a test folder for uploading to a GitHub release.'
+                    'data.txt'    = 'This is some test data'
+                }
+
+                foreach ($file in $fileContents.GetEnumerator()) {
+                    $filePath = Join-Path -Path $folderPath -ChildPath $file.Key
+                    Set-Content -Path $filePath -Value $file.Value
+                }
+
+                $asset = $release | Add-GitHubReleaseAsset -Path $folderPath -Label 'Folder Asset Test'
+
+                LogGroup 'Added folder asset' {
+                    Write-Host ($asset | Format-List -Property * | Out-String)
+                }
+
+                $asset | Should -Not -BeNullOrEmpty
+                $asset | Should -BeOfType 'GitHubReleaseAsset'
+                $asset.Name | Should -Be "$folderName.zip"
+                $asset.Label | Should -Be 'Folder Asset Test'
+                $asset.ContentType | Should -Be 'application/zip'
+                $asset.Size | Should -BeGreaterThan 0
+
+                $downloadPath = Join-Path -Path $PSScriptRoot -ChildPath "Downloaded-$folderName.zip"
+                Invoke-WebRequest -Uri $asset.Url -OutFile $downloadPath -RetryIntervalSec 5 -MaximumRetryCount 5
+
+                $extractPath = Join-Path -Path $PSScriptRoot -ChildPath "Extract-$folderName"
+                New-Item -Path $extractPath -ItemType Directory -Force
+                Expand-Archive -Path $downloadPath -DestinationPath $extractPath -Force
+
+                foreach ($file in $fileContents.GetEnumerator()) {
+                    $extractedFilePath = Join-Path -Path $extractPath -ChildPath $file.Key
+                    Test-Path -Path $extractedFilePath | Should -BeTrue
+                    Get-Content -Path $extractedFilePath -Raw | Should -Be $file.Value
+                }
+            }
+
             It 'Get-GitHubReleaseAsset - Gets all assets from a release ID' {
                 $release = Get-GitHubRelease -Owner $Owner -Repository $repo
                 $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
