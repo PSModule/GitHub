@@ -55,21 +55,18 @@
         [string] $ID,
 
         # The unique identifier of the release.
-        [Parameter(Mandatory, ParameterSetName = 'List assets from a release', ValueFromPipelineByPropertyName)]
-        [Parameter(Mandatory, ParameterSetName = 'Get a specific asset by name from a release ID', ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ParameterSetName = 'List assets from a release by ID', ValueFromPipelineByPropertyName)]
+        [Alias('Release')]
         [string] $ReleaseID,
 
         # The tag name of the release.
-        [Parameter(Mandatory, ParameterSetName = 'Get a specific asset by name from a tag')]
+        [Parameter(Mandatory, ParameterSetName = 'List assets from a release by tag')]
         [string] $Tag,
 
-        # The name of the asset to find.
-        [Parameter(Mandatory, ParameterSetName = 'Get a specific asset by name from a release ID')]
-        [Parameter(Mandatory, ParameterSetName = 'Get a specific asset by name from a tag')]
-        [string] $Name,
-
         # The number of results per page (max 100).
-        [Parameter()]
+        [Parameter(ParameterSetName = 'List assets from the latest release')]
+        [Parameter(ParameterSetName = 'List assets from a release by ID')]
+        [Parameter(ParameterSetName = 'List assets from a release by tag')]
         [ValidateRange(0, 100)]
         [int] $PerPage,
 
@@ -90,32 +87,22 @@
         $params = @{
             Owner      = $Owner
             Repository = $Repository
-            PerPage    = $PerPage
             Context    = $Context
         }
         $params | Remove-HashtableEntry -NullOrEmptyValues
 
         switch ($PSCmdlet.ParameterSetName) {
             'List assets from the latest release' {
-                Get-GitHubReleaseAssetFromLatest @params
+                Get-GitHubReleaseAssetFromLatest @params -PerPage $PerPage
             }
-            'List assets from a release' {
-                Get-GitHubReleaseAssetByReleaseID @params -ID $ReleaseID
+            'List assets from a release by ID' {
+                Get-GitHubReleaseAssetByReleaseID @params -ID $ReleaseID -PerPage $PerPage
+            }
+            'List assets from a release by tag' {
+                Get-GitHubReleaseAssetByTag @params -Tag $Tag -PerPage $PerPage
             }
             'Get a specific asset by ID' {
                 Get-GitHubReleaseAssetByID @params -ID $ID
-            }
-            'Get a specific asset by name from a release ID' {
-                $assets = Get-GitHubReleaseAssetByReleaseID @params -ID $ReleaseID
-                $asset = $assets | Where-Object { $_.Name -eq $Name }
-                if ($asset) {
-                    $asset
-                } else {
-                    Write-Warning "Asset with name '$Name' not found in release with ID '$ReleaseID'"
-                }
-            }
-            'Get a specific asset by name from a tag' {
-                Get-GitHubReleaseAssetByTag @params -Tag $Tag -Name $Name
             }
         }
     }
@@ -124,5 +111,3 @@
         Write-Debug "[$stackPath] - End"
     }
 }
-
-#SkipTest:FunctionTest:Will add a test for this function in a future PR
