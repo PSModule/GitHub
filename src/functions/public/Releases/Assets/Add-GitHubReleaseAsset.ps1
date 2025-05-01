@@ -44,7 +44,7 @@
         .EXAMPLE
         Add-GitHubReleaseAsset -Owner 'octocat' -Repository 'hello-world' -ID '7654321' -Path 'C:\Users\octocat\Projects\MyApp'
 
-        Automatically creates a zip file from the contents of the MyApp directory and uploads it as a release asset.
+        Automatically creates a ZIP file from the contents of the MyApp directory and uploads it as a release asset.
 
         .INPUTS
         GitHubRelease

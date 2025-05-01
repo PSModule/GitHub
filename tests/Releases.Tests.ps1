@@ -567,6 +567,84 @@ ID,Name,Value
                 $remainingAsset = $updatedAssets | Where-Object { $_.ID -eq $assetID }
                 $remainingAsset | Should -BeNullOrEmpty
             }
+
+            It 'Save-GitHubReleaseAsset - Downloads a release asset by ID' {
+                $release = Get-GitHubRelease -Owner $Owner -Repository $repo
+                $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
+                $downloadPath = Join-Path -Path $PSScriptRoot -ChildPath "DownloadTest-$testFolderGuid"
+                New-Item -Path $downloadPath -ItemType Directory -Force | Out-Null
+
+                $downloadedFile = Save-GitHubReleaseAsset -Owner $Owner -Repository $repo -ID $assets[0].ID -Path $downloadPath -PassThru
+                LogGroup 'Downloaded Asset' {
+                    Write-Host ($downloadedFile | Format-List | Out-String)
+                }
+
+                $downloadedFile | Should -Not -BeNullOrEmpty
+                Test-Path -Path $downloadedFile.FullName | Should -BeTrue
+                $downloadedFile.Name | Should -Be $assets[0].Name
+            }
+
+            It 'Save-GitHubReleaseAsset - Downloads a release asset by name from a tag' {
+                $release = Get-GitHubRelease -Owner $Owner -Repository $repo
+                $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
+                $assetName = $assets[1].Name
+                $downloadPath = Join-Path -Path $PSScriptRoot -ChildPath "DownloadByName-$testFolderGuid"
+                New-Item -Path $downloadPath -ItemType Directory -Force | Out-Null
+
+                $downloadedFile = Save-GitHubReleaseAsset -Owner $Owner -Repository $repo -Tag $release.Tag -Name $assetName -Path $downloadPath -PassThru
+                LogGroup 'Downloaded Asset by Name' {
+                    Write-Host ($downloadedFile | Format-List | Out-String)
+                }
+
+                $downloadedFile | Should -Not -BeNullOrEmpty
+                Test-Path -Path $downloadedFile.FullName | Should -BeTrue
+                $downloadedFile.Name | Should -Be $assetName
+            }
+
+            It 'Save-GitHubReleaseAsset - Downloads and extracts a ZIP release asset' {
+                # Find the ZIP asset
+                $release = Get-GitHubRelease -Owner $Owner -Repository $repo
+                $zipAsset = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID |
+                    Where-Object { $_.Name -like '*.zip' } |
+                    Select-Object -First 1
+
+                if ($zipAsset) {
+                    $extractPath = Join-Path -Path $PSScriptRoot -ChildPath "ExtractTest-$testFolderGuid"
+                    New-Item -Path $extractPath -ItemType Directory -Force | Out-Null
+
+                    $extractedItems = Save-GitHubReleaseAsset -Owner $Owner -Repository $repo -ID $zipAsset.ID -Path $extractPath -Expand -PassThru
+                    LogGroup 'Extracted ZIP Asset' {
+                        Write-Host ($extractedItems | Format-Table | Out-String)
+                    }
+
+                    $extractedItems | Should -Not -BeNullOrEmpty
+                    Test-Path -Path $extractPath | Should -BeTrue
+                    # Verify we don't have the zip file in the directory anymore
+                    Test-Path -Path (Join-Path -Path $extractPath -ChildPath $zipAsset.Name) | Should -BeFalse
+                    # Verify we have extracted content
+                    (Get-ChildItem -Path $extractPath -Recurse).Count | Should -BeGreaterThan 0
+                } else {
+                    Set-ItResult -Inconclusive -Because 'No ZIP asset found for testing extraction'
+                }
+            }
+
+            It 'Save-GitHubReleaseAsset - Uses pipeline input from Get-GitHubReleaseAsset' {
+                $release = Get-GitHubRelease -Owner $Owner -Repository $repo
+                $asset = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID |
+                    Select-Object -First 1
+
+                $pipelinePath = Join-Path -Path $PSScriptRoot -ChildPath "PipelineTest-$testFolderGuid"
+                New-Item -Path $pipelinePath -ItemType Directory -Force | Out-Null
+
+                $downloadedFile = $asset | Save-GitHubReleaseAsset -Path $pipelinePath -PassThru
+                LogGroup 'Downloaded Asset via Pipeline' {
+                    Write-Host ($downloadedFile | Format-List | Out-String)
+                }
+
+                $downloadedFile | Should -Not -BeNullOrEmpty
+                Test-Path -Path $downloadedFile.FullName | Should -BeTrue
+                $downloadedFile.Name | Should -Be $asset.Name
+            }
         }
     }
 }

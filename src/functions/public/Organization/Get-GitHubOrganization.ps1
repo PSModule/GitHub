@@ -36,7 +36,7 @@
         https://psmodule.io/GitHub/Functions/Organization/Get-GitHubOrganization
     #>
     [OutputType([GitHubOrganization])]
-    [CmdletBinding(DefaultParameterSetName = 'List organizations for the authenticated user')]
+    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'All', Justification = 'Required for parameter set')]
     param(
         # The organization name. The name is not case sensitive.
@@ -71,7 +71,7 @@
         # The number of results per page (max 100).
         [Parameter(ParameterSetName = 'AllOrg')]
         [Parameter(ParameterSetName = 'UserOrg')]
-        [Parameter(ParameterSetName = 'List organizations for the authenticated user')]
+        [Parameter(ParameterSetName = '__AllParameterSets')]
         [ValidateRange(0, 100)]
         [int] $PerPage,
 
@@ -99,7 +99,7 @@
             'AllOrg' {
                 Get-GitHubAllOrganization -Since $Since -PerPage $PerPage -Context $Context
             }
-            'List organizations for the authenticated user' {
+            default {
                 Get-GitHubMyOrganization -PerPage $PerPage -Context $Context
             }
         }
