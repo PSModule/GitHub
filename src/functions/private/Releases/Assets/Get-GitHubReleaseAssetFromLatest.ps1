@@ -61,10 +61,7 @@ query($owner: String!, $repository: String!, $perPage: Int, $after: String) {
       releaseAssets(first: $perPage, after: $after) {
         nodes {
           id
-          databaseId
           name
-          label
-          state
           contentType
           size
           downloadCount

@@ -56,12 +56,9 @@
             $this.UpdatedAt = [datetime]::Parse($Object.updated_at)
             $this.UploadedBy = [GitHubUser]::new($Object.uploader)
         } else {
-            $this.ID = $Object.databaseId
             $this.NodeID = $Object.id
             $this.Url = $Object.downloadUrl
             $this.Name = $Object.name
-            $this.Label = $Object.label
-            $this.State = $Object.state
             $this.ContentType = $Object.contentType
             $this.Size = $Object.size
             $this.Downloads = $Object.downloadCount
