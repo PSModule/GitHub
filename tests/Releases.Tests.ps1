@@ -346,20 +346,14 @@ ID,Name,Value
                 foreach ($file in $testFiles.Values) {
                     Set-Content -Path $file.Path -Value $file.Content
                 }
-
-                # Create a zip file of all test files
                 $zipFileName = "$testFolderName.zip"
                 $zipFilePath = Join-Path -Path $PSScriptRoot -ChildPath $zipFileName
                 Compress-Archive -Path "$testFolderPath\*" -DestinationPath $zipFilePath -Force
-
-                # Add the zip file to the test files collection
                 $testFiles['ZipFile'] = @{
                     Name        = $zipFileName
                     Path        = $zipFilePath
                     ContentType = 'application/zip'
                 }
-
-                # Get the latest release to use for tests
                 $release = Get-GitHubRelease -Owner $Owner -Repository $repo
             }
 
@@ -436,64 +430,64 @@ ID,Name,Value
                 $assets | Should -BeOfType 'GitHubReleaseAsset'
             }
 
-            # It 'Get-GitHubReleaseAsset - Gets a specific asset by ID' {
-            #     $release = Get-GitHubRelease -Owner $Owner -Repository $repo
-            #     $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
-            #     $asset = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ID $assets[0].ID
-            #     LogGroup 'Release asset by asset ID' {
-            #         Write-Host ($asset | Format-List -Property * | Out-String)
-            #     }
-            #     $asset | Should -Not -BeNullOrEmpty
-            #     $asset | Should -BeOfType 'GitHubReleaseAsset'
-            #     $asset.ID | Should -Be $assets[0].ID
-            # }
+            It 'Get-GitHubReleaseAsset - Gets a specific asset by ID' {
+                $release = Get-GitHubRelease -Owner $Owner -Repository $repo
+                $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
+                $asset = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ID $assets[0].ID
+                LogGroup 'Release asset by asset ID' {
+                    Write-Host ($asset | Format-List -Property * | Out-String)
+                }
+                $asset | Should -Not -BeNullOrEmpty
+                $asset | Should -BeOfType 'GitHubReleaseAsset'
+                $asset.ID | Should -Be $assets[0].ID
+            }
 
-            # It 'Get-GitHubReleaseAsset - Gets a specific asset by name from a release ID' {
-            #     $release = Get-GitHubRelease -Owner $Owner -Repository $repo
-            #     $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
-            #     $assetName = $assets[0].Name
-            #     $asset = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID -Name $assetName
-            #     LogGroup 'Release asset by name from release ID' {
-            #         Write-Host ($asset | Format-List -Property * | Out-String)
-            #     }
-            #     $asset | Should -Not -BeNullOrEmpty
-            #     $asset | Should -BeOfType 'GitHubReleaseAsset'
-            #     $asset.Name | Should -Be $assetName
-            # }
+            It 'Get-GitHubReleaseAsset - Gets a specific asset by name from a release ID' {
+                $release = Get-GitHubRelease -Owner $Owner -Repository $repo
+                $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
+                $assetName = $assets[0].Name
+                $asset = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID -Name $assetName
+                LogGroup 'Release asset by name from release ID' {
+                    Write-Host ($asset | Format-List -Property * | Out-String)
+                }
+                $asset | Should -Not -BeNullOrEmpty
+                $asset | Should -BeOfType 'GitHubReleaseAsset'
+                $asset.Name | Should -Be $assetName
+            }
 
-            # It 'Get-GitHubReleaseAsset - Gets a specific asset by name from a tag' {
-            #     $release = Get-GitHubRelease -Owner $Owner -Repository $repo
-            #     $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
-            #     $assetName = $assets[0].Name
-            #     $asset = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -Tag $release.Tag -Name $assetName
-            #     LogGroup 'Release asset by name from tag' {
-            #         Write-Host ($asset | Format-List -Property * | Out-String)
-            #     }
-            #     $asset | Should -Not -BeNullOrEmpty
-            #     $asset.Name | Should -Be $assetName
-            # }
+            It 'Get-GitHubReleaseAsset - Gets a specific asset by name from a tag' {
+                $release = Get-GitHubRelease -Owner $Owner -Repository $repo
+                $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
+                $assetName = $assets[0].Name
+                $asset = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -Tag $release.Tag -Name $assetName
+                LogGroup 'Release asset by name from tag' {
+                    Write-Host ($asset | Format-List -Property * | Out-String)
+                }
+                $asset | Should -Not -BeNullOrEmpty
+                $asset.Name | Should -Be $assetName
+            }
 
-            # It 'Update-GitHubReleaseAsset - Updates a release asset' {
-            #     $release = Get-GitHubRelease -Owner $Owner -Repository $repo
-            #     $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
-            #     $newLabel = 'Updated test asset'
-            #     $asset = Update-GitHubReleaseAsset -Owner $Owner -Repository $repo -ID $assets[0].ID -Label $newLabel
-            #     LogGroup 'Updated asset' {
-            #         Write-Host ($asset | Format-List -Property * | Out-String)
-            #     }
-            #     $asset | Should -Not -BeNullOrEmpty
-            #     $asset.Label | Should -Be $newLabel
-            # }
+            It 'Update-GitHubReleaseAsset - Updates a release asset' {
+                $release = Get-GitHubRelease -Owner $Owner -Repository $repo
+                $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
+                $newLabel = 'Updated test asset'
+                $asset = Update-GitHubReleaseAsset -Owner $Owner -Repository $repo -ID $assets[0].ID -Label $newLabel
+                LogGroup 'Updated asset' {
+                    Write-Host ($asset | Format-List -Property * | Out-String)
+                }
+                $asset | Should -Not -BeNullOrEmpty
+                $asset.Label | Should -Be $newLabel
+            }
 
-            # It 'Remove-GitHubReleaseAsset - Removes a release asset' {
-            #     $release = Get-GitHubRelease -Owner $Owner -Repository $repo
-            #     $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
-            #     $assetID = $assets[0].ID
-            #     Remove-GitHubReleaseAsset -Owner $Owner -Repository $repo -ID $assetID -Confirm:$false
-            #     $updatedAssets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
-            #     $remainingAsset = $updatedAssets | Where-Object { $_.ID -eq $assetID }
-            #     $remainingAsset | Should -BeNullOrEmpty
-            # }
+            It 'Remove-GitHubReleaseAsset - Removes a release asset' {
+                $release = Get-GitHubRelease -Owner $Owner -Repository $repo
+                $assets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
+                $assetID = $assets[0].ID
+                Remove-GitHubReleaseAsset -Owner $Owner -Repository $repo -ID $assetID -Confirm:$false
+                $updatedAssets = Get-GitHubReleaseAsset -Owner $Owner -Repository $repo -ReleaseID $release.ID
+                $remainingAsset = $updatedAssets | Where-Object { $_.ID -eq $assetID }
+                $remainingAsset | Should -BeNullOrEmpty
+            }
         }
     }
 }
