@@ -1,7 +1,7 @@
 ﻿filter Get-GitHubReleaseAssetByID {
     <#
         .SYNOPSIS
-        Get a release asset
+        Get a release asset by ID
 
         .DESCRIPTION
         To download the asset's binary content, set the `Accept` header of the request to

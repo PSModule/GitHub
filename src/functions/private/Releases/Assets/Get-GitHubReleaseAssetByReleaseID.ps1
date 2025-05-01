@@ -11,11 +11,16 @@
 
         Gets the release assets for the release with the ID '1234567' for the repository 'octocat/hello-world'.
 
+        .EXAMPLE
+        Get-GitHubReleaseAssetByReleaseID -Owner 'octocat' -Repository 'hello-world' -ID '1234567' -Name 'example.zip'
+
+        Gets only the release asset named 'example.zip' for the release with the ID '1234567'.
+
         .NOTES
         https://docs.github.com/rest/releases/assets#list-release-assets
 
     #>
-    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
+    [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
@@ -26,11 +31,12 @@
         [string] $Repository,
 
         # The unique identifier of the release.
-        [Parameter(
-            Mandatory,
-            ParameterSetName = 'ID'
-        )]
+        [Parameter(Mandatory)]
         [string] $ID,
+
+        # The name of a specific asset to return. If provided, only the asset with this name will be returned.
+        [Parameter()]
+        [string] $Name,
 
         # The number of results per page (max 100).
         [Parameter()]
@@ -63,7 +69,14 @@
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             foreach ($asset in $_.Response) {
-                [GitHubReleaseAsset]($asset)
+                if ($PSBoundParameters.ContainsKey('Name')) {
+                    if ($asset.name -eq $Name) {
+                        [GitHubReleaseAsset]($asset)
+                        break
+                    }
+                } else {
+                    [GitHubReleaseAsset]($asset)
+                }
             }
         }
     }
