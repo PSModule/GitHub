@@ -22,6 +22,14 @@
         .LINK
         [List releases](https://docs.github.com/rest/releases/releases#list-releases)
     #>
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSUseDeclaredVarsMoreThanAssignments', 'hasNextPage', Scope = 'Function',
+        Justification = 'Unknown issue with var scoping in blocks.'
+    )]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSUseDeclaredVarsMoreThanAssignments', 'after', Scope = 'Function',
+        Justification = 'Unknown issue with var scoping in blocks.'
+    )]
     [OutputType([GitHubRelease])]
     [CmdletBinding(SupportsPaging)]
     param(

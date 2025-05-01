@@ -20,6 +20,14 @@
         .OUTPUTS
         GitHubReleaseAsset
     #>
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSUseDeclaredVarsMoreThanAssignments', 'hasNextPage', Scope = 'Function',
+        Justification = 'Unknown issue with var scoping in blocks.'
+    )]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSUseDeclaredVarsMoreThanAssignments', 'after', Scope = 'Function',
+        Justification = 'Unknown issue with var scoping in blocks.'
+    )]
     [OutputType([GitHubReleaseAsset])]
     [CmdletBinding()]
     param(

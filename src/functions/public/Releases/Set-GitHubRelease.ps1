@@ -60,6 +60,10 @@
         .LINK
         https://psmodule.io/GitHub/Functions/Releases/Set-GitHubRelease/
     #>
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSShouldProcess', '', Scope = 'Function',
+        Justification = 'This check is performed in the private functions.'
+    )]
     [OutputType([GitHubRelease])]
     [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName = 'Not latest')]
     param(
