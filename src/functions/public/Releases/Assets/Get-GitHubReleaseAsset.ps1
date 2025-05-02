@@ -1,11 +1,13 @@
 ﻿filter Get-GitHubReleaseAsset {
     <#
         .SYNOPSIS
-        List release assets based on a release ID or asset ID
+        List release assets based on a release ID, asset ID, or asset name
 
         .DESCRIPTION
         If an asset ID is provided, the asset is returned.
         If a release ID is provided, all assets for the release are returned.
+        If a release ID and name are provided, the specific named asset from that release is returned.
+        If a tag and name are provided, the specific named asset from the release with that tag is returned.
 
         .EXAMPLE
         Get-GitHubReleaseAsset -Owner 'octocat' -Repository 'hello-world' -ID '1234567'
@@ -15,38 +17,62 @@
         .EXAMPLE
         Get-GitHubReleaseAsset -Owner 'octocat' -Repository 'hello-world' -ReleaseID '7654321'
 
-        Gets the release assets for the release with the ID '7654321' for the repository 'octocat/hello-world'.
+        Gets all release assets for the release with the ID '7654321' for the repository 'octocat/hello-world'.
 
-        .NOTES
-        [Get a release asset](https://docs.github.com/rest/releases/assets#get-a-release-asset)
+        .EXAMPLE
+        Get-GitHubReleaseAsset -Owner 'octocat' -Repository 'hello-world' -ReleaseID '7654321' -Name 'example.zip'
+
+        Gets the release asset named 'example.zip' from the release with ID '7654321' for the repository 'octocat/hello-world'.
+
+        .EXAMPLE
+        Get-GitHubReleaseAsset -Owner 'octocat' -Repository 'hello-world' -Tag 'v1.0.0' -Name 'example.zip'
+
+        Gets the release asset named 'example.zip' from the release tagged as 'v1.0.0' for the repository 'octocat/hello-world'.
+
+        .INPUTS
+        GitHubRelease
+
+        .OUTPUTS
+        GitHubReleaseAsset
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Releases/Assets/Get-GitHubReleaseAsset
     #>
-    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
+    [OutputType([GitHubReleaseAsset])]
+    [CmdletBinding(DefaultParameterSetName = 'List assets from the latest release')]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(Mandatory)]
-        [Alias('Organization')]
-        [Alias('User')]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
+        [Alias('Organization', 'User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Repository,
 
         # The unique identifier of the asset.
-        [Parameter(
-            Mandatory,
-            ParameterSetName = 'ID'
-        )]
-        [Alias('asset_id')]
+        [Parameter(Mandatory, ParameterSetName = 'Get a specific asset by ID')]
         [string] $ID,
 
         # The unique identifier of the release.
-        [Parameter(
-            Mandatory,
-            ParameterSetName = 'ReleaseID'
-        )]
-        [Alias('release_id')]
+        [Parameter(Mandatory, ParameterSetName = 'List assets from a release by ID', ValueFromPipelineByPropertyName)]
+        [Alias('Release')]
         [string] $ReleaseID,
+
+        # The tag name of the release.
+        [Parameter(Mandatory, ParameterSetName = 'List assets from a release by tag')]
+        [string] $Tag,
+
+        # The name of the asset to get. If specified, only assets with this name will be returned.
+        [Parameter()]
+        [string] $Name,
+
+        # The number of results per page (max 100).
+        [Parameter(ParameterSetName = 'List assets from the latest release')]
+        [Parameter(ParameterSetName = 'List assets from a release by ID')]
+        [Parameter(ParameterSetName = 'List assets from a release by tag')]
+        [ValidateRange(0, 100)]
+        [int] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -62,12 +88,26 @@
     }
 
     process {
+        $params = @{
+            Owner      = $Owner
+            Repository = $Repository
+            Context    = $Context
+            Name       = $Name
+        }
+        $params | Remove-HashtableEntry -NullOrEmptyValues
+
         switch ($PSCmdlet.ParameterSetName) {
-            'ReleaseID' {
-                Get-GitHubReleaseAssetByReleaseID -Owner $Owner -Repository $Repository -ReleaseID $ReleaseID -Context $Context
+            'List assets from the latest release' {
+                Get-GitHubReleaseAssetFromLatest @params -PerPage $PerPage
             }
-            'ID' {
-                Get-GitHubReleaseAssetByID -Owner $Owner -Repository $Repository -ID $ID -Context $Context
+            'List assets from a release by ID' {
+                Get-GitHubReleaseAssetByReleaseID @params -ID $ReleaseID -PerPage $PerPage
+            }
+            'List assets from a release by tag' {
+                Get-GitHubReleaseAssetByTag @params -Tag $Tag -PerPage $PerPage
+            }
+            'Get a specific asset by ID' {
+                Get-GitHubReleaseAssetByID @params -ID $ID
             }
         }
     }
@@ -76,5 +116,3 @@
         Write-Debug "[$stackPath] - End"
     }
 }
-
-#SkipTest:FunctionTest:Will add a test for this function in a future PR

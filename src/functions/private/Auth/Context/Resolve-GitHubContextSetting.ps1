@@ -58,6 +58,10 @@
         [object] $Context
     )
 
+    if ($Name -eq 'PerPage' -and $Value -eq 0) {
+        $Value = $null
+    }
+
     Write-Debug "Resolving setting [$Name]"
     [pscustomobject]@{
         'Name'                 = $Name

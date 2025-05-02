@@ -1,4 +1,4 @@
-﻿filter Set-GitHubReleaseAsset {
+﻿filter Update-GitHubReleaseAsset {
     <#
         .SYNOPSIS
         Update a release asset
@@ -7,20 +7,29 @@
         Users with push access to the repository can edit a release asset.
 
         .EXAMPLE
-        Set-GitHubReleaseAsset -Owner 'octocat' -Repository 'hello-world' -ID '1234567' -Name 'new_asset_name' -Label 'new_asset_label'
+        Update-GitHubReleaseAsset -Owner 'octocat' -Repository 'hello-world' -ID '1234567' -Name 'new_asset_name' -Label 'new_asset_label'
 
         Updates the release asset with the ID '1234567' for the repository 'octocat/hello-world' with the new name 'new_asset_name' and
         label 'new_asset_label'.
 
+        .INPUTS
+        GitHubReleaseAsset
+
+        .OUTPUTS
+        GitHubReleaseAsset
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Releases/Assets/Update-GitHubReleaseAsset
+
         .NOTES
         [Update a release asset](https://docs.github.com/rest/releases/assets#update-a-release-asset)
     #>
+    [OutputType([GitHubReleaseAsset])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [Alias('Organization')]
-        [Alias('User')]
+        [Alias('Organization', 'User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
@@ -29,7 +38,6 @@
 
         # The unique identifier of the asset.
         [Parameter(Mandatory)]
-        [Alias('asset_id')]
         [string] $ID,
 
         #The name of the file asset.
@@ -75,7 +83,7 @@
 
         if ($PSCmdlet.ShouldProcess("assets for release with ID [$ID] in [$Owner/$Repository]", 'Set')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
+                [GitHubReleaseAsset]($_.Response)
             }
         }
     }
@@ -84,5 +92,3 @@
         Write-Debug "[$stackPath] - End"
     }
 }
-
-#SkipTest:FunctionTest:Will add a test for this function in a future PR

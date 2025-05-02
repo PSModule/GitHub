@@ -40,8 +40,8 @@ Describe 'Environments' {
                     Write-Host ($context | Format-List | Out-String)
                 }
             }
-            $repoPrefix = "$testName-$os-$TokenType-$guid"
-            $repoName = $repoPrefix
+            $repoPrefix = "$testName-$os-$TokenType"
+            $repoName = "$repoPrefix-$guid"
             $environmentName = "$testName-$os-$TokenType-$guid"
 
             switch ($OwnerType) {

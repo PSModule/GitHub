@@ -1,19 +1,18 @@
 ﻿filter New-GitHubReleaseNote {
     <#
         .SYNOPSIS
-        List releases
+        Generate release notes content for a release.
 
         .DESCRIPTION
-        Generate a name and body describing a [release](https://docs.github.com/rest/releases/releases#get-a-release).
-        The body content will be Markdown formatted and contain information like
-        the changes since last release and users who contributed. The generated release notes are not saved anywhere. They are
-        intended to be generated and used when creating a new release.
+        Generate a name and body describing a [release](https://docs.github.com/rest/releases/releases#generate-release-notes-content-for-a-release).
+        The body content will be Markdown formatted and contain information like the changes since last release and users who contributed.
+        The generated release notes are not saved anywhere. They are intended to be generated and used when creating a new release.
 
         .EXAMPLE
         $params = @{
-            Owner                 = 'octocat'
-            Repo                  = 'hello-world'
-            TagName               = 'v1.0.0'
+            Owner = 'octocat'
+            Repository = 'hello-world'
+            Tag = 'v1.0.0'
         }
         New-GitHubReleaseNote @params
 
@@ -23,10 +22,10 @@
 
         .EXAMPLE
         $params = @{
-            Owner                 = 'octocat'
-            Repo                  = 'hello-world'
-            TagName               = 'v1.0.0'
-            TargetCommitish       = 'main'
+            Owner = 'octocat'
+            Repository = 'hello-world'
+            Tag = 'v1.0.0'
+            Target = 'main'
         }
         New-GitHubReleaseNote @params
 
@@ -35,11 +34,11 @@
 
         .EXAMPLE
         $params = @{
-            Owner                 = 'octocat'
-            Repo                  = 'hello-world'
-            TagName               = 'v1.0.0'
-            TargetCommitish       = 'main'
-            PreviousTagName       = 'v0.9.2'
+            Owner = 'octocat'
+            Repository = 'hello-world'
+            Tag = 'v1.0.0'
+            Target = 'main'
+            PreviousTag = 'v0.9.2'
             ConfigurationFilePath = '.github/custom_release_config.yml'
         }
         New-GitHubReleaseNote @params
@@ -48,8 +47,19 @@
         The release notes will be based on the changes between the tags 'v0.9.2' and 'v1.0.0' and generated based on the
         configuration file located in the repository at '.github/custom_release_config.yml'.
 
+        .OUTPUTS
+        pscustomobject
+
         .NOTES
-        [Generate release notes content for a release](https://docs.github.com/rest/releases/releases#list-releases)
+        The returned object contains the following properties:
+        - Name: The name of the release.
+        - Notes: The body of the release notes.
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Releases/New-GitHubReleaseNote/
+
+        .LINK
+        [Generate release notes content for a release](https://docs.github.com/rest/releases/releases#generate-release-notes-content-for-a-release)
     #>
     [OutputType([pscustomobject])]
     [Alias('Generate-GitHubReleaseNotes')]
@@ -57,39 +67,33 @@
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(Mandatory)]
-        [Alias('Organization')]
-        [Alias('User')]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
+        [Alias('Organization', 'User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Repository,
 
         # The tag name for the release. This can be an existing tag or a new one.
-        [Parameter(Mandatory)]
-        [Alias('tag_name')]
-        [string] $TagName,
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
+        [string] $Tag,
 
         # Specifies the commitish value that will be the target for the release's tag.
         # Required if the supplied tag_name does not reference an existing tag.
         # Ignored if the tag_name already exists.
         [Parameter()]
-        [Alias('target_commitish')]
-        [string] $TargetCommitish,
+        [string] $Target,
 
         # The name of the previous tag to use as the starting point for the release notes.
         # Use to manually specify the range for the set of changes considered as part this release.
         [Parameter()]
-        [Alias('previous_tag_name')]
-        [string] $PreviousTagName,
-
+        [string] $PreviousTag,
 
         # Specifies a path to a file in the repository containing configuration settings used for generating the release notes.
         # If unspecified, the configuration file located in the repository at '.github/release.yml' or '.github/release.yaml' will be used.
         # If that is not present, the default configuration will be used.
         [Parameter()]
-        [Alias('configuration_file_path')]
         [string] $ConfigurationFilePath,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -107,9 +111,9 @@
 
     process {
         $body = @{
-            tag_name                = $TagName
-            target_commitish        = $TargetCommitish
-            previous_tag_name       = $PreviousTagName
+            tag_name                = $Tag
+            target_commitish        = $Target
+            previous_tag_name       = $PreviousTag
             configuration_file_path = $ConfigurationFilePath
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
@@ -118,11 +122,15 @@
             Method      = 'POST'
             APIEndpoint = "/repos/$Owner/$Repository/releases/generate-notes"
             Body        = $body
+            Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("$Owner/$Repository", 'Create release notes')) {
+        if ($PSCmdlet.ShouldProcess("release notes for release on $Owner/$Repository", 'Create')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
+                [PSCustomObject]@{
+                    Name  = $_.Response.name
+                    Notes = $_.Response.body
+                }
             }
         }
     }
@@ -131,5 +139,3 @@
         Write-Debug "[$stackPath] - End"
     }
 }
-
-#SkipTest:FunctionTest:Will add a test for this function in a future PR

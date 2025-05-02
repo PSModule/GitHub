@@ -11,6 +11,12 @@
 
         Deletes the release asset with the ID '1234567' for the repository 'octocat/hello-world'.
 
+        .INPUTS
+        GitHubReleaseAsset
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Releases/Assets/Remove-GitHubReleaseAsset
+
         .NOTES
         [Delete a release asset](https://docs.github.com/rest/releases/assets#delete-a-release-asset)
     #>
@@ -18,8 +24,7 @@
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [Alias('Organization')]
-        [Alias('User')]
+        [Alias('Organization', 'User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
@@ -28,7 +33,6 @@
 
         # The unique identifier of the asset.
         [Parameter(Mandatory)]
-        [Alias('asset_id')]
         [string] $ID,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -52,9 +56,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("Asset with ID [$ID] in [$Owner/$Repository]", 'DELETE')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
-            }
+            $null = Invoke-GitHubAPI @inputObject
         }
     }
 
@@ -62,5 +64,3 @@
         Write-Debug "[$stackPath] - End"
     }
 }
-
-#SkipTest:FunctionTest:Will add a test for this function in a future PR

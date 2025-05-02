@@ -177,9 +177,9 @@ filter Invoke-GitHubAPI {
             if (-not $Body) {
                 $Body = @{}
             }
-
             $Body['per_page'] = Resolve-GitHubContextSetting -Name 'PerPage' -Value $PerPage -Context $Context
-
+            $APICall.Uri = New-Uri -BaseUri $Uri -Query $Body -AsString
+        } elseif (($Method -eq 'POST') -and -not [string]::IsNullOrEmpty($UploadFilePath)) {
             $APICall.Uri = New-Uri -BaseUri $Uri -Query $Body -AsString
         } elseif ($Body) {
             if ($Body -is [hashtable]) {
@@ -244,26 +244,11 @@ filter Invoke-GitHubAPI {
                     'application/.*json' {
                         $results = $response.Content | ConvertFrom-Json
                     }
-                    'text/plain' {
-                        $results = $response.Content
-                    }
-                    'text/html' {
-                        $results = $response.Content
-                    }
                     'application/octocat-stream' {
                         [byte[]]$byteArray = $response.Content
                         $results = [System.Text.Encoding]::UTF8.GetString($byteArray)
                     }
-                    'zip' {
-                        $results = $response.Content
-                    }
                     default {
-                        if (-not $response.Content) {
-                            $results = $null
-                            break
-                        }
-                        Write-Warning "Unknown content type: $($headers.'Content-Type')"
-                        Write-Warning 'Please report this issue!'
                         $results = $response.Content
                     }
                 }
@@ -279,6 +264,7 @@ filter Invoke-GitHubAPI {
             } while ($APICall['Uri'])
         } catch {
             $failure = $_
+            $failure | Out-String -Stream | ForEach-Object { Write-Debug $_ }
             $headers = @{}
             foreach ($item in $failure.Exception.Response.Headers.GetEnumerator()) {
                 $headers[$item.Key] = ($item.Value).Trim() -join ', '

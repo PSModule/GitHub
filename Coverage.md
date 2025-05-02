@@ -5,19 +5,19 @@
 <table>
     <tr>
         <td>Available functions</td>
-        <td>1026</td>
+        <td>1028</td>
     </tr>
     <tr>
         <td>Covered functions</td>
-        <td>221</td>
+        <td>220</td>
     </tr>
     <tr>
         <td>Missing functions</td>
-        <td>805</td>
+        <td>808</td>
     </tr>
     <tr>
         <td>Coverage</td>
-        <td>21.54%</td>
+        <td>21.4%</td>
     </tr>
 </table>
 
@@ -51,6 +51,7 @@
 | `/classrooms/{classroom_id}/assignments`                                                                                  |                    | :x:                |                    |                    |                    |
 | `/codes_of_conduct`                                                                                                       |                    | :x:                |                    |                    |                    |
 | `/codes_of_conduct/{key}`                                                                                                 |                    | :x:                |                    |                    |                    |
+| `/credentials/revoke`                                                                                                     |                    |                    |                    | :x:                |                    |
 | `/emojis`                                                                                                                 |                    | :white_check_mark: |                    |                    |                    |
 | `/enterprises/{enterprise}/code-security/configurations`                                                                  |                    | :x:                |                    | :x:                |                    |
 | `/enterprises/{enterprise}/code-security/configurations/defaults`                                                         |                    | :x:                |                    |                    |                    |
@@ -539,10 +540,10 @@
 | `/repos/{owner}/{repo}/releases`                                                                                          |                    | :white_check_mark: |                    | :white_check_mark: |                    |
 | `/repos/{owner}/{repo}/releases/assets/{asset_id}`                                                                        | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
 | `/repos/{owner}/{repo}/releases/generate-notes`                                                                           |                    |                    |                    | :white_check_mark: |                    |
-| `/repos/{owner}/{repo}/releases/latest`                                                                                   |                    | :white_check_mark: |                    |                    |                    |
-| `/repos/{owner}/{repo}/releases/tags/{tag}`                                                                               |                    | :white_check_mark: |                    |                    |                    |
+| `/repos/{owner}/{repo}/releases/latest`                                                                                   |                    | :x:                |                    |                    |                    |
+| `/repos/{owner}/{repo}/releases/tags/{tag}`                                                                               |                    | :x:                |                    |                    |                    |
 | `/repos/{owner}/{repo}/releases/{release_id}`                                                                             | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
-| `/repos/{owner}/{repo}/releases/{release_id}/assets`                                                                      |                    | :white_check_mark: |                    | :x:                |                    |
+| `/repos/{owner}/{repo}/releases/{release_id}/assets`                                                                      |                    | :white_check_mark: |                    | :white_check_mark: |                    |
 | `/repos/{owner}/{repo}/releases/{release_id}/reactions`                                                                   |                    | :x:                |                    | :x:                |                    |
 | `/repos/{owner}/{repo}/releases/{release_id}/reactions/{reaction_id}`                                                     | :x:                |                    |                    |                    |                    |
 | `/repos/{owner}/{repo}/rules/branches/{branch}`                                                                           |                    | :x:                |                    |                    |                    |
@@ -698,6 +699,7 @@
 | `/users/{username}/settings/billing/actions`                                                                              |                    | :x:                |                    |                    |                    |
 | `/users/{username}/settings/billing/packages`                                                                             |                    | :x:                |                    |                    |                    |
 | `/users/{username}/settings/billing/shared-storage`                                                                       |                    | :x:                |                    |                    |                    |
+| `/users/{username}/settings/billing/usage`                                                                                |                    | :x:                |                    |                    |                    |
 | `/users/{username}/social_accounts`                                                                                       |                    | :white_check_mark: |                    |                    |                    |
 | `/users/{username}/ssh_signing_keys`                                                                                      |                    | :white_check_mark: |                    |                    |                    |
 | `/users/{username}/starred`                                                                                               |                    | :x:                |                    |                    |                    |
