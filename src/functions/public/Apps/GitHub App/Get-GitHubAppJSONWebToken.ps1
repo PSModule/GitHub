@@ -17,7 +17,7 @@
         Generates a JSON Web Token (JWT) for a GitHub App using the specified client ID and private key.
 
         .OUTPUTS
-        System.String
+        GitHubJsonWebToken
 
         .NOTES
         [Generating a JSON Web Token (JWT) for a GitHub App | GitHub Docs](https://docs.github.com/apps/creating-github-apps/authenticating-with-a-github-app/generating-a-json-web-token-jwt-for-a-github-app#example-using-powershell-to-generate-a-jwt)
@@ -35,7 +35,7 @@
 
     [CmdletBinding(DefaultParameterSetName = 'PrivateKey')]
     [Alias('Get-GitHubAppJWT')]
-    [OutputType([string])]
+    [OutputType([GitHubJsonWebToken])]
     param(
         # The client ID of the GitHub App.
         # Can use the GitHub App ID or the client ID.
@@ -86,8 +86,8 @@
             )
         ).TrimEnd('=').Replace('+', '-').Replace('/', '_')
 
-        $iat = [System.DateTimeOffset]::UtcNow.AddSeconds(-10).ToUnixTimeSeconds()
-        $exp = [System.DateTimeOffset]::UtcNow.AddMinutes(10).ToUnixTimeSeconds()
+        $iat = [System.DateTimeOffset]::UtcNow.AddSeconds(-$script:GitHub.Config.JwtTimeTolerance).ToUnixTimeSeconds()
+        $exp = [System.DateTimeOffset]::UtcNow.AddSeconds($script:GitHub.Config.JwtTimeTolerance).ToUnixTimeSeconds()
         $payload = [Convert]::ToBase64String(
             [System.Text.Encoding]::UTF8.GetBytes(
                 (
@@ -111,7 +111,7 @@
             )
         ).TrimEnd('=').Replace('+', '-').Replace('/', '_')
         $jwt = "$header.$payload.$signature"
-        [pscustomobject]@{
+        [GitHubJsonWebToken]@{
             Token     = ConvertTo-SecureString -String $jwt -AsPlainText
             IssuedAt  = [DateTime]::UnixEpoch.AddSeconds($iat)
             ExpiresAt = [DateTime]::UnixEpoch.AddSeconds($exp)

@@ -1,12 +1,6 @@
 ﻿$script:GitHub = [pscustomobject]@{
     TokenPrefixPattern = '(?<=^(ghu|gho|ghs|github_pat|ghp)).*'
-    EnvironmentType    = if ($env:GITHUB_ACTIONS -eq 'true') {
-        'GHA'
-    } elseif (-not [string]::IsNullOrEmpty($env:WEBSITE_PLATFORM_VERSION)) {
-        'AFA'
-    } else {
-        'Local'
-    }
+    EnvironmentType    = Get-GitHubEnvironmentType
     DefaultConfig      = [GitHubConfig]@{
         ID                            = 'PSModule.GitHub'
         HostName                      = ($env:GITHUB_SERVER_URL ?? 'github.com') -replace '^https?://'
@@ -20,6 +14,7 @@
         PerPage                       = 100
         RetryCount                    = 0
         RetryInterval                 = 1
+        JwtTimeTolerance              = 300
     }
     Config             = $null
     Event              = $null

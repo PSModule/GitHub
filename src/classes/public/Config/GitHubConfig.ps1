@@ -35,6 +35,9 @@
     # The default value for retry interval in seconds.
     [int] $RetryInterval
 
+    # The tolerance time in seconds for JWT token validation.
+    [int] $JwtTimeTolerance
+
     # Simple parameterless constructor
     GitHubConfig() {}
 

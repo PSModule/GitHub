@@ -49,6 +49,22 @@ function Initialize-GitHubConfig {
         $context = Get-Context -ID $script:GitHub.DefaultConfig.ID
         if ($context) {
             Write-Debug 'GitHubConfig loaded into memory.'
+
+            Write-Debug "Checking if new default properties are available in the stored context."
+            $needsUpdate = $false
+            $defaultProperties = $script:GitHub.DefaultConfig.PSObject.Properties.Name
+            foreach ($propName in $defaultProperties) {
+                if (-not $context.PSObject.Properties.Name.Contains($propName)) {
+                    Write-Debug "Adding missing property [$propName] from DefaultConfig"
+                    $context | Add-Member -MemberType NoteProperty -Name $propName -Value $script:GitHub.DefaultConfig.$propName
+                    $needsUpdate = $true
+                }
+            }
+            if ($needsUpdate) {
+                Write-Debug 'Updating stored context with new default properties'
+                $context = Set-Context -ID $script:GitHub.DefaultConfig.ID -Context $context -PassThru
+            }
+
             $script:GitHub.Config = [GitHubConfig]$context
             return
         }

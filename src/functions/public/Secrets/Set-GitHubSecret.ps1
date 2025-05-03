@@ -1,4 +1,6 @@
-﻿function Set-GitHubSecret {
+﻿#Requires -Modules @{ ModuleName = 'Sodium'; RequiredVersion = '2.1.2'}
+
+function Set-GitHubSecret {
     <#
         .SYNOPSIS
         Updates a GitHub secret for an organization, repository, or user.
