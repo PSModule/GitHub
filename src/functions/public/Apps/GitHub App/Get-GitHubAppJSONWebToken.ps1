@@ -86,8 +86,8 @@
             )
         ).TrimEnd('=').Replace('+', '-').Replace('/', '_')
 
-        $iat = [System.DateTimeOffset]::UtcNow.AddSeconds(-10).ToUnixTimeSeconds()
-        $exp = [System.DateTimeOffset]::UtcNow.AddMinutes(10).ToUnixTimeSeconds()
+        $iat = [System.DateTimeOffset]::UtcNow.AddSeconds(-$script:GitHub.Config.JwtTimeTolerance).ToUnixTimeSeconds()
+        $exp = [System.DateTimeOffset]::UtcNow.AddSeconds($script:GitHub.Config.JwtTimeTolerance).ToUnixTimeSeconds()
         $payload = [Convert]::ToBase64String(
             [System.Text.Encoding]::UTF8.GetBytes(
                 (
