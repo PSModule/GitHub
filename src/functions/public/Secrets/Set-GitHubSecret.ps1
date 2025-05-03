@@ -1,4 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Sodium'; RequiredVersion = '2.2.0'}
+﻿#Requires -Modules @{ ModuleName = 'Sodium'; RequiredVersion = '2.1.2'}
 
 function Set-GitHubSecret {
     <#
