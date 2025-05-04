@@ -152,7 +152,7 @@ query(
         }
 
         Invoke-GitHubGraphQLQuery @inputObject | ForEach-Object {
-            $_
+            $_.repositoryOwner.repository
         }
     }
 
