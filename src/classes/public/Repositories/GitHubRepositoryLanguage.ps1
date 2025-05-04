@@ -3,14 +3,24 @@
     [string] $Name
 
     # The Node ID of the Language object.
-    [int] $ID
+    [string] $ID
 
     # The color defined for the current language.
     [string] $Color
 
-    GitHubRepositoryLanguage([pscustomobject] $language) {
-        $this.Name = $language.name
-        $this.ID = $language.id
-        $this.Color = $language.color
+    GitHubRepositoryLanguage() {}
+
+    GitHubRepositoryLanguage([pscustomobject] $Object) {
+        $this.Name = $Object.name
+        $this.ID = $Object.id
+        $this.Color = $Object.color
+    }
+
+    GitHubRepositoryLanguage([string] $Name) {
+        $this.Name = $Name
+    }
+
+    [string] ToString() {
+        return $this.Name
     }
 }

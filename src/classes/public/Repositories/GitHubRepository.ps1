@@ -85,7 +85,7 @@
 
     # License information for the repository.
     # Example: 'MIT License', 'Mozilla Public License 2.0'
-    [string] $License
+    [GitHubLicense] $License
 
     # Whether to allow forking this repository.
     # Example: true
@@ -213,18 +213,18 @@
             $this.Homepage = $Object.homepage
             $this.Url = $Object.html_url
             $this.Size = $Object.size
-            $this.Language = $Object.language
-            $this.License = [GitHubLicense]::New($Object.license)
+            $this.Language = [GitHubRepositoryLanguage]::new($Object.language)
             $this.IsFork = $Object.fork
             $this.IsArchived = $Object.archived
             $this.IsDisabled = $Object.disabled
             $this.IsTemplate = $Object.is_template
-            $this.AllowForking = $Object.allow_forking
             $this.HasIssues = $Object.has_issues
             $this.HasProjects = $Object.has_projects
             $this.HasWiki = $Object.has_wiki
             $this.HasDiscussions = $Object.has_discussions
             $this.HasPages = $Object.has_pages
+            $this.AllowForking = $Object.allow_forking
+            $this.License = [GitHubLicense]::New($Object.license)
             $this.RequireWebCommitSignoff = $Object.web_commit_signoff_required
             $this.CreatedAt = $Object.created_at
             $this.UpdatedAt = $Object.created_at
