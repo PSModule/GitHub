@@ -263,10 +263,6 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-
-        if (-not $PSBoundParameters.ContainsKey('Owner')) {
-            $Owner = $Context.UserName
-        }
     }
 
     process {
@@ -356,7 +352,7 @@
                         Context            = $Context
                         ForkOwner          = $ForkOwner
                         Repository         = $ForkRepository
-                        Organization       = $Owner
+                        Owner              = $Owner
                         Name               = $Name
                         IncludeAllBranches = $IncludeAllBranches
                     }
