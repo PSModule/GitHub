@@ -44,8 +44,7 @@
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [Alias('Organization')]
-        [Alias('User')]
+        [Alias('Organization', 'User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
@@ -54,13 +53,11 @@
 
         # A custom webhook event name. Must be 100 characters or fewer.
         [Parameter(Mandatory)]
-        [Alias('event_type')]
         [string] $EventType,
 
         # JSON payload with extra information about the webhook event that your action or workflow may use.
         # The maximum number of top-level properties is 10.
         [Parameter()]
-        [Alias('client_payload')]
         [object] $ClientPayload,
 
         # The context to run the command in. Used to get the details for the API call.

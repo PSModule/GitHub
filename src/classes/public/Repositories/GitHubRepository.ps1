@@ -279,7 +279,7 @@
             $this.License = [GitHubLicense]::new($Object.licenseInfo)
             $this.AllowForking = $Object.forkingAllowed
             $this.RequireWebCommitSignoff = $Object.webCommitSignoffRequired
-            $this.Topics = $Object.repositoryTopics.nodes.topic
+            $this.Topics = $Object.repositoryTopics.nodes.topic.name
             $this.Visibility = $Object.visibility
             $this.OpenIssues = $Object.issues.totalCount
             $this.OpenPullRequests = $Object.pullRequests.totalCount
@@ -301,9 +301,9 @@
             $this.TemplateRepository = [GitHubRepository]::New($Object.templateRepository)
             $this.ForkParent = [GitHubRepository]::New($Object.parent)
             $this.ForkSource = [GitHubRepository]::New($Object.source)
-            $this.CloneUrl = $Object.CloneUrl
-            $this.SshUrl = $Object.SshUrl
-            $this.GitUrl = $Object.GitUrl
+            $this.CloneUrl = -not [string]::IsNullOrEmpty($Object.url) ? $Object.url + '.git' : $null
+            $this.SshUrl = $Object.sshUrl
+            $this.GitUrl = -not [string]::IsNullOrEmpty($Object.url) ? ($Object.Url + '.git').Replace('https://', 'git://') : $null
         }
     }
 
