@@ -45,7 +45,7 @@
 
     # The primary language of the repository.
     # Example: null
-    [string] $Language
+    [GitHubRepositoryLanguage] $Language
 
     # Whether issues are enabled.
     # Example: true
