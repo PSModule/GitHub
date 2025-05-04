@@ -14,4 +14,5 @@ Test:
     Skip: true
     PercentTarget: 50
 Build:
-  Skip: true
+  Docs:
+    Skip: true

@@ -100,7 +100,7 @@
         [Parameter(ParameterSetName = 'fork')]
         [Parameter(ParameterSetName = 'template')]
         [Alias('Organization')]
-        [string] $Owner = $Context.UserName,
+        [string] $Owner,
 
         # The name of the repository.
         [Parameter(ParameterSetName = 'fork')]
@@ -263,6 +263,10 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
+
+        if (-not $PSBoundParameters.ContainsKey('Owner')) {
+            $Owner = $Context.UserName
+        }
     }
 
     process {
