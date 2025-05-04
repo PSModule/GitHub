@@ -17,9 +17,6 @@
 
         .OUTPUTS
         GitHubRepository
-
-        .LINK
-        [Get a repository](https://docs.github.com/rest/repos/repos#get-a-repository)
     #>
     [OutputType([GitHubRepository])]
     [CmdletBinding()]
@@ -47,13 +44,115 @@
 
     process {
         $inputObject = @{
-            Method      = 'GET'
-            APIEndpoint = "/repos/$Owner/$Name"
-            Context     = $Context
+            Query     = @"
+query(
+    `$Owner: String!,
+    `$Name: String!
+) {
+  repositoryOwner(
+    login: `$Owner
+  ) {
+    repository(
+        name: `$Name
+    ) {
+      id
+      databaseId
+      name
+      owner {
+        login
+      }
+      nameWithOwner
+      url
+      description
+      createdAt
+      updatedAt
+      pushedAt
+      archivedAt
+      homepageUrl
+      diskUsage
+      primaryLanguage {
+        name
+        id
+        color
+      }
+      hasIssuesEnabled
+      hasProjectsEnabled
+      hasWikiEnabled
+      hasDiscussionsEnabled
+      isArchived
+      isDisabled
+      isTemplate
+      isFork
+      licenseInfo {
+        name
+      }
+      forkingAllowed
+      webCommitSignoffRequired
+      repositoryTopics(first: 100) {
+        nodes {
+          topic {
+            name
+          }
+        }
+      }
+      visibility
+      issues {
+        totalCount
+      }
+      pullRequests {
+        totalCount
+      }
+      stargazers {
+        totalCount
+      }
+      watchers {
+        totalCount
+      }
+      forks {
+        totalCount
+      }
+      defaultBranchRef {
+        name
+      }
+      viewerPermission
+      squashMergeAllowed
+      mergeCommitAllowed
+      rebaseMergeAllowed
+      autoMergeAllowed
+      deleteBranchOnMerge
+      allowUpdateBranch
+      squashMergeCommitTitle
+      squashMergeCommitMessage
+      mergeCommitTitle
+      mergeCommitMessage
+      templateRepository {
+        id
+        databaseId
+        name
+        owner {
+          login
+        }
+      }
+      parent {
+        name
+        owner {
+          login
+        }
+      }
+      sshUrl
+    }
+  }
+}
+"@
+            Variables = @{
+                Owner = $Owner
+                Name  = $Name
+            }
+            Context   = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
-            [GitHubRepository]::New($_.Response)
+        Invoke-GitHubGraphQLQuery @inputObject | ForEach-Object {
+            [GitHubRepository]::new($_.repositoryOwner.repository)
         }
     }
 
