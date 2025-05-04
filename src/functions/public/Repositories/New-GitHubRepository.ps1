@@ -59,7 +59,7 @@
         $params = @{
             TemplateOwner      = 'GitHub'
             TemplateRepository = 'octocat'
-            Organization       = 'PSModule'
+            Owner              = 'PSModule'
             Name               = 'MyNewRepo'
             IncludeAllBranches = $true
             Description        = 'My new repo'
@@ -85,14 +85,12 @@
         .OUTPUTS
         GitHubRepository
 
+        .NOTES
+        [Create a repository for the authenticated user](https://docs.github.com/rest/repos/repos#create-a-repository-for-the-authenticated-user)
+        [Create an organization repository](https://docs.github.com/rest/repos/repos#create-an-organization-repository)
+
         .LINK
         https://psmodule.io/GitHub/Functions/Repositories/New-GitHubRepository/
-
-        .LINK
-        [Create a repository for the authenticated user](https://docs.github.com/rest/repos/repos#create-a-repository-for-the-authenticated-user)
-
-        .LINK
-        [Create an organization repository](https://docs.github.com/rest/repos/repos#create-an-organization-repository)
     #>
     [OutputType([GitHubRepository])]
     [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName = 'user')]
@@ -101,7 +99,8 @@
         [Parameter(ParameterSetName = 'org')]
         [Parameter(ParameterSetName = 'fork')]
         [Parameter(ParameterSetName = 'template')]
-        [string] $Organization,
+        [Alias('Organization')]
+        [string] $Owner = $Context.UserName,
 
         # The name of the repository.
         [Parameter(ParameterSetName = 'fork')]
@@ -267,9 +266,6 @@
     }
 
     process {
-        if (-not $PSBoundParameters.ContainsKey('Owner')) {
-            $Owner = $Context.UserName
-        }
         Write-Verbose "ParameterSetName: $($PSCmdlet.ParameterSetName)"
         switch ($PSCmdlet.ParameterSetName) {
             'user' {
@@ -306,7 +302,7 @@
             'org' {
                 $params = @{
                     Context                  = $Context
-                    Organization             = $Organization
+                    Organization             = $Owner
                     Name                     = $Name
                     Description              = $Description
                     Homepage                 = $Homepage

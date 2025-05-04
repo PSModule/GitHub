@@ -53,7 +53,6 @@ Describe 'Repositories' {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
         }
 
-        # Tests for IAT UAT and PAT goes here
         It 'New-GitHubRepository - Creates a new repository' -Skip:($OwnerType -eq 'repository') {
             switch ($OwnerType) {
                 'user' {
@@ -64,6 +63,45 @@ Describe 'Repositories' {
                 }
             }
         }
+        It 'New-GitHubRepository - Creates a new repository from a template' -Skip:($OwnerType -eq 'repository') {
+            $params = @{
+                Name               = "$repoName-tmp"
+                TemplateOwner      = 'PSModule'
+                TemplateRepository = 'Template-Action'
+            }
+            switch ($OwnerType) {
+                'user' {
+                    $repo = New-GitHubRepository @params
+                }
+                'organization' {
+                    $repo = New-GitHubRepository @params -Organization $owner
+                }
+            }
+            LogGroup 'Repository - Template' {
+                Write-Host ($repo | Format-List | Out-String)
+            }
+            $repo | Should -Not -BeNullOrEmpty
+        }
+        It 'New-GitHubRepository - Creates a new repository as a fork' -Skip:($OwnerType -eq 'repository') {
+            $params = @{
+                Name           = "$repoName-fork"
+                ForkOwner      = 'PSModule'
+                ForkRepository = 'Template-Action'
+            }
+            switch ($OwnerType) {
+                'user' {
+                    $repo = New-GitHubRepository @params
+                }
+                'organization' {
+                    $repo = New-GitHubRepository @params -Organization $owner
+                }
+            }
+            LogGroup 'Repository - Fork' {
+                Write-Host ($repo | Format-List | Out-String)
+            }
+            $repo | Should -Not -BeNullOrEmpty
+        }
+
         It "Get-GitHubRepository - Gets the authenticated user's repositories" -Skip:($OwnerType -ne 'user') {
             $repos = Get-GitHubRepository
             LogGroup 'Repositories' {
