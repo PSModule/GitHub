@@ -208,7 +208,7 @@
             $this.Name = $Object.name
             $this.Owner = [GitHubOwner]::New($Object.owner)
             $this.FullName = $Object.full_name
-            $this.Visibility = $Object.visibility
+            $this.Visibility = $Object.visibility ? (Get-Culture).TextInfo.ToTitleCase($Object.visibility.ToLower()) : $null
             $this.Description = $Object.description
             $this.Homepage = $Object.homepage
             $this.Url = $Object.html_url
@@ -280,7 +280,7 @@
             $this.AllowForking = $Object.forkingAllowed
             $this.RequireWebCommitSignoff = $Object.webCommitSignoffRequired
             $this.Topics = $Object.repositoryTopics.nodes.topic.name
-            $this.Visibility = $Object.visibility
+            $this.Visibility = $Object.visibility ? (Get-Culture).TextInfo.ToTitleCase($Object.visibility.ToLower()) : $null
             $this.OpenIssues = $Object.issues.totalCount
             $this.OpenPullRequests = $Object.pullRequests.totalCount
             $this.Stargazers = $Object.stargazers.totalCount
