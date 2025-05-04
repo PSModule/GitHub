@@ -145,11 +145,15 @@ Describe 'Repositories' {
             $repos | Should -Not -BeNullOrEmpty
         }
         It 'Remove-GitHubRepository - Removes all repositories' -Skip:($OwnerType -eq 'repository') {
-            LogGroup 'Repositories' {
-                $repos = Get-GitHubRepository -Organization $Owner -Name $repoName
-                Write-Host ($repos | Format-List | Out-String)
+            switch ($OwnerType) {
+                'user' {
+                    Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                }
+                'organization' {
+                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } |
+                        Remove-GitHubRepository -Confirm:$false
+                }
             }
-            Remove-GitHubRepository -Owner $Owner -Name $repoName -Confirm:$false
         }
         It 'Get-GitHubRepository - Gets none repositories after removal' -Skip:($OwnerType -eq 'repository') {
             if ($OwnerType -eq 'user') {

@@ -351,7 +351,7 @@
                     $params = @{
                         Context            = $Context
                         ForkOwner          = $ForkOwner
-                        Repository         = $ForkRepository
+                        ForkRepository     = $ForkRepository
                         Owner              = $Owner
                         Name               = $Name
                         IncludeAllBranches = $IncludeAllBranches
