@@ -36,7 +36,7 @@
 
         .EXAMPLE
         $params = @{
-            Organization                    = 'PSModule'
+            Organization             = 'PSModule'
             Name                     = 'Hello-World'
             Description              = 'This is your first repository'
             Homepage                 = 'https://github.com'
@@ -59,7 +59,7 @@
         $params = @{
             TemplateOwner      = 'GitHub'
             TemplateRepository = 'octocat'
-            Organization              = 'PSModule'
+            Organization       = 'PSModule'
             Name               = 'MyNewRepo'
             IncludeAllBranches = $true
             Description        = 'My new repo'
@@ -73,7 +73,7 @@
         $params = @{
             ForkOwner         = 'octocat'
             ForkRepo          = 'Hello-World'
-            Organization             = 'PSModule'
+            Organization      = 'PSModule'
             Name              = 'MyNewRepo'
             DefaultBranchOnly = $true
         }
@@ -354,7 +354,7 @@
                 if ($PSCmdlet.ShouldProcess("repository [$Owner/$Name] as fork from [$ForkOwner/$ForkRepository]", 'Create')) {
                     $params = @{
                         Context            = $Context
-                        Owner              = $ForkOwner
+                        ForkOwner          = $ForkOwner
                         Repository         = $ForkRepository
                         Organization       = $Owner
                         Name               = $Name

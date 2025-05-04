@@ -26,6 +26,18 @@
         $this.Pull = $Object.pull
     }
 
+    GitHubRepositoryPermissions([string]$Permission) {
+        # Convert the string to a boolean value based on the permission level.
+        switch ($Permission.ToLower()) {
+            'admin' { $this.Admin = $true }
+            'maintain' { $this.Maintain = $true }
+            'push' { $this.Push = $true }
+            'triage' { $this.Triage = $true }
+            'pull' { $this.Pull = $true }
+            default { throw "Invalid permission level: $Permission" }
+        }
+    }
+
     # Output the highest permission level as a string.
     # The order of permissions is: Admin > Maintain > Push > Triage > Pull
     [string] ToString() {

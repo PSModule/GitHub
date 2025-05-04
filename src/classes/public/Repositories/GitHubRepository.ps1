@@ -31,6 +31,10 @@
     # Example: 2011-01-26T19:06:43Z
     [System.Nullable[datetime]] $PushedAt
 
+    # The date and time when the repository was archived.
+    # Example: 2011-01-26T19:01:12Z
+    [System.Nullable[datetime]] $ArchivedAt
+
     # The homepage URL.
     # Example: https://github.com
     [string] $Homepage
@@ -103,6 +107,10 @@
     # Example: 15
     [System.Nullable[uint]] $OpenIssues
 
+    # The number of open pull requests.
+    # Example: 15
+    [System.Nullable[uint]] $OpenPullRequests
+
     # The number of stargazers.
     # Example: 80
     [System.Nullable[uint]] $Stargazers
@@ -147,25 +155,25 @@
     # Example: false
     [System.Nullable[bool]] $AllowUpdateBranch
 
-    # The default value for a squash merge commit message.
-    # Enum: PR_BODY, COMMIT_MESSAGES, BLANK
-    # Example: PR_BODY
-    [string] $SquashMergeCommitMessage
-
     # The default value for a squash merge commit title.
     # Enum: PR_TITLE, COMMIT_OR_PR_TITLE
     # Example: PR_TITLE
     [string] $SquashMergeCommitTitle
 
-    # The default value for a merge commit message.
-    # Enum: PR_BODY, PR_TITLE, BLANK
-    # Example: PR_TITLE
-    [string] $MergeCommitMessage
+    # The default value for a squash merge commit message.
+    # Enum: PR_BODY, COMMIT_MESSAGES, BLANK
+    # Example: PR_BODY
+    [string] $SquashMergeCommitMessage
 
     # The default value for a merge commit title.
     # Enum: PR_TITLE, MERGE_MESSAGE
     # Example: PR_TITLE
     [string] $MergeCommitTitle
+
+    # The default value for a merge commit message.
+    # Enum: PR_BODY, PR_TITLE, BLANK
+    # Example: PR_TITLE
+    [string] $MergeCommitMessage
 
     # The template repository that this repository was created from
     [GithubRepository] $TemplateRepository
@@ -194,56 +202,109 @@
     GitHubRepository() {}
 
     GitHubRepository([PSCustomObject]$Object) {
-        $this.ID = $Object.id
-        $this.NodeID = $Object.node_id
-        $this.Name = $Object.name
-        $this.Owner = [GitHubOwner]::New($Object.owner)
-        $this.FullName = $Object.full_name
-        $this.Visibility = $Object.visibility
-        $this.Description = $Object.description
-        $this.Homepage = $Object.homepage
-        $this.Url = $Object.html_url
-        $this.Size = $Object.size
-        $this.Language = $Object.language
-        $this.License = [GitHubLicense]::New($Object.license)
-        $this.IsFork = $Object.fork
-        $this.IsArchived = $Object.archived
-        $this.IsDisabled = $Object.disabled
-        $this.IsTemplate = $Object.is_template
-        $this.AllowForking = $Object.allow_forking
-        $this.HasIssues = $Object.has_issues
-        $this.HasProjects = $Object.has_projects
-        $this.HasWiki = $Object.has_wiki
-        $this.HasDiscussions = $Object.has_discussions
-        $this.HasPages = $Object.has_pages
-        $this.RequireWebCommitSignoff = $Object.web_commit_signoff_required
-        $this.CreatedAt = $Object.created_at
-        $this.UpdatedAt = $Object.created_at
-        $this.PushedAt = $Object.pushed_at
-        $this.Topics = $Object.topics
-        $this.Forks = $Object.forks_count
-        $this.OpenIssues = $Object.open_issues_count
-        $this.Watchers = $Object.watchers_count
-        $this.Stargazers = $Object.stargazers_count
-        $this.DefaultBranch = $Object.default_branch
-        $this.Permissions = [GitHubRepositoryPermissions]::New($Object.permissions)
-        $this.AllowSquashMerge = $Object.allow_squash_merge
-        $this.AllowMergeCommit = $Object.allow_merge_commit
-        $this.AllowRebaseMerge = $Object.allow_rebase_merge
-        $this.AllowAutoMerge = $Object.allow_auto_merge
-        $this.DeleteBranchOnMerge = $Object.delete_branch_on_merge
-        $this.AllowUpdateBranch = $Object.allow_update_branch
-        $this.SquashMergeCommitMessage = $Object.squash_merge_commit_message
-        $this.SquashMergeCommitTitle = $Object.squash_merge_commit_title
-        $this.MergeCommitMessage = $Object.merge_commit_message
-        $this.MergeCommitTitle = $Object.merge_commit_title
-        $this.CustomProperties = $Object.custom_properties
-        $this.TemplateRepository = $null -ne $Object.template_repository ? [GitHubRepository]::New($Object.template_repository) : $null
-        $this.ForkParent = $null -ne $Object.parent ? [GitHubRepository]::New($Object.parent) : $null
-        $this.ForkSource = $null -ne $Object.source ? [GitHubRepository]::New($Object.source) : $null
-        $this.CloneUrl = $Object.clone_url
-        $this.SshUrl = $Object.ssh_url
-        $this.GitUrl = $Object.git_url
+        if ($null -ne $Object.node_id) {
+            $this.ID = $Object.id
+            $this.NodeID = $Object.node_id
+            $this.Name = $Object.name
+            $this.Owner = [GitHubOwner]::New($Object.owner)
+            $this.FullName = $Object.full_name
+            $this.Visibility = $Object.visibility
+            $this.Description = $Object.description
+            $this.Homepage = $Object.homepage
+            $this.Url = $Object.html_url
+            $this.Size = $Object.size
+            $this.Language = $Object.language
+            $this.License = [GitHubLicense]::New($Object.license)
+            $this.IsFork = $Object.fork
+            $this.IsArchived = $Object.archived
+            $this.IsDisabled = $Object.disabled
+            $this.IsTemplate = $Object.is_template
+            $this.AllowForking = $Object.allow_forking
+            $this.HasIssues = $Object.has_issues
+            $this.HasProjects = $Object.has_projects
+            $this.HasWiki = $Object.has_wiki
+            $this.HasDiscussions = $Object.has_discussions
+            $this.HasPages = $Object.has_pages
+            $this.RequireWebCommitSignoff = $Object.web_commit_signoff_required
+            $this.CreatedAt = $Object.created_at
+            $this.UpdatedAt = $Object.created_at
+            $this.PushedAt = $Object.pushed_at
+            $this.Topics = $Object.topics
+            $this.Forks = $Object.forks_count
+            $this.OpenIssues = $Object.open_issues_count
+            $this.Watchers = $Object.watchers_count
+            $this.Stargazers = $Object.stargazers_count
+            $this.DefaultBranch = $Object.default_branch
+            $this.Permissions = [GitHubRepositoryPermissions]::New($Object.permissions)
+            $this.AllowSquashMerge = $Object.allow_squash_merge
+            $this.AllowMergeCommit = $Object.allow_merge_commit
+            $this.AllowRebaseMerge = $Object.allow_rebase_merge
+            $this.AllowAutoMerge = $Object.allow_auto_merge
+            $this.DeleteBranchOnMerge = $Object.delete_branch_on_merge
+            $this.AllowUpdateBranch = $Object.allow_update_branch
+            $this.SquashMergeCommitMessage = $Object.squash_merge_commit_message
+            $this.SquashMergeCommitTitle = $Object.squash_merge_commit_title
+            $this.MergeCommitMessage = $Object.merge_commit_message
+            $this.MergeCommitTitle = $Object.merge_commit_title
+            $this.CustomProperties = $Object.custom_properties
+            $this.TemplateRepository = $null -ne $Object.template_repository ? [GitHubRepository]::New($Object.template_repository) : $null
+            $this.ForkParent = $null -ne $Object.parent ? [GitHubRepository]::New($Object.parent) : $null
+            $this.ForkSource = $null -ne $Object.source ? [GitHubRepository]::New($Object.source) : $null
+            $this.CloneUrl = $Object.clone_url
+            $this.SshUrl = $Object.ssh_url
+            $this.GitUrl = $Object.git_url
+        } else {
+            $this.ID = $Object.databaseId
+            $this.NodeID = $Object.id
+            $this.Name = $Object.name
+            $this.Owner = [GitHubOwner]::New($Object.owner)
+            $this.FullName = $Object.nameWithOwner
+            $this.Url = $Object.url
+            $this.Description = $Object.description
+            $this.CreatedAt = $Object.createdAt
+            $this.UpdatedAt = $Object.updatedAt
+            $this.PushedAt = $Object.pushedAt
+            $this.ArchivedAt = $Object.archivedAt
+            $this.Homepage = $Object.homepageUrl
+            $this.Size = $Object.diskUsage
+            $this.Language = [GitHubRepositoryLanguage]::new($Object.primaryLanguage)
+            $this.HasIssues = $Object.hasIssuesEnabled
+            $this.HasProjects = $Object.hasProjectsEnabled
+            $this.HasWiki = $Object.hasWikiEnabled
+            $this.HasDiscussions = $Object.hasDiscussionsEnabled
+            $this.IsArchived = $Object.isArchived
+            $this.IsDisabled = $Object.isDisabled
+            $this.IsTemplate = $Object.isTemplate
+            $this.IsFork = $Object.isFork
+            $this.License = [GitHubLicense]::new($Object.licenseInfo)
+            $this.AllowForking = $Object.forkingAllowed
+            $this.RequireWebCommitSignoff = $Object.webCommitSignoffRequired
+            $this.Topics = $Object.repositoryTopics.nodes.topic
+            $this.Visibility = $Object.visibility
+            $this.OpenIssues = $Object.issues.totalCount
+            $this.OpenPullRequests = $Object.pullRequests.totalCount
+            $this.Stargazers = $Object.stargazers.totalCount
+            $this.Watchers = $Object.watchers.totalCount
+            $this.Forks = $Object.forks.totalCount
+            $this.DefaultBranch = $Object.defaultBranchRef.name
+            $this.Permissions = [GitHubRepositoryPermissions]::New($Object.viewerPermission)
+            $this.AllowSquashMerge = $Object.squashMergeAllowed
+            $this.AllowMergeCommit = $Object.mergeCommitAllowed
+            $this.AllowRebaseMerge = $Object.rebaseMergeAllowed
+            $this.AllowAutoMerge = $Object.autoMergeAllowed
+            $this.DeleteBranchOnMerge = $Object.deleteBranchOnMerge
+            $this.AllowUpdateBranch = $Object.allowUpdateBranch
+            $this.SquashMergeCommitTitle = $Object.squashMergeCommitTitle
+            $this.SquashMergeCommitMessage = $Object.squashMergeCommitMessage
+            $this.MergeCommitTitle = $Object.mergeCommitTitle
+            $this.MergeCommitMessage = $Object.mergeCommitMessage
+            $this.TemplateRepository = [GitHubRepository]::New($Object.templateRepository)
+            $this.ForkParent = [GitHubRepository]::New($Object.parent)
+            $this.ForkSource = [GitHubRepository]::New($Object.source)
+            $this.CloneUrl = $Object.CloneUrl
+            $this.SshUrl = $Object.SshUrl
+            $this.GitUrl = $Object.GitUrl
+        }
     }
 
     [string] ToString() {
