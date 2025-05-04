@@ -37,7 +37,7 @@
                                 <PropertyName>Name</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <ScriptBlock>'{0:F2}' -f ($_.Size / 1KB)</ScriptBlock>
+                                <ScriptBlock>'{0:F2}' -f ([math]::Round($_.Size / 1KB, 2))</ScriptBlock>
                                 <Alignment>Right</Alignment>
                             </TableColumnItem>
                             <TableColumnItem>
