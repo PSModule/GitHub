@@ -132,7 +132,7 @@ Describe 'Repositories' {
         }
         It 'Get-GitHubRepository - Gets all repositories from a organization' -Skip:($OwnerType -eq 'repository') {
             LogGroup 'Repositories' {
-                $repos = Get-GitHubRepository -Organization 'PSModule'
+                $repos = Get-GitHubRepository -Organization 'PSModule' -Verbose -Debug
                 Write-Host ($repos | Format-Table | Out-String)
             }
             $repos | Should -Not -BeNullOrEmpty
