@@ -44,14 +44,8 @@
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(ParameterSetName = 'Get a repository by name', ValueFromPipelineByPropertyName)]
-        [Parameter(ParameterSetName = 'List organization repositories', ValueFromPipelineByPropertyName)]
-        [string] $Organization,
-
-        # The handle for the GitHub user account.
-        [Parameter(ParameterSetName = 'Get a repository by name', ValueFromPipelineByPropertyName)]
-        [Parameter(Mandatory, ParameterSetName = 'List user repositories', ValueFromPipelineByPropertyName)]
-        [Alias('User')]
-        [string] $Username,
+        [Parameter(ParameterSetName = 'List repositories from an account', ValueFromPipelineByPropertyName)]
+        [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory, ParameterSetName = 'Get a repository by name')]
@@ -120,16 +114,10 @@
                 Get-GitHubMyRepositories @params
             }
             'Get a repository by name' {
-                $owner = if ($PSBoundParameters.ContainsKey('Username')) {
-                    $Username
-                } elseif ($PSBoundParameters.ContainsKey('Organization')) {
-                    $Organization
-                } else {
-                    $Context.UserName
-                }
+                $owner = $Context.UserName
                 $params = @{
                     Context = $Context
-                    Owner   = $owner
+                    Owner   = $Owner
                     Name    = $Name
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues
@@ -138,25 +126,15 @@
                     Get-GitHubRepositoryByName @params
                 } catch { return }
             }
-            'List organization repositories' {
+            'List repositories from an account' {
                 $params = @{
-                    Context      = $Context
-                    Organization = $Organization
-                    PerPage      = $PerPage
+                    Context = $Context
+                    Owner   = $Owner
+                    PerPage = $PerPage
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues
                 Write-Verbose ($params | Format-List | Out-String)
-                Get-GitHubRepositoryListByOrg @params
-            }
-            'List user repositories' {
-                $params = @{
-                    Context  = $Context
-                    Username = $Username
-                    PerPage  = $PerPage
-                }
-                $params | Remove-HashtableEntry -NullOrEmptyValues
-                Write-Verbose ($params | Format-List | Out-String)
-                Get-GitHubRepositoryListByUser @params
+                Get-GitHubRepositoryListByOwner @params
             }
         }
     }
