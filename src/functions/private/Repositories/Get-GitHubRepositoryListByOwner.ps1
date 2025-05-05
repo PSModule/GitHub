@@ -105,6 +105,7 @@ query(
         createdAt
         updatedAt
         pushedAt
+        diskUsage
         primaryLanguage {
           name
         }
