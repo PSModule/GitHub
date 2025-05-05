@@ -27,6 +27,7 @@
     }
 
     GitHubRepositoryPermissions([string]$Permission) {
+        $Permission = $Permission.ToLower()
         if ($Permission -eq 'admin') {
             $this.Admin = $true
         } elseif ($Permission -eq 'maintain') {
