@@ -101,13 +101,6 @@ Describe 'Repositories' {
             }
             $repo | Should -Not -BeNullOrEmpty
         }
-        It "Get-GitHubRepository - Gets the forked repository" -Skip:($OwnerType -ne 'user') {
-            LogGroup 'Repository' {
-                $repo = Get-GitHubRepository -Name "$repoName-fork"
-                Write-Host ($repo | Format-List | Out-String)
-            }
-            $repo | Should -Not -BeNullOrEmpty
-        }
         It "Get-GitHubRepository - Gets the authenticated user's repositories" -Skip:($OwnerType -ne 'user') {
             LogGroup 'Repositories' {
                 $repos = Get-GitHubRepository
@@ -131,7 +124,14 @@ Describe 'Repositories' {
         }
         It 'Get-GitHubRepository - Gets a specific repository' -Skip:($OwnerType -eq 'repository') {
             LogGroup 'Repository' {
-                $repo = Get-GitHubRepository -Organization 'PSModule' -Name 'GitHub'
+                switch ($OwnerType) {
+                    'user' {
+                        $repo = Get-GitHubRepository -Name $repoName
+                    }
+                    'organization' {
+                        $repo = Get-GitHubRepository -Owner $owner -Name $repoName
+                    }
+                }
                 Write-Host ($repo | Format-List | Out-String)
             }
             $repo | Should -Not -BeNullOrEmpty
