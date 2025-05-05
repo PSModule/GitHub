@@ -18,38 +18,6 @@
 
         Gets the private repositories for the authenticated user.
 
-        .EXAMPLE
-        $param = @{
-            Visibility = 'public'
-            Affiliation = 'owner','collaborator'
-            Sort = 'created'
-            Direction = 'asc'
-            PerPage = 100
-            Since = (Get-Date).AddYears(-5)
-            Before = (Get-Date).AddDays(-1)
-        }
-        Get-GitHubMyRepositories @param
-
-        Gets the public repositories for the authenticated user that are owned by the authenticated user
-        or that the authenticated user has been added to as a collaborator. The results are sorted by
-        creation date in ascending order and the results are limited to 100 repositories. The results
-        are limited to repositories created between 5 years ago and 1 day ago.
-
-        .EXAMPLE
-        Get-GitHubMyRepositories -Type 'forks'
-
-        Gets the forked repositories for the authenticated user.
-
-        .EXAMPLE
-        Get-GitHubMyRepositories -Type 'sources'
-
-        Gets the non-forked repositories for the authenticated user.
-
-        .EXAMPLE
-        Get-GitHubMyRepositories -Type 'member'
-
-        Gets the repositories for the authenticated user that are owned by an organization.
-
         .OUTPUTS
         GitHubRepository
 
@@ -57,55 +25,26 @@
         [List repositories for the authenticated user](https://docs.github.com/rest/repos/repos#list-repositories-for-the-authenticated-user)
     #>
     [OutputType([GitHubRepository])]
-    [CmdletBinding(DefaultParameterSetName = 'Aff-Vis')]
+    [CmdletBinding()]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSUseSingularNouns', '',
         Justification = 'Private function, not exposed to user.'
     )]
     param(
-        # Limit results to repositories with the specified visibility.
-        [Parameter(ParameterSetName = 'Aff-Vis')]
-        [ValidateSet('all', 'public', 'private')]
-        [string] $Visibility = 'all',
-
-        # Comma-separated list of values. Can include:
-        # - owner: Repositories that are owned by the authenticated user.
-        # - collaborator: Repositories that the user has been added to as a collaborator.
-        # - organization_member: Repositories that the user has access to through being a member of an organization.
-        #   This includes every repository on every team that the user is on.
-        # Default: owner, collaborator, organization_member
-        [Parameter(ParameterSetName = 'Aff-Vis')]
-        [ValidateSet('owner', 'collaborator', 'organization_member')]
-        [string[]] $Affiliation = 'owner',
-
-        # Specifies the types of repositories you want returned.
-        [Parameter(ParameterSetName = 'Type')]
-        [ValidateSet('all', 'owner', 'public', 'private', 'member')]
-        [string] $Type = 'owner',
-
-        # The property to sort the results by.
+        # Limit the results to repositories with a visibility level.
+        [ValidateSet('Internal', 'Private', 'Public')]
         [Parameter()]
-        [ValidateSet('created', 'updated', 'pushed', 'full_name')]
-        [string] $Sort = 'pushed',
+        [string] $Visibility,
 
-        # The order to sort by.
-        # Default: asc when using full_name, otherwise desc.
+        # Limit the results to repositories where the user has this role.
+        [ValidateSet('Owner', 'Collaborator', 'Organization_member')]
         [Parameter()]
-        [ValidateSet('asc', 'desc')]
-        [string] $Direction,
+        [string] $Affiliation = 'Owner',
 
         # The number of results per page (max 100).
         [Parameter()]
         [ValidateRange(0, 100)]
         [int] $PerPage,
-
-        # Only show repositories updated after the given time.
-        [Parameter()]
-        [datetime] $Since,
-
-        # Only show repositories updated before the given time.
-        [Parameter()]
-        [datetime] $Before,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -120,40 +59,66 @@
     }
 
     process {
-        $body = @{
-            sort      = $Sort
-            direction = $Direction
-            per_page  = $PerPage
-        }
-        if ($PSBoundParameters.ContainsKey('Since')) {
-            $body['since'] = $Since.ToString('yyyy-MM-ddTHH:mm:ssZ')
-        }
-        if ($PSBoundParameters.ContainsKey('Before')) {
-            $body['before'] = $Before.ToString('yyyy-MM-ddTHH:mm:ssZ')
-        }
-        Write-Debug "ParamSet: [$($PSCmdlet.ParameterSetName)]"
-        switch ($PSCmdlet.ParameterSetName) {
-            'Aff-Vis' {
-                $body['affiliation'] = $Affiliation -join ','
-                $body['visibility'] = $Visibility
-            }
-            'Type' {
-                $body['type'] = $Type
-            }
-        }
+        $hasNextPage = $true
+        $after = $null
+        $perPageSetting = Resolve-GitHubContextSetting -Name 'PerPage' -Value $PerPage -Context $Context
 
-        $inputObject = @{
-            Method      = 'GET'
-            APIEndpoint = '/user/repos'
-            body        = $body
-            Context     = $Context
+        do {
+            $inputObject = @{
+                Query     = @"
+query(
+    `$PerPage: Int!,
+    `$Cursor: String,
+    `$Affiliations: [RepositoryAffiliation!],
+    `$Visibility: RepositoryVisibility,
+    `$IsArchived: Boolean,
+    `$IsFork: Boolean
+) {
+  viewer {
+    repositories(
+        first: `$PerPage,
+        after: `$Cursor,
+        affiliations: `$Affiliations,
+        visibility: `$Visibility,
+        isArchived: `$IsArchived,
+        isFork: `$IsFork
+    ) {
+      nodes {
+        name
+        owner {
+          login
         }
-
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
-            $_.Response | ForEach-Object {
-                [GitHubRepository]::New($_)
+        url
+        diskUsage
+        visibility
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+    }
+  }
+}
+"@
+                Variables = @{
+                    PerPage      = $perPageSetting
+                    Cursor       = $after
+                    Affiliations = $Affiliation | ForEach-Object { $_.ToString().ToUpper() }
+                    Visibility   = -not [string]::IsNullOrEmpty($Visibility) ? $Visibility.ToString().ToUpper() : $null
+                    IsArchived   = $IsArchived
+                    IsFork       = $IsFork
+                }
+                Context   = $Context
             }
-        }
+
+            Invoke-GitHubGraphQLQuery @inputObject | ForEach-Object {
+                $_.viewer.repositories.nodes | ForEach-Object {
+                    [GitHubRepository]::new($_)
+                }
+                $hasNextPage = $response.pageInfo.hasNextPage
+                $after = $response.pageInfo.endCursor
+            }
+        } while ($hasNextPage)
     }
 
     end {

@@ -51,7 +51,7 @@
         # Limit the results to repositories where the user has this role.
         [ValidateSet('Owner', 'Collaborator', 'Organization_member')]
         [Parameter()]
-        [string] $Affiliations = 'Owner',
+        [string] $Affiliation = 'Owner',
 
         # The number of results per page (max 100).
         [Parameter()]
@@ -99,33 +99,13 @@ query(
         isFork: `$IsFork
     ) {
       nodes {
-        databaseId
         name
         owner {
           login
         }
         url
-        description
-        createdAt
-        updatedAt
-        pushedAt
         diskUsage
-        primaryLanguage {
-          name
-        }
-        licenseInfo {
-          name
-        }
-        repositoryTopics(first: 100) {
-          nodes {
-            topic {
-              name
-            }
-          }
-        }
         visibility
-        viewerPermission
-        sshUrl
       }
       pageInfo {
         endCursor
@@ -139,10 +119,10 @@ query(
                     Owner        = $Owner
                     PerPage      = $perPageSetting
                     Cursor       = $after
-                    Affiliations = $affiliations | ForEach-Object { $_.ToString().ToUpper() }
-                    Visibility   = -not [string]::IsNullOrEmpty($visibility) ? $visibility.ToString().ToUpper() : $null
-                    IsArchived   = $isArchived
-                    IsFork       = $isFork
+                    Affiliations = $Affiliation | ForEach-Object { $_.ToString().ToUpper() }
+                    Visibility   = -not [string]::IsNullOrEmpty($Visibility) ? $Visibility.ToString().ToUpper() : $null
+                    IsArchived   = $IsArchived
+                    IsFork       = $IsFork
                 }
                 Context   = $Context
             }

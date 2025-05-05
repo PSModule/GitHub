@@ -16,11 +16,6 @@
         Gets the repositories for the authenticated user.
 
         .EXAMPLE
-        Get-GitHubRepository -Type all
-
-        Gets the repositories owned by the authenticated user.
-
-        .EXAMPLE
         Get-GitHubRepository -Username 'octocat'
 
         Gets the repositories for the specified user.
@@ -40,40 +35,36 @@
         https://psmodule.io/GitHub/Functions/Repositories/Get-GitHubRepository/
     #>
     [OutputType([GitHubRepository])]
-    [CmdletBinding(DefaultParameterSetName = 'List repositories for the authenticated user by type')]
+    [CmdletBinding(DefaultParameterSetName = 'List repositories for the authenticated user')]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(ParameterSetName = 'Get a repository by name', ValueFromPipelineByPropertyName)]
-        [Parameter(ParameterSetName = 'List repositories from an account', ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ParameterSetName = 'Get a repository by name', ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ParameterSetName = 'List repositories from an account', ValueFromPipelineByPropertyName)]
         [Alias('Organization', 'Username')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory, ParameterSetName = 'Get a repository by name')]
+        [Parameter(Mandatory, ParameterSetName = 'Get a repository for the authenticated user by name')]
         [string] $Name,
 
-        # Specifies the types of repositories you want returned.
-        [Parameter(ParameterSetName = 'List repositories for the authenticated user by type')]
-        [string] $Type = 'owner',
+        # Limit the results to repositories with a visibility level.
+        [Parameter(ParameterSetName = 'List repositories for the authenticated user')]
+        [Parameter(ParameterSetName = 'List repositories from an account')]
+        [ValidateSet('Internal', 'Private', 'Public')]
+        [Parameter()]
+        [string] $Visibility,
 
-        # Limit results to repositories with the specified visibility.
-        [Parameter(ParameterSetName = 'List repositories for the authenticated user by affiliation and visibility')]
-        [ValidateSet('all', 'public', 'private')]
-        [string] $Visibility = 'all',
-
-        # Comma-separated list of values. Can include:
-        # - owner: Repositories that are owned by the authenticated user.
-        # - collaborator: Repositories that the user has been added to as a collaborator.
-        # - organization_member: Repositories that the user has access to through being a member of an organization.
-        #   This includes every repository on every team that the user is on.
-        [Parameter(ParameterSetName = 'List repositories for the authenticated user by affiliation and visibility')]
-        [ValidateSet('owner', 'collaborator', 'organization_member')]
-        [string[]] $Affiliation = 'owner',
+        # Limit the results to repositories where the user has this role.
+        [Parameter(ParameterSetName = 'List repositories for the authenticated user')]
+        [Parameter(ParameterSetName = 'List repositories from an account')]
+        [ValidateSet('Owner', 'Collaborator', 'Organization_member')]
+        [Parameter()]
+        [string[]] $Affiliation = 'Owner',
 
         # The number of results per page (max 100).
-        [Parameter(ParameterSetName = 'List repositories for the authenticated user by type')]
-        [Parameter(ParameterSetName = 'List organization repositories')]
-        [Parameter(ParameterSetName = 'List user repositories')]
+        [Parameter(ParameterSetName = 'List repositories for the authenticated user')]
+        [Parameter(ParameterSetName = 'List repositories from an account')]
         [ValidateRange(0, 100)]
         [int] $PerPage,
 
@@ -93,17 +84,16 @@
     process {
         Write-Debug "ParamSet: [$($PSCmdlet.ParameterSetName)]"
         switch ($PSCmdlet.ParameterSetName) {
-            'List repositories for the authenticated user by type' {
+            'Get a repository for the authenticated user by name' {
                 $params = @{
                     Context = $Context
-                    Type    = $Type
-                    PerPage = $PerPage
+                    Name    = $Name
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues
                 Write-Verbose ($params | Format-Table -AutoSize | Out-String)
-                Get-GitHubMyRepositories @params
+                Get-GitHubMyRepositoryByName @params
             }
-            'List repositories for the authenticated user by affiliation and visibility' {
+            'List repositories for the authenticated user' {
                 $params = @{
                     Context     = $Context
                     Affiliation = $Affiliation
@@ -128,9 +118,11 @@
             }
             'List repositories from an account' {
                 $params = @{
-                    Context = $Context
-                    Owner   = $Owner
-                    PerPage = $PerPage
+                    Context     = $Context
+                    Owner       = $Owner
+                    Affiliation = $Affiliation
+                    Visibility  = $Visibility
+                    PerPage     = $PerPage
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues
                 Write-Verbose ($params | Format-Table -AutoSize | Out-String)

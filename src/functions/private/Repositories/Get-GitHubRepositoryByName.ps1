@@ -55,7 +55,6 @@ query(
     repository(
         name: `$Name
     ) {
-      id
       databaseId
       name
       owner {
