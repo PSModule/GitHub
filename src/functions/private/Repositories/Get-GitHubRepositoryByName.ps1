@@ -152,7 +152,6 @@ query(
         }
 
         Invoke-GitHubGraphQLQuery @inputObject | ForEach-Object {
-            Write-Debug "Type: $($_.repositoryOwner.repository.GetType().FullName)"
             [GitHubRepository]::new($_.repositoryOwner.repository)
         }
     }
