@@ -194,7 +194,7 @@ query(
                     PerPage      = $PerPage
                     Cursor       = $after
                     Affiliations = $affiliations | ForEach-Object { $_.ToString().ToUpper() }
-                    Visibility   = $visibility | ForEach-Object { $_.ToString().ToUpper() }
+                    Visibility   = -not [string]::IsNullOrEmpty($visibility) ? $visibility.ToString().ToUpper() : $null
                     IsArchived   = $isArchived
                     IsFork       = $isFork
                 }
