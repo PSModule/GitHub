@@ -115,7 +115,9 @@
                 Get-GitHubMyRepositories @params
             }
             'Get a repository by name' {
-                $owner = $Context.UserName
+                if (-not $Owner) {
+                    $Owner = $Context.User.Login
+                }
                 $params = @{
                     Context = $Context
                     Owner   = $Owner
