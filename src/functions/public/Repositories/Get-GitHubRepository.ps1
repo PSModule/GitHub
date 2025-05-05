@@ -101,7 +101,7 @@
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues
                 Write-Verbose ($params | Format-Table -AutoSize | Out-String)
-                Get-GitHubMyRepositories @params | Write-Output
+                Get-GitHubMyRepositories @params
             }
             'List repositories for the authenticated user by affiliation and visibility' {
                 $params = @{
@@ -112,7 +112,7 @@
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues
                 Write-Verbose ($params | Format-Table -AutoSize | Out-String)
-                Get-GitHubMyRepositories @params | Write-Output
+                Get-GitHubMyRepositories @params
             }
             'Get a repository by name' {
                 $params = @{
@@ -123,7 +123,7 @@
                 $params | Remove-HashtableEntry -NullOrEmptyValues
                 Write-Verbose ($params | Format-Table -AutoSize | Out-String)
                 try {
-                    Get-GitHubRepositoryByName @params | Write-Output
+                    Get-GitHubRepositoryByName @params
                 } catch { return }
             }
             'List repositories from an account' {
@@ -134,7 +134,7 @@
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues
                 Write-Verbose ($params | Format-Table -AutoSize | Out-String)
-                Get-GitHubRepositoryListByOwner @params | Write-Output
+                Get-GitHubRepositoryListByOwner @params
             }
         }
     }
