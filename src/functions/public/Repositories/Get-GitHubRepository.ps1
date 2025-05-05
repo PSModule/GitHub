@@ -45,6 +45,7 @@
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(ParameterSetName = 'Get a repository by name', ValueFromPipelineByPropertyName)]
         [Parameter(ParameterSetName = 'List repositories from an account', ValueFromPipelineByPropertyName)]
+        [Alias('Organization', 'Username')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
