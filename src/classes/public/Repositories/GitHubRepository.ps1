@@ -257,7 +257,7 @@
             $this.ID = $Object.databaseId
             $this.NodeID = $Object.id
             $this.Name = $Object.name
-            # $this.Owner = [GitHubOwner]::New($Object.owner)
+            $this.Owner = [GitHubOwner]::New($Object.owner)
             $this.FullName = $Object.nameWithOwner
             $this.Url = $Object.url
             $this.Description = $Object.description
