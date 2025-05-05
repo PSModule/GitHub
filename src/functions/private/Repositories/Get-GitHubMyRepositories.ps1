@@ -30,6 +30,14 @@
         'PSUseSingularNouns', '',
         Justification = 'Private function, not exposed to user.'
     )]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSUseDeclaredVarsMoreThanAssignments', 'hasNextPage', Scope = 'Function',
+        Justification = 'Unknown issue with var scoping in blocks.'
+    )]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSUseDeclaredVarsMoreThanAssignments', 'after', Scope = 'Function',
+        Justification = 'Unknown issue with var scoping in blocks.'
+    )]
     param(
         # Limit the results to repositories with a visibility level.
         [ValidateSet('Internal', 'Private', 'Public')]

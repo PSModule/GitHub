@@ -91,7 +91,9 @@
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues
                 Write-Verbose ($params | Format-Table -AutoSize | Out-String)
-                Get-GitHubMyRepositoryByName @params
+                try {
+                    Get-GitHubMyRepositoryByName @params
+                } catch { return }
             }
             'List repositories for the authenticated user' {
                 $params = @{

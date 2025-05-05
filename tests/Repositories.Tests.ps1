@@ -136,19 +136,19 @@ Describe 'Repositories' {
             }
             $repo | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubRepository - Gets all repositories from a organization' -Skip:($OwnerType -eq 'repository') {
+        It 'Get-GitHubRepository - Gets all repositories from a organization' {
             LogGroup 'Repositories' {
                 $repos = Get-GitHubRepository -Owner 'PSModule'
                 Write-Host ($repos | Format-Table | Out-String)
             }
-            $repos | Should -Not -BeNullOrEmpty
+            $repos.Count | Should -BeGreaterThan 0
         }
-        It 'Get-GitHubRepository - Gets all repositories from a user' -Skip:($OwnerType -eq 'repository') {
+        It 'Get-GitHubRepository - Gets all repositories from a user' {
             LogGroup 'Repositories' {
                 $repos = Get-GitHubRepository -Username 'MariusStorhaug'
                 Write-Host ($repos | Format-Table | Out-String)
             }
-            $repos | Should -Not -BeNullOrEmpty
+            $repos.Count | Should -BeGreaterThan 0
         }
         It 'Remove-GitHubRepository - Removes all repositories' -Skip:($OwnerType -eq 'repository') {
             switch ($OwnerType) {
