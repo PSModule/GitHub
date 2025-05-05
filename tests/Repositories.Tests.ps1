@@ -101,7 +101,7 @@ Describe 'Repositories' {
             }
             $repo | Should -Not -BeNullOrEmpty
         }
-        It "Get-GitHubRepository - Gets the authenticated user's repository" -Skip:($OwnerType -ne 'user') {
+        It "Get-GitHubRepository - Gets the forked repository" -Skip:($OwnerType -ne 'user') {
             LogGroup 'Repository' {
                 $repo = Get-GitHubRepository -Name "$repoName-fork"
                 Write-Host ($repo | Format-List | Out-String)

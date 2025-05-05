@@ -49,96 +49,90 @@ query(
     repository(
       name: `$Name
     ) {
-      nodes {
+      id
+      databaseId
+      name
+      owner {
+        login
+      }
+      url
+      description
+      createdAt
+      updatedAt
+      pushedAt
+      archivedAt
+      homepageUrl
+      diskUsage
+      primaryLanguage {
+        name
+        id
+        color
+      }
+      hasIssuesEnabled
+      hasProjectsEnabled
+      hasWikiEnabled
+      hasDiscussionsEnabled
+      isArchived
+      isDisabled
+      isTemplate
+      isFork
+      licenseInfo {
+        name
+      }
+      forkingAllowed
+      webCommitSignoffRequired
+      repositoryTopics(first: 100) {
+        nodes {
+          topic {
+            name
+          }
+        }
+      }
+      visibility
+      issues {
+        totalCount
+      }
+      pullRequests {
+        totalCount
+      }
+      stargazers {
+        totalCount
+      }
+      watchers {
+        totalCount
+      }
+      forks {
+        totalCount
+      }
+      defaultBranchRef {
+        name
+      }
+      viewerPermission
+      squashMergeAllowed
+      mergeCommitAllowed
+      rebaseMergeAllowed
+      autoMergeAllowed
+      deleteBranchOnMerge
+      allowUpdateBranch
+      squashMergeCommitTitle
+      squashMergeCommitMessage
+      mergeCommitTitle
+      mergeCommitMessage
+      templateRepository {
         id
         databaseId
         name
         owner {
           login
         }
-        url
-        description
-        createdAt
-        updatedAt
-        pushedAt
-        archivedAt
-        homepageUrl
-        diskUsage
-        primaryLanguage {
-          name
-          id
-          color
-        }
-        hasIssuesEnabled
-        hasProjectsEnabled
-        hasWikiEnabled
-        hasDiscussionsEnabled
-        isArchived
-        isDisabled
-        isTemplate
-        isFork
-        licenseInfo {
-          name
-        }
-        forkingAllowed
-        webCommitSignoffRequired
-        repositoryTopics(first: 100) {
-          nodes {
-            topic {
-              name
-            }
-          }
-        }
-        visibility
-        issues {
-          totalCount
-        }
-        pullRequests {
-          totalCount
-        }
-        stargazers {
-          totalCount
-        }
-        watchers {
-          totalCount
-        }
-        forks {
-          totalCount
-        }
-        defaultBranchRef {
-          name
-        }
-        viewerPermission
-        squashMergeAllowed
-        mergeCommitAllowed
-        rebaseMergeAllowed
-        autoMergeAllowed
-        deleteBranchOnMerge
-        allowUpdateBranch
-        squashMergeCommitTitle
-        squashMergeCommitMessage
-        mergeCommitTitle
-        mergeCommitMessage
-        templateRepository {
-          id
-          databaseId
-          name
-          owner {
-            login
-          }
-        }
-        parent {
-          name
-          owner {
-            login
-          }
-        }
-        sshUrl
       }
-      pageInfo {
-        endCursor
-        hasNextPage
+      parent {
+        name
+        owner {
+          login
+        }
       }
+      sshUrl
     }
   }
 }
