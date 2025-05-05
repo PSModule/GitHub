@@ -71,6 +71,10 @@
     }
 
     process {
+        $hasNextPage = $true
+        $after = $null
+        $perPageSetting = Resolve-GitHubContextSetting -Name 'PerPage' -Value $PerPage -Context $Context
+
         do {
             $inputObject = @{
                 Query     = @"
@@ -191,7 +195,7 @@ query(
 "@
                 Variables = @{
                     Owner        = $Owner
-                    PerPage      = $PerPage
+                    PerPage      = $perPageSetting
                     Cursor       = $after
                     Affiliations = $affiliations | ForEach-Object { $_.ToString().ToUpper() }
                     Visibility   = -not [string]::IsNullOrEmpty($visibility) ? $visibility.ToString().ToUpper() : $null
