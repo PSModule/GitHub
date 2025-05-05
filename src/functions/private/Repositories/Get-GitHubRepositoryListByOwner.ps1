@@ -99,7 +99,11 @@ query(
         isFork: `$IsFork
     ) {
       nodes {
+        databaseId
         name
+        owner {
+          login
+        }
         url
         description
         createdAt
@@ -145,7 +149,7 @@ query(
 
             Invoke-GitHubGraphQLQuery @inputObject | ForEach-Object {
                 foreach ($repository in $_.repositoryOwner.repositories.nodes) {
-                    [GitHubRepository]::new($repository, $Owner)
+                    [GitHubRepository]::new($repository)
                 }
                 $hasNextPage = $_.repositoryOwner.repositories.pageInfo.hasNextPage
                 $after = $_.repositoryOwner.repositories.pageInfo.endCursor

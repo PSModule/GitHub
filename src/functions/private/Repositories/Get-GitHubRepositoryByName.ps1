@@ -61,7 +61,6 @@ query(
       owner {
         login
       }
-      nameWithOwner
       url
       description
       createdAt
@@ -152,7 +151,7 @@ query(
         }
 
         Invoke-GitHubGraphQLQuery @inputObject | ForEach-Object {
-            [GitHubRepository]::new($_.repositoryOwner.repository, $Owner)
+            [GitHubRepository]::new($_.repositoryOwner.repository)
         }
     }
 

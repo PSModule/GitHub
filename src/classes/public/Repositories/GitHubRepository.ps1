@@ -201,12 +201,12 @@
 
     GitHubRepository() {}
 
-    GitHubRepository([PSCustomObject]$Object, [string] $Owner) {
+    GitHubRepository([PSCustomObject]$Object) {
         if ($null -ne $Object.node_id) {
             $this.ID = $Object.id
             $this.NodeID = $Object.node_id
             $this.Name = $Object.name
-            $this.Owner = [GitHubOwner]@{ Name = $Owner }
+            $this.Owner = [GitHubOwner]::New($Object.owner)
             $this.FullName = $Object.full_name
             $this.Visibility = $Object.visibility ? (Get-Culture).TextInfo.ToTitleCase($Object.visibility.ToLower()) : $null
             $this.Description = $Object.description
@@ -257,8 +257,8 @@
             $this.ID = $Object.databaseId
             $this.NodeID = $Object.id
             $this.Name = $Object.name
-            $this.Owner = [GitHubOwner]@{ Name = $Owner }
-            $this.FullName = $Object.nameWithOwner
+            $this.Owner = [GitHubOwner]::New($Object.owner)
+            $this.FullName = $Object.owner.login + '/' + $Object.name
             $this.Url = $Object.url
             $this.Description = $Object.description
             $this.CreatedAt = $Object.createdAt
