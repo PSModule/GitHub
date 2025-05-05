@@ -301,9 +301,9 @@
             $this.TemplateRepository = $null -ne $Object.templateRepository ? [GitHubRepository]::New($Object.templateRepository) : $null
             $this.ForkParent = $null -ne $Object.parent ? [GitHubRepository]::New($Object.parent) : $null
             $this.ForkSource = $null -ne $Object.source ? [GitHubRepository]::New($Object.source) : $null
-            $this.CloneUrl = -not [string]::IsNullOrEmpty($Object.url) ? $Object.url + '.git' : $null
+            # $this.CloneUrl = -not [string]::IsNullOrEmpty($Object.url) ? $Object.url + '.git' : $null
             $this.SshUrl = $Object.sshUrl
-            $this.GitUrl = -not [string]::IsNullOrEmpty($Object.url) ? ($Object.Url + '.git').Replace('https://', 'git://') : $null
+            # $this.GitUrl = -not [string]::IsNullOrEmpty($Object.url) ? ($Object.Url + '.git').Replace('https://', 'git://') : $null
         }
     }
 
