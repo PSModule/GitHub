@@ -125,7 +125,7 @@ Describe 'Repositories' {
         }
         It 'Get-GitHubRepository - Gets a specific repository' -Skip:($OwnerType -eq 'repository') {
             LogGroup 'Repository' {
-                $repo = Get-GitHubRepository -Organization 'PSModule' -Name 'GitHub' -Debug -Verbose
+                $repo = Get-GitHubRepository -Organization 'PSModule' -Name 'GitHub'
                 Write-Host ($repo | Format-List | Out-String)
             }
             $repo | Should -Not -BeNullOrEmpty
