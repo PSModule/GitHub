@@ -193,8 +193,8 @@ query(
                     Owner        = $Owner
                     PerPage      = $PerPage
                     Cursor       = $after
-                    Affiliations = $affiliations
-                    Visibility   = $visibility
+                    Affiliations = $affiliations | ForEach-Object { $_.ToString().ToUpper() }
+                    Visibility   = $visibility | ForEach-Object { $_.ToString().ToUpper() }
                     IsArchived   = $isArchived
                     IsFork       = $isFork
                 }
@@ -202,8 +202,8 @@ query(
             }
 
             Invoke-GitHubGraphQLQuery @inputObject | ForEach-Object {
-                $_.repositoryOwner.repositories.nodes | ForEach-Object {
-                    [GitHubRepository]::new($_)
+                foreach ($repository in $_.repositoryOwner.repositories.nodes) {
+                    [GitHubRepository]::new($repository)
                 }
                 $hasNextPage = $_.repositoryOwner.repositories.pageInfo.hasNextPage
                 $after = $_.repositoryOwner.repositories.pageInfo.endCursor
