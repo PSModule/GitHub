@@ -58,7 +58,10 @@
     #>
     [OutputType([GitHubRepository])]
     [CmdletBinding(DefaultParameterSetName = 'Aff-Vis')]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Private function, not exposed to user.')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSUseSingularNouns', '',
+        Justification = 'Private function, not exposed to user.'
+    )]
     param(
         # Limit results to repositories with the specified visibility.
         [Parameter(ParameterSetName = 'Aff-Vis')]

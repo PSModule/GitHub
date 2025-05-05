@@ -146,8 +146,8 @@
         [Parameter(ParameterSetName = 'user')]
         [Parameter(ParameterSetName = 'org')]
         [Parameter(ParameterSetName = 'template')]
-        [ValidateSet('public', 'private', 'internal')]
-        [string] $Visibility = 'public',
+        [ValidateSet('Public', 'Private', 'Internal')]
+        [string] $Visibility = 'Public',
 
         # Whether issues are enabled.
         [Parameter(ParameterSetName = 'user')]
