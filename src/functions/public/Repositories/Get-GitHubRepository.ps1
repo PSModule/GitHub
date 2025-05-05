@@ -100,8 +100,8 @@
                     PerPage = $PerPage
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues
-                Write-Verbose ($params | Format-List | Out-String)
-                Get-GitHubMyRepositories @params
+                Write-Verbose ($params | Format-Table -AutoSize | Out-String)
+                Get-GitHubMyRepositories @params | Write-Output
             }
             'List repositories for the authenticated user by affiliation and visibility' {
                 $params = @{
@@ -111,8 +111,8 @@
                     PerPage     = $PerPage
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues
-                Write-Verbose ($params | Format-List | Out-String)
-                Get-GitHubMyRepositories @params
+                Write-Verbose ($params | Format-Table -AutoSize | Out-String)
+                Get-GitHubMyRepositories @params | Write-Output
             }
             'Get a repository by name' {
                 $params = @{
@@ -121,9 +121,9 @@
                     Name    = $Name
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues
-                Write-Verbose ($params | Format-List | Out-String)
+                Write-Verbose ($params | Format-Table -AutoSize | Out-String)
                 try {
-                    Get-GitHubRepositoryByName @params
+                    Get-GitHubRepositoryByName @params | Write-Output
                 } catch { return }
             }
             'List repositories from an account' {
@@ -133,8 +133,8 @@
                     PerPage = $PerPage
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues
-                Write-Verbose ($params | Format-List | Out-String)
-                Get-GitHubRepositoryListByOwner @params
+                Write-Verbose ($params | Format-Table -AutoSize | Out-String)
+                Get-GitHubRepositoryListByOwner @params | Write-Output
             }
         }
     }
