@@ -116,7 +116,7 @@
             }
             'Get a repository by name' {
                 if (-not $Owner) {
-                    $Owner = $Context.User.Login
+                    $Owner = $Context.UserName
                 }
                 $params = @{
                     Context = $Context
