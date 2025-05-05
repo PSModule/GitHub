@@ -99,39 +99,18 @@ query(
         isFork: `$IsFork
     ) {
       nodes {
-        id
-        databaseId
         name
-        owner {
-          login
-        }
-        nameWithOwner
         url
         description
         createdAt
         updatedAt
         pushedAt
-        archivedAt
-        homepageUrl
-        diskUsage
         primaryLanguage {
           name
-          id
-          color
         }
-        hasIssuesEnabled
-        hasProjectsEnabled
-        hasWikiEnabled
-        hasDiscussionsEnabled
-        isArchived
-        isDisabled
-        isTemplate
-        isFork
         licenseInfo {
           name
         }
-        forkingAllowed
-        webCommitSignoffRequired
         repositoryTopics(first: 100) {
           nodes {
             topic {
@@ -140,49 +119,7 @@ query(
           }
         }
         visibility
-        issues (states: [OPEN]) {
-          totalCount
-        }
-        pullRequests (states: [OPEN]) {
-          totalCount
-        }
-        stargazers {
-          totalCount
-        }
-        watchers {
-          totalCount
-        }
-        forks {
-          totalCount
-        }
-        defaultBranchRef {
-          name
-        }
         viewerPermission
-        squashMergeAllowed
-        mergeCommitAllowed
-        rebaseMergeAllowed
-        autoMergeAllowed
-        deleteBranchOnMerge
-        allowUpdateBranch
-        squashMergeCommitTitle
-        squashMergeCommitMessage
-        mergeCommitTitle
-        mergeCommitMessage
-        templateRepository {
-          id
-          databaseId
-          name
-          owner {
-            login
-          }
-        }
-        parent {
-          name
-          owner {
-            login
-          }
-        }
         sshUrl
       }
       pageInfo {
@@ -207,7 +144,7 @@ query(
 
             Invoke-GitHubGraphQLQuery @inputObject | ForEach-Object {
                 foreach ($repository in $_.repositoryOwner.repositories.nodes) {
-                    [GitHubRepository]::new($repository)
+                    [GitHubRepository]::new($repository, $Owner)
                 }
                 $hasNextPage = $_.repositoryOwner.repositories.pageInfo.hasNextPage
                 $after = $_.repositoryOwner.repositories.pageInfo.endCursor
