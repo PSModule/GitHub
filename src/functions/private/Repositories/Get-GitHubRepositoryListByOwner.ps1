@@ -43,6 +43,16 @@
         [Parameter(Mandatory)]
         [string] $Owner,
 
+        # Limit the results to repositories with a visibility level.
+        [ValidateSet('Internal', 'Private', 'Public')]
+        [Parameter()]
+        [string] $Visibility,
+
+        # Limit the results to repositories where the user has this role.
+        [ValidateSet('Owner', 'Collaborator', 'Organization_member')]
+        [Parameter()]
+        [string] $Affiliations = 'Owner',
+
         # The number of results per page (max 100).
         [Parameter()]
         [ValidateRange(0, 100)]

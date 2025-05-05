@@ -267,6 +267,7 @@
 
     process {
         Write-Verbose "ParameterSetName: $($PSCmdlet.ParameterSetName)"
+        $Visibility = $Visibility.ToString().ToLower()
         switch ($PSCmdlet.ParameterSetName) {
             'user' {
                 $params = @{

@@ -115,12 +115,9 @@
                 Get-GitHubMyRepositories @params
             }
             'Get a repository by name' {
-                if (-not $Owner) {
-                    $Owner = $Context.UserName
-                }
                 $params = @{
                     Context = $Context
-                    Owner   = $Owner
+                    Owner   = $Owner ?? $Context.UserName
                     Name    = $Name
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues
