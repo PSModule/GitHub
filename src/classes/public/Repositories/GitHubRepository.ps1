@@ -280,7 +280,7 @@
             $this.AllowForking = $Object.forkingAllowed
             $this.RequireWebCommitSignoff = $Object.webCommitSignoffRequired
             $this.Topics = $Object.repositoryTopics.nodes.topic.name
-            # $this.Visibility = $Object.visibility ? (Get-Culture).TextInfo.ToTitleCase($Object.visibility.ToLower()) : $null
+            $this.Visibility = $Object.visibility ? (Get-Culture).TextInfo.ToTitleCase($Object.visibility.ToLower()) : $null
             $this.OpenIssues = $Object.issues.totalCount
             $this.OpenPullRequests = $Object.pullRequests.totalCount
             $this.Stargazers = $Object.stargazers.totalCount
