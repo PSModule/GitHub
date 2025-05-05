@@ -203,7 +203,8 @@ query(
 
             Invoke-GitHubGraphQLQuery @inputObject | ForEach-Object {
                 foreach ($repository in $_.repositoryOwner.repositories.nodes) {
-                    $repository
+                    Write-Debug "Type: $($repository.GetType().FullName)"
+                    [GitHubRepository]::new($repository)
                 }
                 $hasNextPage = $_.repositoryOwner.repositories.pageInfo.hasNextPage
                 $after = $_.repositoryOwner.repositories.pageInfo.endCursor
