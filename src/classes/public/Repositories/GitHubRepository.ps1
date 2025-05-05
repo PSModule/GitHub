@@ -267,7 +267,7 @@
             $this.ArchivedAt = $Object.archivedAt
             $this.Homepage = $Object.homepageUrl
             $this.Size = $Object.diskUsage
-            # $this.Language = [GitHubRepositoryLanguage]::new($Object.primaryLanguage)
+            $this.Language = [GitHubRepositoryLanguage]::new($Object.primaryLanguage)
             $this.HasIssues = $Object.hasIssuesEnabled
             $this.HasProjects = $Object.hasProjectsEnabled
             $this.HasWiki = $Object.hasWikiEnabled
@@ -276,7 +276,7 @@
             $this.IsDisabled = $Object.isDisabled
             $this.IsTemplate = $Object.isTemplate
             $this.IsFork = $Object.isFork
-            # $this.License = [GitHubLicense]::new($Object.licenseInfo)
+            $this.License = [GitHubLicense]::new($Object.licenseInfo)
             $this.AllowForking = $Object.forkingAllowed
             $this.RequireWebCommitSignoff = $Object.webCommitSignoffRequired
             $this.Topics = $Object.repositoryTopics.nodes.topic.name
