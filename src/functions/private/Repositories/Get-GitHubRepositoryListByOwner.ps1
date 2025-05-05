@@ -51,7 +51,7 @@
         # Limit the results to repositories where the user has this role.
         [ValidateSet('Owner', 'Collaborator', 'Organization_member')]
         [Parameter()]
-        [string] $Affiliation = 'Owner',
+        [string[]] $Affiliation = 'Owner',
 
         # The number of results per page (max 100).
         [Parameter()]
