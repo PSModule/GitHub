@@ -27,13 +27,16 @@
     }
 
     GitHubRepositoryPermissions([string]$Permission) {
-        switch ($Permission) {
-            'admin' { $this.Admin = $true }
-            'maintain' { $this.Maintain = $true }
-            'push' { $this.Push = $true }
-            'triage' { $this.Triage = $true }
-            'pull' { $this.Pull = $true }
-            default { throw "Invalid permission level: $Permission" }
+        if ($Permission -eq 'admin') {
+            $this.Admin = $true
+        } elseif ($Permission -eq 'maintain') {
+            $this.Maintain = $true
+        } elseif ($Permission -eq 'push') {
+            $this.Push = $true
+        } elseif ($Permission -eq 'triage') {
+            $this.Triage = $true
+        } elseif ($Permission -eq 'pull') {
+            $this.Pull = $true
         }
     }
 
