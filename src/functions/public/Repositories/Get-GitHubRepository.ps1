@@ -107,7 +107,7 @@
             'Get a repository by name' {
                 $params = @{
                     Context = $Context
-                    Owner   = $Owner ?? $Context.UserName
+                    Owner   = $Owner
                     Name    = $Name
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues

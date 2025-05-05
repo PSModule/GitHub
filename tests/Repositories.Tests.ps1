@@ -101,7 +101,13 @@ Describe 'Repositories' {
             }
             $repo | Should -Not -BeNullOrEmpty
         }
-
+        It "Get-GitHubRepository - Gets the authenticated user's repository" -Skip:($OwnerType -ne 'user') {
+            LogGroup 'Repository' {
+                $repo = Get-GitHubRepository -Name "$repoName-fork"
+                Write-Host ($repo | Format-List | Out-String)
+            }
+            $repo | Should -Not -BeNullOrEmpty
+        }
         It "Get-GitHubRepository - Gets the authenticated user's repositories" -Skip:($OwnerType -ne 'user') {
             LogGroup 'Repositories' {
                 $repos = Get-GitHubRepository
@@ -111,14 +117,14 @@ Describe 'Repositories' {
         }
         It "Get-GitHubRepository - Gets the authenticated user's public repositories" -Skip:($OwnerType -ne 'user') {
             LogGroup 'Repositories' {
-                $repos = Get-GitHubRepository -Type 'public'
+                $repos = Get-GitHubRepository -Visibility 'Public'
                 Write-Host ($repos | Format-Table | Out-String)
             }
             $repos | Should -Not -BeNullOrEmpty
         }
         It 'Get-GitHubRepository - Gets the public repos where the authenticated user is owner' -Skip:($OwnerType -ne 'user') {
             LogGroup 'Repositories' {
-                $repos = Get-GitHubRepository -Visibility 'public'
+                $repos = Get-GitHubRepository -Affiliation 'Owner' -Visibility 'Public'
                 Write-Host ($repos | Format-Table | Out-String)
             }
             $repos | Should -Not -BeNullOrEmpty
@@ -132,7 +138,7 @@ Describe 'Repositories' {
         }
         It 'Get-GitHubRepository - Gets all repositories from a organization' -Skip:($OwnerType -eq 'repository') {
             LogGroup 'Repositories' {
-                $repos = Get-GitHubRepository -Organization 'PSModule' -Verbose -Debug
+                $repos = Get-GitHubRepository -Owner 'PSModule'
                 Write-Host ($repos | Format-Table | Out-String)
             }
             $repos | Should -Not -BeNullOrEmpty
