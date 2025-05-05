@@ -152,8 +152,7 @@ query(
         }
 
         Invoke-GitHubGraphQLQuery @inputObject | ForEach-Object {
-            $_.repositoryOwner.repository
-            # [GitHubRepository]::new($_.repositoryOwner.repository)
+            [GitHubRepository]::new($_.repositoryOwner.repository)
         }
     }
 

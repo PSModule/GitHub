@@ -54,8 +54,7 @@
             return 'Triage'
         } elseif ($this.Pull) {
             return 'Pull'
-        } else {
-            return 'No Access'
         }
+        return $null
     }
 }
