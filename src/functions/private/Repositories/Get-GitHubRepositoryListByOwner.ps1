@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryListByUser {
+﻿filter Get-GitHubRepositoryListByOwner {
     <#
         .SYNOPSIS
         List repositories for a user
@@ -8,17 +8,17 @@
         Note: For GitHub AE, this endpoint will list internal repositories for the specified user.
 
         .EXAMPLE
-        Get-GitHubRepositoryListByUser -Username 'octocat'
+        Get-GitHubRepositoryListByOwner -Owner 'octocat'
 
         Gets the repositories for the user 'octocat'.
 
         .EXAMPLE
-        Get-GitHubRepositoryListByUser -Username 'octocat' -Type 'member'
+        Get-GitHubRepositoryListByOwner -Owner 'octocat' -Type 'member'
 
         Gets the repositories of organizations where the user 'octocat' is a member.
 
         .EXAMPLE
-        Get-GitHubRepositoryListByUser -Username 'octocat' -Sort 'created' -Direction 'asc'
+        Get-GitHubRepositoryListByOwner -Owner 'octocat' -Sort 'created' -Direction 'asc'
 
         Gets the repositories for the user 'octocat' sorted by creation date in ascending order.
 
