@@ -27,8 +27,7 @@
     }
 
     GitHubRepositoryPermissions([string]$Permission) {
-        # Convert the string to a boolean value based on the permission level.
-        switch ($Permission.ToLower()) {
+        switch ($Permission) {
             'admin' { $this.Admin = $true }
             'maintain' { $this.Maintain = $true }
             'push' { $this.Push = $true }

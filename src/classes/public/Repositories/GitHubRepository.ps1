@@ -287,7 +287,7 @@
             $this.Watchers = $Object.watchers.totalCount
             $this.Forks = $Object.forks.totalCount
             $this.DefaultBranch = $Object.defaultBranchRef.name
-            # $this.Permissions = [GitHubRepositoryPermissions]::New($Object.viewerPermission)
+            $this.Permissions = [GitHubRepositoryPermissions]::New($Object.viewerPermission)
             $this.AllowSquashMerge = $Object.squashMergeAllowed
             $this.AllowMergeCommit = $Object.mergeCommitAllowed
             $this.AllowRebaseMerge = $Object.rebaseMergeAllowed
