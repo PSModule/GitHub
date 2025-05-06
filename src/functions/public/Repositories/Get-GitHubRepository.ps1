@@ -60,7 +60,7 @@
         [Parameter(ParameterSetName = 'List repositories from an account')]
         [ValidateSet('Owner', 'Collaborator', 'Organization_member')]
         [Parameter()]
-        [string[]] $Affiliation = 'Owner',
+        [string[]] $Affiliation,
 
         # The number of results per page (max 100).
         [Parameter(ParameterSetName = 'List repositories for the authenticated user')]
@@ -82,52 +82,32 @@
     }
 
     process {
+        $params = @{
+            Context     = $Context
+            Owner       = $Owner
+            Name        = $Name
+            Affiliation = $Affiliation
+            Visibility  = $Visibility
+            PerPage     = $PerPage
+        }
+        $params | Remove-HashtableEntry -NullOrEmptyValues
         Write-Debug "ParamSet: [$($PSCmdlet.ParameterSetName)]"
+        Write-Debug ($params | Format-Table -AutoSize | Out-String)
         switch ($PSCmdlet.ParameterSetName) {
             'Get a repository for the authenticated user by name' {
-                $params = @{
-                    Context = $Context
-                    Name    = $Name
-                }
-                $params | Remove-HashtableEntry -NullOrEmptyValues
-                Write-Verbose ($params | Format-Table -AutoSize | Out-String)
                 try {
                     Get-GitHubMyRepositoryByName @params
                 } catch { return }
             }
             'List repositories for the authenticated user' {
-                $params = @{
-                    Context     = $Context
-                    Affiliation = $Affiliation
-                    Visibility  = $Visibility
-                    PerPage     = $PerPage
-                }
-                $params | Remove-HashtableEntry -NullOrEmptyValues
-                Write-Verbose ($params | Format-Table -AutoSize | Out-String)
                 Get-GitHubMyRepositories @params
             }
             'Get a repository by name' {
-                $params = @{
-                    Context = $Context
-                    Owner   = $Owner
-                    Name    = $Name
-                }
-                $params | Remove-HashtableEntry -NullOrEmptyValues
-                Write-Verbose ($params | Format-Table -AutoSize | Out-String)
                 try {
                     Get-GitHubRepositoryByName @params
                 } catch { return }
             }
             'List repositories from an account' {
-                $params = @{
-                    Context     = $Context
-                    Owner       = $Owner
-                    Affiliation = $Affiliation
-                    Visibility  = $Visibility
-                    PerPage     = $PerPage
-                }
-                $params | Remove-HashtableEntry -NullOrEmptyValues
-                Write-Verbose ($params | Format-Table -AutoSize | Out-String)
                 Get-GitHubRepositoryListByOwner @params
             }
         }
