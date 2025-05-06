@@ -126,10 +126,10 @@ Describe 'Repositories' {
             LogGroup 'Repository' {
                 switch ($OwnerType) {
                     'user' {
-                        $repo = Get-GitHubRepository -Name $repoName -Debug
+                        $repo = Get-GitHubRepository -Name $repoName
                     }
                     'organization' {
-                        $repo = Get-GitHubRepository -Owner $owner -Name $repoName -Debug
+                        $repo = Get-GitHubRepository -Owner $owner -Name $repoName
                     }
                 }
                 Write-Host ($repo | Format-List | Out-String)
@@ -138,14 +138,14 @@ Describe 'Repositories' {
         }
         It 'Get-GitHubRepository - Gets all repositories from a organization' {
             LogGroup 'Repositories' {
-                $repos = Get-GitHubRepository -Owner 'PSModule' -Debug
+                $repos = Get-GitHubRepository -Owner 'PSModule'
                 Write-Host ($repos | Format-Table | Out-String)
             }
             $repos.Count | Should -BeGreaterThan 0
         }
         It 'Get-GitHubRepository - Gets all repositories from a user' {
             LogGroup 'Repositories' {
-                $repos = Get-GitHubRepository -Username 'MariusStorhaug' -Verbose -Debug
+                $repos = Get-GitHubRepository -Username 'MariusStorhaug'
                 Write-Host ($repos | Format-Table | Out-String)
             }
             $repos.Count | Should -BeGreaterThan 0
