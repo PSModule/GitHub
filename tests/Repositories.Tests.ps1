@@ -138,7 +138,7 @@ Describe 'Repositories' {
         }
         It 'Get-GitHubRepository - Gets all repositories from a organization' {
             LogGroup 'Repositories' {
-                $repos = Get-GitHubRepository -Owner 'PSModule'
+                $repos = Get-GitHubRepository -Owner 'PSModule' -Debug
                 Write-Host ($repos | Format-Table | Out-String)
             }
             $repos.Count | Should -BeGreaterThan 0
