@@ -126,9 +126,9 @@ query(
                     Owner             = $Owner
                     PerPage           = $perPageSetting
                     Cursor            = $after
-                    Affiliations      = $Affiliation | ForEach-Object { $_.ToString().ToUpper() }
-                    OwnerAffiliations = $OwnerAffiliations | ForEach-Object { $_.ToString().ToUpper() }
-                    Visibility        = -not [string]::IsNullOrEmpty($Visibility) ? $Visibility.ToString().ToUpper() : $null
+                    Affiliations      = [string]::IsNullOrEmpty($Affiliation) ? $null : $Affiliation.ToUpper()
+                    OwnerAffiliations = [string]::IsNullOrEmpty($OwnerAffiliations) ? $null : $OwnerAffiliations.ToUpper()
+                    Visibility        = [string]::IsNullOrEmpty($Visibility) ? $null : $Visibility.ToUpper()
                     IsArchived        = $IsArchived
                     IsFork            = $IsFork
                 }
