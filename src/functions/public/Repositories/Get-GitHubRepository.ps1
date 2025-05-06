@@ -108,6 +108,7 @@
                 } catch { return }
             }
             'List repositories from an account' {
+                Write-Debug "Test"
                 Get-GitHubRepositoryListByOwner @params
             }
         }
