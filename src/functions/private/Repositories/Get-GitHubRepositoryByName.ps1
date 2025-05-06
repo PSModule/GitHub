@@ -87,7 +87,7 @@ query(
       }
       forkingAllowed
       webCommitSignoffRequired
-      repositoryTopics(first: 100) {
+      repositoryTopics(first: 20) {
         nodes {
           topic {
             name
