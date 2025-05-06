@@ -51,7 +51,12 @@
         # Limit the results to repositories where the user has this role.
         [ValidateSet('Owner', 'Collaborator', 'Organization_member')]
         [Parameter()]
-        [string[]] $Affiliation = 'Owner',
+        [string[]] $Affiliation,
+
+        # Limit the results to repositories where the owner has this affiliation (e.g., OWNER only).
+        [ValidateSet('Owner', 'Collaborator', 'Organization_member')]
+        [Parameter()]
+        [string[]] $OwnerAffiliations = 'Owner',
 
         # The number of results per page (max 100).
         [Parameter()]
@@ -82,7 +87,8 @@ query(
     `$Owner: String!,
     `$PerPage: Int!,
     `$Cursor: String,
-    `$Affiliations: [RepositoryAffiliation!],
+    `$Affiliations: [RepositoryAffiliation],
+    `$OwnerAffiliations: [RepositoryAffiliation!],
     `$Visibility: RepositoryVisibility,
     `$IsArchived: Boolean,
     `$IsFork: Boolean
@@ -94,6 +100,7 @@ query(
         first: `$PerPage,
         after: `$Cursor,
         affiliations: `$Affiliations,
+        ownerAffiliations: `$OwnerAffiliations,
         visibility: `$Visibility,
         isArchived: `$IsArchived,
         isFork: `$IsFork
@@ -116,13 +123,14 @@ query(
 }
 "@
                 Variables = @{
-                    Owner        = $Owner
-                    PerPage      = $perPageSetting
-                    Cursor       = $after
-                    Affiliations = $Affiliation | ForEach-Object { $_.ToString().ToUpper() }
-                    Visibility   = -not [string]::IsNullOrEmpty($Visibility) ? $Visibility.ToString().ToUpper() : $null
-                    IsArchived   = $IsArchived
-                    IsFork       = $IsFork
+                    Owner             = $Owner
+                    PerPage           = $perPageSetting
+                    Cursor            = $after
+                    Affiliations      = $Affiliation | ForEach-Object { $_.ToString().ToUpper() }
+                    OwnerAffiliations = $OwnerAffiliations | ForEach-Object { $_.ToString().ToUpper() }
+                    Visibility        = -not [string]::IsNullOrEmpty($Visibility) ? $Visibility.ToString().ToUpper() : $null
+                    IsArchived        = $IsArchived
+                    IsFork            = $IsFork
                 }
                 Context   = $Context
             }
