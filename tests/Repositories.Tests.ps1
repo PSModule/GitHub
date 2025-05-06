@@ -145,7 +145,7 @@ Describe 'Repositories' {
         }
         It 'Get-GitHubRepository - Gets all repositories from a user' {
             LogGroup 'Repositories' {
-                $repos = Get-GitHubRepository -Username 'MariusStorhaug'
+                $repos = Get-GitHubRepository -Username 'MariusStorhaug' -Verbose -Debug
                 Write-Host ($repos | Format-Table | Out-String)
             }
             $repos.Count | Should -BeGreaterThan 0
