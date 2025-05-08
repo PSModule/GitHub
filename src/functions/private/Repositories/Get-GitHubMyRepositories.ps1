@@ -56,7 +56,7 @@
 
         # Additional properties to include in the repository query.
         [Parameter()]
-        [string[]] $AdditionalProperties,
+        [string[]] $AdditionalProperty,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -74,7 +74,7 @@
         $hasNextPage = $true
         $after = $null
         $perPageSetting = Resolve-GitHubContextSetting -Name 'PerPage' -Value $PerPage -Context $Context
-        $additionalFields = if ($AdditionalProperties) { ($AdditionalProperties -join "`n        ") } else { '' }
+        $additionalFields = if ($AdditionalProperty) { ($AdditionalProperty -join "`n        ") } else { '' }
 
         do {
             $inputObject = @{

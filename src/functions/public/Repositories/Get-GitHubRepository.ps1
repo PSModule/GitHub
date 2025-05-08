@@ -66,7 +66,7 @@
         [Parameter(ParameterSetName = 'List repositories for the authenticated user')]
         [Parameter(ParameterSetName = 'List repositories from an account')]
         [Parameter()]
-        [string[]] $AdditionalProperties,
+        [string[]] $AdditionalProperty,
 
         # The number of results per page (max 100).
         [Parameter(ParameterSetName = 'List repositories for the authenticated user')]
@@ -89,13 +89,13 @@
 
     process {
         $params = @{
-            Context              = $Context
-            Owner                = $Owner
-            Name                 = $Name
-            Affiliation          = $Affiliation
-            Visibility           = $Visibility
-            PerPage              = $PerPage
-            AdditionalProperties = $AdditionalProperties
+            Context            = $Context
+            Owner              = $Owner
+            Name               = $Name
+            Affiliation        = $Affiliation
+            Visibility         = $Visibility
+            PerPage            = $PerPage
+            AdditionalProperty = $AdditionalProperty
         }
         $params | Remove-HashtableEntry -NullOrEmptyValues
         Write-Debug "ParamSet: [$($PSCmdlet.ParameterSetName)]"

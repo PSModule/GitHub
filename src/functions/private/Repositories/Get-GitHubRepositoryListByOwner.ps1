@@ -60,7 +60,7 @@
 
         # Additional properties to include in the repository query.
         [Parameter()]
-        [string[]] $AdditionalProperties,
+        [string[]] $AdditionalProperty,
 
         # The number of results per page (max 100).
         [Parameter()]
@@ -77,7 +77,7 @@
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-        $additionalFields = if ($AdditionalProperties) { ($AdditionalProperties -join "`n        ") } else { '' }
+        $additionalFields = if ($AdditionalProperty) { ($AdditionalProperty -join "`n        ") } else { '' }
     }
 
     process {
