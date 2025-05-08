@@ -54,6 +54,10 @@
         [ValidateRange(0, 100)]
         [int] $PerPage,
 
+        # Additional properties to include in the repository query.
+        [Parameter()]
+        [string[]] $AdditionalProperties,
+
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter(Mandatory)]
@@ -70,6 +74,7 @@
         $hasNextPage = $true
         $after = $null
         $perPageSetting = Resolve-GitHubContextSetting -Name 'PerPage' -Value $PerPage -Context $Context
+        $additionalFields = if ($AdditionalProperties) { ($AdditionalProperties -join "`n        ") } else { '' }
 
         do {
             $inputObject = @{
@@ -99,6 +104,7 @@ query(
         url
         diskUsage
         visibility
+$($additionalFields)
       }
       pageInfo {
         endCursor

@@ -58,6 +58,10 @@
         [Parameter()]
         [string[]] $OwnerAffiliations = 'Owner',
 
+        # Additional properties to include in the repository query.
+        [Parameter()]
+        [string[]] $AdditionalProperties,
+
         # The number of results per page (max 100).
         [Parameter()]
         [ValidateRange(0, 100)]
@@ -73,6 +77,7 @@
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
+        $additionalFields = if ($AdditionalProperties) { ($AdditionalProperties -join "`n        ") } else { '' }
     }
 
     process {
@@ -113,6 +118,7 @@ query(
         url
         diskUsage
         visibility
+$($additionalFields)
       }
       pageInfo {
         endCursor
