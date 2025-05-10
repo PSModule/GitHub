@@ -148,13 +148,15 @@ Describe 'Repositories' {
                 }
                 Write-Host ($repo | Format-List | Out-String)
             }
-            $repo | Should -Not -BeNullOrEmpty
-            $repo.Name | Should -Not -BeNullOrEmpty
-            $repo.CreatedAt | Should -Not -BeNullOrEmpty
-            $repo.UpdatedAt | Should -Not -BeNullOrEmpty
-            $repo.DatabaseID | Should -BeNullOrEmpty
-            $repo.ID | Should -BeNullOrEmpty
-            $repo.Owner | Should -BeNullOrEmpty
+            foreach ($item in $repo) {
+                $item | Should -Not -BeNullOrEmpty
+                $item.Name | Should -Not -BeNullOrEmpty
+                $item.CreatedAt | Should -Not -BeNullOrEmpty
+                $item.UpdatedAt | Should -Not -BeNullOrEmpty
+                $item.DatabaseID | Should -BeNullOrEmpty
+                $item.ID | Should -BeNullOrEmpty
+                $item.Owner | Should -BeNullOrEmpty
+            }
         }
         It 'Get-GitHubRepository - Gets repositories with additional properties' -Skip:($OwnerType -eq 'repository') {
             LogGroup 'Repository - AdditionalProperty' {
