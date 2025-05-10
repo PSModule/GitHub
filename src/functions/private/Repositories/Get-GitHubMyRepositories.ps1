@@ -55,15 +55,11 @@
 
         # Additional properties to include in the returned object.
         [Parameter()]
-        [string[]] $AdditionalProperty = @(),
-
-        # Additional properties to include in the returned object.
-        [Parameter()]
         [string[]] $AdditionalProperty,
 
         # The number of results per page (max 100).
         [Parameter()]
-        [ValidateRange(0, 100)]
+        [ValidateRange(1, 100)]
         [int] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.
