@@ -105,7 +105,7 @@
 
     process {
         $graphParams = @{
-            Property             = $Property + $AdditionalProperty
+            PropertyList         = $Property + $AdditionalProperty
             PropertyToGraphQLMap = [GitHubRepository]::PropertyToGraphQLMap
         }
         $graphQLFields = ConvertTo-GitHubGraphQLField @graphParams

@@ -80,7 +80,7 @@
         $perPageSetting = Resolve-GitHubContextSetting -Name 'PerPage' -Value $PerPage -Context $Context
 
         $graphParams = @{
-            Property             = $Property + $AdditionalProperty
+            PropertyList         = $Property + $AdditionalProperty
             PropertyToGraphQLMap = [GitHubRepository]::PropertyToGraphQLMap
         }
         $graphQLFields = ConvertTo-GitHubGraphQLField @graphParams
