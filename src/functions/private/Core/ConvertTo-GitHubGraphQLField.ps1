@@ -29,12 +29,14 @@
         [hashtable] $PropertyToGraphQLMap
     )
     $PropertyList = $PropertyList | Select-Object -Unique
-    $mappedProperties = $PropertyList | ForEach-Object {
+    $mappedProperties = $PropertyList | Where-Object { -not [string]::IsNullOrEmpty($_) } | ForEach-Object {
         if ($PropertyToGraphQLMap.ContainsKey($_)) {
             $PropertyToGraphQLMap[$_]
         } else {
             Write-Warning "Property '$_' is not available. Skipping."
         }
     }
+
+    $mappedProperties = $mappedProperties | Where-Object { -not [string]::IsNullOrEmpty($_) } | Select-Object -Unique
     return ($mappedProperties -join "`n")
 }
