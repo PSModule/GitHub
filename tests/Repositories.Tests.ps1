@@ -136,6 +136,26 @@ Describe 'Repositories' {
             }
             $repo | Should -Not -BeNullOrEmpty
         }
+        It 'Get-GitHubRepository - Gets repositories with properties' -Skip:($OwnerType -eq 'repository') {
+            LogGroup 'Repository - Property' {
+                switch ($OwnerType) {
+                    'user' {
+                        $repo = Get-GitHubRepository -Property 'Name', 'CreatedAt', 'UpdatedAt' -Debug
+                    }
+                    'organization' {
+                        $repo = Get-GitHubRepository -Owner $owner -Property 'Name', 'CreatedAt', 'UpdatedAt' -Debug
+                    }
+                }
+                Write-Host ($repo | Format-List | Out-String)
+            }
+            $repo | Should -Not -BeNullOrEmpty
+            $repo.Name | Should -Not -BeNullOrEmpty
+            $repo.CreatedAt | Should -Not -BeNullOrEmpty
+            $repo.UpdatedAt | Should -Not -BeNullOrEmpty
+            $repo.DatabaseID | Should -BeNullOrEmpty
+            $repo.ID | Should -BeNullOrEmpty
+            $repo.Owner | Should -BeNullOrEmpty
+        }
         It 'Get-GitHubRepository - Gets repositories with additional properties' -Skip:($OwnerType -eq 'repository') {
             LogGroup 'Repository - AdditionalProperty' {
                 switch ($OwnerType) {

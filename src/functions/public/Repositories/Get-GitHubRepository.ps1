@@ -66,7 +66,8 @@
         [Parameter()]
         [string[]] $Property,
 
-        # Additional properties to include in the returned object.
+        # Additional properties to include in the returned object. Is added to the list of properties to include.
+        # This is useful for properties that are not included in the default list of properties.
         [Parameter()]
         [string[]] $AdditionalProperty,
 
