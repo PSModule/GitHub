@@ -26,6 +26,21 @@
         $this.Pull = $Object.pull
     }
 
+    GitHubRepositoryPermissions([string]$Permission) {
+        $Permission = $Permission.ToLower()
+        if ($Permission -eq 'admin') {
+            $this.Admin = $true
+        } elseif ($Permission -eq 'maintain') {
+            $this.Maintain = $true
+        } elseif ($Permission -eq 'push') {
+            $this.Push = $true
+        } elseif ($Permission -eq 'triage') {
+            $this.Triage = $true
+        } elseif ($Permission -eq 'pull') {
+            $this.Pull = $true
+        }
+    }
+
     # Output the highest permission level as a string.
     # The order of permissions is: Admin > Maintain > Push > Triage > Pull
     [string] ToString() {
@@ -39,8 +54,7 @@
             return 'Triage'
         } elseif ($this.Pull) {
             return 'Pull'
-        } else {
-            return 'No Access'
         }
+        return $null
     }
 }

@@ -1,4 +1,28 @@
-﻿class GitHubLicense {
+﻿class GitHubLicenseRule {
+    # A description of the rule.
+    [string] $Description
+
+    # The machine-readable rule key.
+    [string] $Key
+
+    # The human-readable rule label.
+    [string] $Label
+
+    GitHubLicenseRule() {}
+
+    GitHubLicenseRule([PSCustomObject]$Object) {
+        $this.Description = $Object.description
+        $this.Key = $Object.key
+        $this.Label = $Object.label
+    }
+
+    [string] ToString() {
+        return $this.Description
+    }
+}
+
+
+class GitHubLicense {
     # The license key, used as an identifier.
     # Example: 'mit'
     [string] $Key
@@ -7,13 +31,13 @@
     # Example: 'MIT License'
     [string] $Name
 
+    # Customary short name if applicable (e.g, GPLv3).
+    # Example: 'MIT'
+    [string] $NickName
+
     # The SPDX identifier of the license, or $null.
     # Example: 'MIT'
     [string] $SpdxId
-
-    # API URL of the license, or $null.
-    # Example: 'https://api.github.com/licenses/mit'
-    [string] $ApiUrl
 
     # The node ID of the license.
     # Example: 'MDc6TGljZW5zZW1pdA=='
@@ -56,15 +80,15 @@
     GitHubLicense([PSCustomObject]$Object) {
         $this.Key = $Object.key
         $this.Name = $Object.name
-        $this.SpdxId = $Object.spdx_id
-        $this.ApiUrl = $Object.url
-        $this.NodeID = $Object.node_id
-        $this.Url = $Object.html_url
+        $this.NickName = $Object.nickname
+        $this.SpdxId = $Object.spdx_id ?? $Object.spdxId
+        $this.NodeID = $Object.node_id ?? $Object.id
+        $this.Url = $Object.html_url ?? $Object.url
         $this.Description = $Object.description
         $this.Implementation = $Object.implementation
-        $this.Permissions = $Object.permissions
-        $this.Conditions = $Object.conditions
-        $this.Limitations = $Object.limitations
+        $this.Permissions = [GitHubLicenseRule]::new($Object.permissions)
+        $this.Conditions = [GitHubLicenseRule]::new($Object.conditions)
+        $this.Limitations = [GitHubLicenseRule]::new($Object.limitations)
         $this.Body = $Object.body
         $this.Featured = $Object.featured
     }
