@@ -136,14 +136,14 @@ Describe 'Repositories' {
             }
             $repo | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubRepository - Gets repository with additional properties' -Skip:($OwnerType -eq 'repository') {
+        It 'Get-GitHubRepository - Gets repositories with additional properties' -Skip:($OwnerType -eq 'repository') {
             LogGroup 'Repository - AdditionalProperty' {
                 switch ($OwnerType) {
                     'user' {
-                        $repo = Get-GitHubRepository -Name $repoName -AdditionalProperty 'CreatedAt', 'UpdatedAt' -Debug
+                        $repo = Get-GitHubRepository -AdditionalProperty 'CreatedAt', 'UpdatedAt' -Debug
                     }
                     'organization' {
-                        $repo = Get-GitHubRepository -Owner $owner -Name $repoName -AdditionalProperty 'CreatedAt', 'UpdatedAt' -Debug
+                        $repo = Get-GitHubRepository -Owner $owner -AdditionalProperty 'CreatedAt', 'UpdatedAt' -Debug
                     }
                 }
                 Write-Host ($repo | Format-List | Out-String)
