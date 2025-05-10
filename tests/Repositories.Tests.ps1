@@ -126,15 +126,15 @@ Describe 'Repositories' {
             LogGroup 'Repository' {
                 switch ($OwnerType) {
                     'user' {
-                        $repo = Get-GitHubRepository -Name $repoName -Debug
+                        $repo = Get-GitHubRepository -Name $repoName
                     }
                     'organization' {
-                        $repo = Get-GitHubRepository -Owner $owner -Name $repoName -Debug
+                        $repo = Get-GitHubRepository -Owner $owner -Name $repoName
                     }
                 }
                 Write-Host ($repo | Format-List | Out-String)
             }
-            $repo | Should -Not -BeNullOrEmptya
+            $repo | Should -Not -BeNullOrEmpty
         }
         It 'Get-GitHubRepository - Gets repository with additional properties' -Skip:($OwnerType -eq 'repository') {
             LogGroup 'Repository - AdditionalProperty' {
