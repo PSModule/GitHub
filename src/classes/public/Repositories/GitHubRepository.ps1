@@ -216,7 +216,6 @@
         HasIssues                = 'hasIssuesEnabled'
         HasProjects              = 'hasProjectsEnabled'
         HasWiki                  = 'hasWikiEnabled'
-        HasPages                 = 'hasPagesEnabled'
         HasDiscussions           = 'hasDiscussionsEnabled'
         IsArchived               = 'isArchived'
         IsDisabled               = 'isDisabled'

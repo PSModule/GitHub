@@ -47,25 +47,35 @@
             Context     = $Context
         }
 
-        $apiResponse = Invoke-GitHubAPI @inputObject
-        $graphQLResponse = $apiResponse.Response
+        try {
+            $apiResponse = Invoke-GitHubAPI @inputObject
+            $graphQLResponse = $apiResponse.Response
 
-        # Handle GraphQL-specific errors (200 OK with errors in response)
-        if ($graphQLResponse.errors) {
-            $errorMessages = $graphQLResponse.errors | ForEach-Object {
-                "GraphQL Error [$($_.type)]: $($_.message)`nPath: $($_.path -join '/')`nLocations: $($_.locations.line):$($_.locations.column)"
-            }
-            $PSCmdlet.ThrowTerminatingError(
-                [System.Management.Automation.ErrorRecord]::new(
-                    [System.Exception]::new("GraphQL errors occurred:`n$($errorMessages -join "`n`n")"),
-                    'GraphQLError',
-                    [System.Management.Automation.ErrorCategory]::InvalidOperation,
-                    $graphQLResponse
+            # Handle GraphQL-specific errors (200 OK with errors in response)
+            if ($graphQLResponse.errors) {
+                $errorMessages = $graphQLResponse.errors | ForEach-Object {
+                    @"
+GraphQL Error [$($_.type)]:
+Message:   $($_.message)
+Path:      $($_.path -join '/')
+Locations: $($_.locations.line):$($_.locations.column)
+
+"@
+                }
+                $PSCmdlet.ThrowTerminatingError(
+                    [System.Management.Automation.ErrorRecord]::new(
+                        [System.Exception]::new("GraphQL errors occurred:`n$($errorMessages -join "`n`n")"),
+                        'GraphQLError',
+                        [System.Management.Automation.ErrorCategory]::InvalidOperation,
+                        $graphQLResponse
+                    )
                 )
-            )
-        }
+            }
 
-        $graphQLResponse.data
+            $graphQLResponse.data
+        } catch {
+            $PSCmdlet.ThrowTerminatingError($_)
+        }
     }
 
     end {
