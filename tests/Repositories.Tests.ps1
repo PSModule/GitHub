@@ -140,10 +140,10 @@ Describe 'Repositories' {
             LogGroup 'Repository - AdditionalProperty' {
                 switch ($OwnerType) {
                     'user' {
-                        $repo = Get-GitHubRepository -Name $repoName -AdditionalProperty 'createdAt', 'updatedAt' -Debug
+                        $repo = Get-GitHubRepository -Name $repoName -AdditionalProperty 'CreatedAt', 'UpdatedAt' -Debug
                     }
                     'organization' {
-                        $repo = Get-GitHubRepository -Owner $owner -Name $repoName -AdditionalProperty 'createdAt', 'updatedAt'
+                        $repo = Get-GitHubRepository -Owner $owner -Name $repoName -AdditionalProperty 'CreatedAt', 'UpdatedAt' -Debug
                     }
                 }
                 Write-Host ($repo | Format-List | Out-String)
