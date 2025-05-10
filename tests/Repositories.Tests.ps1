@@ -126,10 +126,10 @@ Describe 'Repositories' {
             LogGroup 'Repository' {
                 switch ($OwnerType) {
                     'user' {
-                        $repo = Get-GitHubRepository -Name $repoName
+                        $repo = Get-GitHubRepository -Name $repoName -Debug
                     }
                     'organization' {
-                        $repo = Get-GitHubRepository -Owner $owner -Name $repoName
+                        $repo = Get-GitHubRepository -Owner $owner -Name $repoName -Debug
                     }
                 }
                 Write-Host ($repo | Format-List | Out-String)
