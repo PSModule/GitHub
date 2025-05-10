@@ -58,9 +58,13 @@
         [Parameter()]
         [string[]] $OwnerAffiliations = 'Owner',
 
-        # Additional properties to include in the repository query.
+        # Properties to include in the returned object.
         [Parameter()]
-        [string[]] $AdditionalProperty,
+        [string[]] $Property = @('Name', 'Owner', 'Url', 'Size', 'Visibility'),
+
+        # Additional properties to include in the returned object.
+        [Parameter()]
+        [string[]] $AdditionalProperty = @(),
 
         # The number of results per page (max 100).
         [Parameter()]
@@ -77,13 +81,17 @@
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-        $additionalFields = if ($AdditionalProperty) { ($AdditionalProperty -join "`n        ") } else { '' }
     }
 
     process {
         $hasNextPage = $true
         $after = $null
         $perPageSetting = Resolve-GitHubContextSetting -Name 'PerPage' -Value $PerPage -Context $Context
+        $graphParams = @{
+            Property             = $Property + $AdditionalProperty
+            PropertyToGraphQLMap = [GitHubRepository]::PropertyToGraphQLMap
+        }
+        $graphQLFields = ConvertTo-GitHubGraphQLField @graphParams
 
         do {
             $inputObject = @{
@@ -111,14 +119,7 @@ query(
         isFork: `$IsFork
     ) {
       nodes {
-        name
-        owner {
-          login
-        }
-        url
-        diskUsage
-        visibility
-$($additionalFields)
+        $graphQLFields
       }
       pageInfo {
         endCursor

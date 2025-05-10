@@ -62,9 +62,11 @@
         [Parameter()]
         [string[]] $Affiliation,
 
-        # Additional properties to include in the repository query.
-        [Parameter(ParameterSetName = 'List repositories for the authenticated user')]
-        [Parameter(ParameterSetName = 'List repositories from an account')]
+        # Properties to include in the returned object.
+        [Parameter()]
+        [string[]] $Property,
+
+        # Additional properties to include in the returned object.
         [Parameter()]
         [string[]] $AdditionalProperty,
 
@@ -95,6 +97,7 @@
             Affiliation        = $Affiliation
             Visibility         = $Visibility
             PerPage            = $PerPage
+            Property           = $Property
             AdditionalProperty = $AdditionalProperty
         }
         $params | Remove-HashtableEntry -NullOrEmptyValues

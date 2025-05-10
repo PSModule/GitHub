@@ -49,14 +49,22 @@
         [Parameter()]
         [string[]] $Affiliation = 'Owner',
 
+        # Properties to include in the returned object.
+        [Parameter()]
+        [string[]] $Property = @('Name', 'Owner', 'Url', 'Size', 'Visibility'),
+
+        # Additional properties to include in the returned object.
+        [Parameter()]
+        [string[]] $AdditionalProperty = @(),
+
+        # Additional properties to include in the returned object.
+        [Parameter()]
+        [string[]] $AdditionalProperty,
+
         # The number of results per page (max 100).
         [Parameter()]
         [ValidateRange(0, 100)]
         [int] $PerPage,
-
-        # Additional properties to include in the repository query.
-        [Parameter()]
-        [string[]] $AdditionalProperty,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -74,7 +82,12 @@
         $hasNextPage = $true
         $after = $null
         $perPageSetting = Resolve-GitHubContextSetting -Name 'PerPage' -Value $PerPage -Context $Context
-        $additionalFields = if ($AdditionalProperty) { ($AdditionalProperty -join "`n        ") } else { '' }
+
+        $graphParams = @{
+            Property             = $Property + $AdditionalProperty
+            PropertyToGraphQLMap = [GitHubRepository]::PropertyToGraphQLMap
+        }
+        $graphQLFields = ConvertTo-GitHubGraphQLField @graphParams
 
         do {
             $inputObject = @{
@@ -97,14 +110,7 @@ query(
         isFork: `$IsFork
     ) {
       nodes {
-        name
-        owner {
-          login
-        }
-        url
-        diskUsage
-        visibility
-$($additionalFields)
+$graphQLFields
       }
       pageInfo {
         endCursor

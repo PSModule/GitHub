@@ -143,7 +143,7 @@ Describe 'Repositories' {
                         $repo = Get-GitHubRepository -Name $repoName -AdditionalProperty 'createdAt', 'updatedAt' -Debug
                     }
                     'organization' {
-                        $repo = Get-GitHubRepository -Owner $owner -Name $repoName -AdditionalProperty 'createdAt', 'updatedAt' -Debug
+                        $repo = Get-GitHubRepository -Owner $owner -Name $repoName -AdditionalProperty 'createdAt', 'updatedAt'
                     }
                 }
                 Write-Host ($repo | Format-List | Out-String)

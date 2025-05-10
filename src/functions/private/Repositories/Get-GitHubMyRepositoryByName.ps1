@@ -27,6 +27,67 @@
         [Parameter(Mandatory)]
         [string] $Name,
 
+        # Properties to include in the returned object.
+        [Parameter()]
+        [string[]] $Property = @(
+            'ID',
+            'NodeID'
+            'Name',
+            'Owner',
+            'FullName',
+            'Url',
+            'Description',
+            'CreatedAt',
+            'UpdatedAt',
+            'PushedAt',
+            'ArchivedAt',
+            'Homepage',
+            'Size',
+            'Language',
+            'HasIssues',
+            'HasProjects',
+            'HasWiki',
+            'HasPages',
+            'HasDiscussions',
+            'IsArchived',
+            'IsDisabled',
+            'IsTemplate',
+            'IsFork',
+            'License',
+            'AllowForking',
+            'RequireWebCommitSignoff',
+            'Topics',
+            'Visibility',
+            'OpenIssues',
+            'OpenPullRequests',
+            'Stargazers',
+            'Watchers',
+            'Forks',
+            'DefaultBranch',
+            'Permissions',
+            'AllowSquashMerge',
+            'AllowMergeCommit',
+            'AllowRebaseMerge',
+            'AllowAutoMerge',
+            'DeleteBranchOnMerge',
+            'AllowUpdateBranch',
+            'SquashMergeCommitTitle',
+            'SquashMergeCommitMessage',
+            'MergeCommitTitle',
+            'MergeCommitMessage',
+            'TemplateRepository',
+            'ForkParent',
+            'ForkSource',
+            'CustomProperties',
+            'CloneUrl',
+            'SshUrl',
+            'GitUrl'
+        ),
+
+        # Additional properties to include in the returned object.
+        [Parameter()]
+        [string[]] $AdditionalProperty,
+
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter(Mandatory)]
@@ -40,6 +101,12 @@
     }
 
     process {
+        $graphParams = @{
+            Property             = $Property + $AdditionalProperty
+            PropertyToGraphQLMap = [GitHubRepository]::PropertyToGraphQLMap
+        }
+        $graphQLFields = ConvertTo-GitHubGraphQLField @graphParams
+
         $inputObject = @{
             Query     = @"
 query(
@@ -49,90 +116,7 @@ query(
     repository(
       name: `$Name
     ) {
-      id
-      databaseId
-      name
-      owner {
-        login
-      }
-      url
-      description
-      createdAt
-      updatedAt
-      pushedAt
-      archivedAt
-      homepageUrl
-      diskUsage
-      primaryLanguage {
-        name
-        id
-        color
-      }
-      hasIssuesEnabled
-      hasProjectsEnabled
-      hasWikiEnabled
-      hasDiscussionsEnabled
-      isArchived
-      isDisabled
-      isTemplate
-      isFork
-      licenseInfo {
-        name
-      }
-      forkingAllowed
-      webCommitSignoffRequired
-      repositoryTopics(first: 20) {
-        nodes {
-          topic {
-            name
-          }
-        }
-      }
-      visibility
-      issues {
-        totalCount
-      }
-      pullRequests {
-        totalCount
-      }
-      stargazers {
-        totalCount
-      }
-      watchers {
-        totalCount
-      }
-      forks {
-        totalCount
-      }
-      defaultBranchRef {
-        name
-      }
-      viewerPermission
-      squashMergeAllowed
-      mergeCommitAllowed
-      rebaseMergeAllowed
-      autoMergeAllowed
-      deleteBranchOnMerge
-      allowUpdateBranch
-      squashMergeCommitTitle
-      squashMergeCommitMessage
-      mergeCommitTitle
-      mergeCommitMessage
-      templateRepository {
-        id
-        databaseId
-        name
-        owner {
-          login
-        }
-      }
-      parent {
-        name
-        owner {
-          login
-        }
-      }
-      sshUrl
+$graphQLFields
     }
   }
 }
