@@ -37,6 +37,8 @@
         }
     }
 
-    $mappedProperties = $mappedProperties | Where-Object { -not [string]::IsNullOrEmpty($_) } | Select-Object -Unique
+    $mappedProperties = $mappedProperties | Select-Object -Unique
+    Write-Debug "Mapped properties:"
+    $mappedProperties | ForEach-Object { Write-Debug $_ }
     return ($mappedProperties -join "`n")
 }
