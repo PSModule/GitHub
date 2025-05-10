@@ -51,7 +51,16 @@
         # Limit the results to repositories where the user has this role.
         [ValidateSet('Owner', 'Collaborator', 'Organization_member')]
         [Parameter()]
-        [string[]] $Affiliation = 'Owner',
+        [string[]] $Affiliation,
+
+        # Limit the results to repositories where the owner has this affiliation (e.g., OWNER only).
+        [ValidateSet('Owner', 'Collaborator', 'Organization_member')]
+        [Parameter()]
+        [string[]] $OwnerAffiliations = 'Owner',
+
+        # Additional properties to include in the repository query.
+        [Parameter()]
+        [string[]] $AdditionalProperty,
 
         # The number of results per page (max 100).
         [Parameter()]
@@ -68,6 +77,7 @@
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
+        $additionalFields = if ($AdditionalProperty) { ($AdditionalProperty -join "`n        ") } else { '' }
     }
 
     process {
@@ -82,7 +92,8 @@ query(
     `$Owner: String!,
     `$PerPage: Int!,
     `$Cursor: String,
-    `$Affiliations: [RepositoryAffiliation!],
+    `$Affiliations: [RepositoryAffiliation],
+    `$OwnerAffiliations: [RepositoryAffiliation!],
     `$Visibility: RepositoryVisibility,
     `$IsArchived: Boolean,
     `$IsFork: Boolean
@@ -94,6 +105,7 @@ query(
         first: `$PerPage,
         after: `$Cursor,
         affiliations: `$Affiliations,
+        ownerAffiliations: `$OwnerAffiliations,
         visibility: `$Visibility,
         isArchived: `$IsArchived,
         isFork: `$IsFork
@@ -106,6 +118,7 @@ query(
         url
         diskUsage
         visibility
+$($additionalFields)
       }
       pageInfo {
         endCursor
@@ -116,13 +129,14 @@ query(
 }
 "@
                 Variables = @{
-                    Owner        = $Owner
-                    PerPage      = $perPageSetting
-                    Cursor       = $after
-                    Affiliations = $Affiliation | ForEach-Object { $_.ToString().ToUpper() }
-                    Visibility   = -not [string]::IsNullOrEmpty($Visibility) ? $Visibility.ToString().ToUpper() : $null
-                    IsArchived   = $IsArchived
-                    IsFork       = $IsFork
+                    Owner             = $Owner
+                    PerPage           = $perPageSetting
+                    Cursor            = $after
+                    Affiliations      = [string]::IsNullOrEmpty($Affiliation) ? $null : $Affiliation.ToUpper()
+                    OwnerAffiliations = [string]::IsNullOrEmpty($OwnerAffiliations) ? $null : $OwnerAffiliations.ToUpper()
+                    Visibility        = [string]::IsNullOrEmpty($Visibility) ? $null : $Visibility.ToUpper()
+                    IsArchived        = $IsArchived
+                    IsFork            = $IsFork
                 }
                 Context   = $Context
             }

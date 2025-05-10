@@ -134,7 +134,23 @@ Describe 'Repositories' {
                 }
                 Write-Host ($repo | Format-List | Out-String)
             }
+            $repo | Should -Not -BeNullOrEmptya
+        }
+        It 'Get-GitHubRepository - Gets repository with additional properties' -Skip:($OwnerType -eq 'repository') {
+            LogGroup 'Repository - AdditionalProperty' {
+                switch ($OwnerType) {
+                    'user' {
+                        $repo = Get-GitHubRepository -Name $repoName -AdditionalProperty 'createdAt', 'updatedAt'
+                    }
+                    'organization' {
+                        $repo = Get-GitHubRepository -Owner $owner -Name $repoName -AdditionalProperty 'createdAt', 'updatedAt'
+                    }
+                }
+                Write-Host ($repo | Format-List | Out-String)
+            }
             $repo | Should -Not -BeNullOrEmpty
+            $repo.CreatedAt | Should -Not -BeNullOrEmpty
+            $repo.UpdatedAt | Should -Not -BeNullOrEmpty
         }
         It 'Get-GitHubRepository - Gets all repositories from a organization' {
             LogGroup 'Repositories' {
