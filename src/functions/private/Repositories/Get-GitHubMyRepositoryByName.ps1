@@ -47,7 +47,6 @@
             'HasIssues',
             'HasProjects',
             'HasWiki',
-            'HasPages',
             'HasDiscussions',
             'IsArchived',
             'IsDisabled',
