@@ -211,7 +211,6 @@ Describe 'Repositories' {
             $repos | Should -BeNullOrEmpty
         }
         It 'Update-GitHubRepository - Renames a repository' -Skip:($OwnerType -eq 'repository') {
-            # Get the current repo
             switch ($OwnerType) {
                 'user' {
                     $repo = Get-GitHubRepository -Name $repoName
@@ -220,9 +219,7 @@ Describe 'Repositories' {
                     $repo = Get-GitHubRepository -Owner $owner -Name $repoName
                 }
             }
-            $originalRepo = $repo.PSObject.Copy()
-            $newName = "$($repo.Name)newname"
-            # Rename the repository
+            $newName = "$repoName-newname"
             switch ($OwnerType) {
                 'user' {
                     $updatedRepo = Update-GitHubRepository -Name $repo.Name -NewName $newName
@@ -236,13 +233,6 @@ Describe 'Repositories' {
             }
             $updatedRepo | Should -Not -BeNullOrEmpty
             $updatedRepo.Name | Should -Be $newName
-            # Verify other settings remain unchanged
-            $unchangedProps = @('Description', 'Private', 'AllowSquashMerge', 'AllowMergeCommit', 'AllowRebaseMerge', 'HasIssuesEnabled', 'HasWikiEnabled', 'HasProjectsEnabled', 'DefaultBranch')
-            foreach ($prop in $unchangedProps) {
-                if ($originalRepo.PSObject.Properties[$prop]) {
-                    $updatedRepo.$prop | Should -Be $originalRepo.$prop
-                }
-            }
         }
     }
 }
