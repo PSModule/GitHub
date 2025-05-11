@@ -49,7 +49,6 @@
             'HasWiki',
             'HasDiscussions',
             'IsArchived',
-            'IsDisabled',
             'IsTemplate',
             'IsFork',
             'License',
