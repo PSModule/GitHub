@@ -53,9 +53,11 @@ Describe 'Releases' {
             }
             switch ($OwnerType) {
                 'user' {
+                    Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
                     $repo = New-GitHubRepository @params
                 }
                 'organization' {
+                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
                     $repo = New-GitHubRepository @params -Organization $owner
                 }
             }

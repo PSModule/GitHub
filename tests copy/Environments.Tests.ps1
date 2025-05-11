@@ -46,9 +46,11 @@ Describe 'Environments' {
 
             switch ($OwnerType) {
                 'user' {
+                    Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
                     New-GitHubRepository -Name $repoName -AllowSquashMerge -Confirm:$false
                 }
                 'organization' {
+                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
                     New-GitHubRepository -Organization $owner -Name $repoName -AllowSquashMerge -Confirm:$false
                 }
             }

@@ -38,6 +38,15 @@ Describe 'Repositories' {
             }
             $repoPrefix = "$testName-$os-$TokenType"
             $repoName = "$repoPrefix-$guid"
+
+            switch ($OwnerType) {
+                'user' {
+                    Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                }
+                'organization' {
+                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                }
+            }
         }
 
         AfterAll {
@@ -46,8 +55,7 @@ Describe 'Repositories' {
                     Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
                 }
                 'organization' {
-                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } |
-                        Remove-GitHubRepository -Confirm:$false
+                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
                 }
             }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
@@ -211,21 +219,13 @@ Describe 'Repositories' {
             $repos | Should -BeNullOrEmpty
         }
         It 'Update-GitHubRepository - Renames a repository' -Skip:($OwnerType -eq 'repository') {
-            switch ($OwnerType) {
-                'user' {
-                    $repo = Get-GitHubRepository -Name $repoName
-                }
-                'organization' {
-                    $repo = Get-GitHubRepository -Owner $owner -Name $repoName
-                }
-            }
             $newName = "$repoName-newname"
             switch ($OwnerType) {
                 'user' {
-                    $updatedRepo = Update-GitHubRepository -Name $repo.Name -NewName $newName
+                    $updatedRepo = Update-GitHubRepository -Name $repoName -NewName $newName
                 }
                 'organization' {
-                    $updatedRepo = Update-GitHubRepository -Owner $owner -Name $repo.Name -NewName $newName
+                    $updatedRepo = Update-GitHubRepository -Owner $owner -Name $repoName -NewName $newName
                 }
             }
             LogGroup 'Repository - Renamed' {
