@@ -33,10 +33,10 @@
         [Parameter()]
         [switch] $Summary,
 
-        # The stanmp to use for the API call.
+        # The stamp to check status for.
         [Parameter()]
-        [ValidateSet('public', 'eu')]
-        [string] $Stamp = 'public'
+        [ValidateSet('Public', 'Europe', 'Australia')]
+        [string] $Stamp = 'Public'
     )
     begin {
         $stackPath = Get-PSCallStackPath

@@ -1,4 +1,5 @@
 ﻿$script:StatusBaseURL = @{
-    public = 'https://www.githubstatus.com'
-    eu     = 'https://eu.githubstatus.com'
+    Public    = 'https://www.githubstatus.com'
+    Europe    = 'https://eu.githubstatus.com'
+    Australia = 'https://au.githubstatus.com'
 }
