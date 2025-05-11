@@ -184,7 +184,6 @@
             merge_commit_message        = $MergeCommitMessage
             gitignore_template          = $Gitignore
             license_template            = $License
-            # private                     = $Visibility -eq 'private'
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 

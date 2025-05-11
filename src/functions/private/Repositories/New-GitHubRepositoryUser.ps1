@@ -57,8 +57,8 @@
 
         # The visibility of the repository.
         [Parameter()]
-        [ValidateSet('public', 'private')]
-        [string] $Visibility = 'public',
+        [ValidateSet('Public', 'Private')]
+        [string] $Visibility = 'Public',
 
         # Whether issues are enabled.
         [Parameter()]
@@ -181,7 +181,7 @@
             squash_merge_commit_message = $SquashMergeCommitMessage
             merge_commit_title          = $MergeCommitTitle
             merge_commit_message        = $MergeCommitMessage
-            private                     = $Visibility -eq 'private'
+            private                     = $Visibility -eq 'Private'
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 

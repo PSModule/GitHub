@@ -71,10 +71,6 @@
     # Example: false
     [System.Nullable[bool]] $IsArchived
 
-    # Indicates whether the repository is disabled.
-    # Example: false
-    [System.Nullable[bool]] $IsDisabled
-
     # Indicates whether the repository acts as a template.
     # Example: true
     [System.Nullable[bool]] $IsTemplate
@@ -151,9 +147,9 @@
     # Example: false
     [System.Nullable[bool]] $DeleteBranchOnMerge
 
-    # Whether a pull request head branch can be updated even if behind its base branch.
+    # Whether a pull request head branch is suggested to be updated if behind its base branch.
     # Example: false
-    [System.Nullable[bool]] $AllowUpdateBranch
+    [System.Nullable[bool]] $SuggestUpdateBranch
 
     # The default value for a squash merge commit title.
     # Enum: PR_TITLE, COMMIT_OR_PR_TITLE
@@ -218,7 +214,6 @@
         HasWiki                  = 'hasWikiEnabled'
         HasDiscussions           = 'hasDiscussionsEnabled'
         IsArchived               = 'isArchived'
-        IsDisabled               = 'isDisabled'
         IsTemplate               = 'isTemplate'
         IsFork                   = 'isFork'
         License                  = 'licenseInfo { name }'
@@ -238,7 +233,7 @@
         AllowRebaseMerge         = 'rebaseMergeAllowed'
         AllowAutoMerge           = 'autoMergeAllowed'
         DeleteBranchOnMerge      = 'deleteBranchOnMerge'
-        AllowUpdateBranch        = 'allowUpdateBranch'
+        SuggestUpdateBranch      = 'allowUpdateBranch'
         SquashMergeCommitTitle   = 'squashMergeCommitTitle'
         SquashMergeCommitMessage = 'squashMergeCommitMessage'
         MergeCommitTitle         = 'mergeCommitTitle'
@@ -271,7 +266,6 @@
             $this.Language = [GitHubRepositoryLanguage]::new($Object.language)
             $this.IsFork = $Object.fork
             $this.IsArchived = $Object.archived
-            $this.IsDisabled = $Object.disabled
             $this.IsTemplate = $Object.is_template
             $this.HasIssues = $Object.has_issues
             $this.HasProjects = $Object.has_projects
@@ -296,7 +290,7 @@
             $this.AllowRebaseMerge = $Object.allow_rebase_merge
             $this.AllowAutoMerge = $Object.allow_auto_merge
             $this.DeleteBranchOnMerge = $Object.delete_branch_on_merge
-            $this.AllowUpdateBranch = $Object.allow_update_branch
+            $this.SuggestUpdateBranch = $Object.allow_update_branch
             $this.SquashMergeCommitMessage = $Object.squash_merge_commit_message
             $this.SquashMergeCommitTitle = $Object.squash_merge_commit_title
             $this.MergeCommitMessage = $Object.merge_commit_message
@@ -328,7 +322,6 @@
             $this.HasWiki = $Object.hasWikiEnabled
             $this.HasDiscussions = $Object.hasDiscussionsEnabled
             $this.IsArchived = $Object.isArchived
-            $this.IsDisabled = $Object.isDisabled
             $this.IsTemplate = $Object.isTemplate
             $this.IsFork = $Object.isFork
             $this.License = [GitHubLicense]::new($Object.licenseInfo)
@@ -348,7 +341,7 @@
             $this.AllowRebaseMerge = $Object.rebaseMergeAllowed
             $this.AllowAutoMerge = $Object.autoMergeAllowed
             $this.DeleteBranchOnMerge = $Object.deleteBranchOnMerge
-            $this.AllowUpdateBranch = $Object.allowUpdateBranch
+            $this.SuggestUpdateBranch = $Object.allowUpdateBranch
             $this.SquashMergeCommitTitle = $Object.squashMergeCommitTitle
             $this.SquashMergeCommitMessage = $Object.squashMergeCommitMessage
             $this.MergeCommitTitle = $Object.mergeCommitTitle

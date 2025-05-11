@@ -69,7 +69,7 @@
             'AllowRebaseMerge',
             'AllowAutoMerge',
             'DeleteBranchOnMerge',
-            'AllowUpdateBranch',
+            'SuggestUpdateBranch',
             'SquashMergeCommitTitle',
             'SquashMergeCommitMessage',
             'MergeCommitTitle',

@@ -29,7 +29,7 @@
         .LINK
         https://psmodule.io/GitHub/Functions/Repositories/Update-GitHubRepository/
 
-        .LINK
+        .NOTES
         [Update a repository](https://docs.github.com/rest/repos/repos#update-a-repository)
     #>
     [OutputType([GitHubRepository])]
@@ -57,7 +57,7 @@
 
         # The visibility of the repository.
         [Parameter()]
-        [ValidateSet('public', 'private', 'internal')]
+        [ValidateSet('Public', 'Private', 'Internal')]
         [string] $Visibility,
 
         # Use the status property to enable or disable GitHub Advanced Security for this repository.
@@ -118,7 +118,7 @@
         # Either true to always allow a pull request head branch that is behind its base branch
         # to be updated even if it is not required to be up to date before merging, or false otherwise.
         [Parameter()]
-        [switch] $AllowUpdateBranch,
+        [switch] $SuggestUpdateBranch,
 
         # The default value for a squash merge commit title:
         # - PR_TITLE - default to the pull request's title.
@@ -181,8 +181,7 @@
             name                            = $NewName
             description                     = $Description
             homepage                        = $Homepage
-            visibility                      = $Visibility
-            private                         = $Visibility -eq 'private'
+            visibility                      = $Visibility.ToLower()
             default_branch                  = $DefaultBranch
             advanced_security               = $EnableAdvancedSecurity ? @{
                 status = $EnableAdvancedSecurity ? 'enabled' : 'disabled'
@@ -205,7 +204,7 @@
             merge_commit_message            = $MergeCommitMessage
             allow_rebase_merge              = $AllowRebaseMerge ? $AllowRebaseMerge : $null
             allow_auto_merge                = $AllowAutoMerge ? $AllowAutoMerge : $null
-            allow_update_branch             = $AllowUpdateBranch ? $AllowUpdateBranch : $null
+            allow_update_branch             = $SuggestUpdateBranch ? $SuggestUpdateBranch : $null
             delete_branch_on_merge          = $DeleteBranchOnMerge ? $DeleteBranchOnMerge : $null
             archived                        = $Archived ? $Archived : $null
             allow_forking                   = $AllowForking ? $AllowForking : $null

@@ -63,7 +63,7 @@
             Name               = 'MyNewRepo'
             IncludeAllBranches = $true
             Description        = 'My new repo'
-            Private            = $true
+            Visibility         = 'Private'
         }
         New-GitHubRepository @params
 
