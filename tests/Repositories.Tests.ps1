@@ -196,6 +196,22 @@ Describe 'Repositories' {
             }
             $repos.Count | Should -BeGreaterThan 0
         }
+        It 'Update-GitHubRepository - Renames a repository' -Skip:($OwnerType -eq 'repository') {
+            $newName = "$repoName-newname"
+            switch ($OwnerType) {
+                'user' {
+                    $updatedRepo = Update-GitHubRepository -Name $repoName -NewName $newName
+                }
+                'organization' {
+                    $updatedRepo = Update-GitHubRepository -Owner $owner -Name $repoName -NewName $newName
+                }
+            }
+            LogGroup 'Repository - Renamed' {
+                Write-Host ($updatedRepo | Format-List | Out-String)
+            }
+            $updatedRepo | Should -Not -BeNullOrEmpty
+            $updatedRepo.Name | Should -Be $newName
+        }
         It 'Remove-GitHubRepository - Removes all repositories' -Skip:($OwnerType -eq 'repository') {
             switch ($OwnerType) {
                 'user' {
@@ -218,21 +234,6 @@ Describe 'Repositories' {
             }
             $repos | Should -BeNullOrEmpty
         }
-        It 'Update-GitHubRepository - Renames a repository' -Skip:($OwnerType -eq 'repository') {
-            $newName = "$repoName-newname"
-            switch ($OwnerType) {
-                'user' {
-                    $updatedRepo = Update-GitHubRepository -Name $repoName -NewName $newName
-                }
-                'organization' {
-                    $updatedRepo = Update-GitHubRepository -Owner $owner -Name $repoName -NewName $newName
-                }
-            }
-            LogGroup 'Repository - Renamed' {
-                Write-Host ($updatedRepo | Format-List | Out-String)
-            }
-            $updatedRepo | Should -Not -BeNullOrEmpty
-            $updatedRepo.Name | Should -Be $newName
-        }
+
     }
 }
