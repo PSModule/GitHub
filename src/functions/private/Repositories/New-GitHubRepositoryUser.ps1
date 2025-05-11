@@ -62,31 +62,27 @@
 
         # Whether issues are enabled.
         [Parameter()]
-        [switch] $HasIssues,
+        [bool] $HasIssues,
 
         # Whether projects are enabled.
         [Parameter()]
-        [switch] $HasProjects,
+        [bool] $HasProjects,
 
         # Whether the wiki is enabled.
         [Parameter()]
-        [switch] $HasWiki,
+        [bool] $HasWiki,
 
         # Whether discussions are enabled.
         [Parameter()]
-        [switch] $HasDiscussions,
+        [bool] $HasDiscussions,
 
         # Whether this repository acts as a template that can be used to generate new repositories.
         [Parameter()]
-        [switch] $IsTemplate,
-
-        # The ID of the team that will be granted access to this repository. This is only valid when creating a repository in an organization.
-        [Parameter()]
-        [System.Nullable[int]] $TeamId,
+        [bool] $IsTemplate,
 
         # Pass true to create an initial commit with empty README.
         [Parameter()]
-        [switch] $AddReadme,
+        [bool] $AddReadme,
 
         # The desired language or platform to apply to the .gitignore.
         [Parameter()]
@@ -98,23 +94,23 @@
 
         # Whether to allow squash merges for pull requests.
         [Parameter()]
-        [switch] $AllowSquashMerge,
+        [bool] $AllowSquashMerge,
 
         # Whether to allow merge commits for pull requests.
         [Parameter()]
-        [switch] $AllowMergeCommit,
+        [bool] $AllowMergeCommit,
 
         # Whether to allow rebase merges for pull requests.
         [Parameter()]
-        [switch] $AllowRebaseMerge,
+        [bool] $AllowRebaseMerge,
 
         # Whether to allow Auto-merge to be used on pull requests.
         [Parameter()]
-        [switch] $AllowAutoMerge,
+        [bool] $AllowAutoMerge,
 
         # Whether to delete head branches when pull requests are merged
         [Parameter()]
-        [switch] $DeleteBranchOnMerge,
+        [bool] $DeleteBranchOnMerge,
 
         # The default value for a squash merge commit title:
         #   - PR_TITLE - default to the pull request's title.
@@ -162,13 +158,12 @@
         $body = @{
             name                        = $Name
             description                 = $Description
-            homepage                    = $Homepage
+            homepage                    = [string]$Homepage
             has_issues                  = [bool]$HasIssues
             has_projects                = [bool]$HasProjects
             has_wiki                    = [bool]$HasWiki
             has_discussions             = [bool]$HasDiscussions
             is_template                 = [bool]$IsTemplate
-            team_id                     = $TeamId
             auto_init                   = [bool]$AddReadme
             gitignore_template          = $Gitignore
             license_template            = $License

@@ -61,7 +61,7 @@
 
         # Include all branches from the source repository.
         [Parameter()]
-        [switch] $IncludeAllBranches,
+        [bool] $IncludeAllBranches,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.

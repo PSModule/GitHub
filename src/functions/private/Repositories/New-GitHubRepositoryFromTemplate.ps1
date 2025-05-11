@@ -63,12 +63,12 @@
 
         # Include all branches from the source repository.
         [Parameter()]
-        [switch] $IncludeAllBranches,
+        [bool] $IncludeAllBranches,
 
         # The visibility of the repository.
         [Parameter()]
-        [ValidateSet('public', 'private')]
-        [string] $Visibility = 'public',
+        [ValidateSet('Public', 'Private')]
+        [string] $Visibility = 'Public',
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -88,7 +88,7 @@
             name                 = $Name
             description          = $Description
             include_all_branches = [bool]$IncludeAllBranches
-            private              = $Visibility -eq 'private'
+            private              = $Visibility -eq 'Private'
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
