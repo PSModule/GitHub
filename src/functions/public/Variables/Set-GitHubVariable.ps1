@@ -72,8 +72,8 @@ function Set-GitHubVariable {
         # The visibility of the variable when updating an organization variable.
         # Can be `private`, `selected`, or `all`.
         [Parameter(ParameterSetName = 'Organization')]
-        [ValidateSet('private', 'selected', 'all')]
-        [string] $Visibility = 'private',
+        [ValidateSet('Private', 'Selected', 'All')]
+        [string] $Visibility = 'Private',
 
         # The IDs of the repositories to which the variable is available.
         # Used only when the `-Visibility` parameter is set to `selected`.
@@ -113,7 +113,7 @@ function Set-GitHubVariable {
             ErrorAction          = 'Stop'
         }
         if ($PSCmdlet.ParameterSetName -eq 'Organization') {
-            $params['Visibility'] = $Visibility
+            $params['Visibility'] = $Visibility.ToLower()
         }
         $params | Remove-HashtableEntry -NullOrEmptyValues
 
