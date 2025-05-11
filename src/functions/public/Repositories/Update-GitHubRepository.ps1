@@ -36,7 +36,7 @@
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
@@ -174,6 +174,10 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
+        if ([string]::IsNullOrEmpty($Owner)) {
+            $Owner = $Context.Username
+        }
+        Write-Debug "Owner: [$Owner]"
     }
 
     process {
