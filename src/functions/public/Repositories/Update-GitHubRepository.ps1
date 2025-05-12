@@ -241,7 +241,7 @@
             allow_auto_merge                      = $PSBoundParameters.ContainsKey('AllowAutoMerge') ? $AllowAutoMerge : $null
             allow_update_branch                   = $PSBoundParameters.ContainsKey('SuggestUpdateBranch') ? $SuggestUpdateBranch : $null
             delete_branch_on_merge                = $PSBoundParameters.ContainsKey('DeleteBranchOnMerge') ? $DeleteBranchOnMerge : $null
-            archived                              = $PSBoundParameters.ContainsKey('Archived') ? $Archived : $null
+            archived                              = $PSBoundParameters.ContainsKey('IsArchived') ? $IsArchived : $null
             allow_forking                         = $PSBoundParameters.ContainsKey('AllowForking') ? $AllowForking : $null
             web_commit_signoff_required           = $PSBoundParameters.ContainsKey('WebCommitSignoffRequired') ? $WebCommitSignoffRequired : $null
         }
