@@ -62,51 +62,51 @@
 
         # Whether to enable GitHub Advanced Security for this repository.
         [Parameter()]
-        [bool] $EnableAdvancedSecurity,
+        [System.Nullable[bool]] $EnableAdvancedSecurity,
 
         # Whether to enable code security for this repository.
         [Parameter()]
-        [bool] $EnableCodeSecurity,
+        [System.Nullable[bool]] $EnableCodeSecurity,
 
         # Whether to enable secret scanning for this repository.
         [Parameter()]
-        [bool] $EnableSecretScanning,
+        [System.Nullable[bool]] $EnableSecretScanning,
 
         # Whether to enable secret scanning push protection for this repository.
         [Parameter()]
-        [bool] $EnableSecretScanningPushProtection,
+        [System.Nullable[bool]] $EnableSecretScanningPushProtection,
 
         # Whether to enable secret scanning AI detection for this repository.
         [Parameter()]
-        [bool] $EnableSecretScanningAIDetection,
+        [System.Nullable[bool]] $EnableSecretScanningAIDetection,
 
         # Whether to enable secret scanning non-provider patterns for this repository.
         [Parameter()]
-        [bool] $EnableSecretScanningNonProviderPatterns,
+        [System.Nullable[bool]] $EnableSecretScanningNonProviderPatterns,
 
         # Whether issues are enabled.
         [Parameter()]
-        [bool] $HasIssues,
+        [System.Nullable[bool]] $HasIssues,
 
         # Whether projects are enabled.
         [Parameter()]
-        [bool] $HasProjects,
+        [System.Nullable[bool]] $HasProjects,
 
         # Whether the wiki is enabled.
         [Parameter()]
-        [bool] $HasWiki,
+        [System.Nullable[bool]] $HasWiki,
 
         # Whether discussions are enabled.
         [Parameter()]
-        [bool] $HasDiscussions,
+        [System.Nullable[bool]] $HasDiscussions,
 
         # Whether sponsorships are enabled.
         [Parameter()]
-        [bool] $HasSponsorships,
+        [System.Nullable[bool]] $HasSponsorships,
 
         # Whether this repository acts as a template that can be used to generate new repositories.
         [Parameter()]
-        [bool] $IsTemplate,
+        [System.Nullable[bool]] $IsTemplate,
 
         # Updates the default branch for this repository.
         [Parameter()]
@@ -114,28 +114,28 @@
 
         # Whether to allow squash merges for pull requests.
         [Parameter()]
-        [bool] $AllowSquashMerge,
+        [System.Nullable[bool]] $AllowSquashMerge,
 
         # Whether to allow merge commits for pull requests.
         [Parameter()]
-        [bool] $AllowMergeCommit,
+        [System.Nullable[bool]] $AllowMergeCommit,
 
         # Whether to allow rebase merges for pull requests.
         [Parameter()]
-        [bool] $AllowRebaseMerge,
+        [System.Nullable[bool]] $AllowRebaseMerge,
 
         # Whether to allow Auto-merge to be used on pull requests.
         [Parameter()]
-        [bool] $AllowAutoMerge,
+        [System.Nullable[bool]] $AllowAutoMerge,
 
         # Whether to delete head branches when pull requests are merged
         [Parameter()]
-        [bool] $DeleteBranchOnMerge,
+        [System.Nullable[bool]] $DeleteBranchOnMerge,
 
         # Either true to always allow a pull request head branch that is behind its base branch
         # to be updated even if it is not required to be up to date before merging, or false otherwise.
         [Parameter()]
-        [bool] $SuggestUpdateBranch,
+        [System.Nullable[bool]] $SuggestUpdateBranch,
 
         # The default value for a squash merge commit title:
         # - PR_TITLE - default to the pull request's title.
@@ -169,16 +169,16 @@
 
         # Whether to archive this repository. false will unarchive a previously archived repository.
         [Parameter()]
-        [bool] $Archived,
+        [System.Nullable[bool]] $IsArchived,
 
         # Either true to allow private forks, or false to prevent private forks.
         [Parameter()]
-        [bool] $AllowForking,
+        [System.Nullable[bool]] $AllowForking,
 
         # Either true to require contributors to sign off on web-based commits,
         # or false to not require contributors to sign off on web-based commits.
         [Parameter()]
-        [bool] $WebCommitSignoffRequired,
+        [System.Nullable[bool]] $WebCommitSignoffRequired,
 
         # Takes all parameters and updates the repository with the provided _AND_ the default values of the non-provided parameters.
         # Used for Set-GitHubRepository.
