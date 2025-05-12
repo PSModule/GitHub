@@ -261,21 +261,25 @@
         }
 
         $updateGraphQLInputs = @{
-            query     = @'
-            mutation($input: UpdateRepositoryInput!) {
-                updateRepository(input: $input) {
-                    hasDiscussionsEnabled
-                    hasSponsorshipsEnabled
+            query = @"
+                mutation {
+                    updateRepository(input: {
+                        repositoryId           = $($repo.NodeID)
+                        hasDiscussionsEnabled  = $HasDiscussions
+                        hasSponsorshipsEnabled = $HasSponsorships
+                    }) {
+                        repository {
+                            id
+                            name
+                            owner {
+                                login
+                            }
+                            hasDiscussionsEnabled
+                            hasSponsorshipsEnabled
+                        }
+                    }
                 }
-            }
-'@
-            variables = @{
-                input = @{
-                    repositoryId           = $repo.id
-                    hasDiscussionsEnabled  = $HasDiscussions
-                    hasSponsorshipsEnabled = $HasSponsorships
-                }
-            }
+"@
         }
 
         Invoke-GitHubGraphQLQuery @updateGraphQLInputs
