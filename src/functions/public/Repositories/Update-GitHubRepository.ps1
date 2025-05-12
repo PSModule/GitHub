@@ -278,7 +278,9 @@
         }
 
         if ($PSCmdlet.ShouldProcess("Repository [$Owner/$Name]", 'Update')) {
-            $repo = Invoke-GitHubAPI @inputObject | Select-Object -ExpandProperty Response
+            $repo = Invoke-GitHubAPI @inputObject | ForEach-Object {
+                [GitHubRepository]::new($_.Response)
+            }
         }
 
         if ($PSBoundParameters.ContainsKey('HasSponsorships') -or $PSBoundParameters.ContainsKey('HasDiscussions')) {
