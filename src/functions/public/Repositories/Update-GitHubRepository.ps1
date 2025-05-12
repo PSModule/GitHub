@@ -283,13 +283,15 @@
             }
         }
 
+        Write-Debug "$($repo | Select-Object * | Out-String)"
+
         if ($PSBoundParameters.ContainsKey('HasSponsorships') -or $PSBoundParameters.ContainsKey('HasDiscussions')) {
-            $input = @{
+            $inputParams = @{
                 repositoryId           = $($repo.NodeID)
                 hasSponsorshipsEnabled = $HasSponsorships
                 hasDiscussionsEnabled  = $HasDiscussions
             }
-            $input | Remove-HashtableEntry -NullOrEmptyValues
+            $inputParams | Remove-HashtableEntry -NullOrEmptyValues
 
             $updateGraphQLInputs = @{
                 query     = @'
@@ -308,7 +310,7 @@
                 }
 '@
                 variables = @{
-                    input = $input
+                    input = $inputParams
                 }
             }
 
