@@ -96,6 +96,14 @@
         [Parameter()]
         [bool] $HasWiki,
 
+        # Whether discussions are enabled.
+        [Parameter()]
+        [bool] $HasDiscussions,
+
+        # Whether sponsorships are enabled.
+        [Parameter()]
+        [bool] $HasSponsorships,
+
         # Whether this repository acts as a template that can be used to generate new repositories.
         [Parameter()]
         [bool] $IsTemplate,
@@ -196,46 +204,46 @@
 
     process {
         $body = @{
-            name                            = $NewName
-            description                     = $Description
-            homepage                        = $Homepage
-            visibility                      = $Visibility.ToLower()
-            default_branch                  = $DefaultBranch
-            advanced_security               = $PSBoundParameters.ContainsKey('EnableAdvancedSecurity') ? @{
+            name                                  = $NewName
+            description                           = $Description
+            homepage                              = $Homepage
+            visibility                            = $Visibility.ToLower()
+            default_branch                        = $DefaultBranch
+            advanced_security                     = $PSBoundParameters.ContainsKey('EnableAdvancedSecurity') ? @{
                 status = $EnableAdvancedSecurity ? 'enabled' : 'disabled'
             } : $null
-            code_security                   = $PSBoundParameters.ContainsKey('EnableCodeSecurity') ? @{
+            code_security                         = $PSBoundParameters.ContainsKey('EnableCodeSecurity') ? @{
                 status = $EnableCodeSecurity ? 'enabled' : 'disabled'
             } : $null
-            secret_scanning                 = $PSBoundParameters.ContainsKey('EnableSecretScanning') ? @{
+            secret_scanning                       = $PSBoundParameters.ContainsKey('EnableSecretScanning') ? @{
                 status = $EnableSecretScanning ? 'enabled' : 'disabled'
             } : $null
-            secret_scanning_push_protection = $PSBoundParameters.ContainsKey('EnableSecretScanningPushProtection') ? @{
+            secret_scanning_push_protection       = $PSBoundParameters.ContainsKey('EnableSecretScanningPushProtection') ? @{
                 status = $EnableSecretScanningPushProtection ? 'enabled' : 'disabled'
             } : $null
-            secret_scanning_ai_detection    = $PSBoundParameters.ContainsKey('EnableSecretScanningAIDetection') ? @{
+            secret_scanning_ai_detection          = $PSBoundParameters.ContainsKey('EnableSecretScanningAIDetection') ? @{
                 status = $EnableSecretScanningAIDetection ? 'enabled' : 'disabled'
             } : $null
             secret_scanning_non_provider_patterns = $PSBoundParameters.ContainsKey('EnableSecretScanningNonProviderPatterns') ? @{
                 status = $EnableSecretScanningNonProviderPatterns ? 'enabled' : 'disabled'
             } : $null
-            has_issues                      = $PSBoundParameters.ContainsKey('HasIssues') ? $HasIssues : $null
-            has_projects                    = $PSBoundParameters.ContainsKey('HasProjects') ? $HasProjects : $null
-            has_wiki                        = $PSBoundParameters.ContainsKey('HasWiki') ? $HasWiki : $null
-            is_template                     = $PSBoundParameters.ContainsKey('IsTemplate') ? $IsTemplate : $null
-            allow_squash_merge              = $PSBoundParameters.ContainsKey('AllowSquashMerge') ? $AllowSquashMerge : $null
-            allow_merge_commit              = $PSBoundParameters.ContainsKey('AllowMergeCommit') ? $AllowMergeCommit : $null
-            squash_merge_commit_title       = $SquashMergeCommitTitle
-            squash_merge_commit_message     = $SquashMergeCommitMessage
-            merge_commit_title              = $MergeCommitTitle
-            merge_commit_message            = $MergeCommitMessage
-            allow_rebase_merge              = $PSBoundParameters.ContainsKey('AllowRebaseMerge') ? $AllowRebaseMerge : $null
-            allow_auto_merge                = $PSBoundParameters.ContainsKey('AllowAutoMerge') ? $AllowAutoMerge : $null
-            allow_update_branch             = $PSBoundParameters.ContainsKey('SuggestUpdateBranch') ? $SuggestUpdateBranch : $null
-            delete_branch_on_merge          = $PSBoundParameters.ContainsKey('DeleteBranchOnMerge') ? $DeleteBranchOnMerge : $null
-            archived                        = $PSBoundParameters.ContainsKey('Archived') ? $Archived : $null
-            allow_forking                   = $PSBoundParameters.ContainsKey('AllowForking') ? $AllowForking : $null
-            web_commit_signoff_required     = $PSBoundParameters.ContainsKey('WebCommitSignoffRequired') ? $WebCommitSignoffRequired : $null
+            has_issues                            = $PSBoundParameters.ContainsKey('HasIssues') ? $HasIssues : $null
+            has_projects                          = $PSBoundParameters.ContainsKey('HasProjects') ? $HasProjects : $null
+            has_wiki                              = $PSBoundParameters.ContainsKey('HasWiki') ? $HasWiki : $null
+            is_template                           = $PSBoundParameters.ContainsKey('IsTemplate') ? $IsTemplate : $null
+            allow_squash_merge                    = $PSBoundParameters.ContainsKey('AllowSquashMerge') ? $AllowSquashMerge : $null
+            allow_merge_commit                    = $PSBoundParameters.ContainsKey('AllowMergeCommit') ? $AllowMergeCommit : $null
+            squash_merge_commit_title             = $SquashMergeCommitTitle
+            squash_merge_commit_message           = $SquashMergeCommitMessage
+            merge_commit_title                    = $MergeCommitTitle
+            merge_commit_message                  = $MergeCommitMessage
+            allow_rebase_merge                    = $PSBoundParameters.ContainsKey('AllowRebaseMerge') ? $AllowRebaseMerge : $null
+            allow_auto_merge                      = $PSBoundParameters.ContainsKey('AllowAutoMerge') ? $AllowAutoMerge : $null
+            allow_update_branch                   = $PSBoundParameters.ContainsKey('SuggestUpdateBranch') ? $SuggestUpdateBranch : $null
+            delete_branch_on_merge                = $PSBoundParameters.ContainsKey('DeleteBranchOnMerge') ? $DeleteBranchOnMerge : $null
+            archived                              = $PSBoundParameters.ContainsKey('Archived') ? $Archived : $null
+            allow_forking                         = $PSBoundParameters.ContainsKey('AllowForking') ? $AllowForking : $null
+            web_commit_signoff_required           = $PSBoundParameters.ContainsKey('WebCommitSignoffRequired') ? $WebCommitSignoffRequired : $null
         }
         if (-not $Declare) {
             $body | Remove-HashtableEntry -NullOrEmptyValues
@@ -249,10 +257,28 @@
         }
 
         if ($PSCmdlet.ShouldProcess("Repository [$Owner/$Name]", 'Update')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
+            $repo = Invoke-GitHubAPI @inputObject | Select-Object -ExpandProperty Response
+        }
+
+        $updateGraphQLInputs = @{
+            query     = @'
+            mutation($input: UpdateRepositoryInput!) {
+                updateRepository(input: $input) {
+                    hasDiscussions
+                    hasSponsorships
+                }
+            }
+'@
+            variables = @{
+                input = @{
+                    repositoryId           = $repo.id
+                    hasDiscussionsEnabled  = $HasDiscussions
+                    hasSponsorshipsEnabled = $HasSponsorships
+                }
             }
         }
+
+        Invoke-GitHubGraphQLQuery @updateGraphQLInputs
     }
 
     end {

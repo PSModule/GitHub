@@ -322,6 +322,8 @@
             HasIssues                          = $HasIssues
             HasProjects                        = $HasProjects
             HasWiki                            = $HasWiki
+            HasDiscussions                     = $HasDiscussions
+            HasSponsorships                    = $HasSponsorships
             IsTemplate                         = $IsTemplate
             DefaultBranch                      = $DefaultBranch
             AllowSquashMerge                   = $AllowSquashMerge
@@ -334,7 +336,7 @@
             SquashMergeCommitMessage           = $SquashMergeCommitMessage
             MergeCommitTitle                   = $MergeCommitTitle
             MergeCommitMessage                 = $MergeCommitMessage
-            Archived                           = $Archived
+            IsArchived                         = $IsArchived
             AllowForking                       = $AllowForking
             WebCommitSignoffRequired           = $WebCommitSignoffRequired
         }
