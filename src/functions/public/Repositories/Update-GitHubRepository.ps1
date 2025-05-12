@@ -13,7 +13,7 @@
         .EXAMPLE
         $params = @{
             Owner       = 'octocat'
-            Repo        = 'Hello-World'
+            Name        = 'Hello-World'
             NewName     = 'Hello-World-Repository'
             Description = 'This is your first repository'
             Homepage    = 'https://github.com'
