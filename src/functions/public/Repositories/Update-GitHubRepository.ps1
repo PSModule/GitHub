@@ -316,6 +316,8 @@
 
             Invoke-GitHubGraphQLQuery @updateGraphQLInputs
         }
+
+        Get-GitHubRepository -Owner $Owner -Name $Name
     }
 
     end {
