@@ -64,10 +64,10 @@ Describe 'Repositories' {
         It 'New-GitHubRepository - Creates a new repository' -Skip:($OwnerType -eq 'repository') {
             switch ($OwnerType) {
                 'user' {
-                    $repo = New-GitHubRepository -Name $repoName -AllowSquashMerge
+                    $repo = New-GitHubRepository -Name $repoName -Debug
                 }
                 'organization' {
-                    $repo = New-GitHubRepository -Organization $owner -Name $repoName -AllowSquashMerge
+                    $repo = New-GitHubRepository -Organization $owner -Name $repoName -Debug
                 }
             }
             LogGroup 'Repository - Creation' {
