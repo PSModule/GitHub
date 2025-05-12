@@ -309,7 +309,6 @@
         $updateParams = @{
             Owner                              = $Owner ?? $Context.Username
             Repo                               = $Name
-            NewName                            = $NewName
             Description                        = $Description
             Homepage                           = $Homepage
             Visibility                         = $Visibility
