@@ -264,9 +264,9 @@
             query = @"
                 mutation {
                     updateRepository(input: {
-                        repositoryId           = $($repo.NodeID)
-                        hasDiscussionsEnabled  = $HasDiscussions
-                        hasSponsorshipsEnabled = $HasSponsorships
+                        repositoryId: $($repo.NodeID)
+                        hasDiscussionsEnabled: $HasDiscussions
+                        hasSponsorshipsEnabled: $HasSponsorships
                     }) {
                         repository {
                             id
