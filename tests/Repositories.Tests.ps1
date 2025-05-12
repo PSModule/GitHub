@@ -64,11 +64,14 @@ Describe 'Repositories' {
         It 'New-GitHubRepository - Creates a new repository' -Skip:($OwnerType -eq 'repository') {
             switch ($OwnerType) {
                 'user' {
-                    New-GitHubRepository -Name $repoName -AllowSquashMerge
+                    $repo = New-GitHubRepository -Name $repoName -AllowSquashMerge
                 }
                 'organization' {
-                    New-GitHubRepository -Organization $owner -Name $repoName -AllowSquashMerge
+                    $repo = New-GitHubRepository -Organization $owner -Name $repoName -AllowSquashMerge
                 }
+            }
+            LogGroup 'Repository - Creation' {
+                Write-Host ($repo | Format-List | Out-String)
             }
         }
         It 'New-GitHubRepository - Creates a new repository from a template' -Skip:($OwnerType -eq 'repository') {
