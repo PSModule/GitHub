@@ -62,27 +62,27 @@
 
         # Whether issues are enabled.
         [Parameter()]
-        [bool] $HasIssues,
+        [bool] $HasIssues = $true,
 
         # Whether projects are enabled.
         [Parameter()]
-        [bool] $HasProjects,
+        [bool] $HasProjects = $true,
 
         # Whether the wiki is enabled.
         [Parameter()]
-        [bool] $HasWiki,
+        [bool] $HasWiki = $true,
 
         # Whether discussions are enabled.
         [Parameter()]
-        [bool] $HasDiscussions,
+        [bool] $HasDiscussions = $true,
 
         # Whether this repository acts as a template that can be used to generate new repositories.
         [Parameter()]
-        [bool] $IsTemplate,
+        [bool] $IsTemplate = $false,
 
         # Pass true to create an initial commit with empty README.
         [Parameter()]
-        [bool] $AddReadme,
+        [bool] $AddReadme = $false,
 
         # The desired language or platform to apply to the .gitignore.
         [Parameter()]
@@ -94,23 +94,23 @@
 
         # Whether to allow squash merges for pull requests.
         [Parameter()]
-        [bool] $AllowSquashMerge,
+        [bool] $AllowSquashMerge = $true,
 
         # Whether to allow merge commits for pull requests.
         [Parameter()]
-        [bool] $AllowMergeCommit,
+        [bool] $AllowMergeCommit = $true,
 
         # Whether to allow rebase merges for pull requests.
         [Parameter()]
-        [bool] $AllowRebaseMerge,
+        [bool] $AllowRebaseMerge = $true,
 
         # Whether to allow Auto-merge to be used on pull requests.
         [Parameter()]
-        [bool] $AllowAutoMerge,
+        [bool] $AllowAutoMerge = $false,
 
         # Whether to delete head branches when pull requests are merged
         [Parameter()]
-        [bool] $DeleteBranchOnMerge,
+        [bool] $DeleteBranchOnMerge = $false,
 
         # The default value for a squash merge commit title:
         #   - PR_TITLE - default to the pull request's title.
