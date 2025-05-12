@@ -264,8 +264,8 @@
             query     = @'
             mutation($input: UpdateRepositoryInput!) {
                 updateRepository(input: $input) {
-                    hasDiscussions
-                    hasSponsorships
+                    hasDiscussionsEnabled
+                    hasSponsorshipsEnabled
                 }
             }
 '@
