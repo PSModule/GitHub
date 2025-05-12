@@ -281,14 +281,18 @@
             $repo = Invoke-GitHubAPI @inputObject | Select-Object -ExpandProperty Response
         }
 
-        $updateGraphQLInputs = @{
-            query = @"
-                mutation {
-                    updateRepository(input: {
-                        repositoryId: $($repo.NodeID)
-                        hasSponsorshipsEnabled: $HasSponsorships
-                        hasDiscussionsEnabled: $HasDiscussions
-                    }) {
+        if ($PSBoundParameters.ContainsKey('HasSponsorships') -or $PSBoundParameters.ContainsKey('HasDiscussions')) {
+            $input = @{
+                repositoryId           = $($repo.NodeID)
+                hasSponsorshipsEnabled = $HasSponsorships
+                hasDiscussionsEnabled  = $HasDiscussions
+            }
+            $input | Remove-HashtableEntry -NullOrEmptyValues
+
+            $updateGraphQLInputs = @{
+                query     = @'
+                mutation($input:UpdateRepositoryInput!) {
+                    updateRepository(input:$input) {
                         repository {
                             id
                             name
@@ -300,10 +304,14 @@
                         }
                     }
                 }
-"@
-        }
+'@
+                variables = @{
+                    input = $input
+                }
+            }
 
-        Invoke-GitHubGraphQLQuery @updateGraphQLInputs
+            Invoke-GitHubGraphQLQuery @updateGraphQLInputs
+        }
     }
 
     end {

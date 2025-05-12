@@ -62,52 +62,52 @@ Describe 'Repositories' {
         }
 
         It 'New-GitHubRepository - Creates a new repository' -Skip:($OwnerType -eq 'repository') {
-            switch ($OwnerType) {
-                'user' {
-                    $repo = New-GitHubRepository -Name $repoName -Debug
-                }
-                'organization' {
-                    $repo = New-GitHubRepository -Organization $owner -Name $repoName -Debug
-                }
-            }
             LogGroup 'Repository - Creation' {
+                switch ($OwnerType) {
+                    'user' {
+                        $repo = New-GitHubRepository -Name $repoName -Debug
+                    }
+                    'organization' {
+                        $repo = New-GitHubRepository -Organization $owner -Name $repoName -Debug
+                    }
+                }
                 Write-Host ($repo | Format-List | Out-String)
             }
         }
         It 'New-GitHubRepository - Creates a new repository from a template' -Skip:($OwnerType -eq 'repository') {
-            $params = @{
-                Name               = "$repoName-tmp"
-                TemplateOwner      = 'PSModule'
-                TemplateRepository = 'Template-Action'
-            }
-            switch ($OwnerType) {
-                'user' {
-                    $repo = New-GitHubRepository @params
-                }
-                'organization' {
-                    $repo = New-GitHubRepository @params -Organization $owner
-                }
-            }
             LogGroup 'Repository - Template' {
+                $params = @{
+                    Name               = "$repoName-tmp"
+                    TemplateOwner      = 'PSModule'
+                    TemplateRepository = 'Template-Action'
+                }
+                switch ($OwnerType) {
+                    'user' {
+                        $repo = New-GitHubRepository @params
+                    }
+                    'organization' {
+                        $repo = New-GitHubRepository @params -Organization $owner
+                    }
+                }
                 Write-Host ($repo | Format-List | Out-String)
             }
             $repo | Should -Not -BeNullOrEmpty
         }
         It 'New-GitHubRepository - Creates a new repository as a fork' -Skip:($OwnerType -eq 'repository') {
-            $params = @{
-                Name           = "$repoName-fork"
-                ForkOwner      = 'PSModule'
-                ForkRepository = 'Template-Action'
-            }
-            switch ($OwnerType) {
-                'user' {
-                    $repo = New-GitHubRepository @params
-                }
-                'organization' {
-                    $repo = New-GitHubRepository @params -Organization $owner
-                }
-            }
             LogGroup 'Repository - Fork' {
+                $params = @{
+                    Name           = "$repoName-fork"
+                    ForkOwner      = 'PSModule'
+                    ForkRepository = 'Template-Action'
+                }
+                switch ($OwnerType) {
+                    'user' {
+                        $repo = New-GitHubRepository @params
+                    }
+                    'organization' {
+                        $repo = New-GitHubRepository @params -Organization $owner
+                    }
+                }
                 Write-Host ($repo | Format-List | Out-String)
             }
             $repo | Should -Not -BeNullOrEmpty
@@ -222,16 +222,16 @@ Describe 'Repositories' {
             $repos.Count | Should -BeGreaterThan 0
         }
         It 'Update-GitHubRepository - Renames a repository' -Skip:($OwnerType -eq 'repository') {
-            $newName = "$repoName-newname"
-            switch ($OwnerType) {
-                'user' {
-                    $updatedRepo = Update-GitHubRepository -Name $repoName -NewName $newName
-                }
-                'organization' {
-                    $updatedRepo = Update-GitHubRepository -Owner $owner -Name $repoName -NewName $newName
-                }
-            }
             LogGroup 'Repository - Renamed' {
+                $newName = "$repoName-newname"
+                switch ($OwnerType) {
+                    'user' {
+                        $updatedRepo = Update-GitHubRepository -Name $repoName -NewName $newName
+                    }
+                    'organization' {
+                        $updatedRepo = Update-GitHubRepository -Owner $owner -Name $repoName -NewName $newName
+                    }
+                }
                 Write-Host ($updatedRepo | Format-List | Out-String)
             }
             $updatedRepo | Should -Not -BeNullOrEmpty
