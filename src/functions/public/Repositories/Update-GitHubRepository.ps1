@@ -141,7 +141,7 @@
         # - PR_TITLE - default to the pull request's title.
         # - COMMIT_OR_PR_TITLE - default to the commit's title (if only one commit) or the pull request's title (when more than one commit).
         [Parameter()]
-        [ValidateSet('PR_TITLE', 'COMMIT_OR_PR_TITLE')]
+        [ValidateSet('PR_TITLE', 'COMMIT_OR_PR_TITLE', '')]
         [string] $SquashMergeCommitTitle,
 
         # The default value for a squash merge commit message:
@@ -149,14 +149,14 @@
         # - COMMIT_MESSAGES - default to the branch's commit messages.
         # - BLANK - default to a blank commit message.
         [Parameter()]
-        [ValidateSet('PR_BODY', 'COMMIT_MESSAGES', 'BLANK')]
+        [ValidateSet('PR_BODY', 'COMMIT_MESSAGES', 'BLANK', '')]
         [string] $SquashMergeCommitMessage,
 
         # The default value for a merge commit title.
         # - PR_TITLE - default to the pull request's title.
         # - MERGE_MESSAGE - default to the classic title for a merge message (e.g.,Merge pull request #123 from branch-name).
         [Parameter()]
-        [ValidateSet('PR_TITLE', 'MERGE_MESSAGE')]
+        [ValidateSet('PR_TITLE', 'MERGE_MESSAGE', '')]
         [string] $MergeCommitTitle,
 
         # The default value for a merge commit message.
@@ -164,7 +164,7 @@
         # - PR_TITLE - default to the pull request's title.
         # - BLANK - default to a blank commit message.
         [Parameter()]
-        [ValidateSet('PR_BODY', 'PR_TITLE', 'BLANK')]
+        [ValidateSet('PR_BODY', 'PR_TITLE', 'BLANK', '')]
         [string] $MergeCommitMessage,
 
         # Whether to archive this repository. false will unarchive a previously archived repository.
