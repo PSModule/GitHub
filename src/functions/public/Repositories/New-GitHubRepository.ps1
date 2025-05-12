@@ -273,25 +273,8 @@
                 $params = @{
                     Context                  = $Context
                     Name                     = $Name
-                    Description              = $Description
-                    Homepage                 = $Homepage
                     Visibility               = $Visibility
-                    HasIssues                = $HasIssues
-                    HasProjects              = $HasProjects
-                    HasWiki                  = $HasWiki
-                    HasDiscussions           = $HasDiscussions
-                    IsTemplate               = $IsTemplate
-                    TeamId                   = $TeamId
                     AddReadme                = $AddReadme
-                    AllowSquashMerge         = $AllowSquashMerge
-                    AllowMergeCommit         = $AllowMergeCommit
-                    AllowRebaseMerge         = $AllowRebaseMerge
-                    AllowAutoMerge           = $AllowAutoMerge
-                    DeleteBranchOnMerge      = $DeleteBranchOnMerge
-                    SquashMergeCommitTitle   = $SquashMergeCommitTitle
-                    SquashMergeCommitMessage = $SquashMergeCommitMessage
-                    MergeCommitTitle         = $MergeCommitTitle
-                    MergeCommitMessage       = $MergeCommitMessage
                     Gitignore                = $Gitignore
                     License                  = $License
                 }
@@ -305,24 +288,8 @@
                     Context                  = $Context
                     Organization             = $Owner
                     Name                     = $Name
-                    Description              = $Description
-                    Homepage                 = $Homepage
                     Visibility               = $Visibility
-                    HasIssues                = $HasIssues
-                    HasProjects              = $HasProjects
-                    HasWiki                  = $HasWiki
-                    IsTemplate               = $IsTemplate
-                    TeamId                   = $TeamId
                     AddReadme                = $AddReadme
-                    AllowSquashMerge         = $AllowSquashMerge
-                    AllowMergeCommit         = $AllowMergeCommit
-                    AllowRebaseMerge         = $AllowRebaseMerge
-                    AllowAutoMerge           = $AllowAutoMerge
-                    DeleteBranchOnMerge      = $DeleteBranchOnMerge
-                    SquashMergeCommitTitle   = $SquashMergeCommitTitle
-                    SquashMergeCommitMessage = $SquashMergeCommitMessage
-                    MergeCommitTitle         = $MergeCommitTitle
-                    MergeCommitMessage       = $MergeCommitMessage
                     Gitignore                = $Gitignore
                     License                  = $License
                 }
@@ -340,7 +307,6 @@
                         Owner              = $Owner
                         Name               = $Name
                         IncludeAllBranches = $IncludeAllBranches
-                        Description        = $Description
                         Visibility         = $Visibility
                     }
                     $params | Remove-HashtableEntry -NullOrEmptyValues
@@ -362,6 +328,8 @@
                 }
             }
         }
+
+        # Update-GitHubRepository
     }
 
     end {
