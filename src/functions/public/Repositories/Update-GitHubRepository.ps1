@@ -60,36 +60,45 @@
         [ValidateSet('Public', 'Private', 'Internal')]
         [string] $Visibility,
 
-        # Use the status property to enable or disable GitHub Advanced Security for this repository.
-        # For more information, see "About GitHub Advanced Security."
+        # Whether to enable GitHub Advanced Security for this repository.
         [Parameter()]
-        [switch] $EnableAdvancedSecurity,
+        [bool] $EnableAdvancedSecurity,
 
-        # Use the status property to enable or disable secret scanning for this repository.
-        # For more information, see "About secret scanning."
+        # Whether to enable code security for this repository.
         [Parameter()]
-        [switch] $EnableSecretScanning,
+        [bool] $EnableCodeSecurity,
 
-        # Use the status property to enable or disable secret scanning push protection for this repository.
-        # For more information, see "Protecting pushes with secret scanning."
+        # Whether to enable secret scanning for this repository.
         [Parameter()]
-        [switch] $EnableSecretScanningPushProtection,
+        [bool] $EnableSecretScanning,
+
+        # Whether to enable secret scanning push protection for this repository.
+        [Parameter()]
+        [bool] $EnableSecretScanningPushProtection,
+
+        # Whether to enable secret scanning AI detection for this repository.
+        [Parameter()]
+        [bool] $EnableSecretScanningAIDetection,
+
+        # Whether to enable secret scanning non-provider patterns for this repository.
+        [Parameter()]
+        [bool] $SecretScanningNonProviderPatterns,
 
         # Whether issues are enabled.
         [Parameter()]
-        [switch] $HasIssues,
+        [bool] $HasIssues,
 
         # Whether projects are enabled.
         [Parameter()]
-        [switch] $HasProjects,
+        [bool] $HasProjects,
 
         # Whether the wiki is enabled.
         [Parameter()]
-        [switch] $HasWiki,
+        [bool] $HasWiki,
 
         # Whether this repository acts as a template that can be used to generate new repositories.
         [Parameter()]
-        [switch] $IsTemplate,
+        [bool] $IsTemplate,
 
         # Updates the default branch for this repository.
         [Parameter()]
@@ -97,28 +106,28 @@
 
         # Whether to allow squash merges for pull requests.
         [Parameter()]
-        [switch] $AllowSquashMerge,
+        [bool] $AllowSquashMerge,
 
         # Whether to allow merge commits for pull requests.
         [Parameter()]
-        [switch] $AllowMergeCommit,
+        [bool] $AllowMergeCommit,
 
         # Whether to allow rebase merges for pull requests.
         [Parameter()]
-        [switch] $AllowRebaseMerge,
+        [bool] $AllowRebaseMerge,
 
         # Whether to allow Auto-merge to be used on pull requests.
         [Parameter()]
-        [switch] $AllowAutoMerge,
+        [bool] $AllowAutoMerge,
 
         # Whether to delete head branches when pull requests are merged
         [Parameter()]
-        [switch] $DeleteBranchOnMerge,
+        [bool] $DeleteBranchOnMerge,
 
         # Either true to always allow a pull request head branch that is behind its base branch
         # to be updated even if it is not required to be up to date before merging, or false otherwise.
         [Parameter()]
-        [switch] $SuggestUpdateBranch,
+        [bool] $SuggestUpdateBranch,
 
         # The default value for a squash merge commit title:
         # - PR_TITLE - default to the pull request's title.
@@ -152,16 +161,21 @@
 
         # Whether to archive this repository. false will unarchive a previously archived repository.
         [Parameter()]
-        [switch] $Archived,
+        [bool] $Archived,
 
         # Either true to allow private forks, or false to prevent private forks.
         [Parameter()]
-        [switch] $AllowForking,
+        [bool] $AllowForking,
 
         # Either true to require contributors to sign off on web-based commits,
         # or false to not require contributors to sign off on web-based commits.
         [Parameter()]
-        [switch] $WebCommitSignoffRequired,
+        [bool] $WebCommitSignoffRequired,
+
+        # Takes all parameters and updates the repository with the provided _AND_ the default values of the non-provided parameters.
+        # Used for Set-GitHubRepository.
+        [Parameter()]
+        [switch] $Declare,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -187,34 +201,42 @@
             homepage                        = $Homepage
             visibility                      = $Visibility.ToLower()
             default_branch                  = $DefaultBranch
-            advanced_security               = $EnableAdvancedSecurity ? @{
+            advanced_security               = $PSBoundParameters.ContainsKey('EnableAdvancedSecurity') ? @{
                 status = $EnableAdvancedSecurity ? 'enabled' : 'disabled'
             } : $null
-            secret_scanning                 = $EnableSecretScanning ? @{
+            code_security                   = $PSBoundParameters.ContainsKey('EnableCodeSecurity') ? @{
+                status = $EnableCodeSecurity ? 'enabled' : 'disabled'
+            } : $null
+            secret_scanning                 = $PSBoundParameters.ContainsKey('EnableSecretScanning') ? @{
                 status = $EnableSecretScanning ? 'enabled' : 'disabled'
             } : $null
-            secret_scanning_push_protection = $EnableSecretScanningPushProtection ? @{
+            secret_scanning_push_protection = $PSBoundParameters.ContainsKey('EnableSecretScanningPushProtection') ? @{
                 status = $EnableSecretScanningPushProtection ? 'enabled' : 'disabled'
             } : $null
-            has_issues                      = $HasIssues ? $HasIssues : $null
-            has_projects                    = $HasProjects ? $HasProjects : $null
-            has_wiki                        = $HasWiki ? $HasWiki : $null
-            is_template                     = $IsTemplate ? $IsTemplate : $null
-            allow_squash_merge              = $AllowSquashMerge ? $AllowSquashMerge : $null
+            secret_scanning_ai_detection    = $PSBoundParameters.ContainsKey('EnableSecretScanningAIDetection') ? @{
+                status = $EnableSecretScanningAIDetection ? 'enabled' : 'disabled'
+            } : $null
+            has_issues                      = $PSBoundParameters.ContainsKey('HasIssues') ? $HasIssues : $null
+            has_projects                    = $PSBoundParameters.ContainsKey('HasProjects') ? $HasProjects : $null
+            has_wiki                        = $PSBoundParameters.ContainsKey('HasWiki') ? $HasWiki : $null
+            is_template                     = $PSBoundParameters.ContainsKey('IsTemplate') ? $IsTemplate : $null
+            allow_squash_merge              = $PSBoundParameters.ContainsKey('AllowSquashMerge') ? $AllowSquashMerge : $null
+            allow_merge_commit              = $PSBoundParameters.ContainsKey('AllowMergeCommit') ? $AllowMergeCommit : $null
             squash_merge_commit_title       = $SquashMergeCommitTitle
             squash_merge_commit_message     = $SquashMergeCommitMessage
-            allow_merge_commit              = $AllowMergeCommit ? $AllowMergeCommit : $null
             merge_commit_title              = $MergeCommitTitle
             merge_commit_message            = $MergeCommitMessage
-            allow_rebase_merge              = $AllowRebaseMerge ? $AllowRebaseMerge : $null
-            allow_auto_merge                = $AllowAutoMerge ? $AllowAutoMerge : $null
-            allow_update_branch             = $SuggestUpdateBranch ? $SuggestUpdateBranch : $null
-            delete_branch_on_merge          = $DeleteBranchOnMerge ? $DeleteBranchOnMerge : $null
-            archived                        = $Archived ? $Archived : $null
-            allow_forking                   = $AllowForking ? $AllowForking : $null
-            web_commit_signoff_required     = $WebCommitSignoffRequired ? $WebCommitSignoffRequired : $null
+            allow_rebase_merge              = $PSBoundParameters.ContainsKey('AllowRebaseMerge') ? $AllowRebaseMerge : $null
+            allow_auto_merge                = $PSBoundParameters.ContainsKey('AllowAutoMerge') ? $AllowAutoMerge : $null
+            allow_update_branch             = $PSBoundParameters.ContainsKey('SuggestUpdateBranch') ? $SuggestUpdateBranch : $null
+            delete_branch_on_merge          = $PSBoundParameters.ContainsKey('DeleteBranchOnMerge') ? $DeleteBranchOnMerge : $null
+            archived                        = $PSBoundParameters.ContainsKey('Archived') ? $Archived : $null
+            allow_forking                   = $PSBoundParameters.ContainsKey('AllowForking') ? $AllowForking : $null
+            web_commit_signoff_required     = $PSBoundParameters.ContainsKey('WebCommitSignoffRequired') ? $WebCommitSignoffRequired : $null
         }
-        $body | Remove-HashtableEntry -NullOrEmptyValues
+        if (-not $Declare) {
+            $body | Remove-HashtableEntry -NullOrEmptyValues
+        }
 
         $inputObject = @{
             Method      = 'PATCH'
@@ -234,5 +256,3 @@
         Write-Debug "[$stackPath] - End"
     }
 }
-
-#SkipTest:FunctionTest:Will add a test for this function in a future PR
