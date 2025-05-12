@@ -151,10 +151,10 @@ Describe 'Repositories' {
             LogGroup 'Repository - Property' {
                 switch ($OwnerType) {
                     'user' {
-                        $repo = Get-GitHubRepository -Property 'Name', 'CreatedAt', 'UpdatedAt' -Debug
+                        $repo = Get-GitHubRepository -Property 'Name', 'CreatedAt', 'UpdatedAt'
                     }
                     'organization' {
-                        $repo = Get-GitHubRepository -Owner $owner -Property 'Name', 'CreatedAt', 'UpdatedAt' -Debug
+                        $repo = Get-GitHubRepository -Owner $owner -Property 'Name', 'CreatedAt', 'UpdatedAt'
                     }
                 }
                 Write-Host ($repo | Format-List | Out-String)
@@ -173,10 +173,10 @@ Describe 'Repositories' {
             LogGroup 'Repository - AdditionalProperty' {
                 switch ($OwnerType) {
                     'user' {
-                        $repo = Get-GitHubRepository -AdditionalProperty 'CreatedAt', 'UpdatedAt' -Debug
+                        $repo = Get-GitHubRepository -AdditionalProperty 'CreatedAt', 'UpdatedAt'
                     }
                     'organization' {
-                        $repo = Get-GitHubRepository -Owner $owner -AdditionalProperty 'CreatedAt', 'UpdatedAt' -Debug
+                        $repo = Get-GitHubRepository -Owner $owner -AdditionalProperty 'CreatedAt', 'UpdatedAt'
                     }
                 }
                 Write-Host ($repo | Format-List | Out-String)
@@ -184,6 +184,28 @@ Describe 'Repositories' {
             $repo | Should -Not -BeNullOrEmpty
             $repo.CreatedAt | Should -Not -BeNullOrEmpty
             $repo.UpdatedAt | Should -Not -BeNullOrEmpty
+        }
+        It 'Get-GitHubRepository - Gets repositories with properties - only name' -Skip:($OwnerType -eq 'repository') {
+            LogGroup 'Repository - Property' {
+                switch ($OwnerType) {
+                    'user' {
+                        $repo = Get-GitHubRepository -Property 'Name'
+                    }
+                    'organization' {
+                        $repo = Get-GitHubRepository -Owner $owner -Property 'Name'
+                    }
+                }
+                Write-Host ($repo | Format-List | Out-String)
+            }
+            foreach ($item in $repo) {
+                $item | Should -Not -BeNullOrEmpty
+                $item.Name | Should -Not -BeNullOrEmpty
+                $item.CreatedAt | Should -BeNullOrEmpty
+                $item.UpdatedAt | Should -BeNullOrEmpty
+                $item.DatabaseID | Should -BeNullOrEmpty
+                $item.ID | Should -BeNullOrEmpty
+                $item.Owner | Should -BeNullOrEmpty
+            }
         }
         It 'Get-GitHubRepository - Gets all repositories from a organization' {
             LogGroup 'Repositories' {
@@ -237,6 +259,5 @@ Describe 'Repositories' {
             }
             $repos | Should -BeNullOrEmpty
         }
-
     }
 }

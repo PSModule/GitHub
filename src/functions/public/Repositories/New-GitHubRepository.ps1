@@ -99,8 +99,8 @@
         [Parameter(ParameterSetName = 'org')]
         [Parameter(ParameterSetName = 'fork')]
         [Parameter(ParameterSetName = 'template')]
-        [Alias('Organization')]
-        [string] $Owner,
+        [Alias('Owner')]
+        [string] $Organization,
 
         # The name of the repository.
         [Parameter(ParameterSetName = 'fork')]
@@ -125,27 +125,21 @@
         [Parameter(Mandatory, ParameterSetName = 'fork')]
         [string] $ForkRepository,
 
-        # A short description of the new repository.
-        [Parameter(ParameterSetName = 'user')]
-        [Parameter(ParameterSetName = 'org')]
-        [Parameter(ParameterSetName = 'template')]
-        [string] $Description,
-
         # Include all branches from the source repository.
         [Parameter(ParameterSetName = 'template')]
         [Parameter(ParameterSetName = 'fork')]
         [switch] $IncludeAllBranches,
 
+        # A short description of the new repository.
+        [Parameter()]
+        [string] $Description,
+
         # A URL with more information about the repository.
-        [Parameter(ParameterSetName = 'user')]
-        [Parameter(ParameterSetName = 'org')]
-        [ValidateNotNullOrEmpty()]
+        [Parameter()]
         [uri] $Homepage,
 
         # The visibility of the repository.
-        [Parameter(ParameterSetName = 'user')]
-        [Parameter(ParameterSetName = 'org')]
-        [Parameter(ParameterSetName = 'template')]
+        [Parameter()]
         [ValidateSet('Public', 'Private', 'Internal')]
         [string] $Visibility = 'Public',
 
@@ -168,15 +162,13 @@
         [Parameter(ParameterSetName = 'user')]
         [switch] $HasDiscussions,
 
-        # Whether this repository acts as a template that can be used to generate new repositories.
-        [Parameter(ParameterSetName = 'user')]
-        [Parameter(ParameterSetName = 'org')]
-        [switch] $IsTemplate,
+        # Whether sponsorships are enabled.
+        [Parameter()]
+        [bool] $HasSponsorships,
 
-        # The ID of the team that will be granted access to this repository. This is only valid when creating a repository in an organization.
-        [Parameter(ParameterSetName = 'user')]
-        [Parameter(ParameterSetName = 'org')]
-        [System.Nullable[int]] $TeamId,
+        # Whether this repository acts as a template that can be used to generate new repositories.
+        [Parameter()]
+        [switch] $IsTemplate,
 
         # Pass true to create an initial commit with empty README.
         [Parameter(ParameterSetName = 'user')]
@@ -194,35 +186,29 @@
         [string] $License,
 
         # Whether to allow squash merges for pull requests.
-        [Parameter(ParameterSetName = 'user')]
-        [Parameter(ParameterSetName = 'org')]
+        [Parameter()]
         [switch] $AllowSquashMerge,
 
         # Whether to allow merge commits for pull requests.
-        [Parameter(ParameterSetName = 'user')]
-        [Parameter(ParameterSetName = 'org')]
+        [Parameter()]
         [switch] $AllowMergeCommit,
 
         # Whether to allow rebase merges for pull requests.
-        [Parameter(ParameterSetName = 'user')]
-        [Parameter(ParameterSetName = 'org')]
+        [Parameter()]
         [switch] $AllowRebaseMerge,
 
         # Whether to allow Auto-merge to be used on pull requests.
-        [Parameter(ParameterSetName = 'user')]
-        [Parameter(ParameterSetName = 'org')]
+        [Parameter()]
         [switch] $AllowAutoMerge,
 
         # Whether to delete head branches when pull requests are merged
-        [Parameter(ParameterSetName = 'user')]
-        [Parameter(ParameterSetName = 'org')]
+        [Parameter()]
         [switch] $DeleteBranchOnMerge,
 
         # The default value for a squash merge commit title:
         # - PR_TITLE - default to the pull request's title.
         # - COMMIT_OR_PR_TITLE - default to the commit's title (if only one commit) or the pull request's title (when more than one commit).
-        [Parameter(ParameterSetName = 'user')]
-        [Parameter(ParameterSetName = 'org')]
+        [Parameter()]
         [ValidateSet('PR_TITLE', 'COMMIT_OR_PR_TITLE')]
         [string] $SquashMergeCommitTitle,
 
@@ -230,16 +216,14 @@
         # - PR_BODY - default to the pull request's body.
         # - COMMIT_MESSAGES - default to the branch's commit messages.
         # - BLANK - default to a blank commit message.
-        [Parameter(ParameterSetName = 'user')]
-        [Parameter(ParameterSetName = 'org')]
+        [Parameter()]
         [ValidateSet('PR_BODY', 'COMMIT_MESSAGES', 'BLANK')]
         [string] $SquashMergeCommitMessage,
 
         # The default value for a merge commit title.
         # - PR_TITLE - default to the pull request's title.
         # - MERGE_MESSAGE - default to the classic title for a merge message (e.g.,Merge pull request #123 from branch-name).
-        [Parameter(ParameterSetName = 'user')]
-        [Parameter(ParameterSetName = 'org')]
+        [Parameter()]
         [ValidateSet('PR_TITLE', 'MERGE_MESSAGE')]
         [string] $MergeCommitTitle,
 
@@ -247,8 +231,7 @@
         # - PR_BODY - default to the pull request's body.
         # - PR_TITLE - default to the pull request's title.
         # - BLANK - default to a blank commit message.
-        [Parameter(ParameterSetName = 'user')]
-        [Parameter(ParameterSetName = 'org')]
+        [Parameter()]
         [ValidateSet('PR_BODY', 'PR_TITLE', 'BLANK')]
         [string] $MergeCommitMessage,
 
@@ -267,69 +250,92 @@
 
     process {
         Write-Verbose "ParameterSetName: $($PSCmdlet.ParameterSetName)"
-        $Visibility = $Visibility.ToString().ToLower()
         switch ($PSCmdlet.ParameterSetName) {
             'user' {
                 $params = @{
-                    Context                  = $Context
-                    Name                     = $Name
-                    Visibility               = $Visibility
-                    AddReadme                = $AddReadme
-                    Gitignore                = $Gitignore
-                    License                  = $License
+                    Context    = $Context
+                    Name       = $Name
+                    Visibility = $Visibility
+                    AddReadme  = $AddReadme
+                    Gitignore  = $Gitignore
+                    License    = $License
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues
-                if ($PSCmdlet.ShouldProcess("repository for user [$Name]", 'Create')) {
-                    New-GitHubRepositoryUser @params
-                }
+                New-GitHubRepositoryUser @params
             }
             'org' {
                 $params = @{
-                    Context                  = $Context
-                    Organization             = $Owner
-                    Name                     = $Name
-                    Visibility               = $Visibility
-                    AddReadme                = $AddReadme
-                    Gitignore                = $Gitignore
-                    License                  = $License
+                    Context      = $Context
+                    Organization = $Organization
+                    Name         = $Name
+                    Visibility   = $Visibility
+                    AddReadme    = $AddReadme
+                    Gitignore    = $Gitignore
+                    License      = $License
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues
-                if ($PSCmdlet.ShouldProcess("repository for organization [$Owner/$Name]", 'Create')) {
-                    New-GitHubRepositoryOrg @params
-                }
+                New-GitHubRepositoryOrg @params
             }
             'template' {
-                if ($PSCmdlet.ShouldProcess("repository [$Owner/$Name] from template [$TemplateOwner/$TemplateRepository]", 'Create')) {
-                    $params = @{
-                        Context            = $Context
-                        TemplateOwner      = $TemplateOwner
-                        TemplateRepository = $TemplateRepository
-                        Owner              = $Owner
-                        Name               = $Name
-                        IncludeAllBranches = $IncludeAllBranches
-                        Visibility         = $Visibility
-                    }
-                    $params | Remove-HashtableEntry -NullOrEmptyValues
-                    New-GitHubRepositoryFromTemplate @params
+                $params = @{
+                    Context            = $Context
+                    TemplateOwner      = $TemplateOwner
+                    TemplateRepository = $TemplateRepository
+                    Owner              = $Organization
+                    Name               = $Name
+                    IncludeAllBranches = $IncludeAllBranches
+                    Visibility         = $Visibility
                 }
+                $params | Remove-HashtableEntry -NullOrEmptyValues
+                New-GitHubRepositoryFromTemplate @params
             }
             'fork' {
-                if ($PSCmdlet.ShouldProcess("repository [$Owner/$Name] as fork from [$ForkOwner/$ForkRepository]", 'Create')) {
-                    $params = @{
-                        Context            = $Context
-                        ForkOwner          = $ForkOwner
-                        ForkRepository     = $ForkRepository
-                        Owner              = $Owner
-                        Name               = $Name
-                        IncludeAllBranches = $IncludeAllBranches
-                    }
-                    $params | Remove-HashtableEntry -NullOrEmptyValues
-                    New-GitHubRepositoryAsFork @params
+                $params = @{
+                    Context            = $Context
+                    ForkOwner          = $ForkOwner
+                    ForkRepository     = $ForkRepository
+                    Owner              = $Organization
+                    Name               = $Name
+                    IncludeAllBranches = $IncludeAllBranches
                 }
+                $params | Remove-HashtableEntry -NullOrEmptyValues
+                New-GitHubRepositoryAsFork @params
             }
         }
 
-        # Update-GitHubRepository
+        $updateParams = @{
+            Owner                              = $Organization
+            Repo                               = $Name
+            NewName                            = $NewName
+            Description                        = $Description
+            Homepage                           = $Homepage
+            Visibility                         = $Visibility
+            EnableAdvancedSecurity             = $EnableAdvancedSecurity
+            EnableCodeSecurity                 = $EnableCodeSecurity
+            EnableSecretScanning               = $EnableSecretScanning
+            EnableSecretScanningPushProtection = $EnableSecretScanningPushProtection
+            EnableSecretScanningAIDetection    = $EnableSecretScanningAIDetection
+            SecretScanningNonProviderPatterns  = $SecretScanningNonProviderPatterns
+            HasIssues                          = $HasIssues
+            HasProjects                        = $HasProjects
+            HasWiki                            = $HasWiki
+            IsTemplate                         = $IsTemplate
+            DefaultBranch                      = $DefaultBranch
+            AllowSquashMerge                   = $AllowSquashMerge
+            AllowMergeCommit                   = $AllowMergeCommit
+            AllowRebaseMerge                   = $AllowRebaseMerge
+            AllowAutoMerge                     = $AllowAutoMerge
+            DeleteBranchOnMerge                = $DeleteBranchOnMerge
+            SuggestUpdateBranch                = $SuggestUpdateBranch
+            SquashMergeCommitTitle             = $SquashMergeCommitTitle
+            SquashMergeCommitMessage           = $SquashMergeCommitMessage
+            MergeCommitTitle                   = $MergeCommitTitle
+            MergeCommitMessage                 = $MergeCommitMessage
+            Archived                           = $Archived
+            AllowForking                       = $AllowForking
+            WebCommitSignoffRequired           = $WebCommitSignoffRequired
+        }
+        Update-GitHubRepository @updateParams
     }
 
     end {
