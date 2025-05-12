@@ -130,49 +130,6 @@
         [Parameter(ParameterSetName = 'fork')]
         [switch] $IncludeAllBranches,
 
-        # A short description of the new repository.
-        [Parameter()]
-        [string] $Description,
-
-        # A URL with more information about the repository.
-        [Parameter()]
-        [uri] $Homepage,
-
-        # The visibility of the repository.
-        [Parameter(ParameterSetName = 'user')]
-        [Parameter(ParameterSetName = 'org')]
-        [Parameter(ParameterSetName = 'template')]
-        [ValidateSet('Public', 'Private', 'Internal')]
-        [string] $Visibility = 'Public',
-
-        # Whether issues are enabled.
-        [Parameter()]
-        [switch] $HasIssues,
-
-        # Whether projects are enabled.
-        [Parameter()]
-        [switch] $HasProjects,
-
-        # Whether the wiki is enabled.
-        [Parameter()]
-        [switch] $HasWiki,
-
-        # Whether discussions are enabled.
-        [Parameter()]
-        [switch] $HasDiscussions,
-
-        # Whether sponsorships are enabled.
-        [Parameter()]
-        [bool] $HasSponsorships,
-
-        # Whether this repository acts as a template that can be used to generate new repositories.
-        [Parameter()]
-        [switch] $IsTemplate,
-
-        # Whether the repository is archived.
-        [Parameter()]
-        [bool] $IsArchived,
-
         # Pass true to create an initial commit with empty README.
         [Parameter(ParameterSetName = 'user')]
         [Parameter(ParameterSetName = 'org')]
@@ -188,55 +145,110 @@
         [Parameter(ParameterSetName = 'org')]
         [string] $License,
 
-        # Whether to allow squash merges for pull requests.
-        [Parameter()]
-        [switch] $AllowSquashMerge,
+        # The visibility of the repository.
+        [Parameter(ParameterSetName = 'user')]
+        [Parameter(ParameterSetName = 'org')]
+        [Parameter(ParameterSetName = 'template')]
+        [ValidateSet('Public', 'Private', 'Internal')]
+        [string] $Visibility = 'Public',
 
-        # Whether to allow merge commits for pull requests.
+        # A short description of the new repository.
         [Parameter()]
-        [switch] $AllowMergeCommit,
+        [string] $Description,
+
+        # A URL with more information about the repository.
+        [Parameter()]
+        [uri] $Homepage,
+
+        # Whether the repository is archived.
+        [Parameter()]
+        [System.Nullable[bool]] $IsArchived,
+
+        # Whether this repository acts as a template that can be used to generate new repositories.
+        [Parameter()]
+        [System.Nullable[bool]] $IsTemplate,
+
+        # Whether to require contributors to sign off on web-based commits.
+        [Parameter()]
+        [System.Nullable[bool]] $WebCommitSignoffRequired,
+
+        # Updates the default branch for this repository.
+        [Parameter()]
+        [string] $DefaultBranch,
+
+        # Whether the wiki is enabled.
+        [Parameter()]
+        [System.Nullable[bool]] $HasWiki,
+
+        # Whether issues are enabled.
+        [Parameter()]
+        [System.Nullable[bool]] $HasIssues,
+
+        # Either true to allow private forks, or false to prevent private forks.
+        [Parameter()]
+        [System.Nullable[bool]] $AllowForking,
+
+        # Whether sponsorships are enabled.
+        [Parameter()]
+        [System.Nullable[bool]] $HasSponsorships,
+
+        # Whether discussions are enabled.
+        [Parameter()]
+        [System.Nullable[bool]] $HasDiscussions,
+
+        # Whether projects are enabled.
+        [Parameter()]
+        [System.Nullable[bool]] $HasProjects,
+
+        # Allow merge commits for pull requests with the specified setting.
+        [Parameter()]
+        [ValidateSet('', 'Default message', 'Pull request title', 'Pull request title and description')]
+        [string] $AllowMergeCommitWith = 'Default message',
+
+        # Allow squash merges for pull requests with the specified setting.
+        [Parameter()]
+        [ValidateSet('', 'Default message', 'Pull request title', 'Pull request title and description', 'Pull request title and commit details')]
+        [string] $AllowSquashMergingWith = 'Default message',
 
         # Whether to allow rebase merges for pull requests.
         [Parameter()]
-        [switch] $AllowRebaseMerge,
+        [switch] $AllowRebaseMerging,
+
+        # Whether to always suggest to update a head branch that is behind its base branch during a pull request.
+        [Parameter()]
+        [System.Nullable[switch]] $SuggestUpdateBranch,
 
         # Whether to allow Auto-merge to be used on pull requests.
         [Parameter()]
-        [switch] $AllowAutoMerge,
+        [System.Nullable[switch]] $AllowAutoMerge,
 
         # Whether to delete head branches when pull requests are merged
         [Parameter()]
-        [switch] $DeleteBranchOnMerge,
+        [System.Nullable[switch]] $DeleteBranchOnMerge,
 
-        # The default value for a squash merge commit title:
-        # - PR_TITLE - default to the pull request's title.
-        # - COMMIT_OR_PR_TITLE - default to the commit's title (if only one commit) or the pull request's title (when more than one commit).
+        # Whether to enable GitHub Advanced Security for this repository.
         [Parameter()]
-        [ValidateSet('PR_TITLE', 'COMMIT_OR_PR_TITLE')]
-        [string] $SquashMergeCommitTitle,
+        [System.Nullable[bool]] $EnableAdvancedSecurity,
 
-        # The default value for a squash merge commit message:
-        # - PR_BODY - default to the pull request's body.
-        # - COMMIT_MESSAGES - default to the branch's commit messages.
-        # - BLANK - default to a blank commit message.
+        # Whether to enable code security for this repository.
         [Parameter()]
-        [ValidateSet('PR_BODY', 'COMMIT_MESSAGES', 'BLANK')]
-        [string] $SquashMergeCommitMessage,
+        [System.Nullable[bool]] $EnableCodeSecurity,
 
-        # The default value for a merge commit title.
-        # - PR_TITLE - default to the pull request's title.
-        # - MERGE_MESSAGE - default to the classic title for a merge message (e.g.,Merge pull request #123 from branch-name).
+        # Whether to enable secret scanning for this repository.
         [Parameter()]
-        [ValidateSet('PR_TITLE', 'MERGE_MESSAGE')]
-        [string] $MergeCommitTitle,
+        [System.Nullable[bool]] $EnableSecretScanning,
 
-        # The default value for a merge commit message.
-        # - PR_BODY - default to the pull request's body.
-        # - PR_TITLE - default to the pull request's title.
-        # - BLANK - default to a blank commit message.
+        # Whether to enable secret scanning push protection for this repository.
         [Parameter()]
-        [ValidateSet('PR_BODY', 'PR_TITLE', 'BLANK')]
-        [string] $MergeCommitMessage,
+        [System.Nullable[bool]] $EnableSecretScanningPushProtection,
+
+        # Whether to enable secret scanning AI detection for this repository.
+        [Parameter()]
+        [System.Nullable[bool]] $EnableSecretScanningAIDetection,
+
+        # Whether to enable secret scanning non-provider patterns for this repository.
+        [Parameter()]
+        [System.Nullable[bool]] $EnableSecretScanningNonProviderPatterns,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -309,35 +321,31 @@
         $updateParams = @{
             Owner                                   = $Owner ?? $Context.Username
             Name                                    = $Name
+            Visibility                              = $Visibility
             Description                             = $Description
             Homepage                                = $Homepage
-            Visibility                              = $Visibility
+            IsArchived                              = $IsArchived
+            IsTemplate                              = $IsTemplate
+            WebCommitSignoffRequired                = $WebCommitSignoffRequired
+            DefaultBranch                           = $DefaultBranch
+            HasWiki                                 = $HasWiki
+            HasIssues                               = $HasIssues
+            AllowForking                            = $AllowForking
+            HasSponsorships                         = $HasSponsorships
+            HasDiscussions                          = $HasDiscussions
+            HasProjects                             = $HasProjects
+            AllowMergeCommitWith                    = $AllowMergeCommitWith
+            AllowSquashMergingWith                  = $AllowSquashMergingWith
+            AllowRebaseMerging                      = $AllowRebaseMerging
+            SuggestUpdateBranch                     = $SuggestUpdateBranch
+            AllowAutoMerge                          = $AllowAutoMerge
+            DeleteBranchOnMerge                     = $DeleteBranchOnMerge
             EnableAdvancedSecurity                  = $EnableAdvancedSecurity
             EnableCodeSecurity                      = $EnableCodeSecurity
             EnableSecretScanning                    = $EnableSecretScanning
             EnableSecretScanningPushProtection      = $EnableSecretScanningPushProtection
             EnableSecretScanningAIDetection         = $EnableSecretScanningAIDetection
             EnableSecretScanningNonProviderPatterns = $EnableSecretScanningNonProviderPatterns
-            HasIssues                               = $HasIssues
-            HasProjects                             = $HasProjects
-            HasWiki                                 = $HasWiki
-            HasDiscussions                          = $HasDiscussions
-            HasSponsorships                         = $HasSponsorships
-            IsTemplate                              = $IsTemplate
-            DefaultBranch                           = $DefaultBranch
-            AllowSquashMerge                        = $AllowSquashMerge
-            AllowMergeCommit                        = $AllowMergeCommit
-            AllowRebaseMerge                        = $AllowRebaseMerge
-            AllowAutoMerge                          = $AllowAutoMerge
-            DeleteBranchOnMerge                     = $DeleteBranchOnMerge
-            SuggestUpdateBranch                     = $SuggestUpdateBranch
-            SquashMergeCommitTitle                  = $SquashMergeCommitTitle
-            SquashMergeCommitMessage                = $SquashMergeCommitMessage
-            MergeCommitTitle                        = $MergeCommitTitle
-            MergeCommitMessage                      = $MergeCommitMessage
-            IsArchived                              = $IsArchived
-            AllowForking                            = $AllowForking
-            WebCommitSignoffRequired                = $WebCommitSignoffRequired
         }
         Update-GitHubRepository @updateParams
     }
