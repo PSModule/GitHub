@@ -308,7 +308,7 @@
             $this.Name = $Object.name
             $this.Owner = [GitHubOwner]::New($Object.owner)
             if (-not ([string]::IsNullOrEmpty($this.Owner) -and [string]::IsNullOrEmpty($this.Name))) {
-                $this.FullName = $this.Owner + '/' + $this.Name
+                $this.FullName = "$($this.Owner)/$($this.Name)"
             }
             $this.Url = $Object.url
             $this.Description = $Object.description
