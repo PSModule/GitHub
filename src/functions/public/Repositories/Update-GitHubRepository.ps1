@@ -82,7 +82,7 @@
 
         # Whether to enable secret scanning non-provider patterns for this repository.
         [Parameter()]
-        [bool] $SecretScanningNonProviderPatterns,
+        [bool] $EnableSecretScanningNonProviderPatterns,
 
         # Whether issues are enabled.
         [Parameter()]
@@ -215,6 +215,9 @@
             } : $null
             secret_scanning_ai_detection    = $PSBoundParameters.ContainsKey('EnableSecretScanningAIDetection') ? @{
                 status = $EnableSecretScanningAIDetection ? 'enabled' : 'disabled'
+            } : $null
+            secret_scanning_non_provider_patterns = $PSBoundParameters.ContainsKey('EnableSecretScanningNonProviderPatterns') ? @{
+                status = $EnableSecretScanningNonProviderPatterns ? 'enabled' : 'disabled'
             } : $null
             has_issues                      = $PSBoundParameters.ContainsKey('HasIssues') ? $HasIssues : $null
             has_projects                    = $PSBoundParameters.ContainsKey('HasProjects') ? $HasProjects : $null

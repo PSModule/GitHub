@@ -59,7 +59,7 @@
         $params = @{
             TemplateOwner      = 'GitHub'
             TemplateRepository = 'octocat'
-            Owner              = 'PSModule'
+            Organization       = 'PSModule'
             Name               = 'MyNewRepo'
             IncludeAllBranches = $true
             Description        = 'My new repo'
@@ -139,27 +139,26 @@
         [uri] $Homepage,
 
         # The visibility of the repository.
-        [Parameter()]
+        [Parameter(ParameterSetName = 'user')]
+        [Parameter(ParameterSetName = 'org')]
+        [Parameter(ParameterSetName = 'template')]
         [ValidateSet('Public', 'Private', 'Internal')]
         [string] $Visibility = 'Public',
 
         # Whether issues are enabled.
-        [Parameter(ParameterSetName = 'user')]
-        [Parameter(ParameterSetName = 'org')]
+        [Parameter()]
         [switch] $HasIssues,
 
         # Whether projects are enabled.
-        [Parameter(ParameterSetName = 'user')]
-        [Parameter(ParameterSetName = 'org')]
+        [Parameter()]
         [switch] $HasProjects,
 
         # Whether the wiki is enabled.
-        [Parameter(ParameterSetName = 'user')]
-        [Parameter(ParameterSetName = 'org')]
+        [Parameter()]
         [switch] $HasWiki,
 
         # Whether discussions are enabled.
-        [Parameter(ParameterSetName = 'user')]
+        [Parameter()]
         [switch] $HasDiscussions,
 
         # Whether sponsorships are enabled.
@@ -169,6 +168,10 @@
         # Whether this repository acts as a template that can be used to generate new repositories.
         [Parameter()]
         [switch] $IsTemplate,
+
+        # Whether the repository is archived.
+        [Parameter()]
+        [bool] $IsArchived,
 
         # Pass true to create an initial commit with empty README.
         [Parameter(ParameterSetName = 'user')]
@@ -304,7 +307,7 @@
         }
 
         $updateParams = @{
-            Owner                              = $Organization
+            Owner                              = $Owner ?? $Context.Username
             Repo                               = $Name
             NewName                            = $NewName
             Description                        = $Description
