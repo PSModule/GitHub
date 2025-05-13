@@ -278,8 +278,8 @@
         }
 
         if ($PSCmdlet.ShouldProcess("Repository [$Owner/$Name]", 'Update')) {
-            $repo = Invoke-GitHubAPI @inputObject | ForEach-Object {
-                [GitHubRepository]::new($_.Response)
+            Invoke-GitHubAPI @inputObject -RetryCount 5 -RetryInterval 1 | ForEach-Object {
+                $repo = [GitHubRepository]::new($_.Response)
             }
         }
 
