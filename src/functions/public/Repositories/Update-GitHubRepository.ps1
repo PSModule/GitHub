@@ -278,14 +278,15 @@
         }
 
         if ($PSCmdlet.ShouldProcess("Repository [$Owner/$Name]", 'Update')) {
-            $nodeID = Invoke-GitHubAPI @inputObject | Select-Object -ExpandProperty node_id
+            $repo = Invoke-GitHubAPI @inputObject
         }
 
+        Write-Debug "Repo has been updated"
         Write-Debug "$($repo | Select-Object * | Out-String)"
 
         if ($PSBoundParameters.ContainsKey('HasSponsorships') -or $PSBoundParameters.ContainsKey('HasDiscussions')) {
             $inputParams = @{
-                repositoryId           = $nodeID
+                repositoryId           = $repo.NodeID
                 hasSponsorshipsEnabled = $HasSponsorships
                 hasDiscussionsEnabled  = $HasDiscussions
             }
