@@ -205,6 +205,7 @@ Describe 'Repositories' {
                 $item.DatabaseID | Should -BeNullOrEmpty
                 $item.ID | Should -BeNullOrEmpty
                 $item.Owner | Should -BeNullOrEmpty
+                $item.FullName | Should -BeNullOrEmpty
             }
         }
         It 'Get-GitHubRepository - Gets all repositories from a organization' {
