@@ -265,7 +265,7 @@
 
     process {
         Write-Verbose "ParameterSetName: $($PSCmdlet.ParameterSetName)"
-        switch ($PSCmdlet.ParameterSetName) {
+        $repo = switch ($PSCmdlet.ParameterSetName) {
             'user' {
                 $params = @{
                     Context    = $Context
@@ -317,6 +317,9 @@
                 New-GitHubRepositoryAsFork @params
             }
         }
+
+        Write-Debug "New repo created"
+        Write-Debug "$($repo | Format-Table | Out-String)"
 
         $updateParams = @{
             Owner                                   = $Owner ?? $Context.Username
