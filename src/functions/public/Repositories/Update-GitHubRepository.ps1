@@ -173,6 +173,18 @@
     }
 
     process {
+        $repo = Get-GitHubRepository -Owner $Owner -Name $Name
+        if (-not $repo) {
+            $PSCmdlet.ThrowTerminatingError(
+                [System.Management.Automation.ErrorRecord]::new(
+                    [System.Management.Automation.ItemNotFoundException]::new("Repository '$Name' not found for owner '$Owner'."),
+                    'RepositoryNotFound',
+                    [System.Management.Automation.ErrorCategory]::ObjectNotFound,
+                    $null
+                )
+            )
+        }
+
         if ($PSBoundParameters.ContainsKey('AllowMergeCommitWith')) {
             switch ($AllowMergeCommitWith) {
                 'Default message' {
@@ -266,31 +278,42 @@
                 status = $EnableSecretScanningNonProviderPatterns ? 'enabled' : 'disabled'
             } : $null
         }
+
         if (-not $Declare) {
             $body | Remove-HashtableEntry -NullOrEmptyValues
         }
 
-        $inputObject = @{
-            Method      = 'PATCH'
-            APIEndpoint = "/repos/$Owner/$Name"
-            Body        = $body
-            Context     = $Context
-        }
-
-        if ($PSCmdlet.ShouldProcess("Repository [$Owner/$Name]", 'Update')) {
-            $repo = Invoke-GitHubAPI @inputObject | Select-Object -ExpandProperty Response
-        }
-
-        Write-Debug "Repo has been updated"
-        Write-Debug "$($repo | Select-Object * | Out-String)"
-
-        if ($PSBoundParameters.ContainsKey('HasSponsorships') -or $PSBoundParameters.ContainsKey('HasDiscussions')) {
-            $inputParams = @{
-                repositoryId           = $repo.node_id
-                hasSponsorshipsEnabled = $HasSponsorships
-                hasDiscussionsEnabled  = $HasDiscussions
+        Write-Debug 'Changed settings for REST call is:'
+        Write-Debug "$($body | Out-String)"
+        if ($body.Keys.Count -gt 0) {
+            $inputObject = @{
+                Method      = 'PATCH'
+                APIEndpoint = "/repos/$Owner/$Name"
+                Body        = $body
+                Context     = $Context
             }
-            $inputParams | Remove-HashtableEntry -NullOrEmptyValues
+
+            if ($PSCmdlet.ShouldProcess("Repository [$Owner/$Name]", 'Update')) {
+                $updatedRepo = Invoke-GitHubAPI @inputObject | Select-Object -ExpandProperty Response
+            }
+            Write-Debug 'Repo has been updated'
+            Write-Debug "$($updatedRepo | Select-Object * | Out-String)"
+        } else {
+            Write-Debug 'No changes made to repo via REST'
+        }
+
+        $inputParams = @{
+            hasSponsorshipsEnabled = $HasSponsorships
+            hasDiscussionsEnabled  = $HasDiscussions
+        }
+        $inputParams | Remove-HashtableEntry -NullOrEmptyValues
+
+        Write-Debug 'Changed settings for GraphQL call is:'
+        Write-Debug "$($inputParams | Out-String)"
+        if ($inputParams.Keys.Count -gt 0) {
+            $inputParams += @{
+                repositoryId = $repo.NodeID
+            }
 
             $updateGraphQLInputs = @{
                 query     = @'
@@ -314,6 +337,8 @@
             }
 
             Invoke-GitHubGraphQLQuery @updateGraphQLInputs
+        } else {
+            Write-Debug 'No changes made to repo via GraphQL'
         }
 
         Get-GitHubRepository -Owner $Owner -Name $Name
