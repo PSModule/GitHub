@@ -307,7 +307,7 @@
             $this.NodeID = $Object.id
             $this.Name = $Object.name
             $this.Owner = [GitHubOwner]::New($Object.owner)
-            if (-not ([string]::IsNullOrEmpty($this.Owner) -and [string]::IsNullOrEmpty($this.Name))) {
+            if (-not [string]::IsNullOrEmpty($this.Owner) -and -not [string]::IsNullOrEmpty($this.Name)) {
                 $this.FullName = "$($this.Owner)/$($this.Name)"
             }
             $this.Url = $Object.url
