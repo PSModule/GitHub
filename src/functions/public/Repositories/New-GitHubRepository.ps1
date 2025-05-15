@@ -322,7 +322,7 @@
         Write-Debug "$($repo | Format-Table | Out-String)"
 
         $updateParams = @{
-            Owner                                   = $Owner ?? $Context.Username
+            Owner                                   = $Organization ?? $Context.Username
             Name                                    = $Name
             Visibility                              = $Visibility
             Description                             = $Description
