@@ -37,8 +37,13 @@
     }
 
     process {
-        Write-Debug "Getting context: [$Context]"
-        $Context = Get-GitHubContext -Context $Context
+        if ($Context -is [string]) {
+            $contextName = $Context
+            Write-Debug "Getting context: [$contextName]"
+            $Context = Get-GitHubContext -Context $contextName
+        } else {
+            $Context = Get-GitHubContext -Context $Context.Name
+        }
 
         # TODO: Implement App installation context resolution
         # switch ($Context.Type) {
