@@ -33,12 +33,35 @@ Register-ArgumentCompleter -CommandName Get-GitHubRepository -ParameterName Prop
 Register-ArgumentCompleter -CommandName ($script:PSModuleInfo.FunctionsToExport) -ParameterName Repository -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
-    $owner = if ($fakeBoundParameters.ContainsKey('Owner')) {
-        $fakeBoundParameters.Owner
-    } elseif ($fakeBoundParameters.ContainsKey('Organization')) {
-        $fakeBoundParameters.Organization
+    $params = @{
+        Property = 'Name'
+        Verbose  = $false
+        Debug    = $false
     }
-    (Get-GitHubRepository -Owner $owner -Property Name -Verbose:$false).Name | Where-Object { $_ -like "$wordToComplete*" } | ForEach-Object {
+    if ($fakeBoundParameters.ContainsKey('Owner')) {
+        $params['Owner'] = $fakeBoundParameters.Owner
+    } elseif ($fakeBoundParameters.ContainsKey('Organization')) {
+        $params['Owner'] = $fakeBoundParameters.Organization
+    }
+    (Get-GitHubRepository @params).Name | Where-Object { $_ -like "$wordToComplete*" } | ForEach-Object {
+        [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
+    }
+}
+
+Register-ArgumentCompleter -CommandName ($script:PSModuleInfo.FunctionsToExport | Where-Object { $_ -like '*GitHubRepository' }) -ParameterName Name -ScriptBlock {
+    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
+    $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
+    $params = @{
+        Property = 'Name'
+        Verbose  = $false
+        Debug    = $false
+    }
+    if ($fakeBoundParameters.ContainsKey('Owner')) {
+        $params['Owner'] = $fakeBoundParameters.Owner
+    } elseif ($fakeBoundParameters.ContainsKey('Organization')) {
+        $params['Owner'] = $fakeBoundParameters.Organization
+    }
+    (Get-GitHubRepository @params).Name | Where-Object { $_ -like "$wordToComplete*" } | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
     }
 }
