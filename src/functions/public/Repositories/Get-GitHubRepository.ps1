@@ -52,14 +52,12 @@
         [Parameter(ParameterSetName = 'List repositories for the authenticated user')]
         [Parameter(ParameterSetName = 'List repositories from an account')]
         [ValidateSet('Internal', 'Private', 'Public')]
-        [Parameter()]
         [string] $Visibility,
 
         # Limit the results to repositories where the user has this role.
         [Parameter(ParameterSetName = 'List repositories for the authenticated user')]
         [Parameter(ParameterSetName = 'List repositories from an account')]
         [ValidateSet('Owner', 'Collaborator', 'Organization_member')]
-        [Parameter()]
         [string[]] $Affiliation,
 
         # Properties to include in the returned object.
@@ -126,22 +124,5 @@
 
     end {
         Write-Debug "[$stackPath] - End"
-    }
-}
-
-Register-ArgumentCompleter -CommandName Get-GitHubRepository -ParameterName Type -ScriptBlock {
-    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
-    $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
-
-    $validateSet = if ($fakeBoundParameters.ContainsKey('Organization')) {
-        'all', 'public', 'private', 'forks', 'sources', 'member'
-    } elseif ($fakeBoundParameters.ContainsKey('Username')) {
-        'all', 'owner', 'member'
-    } else {
-        'all', 'owner', 'public', 'private', 'member'
-    }
-
-    $validateSet | Where-Object { $_ -like "$wordToComplete*" } | ForEach-Object {
-        [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
     }
 }
