@@ -195,7 +195,7 @@
                     } else {
                         switch ($Mode) {
                             'GitHubApp' {
-                                Write-Verbose "Using default ClientID: [$($script:GitHub.Config.GitHubAppClientID)']"
+                                Write-Verbose "Using default ClientID: [$($script:GitHub.Config.GitHubAppClientID)]"
                                 $authClientID = $($script:GitHub.Config.GitHubAppClientID)
                             }
                             'OAuthApp' {
