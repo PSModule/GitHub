@@ -1,6 +1,6 @@
 # GitHub PowerShell
 
-The module provides a PowerShell-flavored approch to managing and automating your GitHub environments. It's tailored for developers, administrators,
+The module provides a PowerShell-flavored approach to managing and automating your GitHub environments. It's tailored for developers, administrators,
 and GitHub enthusiasts who want to use PowerShell to integrate or manage GitHub seamlessly.
 
 ## Supported use-cases
