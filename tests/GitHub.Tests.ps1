@@ -161,7 +161,7 @@ Describe 'GitHub' {
             $workflow | Should -Not -BeNullOrEmpty
         }
     }
-    Context 'Status' -ForEach @('public', 'eu') {
+    Context 'Status' -ForEach @('Public', 'Europe', 'Australia') {
         It 'Get-GitHubScheduledMaintenance - Gets scheduled maintenance for <_>' {
             { Get-GitHubScheduledMaintenance -Stamp $_ } | Should -Not -Throw
         }

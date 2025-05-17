@@ -45,15 +45,15 @@ Describe 'Secrets' {
             switch ($OwnerType) {
                 'user' {
                     Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                    $repo = New-GitHubRepository -Name "$repoName-1" -AllowSquashMerge
-                    $repo2 = New-GitHubRepository -Name "$repoName-2" -AllowSquashMerge
-                    $repo3 = New-GitHubRepository -Name "$repoName-3" -AllowSquashMerge
+                    $repo = New-GitHubRepository -Name "$repoName-1"
+                    $repo2 = New-GitHubRepository -Name "$repoName-2"
+                    $repo3 = New-GitHubRepository -Name "$repoName-3"
                 }
                 'organization' {
                     Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                    $repo = New-GitHubRepository -Organization $owner -Name "$repoName-1" -AllowSquashMerge
-                    $repo2 = New-GitHubRepository -Organization $owner -Name "$repoName-2" -AllowSquashMerge
-                    $repo3 = New-GitHubRepository -Organization $owner -Name "$repoName-3" -AllowSquashMerge
+                    $repo = New-GitHubRepository -Organization $owner -Name "$repoName-1"
+                    $repo2 = New-GitHubRepository -Organization $owner -Name "$repoName-2"
+                    $repo3 = New-GitHubRepository -Organization $owner -Name "$repoName-3"
                     LogGroup "Org secret - [$secretPrefix]" {
                         $params = @{
                             Owner                = $owner

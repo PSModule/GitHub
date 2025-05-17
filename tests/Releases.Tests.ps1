@@ -46,7 +46,6 @@ Describe 'Releases' {
             $params = @{
                 Name             = $repoName
                 Context          = $context
-                AllowSquashMerge = $true
                 AddReadme        = $true
                 License          = 'mit'
                 Gitignore        = 'VisualStudio'
