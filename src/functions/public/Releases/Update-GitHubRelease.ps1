@@ -157,11 +157,11 @@
         }
 
         $repo = Get-GitHubRepositoryByName -Owner $Owner -Name $Repository -Context $Context
-        if ($repo.HasDiscussions -and $PSBoundParameters.ContainsKey('DiscussionCategoryName')) {
+        if ($repo.HasDiscussion) {
             $body['discussion_category_name'] = $DiscussionCategoryName
         }
         if (-not $Declare) {
-            $body | Remove-HashtableEntry -NullOrEmptyValues
+            $body | Remove-HashtableEntry -NullOrEmptyValues -KeepKeys 'discussion_category_name'
         }
 
         if ($Latest) {
