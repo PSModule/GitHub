@@ -156,12 +156,12 @@
             $body.Remove('tag_name')
         }
 
-        $repo = Get-GitHubRepositoryByName -Owner $Owner -Name $Repository -Context $Context
-        if ($repo.HasDiscussion) {
+        $repo = Get-GitHubRepositoryByName -Owner $Owner -Name $Repository -Context $Context -Property HasDiscussions
+        if ($repo.HasDiscussions -and $PSBoundParameters.ContainsKey('DiscussionCategoryName') -and -not [string]::IsNullOrEmpty($DiscussionCategoryName)) {
             $body['discussion_category_name'] = $DiscussionCategoryName
         }
         if (-not $Declare) {
-            $body | Remove-HashtableEntry -NullOrEmptyValues -KeepKeys 'discussion_category_name'
+            $body | Remove-HashtableEntry -NullOrEmptyValues
         }
 
         if ($Latest) {
