@@ -2,7 +2,7 @@
 
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
     'PSUseDeclaredVarsMoreThanAssignments', '',
-    Justification = 'Pester grouping syntax - known issue.'
+    Justification = 'Pester grouping syntax: known issue.'
 )]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
     'PSAvoidUsingConvertToSecureStringWithPlainText', '',
@@ -11,6 +11,10 @@
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
     'PSAvoidUsingWriteHost', '',
     Justification = 'Log outputs to GitHub Actions logs.'
+)]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+    'PSAvoidLongLines', '',
+    Justification = 'Long test descriptions and skip switches'
 )]
 [CmdletBinding()]
 param()

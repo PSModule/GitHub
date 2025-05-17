@@ -12,9 +12,12 @@
     'PSAvoidUsingWriteHost', '',
     Justification = 'Log outputs to GitHub Actions logs.'
 )]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+    'PSAvoidLongLines', '',
+    Justification = 'Long test descriptions and skip switches'
+)]
 [CmdletBinding()]
 param()
-
 
 BeforeAll {
     # DEFAULTS ACCROSS ALL TESTS

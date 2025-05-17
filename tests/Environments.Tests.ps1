@@ -2,7 +2,7 @@
 
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
     'PSUseDeclaredVarsMoreThanAssignments', '',
-    Justification = 'Pester grouping syntax - known issue.'
+    Justification = 'Pester grouping syntax: known issue.'
 )]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
     'PSAvoidUsingConvertToSecureStringWithPlainText', '',
