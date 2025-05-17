@@ -157,7 +157,7 @@
         }
 
         $repo = Get-GitHubRepositoryByName -Owner $Owner -Name $Repository -Context $Context
-        if ($repo.HasDiscussions) {
+        if ($repo.HasDiscussions -and $PSBoundParameters.ContainsKey('DiscussionCategoryName')) {
             $body['discussion_category_name'] = $DiscussionCategoryName
         }
         if (-not $Declare) {
