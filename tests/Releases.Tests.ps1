@@ -44,11 +44,11 @@ Describe 'Releases' {
             $repoName = "$repoPrefix-$guid"
 
             $params = @{
-                Name             = $repoName
-                Context          = $context
-                AddReadme        = $true
-                License          = 'mit'
-                Gitignore        = 'VisualStudio'
+                Name      = $repoName
+                Context   = $context
+                AddReadme = $true
+                License   = 'mit'
+                Gitignore = 'VisualStudio'
             }
             switch ($OwnerType) {
                 'user' {
@@ -247,7 +247,7 @@ Describe 'Releases' {
             }
 
             It 'Set-GitHubRelease - Sets release v1.0 as latest' {
-                $release = Set-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.0' -Latest -Name 'Updated Release again' -Notes 'Updated release notes to something else' -Debug
+                $release = Set-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.0' -Latest -Name 'Updated Release again' -Notes 'Updated release notes to something else'
                 LogGroup 'Set release' {
                     Write-Host ($release | Format-List -Property * | Out-String)
                 }
