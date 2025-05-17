@@ -61,7 +61,7 @@ Describe 'Releases' {
                 }
             }
             LogGroup "Repository - [$repoName]" {
-                Write-Host ($repo | Format-Table | Out-String)
+                Write-Host ($repo | Select-Object * | Out-String)
             }
         }
 

@@ -47,12 +47,15 @@ Describe 'Environments' {
             switch ($OwnerType) {
                 'user' {
                     Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                    New-GitHubRepository -Name $repoName -Confirm:$false
+                    $repo = New-GitHubRepository -Name $repoName -Confirm:$false
                 }
                 'organization' {
                     Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                    New-GitHubRepository -Organization $owner -Name $repoName -Confirm:$false
+                    $repo = New-GitHubRepository -Organization $owner -Name $repoName -Confirm:$false
                 }
+            }
+            LogGroup "Repository - [$repoName]" {
+                Write-Host ($repo | Select-Object * | Out-String)
             }
         }
 

@@ -63,14 +63,14 @@ Describe 'Variables' {
                             SelectedRepositories = $repo.id
                         }
                         $orgVariable = Set-GitHubVariable @params
-                        Write-Host ($orgVariable | Select-Object * | Format-Table | Out-String)
+                        Write-Host ($orgVariable | Select-Object * | Out-String)
                     }
                 }
             }
             LogGroup "Repository - [$repoName]" {
-                Write-Host ($repo | Format-Table | Out-String)
-                Write-Host ($repo2 | Format-Table | Out-String)
-                Write-Host ($repo3 | Format-Table | Out-String)
+                Write-Host ($repo | Select-Object * | Out-String)
+                Write-Host ($repo2 | Select-Object * | Out-String)
+                Write-Host ($repo3 | Select-Object * | Out-String)
             }
         }
 
