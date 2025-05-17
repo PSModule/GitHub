@@ -222,6 +222,38 @@ Describe 'Repositories' {
             }
             $repos.Count | Should -BeGreaterThan 0
         }
+        It 'Set-GitHubRepository - Updates an existing repository' -Skip:($OwnerType -eq 'repository') {
+            $description = 'Updated description'
+            LogGroup 'Repository - Set update' {
+                switch ($OwnerType) {
+                    'user' {
+                        $repo = Set-GitHubRepository -Name $repoName -Description $description
+                    }
+                    'organization' {
+                        $repo = Set-GitHubRepository -Owner $owner -Name $repoName -Description $description
+                    }
+                }
+                Write-Host ($repo | Format-List | Out-String)
+            }
+            $repo | Should -Not -BeNullOrEmpty
+            $repo.Description | Should -Be $description
+        }
+        It 'Set-GitHubRepository - Creates a new repository when missing' -Skip:($OwnerType -eq 'repository') {
+            $newRepoName = "$repoName-new"
+            LogGroup 'Repository - Set create' {
+                switch ($OwnerType) {
+                    'user' {
+                        $repo = Set-GitHubRepository -Name $newRepoName -Description 'Set create'
+                    }
+                    'organization' {
+                        $repo = Set-GitHubRepository -Owner $owner -Name $newRepoName -Description 'Set create'
+                    }
+                }
+                Write-Host ($repo | Format-List | Out-String)
+            }
+            $repo | Should -Not -BeNullOrEmpty
+            $repo.Name | Should -Be $newRepoName
+        }
         It 'Update-GitHubRepository - Renames a repository' -Skip:($OwnerType -eq 'repository') {
             LogGroup 'Repository - Renamed' {
                 $newName = "$repoName-newname"
