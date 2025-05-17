@@ -247,7 +247,7 @@ Describe 'Releases' {
             }
 
             It 'Set-GitHubRelease - Sets release v1.0 as latest' {
-                $release = Set-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.0' -Latest -Name 'Updated Release again' -Notes 'Updated release notes to something else'
+                $release = Set-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.0' -Latest -Name 'Updated Release again' -Notes 'Updated release notes to something else' -Debug
                 LogGroup 'Set release' {
                     Write-Host ($release | Format-List -Property * | Out-String)
                 }
