@@ -26,13 +26,15 @@
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [CmdletBinding()]
     param(
+        # Get the publicly visible email address for the authenticated user.
+        [Parameter()]
+        [switch] $Public,
+
         # The number of results per page (max 100).
         [Parameter()]
         [ValidateRange(1, 100)]
+        [AllowNull()]
         [System.Nullable[int]] $PerPage,
-
-        [Parameter()]
-        [switch] $Public,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.

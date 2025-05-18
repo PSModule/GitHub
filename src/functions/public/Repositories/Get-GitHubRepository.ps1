@@ -73,6 +73,7 @@
         [Parameter(ParameterSetName = 'List repositories for the authenticated user')]
         [Parameter(ParameterSetName = 'List repositories from an account')]
         [ValidateRange(1, 100)]
+        [AllowNull()]
         [System.Nullable[int]] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.

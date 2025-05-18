@@ -82,9 +82,10 @@ filter Get-GitHubEnvironment {
         [SupportsWildcards()]
         [string] $Name = '*',
 
-        # The maximum number of environments to return per request.
+        # The number of results per page (max 100).
         [Parameter()]
         [ValidateRange(1, 100)]
+        [AllowNull()]
         [System.Nullable[int]] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.

@@ -72,6 +72,7 @@
         [Parameter(ParameterSetName = 'List assets from a release by ID')]
         [Parameter(ParameterSetName = 'List assets from a release by tag')]
         [ValidateRange(1, 100)]
+        [AllowNull()]
         [System.Nullable[int]] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.
