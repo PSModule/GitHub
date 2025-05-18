@@ -66,8 +66,8 @@
 
         # The number of results per page (max 100).
         [Parameter()]
-        [ValidateRange(0, 100)]
-        [int] $PerPage,
+        [ValidateRange(1, 100)]
+        [System.Nullable[int]] $PerPage,
 
         # The unique identifier of the rule suite result. To get this ID, you can use GET /repos/ { owner }/ { repo }/rulesets/rule-suites for repositories and GET /orgs/ { org }/rulesets/rule-suites for organizations.
         [Parameter(

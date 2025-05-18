@@ -84,8 +84,8 @@ filter Get-GitHubEnvironment {
 
         # The maximum number of environments to return per request.
         [Parameter()]
-        [ValidateRange(0, 100)]
-        [int] $PerPage,
+        [ValidateRange(1, 100)]
+        [System.Nullable[int]] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -101,11 +101,16 @@ filter Get-GitHubEnvironment {
     }
 
     process {
+        $params = @{
+            Owner      = $Owner
+            Repository = $Repository
+            Context    = $Context
+        }
         if ($Name.Contains('*')) {
-            Get-GitHubEnvironmentList -Owner $Owner -Repository $Repository -PerPage $PerPage -Context $Context |
+            Get-GitHubEnvironmentList @params -PerPage $PerPage -Context $Context |
                 Where-Object { $_.Name -like $Name }
         } else {
-            Get-GitHubEnvironmentByName -Owner $Owner -Repository $Repository -Name $Name -Context $Context
+            Get-GitHubEnvironmentByName @params -Name $Name -Context $Context
         }
     }
 

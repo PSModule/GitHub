@@ -28,8 +28,8 @@
     param(
         # The number of results per page (max 100).
         [Parameter()]
-        [ValidateRange(0, 100)]
-        [int] $PerPage,
+        [ValidateRange(1, 100)]
+        [System.Nullable[int]] $PerPage,
 
         [Parameter()]
         [switch] $Public,
@@ -48,10 +48,14 @@
     }
 
     process {
+        $params = @{
+            PerPage = $PerPage
+            Context = $Context
+        }
         if ($Public) {
-            Get-GitHubUserPublicEmail -PerPage $PerPage -Context $Context
+            Get-GitHubUserPublicEmail @params
         } else {
-            Get-GitHubUserAllEmail -PerPage $PerPage -Context $Context
+            Get-GitHubUserAllEmail @params
         }
     }
 
