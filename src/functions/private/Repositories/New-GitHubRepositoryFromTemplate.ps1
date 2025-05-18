@@ -50,7 +50,7 @@
 
         # The organization or person who will own the new repository.
         # To create a new repository in an organization, the authenticated user must be a member of the specified organization.
-        [Parameter(Mandatory)]
+        [Parameter()]
         [string] $Owner,
 
         # The name of the new repository.
@@ -63,12 +63,12 @@
 
         # Include all branches from the source repository.
         [Parameter()]
-        [switch] $IncludeAllBranches,
+        [bool] $IncludeAllBranches,
 
         # The visibility of the repository.
         [Parameter()]
-        [ValidateSet('public', 'private')]
-        [string] $Visibility = 'public',
+        [ValidateSet('Public', 'Private')]
+        [string] $Visibility = 'Public',
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -88,8 +88,9 @@
             name                 = $Name
             description          = $Description
             include_all_branches = [bool]$IncludeAllBranches
-            private              = $Visibility -eq 'private'
+            private              = $Visibility -eq 'Private'
         }
+        $body | Remove-HashtableEntry -NullOrEmptyValues
 
         $inputObject = @{
             Method      = 'POST'

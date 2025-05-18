@@ -2,7 +2,7 @@
 
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
     'PSUseDeclaredVarsMoreThanAssignments', '',
-    Justification = 'Pester grouping syntax - known issue.'
+    Justification = 'Pester grouping syntax: known issue.'
 )]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
     'PSAvoidUsingConvertToSecureStringWithPlainText', '',
@@ -11,6 +11,10 @@
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
     'PSAvoidUsingWriteHost', '',
     Justification = 'Log outputs to GitHub Actions logs.'
+)]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+    'PSAvoidLongLines', '',
+    Justification = 'Long test descriptions and skip switches'
 )]
 [CmdletBinding()]
 param()
@@ -45,14 +49,16 @@ Describe 'Secrets' {
 
             switch ($OwnerType) {
                 'user' {
-                    $repo = New-GitHubRepository -Name "$repoName-1" -AllowSquashMerge
-                    $repo2 = New-GitHubRepository -Name "$repoName-2" -AllowSquashMerge
-                    $repo3 = New-GitHubRepository -Name "$repoName-3" -AllowSquashMerge
+                    Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                    $repo = New-GitHubRepository -Name "$repoName-1"
+                    $repo2 = New-GitHubRepository -Name "$repoName-2"
+                    $repo3 = New-GitHubRepository -Name "$repoName-3"
                 }
                 'organization' {
-                    $repo = New-GitHubRepository -Organization $owner -Name "$repoName-1" -AllowSquashMerge
-                    $repo2 = New-GitHubRepository -Organization $owner -Name "$repoName-2" -AllowSquashMerge
-                    $repo3 = New-GitHubRepository -Organization $owner -Name "$repoName-3" -AllowSquashMerge
+                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                    $repo = New-GitHubRepository -Organization $owner -Name "$repoName-1"
+                    $repo2 = New-GitHubRepository -Organization $owner -Name "$repoName-2"
+                    $repo3 = New-GitHubRepository -Organization $owner -Name "$repoName-3"
                     LogGroup "Org secret - [$secretPrefix]" {
                         $params = @{
                             Owner                = $owner
@@ -63,14 +69,14 @@ Describe 'Secrets' {
                         }
 
                         $orgSecret += Set-GitHubSecret @params
-                        Write-Host ($orgSecret | Select-Object * | Format-Table | Out-String)
+                        Write-Host ($orgSecret | Select-Object * | Out-String)
                     }
                 }
             }
             LogGroup "Repository - [$repoName]" {
-                Write-Host ($repo | Format-List | Out-String)
-                Write-Host ($repo2 | Format-List | Out-String)
-                Write-Host ($repo3 | Format-List | Out-String)
+                Write-Host ($repo | Select-Object * | Out-String)
+                Write-Host ($repo2 | Select-Object * | Out-String)
+                Write-Host ($repo3 | Select-Object * | Out-String)
             }
         }
 

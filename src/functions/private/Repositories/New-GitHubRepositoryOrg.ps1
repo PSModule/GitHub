@@ -61,34 +61,30 @@
 
         # The visibility of the repository.
         [Parameter()]
-        [ValidateSet('public', 'private', 'internal')]
-        [string] $Visibility = 'public',
+        [ValidateSet('Public', 'Private', 'Internal')]
+        [string] $Visibility = 'Public',
 
         # Either true to enable issues for this repository or false to disable them.
         [Parameter()]
-        [switch] $HasIssues,
+        [bool] $HasIssues = $true,
 
         # Either true to enable projects for this repository or false to disable them.
         # Note: If you're creating a repository in an organization that has disabled repository projects, the default is false,
         # and if you pass true, the API returns an error.
         [Parameter()]
-        [switch] $HasProjects,
+        [bool] $HasProjects = $true,
 
         # Either true to enable the wiki for this repository or false to disable it.
         [Parameter()]
-        [switch] $HasWiki,
+        [bool] $HasWiki = $true,
 
         # Either true to make this repo available as a template repository or false to prevent it.
         [Parameter()]
-        [switch] $IsTemplate,
-
-        # The ID of the team that will be granted access to this repository. This is only valid when creating a repository in an organization.
-        [Parameter()]
-        [System.Nullable[int]] $TeamId,
+        [bool] $IsTemplate = $false,
 
         # Pass true to create an initial commit with empty README.
         [Parameter()]
-        [switch] $AddReadme,
+        [bool] $AddReadme = $false,
 
         # The desired language or platform to apply to the .gitignore.
         [Parameter()]
@@ -100,24 +96,24 @@
 
         # Either true to allow squash-merging pull requests, or false to prevent squash-merging.
         [Parameter()]
-        [switch] $AllowSquashMerge,
+        [bool] $AllowSquashMerge = $true,
 
         # Either true to allow merging pull requests with a merge commit, or false to prevent merging pull requests with merge commits.
         [Parameter()]
-        [switch] $AllowMergeCommit,
+        [bool] $AllowMergeCommit = $true,
 
         # Either true to allow rebase-merging pull requests, or false to prevent rebase-merging.
         [Parameter()]
-        [switch] $AllowRebaseMerge,
+        [bool] $AllowRebaseMerge = $true,
 
         # Either true to allow auto-merge on pull requests, or false to disallow auto-merge.
         [Parameter()]
-        [switch] $AllowAutoMerge,
+        [bool] $AllowAutoMerge = $false,
 
         # Either true to allow automatically deleting head branches when pull requests are merged, or false to prevent automatic deletion.
         # The authenticated user must be an organization owner to set this property to true.
         [Parameter()]
-        [switch] $DeleteBranchOnMerge,
+        [bool] $DeleteBranchOnMerge = $false,
 
         # The default value for a squash merge commit title:
         #   - PR_TITLE - default to the pull request's title.
@@ -165,26 +161,24 @@
         $body = @{
             name                        = $Name
             description                 = $Description
-            homepage                    = $Homepage
-            visibility                  = $Visibility
-            has_issues                  = [bool]$HasIssues
-            has_projects                = [bool]$HasProjects
-            has_wiki                    = [bool]$HasWiki
-            is_template                 = [bool]$IsTemplate
-            team_id                     = $TeamId
-            auto_init                   = [bool]$AddReadme
-            allow_squash_merge          = [bool]$AllowSquashMerge
-            allow_merge_commit          = [bool]$AllowMergeCommit
-            allow_rebase_merge          = [bool]$AllowRebaseMerge
-            allow_auto_merge            = [bool]$AllowAutoMerge
-            delete_branch_on_merge      = [bool]$DeleteBranchOnMerge
+            homepage                    = [string]$Homepage
+            visibility                  = $Visibility.ToLower()
+            has_issues                  = $HasIssues
+            has_projects                = $HasProjects
+            has_wiki                    = $HasWiki
+            is_template                 = $IsTemplate
+            auto_init                   = $AddReadme
+            allow_squash_merge          = $AllowSquashMerge
+            allow_merge_commit          = $AllowMergeCommit
+            allow_rebase_merge          = $AllowRebaseMerge
+            allow_auto_merge            = $AllowAutoMerge
+            delete_branch_on_merge      = $DeleteBranchOnMerge
             squash_merge_commit_title   = $SquashMergeCommitTitle
             squash_merge_commit_message = $SquashMergeCommitMessage
             merge_commit_title          = $MergeCommitTitle
             merge_commit_message        = $MergeCommitMessage
             gitignore_template          = $Gitignore
             license_template            = $License
-            # private                     = $Visibility -eq 'private'
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 

@@ -32,8 +32,7 @@
 
         # The number of results per page (max 100).
         [Parameter()]
-        [ValidateRange(0, 100)]
-        [int] $PerPage,
+        [System.Nullable[int]] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -49,10 +48,14 @@
     }
 
     process {
+        $params = @{
+            PerPage = $PerPage
+            Context = $Context
+        }
         if ($Username) {
-            Get-GitHubUserFollowersOfUser -Username $Username -PerPage $PerPage -Context $Context
+            Get-GitHubUserFollowersOfUser @params -Username $Username
         } else {
-            Get-GitHubUserMyFollower -PerPage $PerPage -Context $Context
+            Get-GitHubUserMyFollower @params
         }
     }
 

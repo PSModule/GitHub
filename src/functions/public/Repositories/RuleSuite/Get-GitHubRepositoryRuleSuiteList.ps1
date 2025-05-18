@@ -60,8 +60,7 @@
 
         # The number of results per page (max 100).
         [Parameter()]
-        [ValidateRange(0, 100)]
-        [int] $PerPage,
+        [System.Nullable[int]] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -82,7 +81,6 @@
             time_period       = $TimePeriod
             actor_name        = $ActorName
             rule_suite_result = $RuleSuiteResult
-            per_page          = $PerPage
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
@@ -90,6 +88,7 @@
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/rulesets/rule-suites"
             Body        = $body
+            PerPage     = $PerPage
             Context     = $Context
         }
 

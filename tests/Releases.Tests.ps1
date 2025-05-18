@@ -44,23 +44,24 @@ Describe 'Releases' {
             $repoName = "$repoPrefix-$guid"
 
             $params = @{
-                Name             = $repoName
-                Context          = $context
-                AllowSquashMerge = $true
-                AddReadme        = $true
-                License          = 'mit'
-                Gitignore        = 'VisualStudio'
+                Name      = $repoName
+                Context   = $context
+                AddReadme = $true
+                License   = 'mit'
+                Gitignore = 'VisualStudio'
             }
             switch ($OwnerType) {
                 'user' {
+                    Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
                     $repo = New-GitHubRepository @params
                 }
                 'organization' {
+                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
                     $repo = New-GitHubRepository @params -Organization $owner
                 }
             }
             LogGroup "Repository - [$repoName]" {
-                Write-Host ($repo | Format-Table | Out-String)
+                Write-Host ($repo | Select-Object * | Out-String)
             }
         }
 

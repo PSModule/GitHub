@@ -89,7 +89,7 @@
 
         # Default permission level members have for organization repositories.
         [Parameter(ValueFromPipelineByPropertyName)]
-        [ValidateSet('read', 'write', 'admin', 'none')]
+        [ValidateSet('Read', 'Write', 'Admin', 'None')]
         [string] $DefaultRepositoryPermission,
 
         # Whether of non-admin organization members can create repositories.
@@ -179,7 +179,7 @@
             twitter_username                                             = $TwitterUsername
             has_organization_projects                                    = $PSBoundParameters.ContainsKey('HasOrganizationProjects') ? $HasOrganizationProjects : $null
             has_repository_projects                                      = $PSBoundParameters.ContainsKey('HasRepositoryProjects') ? $HasRepositoryProjects : $null
-            default_repository_permission                                = $PSBoundParameters.ContainsKey('DefaultRepositoryPermission') ? $DefaultRepositoryPermission : $null
+            default_repository_permission                                = $PSBoundParameters.ContainsKey('DefaultRepositoryPermission') ? $DefaultRepositoryPermission.ToLower() : $null
             members_can_create_repositories                              = $PSBoundParameters.ContainsKey('MembersCanCreateRepositories') ? $MembersCanCreateRepositories : $null
             members_can_create_internal_repositories                     = $PSBoundParameters.ContainsKey('MembersCanCreateInternalRepositories') ? $MembersCanCreateInternalRepositories : $null
             members_can_create_private_repositories                      = $PSBoundParameters.ContainsKey('MembersCanCreatePrivateRepositories') ? $MembersCanCreatePrivateRepositories : $null

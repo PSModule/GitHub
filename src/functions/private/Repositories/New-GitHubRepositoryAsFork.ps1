@@ -44,16 +44,16 @@
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [string] $Owner,
+        [string] $ForkOwner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory)]
-        [string] $Repository,
+        [string] $ForkRepository,
 
         # The organization or person who will own the new repository.
         # To create a new repository in an organization, the authenticated user must be a member of the specified organization.
         [Parameter()]
-        [string] $Organization,
+        [string] $Owner,
 
         # The name of the new repository.
         [Parameter()]
@@ -61,7 +61,7 @@
 
         # Include all branches from the source repository.
         [Parameter()]
-        [switch] $IncludeAllBranches,
+        [bool] $IncludeAllBranches,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -77,7 +77,7 @@
 
     process {
         $body = @{
-            organization        = $Organization
+            organization        = $Owner
             name                = $Name
             default_branch_only = -not $IncludeAllBranches
         }
@@ -85,12 +85,12 @@
 
         $inputObject = @{
             Method      = 'POST'
-            APIEndpoint = "/repos/$Owner/$Repository/forks"
+            APIEndpoint = "/repos/$ForkOwner/$ForkRepository/forks"
             Body        = $body
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("Repository [$Organization/$Name] as fork of [$Owner/$Repository]", 'Create')) {
+        if ($PSCmdlet.ShouldProcess("Repository [$Owner/$Name] as fork of [$ForkOwner/$ForkRepository]", 'Create')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 [GitHubRepository]::New($_.Response)
             }

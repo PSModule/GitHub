@@ -12,6 +12,10 @@
     'PSAvoidUsingWriteHost', '',
     Justification = 'Log outputs to GitHub Actions logs.'
 )]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+    'PSAvoidLongLines', '',
+    Justification = 'Long test descriptions and skip switches'
+)]
 [CmdletBinding()]
 param()
 
@@ -161,7 +165,7 @@ Describe 'GitHub' {
             $workflow | Should -Not -BeNullOrEmpty
         }
     }
-    Context 'Status' -ForEach @('public', 'eu') {
+    Context 'Status' -ForEach @('Public', 'Europe', 'Australia') {
         It 'Get-GitHubScheduledMaintenance - Gets scheduled maintenance for <_>' {
             { Get-GitHubScheduledMaintenance -Stamp $_ } | Should -Not -Throw
         }

@@ -26,13 +26,13 @@
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [CmdletBinding()]
     param(
-        # The number of results per page (max 100).
-        [Parameter()]
-        [ValidateRange(0, 100)]
-        [int] $PerPage,
-
+        # Get the publicly visible email address for the authenticated user.
         [Parameter()]
         [switch] $Public,
+
+        # The number of results per page (max 100).
+        [Parameter()]
+        [System.Nullable[int]] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -48,10 +48,14 @@
     }
 
     process {
+        $params = @{
+            PerPage = $PerPage
+            Context = $Context
+        }
         if ($Public) {
-            Get-GitHubUserPublicEmail -PerPage $PerPage -Context $Context
+            Get-GitHubUserPublicEmail @params
         } else {
-            Get-GitHubUserAllEmail -PerPage $PerPage -Context $Context
+            Get-GitHubUserAllEmail @params
         }
     }
 

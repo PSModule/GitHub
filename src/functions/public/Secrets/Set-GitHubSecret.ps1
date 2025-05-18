@@ -21,7 +21,7 @@ function Set-GitHubSecret {
             Name         = 'MySecret'
             Type         = 'actions'
             Value        = (ConvertTo-SecureString "my-secret-value" -AsPlainText -Force)
-            Private      = $true
+            Visibility   = 'Private'
         }
         Set-GitHubSecret @params
 
@@ -29,11 +29,11 @@ function Set-GitHubSecret {
 
         .EXAMPLE
         $params = @{
-            Owner      = 'MyUser'
-            Repository = 'MyRepo'
+            Owner       = 'MyUser'
+            Repository  = 'MyRepo'
             Environment = 'Production'
-            Name       = 'MySecret'
-            Value      = (ConvertTo-SecureString "my-secret-value" -AsPlainText -Force)
+            Name        = 'MySecret'
+            Value       = (ConvertTo-SecureString "my-secret-value" -AsPlainText -Force)
         }
         Set-GitHubSecret @params
 
@@ -45,6 +45,7 @@ function Set-GitHubSecret {
         .LINK
         https://psmodule.io/GitHub/Functions/Secrets/Set-GitHubSecret/
     #>
+    [Alias('New-GitHubSecret')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSShouldProcess', '', Scope = 'Function',
         Justification = 'This check is performed in the private functions.'
@@ -79,8 +80,8 @@ function Set-GitHubSecret {
         # The visibility of the secret when updating an organization secret.
         # Can be `private`, `selected`, or `all`.
         [Parameter(ParameterSetName = 'Organization')]
-        [ValidateSet('private', 'selected', 'all')]
-        [string] $Visibility = 'private',
+        [ValidateSet('Private', 'Selected', 'All')]
+        [string] $Visibility = 'Private',
 
         # The IDs of the repositories to which the secret is available.
         # Used only when the `-Visibility` parameter is set to `selected`.
@@ -122,7 +123,7 @@ function Set-GitHubSecret {
 
         switch ($PSCmdlet.ParameterSetName) {
             'Organization' {
-                $params['Visibility'] = $Visibility
+                $params['Visibility'] = $Visibility.ToLower()
                 $params['SelectedRepositories'] = $SelectedRepositories
                 Set-GitHubSecretOnOwner @params
                 break

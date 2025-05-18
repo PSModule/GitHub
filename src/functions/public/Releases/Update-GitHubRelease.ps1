@@ -156,8 +156,8 @@
             $body.Remove('tag_name')
         }
 
-        $repo = Get-GitHubRepositoryByName -Owner $Owner -Name $Repository -Context $Context
-        if ($repo.HasDiscussions) {
+        $repo = Get-GitHubRepositoryByName -Owner $Owner -Name $Repository -Context $Context -Property HasDiscussions
+        if ($repo.HasDiscussions -and $PSBoundParameters.ContainsKey('DiscussionCategoryName') -and -not [string]::IsNullOrEmpty($DiscussionCategoryName)) {
             $body['discussion_category_name'] = $DiscussionCategoryName
         }
         if (-not $Declare) {
