@@ -32,14 +32,9 @@
         [string] $Organization,
 
         # The number of results per page (max 100).
-        [Parameter(
-            ParameterSetName = 'Enterprise'
-        )]
-        [Parameter(
-            ParameterSetName = 'Organization'
-        )]
-        [ValidateRange(0, 100)]
-        [int] $PerPage,
+        [Parameter(ParameterSetName = 'Enterprise')]
+        [Parameter(ParameterSetName = 'Organization')]
+        [System.Nullable[int]] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.

@@ -76,9 +76,9 @@ Describe 'Users' {
                 It 'Add/Remove-GitHubUserEmail - Adds and removes an email to the authenticated user' {
                     $email = (New-Guid).Guid + '@psmodule.io'
                     { Add-GitHubUserEmail -Email $email } | Should -Not -Throw
-                (Get-GitHubUserEmail).email | Should -Contain $email
+                    (Get-GitHubUserEmail).email | Should -Contain $email
                     { Remove-GitHubUserEmail -Email $email } | Should -Not -Throw
-                (Get-GitHubUserEmail).email | Should -Not -Contain $email
+                    (Get-GitHubUserEmail).email | Should -Not -Contain $email
                 }
             }
         }

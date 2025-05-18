@@ -75,8 +75,8 @@ function New-GitHubVariable {
         # `selected` - The variable is available to selected repositories.
         # `all` - The variable is available to all repositories in the organization.
         [Parameter(ParameterSetName = 'Organization')]
-        [ValidateSet('private', 'selected', 'all')]
-        [string] $Visibility = 'private',
+        [ValidateSet('Private', 'Selected', 'All')]
+        [string] $Visibility = 'Private',
 
         # The IDs of the repositories to which the variable is available.
         # This parameter is only used when the `-Visibility` parameter is set to `selected`.
@@ -110,7 +110,7 @@ function New-GitHubVariable {
         $params | Remove-HashtableEntry -NullOrEmptyValues
         $null = switch ($PSCmdlet.ParameterSetName) {
             'Organization' {
-                $params.Visibility = $Visibility
+                $params.Visibility = $Visibility.ToLower()
                 New-GitHubVariableOnOwner @params
                 break
             }

@@ -53,13 +53,25 @@
 
             # Handle GraphQL-specific errors (200 OK with errors in response)
             if ($graphQLResponse.errors) {
-                $errorMessages = $graphQLResponse.errors | ForEach-Object {
-                    "GraphQL Error [$($_.type)]: $($_.message)`nPath: $($_.path -join '/')`nLocations: $($_.locations.line):$($_.locations.column)"
+                $queryLines = $Query -split "`n"
+                $errorMessages = @()
+                $graphQLResponse.errors | ForEach-Object {
+                    $lineNum = $_.locations.line
+                    $lineText = if ($lineNum -and ($lineNum -le $queryLines.Count)) { $queryLines[$lineNum - 1].Trim() } else { '' }
+                    $errorMessages += @"
+GraphQL Error [$($_.type)]:
+Message:    $($_.message)
+Path:       $($_.path -join '/')
+Location:   $($_.locations.line):$($_.locations.column)
+Query Line: $lineText
+Extensions: $($_.extensions | Out-String)
+
+"@
                 }
                 $PSCmdlet.ThrowTerminatingError(
                     [System.Management.Automation.ErrorRecord]::new(
                         [System.Exception]::new("GraphQL errors occurred:`n$($errorMessages -join "`n`n")"),
-                        "GraphQLError",
+                        'GraphQLError',
                         [System.Management.Automation.ErrorCategory]::InvalidOperation,
                         $graphQLResponse
                     )

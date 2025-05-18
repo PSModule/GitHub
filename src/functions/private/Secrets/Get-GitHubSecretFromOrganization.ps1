@@ -64,6 +64,10 @@ function Get-GitHubSecretFromOrganization {
         [Parameter(Mandatory)]
         [string] $Repository,
 
+        # The number of results per page (max 100).
+        [Parameter()]
+        [System.Nullable[int]] $PerPage,
+
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter(Mandatory)]
@@ -80,7 +84,7 @@ function Get-GitHubSecretFromOrganization {
         $inputObject = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/actions/organization-secrets"
-            PerPage     = 30
+            PerPage     = $PerPage
             Context     = $Context
         }
 

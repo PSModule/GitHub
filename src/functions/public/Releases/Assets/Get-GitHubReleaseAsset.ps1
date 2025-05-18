@@ -71,8 +71,7 @@
         [Parameter(ParameterSetName = 'List assets from the latest release')]
         [Parameter(ParameterSetName = 'List assets from a release by ID')]
         [Parameter(ParameterSetName = 'List assets from a release by tag')]
-        [ValidateRange(0, 100)]
-        [int] $PerPage,
+        [System.Nullable[int]] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.

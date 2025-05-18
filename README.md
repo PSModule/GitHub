@@ -1,6 +1,6 @@
 # GitHub PowerShell
 
-The module provides a PowerShell-flavored approch to managing and automating your GitHub environments. It's tailored for developers, administrators,
+The module provides a PowerShell-flavored approach to managing and automating your GitHub environments. It's tailored for developers, administrators,
 and GitHub enthusiasts who want to use PowerShell to integrate or manage GitHub seamlessly.
 
 ## Supported use-cases
@@ -148,7 +148,7 @@ Connect-GitHubAccount -Token '...'
 If you are using a GitHub App, you can use the `Connect-GitHubAccount` command to authenticate using the client ID and private key.
 
 ```powershell
-Connect-GitHubAccount -ClientId $ClientID -PrivateKey $PrivateKey
+Connect-GitHubAccount -ClientID $ClientID -PrivateKey $PrivateKey
 ✓ Logged in as my-github-app!
 ```
 

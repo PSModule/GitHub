@@ -7,12 +7,12 @@
         Sets the visibility for your primary email addresses.
 
         .EXAMPLE
-        Set-GitHubUserEmailVisibility -Visibility public
+        Set-GitHubUserEmailVisibility -Visibility Public
 
         Sets the visibility for your primary email addresses to public.
 
         .EXAMPLE
-        Set-GitHubUserEmailVisibility -Visibility private
+        Set-GitHubUserEmailVisibility -Visibility Private
 
         Sets the visibility for your primary email addresses to private.
 
@@ -29,7 +29,7 @@
             ValueFromPipeline,
             ValueFromPipelineByPropertyName
         )]
-        [ValidateSet('public', 'private')]
+        [ValidateSet('Public', 'Private')]
         [string] $Visibility,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -47,7 +47,7 @@
 
     process {
         $body = @{
-            visibility = $Visibility
+            visibility = $Visibility.ToLower()
         }
 
         $inputObject = @{

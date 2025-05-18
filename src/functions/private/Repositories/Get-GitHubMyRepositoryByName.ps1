@@ -1,31 +1,28 @@
-﻿filter Get-GitHubRepositoryByName {
+﻿filter Get-GitHubMyRepositoryByName {
     <#
         .SYNOPSIS
-        Get a repository
+        List repositories for the authenticated user.
 
         .DESCRIPTION
-        The `parent` and `source` objects are present when the repository is a fork.
-        `parent` is the repository this repository was forked from, `source` is the ultimate source for the network.
-        **Note:** In order to see the `security_and_analysis` block for a repository you must have admin permissions
-        for the repository or be an owner or security manager for the organization that owns the repository.
-        For more information, see "[Managing security managers in your organization](https://docs.github.com/organizations/managing-peoples-access-to-your-organization-with-roles/managing-security-managers-in-your-organization)."
+        Lists repositories that the authenticated user has explicit permission (`:read`, `:write`, or `:admin`) to access.
+        The authenticated user has explicit permission to access repositories they own, repositories where
+        they are a collaborator, and repositories that they can access through an organization membership.
 
         .EXAMPLE
-        Get-GitHubRepositoryByName -Owner 'octocat' -Name 'Hello-World'
+        Get-GitHubMyRepositoryByName
 
-        Gets the repository 'Hello-World' for the organization 'octocat'.
+        Gets the repositories for the authenticated user.
 
         .OUTPUTS
         GitHubRepository
     #>
     [OutputType([GitHubRepository])]
     [CmdletBinding()]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSUseSingularNouns', '',
+        Justification = 'Private function, not exposed to user.'
+    )]
     param(
-        # The account owner of the repository. The name is not case sensitive.
-        [Parameter(Mandatory)]
-        [string] $Owner,
-
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory)]
         [string] $Name,
@@ -111,14 +108,11 @@
         $inputObject = @{
             Query     = @"
 query(
-    `$Owner: String!,
     `$Name: String!
 ) {
-  repositoryOwner(
-    login: `$Owner
-  ) {
+  viewer {
     repository(
-        name: `$Name
+      name: `$Name
     ) {
 $graphQLFields
     }
@@ -126,14 +120,13 @@ $graphQLFields
 }
 "@
             Variables = @{
-                Owner = $Owner
-                Name  = $Name
+                Name = $Name
             }
             Context   = $Context
         }
 
         Invoke-GitHubGraphQLQuery @inputObject | ForEach-Object {
-            [GitHubRepository]::new($_.repositoryOwner.repository)
+            [GitHubRepository]::new($_.viewer.repository)
         }
     }
 

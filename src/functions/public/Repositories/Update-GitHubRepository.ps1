@@ -13,7 +13,7 @@
         .EXAMPLE
         $params = @{
             Owner       = 'octocat'
-            Repo        = 'Hello-World'
+            Name        = 'Hello-World'
             NewName     = 'Hello-World-Repository'
             Description = 'This is your first repository'
             Homepage    = 'https://github.com'
@@ -29,14 +29,14 @@
         .LINK
         https://psmodule.io/GitHub/Functions/Repositories/Update-GitHubRepository/
 
-        .LINK
+        .NOTES
         [Update a repository](https://docs.github.com/rest/repos/repos#update-a-repository)
     #>
     [OutputType([GitHubRepository])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
@@ -47,6 +47,11 @@
         [Parameter()]
         [string] $NewName,
 
+        # The visibility of the repository.
+        [Parameter()]
+        [ValidateSet('Public', 'Private', 'Internal')]
+        [string] $Visibility,
+
         # A short description of the repository.
         [Parameter()]
         [string] $Description,
@@ -55,113 +60,100 @@
         [Parameter()]
         [uri] $Homepage,
 
-        # The visibility of the repository.
+        # Whether to archive this repository. false will unarchive a previously archived repository.
         [Parameter()]
-        [ValidateSet('public', 'private', 'internal')]
-        [string] $Visibility,
-
-        # Use the status property to enable or disable GitHub Advanced Security for this repository.
-        # For more information, see "About GitHub Advanced Security."
-        [Parameter()]
-        [switch] $EnableAdvancedSecurity,
-
-        # Use the status property to enable or disable secret scanning for this repository.
-        # For more information, see "About secret scanning."
-        [Parameter()]
-        [switch] $EnableSecretScanning,
-
-        # Use the status property to enable or disable secret scanning push protection for this repository.
-        # For more information, see "Protecting pushes with secret scanning."
-        [Parameter()]
-        [switch] $EnableSecretScanningPushProtection,
-
-        # Whether issues are enabled.
-        [Parameter()]
-        [switch] $HasIssues,
-
-        # Whether projects are enabled.
-        [Parameter()]
-        [switch] $HasProjects,
-
-        # Whether the wiki is enabled.
-        [Parameter()]
-        [switch] $HasWiki,
+        [System.Nullable[bool]] $IsArchived,
 
         # Whether this repository acts as a template that can be used to generate new repositories.
         [Parameter()]
-        [switch] $IsTemplate,
+        [System.Nullable[bool]] $IsTemplate,
+
+        # Whether to require contributors to sign off on web-based commits.
+        [Parameter()]
+        [System.Nullable[bool]] $WebCommitSignoffRequired,
 
         # Updates the default branch for this repository.
         [Parameter()]
         [string] $DefaultBranch,
 
-        # Whether to allow squash merges for pull requests.
+        # Whether the wiki is enabled.
         [Parameter()]
-        [switch] $AllowSquashMerge,
+        [System.Nullable[bool]] $HasWiki,
 
-        # Whether to allow merge commits for pull requests.
+        # Whether issues are enabled.
         [Parameter()]
-        [switch] $AllowMergeCommit,
-
-        # Whether to allow rebase merges for pull requests.
-        [Parameter()]
-        [switch] $AllowRebaseMerge,
-
-        # Whether to allow Auto-merge to be used on pull requests.
-        [Parameter()]
-        [switch] $AllowAutoMerge,
-
-        # Whether to delete head branches when pull requests are merged
-        [Parameter()]
-        [switch] $DeleteBranchOnMerge,
-
-        # Either true to always allow a pull request head branch that is behind its base branch
-        # to be updated even if it is not required to be up to date before merging, or false otherwise.
-        [Parameter()]
-        [switch] $AllowUpdateBranch,
-
-        # The default value for a squash merge commit title:
-        # - PR_TITLE - default to the pull request's title.
-        # - COMMIT_OR_PR_TITLE - default to the commit's title (if only one commit) or the pull request's title (when more than one commit).
-        [Parameter()]
-        [ValidateSet('PR_TITLE', 'COMMIT_OR_PR_TITLE')]
-        [string] $SquashMergeCommitTitle,
-
-        # The default value for a squash merge commit message:
-        # - PR_BODY - default to the pull request's body.
-        # - COMMIT_MESSAGES - default to the branch's commit messages.
-        # - BLANK - default to a blank commit message.
-        [Parameter()]
-        [ValidateSet('PR_BODY', 'COMMIT_MESSAGES', 'BLANK')]
-        [string] $SquashMergeCommitMessage,
-
-        # The default value for a merge commit title.
-        # - PR_TITLE - default to the pull request's title.
-        # - MERGE_MESSAGE - default to the classic title for a merge message (e.g.,Merge pull request #123 from branch-name).
-        [Parameter()]
-        [ValidateSet('PR_TITLE', 'MERGE_MESSAGE')]
-        [string] $MergeCommitTitle,
-
-        # The default value for a merge commit message.
-        # - PR_BODY - default to the pull request's body.
-        # - PR_TITLE - default to the pull request's title.
-        # - BLANK - default to a blank commit message.
-        [Parameter()]
-        [ValidateSet('PR_BODY', 'PR_TITLE', 'BLANK')]
-        [string] $MergeCommitMessage,
-
-        # Whether to archive this repository. false will unarchive a previously archived repository.
-        [Parameter()]
-        [switch] $Archived,
+        [System.Nullable[bool]] $HasIssues,
 
         # Either true to allow private forks, or false to prevent private forks.
         [Parameter()]
-        [switch] $AllowForking,
+        [System.Nullable[bool]] $AllowForking,
 
-        # Either true to require contributors to sign off on web-based commits,
-        # or false to not require contributors to sign off on web-based commits.
+        # Whether sponsorships are enabled.
         [Parameter()]
-        [switch] $WebCommitSignoffRequired,
+        [System.Nullable[bool]] $HasSponsorships,
+
+        # Whether discussions are enabled.
+        [Parameter()]
+        [System.Nullable[bool]] $HasDiscussions,
+
+        # Whether projects are enabled.
+        [Parameter()]
+        [System.Nullable[bool]] $HasProjects,
+
+        # Allow merge commits for pull requests with the specified setting.
+        [Parameter()]
+        [ValidateSet('', 'Default message', 'Pull request title', 'Pull request title and description')]
+        [string] $AllowMergeCommitWith,
+
+        # Allow squash merges for pull requests with the specified setting.
+        [Parameter()]
+        [ValidateSet('', 'Default message', 'Pull request title', 'Pull request title and description', 'Pull request title and commit details')]
+        [string] $AllowSquashMergingWith,
+
+        # Whether to allow rebase merges for pull requests.
+        [Parameter()]
+        [switch] $AllowRebaseMerging,
+
+        # Whether to always suggest to update a head branch that is behind its base branch during a pull request.
+        [Parameter()]
+        [System.Nullable[bool]] $SuggestUpdateBranch,
+
+        # Whether to allow Auto-merge to be used on pull requests.
+        [Parameter()]
+        [System.Nullable[bool]] $AllowAutoMerge,
+
+        # Whether to delete head branches when pull requests are merged
+        [Parameter()]
+        [System.Nullable[bool]] $DeleteBranchOnMerge,
+
+        # Whether to enable GitHub Advanced Security for this repository.
+        [Parameter()]
+        [System.Nullable[bool]] $EnableAdvancedSecurity,
+
+        # Whether to enable code security for this repository.
+        [Parameter()]
+        [System.Nullable[bool]] $EnableCodeSecurity,
+
+        # Whether to enable secret scanning for this repository.
+        [Parameter()]
+        [System.Nullable[bool]] $EnableSecretScanning,
+
+        # Whether to enable secret scanning push protection for this repository.
+        [Parameter()]
+        [System.Nullable[bool]] $EnableSecretScanningPushProtection,
+
+        # Whether to enable secret scanning AI detection for this repository.
+        [Parameter()]
+        [System.Nullable[bool]] $EnableSecretScanningAIDetection,
+
+        # Whether to enable secret scanning non-provider patterns for this repository.
+        [Parameter()]
+        [System.Nullable[bool]] $EnableSecretScanningNonProviderPatterns,
+
+        # Takes all parameters and updates the repository with the provided _AND_ the default values of the non-provided parameters.
+        # Used for Set-GitHubRepository.
+        [Parameter()]
+        [switch] $Declare,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -174,62 +166,185 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
+        if ([string]::IsNullOrEmpty($Owner)) {
+            $Owner = $Context.Username
+        }
+        Write-Debug "Owner: [$Owner]"
     }
 
     process {
-        $body = @{
-            name                            = $NewName
-            description                     = $Description
-            homepage                        = $Homepage
-            visibility                      = $Visibility
-            private                         = $Visibility -eq 'private'
-            default_branch                  = $DefaultBranch
-            advanced_security               = $EnableAdvancedSecurity ? @{
-                status = $EnableAdvancedSecurity ? 'enabled' : 'disabled'
-            } : $null
-            secret_scanning                 = $EnableSecretScanning ? @{
-                status = $EnableSecretScanning ? 'enabled' : 'disabled'
-            } : $null
-            secret_scanning_push_protection = $EnableSecretScanningPushProtection ? @{
-                status = $EnableSecretScanningPushProtection ? 'enabled' : 'disabled'
-            } : $null
-            has_issues                      = $HasIssues ? $HasIssues : $null
-            has_projects                    = $HasProjects ? $HasProjects : $null
-            has_wiki                        = $HasWiki ? $HasWiki : $null
-            is_template                     = $IsTemplate ? $IsTemplate : $null
-            allow_squash_merge              = $AllowSquashMerge ? $AllowSquashMerge : $null
-            squash_merge_commit_title       = $SquashMergeCommitTitle
-            squash_merge_commit_message     = $SquashMergeCommitMessage
-            allow_merge_commit              = $AllowMergeCommit ? $AllowMergeCommit : $null
-            merge_commit_title              = $MergeCommitTitle
-            merge_commit_message            = $MergeCommitMessage
-            allow_rebase_merge              = $AllowRebaseMerge ? $AllowRebaseMerge : $null
-            allow_auto_merge                = $AllowAutoMerge ? $AllowAutoMerge : $null
-            allow_update_branch             = $AllowUpdateBranch ? $AllowUpdateBranch : $null
-            delete_branch_on_merge          = $DeleteBranchOnMerge ? $DeleteBranchOnMerge : $null
-            archived                        = $Archived ? $Archived : $null
-            allow_forking                   = $AllowForking ? $AllowForking : $null
-            web_commit_signoff_required     = $WebCommitSignoffRequired ? $WebCommitSignoffRequired : $null
-        }
-        $body | Remove-HashtableEntry -NullOrEmptyValues
-
-        $inputObject = @{
-            Method      = 'PATCH'
-            APIEndpoint = "/repos/$Owner/$Name"
-            Body        = $body
-            Context     = $Context
+        $repo = Get-GitHubRepository -Owner $Owner -Name $Name
+        if (-not $repo) {
+            $PSCmdlet.ThrowTerminatingError(
+                [System.Management.Automation.ErrorRecord]::new(
+                    [System.Management.Automation.ItemNotFoundException]::new("Repository '$Name' not found for owner '$Owner'."),
+                    'RepositoryNotFound',
+                    [System.Management.Automation.ErrorCategory]::ObjectNotFound,
+                    $null
+                )
+            )
         }
 
-        if ($PSCmdlet.ShouldProcess("Repository [$Owner/$Name]", 'Update')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
-                Write-Output $_.Response
+        if ($PSBoundParameters.ContainsKey('AllowMergeCommitWith')) {
+            switch ($AllowMergeCommitWith) {
+                'Default message' {
+                    $AllowMergeCommit = $true
+                    $MergeCommitTitle = 'MERGE_MESSAGE'
+                    $MergeCommitMessage = 'PR_TITLE'
+                }
+                'Pull request title' {
+                    $AllowMergeCommit = $true
+                    $MergeCommitTitle = 'PR_TITLE'
+                    $MergeCommitMessage = 'BLANK'
+                }
+                'Pull request title and description' {
+                    $AllowMergeCommit = $true
+                    $MergeCommitTitle = 'PR_TITLE'
+                    $MergeCommitMessage = 'PR_BODY'
+                }
+                default {
+                    $AllowMergeCommit = $false
+                }
             }
         }
+
+        if ($PSBoundParameters.ContainsKey('AllowSquashMergingWith')) {
+            switch ($AllowSquashMergingWith) {
+                'Default message' {
+                    $AllowSquashMerge = $true
+                    $SquashMergeCommitTitle = 'COMMIT_OR_PR_TITLE'
+                    $SquashMergeCommitMessage = 'COMMIT_MESSAGES'
+                }
+                'Pull request title' {
+                    $AllowSquashMerge = $true
+                    $SquashMergeCommitTitle = 'PR_TITLE'
+                    $SquashMergeCommitMessage = 'BLANK'
+                }
+                'Pull request title and description' {
+                    $AllowSquashMerge = $true
+                    $SquashMergeCommitTitle = 'PR_TITLE'
+                    $SquashMergeCommitMessage = 'PR_BODY'
+                }
+                'Pull request title and commit details' {
+                    $AllowSquashMerge = $true
+                    $SquashMergeCommitTitle = 'PR_TITLE'
+                    $SquashMergeCommitMessage = 'COMMIT_MESSAGES'
+                }
+                default {
+                    $AllowSquashMerge = $false
+                }
+            }
+        }
+
+        $body = @{
+            name                                  = $NewName
+            visibility                            = $Visibility.ToLower()
+            description                           = $Description
+            homepage                              = $Homepage
+            archived                              = $IsArchived
+            is_template                           = $IsTemplate
+            web_commit_signoff_required           = $WebCommitSignoffRequired
+            default_branch                        = $DefaultBranch
+            has_wiki                              = $HasWiki
+            has_issues                            = $HasIssues
+            allow_forking                         = $AllowForking
+            has_projects                          = $HasProjects
+            allow_squash_merge                    = $AllowSquashMerge
+            allow_merge_commit                    = $AllowMergeCommit
+            squash_merge_commit_title             = $SquashMergeCommitTitle
+            squash_merge_commit_message           = $SquashMergeCommitMessage
+            merge_commit_title                    = $MergeCommitTitle
+            merge_commit_message                  = $MergeCommitMessage
+            allow_rebase_merge                    = $AllowRebaseMerge
+            allow_update_branch                   = $SuggestUpdateBranch
+            allow_auto_merge                      = $AllowAutoMerge
+            delete_branch_on_merge                = $DeleteBranchOnMerge
+            advanced_security                     = $PSBoundParameters.ContainsKey('EnableAdvancedSecurity') ? @{
+                status = $EnableAdvancedSecurity ? 'enabled' : 'disabled'
+            } : $null
+            code_security                         = $PSBoundParameters.ContainsKey('EnableCodeSecurity') ? @{
+                status = $EnableCodeSecurity ? 'enabled' : 'disabled'
+            } : $null
+            secret_scanning                       = $PSBoundParameters.ContainsKey('EnableSecretScanning') ? @{
+                status = $EnableSecretScanning ? 'enabled' : 'disabled'
+            } : $null
+            secret_scanning_push_protection       = $PSBoundParameters.ContainsKey('EnableSecretScanningPushProtection') ? @{
+                status = $EnableSecretScanningPushProtection ? 'enabled' : 'disabled'
+            } : $null
+            secret_scanning_ai_detection          = $PSBoundParameters.ContainsKey('EnableSecretScanningAIDetection') ? @{
+                status = $EnableSecretScanningAIDetection ? 'enabled' : 'disabled'
+            } : $null
+            secret_scanning_non_provider_patterns = $PSBoundParameters.ContainsKey('EnableSecretScanningNonProviderPatterns') ? @{
+                status = $EnableSecretScanningNonProviderPatterns ? 'enabled' : 'disabled'
+            } : $null
+        }
+
+        if (-not $Declare) {
+            $body | Remove-HashtableEntry -NullOrEmptyValues
+        }
+
+        Write-Debug 'Changed settings for REST call is:'
+        Write-Debug "$($body | Out-String)"
+        if ($body.Keys.Count -gt 0) {
+            $inputObject = @{
+                Method      = 'PATCH'
+                APIEndpoint = "/repos/$Owner/$Name"
+                Body        = $body
+                Context     = $Context
+            }
+
+            if ($PSCmdlet.ShouldProcess("Repository [$Owner/$Name]", 'Update')) {
+                $updatedRepo = Invoke-GitHubAPI @inputObject | Select-Object -ExpandProperty Response
+            }
+            Write-Debug 'Repo has been updated'
+            Write-Debug "$($updatedRepo | Select-Object * | Out-String)"
+        } else {
+            Write-Debug 'No changes made to repo via REST'
+        }
+
+        $inputParams = @{
+            hasSponsorshipsEnabled = $HasSponsorships
+            hasDiscussionsEnabled  = $HasDiscussions
+        }
+        $inputParams | Remove-HashtableEntry -NullOrEmptyValues
+
+        Write-Debug 'Changed settings for GraphQL call is:'
+        Write-Debug "$($inputParams | Out-String)"
+        if ($inputParams.Keys.Count -gt 0) {
+            $inputParams += @{
+                repositoryId = $repo.NodeID
+            }
+
+            $updateGraphQLInputs = @{
+                query     = @'
+                mutation($input:UpdateRepositoryInput!) {
+                    updateRepository(input:$input) {
+                        repository {
+                            id
+                            name
+                            owner {
+                                login
+                            }
+                            hasSponsorshipsEnabled
+                            hasDiscussionsEnabled
+                        }
+                    }
+                }
+'@
+                variables = @{
+                    input = $inputParams
+                }
+            }
+
+            Invoke-GitHubGraphQLQuery @updateGraphQLInputs
+        } else {
+            Write-Debug 'No changes made to repo via GraphQL'
+        }
+
+        Get-GitHubRepository -Owner $Owner -Name $Name
     }
 
     end {
         Write-Debug "[$stackPath] - End"
     }
 }
-
-#SkipTest:FunctionTest:Will add a test for this function in a future PR

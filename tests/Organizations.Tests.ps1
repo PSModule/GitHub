@@ -12,9 +12,12 @@
     'PSAvoidUsingWriteHost', '',
     Justification = 'Log outputs to GitHub Actions logs.'
 )]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+    'PSAvoidLongLines', '',
+    Justification = 'Long test descriptions and skip switches'
+)]
 [CmdletBinding()]
 param()
-
 
 BeforeAll {
     # DEFAULTS ACCROSS ALL TESTS
@@ -27,7 +30,7 @@ Describe 'Organizations' {
         BeforeAll {
             $context = Connect-GitHubAccount @connectParams -PassThru -Silent
             LogGroup 'Context' {
-                Write-Host ($context | Format-List | Out-String)
+                Write-Host ($context | Select-Object * | Out-String)
             }
         }
         AfterAll {
@@ -39,7 +42,7 @@ Describe 'Organizations' {
             It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
                 $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
                 LogGroup 'Context' {
-                    Write-Host ($context | Format-List | Out-String)
+                    Write-Host ($context | Select-Object * | Out-String)
                 }
             }
         }
@@ -50,14 +53,14 @@ Describe 'Organizations' {
         It "Get-GitHubOrganization - Gets a specific organization 'PSModule'" {
             $organization = Get-GitHubOrganization -Name 'PSModule'
             LogGroup 'Organization' {
-                Write-Host ($organization | Format-Table | Out-String)
+                Write-Host ($organization | Select-Object * | Out-String)
             }
             $organization | Should -Not -BeNullOrEmpty
         }
         It "Get-GitHubOrganization - List public organizations for the user 'psmodule-user'" {
             $organizations = Get-GitHubOrganization -Username 'psmodule-user'
             LogGroup 'Organization' {
-                Write-Host ($organizations | Format-Table | Out-String)
+                Write-Host ($organizations | Select-Object * | Out-String)
             }
             $organizations | Should -Not -BeNullOrEmpty
         }
@@ -65,7 +68,7 @@ Describe 'Organizations' {
             It 'Get-GitHubOrganizationMember - Gets the members of a specific organization' {
                 $members = Get-GitHubOrganizationMember -Organization $owner
                 LogGroup 'Members' {
-                    Write-Host ($members | Format-Table | Out-String)
+                    Write-Host ($members | Select-Object * | Out-String)
                 }
                 $members | Should -Not -BeNullOrEmpty
             }
