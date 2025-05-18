@@ -72,8 +72,6 @@
         [Parameter(ParameterSetName = 'AllOrg')]
         [Parameter(ParameterSetName = 'UserOrg')]
         [Parameter(ParameterSetName = '__AllParameterSets')]
-        [ValidateRange(1, 100)]
-        [AllowNull()]
         [System.Nullable[int]] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.

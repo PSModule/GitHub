@@ -67,8 +67,6 @@
 
         # The number of results per page (max 100).
         [Parameter()]
-        [ValidateRange(1, 100)]
-        [AllowNull()]
         [System.Nullable[int]] $PerPage,
 
         # A cursor, as given in the Link header. If specified, the query only searches for results before this cursor.
