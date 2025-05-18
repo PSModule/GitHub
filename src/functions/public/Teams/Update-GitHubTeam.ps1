@@ -33,11 +33,11 @@
     param(
         # The organization name. The name is not case sensitive.
         # If you do not provide this parameter, the command will use the organization from the context.
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Organization,
 
         # The slug of the team name.
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Slug,
 
         # The new team name.

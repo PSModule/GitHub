@@ -29,7 +29,7 @@
     param(
         # The organization name. The name is not case sensitive.
         # If not provided, the owner from the context will be used.
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Organization,
 
         # The slug of the team name.

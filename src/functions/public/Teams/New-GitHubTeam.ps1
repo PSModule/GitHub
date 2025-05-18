@@ -35,7 +35,7 @@
     param(
         # The organization name. The name is not case sensitive.
         # If not provided, the organization from the context is used.
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Organization,
 
         # The name of the team.

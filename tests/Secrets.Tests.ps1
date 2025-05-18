@@ -38,8 +38,9 @@ Describe 'Secrets' {
             }
             $repoPrefix = "$testName-$os-$TokenType"
             $repoName = "$repoPrefix-$guid"
-            $secretPrefix = ("$testName`_$os`_$TokenType`_$guid" -replace '-', '_').ToUpper()
-            $orgSecretName = "$secretPrefix`ORG"
+            $secretPrefix = ("$testName`_$os`_$TokenType" -replace '-', '_').ToUpper()
+            $secretName = ("$secretPrefix`_$guid").ToUpper()
+            $orgSecretName = ("$secretName`_ORG").ToUpper()
             $environmentName = "$testName-$os-$TokenType-$guid"
 
             switch ($OwnerType) {
@@ -146,7 +147,7 @@ Describe 'Secrets' {
             }
 
             It 'Set-GitHubSecret - should ensure existance of a organization secret' {
-                $name = "$secretPrefix`TestSecret"
+                $name = "$secretName`_TestSecret"
                 LogGroup "Secret - [$name]" {
                     $param = @{
                         Name       = $name
@@ -164,7 +165,7 @@ Describe 'Secrets' {
             }
 
             It 'Set-GitHubSecret - should update an existing organization secret' {
-                $name = "$secretPrefix`TestSecret"
+                $name = "$secretName`_TestSecret"
                 LogGroup "Secret - [$name]" {
                     $param = @{
                         Name       = $name

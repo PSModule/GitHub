@@ -84,7 +84,7 @@ filter Get-GitHubEnvironment {
 
         # The maximum number of environments to return per request.
         [Parameter()]
-        [ValidateRange(0, 100)]
+        [ValidateRange(1, 100)]
         [int] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.
