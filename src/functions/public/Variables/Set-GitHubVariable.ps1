@@ -119,11 +119,10 @@ function Set-GitHubVariable {
 
         if ($variable) {
             $null = Update-GitHubVariable @params -PassThru
+            Get-GitHubVariable @getParams -Name $Name
         } else {
-            $null = New-GitHubVariable @params
+            New-GitHubVariable @params
         }
-
-        Get-GitHubVariable @getParams -Name $Name
     }
 
     end {

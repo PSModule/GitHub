@@ -84,7 +84,15 @@ function Remove-GitHubVariable {
         switch ($PSCmdlet.ParameterSetName) {
             'ArrayInput' {
                 foreach ($item in $InputObject) {
-                    $item | Remove-GitHubVariable -Context $Context
+                    $params = @{
+                        Owner       = $item.Owner
+                        Repository  = $item.Repository
+                        Environment = $item.Environment
+                        Name        = $item.Name
+                        Context     = $item.Context
+                    }
+                    $params | Remove-HashtableEntry -NullOrEmptyValues
+                    Remove-GitHubVariable @params
                 }
                 break
             }

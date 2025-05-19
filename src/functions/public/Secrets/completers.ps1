@@ -4,8 +4,9 @@
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter
 
     $params = @{
-        Owner      = $fakeBoundParameter.Owner
-        Repository = $fakeBoundParameter.Repository
+        Owner       = $fakeBoundParameter.Owner
+        Repository  = $fakeBoundParameter.Repository
+        Environment = $fakeBoundParameter.Environment
     }
     $params | Remove-HashtableEntry -NullOrEmptyValues
     Get-GitHubSecret @params | Where-Object { $_.Name -like "$wordToComplete*" } | ForEach-Object {

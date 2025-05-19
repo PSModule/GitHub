@@ -75,13 +75,18 @@
     }
 
     process {
-        Write-Debug "ParameterSet: $($PSCmdlet.ParameterSetName)"
-        Write-Debug 'Parameters:'
-        Get-FunctionParameter | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
         switch ($PSCmdlet.ParameterSetName) {
             'ArrayInput' {
                 foreach ($item in $InputObject) {
-                    $item | Remove-GitHubSecret -Context $Context
+                    $params = @{
+                        Owner       = $item.Owner
+                        Repository  = $item.Repository
+                        Environment = $item.Environment
+                        Name        = $item.Name
+                        Context     = $item.Context
+                    }
+                    $params | Remove-HashtableEntry -NullOrEmptyValues
+                    Remove-GitHubSecret @params
                 }
                 break
             }
