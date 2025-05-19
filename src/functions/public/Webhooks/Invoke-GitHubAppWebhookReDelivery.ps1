@@ -17,7 +17,7 @@
         .LINK
         https://psmodule.io/GitHub/Functions/Webhooks/Invoke-GitHubAppWebhookReDelivery
 
-        .LINK
+        .NOTES
         [Redeliver a delivery for an app webhook](https://docs.github.com/rest/apps/webhooks#redeliver-a-delivery-for-an-app-webhook)
     #>
     [OutputType([void])]

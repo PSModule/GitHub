@@ -20,7 +20,7 @@ function Get-GitHubSecretRepositoryByName {
 
         Retrieves the specified secret from the specified repository.
 
-        .LINK
+        .NOTES
         [Get a repository secret](https://docs.github.com/rest/actions/secrets#get-a-repository-secret)
     #>
     [OutputType([GitHubSecret])]

@@ -18,7 +18,7 @@
         .LINK
         https://psmodule.io/GitHub/Functions/Apps/Webhooks/Get-GitHubAppWebhookConfiguration/
 
-        .LINK
+        .NOTES
         [Get a webhook configuration for an app](https://docs.github.com/rest/apps/webhooks#get-a-webhook-configuration-for-an-app)
     #>
     [CmdletBinding()]

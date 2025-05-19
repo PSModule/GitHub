@@ -22,7 +22,7 @@
         .OUTPUTS
         GitHubOrganization
 
-        .LINK
+        .NOTES
         [Get an organization](https://docs.github.com/rest/orgs/orgs#get-an-organization)
     #>
     [OutputType([GitHubOrganization])]

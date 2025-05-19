@@ -14,7 +14,7 @@ function Remove-GitHubVariableFromOwner {
 
         Deletes the specified variable from the specified organization.
 
-        .LINK
+        .NOTES
         [Delete an organization variable](https://docs.github.com/rest/actions/variables#delete-an-organization-variable)
     #>
     [OutputType([void])]

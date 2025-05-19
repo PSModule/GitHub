@@ -12,7 +12,7 @@ function Remove-GitHubSecretFromEnvironment {
 
         Deletes the specified secret from the specified environment.
 
-        .LINK
+        .NOTES
         [Delete an environment secret](https://docs.github.com/rest/actions/secrets#delete-an-environment-secret)
     #>
     [OutputType([void])]

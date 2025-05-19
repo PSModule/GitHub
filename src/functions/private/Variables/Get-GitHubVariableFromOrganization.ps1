@@ -53,7 +53,7 @@ function Get-GitHubVariableFromOrganization {
         An array of GitHubVariable objects representing the environment variables.
         Each object contains Name, Value, CreatedAt, UpdatedAt, Owner, Repository, and Environment properties.
 
-        .LINK
+        .NOTES
         [List repository organization variables](https://docs.github.com/rest/actions/variables#list-repository-organization-variables)
     #>
     [OutputType([GitHubVariable[]])]

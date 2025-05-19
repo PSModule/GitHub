@@ -26,7 +26,7 @@
         .OUTPUTS
         GitHubWorkflowRun
 
-        .LINK
+        .NOTES
         [List workflow runs for a workflow](https://docs.github.com/rest/actions/workflow-runs#list-workflow-runs-for-a-workflow)
     #>
     [CmdletBinding()]

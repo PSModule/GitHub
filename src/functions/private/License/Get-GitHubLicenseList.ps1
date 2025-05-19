@@ -15,7 +15,7 @@
         .OUTPUTS
         GitHubLicense[]
 
-        .LINK
+        .NOTES
         [Get all commonly used licenses](https://docs.github.com/rest/licenses/licenses#get-all-commonly-used-licenses)
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]

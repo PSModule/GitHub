@@ -36,7 +36,7 @@
         .OUTPUTS
         GitHubRepository
 
-        .LINK
+        .NOTES
         [Create a repository for the authenticated user](https://docs.github.com/rest/repos/repos#create-a-repository-for-the-authenticated-user)
     #>
     [OutputType([GitHubRepository])]

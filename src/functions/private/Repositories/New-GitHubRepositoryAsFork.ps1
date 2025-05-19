@@ -36,7 +36,7 @@
         .OUTPUTS
         GitHubRepository
 
-        .LINK
+        .NOTES
         [Create a fork](https://docs.github.com/rest/repos/forks#create-a-fork)
     #>
     [OutputType([GitHubRepository])]

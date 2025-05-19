@@ -52,7 +52,7 @@ filter Set-GitHubEnvironment {
         .LINK
         https://psmodule.io/GitHub/Functions/Environments/Set-GitHubEnvironment/
 
-        .LINK
+        .NOTES
         [Create or update an environment](https://docs.github.com/rest/deployments/environments#create-or-update-an-environment)
     #>
     [OutputType([GitHubEnvironment])]

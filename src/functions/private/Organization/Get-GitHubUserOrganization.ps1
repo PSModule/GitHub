@@ -20,7 +20,7 @@
         .OUTPUTS
         GitHubOrganization
 
-        .LINK
+        .NOTES
         [List organizations for a user](https://docs.github.com/rest/orgs/orgs#list-organizations-for-a-user)
     #>
     [OutputType([GitHubOrganization])]

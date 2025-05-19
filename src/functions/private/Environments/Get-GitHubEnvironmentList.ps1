@@ -36,7 +36,7 @@ filter Get-GitHubEnvironmentList {
         .NOTES
         Contains details of each environment in the repository, including its name and protection settings.
 
-        .LINK
+        .NOTES
         [List environments](https://docs.github.com/rest/deployments/environments#list-environments)
     #>
     [OutputType([GitHubEnvironment[]])]

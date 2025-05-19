@@ -23,7 +23,7 @@ function Set-GitHubSecretOnEnvironment {
 
         Creates a new environment secret named `SECRET1` with the value `secret_value` in the specified environment.
 
-        .LINK
+        .NOTES
         [Create or update an environment secret](https://docs.github.com/rest/actions/secrets#create-or-update-an-environment-secret)
     #>
     [OutputType([void])]

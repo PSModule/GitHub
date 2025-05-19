@@ -17,7 +17,7 @@
         .LINK
         https://psmodule.io/GitHub/Functions/Secrets/SelectedRepository/Set-GitHubSecretSelectedRepository
 
-        .LINK
+        .NOTES
         [Set selected repositories for an organization secret](https://docs.github.com/rest/actions/secrets#set-selected-repositories-for-an-organization-secret)
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(

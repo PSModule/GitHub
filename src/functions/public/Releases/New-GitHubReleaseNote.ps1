@@ -58,7 +58,7 @@
         .LINK
         https://psmodule.io/GitHub/Functions/Releases/New-GitHubReleaseNote/
 
-        .LINK
+        .NOTES
         [Generate release notes content for a release](https://docs.github.com/rest/releases/releases#generate-release-notes-content-for-a-release)
     #>
     [OutputType([pscustomobject])]

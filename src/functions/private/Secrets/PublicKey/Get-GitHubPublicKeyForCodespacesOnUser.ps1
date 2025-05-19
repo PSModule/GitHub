@@ -26,7 +26,7 @@
         .OUTPUTS
         GitHubPublicKey
 
-        .LINK
+        .NOTES
         [Get public key for the authenticated user](https://docs.github.com/rest/codespaces/secrets#get-public-key-for-the-authenticated-user)
     #>
     [OutputType([GitHubPublicKey])]

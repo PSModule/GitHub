@@ -13,7 +13,7 @@ function Update-GitHubVariableOnRepository {
 
         Updates the repository variable named `HOST_NAME` with the value `github.com` in the specified repository.
 
-        .LINK
+        .NOTES
         [Update a repository variable](https://docs.github.com/rest/actions/variables#update-a-repository-variable)
     #>
     [OutputType([void])]

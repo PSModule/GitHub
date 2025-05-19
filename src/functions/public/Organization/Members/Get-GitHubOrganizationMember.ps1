@@ -13,7 +13,7 @@
         .LINK
         https://psmodule.io/GitHub/Functions/Organization/Members/Get-GitHubOrganizationMember
 
-        .LINK
+        .NOTES
         [List organization members](https://docs.github.com/rest/orgs/members#list-organization-members)
     #>
     [OutputType([GitHubUser])]

@@ -50,7 +50,7 @@ function Save-GitHubArtifact {
         .LINK
         https://psmodule.io/GitHub/Functions/Artifacts/Save-GitHubArtifact/
 
-        .LINK
+        .NOTES
         [Get an artifact](https://docs.github.com/rest/actions/artifacts#get-an-artifact)
     #>
     [OutputType([System.IO.FileSystemInfo[]])]

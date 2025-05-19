@@ -15,7 +15,7 @@ filter Remove-GitHubEnvironment {
         .LINK
         https://psmodule.io/GitHub/Functions/Environments/Remove-GitHubEnvironment/
 
-        .LINK
+        .NOTES
         [Delete environments](https://docs.github.com/rest/deployments/environments?#delete-an-environment)
     #>
     [OutputType([void])]
