@@ -30,7 +30,7 @@ function Get-GitHubArtifactById {
         A GitHubArtifact object representing a workflow artifact from the run.
         When -AllVersions is used, all versions of each artifact name are returned instead of the latest only.
 
-        .LINK
+        .NOTES
         [Get an artifact](https://docs.github.com/rest/actions/artifacts#get-an-artifact)
     #>
     [OutputType([GitHubArtifact])]

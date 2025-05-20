@@ -25,7 +25,7 @@
         .OUTPUTS
         GitHubUser
 
-        .LINK
+        .NOTES
         [Get a user](https://docs.github.com/rest/users/users#get-a-user)
     #>
     [OutputType([GitHubUser])]

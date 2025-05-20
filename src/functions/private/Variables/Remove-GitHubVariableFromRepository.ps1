@@ -13,7 +13,7 @@ function Remove-GitHubVariableFromRepository {
 
         Deletes the specified variable from the specified repository.
 
-        .LINK
+        .NOTES
         [Delete a repository variable](https://docs.github.com/rest/actions/variables#delete-a-repository-variable)
     #>
     [OutputType([void])]

@@ -25,10 +25,10 @@
         .LINK
         https://psmodule.io/GitHub/Functions/Webhooks/Get-GitHubAppWebhookDelivery/
 
-        .LINK
+        .NOTES
         [Get a delivery for an app webhook](https://docs.github.com/rest/apps/webhooks#get-a-delivery-for-an-app-webhook)
 
-        .LINK
+        .NOTES
         [Get a webhook configuration for an app](https://docs.github.com/rest/apps/webhooks#get-a-webhook-configuration-for-an-app)
     #>
     [OutputType([GitHubWebhookDelivery[]])]

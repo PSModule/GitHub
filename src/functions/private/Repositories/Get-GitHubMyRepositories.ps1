@@ -21,7 +21,7 @@
         .OUTPUTS
         GitHubRepository
 
-        .LINK
+        .NOTES
         [List repositories for the authenticated user](https://docs.github.com/rest/repos/repos#list-repositories-for-the-authenticated-user)
     #>
     [OutputType([GitHubRepository])]

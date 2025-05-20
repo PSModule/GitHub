@@ -25,7 +25,7 @@
         .OUTPUTS
         GitHubRepository
 
-        .LINK
+        .NOTES
         [List repositories for a user](https://docs.github.com/rest/repos/repos#list-repositories-for-a-user)
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(

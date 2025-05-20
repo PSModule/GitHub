@@ -23,22 +23,16 @@
     [CmdletBinding(SupportsShouldProcess)]
     [alias('Cancel-GitHubWorkflowRun')]
     param(
-        [Parameter(
-            Mandatory,
-            ValueFromPipelineByPropertyName
-        )]
+        # The account owner of the repository. The name is not case sensitive.
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Owner,
 
-        [Parameter(
-            Mandatory,
-            ValueFromPipelineByPropertyName
-        )]
+        # The name of the repository without the .git extension. The name is not case sensitive.
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Repository,
 
-        [Parameter(
-            Mandatory,
-            ValueFromPipelineByPropertyName
-        )]
+        # The unique identifier of the workflow run.
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $ID,
 
         # The context to run the command in. Used to get the details for the API call.

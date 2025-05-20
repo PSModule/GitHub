@@ -52,32 +52,19 @@
         Justification = 'A parameter that is used in the api call.')]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(
-            Mandatory,
-            ValueFromPipelineByPropertyName
-        )]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Owner,
 
         # The name of the repository. The name is not case sensitive.
-        [Parameter(
-            Mandatory,
-            ValueFromPipelineByPropertyName
-        )]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Repository,
 
         # The ID of the workflow. You can also pass the workflow filename as a string.
-        [Parameter(
-            Mandatory,
-            ParameterSetName = 'ByID',
-            ValueFromPipelineByPropertyName
-        )]
+        [Parameter(Mandatory, ParameterSetName = 'ByID', ValueFromPipelineByPropertyName)]
         [string] $ID,
 
         # The name of the workflow.
-        [Parameter(
-            Mandatory,
-            ParameterSetName = 'ByName'
-        )]
+        [Parameter(Mandatory, ParameterSetName = 'ByName')]
         [string] $Name,
 
         # Returns someone's workflow runs. Use the login for the user who created the push associated with the check suite or workflow run.

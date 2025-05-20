@@ -27,7 +27,7 @@ function Remove-GitHubArtifact {
         .LINK
         https://psmodule.io/GitHub/Functions/Actions/Remove-GitHubArtifact/
 
-        .LINK
+        .NOTES
         [Delete an artifact](https://docs.github.com/rest/actions/artifacts#delete-an-artifact)
     #>
     [OutputType([GitHubArtifact])]

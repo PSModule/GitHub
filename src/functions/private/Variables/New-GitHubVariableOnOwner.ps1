@@ -14,7 +14,7 @@ function New-GitHubVariableOnOwner {
 
         Creates a new organization variable named `HOST_NAME` with the value `github.com` in the specified organization.
 
-        .LINK
+        .NOTES
         [Create an organization variable](https://docs.github.com/rest/actions/variables#create-an-organization-variable)
     #>
     [OutputType([void])]

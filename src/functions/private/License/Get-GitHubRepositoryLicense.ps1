@@ -17,7 +17,7 @@
         .OUTPUTS
         GitHubLicense
 
-        .LINK
+        .NOTES
         [Get the license for a repository](https://docs.github.com/rest/licenses/licenses#get-the-license-for-a-repository)
     #>
     [OutputType([GitHubLicense])]

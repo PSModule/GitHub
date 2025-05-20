@@ -37,7 +37,7 @@
         .OUTPUTS
         GitHubRepository
 
-        .LINK
+        .NOTES
         [Create an organization repository](https://docs.github.com/rest/repos/repos#create-an-organization-repository)
     #>
     [OutputType([GitHubRepository])]

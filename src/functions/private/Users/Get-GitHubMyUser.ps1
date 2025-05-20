@@ -17,7 +17,7 @@
         .OUTPUTS
         GitHubUser
 
-        .LINK
+        .NOTES
         [Get the authenticated user](https://docs.github.com/rest/users/users#get-the-authenticated-user)
     #>
     [OutputType([GitHubUser])]

@@ -28,7 +28,7 @@ function Get-GitHubSecretOwnerByName {
 
         Retrieves the specified secret from the specified organization.
 
-        .LINK
+        .NOTES
         [Create or update an organization secret](https://docs.github.com/rest/actions/secrets#create-or-update-an-organization-secret)
     #>
     [OutputType([GitHubSecret])]

@@ -17,7 +17,7 @@
         .OUTPUTS
         GitHubWebhookDelivery
 
-        .LINK
+        .NOTES
         [List deliveries for an app webhook](https://docs.github.com/rest/apps/webhooks#list-deliveries-for-an-app-webhook)
     #>
     [OutputType([GitHubWebhookDelivery[]])]

@@ -13,7 +13,7 @@ function New-GitHubVariableOnRepository {
 
         Creates a new repository variable named `HOST_NAME` with the value `github.com` in the specified repository.
 
-        .LINK
+        .NOTES
         [Create a repository variable](https://docs.github.com/rest/actions/variables#create-a-repository-variable)
     #>
     [OutputType([void])]

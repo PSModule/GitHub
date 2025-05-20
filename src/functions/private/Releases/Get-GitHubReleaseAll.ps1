@@ -19,7 +19,7 @@
         .OUTPUTS
         GitHubRelease
 
-        .LINK
+        .NOTES
         [List releases](https://docs.github.com/rest/releases/releases#list-releases)
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(

@@ -1,4 +1,4 @@
-﻿filter Get-GitHubWorkflowRunByRepo {
+filter Get-GitHubWorkflowRunByRepo {
     <#
         .SYNOPSIS
         List workflow runs for a repository.
@@ -24,7 +24,7 @@
         .OUTPUTS
         GitHubWorkflowRun
 
-        .LINK
+        .NOTES
         [List workflow runs for a repository](https://docs.github.com/rest/actions/workflow-runs#list-workflow-runs-for-a-repository)
     #>
     [OutputType([GitHubWorkflowRun])]

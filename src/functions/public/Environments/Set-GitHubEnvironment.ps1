@@ -52,62 +52,32 @@ filter Set-GitHubEnvironment {
         .LINK
         https://psmodule.io/GitHub/Functions/Environments/Set-GitHubEnvironment/
 
-        .LINK
+        .NOTES
         [Create or update an environment](https://docs.github.com/rest/deployments/environments#create-or-update-an-environment)
     #>
     [OutputType([GitHubEnvironment])]
     [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName = 'Default')]
     param(
         # The name of the organization.
-        [Parameter(
-            Mandatory,
-            ValueFromPipelineByPropertyName,
-            ParameterSetName = 'Default'
-        )]
-        [Parameter(
-            Mandatory,
-            ValueFromPipelineByPropertyName,
-            ParameterSetName = 'WithReviewers'
-        )]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'Default')]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'WithReviewers')]
         [Alias('Organization', 'User')]
         [string] $Owner,
 
         # The name of the Repository.
-        [Parameter(
-            Mandatory,
-            ValueFromPipelineByPropertyName,
-            ParameterSetName = 'Default'
-        )]
-        [Parameter(
-            Mandatory,
-            ValueFromPipelineByPropertyName,
-            ParameterSetName = 'WithReviewers'
-        )]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'Default')]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'WithReviewers')]
         [string] $Repository,
 
         # The name of the environment.
-        [Parameter(
-            Mandatory,
-            ValueFromPipelineByPropertyName,
-            ParameterSetName = 'Default'
-        )]
-        [Parameter(
-            Mandatory,
-            ValueFromPipelineByPropertyName,
-            ParameterSetName = 'WithReviewers'
-        )]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'Default')]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'WithReviewers')]
         [string] $Name,
 
         # The amount of time to delay a job after the job is initially triggered.
         # The time (in minutes) must be an integer between 0 and 43,200 (30 days).
-        [Parameter(
-            ValueFromPipelineByPropertyName,
-            ParameterSetName = 'Default'
-        )]
-        [Parameter(
-            ValueFromPipelineByPropertyName,
-            ParameterSetName = 'WithReviewers'
-        )]
+        [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'Default')]
+        [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'WithReviewers')]
         [Alias('wait_timer')]
         [ValidateRange(0, 43200)]
         [int] $WaitTimer = 0,
@@ -121,30 +91,17 @@ filter Set-GitHubEnvironment {
         #     @{ ID = 123456789; Type = 'User' },
         #     @{ ID = 987654321; Type = 'Team' }
         # )
-        [Parameter(
-            Mandatory,
-            ValueFromPipelineByPropertyName,
-            ParameterSetName = 'WithReviewers'
-        )]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'WithReviewers')]
         [array] $Reviewers,
 
         # Whether or not a user who created the job is prevented from approving their own job.
-        [Parameter(
-            ValueFromPipelineByPropertyName,
-            ParameterSetName = 'WithReviewers'
-        )]
+        [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'WithReviewers')]
         [Alias('prevent_self_review')]
         [switch] $PreventSelfReview,
 
         # The type of deployment branch policy for this environment.
-        [Parameter(
-            ValueFromPipelineByPropertyName,
-            ParameterSetName = 'Default'
-        )]
-        [Parameter(
-            ValueFromPipelineByPropertyName,
-            ParameterSetName = 'WithReviewers'
-        )]
+        [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'Default')]
+        [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = 'WithReviewers')]
         [Alias('deployment_branch_policy')]
         [ValidateSet('ProtectedBranches', 'CustomBranchPolicies')]
         [string] $DeploymentBranchPolicy,

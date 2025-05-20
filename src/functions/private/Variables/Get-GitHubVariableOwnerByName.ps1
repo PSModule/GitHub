@@ -27,7 +27,7 @@ function Get-GitHubVariableOwnerByName {
 
         Retrieves the specified variable from the specified organization.
 
-        .LINK
+        .NOTES
         [Get an organization variable](https://docs.github.com/rest/actions/variables#get-an-organization-variable)
     #>
     [OutputType([GitHubVariable])]

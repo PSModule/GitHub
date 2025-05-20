@@ -19,7 +19,7 @@
         .OUTPUTS
         GitHubRelease
 
-        .LINK
+        .NOTES
         [Get the latest release](https://docs.github.com/rest/releases/releases#get-the-latest-release)
     #>
     [OutputType([GitHubRelease])]

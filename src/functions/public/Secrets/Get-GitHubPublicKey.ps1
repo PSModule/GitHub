@@ -31,18 +31,18 @@
     [CmdletBinding(DefaultParameterSetName = 'AuthenticatedUser')]
     param (
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(ParameterSetName = 'Organization', Mandatory)]
-        [Parameter(ParameterSetName = 'Repository', Mandatory)]
-        [Parameter(ParameterSetName = 'Environment', Mandatory)]
+        [Parameter(Mandatory, ParameterSetName = 'Organization', ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ParameterSetName = 'Repository', ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ParameterSetName = 'Environment', ValueFromPipelineByPropertyName)]
         [string] $Owner,
 
         # The name of the repository. The name is not case sensitive.
-        [Parameter(ParameterSetName = 'Repository', Mandatory)]
-        [Parameter(ParameterSetName = 'Environment', Mandatory)]
+        [Parameter(Mandatory, ParameterSetName = 'Repository', ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ParameterSetName = 'Environment', ValueFromPipelineByPropertyName)]
         [string] $Repository,
 
         # The name of the repository environment.
-        [Parameter(ParameterSetName = 'Environment', Mandatory)]
+        [Parameter(Mandatory, ParameterSetName = 'Environment', ValueFromPipelineByPropertyName)]
         [string] $Environment,
 
         # The context to run the command in. Used to get the details for the API call.

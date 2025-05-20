@@ -33,7 +33,7 @@
         .LINK
         https://psmodule.io/GitHub/Functions/Organization/Update-GitHubOrganization
 
-        .LINK
+        .NOTES
         [Update an organization](https://docs.github.com/rest/orgs/orgs#update-an-organization)
     #>
     [OutputType([GitHubOrganization])]

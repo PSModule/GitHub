@@ -322,12 +322,13 @@
             }
         }
 
+
         Write-Debug 'New repo created'
         Write-Debug "$($repo | Format-Table | Out-String)"
 
         $updateParams = @{
-            Owner                                   = $Organization ?? $Context.Username
-            Name                                    = $Name
+            Owner                                   = $repo.Owner
+            Name                                    = $repo.Name
             Visibility                              = $Visibility
             Description                             = $Description
             Homepage                                = $Homepage

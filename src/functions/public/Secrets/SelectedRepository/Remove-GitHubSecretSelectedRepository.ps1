@@ -20,7 +20,7 @@
         .LINK
         https://psmodule.io/GitHub/Functions/Secrets/SelectedRepository/Remove-GitHubSecretSelectedRepository
 
-        .LINK
+        .NOTES
         [Remove selected repository from an organization secret](https://docs.github.com/rest/actions/secrets#remove-selected-repository-from-an-organization-secret)
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(

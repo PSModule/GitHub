@@ -12,7 +12,7 @@
         .LINK
         https://psmodule.io/GitHub/Functions/API/Invoke-GitHubGraphQLQuery
 
-        .LINK
+        .NOTES
         [GitHub GraphQL API documentation](https://docs.github.com/graphql)
     #>
     [CmdletBinding()]
