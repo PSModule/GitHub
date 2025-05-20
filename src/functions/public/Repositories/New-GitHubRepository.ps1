@@ -322,6 +322,7 @@
             }
         }
 
+
         Write-Debug 'New repo created'
         Write-Debug "$($repo | Format-Table | Out-String)"
 
@@ -354,7 +355,16 @@
             EnableSecretScanningAIDetection         = $EnableSecretScanningAIDetection
             EnableSecretScanningNonProviderPatterns = $EnableSecretScanningNonProviderPatterns
         }
-        Update-GitHubRepository @updateParams
+        $i = 0
+        do {
+            try {
+                Write-Debug 'Attempt to update repo'
+                Update-GitHubRepository @updateParams
+            } catch {
+                $i++
+                Start-Sleep -Seconds $i
+            }
+        } while ($i -lt 10)
     }
 
     end {
