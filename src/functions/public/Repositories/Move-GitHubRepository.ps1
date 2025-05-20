@@ -25,7 +25,7 @@
         .LINK
         https://psmodule.io/GitHub/Functions/Repositories/Move-GitHubRepository/
 
-        .LINK
+        .NOTES
         [Transfer a repository](https://docs.github.com/rest/repos/repos#transfer-a-repository)
     #>
     [OutputType([GitHubRepository])]

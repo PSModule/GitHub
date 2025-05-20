@@ -31,10 +31,9 @@
         [ValidateSet('newest', 'oldest', 'stargazers', 'watchers')]
         [string] $Sort = 'newest',
 
-        # The number of results per page.
+        # The number of results per page (max 100).
         [Parameter()]
-        [ValidateRange(0, 100)]
-        [int] $PerPage,
+        [System.Nullable[int]] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -52,7 +51,6 @@
     process {
         $body = @{
             sort     = $Sort
-            per_page = $PerPage
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
@@ -60,6 +58,7 @@
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Name/forks"
             Body        = $body
+            PerPage     = $PerPage
             Context     = $Context
         }
 

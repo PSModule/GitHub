@@ -20,7 +20,7 @@
         .LINK
         https://psmodule.io/GitHub/Functions/Repositories/Remove-GitHubRepository/
 
-        .LINK
+        .NOTES
         [Delete a repository](https://docs.github.com/rest/repos/repos#delete-a-repository)
     #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]

@@ -13,7 +13,7 @@ function Remove-GitHubSecretFromOwner {
 
         Deletes the specified secret from the specified organization.
 
-        .LINK
+        .NOTES
         [Delete an organization secret](https://docs.github.com/rest/actions/secrets#delete-an-organization-secret)
     #>
     [OutputType([void])]

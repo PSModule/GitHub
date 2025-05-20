@@ -44,23 +44,23 @@ function Update-GitHubVariable {
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(Mandatory, ParameterSetName = 'Organization')]
-        [Parameter(Mandatory, ParameterSetName = 'Repository')]
-        [Parameter(Mandatory, ParameterSetName = 'Environment')]
+        [Parameter(Mandatory, ParameterSetName = 'Organization', ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ParameterSetName = 'Repository', ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ParameterSetName = 'Environment', ValueFromPipelineByPropertyName)]
         [Alias('Organization', 'User')]
         [string] $Owner,
 
         # The name of the repository. The name is not case sensitive.
-        [Parameter(Mandatory, ParameterSetName = 'Repository')]
-        [Parameter(Mandatory, ParameterSetName = 'Environment')]
+        [Parameter(Mandatory, ParameterSetName = 'Repository', ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ParameterSetName = 'Environment', ValueFromPipelineByPropertyName)]
         [string] $Repository,
 
         # The name of the repository environment.
-        [Parameter(Mandatory, ParameterSetName = 'Environment')]
+        [Parameter(Mandatory, ParameterSetName = 'Environment', ValueFromPipelineByPropertyName)]
         [string] $Environment,
 
         # The name of the variable.
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Name,
 
         # The new name of the variable.

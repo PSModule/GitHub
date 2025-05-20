@@ -16,7 +16,7 @@ function Set-GitHubSecretOnOwner {
 
         Creates a new organization secret named `HOST_NAME` with the value `test_value` in the specified organization.
 
-        .LINK
+        .NOTES
         [Create or update an organization secret](https://docs.github.com/rest/actions/secrets#create-or-update-an-organization-secret)
     #>
     [OutputType([void])]

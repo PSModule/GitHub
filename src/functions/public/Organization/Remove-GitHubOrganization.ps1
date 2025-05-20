@@ -20,7 +20,7 @@
         .LINK
         https://psmodule.io/GitHub/Functions/Organization/Remove-GitHubOrganization
 
-        .LINK
+        .NOTES
         [Delete an organization](https://docs.github.com/rest/orgs/orgs#delete-an-organization)
     #>
     [OutputType([void])]

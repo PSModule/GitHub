@@ -50,7 +50,7 @@ function Get-GitHubSecretFromOrganization {
         An array of GitHubSecret objects representing the environment secrets.
         Each object contains Name, CreatedAt, UpdatedAt, Owner, Repository, and Environment properties.
 
-        .LINK
+        .NOTES
         [List repository organization secrets](https://docs.github.com/rest/actions/secrets#list-repository-organization-secrets)
     #>
     [OutputType([GitHubSecret[]])]
@@ -63,6 +63,10 @@ function Get-GitHubSecretFromOrganization {
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory)]
         [string] $Repository,
+
+        # The number of results per page (max 100).
+        [Parameter()]
+        [System.Nullable[int]] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -80,7 +84,7 @@ function Get-GitHubSecretFromOrganization {
         $inputObject = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/actions/organization-secrets"
-            PerPage     = 30
+            PerPage     = $PerPage
             Context     = $Context
         }
 

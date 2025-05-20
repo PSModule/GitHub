@@ -93,6 +93,10 @@
         https://psmodule.io/GitHub/Functions/Repositories/New-GitHubRepository/
     #>
     [OutputType([GitHubRepository])]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSShouldProcess', '', Scope = 'Function',
+        Justification = 'This check is performed in the private functions.'
+    )]
     [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName = 'user')]
     param(
         # The account owner of the repository. The name is not case sensitive.
@@ -318,12 +322,12 @@
             }
         }
 
-        Write-Debug "New repo created"
+        Write-Debug 'New repo created'
         Write-Debug "$($repo | Format-Table | Out-String)"
 
         $updateParams = @{
-            Owner                                   = $Organization ?? $Context.Username
-            Name                                    = $Name
+            Owner                                   = $repo.Owner
+            Name                                    = $repo.Name
             Visibility                              = $Visibility
             Description                             = $Description
             Homepage                                = $Homepage

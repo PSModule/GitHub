@@ -33,7 +33,7 @@ function Get-GitHubSecretEnvironmentList {
         An array of GitHubSecret objects representing the environment secrets.
         Each object contains Name, CreatedAt, UpdatedAt, Owner, Repository, and Environment properties.
 
-        .LINK
+        .NOTES
         [List environment secrets](https://docs.github.com/rest/actions/secrets#list-environment-secrets)
     #>
     [OutputType([GitHubSecret[]])]

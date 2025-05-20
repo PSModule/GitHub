@@ -34,7 +34,7 @@
         .OUTPUTS
         GitHubRepository
 
-        .LINK
+        .NOTES
         [Create a repository using a template](https://docs.github.com/rest/repos/repos#create-a-repository-using-a-template)
     #>
     [OutputType([GitHubRepository])]

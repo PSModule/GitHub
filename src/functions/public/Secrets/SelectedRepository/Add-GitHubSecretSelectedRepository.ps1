@@ -15,10 +15,13 @@
 
         Adds the repository 'test-repo' to the 'API_KEY' secret in the organization 'my-org'.
 
+        .INPUTS
+        [GitHubSecret]
+
         .LINK
         https://psmodule.io/GitHub/Functions/Secrets/SelectedRepository/Add-GitHubSecretSelectedRepository
 
-        .LINK
+        .NOTES
         [Add selected repository to an organization secret](https://docs.github.com/rest/actions/secrets#add-selected-repository-to-an-organization-secret)
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(

@@ -1,4 +1,4 @@
-﻿filter Get-GitHubWorkflowRunByRepo {
+filter Get-GitHubWorkflowRunByRepo {
     <#
         .SYNOPSIS
         List workflow runs for a repository.
@@ -24,7 +24,7 @@
         .OUTPUTS
         GitHubWorkflowRun
 
-        .LINK
+        .NOTES
         [List workflow runs for a repository](https://docs.github.com/rest/actions/workflow-runs#list-workflow-runs-for-a-repository)
     #>
     [OutputType([GitHubWorkflowRun])]
@@ -82,7 +82,6 @@
 
         # The number of results per page (max 100).
         [Parameter()]
-        [ValidateRange(0, 100)]
         [System.Nullable[int]] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.

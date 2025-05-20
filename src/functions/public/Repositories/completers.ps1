@@ -48,7 +48,8 @@ Register-ArgumentCompleter -CommandName ($script:PSModuleInfo.FunctionsToExport)
     }
 }
 
-Register-ArgumentCompleter -CommandName ($script:PSModuleInfo.FunctionsToExport | Where-Object { $_ -like '*GitHubRepository' }) -ParameterName Name -ScriptBlock {
+Register-ArgumentCompleter -CommandName ($script:PSModuleInfo.FunctionsToExport |
+        Where-Object { $_ -like '*GitHubRepository' }) -ParameterName Name -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
     $params = @{

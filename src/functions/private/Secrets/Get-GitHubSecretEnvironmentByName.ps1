@@ -27,7 +27,7 @@ function Get-GitHubSecretEnvironmentByName {
         Returns an GitHubSecret object containing details about the environment Secret,
         including its name, associated repository, and environment details.
 
-        .LINK
+        .NOTES
         [Get an environment secret](https://docs.github.com/rest/actions/secrets#get-an-environment-secret)
     #>
     [OutputType([GitHubSecret])]

@@ -19,7 +19,7 @@
         .OUTPUTS
         GitHubRelease
 
-        .LINK
+        .NOTES
         [List releases](https://docs.github.com/rest/releases/releases#list-releases)
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
@@ -43,8 +43,7 @@
 
         # The number of results per page (max 100).
         [Parameter()]
-        [ValidateRange(0, 100)]
-        [int] $PerPage,
+        [System.Nullable[int]] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.

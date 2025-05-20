@@ -2,7 +2,7 @@
 
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
     'PSUseDeclaredVarsMoreThanAssignments', '',
-    Justification = 'Pester grouping syntax - known issue.'
+    Justification = 'Pester grouping syntax: known issue.'
 )]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
     'PSAvoidUsingConvertToSecureStringWithPlainText', '',
@@ -12,13 +12,17 @@
     'PSAvoidUsingWriteHost', '',
     Justification = 'Log outputs to GitHub Actions logs.'
 )]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+    'PSAvoidLongLines', '',
+    Justification = 'Long test descriptions and skip switches'
+)]
 [CmdletBinding()]
 param()
 
 BeforeAll {
     $testName = 'SecretsTests'
     $os = $env:RUNNER_OS
-    $guid = [guid]::NewGuid().ToString()
+    $guid = [guid]::NewGuid().ToString() -replace '-', '_'
 }
 
 Describe 'Secrets' {
@@ -38,23 +42,25 @@ Describe 'Secrets' {
             }
             $repoPrefix = "$testName-$os-$TokenType"
             $repoName = "$repoPrefix-$guid"
-            $secretPrefix = ("$testName`_$os`_$TokenType`_$guid" -replace '-', '_').ToUpper()
-            $orgSecretName = "$secretPrefix`ORG"
+            $secretPrefix = "$testName`_$os`_$TokenType"
+            $secretName = "$secretPrefix`_$guid"
+            $orgSecretName = "$secretName`_ORG"
             $environmentName = "$testName-$os-$TokenType-$guid"
 
             switch ($OwnerType) {
                 'user' {
                     Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                    $repo = New-GitHubRepository -Name "$repoName-1" -AllowSquashMerge
-                    $repo2 = New-GitHubRepository -Name "$repoName-2" -AllowSquashMerge
-                    $repo3 = New-GitHubRepository -Name "$repoName-3" -AllowSquashMerge
+                    $repo = New-GitHubRepository -Name "$repoName-1"
+                    $repo2 = New-GitHubRepository -Name "$repoName-2"
+                    $repo3 = New-GitHubRepository -Name "$repoName-3"
                 }
                 'organization' {
                     Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                    $repo = New-GitHubRepository -Organization $owner -Name "$repoName-1" -AllowSquashMerge
-                    $repo2 = New-GitHubRepository -Organization $owner -Name "$repoName-2" -AllowSquashMerge
-                    $repo3 = New-GitHubRepository -Organization $owner -Name "$repoName-3" -AllowSquashMerge
-                    LogGroup "Org secret - [$secretPrefix]" {
+                    Get-GitHubSecret -Owner $Owner | Where-Object { $_.Name -like "$secretPrefix*" } | Remove-GitHubSecret -Confirm:$false
+                    $repo = New-GitHubRepository -Organization $owner -Name "$repoName-1"
+                    $repo2 = New-GitHubRepository -Organization $owner -Name "$repoName-2"
+                    $repo3 = New-GitHubRepository -Organization $owner -Name "$repoName-3"
+                    LogGroup "Org secret - [$orgSecretName]" {
                         $params = @{
                             Owner                = $owner
                             Name                 = $orgSecretName
@@ -64,14 +70,14 @@ Describe 'Secrets' {
                         }
 
                         $orgSecret += Set-GitHubSecret @params
-                        Write-Host ($orgSecret | Select-Object * | Format-Table | Out-String)
+                        Write-Host ($orgSecret | Select-Object * | Out-String)
                     }
                 }
             }
             LogGroup "Repository - [$repoName]" {
-                Write-Host ($repo | Format-List | Out-String)
-                Write-Host ($repo2 | Format-List | Out-String)
-                Write-Host ($repo3 | Format-List | Out-String)
+                Write-Host ($repo | Select-Object * | Out-String)
+                Write-Host ($repo2 | Select-Object * | Out-String)
+                Write-Host ($repo3 | Select-Object * | Out-String)
             }
         }
 
@@ -82,7 +88,7 @@ Describe 'Secrets' {
                 }
                 'organization' {
                     LogGroup 'Secrets to remove' {
-                        $orgSecrets = Get-GitHubSecret -Owner $owner | Where-Object { $_.Name -like "$secretPrefix*" }
+                        $orgSecrets = Get-GitHubSecret -Owner $owner | Where-Object { $_.Name -like "$secretName*" }
                         Write-Host "$($orgSecrets | Format-List | Out-String)"
                         $orgSecrets | Remove-GitHubSecret
                     }
@@ -148,7 +154,7 @@ Describe 'Secrets' {
             }
 
             It 'Set-GitHubSecret - should ensure existance of a organization secret' {
-                $name = "$secretPrefix`TestSecret"
+                $name = "$secretName`_TestSecret"
                 LogGroup "Secret - [$name]" {
                     $param = @{
                         Name       = $name
@@ -166,7 +172,7 @@ Describe 'Secrets' {
             }
 
             It 'Set-GitHubSecret - should update an existing organization secret' {
-                $name = "$secretPrefix`TestSecret"
+                $name = "$secretName`_TestSecret"
                 LogGroup "Secret - [$name]" {
                     $param = @{
                         Name       = $name
@@ -184,7 +190,7 @@ Describe 'Secrets' {
             }
 
             It 'Get-GitHubSecret' {
-                $result = Get-GitHubSecret @scope -Name "$secretPrefix*"
+                $result = Get-GitHubSecret @scope -Name "$secretName*"
                 LogGroup 'Secrets' {
                     Write-Host "$($result | Select-Object * | Format-List | Out-String)"
                 }
@@ -192,7 +198,7 @@ Describe 'Secrets' {
             }
 
             It 'Remove-GitHubSecret by name parameter' {
-                $testSecretName = "$secretPrefix`RemoveByName"
+                $testSecretName = "$secretName`RemoveByName"
                 LogGroup 'Create secret for removal test' {
                     $createResult = Set-GitHubSecret @scope -Name $testSecretName -Value 'TestForRemoval'
                     Write-Host "$($createResult | Format-List | Out-String)"
@@ -213,7 +219,7 @@ Describe 'Secrets' {
             }
 
             It 'Remove-GitHubSecret' {
-                $testSecretName = "$secretPrefix`TestSecret*"
+                $testSecretName = "$secretName`TestSecret*"
                 LogGroup 'Before remove' {
                     $before = Get-GitHubSecret @scope -Name $testSecretName
                     Write-Host "$($before | Format-List | Out-String)"
@@ -329,7 +335,7 @@ Describe 'Secrets' {
 
             It 'Set-GitHubSecret - String' {
                 $param = @{
-                    Name  = "$secretPrefix`TestSecret"
+                    Name  = "$secretName`TestSecret"
                     Value = 'TestValue'
                 }
                 $result = Set-GitHubSecret @param @scope
@@ -341,7 +347,7 @@ Describe 'Secrets' {
 
             It 'Set-GitHubSecret - SecureString' {
                 $param = @{
-                    Name  = "$secretPrefix`TestSecret"
+                    Name  = "$secretName`TestSecret"
                     Value = ConvertTo-SecureString -String 'TestValue' -AsPlainText
                 }
                 $result = Set-GitHubSecret @param @scope
@@ -353,7 +359,7 @@ Describe 'Secrets' {
 
             It 'Set-GitHubSecret' {
                 $param = @{
-                    Name  = "$secretPrefix`TestSecret2"
+                    Name  = "$secretName`TestSecret2"
                     Value = 'TestValue123'
                 }
                 $result = Set-GitHubSecret @param @scope
@@ -379,7 +385,7 @@ Describe 'Secrets' {
             }
 
             It 'Remove-GitHubSecret by name parameter' {
-                $testSecretName = "$secretPrefix`RemoveByName"
+                $testSecretName = "$secretName`RemoveByName"
                 LogGroup 'Create secret for removal test' {
                     $createResult = Set-GitHubSecret @scope -Name $testSecretName -Value 'TestForRemoval'
                     Write-Host "$($createResult | Format-List | Out-String)"
@@ -445,7 +451,7 @@ Describe 'Secrets' {
 
             It 'Set-GitHubSecret' {
                 $param = @{
-                    Name  = "$secretPrefix`TestSecret"
+                    Name  = "$secretName`TestSecret"
                     Value = 'TestValue'
                 }
                 $result = Set-GitHubSecret @param @scope
@@ -460,7 +466,7 @@ Describe 'Secrets' {
 
             It 'Set-GitHubSecret' {
                 $param = @{
-                    Name  = "$secretPrefix`TestSecret2"
+                    Name  = "$secretName`TestSecret2"
                     Value = 'TestValue123'
                 }
                 $result = Set-GitHubSecret @param @scope
@@ -489,7 +495,7 @@ Describe 'Secrets' {
             }
 
             It 'Remove-GitHubSecret by name parameter' {
-                $testSecretName = "$secretPrefix`RemoveByName"
+                $testSecretName = "$secretName`RemoveByName"
                 LogGroup 'Create secret for removal test' {
                     $createResult = Set-GitHubSecret @scope -Name $testSecretName -Value 'TestForRemoval'
                     Write-Host "$($createResult | Format-List | Out-String)"

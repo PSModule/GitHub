@@ -13,7 +13,7 @@ function Remove-GitHubVariableFromEnvironment {
 
         Deletes the specified variable from the specified environment.
 
-        .LINK
+        .NOTES
         [Delete an environment variable](https://docs.github.com/rest/actions/variables#delete-an-environment-variable)
     #>
     [OutputType([void])]

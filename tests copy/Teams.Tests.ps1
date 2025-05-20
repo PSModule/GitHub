@@ -22,7 +22,7 @@ param()
 BeforeAll {
     $testName = 'TeamsTests'
     $os = $env:RUNNER_OS
-    $guid = [guid]::NewGuid().ToString()
+    $guid = [guid]::NewGuid().ToString() -replace '-', '_'
 }
 
 Describe 'Teams' {
@@ -40,7 +40,14 @@ Describe 'Teams' {
                     Write-Host ($context | Format-List | Out-String)
                 }
             }
-            $teamPrefix = ("$testName`_$os`_$TokenType`_$guid" -replace '-', '_').ToUpper()
+            $teamPrefix = "$testName`_$os`_$TokenType"
+            $teamName = "$teamPrefix`_$guid"
+
+            switch ($OwnerType) {
+                'organization' {
+                    Get-GitHubTeam -Organization $owner | Where-Object { $_.Name -like "$teamPrefix*" } | Remove-GitHubTeam -Confirm:$false
+                }
+            }
         }
 
         AfterAll {

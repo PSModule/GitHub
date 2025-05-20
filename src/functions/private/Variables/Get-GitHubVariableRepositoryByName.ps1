@@ -22,7 +22,7 @@ function Get-GitHubVariableRepositoryByName {
 
         Retrieves the specified variable from the specified repository.
 
-        .LINK
+        .NOTES
         [Get a repository variable](https://docs.github.com/rest/actions/variables#get-a-repository-variable)
     #>
     [OutputType([GitHubVariable])]

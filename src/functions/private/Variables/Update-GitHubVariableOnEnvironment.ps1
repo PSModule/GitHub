@@ -22,7 +22,7 @@ function Update-GitHubVariableOnEnvironment {
 
         Updates the environment variable named `HOST_NAME` with the value `github.com` in the specified environment.
 
-        .LINK
+        .NOTES
         [Update an environment variable](https://docs.github.com/rest/actions/variables#update-an-environment-variable)
     #>
     [OutputType([void])]

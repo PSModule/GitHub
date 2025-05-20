@@ -22,7 +22,7 @@
         .LINK
         https://psmodule.io/GitHub/Functions/Organization/Members/Remove-GitHubOrganizationInvitation
 
-        .LINK
+        .NOTES
         [Cancel an organization invitation](https://docs.github.com/rest/orgs/members#cancel-an-organization-invitation)
     #>
     [OutputType([void])]

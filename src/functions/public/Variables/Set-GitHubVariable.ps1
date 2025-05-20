@@ -46,19 +46,19 @@ function Set-GitHubVariable {
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(Mandatory, ParameterSetName = 'Organization')]
-        [Parameter(Mandatory, ParameterSetName = 'Repository')]
-        [Parameter(Mandatory, ParameterSetName = 'Environment')]
+        [Parameter(Mandatory, ParameterSetName = 'Organization', ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ParameterSetName = 'Repository', ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ParameterSetName = 'Environment', ValueFromPipelineByPropertyName)]
         [Alias('Organization', 'User')]
         [string] $Owner,
 
         # The name of the repository. The name is not case sensitive.
-        [Parameter(Mandatory, ParameterSetName = 'Repository')]
-        [Parameter(Mandatory, ParameterSetName = 'Environment')]
+        [Parameter(Mandatory, ParameterSetName = 'Repository', ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ParameterSetName = 'Environment', ValueFromPipelineByPropertyName)]
         [string] $Repository,
 
         # The name of the repository environment.
-        [Parameter(Mandatory, ParameterSetName = 'Environment')]
+        [Parameter(Mandatory, ParameterSetName = 'Environment', ValueFromPipelineByPropertyName)]
         [string] $Environment,
 
         # The name of the variable.
@@ -119,11 +119,10 @@ function Set-GitHubVariable {
 
         if ($variable) {
             $null = Update-GitHubVariable @params -PassThru
+            Get-GitHubVariable @getParams -Name $Name
         } else {
-            $null = New-GitHubVariable @params
+            New-GitHubVariable @params
         }
-
-        Get-GitHubVariable @getParams -Name $Name
     }
 
     end {

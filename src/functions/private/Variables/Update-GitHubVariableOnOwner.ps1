@@ -14,7 +14,7 @@ function Update-GitHubVariableOnOwner {
 
         Updates the organization variable named `HOST_NAME` with the value `github.com` in the specified organization.
 
-        .LINK
+        .NOTES
         [Update an organization variable](https://docs.github.com/rest/actions/variables#update-an-organization-variable)
     #>
     [OutputType([void])]

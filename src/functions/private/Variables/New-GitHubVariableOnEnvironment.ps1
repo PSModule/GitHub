@@ -21,7 +21,7 @@ function New-GitHubVariableOnEnvironment {
 
         Creates a new environment variable named `HOST_NAME` with the value `github.com` in the specified environment.
 
-        .LINK
+        .NOTES
         [Create an environment variable](https://docs.github.com/rest/actions/variables#create-an-environment-variable)
     #>
     [OutputType([void])]

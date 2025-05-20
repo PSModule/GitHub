@@ -36,7 +36,7 @@ filter Get-GitHubEnvironmentList {
         .NOTES
         Contains details of each environment in the repository, including its name and protection settings.
 
-        .LINK
+        .NOTES
         [List environments](https://docs.github.com/rest/deployments/environments#list-environments)
     #>
     [OutputType([GitHubEnvironment[]])]
@@ -57,10 +57,9 @@ filter Get-GitHubEnvironmentList {
         )]
         [string] $Repository,
 
-        # The maximum number of environments to return per request.
+        # The number of results per page (max 100).
         [Parameter()]
-        [ValidateRange(0, 100)]
-        [int] $PerPage,
+        [System.Nullable[int]] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -75,14 +74,10 @@ filter Get-GitHubEnvironmentList {
     }
 
     process {
-        $body = @{
-            per_page = $PerPage
-        }
-
         $inputObject = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/environments"
-            Body        = $body
+            PerPage     = $PerPage
             Context     = $Context
         }
 

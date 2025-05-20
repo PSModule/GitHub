@@ -23,7 +23,7 @@ function Get-GitHubSecretOwnerList {
         .NOTES
         An array of GitHubSecret objects representing the organization secrets.
 
-        .LINK
+        .NOTES
         [List organization secrets](https://docs.github.com/rest/actions/secrets#list-organization-secrets)
     #>
     [OutputType([GitHubSecret[]])]

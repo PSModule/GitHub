@@ -2,7 +2,7 @@
 
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
     'PSUseDeclaredVarsMoreThanAssignments', '',
-    Justification = 'Pester grouping syntax - known issue.'
+    Justification = 'Pester grouping syntax: known issue.'
 )]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
     'PSAvoidUsingConvertToSecureStringWithPlainText', '',
@@ -12,13 +12,17 @@
     'PSAvoidUsingWriteHost', '',
     Justification = 'Log outputs to GitHub Actions logs.'
 )]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+    'PSAvoidLongLines', '',
+    Justification = 'Long test descriptions and skip switches'
+)]
 [CmdletBinding()]
 param()
 
 BeforeAll {
     $testName = 'VariablesTests'
     $os = $env:RUNNER_OS
-    $guid = [guid]::NewGuid().ToString()
+    $guid = [guid]::NewGuid().ToString() -replace '-', '_'
 }
 
 Describe 'Variables' {
@@ -38,23 +42,25 @@ Describe 'Variables' {
             }
             $repoPrefix = "$testName-$os-$TokenType"
             $repoName = "$repoPrefix-$guid"
-            $variablePrefix = ("$testName`_$os`_$TokenType`_$guid" -replace '-', '_').ToUpper()
-            $orgVariableName = "$variablePrefix`ORG"
+            $variablePrefix = "$testName`_$os`_$TokenType"
+            $variableName = "$variablePrefix`_$guid"
+            $orgVariableName = "$variableName`_ORG"
             $environmentName = "$testName-$os-$TokenType-$guid"
 
             switch ($OwnerType) {
                 'user' {
                     Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                    $repo = New-GitHubRepository -Name "$repoName-1" -AllowSquashMerge
-                    $repo2 = New-GitHubRepository -Name "$repoName-2" -AllowSquashMerge
-                    $repo3 = New-GitHubRepository -Name "$repoName-3" -AllowSquashMerge
+                    $repo = New-GitHubRepository -Name "$repoName-1"
+                    $repo2 = New-GitHubRepository -Name "$repoName-2"
+                    $repo3 = New-GitHubRepository -Name "$repoName-3"
                 }
                 'organization' {
                     Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                    $repo = New-GitHubRepository -Organization $owner -Name "$repoName-1" -AllowSquashMerge
-                    $repo2 = New-GitHubRepository -Organization $owner -Name "$repoName-2" -AllowSquashMerge
-                    $repo3 = New-GitHubRepository -Organization $owner -Name "$repoName-3" -AllowSquashMerge
-                    LogGroup "Org variable - [$variablePrefix]" {
+                    Get-GitHubVariable -Owner $Owner | Where-Object { $_.Name -like "$variablePrefix*" } | Remove-GitHubVariable -Confirm:$false
+                    $repo = New-GitHubRepository -Organization $owner -Name "$repoName-1"
+                    $repo2 = New-GitHubRepository -Organization $owner -Name "$repoName-2"
+                    $repo3 = New-GitHubRepository -Organization $owner -Name "$repoName-3"
+                    LogGroup "Org variable - [$orgVariableName]" {
                         $params = @{
                             Owner                = $owner
                             Name                 = $orgVariableName
@@ -63,14 +69,14 @@ Describe 'Variables' {
                             SelectedRepositories = $repo.id
                         }
                         $orgVariable = Set-GitHubVariable @params
-                        Write-Host ($orgVariable | Select-Object * | Format-Table | Out-String)
+                        Write-Host ($orgVariable | Select-Object * | Out-String)
                     }
                 }
             }
             LogGroup "Repository - [$repoName]" {
-                Write-Host ($repo | Format-Table | Out-String)
-                Write-Host ($repo2 | Format-Table | Out-String)
-                Write-Host ($repo3 | Format-Table | Out-String)
+                Write-Host ($repo | Select-Object * | Out-String)
+                Write-Host ($repo2 | Select-Object * | Out-String)
+                Write-Host ($repo3 | Select-Object * | Out-String)
             }
         }
 
@@ -102,7 +108,7 @@ Describe 'Variables' {
                 }
             }
             It 'Set-GitHubVariable - should ensure existance of a organization variable' {
-                $name = "$variablePrefix`TestVariable"
+                $name = "$variableName`TestVariable"
                 LogGroup "Variable - [$name]" {
                     $param = @{
                         Name       = $name
@@ -121,7 +127,7 @@ Describe 'Variables' {
             }
 
             It 'Set-GitHubVariable - should update an existing organization variable' {
-                $name = "$variablePrefix`TestVariable"
+                $name = "$variableName`TestVariable"
                 LogGroup "Variable - [$name]" {
                     $param = @{
                         Name       = $name
@@ -140,7 +146,7 @@ Describe 'Variables' {
             }
 
             It 'Update-GitHubVariable - should update an existing organization variable' {
-                $name = "$variablePrefix`TestVariable"
+                $name = "$variableName`TestVariable"
                 LogGroup "Variable - [$name]" {
                     $param = @{
                         Name  = $name
@@ -158,7 +164,7 @@ Describe 'Variables' {
             }
 
             It 'New-GitHubVariable - should create a new organization variable' {
-                $name = "$variablePrefix`TestVariable2"
+                $name = "$variableName`TestVariable2"
                 LogGroup "Variable - [$name]" {
                     $param = @{
                         Name  = $name
@@ -176,7 +182,7 @@ Describe 'Variables' {
             }
 
             It 'New-GitHubVariable - should throw if creating an organization variable that exists' {
-                $name = "$variablePrefix`TestVariable2"
+                $name = "$variableName`TestVariable2"
                 LogGroup "Variable - [$name]" {
                     $param = @{
                         Name  = $name
@@ -190,7 +196,7 @@ Describe 'Variables' {
             }
 
             It 'Get-GitHubVariable' {
-                $result = Get-GitHubVariable @scope -Name "$variablePrefix*"
+                $result = Get-GitHubVariable @scope -Name "$variableName*"
                 LogGroup 'Variables' {
                     Write-Host "$($result | Select-Object * | Format-List | Out-String)"
                 }
@@ -199,7 +205,7 @@ Describe 'Variables' {
 
             It 'Export-GitHubVariable' {
                 Get-GitHubVariable @scope -IncludeInherited | Export-GitHubVariable
-                $result = Get-ChildItem -Path env: | Where-Object { $_.Name -like "$variablePrefix*" }
+                $result = Get-ChildItem -Path env: | Where-Object { $_.Name -like "$variableName*" }
                 LogGroup 'Variables' {
                     Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
                 }
@@ -207,7 +213,7 @@ Describe 'Variables' {
             }
 
             It 'Remove-GitHubVariable by name parameter' {
-                $testVarName = "$variablePrefix`RemoveByName"
+                $testVarName = "$variableName`RemoveByName"
                 LogGroup 'Create variable for removal test' {
                     $createResult = Set-GitHubVariable @scope -Name $testVarName -Value 'TestForRemoval'
                     Write-Host "$($createResult | Format-List | Out-String)"
@@ -228,7 +234,7 @@ Describe 'Variables' {
             }
 
             It 'Remove-GitHubVariable' {
-                $testVarName = "$variablePrefix`TestVariable*"
+                $testVarName = "$variableName`TestVariable*"
                 LogGroup 'Before remove' {
                     $before = Get-GitHubVariable @scope -Name $testVarName
                     Write-Host "$($before | Format-List | Out-String)"
@@ -324,7 +330,7 @@ Describe 'Variables' {
                 Set-GitHubVariable @scope -Name $orgVariableName -Value 'repository'
             }
             It 'Set-GitHubVariable' {
-                $name = "$variablePrefix`TestVariable"
+                $name = "$variableName`TestVariable"
                 $value = 'TestValue'
                 $param = @{
                     Name  = $name
@@ -345,7 +351,7 @@ Describe 'Variables' {
 
             It 'Update-GitHubVariable' {
                 $param = @{
-                    Name  = "$variablePrefix`TestVariable"
+                    Name  = "$variableName`TestVariable"
                     Value = 'TestValue1234'
                 }
                 $result = Update-GitHubVariable @param @scope -PassThru
@@ -356,7 +362,7 @@ Describe 'Variables' {
             }
 
             It 'New-GitHubVariable' {
-                $name = "$variablePrefix`TestVariable2"
+                $name = "$variableName`TestVariable2"
                 $value = 'TestValue123'
                 $param = @{
                     Name  = $name
@@ -392,7 +398,7 @@ Describe 'Variables' {
 
             It 'Export-GitHubVariable' {
                 Get-GitHubVariable @scope -IncludeInherited | Export-GitHubVariable
-                $result = Get-ChildItem -Path env: | Where-Object { $_.Name -like "$variablePrefix*" }
+                $result = Get-ChildItem -Path env: | Where-Object { $_.Name -like "$variableName*" }
                 LogGroup 'Variables' {
                     Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
                 }
@@ -400,7 +406,7 @@ Describe 'Variables' {
             }
 
             It 'Remove-GitHubVariable by name parameter' {
-                $testVarName = "$variablePrefix`RemoveByName"
+                $testVarName = "$variableName`RemoveByName"
                 LogGroup 'Create variable for removal test' {
                     $createResult = Set-GitHubVariable @scope -Name $testVarName -Value 'TestForRemoval'
                     Write-Host "$($createResult | Format-List | Out-String)"
@@ -450,7 +456,7 @@ Describe 'Variables' {
                 Set-GitHubVariable @scope -Name $orgVariableName -Value 'environment'
             }
             It 'Set-GitHubVariable' {
-                $name = "$variablePrefix`TestVariable"
+                $name = "$variableName`TestVariable"
                 $value = 'TestValue'
                 $param = @{
                     Name  = $name
@@ -471,7 +477,7 @@ Describe 'Variables' {
 
             It 'Update-GitHubVariable' {
                 $param = @{
-                    Name  = "$variablePrefix`TestVariable"
+                    Name  = "$variableName`TestVariable"
                     Value = 'TestValue1234'
                 }
                 $result = Update-GitHubVariable @param @scope -PassThru
@@ -482,7 +488,7 @@ Describe 'Variables' {
             }
 
             It 'New-GitHubVariable' {
-                $name = "$variablePrefix`TestVariable2"
+                $name = "$variableName`TestVariable2"
                 $value = 'TestValue123'
                 $param = @{
                     Name  = $name
@@ -519,7 +525,7 @@ Describe 'Variables' {
 
             It 'Export-GitHubVariable' {
                 Get-GitHubVariable @scope -IncludeInherited | Export-GitHubVariable
-                $result = Get-ChildItem -Path env: | Where-Object { $_.Name -like "$variablePrefix*" }
+                $result = Get-ChildItem -Path env: | Where-Object { $_.Name -like "$variableName*" }
                 LogGroup 'Variables' {
                     Write-Host "$($result | Select-Object * | Format-Table | Out-String)"
                 }
@@ -527,7 +533,7 @@ Describe 'Variables' {
             }
 
             It 'Remove-GitHubVariable by name parameter' {
-                $testVarName = "$variablePrefix`RemoveByName"
+                $testVarName = "$variableName`RemoveByName"
                 LogGroup 'Create variable for removal test' {
                     $createResult = Set-GitHubVariable @scope -Name $testVarName -Value 'TestForRemoval'
                     Write-Host "$($createResult | Format-List | Out-String)"

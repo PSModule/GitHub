@@ -15,32 +15,23 @@ filter Remove-GitHubEnvironment {
         .LINK
         https://psmodule.io/GitHub/Functions/Environments/Remove-GitHubEnvironment/
 
-        .LINK
+        .NOTES
         [Delete environments](https://docs.github.com/rest/deployments/environments?#delete-an-environment)
     #>
     [OutputType([void])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The name of the organization.
-        [Parameter(
-            Mandatory,
-            ValueFromPipelineByPropertyName
-        )]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [Alias('Organization', 'User')]
         [string] $Owner,
 
         # The name of the repository.
-        [Parameter(
-            Mandatory,
-            ValueFromPipelineByPropertyName
-        )]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Repository,
 
         # The name of the environment to delete.
-        [Parameter(
-            Mandatory,
-            ValueFromPipelineByPropertyName
-        )]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Name,
 
         # The context to run the command in. Used to get the details for the API call.

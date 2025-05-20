@@ -17,7 +17,7 @@
         .OUTPUTS
         GitHubRelease
 
-        .LINK
+        .NOTES
         [Get a release by tag name](https://docs.github.com/rest/releases/releases#get-a-release-by-tag-name)
     #>
     [OutputType([GitHubRelease])]

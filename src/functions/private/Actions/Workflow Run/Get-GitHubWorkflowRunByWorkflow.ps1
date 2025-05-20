@@ -26,7 +26,7 @@
         .OUTPUTS
         GitHubWorkflowRun
 
-        .LINK
+        .NOTES
         [List workflow runs for a workflow](https://docs.github.com/rest/actions/workflow-runs#list-workflow-runs-for-a-workflow)
     #>
     [CmdletBinding()]
@@ -87,7 +87,6 @@
 
         # The number of results per page (max 100).
         [Parameter()]
-        [ValidateRange(0, 100)]
         [System.Nullable[int]] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.

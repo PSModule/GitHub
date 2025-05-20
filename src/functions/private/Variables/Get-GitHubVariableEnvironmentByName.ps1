@@ -29,7 +29,7 @@ function Get-GitHubVariableEnvironmentByName {
         Returns an GitHubVariable object containing details about the environment variable,
         including its name, value, associated repository, and environment details.
 
-        .LINK
+        .NOTES
         [Get an environment variable](https://docs.github.com/rest/actions/variables#get-an-environment-variable)
     #>
     [OutputType([GitHubVariable])]

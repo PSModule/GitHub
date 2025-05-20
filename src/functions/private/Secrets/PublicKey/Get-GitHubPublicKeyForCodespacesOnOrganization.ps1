@@ -25,7 +25,7 @@
         .OUTPUTS
         GitHubPublicKey
 
-        .LINK
+        .NOTES
         [Get an organization public key](https://docs.github.com/rest/codespaces/organization-secrets#get-an-organization-public-key)
     #>
     [OutputType([GitHubPublicKey])]

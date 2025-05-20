@@ -20,7 +20,7 @@
         .LINK
         https://psmodule.io/GitHub/Functions/Releases/Get-GitHubRelease/
 
-        .LINK
+        .NOTES
         [Delete a release](https://docs.github.com/rest/releases/releases#delete-a-release)
     #>
     [OutputType([void])]

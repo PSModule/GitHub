@@ -67,8 +67,7 @@
 
         # The number of results per page (max 100).
         [Parameter()]
-        [ValidateRange(0, 100)]
-        [int] $PerPage,
+        [System.Nullable[int]] $PerPage,
 
         # A cursor, as given in the Link header. If specified, the query only searches for results before this cursor.
         [Parameter(ParameterSetName = 'BeforeAfter')]
@@ -118,7 +117,6 @@
     process {
         $body = @{
             direction     = $Direction
-            per_page      = $PerPage
             before        = $Before
             after         = $After
             ref           = $Ref
@@ -132,6 +130,7 @@
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Name/activity"
             Body        = $body
+            PerPage     = $PerPage
             Context     = $Context
         }
 

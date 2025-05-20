@@ -12,7 +12,7 @@ function Remove-GitHubSecretFromRepository {
 
         Deletes the specified secret from the specified repository.
 
-        .LINK
+        .NOTES
         [Delete a repository secret](https://docs.github.com/rest/actions/secrets#delete-a-repository-secret)
     #>
     [OutputType([void])]

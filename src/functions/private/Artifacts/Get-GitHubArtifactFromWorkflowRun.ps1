@@ -36,7 +36,7 @@ function Get-GitHubArtifactFromWorkflowRun {
         A list of GitHubArtifact objects representing workflow artifacts from the run.
         When -AllVersions is used, all versions of each artifact name are returned instead of the latest only.
 
-        .LINK
+        .NOTES
         [List workflow run artifacts](https://docs.github.com/rest/actions/artifacts#list-workflow-run-artifacts)
     #>
     [OutputType([GitHubArtifact[]])]
