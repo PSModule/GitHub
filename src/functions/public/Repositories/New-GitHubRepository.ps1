@@ -327,8 +327,8 @@
         Write-Debug "$($repo | Format-Table | Out-String)"
 
         $updateParams = @{
-            Owner                                   = $Organization ?? $Context.Username
-            Name                                    = $Name
+            Owner                                   = $repo.Owner
+            Name                                    = $repo.Name
             Visibility                              = $Visibility
             Description                             = $Description
             Homepage                                = $Homepage
@@ -355,16 +355,7 @@
             EnableSecretScanningAIDetection         = $EnableSecretScanningAIDetection
             EnableSecretScanningNonProviderPatterns = $EnableSecretScanningNonProviderPatterns
         }
-        $i = 0
-        do {
-            try {
-                Write-Debug 'Attempt to update repo'
-                Update-GitHubRepository @updateParams
-            } catch {
-                $i++
-                Start-Sleep -Seconds $i
-            }
-        } while ($i -lt 10)
+        Update-GitHubRepository @updateParams
     }
 
     end {
