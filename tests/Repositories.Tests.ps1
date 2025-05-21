@@ -234,21 +234,18 @@ Describe 'Repositories' {
                     'user' {
                         $repoBefore = Get-GitHubRepository -Name $repoName
                         $repo = Set-GitHubRepository -Name $repoName -Description $description
-                        $repoAfter = Get-GitHubRepository -Name $repoName
                     }
                     'organization' {
                         $repoBefore = Get-GitHubRepository -Owner $owner -Name $repoName
                         $repo = Set-GitHubRepository -Owner $owner -Name $repoName -Description $description
-                        $repoAfter = Get-GitHubRepository -Owner $owner -Name $repoName
                     }
                 }
                 Write-Host ($repo | Format-List | Out-String)
-                $changes = Compare-PSCustomObject -Left $repoBefore -Right $repoAfter -OnlyChanged
+                $changes = Compare-PSCustomObject -Left $repoBefore -Right $repo -OnlyChanged
                 Write-Host ('Changed properties: ' + ($changes | Format-Table | Out-String))
             }
             $repo | Should -Not -BeNullOrEmpty
             $repo.Description | Should -Be $description
-            # Only UpdatedAt and Description should be changed
             $changedProps = $changes.Property
             $changedProps | Should -Contain 'UpdatedAt'
             $changedProps | Should -Contain 'Description'
@@ -276,17 +273,15 @@ Describe 'Repositories' {
                 switch ($OwnerType) {
                     'user' {
                         $repoBefore = Get-GitHubRepository -Name $repoName
-                        $updatedRepo = Update-GitHubRepository -Name $repoName -NewName $newName
-                        $repoAfter = Get-GitHubRepository -Name $newName
+                        $repo = Update-GitHubRepository -Name $repoName -NewName $newName
                     }
                     'organization' {
                         $repoBefore = Get-GitHubRepository -Owner $owner -Name $repoName
-                        $updatedRepo = Update-GitHubRepository -Owner $owner -Name $repoName -NewName $newName
-                        $repoAfter = Get-GitHubRepository -Owner $owner -Name $newName
+                        $repo = Update-GitHubRepository -Owner $owner -Name $repoName -NewName $newName
                     }
                 }
                 Write-Host ($updatedRepo | Format-List | Out-String)
-                $changes = Compare-PSCustomObject -Left $repoBefore -Right $repoAfter -OnlyChanged
+                $changes = Compare-PSCustomObject -Left $repoBefore -Right $repo -OnlyChanged
                 Write-Host ('Changed properties: ' + ($changes | Format-Table | Out-String))
             }
             $updatedRepo | Should -Not -BeNullOrEmpty
