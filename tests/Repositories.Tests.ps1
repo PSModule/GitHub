@@ -87,10 +87,10 @@ Describe 'Repositories' {
                 }
                 switch ($OwnerType) {
                     'user' {
-                        $repo = New-GitHubRepository @params
+                        $repo = New-GitHubRepository @params -Debug
                     }
                     'organization' {
-                        $repo = New-GitHubRepository @params -Organization $owner
+                        $repo = New-GitHubRepository @params -Organization $owner -Debug
                     }
                 }
                 Write-Host ($repo | Format-List | Out-String)
@@ -106,10 +106,10 @@ Describe 'Repositories' {
                 }
                 switch ($OwnerType) {
                     'user' {
-                        $repo = New-GitHubRepository @params
+                        $repo = New-GitHubRepository @params -Debug
                     }
                     'organization' {
-                        $repo = New-GitHubRepository @params -Organization $owner
+                        $repo = New-GitHubRepository @params -Organization $owner -Debug
                     }
                 }
                 Write-Host ($repo | Format-List | Out-String)
