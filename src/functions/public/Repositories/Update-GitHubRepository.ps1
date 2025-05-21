@@ -150,11 +150,6 @@
         [Parameter()]
         [System.Nullable[bool]] $EnableSecretScanningNonProviderPatterns,
 
-        # Takes all parameters and updates the repository with the provided _AND_ the default values of the non-provided parameters.
-        # Used for Set-GitHubRepository.
-        [Parameter()]
-        [switch] $Declare,
-
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
@@ -279,9 +274,7 @@
             } : $null
         }
 
-        if (-not $Declare) {
-            $body | Remove-HashtableEntry -NullOrEmptyValues
-        }
+        $body | Remove-HashtableEntry -NullOrEmptyValues
 
         Write-Debug 'Changed settings for REST call is:'
         Write-Debug "$($body | Out-String)"

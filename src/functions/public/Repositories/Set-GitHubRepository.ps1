@@ -11,8 +11,8 @@ function Set-GitHubRepository {
         .EXAMPLE
         Set-GitHubRepository -Name 'Hello-World' -Description 'My repo'
 
-        Creates the repository `Hello-World` for the authenticated user if it does not exist,
-        or updates it if it already exists.
+        Sets the repository `Hello-World` for the authenticated user if it does not exist,
+        or updates it if it already exists. The repository uses GitHub's default settings.
 
         .EXAMPLE
         $params = @{
@@ -26,7 +26,7 @@ function Set-GitHubRepository {
         }
         Set-GitHubRepository @params
 
-        Demonstrates using splatting to configure a repository.
+        Sets a repository using splatting for the configuration.
 
         .OUTPUTS
         GitHubRepository
@@ -37,167 +37,174 @@ function Set-GitHubRepository {
     [OutputType([GitHubRepository])]
     [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName = 'user')]
     param(
-        [Parameter(ParameterSetName = 'org')]
-        [Parameter(ParameterSetName = 'fork')]
-        [Parameter(ParameterSetName = 'template')]
-        [Alias('Organization', 'User')]
         # The account owner of the repository. The name is not case sensitive.
-        [string] $Owner,
+        [Parameter(ParameterSetName = 'Set a repository in an organization')]
+        [Parameter(ParameterSetName = 'Set a forked repository in an organization')]
+        [Parameter(ParameterSetName = 'Set a repository from a template to an organization')]
+        [Alias('Owner')]
+        [string] $Organization,
 
-        [Parameter(Mandatory, ParameterSetName = 'user')]
-        [Parameter(Mandatory, ParameterSetName = 'org')]
-        [Parameter(Mandatory, ParameterSetName = 'template')]
-        [Parameter(Mandatory, ParameterSetName = 'fork')]
-        # The name of the repository without the .git extension. The name is not case sensitive.
+        # The name of the repository.
+        [Parameter(ParameterSetName = 'Set a forked repository in an organization')]
+        [Parameter(ParameterSetName = 'Set a repository from a template to an organization')]
+        [Parameter(ParameterSetName = 'Set a forked repository for a user')]
+        [Parameter(ParameterSetName = 'Set a repository from a template to a user')]
+        [Parameter(Mandatory, ParameterSetName = 'Set a repository for the authenticated user')]
+        [Parameter(Mandatory, ParameterSetName = 'Set a repository in an organization')]
         [string] $Name,
 
-        [Parameter(Mandatory, ParameterSetName = 'template')]
         # The account owner of the template repository. The name is not case sensitive.
+        [Parameter(Mandatory, ParameterSetName = 'Set a repository from a template to a user')]
+        [Parameter(Mandatory, ParameterSetName = 'Set a repository from a template to an organization')]
         [string] $TemplateOwner,
 
-        [Parameter(Mandatory, ParameterSetName = 'template')]
         # The name of the template repository without the .git extension. The name is not case sensitive.
+        [Parameter(Mandatory, ParameterSetName = 'Set a repository from a template to a user')]
+        [Parameter(Mandatory, ParameterSetName = 'Set a repository from a template to an organization')]
         [string] $TemplateRepository,
 
-        [Parameter(Mandatory, ParameterSetName = 'fork')]
-        # The account owner of the source repository for the fork.
+        # The account owner of the repository. The name is not case sensitive.
+        [Parameter(Mandatory, ParameterSetName = 'Set a forked repository for a user')]
+        [Parameter(Mandatory, ParameterSetName = 'Set a forked repository in an organization')]
         [string] $ForkOwner,
 
-        [Parameter(Mandatory, ParameterSetName = 'fork')]
-        # The name of the source repository for the fork.
+        # The name of the repository without the .git extension. The name is not case sensitive.
+        [Parameter(Mandatory, ParameterSetName = 'Set a forked repository for a user')]
+        [Parameter(Mandatory, ParameterSetName = 'Set a forked repository in an organization')]
         [string] $ForkRepository,
 
-        [Parameter(ParameterSetName = 'template')]
-        [Parameter(ParameterSetName = 'fork')]
         # Include all branches from the source repository.
+        [Parameter(ParameterSetName = 'Set a repository from a template to a user')]
+        [Parameter(ParameterSetName = 'Set a repository from a template to an organization')]
+        [Parameter(ParameterSetName = 'Set a forked repository for a user')]
+        [Parameter(ParameterSetName = 'Set a forked repository in an organization')]
         [switch] $IncludeAllBranches,
 
-        [Parameter(ParameterSetName = 'user')]
-        [Parameter(ParameterSetName = 'org')]
-        # Pass true to create an initial commit with empty README.
+        # Pass true to Set an initial commit with empty README.
+        [Parameter(ParameterSetName = 'Set a repository for the authenticated user')]
+        [Parameter(ParameterSetName = 'Set a repository in an organization')]
         [switch] $AddReadme,
 
-        [Parameter(ParameterSetName = 'user')]
-        [Parameter(ParameterSetName = 'org')]
         # The desired language or platform to apply to the .gitignore.
+        [Parameter(ParameterSetName = 'Set a repository for the authenticated user')]
+        [Parameter(ParameterSetName = 'Set a repository in an organization')]
         [string] $Gitignore,
 
-        [Parameter(ParameterSetName = 'user')]
-        [Parameter(ParameterSetName = 'org')]
         # The license keyword of the open source license for this repository.
+        [Parameter(ParameterSetName = 'Set a repository for the authenticated user')]
+        [Parameter(ParameterSetName = 'Set a repository in an organization')]
         [string] $License,
 
-        [Parameter(ParameterSetName = 'user')]
-        [Parameter(ParameterSetName = 'org')]
-        [Parameter(ParameterSetName = 'template')]
-        [ValidateSet('Public', 'Private', 'Internal')]
         # The visibility of the repository.
+        [Parameter(ParameterSetName = 'Set a repository for the authenticated user')]
+        [Parameter(ParameterSetName = 'Set a repository in an organization')]
+        [Parameter(ParameterSetName = 'Set a repository from a template to an organization')]
+        [ValidateSet('Public', 'Private', 'Internal')]
         [string] $Visibility = 'Public',
 
+        # A short description of the new repository.
         [Parameter()]
-        # The new name to be given to the repository.
-        [string] $NewName,
-
-        [Parameter()]
-        # A short description of the repository.
         [string] $Description,
 
-        [Parameter()]
         # A URL with more information about the repository.
+        [Parameter()]
         [uri] $Homepage,
 
-        [Parameter()]
         # Whether the repository is archived.
-        [bool] $IsArchived,
-
         [Parameter()]
+        [System.Nullable[bool]] $IsArchived,
+
         # Whether this repository acts as a template that can be used to generate new repositories.
-        [bool] $IsTemplate,
-
         [Parameter()]
+        [System.Nullable[bool]] $IsTemplate,
+
         # Whether to require contributors to sign off on web-based commits.
-        [bool] $WebCommitSignoffRequired,
-
         [Parameter()]
+        [System.Nullable[bool]] $WebCommitSignoffRequired,
+
         # Updates the default branch for this repository.
+        [Parameter()]
         [string] $DefaultBranch,
 
-        [Parameter()]
         # Whether the wiki is enabled.
-        [bool] $HasWiki,
-
         [Parameter()]
+        [System.Nullable[bool]] $HasWiki,
+
         # Whether issues are enabled.
-        [bool] $HasIssues,
-
         [Parameter()]
-        # Either true to allow forks, or false to prevent them.
-        [bool] $AllowForking,
+        [System.Nullable[bool]] $HasIssues,
 
-        [Parameter()]
+        # Either true to allow private forks, or false to prevent private forks.
+        [Parameter(ParameterSetName = 'Set a forked repository in an organization')]
+        [Parameter(ParameterSetName = 'Set a repository from a template to an organization')]
+        [Parameter(ParameterSetName = 'Set a repository in an organization')]
+        [System.Nullable[bool]] $AllowForking,
+
         # Whether sponsorships are enabled.
-        [bool] $HasSponsorships,
-
         [Parameter()]
+        [System.Nullable[bool]] $HasSponsorships,
+
         # Whether discussions are enabled.
-        [bool] $HasDiscussions,
-
         [Parameter()]
-        # Whether projects are enabled.
-        [bool] $HasProjects,
+        [System.Nullable[bool]] $HasDiscussions,
 
+        # Whether projects are enabled.
+        [Parameter()]
+        [System.Nullable[bool]] $HasProjects,
+
+        # Allow merge commits for pull requests with the specified setting.
         [Parameter()]
         [ValidateSet('', 'Default message', 'Pull request title', 'Pull request title and description')]
-        # Allow merge commits for pull requests with the specified setting.
-        [string] $AllowMergeCommitWith,
+        [string] $AllowMergeCommitWith = 'Default message',
 
+        # Allow squash merges for pull requests with the specified setting.
         [Parameter()]
         [ValidateSet('', 'Default message', 'Pull request title', 'Pull request title and description', 'Pull request title and commit details')]
-        # Allow squash merges for pull requests with the specified setting.
-        [string] $AllowSquashMergingWith,
+        [string] $AllowSquashMergingWith = 'Default message',
 
-        [Parameter()]
         # Whether to allow rebase merges for pull requests.
+        [Parameter()]
         [switch] $AllowRebaseMerging,
 
+        # Whether to always suggest to update a head branch that is behind its base branch during a pull request.
         [Parameter()]
-        # Whether to suggest updating a pull request branch if it is behind.
-        [bool] $SuggestUpdateBranch,
+        [System.Nullable[switch]] $SuggestUpdateBranch,
 
-        [Parameter()]
         # Whether to allow Auto-merge to be used on pull requests.
-        [bool] $AllowAutoMerge,
-
         [Parameter()]
-        # Whether to delete head branches when pull requests are merged.
-        [bool] $DeleteBranchOnMerge,
+        [System.Nullable[switch]] $AllowAutoMerge,
 
+        # Whether to delete head branches when pull requests are merged
         [Parameter()]
+        [System.Nullable[switch]] $DeleteBranchOnMerge,
+
         # Whether to enable GitHub Advanced Security for this repository.
-        [bool] $EnableAdvancedSecurity,
-
         [Parameter()]
+        [System.Nullable[bool]] $EnableAdvancedSecurity,
+
         # Whether to enable code security for this repository.
-        [bool] $EnableCodeSecurity,
-
         [Parameter()]
+        [System.Nullable[bool]] $EnableCodeSecurity,
+
         # Whether to enable secret scanning for this repository.
-        [bool] $EnableSecretScanning,
-
         [Parameter()]
-        # Whether to enable secret scanning push protection.
-        [bool] $EnableSecretScanningPushProtection,
+        [System.Nullable[bool]] $EnableSecretScanning,
 
+        # Whether to enable secret scanning push protection for this repository.
         [Parameter()]
-        # Whether to enable secret scanning AI detection.
-        [bool] $EnableSecretScanningAIDetection,
+        [System.Nullable[bool]] $EnableSecretScanningPushProtection,
 
+        # Whether to enable secret scanning AI detection for this repository.
         [Parameter()]
-        # Whether to enable secret scanning non-provider patterns.
-        [bool] $EnableSecretScanningNonProviderPatterns,
+        [System.Nullable[bool]] $EnableSecretScanningAIDetection,
 
+        # Whether to enable secret scanning non-provider patterns for this repository.
         [Parameter()]
-        # The context to run the command in. Can be either a string or a GitHubContext object.
+        [System.Nullable[bool]] $EnableSecretScanningNonProviderPatterns,
+
+        # The context to run the command in. Used to get the details for the API call.
+        # Can be either a string or a GitHubContext object.
+        [Parameter()]
         [object] $Context = (Get-GitHubContext)
     )
 
@@ -213,53 +220,16 @@ function Set-GitHubRepository {
     }
 
     process {
-        $scope = @{ Owner = $Owner; Name = $Name; Context = $Context }
-        $repo = Get-GitHubRepository @scope
-
-        $newParams = @{
-            Organization                             = $Owner
-            Name                                     = $Name
-            TemplateOwner                            = $TemplateOwner
-            TemplateRepository                       = $TemplateRepository
-            ForkOwner                                = $ForkOwner
-            ForkRepository                           = $ForkRepository
-            IncludeAllBranches                       = $IncludeAllBranches
-            AddReadme                                = $AddReadme
-            Gitignore                                = $Gitignore
-            License                                  = $License
-            Visibility                               = $Visibility
-            Description                              = $Description
-            Homepage                                 = $Homepage
-            IsArchived                               = $IsArchived
-            IsTemplate                               = $IsTemplate
-            WebCommitSignoffRequired                 = $WebCommitSignoffRequired
-            DefaultBranch                            = $DefaultBranch
-            HasWiki                                  = $HasWiki
-            HasIssues                                = $HasIssues
-            AllowForking                             = $AllowForking
-            HasSponsorships                          = $HasSponsorships
-            HasDiscussions                           = $HasDiscussions
-            HasProjects                              = $HasProjects
-            AllowMergeCommitWith                     = $AllowMergeCommitWith
-            AllowSquashMergingWith                   = $AllowSquashMergingWith
-            AllowRebaseMerging                       = $AllowRebaseMerging
-            SuggestUpdateBranch                      = $SuggestUpdateBranch
-            AllowAutoMerge                           = $AllowAutoMerge
-            DeleteBranchOnMerge                      = $DeleteBranchOnMerge
-            EnableAdvancedSecurity                   = $EnableAdvancedSecurity
-            EnableCodeSecurity                       = $EnableCodeSecurity
-            EnableSecretScanning                     = $EnableSecretScanning
-            EnableSecretScanningPushProtection       = $EnableSecretScanningPushProtection
-            EnableSecretScanningAIDetection          = $EnableSecretScanningAIDetection
-            EnableSecretScanningNonProviderPatterns  = $EnableSecretScanningNonProviderPatterns
-            Context                                  = $Context
+        $params = @{
+            Owner   = $Organization
+            Name    = $Name
+            Context = $Context
         }
-        $newParams | Remove-HashtableEntry -NullOrEmptyValues
+        $params | Remove-HashtableEntry -NullOrEmptyValues
 
-        $updateParams = @{
-            Owner                                   = $Owner
-            Name                                    = $Name
-            NewName                                 = $NewName
+        $repo = Get-GitHubRepository @params
+
+        $params += @{
             Visibility                              = $Visibility
             Description                             = $Description
             Homepage                                = $Homepage
@@ -285,16 +255,24 @@ function Set-GitHubRepository {
             EnableSecretScanningPushProtection      = $EnableSecretScanningPushProtection
             EnableSecretScanningAIDetection         = $EnableSecretScanningAIDetection
             EnableSecretScanningNonProviderPatterns = $EnableSecretScanningNonProviderPatterns
-            Declare                                 = $true
-            Context                                 = $Context
         }
-        $updateParams | Remove-HashtableEntry -NullOrEmptyValues
+        $params | Remove-HashtableEntry -NullOrEmptyValues
 
         if ($repo) {
-            Update-GitHubRepository @updateParams
-        }
-        else {
-            New-GitHubRepository @newParams
+            $params = @{
+                Owner              = $Organization
+                TemplateOwner      = $TemplateOwner
+                TemplateRepository = $TemplateRepository
+                ForkOwner          = $ForkOwner
+                ForkRepository     = $ForkRepository
+                IncludeAllBranches = $IncludeAllBranches
+                AddReadme          = $AddReadme
+                Gitignore          = $Gitignore
+                License            = $License
+            }
+            Update-GitHubRepository @params
+        } else {
+            New-GitHubRepository @params
         }
     }
 

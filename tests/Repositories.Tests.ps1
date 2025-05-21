@@ -229,18 +229,30 @@ Describe 'Repositories' {
         It 'Set-GitHubRepository - Updates an existing repository' -Skip:($OwnerType -eq 'repository') {
             $description = 'Updated description'
             LogGroup 'Repository - Set update' {
+                # Get current repo config
                 switch ($OwnerType) {
                     'user' {
+                        $repoBefore = Get-GitHubRepository -Name $repoName
                         $repo = Set-GitHubRepository -Name $repoName -Description $description
+                        $repoAfter = Get-GitHubRepository -Name $repoName
                     }
                     'organization' {
+                        $repoBefore = Get-GitHubRepository -Owner $owner -Name $repoName
                         $repo = Set-GitHubRepository -Owner $owner -Name $repoName -Description $description
+                        $repoAfter = Get-GitHubRepository -Owner $owner -Name $repoName
                     }
                 }
                 Write-Host ($repo | Format-List | Out-String)
+                $changes = Compare-PSCustomObject -Left $repoBefore -Right $repoAfter -OnlyChanged
+                Write-Host ('Changed properties: ' + ($changes | Format-Table | Out-String))
             }
             $repo | Should -Not -BeNullOrEmpty
             $repo.Description | Should -Be $description
+            # Only UpdatedAt and Description should be changed
+            $changedProps = $changes.Property
+            $changedProps | Should -Contain 'UpdatedAt'
+            $changedProps | Should -Contain 'Description'
+            $changedProps.Count | Should -Be 2
         }
         It 'Set-GitHubRepository - Creates a new repository when missing' -Skip:($OwnerType -eq 'repository') {
             $newRepoName = "$repoName-new"
@@ -263,16 +275,27 @@ Describe 'Repositories' {
                 $newName = "$repoName-newname"
                 switch ($OwnerType) {
                     'user' {
+                        $repoBefore = Get-GitHubRepository -Name $repoName
                         $updatedRepo = Update-GitHubRepository -Name $repoName -NewName $newName
+                        $repoAfter = Get-GitHubRepository -Name $newName
                     }
                     'organization' {
+                        $repoBefore = Get-GitHubRepository -Owner $owner -Name $repoName
                         $updatedRepo = Update-GitHubRepository -Owner $owner -Name $repoName -NewName $newName
+                        $repoAfter = Get-GitHubRepository -Owner $owner -Name $newName
                     }
                 }
                 Write-Host ($updatedRepo | Format-List | Out-String)
+                $changes = Compare-PSCustomObject -Left $repoBefore -Right $repoAfter -OnlyChanged
+                Write-Host ('Changed properties: ' + ($changes | Format-Table | Out-String))
             }
             $updatedRepo | Should -Not -BeNullOrEmpty
             $updatedRepo.Name | Should -Be $newName
+            # Only UpdatedAt and Name should be changed
+            $changedProps = $changes.Property
+            $changedProps | Should -Contain 'UpdatedAt'
+            $changedProps | Should -Contain 'Name'
+            $changedProps.Count | Should -Be 2
         }
         It 'Remove-GitHubRepository - Removes all repositories' -Skip:($OwnerType -eq 'repository') {
             switch ($OwnerType) {
