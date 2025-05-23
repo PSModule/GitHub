@@ -223,7 +223,7 @@ function Set-GitHubRepository {
         $getParams | Remove-HashtableEntry -NullOrEmptyValues
         $repo = Get-GitHubRepository @getParams -ErrorAction Stop
 
-        $updateParams = @{
+        $configParams = @{
             Visibility                              = $Visibility
             Description                             = $Description
             Homepage                                = $Homepage
@@ -250,15 +250,15 @@ function Set-GitHubRepository {
             EnableSecretScanningAIDetection         = $EnableSecretScanningAIDetection
             EnableSecretScanningNonProviderPatterns = $EnableSecretScanningNonProviderPatterns
         }
-        $updateParams | Remove-HashtableEntry -NullOrEmptyValues
+        $configParams | Remove-HashtableEntry -NullOrEmptyValues
 
         if ($repo) {
-            $updateParams += @{
+            $updateParams = @{
                 Owner   = $repo.Owner
                 Name    = $repo.Name
                 Context = $Context
             }
-            Update-GitHubRepository @updateParams -ErrorAction Stop
+            Update-GitHubRepository @updateParams @configParams -ErrorAction Stop
         } else {
             $newParams = @{
                 Organization       = $Organization
@@ -267,14 +267,14 @@ function Set-GitHubRepository {
                 TemplateRepository = $TemplateRepository
                 ForkOwner          = $ForkOwner
                 ForkRepository     = $ForkRepository
-                IncludeAllBranches = $IncludeAllBranches
-                AddReadme          = $AddReadme
+                IncludeAllBranches = $PSBoundParameters.ContainsKey('IncludeAllBranches') ? $IncludeAllBranches : $null
+                AddReadme          = $PSBoundParameters.ContainsKey('AddReadme') ? $AddReadme : $null
                 Gitignore          = $Gitignore
                 License            = $License
                 Context            = $Context
             }
             $newParams | Remove-HashtableEntry -NullOrEmptyValues
-            New-GitHubRepository @newParams @updateParams -ErrorAction Stop
+            New-GitHubRepository @newParams @configParams -ErrorAction Stop
         }
     }
 
