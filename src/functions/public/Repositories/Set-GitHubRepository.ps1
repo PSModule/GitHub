@@ -33,7 +33,8 @@ function Set-GitHubRepository {
 
         .LINK
         https://psmodule.io/GitHub/Functions/Repositories/Set-GitHubRepository/
-    #>    [OutputType([GitHubRepository])]
+    #>
+    [OutputType([GitHubRepository])]
     [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName = 'Set a repository for the authenticated user')]
     param(
         # The account owner of the repository. The name is not case sensitive.
@@ -211,10 +212,6 @@ function Set-GitHubRepository {
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-        if (-not $Organization) {
-            $Organization = $Context.Username
-        }
-        Write-Debug "Organization: [$Organization]"
     }
 
     process {
