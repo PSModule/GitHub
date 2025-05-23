@@ -305,6 +305,18 @@
                 $params | Remove-HashtableEntry -NullOrEmptyValues
                 New-GitHubRepositoryOrg @params
             }
+            'Create a repository from a template to a user' {
+                $params = @{
+                    Context            = $Context
+                    TemplateOwner      = $TemplateOwner
+                    TemplateRepository = $TemplateRepository
+                    Name               = $Name
+                    IncludeAllBranches = $IncludeAllBranches
+                    Visibility         = $Visibility
+                }
+                $params | Remove-HashtableEntry -NullOrEmptyValues
+                New-GitHubRepositoryFromTemplate @params
+            }
             'Create a repository from a template to an organization' {
                 $params = @{
                     Context            = $Context
@@ -317,6 +329,17 @@
                 }
                 $params | Remove-HashtableEntry -NullOrEmptyValues
                 New-GitHubRepositoryFromTemplate @params
+            }
+            'Fork a repository to a user' {
+                $params = @{
+                    Context            = $Context
+                    ForkOwner          = $ForkOwner
+                    ForkRepository     = $ForkRepository
+                    Name               = $Name
+                    IncludeAllBranches = $IncludeAllBranches
+                }
+                $params | Remove-HashtableEntry -NullOrEmptyValues
+                New-GitHubRepositoryAsFork @params
             }
             'Fork a repository to an organization' {
                 $params = @{
@@ -347,7 +370,6 @@
             DefaultBranch                           = $DefaultBranch
             HasWiki                                 = $HasWiki
             HasIssues                               = $HasIssues
-            AllowForking                            = $AllowForking
             HasSponsorships                         = $HasSponsorships
             HasDiscussions                          = $HasDiscussions
             HasProjects                             = $HasProjects
@@ -363,6 +385,9 @@
             EnableSecretScanningPushProtection      = $EnableSecretScanningPushProtection
             EnableSecretScanningAIDetection         = $EnableSecretScanningAIDetection
             EnableSecretScanningNonProviderPatterns = $EnableSecretScanningNonProviderPatterns
+        }
+        if ($PSCmdlet.ParameterSetName -like 'Fork*') {
+            $updateParams['AllowForking'] = $AllowForking
         }
         Update-GitHubRepository @updateParams
     }
