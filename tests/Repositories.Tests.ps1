@@ -327,10 +327,10 @@ Describe 'Repositories' {
             LogGroup 'Repository - Set create from template' {
                 switch ($OwnerType) {
                     'user' {
-                        $repo = Set-GitHubRepository @templateParams
+                        $repo = Set-GitHubRepository @templateParams -Debug
                     }
                     'organization' {
-                        $repo = Set-GitHubRepository @templateParams -Organization $owner
+                        $repo = Set-GitHubRepository @templateParams -Organization $owner -Debug
                     }
                 }
                 Write-Host ($repo | Format-List | Out-String)
@@ -344,11 +344,11 @@ Describe 'Repositories' {
                 switch ($OwnerType) {
                     'user' {
                         $repoBefore = Get-GitHubRepository -Name "$repoName-template"
-                        $updatedRepo = Set-GitHubRepository -Name "$repoName-template" -Description $newDescription
+                        $updatedRepo = Set-GitHubRepository -Name "$repoName-template" -Description $newDescription -Debug
                     }
                     'organization' {
                         $repoBefore = Get-GitHubRepository -Owner $owner -Name "$repoName-template"
-                        $updatedRepo = Set-GitHubRepository -Organization $owner -Name "$repoName-template" -Description $newDescription
+                        $updatedRepo = Set-GitHubRepository -Organization $owner -Name "$repoName-template" -Description $newDescription -Debug
                     }
                 }
                 Write-Host ($updatedRepo | Format-List | Out-String)
@@ -371,10 +371,10 @@ Describe 'Repositories' {
             LogGroup 'Repository - Set create as fork' {
                 switch ($OwnerType) {
                     'user' {
-                        $repo = Set-GitHubRepository @forkParams
+                        $repo = Set-GitHubRepository @forkParams -Debug
                     }
                     'organization' {
-                        $repo = Set-GitHubRepository @forkParams -Organization $owner
+                        $repo = Set-GitHubRepository @forkParams -Organization $owner -Debug
                     }
                 }
                 Write-Host ($repo | Format-List | Out-String)
@@ -388,11 +388,11 @@ Describe 'Repositories' {
                 switch ($OwnerType) {
                     'user' {
                         $repoBefore = Get-GitHubRepository -Name "$repoName-fork"
-                        $updatedRepo = Set-GitHubRepository -Name "$repoName-fork" -Description $newDescription
+                        $updatedRepo = Set-GitHubRepository -Name "$repoName-fork" -Description $newDescription -Debug
                     }
                     'organization' {
                         $repoBefore = Get-GitHubRepository -Owner $owner -Name "$repoName-fork"
-                        $updatedRepo = Set-GitHubRepository -Organization $owner -Name "$repoName-fork" -Description $newDescription
+                        $updatedRepo = Set-GitHubRepository -Organization $owner -Name "$repoName-fork" -Description $newDescription -Debug
                     }
                 }
                 Write-Host ($updatedRepo | Format-List | Out-String)
