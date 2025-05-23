@@ -280,12 +280,12 @@ Describe 'Repositories' {
                         $repo = Update-GitHubRepository -Owner $owner -Name $repoName -NewName $newName
                     }
                 }
-                Write-Host ($updatedRepo | Format-List | Out-String)
+                Write-Host ($repo | Format-List | Out-String)
                 $changes = Compare-PSCustomObject -Left $repoBefore -Right $repo -OnlyChanged
                 Write-Host ('Changed properties: ' + ($changes | Format-Table | Out-String))
             }
-            $updatedRepo | Should -Not -BeNullOrEmpty
-            $updatedRepo.Name | Should -Be $newName
+            $repo | Should -Not -BeNullOrEmpty
+            $repo.Name | Should -Be $newName
             # Only UpdatedAt and Name should be changed
             $changedProps = $changes.Property
             $changedProps | Should -Contain 'UpdatedAt'
