@@ -220,16 +220,15 @@ function Set-GitHubRepository {
     }
 
     process {
-        $params = @{
+        $getParams = @{
             Owner   = $Organization
             Name    = $Name
             Context = $Context
         }
-        $params | Remove-HashtableEntry -NullOrEmptyValues
+        $getParams | Remove-HashtableEntry -NullOrEmptyValues
+        $repo = Get-GitHubRepository @getParams -ErrorAction Stop
 
-        $repo = Get-GitHubRepository @params
-
-        $params += @{
+        $updateParams = @{
             Visibility                              = $Visibility
             Description                             = $Description
             Homepage                                = $Homepage
@@ -256,11 +255,19 @@ function Set-GitHubRepository {
             EnableSecretScanningAIDetection         = $EnableSecretScanningAIDetection
             EnableSecretScanningNonProviderPatterns = $EnableSecretScanningNonProviderPatterns
         }
-        $params | Remove-HashtableEntry -NullOrEmptyValues
+        $updateParams | Remove-HashtableEntry -NullOrEmptyValues
 
         if ($repo) {
-            $params = @{
+            $updateParams += @{
+                Owner   = $repo.Owner
+                Name    = $repo.Name
+                Context = $Context
+            }
+            Update-GitHubRepository @updateParams -ErrorAction Stop
+        } else {
+            $newParams = @{
                 Owner              = $Organization
+                Name               = $Name
                 TemplateOwner      = $TemplateOwner
                 TemplateRepository = $TemplateRepository
                 ForkOwner          = $ForkOwner
@@ -269,10 +276,9 @@ function Set-GitHubRepository {
                 AddReadme          = $AddReadme
                 Gitignore          = $Gitignore
                 License            = $License
+                Context            = $Context
             }
-            Update-GitHubRepository @params
-        } else {
-            New-GitHubRepository @params
+            New-GitHubRepository @newParams @updateParams -ErrorAction Stop
         }
     }
 
