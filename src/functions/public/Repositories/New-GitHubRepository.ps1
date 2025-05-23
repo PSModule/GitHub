@@ -108,9 +108,9 @@
 
         # The name of the repository.
         [Parameter(ParameterSetName = 'Fork a repository to an organization')]
-        [Parameter(ParameterSetName = 'Create a repository from a template to an organization')]
         [Parameter(ParameterSetName = 'Fork a repository to a user')]
-        [Parameter(ParameterSetName = 'Create a repository from a template to a user')]
+        [Parameter(Mandatory, ParameterSetName = 'Create a repository from a template to an organization')]
+        [Parameter(Mandatory, ParameterSetName = 'Create a repository from a template to a user')]
         [Parameter(Mandatory, ParameterSetName = 'Create a repository for the authenticated user')]
         [Parameter(Mandatory, ParameterSetName = 'Create a repository in an organization')]
         [string] $Name,
