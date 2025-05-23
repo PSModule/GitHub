@@ -286,11 +286,16 @@ Describe 'Repositories' {
             }
             $repo | Should -Not -BeNullOrEmpty
             $repo.Name | Should -Be $newName
-            # Only UpdatedAt and Name should be changed
             $changedProps = $changes.Property
             $changedProps | Should -Contain 'UpdatedAt'
             $changedProps | Should -Contain 'Name'
-            $changedProps.Count | Should -Be 2
+            $changedProps | Should -Contain 'FullName'
+            $changedProps | Should -Contain 'Url'
+            $changedProps | Should -Contain 'UpdatedAt'
+            $changedProps | Should -Contain 'CloneUrl'
+            $changedProps | Should -Contain 'SshUrl'
+            $changedProps | Should -Contain 'GitUrl'
+            $changedProps.Count | Should -Be 8
         }
         It 'Remove-GitHubRepository - Removes all repositories' -Skip:($OwnerType -eq 'repository') {
             switch ($OwnerType) {
