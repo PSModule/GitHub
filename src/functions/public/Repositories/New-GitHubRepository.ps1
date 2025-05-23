@@ -100,9 +100,9 @@
     [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName = 'Create a repository for the authenticated user')]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(ParameterSetName = 'Create a repository in an organization')]
-        [Parameter(ParameterSetName = 'Fork a repository to an organization')]
-        [Parameter(ParameterSetName = 'Create a repository from a template to an organization')]
+        [Parameter(Mandatory, ParameterSetName = 'Create a repository in an organization')]
+        [Parameter(Mandatory, ParameterSetName = 'Fork a repository to an organization')]
+        [Parameter(Mandatory, ParameterSetName = 'Create a repository from a template to an organization')]
         [Alias('Owner')]
         [string] $Organization,
 
