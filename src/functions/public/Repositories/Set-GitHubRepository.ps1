@@ -33,9 +33,8 @@ function Set-GitHubRepository {
 
         .LINK
         https://psmodule.io/GitHub/Functions/Repositories/Set-GitHubRepository/
-    #>
-    [OutputType([GitHubRepository])]
-    [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName = 'user')]
+    #>    [OutputType([GitHubRepository])]
+    [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName = 'Set a repository for the authenticated user')]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory, ParameterSetName = 'Set a repository in an organization')]
@@ -207,16 +206,15 @@ function Set-GitHubRepository {
         [Parameter()]
         [object] $Context = (Get-GitHubContext)
     )
-
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-        if (-not $Owner) {
-            $Owner = $Context.Username
+        if (-not $Organization) {
+            $Organization = $Context.Username
         }
-        Write-Debug "Owner: [$Owner]"
+        Write-Debug "Organization: [$Organization]"
     }
 
     process {
@@ -266,7 +264,7 @@ function Set-GitHubRepository {
             Update-GitHubRepository @updateParams -ErrorAction Stop
         } else {
             $newParams = @{
-                Owner              = $Organization
+                Organization       = $Organization
                 Name               = $Name
                 TemplateOwner      = $TemplateOwner
                 TemplateRepository = $TemplateRepository
