@@ -278,6 +278,7 @@ function Set-GitHubRepository {
                 License            = $License
                 Context            = $Context
             }
+            $newParams | Remove-HashtableEntry -NullOrEmptyValues
             New-GitHubRepository @newParams @updateParams -ErrorAction Stop
         }
     }
