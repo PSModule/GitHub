@@ -255,10 +255,10 @@ Describe 'Repositories' {
             LogGroup 'Repository - Set create' {
                 switch ($OwnerType) {
                     'user' {
-                        $repo = Set-GitHubRepository -Name $newRepoName -Description 'Set create'
+                        $repo = Set-GitHubRepository -Name $newRepoName
                     }
                     'organization' {
-                        $repo = Set-GitHubRepository -Owner $owner -Name $newRepoName -Description 'Set create'
+                        $repo = Set-GitHubRepository -Organization $owner -Name $newRepoName
                     }
                 }
                 Write-Host ($repo | Format-List | Out-String)
