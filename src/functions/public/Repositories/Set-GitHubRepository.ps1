@@ -164,19 +164,19 @@ function Set-GitHubRepository {
 
         # Whether to allow rebase merges for pull requests.
         [Parameter()]
-        [switch] $AllowRebaseMerging,
+        [System.Nullable[bool]] $AllowRebaseMerging,
 
         # Whether to always suggest to update a head branch that is behind its base branch during a pull request.
         [Parameter()]
-        [System.Nullable[switch]] $SuggestUpdateBranch,
+        [System.Nullable[bool]] $SuggestUpdateBranch,
 
         # Whether to allow Auto-merge to be used on pull requests.
         [Parameter()]
-        [System.Nullable[switch]] $AllowAutoMerge,
+        [System.Nullable[bool]] $AllowAutoMerge,
 
         # Whether to delete head branches when pull requests are merged
         [Parameter()]
-        [System.Nullable[switch]] $DeleteBranchOnMerge,
+        [System.Nullable[bool]] $DeleteBranchOnMerge,
 
         # Whether to enable GitHub Advanced Security for this repository.
         [Parameter()]
