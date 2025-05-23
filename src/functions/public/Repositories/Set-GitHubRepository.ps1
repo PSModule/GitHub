@@ -38,17 +38,17 @@ function Set-GitHubRepository {
     [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName = 'user')]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(ParameterSetName = 'Set a repository in an organization')]
-        [Parameter(ParameterSetName = 'Set a forked repository in an organization')]
-        [Parameter(ParameterSetName = 'Set a repository from a template to an organization')]
+        [Parameter(Mandatory, ParameterSetName = 'Set a repository in an organization')]
+        [Parameter(Mandatory, ParameterSetName = 'Set a forked repository in an organization')]
+        [Parameter(Mandatory, ParameterSetName = 'Set a repository from a template to an organization')]
         [Alias('Owner')]
         [string] $Organization,
 
         # The name of the repository.
-        [Parameter(ParameterSetName = 'Set a forked repository in an organization')]
-        [Parameter(ParameterSetName = 'Set a repository from a template to an organization')]
         [Parameter(ParameterSetName = 'Set a forked repository for a user')]
-        [Parameter(ParameterSetName = 'Set a repository from a template to a user')]
+        [Parameter(ParameterSetName = 'Set a forked repository in an organization')]
+        [Parameter(Mandatory, ParameterSetName = 'Set a repository from a template to a user')]
+        [Parameter(Mandatory, ParameterSetName = 'Set a repository from a template to an organization')]
         [Parameter(Mandatory, ParameterSetName = 'Set a repository for the authenticated user')]
         [Parameter(Mandatory, ParameterSetName = 'Set a repository in an organization')]
         [string] $Name,

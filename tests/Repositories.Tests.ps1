@@ -229,7 +229,6 @@ Describe 'Repositories' {
         It 'Set-GitHubRepository - Updates an existing repository' -Skip:($OwnerType -eq 'repository') {
             $description = 'Updated description'
             LogGroup 'Repository - Set update' {
-                # Get current repo config
                 switch ($OwnerType) {
                     'user' {
                         $repoBefore = Get-GitHubRepository -Name $repoName
