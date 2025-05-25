@@ -206,7 +206,7 @@ filter Invoke-GitHubAPI {
                 Write-Debug 'Request body:'
                 $APICall.Body | Out-String -Stream | ForEach-Object {
                     $bodyContent = $_
-                    # $bodyContent = $bodyContent -split '\n'
+                    $bodyContent = $bodyContent -split '\n'
                     $bodyContent = $bodyContent.Split('\n')
                     foreach ($item in $bodyContent) {
                         Write-Debug $item
@@ -279,7 +279,7 @@ filter Invoke-GitHubAPI {
                     Write-Debug 'Response content:'
                     $results | ConvertTo-Json -Depth 5 -WarningAction SilentlyContinue | Out-String -Stream | ForEach-Object {
                         $content = $_
-                        # $content = $content -split '\n'
+                        $content = $content -split '\n'
                         $content = $content.Split('\n')
                         foreach ($item in $content) {
                             Write-Debug $item
@@ -357,7 +357,7 @@ $($APICall.Headers | Select-Object * | Out-String -Stream)
 Request body:
 $($APICall.Body | ConvertTo-Json -Depth 10 | Out-String -Stream | ForEach-Object {
     $content = $_
-    # $content = $content -split '\n'
+    $content = $content -split '\n'
     $content = $content.Split('\n')
     $content
 })
