@@ -239,7 +239,7 @@ Describe 'Repositories' {
                 $repo.Forks | Should -Be 0
                 $repo.Stargazers | Should -Be 0
                 $repo.Watchers | Should -Be 0
-                $repo.Language | Should -BeNullOrEmpty
+                $repo.Language | Should -Be 'C#'
                 $repo.TemplateRepository | Should -BeNullOrEmpty
                 $repo.ForkParent.Name | Should -Be 'PowerShell'
                 $repo.ForkParent.Owner | Should -Be 'MariusStorhaug'
