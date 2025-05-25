@@ -289,7 +289,7 @@ filter Invoke-GitHubAPI {
             if ($debug) {
                 Write-Debug '----------------------------------'
                 Write-Debug 'Failure:'
-                $failure | ConvertTo-Json -Depth 5 -WarningAction SilentlyContinue | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+                $failure | Out-String -Stream | ForEach-Object { Write-Debug $_ }
                 Write-Debug '----------------------------------'
             }
             $headers = @{}

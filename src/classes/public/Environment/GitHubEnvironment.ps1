@@ -11,9 +11,6 @@
     # URL of the environment.
     [string] $Url
 
-    # URL of the environment.
-    [string] $DeploymentsUrl
-
     # The date and time the environment was created.
     [System.Nullable[datetime]] $CreatedAt
 
@@ -35,7 +32,6 @@
         $this.ID = $Object.id
         $this.NodeID = $Object.node_id
         $this.Name = $Object.name
-        $this.DeploymentsUrl = $Object.html_url
         $this.Owner = $Owner
         $this.Repository = $Repository
         $this.CreatedAt = $Object.created_at
