@@ -220,6 +220,7 @@ Describe 'Repositories' {
                         $repo = New-GitHubRepository @params2 -Organization $owner -Debug
                     }
                 }
+
                 Write-Host ($repo | Format-List | Out-String)
                 $repo | Should -BeOfType 'GitHubRepository'
                 $repo | Should -Not -BeNullOrEmpty
