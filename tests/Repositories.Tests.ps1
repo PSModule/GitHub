@@ -327,7 +327,14 @@ Describe 'Repositories' {
             LogGroup 'Repository - Set create from template' {
                 switch ($OwnerType) {
                     'user' {
-                        $repo = Set-GitHubRepository @templateParams -Debug
+                        Trace-Command ParameterBinding -Expression {
+                            $templateParams = @{
+                                Name               = "$repoName-template"
+                                TemplateOwner      = 'PSModule'
+                                TemplateRepository = 'Template-Action'
+                            }
+                            $repo = Set-GitHubRepository @templateParams -Debug
+                        } -PSHost
                     }
                     'organization' {
                         $repo = Set-GitHubRepository @templateParams -Organization $owner -Debug
