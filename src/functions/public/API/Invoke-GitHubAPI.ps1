@@ -107,12 +107,15 @@ filter Invoke-GitHubAPI {
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
+        $debug = $DebugPreference -eq 'Continue'
         $Context = Resolve-GitHubContext -Context $Context
-        Write-Debug 'Invoking GitHub API...'
-        Write-Debug 'Parent function parameters:'
-        Get-FunctionParameter -Scope 1 | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
-        Write-Debug 'Parameters:'
-        Get-FunctionParameter | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+        if ($debug) {
+            Write-Debug 'Invoking GitHub API...'
+            Write-Debug 'Parent function parameters:'
+            Get-FunctionParameter -Scope 1 | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+            Write-Debug 'Parameters:'
+            Get-FunctionParameter | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+        }
     }
 
     process {
@@ -124,13 +127,15 @@ filter Invoke-GitHubAPI {
         $RetryCount = Resolve-GitHubContextSetting -Name 'RetryCount' -Value $RetryCount -Context $Context
         $RetryInterval = Resolve-GitHubContextSetting -Name 'RetryInterval' -Value $RetryInterval -Context $Context
         $TokenType = Resolve-GitHubContextSetting -Name 'TokenType' -Value $TokenType -Context $Context
-        [pscustomobject]@{
-            Token       = $Token
-            HttpVersion = $HttpVersion
-            ApiBaseUri  = $ApiBaseUri
-            ApiVersion  = $ApiVersion
-            TokenType   = $TokenType
-        } | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+        if ($debug) {
+            [pscustomobject]@{
+                Token       = $Token
+                HttpVersion = $HttpVersion
+                ApiBaseUri  = $ApiBaseUri
+                ApiVersion  = $ApiVersion
+                TokenType   = $TokenType
+            } | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+        }
         $jwt = $null
         switch ($TokenType) {
             'ghu' {
@@ -190,10 +195,12 @@ filter Invoke-GitHubAPI {
         }
 
         try {
-            Write-Debug '----------------------------------'
-            Write-Debug 'Request:'
-            [pscustomobject]$APICall | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
-            Write-Debug '----------------------------------'
+            if ($debug) {
+                Write-Debug '----------------------------------'
+                Write-Debug 'Request:'
+                [pscustomobject]$APICall | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+                Write-Debug '----------------------------------'
+            }
             do {
                 switch ($TokenType) {
                     'ghu' {
@@ -233,13 +240,15 @@ filter Invoke-GitHubAPI {
                         ($headers.'github-authentication-token-expiration').Replace('UTC', '').Trim()
                     ).ToLocalTime().ToString('s')
                 }
-                Write-Debug '----------------------------------'
-                Write-Debug 'Response headers:'
-                $headers | Out-String -Stream | ForEach-Object { Write-Debug $_ }
-                Write-Debug '---------------------------'
-                Write-Debug 'Response:'
-                $response | Out-String -Stream | ForEach-Object { Write-Debug $_ }
-                Write-Debug '---------------------------'
+                if ($debug) {
+                    Write-Debug '----------------------------------'
+                    Write-Debug 'Response headers:'
+                    $headers | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+                    Write-Debug '---------------------------'
+                    Write-Debug 'Response:'
+                    $response | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+                    Write-Debug '---------------------------'
+                }
                 switch -Regex ($headers.'Content-Type') {
                     'application/.*json' {
                         $results = $response.Content | ConvertFrom-Json
@@ -253,7 +262,9 @@ filter Invoke-GitHubAPI {
                     }
                 }
 
-                $results | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+                if ($debug) {
+                    $results | ConvertTo-Json -Depth 5 -WarningAction SilentlyContinue | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+                }
 
                 [pscustomobject]@{
                     Request           = $APICall
@@ -266,7 +277,9 @@ filter Invoke-GitHubAPI {
             } while ($APICall['Uri'])
         } catch {
             $failure = $_
-            $failure | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+            if ($debug) {
+                $failure | ConvertTo-Json -Depth 5 -WarningAction SilentlyContinue | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+            }
             $headers = @{}
             foreach ($item in $failure.Exception.Response.Headers.GetEnumerator()) {
                 $headers[$item.Key] = ($item.Value).Trim() -join ', '
@@ -289,9 +302,11 @@ filter Invoke-GitHubAPI {
             }
             $sortedProperties = $headers.PSObject.Properties.Name | Sort-Object
             $headers = $headers | Select-Object $sortedProperties
-            Write-Debug 'Response headers:'
-            $headers | Out-String -Stream | ForEach-Object { Write-Debug $_ }
-            Write-Debug '---------------------------'
+            if ($debug) {
+                Write-Debug 'Response headers:'
+                $headers | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+                Write-Debug '---------------------------'
+            }
 
             $errordetails = $failure.ErrorDetails | ConvertFrom-Json -AsHashtable
             $errors = $errordetails.errors
