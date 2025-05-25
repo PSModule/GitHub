@@ -278,7 +278,7 @@
 
         if ($DebugPreference -eq 'Continue') {
             Write-Debug 'Changed settings for REST call is:'
-            $body | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+            [pscustomobject]$body | Out-String -Stream | ForEach-Object { Write-Debug $_ }
         }
         if ($body.Keys.Count -gt 0) {
             $inputObject = @{
