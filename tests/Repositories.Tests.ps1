@@ -212,8 +212,8 @@ Describe 'Repositories' {
             LogGroup 'Repository - Fork2' {
                 $params = @{
                     Name           = "$repoName-fork2"
-                    ForkOwner      = 'PSModule'
-                    ForkRepository = 'Template-Action'
+                    ForkOwner      = 'MariusStorhaug'
+                    ForkRepository = 'PowerShell'
                 }
                 switch ($OwnerType) {
                     'user' {
@@ -244,8 +244,10 @@ Describe 'Repositories' {
                 $repo.Watchers | Should -Be 0
                 $repo.Language | Should -BeNullOrEmpty
                 $repo.TemplateRepository | Should -BeNullOrEmpty
-                $repo.ForkParent | Should -Be "$repoName-tmp"
-                $repo.ForkSource | Should -Be 'Template-Action'
+                $repo.ForkParent.Name | Should -Be 'PowerShell'
+                $repo.ForkParent.Owner | Should -Be 'MariusStorhaug'
+                $repo.ForkSource.Name | Should -Be 'PowerShell'
+                $repo.ForkSource.Owner | Should -Be 'PowerShell'
                 $repo.Visibility | Should -Be 'Public'
                 $repo.DefaultBranch | Should -Be 'main'
                 $repo.Permissions | Should -Be 'Admin'
