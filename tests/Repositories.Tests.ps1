@@ -137,7 +137,7 @@ Describe 'Repositories' {
                 $repo.GitUrl | Should -Not -BeNullOrEmpty
                 $repo.CreatedAt | Should -Not -BeNullOrEmpty
                 $repo.UpdatedAt | Should -Not -BeNullOrEmpty
-                $repo.IsTemplate | Should -Be $true
+                $repo.IsTemplate | Should -Be $false
                 $repo.IsFork | Should -Be $false
                 $repo.Forks | Should -Be 0
                 $repo.Stargazers | Should -Be 0
@@ -189,7 +189,7 @@ Describe 'Repositories' {
                 $repo.GitUrl | Should -Not -BeNullOrEmpty
                 $repo.CreatedAt | Should -Not -BeNullOrEmpty
                 $repo.UpdatedAt | Should -Not -BeNullOrEmpty
-                $repo.IsTemplate | Should -Be $false
+                $repo.IsTemplate | Should -Be $true
                 $repo.IsFork | Should -Be $true
                 $repo.Forks | Should -Be 0
                 $repo.Stargazers | Should -Be 0
