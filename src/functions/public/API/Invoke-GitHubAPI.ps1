@@ -253,6 +253,8 @@ filter Invoke-GitHubAPI {
                     }
                 }
 
+                $results | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+
                 [pscustomobject]@{
                     Request           = $APICall
                     Response          = $results

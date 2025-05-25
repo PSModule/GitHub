@@ -117,10 +117,10 @@ Describe 'Repositories' {
                 }
                 switch ($OwnerType) {
                     'user' {
-                        $repo = New-GitHubRepository @params -Debug
+                        $repo = New-GitHubRepository @params
                     }
                     'organization' {
-                        $repo = New-GitHubRepository @params -Organization $owner -Debug
+                        $repo = New-GitHubRepository @params -Organization $owner
                     }
                 }
                 Write-Host ($repo | Format-List | Out-String)
@@ -142,7 +142,7 @@ Describe 'Repositories' {
                 $repo.Forks | Should -Be 0
                 $repo.Stargazers | Should -Be 0
                 $repo.Watchers | Should -Be 0
-                $repo.Language | Should -BeNullOrEmpty
+                $repo.Language | Should -Be 'PowerShell'
                 $repo.TemplateRepository | Should -Be 'Template-Action'
                 $repo.TemplateRepository.Owner | Should -Be 'PSModule'
                 $repo.ForkParent | Should -BeNullOrEmpty
@@ -169,16 +169,16 @@ Describe 'Repositories' {
                 }
                 switch ($OwnerType) {
                     'user' {
-                        $repo = New-GitHubRepository @params -Debug
+                        $repo = New-GitHubRepository @params
                     }
                     'organization' {
-                        $repo = New-GitHubRepository @params -Organization $owner -Debug
+                        $repo = New-GitHubRepository @params -Organization $owner
                     }
                 }
                 Write-Host ($repo | Format-List | Out-String)
                 $repo | Should -BeOfType 'GitHubRepository'
                 $repo | Should -Not -BeNullOrEmpty
-                $repo.Name | Should -Be "$repoName-tmp"
+                $repo.Name | Should -Be "$repoName-fork"
                 $repo.FullName | Should -Be "$owner/$repoName-fork"
                 $repo.Owner | Should -Be $owner
                 $repo.DatabaseID | Should -Not -BeNullOrEmpty
@@ -208,26 +208,26 @@ Describe 'Repositories' {
                 $repo.IsArchived | Should -Be $false
             }
         }
-        It 'New-GitHubRepository - Creates a new repository as a fork' -Skip:($OwnerType -eq 'repository') {
+        It 'New-GitHubRepository - Creates a second new repository as a fork' -Skip:($OwnerType -eq 'repository') {
             LogGroup 'Repository - Fork' {
                 $params = @{
-                    Name           = "$repoName-fork"
+                    Name           = "$repoName-fork2"
                     ForkOwner      = 'PSModule'
                     ForkRepository = 'Template-Action'
                 }
                 switch ($OwnerType) {
                     'user' {
-                        $repo = New-GitHubRepository @params -Debug
+                        $repo = New-GitHubRepository @params
                     }
                     'organization' {
-                        $repo = New-GitHubRepository @params -Organization $owner -Debug
+                        $repo = New-GitHubRepository @params -Organization $owner
                     }
                 }
                 Write-Host ($repo | Format-List | Out-String)
                 $repo | Should -BeOfType 'GitHubRepository'
                 $repo | Should -Not -BeNullOrEmpty
-                $repo.Name | Should -Be "$repoName-tmp"
-                $repo.FullName | Should -Be "$owner/$repoName-fork"
+                $repo.Name | Should -Be "$repoName-fork2"
+                $repo.FullName | Should -Be "$owner/$repoName-fork2"
                 $repo.Owner | Should -Be $owner
                 $repo.DatabaseID | Should -Not -BeNullOrEmpty
                 $repo.ID | Should -Not -BeNullOrEmpty
@@ -467,17 +467,15 @@ Describe 'Repositories' {
             LogGroup 'Repository - Set create from template' {
                 switch ($OwnerType) {
                     'user' {
-                        Trace-Command ParameterBinding -Expression {
-                            $templateParams = @{
-                                Name               = "$repoName-template"
-                                TemplateOwner      = 'PSModule'
-                                TemplateRepository = 'Template-Action'
-                            }
-                            $repo = Set-GitHubRepository @templateParams -Debug
-                        } -PSHost
+                        $templateParams = @{
+                            Name               = "$repoName-template"
+                            TemplateOwner      = 'PSModule'
+                            TemplateRepository = 'Template-Action'
+                        }
+                        $repo = Set-GitHubRepository @templateParams
                     }
                     'organization' {
-                        $repo = Set-GitHubRepository @templateParams -Organization $owner -Debug
+                        $repo = Set-GitHubRepository @templateParams -Organization $owner
                     }
                 }
                 Write-Host ($repo | Format-List | Out-String)
@@ -491,11 +489,11 @@ Describe 'Repositories' {
                 switch ($OwnerType) {
                     'user' {
                         $repoBefore = Get-GitHubRepository -Name "$repoName-template"
-                        $updatedRepo = Set-GitHubRepository -Name "$repoName-template" -Description $newDescription -Debug
+                        $updatedRepo = Set-GitHubRepository -Name "$repoName-template" -Description $newDescription
                     }
                     'organization' {
                         $repoBefore = Get-GitHubRepository -Owner $owner -Name "$repoName-template"
-                        $updatedRepo = Set-GitHubRepository -Organization $owner -Name "$repoName-template" -Description $newDescription -Debug
+                        $updatedRepo = Set-GitHubRepository -Organization $owner -Name "$repoName-template" -Description $newDescription
                     }
                 }
                 Write-Host ($updatedRepo | Format-List | Out-String)
@@ -518,10 +516,10 @@ Describe 'Repositories' {
             LogGroup 'Repository - Set create as fork' {
                 switch ($OwnerType) {
                     'user' {
-                        $repo = Set-GitHubRepository @forkParams -Debug
+                        $repo = Set-GitHubRepository @forkParams
                     }
                     'organization' {
-                        $repo = Set-GitHubRepository @forkParams -Organization $owner -Debug
+                        $repo = Set-GitHubRepository @forkParams -Organization $owner
                     }
                 }
                 Write-Host ($repo | Format-List | Out-String)
@@ -535,11 +533,11 @@ Describe 'Repositories' {
                 switch ($OwnerType) {
                     'user' {
                         $repoBefore = Get-GitHubRepository -Name "$repoName-fork"
-                        $updatedRepo = Set-GitHubRepository -Name "$repoName-fork" -Description $newDescription -Debug
+                        $updatedRepo = Set-GitHubRepository -Name "$repoName-fork" -Description $newDescription
                     }
                     'organization' {
                         $repoBefore = Get-GitHubRepository -Owner $owner -Name "$repoName-fork"
-                        $updatedRepo = Set-GitHubRepository -Organization $owner -Name "$repoName-fork" -Description $newDescription -Debug
+                        $updatedRepo = Set-GitHubRepository -Organization $owner -Name "$repoName-fork" -Description $newDescription
                     }
                 }
                 Write-Host ($updatedRepo | Format-List | Out-String)
