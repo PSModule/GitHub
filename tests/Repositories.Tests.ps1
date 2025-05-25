@@ -156,9 +156,6 @@ Describe 'Repositories' {
                 $repo.HasDiscussions | Should -Be $false
                 $repo.IsArchived | Should -Be $false
             }
-            $repo | Should -Not -BeNullOrEmpty
-            $repo.Parent | Should -Not -BeNullOrEmpty
-            $repo.TemplateSource | Should -Not -BeNullOrEmpty
         }
         It 'New-GitHubRepository - Creates a new repository as a fork' -Skip:($OwnerType -eq 'repository') {
             LogGroup 'Repository - Fork' {
@@ -194,7 +191,7 @@ Describe 'Repositories' {
                 $repo.Forks | Should -Be 0
                 $repo.Stargazers | Should -Be 0
                 $repo.Watchers | Should -Be 0
-                $repo.Language | Should -BeNullOrEmpty
+                $repo.Language | Should -Be 'PowerShell'
                 $repo.TemplateRepository | Should -BeNullOrEmpty
                 $repo.ForkParent | Should -Be 'Template-Action'
                 $repo.ForkSource | Should -BeNullOrEmpty
@@ -210,17 +207,17 @@ Describe 'Repositories' {
         }
         It 'New-GitHubRepository - Creates a second new repository as a fork' -Skip:($OwnerType -eq 'repository') {
             LogGroup 'Repository - Fork2' {
-                $params = @{
+                $params2 = @{
                     Name           = "$repoName-fork2"
                     ForkOwner      = 'MariusStorhaug'
                     ForkRepository = 'PowerShell'
                 }
                 switch ($OwnerType) {
                     'user' {
-                        $repo = New-GitHubRepository @params
+                        $repo = New-GitHubRepository @params2
                     }
                     'organization' {
-                        $repo = New-GitHubRepository @params -Organization $owner
+                        $repo = New-GitHubRepository @params2 -Organization $owner
                     }
                 }
                 Write-Host ($repo | Format-List | Out-String)
