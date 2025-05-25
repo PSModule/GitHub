@@ -83,7 +83,9 @@ filter Get-GitHubEnvironmentList {
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             $_.Response.environments | ForEach-Object {
-                [GitHubEnvironment]::new($_, $Owner, $Repository)
+                $environment = [GitHubEnvironment]::new($_, $Owner, $Repository)
+                $environment.Url = "https://$($Context.HostName)/$Owner/$Repository/settings/environments/$($environment.ID)/edit"
+                $environment
             }
         }
     }
