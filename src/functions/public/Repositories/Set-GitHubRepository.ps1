@@ -274,7 +274,7 @@ function Set-GitHubRepository {
             # Gitignore          = $Gitignore
             # License            = $License
             $newParams | Remove-HashtableEntry -NullOrEmptyValues
-            Write-Debuh "$($newParams | Out-String)"
+            Write-Debug "$($newParams | Select-Object * | Out-String)"
             New-GitHubRepository @newParams @configParams -ErrorAction Stop
         }
     }

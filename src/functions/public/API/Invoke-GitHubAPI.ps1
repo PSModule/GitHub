@@ -198,10 +198,16 @@ filter Invoke-GitHubAPI {
             if ($debug) {
                 Write-Debug '----------------------------------'
                 Write-Debug 'Request:'
-                [pscustomobject]$APICall | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+                [pscustomobject]$APICall | Select-Object -ExcludeProperty Body, Headers | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
                 Write-Debug '----------------------------------'
-                Write-Debug 'Body:'
-                $Body | ConvertTo-Json -Depth 10 | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+                Write-Debug 'Request headers:'
+                $APICall.Headers | Select-Object * | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+                Write-Debug '----------------------------------'
+                Write-Debug 'Request body:'
+                $APICall.Body | ConvertTo-Json -Depth 10 | Out-String -Stream | ForEach-Object {
+                    $content = $_
+                    $content -split '\r\n\n|\r', '\\r\\n', '\\n', '\\r' | ForEach-Object { Write-Debug $_ }
+                }
                 Write-Debug '----------------------------------'
             }
             do {
@@ -285,9 +291,6 @@ filter Invoke-GitHubAPI {
                 Write-Debug 'Failure:'
                 $failure | ConvertTo-Json -Depth 5 -WarningAction SilentlyContinue | Out-String -Stream | ForEach-Object { Write-Debug $_ }
                 Write-Debug '----------------------------------'
-                Write-Debug 'Body:'
-                $Body | ConvertTo-Json -Depth 10 | Out-String -Stream | ForEach-Object { Write-Debug $_ }
-                Write-Debug '----------------------------------'
             }
             $headers = @{}
             foreach ($item in $failure.Exception.Response.Headers.GetEnumerator()) {
@@ -333,10 +336,16 @@ filter Invoke-GitHubAPI {
             $exception = @"
 ----------------------------------
 Request:
-$([pscustomobject]$APICall | Format-List -Property Headers, HttpVersion, Method, Uri, ContentType, Authentication, Token | Out-String)
+$([pscustomobject]$APICall | Select-Object -ExcludeProperty Body, Headers | Format-List | Out-String -Stream)
 ----------------------------------
-Body:
-$($Body | ConvertTo-Json -Depth 10 | Out-String -Stream | ForEach-Object { Write-Debug $_ })
+Request headers:
+$($APICall.Headers | Select-Object * | Out-String -Stream)
+----------------------------------
+Request body:
+$($APICall.Body | ConvertTo-Json -Depth 10 | Out-String -Stream | ForEach-Object {
+    $content = $_
+    $content -split '\r\n\n|\r', '\\r\\n','\\n', '\\r'
+})
 ----------------------------------
 Response Headers:
 $($headers | Format-List | Out-String)
