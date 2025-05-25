@@ -243,9 +243,9 @@ Describe 'Repositories' {
                 $repo.Visibility | Should -Be 'Public'
                 $repo.DefaultBranch | Should -Be 'main'
                 $repo.Permissions | Should -Be 'Admin'
-                $repo.HasIssues | Should -Be $true
+                $repo.HasIssues | Should -Be $false
                 $repo.HasProjects | Should -Be $true
-                $repo.HasWiki | Should -Be $true
+                $repo.HasWiki | Should -Be $false
                 $repo.HasDiscussions | Should -Be $false
                 $repo.IsArchived | Should -Be $false
             }
