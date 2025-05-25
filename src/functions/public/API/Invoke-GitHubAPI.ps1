@@ -200,6 +200,9 @@ filter Invoke-GitHubAPI {
                 Write-Debug 'Request:'
                 [pscustomobject]$APICall | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
                 Write-Debug '----------------------------------'
+                Write-Debug 'Body:'
+                $Body | ConvertTo-Json -Depth 10 | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+                Write-Debug '----------------------------------'
             }
             do {
                 switch ($TokenType) {
@@ -278,7 +281,13 @@ filter Invoke-GitHubAPI {
         } catch {
             $failure = $_
             if ($debug) {
+                Write-Debug '----------------------------------'
+                Write-Debug 'Failure:'
                 $failure | ConvertTo-Json -Depth 5 -WarningAction SilentlyContinue | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+                Write-Debug '----------------------------------'
+                Write-Debug 'Body:'
+                $Body | ConvertTo-Json -Depth 10 | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+                Write-Debug '----------------------------------'
             }
             $headers = @{}
             foreach ($item in $failure.Exception.Response.Headers.GetEnumerator()) {
@@ -325,6 +334,9 @@ filter Invoke-GitHubAPI {
 ----------------------------------
 Request:
 $([pscustomobject]$APICall | Format-List -Property Headers, HttpVersion, Method, Uri, ContentType, Authentication, Token | Out-String)
+----------------------------------
+Body:
+$($Body | ConvertTo-Json -Depth 10 | Out-String -Stream | ForEach-Object { Write-Debug $_ })
 ----------------------------------
 Response Headers:
 $($headers | Format-List | Out-String)

@@ -226,7 +226,7 @@
         Stargazers               = 'stargazers { totalCount }'
         Watchers                 = 'watchers { totalCount }'
         Forks                    = 'forks { totalCount }'
-        DefaultBranch            = 'defaultBranchRef { id name prefix target { id oid abbreviatedOid } }'
+        DefaultBranch            = 'defaultBranchRef { name }'
         Permissions              = 'viewerPermission'
         AllowSquashMerge         = 'squashMergeAllowed'
         AllowMergeCommit         = 'mergeCommitAllowed'

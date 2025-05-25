@@ -389,7 +389,8 @@
         if ($PSCmdlet.ParameterSetName -like 'Fork*') {
             $updateParams['AllowForking'] = $AllowForking
         }
-        Update-GitHubRepository @updateParams
+        $updatedRepo = Update-GitHubRepository @updateParams
+        $updatedRepo.DefaultBranch = $repo.DefaultBranch
     }
 
     end {
