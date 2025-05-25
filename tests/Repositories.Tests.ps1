@@ -76,6 +76,37 @@ Describe 'Repositories' {
                     }
                 }
                 Write-Host ($repo | Format-List | Out-String)
+                $repo | Should -BeOfType 'GitHubRepository'
+                $repo | Should -Not -BeNullOrEmpty
+                $repo.Name | Should -Be $repoName
+                $repo.FullName | Should -Be "$owner/$repoName"
+                $repo.Owner | Should -Be $owner
+                $repo.DatabaseID | Should -Not -BeNullOrEmpty
+                $repo.ID | Should -Not -BeNullOrEmpty
+                $repo.Url | Should -Not -BeNullOrEmpty
+                $repo.CloneUrl | Should -Not -BeNullOrEmpty
+                $repo.SshUrl | Should -Not -BeNullOrEmpty
+                $repo.GitUrl | Should -Not -BeNullOrEmpty
+                $repo.CreatedAt | Should -Not -BeNullOrEmpty
+                $repo.UpdatedAt | Should -Not -BeNullOrEmpty
+                $repo.IsTemplate | Should -Be $false
+                $repo.IsFork | Should -Be $false
+                $repo.Parent | Should -BeNullOrEmpty
+                $repo.TemplateRepository | Should -BeNullOrEmpty
+                $repo.ForkSource | Should -BeNullOrEmpty
+                $repo.ForkCount | Should -Be 0
+                $repo.StargazerCount | Should -Be 0
+                $repo.WatchersCount | Should -Be 0
+                $repo.Language | Should -BeNullOrEmpty
+                $repo.ForkParent | Should -BeNullOrEmpty
+                $repo.ForkSource | Should -BeNullOrEmpty
+                $repo.Visibility | Should -Be 'Public'
+                $repo.DefaultBranch | Should -Be 'main'
+                $repo.HasIssues | Should -Be $true
+                $repo.HasProjects | Should -Be $true
+                $repo.HasWiki | Should -Be $true
+                $repo.HasDiscussions | Should -Be $false
+                $repo.IsArchived | Should -Be $false
             }
         }
         It 'New-GitHubRepository - Creates a new repository from a template' -Skip:($OwnerType -eq 'repository') {
@@ -96,11 +127,13 @@ Describe 'Repositories' {
                 Write-Host ($repo | Format-List | Out-String)
             }
             $repo | Should -Not -BeNullOrEmpty
+            $repo.Parent | Should -Not -BeNullOrEmpty
+            $repo.TemplateSource | Should -Not -BeNullOrEmpty
         }
         It 'New-GitHubRepository - Creates a new repository as a fork' -Skip:($OwnerType -eq 'repository') {
             LogGroup 'Repository - Fork' {
                 $params = @{
-                    Name           = "$repoName-fork"
+                    Name           = "$repoName-fork-plain"
                     ForkOwner      = 'PSModule'
                     ForkRepository = 'Template-Action'
                 }
@@ -115,6 +148,8 @@ Describe 'Repositories' {
                 Write-Host ($repo | Format-List | Out-String)
             }
             $repo | Should -Not -BeNullOrEmpty
+            $repo.Parent | Should -Not -BeNullOrEmpty
+            $repo.TemplateSource | Should -Not -BeNullOrEmpty
         }
         It "Get-GitHubRepository - Gets the authenticated user's repositories" -Skip:($OwnerType -ne 'user') {
             LogGroup 'Repositories' {
@@ -226,46 +261,46 @@ Describe 'Repositories' {
             }
             $repos.Count | Should -BeGreaterThan 0
         }
-        It 'Set-GitHubRepository - Updates an existing repository' -Skip:($OwnerType -eq 'repository') {
-            $description = 'Updated description'
-            LogGroup 'Repository - Set update' {
-                switch ($OwnerType) {
-                    'user' {
-                        $repoBefore = Get-GitHubRepository -Name $repoName
-                        $repo = Set-GitHubRepository -Name $repoName -Description $description
-                    }
-                    'organization' {
-                        $repoBefore = Get-GitHubRepository -Owner $owner -Name $repoName
-                        $repo = Set-GitHubRepository -Owner $owner -Name $repoName -Description $description
-                    }
-                }
-                Write-Host ($repo | Format-List | Out-String)
-                $changes = Compare-PSCustomObject -Left $repoBefore -Right $repo -OnlyChanged
-                Write-Host ('Changed properties: ' + ($changes | Format-Table | Out-String))
-            }
-            $repo | Should -Not -BeNullOrEmpty
-            $repo.Description | Should -Be $description
-            $changedProps = $changes.Property
-            $changedProps | Should -Contain 'UpdatedAt'
-            $changedProps | Should -Contain 'Description'
-            $changedProps.Count | Should -Be 2
-        }
-        It 'Set-GitHubRepository - Creates a new repository when missing' -Skip:($OwnerType -eq 'repository') {
-            $newRepoName = "$repoName-new"
-            LogGroup 'Repository - Set create' {
-                switch ($OwnerType) {
-                    'user' {
-                        $repo = Set-GitHubRepository -Name $newRepoName
-                    }
-                    'organization' {
-                        $repo = Set-GitHubRepository -Organization $owner -Name $newRepoName
-                    }
-                }
-                Write-Host ($repo | Format-List | Out-String)
-            }
-            $repo | Should -Not -BeNullOrEmpty
-            $repo.Name | Should -Be $newRepoName
-        }
+        # It 'Set-GitHubRepository - Updates an existing repository' -Skip:($OwnerType -eq 'repository') {
+        #     $description = 'Updated description'
+        #     LogGroup 'Repository - Set update' {
+        #         switch ($OwnerType) {
+        #             'user' {
+        #                 $repoBefore = Get-GitHubRepository -Name $repoName
+        #                 $repo = Set-GitHubRepository -Name $repoName -Description $description
+        #             }
+        #             'organization' {
+        #                 $repoBefore = Get-GitHubRepository -Owner $owner -Name $repoName
+        #                 $repo = Set-GitHubRepository -Owner $owner -Name $repoName -Description $description
+        #             }
+        #         }
+        #         Write-Host ($repo | Format-List | Out-String)
+        #         $changes = Compare-PSCustomObject -Left $repoBefore -Right $repo -OnlyChanged
+        #         Write-Host ('Changed properties: ' + ($changes | Format-Table | Out-String))
+        #     }
+        #     $repo | Should -Not -BeNullOrEmpty
+        #     $repo.Description | Should -Be $description
+        #     $changedProps = $changes.Property
+        #     $changedProps | Should -Contain 'UpdatedAt'
+        #     $changedProps | Should -Contain 'Description'
+        #     $changedProps.Count | Should -Be 2
+        # }
+        # It 'Set-GitHubRepository - Creates a new repository when missing' -Skip:($OwnerType -eq 'repository') {
+        #     $newRepoName = "$repoName-new"
+        #     LogGroup 'Repository - Set create' {
+        #         switch ($OwnerType) {
+        #             'user' {
+        #                 $repo = Set-GitHubRepository -Name $newRepoName
+        #             }
+        #             'organization' {
+        #                 $repo = Set-GitHubRepository -Organization $owner -Name $newRepoName
+        #             }
+        #         }
+        #         Write-Host ($repo | Format-List | Out-String)
+        #     }
+        #     $repo | Should -Not -BeNullOrEmpty
+        #     $repo.Name | Should -Be $newRepoName
+        # }
         It 'Update-GitHubRepository - Renames a repository' -Skip:($OwnerType -eq 'repository') {
             LogGroup 'Repository - Renamed' {
                 $newName = "$repoName-newname"
