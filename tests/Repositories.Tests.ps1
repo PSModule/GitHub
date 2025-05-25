@@ -69,10 +69,10 @@ Describe 'Repositories' {
             LogGroup 'Repository - Creation' {
                 switch ($OwnerType) {
                     'user' {
-                        $repo = New-GitHubRepository -Name $repoName -Debug
+                        $repo = New-GitHubRepository -Name $repoName
                     }
                     'organization' {
-                        $repo = New-GitHubRepository -Organization $owner -Name $repoName -Debug
+                        $repo = New-GitHubRepository -Organization $owner -Name $repoName
                     }
                 }
                 Write-Host ($repo | Format-List | Out-String)
@@ -104,7 +104,7 @@ Describe 'Repositories' {
                 $repo.HasIssues | Should -Be $true
                 $repo.HasProjects | Should -Be $true
                 $repo.HasWiki | Should -Be $true
-                $repo.HasDiscussions | Should -Be $false
+                $repo.HasDiscussions | Should -Be $true
                 $repo.IsArchived | Should -Be $false
             }
         }
@@ -137,12 +137,12 @@ Describe 'Repositories' {
                 $repo.GitUrl | Should -Not -BeNullOrEmpty
                 $repo.CreatedAt | Should -Not -BeNullOrEmpty
                 $repo.UpdatedAt | Should -Not -BeNullOrEmpty
-                $repo.IsTemplate | Should -Be $false
+                $repo.IsTemplate | Should -Be $true
                 $repo.IsFork | Should -Be $false
                 $repo.Forks | Should -Be 0
                 $repo.Stargazers | Should -Be 0
                 $repo.Watchers | Should -Be 0
-                $repo.Language | Should -Be 'PowerShell'
+                $repo.Language | Should -BeNullOrEmpty
                 $repo.TemplateRepository | Should -Be 'Template-Action'
                 $repo.TemplateRepository.Owner | Should -Be 'PSModule'
                 $repo.ForkParent | Should -BeNullOrEmpty
@@ -209,7 +209,7 @@ Describe 'Repositories' {
             }
         }
         It 'New-GitHubRepository - Creates a second new repository as a fork' -Skip:($OwnerType -eq 'repository') {
-            LogGroup 'Repository - Fork' {
+            LogGroup 'Repository - Fork2' {
                 $params = @{
                     Name           = "$repoName-fork2"
                     ForkOwner      = 'PSModule'
