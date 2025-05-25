@@ -92,13 +92,11 @@ Describe 'Repositories' {
                 $repo.IsTemplate | Should -Be $false
                 $repo.IsFork | Should -Be $false
                 $repo.TemplateRepository | Should -BeNullOrEmpty
-                $repo.ForkSource | Should -BeNullOrEmpty
                 $repo.Forks | Should -Be 0
                 $repo.Stargazers | Should -Be 0
                 $repo.Watchers | Should -Be 0
                 $repo.Language | Should -BeNullOrEmpty
-                $repo.ForkParent | Should -BeNullOrEmpty
-                $repo.ForkSource | Should -BeNullOrEmpty
+                $repo.ForkRepository | Should -BeNullOrEmpty
                 $repo.Visibility | Should -Be 'Public'
                 $repo.DefaultBranch | Should -Be 'main'
                 $repo.HasIssues | Should -Be $true
@@ -145,8 +143,7 @@ Describe 'Repositories' {
                 $repo.Language | Should -BeNullOrEmpty
                 $repo.TemplateRepository | Should -Be 'Template-Action'
                 $repo.TemplateRepository.Owner | Should -Be 'PSModule'
-                $repo.ForkParent | Should -BeNullOrEmpty
-                $repo.ForkSource | Should -BeNullOrEmpty
+                $repo.ForkRepository | Should -BeNullOrEmpty
                 $repo.Visibility | Should -Be 'Public'
                 $repo.DefaultBranch | Should -Be 'main'
                 $repo.Permissions | Should -Be 'Admin'
@@ -193,8 +190,7 @@ Describe 'Repositories' {
                 $repo.Watchers | Should -Be 0
                 $repo.Language | Should -Be 'PowerShell'
                 $repo.TemplateRepository | Should -BeNullOrEmpty
-                $repo.ForkParent | Should -Be 'Template-Action'
-                $repo.ForkSource | Should -BeNullOrEmpty
+                $repo.ForkRepository | Should -Be 'Template-Action'
                 $repo.Visibility | Should -Be 'Public'
                 $repo.DefaultBranch | Should -Be 'main'
                 $repo.Permissions | Should -Be 'Admin'
@@ -242,10 +238,8 @@ Describe 'Repositories' {
                 $repo.Watchers | Should -Be 0
                 $repo.Language | Should -Be 'C#'
                 $repo.TemplateRepository | Should -BeNullOrEmpty
-                $repo.ForkParent.Name | Should -Be 'PowerShell'
-                $repo.ForkParent.Owner | Should -Be 'MariusStorhaug'
-                $repo.ForkSource.Name | Should -Be 'PowerShell'
-                $repo.ForkSource.Owner | Should -Be 'PowerShell'
+                $repo.ForkRepository.Name | Should -Be 'PowerShell'
+                $repo.ForkRepository.Owner | Should -Be 'MariusStorhaug'
                 $repo.Visibility | Should -Be 'Public'
                 $repo.DefaultBranch | Should -Be 'main'
                 $repo.Permissions | Should -Be 'Admin'
