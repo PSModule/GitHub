@@ -91,12 +91,11 @@ Describe 'Repositories' {
                 $repo.UpdatedAt | Should -Not -BeNullOrEmpty
                 $repo.IsTemplate | Should -Be $false
                 $repo.IsFork | Should -Be $false
-                $repo.Parent | Should -BeNullOrEmpty
                 $repo.TemplateRepository | Should -BeNullOrEmpty
                 $repo.ForkSource | Should -BeNullOrEmpty
-                $repo.ForkCount | Should -Be 0
-                $repo.StargazerCount | Should -Be 0
-                $repo.WatchersCount | Should -Be 0
+                $repo.Forks | Should -Be 0
+                $repo.Stargazers | Should -Be 0
+                $repo.Watchers | Should -Be 0
                 $repo.Language | Should -BeNullOrEmpty
                 $repo.ForkParent | Should -BeNullOrEmpty
                 $repo.ForkSource | Should -BeNullOrEmpty
@@ -125,6 +124,37 @@ Describe 'Repositories' {
                     }
                 }
                 Write-Host ($repo | Format-List | Out-String)
+                $repo | Should -BeOfType 'GitHubRepository'
+                $repo | Should -Not -BeNullOrEmpty
+                $repo.Name | Should -Be "$repoName-tmp"
+                $repo.FullName | Should -Be "$owner/$repoName-tmp"
+                $repo.Owner | Should -Be $owner
+                $repo.DatabaseID | Should -Not -BeNullOrEmpty
+                $repo.ID | Should -Not -BeNullOrEmpty
+                $repo.Url | Should -Not -BeNullOrEmpty
+                $repo.CloneUrl | Should -Not -BeNullOrEmpty
+                $repo.SshUrl | Should -Not -BeNullOrEmpty
+                $repo.GitUrl | Should -Not -BeNullOrEmpty
+                $repo.CreatedAt | Should -Not -BeNullOrEmpty
+                $repo.UpdatedAt | Should -Not -BeNullOrEmpty
+                $repo.IsTemplate | Should -Be $false
+                $repo.IsFork | Should -Be $false
+                $repo.Forks | Should -Be 0
+                $repo.Stargazers | Should -Be 0
+                $repo.Watchers | Should -Be 0
+                $repo.Language | Should -BeNullOrEmpty
+                $repo.TemplateRepository | Should -Be 'Template-Action'
+                $repo.TemplateRepository.Owner | Should -Be 'PSModule'
+                $repo.ForkParent | Should -BeNullOrEmpty
+                $repo.ForkSource | Should -BeNullOrEmpty
+                $repo.Visibility | Should -Be 'Public'
+                $repo.DefaultBranch | Should -Be 'main'
+                $repo.Permissions | Should -Be 'Admin'
+                $repo.HasIssues | Should -Be $true
+                $repo.HasProjects | Should -Be $true
+                $repo.HasWiki | Should -Be $true
+                $repo.HasDiscussions | Should -Be $false
+                $repo.IsArchived | Should -Be $false
             }
             $repo | Should -Not -BeNullOrEmpty
             $repo.Parent | Should -Not -BeNullOrEmpty
@@ -133,7 +163,7 @@ Describe 'Repositories' {
         It 'New-GitHubRepository - Creates a new repository as a fork' -Skip:($OwnerType -eq 'repository') {
             LogGroup 'Repository - Fork' {
                 $params = @{
-                    Name           = "$repoName-fork-plain"
+                    Name           = "$repoName-fork"
                     ForkOwner      = 'PSModule'
                     ForkRepository = 'Template-Action'
                 }
@@ -146,10 +176,85 @@ Describe 'Repositories' {
                     }
                 }
                 Write-Host ($repo | Format-List | Out-String)
+                $repo | Should -BeOfType 'GitHubRepository'
+                $repo | Should -Not -BeNullOrEmpty
+                $repo.Name | Should -Be "$repoName-tmp"
+                $repo.FullName | Should -Be "$owner/$repoName-fork"
+                $repo.Owner | Should -Be $owner
+                $repo.DatabaseID | Should -Not -BeNullOrEmpty
+                $repo.ID | Should -Not -BeNullOrEmpty
+                $repo.Url | Should -Not -BeNullOrEmpty
+                $repo.CloneUrl | Should -Not -BeNullOrEmpty
+                $repo.SshUrl | Should -Not -BeNullOrEmpty
+                $repo.GitUrl | Should -Not -BeNullOrEmpty
+                $repo.CreatedAt | Should -Not -BeNullOrEmpty
+                $repo.UpdatedAt | Should -Not -BeNullOrEmpty
+                $repo.IsTemplate | Should -Be $false
+                $repo.IsFork | Should -Be $true
+                $repo.Forks | Should -Be 0
+                $repo.Stargazers | Should -Be 0
+                $repo.Watchers | Should -Be 0
+                $repo.Language | Should -BeNullOrEmpty
+                $repo.TemplateRepository | Should -BeNullOrEmpty
+                $repo.ForkParent | Should -Be 'Template-Action'
+                $repo.ForkSource | Should -BeNullOrEmpty
+                $repo.Visibility | Should -Be 'Public'
+                $repo.DefaultBranch | Should -Be 'main'
+                $repo.Permissions | Should -Be 'Admin'
+                $repo.HasIssues | Should -Be $true
+                $repo.HasProjects | Should -Be $true
+                $repo.HasWiki | Should -Be $true
+                $repo.HasDiscussions | Should -Be $false
+                $repo.IsArchived | Should -Be $false
             }
-            $repo | Should -Not -BeNullOrEmpty
-            $repo.Parent | Should -Not -BeNullOrEmpty
-            $repo.TemplateSource | Should -Not -BeNullOrEmpty
+        }
+        It 'New-GitHubRepository - Creates a new repository as a fork' -Skip:($OwnerType -eq 'repository') {
+            LogGroup 'Repository - Fork' {
+                $params = @{
+                    Name           = "$repoName-fork"
+                    ForkOwner      = 'PSModule'
+                    ForkRepository = 'Template-Action'
+                }
+                switch ($OwnerType) {
+                    'user' {
+                        $repo = New-GitHubRepository @params -Debug
+                    }
+                    'organization' {
+                        $repo = New-GitHubRepository @params -Organization $owner -Debug
+                    }
+                }
+                Write-Host ($repo | Format-List | Out-String)
+                $repo | Should -BeOfType 'GitHubRepository'
+                $repo | Should -Not -BeNullOrEmpty
+                $repo.Name | Should -Be "$repoName-tmp"
+                $repo.FullName | Should -Be "$owner/$repoName-fork"
+                $repo.Owner | Should -Be $owner
+                $repo.DatabaseID | Should -Not -BeNullOrEmpty
+                $repo.ID | Should -Not -BeNullOrEmpty
+                $repo.Url | Should -Not -BeNullOrEmpty
+                $repo.CloneUrl | Should -Not -BeNullOrEmpty
+                $repo.SshUrl | Should -Not -BeNullOrEmpty
+                $repo.GitUrl | Should -Not -BeNullOrEmpty
+                $repo.CreatedAt | Should -Not -BeNullOrEmpty
+                $repo.UpdatedAt | Should -Not -BeNullOrEmpty
+                $repo.IsTemplate | Should -Be $false
+                $repo.IsFork | Should -Be $true
+                $repo.Forks | Should -Be 0
+                $repo.Stargazers | Should -Be 0
+                $repo.Watchers | Should -Be 0
+                $repo.Language | Should -BeNullOrEmpty
+                $repo.TemplateRepository | Should -BeNullOrEmpty
+                $repo.ForkParent | Should -Be "$repoName-tmp"
+                $repo.ForkSource | Should -Be 'Template-Action'
+                $repo.Visibility | Should -Be 'Public'
+                $repo.DefaultBranch | Should -Be 'main'
+                $repo.Permissions | Should -Be 'Admin'
+                $repo.HasIssues | Should -Be $true
+                $repo.HasProjects | Should -Be $true
+                $repo.HasWiki | Should -Be $true
+                $repo.HasDiscussions | Should -Be $false
+                $repo.IsArchived | Should -Be $false
+            }
         }
         It "Get-GitHubRepository - Gets the authenticated user's repositories" -Skip:($OwnerType -ne 'user') {
             LogGroup 'Repositories' {
