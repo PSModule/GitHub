@@ -99,8 +99,10 @@
             AdditionalProperty = $AdditionalProperty
         }
         $params | Remove-HashtableEntry -NullOrEmptyValues
-        Write-Debug "ParamSet: [$($PSCmdlet.ParameterSetName)]"
-        Write-Debug ($params | Format-Table -AutoSize | Out-String)
+        if ($DebugPreference -eq 'Continue') {
+            Write-Debug "ParamSet: [$($PSCmdlet.ParameterSetName)]"
+            $params | Format-Table -AutoSize | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+        }
         switch ($PSCmdlet.ParameterSetName) {
             'Get a repository for the authenticated user by name' {
                 try {

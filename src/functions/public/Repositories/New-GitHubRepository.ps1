@@ -355,8 +355,10 @@
             }
         }
 
-        Write-Debug 'New repo created'
-        Write-Debug "$($repo | Format-Table | Out-String)"
+        if ($DebugPreference -eq 'Continue') {
+            Write-Debug 'New repo created'
+            $repo | Select-Object * | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+        }
 
         $updateParams = @{
             Owner                                   = $repo.Owner

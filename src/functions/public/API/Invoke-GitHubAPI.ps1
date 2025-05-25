@@ -201,12 +201,13 @@ filter Invoke-GitHubAPI {
                 [pscustomobject]$APICall | Select-Object -ExcludeProperty Body, Headers | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
                 Write-Debug '----------------------------------'
                 Write-Debug 'Request headers:'
-                $APICall.Headers | Select-Object * | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+                $APICall.Headers | Select-Object * | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
                 Write-Debug '----------------------------------'
                 Write-Debug 'Request body:'
-                $APICall.Body | ConvertTo-Json -Depth 10 | Out-String -Stream | ForEach-Object {
+                $APICall.Body | Out-String -Stream | ForEach-Object {
                     $bodyContent = $_
-                    $bodyContent -split '(\\r\\n|\r\n|\r|\n)' | ForEach-Object { Write-Debug $_ }
+                    $bodyContent = $bodyContent -split '(\\r\\n|\r\n|\r|\n)'
+                    foreach ($item in $bodyContent) { Write-Debug $item }
                 }
                 Write-Debug '----------------------------------'
             }
@@ -275,8 +276,9 @@ filter Invoke-GitHubAPI {
                     Write-Debug 'Response content:'
                     $results | ConvertTo-Json -Depth 5 -WarningAction SilentlyContinue | Out-String -Stream | ForEach-Object {
                         $content = $_
-                        $content -split '(\\r\\n|\r\n|\r|\n)' | ForEach-Object {
-                            Write-Debug $_
+                        $content = $content -split '(\\r\\n|\r\n|\r|\n)'
+                        foreach ($item in $content) {
+                            Write-Debug $item
                         }
                     }
                     Write-Debug '---------------------------'
