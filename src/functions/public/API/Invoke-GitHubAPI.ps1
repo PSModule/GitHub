@@ -206,7 +206,7 @@ filter Invoke-GitHubAPI {
                 Write-Debug 'Request body:'
                 $APICall.Body | ConvertTo-Json -Depth 10 | Out-String -Stream | ForEach-Object {
                     $content = $_
-                    $content.ToString() -split '\r\n\n|\r', '\\r\\n', '\\n', '\\r' | ForEach-Object { Write-Debug $_ }
+                    $content.ToString() -split '(\\r\\n|\r\n|\r|\n)' | ForEach-Object { Write-Debug $_ }
                 }
                 Write-Debug '----------------------------------'
             }
@@ -344,7 +344,7 @@ $($APICall.Headers | Select-Object * | Out-String -Stream)
 Request body:
 $($APICall.Body | ConvertTo-Json -Depth 10 | Out-String -Stream | ForEach-Object {
     $content = $_
-    $content.ToString() -split '\r\n\n|\r', '\\r\\n','\\n', '\\r'
+    $content.ToString() -split '(\\r\\n|\r\n|\r|\n)'
 })
 ----------------------------------
 Response Headers:
