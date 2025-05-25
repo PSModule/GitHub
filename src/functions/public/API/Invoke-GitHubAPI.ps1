@@ -205,8 +205,8 @@ filter Invoke-GitHubAPI {
                 Write-Debug '----------------------------------'
                 Write-Debug 'Request body:'
                 $APICall.Body | ConvertTo-Json -Depth 10 | Out-String -Stream | ForEach-Object {
-                    $content = $_
-                    $content -split '(\\r\\n|\r\n|\r|\n)' | ForEach-Object { Write-Debug $_ }
+                    $bodyContent = $_
+                    $bodyContent -split '(\\r\\n|\r\n|\r|\n)' | ForEach-Object { Write-Debug $_ }
                 }
                 Write-Debug '----------------------------------'
             }
@@ -251,11 +251,11 @@ filter Invoke-GitHubAPI {
                 }
                 if ($debug) {
                     Write-Debug '----------------------------------'
+                    Write-Debug 'Response:'
+                    $response | Select-Object -ExcludeProperty Content, Headers | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+                    Write-Debug '---------------------------'
                     Write-Debug 'Response headers:'
                     $headers | Out-String -Stream | ForEach-Object { Write-Debug $_ }
-                    Write-Debug '---------------------------'
-                    Write-Debug 'Response:'
-                    $response | Out-String -Stream | ForEach-Object { Write-Debug $_ }
                     Write-Debug '---------------------------'
                 }
                 switch -Regex ($headers.'Content-Type') {
@@ -272,7 +272,14 @@ filter Invoke-GitHubAPI {
                 }
 
                 if ($debug) {
-                    $results | ConvertTo-Json -Depth 5 -WarningAction SilentlyContinue | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+                    Write-Debug 'Response content:'
+                    $results | ConvertTo-Json -Depth 5 -WarningAction SilentlyContinue | Out-String -Stream | ForEach-Object {
+                        $content = $_
+                        $content -split '(\\r\\n|\r\n|\r|\n)' | ForEach-Object {
+                            Write-Debug $_
+                        }
+                    }
+                    Write-Debug '---------------------------'
                 }
 
                 [pscustomobject]@{
@@ -347,7 +354,7 @@ $($APICall.Body | ConvertTo-Json -Depth 10 | Out-String -Stream | ForEach-Object
     $content -split '(\\r\\n|\r\n|\r|\n)'
 })
 ----------------------------------
-Response Headers:
+Response headers:
 $($headers | Format-List | Out-String)
 ----------------------------------
 Error:
