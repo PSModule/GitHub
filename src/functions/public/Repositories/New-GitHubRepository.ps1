@@ -363,6 +363,7 @@
         $updateParams = @{
             Owner                                   = $repo.Owner
             Name                                    = $repo.Name
+            Context                                 = $Context
             Visibility                              = $Visibility
             Description                             = $Description
             Homepage                                = $Homepage
@@ -393,6 +394,7 @@
         }
         $updatedRepo = Update-GitHubRepository @updateParams
         $updatedRepo.DefaultBranch = $repo.DefaultBranch
+        $updatedRepo
     }
 
     end {
