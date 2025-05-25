@@ -45,12 +45,12 @@ function Set-GitHubRepository {
         [string] $Organization,
 
         # The name of the repository.
-        [Parameter(ParameterSetName = 'Set a forked repository for a user')]
-        [Parameter(ParameterSetName = 'Set a forked repository in an organization')]
         [Parameter(Mandatory, ParameterSetName = 'Set a repository from a template to a user')]
         [Parameter(Mandatory, ParameterSetName = 'Set a repository from a template to an organization')]
         [Parameter(Mandatory, ParameterSetName = 'Set a repository for the authenticated user')]
         [Parameter(Mandatory, ParameterSetName = 'Set a repository in an organization')]
+        [Parameter(ParameterSetName = 'Set a forked repository for a user')]
+        [Parameter(ParameterSetName = 'Set a forked repository in an organization')]
         [string] $Name,
 
         # The account owner of the template repository. The name is not case sensitive.
@@ -267,12 +267,12 @@ function Set-GitHubRepository {
                 TemplateRepository = $TemplateRepository
                 ForkOwner          = $ForkOwner
                 ForkRepository     = $ForkRepository
-                IncludeAllBranches = $PSBoundParameters.ContainsKey('IncludeAllBranches') ? $IncludeAllBranches : $null
-                AddReadme          = $PSBoundParameters.ContainsKey('AddReadme') ? $AddReadme : $null
-                Gitignore          = $Gitignore
-                License            = $License
                 Context            = $Context
             }
+            # IncludeAllBranches = $PSBoundParameters.ContainsKey('IncludeAllBranches') ? $IncludeAllBranches : $null
+            # AddReadme          = $PSBoundParameters.ContainsKey('AddReadme') ? $AddReadme : $null
+            # Gitignore          = $Gitignore
+            # License            = $License
             $newParams | Remove-HashtableEntry -NullOrEmptyValues
             New-GitHubRepository @newParams @configParams -ErrorAction Stop
         }
