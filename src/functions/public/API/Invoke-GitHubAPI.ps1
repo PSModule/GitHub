@@ -349,10 +349,10 @@ filter Invoke-GitHubAPI {
             $exception = @"
 ----------------------------------
 Request:
-$([pscustomobject]$APICall | Select-Object -ExcludeProperty Body, Headers | Format-List | Out-String -Stream)
+$([pscustomobject]$APICall | Select-Object -ExcludeProperty Body, Headers | Format-List | Out-String)
 ----------------------------------
 Request headers:
-$($APICall.Headers | Select-Object * | Out-String -Stream)
+$($APICall.Headers | Select-Object * | Out-String)
 ----------------------------------
 Request body:
 $($APICall.Body | ConvertTo-Json -Depth 10 | Out-String -Stream | ForEach-Object {
