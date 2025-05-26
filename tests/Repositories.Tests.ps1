@@ -46,9 +46,13 @@ Describe 'Repositories' {
             switch ($OwnerType) {
                 'user' {
                     Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                    $expectedHasDiscussions = $true
+                    $expectedPermission = 'Admin'
                 }
                 'organization' {
                     Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                    $expectedHasDiscussions = $true
+                    $expectedPermission = ''
                 }
             }
         }
@@ -99,10 +103,11 @@ Describe 'Repositories' {
                 $repo.ForkRepository | Should -BeNullOrEmpty
                 $repo.Visibility | Should -Be 'Public'
                 $repo.DefaultBranch | Should -Be 'main'
+                $repo.Permissions | Should -Be $expectedPermission
                 $repo.HasIssues | Should -Be $true
                 $repo.HasProjects | Should -Be $true
                 $repo.HasWiki | Should -Be $true
-                $repo.HasDiscussions | Should -Be $true
+                $repo.HasDiscussions | Should -Be $expectedHasDiscussions
                 $repo.IsArchived | Should -Be $false
             }
         }
@@ -146,11 +151,11 @@ Describe 'Repositories' {
                 $repo.ForkRepository | Should -BeNullOrEmpty
                 $repo.Visibility | Should -Be 'Public'
                 $repo.DefaultBranch | Should -Be 'main'
-                $repo.Permissions | Should -Be 'Admin'
+                $repo.Permissions | Should -Be $expectedPermission
                 $repo.HasIssues | Should -Be $true
                 $repo.HasProjects | Should -Be $true
                 $repo.HasWiki | Should -Be $true
-                $repo.HasDiscussions | Should -Be $false
+                $repo.HasDiscussions | Should -Be $expectedHasDiscussions
                 $repo.IsArchived | Should -Be $false
             }
         }
@@ -193,11 +198,11 @@ Describe 'Repositories' {
                 $repo.ForkRepository | Should -Be 'Template-Action'
                 $repo.Visibility | Should -Be 'Public'
                 $repo.DefaultBranch | Should -Be 'main'
-                $repo.Permissions | Should -Be 'Admin'
+                $repo.Permissions | Should -Be $expectedPermission
                 $repo.HasIssues | Should -Be $false
                 $repo.HasProjects | Should -Be $true
                 $repo.HasWiki | Should -Be $false
-                $repo.HasDiscussions | Should -Be $false
+                $repo.HasDiscussions | Should -Be $expectedHasDiscussions
                 $repo.IsArchived | Should -Be $false
             }
         }
@@ -242,11 +247,11 @@ Describe 'Repositories' {
                 $repo.ForkRepository.Owner | Should -Be 'MariusStorhaug'
                 $repo.Visibility | Should -Be 'Public'
                 $repo.DefaultBranch | Should -Be 'main'
-                $repo.Permissions | Should -Be 'Admin'
+                $repo.Permissions | Should -Be $expectedPermission
                 $repo.HasIssues | Should -Be $false
                 $repo.HasProjects | Should -Be $true
                 $repo.HasWiki | Should -Be $false
-                $repo.HasDiscussions | Should -Be $false
+                $repo.HasDiscussions | Should -Be $expectedHasDiscussions
                 $repo.IsArchived | Should -Be $false
             }
         }
@@ -397,9 +402,9 @@ Describe 'Repositories' {
                         $repo = Set-GitHubRepository -Organization $owner -Name $newRepoName
                     }
                 }
-                Write-Host "Repo before creation"
+                Write-Host 'Repo before creation'
                 Write-Host ($repoBefore | Format-List | Out-String)
-                Write-Host "Repo after creation"
+                Write-Host 'Repo after creation'
                 Write-Host ($repo | Format-List | Out-String)
                 $repoBefore | Should -BeNullOrEmpty
                 $repo | Should -Not -BeNullOrEmpty
@@ -524,7 +529,6 @@ Describe 'Repositories' {
         #     }
         #     $repo | Should -Not -BeNullOrEmpty
         #     $repo.Name | Should -Be "$repoName-fork"
-
         #     # Now update the description
         #     $newDescription = 'Updated description for forked repo'
         #     LogGroup 'Repository - Set update as fork' {
