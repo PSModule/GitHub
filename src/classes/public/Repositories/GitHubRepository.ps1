@@ -67,6 +67,10 @@
     # Example: true
     [System.Nullable[bool]] $HasDiscussions
 
+    # Whether sponsorships are enabled.
+    # Example: false
+    [System.Nullable[bool]] $HasSponsorships
+
     # Indicates whether the repository is archived.
     # Example: false
     [System.Nullable[bool]] $IsArchived
@@ -210,6 +214,7 @@
         HasProjects              = 'hasProjectsEnabled'
         HasWiki                  = 'hasWikiEnabled'
         HasDiscussions           = 'hasDiscussionsEnabled'
+        HasSponsorships          = 'hasSponsorshipsEnabled'
         IsArchived               = 'isArchived'
         IsTemplate               = 'isTemplate'
         IsFork                   = 'isFork'
@@ -318,6 +323,7 @@
             $this.HasProjects = $Object.hasProjectsEnabled
             $this.HasWiki = $Object.hasWikiEnabled
             $this.HasDiscussions = $Object.hasDiscussionsEnabled
+            $this.HasSponsorships = $Object.hasSponsorshipsEnabled
             $this.IsArchived = $Object.isArchived
             $this.IsTemplate = $Object.isTemplate
             $this.IsFork = $Object.isFork
