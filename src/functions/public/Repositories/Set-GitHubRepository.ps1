@@ -267,12 +267,12 @@ function Set-GitHubRepository {
                 TemplateRepository = $TemplateRepository
                 ForkOwner          = $ForkOwner
                 ForkRepository     = $ForkRepository
+                IncludeAllBranches = $PSBoundParameters.ContainsKey('IncludeAllBranches') ? $IncludeAllBranches : $null
+                AddReadme          = $PSBoundParameters.ContainsKey('AddReadme') ? $AddReadme : $null
+                Gitignore          = $Gitignore
+                License            = $License
                 Context            = $Context
             }
-            # IncludeAllBranches = $PSBoundParameters.ContainsKey('IncludeAllBranches') ? $IncludeAllBranches : $null
-            # AddReadme          = $PSBoundParameters.ContainsKey('AddReadme') ? $AddReadme : $null
-            # Gitignore          = $Gitignore
-            # License            = $License
             $newParams | Remove-HashtableEntry -NullOrEmptyValues
             Write-Debug "$($newParams | Select-Object * | Out-String)"
             New-GitHubRepository @newParams @configParams -ErrorAction Stop
