@@ -125,7 +125,6 @@ Describe 'Repositories' {
                     Visibility             = 'Private'
                     Gitignore              = 'VisualStudio'
                     Homepage               = 'https://example.com'
-                    DefaultBranch          = 'default'
                 }
                 switch ($OwnerType) {
                     'user' {
@@ -159,7 +158,7 @@ Describe 'Repositories' {
                 $repo.Language | Should -BeNullOrEmpty
                 $repo.ForkRepository | Should -BeNullOrEmpty
                 $repo.Visibility | Should -Be 'Public'
-                $repo.DefaultBranch | Should -Be 'default'
+                $repo.DefaultBranch | Should -Be 'main'
                 $repo.HasIssues | Should -Be $false
                 $repo.HasWiki | Should -Be $false
                 $repo.HasProjects | Should -Be $false
