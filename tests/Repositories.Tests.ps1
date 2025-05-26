@@ -157,7 +157,7 @@ Describe 'Repositories' {
                 $repo.Watchers | Should -Be 0
                 $repo.Language | Should -BeNullOrEmpty
                 $repo.ForkRepository | Should -BeNullOrEmpty
-                $repo.Visibility | Should -Be 'Public'
+                $repo.Visibility | Should -Be 'Private'
                 $repo.DefaultBranch | Should -Be 'main'
                 $repo.HasIssues | Should -Be $false
                 $repo.HasWiki | Should -Be $false
