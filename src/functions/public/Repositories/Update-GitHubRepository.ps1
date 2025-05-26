@@ -334,8 +334,7 @@
                     input = $inputParams
                 }
             }
-
-            Invoke-GitHubGraphQLQuery @updateGraphQLInputs
+            $null = Invoke-GitHubGraphQLQuery @updateGraphQLInputs
         } else {
             Write-Debug 'No changes made to repo via GraphQL'
         }
