@@ -204,14 +204,7 @@ filter Invoke-GitHubAPI {
                 [pscustomobject]$APICall.Headers | Select-Object * | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
                 Write-Debug '----------------------------------'
                 Write-Debug 'Request body:'
-                $APICall.Body | ConvertFrom-Json | ConvertTo-Json -Depth 10 | Out-String -Stream | ForEach-Object {
-                    $bodyContent = $_
-                    $bodyContent = $bodyContent -split '\n'
-                    $bodyContent = $bodyContent.Split('\n')
-                    foreach ($item in $bodyContent) {
-                        Write-Debug $item
-                    }
-                }
+                ($APICall.Body | Out-String).Split("`n") -split '\n' | ForEach-Object { Write-Debug $_ }
                 Write-Debug '----------------------------------'
             }
             do {
@@ -355,12 +348,7 @@ Request headers:
 $([pscustomobject]$APICall.Headers | Format-List | Out-String)
 ----------------------------------
 Request body:
-$($APICall.Body | ConvertFrom-Json | ConvertTo-Json -Depth 10 | Out-String -Stream | ForEach-Object {
-    $content = $_
-    $content = $content -split '\n'
-    $content = $content.Split('\n')
-    $content
-})
+$(($APICall.Body | Out-String).Split("`n") -split '\n')
 ----------------------------------
 Response headers:
 $($headers | Format-List | Out-String)
