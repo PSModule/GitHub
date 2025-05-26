@@ -393,6 +393,12 @@
             $updateParams['AllowForking'] = $AllowForking
         }
         $updatedRepo = Update-GitHubRepository @updateParams
+
+        if ($DebugPreference -eq 'Continue') {
+            Write-Debug 'Updated repo'
+            $updatedRepo | Select-Object * | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+        }
+
         $updatedRepo.DefaultBranch = $repo.DefaultBranch
         $updatedRepo
     }
