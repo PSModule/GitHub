@@ -105,6 +105,74 @@ Describe 'Repositories' {
                 $repo.IsArchived | Should -Be $false
             }
         }
+        It 'New-GitHubRepository - Creates a new repository with settings' -Skip:($OwnerType -eq 'repository') {
+            LogGroup 'Repository - Creation' {
+                $params = @{
+                    Name                   = "$repoName-settings"
+                    Description            = 'Test repository with settings'
+                    HasIssues              = $false
+                    HasProjects            = $false
+                    HasWiki                = $false
+                    HasDiscussions         = $true
+                    HasSponsorships        = $true
+                    AllowSquashMergingWith = 'Pull request title and description'
+                    SuggestUpdateBranch    = $true
+                    DeleteBranchOnMerge    = $true
+                    AllowAutoMerge         = $true
+                    IsTemplate             = $true
+                    AddReadme              = $true
+                    License                = 'mit'
+                    Visibility             = 'Private'
+                    Gitignore              = 'VisualStudio'
+                    Homepage               = 'https://example.com'
+                    DefaultBranch          = 'default'
+                }
+                switch ($OwnerType) {
+                    'user' {
+                        $repo = New-GitHubRepository -Name $repoName
+                    }
+                    'organization' {
+                        $repo = New-GitHubRepository -Organization $owner -Name $repoName
+                    }
+                }
+                Write-Host ($repo | Format-List | Out-String)
+                $repo | Should -BeOfType 'GitHubRepository'
+                $repo | Should -Not -BeNullOrEmpty
+                $repo.Name | Should -Be $repoName
+                $repo.FullName | Should -Be "$owner/$repoName"
+                $repo.Owner | Should -Be $owner
+                $repo.DatabaseID | Should -Not -BeNullOrEmpty
+                $repo.ID | Should -Not -BeNullOrEmpty
+                $repo.Description | Should -Be 'Test repository with settings'
+                $repo.Url | Should -Not -BeNullOrEmpty
+                $repo.CloneUrl | Should -Not -BeNullOrEmpty
+                $repo.SshUrl | Should -Not -BeNullOrEmpty
+                $repo.GitUrl | Should -Not -BeNullOrEmpty
+                $repo.CreatedAt | Should -Not -BeNullOrEmpty
+                $repo.UpdatedAt | Should -Not -BeNullOrEmpty
+                $repo.IsTemplate | Should -Be $true
+                $repo.IsFork | Should -Be $false
+                $repo.TemplateRepository | Should -BeNullOrEmpty
+                $repo.Forks | Should -Be 0
+                $repo.Stargazers | Should -Be 0
+                $repo.Watchers | Should -Be 0
+                $repo.Language | Should -BeNullOrEmpty
+                $repo.ForkRepository | Should -BeNullOrEmpty
+                $repo.Visibility | Should -Be 'Public'
+                $repo.DefaultBranch | Should -Be 'default'
+                $repo.HasIssues | Should -Be $false
+                $repo.HasWiki | Should -Be $false
+                $repo.HasProjects | Should -Be $false
+                $repo.HasDiscussions | Should -Be $true
+                $repo.HasSponsorships | Should -Be $true
+                $repo.IsArchived | Should -Be $false
+                $repo.SuggestUpdateBranch | Should -Be $true
+                $repo.DeleteBranchOnMerge | Should -Be $true
+                $repo.AllowAutoMerge | Should -Be $true
+                $repo.License | Should -Be 'mit'
+                $repo.Homepage | Should -Be 'https://example.com'
+            }
+        }
         It 'New-GitHubRepository - Creates a new repository from a template' -Skip:($OwnerType -eq 'repository') {
             LogGroup 'Repository - Template' {
                 $params = @{
