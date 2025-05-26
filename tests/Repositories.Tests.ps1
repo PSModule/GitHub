@@ -46,7 +46,7 @@ Describe 'Repositories' {
             switch ($OwnerType) {
                 'user' {
                     Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                    $expectedHasDiscussions = $true
+                    $expectedHasDiscussions = $false
                     $expectedPermission = 'Admin'
                 }
                 'organization' {
