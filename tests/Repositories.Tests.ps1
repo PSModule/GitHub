@@ -106,7 +106,7 @@ Describe 'Repositories' {
             }
         }
         It 'New-GitHubRepository - Creates a new repository with settings' -Skip:($OwnerType -eq 'repository') {
-            LogGroup 'Repository - Creation' {
+            LogGroup 'Repository - Creation + Settings' {
                 $params = @{
                     Name                   = "$repoName-settings"
                     Description            = 'Test repository with settings'
