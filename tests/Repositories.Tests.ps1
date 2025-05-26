@@ -46,12 +46,10 @@ Describe 'Repositories' {
             switch ($OwnerType) {
                 'user' {
                     Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                    $expectedHasDiscussions = $false
                     $expectedPermission = 'Admin'
                 }
                 'organization' {
                     Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                    $expectedHasDiscussions = $true
                     $expectedPermission = ''
                 }
             }
@@ -107,7 +105,7 @@ Describe 'Repositories' {
                 $repo.HasIssues | Should -Be $true
                 $repo.HasProjects | Should -Be $true
                 $repo.HasWiki | Should -Be $true
-                $repo.HasDiscussions | Should -Be $expectedHasDiscussions
+                $repo.HasDiscussions | Should -Be $false
                 $repo.IsArchived | Should -Be $false
             }
         }
@@ -155,7 +153,7 @@ Describe 'Repositories' {
                 $repo.HasIssues | Should -Be $true
                 $repo.HasProjects | Should -Be $true
                 $repo.HasWiki | Should -Be $true
-                $repo.HasDiscussions | Should -Be $expectedHasDiscussions
+                $repo.HasDiscussions | Should -Be $false
                 $repo.IsArchived | Should -Be $false
             }
         }
@@ -202,7 +200,7 @@ Describe 'Repositories' {
                 $repo.HasIssues | Should -Be $false
                 $repo.HasProjects | Should -Be $true
                 $repo.HasWiki | Should -Be $false
-                $repo.HasDiscussions | Should -Be $expectedHasDiscussions
+                $repo.HasDiscussions | Should -Be $false
                 $repo.IsArchived | Should -Be $false
             }
         }
@@ -251,7 +249,7 @@ Describe 'Repositories' {
                 $repo.HasIssues | Should -Be $false
                 $repo.HasProjects | Should -Be $true
                 $repo.HasWiki | Should -Be $false
-                $repo.HasDiscussions | Should -Be $expectedHasDiscussions
+                $repo.HasDiscussions | Should -Be $false
                 $repo.IsArchived | Should -Be $false
             }
         }
