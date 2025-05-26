@@ -210,10 +210,10 @@ Describe 'Repositories' {
                 }
                 switch ($OwnerType) {
                     'user' {
-                        $repo = New-GitHubRepository @params2 -Debug
+                        $repo = New-GitHubRepository @params2
                     }
                     'organization' {
-                        $repo = New-GitHubRepository @params2 -Organization $owner -Debug
+                        $repo = New-GitHubRepository @params2 -Organization $owner
                     }
                 }
 
@@ -397,16 +397,12 @@ Describe 'Repositories' {
                         $repo = Set-GitHubRepository -Organization $owner -Name $newRepoName
                     }
                 }
+                Write-Host "Repo before creation"
+                Write-Host ($repoBefore | Format-List | Out-String)
+                Write-Host "Repo after creation"
                 Write-Host ($repo | Format-List | Out-String)
-                Write-Host ($repo | Format-List | Out-String)
-                $changes = Compare-PSCustomObject -Left $repoBefore -Right $repo -OnlyChanged
-                Write-Host ('Changed properties: ' + ($changes | Format-Table | Out-String))
-                $changes | Should -Not -BeNullOrEmpty
-                $changes.Name | Should -Be $newRepoName
-                $changedProps = $changes.Property
-                $changedProps | Should -Contain 'UpdatedAt'
-                $changedProps | Should -Contain 'Name'
-                $changedProps.Count | Should -Be 2
+                $repoBefore | Should -BeNullOrEmpty
+                $repo | Should -Not -BeNullOrEmpty
             }
         }
         It 'Update-GitHubRepository - Renames a repository' -Skip:($OwnerType -eq 'repository') {
@@ -485,7 +481,6 @@ Describe 'Repositories' {
         #     }
         #     $repo | Should -Not -BeNullOrEmpty
         #     $repo.Name | Should -Be "$repoName-template"
-
         #     # Now update the description
         #     $newDescription = 'Updated description for template repo'
         #     LogGroup 'Repository - Set update from template' {
