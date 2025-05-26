@@ -352,7 +352,7 @@ Request:
 $([pscustomobject]$APICall | Select-Object -ExcludeProperty Body, Headers | Format-List | Out-String)
 ----------------------------------
 Request headers:
-$($APICall.Headers | Select-Object * | Out-String)
+$($APICall.Headers | Format-List | Out-String)
 ----------------------------------
 Request body:
 $($APICall.Body | ConvertTo-Json -Depth 10 | Out-String -Stream | ForEach-Object {

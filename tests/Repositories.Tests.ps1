@@ -51,10 +51,6 @@ Describe 'Repositories' {
                     Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
                 }
             }
-            LogGroup 'Available organizations' {
-                $orgs = Get-GitHubOrganization
-                Write-Host ($orgs | Format-Table | Out-String)
-            }
         }
 
         AfterAll {
