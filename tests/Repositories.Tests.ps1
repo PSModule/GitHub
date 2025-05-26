@@ -129,10 +129,10 @@ Describe 'Repositories' {
                 }
                 switch ($OwnerType) {
                     'user' {
-                        $repo = New-GitHubRepository -Name $repoName
+                        $repo = New-GitHubRepository @params
                     }
                     'organization' {
-                        $repo = New-GitHubRepository -Organization $owner -Name $repoName
+                        $repo = New-GitHubRepository -Organization $owner @params
                     }
                 }
                 Write-Host ($repo | Format-List | Out-String)
