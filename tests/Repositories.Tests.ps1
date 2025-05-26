@@ -137,8 +137,8 @@ Describe 'Repositories' {
                 Write-Host ($repo | Format-List | Out-String)
                 $repo | Should -BeOfType 'GitHubRepository'
                 $repo | Should -Not -BeNullOrEmpty
-                $repo.Name | Should -Be $repoName
-                $repo.FullName | Should -Be "$owner/$repoName"
+                $repo.Name | Should -Be "$repoName-settings"
+                $repo.FullName | Should -Be "$owner/$repoName-settings"
                 $repo.Owner | Should -Be $owner
                 $repo.DatabaseID | Should -Not -BeNullOrEmpty
                 $repo.ID | Should -Not -BeNullOrEmpty
