@@ -355,7 +355,7 @@ Request headers:
 $($APICall.Headers | Format-List | Out-String)
 ----------------------------------
 Request body:
-$($APICall.Body | ConvertTo-Json -Depth 10 | Out-String -Stream | ForEach-Object {
+$($APICall.Body | Out-String -Stream | ForEach-Object {
     $content = $_
     $content = $content -split '\n'
     $content = $content.Split('\n')
