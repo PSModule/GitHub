@@ -1,4 +1,4 @@
-﻿filter Move-GitHubRepository {
+filter Move-GitHubRepository {
     <#
         .SYNOPSIS
         Transfer a repository
@@ -20,9 +20,7 @@
         GitHubRepository
 
         .OUTPUTS
-        GitHubRepository
-
-        .LINK
+        GitHubRepository        .LINK
         https://psmodule.io/GitHub/Functions/Repositories/Move-GitHubRepository/
 
         .NOTES

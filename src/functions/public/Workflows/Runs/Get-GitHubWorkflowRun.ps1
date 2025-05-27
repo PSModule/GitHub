@@ -1,4 +1,4 @@
-﻿filter Get-GitHubWorkflowRun {
+filter Get-GitHubWorkflowRun {
     <#
         .SYNOPSIS
         List workflow runs for a repository or a workflow
@@ -36,9 +36,7 @@
         GitHubWorkflow
 
         .OUTPUTS
-        GitHubWorkflowRun
-
-        .LINK
+        GitHubWorkflowRun        .LINK
         https://psmodule.io/GitHub/Functions/Workflows/Runs/Get-GitHubWorkflowRun/
 
         .NOTES

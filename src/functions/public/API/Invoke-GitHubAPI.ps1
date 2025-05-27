@@ -1,4 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Uri'; RequiredVersion = '1.1.0' }
+#Requires -Modules @{ ModuleName = 'Uri'; RequiredVersion = '1.1.0' }
 #Requires -Modules @{ ModuleName = 'Hashtable'; RequiredVersion = '1.1.5' }
 
 filter Invoke-GitHubAPI {
@@ -23,10 +23,8 @@ filter Invoke-GitHubAPI {
         .EXAMPLE
         Invoke-GitHubAPI -ApiEndpoint '/repos/user/repo/pulls' -Method GET -Body @{ state = 'open' } -Accept 'application/vnd.github.v3+json'
 
-        Gets all open pull requests for the specified repository, filtered by the 'state' parameter, and using the specified 'Accept' header.
-
-        .LINK
-        https://psmodule.io/GitHub/Functions/API/Invoke-GitHubAPI
+        Gets all open pull requests for the specified repository, filtered by the 'state' parameter, and using the specified 'Accept' header.        .LINK
+        https://psmodule.io/GitHub/Functions/API/Invoke-GitHubAPI/
     #>
     [CmdletBinding(DefaultParameterSetName = 'ApiEndpoint')]
     param(

@@ -1,4 +1,4 @@
-﻿function Update-GitHubAppWebhookConfiguration {
+function Update-GitHubAppWebhookConfiguration {
     <#
         .SYNOPSIS
         Update a webhook configuration for an app
@@ -25,10 +25,10 @@
         and a secret of `mysecret` enabling SSL verification when delivering payloads.
 
         .OUTPUTS
-        GitHubWebhookConfiguration
+        GitHubWebhookConfiguration        .LINK
+        https://psmodule.io/GitHub/Functions/Webhooks/Update-GitHubAppWebhookConfiguration/
 
-        .LINK
-        https://psmodule.io/GitHub/Functions/Webhooks/Update-GitHubAppWebhookConfiguration
+                https://psmodule.io/GitHub/Functions/Webhooks/Update-GitHubAppWebhookConfiguration
 
         .NOTES
         [Update a webhook configuration for an app](https://docs.github.com/rest/apps/webhooks#update-a-webhook-configuration-for-an-app)

@@ -1,4 +1,4 @@
-﻿filter Start-GitHubWorkflow {
+filter Start-GitHubWorkflow {
     <#
         .SYNOPSIS
         Start a workflow run using the workflow's ID.
@@ -12,9 +12,7 @@
             deploymentValidation = $false
             removeDeployment = $true
             prerelease = $false
-        }
-
-        .LINK
+        }        .LINK
         https://psmodule.io/GitHub/Functions/Workflows/Start-GitHubWorkflow/
 
         .NOTES

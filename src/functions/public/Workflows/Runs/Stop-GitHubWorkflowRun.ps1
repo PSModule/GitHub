@@ -1,4 +1,4 @@
-﻿filter Stop-GitHubWorkflowRun {
+filter Stop-GitHubWorkflowRun {
     <#
         .SYNOPSIS
         Cancel a workflow run
@@ -12,9 +12,7 @@
         Cancels the workflow run with the ID 123456789 from the 'Hello-World' repository owned by 'octocat'.
 
         .INPUTS
-        GitHubWorkflowRun
-
-        .LINK
+        GitHubWorkflowRun        .LINK
         https://psmodule.io/GitHub/Functions/Workflows/Runs/Stop-GitHubWorkflowRun/
 
         .NOTES

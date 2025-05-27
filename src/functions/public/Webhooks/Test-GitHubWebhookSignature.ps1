@@ -1,4 +1,4 @@
-﻿function Test-GitHubWebhookSignature {
+function Test-GitHubWebhookSignature {
     <#
         .SYNOPSIS
         Verifies a GitHub webhook signature using a shared secret.
@@ -24,13 +24,13 @@
 
         .NOTES
         Returns True if the webhook signature is valid, otherwise False. Indicates whether the signature
-        matches the computed value based on the payload and secret.
+        matches the computed value based on the payload and secret.        .LINK
+        https://psmodule.io/GitHub/Functions/Webhooks/Test-GitHubWebhookSignature/
 
-        .LINK
-        https://psmodule.io/GitHub/Functions/Webhooks/Test-GitHubWebhookSignature
+                https://psmodule.io/GitHub/Functions/Webhooks/Test-GitHubWebhookSignature        .LINK
+        https://psmodule.io/GitHub/Functions/Webhooks/Test-GitHubWebhookSignature/
 
-        .LINK
-        https://docs.github.com/webhooks/using-webhooks/validating-webhook-deliveries
+                https://docs.github.com/webhooks/using-webhooks/validating-webhook-deliveries
     #>
     [OutputType([bool])]
     [CmdletBinding()]

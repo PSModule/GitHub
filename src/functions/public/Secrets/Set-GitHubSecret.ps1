@@ -1,4 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Sodium'; RequiredVersion = '2.1.2'}
+#Requires -Modules @{ ModuleName = 'Sodium'; RequiredVersion = '2.1.2'}
 
 function Set-GitHubSecret {
     <#
@@ -40,9 +40,7 @@ function Set-GitHubSecret {
         Updates the secret `MySecret` in the `Production` environment of the `MyRepo` repository for `MyUser`.
 
         .OUTPUTS
-        GitHubSecret
-
-        .LINK
+        GitHubSecret        .LINK
         https://psmodule.io/GitHub/Functions/Secrets/Set-GitHubSecret/
     #>
     [Alias('New-GitHubSecret')]

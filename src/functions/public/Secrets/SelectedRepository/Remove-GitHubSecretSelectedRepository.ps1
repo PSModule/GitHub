@@ -1,4 +1,4 @@
-﻿function Remove-GitHubSecretSelectedRepository {
+function Remove-GitHubSecretSelectedRepository {
     <#
         .SYNOPSIS
         Remove selected repository from an organization secret.
@@ -15,10 +15,10 @@
         Removes repository with ID 123456 from the organization secret 'ENV_SECRET' in 'my-org'.
 
         .OUTPUTS
-        void
+        void        .LINK
+        https://psmodule.io/GitHub/Functions/Secrets/SelectedRepository/Remove-GitHubSecretSelectedRepository/
 
-        .LINK
-        https://psmodule.io/GitHub/Functions/Secrets/SelectedRepository/Remove-GitHubSecretSelectedRepository
+                https://psmodule.io/GitHub/Functions/Secrets/SelectedRepository/Remove-GitHubSecretSelectedRepository
 
         .NOTES
         [Remove selected repository from an organization secret](https://docs.github.com/rest/actions/secrets#remove-selected-repository-from-an-organization-secret)

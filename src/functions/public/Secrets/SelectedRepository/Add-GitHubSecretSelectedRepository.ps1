@@ -1,4 +1,4 @@
-﻿function Add-GitHubSecretSelectedRepository {
+function Add-GitHubSecretSelectedRepository {
     <#
         .SYNOPSIS
         Add selected repository to an organization secret.
@@ -16,10 +16,10 @@
         Adds the repository 'test-repo' to the 'API_KEY' secret in the organization 'my-org'.
 
         .INPUTS
-        [GitHubSecret]
+        [GitHubSecret]        .LINK
+        https://psmodule.io/GitHub/Functions/Secrets/SelectedRepository/Add-GitHubSecretSelectedRepository/
 
-        .LINK
-        https://psmodule.io/GitHub/Functions/Secrets/SelectedRepository/Add-GitHubSecretSelectedRepository
+                https://psmodule.io/GitHub/Functions/Secrets/SelectedRepository/Add-GitHubSecretSelectedRepository
 
         .NOTES
         [Add selected repository to an organization secret](https://docs.github.com/rest/actions/secrets#add-selected-repository-to-an-organization-secret)

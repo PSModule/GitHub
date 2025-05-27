@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepository {
+filter Get-GitHubRepository {
     <#
         .SYNOPSIS
         Gets a specific repository or list of repositories.
@@ -29,9 +29,7 @@
         GitHubOwner
 
         .OUTPUTS
-        GithubRepository
-
-        .LINK
+        GithubRepository        .LINK
         https://psmodule.io/GitHub/Functions/Repositories/Get-GitHubRepository/
     #>
     [OutputType([GitHubRepository])]

@@ -1,4 +1,4 @@
-﻿filter Update-GitHubRepository {
+filter Update-GitHubRepository {
     <#
         .SYNOPSIS
         Update a repository
@@ -24,9 +24,7 @@
         GitHubRepository
 
         .OUTPUTS
-        GitHubRepository
-
-        .LINK
+        GitHubRepository        .LINK
         https://psmodule.io/GitHub/Functions/Repositories/Update-GitHubRepository/
 
         .NOTES

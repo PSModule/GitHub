@@ -1,4 +1,4 @@
-﻿function Get-GitHubSecret {
+function Get-GitHubSecret {
     <#
         .SYNOPSIS
         Retrieve GitHub secret(s) without revealing encrypted value(s).
@@ -26,9 +26,7 @@
         Retrieves all secrets for the 'Staging' environment in the 'Demo' repository under 'PSModule'.
 
         .OUTPUTS
-        GitHubSecret[]
-
-        .LINK
+        GitHubSecret[]        .LINK
         https://psmodule.io/GitHub/Functions/Secrets/Get-GitHubSecret/
     #>
     [OutputType([GitHubSecret[]])]

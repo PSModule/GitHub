@@ -1,4 +1,4 @@
-﻿function Set-GitHubSecretSelectedRepository {
+function Set-GitHubSecretSelectedRepository {
     <#
         .SYNOPSIS
         Set selected repositories for an organization secret.
@@ -12,10 +12,10 @@
         .EXAMPLE
         Set-GitHubSecretSelectedRepository -Owner 'octocat' -Name 'mysecret' -RepositoryID 1234567890
 
-        Sets the selected repositories for the secret `mysecret` in the organization `octocat` to the repository with ID `1234567890`.
+        Sets the selected repositories for the secret `mysecret` in the organization `octocat` to the repository with ID `1234567890`.        .LINK
+        https://psmodule.io/GitHub/Functions/Secrets/SelectedRepository/Set-GitHubSecretSelectedRepository/
 
-        .LINK
-        https://psmodule.io/GitHub/Functions/Secrets/SelectedRepository/Set-GitHubSecretSelectedRepository
+                https://psmodule.io/GitHub/Functions/Secrets/SelectedRepository/Set-GitHubSecretSelectedRepository
 
         .NOTES
         [Set selected repositories for an organization secret](https://docs.github.com/rest/actions/secrets#set-selected-repositories-for-an-organization-secret)

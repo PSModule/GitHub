@@ -1,4 +1,4 @@
-﻿function Remove-GitHubOrganizationInvitation {
+function Remove-GitHubOrganizationInvitation {
     <#
         .SYNOPSIS
         Cancel an organization invitation
@@ -17,10 +17,10 @@
         GitHubOrganization
 
         .OUTPUTS
-        void
+        void        .LINK
+        https://psmodule.io/GitHub/Functions/Organization/Members/Remove-GitHubOrganizationInvitation/
 
-        .LINK
-        https://psmodule.io/GitHub/Functions/Organization/Members/Remove-GitHubOrganizationInvitation
+                https://psmodule.io/GitHub/Functions/Organization/Members/Remove-GitHubOrganizationInvitation
 
         .NOTES
         [Cancel an organization invitation](https://docs.github.com/rest/orgs/members#cancel-an-organization-invitation)

@@ -1,4 +1,4 @@
-﻿function New-GitHubTeam {
+function New-GitHubTeam {
     <#
         .SYNOPSIS
         Create a team
@@ -22,10 +22,10 @@
             Privacy      = 'closed'
             Permission   = 'pull'
         }
-        New-GitHubTeam @params
+        New-GitHubTeam @params        .LINK
+        https://psmodule.io/GitHub/Functions/Teams/New-GitHubTeam/
 
-        .LINK
-        https://psmodule.io/GitHub/Functions/Teams/New-GitHubTeam
+                https://psmodule.io/GitHub/Functions/Teams/New-GitHubTeam
 
         .NOTES
         [Create a team](https://docs.github.com/rest/teams/teams#create-a-team)

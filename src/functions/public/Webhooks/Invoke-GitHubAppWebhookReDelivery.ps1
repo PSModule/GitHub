@@ -1,4 +1,4 @@
-﻿function Invoke-GitHubAppWebhookReDelivery {
+function Invoke-GitHubAppWebhookReDelivery {
     <#
         .SYNOPSIS
         Redeliver a delivery for an app webhook
@@ -12,10 +12,10 @@
         .EXAMPLE
         Invoke-GitHubAppWebhookReDelivery -ID 12345
 
-        Redelivers the delivery with the ID `12345`.
+        Redelivers the delivery with the ID `12345`.        .LINK
+        https://psmodule.io/GitHub/Functions/Webhooks/Invoke-GitHubAppWebhookReDelivery/
 
-        .LINK
-        https://psmodule.io/GitHub/Functions/Webhooks/Invoke-GitHubAppWebhookReDelivery
+                https://psmodule.io/GitHub/Functions/Webhooks/Invoke-GitHubAppWebhookReDelivery
 
         .NOTES
         [Redeliver a delivery for an app webhook](https://docs.github.com/rest/apps/webhooks#redeliver-a-delivery-for-an-app-webhook)

@@ -1,4 +1,4 @@
-﻿filter New-GitHubRelease {
+filter New-GitHubRelease {
     <#
         .SYNOPSIS
         Create a release
@@ -40,9 +40,7 @@
         GitHubRepository
 
         .OUTPUTS
-        GitHubRelease
-
-        .LINK
+        GitHubRelease        .LINK
         https://psmodule.io/GitHub/Functions/Releases/New-GitHubRelease/
 
         .NOTES

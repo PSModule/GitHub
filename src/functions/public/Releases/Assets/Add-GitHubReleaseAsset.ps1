@@ -1,4 +1,4 @@
-﻿filter Add-GitHubReleaseAsset {
+filter Add-GitHubReleaseAsset {
     <#
         .SYNOPSIS
         Upload a release asset
@@ -50,9 +50,7 @@
         GitHubRelease
 
         .OUTPUTS
-        GitHubReleaseAsset
-
-        .LINK
+        GitHubReleaseAsset        .LINK
         https://psmodule.io/GitHub/Functions/Releases/Assets/Add-GitHubReleaseAsset/
 
         .NOTES

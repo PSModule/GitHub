@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRelease {
+filter Get-GitHubRelease {
     <#
         .SYNOPSIS
         Retrieves GitHub release information for a repository.
@@ -32,9 +32,7 @@
         GitHubRepository
 
         .OUTPUTS
-        GitHubRelease
-
-        .LINK
+        GitHubRelease        .LINK
         https://psmodule.io/GitHub/Functions/Releases/Get-GitHubRelease/
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(

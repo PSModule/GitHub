@@ -1,4 +1,4 @@
-﻿function Remove-GitHubVariableSelectedRepository {
+function Remove-GitHubVariableSelectedRepository {
     <#
         .SYNOPSIS
         Remove selected repository from an organization variable.
@@ -21,10 +21,10 @@
         Removes repository with ID 123456 from the organization variable 'ENV_SECRET' in 'my-org'.
 
         .OUTPUTS
-        void
+        void        .LINK
+        https://psmodule.io/GitHub/Functions/Variables/SelectedRepository/Remove-GitHubVariableSelectedRepository/
 
-        .LINK
-        https://psmodule.io/GitHub/Functions/Variables/SelectedRepository/Remove-GitHubVariableSelectedRepository
+                https://psmodule.io/GitHub/Functions/Variables/SelectedRepository/Remove-GitHubVariableSelectedRepository
 
         .NOTES
         [Remove selected repository from an organization variable](https://docs.github.com/rest/actions/variables#remove-selected-repository-from-an-organization-variable)

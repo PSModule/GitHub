@@ -1,4 +1,4 @@
-﻿function Get-GitHubOrganizationMember {
+function Get-GitHubOrganizationMember {
     <#
         .SYNOPSIS
         List organization members
@@ -8,10 +8,10 @@
         If the authenticated user is also a member of this organization then both concealed and public members will be returned.
 
         .OUTPUTS
-        GitHubUser
+        GitHubUser        .LINK
+        https://psmodule.io/GitHub/Functions/Organization/Members/Get-GitHubOrganizationMember/
 
-        .LINK
-        https://psmodule.io/GitHub/Functions/Organization/Members/Get-GitHubOrganizationMember
+                https://psmodule.io/GitHub/Functions/Organization/Members/Get-GitHubOrganizationMember
 
         .NOTES
         [List organization members](https://docs.github.com/rest/orgs/members#list-organization-members)

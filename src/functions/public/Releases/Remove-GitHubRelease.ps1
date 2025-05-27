@@ -1,4 +1,4 @@
-﻿filter Remove-GitHubRelease {
+filter Remove-GitHubRelease {
     <#
         .SYNOPSIS
         Delete a release
@@ -15,10 +15,10 @@
         GitHubRelease
 
         .OUTPUTS
-        None
+        None        .LINK
+        https://psmodule.io/GitHub/Functions/Releases/Remove-GitHubRelease/
 
-        .LINK
-        https://psmodule.io/GitHub/Functions/Releases/Get-GitHubRelease/
+                https://psmodule.io/GitHub/Functions/Releases/Get-GitHubRelease/
 
         .NOTES
         [Delete a release](https://docs.github.com/rest/releases/releases#delete-a-release)

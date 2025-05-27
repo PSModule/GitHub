@@ -23,7 +23,7 @@ function Export-GitHubVariable {
         void
 
         .LINK
-        https://psmodule.io/GitHub/Functions/Variables/Export-GitHubVariable
+        https://psmodule.io/GitHub/Functions/Variables/Export-GitHubVariable/
     #>
     [OutputType([void])]
     [CmdletBinding()]

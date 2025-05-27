@@ -1,4 +1,4 @@
-﻿filter New-GitHubReleaseNote {
+filter New-GitHubReleaseNote {
     <#
         .SYNOPSIS
         Generate release notes content for a release.
@@ -53,9 +53,7 @@
         .NOTES
         The returned object contains the following properties:
         - Name: The name of the release.
-        - Notes: The body of the release notes.
-
-        .LINK
+        - Notes: The body of the release notes.        .LINK
         https://psmodule.io/GitHub/Functions/Releases/New-GitHubReleaseNote/
 
         .NOTES

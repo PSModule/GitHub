@@ -1,4 +1,4 @@
-﻿filter Get-GitHubOrganization {
+filter Get-GitHubOrganization {
     <#
         .SYNOPSIS
         List organization
@@ -30,10 +30,8 @@
         Get the organization 'PSModule'.
 
         .OUTPUTS
-        GitHubOrganization
-
-        .LINK
-        https://psmodule.io/GitHub/Functions/Organization/Get-GitHubOrganization
+        GitHubOrganization        .LINK
+        https://psmodule.io/GitHub/Functions/Organization/Get-GitHubOrganization/
     #>
     [OutputType([GitHubOrganization])]
     [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]

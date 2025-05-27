@@ -1,4 +1,4 @@
-﻿filter Disable-GitHubWorkflow {
+filter Disable-GitHubWorkflow {
     <#
         .SYNOPSIS
         Disable a workflow.
@@ -10,9 +10,7 @@
         .EXAMPLE
 
         .INPUTS
-        GitHubWorkflow
-
-        .LINK
+        GitHubWorkflow        .LINK
         https://psmodule.io/GitHub/Functions/Workflows/Disable-GitHubWorkflow/
 
         .NOTES

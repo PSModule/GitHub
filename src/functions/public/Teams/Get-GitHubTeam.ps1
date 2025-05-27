@@ -1,4 +1,4 @@
-﻿function Get-GitHubTeam {
+function Get-GitHubTeam {
     <#
         .SYNOPSIS
         List teams from an org or get a team by name
@@ -19,10 +19,10 @@
         Gets the team with the slug 'my-team-name' in the `github` organization.
 
         .NOTES
-        [List teams](https://docs.github.com/rest/teams/teams#list-teams)
+        [List teams](https://docs.github.com/rest/teams/teams#list-teams)        .LINK
+        https://psmodule.io/GitHub/Functions/Teams/Get-GitHubTeam/
 
-        .LINK
-        https://psmodule.io/GitHub/Functions/Teams/Get-GitHubTeam
+                https://psmodule.io/GitHub/Functions/Teams/Get-GitHubTeam
     #>
     [OutputType([GitHubTeam])]
     [CmdletBinding(DefaultParameterSetName = 'List all teams in an organization')]

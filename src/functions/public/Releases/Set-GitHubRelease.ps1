@@ -1,4 +1,4 @@
-﻿filter Set-GitHubRelease {
+filter Set-GitHubRelease {
     <#
         .SYNOPSIS
         Creates or updates a release.
@@ -55,9 +55,7 @@
         GitHubRepository
 
         .OUTPUTS
-        GitHubRelease
-
-        .LINK
+        GitHubRelease        .LINK
         https://psmodule.io/GitHub/Functions/Releases/Set-GitHubRelease/
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(

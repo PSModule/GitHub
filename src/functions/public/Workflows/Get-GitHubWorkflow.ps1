@@ -1,4 +1,4 @@
-﻿filter Get-GitHubWorkflow {
+filter Get-GitHubWorkflow {
     <#
         .SYNOPSIS
         Lists the workflows in a repository.
@@ -19,9 +19,7 @@
         Gets the 'hello-world.yml' workflow in the 'octocat/hello-world' repository.
 
         .OUTPUTS
-        GitHubWorkflow
-
-        .LINK
+        GitHubWorkflow        .LINK
         https://psmodule.io/GitHub/Functions/Workflows/Get-GitHubWorkflow/
 
         .NOTES

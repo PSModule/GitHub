@@ -1,4 +1,4 @@
-﻿filter Get-GitHubReleaseAsset {
+filter Get-GitHubReleaseAsset {
     <#
         .SYNOPSIS
         List release assets based on a release ID, asset ID, or asset name
@@ -33,10 +33,10 @@
         GitHubRelease
 
         .OUTPUTS
-        GitHubReleaseAsset
+        GitHubReleaseAsset        .LINK
+        https://psmodule.io/GitHub/Functions/Releases/Assets/Get-GitHubReleaseAsset/
 
-        .LINK
-        https://psmodule.io/GitHub/Functions/Releases/Assets/Get-GitHubReleaseAsset
+                https://psmodule.io/GitHub/Functions/Releases/Assets/Get-GitHubReleaseAsset
     #>
     [OutputType([GitHubReleaseAsset])]
     [CmdletBinding(DefaultParameterSetName = 'List assets from the latest release')]

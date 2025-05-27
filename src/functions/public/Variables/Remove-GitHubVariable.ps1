@@ -32,9 +32,7 @@ function Remove-GitHubVariable {
         GitHubVariable
 
         .OUTPUTS
-        void
-
-        .LINK
+        void        .LINK
         https://psmodule.io/GitHub/Functions/Variables/Remove-GitHubVariable/
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
