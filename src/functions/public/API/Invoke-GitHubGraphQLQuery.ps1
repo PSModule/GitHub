@@ -55,15 +55,16 @@
                 $graphQLResponse | ConvertTo-Json -Depth 10 | Out-String -Stream | ForEach-Object { Write-Debug $_ }
             }
             # Handle GraphQL-specific errors (200 OK with errors in response)
-            $errorMessages = @()
             if ($graphQLResponse.errors) {
+                $errorMessages = @()
                 foreach ($errorItem in $graphQLResponse.errors) {
                     $errorMessages += @"
 GraphQL Error [$($errorItem.type)]:
 Message:    $($errorItem.message)
 Path:       $($errorItem.path -join '/')
 Query Line: $lineText
-Locations:  $($errorItem.locations | ForEach-Object { "[$($_.line):$($_.column)]" } -join ', ')
+Locations:
+$($errorItem.locations | ForEach-Object { " - [$($_.line):$($_.column)]" })
 
 Full Error: $($errorItem | ConvertTo-Json -Depth 10 | Out-String -Stream)
 
