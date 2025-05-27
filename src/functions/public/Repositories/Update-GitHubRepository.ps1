@@ -321,12 +321,8 @@
                         repository {
                             id
                             name
-                            owner {
-                                login
-                            }
                             hasSponsorshipsEnabled
                             hasDiscussionsEnabled
-                            autoMergeAllowed
                         }
                     }
                 }
