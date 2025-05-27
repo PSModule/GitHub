@@ -4,7 +4,7 @@
         Write a colored message in GitHub Actions or locally
 
         .DESCRIPTION
-        Write a colored message in GitHub Actions or locally with ANSI color support. 
+        Write a colored message in GitHub Actions or locally with ANSI color support.
         When running in GitHub Actions, uses ANSI color codes for text formatting.
         When not running in GitHub Actions, uses standard Write-Host.
 
@@ -43,23 +43,20 @@
         # The message to display
         [Parameter(Mandatory = $true, Position = 0)]
         [string] $Message,
-        
         # Foreground color for the message
         [Parameter()]
         [ArgumentCompleter({
-            param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
-            $PSStyle.Foreground.PSObject.Properties.Name | Where-Object { $_ -like "$wordToComplete*" }
-        })]
+                param($wordToComplete)
+                $PSStyle.Foreground.PSObject.Properties.Name | Where-Object { $_ -like "$wordToComplete*" }
+            })]
         [string] $ForegroundColor,
-        
         # Background color for the message
         [Parameter()]
         [ArgumentCompleter({
-            param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
-            $PSStyle.Background.PSObject.Properties.Name | Where-Object { $_ -like "$wordToComplete*" }
-        })]
+                param($wordToComplete)
+                $PSStyle.Background.PSObject.Properties.Name | Where-Object { $_ -like "$wordToComplete*" }
+            })]
         [string] $BackgroundColor,
-        
         # Output the message without a trailing newline
         [Parameter()]
         [switch] $NoNewLine
@@ -76,15 +73,15 @@
             $params = @{
                 Object = $Message
             }
-            
+
             if ($NoNewLine) {
                 $params['NoNewLine'] = $true
             }
-            
+
             Write-Host @params
             return
         }
-        
+
         # Running in GitHub Actions, so use ANSI colors
         # Build the ANSI escape sequence string using $PSStyle values
         $ansiString = ""
