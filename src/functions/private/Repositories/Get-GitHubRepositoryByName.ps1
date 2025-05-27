@@ -51,6 +51,7 @@
             'HasProjects',
             'HasWiki',
             'HasDiscussions',
+            'HasSponsorships',
             'IsArchived',
             'IsTemplate',
             'IsFork',
