@@ -66,7 +66,8 @@ Path:       $($errorItem.path -join '/')
 Locations:
 $($errorItem.locations | ForEach-Object { " - [$($_.line):$($_.column)] - $($queryLines[$_.line - 1])" })
 
-Full Error: $($errorItem | ConvertTo-Json -Depth 10 | Out-String -Stream | ForEach-Object { "$_" })
+Full Error:
+$($errorItem | ConvertTo-Json -Depth 10 -Indent 4)
 
 "@
                 }
