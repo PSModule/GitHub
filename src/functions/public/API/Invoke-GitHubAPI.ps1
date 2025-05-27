@@ -348,7 +348,7 @@ Request headers:
 $([pscustomobject]$APICall.Headers | Format-List | Out-String)
 ----------------------------------
 Request body:
-$(($APICall.Body | Out-String).Split('\n') -split '\n')
+$(($APICall.Body | Out-String -Stream).Split('\n') -split '\n')
 ----------------------------------
 Response headers:
 $($headers | Format-List | Out-String)
