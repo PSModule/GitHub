@@ -50,23 +50,22 @@
         try {
             $apiResponse = Invoke-GitHubAPI @inputObject
             $graphQLResponse = $apiResponse.Response
-
+            if ($DebugPreference -eq 'Continue') {
+                Write-Debug 'GraphQL Response RAW:'
+                $graphQLResponse | ConvertTo-Json -Depth 10 | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+            }
             # Handle GraphQL-specific errors (200 OK with errors in response)
+            $errorMessages = @()
             if ($graphQLResponse.errors) {
-                $queryLines = $Query -split "`n"
-                $errorMessages = @()
-                $graphQLResponse.errors | ForEach-Object {
-                    $lineNum = $_.locations.line
-                    $lineText = if ($lineNum -and ($lineNum -le $queryLines.Count)) { $queryLines[$lineNum - 1].Trim() } else { '' }
+                foreach ($errorItem in $graphQLResponse.errors) {
                     $errorMessages += @"
-GraphQL Error [$($_.type)]:
-Message:    $($_.message)
-Path:       $($_.path -join '/')
-Location:   $($_.locations.line):$($_.locations.column)
+GraphQL Error [$($errorItem.type)]:
+Message:    $($errorItem.message)
+Path:       $($errorItem.path -join '/')
 Query Line: $lineText
-Extensions: $($_.extensions | ConvertTo-Json -Depth 10 | Out-String -Stream)
+Locations:  $($errorItem.locations | ForEach-Object { "[$($_.line):$($_.column)]" } -join ', ')
 
-Full Error: $($_ | ConvertTo-Json -Depth 10 | Out-String -Stream)
+Full Error: $($errorItem | ConvertTo-Json -Depth 10 | Out-String -Stream)
 
 "@
                 }
