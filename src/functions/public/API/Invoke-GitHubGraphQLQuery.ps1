@@ -66,6 +66,8 @@ Location:   $($_.locations.line):$($_.locations.column)
 Query Line: $lineText
 Extensions: $($_.extensions | ConvertTo-Json -Depth 10 | Out-String -Stream)
 
+Full Error: $($_ | ConvertTo-Json -Depth 10 | Out-String -Stream)
+
 "@
                 }
                 $PSCmdlet.ThrowTerminatingError(
