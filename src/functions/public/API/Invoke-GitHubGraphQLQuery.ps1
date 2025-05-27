@@ -67,7 +67,7 @@ Locations:
 $($errorItem.locations | ForEach-Object { " - [$($_.line):$($_.column)] - $($queryLines[$_.line - 1])" })
 
 Full Error:
-$($errorItem | ConvertTo-Json -Depth 10 -Indent 4)
+$($errorItem | ConvertTo-Json -Depth 10)
 
 "@
                 }
