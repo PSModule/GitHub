@@ -71,6 +71,7 @@ Full Error:
 "@
 
                     $errorItem | ConvertTo-Json -Depth 10 | Out-String -Stream | ForEach-Object {
+                        Write-Debug $_
                         $errorMessages += "$_"
                     }
                 }
