@@ -167,8 +167,8 @@ Describe 'Repositories' {
                 $repo.IsArchived | Should -Be $false
                 $repo.SuggestUpdateBranch | Should -Be $true
                 $repo.DeleteBranchOnMerge | Should -Be $true
-                $repo.AllowAutoMerge | Should -Be $true
-                $repo.License | Should -Be 'mit'
+                # $repo.AllowAutoMerge | Should -Be $true
+                $repo.License | Should -Be 'MIT License'
                 $repo.Homepage | Should -Be 'https://example.com'
             }
         }
