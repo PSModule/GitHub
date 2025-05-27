@@ -64,7 +64,7 @@ Message:    $($_.message)
 Path:       $($_.path -join '/')
 Location:   $($_.locations.line):$($_.locations.column)
 Query Line: $lineText
-Extensions: $($_.extensions | Out-String)
+Extensions: $($_.extensions | ConvertTo-Json -Depth 10 | Out-String)
 
 "@
                 }
