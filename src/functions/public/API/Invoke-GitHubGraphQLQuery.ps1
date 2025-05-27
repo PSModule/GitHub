@@ -57,14 +57,14 @@
             # Handle GraphQL-specific errors (200 OK with errors in response)
             if ($graphQLResponse.errors) {
                 $errorMessages = @()
+                $queryLines = $Query -split "`n" | ForEach-Object { $_.Trim() }
                 foreach ($errorItem in $graphQLResponse.errors) {
                     $errorMessages += @"
 GraphQL Error [$($errorItem.type)]:
 Message:    $($errorItem.message)
 Path:       $($errorItem.path -join '/')
-Query Line: $lineText
 Locations:
-$($errorItem.locations | ForEach-Object { " - [$($_.line):$($_.column)]" })
+$($errorItem.locations | ForEach-Object { " - [$($_.line):$($_.column)] - $($queryLines[$_.line - 1])" })
 
 Full Error: $($errorItem | ConvertTo-Json -Depth 10 | Out-String -Stream)
 
