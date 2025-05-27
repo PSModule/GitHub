@@ -67,9 +67,12 @@ Locations:
 $($errorItem.locations | ForEach-Object { " - [$($_.line):$($_.column)] - $($queryLines[$_.line - 1])" })
 
 Full Error:
-$($errorItem | ConvertTo-Json -Depth 10)
 
 "@
+
+                    $errorItem | ConvertTo-Json -Depth 10 | Out-String -Stream | ForEach-Object {
+                        $errorMessages += "$_"
+                    }
                 }
                 $PSCmdlet.ThrowTerminatingError(
                     [System.Management.Automation.ErrorRecord]::new(
