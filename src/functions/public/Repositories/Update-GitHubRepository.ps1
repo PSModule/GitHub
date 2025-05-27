@@ -302,7 +302,6 @@
         $inputParams = @{
             hasSponsorshipsEnabled = $HasSponsorships
             hasDiscussionsEnabled  = $HasDiscussions
-            autoMergeAllowed       = $AllowAutoMerge
         }
         $inputParams | Remove-HashtableEntry -NullOrEmptyValues
 
