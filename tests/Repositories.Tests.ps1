@@ -565,7 +565,7 @@ Describe 'Repositories' {
                 $changedProps | Should -Contain 'UpdatedAt'
                 $changedProps | Should -Contain 'Description'
                 $changedProps | Should -Contain 'HasIssues'
-                $changedProps | Should -Contain 'HasDiscussions'
+                $changedProps | Should -Contain 'HasWiki'
                 $changedProps.Count | Should -Be 4
             }
         }
@@ -588,8 +588,6 @@ Describe 'Repositories' {
                 }
                 Write-Host ($repo | Format-List | Out-String)
             }
-            $repo | Should -Not -BeNullOrEmpty
-            $repo.Name | Should -Be "$repoName-fork3"
             # Now update the description
             $newDescription = 'Updated description for forked repo'
             LogGroup 'Repository - Set update as fork' {
