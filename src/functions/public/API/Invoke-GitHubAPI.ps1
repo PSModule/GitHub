@@ -198,7 +198,8 @@ filter Invoke-GitHubAPI {
             if ($debug) {
                 Write-Debug '----------------------------------'
                 Write-Debug 'Request:'
-                [pscustomobject]$APICall | Select-Object -ExcludeProperty Body, Headers | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+                [pscustomobject]$APICall | Select-Object -ExcludeProperty Body, Headers | Format-List |
+                    Out-String -Stream | ForEach-Object { Write-Debug $_ }
                 Write-Debug '----------------------------------'
                 Write-Debug 'Request headers:'
                 [pscustomobject]$APICall.Headers | Select-Object * | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
