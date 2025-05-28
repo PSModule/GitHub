@@ -161,6 +161,7 @@
         [Parameter(ParameterSetName = 'Create a repository for the authenticated user')]
         [Parameter(ParameterSetName = 'Create a repository in an organization')]
         [Parameter(ParameterSetName = 'Create a repository from a template to an organization')]
+        [Parameter(ParameterSetName = 'Create a repository from a template to a user')]
         [ValidateSet('Public', 'Private', 'Internal')]
         [string] $Visibility = 'Public',
 
@@ -379,6 +380,7 @@
             AllowMergeCommitWith                    = $AllowMergeCommitWith
             AllowSquashMergingWith                  = $AllowSquashMergingWith
             AllowRebaseMerging                      = $AllowRebaseMerging
+            AllowForking                            = $AllowForking
             SuggestUpdateBranch                     = $SuggestUpdateBranch
             AllowAutoMerge                          = $AllowAutoMerge
             DeleteBranchOnMerge                     = $DeleteBranchOnMerge
@@ -388,9 +390,6 @@
             EnableSecretScanningPushProtection      = $EnableSecretScanningPushProtection
             EnableSecretScanningAIDetection         = $EnableSecretScanningAIDetection
             EnableSecretScanningNonProviderPatterns = $EnableSecretScanningNonProviderPatterns
-        }
-        if ($PSCmdlet.ParameterSetName -like 'Fork*') {
-            $updateParams['AllowForking'] = $AllowForking
         }
         $updatedRepo = Update-GitHubRepository @updateParams
 
