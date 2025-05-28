@@ -37,7 +37,7 @@
     [OutputType([void])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'Is the CLI part of the module.')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText', '',
-        Justification = 'The tokens are recieved as clear text. Mitigating exposure by removing variables and performing garbage collection.')]
+        Justification = 'The tokens are received as clear text. Mitigating exposure by removing variables and performing garbage collection.')]
     [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(
         # The user account to connect to.
