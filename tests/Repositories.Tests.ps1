@@ -526,7 +526,7 @@ Describe 'Repositories' {
             LogGroup 'Repository - Set create from template' {
                 switch ($OwnerType) {
                     'user' {
-                        $repo = Set-GitHubRepository @templateParams
+                        $repo = Set-GitHubRepository @templateParams -debug
                     }
                     'organization' {
                         $repo = Set-GitHubRepository @templateParams -Organization $owner
@@ -539,32 +539,39 @@ Describe 'Repositories' {
             # Now update the description
             $newDescription = 'Updated description for template repo'
             LogGroup 'Repository - Set update from template' {
+                $changeParams = @{
+                    Description = $newDescription
+                    HasIssues   = $false
+                    HasWiki     = $false
+                }
                 switch ($OwnerType) {
                     'user' {
                         $repoBefore = Get-GitHubRepository -Name "$repoName-template"
-                        $updatedRepo = Set-GitHubRepository -Name "$repoName-template" -Description $newDescription -HasIssue $false -HasDiscussion $false
+                        $updatedRepo = Set-GitHubRepository -Name "$repoName-template" @changeParams
                     }
                     'organization' {
                         $repoBefore = Get-GitHubRepository -Owner $owner -Name "$repoName-template"
-                        $updatedRepo = Set-GitHubRepository -Organization $owner -Name "$repoName-template" -Description $newDescription -HasIssue $false -HasDiscussion $false
+                        $updatedRepo = Set-GitHubRepository -Organization $owner -Name "$repoName-template" @changeParams
                     }
                 }
                 Write-Host ($updatedRepo | Format-List | Out-String)
+            }
+            LogGroup "Repo diff:" {
                 $changes = Compare-PSCustomObject -Left $repoBefore -Right $updatedRepo -OnlyChanged
                 Write-Host ('Changed properties: ' + ($changes | Format-Table | Out-String))
+                $updatedRepo | Should -Not -BeNullOrEmpty
+                $updatedRepo.Description | Should -Be $newDescription
+                $changedProps = $changes.Property
+                $changedProps | Should -Contain 'UpdatedAt'
+                $changedProps | Should -Contain 'Description'
+                $changedProps | Should -Contain 'HasIssues'
+                $changedProps | Should -Contain 'HasDiscussions'
+                $changedProps.Count | Should -Be 4
             }
-            $updatedRepo | Should -Not -BeNullOrEmpty
-            $updatedRepo.Description | Should -Be $newDescription
-            $changedProps = $changes.Property
-            $changedProps | Should -Contain 'UpdatedAt'
-            $changedProps | Should -Contain 'Description'
-            $changedProps | Should -Contain 'HasIssues'
-            $changedProps | Should -Contain 'HasDiscussions'
-            $changedProps.Count | Should -Be 4
         }
         It 'Set-GitHubRepository - Creates and updates a repository as a fork' -Skip:($OwnerType -eq 'repository') {
             $forkParams = @{
-                Name            = "$repoName-fork"
+                Name            = "$repoName-fork3"
                 ForkOwner       = 'PSModule'
                 ForkRepository  = 'Template-Action'
                 HasIssues       = $false
@@ -582,7 +589,7 @@ Describe 'Repositories' {
                 Write-Host ($repo | Format-List | Out-String)
             }
             $repo | Should -Not -BeNullOrEmpty
-            $repo.Name | Should -Be "$repoName-fork"
+            $repo.Name | Should -Be "$repoName-fork3"
             # Now update the description
             $newDescription = 'Updated description for forked repo'
             LogGroup 'Repository - Set update as fork' {
@@ -593,12 +600,12 @@ Describe 'Repositories' {
                 }
                 switch ($OwnerType) {
                     'user' {
-                        $repoBefore = Get-GitHubRepository -Name "$repoName-fork"
-                        $updatedRepo = Set-GitHubRepository -Name "$repoName-fork" @setParams
+                        $repoBefore = Get-GitHubRepository -Name "$repoName-fork3"
+                        $updatedRepo = Set-GitHubRepository -Name "$repoName-fork3" @setParams
                     }
                     'organization' {
-                        $repoBefore = Get-GitHubRepository -Owner $owner -Name "$repoName-fork"
-                        $updatedRepo = Set-GitHubRepository -Organization $owner -Name "$repoName-fork" @setParams
+                        $repoBefore = Get-GitHubRepository -Owner $owner -Name "$repoName-fork3"
+                        $updatedRepo = Set-GitHubRepository -Organization $owner -Name "$repoName-fork3" @setParams
                     }
                 }
                 Write-Host ($updatedRepo | Format-List | Out-String)
