@@ -274,8 +274,10 @@ function Set-GitHubRepository {
                 Context            = $Context
             }
             $newParams | Remove-HashtableEntry -NullOrEmptyValues
-            Write-Debug "New repo params:"
-            Write-Debug "$($newParams | Select-Object * | Out-String)"
+            if ($DebugPreference -eq 'Continue') {
+                Write-Debug "New repo params:"
+                $newParams | Select-Object * | Format-List | Out-String -Stream| ForEach-Object { Write-Debug $_ }
+            }
             New-GitHubRepository @newParams @configParams -ErrorAction Stop
         }
     }

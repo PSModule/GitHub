@@ -50,10 +50,6 @@
         try {
             $apiResponse = Invoke-GitHubAPI @inputObject
             $graphQLResponse = $apiResponse.Response
-            if ($DebugPreference -eq 'Continue') {
-                Write-Debug 'GraphQL Response RAW:'
-                $graphQLResponse | ConvertTo-Json -Depth 10 | Out-String -Stream | ForEach-Object { Write-Debug $_ }
-            }
             # Handle GraphQL-specific errors (200 OK with errors in response)
             if ($graphQLResponse.errors) {
                 $errorMessages = @()
