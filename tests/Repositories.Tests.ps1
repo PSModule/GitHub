@@ -526,10 +526,14 @@ Describe 'Repositories' {
             LogGroup 'Repository - Set create from template' {
                 switch ($OwnerType) {
                     'user' {
-                        $repo = Set-GitHubRepository @templateParams -debug
+                        Trace-Command ParameterBinding {
+                            $repo = Set-GitHubRepository @templateParams -Debug
+                        }
                     }
                     'organization' {
-                        $repo = Set-GitHubRepository @templateParams -Organization $owner
+                        Trace-Command ParameterBinding {
+                            $repo = Set-GitHubRepository @templateParams -Organization $owner
+                        }
                     }
                 }
                 Write-Host ($repo | Format-List | Out-String)
@@ -556,7 +560,7 @@ Describe 'Repositories' {
                 }
                 Write-Host ($updatedRepo | Format-List | Out-String)
             }
-            LogGroup "Repo diff:" {
+            LogGroup 'Repo diff:' {
                 $changes = Compare-PSCustomObject -Left $repoBefore -Right $updatedRepo -OnlyChanged
                 Write-Host ('Changed properties: ' + ($changes | Format-Table | Out-String))
                 $updatedRepo | Should -Not -BeNullOrEmpty
