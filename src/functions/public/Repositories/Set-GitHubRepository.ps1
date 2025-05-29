@@ -221,7 +221,8 @@ function Set-GitHubRepository {
             Context = $Context
         }
         $getParams | Remove-HashtableEntry -NullOrEmptyValues
-
+        $repo = Get-GitHubRepository @getParams -ErrorAction Stop
+        
         $configParams = @{
             Visibility                              = $Visibility
             Description                             = $Description
