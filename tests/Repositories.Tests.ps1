@@ -526,14 +526,14 @@ Describe 'Repositories' {
             LogGroup 'Repository - Set create from template' {
                 switch ($OwnerType) {
                     'user' {
-                        Trace-Command ParameterBinding {
+                        Trace-Command -Name ParameterBinding, ParameterBinderBase, ParameterBinderController -Expression {
                             $repo = Set-GitHubRepository @templateParams -Debug
-                        }
+                        } -PSHost
                     }
                     'organization' {
-                        Trace-Command ParameterBinding {
+                        Trace-Command -Name ParameterBinding, ParameterBinderBase, ParameterBinderController -Expression {
                             $repo = Set-GitHubRepository @templateParams -Organization $owner
-                        }
+                        } -PSHost
                     }
                 }
                 Write-Host ($repo | Format-List | Out-String)
