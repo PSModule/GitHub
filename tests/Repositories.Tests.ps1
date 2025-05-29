@@ -111,9 +111,10 @@ Describe 'Repositories' {
             }
         }
         It 'New-GitHubRepository - Creates a new repository with settings' -Skip:($OwnerType -eq 'repository') {
+            $name = "$repoName-settings"
             LogGroup 'Repository - Creation + Settings' {
                 $params = @{
-                    Name                   = "$repoName-settings"
+                    Name                   = $name
                     Description            = 'Test repository with settings'
                     HasIssues              = $false
                     HasProjects            = $false
@@ -142,8 +143,8 @@ Describe 'Repositories' {
                 Write-Host ($repo | Format-List | Out-String)
                 $repo | Should -BeOfType 'GitHubRepository'
                 $repo | Should -Not -BeNullOrEmpty
-                $repo.Name | Should -Be "$repoName-settings"
-                $repo.FullName | Should -Be "$owner/$repoName-settings"
+                $repo.Name | Should -Be $name
+                $repo.FullName | Should -Be "$owner/$name"
                 $repo.Owner | Should -Be $owner
                 $repo.DatabaseID | Should -Not -BeNullOrEmpty
                 $repo.ID | Should -Not -BeNullOrEmpty
@@ -178,9 +179,10 @@ Describe 'Repositories' {
             }
         }
         It 'New-GitHubRepository - Creates a new repository from a template' -Skip:($OwnerType -eq 'repository') {
+            $name = "$repoName-template"
             LogGroup 'Repository - Template' {
                 $params = @{
-                    Name               = "$repoName-tmp"
+                    Name               = $name
                     TemplateOwner      = 'PSModule'
                     TemplateRepository = 'Template-Action'
                     HasWiki            = $false
@@ -197,8 +199,8 @@ Describe 'Repositories' {
                 Write-Host ($repo | Format-List | Out-String)
                 $repo | Should -BeOfType 'GitHubRepository'
                 $repo | Should -Not -BeNullOrEmpty
-                $repo.Name | Should -Be "$repoName-tmp"
-                $repo.FullName | Should -Be "$owner/$repoName-tmp"
+                $repo.Name | Should -Be $name
+                $repo.FullName | Should -Be "$owner/$name"
                 $repo.Owner | Should -Be $owner
                 $repo.DatabaseID | Should -Not -BeNullOrEmpty
                 $repo.ID | Should -Not -BeNullOrEmpty
@@ -226,11 +228,12 @@ Describe 'Repositories' {
             }
         }
         It 'New-GitHubRepository - Creates a new repository as a fork' -Skip:($OwnerType -eq 'repository') {
+            $name = "$repoName-fork"
             LogGroup 'Repository - Fork' {
                 $params = @{
-                    Name           = "$repoName-fork"
-                    ForkOwner      = 'PSModule'
-                    ForkRepository = 'Template-Action'
+                    Name           = $name
+                    ForkOwner      = 'psmodule-test'
+                    ForkRepository = "fork-$os"
                     HasWiki        = $false
                     HasIssues      = $false
                 }
@@ -245,8 +248,8 @@ Describe 'Repositories' {
                 Write-Host ($repo | Format-List | Out-String)
                 $repo | Should -BeOfType 'GitHubRepository'
                 $repo | Should -Not -BeNullOrEmpty
-                $repo.Name | Should -Be "$repoName-fork"
-                $repo.FullName | Should -Be "$owner/$repoName-fork"
+                $repo.Name | Should -Be $name
+                $repo.FullName | Should -Be "$owner/$name"
                 $repo.Owner | Should -Be $owner
                 $repo.DatabaseID | Should -Not -BeNullOrEmpty
                 $repo.ID | Should -Not -BeNullOrEmpty
