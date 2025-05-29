@@ -222,7 +222,7 @@ function Set-GitHubRepository {
         }
         $getParams | Remove-HashtableEntry -NullOrEmptyValues
         $repo = Get-GitHubRepository @getParams -ErrorAction Stop
-        
+
         $configParams = @{
             Visibility                              = $Visibility
             Description                             = $Description
@@ -274,11 +274,11 @@ function Set-GitHubRepository {
                 Context            = $Context
             }
             $newParams | Remove-HashtableEntry -NullOrEmptyValues
-            if ($DebugPreference -eq 'Continue') {
-                Write-Debug 'New repo params:'
-                $newParams | Select-Object * | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
-                Write-Debug 'Config params:'
-                $configParams | Select-Object * | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+            if ($VerbosePreference -eq 'Continue') {
+                Write-Verbose 'New repo params:'
+                $newParams | Select-Object * | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+                Write-Verbose 'Config params:'
+                $configParams | Select-Object * | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
             }
             New-GitHubRepository @newParams @configParams -ErrorAction Stop
         }

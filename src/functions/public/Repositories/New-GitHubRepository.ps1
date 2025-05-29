@@ -356,9 +356,9 @@
             }
         }
 
-        if ($DebugPreference -eq 'Continue') {
-            Write-Debug 'New repo created'
-            $repo | Select-Object * | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+        if ($VerbosePreference -eq 'Continue') {
+            Write-Verbose 'New repo created'
+            $repo | Select-Object * | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
         }
 
         $updateParams = @{
@@ -393,9 +393,9 @@
         }
         $updatedRepo = Update-GitHubRepository @updateParams
 
-        if ($DebugPreference -eq 'Continue') {
-            Write-Debug 'Updated repo'
-            $updatedRepo | Select-Object * | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+        if ($VerbosePreference -eq 'Continue') {
+            Write-Verbose 'Updated repo'
+            $updatedRepo | Select-Object * | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
         }
 
         $updatedRepo.DefaultBranch = $repo.DefaultBranch
