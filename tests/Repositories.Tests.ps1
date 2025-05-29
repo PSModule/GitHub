@@ -67,12 +67,17 @@ Describe 'Repositories' {
 
         It 'New-GitHubRepository - Creates a new repository' -Skip:($OwnerType -eq 'repository') {
             LogGroup 'Repository - Creation' {
+                $params = @{
+                    Name      = $repoName
+                    HasWiki   = $false
+                    HasIssues = $false
+                }
                 switch ($OwnerType) {
                     'user' {
-                        $repo = New-GitHubRepository -Name $repoName
+                        $repo = New-GitHubRepository @params
                     }
                     'organization' {
-                        $repo = New-GitHubRepository -Organization $owner -Name $repoName
+                        $repo = New-GitHubRepository -Organization $owner @params
                     }
                 }
                 Write-Host ($repo | Format-List | Out-String)
@@ -99,9 +104,9 @@ Describe 'Repositories' {
                 $repo.ForkRepository | Should -BeNullOrEmpty
                 $repo.Visibility | Should -Be 'Public'
                 $repo.DefaultBranch | Should -Be 'main'
-                $repo.HasIssues | Should -Be $true
+                $repo.HasIssues | Should -Be $false
                 $repo.HasProjects | Should -Be $true
-                $repo.HasWiki | Should -Be $true
+                $repo.HasWiki | Should -Be $false
                 $repo.IsArchived | Should -Be $false
             }
         }
@@ -178,6 +183,8 @@ Describe 'Repositories' {
                     Name               = "$repoName-tmp"
                     TemplateOwner      = 'PSModule'
                     TemplateRepository = 'Template-Action'
+                    HasWiki            = $false
+                    HasIssues          = $false
                 }
                 switch ($OwnerType) {
                     'user' {
@@ -212,18 +219,19 @@ Describe 'Repositories' {
                 $repo.ForkRepository | Should -BeNullOrEmpty
                 $repo.Visibility | Should -Be 'Public'
                 $repo.DefaultBranch | Should -Be 'main'
-                $repo.HasIssues | Should -Be $true
+                $repo.HasIssues | Should -Be $false
                 $repo.HasProjects | Should -Be $true
-                $repo.HasWiki | Should -Be $true
+                $repo.HasWiki | Should -Be $false
                 $repo.IsArchived | Should -Be $false
             }
         }
         It 'New-GitHubRepository - Creates a new repository as a fork' -Skip:($OwnerType -eq 'repository') {
-            LogGroup 'Repository - Fork' {
-                $params = @{
+            LogGroup 'Repository - Fork' { $params = @{
                     Name           = "$repoName-fork"
                     ForkOwner      = 'PSModule'
                     ForkRepository = 'Template-Action'
+                    HasWiki        = $false
+                    HasIssues      = $false
                 }
                 switch ($OwnerType) {
                     'user' {
@@ -264,11 +272,12 @@ Describe 'Repositories' {
             }
         }
         It 'New-GitHubRepository - Creates a second new repository as a fork' -Skip:($OwnerType -eq 'repository') {
-            LogGroup 'Repository - Fork2' {
-                $params2 = @{
+            LogGroup 'Repository - Fork2' { $params2 = @{
                     Name           = "$repoName-fork2"
                     ForkOwner      = 'MariusStorhaug'
                     ForkRepository = 'PowerShell'
+                    HasWiki        = $false
+                    HasIssues      = $false
                 }
                 switch ($OwnerType) {
                     'user' {
@@ -526,14 +535,10 @@ Describe 'Repositories' {
             LogGroup 'Repository - Set create from template' {
                 switch ($OwnerType) {
                     'user' {
-                        Trace-Command -Name ParameterBinding, ParameterBinderBase, ParameterBinderController -Expression {
-                            $repo = Set-GitHubRepository @templateParams -Debug
-                        } -PSHost
+                        $repo = Set-GitHubRepository @templateParams
                     }
                     'organization' {
-                        Trace-Command -Name ParameterBinding, ParameterBinderBase, ParameterBinderController -Expression {
-                            $repo = Set-GitHubRepository @templateParams -Organization $owner
-                        } -PSHost
+                        $repo = Set-GitHubRepository @templateParams -Organization $owner
                     }
                 }
                 Write-Host ($repo | Format-List | Out-String)
