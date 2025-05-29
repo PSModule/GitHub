@@ -224,12 +224,7 @@ function Set-GitHubRepository {
         $getParams | Remove-HashtableEntry -NullOrEmptyValues
         $repo = Get-GitHubRepository @getParams -ErrorAction Stop
 
-        if ($PSCmdlet.ParameterSetName -like '*fork*') {
-            $Visibility = $null
-        }
-
         $configParams = @{
-            Visibility                              = $Visibility
             Description                             = $Description
             Homepage                                = $Homepage
             IsArchived                              = $IsArchived
@@ -254,6 +249,9 @@ function Set-GitHubRepository {
             EnableSecretScanningPushProtection      = $EnableSecretScanningPushProtection
             EnableSecretScanningAIDetection         = $EnableSecretScanningAIDetection
             EnableSecretScanningNonProviderPatterns = $EnableSecretScanningNonProviderPatterns
+        }
+        if ($PSCmdlet.ParameterSetName -notlike '*fork*') {
+            $configParams['Visibility'] = $Visibility
         }
         $configParams | Remove-HashtableEntry -NullOrEmptyValues
 
