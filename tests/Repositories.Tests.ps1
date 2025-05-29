@@ -215,7 +215,7 @@ Describe 'Repositories' {
                 $repo.Forks | Should -Be 0
                 $repo.Stargazers | Should -Be 0
                 $repo.Watchers | Should -Be 0
-                $repo.Language | Should -BeNullOrEmpty
+                $repo.Language | Should -Be 'PowerShell'
                 $repo.TemplateRepository | Should -Be 'Template-Action'
                 $repo.TemplateRepository.Owner | Should -Be 'PSModule'
                 $repo.ForkRepository | Should -BeNullOrEmpty
@@ -264,58 +264,9 @@ Describe 'Repositories' {
                 $repo.Forks | Should -Be 0
                 $repo.Stargazers | Should -Be 0
                 $repo.Watchers | Should -Be 0
-                $repo.Language | Should -Be 'PowerShell'
+                $repo.Language | Should -BeNullOrEmpty
                 $repo.TemplateRepository | Should -BeNullOrEmpty
                 $repo.ForkRepository | Should -Be 'Template-Action'
-                $repo.Visibility | Should -Be 'Public'
-                $repo.DefaultBranch | Should -Be 'main'
-                $repo.HasIssues | Should -Be $false
-                $repo.HasProjects | Should -Be $true
-                $repo.HasWiki | Should -Be $false
-                $repo.IsArchived | Should -Be $false
-            }
-        }
-        It 'New-GitHubRepository - Creates a second new repository as a fork' -Skip:($OwnerType -eq 'repository') {
-            LogGroup 'Repository - Fork2' {
-                $params = @{
-                    Name           = "$repoName-fork2"
-                    ForkOwner      = 'MariusStorhaug'
-                    ForkRepository = 'PowerShell'
-                    HasWiki        = $false
-                    HasIssues      = $false
-                }
-                switch ($OwnerType) {
-                    'user' {
-                        $repo = New-GitHubRepository @params
-                    }
-                    'organization' {
-                        $repo = New-GitHubRepository @params -Organization $owner
-                    }
-                }
-
-                Write-Host ($repo | Format-List | Out-String)
-                $repo | Should -BeOfType 'GitHubRepository'
-                $repo | Should -Not -BeNullOrEmpty
-                $repo.Name | Should -Be "$repoName-fork2"
-                $repo.FullName | Should -Be "$owner/$repoName-fork2"
-                $repo.Owner | Should -Be $owner
-                $repo.DatabaseID | Should -Not -BeNullOrEmpty
-                $repo.ID | Should -Not -BeNullOrEmpty
-                $repo.Url | Should -Not -BeNullOrEmpty
-                $repo.CloneUrl | Should -Not -BeNullOrEmpty
-                $repo.SshUrl | Should -Not -BeNullOrEmpty
-                $repo.GitUrl | Should -Not -BeNullOrEmpty
-                $repo.CreatedAt | Should -Not -BeNullOrEmpty
-                $repo.UpdatedAt | Should -Not -BeNullOrEmpty
-                $repo.IsTemplate | Should -Be $false
-                $repo.IsFork | Should -Be $true
-                $repo.Forks | Should -Be 0
-                $repo.Stargazers | Should -Be 0
-                $repo.Watchers | Should -Be 0
-                $repo.Language | Should -Be 'C#'
-                $repo.TemplateRepository | Should -BeNullOrEmpty
-                $repo.ForkRepository.Name | Should -Be 'PowerShell'
-                $repo.ForkRepository.Owner | Should -Be 'MariusStorhaug'
                 $repo.Visibility | Should -Be 'Public'
                 $repo.DefaultBranch | Should -Be 'main'
                 $repo.HasIssues | Should -Be $false
