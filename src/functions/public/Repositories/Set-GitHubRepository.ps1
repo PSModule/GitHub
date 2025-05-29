@@ -96,9 +96,10 @@ function Set-GitHubRepository {
         [string] $License,
 
         # The visibility of the repository.
+        [Parameter(ParameterSetName = 'Set a repository from a template to a user')]
+        [Parameter(ParameterSetName = 'Set a repository from a template to an organization')]
         [Parameter(ParameterSetName = 'Set a repository for the authenticated user')]
         [Parameter(ParameterSetName = 'Set a repository in an organization')]
-        [Parameter(ParameterSetName = 'Set a repository from a template to an organization')]
         [ValidateSet('Public', 'Private', 'Internal')]
         [string] $Visibility = 'Public',
 
@@ -222,6 +223,10 @@ function Set-GitHubRepository {
         }
         $getParams | Remove-HashtableEntry -NullOrEmptyValues
         $repo = Get-GitHubRepository @getParams -ErrorAction Stop
+
+        if ($PSCmdlet.ParameterSetName -like '*fork*') {
+            $Visibility = $null
+        }
 
         $configParams = @{
             Visibility                              = $Visibility
