@@ -223,7 +223,7 @@ filter Invoke-GitHubAPI {
                         }
                     }
                 }
-                $response = Invoke-WebRequest @APICall -ProgressAction 'SilentlyContinue'
+                $response = Invoke-WebRequest @APICall -ProgressAction 'SilentlyContinue' -Debug:$false -Verbose:$false
 
                 $headers = @{}
                 foreach ($item in $response.Headers.GetEnumerator()) {

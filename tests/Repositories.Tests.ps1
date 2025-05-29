@@ -612,6 +612,7 @@ Describe 'Repositories' {
                         $updatedRepo = Set-GitHubRepository -Organization $owner -Name "$repoName-fork3" @setParams -Verbose
                     }
                 }
+                Write-Host ($repoBefore | Format-List | Out-String)
                 Write-Host ($updatedRepo | Format-List | Out-String)
             }
             LogGroup 'Changed properties:' {
