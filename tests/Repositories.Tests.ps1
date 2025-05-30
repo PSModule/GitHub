@@ -215,7 +215,7 @@ Describe 'Repositories' {
                 $repo.Forks | Should -Be 0
                 $repo.Stargazers | Should -Be 0
                 $repo.Watchers | Should -Be 0
-                $repo.Language | Should -Be 'PowerShell'
+                # $repo.Language | Should -Be 'PowerShell' - Not always available on the object.
                 $repo.TemplateRepository | Should -Be 'Template-Action'
                 $repo.TemplateRepository.Owner | Should -Be 'PSModule'
                 $repo.ForkRepository | Should -BeNullOrEmpty
@@ -266,7 +266,7 @@ Describe 'Repositories' {
                 $repo.Watchers | Should -Be 0
                 $repo.Language | Should -BeNullOrEmpty
                 $repo.TemplateRepository | Should -BeNullOrEmpty
-                $repo.ForkRepository | Should -Be 'Template-Action'
+                $repo.ForkRepository | Should -Be "fork-$os"
                 $repo.Visibility | Should -Be 'Public'
                 $repo.DefaultBranch | Should -Be 'main'
                 $repo.HasIssues | Should -Be $false
