@@ -544,8 +544,8 @@ Describe 'Repositories' {
             $name = "$repoName-fork3"
             $forkParams = @{
                 Name           = $name
-                ForkOwner      = 'PSModule'
-                ForkRepository = 'Template-Action'
+                ForkOwner      = 'psmodule-test'
+                ForkRepository = "fork-$os"
             }
             LogGroup 'Repository - Set create as fork' {
                 switch ($OwnerType) {
