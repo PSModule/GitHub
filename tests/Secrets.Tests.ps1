@@ -69,7 +69,7 @@ Describe 'Secrets' {
                             SelectedRepositories = $repo.id
                         }
 
-                        $orgSecret += Set-GitHubSecret @params
+                        $orgSecret += Set-GitHubSecret @params -Debug
                         Write-Host ($orgSecret | Select-Object * | Out-String)
                     }
                 }

@@ -32,7 +32,6 @@
         $this.ID = $Object.id
         $this.NodeID = $Object.node_id
         $this.Name = $Object.name
-        $this.Url = $Object.html_url
         $this.Owner = $Owner
         $this.Repository = $Repository
         $this.CreatedAt = $Object.created_at

@@ -150,11 +150,6 @@
         [Parameter()]
         [System.Nullable[bool]] $EnableSecretScanningNonProviderPatterns,
 
-        # Takes all parameters and updates the repository with the provided _AND_ the default values of the non-provided parameters.
-        # Used for Set-GitHubRepository.
-        [Parameter()]
-        [switch] $Declare,
-
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
@@ -279,12 +274,12 @@
             } : $null
         }
 
-        if (-not $Declare) {
-            $body | Remove-HashtableEntry -NullOrEmptyValues
-        }
+        $body | Remove-HashtableEntry -NullOrEmptyValues
 
-        Write-Debug 'Changed settings for REST call is:'
-        Write-Debug "$($body | Out-String)"
+        if ($DebugPreference -eq 'Continue') {
+            Write-Debug 'Changed settings for REST call is:'
+            [pscustomobject]$body | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+        }
         if ($body.Keys.Count -gt 0) {
             $inputObject = @{
                 Method      = 'PATCH'
@@ -296,8 +291,10 @@
             if ($PSCmdlet.ShouldProcess("Repository [$Owner/$Name]", 'Update')) {
                 $updatedRepo = Invoke-GitHubAPI @inputObject | Select-Object -ExpandProperty Response
             }
-            Write-Debug 'Repo has been updated'
-            Write-Debug "$($updatedRepo | Select-Object * | Out-String)"
+            if ($DebugPreference -eq 'Continue') {
+                Write-Debug 'Repo has been updated'
+                $updatedRepo | Select-Object * | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+            }
         } else {
             Write-Debug 'No changes made to repo via REST'
         }
@@ -308,8 +305,10 @@
         }
         $inputParams | Remove-HashtableEntry -NullOrEmptyValues
 
-        Write-Debug 'Changed settings for GraphQL call is:'
-        Write-Debug "$($inputParams | Out-String)"
+        if ($DebugPreference -eq 'Continue') {
+            Write-Debug 'Changed settings for GraphQL call is:'
+            $inputParams | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+        }
         if ($inputParams.Keys.Count -gt 0) {
             $inputParams += @{
                 repositoryId = $repo.NodeID
@@ -322,9 +321,6 @@
                         repository {
                             id
                             name
-                            owner {
-                                login
-                            }
                             hasSponsorshipsEnabled
                             hasDiscussionsEnabled
                         }
@@ -335,8 +331,7 @@
                     input = $inputParams
                 }
             }
-
-            Invoke-GitHubGraphQLQuery @updateGraphQLInputs
+            $null = Invoke-GitHubGraphQLQuery @updateGraphQLInputs
         } else {
             Write-Debug 'No changes made to repo via GraphQL'
         }
