@@ -23,12 +23,6 @@
 
         Writes 'Success!' in green text on a black background.
 
-        .EXAMPLE
-        Write-GitHubLog -Message 'Working...' -NoNewLine
-        Write-GitHubLog -Message ' Done!'
-
-        Writes 'Working... Done!' on the same line.
-
         .NOTES
         Uses PowerShell's $PSStyle for ANSI color rendering when supported.
 
@@ -44,7 +38,7 @@
     [CmdletBinding()]
     param(
         # The message to display
-        [Parameter(Mandatory, Position = 0)]
+        [Parameter(Mandatory, Position = 0, ValueFromPipeline)]
         [string] $Message,
 
         # Foreground color for the message
@@ -53,15 +47,11 @@
 
         # Background color for the message
         [Parameter()]
-        [System.ConsoleColor] $BackgroundColor,
-
-        # Output the message without a trailing newline
-        [Parameter()]
-        [switch] $NoNewLine
+        [System.ConsoleColor] $BackgroundColor
     )
 
     begin {
-        # $stackPath = Get-PSCallStackPath
+        $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
     }
 
@@ -76,10 +66,10 @@
             }
             $ansiReset = $PSStyle.Reset
             $outputMessage = "$ansiString$Message$ansiReset"
-            Write-Host $($outputMessage | Out-String) -NoNewline:$NoNewLine
+            Write-Host $($outputMessage | Out-String)
             return
         }
-        Write-Host $Message -NoNewline:$NoNewLine -ForegroundColor $ForegroundColor -BackgroundColor $BackgroundColor
+        Write-Host $Message -ForegroundColor $ForegroundColor -BackgroundColor $BackgroundColor
     }
 
     end {
