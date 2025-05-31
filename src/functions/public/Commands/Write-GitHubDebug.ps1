@@ -46,6 +46,7 @@
     process {
         if ($env:GITHUB_ACTIONS -eq 'true') {
             Write-Host "::debug::$Message"
+            return
         }
         Write-Debug "$Message"
     }

@@ -10,6 +10,9 @@
 
         .NOTES
         [GitHub - Grouping log lines](https://docs.github.com/actions/using-workflows/workflow-commands-for-github-actions#grouping-log-lines)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Commands/Stop-GitHubLogGroup
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSUseShouldProcessForStateChangingFunctions', '', Scope = 'Function',

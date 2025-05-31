@@ -66,6 +66,7 @@
     process {
         if ($env:GITHUB_ACTIONS -eq 'true') {
             Write-Host "::notice file=$Name,line=$Line,col=$Column,endColumn=$EndColumn,endLine=$EndLine,title=$Title::$Message"
+            return
         }
         Write-Host $Message
     }

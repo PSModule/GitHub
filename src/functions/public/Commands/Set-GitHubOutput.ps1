@@ -10,6 +10,8 @@
         - GitHub composite action via [GitHub-Script](https://github.com/PSModule/GitHub-Script):
             Accumulates key-value pairs under the 'result' key as a JSON object.
 
+        The Value parameter accepts null values, which will be correctly preserved and set as the output.
+
         .EXAMPLE
         Set-GitHubOutput -Name 'ID' -Value '123123123'
 
@@ -30,8 +32,9 @@
         [Parameter(Mandatory)]
         [string] $Name,
 
-        # The value of the output variable to set.
-        [Parameter(Mandatory)]
+        # The value of the output variable to set. Can be null.
+        [Parameter()]
+        [AllowNull()]
         [object] $Value,
 
         # The path to the GitHub output file.
