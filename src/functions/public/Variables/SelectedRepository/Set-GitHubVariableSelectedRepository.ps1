@@ -9,12 +9,13 @@ function Set-GitHubVariableSelectedRepository {
         Authenticated users must have collaborator access to a repository to create, update, or read variables.
         OAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint. If the repository is private, the `repo` scope is also required.
 
-.EXAMPLE
+        .EXAMPLE
+        Set-GitHubVariableSelectedRepository -Owner 'PSModule' -Name 'MyVariable' -RepositoryID @(123456789)
+
+        Sets the variable 'MyVariable' in the 'PSModule' organization to be available only to the repository with ID 123456789.
 
         .LINK
         https://psmodule.io/GitHub/Functions/Variables/SelectedRepository/Set-GitHubVariableSelectedRepository/
-
-                https://psmodule.io/GitHub/Functions/Variables/SelectedRepository/Set-GitHubVariableSelectedRepository
 
         .NOTES
         [Set selected repositories for an organization variable](https://docs.github.com/rest/actions/variables#set-selected-repositories-for-an-organization-variable)

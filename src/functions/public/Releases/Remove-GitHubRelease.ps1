@@ -20,8 +20,6 @@ filter Remove-GitHubRelease {
         .LINK
         https://psmodule.io/GitHub/Functions/Releases/Remove-GitHubRelease/
 
-                https://psmodule.io/GitHub/Functions/Releases/Get-GitHubRelease/
-
         .NOTES
         [Delete a release](https://docs.github.com/rest/releases/releases#delete-a-release)
     #>

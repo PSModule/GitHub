@@ -26,8 +26,6 @@ function Remove-GitHubVariableSelectedRepository {
         .LINK
         https://psmodule.io/GitHub/Functions/Variables/SelectedRepository/Remove-GitHubVariableSelectedRepository/
 
-                https://psmodule.io/GitHub/Functions/Variables/SelectedRepository/Remove-GitHubVariableSelectedRepository
-
         .NOTES
         [Remove selected repository from an organization variable](https://docs.github.com/rest/actions/variables#remove-selected-repository-from-an-organization-variable)
     #>

@@ -21,8 +21,6 @@ filter Update-GitHubReleaseAsset {
         .LINK
         https://psmodule.io/GitHub/Functions/Releases/Assets/Update-GitHubReleaseAsset/
 
-                https://psmodule.io/GitHub/Functions/Releases/Assets/Update-GitHubReleaseAsset
-
         .NOTES
         [Update a release asset](https://docs.github.com/rest/releases/assets#update-a-release-asset)
     #>

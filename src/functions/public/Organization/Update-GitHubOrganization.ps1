@@ -33,8 +33,6 @@ filter Update-GitHubOrganization {
         .LINK
         https://psmodule.io/GitHub/Functions/Organization/Update-GitHubOrganization/
 
-                https://psmodule.io/GitHub/Functions/Organization/Update-GitHubOrganization
-
         .NOTES
         [Update an organization](https://docs.github.com/rest/orgs/orgs#update-an-organization)
     #>

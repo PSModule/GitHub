@@ -11,12 +11,10 @@ function Remove-GitHubTeam {
         Remove-GitHubTeam -Organization 'github' -Name 'team-name'
 
         .NOTES
-[Delete a team](https://docs.github.com/rest/teams/teams#delete-a-team)
+        [Delete a team](https://docs.github.com/rest/teams/teams#delete-a-team)
 
         .LINK
         https://psmodule.io/GitHub/Functions/Teams/Remove-GitHubTeam/
-
-                https://psmodule.io/GitHub/Functions/Teams/Remove-GitHubTeam
     #>
     [OutputType([void])]
     [CmdletBinding(SupportsShouldProcess)]

@@ -13,8 +13,6 @@ function Get-GitHubOrganizationMember {
         .LINK
         https://psmodule.io/GitHub/Functions/Organization/Members/Get-GitHubOrganizationMember/
 
-                https://psmodule.io/GitHub/Functions/Organization/Members/Get-GitHubOrganizationMember
-
         .NOTES
         [List organization members](https://docs.github.com/rest/orgs/members#list-organization-members)
     #>

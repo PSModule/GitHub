@@ -37,8 +37,6 @@ filter Get-GitHubReleaseAsset {
 
         .LINK
         https://psmodule.io/GitHub/Functions/Releases/Assets/Get-GitHubReleaseAsset/
-
-                https://psmodule.io/GitHub/Functions/Releases/Assets/Get-GitHubReleaseAsset
     #>
     [OutputType([GitHubReleaseAsset])]
     [CmdletBinding(DefaultParameterSetName = 'List assets from the latest release')]

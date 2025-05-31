@@ -28,6 +28,9 @@ function Test-GitHubWebhookSignature {
 
         .LINK
         https://psmodule.io/GitHub/Functions/Webhooks/Test-GitHubWebhookSignature/
+
+        .LINK
+        https://docs.github.com/webhooks/using-webhooks/validating-webhook-deliveries
     #>
     [OutputType([bool])]
     [CmdletBinding()]

@@ -21,8 +21,6 @@ function Add-GitHubSecretSelectedRepository {
         .LINK
         https://psmodule.io/GitHub/Functions/Secrets/SelectedRepository/Add-GitHubSecretSelectedRepository/
 
-                https://psmodule.io/GitHub/Functions/Secrets/SelectedRepository/Add-GitHubSecretSelectedRepository
-
         .NOTES
         [Add selected repository to an organization secret](https://docs.github.com/rest/actions/secrets#add-selected-repository-to-an-organization-secret)
     #>

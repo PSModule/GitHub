@@ -30,8 +30,6 @@ function Update-GitHubAppWebhookConfiguration {
         .LINK
         https://psmodule.io/GitHub/Functions/Webhooks/Update-GitHubAppWebhookConfiguration/
 
-                https://psmodule.io/GitHub/Functions/Webhooks/Update-GitHubAppWebhookConfiguration
-
         .NOTES
         [Update a webhook configuration for an app](https://docs.github.com/rest/apps/webhooks#update-a-webhook-configuration-for-an-app)
     #>

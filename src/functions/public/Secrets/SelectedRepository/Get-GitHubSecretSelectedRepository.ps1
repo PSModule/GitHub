@@ -40,8 +40,6 @@ function Get-GitHubSecretSelectedRepository {
         .LINK
         https://psmodule.io/GitHub/Functions/Secrets/SelectedRepository/Get-GitHubSecretSelectedRepository/
 
-                https://psmodule.io/GitHub/Functions/Secrets/SelectedRepository/Get-GitHubSecretSelectedRepository
-
         .NOTES
         [List selected repositories for an organization secret](https://docs.github.com/rest/actions/Secrets#list-selected-repositories-for-an-organization-Secret)
     #>

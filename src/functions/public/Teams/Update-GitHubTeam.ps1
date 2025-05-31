@@ -27,8 +27,6 @@ function Update-GitHubTeam {
 
         .LINK
         https://psmodule.io/GitHub/Functions/Teams/Update-GitHubTeam/
-
-                https://psmodule.io/GitHub/Functions/Teams/Update-GitHubTeam
     #>
     [OutputType([GitHubTeam])]
     [CmdletBinding(SupportsShouldProcess)]

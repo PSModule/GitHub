@@ -20,8 +20,6 @@ function Remove-GitHubSecretSelectedRepository {
         .LINK
         https://psmodule.io/GitHub/Functions/Secrets/SelectedRepository/Remove-GitHubSecretSelectedRepository/
 
-                https://psmodule.io/GitHub/Functions/Secrets/SelectedRepository/Remove-GitHubSecretSelectedRepository
-
         .NOTES
         [Remove selected repository from an organization secret](https://docs.github.com/rest/actions/secrets#remove-selected-repository-from-an-organization-secret)
     #>
