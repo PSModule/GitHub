@@ -16,7 +16,7 @@
         Returns the webhook configuration for the authenticated app.
 
         .LINK
-        https://psmodule.io/GitHub/Functions/Apps/Webhooks/Get-GitHubAppWebhookConfiguration/
+        https://psmodule.io/GitHub/Functions/Webhooks/Get-GitHubAppWebhookConfiguration/
 
         .NOTES
         [Get a webhook configuration for an app](https://docs.github.com/rest/apps/webhooks#get-a-webhook-configuration-for-an-app)

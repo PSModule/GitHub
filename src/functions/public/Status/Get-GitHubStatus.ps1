@@ -24,6 +24,9 @@
         .NOTES
         [Summary](https://www.githubstatus.com/api#summary)
         [Status](https://www.githubstatus.com/api#status)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Status/Get-GitHubStatus
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]

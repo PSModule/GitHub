@@ -18,6 +18,9 @@
         Get-GitHubAppAccessibleRepository @params
 
         Get the repositories that can be made accessible to a GitHub App installed on the organization 'PSModule' in the enterprise 'msx'.
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Apps/GitHub%20App%20Installations/Get-GitHubAppAccessibleRepository
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param(

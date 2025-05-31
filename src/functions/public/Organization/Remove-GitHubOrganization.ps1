@@ -17,11 +17,11 @@
         .INPUTS
         GitHubOrganization
 
-        .LINK
-        https://psmodule.io/GitHub/Functions/Organization/Remove-GitHubOrganization
-
         .NOTES
         [Delete an organization](https://docs.github.com/rest/orgs/orgs#delete-an-organization)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Organization/Remove-GitHubOrganization
     #>
     [OutputType([void])]
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]

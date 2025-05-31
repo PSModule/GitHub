@@ -21,6 +21,9 @@
         .NOTES
         [Unblock a user](https://docs.github.com/rest/users/blocking#unblock-a-user)
         [Unblock a user from an organization](https://docs.github.com/rest/orgs/blocking#unblock-a-user-from-an-organization)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Users/Blocking/Unblock-GitHubUser
     #>
     [OutputType([bool])]
     [CmdletBinding()]

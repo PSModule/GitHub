@@ -13,6 +13,9 @@
 
         .NOTES
         [Get all API versions](https://docs.github.com/rest/meta/meta#get-all-api-versions)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Meta/Get-GitHubApiVersion
     #>
     [OutputType([string[]])]
     [CmdletBinding()]

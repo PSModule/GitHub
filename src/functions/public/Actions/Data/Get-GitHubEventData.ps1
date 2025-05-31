@@ -8,6 +8,9 @@
 
         .EXAMPLE
         Get-GitHubEventData
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Actions/Data/Get-GitHubEventData
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]

@@ -21,6 +21,9 @@
 
         .NOTES
         [List repository teams](https://docs.github.com/rest/repos/repos#list-repository-teams)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Repositories/Repositories/Get-GitHubRepositoryTeam
     #>
     [CmdletBinding()]
     [Alias('Get-GitHubRepositoryTeams')]

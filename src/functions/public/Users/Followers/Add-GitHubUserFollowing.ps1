@@ -15,6 +15,9 @@
 
         .NOTES
         [Follow a user](https://docs.github.com/rest/users/followers#follow-a-user)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Users/Followers/Add-GitHubUserFollowing
     #>
     [OutputType([pscustomobject])]
     [Alias('Follow-GitHubUser')]

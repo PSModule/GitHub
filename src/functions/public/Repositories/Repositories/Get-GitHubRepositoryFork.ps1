@@ -13,6 +13,9 @@
 
         .NOTES
         [List forks](https://docs.github.com/rest/repos/forks#list-forks)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Repositories/Repositories/Get-GitHubRepositoryFork
     #>
     [CmdletBinding()]
     param(

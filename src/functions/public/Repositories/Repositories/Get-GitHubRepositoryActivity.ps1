@@ -47,6 +47,9 @@
 
         .NOTES
         [List repository activities](https://docs.github.com/rest/repos/repos#list-repository-activities)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Repositories/Repositories/Get-GitHubRepositoryActivity
     #>
     [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(

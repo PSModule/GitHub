@@ -14,6 +14,9 @@
 
         .NOTES
         [List repository languages](https://docs.github.com/rest/repos/repos#list-repository-languages)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Repositories/Repositories/Get-GitHubRepositoryLanguage
     #>
     [CmdletBinding()]
     [Alias('Get-GitHubRepositoryLanguages')]

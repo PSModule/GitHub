@@ -29,6 +29,9 @@
         .NOTES
         [List repository rule suites](https://docs.github.com/rest/repos/rule-suites#list-repository-rule-suites)
         [Get a repository rule suite](https://docs.github.com/rest/repos/rule-suites#get-a-repository-rule-suite)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Repositories/RuleSuite/Get-GitHubRepositoryRuleSuite
     #>
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Long links')]

@@ -19,6 +19,9 @@
         .NOTES
         [List users blocked by the authenticated user](https://docs.github.com/rest/users/blocking#list-users-blocked-by-the-authenticated-user)
         [List users blocked by an organization](https://docs.github.com/rest/orgs/blocking#list-users-blocked-by-an-organization)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Users/Blocking/Get-GitHubBlockedUser
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]

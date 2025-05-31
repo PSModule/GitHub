@@ -24,6 +24,9 @@
 
         Update the repository access for the GitHub App installation with the ID '12345678'
         to the repositories 'repo1' and 'repo2' on the organization 'PSModule' in the enterprise 'msx'.
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Apps/GitHub%20App%20Installations/Update-GitHubAppInstallationRepositoryAccess
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param(

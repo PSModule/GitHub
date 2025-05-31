@@ -21,6 +21,9 @@
 
         .NOTES
         [List pending organization invitations](https://docs.github.com/rest/orgs/members#list-pending-organization-invitations)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Organization/Members/Get-GitHubOrganizationPendingInvitation
     #>
     [CmdletBinding()]
     param(

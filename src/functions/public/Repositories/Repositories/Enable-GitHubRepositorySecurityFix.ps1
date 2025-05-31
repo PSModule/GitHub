@@ -15,6 +15,9 @@
 
         .NOTES
         [Enable automated security fixes](https://docs.github.com/rest/repos/repos#enable-automated-security-fixes)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Repositories/Repositories/Enable-GitHubRepositorySecurityFix
     #>
     [CmdletBinding(SupportsShouldProcess)]
     [Alias('Enable-GitHubRepositorySecurityFixes')]

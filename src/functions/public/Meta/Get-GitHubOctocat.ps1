@@ -18,6 +18,9 @@
 
         .NOTES
         [Get Octocat](https://docs.github.com/rest/meta/meta#get-octocat)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Meta/Get-GitHubOctocat
     #>
     [OutputType([string])]
     [CmdletBinding()]

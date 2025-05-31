@@ -13,6 +13,9 @@
 
         .NOTES
         [List repository tags](https://docs.github.com/rest/repos/repos#list-repository-tags)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Repositories/Repositories/Get-GitHubRepositoryTag
     #>
     [CmdletBinding()]
     [Alias('Get-GitHubRepositoryTags')]

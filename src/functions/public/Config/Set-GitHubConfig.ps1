@@ -12,6 +12,9 @@ function Set-GitHubConfig {
         Set-GitHubConfig -Name DefaultUser -Value 'Octocat'
 
         Sets the value of DefaultUser to 'Octocat' in the GitHub module configuration.
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Config/Set-GitHubConfig
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param(

@@ -22,6 +22,9 @@
         - the client ID '123456'
         - the repository selection 'all'
         on the organization 'org' in the enterprise 'msx'.
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Apps/GitHub%20App/Install-GitHubApp
     #>
     [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(

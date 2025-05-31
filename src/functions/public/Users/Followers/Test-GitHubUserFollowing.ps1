@@ -21,6 +21,9 @@
         .NOTES
         [Check if a person is followed by the authenticated user](https://docs.github.com/rest/users/followers#check-if-a-person-is-followed-by-the-authenticated-user)
         [Check if a user follows another user](https://docs.github.com/rest/users/followers#check-if-a-user-follows-another-user)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Users/Followers/Test-GitHubUserFollowing
     #>
     [OutputType([bool])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]

@@ -22,6 +22,9 @@
         .NOTES
         [Block a user](https://docs.github.com/rest/users/blocking#block-a-user)
         [Block a user from an organization](https://docs.github.com/rest/orgs/blocking#block-a-user-from-an-organization)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Users/Blocking/Block-GitHubUser
     #>
     [OutputType([bool])]
     [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]

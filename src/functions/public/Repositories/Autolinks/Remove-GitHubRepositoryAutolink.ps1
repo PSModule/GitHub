@@ -15,6 +15,9 @@
 
         .NOTES
         [Delete an autolink reference from a repository](https://docs.github.com/rest/repos/autolinks#delete-an-autolink-reference-from-a-repository)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Repositories/Autolinks/Remove-GitHubRepositoryAutolink
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding(SupportsShouldProcess)]

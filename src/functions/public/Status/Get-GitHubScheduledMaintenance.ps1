@@ -30,6 +30,9 @@
 
         .NOTES
         [Scheduled maintenances](https://www.githubstatus.com/api#scheduled-maintenances)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Status/Get-GitHubScheduledMaintenance
     #>
     [CmdletBinding()]
     param(

@@ -19,6 +19,9 @@
 
         .NOTES
         [Get emojis](https://docs.github.com/rest/reference/emojis#get-emojis)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Emojis/Get-GitHubEmoji
     #>
     [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(

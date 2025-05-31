@@ -12,6 +12,9 @@
 
         .EXAMPLE
         Get-GitHubAppInstallableOrganization -Enterprise 'msx'
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Apps/GitHub%20App/Get-GitHubAppInstallableOrganization
     #>
     [CmdletBinding()]
     param(

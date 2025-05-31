@@ -13,6 +13,9 @@
 
         .NOTES
         [Add social accounts for the authenticated user](https://docs.github.com/rest/users/social-accounts#add-social-accounts-for-the-authenticated-user)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Users/Social-Accounts/Add-GitHubUserSocial
     #>
     [OutputType([void])]
     [Alias('Add-GitHubUserSocials')]

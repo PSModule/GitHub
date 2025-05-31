@@ -15,6 +15,9 @@
 
         .NOTES
         [Disable automated security fixes](https://docs.github.com/rest/repos/repos#disable-automated-security-fixes)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Repositories/Repositories/Disable-GitHubRepositorySecurityFix
     #>
     [CmdletBinding(SupportsShouldProcess)]
     [Alias('Disable-GitHubRepositorySecurityFixes')]

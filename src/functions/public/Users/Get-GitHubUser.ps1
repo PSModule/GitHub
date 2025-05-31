@@ -28,6 +28,9 @@
 
         .NOTES
         [Get the authenticated user](https://docs.github.com/rest/users/users)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Users/Get-GitHubUser
     #>
     [OutputType([GitHubOwner])]
     [Alias('Get-GitHubOwner')]

@@ -23,6 +23,9 @@
 
         .NOTES
         [Incidents](https://www.githubstatus.com/api#incidents)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Status/Get-GitHubStatusIncident
     #>
     [OutputType([pscustomobject[]])]
     [Alias('Get-GitHubStatusIncidents')]

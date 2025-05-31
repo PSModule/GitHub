@@ -14,6 +14,9 @@
 
         .NOTES
         [Get all custom property values for a repository](https://docs.github.com/rest/repos/custom-properties#get-all-custom-property-values-for-a-repository)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Repositories/CustomProperties/Get-GitHubRepositoryCustomProperty
     #>
     [Alias('Get-GitHubRepositoryCustomProperties')]
     [CmdletBinding()]

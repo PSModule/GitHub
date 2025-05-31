@@ -14,6 +14,9 @@
 
         .NOTES
         [Components](https://www.githubstatus.com/api#components)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Status/Get-GitHubStatusComponent
     #>
     [OutputType([pscustomobject[]])]
     [Alias('Get-GitHubStatusComponents')]

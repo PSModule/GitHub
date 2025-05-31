@@ -30,11 +30,11 @@
         .OUTPUTS
         GitHubOrganization
 
-        .LINK
-        https://psmodule.io/GitHub/Functions/Organization/Update-GitHubOrganization
-
         .NOTES
         [Update an organization](https://docs.github.com/rest/orgs/orgs#update-an-organization)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Organization/Update-GitHubOrganization
     #>
     [OutputType([GitHubOrganization])]
     [CmdletBinding(SupportsShouldProcess)]

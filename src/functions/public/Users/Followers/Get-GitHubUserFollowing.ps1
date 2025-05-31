@@ -19,6 +19,9 @@
         .NOTES
         [List the people the authenticated user follows](https://docs.github.com/rest/users/followers#list-the-people-the-authenticated-user-follows)
         [List the people a user follows](https://docs.github.com/rest/users/followers#list-the-people-a-user-follows)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Users/Followers/Get-GitHubUserFollowing
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]

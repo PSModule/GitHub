@@ -18,6 +18,9 @@
 
         Get the repositories accessible to the GitHub App installation
         with the ID '12345678' on the organization 'PSModule' in the enterprise 'msx'.
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Apps/GitHub%20App%20Installations/Get-GitHubAppInstallationRepositoryAccess
     #>
     [CmdletBinding()]
     param(

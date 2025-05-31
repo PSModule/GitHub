@@ -19,11 +19,11 @@
         .OUTPUTS
         void
 
-        .LINK
-        https://psmodule.io/GitHub/Functions/Organization/Members/Remove-GitHubOrganizationInvitation
-
         .NOTES
         [Cancel an organization invitation](https://docs.github.com/rest/orgs/members#cancel-an-organization-invitation)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Organization/Members/Remove-GitHubOrganizationInvitation
     #>
     [OutputType([void])]
     [CmdletBinding(SupportsShouldProcess)]

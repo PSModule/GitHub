@@ -14,6 +14,9 @@
 
         .NOTES
         [Render a Markdown document](https://docs.github.com/rest/markdown/markdown#render-a-markdown-document)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Markdown/Get-GitHubMarkdown
     #>
     [OutputType([string])]
     [CmdletBinding()]

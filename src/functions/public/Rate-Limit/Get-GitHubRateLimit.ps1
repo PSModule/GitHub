@@ -29,6 +29,8 @@
         .NOTES
         [Get rate limit status for the authenticated user](https://docs.github.com/rest/rate-limit/rate-limit#get-rate-limit-status-for-the-authenticated-user)
 
+        .LINK
+        https://psmodule.io/GitHub/Functions/Rate-Limit/Get-GitHubRateLimit
     #>
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]

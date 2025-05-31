@@ -10,6 +10,9 @@
         Get-GitHubGitConfig
 
         Gets the global Git configuration.
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Git/Get-GitHubGitConfig
     #>
     [OutputType([object[]])]
     [CmdletBinding()]

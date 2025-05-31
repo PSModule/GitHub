@@ -19,6 +19,9 @@
         .NOTES
         [Get an app](https://docs.github.com/rest/apps/apps#get-an-app)
         [Get the authenticated app | GitHub Docs](https://docs.github.com/rest/apps/apps#get-the-authenticated-app)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Apps/GitHub%20App/Get-GitHubApp
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
