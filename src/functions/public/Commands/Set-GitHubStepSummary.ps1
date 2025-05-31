@@ -29,6 +29,10 @@
         'PSUseShouldProcessForStateChangingFunctions', '', Scope = 'Function',
         Justification = 'Does not change system state significantly'
     )]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSAvoidUsingWriteHost', '', Scope = 'Function',
+        Justification = 'Intended for logging in Github Runners which does support Write-Host'
+    )]
     [OutputType([void])]
     [Alias('Summary')]
     [CmdletBinding()]
