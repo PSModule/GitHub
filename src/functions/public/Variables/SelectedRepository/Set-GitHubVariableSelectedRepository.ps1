@@ -16,6 +16,9 @@
 
         .NOTES
         [Set selected repositories for an organization variable](https://docs.github.com/rest/actions/variables#set-selected-repositories-for-an-organization-variable)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Variables/SelectedRepository/Set-GitHubVariableSelectedRepository
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSAvoidLongLines', '',

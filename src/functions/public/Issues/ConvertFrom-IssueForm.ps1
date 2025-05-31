@@ -23,6 +23,8 @@
 
         Converts the issue form content into a hashtable.
 
+        .LINK
+        https://psmodule.io/GitHub/Functions/Issues/ConvertFrom-IssueForm
     #>
     [OutputType([PSCustomObject])]
     [OutputType([hashtable])]

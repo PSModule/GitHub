@@ -14,6 +14,9 @@
 
         .NOTES
         [Delete social accounts for the authenticated user](https://docs.github.com/rest/users/social-accounts#delete-social-accounts-for-the-authenticated-user)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Users/Social-Accounts/Remove-GitHubUserSocial
     #>
     [OutputType([void])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]

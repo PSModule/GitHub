@@ -23,6 +23,9 @@ function Get-GitHubVariableSelectedRepository {
 
         .NOTES
         [List selected repositories for an organization variable](https://docs.github.com/rest/actions/variables#list-selected-repositories-for-an-organization-variable)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Variables/SelectedRepository/Get-GitHubVariableSelectedRepository
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSAvoidLongLines', '',

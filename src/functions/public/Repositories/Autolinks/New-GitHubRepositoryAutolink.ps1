@@ -14,6 +14,9 @@
 
         .NOTES
         [Create an autolink reference for a repository](https://docs.github.com/rest/repos/autolinks#create-an-autolink-reference-for-a-repository)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Repositories/Autolinks/New-GitHubRepositoryAutolink
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding(SupportsShouldProcess)]

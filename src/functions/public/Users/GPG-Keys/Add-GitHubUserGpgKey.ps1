@@ -21,6 +21,9 @@
 
         .NOTES
         [Create a GPG key for the authenticated user](https://docs.github.com/rest/users/gpg-keys#create-a-gpg-key-for-the-authenticated-user)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Users/GPG-Keys/Add-GitHubUserGpgKey
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]

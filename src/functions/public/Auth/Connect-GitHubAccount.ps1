@@ -42,6 +42,9 @@
 
         .NOTES
         [Authenticating to the REST API](https://docs.github.com/rest/overview/other-authentication-methods#authenticating-for-saml-sso)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Auth/Connect-GitHubAccount
     #>
     [Alias('Connect-GitHub')]
     [OutputType([void])]

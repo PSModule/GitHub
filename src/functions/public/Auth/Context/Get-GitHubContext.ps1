@@ -12,6 +12,9 @@ function Get-GitHubContext {
         Get-GitHubContext
 
         Gets the current GitHub context.
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Auth/Context/Get-GitHubContext
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSAvoidUsingConvertToSecureStringWithPlainText', '',

@@ -10,6 +10,9 @@
         Uninstall-GitHubApp -Enterprise 'msx' -Organization 'org' -InstallationID '123456'
 
         Uninstall the GitHub App with the installation ID '123456' from the organization 'org' in the enterprise 'msx'.
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Apps/GitHub%20App/Uninstall-GitHubApp
     #>
     [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(

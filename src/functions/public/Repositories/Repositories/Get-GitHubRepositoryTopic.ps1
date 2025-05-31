@@ -10,6 +10,9 @@
 
         .NOTES
         [Get all repository topics](https://docs.github.com/rest/repos/repos#get-all-repository-topics)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Repositories/Repositories/Get-GitHubRepositoryTopic
     #>
     [CmdletBinding()]
     param(

@@ -15,6 +15,9 @@
         Set-GitHubGitConfig -Context 'MyContext'
 
         Sets the Git configuration for the GitHub context named 'MyContext'.
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Git/Set-GitHubGitConfig
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param(

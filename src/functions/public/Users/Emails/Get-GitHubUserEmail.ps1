@@ -21,6 +21,9 @@
         .NOTES
         [List email addresses for the authenticated user](https://docs.github.com/rest/users/emails#list-email-addresses-for-the-authenticated-user)
         [List public email addresses for the authenticated user](https://docs.github.com/rest/users/emails#list-public-email-addresses-for-the-authenticated-user)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Users/Emails/Get-GitHubUserEmail
     #>
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]

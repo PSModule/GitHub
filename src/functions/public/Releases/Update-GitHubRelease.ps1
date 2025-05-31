@@ -30,9 +30,6 @@
 
         Updates the release with tag 'v1.0' to be the latest release and automatically generates release notes.
 
-        .LINK
-        https://psmodule.io/GitHub/Functions/Releases/Update-GitHubRelease
-
         .INPUTS
         GitHubRelease
 
@@ -41,6 +38,9 @@
 
         .NOTES
         [Update a release](https://docs.github.com/rest/releases/releases#update-a-release)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Releases/Update-GitHubRelease
     #>
     [OutputType([GitHubRelease])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
