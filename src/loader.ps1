@@ -2,10 +2,6 @@
 Write-Verbose 'Initializing GitHub PowerShell module...'
 Write-Verbose "Path: $scriptFilePath"
 
-# Enable ANSI color support if the terminal supports it
-Write-Verbose "SupportsVirtualTerminal = $($Host.UI.SupportsVirtualTerminal)" -Verbose
-Write-Verbose ($PSStyle.OutputRendering.ToString()) -Verbose
-
 if ($Host.UI.SupportsVirtualTerminal) {
     $PSStyle.OutputRendering = 'Ansi'
 }
