@@ -95,62 +95,71 @@ filter New-GitHubRepository {
         'PSShouldProcess', '', Scope = 'Function',
         Justification = 'This check is performed in the private functions.'
     )]
-    [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName = 'user')]
+    [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName = 'Create a repository for the authenticated user')]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(ParameterSetName = 'org')]
-        [Parameter(ParameterSetName = 'fork')]
-        [Parameter(ParameterSetName = 'template')]
+        [Parameter(Mandatory, ParameterSetName = 'Create a repository in an organization')]
+        [Parameter(Mandatory, ParameterSetName = 'Fork a repository to an organization')]
+        [Parameter(Mandatory, ParameterSetName = 'Create a repository from a template to an organization')]
         [Alias('Owner')]
         [string] $Organization,
 
         # The name of the repository.
-        [Parameter(ParameterSetName = 'fork')]
-        [Parameter(ParameterSetName = 'template')]
-        [Parameter(Mandatory, ParameterSetName = 'user')]
-        [Parameter(Mandatory, ParameterSetName = 'org')]
+        [Parameter(Mandatory, ParameterSetName = 'Create a repository from a template to a user')]
+        [Parameter(Mandatory, ParameterSetName = 'Create a repository from a template to an organization')]
+        [Parameter(Mandatory, ParameterSetName = 'Create a repository for the authenticated user')]
+        [Parameter(Mandatory, ParameterSetName = 'Create a repository in an organization')]
+        [Parameter(ParameterSetName = 'Fork a repository to a user')]
+        [Parameter(ParameterSetName = 'Fork a repository to an organization')]
         [string] $Name,
 
         # The account owner of the template repository. The name is not case sensitive.
-        [Parameter(Mandatory, ParameterSetName = 'template')]
+        [Parameter(Mandatory, ParameterSetName = 'Create a repository from a template to a user')]
+        [Parameter(Mandatory, ParameterSetName = 'Create a repository from a template to an organization')]
         [string] $TemplateOwner,
 
         # The name of the template repository without the .git extension. The name is not case sensitive.
-        [Parameter(Mandatory, ParameterSetName = 'template')]
+        [Parameter(Mandatory, ParameterSetName = 'Create a repository from a template to a user')]
+        [Parameter(Mandatory, ParameterSetName = 'Create a repository from a template to an organization')]
         [string] $TemplateRepository,
 
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(Mandatory, ParameterSetName = 'fork')]
+        [Parameter(Mandatory, ParameterSetName = 'Fork a repository to a user')]
+        [Parameter(Mandatory, ParameterSetName = 'Fork a repository to an organization')]
         [string] $ForkOwner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter(Mandatory, ParameterSetName = 'fork')]
+        [Parameter(Mandatory, ParameterSetName = 'Fork a repository to a user')]
+        [Parameter(Mandatory, ParameterSetName = 'Fork a repository to an organization')]
         [string] $ForkRepository,
 
         # Include all branches from the source repository.
-        [Parameter(ParameterSetName = 'template')]
-        [Parameter(ParameterSetName = 'fork')]
+        [Parameter(ParameterSetName = 'Create a repository from a template to a user')]
+        [Parameter(ParameterSetName = 'Create a repository from a template to an organization')]
+        [Parameter(ParameterSetName = 'Fork a repository to a user')]
+        [Parameter(ParameterSetName = 'Fork a repository to an organization')]
         [switch] $IncludeAllBranches,
 
         # Pass true to create an initial commit with empty README.
-        [Parameter(ParameterSetName = 'user')]
-        [Parameter(ParameterSetName = 'org')]
+        [Parameter(ParameterSetName = 'Create a repository for the authenticated user')]
+        [Parameter(ParameterSetName = 'Create a repository in an organization')]
         [switch] $AddReadme,
 
         # The desired language or platform to apply to the .gitignore.
-        [Parameter(ParameterSetName = 'user')]
-        [Parameter(ParameterSetName = 'org')]
+        [Parameter(ParameterSetName = 'Create a repository for the authenticated user')]
+        [Parameter(ParameterSetName = 'Create a repository in an organization')]
         [string] $Gitignore,
 
         # The license keyword of the open source license for this repository.
-        [Parameter(ParameterSetName = 'user')]
-        [Parameter(ParameterSetName = 'org')]
+        [Parameter(ParameterSetName = 'Create a repository for the authenticated user')]
+        [Parameter(ParameterSetName = 'Create a repository in an organization')]
         [string] $License,
 
         # The visibility of the repository.
-        [Parameter(ParameterSetName = 'user')]
-        [Parameter(ParameterSetName = 'org')]
-        [Parameter(ParameterSetName = 'template')]
+        [Parameter(ParameterSetName = 'Create a repository for the authenticated user')]
+        [Parameter(ParameterSetName = 'Create a repository in an organization')]
+        [Parameter(ParameterSetName = 'Create a repository from a template to an organization')]
+        [Parameter(ParameterSetName = 'Create a repository from a template to a user')]
         [ValidateSet('Public', 'Private', 'Internal')]
         [string] $Visibility = 'Public',
 
@@ -187,7 +196,9 @@ filter New-GitHubRepository {
         [System.Nullable[bool]] $HasIssues,
 
         # Either true to allow private forks, or false to prevent private forks.
-        [Parameter()]
+        [Parameter(ParameterSetName = 'Fork a repository to an organization')]
+        [Parameter(ParameterSetName = 'Create a repository from a template to an organization')]
+        [Parameter(ParameterSetName = 'Create a repository in an organization')]
         [System.Nullable[bool]] $AllowForking,
 
         # Whether sponsorships are enabled.
@@ -214,19 +225,19 @@ filter New-GitHubRepository {
 
         # Whether to allow rebase merges for pull requests.
         [Parameter()]
-        [switch] $AllowRebaseMerging,
+        [System.Nullable[bool]] $AllowRebaseMerging,
 
         # Whether to always suggest to update a head branch that is behind its base branch during a pull request.
         [Parameter()]
-        [System.Nullable[switch]] $SuggestUpdateBranch,
+        [System.Nullable[bool]] $SuggestUpdateBranch,
 
         # Whether to allow Auto-merge to be used on pull requests.
         [Parameter()]
-        [System.Nullable[switch]] $AllowAutoMerge,
+        [System.Nullable[bool]] $AllowAutoMerge,
 
         # Whether to delete head branches when pull requests are merged
         [Parameter()]
-        [System.Nullable[switch]] $DeleteBranchOnMerge,
+        [System.Nullable[bool]] $DeleteBranchOnMerge,
 
         # Whether to enable GitHub Advanced Security for this repository.
         [Parameter()]
@@ -268,7 +279,7 @@ filter New-GitHubRepository {
     process {
         Write-Verbose "ParameterSetName: $($PSCmdlet.ParameterSetName)"
         $repo = switch ($PSCmdlet.ParameterSetName) {
-            'user' {
+            'Create a repository for the authenticated user' {
                 $params = @{
                     Context    = $Context
                     Name       = $Name
@@ -280,7 +291,7 @@ filter New-GitHubRepository {
                 $params | Remove-HashtableEntry -NullOrEmptyValues
                 New-GitHubRepositoryUser @params
             }
-            'org' {
+            'Create a repository in an organization' {
                 $params = @{
                     Context      = $Context
                     Organization = $Organization
@@ -293,7 +304,19 @@ filter New-GitHubRepository {
                 $params | Remove-HashtableEntry -NullOrEmptyValues
                 New-GitHubRepositoryOrg @params
             }
-            'template' {
+            'Create a repository from a template to a user' {
+                $params = @{
+                    Context            = $Context
+                    TemplateOwner      = $TemplateOwner
+                    TemplateRepository = $TemplateRepository
+                    Name               = $Name
+                    IncludeAllBranches = $IncludeAllBranches
+                    Visibility         = $Visibility
+                }
+                $params | Remove-HashtableEntry -NullOrEmptyValues
+                New-GitHubRepositoryFromTemplate @params
+            }
+            'Create a repository from a template to an organization' {
                 $params = @{
                     Context            = $Context
                     TemplateOwner      = $TemplateOwner
@@ -306,7 +329,18 @@ filter New-GitHubRepository {
                 $params | Remove-HashtableEntry -NullOrEmptyValues
                 New-GitHubRepositoryFromTemplate @params
             }
-            'fork' {
+            'Fork a repository to a user' {
+                $params = @{
+                    Context            = $Context
+                    ForkOwner          = $ForkOwner
+                    ForkRepository     = $ForkRepository
+                    Name               = $Name
+                    IncludeAllBranches = $IncludeAllBranches
+                }
+                $params | Remove-HashtableEntry -NullOrEmptyValues
+                New-GitHubRepositoryAsFork @params
+            }
+            'Fork a repository to an organization' {
                 $params = @{
                     Context            = $Context
                     ForkOwner          = $ForkOwner
@@ -320,13 +354,15 @@ filter New-GitHubRepository {
             }
         }
 
-
-        Write-Debug 'New repo created'
-        Write-Debug "$($repo | Format-Table | Out-String)"
+        if ($VerbosePreference -eq 'Continue') {
+            Write-Verbose 'New repo created'
+            $repo | Select-Object * | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+        }
 
         $updateParams = @{
             Owner                                   = $repo.Owner
             Name                                    = $repo.Name
+            Context                                 = $Context
             Visibility                              = $Visibility
             Description                             = $Description
             Homepage                                = $Homepage
@@ -336,13 +372,13 @@ filter New-GitHubRepository {
             DefaultBranch                           = $DefaultBranch
             HasWiki                                 = $HasWiki
             HasIssues                               = $HasIssues
-            AllowForking                            = $AllowForking
             HasSponsorships                         = $HasSponsorships
             HasDiscussions                          = $HasDiscussions
             HasProjects                             = $HasProjects
             AllowMergeCommitWith                    = $AllowMergeCommitWith
             AllowSquashMergingWith                  = $AllowSquashMergingWith
             AllowRebaseMerging                      = $AllowRebaseMerging
+            AllowForking                            = $AllowForking
             SuggestUpdateBranch                     = $SuggestUpdateBranch
             AllowAutoMerge                          = $AllowAutoMerge
             DeleteBranchOnMerge                     = $DeleteBranchOnMerge
@@ -353,7 +389,15 @@ filter New-GitHubRepository {
             EnableSecretScanningAIDetection         = $EnableSecretScanningAIDetection
             EnableSecretScanningNonProviderPatterns = $EnableSecretScanningNonProviderPatterns
         }
-        Update-GitHubRepository @updateParams
+        $updatedRepo = Update-GitHubRepository @updateParams
+
+        if ($VerbosePreference -eq 'Continue') {
+            Write-Verbose 'Updated repo'
+            $updatedRepo | Select-Object * | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+        }
+
+        $updatedRepo.DefaultBranch = $repo.DefaultBranch
+        $updatedRepo
     }
 
     end {

@@ -50,23 +50,23 @@ function Invoke-GitHubGraphQLQuery {
         try {
             $apiResponse = Invoke-GitHubAPI @inputObject
             $graphQLResponse = $apiResponse.Response
-
             # Handle GraphQL-specific errors (200 OK with errors in response)
             if ($graphQLResponse.errors) {
-                $queryLines = $Query -split "`n"
                 $errorMessages = @()
-                $graphQLResponse.errors | ForEach-Object {
-                    $lineNum = $_.locations.line
-                    $lineText = if ($lineNum -and ($lineNum -le $queryLines.Count)) { $queryLines[$lineNum - 1].Trim() } else { '' }
+                $queryLines = $Query -split "`n" | ForEach-Object { $_.Trim() }
+                foreach ($errorItem in $graphQLResponse.errors) {
                     $errorMessages += @"
-GraphQL Error [$($_.type)]:
-Message:    $($_.message)
-Path:       $($_.path -join '/')
-Location:   $($_.locations.line):$($_.locations.column)
-Query Line: $lineText
-Extensions: $($_.extensions | Out-String)
+GraphQL Error [$($errorItem.type)]:
+Message:    $($errorItem.message)
+Path:       $($errorItem.path -join '/')
+Locations:
+$($errorItem.locations | ForEach-Object { " - [$($_.line):$($_.column)] - $($queryLines[$_.line - 1])" })
+
+Full Error:
+$($errorItem | ConvertTo-Json -Depth 10 | Out-String -Stream)
 
 "@
+
                 }
                 $PSCmdlet.ThrowTerminatingError(
                     [System.Management.Automation.ErrorRecord]::new(

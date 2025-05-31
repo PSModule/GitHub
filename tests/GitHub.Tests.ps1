@@ -309,6 +309,8 @@ string
             { Write-GitHubError 'Error' } | Should -Not -Throw
             { Write-GitHubNotice 'Notice' } | Should -Not -Throw
             { Write-GitHubWarning 'Warning' } | Should -Not -Throw
+            { Write-GitHubLog 'Log' } | Should -Not -Throw
+            { Write-GitHubLog 'Colored Log' -ForegroundColor Green } | Should -Not -Throw
         }
     }
     Context 'IssueParser' {

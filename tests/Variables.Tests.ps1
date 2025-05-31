@@ -68,7 +68,7 @@ Describe 'Variables' {
                             Visibility           = 'selected'
                             SelectedRepositories = $repo.id
                         }
-                        $orgVariable = Set-GitHubVariable @params
+                        $orgVariable = Set-GitHubVariable @params -Debug
                         Write-Host ($orgVariable | Select-Object * | Out-String)
                     }
                 }

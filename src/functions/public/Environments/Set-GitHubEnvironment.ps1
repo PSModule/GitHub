@@ -180,7 +180,9 @@ filter Set-GitHubEnvironment {
 
         if ($PSCmdlet.ShouldProcess("Environment [$Owner/$Repository/$Name]", 'Set')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
-                [GitHubEnvironment]::new($_.Response, $Owner, $Repository)
+                $environment = [GitHubEnvironment]::new($_.Response, $Owner, $Repository)
+                $environment.Url = "https://$($Context.HostName)/$Owner/$Repository/settings/environments/$($environment.ID)/edit"
+                $environment
             }
         }
     }

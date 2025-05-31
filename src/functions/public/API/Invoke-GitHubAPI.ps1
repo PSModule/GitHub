@@ -105,12 +105,15 @@ filter Invoke-GitHubAPI {
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
+        $debug = $DebugPreference -eq 'Continue'
         $Context = Resolve-GitHubContext -Context $Context
-        Write-Debug 'Invoking GitHub API...'
-        Write-Debug 'Parent function parameters:'
-        Get-FunctionParameter -Scope 1 | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
-        Write-Debug 'Parameters:'
-        Get-FunctionParameter | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+        if ($debug) {
+            Write-Debug 'Invoking GitHub API...'
+            Write-Debug 'Parent function parameters:'
+            Get-FunctionParameter -Scope 1 | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+            Write-Debug 'Parameters:'
+            Get-FunctionParameter | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+        }
     }
 
     process {
@@ -122,13 +125,15 @@ filter Invoke-GitHubAPI {
         $RetryCount = Resolve-GitHubContextSetting -Name 'RetryCount' -Value $RetryCount -Context $Context
         $RetryInterval = Resolve-GitHubContextSetting -Name 'RetryInterval' -Value $RetryInterval -Context $Context
         $TokenType = Resolve-GitHubContextSetting -Name 'TokenType' -Value $TokenType -Context $Context
-        [pscustomobject]@{
-            Token       = $Token
-            HttpVersion = $HttpVersion
-            ApiBaseUri  = $ApiBaseUri
-            ApiVersion  = $ApiVersion
-            TokenType   = $TokenType
-        } | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+        if ($debug) {
+            [pscustomobject]@{
+                Token       = $Token
+                HttpVersion = $HttpVersion
+                ApiBaseUri  = $ApiBaseUri
+                ApiVersion  = $ApiVersion
+                TokenType   = $TokenType
+            } | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+        }
         $jwt = $null
         switch ($TokenType) {
             'ghu' {
@@ -188,10 +193,19 @@ filter Invoke-GitHubAPI {
         }
 
         try {
-            Write-Debug '----------------------------------'
-            Write-Debug 'Request:'
-            [pscustomobject]$APICall | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
-            Write-Debug '----------------------------------'
+            if ($debug) {
+                Write-Debug '----------------------------------'
+                Write-Debug 'Request:'
+                [pscustomobject]$APICall | Select-Object -ExcludeProperty Body, Headers | Format-List |
+                    Out-String -Stream | ForEach-Object { Write-Debug $_ }
+                Write-Debug '----------------------------------'
+                Write-Debug 'Request headers:'
+                [pscustomobject]$APICall.Headers | Select-Object * | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+                Write-Debug '----------------------------------'
+                Write-Debug 'Request body:'
+                ($APICall.Body | Out-String).Split('\n') -split '\n' | ForEach-Object { Write-Debug $_ }
+                Write-Debug '----------------------------------'
+            }
             do {
                 switch ($TokenType) {
                     'ghu' {
@@ -207,7 +221,7 @@ filter Invoke-GitHubAPI {
                         }
                     }
                 }
-                $response = Invoke-WebRequest @APICall -ProgressAction 'SilentlyContinue'
+                $response = Invoke-WebRequest @APICall -ProgressAction 'SilentlyContinue' -Debug:$false -Verbose:$false
 
                 $headers = @{}
                 foreach ($item in $response.Headers.GetEnumerator()) {
@@ -231,13 +245,15 @@ filter Invoke-GitHubAPI {
                         ($headers.'github-authentication-token-expiration').Replace('UTC', '').Trim()
                     ).ToLocalTime().ToString('s')
                 }
-                Write-Debug '----------------------------------'
-                Write-Debug 'Response headers:'
-                $headers | Out-String -Stream | ForEach-Object { Write-Debug $_ }
-                Write-Debug '---------------------------'
-                Write-Debug 'Response:'
-                $response | Out-String -Stream | ForEach-Object { Write-Debug $_ }
-                Write-Debug '---------------------------'
+                if ($debug) {
+                    Write-Debug '----------------------------------'
+                    Write-Debug 'Response:'
+                    $response | Select-Object -ExcludeProperty Content, Headers | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+                    Write-Debug '---------------------------'
+                    Write-Debug 'Response headers:'
+                    $headers | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+                    Write-Debug '---------------------------'
+                }
                 switch -Regex ($headers.'Content-Type') {
                     'application/.*json' {
                         $results = $response.Content | ConvertFrom-Json
@@ -251,6 +267,19 @@ filter Invoke-GitHubAPI {
                     }
                 }
 
+                if ($debug) {
+                    Write-Debug 'Response content:'
+                    $results | ConvertTo-Json -Depth 5 -WarningAction SilentlyContinue | Out-String -Stream | ForEach-Object {
+                        $content = $_
+                        $content = $content -split '\n'
+                        $content = $content.Split('\n')
+                        foreach ($item in $content) {
+                            Write-Debug $item
+                        }
+                    }
+                    Write-Debug '---------------------------'
+                }
+
                 [pscustomobject]@{
                     Request           = $APICall
                     Response          = $results
@@ -262,7 +291,12 @@ filter Invoke-GitHubAPI {
             } while ($APICall['Uri'])
         } catch {
             $failure = $_
-            $failure | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+            if ($debug) {
+                Write-Debug '----------------------------------'
+                Write-Debug 'Failure:'
+                $failure | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+                Write-Debug '----------------------------------'
+            }
             $headers = @{}
             foreach ($item in $failure.Exception.Response.Headers.GetEnumerator()) {
                 $headers[$item.Key] = ($item.Value).Trim() -join ', '
@@ -285,9 +319,11 @@ filter Invoke-GitHubAPI {
             }
             $sortedProperties = $headers.PSObject.Properties.Name | Sort-Object
             $headers = $headers | Select-Object $sortedProperties
-            Write-Debug 'Response headers:'
-            $headers | Out-String -Stream | ForEach-Object { Write-Debug $_ }
-            Write-Debug '---------------------------'
+            if ($debug) {
+                Write-Debug 'Response headers:'
+                $headers | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+                Write-Debug '---------------------------'
+            }
 
             $errordetails = $failure.ErrorDetails | ConvertFrom-Json -AsHashtable
             $errors = $errordetails.errors
@@ -305,9 +341,15 @@ filter Invoke-GitHubAPI {
             $exception = @"
 ----------------------------------
 Request:
-$([pscustomobject]$APICall | Format-List -Property Headers, HttpVersion, Method, Uri, ContentType, Authentication, Token | Out-String)
+$([pscustomobject]$APICall | Select-Object -ExcludeProperty Body, Headers | Format-List | Out-String)
 ----------------------------------
-Response Headers:
+Request headers:
+$([pscustomobject]$APICall.Headers | Format-List | Out-String)
+----------------------------------
+Request body:
+$(($APICall.Body | Out-String -Stream).Split('\n') -split '\n')
+----------------------------------
+Response headers:
 $($headers | Format-List | Out-String)
 ----------------------------------
 Error:
