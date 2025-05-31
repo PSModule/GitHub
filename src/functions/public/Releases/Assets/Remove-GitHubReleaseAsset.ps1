@@ -12,12 +12,10 @@ filter Remove-GitHubReleaseAsset {
         Deletes the release asset with the ID '1234567' for the repository 'octocat/hello-world'.
 
         .INPUTS
-GitHubReleaseAsset
+        GitHubReleaseAsset
 
         .LINK
         https://psmodule.io/GitHub/Functions/Releases/Assets/Remove-GitHubReleaseAsset/
-
-                https://psmodule.io/GitHub/Functions/Releases/Assets/Remove-GitHubReleaseAsset
 
         .NOTES
         [Delete a release asset](https://docs.github.com/rest/releases/assets#delete-a-release-asset)

@@ -7,7 +7,7 @@ filter Enable-GitHubWorkflow {
         .EXAMPLE
 
         .INPUTS
-GitHubWorkflow
+        GitHubWorkflow
 
         .LINK
         https://psmodule.io/GitHub/Functions/Workflows/Enable-GitHubWorkflow/

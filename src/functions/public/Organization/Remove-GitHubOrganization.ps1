@@ -15,12 +15,10 @@ filter Remove-GitHubOrganization {
         Deletes the organization 'GitHub' and all its repositories.
 
         .INPUTS
-GitHubOrganization
+        GitHubOrganization
 
         .LINK
         https://psmodule.io/GitHub/Functions/Organization/Remove-GitHubOrganization/
-
-                https://psmodule.io/GitHub/Functions/Organization/Remove-GitHubOrganization
 
         .NOTES
         [Delete an organization](https://docs.github.com/rest/orgs/orgs#delete-an-organization)

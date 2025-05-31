@@ -58,7 +58,7 @@ function Save-GitHubReleaseAsset {
 
         .NOTES
         Contains the extracted file or folder information from the downloaded asset.
-This output can include directories or files depending on the asset content.
+        This output can include directories or files depending on the asset content.
 
         .LINK
         https://psmodule.io/GitHub/Functions/Releases/Assets/Save-GitHubReleaseAsset/

@@ -47,7 +47,7 @@ filter Set-GitHubEnvironment {
         GitHubEnvironment
 
         .NOTES
-Returns the response object from the GitHub API call.
+        Returns the response object from the GitHub API call.
 
         .LINK
         https://psmodule.io/GitHub/Functions/Environments/Set-GitHubEnvironment/

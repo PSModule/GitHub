@@ -7,11 +7,12 @@ filter Add-GitHubUserSocial {
         Add one or more social accounts to the authenticated user's profile. This endpoint is accessible with the `user` scope.
 
         .EXAMPLE
-Add-GitHubUserSocial -AccountUrls 'https://twitter.com/MyTwitterAccount', 'https://www
-
-        .LINK
+        Add-GitHubUserSocial -AccountUrls 'https://twitter.com/MyTwitterAccount', 'https://www.linkedin.com/in/myprofile'
 
         Adds the Twitter and LinkedIn accounts to the authenticated user's profile.
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Users/Social-Accounts/Add-GitHubUserSocial/
 
         .NOTES
         [Add social accounts for the authenticated user](https://docs.github.com/rest/users/social-accounts#add-social-accounts-for-the-authenticated-user)

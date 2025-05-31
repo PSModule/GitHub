@@ -23,7 +23,7 @@ function Update-GitHubTeam {
         visibility set to 'closed', notifications enabled, permission set to 'pull', and the parent team ID set to 123456.
 
         .NOTES
-[Update a team](https://docs.github.com/rest/teams/teams#update-a-team)
+        [Update a team](https://docs.github.com/rest/teams/teams#update-a-team)
 
         .LINK
         https://psmodule.io/GitHub/Functions/Teams/Update-GitHubTeam/

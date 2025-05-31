@@ -13,12 +13,10 @@ function Add-GitHubVariableSelectedRepository {
         .EXAMPLE
         Add-GitHubVariableSelectedRepository -Owner 'my-org' -Name 'API_KEY' -RepositoryID '654321'
 
-Adds the repository 'test-repo' to the 'API_KEY' variable in the organization 'my-org'.
+        Adds the repository 'test-repo' to the 'API_KEY' variable in the organization 'my-org'.
 
         .LINK
         https://psmodule.io/GitHub/Functions/Variables/SelectedRepository/Add-GitHubVariableSelectedRepository/
-
-                https://psmodule.io/GitHub/Functions/Variables/SelectedRepository/Add-GitHubVariableSelectedRepository
 
         .NOTES
         [Add selected repository to an organization variable](https://docs.github.com/rest/actions/variables#add-selected-repository-to-an-organization-variable)

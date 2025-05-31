@@ -10,7 +10,7 @@ filter Restart-GitHubWorkflowRun {
         Start-GitHubWorkflowReRun -Owner 'octocat' -Repository 'Hello-World' -ID 123456789
 
         .INPUTS
-GitHubWorkflowRun
+        GitHubWorkflowRun
 
         .LINK
         https://psmodule.io/GitHub/Functions/Workflows/Runs/Restart-GitHubWorkflowRun/
