@@ -13,6 +13,9 @@
 
         .NOTES
         [Enabling debug logging](https://docs.github.com/actions/monitoring-and-troubleshooting-workflows/troubleshooting-workflows/enabling-debug-logging)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Commands/Write-GitHubNotice
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSAvoidLongLines', '', Scope = 'Function',
@@ -63,9 +66,9 @@
     process {
         if ($env:GITHUB_ACTIONS -eq 'true') {
             Write-Host "::notice file=$Name,line=$Line,col=$Column,endColumn=$EndColumn,endLine=$EndLine,title=$Title::$Message"
-        } else {
-            Write-Host $Message
+            return
         }
+        Write-Host $Message
     }
 
     end {

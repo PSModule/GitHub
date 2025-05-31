@@ -2,9 +2,12 @@
 Write-Verbose 'Initializing GitHub PowerShell module...'
 Write-Verbose "Path: $scriptFilePath"
 
+if ($Host.UI.SupportsVirtualTerminal) {
+    $PSStyle.OutputRendering = 'Ansi'
+}
+
 switch ($script:GitHub.EnvironmentType) {
     'GHA' {
-        $PSStyle.OutputRendering = 'Ansi'
         Write-Verbose 'Detected running on a GitHub Actions runner, preparing environment...'
         $env:GITHUB_REPOSITORY_NAME = $env:GITHUB_REPOSITORY -replace '.+/'
         Set-GitHubEnvironmentVariable -Name 'GITHUB_REPOSITORY_NAME' -Value $env:GITHUB_REPOSITORY_NAME
