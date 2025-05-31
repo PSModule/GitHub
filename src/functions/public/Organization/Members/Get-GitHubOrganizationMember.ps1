@@ -8,7 +8,9 @@ function Get-GitHubOrganizationMember {
         If the authenticated user is also a member of this organization then both concealed and public members will be returned.
 
         .OUTPUTS
-        GitHubUser        .LINK
+        GitHubUser
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Organization/Members/Get-GitHubOrganizationMember/
 
                 https://psmodule.io/GitHub/Functions/Organization/Members/Get-GitHubOrganizationMember

@@ -26,7 +26,9 @@ function Get-GitHubSecret {
         Retrieves all secrets for the 'Staging' environment in the 'Demo' repository under 'PSModule'.
 
         .OUTPUTS
-        GitHubSecret[]        .LINK
+        GitHubSecret[]
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Secrets/Get-GitHubSecret/
     #>
     [OutputType([GitHubSecret[]])]

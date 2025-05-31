@@ -29,7 +29,9 @@ filter Get-GitHubRepository {
         GitHubOwner
 
         .OUTPUTS
-        GithubRepository        .LINK
+        GithubRepository
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Repositories/Get-GitHubRepository/
     #>
     [OutputType([GitHubRepository])]

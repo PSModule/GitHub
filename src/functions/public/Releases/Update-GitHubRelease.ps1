@@ -28,7 +28,9 @@ filter Update-GitHubRelease {
         .EXAMPLE
         Update-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -Tag 'v1.0' -Latest -GenerateReleaseNotes
 
-        Updates the release with tag 'v1.0' to be the latest release and automatically generates release notes.        .LINK
+Updates the release with tag 'v1.0' to be the latest release and automatically generates release notes.
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Releases/Update-GitHubRelease/
 
                 https://psmodule.io/GitHub/Functions/Releases/Update-GitHubRelease

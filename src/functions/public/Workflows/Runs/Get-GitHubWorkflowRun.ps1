@@ -36,7 +36,9 @@ filter Get-GitHubWorkflowRun {
         GitHubWorkflow
 
         .OUTPUTS
-        GitHubWorkflowRun        .LINK
+        GitHubWorkflowRun
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Workflows/Runs/Get-GitHubWorkflowRun/
 
         .NOTES

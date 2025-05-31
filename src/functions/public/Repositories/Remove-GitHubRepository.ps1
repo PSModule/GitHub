@@ -15,7 +15,9 @@ filter Remove-GitHubRepository {
         Deletes the repository `Hello-World` in the `PSModule` organization.
 
         .INPUTS
-        GitHubRepository        .LINK
+GitHubRepository
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Repositories/Remove-GitHubRepository/
 
         .NOTES

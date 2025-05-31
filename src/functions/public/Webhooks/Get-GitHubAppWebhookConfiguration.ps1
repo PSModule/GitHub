@@ -13,7 +13,9 @@ function Get-GitHubAppWebhookConfiguration {
         .EXAMPLE
         Get-GitHubAppWebhookConfiguration
 
-        Returns the webhook configuration for the authenticated app.        .LINK
+Returns the webhook configuration for the authenticated app.
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Webhooks/Get-GitHubAppWebhookConfiguration/
 
                 https://psmodule.io/GitHub/Functions/Apps/Webhooks/Get-GitHubAppWebhookConfiguration/

@@ -40,7 +40,9 @@ function Set-GitHubSecret {
         Updates the secret `MySecret` in the `Production` environment of the `MyRepo` repository for `MyUser`.
 
         .OUTPUTS
-        GitHubSecret        .LINK
+        GitHubSecret
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Secrets/Set-GitHubSecret/
     #>
     [Alias('New-GitHubSecret')]

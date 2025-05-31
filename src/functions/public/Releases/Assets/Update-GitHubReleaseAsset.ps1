@@ -16,7 +16,9 @@ filter Update-GitHubReleaseAsset {
         GitHubReleaseAsset
 
         .OUTPUTS
-        GitHubReleaseAsset        .LINK
+        GitHubReleaseAsset
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Releases/Assets/Update-GitHubReleaseAsset/
 
                 https://psmodule.io/GitHub/Functions/Releases/Assets/Update-GitHubReleaseAsset

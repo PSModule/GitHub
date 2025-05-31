@@ -33,7 +33,9 @@ filter Get-GitHubReleaseAsset {
         GitHubRelease
 
         .OUTPUTS
-        GitHubReleaseAsset        .LINK
+        GitHubReleaseAsset
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Releases/Assets/Get-GitHubReleaseAsset/
 
                 https://psmodule.io/GitHub/Functions/Releases/Assets/Get-GitHubReleaseAsset

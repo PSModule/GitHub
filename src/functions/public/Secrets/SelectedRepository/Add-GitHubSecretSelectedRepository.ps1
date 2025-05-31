@@ -16,7 +16,9 @@ function Add-GitHubSecretSelectedRepository {
         Adds the repository 'test-repo' to the 'API_KEY' secret in the organization 'my-org'.
 
         .INPUTS
-        [GitHubSecret]        .LINK
+[GitHubSecret]
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Secrets/SelectedRepository/Add-GitHubSecretSelectedRepository/
 
                 https://psmodule.io/GitHub/Functions/Secrets/SelectedRepository/Add-GitHubSecretSelectedRepository

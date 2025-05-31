@@ -32,7 +32,9 @@ filter Get-GitHubRelease {
         GitHubRepository
 
         .OUTPUTS
-        GitHubRelease        .LINK
+        GitHubRelease
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Releases/Get-GitHubRelease/
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(

@@ -69,7 +69,9 @@ function Get-GitHubArtifact {
         Retrieves the latest version of all artifacts from the specified repository.
 
         .OUTPUTS
-        GitHubArtifact[]        .LINK
+        GitHubArtifact[]
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Artifacts/Get-GitHubArtifact/
     #>
 

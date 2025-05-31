@@ -87,7 +87,9 @@ filter New-GitHubRepository {
 
         .NOTES
         [Create a repository for the authenticated user](https://docs.github.com/rest/repos/repos#create-a-repository-for-the-authenticated-user)
-        [Create an organization repository](https://docs.github.com/rest/repos/repos#create-an-organization-repository)        .LINK
+[Create an organization repository](https://docs.github.com/rest/repos/repos#create-an-organization-repository)
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Repositories/New-GitHubRepository/
     #>
     [OutputType([GitHubRepository])]

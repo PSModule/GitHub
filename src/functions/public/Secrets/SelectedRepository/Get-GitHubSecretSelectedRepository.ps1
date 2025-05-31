@@ -35,7 +35,9 @@ function Get-GitHubSecretSelectedRepository {
         Gets the repositories that have been selected for the secret `hello-world` in the organization `octocat`.
 
         .OUTPUTS
-        GitHubRepository        .LINK
+        GitHubRepository
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Secrets/SelectedRepository/Get-GitHubSecretSelectedRepository/
 
                 https://psmodule.io/GitHub/Functions/Secrets/SelectedRepository/Get-GitHubSecretSelectedRepository

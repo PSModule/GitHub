@@ -19,7 +19,9 @@ filter Get-GitHubWorkflow {
         Gets the 'hello-world.yml' workflow in the 'octocat/hello-world' repository.
 
         .OUTPUTS
-        GitHubWorkflow        .LINK
+        GitHubWorkflow
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Workflows/Get-GitHubWorkflow/
 
         .NOTES

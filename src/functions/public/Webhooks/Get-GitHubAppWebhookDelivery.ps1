@@ -20,7 +20,9 @@ function Get-GitHubAppWebhookDelivery {
         Returns the webhook delivery with the ID `123456` for the authenticated app.
 
         .OUTPUTS
-        GitHubWebhookDelivery        .LINK
+        GitHubWebhookDelivery
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Webhooks/Get-GitHubAppWebhookDelivery/
 
         .NOTES

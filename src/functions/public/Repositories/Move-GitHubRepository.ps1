@@ -20,7 +20,9 @@ filter Move-GitHubRepository {
         GitHubRepository
 
         .OUTPUTS
-        GitHubRepository        .LINK
+        GitHubRepository
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Repositories/Move-GitHubRepository/
 
         .NOTES

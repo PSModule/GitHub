@@ -55,7 +55,9 @@ filter Set-GitHubRelease {
         GitHubRepository
 
         .OUTPUTS
-        GitHubRelease        .LINK
+        GitHubRelease
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Releases/Set-GitHubRelease/
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(

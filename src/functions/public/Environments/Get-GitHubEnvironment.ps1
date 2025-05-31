@@ -60,7 +60,9 @@ filter Get-GitHubEnvironment {
         GitHubEnvironment[]
 
         .NOTES
-        Returns details of a GitHub environment or a list of environments for a repository.        .LINK
+Returns details of a GitHub environment or a list of environments for a repository.
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Environments/Get-GitHubEnvironment/
     #>
     [OutputType([GitHubEnvironment[]])]

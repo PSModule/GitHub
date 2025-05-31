@@ -21,7 +21,9 @@ function Remove-GitHubVariableSelectedRepository {
         Removes repository with ID 123456 from the organization variable 'ENV_SECRET' in 'my-org'.
 
         .OUTPUTS
-        void        .LINK
+        void
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Variables/SelectedRepository/Remove-GitHubVariableSelectedRepository/
 
                 https://psmodule.io/GitHub/Functions/Variables/SelectedRepository/Remove-GitHubVariableSelectedRepository

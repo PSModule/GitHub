@@ -40,7 +40,9 @@ filter New-GitHubRelease {
         GitHubRepository
 
         .OUTPUTS
-        GitHubRelease        .LINK
+        GitHubRelease
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Releases/New-GitHubRelease/
 
         .NOTES

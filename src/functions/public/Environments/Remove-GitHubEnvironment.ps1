@@ -10,7 +10,9 @@ filter Remove-GitHubEnvironment {
         .EXAMPLE
         Remove-GitHubEnvironment -Owner 'PSModule' -Repository 'GitHub' -Name 'Production'
 
-        Deletes the 'Production' environment from the 'PSModule/GitHub' repository.        .LINK
+Deletes the 'Production' environment from the 'PSModule/GitHub' repository.
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Environments/Remove-GitHubEnvironment/
 
         .NOTES

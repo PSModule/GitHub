@@ -31,7 +31,9 @@ function Update-GitHubVariable {
 
         .NOTES
         Returns an GitHubVariable object containing details about the environment variable,
-        including its name, value, associated repository, and environment details.        .LINK
+including its name, value, associated repository, and environment details.
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Variables/Update-GitHubVariable/
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(

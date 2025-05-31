@@ -117,7 +117,9 @@ function Get-GitHubVariable {
 
         .NOTES
         An object or array of objects representing the GitHub variable, containing Name, Value, Owner,
-        Repository, and Environment details.        .LINK
+Repository, and Environment details.
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Variables/Get-GitHubVariable/
 
                 https://psmodule.io/GitHub/Functions/Variables/Get-GitHubVariable

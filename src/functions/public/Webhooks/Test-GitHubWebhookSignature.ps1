@@ -24,13 +24,10 @@ function Test-GitHubWebhookSignature {
 
         .NOTES
         Returns True if the webhook signature is valid, otherwise False. Indicates whether the signature
-        matches the computed value based on the payload and secret.        .LINK
-        https://psmodule.io/GitHub/Functions/Webhooks/Test-GitHubWebhookSignature/
+        matches the computed value based on the payload and secret.
 
-                https://psmodule.io/GitHub/Functions/Webhooks/Test-GitHubWebhookSignature        .LINK
+        .LINK
         https://psmodule.io/GitHub/Functions/Webhooks/Test-GitHubWebhookSignature/
-
-                https://docs.github.com/webhooks/using-webhooks/validating-webhook-deliveries
     #>
     [OutputType([bool])]
     [CmdletBinding()]

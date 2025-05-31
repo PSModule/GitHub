@@ -12,7 +12,9 @@ filter Start-GitHubWorkflow {
             deploymentValidation = $false
             removeDeployment = $true
             prerelease = $false
-        }        .LINK
+}
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Workflows/Start-GitHubWorkflow/
 
         .NOTES

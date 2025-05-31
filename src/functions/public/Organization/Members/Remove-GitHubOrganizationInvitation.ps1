@@ -17,7 +17,9 @@ function Remove-GitHubOrganizationInvitation {
         GitHubOrganization
 
         .OUTPUTS
-        void        .LINK
+        void
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Organization/Members/Remove-GitHubOrganizationInvitation/
 
                 https://psmodule.io/GitHub/Functions/Organization/Members/Remove-GitHubOrganizationInvitation

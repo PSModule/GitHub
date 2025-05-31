@@ -25,7 +25,9 @@ function Update-GitHubAppWebhookConfiguration {
         and a secret of `mysecret` enabling SSL verification when delivering payloads.
 
         .OUTPUTS
-        GitHubWebhookConfiguration        .LINK
+        GitHubWebhookConfiguration
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Webhooks/Update-GitHubAppWebhookConfiguration/
 
                 https://psmodule.io/GitHub/Functions/Webhooks/Update-GitHubAppWebhookConfiguration

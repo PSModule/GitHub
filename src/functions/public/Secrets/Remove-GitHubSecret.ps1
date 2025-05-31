@@ -23,7 +23,9 @@ function Remove-GitHubSecret {
         Deletes the 'DB_PASSWORD' secret from the 'Production' environment in the 'MyRepo' repository.
 
         .NOTES
-        Supports authentication using GitHub App tokens (IAT), Personal Access Tokens (PAT), or User Access Tokens (UAT).        .LINK
+Supports authentication using GitHub App tokens (IAT), Personal Access Tokens (PAT), or User Access Tokens (UAT).
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Secrets/Remove-GitHubSecret/
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(

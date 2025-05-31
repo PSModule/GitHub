@@ -15,7 +15,9 @@ filter Remove-GitHubRelease {
         GitHubRelease
 
         .OUTPUTS
-        None        .LINK
+        None
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Releases/Remove-GitHubRelease/
 
                 https://psmodule.io/GitHub/Functions/Releases/Get-GitHubRelease/

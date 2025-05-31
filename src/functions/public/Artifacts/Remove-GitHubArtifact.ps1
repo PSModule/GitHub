@@ -22,7 +22,9 @@ function Remove-GitHubArtifact {
 
         .NOTES
         This function does not return any output.
-        It performs a delete operation against the GitHub REST API and is silent on success.        .LINK
+It performs a delete operation against the GitHub REST API and is silent on success.
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Artifacts/Remove-GitHubArtifact/
 
                 https://psmodule.io/GitHub/Functions/Actions/Remove-GitHubArtifact/

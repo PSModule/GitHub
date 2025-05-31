@@ -16,7 +16,9 @@ function Get-GitHubVariableSelectedRepository {
         GitHubRepository
 
         .NOTES
-        Returns a list of GitHubRepository objects that represent the repositories that can access the variable.        .LINK
+Returns a list of GitHubRepository objects that represent the repositories that can access the variable.
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Variables/SelectedRepository/Get-GitHubVariableSelectedRepository/
 
                 https://psmodule.io/GitHub/Functions/Variables/SelectedRepository/Get-GitHubVariableSelectedRepository

@@ -22,7 +22,9 @@ function Get-GitHubPublicKey {
         Gets a public key for the 'hello-world' repository in the 'octocat' organization for codespaces.
 
         .OUTPUTS
-        GitHubPublicKey        .LINK
+        GitHubPublicKey
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Secrets/Get-GitHubPublicKey/
     #>
     [OutputType([GitHubPublicKey])]

@@ -24,7 +24,9 @@ filter Update-GitHubRepository {
         GitHubRepository
 
         .OUTPUTS
-        GitHubRepository        .LINK
+        GitHubRepository
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Repositories/Update-GitHubRepository/
 
         .NOTES

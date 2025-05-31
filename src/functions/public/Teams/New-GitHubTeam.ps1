@@ -22,7 +22,9 @@ function New-GitHubTeam {
             Privacy      = 'closed'
             Permission   = 'pull'
         }
-        New-GitHubTeam @params        .LINK
+New-GitHubTeam @params
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Teams/New-GitHubTeam/
 
                 https://psmodule.io/GitHub/Functions/Teams/New-GitHubTeam

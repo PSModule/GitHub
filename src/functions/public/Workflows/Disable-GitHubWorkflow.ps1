@@ -10,7 +10,9 @@ filter Disable-GitHubWorkflow {
         .EXAMPLE
 
         .INPUTS
-        GitHubWorkflow        .LINK
+GitHubWorkflow
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Workflows/Disable-GitHubWorkflow/
 
         .NOTES

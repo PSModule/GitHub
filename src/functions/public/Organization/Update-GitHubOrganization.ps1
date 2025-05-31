@@ -28,7 +28,9 @@ filter Update-GitHubOrganization {
         GitHubOrganization
 
         .OUTPUTS
-        GitHubOrganization        .LINK
+        GitHubOrganization
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Organization/Update-GitHubOrganization/
 
                 https://psmodule.io/GitHub/Functions/Organization/Update-GitHubOrganization

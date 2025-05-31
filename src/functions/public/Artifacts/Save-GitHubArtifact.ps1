@@ -45,7 +45,9 @@ function Save-GitHubArtifact {
 
         .NOTES
         Contains the extracted file or folder information from the downloaded artifact.
-        This output can include directories or files depending on the artifact content.        .LINK
+This output can include directories or files depending on the artifact content.
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Artifacts/Save-GitHubArtifact/
 
         .NOTES

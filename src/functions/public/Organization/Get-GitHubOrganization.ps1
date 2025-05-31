@@ -30,7 +30,9 @@ filter Get-GitHubOrganization {
         Get the organization 'PSModule'.
 
         .OUTPUTS
-        GitHubOrganization        .LINK
+        GitHubOrganization
+
+        .LINK
         https://psmodule.io/GitHub/Functions/Organization/Get-GitHubOrganization/
     #>
     [OutputType([GitHubOrganization])]
