@@ -13,6 +13,9 @@
 
         .NOTES
         [Adding a system path](https://docs.github.com/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions#adding-a-system-path)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Commands/Add-GitHubSystemPath
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSAvoidLongLines', '', Scope = 'Function',
@@ -21,6 +24,8 @@
     [OutputType([void])]
     [CmdletBinding()]
     param(
+        # The system path to add.
+        [Parameter(Mandatory, Position = 0)]
         [string]$Path
     )
 

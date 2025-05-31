@@ -17,6 +17,9 @@
 
         .NOTES
         [Stopping and starting workflow commands](https://docs.github.com/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions#stopping-and-starting-workflow-commands)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Commands/Disable-GitHubCommand
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSAvoidLongLines', '', Scope = 'Function',

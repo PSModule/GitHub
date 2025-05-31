@@ -31,6 +31,9 @@
 
         .NOTES
         Uses PowerShell's $PSStyle for ANSI color rendering when supported.
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Commands/Write-GitHubLog
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSAvoidUsingWriteHost', '', Scope = 'Function',
@@ -41,67 +44,42 @@
     [CmdletBinding()]
     param(
         # The message to display
-        [Parameter(Mandatory = $true, Position = 0)]
+        [Parameter(Mandatory, Position = 0)]
         [string] $Message,
+
         # Foreground color for the message
         [Parameter()]
-        [ArgumentCompleter({
-                param($wordToComplete)
-                $PSStyle.Foreground.PSObject.Properties.Name | Where-Object { $_ -like "$wordToComplete*" }
-            })]
-        [string] $ForegroundColor,
+        [System.ConsoleColor] $ForegroundColor,
+
         # Background color for the message
         [Parameter()]
-        [ArgumentCompleter({
-                param($wordToComplete)
-                $PSStyle.Background.PSObject.Properties.Name | Where-Object { $_ -like "$wordToComplete*" }
-            })]
-        [string] $BackgroundColor,
+        [System.ConsoleColor] $BackgroundColor,
+
         # Output the message without a trailing newline
         [Parameter()]
         [switch] $NoNewLine
     )
 
     begin {
-        $stackPath = Get-PSCallStackPath
+        # $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
     }
 
     process {
-        # If not running on GitHub Actions, just output normally
-        if ($env:GITHUB_ACTIONS -ne 'true') {
-            $params = @{
-                Object = $Message
+        if ($env:GITHUB_ACTIONS -eq 'true') {
+            $ansiString = ''
+            if ($ForegroundColor) {
+                $ansiString += $PSStyle.Foreground.$ForegroundColor
             }
-
-            if ($NoNewLine) {
-                $params['NoNewLine'] = $true
+            if ($BackgroundColor) {
+                $ansiString += $PSStyle.Background.$BackgroundColor
             }
-
-            Write-Host @params
+            $ansiReset = $PSStyle.Reset
+            $outputMessage = "$ansiString$Message$ansiReset"
+            Write-Host $($outputMessage | Out-String) -NoNewline:$NoNewLine
             return
         }
-
-        # Running in GitHub Actions, so use ANSI colors
-        # Build the ANSI escape sequence string using $PSStyle values
-        $ansiString = ""
-        if ($ForegroundColor) {
-            $ansiString += $PSStyle.Foreground.$ForegroundColor
-        }
-        if ($BackgroundColor) {
-            $ansiString += $PSStyle.Background.$BackgroundColor
-        }
-        $ansiReset = $PSStyle.Reset
-
-        # Format the output message with ANSI colors
-        $outputMessage = "$ansiString$Message$ansiReset"
-
-        # Write the message with or without a newline
-        if ($NoNewLine) {
-            Write-Host -NoNewline $outputMessage
-        } else {
-            Write-Host $outputMessage
-        }
+        Write-Host $Message -NoNewline:$NoNewLine -ForegroundColor $ForegroundColor -BackgroundColor $BackgroundColor
     }
 
     end {

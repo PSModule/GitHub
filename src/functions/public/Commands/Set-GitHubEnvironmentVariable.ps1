@@ -21,7 +21,6 @@
         Justification = 'Does not change system state significantly'
     )]
     [OutputType([void])]
-    [Alias('Set-GitHubEnv')]
     [CmdletBinding()]
     param(
         # Name of the variable

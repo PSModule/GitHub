@@ -23,6 +23,7 @@
     [Alias('Stop-LogGroup')]
     param()
 
-    Write-Host '::endgroup::'
-
+    if ($env:GITHUB_ACTIONS -eq 'true') {
+        Write-Host '::endgroup::'
+    }
 }

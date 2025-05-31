@@ -55,7 +55,11 @@
         Write-Verbose $Summary
 
         $Append = -not $Overwrite
-        $Summary | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append:$Append
+        if ($env:GITHUB_ACTIONS -eq 'true') {
+            $Summary | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append:$Append
+        } else {
+            Write-Host "$Summary"
+        }
     }
 
     end {

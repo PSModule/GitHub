@@ -17,6 +17,9 @@
 
         .NOTES
         [Enabling debug logging](https://docs.github.com/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions#setting-a-debug-message)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Commands/Write-GitHubDebug
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSAvoidLongLines', '', Scope = 'Function',
@@ -43,9 +46,8 @@
     process {
         if ($env:GITHUB_ACTIONS -eq 'true') {
             Write-Host "::debug::$Message"
-        } else {
-            Write-Debug "$Message"
         }
+        Write-Debug "$Message"
     }
 
     end {

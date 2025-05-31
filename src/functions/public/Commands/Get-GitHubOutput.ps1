@@ -27,6 +27,9 @@
         MY_VALUE                       qwe…
 
         Gets the GitHub output and returns a hashtable.
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Commands/Get-GitHubOutput
     #>
     [OutputType([hashtable])]
     [CmdletBinding()]

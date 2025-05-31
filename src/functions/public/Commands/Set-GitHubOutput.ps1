@@ -1,25 +1,28 @@
 ﻿function Set-GitHubOutput {
     <#
-    .SYNOPSIS
-    Sets the GitHub output for a given key and value.
+        .SYNOPSIS
+        Sets the GitHub output for a given key and value.
 
-    .DESCRIPTION
-    This function appends key-value pairs to the GitHub Actions output file specified by $env:GITHUB_OUTPUT.
-    It handles two scenarios:
-    - Normal shell execution: Appends the key-value pair directly.
-    - GitHub composite action via [GitHub-Script](https://github.com/PSModule/GitHub-Script):
-        Accumulates key-value pairs under the 'result' key as a JSON object.
+        .DESCRIPTION
+        This function appends key-value pairs to the GitHub Actions output file specified by $env:GITHUB_OUTPUT.
+        It handles two scenarios:
+        - Normal shell execution: Appends the key-value pair directly.
+        - GitHub composite action via [GitHub-Script](https://github.com/PSModule/GitHub-Script):
+            Accumulates key-value pairs under the 'result' key as a JSON object.
 
-    .EXAMPLE
-    Set-GitHubOutput -Name 'ID' -Value '123123123'
+        .EXAMPLE
+        Set-GitHubOutput -Name 'ID' -Value '123123123'
 
-    Sets the output variable 'ID' to '123123123' in the GitHub Actions output file.
+        Sets the output variable 'ID' to '123123123' in the GitHub Actions output file.
 
-    .EXAMPLE
-    Set-GitHubOutput -Name 'result' -Value @{
-        ID   = '123123123'
-        name = 'test'
-    }
+        .EXAMPLE
+        Set-GitHubOutput -Name 'result' -Value @{
+            ID   = '123123123'
+            name = 'test'
+        }
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Commands/Set-GitHubOutput
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param(

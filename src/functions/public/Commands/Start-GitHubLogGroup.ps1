@@ -27,6 +27,8 @@
         [string] $Name
     )
 
-    Write-Host "::group::$Name"
+    if ($env:GITHUB_ACTIONS -eq 'true') {
+        Write-Host "::group::$Name"
+    }
 
 }
