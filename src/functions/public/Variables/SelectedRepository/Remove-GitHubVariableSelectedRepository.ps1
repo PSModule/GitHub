@@ -28,6 +28,9 @@
 
         .NOTES
         [Remove selected repository from an organization variable](https://docs.github.com/rest/actions/variables#remove-selected-repository-from-an-organization-variable)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Variables/SelectedRepository/Remove-GitHubVariableSelectedRepository
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSAvoidLongLines', '',

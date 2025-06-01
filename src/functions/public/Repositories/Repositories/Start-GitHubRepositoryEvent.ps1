@@ -38,6 +38,9 @@
 
         .NOTES
         [Create a repository dispatch event](https://docs.github.com/rest/repos/repos#create-a-repository-dispatch-event)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Repositories/Repositories/Start-GitHubRepositoryEvent
     #>
     [CmdletBinding(SupportsShouldProcess)]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Long links')]

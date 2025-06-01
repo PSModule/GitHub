@@ -15,6 +15,9 @@
 
         .NOTES
         [Delete a public SSH key for the authenticated user](https://docs.github.com/rest/users/keys#delete-a-public-ssh-key-for-the-authenticated-user)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Users/Keys/Remove-GitHubUserKey
     #>
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]

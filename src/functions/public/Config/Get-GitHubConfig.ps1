@@ -10,6 +10,9 @@
         Get-GitHubConfig -Name DefaultContext
 
         Get the DefaultContext value from the GitHub module configuration.
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Config/Get-GitHubConfig
     #>
     [OutputType([object], [GitHubConfig])]
     [CmdletBinding()]

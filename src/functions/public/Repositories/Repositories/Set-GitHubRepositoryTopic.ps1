@@ -13,6 +13,9 @@
 
         .NOTES
         [Replace all repository topics](https://docs.github.com/rest/repos/repos#replace-all-repository-topics)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Repositories/Repositories/Set-GitHubRepositoryTopic
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param(

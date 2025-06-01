@@ -16,6 +16,9 @@
 
         .NOTES
         [Render a Markdown document in raw mode](https://docs.github.com/rest/markdown/markdown#render-a-markdown-document-in-raw-mode)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Markdown/Get-GitHubMarkdownRaw
     #>
     [CmdletBinding()]
     param(

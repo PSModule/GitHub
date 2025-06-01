@@ -10,6 +10,9 @@
         Reset-GitHubConfig
 
         Re-initializes the GitHub module configuration.
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Config/Reset-GitHubConfig
     #>
     [OutputType([void])]
     [CmdletBinding(SupportsShouldProcess)]

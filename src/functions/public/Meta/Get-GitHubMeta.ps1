@@ -21,6 +21,9 @@
 
         .NOTES
         [Get GitHub meta information](https://docs.github.com/rest/meta/meta#get-apiname-meta-information)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Meta/Get-GitHubMeta
     #>
     [OutputType([object])]
     [CmdletBinding()]

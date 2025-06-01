@@ -12,6 +12,9 @@ function Remove-GitHubConfig {
         Remove-GitHubConfig -Name DefaultUser
 
         Removes the 'DefaultUser' item in the GitHub module configuration.
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Config/Remove-GitHubConfig
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param(
