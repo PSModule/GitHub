@@ -49,7 +49,7 @@
         Justification = 'No state is changed.'
     )]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText', '',
-        Justification = 'The tokens are recieved as clear text. Mitigating exposure by removing variables and performing garbage collection.')]
+        Justification = 'The tokens are received as clear text. Mitigating exposure by removing variables and performing garbage collection.')]
     [CmdletBinding()]
     param(
         # The unique identifier of the installation.

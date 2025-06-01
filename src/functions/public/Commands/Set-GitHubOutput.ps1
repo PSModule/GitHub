@@ -92,9 +92,9 @@
 
     end {
         if ($env:PSMODULE_GITHUB_SCRIPT) {
-            Write-Verbose "Output: [$Name] avaiable as '`${{ fromJson(steps.$env:GITHUB_ACTION.outputs.result).$Name }}'"
+            Write-Verbose "Output: [$Name] available as '`${{ fromJson(steps.$env:GITHUB_ACTION.outputs.result).$Name }}'"
         } else {
-            Write-Verbose "Output: [$Name] avaiable as '`${{ steps.$env:GITHUB_ACTION.outputs.$Name }}'"
+            Write-Verbose "Output: [$Name] available as '`${{ steps.$env:GITHUB_ACTION.outputs.$Name }}'"
         }
         Write-Debug "[$stackPath] - End"
     }
