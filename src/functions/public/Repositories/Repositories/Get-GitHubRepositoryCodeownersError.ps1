@@ -16,6 +16,9 @@
 
         .NOTES
         [List CODEOWNERS errors](https://docs.github.com/rest/repos/repos#list-codeowners-errors)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Repositories/Repositories/Get-GitHubRepositoryCodeownersError
     #>
     [CmdletBinding()]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]

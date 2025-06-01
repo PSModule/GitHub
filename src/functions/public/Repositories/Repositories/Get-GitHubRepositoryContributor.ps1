@@ -18,6 +18,9 @@
 
         .NOTES
         [List repository contributors](https://docs.github.com/rest/repos/repos#list-repository-contributors)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Repositories/Repositories/Get-GitHubRepositoryContributor
     #>
     [CmdletBinding()]
     param(

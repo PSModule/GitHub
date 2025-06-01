@@ -13,6 +13,9 @@
 
         .NOTES
         [Unfollow a user](https://docs.github.com/rest/users/followers#unfollow-a-user)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Users/Followers/Remove-GitHubUserFollowing
     #>
     [OutputType([pscustomobject])]
     [Alias('Unfollow-GitHubUser')]

@@ -20,6 +20,9 @@
 
         .NOTES
         [Get all autolinks of a repository](https://docs.github.com/rest/repos/autolinks#list-all-autolinks-of-a-repository)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Repositories/Autolinks/Get-GitHubRepositoryAutolink
     #>
     [Alias('Get-GitHubRepositoryAutolinks')]
     [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]

@@ -8,6 +8,9 @@
 
         .EXAMPLE
         Get-GitHubEnterpriseOrganization -Enterprise 'msx'
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Enterprise/Get-GitHubEnterpriseOrganization
     #>
     [CmdletBinding()]
     param(

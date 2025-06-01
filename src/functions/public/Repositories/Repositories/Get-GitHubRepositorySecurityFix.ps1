@@ -15,6 +15,9 @@
 
         .NOTES
         [Check if automated security fixes are enabled for a repository](https://docs.github.com/rest/repos/repos#check-if-automated-security-fixes-are-enabled-for-a-repository)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Repositories/Repositories/Get-GitHubRepositorySecurityFix
     #>
     [Alias('Get-GitHubRepoSecurityFixes')]
     [CmdletBinding()]

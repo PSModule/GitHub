@@ -13,6 +13,9 @@
 
         .NOTES
         [Get the Zen of GitHub](https://docs.github.com/rest/meta/meta#get-the-zen-of-github)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Meta/Get-GitHubZen
     #>
     [CmdletBinding()]
     param(

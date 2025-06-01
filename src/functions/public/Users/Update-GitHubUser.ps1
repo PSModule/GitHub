@@ -25,6 +25,9 @@
 
         .NOTES
         [Update the authenticated user](https://docs.github.com/rest/users/users#update-the-authenticated-user)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Users/Update-GitHubUser
     #>
     [OutputType([void])]
     [CmdletBinding(SupportsShouldProcess)]

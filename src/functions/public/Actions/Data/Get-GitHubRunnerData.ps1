@@ -8,6 +8,9 @@
 
         .EXAMPLE
         Get-GitHubRunnerData
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Actions/Data/Get-GitHubRunnerData
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]

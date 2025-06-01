@@ -8,6 +8,9 @@
 
         .EXAMPLE
         Switch-GitHubContext -Context 'github.com/Octocat'
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Auth/Context/Switch-GitHubContext
     #>
     [Alias('Set-GitHubDefaultContext')]
     [CmdletBinding(SupportsShouldProcess)]
