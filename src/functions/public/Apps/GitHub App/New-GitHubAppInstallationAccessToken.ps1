@@ -40,6 +40,9 @@
 
         .NOTES
         [Create an installation access token for an app](https://docs.github.com/rest/apps/apps#create-an-installation-access-token-for-an-app)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Apps/GitHub%20App/New-GitHubAppInstallationAccessToken
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSUseShouldProcessForStateChangingFunctions', '',

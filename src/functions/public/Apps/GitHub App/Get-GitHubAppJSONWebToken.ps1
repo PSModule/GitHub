@@ -21,6 +21,9 @@
 
         .NOTES
         [Generating a JSON Web Token (JWT) for a GitHub App | GitHub Docs](https://docs.github.com/apps/creating-github-apps/authenticating-with-a-github-app/generating-a-json-web-token-jwt-for-a-github-app#example-using-powershell-to-generate-a-jwt)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Apps/GitHub%20App/Get-GitHubAppJSONWebToken
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSAvoidLongLines',

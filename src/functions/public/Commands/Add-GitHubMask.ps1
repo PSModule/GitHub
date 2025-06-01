@@ -21,6 +21,9 @@
 
         .NOTES
         [Masking a value in a log](https://docs.github.com/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions#masking-a-value-in-a-log)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Commands/Add-GitHubMask
     #>
     [Alias('Mask', 'Add-Mask')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(

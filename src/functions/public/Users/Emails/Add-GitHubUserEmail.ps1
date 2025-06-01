@@ -13,6 +13,9 @@
 
         .NOTES
         [Add an email address for the authenticated user](https://docs.github.com/rest/users/emails#add-an-email-address-for-the-authenticated-user)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Users/Emails/Add-GitHubUserEmail
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]

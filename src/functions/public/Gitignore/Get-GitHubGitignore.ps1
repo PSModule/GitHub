@@ -20,6 +20,9 @@
         .NOTES
         [Get a gitignore template](https://docs.github.com/rest/gitignore/gitignore#get-a-gitignore-template)
         [Get all gitignore templates](https://docs.github.com/rest/gitignore/gitignore#get-all-gitignore-templates)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Gitignore/Get-GitHubGitignore
     #>
     [CmdletBinding(DefaultParameterSetName = 'List')]
     param(

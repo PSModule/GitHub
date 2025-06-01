@@ -13,6 +13,9 @@
 
         .NOTES
         [GitHub API Root](https://docs.github.com/rest/meta/meta#github-api-root)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Meta/Get-GitHubRoot
     #>
     [CmdletBinding()]
     param(

@@ -26,6 +26,9 @@
 
         .NOTES
         [List GPG keys for the authenticated user](https://docs.github.com/rest/users/gpg-keys#list-gpg-keys-for-the-authenticated-user)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Users/Keys/Get-GitHubUserKey
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]

@@ -15,6 +15,9 @@
         Disconnect-GithubAccount -Context 'github.com/Octocat'
 
         Disconnects from GitHub and removes the context 'github.com/Octocat'.
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Auth/Disconnect-GitHubAccount
     #>
     [Alias('Disconnect-GitHub')]
     [OutputType([void])]

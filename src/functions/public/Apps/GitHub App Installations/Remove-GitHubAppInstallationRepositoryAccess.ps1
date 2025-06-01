@@ -17,6 +17,9 @@
 
         Remove access to the repositories 'repo1' and 'repo2' for the installation
         with the ID '12345678' on the organization 'PSModule' in the enterprise 'msx'.
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Apps/GitHub%20App%20Installations/Remove-GitHubAppInstallationRepositoryAccess
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param(

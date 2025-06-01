@@ -10,6 +10,9 @@
 
         .NOTES
         [GitHub - Grouping log lines](https://docs.github.com/actions/using-workflows/workflow-commands-for-github-actions#grouping-log-lines)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Commands/Start-GitHubLogGroup
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSUseShouldProcessForStateChangingFunctions', '', Scope = 'Function',
@@ -27,6 +30,8 @@
         [string] $Name
     )
 
-    Write-Host "::group::$Name"
+    if ($env:GITHUB_ACTIONS -eq 'true') {
+        Write-Host "::group::$Name"
+    }
 
 }

@@ -24,6 +24,9 @@
 
         .NOTES
         [Create an organization invitation](https://docs.github.com/rest/orgs/members#list-pending-organization-invitations)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Organization/Members/New-GitHubOrganizationInvitation
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param(

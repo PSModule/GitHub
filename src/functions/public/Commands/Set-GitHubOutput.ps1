@@ -1,25 +1,30 @@
 ﻿function Set-GitHubOutput {
     <#
-    .SYNOPSIS
-    Sets the GitHub output for a given key and value.
+        .SYNOPSIS
+        Sets the GitHub output for a given key and value.
 
-    .DESCRIPTION
-    This function appends key-value pairs to the GitHub Actions output file specified by $env:GITHUB_OUTPUT.
-    It handles two scenarios:
-    - Normal shell execution: Appends the key-value pair directly.
-    - GitHub composite action via [GitHub-Script](https://github.com/PSModule/GitHub-Script):
-        Accumulates key-value pairs under the 'result' key as a JSON object.
+        .DESCRIPTION
+        This function appends key-value pairs to the GitHub Actions output file specified by $env:GITHUB_OUTPUT.
+        It handles two scenarios:
+        - Normal shell execution: Appends the key-value pair directly.
+        - GitHub composite action via [GitHub-Script](https://github.com/PSModule/GitHub-Script):
+            Accumulates key-value pairs under the 'result' key as a JSON object.
 
-    .EXAMPLE
-    Set-GitHubOutput -Name 'ID' -Value '123123123'
+        The Value parameter accepts null values, which will be correctly preserved and set as the output.
 
-    Sets the output variable 'ID' to '123123123' in the GitHub Actions output file.
+        .EXAMPLE
+        Set-GitHubOutput -Name 'ID' -Value '123123123'
 
-    .EXAMPLE
-    Set-GitHubOutput -Name 'result' -Value @{
-        ID   = '123123123'
-        name = 'test'
-    }
+        Sets the output variable 'ID' to '123123123' in the GitHub Actions output file.
+
+        .EXAMPLE
+        Set-GitHubOutput -Name 'result' -Value @{
+            ID   = '123123123'
+            name = 'test'
+        }
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Commands/Set-GitHubOutput
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param(
@@ -27,8 +32,9 @@
         [Parameter(Mandatory)]
         [string] $Name,
 
-        # The value of the output variable to set.
-        [Parameter(Mandatory)]
+        # The value of the output variable to set. Can be null.
+        [Parameter()]
+        [AllowNull()]
         [object] $Value,
 
         # The path to the GitHub output file.

@@ -11,6 +11,9 @@
 
         .NOTES
         [Setting an environment variable](https://docs.github.com/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions#setting-an-environment-variable)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Commands/Set-GitHubEnvironmentVariable
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSAvoidLongLines', '', Scope = 'Function',
@@ -21,15 +24,14 @@
         Justification = 'Does not change system state significantly'
     )]
     [OutputType([void])]
-    [Alias('Set-GitHubEnv')]
     [CmdletBinding()]
     param(
         # Name of the variable
         [Parameter(Mandatory)]
         [string] $Name,
 
-        # Value of the variable
-        [Parameter(Mandatory)]
+        # Value of the variable to set. Can be null.
+        [Parameter()]
         [AllowNull()]
         [string] $Value
     )

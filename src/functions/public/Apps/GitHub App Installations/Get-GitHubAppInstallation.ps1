@@ -7,6 +7,9 @@
         Lists the installations for the authenticated app.
         If the app is installed on an enterprise, the installations for the enterprise are returned.
         If the app is installed on an organization, the installations for the organization are returned.
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Apps/GitHub%20App%20Installations/Get-GitHubAppInstallation
     #>
     [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(

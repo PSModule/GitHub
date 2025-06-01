@@ -67,6 +67,10 @@
     # Example: true
     [System.Nullable[bool]] $HasDiscussions
 
+    # Whether sponsorships are enabled.
+    # Example: false
+    [System.Nullable[bool]] $HasSponsorships
+
     # Indicates whether the repository is archived.
     # Example: false
     [System.Nullable[bool]] $IsArchived
@@ -175,10 +179,7 @@
     [GithubRepository] $TemplateRepository
 
     # The repository this repository was forked from.
-    [GithubRepository] $ForkParent
-
-    # The ultimate source for the fork network.
-    [GithubRepository] $ForkSource
+    [GithubRepository] $ForkRepository
 
     # Custom properties for the repository.
     [PSCustomObject] $CustomProperties
@@ -213,6 +214,7 @@
         HasProjects              = 'hasProjectsEnabled'
         HasWiki                  = 'hasWikiEnabled'
         HasDiscussions           = 'hasDiscussionsEnabled'
+        HasSponsorships          = 'hasSponsorshipsEnabled'
         IsArchived               = 'isArchived'
         IsTemplate               = 'isTemplate'
         IsFork                   = 'isFork'
@@ -239,8 +241,7 @@
         MergeCommitTitle         = 'mergeCommitTitle'
         MergeCommitMessage       = 'mergeCommitMessage'
         TemplateRepository       = 'templateRepository { id databaseId name owner { login } }'
-        ForkParent               = 'parent { name owner { login } }'
-        ForkSource               = 'parent { name owner { login } }'
+        ForkRepository           = 'parent { id databaseId name owner { login }  }'
         CustomProperties         = ''
         CloneUrl                 = 'url'
         SshUrl                   = 'sshUrl'
@@ -297,8 +298,7 @@
             $this.MergeCommitTitle = $Object.merge_commit_title
             $this.CustomProperties = $Object.custom_properties
             $this.TemplateRepository = $null -ne $Object.template_repository ? [GitHubRepository]::New($Object.template_repository) : $null
-            $this.ForkParent = $null -ne $Object.parent ? [GitHubRepository]::New($Object.parent) : $null
-            $this.ForkSource = $null -ne $Object.source ? [GitHubRepository]::New($Object.source) : $null
+            $this.ForkRepository = $null -ne $Object.parent ? [GitHubRepository]::New($Object.parent) : $null
             $this.CloneUrl = $Object.clone_url
             $this.SshUrl = $Object.ssh_url
             $this.GitUrl = $Object.git_url
@@ -323,6 +323,7 @@
             $this.HasProjects = $Object.hasProjectsEnabled
             $this.HasWiki = $Object.hasWikiEnabled
             $this.HasDiscussions = $Object.hasDiscussionsEnabled
+            $this.HasSponsorships = $Object.hasSponsorshipsEnabled
             $this.IsArchived = $Object.isArchived
             $this.IsTemplate = $Object.isTemplate
             $this.IsFork = $Object.isFork
@@ -349,8 +350,7 @@
             $this.MergeCommitTitle = $Object.mergeCommitTitle
             $this.MergeCommitMessage = $Object.mergeCommitMessage
             $this.TemplateRepository = $null -ne $Object.templateRepository ? [GitHubRepository]::New($Object.templateRepository) : $null
-            $this.ForkParent = $null -ne $Object.parent ? [GitHubRepository]::New($Object.parent) : $null
-            $this.ForkSource = $null -ne $Object.source ? [GitHubRepository]::New($Object.source) : $null
+            $this.ForkRepository = $null -ne $Object.parent ? [GitHubRepository]::New($Object.parent) : $null
             $this.CloneUrl = -not [string]::IsNullOrEmpty($Object.url) ? $Object.url + '.git' : $null
             $this.SshUrl = $Object.sshUrl
             $this.GitUrl = -not [string]::IsNullOrEmpty($Object.url) ? ($Object.Url + '.git').Replace('https://', 'git://') : $null

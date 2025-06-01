@@ -13,6 +13,9 @@
 
         .NOTES
         [GraphQL API - Queries - Viewer](https://docs.github.com/graphql/reference/queries#viewer)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Auth/Get-GitHubViewer
     #>
     [CmdletBinding()]
     param(

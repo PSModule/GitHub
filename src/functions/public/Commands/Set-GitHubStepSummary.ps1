@@ -20,6 +20,9 @@
 
         .NOTES
         [Adding a job summary](https://docs.github.com/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions?utm_source=chatgpt.com#adding-a-job-summary)
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Commands/Set-GitHubStepSummary
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSAvoidLongLines', '', Scope = 'Function',
@@ -28,6 +31,10 @@
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSUseShouldProcessForStateChangingFunctions', '', Scope = 'Function',
         Justification = 'Does not change system state significantly'
+    )]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSAvoidUsingWriteHost', '', Scope = 'Function',
+        Justification = 'Intended for logging in Github Runners which does support Write-Host'
     )]
     [OutputType([void])]
     [Alias('Summary')]
@@ -55,7 +62,11 @@
         Write-Verbose $Summary
 
         $Append = -not $Overwrite
-        $Summary | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append:$Append
+        if ($env:GITHUB_ACTIONS -eq 'true') {
+            $Summary | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append:$Append
+            return
+        }
+        Write-Host "$Summary"
     }
 
     end {
