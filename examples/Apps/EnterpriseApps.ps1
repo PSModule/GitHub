@@ -20,7 +20,7 @@ filter Install-GithubApp {
     )
 
     process {
-        $installableOrgs = Get-GitHubAppInstallableOrganization -Enterprise $Enterprise -Debug -Verbose
+        $installableOrgs = Get-GitHubOrganization -Enterprise $Enterprise -Debug -Verbose
         $orgs = $installableOrgs | Where-Object { $_.login -like $organization }
         foreach ($org in $orgs) {
             foreach ($appIDitem in $AppID) {

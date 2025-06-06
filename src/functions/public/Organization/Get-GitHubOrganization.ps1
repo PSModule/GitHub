@@ -12,22 +12,27 @@
         .EXAMPLE
         Get-GitHubOrganization
 
-        List organizations for the authenticated user.
+        List all organizations for the authenticated user.
 
         .EXAMPLE
         Get-GitHubOrganization -Username 'octocat'
 
-        List public organizations for the user 'octocat'.
+        List public organizations for a specific user.
 
         .EXAMPLE
         Get-GitHubOrganization -All -Since 142951047
 
-        List organizations, starting with PSModule.
+        List all organizations made after an ID.
 
         .EXAMPLE
         Get-GitHubOrganization -Name 'PSModule'
 
-        Get the organization 'PSModule'.
+        Get a specific organization.
+
+        .EXAMPLE
+        Get-GitHubOrganization -Enterprise 'msx'
+
+        Get the organizations belonging to an Enterprise.
 
         .OUTPUTS
         GitHubOrganization
@@ -36,13 +41,13 @@
         https://psmodule.io/GitHub/Functions/Organization/Get-GitHubOrganization
     #>
     [OutputType([GitHubOrganization])]
-    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
+    [CmdletBinding(DefaultParameterSetName = 'List all organizations for the authenticated user')]
     [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'All', Justification = 'Required for parameter set')]
     param(
         # The organization name. The name is not case sensitive.
         [Parameter(
             Mandatory,
-            ParameterSetName = 'NamedOrg',
+            ParameterSetName = 'Get a specific organization',
             ValueFromPipeline,
             ValueFromPipelineByPropertyName
         )]
@@ -51,27 +56,34 @@
         # The handle for the GitHub user account.
         [Parameter(
             Mandatory,
-            ParameterSetName = 'NamedUser',
+            ParameterSetName = 'List public organizations for a specific user',
             ValueFromPipelineByPropertyName
         )]
         [Alias('User')]
         [string] $Username,
 
+        # The Enterprise slug to get organizations from.
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'Get the organizations belonging to an Enterprise',
+            ValueFromPipelineByPropertyName
+        )]
+        [string] $Enterprise,
+
         # List all organizations. Use '-Since' to start at a specific organization ID.
         [Parameter(
             Mandatory,
-            ParameterSetName = 'AllOrg'
+            ParameterSetName = 'List all organizations on the tenant'
         )]
         [switch] $All,
 
         # A organization ID. Only return organizations with an ID greater than this ID.
-        [Parameter(ParameterSetName = 'AllOrg')]
+        [Parameter(ParameterSetName = 'List all organizations on the tenant')]
         [int] $Since = 0,
 
         # The number of results per page (max 100).
-        [Parameter(ParameterSetName = 'AllOrg')]
-        [Parameter(ParameterSetName = 'UserOrg')]
-        [Parameter(ParameterSetName = '__AllParameterSets')]
+        [Parameter(ParameterSetName = 'List all organizations on the tenant')]
+        [Parameter(ParameterSetName = 'List all organizations for the authenticated user')]
         [System.Nullable[int]] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -89,13 +101,16 @@
 
     process {
         switch ($PSCmdlet.ParameterSetName) {
-            'NamedOrg' {
+            'Get a specific organization' {
                 Get-GitHubOrganizationByName -Name $Name -Context $Context
             }
-            'NamedUser' {
+            'List public organizations for a specific user' {
                 Get-GitHubUserOrganization -Username $Username -Context $Context
             }
-            'AllOrg' {
+            'Get the organizations belonging to an Enterprise' {
+                Get-GitHubAppInstallableOrganization -Enterprise $Enterprise -Context $Context
+            }
+            'List all organizations on the tenant' {
                 Get-GitHubAllOrganization -Since $Since -PerPage $PerPage -Context $Context
             }
             default {

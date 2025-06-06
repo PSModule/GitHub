@@ -27,9 +27,8 @@
         [System.Nullable[int]] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.
-        # Can be either a string or a GitHubContext object.
-        [Parameter()]
-        [object] $Context = (Get-GitHubContext)
+        [Parameter(Mandatory)]
+        [object] $Context
     )
 
     begin {
@@ -49,7 +48,7 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            [GitHubOrganization]::new($_.Response)
         }
     }
 
@@ -57,5 +56,3 @@
         Write-Debug "[$stackPath] - End"
     }
 }
-
-#SkipTest:FunctionTest:Will add a test for this function in a future PR
