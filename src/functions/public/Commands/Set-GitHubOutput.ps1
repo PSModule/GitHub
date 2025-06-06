@@ -72,7 +72,7 @@
         # else append the key-value pair directly.
         if ($env:PSMODULE_GITHUB_SCRIPT) {
             if ($Value -isnot [string]) {
-                $Value = $Value | ConvertTo-Json -Compress -Depth 100
+                $Value = $Value | ConvertTo-Json -Depth 100
             }
             Write-Debug "[$stackPath] - Running in GitHub-Script composite action"
             if (-not $outputs.ContainsKey('result')) {
