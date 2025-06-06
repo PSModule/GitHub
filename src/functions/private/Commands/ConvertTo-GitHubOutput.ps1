@@ -82,7 +82,6 @@
                 $value = $value | ConvertTo-Json -Depth 100
             }
 
-
             $guid = [Guid]::NewGuid().ToString()
             $EOFMarker = "EOF_$guid"
             $outputLines += "$key<<$EOFMarker"
