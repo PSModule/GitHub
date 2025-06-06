@@ -57,6 +57,14 @@
         [Alias('User')]
         [string] $Username,
 
+        # The Enterprise slug to get organizations from.
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'EnterpriseOrganizations',
+            ValueFromPipelineByPropertyName
+        )]
+        [string] $Enterprise,
+
         # List all organizations. Use '-Since' to start at a specific organization ID.
         [Parameter(
             Mandatory,
@@ -94,6 +102,9 @@
             }
             'NamedUser' {
                 Get-GitHubUserOrganization -Username $Username -Context $Context
+            }
+            'EnterpriseOrganizations' {
+                Get-GitHubAppInstallableOrganization -Enterprise $Enterprise -Context $Context
             }
             'AllOrg' {
                 Get-GitHubAllOrganization -Since $Since -PerPage $PerPage -Context $Context
