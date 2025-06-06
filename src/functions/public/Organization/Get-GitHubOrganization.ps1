@@ -29,6 +29,11 @@
 
         Get the organization 'PSModule'.
 
+        .EXAMPLE
+        Get-GitHubOrganization -Enterprise 'msx'
+
+        Get the organizations belonging to the Enterprise called 'msx'.
+
         .OUTPUTS
         GitHubOrganization
 
