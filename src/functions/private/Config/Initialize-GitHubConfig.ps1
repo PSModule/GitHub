@@ -1,6 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '7.0.2' }
-
-function Initialize-GitHubConfig {
+﻿function Initialize-GitHubConfig {
     <#
         .SYNOPSIS
         Initialize the GitHub module configuration.
@@ -50,7 +48,7 @@ function Initialize-GitHubConfig {
         if ($context) {
             Write-Debug 'GitHubConfig loaded into memory.'
 
-            Write-Debug "Checking if new default properties are available in the stored context."
+            Write-Debug 'Checking if new default properties are available in the stored context.'
             $needsUpdate = $false
             $defaultProperties = $script:GitHub.DefaultConfig.PSObject.Properties.Name
             foreach ($propName in $defaultProperties) {
@@ -77,3 +75,4 @@ function Initialize-GitHubConfig {
         Write-Debug "[$stackPath] - End"
     }
 }
+#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '8.0.0' }

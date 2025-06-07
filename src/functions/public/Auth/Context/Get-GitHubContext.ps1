@@ -1,6 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '7.0.2' }
-
-function Get-GitHubContext {
+﻿function Get-GitHubContext {
     <#
         .SYNOPSIS
         Get the current GitHub context.
@@ -94,3 +92,4 @@ function Get-GitHubContext {
         Write-Debug "[$stackPath] - End"
     }
 }
+#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '8.0.0' }

@@ -1,6 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '7.0.2' }
-
-function Set-GitHubContext {
+﻿function Set-GitHubContext {
     <#
         .SYNOPSIS
         Sets the GitHub context and stores it in the context vault.
@@ -170,3 +168,4 @@ function Set-GitHubContext {
         Write-Debug "[$stackPath] - End"
     }
 }
+#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '8.0.0' }

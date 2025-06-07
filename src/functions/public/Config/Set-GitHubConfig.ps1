@@ -1,6 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '7.0.2' }
-
-function Set-GitHubConfig {
+﻿function Set-GitHubConfig {
     <#
         .SYNOPSIS
         Set a GitHub module configuration.
@@ -45,3 +43,4 @@ function Set-GitHubConfig {
         Write-Debug "[$stackPath] - End"
     }
 }
+#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '8.0.0' }

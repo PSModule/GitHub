@@ -1,5 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '7.0.2' }
-
+﻿
 filter Remove-GitHubContext {
     <#
         .SYNOPSIS
@@ -47,3 +46,4 @@ filter Remove-GitHubContext {
         Write-Debug "[$stackPath] - End"
     }
 }
+#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '8.0.0' }
