@@ -1,6 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '7.0.2' }
-
-function Set-GitHubConfig {
+﻿function Set-GitHubConfig {
     <#
         .SYNOPSIS
         Set a GitHub module configuration.
@@ -37,7 +35,7 @@ function Set-GitHubConfig {
         Write-Verbose "Setting [$Name] to [$Value]"
         $script:GitHub.Config.$Name = $Value
         if ($PSCmdlet.ShouldProcess('ContextSetting', 'Set')) {
-            Set-Context -ID $script:GitHub.Config.ID -Context $script:GitHub.Config
+            Set-Context -Context $script:GitHub.Config -Vault $script:GitHub.ContextVault
         }
     }
 
@@ -45,3 +43,4 @@ function Set-GitHubConfig {
         Write-Debug "[$stackPath] - End"
     }
 }
+#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '8.0.0' }

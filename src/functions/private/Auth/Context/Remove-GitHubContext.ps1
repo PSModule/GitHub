@@ -1,5 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '7.0.2' }
-
+﻿
 filter Remove-GitHubContext {
     <#
         .SYNOPSIS
@@ -36,10 +35,8 @@ filter Remove-GitHubContext {
     }
 
     process {
-        $ID = "$($script:GitHub.Config.ID)/$Context"
-
         if ($PSCmdlet.ShouldProcess($context.Name, 'Remove context')) {
-            Remove-Context -ID $ID
+            Remove-Context -ID $Context -Vault $script:GitHub.ContextVault
         }
     }
 
@@ -47,3 +44,4 @@ filter Remove-GitHubContext {
         Write-Debug "[$stackPath] - End"
     }
 }
+#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '8.0.0' }

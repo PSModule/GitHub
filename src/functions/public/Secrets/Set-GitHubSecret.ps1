@@ -1,6 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Sodium'; RequiredVersion = '2.1.2'}
-
-function Set-GitHubSecret {
+﻿function Set-GitHubSecret {
     <#
         .SYNOPSIS
         Updates a GitHub secret for an organization, repository, or user.
@@ -145,3 +143,4 @@ function Set-GitHubSecret {
         Write-Debug "[$stackPath] - End"
     }
 }
+#Requires -Modules @{ ModuleName = 'Sodium'; RequiredVersion = '2.2.0'}

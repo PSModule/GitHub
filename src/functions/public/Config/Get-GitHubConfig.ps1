@@ -30,7 +30,7 @@
 
     process {
         if (-not $Name) {
-            return [GitHubConfig]($script:GitHub.Config)
+            Get-Context -ID $script:GitHub.Config.ID -Vault $script:GitHub.ContextVault
         }
 
         $script:GitHub.Config.$Name

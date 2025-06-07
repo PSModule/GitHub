@@ -41,6 +41,7 @@ Describe 'Artifacts' {
         }
         AfterAll {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+            Write-Host ('-' * 60)
         }
 
         Context 'Repository' {

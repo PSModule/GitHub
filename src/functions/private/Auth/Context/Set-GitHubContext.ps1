@@ -1,6 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '7.0.2' }
-
-function Set-GitHubContext {
+﻿function Set-GitHubContext {
     <#
         .SYNOPSIS
         Sets the GitHub context and stores it in the context vault.
@@ -144,7 +142,7 @@ function Set-GitHubContext {
             Write-Debug '----------------------------------------------------'
             if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
                 Write-Debug "Saving context: [$($script:GitHub.Config.ID)/$($contextObj['Name'])]"
-                Set-Context -ID "$($script:GitHub.Config.ID)/$($contextObj['Name'])" -Context $contextObj
+                Set-Context -ID $($contextObj['Name']) -Context $contextObj -Vault $script:GitHub.ContextVault
                 if ($Default) {
                     Switch-GitHubContext -Context $contextObj['Name']
                 }
@@ -170,3 +168,4 @@ function Set-GitHubContext {
         Write-Debug "[$stackPath] - End"
     }
 }
+#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '8.0.0' }
