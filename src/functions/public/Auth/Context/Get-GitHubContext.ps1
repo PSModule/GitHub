@@ -47,23 +47,21 @@
         switch ($PSCmdlet.ParameterSetName) {
             'NamedContext' {
                 Write-Verbose "NamedContext: [$Context]"
-                $ID = "$($script:GitHub.Config.ID)/$Context"
-                Write-Verbose "Getting available contexts for [$ID]"
+                $ID = $Context
             }
             'ListAvailableContexts' {
                 Write-Verbose "ListAvailable: [$ListAvailable]"
-                $ID = "$($script:GitHub.Config.ID)/*"
-                Write-Verbose "Getting available contexts for [$ID]"
+                $ID = "*"
             }
             default {
                 Write-Verbose 'Getting default context.'
-                $ID = "$($script:GitHub.Config.ID)/$($script:GitHub.Config.DefaultContext)"
+                $ID = $script:GitHub.Config.DefaultContext
                 if ([string]::IsNullOrEmpty($ID)) {
                     throw "No default GitHub context found. Please run 'Set-GitHubDefaultContext' or 'Connect-GitHub' to configure a GitHub context."
                 }
-                Write-Verbose "Getting the default context: [$ID]"
             }
         }
+        Write-Verbose "Getting the default context: [$ID]"
 
         Get-Context -ID $ID -Vault $script:GitHub.ContextVault | ForEach-Object {
             $contextObj = $_

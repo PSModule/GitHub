@@ -32,7 +32,7 @@
         Write-Debug "Force:           [$Force]"
         if ($Force) {
             Write-Debug 'Forcing initialization of GitHubConfig.'
-            $context = Set-Context -ID $script:GitHub.DefaultConfig.ID -Context $script:GitHub.DefaultConfig -Vault $script:GitHub.ContextVault
+            $context = Set-Context -Context $script:GitHub.DefaultConfig -Vault $script:GitHub.ContextVault
             $script:GitHub.Config = [GitHubConfig]$context
             return
         }
@@ -44,7 +44,7 @@
         }
 
         Write-Debug 'Attempt to load the stored GitHubConfig from ContextVault'
-        $context = Get-Context -ID $script:GitHub.DefaultConfig.ID -Vault $script:GitHub.Vault
+        $context = Get-Context -ID $script:GitHub.DefaultConfig.ID -Vault $script:GitHub.ContextVault
         if ($context) {
             Write-Debug 'GitHubConfig loaded into memory.'
 
@@ -60,14 +60,14 @@
             }
             if ($needsUpdate) {
                 Write-Debug 'Updating stored context with new default properties'
-                $context = Set-Context -ID $script:GitHub.DefaultConfig.ID -Context $context -Vault $script:GitHub.ContextVault
+                $context = Set-Context -Context $context -Vault $script:GitHub.ContextVault
             }
 
             $script:GitHub.Config = [GitHubConfig]$context
             return
         }
         Write-Debug 'Initializing GitHubConfig from defaults'
-        $context = Set-Context -ID $script:GitHub.DefaultConfig.ID -Context $script:GitHub.DefaultConfig -Vault $script:GitHub.ContextVault
+        $context = Set-Context -Context $script:GitHub.DefaultConfig -Vault $script:GitHub.ContextVault
         $script:GitHub.Config = [GitHubConfig]$context
     }
 
