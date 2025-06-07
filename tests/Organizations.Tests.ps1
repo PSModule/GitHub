@@ -35,6 +35,7 @@ Describe 'Organizations' {
         }
         AfterAll {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+            Write-Host ('-' * 60)
         }
 
         # Tests for APP goes here

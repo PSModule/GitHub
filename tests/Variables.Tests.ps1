@@ -99,6 +99,7 @@ Describe 'Variables' {
                 }
             }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+            Write-Host ('-' * 60)
         }
 
         Context 'Organization' -Skip:($OwnerType -ne 'organization') {

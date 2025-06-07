@@ -25,6 +25,7 @@ Describe 'Auth' {
     Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
         AfterAll {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+            Write-Host ('-' * 60)
         }
 
         It 'Connect-GitHubAccount - Connects using the provided credentials' {
@@ -374,6 +375,7 @@ Describe 'Apps' {
 
         AfterAll {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+            Write-Host ('-' * 60)
         }
 
         # Tests for APP goes here
@@ -483,6 +485,7 @@ Describe 'API' {
         }
         AfterAll {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+            Write-Host ('-' * 60)
         }
 
         # Tests for APP goes here
@@ -700,6 +703,7 @@ Describe 'Emojis' {
         }
         AfterAll {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+            Write-Host ('-' * 60)
         }
 
         # Tests for APP goes here

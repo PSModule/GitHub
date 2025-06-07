@@ -69,6 +69,7 @@ Describe 'Environments' {
                 }
             }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+            Write-Host ('-' * 60)
         }
 
         It 'Get-GitHubEnvironment - should return an empty list when no environments exist' -Skip:($OwnerType -eq 'repository') {
