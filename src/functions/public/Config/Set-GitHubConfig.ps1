@@ -35,7 +35,7 @@
         Write-Verbose "Setting [$Name] to [$Value]"
         $script:GitHub.Config.$Name = $Value
         if ($PSCmdlet.ShouldProcess('ContextSetting', 'Set')) {
-            Set-Context -ID $script:GitHub.Config.ID -Context $script:GitHub.Config
+            Set-Context -ID $script:GitHub.Config.ID -Context $script:GitHub.Config -Vault $script:GitHub.ContextVault
         }
     }
 

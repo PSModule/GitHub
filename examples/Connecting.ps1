@@ -49,7 +49,6 @@ Get-GitHubContext -Context 'github.com/MariusStorhaug' | Set-GitHubDefaultContex
 
 # Abstraction layers on GitHubContexts
 Get-GitHubContext -Context 'msx.ghe.com/MariusStorhaug'
-Get-Context -ID 'PSModule.GitHub/msx.ghe.com/MariusStorhaug'
 
 ###
 ### DISCONNECTING

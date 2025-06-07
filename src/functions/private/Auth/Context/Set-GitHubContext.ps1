@@ -142,7 +142,7 @@
             Write-Debug '----------------------------------------------------'
             if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
                 Write-Debug "Saving context: [$($script:GitHub.Config.ID)/$($contextObj['Name'])]"
-                Set-Context -ID "$($script:GitHub.Config.ID)/$($contextObj['Name'])" -Context $contextObj
+                Set-Context -ID $($contextObj['Name']) -Context $contextObj -Vault $script:GitHub.ContextVault
                 if ($Default) {
                     Switch-GitHubContext -Context $contextObj['Name']
                 }

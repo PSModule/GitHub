@@ -65,7 +65,7 @@
             }
         }
 
-        Get-Context -ID $ID | ForEach-Object {
+        Get-Context -ID $ID -Vault $script:GitHub.ContextVault | ForEach-Object {
             $contextObj = $_
             Write-Verbose 'Context:'
             $contextObj | Select-Object * | Out-String -Stream | ForEach-Object { Write-Verbose $_ }

@@ -37,7 +37,7 @@
             Write-Error (Get-PSCallStack | Format-Table | Out-String)
             throw 'Failed to connect to GitHub.'
         }
-        Set-Context -ID $script:GitHub.Config.ID -Context $script:GitHub.Config
+        Set-Context -ID $script:GitHub.Config.ID -Context $script:GitHub.Config -Vault $script:GitHub.ContextVault
     }
 
     end {

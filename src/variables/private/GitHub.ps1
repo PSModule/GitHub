@@ -1,8 +1,9 @@
 ﻿$script:GitHub = [pscustomobject]@{
+    ContextVault       = 'PSModule.GitHub'
     TokenPrefixPattern = '(?<=^(ghu|gho|ghs|github_pat|ghp)).*'
     EnvironmentType    = Get-GitHubEnvironmentType
     DefaultConfig      = [GitHubConfig]@{
-        ID                            = 'PSModule.GitHub'
+        ID                            = 'Module'
         HostName                      = ($env:GITHUB_SERVER_URL ?? 'github.com') -replace '^https?://'
         ApiBaseUri                    = "https://api.$(($env:GITHUB_SERVER_URL ?? 'github.com') -replace '^https?://')"
         AccessTokenGracePeriodInHours = 4
