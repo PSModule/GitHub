@@ -35,10 +35,8 @@ filter Remove-GitHubContext {
     }
 
     process {
-        $ID = "$($script:GitHub.Config.ID)/$Context"
-
         if ($PSCmdlet.ShouldProcess($context.Name, 'Remove context')) {
-            Remove-Context -ID $ID -Vault $script:GitHub.ContextVault
+            Remove-Context -ID $Context -Vault $script:GitHub.ContextVault
         }
     }
 
