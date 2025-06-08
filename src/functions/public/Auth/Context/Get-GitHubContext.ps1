@@ -63,7 +63,7 @@
         }
         Write-Verbose "Getting the context: [$ID]"
 
-        Get-Context -ID $ID -Vault $script:GitHub.ContextVault | ForEach-Object {
+        Get-Context -ID $ID -Vault $script:GitHub.ContextVault | Where-Object { $_.ID -ne $script:GitHub.DefaultConfig.ID } | ForEach-Object {
             $contextObj = $_
             Write-Verbose 'Context:'
             $contextObj | Select-Object * | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
