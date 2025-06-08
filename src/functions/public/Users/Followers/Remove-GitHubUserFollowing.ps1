@@ -1,4 +1,4 @@
-﻿filter Remove-GitHubUserFollowing {
+filter Remove-GitHubUserFollowing {
     <#
         .SYNOPSIS
         Unfollow a user
@@ -38,7 +38,7 @@
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $Context = Resolve-GitHubContext -Context $Context -Anonymous $Anonymous
+        $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 

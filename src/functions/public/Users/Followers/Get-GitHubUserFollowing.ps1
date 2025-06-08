@@ -1,4 +1,4 @@
-﻿filter Get-GitHubUserFollowing {
+filter Get-GitHubUserFollowing {
     <#
         .SYNOPSIS
         List the people a given user or the authenticated user follows
@@ -47,7 +47,7 @@
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $Context = Resolve-GitHubContext -Context $Context -Anonymous $Anonymous
+        $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 

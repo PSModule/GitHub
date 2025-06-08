@@ -1,4 +1,4 @@
-﻿function Get-GitHubTeam {
+function Get-GitHubTeam {
     <#
         .SYNOPSIS
         List teams from an org or get a team by name
@@ -45,7 +45,7 @@
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $Context = Resolve-GitHubContext -Context $Context -Anonymous $Anonymous
+        $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 

@@ -1,4 +1,4 @@
-﻿filter Remove-GitHubUserKey {
+filter Remove-GitHubUserKey {
     <#
         .SYNOPSIS
         Delete a public SSH key for the authenticated user
@@ -39,7 +39,7 @@
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $Context = Resolve-GitHubContext -Context $Context -Anonymous $Anonymous
+        $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 

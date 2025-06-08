@@ -1,4 +1,4 @@
-﻿filter Enable-GitHubRepositorySecurityFix {
+filter Enable-GitHubRepositorySecurityFix {
     <#
         .SYNOPSIS
         Enable automated security fixes
@@ -39,7 +39,7 @@
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $Context = Resolve-GitHubContext -Context $Context -Anonymous $Anonymous
+        $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 

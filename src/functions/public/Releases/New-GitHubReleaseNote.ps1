@@ -1,4 +1,4 @@
-﻿filter New-GitHubReleaseNote {
+filter New-GitHubReleaseNote {
     <#
         .SYNOPSIS
         Generate release notes content for a release.
@@ -105,7 +105,7 @@
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $Context = Resolve-GitHubContext -Context $Context -Anonymous $Anonymous
+        $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 

@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositorySecurityFix {
+filter Get-GitHubRepositorySecurityFix {
     <#
         .SYNOPSIS
         Check if automated security fixes are enabled for a repository
@@ -42,7 +42,7 @@
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $Context = Resolve-GitHubContext -Context $Context -Anonymous $Anonymous
+        $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 

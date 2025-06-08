@@ -1,4 +1,4 @@
-﻿function Get-GitHubAppAccessibleRepository {
+function Get-GitHubAppAccessibleRepository {
     <#
         .SYNOPSIS
         Get repositories belonging to an enterprise owned organization that can be made accessible to a GitHub App
@@ -51,7 +51,7 @@
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $Context = Resolve-GitHubContext -Context $Context -Anonymous $Anonymous
+        $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, UAT
         # Enterprise organization installations (read)
     }

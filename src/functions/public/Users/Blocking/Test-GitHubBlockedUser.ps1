@@ -1,4 +1,4 @@
-﻿filter Test-GitHubBlockedUser {
+filter Test-GitHubBlockedUser {
     <#
         .SYNOPSIS
         Check if a user is blocked by the authenticated user or an organization.
@@ -59,7 +59,7 @@
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $Context = Resolve-GitHubContext -Context $Context -Anonymous $Anonymous
+        $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
 
         if ([string]::IsNullOrEmpty($Organization)) {

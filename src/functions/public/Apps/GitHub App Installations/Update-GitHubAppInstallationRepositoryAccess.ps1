@@ -1,4 +1,4 @@
-﻿function Update-GitHubAppInstallationRepositoryAccess {
+function Update-GitHubAppInstallationRepositoryAccess {
     <#
         .SYNOPSIS
         Update the installation repository access between all repositories and selected repositories.
@@ -72,7 +72,7 @@
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $Context = Resolve-GitHubContext -Context $Context -Anonymous $Anonymous
+        $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, UAT
         #enterprise_organization_installation_repositories=write
         #enterprise_organization_installations=write

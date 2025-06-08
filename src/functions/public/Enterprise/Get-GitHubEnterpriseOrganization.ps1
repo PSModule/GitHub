@@ -1,4 +1,4 @@
-﻿function Get-GitHubEnterpriseOrganization {
+function Get-GitHubEnterpriseOrganization {
     <#
         .SYNOPSIS
         Get the list of organizations in a GitHub Enterprise instance.
@@ -26,7 +26,7 @@
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $Context = Resolve-GitHubContext -Context $Context -Anonymous $Anonymous
+        $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
         if ([string]::IsNullOrEmpty($Enterprise)) {
             $Enterprise = $Context.Enterprise

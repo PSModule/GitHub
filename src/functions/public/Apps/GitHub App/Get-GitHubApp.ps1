@@ -1,4 +1,4 @@
-﻿filter Get-GitHubApp {
+filter Get-GitHubApp {
     <#
         .SYNOPSIS
         Get the authenticated app or a specific app by its slug.
@@ -45,7 +45,7 @@
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $Context = Resolve-GitHubContext -Context $Context -Anonymous $Anonymous
+        $Context = Resolve-GitHubContext -Context $Context
     }
 
     process {

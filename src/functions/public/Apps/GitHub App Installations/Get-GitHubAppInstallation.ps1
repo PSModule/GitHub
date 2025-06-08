@@ -1,4 +1,4 @@
-﻿function Get-GitHubAppInstallation {
+function Get-GitHubAppInstallation {
     <#
         .SYNOPSIS
         List installations for the authenticated app, on organization or enterprise organization.
@@ -48,7 +48,7 @@
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $Context = Resolve-GitHubContext -Context $Context -Anonymous $Anonymous
+        $Context = Resolve-GitHubContext -Context $Context
     }
 
     process {

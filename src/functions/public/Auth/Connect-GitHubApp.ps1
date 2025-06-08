@@ -1,4 +1,4 @@
-﻿function Connect-GitHubApp {
+function Connect-GitHubApp {
     <#
         .SYNOPSIS
         Connects to GitHub as a installation using a GitHub App.
@@ -80,7 +80,7 @@
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $Context = Resolve-GitHubContext -Context $Context -Anonymous $Anonymous
+        $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType App
     }
 

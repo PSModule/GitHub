@@ -1,4 +1,4 @@
-﻿function Switch-GitHubContext {
+function Switch-GitHubContext {
     <#
         .SYNOPSIS
         Set the default context.
@@ -27,7 +27,7 @@
 
     process {
         Write-Debug "Setting default context to [$Context]"
-        $Context = Resolve-GitHubContext -Context $Context -Anonymous $Anonymous
+        $Context = Resolve-GitHubContext -Context $Context
         if ($PSCmdlet.ShouldProcess("$Context", 'Set default context')) {
             Set-GitHubConfig -Name 'DefaultContext' -Value $Context.Name
         }

@@ -1,4 +1,4 @@
-﻿function Get-GitHubViewer {
+function Get-GitHubViewer {
     <#
         .SYNOPSIS
         Gets the currently authenticated user.
@@ -32,7 +32,7 @@
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $Context = Resolve-GitHubContext -Context $Context -Anonymous $Anonymous
+        $Context = Resolve-GitHubContext -Context $Context
     }
 
     process {

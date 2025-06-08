@@ -1,4 +1,4 @@
-﻿function Uninstall-GitHubApp {
+function Uninstall-GitHubApp {
     <#
         .SYNOPSIS
         Uninstall a GitHub App.
@@ -49,7 +49,7 @@
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $Context = Resolve-GitHubContext -Context $Context -Anonymous $Anonymous
+        $Context = Resolve-GitHubContext -Context $Context
     }
 
     process {

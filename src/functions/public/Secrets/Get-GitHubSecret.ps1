@@ -1,4 +1,4 @@
-﻿function Get-GitHubSecret {
+function Get-GitHubSecret {
     <#
         .SYNOPSIS
         Retrieve GitHub secret(s) without revealing encrypted value(s).
@@ -78,7 +78,7 @@
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $Context = Resolve-GitHubContext -Context $Context -Anonymous $Anonymous
+        $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 
