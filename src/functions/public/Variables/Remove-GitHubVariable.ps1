@@ -1,4 +1,4 @@
-function Remove-GitHubVariable {
+﻿function Remove-GitHubVariable {
     <#
         .SYNOPSIS
         Deletes a GitHub variable from an organization, repository, or environment.

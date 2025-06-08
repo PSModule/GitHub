@@ -1,4 +1,4 @@
-function Update-GitHubVariable {
+﻿function Update-GitHubVariable {
     <#
         .SYNOPSIS
         Update a GitHub variable at the organization, repository, or environment level.

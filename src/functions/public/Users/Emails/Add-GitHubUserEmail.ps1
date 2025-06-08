@@ -1,4 +1,4 @@
-filter Add-GitHubUserEmail {
+﻿filter Add-GitHubUserEmail {
     <#
         .SYNOPSIS
         Add an email address for the authenticated user

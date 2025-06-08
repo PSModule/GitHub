@@ -1,4 +1,4 @@
-filter Get-GitHubRepositoryFork {
+﻿filter Get-GitHubRepositoryFork {
     <#
         .SYNOPSIS
         List forks

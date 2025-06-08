@@ -1,4 +1,4 @@
-filter Get-GitHubRepositoryTopic {
+﻿filter Get-GitHubRepositoryTopic {
     <#
         .SYNOPSIS
         Get all repository topics

@@ -1,4 +1,4 @@
-function Get-GitHubAppInstallationRepositoryAccess {
+﻿function Get-GitHubAppInstallationRepositoryAccess {
     <#
         .SYNOPSIS
         Get the repositories accessible to a given GitHub App installation.

@@ -1,4 +1,4 @@
-filter Remove-GitHubRepository {
+﻿filter Remove-GitHubRepository {
     <#
         .SYNOPSIS
         Delete a repository

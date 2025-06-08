@@ -1,4 +1,4 @@
-filter Get-GitHubUserEmail {
+﻿filter Get-GitHubUserEmail {
     <#
         .SYNOPSIS
         List email addresses for the authenticated user

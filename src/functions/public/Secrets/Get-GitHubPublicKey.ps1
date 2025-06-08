@@ -1,4 +1,4 @@
-function Get-GitHubPublicKey {
+﻿function Get-GitHubPublicKey {
     <#
         .SYNOPSIS
         Gets a public key.

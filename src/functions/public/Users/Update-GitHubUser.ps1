@@ -1,4 +1,4 @@
-filter Update-GitHubUser {
+﻿filter Update-GitHubUser {
     <#
         .SYNOPSIS
         Update the authenticated user

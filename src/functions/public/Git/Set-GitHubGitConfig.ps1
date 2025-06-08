@@ -1,4 +1,4 @@
-function Set-GitHubGitConfig {
+﻿function Set-GitHubGitConfig {
     <#
         .SYNOPSIS
         Set the Git configuration for the GitHub context.

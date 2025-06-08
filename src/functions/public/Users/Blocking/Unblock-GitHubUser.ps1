@@ -1,4 +1,4 @@
-filter Unblock-GitHubUser {
+﻿filter Unblock-GitHubUser {
     <#
         .SYNOPSIS
         Unblock a user

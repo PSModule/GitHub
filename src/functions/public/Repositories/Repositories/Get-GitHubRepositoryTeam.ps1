@@ -1,4 +1,4 @@
-filter Get-GitHubRepositoryTeam {
+﻿filter Get-GitHubRepositoryTeam {
     <#
         .SYNOPSIS
         List repository teams

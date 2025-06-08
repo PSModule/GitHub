@@ -1,4 +1,4 @@
-function Remove-GitHubArtifact {
+﻿function Remove-GitHubArtifact {
     <#
         .SYNOPSIS
         Deletes an artifact from a GitHub repository by its unique ID.

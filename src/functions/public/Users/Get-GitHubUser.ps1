@@ -1,4 +1,4 @@
-function Get-GitHubUser {
+﻿function Get-GitHubUser {
     <#
         .SYNOPSIS
         List user(s)

@@ -1,4 +1,4 @@
-function New-GitHubVariable {
+﻿function New-GitHubVariable {
     <#
         .SYNOPSIS
         Creates a GitHub Actions variable at the organization, repository, or environment level.

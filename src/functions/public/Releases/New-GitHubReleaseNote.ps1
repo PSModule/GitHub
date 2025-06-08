@@ -1,4 +1,4 @@
-filter New-GitHubReleaseNote {
+﻿filter New-GitHubReleaseNote {
     <#
         .SYNOPSIS
         Generate release notes content for a release.

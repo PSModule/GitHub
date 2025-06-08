@@ -1,4 +1,4 @@
-filter Move-GitHubRepository {
+﻿filter Move-GitHubRepository {
     <#
         .SYNOPSIS
         Transfer a repository

@@ -1,4 +1,4 @@
-filter Update-GitHubRelease {
+﻿filter Update-GitHubRelease {
     <#
         .SYNOPSIS
         Update a release

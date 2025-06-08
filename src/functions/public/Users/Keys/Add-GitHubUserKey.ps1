@@ -1,4 +1,4 @@
-filter Add-GitHubUserKey {
+﻿filter Add-GitHubUserKey {
     <#
         .SYNOPSIS
         Create a public SSH key for the authenticated user

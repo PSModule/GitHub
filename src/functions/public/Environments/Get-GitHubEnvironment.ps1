@@ -1,4 +1,4 @@
-filter Get-GitHubEnvironment {
+﻿filter Get-GitHubEnvironment {
     <#
         .SYNOPSIS
         Retrieves details of a specified GitHub environment or lists all environments for a repository.

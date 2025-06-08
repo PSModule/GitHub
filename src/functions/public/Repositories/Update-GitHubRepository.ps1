@@ -1,4 +1,4 @@
-filter Update-GitHubRepository {
+﻿filter Update-GitHubRepository {
     <#
         .SYNOPSIS
         Update a repository

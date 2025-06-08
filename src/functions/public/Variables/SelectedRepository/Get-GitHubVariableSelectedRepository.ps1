@@ -1,4 +1,4 @@
-function Get-GitHubVariableSelectedRepository {
+﻿function Get-GitHubVariableSelectedRepository {
     <#
         .SYNOPSIS
         List selected repositories for an organization variable.

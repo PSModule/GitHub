@@ -1,4 +1,4 @@
-function Add-GitHubAppInstallationRepositoryAccess {
+﻿function Add-GitHubAppInstallationRepositoryAccess {
     <#
         .SYNOPSIS
         Grant repository access to an organization installation.

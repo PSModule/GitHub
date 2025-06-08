@@ -1,4 +1,4 @@
-filter Get-GitHubRepositoryContributor {
+﻿filter Get-GitHubRepositoryContributor {
     <#
         .SYNOPSIS
         List repository contributors

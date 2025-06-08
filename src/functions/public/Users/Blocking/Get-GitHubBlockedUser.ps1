@@ -1,4 +1,4 @@
-filter Get-GitHubBlockedUser {
+﻿filter Get-GitHubBlockedUser {
     <#
         .SYNOPSIS
         List blocked users.

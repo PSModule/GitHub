@@ -1,4 +1,4 @@
-filter Set-GitHubRepositoryTopic {
+﻿filter Set-GitHubRepositoryTopic {
     <#
         .SYNOPSIS
         Replace all repository topics

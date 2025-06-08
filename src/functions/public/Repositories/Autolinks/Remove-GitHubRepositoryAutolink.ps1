@@ -1,4 +1,4 @@
-filter Remove-GitHubRepositoryAutolink {
+﻿filter Remove-GitHubRepositoryAutolink {
     <#
         .SYNOPSIS
         Delete an autolink reference from a repository

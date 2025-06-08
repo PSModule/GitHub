@@ -1,4 +1,4 @@
-filter Remove-GitHubUserSocial {
+﻿filter Remove-GitHubUserSocial {
     <#
         .SYNOPSIS
         Delete social accounts for the authenticated user

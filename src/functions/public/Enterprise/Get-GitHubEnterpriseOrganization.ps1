@@ -1,4 +1,4 @@
-function Get-GitHubEnterpriseOrganization {
+﻿function Get-GitHubEnterpriseOrganization {
     <#
         .SYNOPSIS
         Get the list of organizations in a GitHub Enterprise instance.

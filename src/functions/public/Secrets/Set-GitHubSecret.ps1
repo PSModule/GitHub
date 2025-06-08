@@ -1,4 +1,4 @@
-function Set-GitHubSecret {
+﻿function Set-GitHubSecret {
     <#
         .SYNOPSIS
         Updates a GitHub secret for an organization, repository, or user.

@@ -1,4 +1,4 @@
-filter Start-GitHubRepositoryEvent {
+﻿filter Start-GitHubRepositoryEvent {
     <#
         .SYNOPSIS
         Create a repository dispatch event

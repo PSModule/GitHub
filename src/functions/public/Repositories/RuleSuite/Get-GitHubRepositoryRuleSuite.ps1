@@ -1,4 +1,4 @@
-filter Get-GitHubRepositoryRuleSuite {
+﻿filter Get-GitHubRepositoryRuleSuite {
     <#
         .SYNOPSIS
         List repository rule suites or a rule suite by ID.

@@ -1,4 +1,4 @@
-filter Remove-GitHubEnvironment {
+﻿filter Remove-GitHubEnvironment {
     <#
         .SYNOPSIS
         Deletes an environment from a repository.

@@ -1,4 +1,4 @@
-function Set-GitHubSecretSelectedRepository {
+﻿function Set-GitHubSecretSelectedRepository {
     <#
         .SYNOPSIS
         Set selected repositories for an organization secret.

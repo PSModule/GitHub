@@ -1,4 +1,4 @@
-function Get-GitHubAppInstallation {
+﻿function Get-GitHubAppInstallation {
     <#
         .SYNOPSIS
         List installations for the authenticated app, on organization or enterprise organization.

@@ -1,4 +1,4 @@
-function Get-GitHubSecretSelectedRepository {
+﻿function Get-GitHubSecretSelectedRepository {
     <#
         .SYNOPSIS
         List selected repositories for an organization secret.

@@ -1,4 +1,4 @@
-filter Get-GitHubRelease {
+﻿filter Get-GitHubRelease {
     <#
         .SYNOPSIS
         Retrieves GitHub release information for a repository.
