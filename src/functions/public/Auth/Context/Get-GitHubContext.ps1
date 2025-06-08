@@ -44,6 +44,7 @@
     }
 
     process {
+        Write-Host "$Context"
         switch ($PSCmdlet.ParameterSetName) {
             'NamedContext' {
                 Write-Host "NamedContext: [$Context]"
