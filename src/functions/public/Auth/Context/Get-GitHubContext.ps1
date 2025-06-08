@@ -57,16 +57,14 @@
                 Write-Verbose 'Getting default context.'
                 $ID = $script:GitHub.Config.DefaultContext
                 if ([string]::IsNullOrEmpty($ID)) {
-                    throw "No default GitHub context found. Please run 'Set-GitHubDefaultContext' or 'Connect-GitHub' to configure a GitHub context."
+                    throw "No default GitHub context found. Please run 'Switch-GitHubContext' or 'Connect-GitHub' to configure a GitHub context."
                 }
             }
         }
         Write-Verbose "Getting the context: [$ID]"
 
-        $contexts = Get-Context -ID $ID -Vault $script:GitHub.ContextVault | Where-Object { $_.ID -ne $script:GitHub.DefaultConfig.ID }
-        $contexts | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
-
-        foreach ($contextObj in $contexts) {
+        Get-Context -ID $ID -Vault $script:GitHub.ContextVault | ForEach-Object {
+            $contextObj = $_
             Write-Verbose 'Context:'
             $contextObj | Select-Object * | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
 

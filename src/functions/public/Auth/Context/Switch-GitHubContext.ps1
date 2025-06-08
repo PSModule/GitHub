@@ -12,7 +12,6 @@
         .LINK
         https://psmodule.io/GitHub/Functions/Auth/Context/Switch-GitHubContext
     #>
-    [Alias('Set-GitHubDefaultContext')]
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The context to run the command in. Used to get the details for the API call.

@@ -26,7 +26,7 @@ $deliveries | Where-Object { $_.Event -eq 'team' } | Format-Table -AutoSize
 
 $Return.Response | Format-Table -AutoSize
 
-Set-GitHubDefaultContext -Context 'msx.ghe.com/Marius-Storhaug'
+Switch-GitHubContext -Context 'msx.ghe.com/Marius-Storhaug'
 
 1..10 | ForEach-Object {
     New-GitHubTeam -Organization 'my-org' -Name "Test$_"

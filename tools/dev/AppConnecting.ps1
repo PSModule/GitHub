@@ -25,7 +25,7 @@ LogGroup "Connect to org [$env:GITHUB_REPOSITORY_OWNER]" {
         $orgName = $_.account.login
         $orgInstallationID = $_.id
         Write-Verbose "Processing [$orgName] [$orgInstallationID]"
-        Set-GitHubDefaultContext -Context $appContext
+        Switch-GitHubContext -Context $appContext
         $token = New-GitHubAppInstallationAccessToken -InstallationID $_.id | Select-Object -ExpandProperty Token
         Connect-GitHub -Token $token -Silent
 
