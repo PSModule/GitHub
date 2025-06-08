@@ -137,11 +137,10 @@
                     throw 'Failed to get info on the context. Unknown logon type.'
                 }
             }
-            Write-Debug "Found [$($contextObj['Type'])] with login: [$($contextObj['Name'])]"
-            $contextObj | Out-String -Stream | ForEach-Object { Write-Debug $_ }
-            Write-Debug '----------------------------------------------------'
+            Write-Host "Found [$($contextObj['Type'])] with login: [$($contextObj['Name'])]" #FIXME
+            $contextObj | Out-String -Stream | ForEach-Object { Write-Host $_ } #FIXME
             if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
-                Write-Debug "Saving context: [$($script:GitHub.Config.ID)/$($contextObj['Name'])]"
+                Write-Host "Saving context: [$($contextObj['Name'])]" #FIXME
                 Set-Context -ID $($contextObj['Name']) -Context $contextObj -Vault $script:GitHub.ContextVault
                 if ($Default) {
                     Switch-GitHubContext -Context $contextObj['Name']
