@@ -45,7 +45,7 @@
 
     process {
         Write-Debug 'Context:'
-        $contextObj | Out-String -Stream | ForEach-Object { Write-Host $_ }  #FIXME
+        $contextObj | Out-String -Stream | ForEach-Object { Write-Debug $_ }
 
         # Run functions to get info on the temporary context.
         try {
@@ -137,10 +137,11 @@
                     throw 'Failed to get info on the context. Unknown logon type.'
                 }
             }
-            Write-Host "Found [$($contextObj['Type'])] with login: [$($contextObj['Name'])]" #FIXME
-            $contextObj | Out-String -Stream | ForEach-Object { Write-Host $_ } #FIXME
+            Write-Debug "Found [$($contextObj['Type'])] with login: [$($contextObj['Name'])]"
+            $contextObj | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+            Write-Debug '----------------------------------------------------'
             if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
-                Write-Host "Saving context: [$($contextObj['Name'])]" #FIXME
+                Write-Debug "Saving context: [$($contextObj['Name'])]"
                 Set-Context -ID $($contextObj['Name']) -Context $contextObj -Vault $script:GitHub.ContextVault
                 if ($Default) {
                     Switch-GitHubContext -Context $contextObj['Name']
