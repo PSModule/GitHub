@@ -44,18 +44,17 @@
     }
 
     process {
-        Write-Host "$Context"
         switch ($PSCmdlet.ParameterSetName) {
             'NamedContext' {
-                Write-Host "NamedContext: [$Context]"
+                Write-Host "NamedContext: [$Context]" #FIXME
                 $ID = $Context
             }
             'ListAvailableContexts' {
-                Write-Host "ListAvailable: [$ListAvailable]"
+                Write-Host "ListAvailable: [$ListAvailable]" #FIXME
                 $ID = '*'
             }
             default {
-                Write-Host 'Getting default context.'
+                Write-Host 'Getting default context.' #FIXME
                 $ID = $script:GitHub.Config.DefaultContext
                 if ([string]::IsNullOrEmpty($ID)) {
                     throw "No default GitHub context found. Please run 'Switch-GitHubContext' or 'Connect-GitHub' to configure a GitHub context."

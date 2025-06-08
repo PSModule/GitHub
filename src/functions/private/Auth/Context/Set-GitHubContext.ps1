@@ -45,7 +45,7 @@
 
     process {
         Write-Debug 'Context:'
-        $contextObj | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+        $contextObj | Out-String -Stream | ForEach-Object { Write-Host $_ }  #FIXME
 
         # Run functions to get info on the temporary context.
         try {
