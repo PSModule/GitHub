@@ -30,7 +30,7 @@
 
     process {
         if (-not $Name) {
-            Get-Context -ID $script:GitHub.Config.ID -Vault $script:GitHub.ContextVault
+            Get-Context -ID $script:GitHub.Config.ID -Vault $script:GitHub.ContextVault | Select-Object -ExcludeProperty ID
         }
 
         $script:GitHub.Config.$Name
