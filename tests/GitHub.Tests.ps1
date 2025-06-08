@@ -750,14 +750,14 @@ Describe 'Webhooks' {
 
 Describe 'Anonymous - Functions that can run anonymously' {
     It 'Get-GithubRateLimit - Using -Anonymous' {
-        $rateLimit = Get-GitHubRateLimit -Anonymous
+        $rateLimit = Get-GitHubRateLimit -Anonymous -Debug -Verbose
         LogGroup 'Rate Limit' {
             Write-Host ($rateLimit | Format-List | Out-String)
         }
         $rateLimit | Should -Not -BeNullOrEmpty
     }
     It 'Invoke-GitHubAPI - Using -Anonymous' {
-        $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit' -Anonymous
+        $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit' -Anonymous -Debug -Verbose
         LogGroup 'Rate Limit' {
             Write-Host ($rateLimit | Format-List | Out-String)
         }
