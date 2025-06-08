@@ -187,7 +187,7 @@
                 Repository  = [string]$Repository
             }
 
-            $context | Format-Table | Out-String -Sream | ForEach-Object { Write-Verbose $_ }
+            $context | Format-Table | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
 
             switch ($authType) {
                 'UAT' {
