@@ -42,7 +42,6 @@
         $inputObject = @{
             Method      = 'GET'
             APIEndpoint = '/licenses'
-            Anonymous   = $Anonymous
             Context     = $Context
         }
 

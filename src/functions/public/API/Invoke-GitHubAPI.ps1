@@ -101,14 +101,14 @@ filter Invoke-GitHubAPI {
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [object] $Context = (Get-GitHubContext)
+        [object] $Context
     )
 
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         $debug = $DebugPreference -eq 'Continue'
-        $Context = Resolve-GitHubContext -Context $Context
+        $Context = Resolve-GitHubContext -Context $Context -Anonymous $Anonymous
         if ($debug) {
             Write-Debug 'Invoking GitHub API...'
             Write-Debug 'Parent function parameters:'

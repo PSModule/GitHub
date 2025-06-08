@@ -62,7 +62,6 @@
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/license"
             ContentType = $contentType
-            Anonymous   = $Anonymous
             Context     = $Context
         }
 

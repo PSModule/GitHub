@@ -27,7 +27,11 @@
         # Can be either a string or a GitHubContext object.
         [Parameter(Mandatory, ValueFromPipeline)]
         [AllowNull()]
-        [object] $Context
+        [object] $Context,
+
+        # If specified, makes an anonymous request to the GitHub API without authentication.
+        [Parameter()]
+        [bool] $Anonymous
     )
 
     begin {
@@ -37,10 +41,19 @@
     }
 
     process {
+        if ($Anonymous) {
+            return
+        }
+
         if ($Context -is [string]) {
             $contextName = $Context
-            Write-Debug "Getting context: [$contextName]"
-            $Context = Get-GitHubContext -Context $contextName
+            Write-Verbose "Getting context: [$contextName]"
+            return Get-GitHubContext -Context $contextName
+        }
+
+        if ($null -eq $Context) {
+            Write-Verbose 'Context is null, returning default context.'
+            return Get-GitHubContext
         }
 
         # TODO: Implement App installation context resolution
@@ -56,8 +69,6 @@
         #         }
         #     }
         # }
-
-        $Context
     }
 
     end {

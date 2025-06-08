@@ -42,7 +42,6 @@
             Method      = 'GET'
             APIEndpoint = "/gitignore/templates/$Name"
             Accept      = 'application/vnd.github.raw+json'
-            Anonymous   = $Anonymous
             Context     = $Context
         }
 

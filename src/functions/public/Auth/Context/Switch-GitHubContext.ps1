@@ -17,7 +17,7 @@
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter(ValueFromPipeline)]
-        [object] $Context = (Get-GitHubContext)
+        [object] $Context
     )
 
     begin {
@@ -27,7 +27,7 @@
 
     process {
         Write-Debug "Setting default context to [$Context]"
-        $Context = Resolve-GitHubContext -Context $Context
+        $Context = Resolve-GitHubContext -Context $Context -Anonymous $Anonymous
         if ($PSCmdlet.ShouldProcess("$Context", 'Set default context')) {
             Set-GitHubConfig -Name 'DefaultContext' -Value $Context.Name
         }

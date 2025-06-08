@@ -46,13 +46,13 @@
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [object] $Context = (Get-GitHubContext)
+        [object] $Context
     )
 
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $Context = Resolve-GitHubContext -Context $Context
+        $Context = Resolve-GitHubContext -Context $Context -Anonymous $Anonymous
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT, Anonymous
     }
 
@@ -67,7 +67,6 @@
             Method      = 'POST'
             APIEndpoint = '/markdown'
             Body        = $body
-            Anonymous   = $Anonymous
             Context     = $Context
         }
 

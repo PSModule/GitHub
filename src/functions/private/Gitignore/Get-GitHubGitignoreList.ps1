@@ -39,7 +39,6 @@
         $inputObject = @{
             Method      = 'GET'
             APIEndpoint = '/gitignore/templates'
-            Anonymous   = $Anonymous
             Context     = $Context
         }
 

@@ -44,7 +44,6 @@
             Method      = 'GET'
             APIEndpoint = "/licenses/$Name"
             Accept      = 'application/vnd.github+json'
-            Anonymous   = $Anonymous
             Context     = $Context
         }
 
