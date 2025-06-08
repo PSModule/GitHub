@@ -22,7 +22,11 @@
 
         # Set the access token type.
         [Parameter()]
-        [string] $Value
+        [string] $Value,
+
+        # Pass the context through the pipeline.
+        [Parameter()]
+        [switch] $PassThru
     )
 
     begin {
@@ -35,7 +39,7 @@
         Write-Verbose "Setting [$Name] to [$Value]"
         $script:GitHub.Config.$Name = $Value
         if ($PSCmdlet.ShouldProcess('ContextSetting', 'Set')) {
-            Set-Context -Context $script:GitHub.Config -Vault $script:GitHub.ContextVault
+            Set-Context -Context $script:GitHub.Config -Vault $script:GitHub.ContextVault -PassThru:$PassThru
         }
     }
 
@@ -43,4 +47,4 @@
         Write-Debug "[$stackPath] - End"
     }
 }
-#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '8.0.1' }
+#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '8.0.2' }

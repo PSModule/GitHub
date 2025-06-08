@@ -44,4 +44,4 @@ filter Remove-GitHubContext {
         Write-Debug "[$stackPath] - End"
     }
 }
-#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '8.0.1' }
+#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '8.0.2' }

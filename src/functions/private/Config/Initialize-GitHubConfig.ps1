@@ -32,7 +32,7 @@
         Write-Debug "Force:           [$Force]"
         if ($Force) {
             Write-Debug 'Forcing initialization of GitHubConfig.'
-            $context = Set-Context -Context $script:GitHub.DefaultConfig -Vault $script:GitHub.ContextVault
+            $context = Set-Context -Context $script:GitHub.DefaultConfig -Vault $script:GitHub.ContextVault -PassThru
             $script:GitHub.Config = [GitHubConfig]$context
             return
         }
@@ -60,14 +60,14 @@
             }
             if ($needsUpdate) {
                 Write-Debug 'Updating stored context with new default properties'
-                $context = Set-Context -Context $context -Vault $script:GitHub.ContextVault
+                $context = Set-Context -Context $context -Vault $script:GitHub.ContextVault -PassThru
             }
 
             $script:GitHub.Config = [GitHubConfig]$context
             return
         }
         Write-Debug 'Initializing GitHubConfig from defaults'
-        $context = Set-Context -Context $script:GitHub.DefaultConfig -Vault $script:GitHub.ContextVault
+        $context = Set-Context -Context $script:GitHub.DefaultConfig -Vault $script:GitHub.ContextVault -PassThru
         $script:GitHub.Config = [GitHubConfig]$context
     }
 
@@ -75,4 +75,4 @@
         Write-Debug "[$stackPath] - End"
     }
 }
-#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '8.0.1' }
+#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '8.0.2' }
