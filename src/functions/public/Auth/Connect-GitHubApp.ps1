@@ -158,9 +158,9 @@
                 }
             }
             Write-Verbose 'Logging in using a managed installation access token...'
-            Write-Verbose ($contextParams | Format-Table | Out-String)
+            $contextParams | Format-Table | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
             $contextObj = [InstallationGitHubContext]::new((Set-GitHubContext -Context $contextParams.Clone() -PassThru -Default:$Default))
-            Write-Verbose ($contextObj | Format-List | Out-String)
+            $contextObj | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
             if (-not $Silent) {
                 $name = $contextObj.name
                 if ($script:GitHub.EnvironmentType -eq 'GHA') {
