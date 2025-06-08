@@ -24,13 +24,13 @@ Describe 'Artifacts' {
 
     Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
         BeforeAll {
-            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
+            $context = Connect-GitHubAccount @connectParams -PassThru -Silent -Debug -Verbose
             LogGroup 'Context' {
                 Write-Host ($context | Format-Table | Out-String)
             }
             if ($AuthType -eq 'APP') {
                 LogGroup 'Context - Installation' {
-                    $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
+                    $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent -Debug -Verbose
                     Write-Host ($context | Format-Table | Out-String)
                 }
             }
