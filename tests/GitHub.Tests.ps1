@@ -757,7 +757,7 @@ Describe 'Webhooks' {
 
 Describe 'Anonymous - Functions that can run anonymously' {
     It 'Get-GithubRateLimit - Using -Anonymous' {
-        $rateLimit = Get-GitHubRateLimit -Anonymous -Debug -Verbose
+        $rateLimit = Get-GitHubRateLimit -Anonymous
         LogGroup 'Rate Limit' {
             Write-Host ($rateLimit | Format-Table | Out-String)
         }
@@ -771,7 +771,7 @@ Describe 'Anonymous - Functions that can run anonymously' {
         $rateLimit | Should -Not -BeNullOrEmpty
     }
     It 'Get-GithubRateLimit - Using -Context Anonymous' {
-        $rateLimit = Get-GitHubRateLimit -Context Anonymous -Debug -Verbose
+        $rateLimit = Get-GitHubRateLimit -Context Anonymous
         LogGroup 'Rate Limit' {
             Write-Host ($rateLimit | Format-List | Out-String)
         }
