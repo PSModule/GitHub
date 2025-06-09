@@ -41,8 +41,10 @@
     }
 
     process {
+        Write-Verbose "Context: [$Context]"
+        Write-Verbose "Anonymous: [$Anonymous]"
         if ($Anonymous -or $Context -eq 'Anonymous') {
-            return
+            return 'Anonymous'
         }
 
         if ($Context -is [string]) {

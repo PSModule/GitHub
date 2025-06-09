@@ -35,6 +35,8 @@
 
     process {
         $command = (Get-PSCallStack)[1].Command
+        Write-Verbose "Context: $Context"
+        Write-Verbose "AuthType: $AuthType"
 
         if ($Context) {
             if ($Context.AuthType -in $AuthType) {
