@@ -122,6 +122,13 @@ Describe 'Auth' {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
             (Get-GitHubContext -ListAvailable).count | Should -Be 0
         }
+
+        It 'Get-GitHubContext - Does not fail when there are 0 contexts' {
+            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+            { Get-GitHubContext } | Should -Not -Throw
+            $contexts = Get-GitHubContext
+            $contexts | Should -BeNullOrEmpty
+        }
     }
 }
 
@@ -750,7 +757,7 @@ Describe 'Webhooks' {
 
 Describe 'Anonymous - Functions that can run anonymously' {
     It 'Get-GithubRateLimit - Using -Anonymous' {
-        $rateLimit = Get-GitHubRateLimit -Anonymous -Debug -Verbose
+        $rateLimit = Get-GitHubRateLimit -Anonymous
         LogGroup 'Rate Limit' {
             Write-Host ($rateLimit | Format-Table | Out-String)
         }
@@ -764,7 +771,7 @@ Describe 'Anonymous - Functions that can run anonymously' {
         $rateLimit | Should -Not -BeNullOrEmpty
     }
     It 'Get-GithubRateLimit - Using -Context Anonymous' {
-        $rateLimit = Get-GitHubRateLimit -Context Anonymous -Debug -Verbose
+        $rateLimit = Get-GitHubRateLimit -Context Anonymous
         LogGroup 'Rate Limit' {
             Write-Host ($rateLimit | Format-List | Out-String)
         }
