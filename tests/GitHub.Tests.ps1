@@ -122,6 +122,13 @@ Describe 'Auth' {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
             (Get-GitHubContext -ListAvailable).count | Should -Be 0
         }
+
+        It 'Get-GitHubContext - Does not fail when there are 0 contexts' {
+            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+            { Get-GitHubContext } | Should -Not -Throw
+            $contexts = Get-GitHubContext
+            $contexts | Should -BeNullOrEmpty
+        }
     }
 }
 
