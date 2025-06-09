@@ -49,6 +49,9 @@
                 )
             )
         } else {
+            if ('Anonymous' -in $AuthType) {
+                return
+            }
             $PSCmdlet.ThrowTerminatingError(
                 [System.Management.Automation.ErrorRecord]::new(
                     [System.Exception]::new("Please provide a valid context or log in using 'Connect-GitHub'."),
