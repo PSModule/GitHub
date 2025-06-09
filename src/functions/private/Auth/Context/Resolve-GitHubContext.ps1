@@ -41,7 +41,7 @@
     }
 
     process {
-        if ($Anonymous -or $Context -is 'Anonymous') {
+        if ($Anonymous -or $Context -eq 'Anonymous') {
             return
         }
 
