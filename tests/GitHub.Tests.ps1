@@ -25,6 +25,7 @@ Describe 'Auth' {
     Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
         AfterAll {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+            Write-Host ('-' * 60)
         }
 
         It 'Connect-GitHubAccount - Connects using the provided credentials' {
@@ -374,6 +375,7 @@ Describe 'Apps' {
 
         AfterAll {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+            Write-Host ('-' * 60)
         }
 
         # Tests for APP goes here
@@ -483,6 +485,7 @@ Describe 'API' {
         }
         AfterAll {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+            Write-Host ('-' * 60)
         }
 
         # Tests for APP goes here
@@ -700,6 +703,7 @@ Describe 'Emojis' {
         }
         AfterAll {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+            Write-Host ('-' * 60)
         }
 
         # Tests for APP goes here
@@ -746,30 +750,30 @@ Describe 'Webhooks' {
 
 Describe 'Anonymous - Functions that can run anonymously' {
     It 'Get-GithubRateLimit - Using -Anonymous' {
-        $rateLimit = Get-GitHubRateLimit -Anonymous
+        $rateLimit = Get-GitHubRateLimit -Anonymous -Debug -Verbose
         LogGroup 'Rate Limit' {
-            Write-Host ($rateLimit | Format-List | Out-String)
+            Write-Host ($rateLimit | Format-Table | Out-String)
         }
         $rateLimit | Should -Not -BeNullOrEmpty
     }
     It 'Invoke-GitHubAPI - Using -Anonymous' {
-        $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit' -Anonymous
+        $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit' -Anonymous | Select-Object -ExpandProperty Response
+        LogGroup 'Rate Limit' {
+            Write-Host ($rateLimit | Format-Table | Out-String)
+        }
+        $rateLimit | Should -Not -BeNullOrEmpty
+    }
+    It 'Get-GithubRateLimit - Using -Context Anonymous' {
+        $rateLimit = Get-GitHubRateLimit -Context Anonymous -Debug -Verbose
         LogGroup 'Rate Limit' {
             Write-Host ($rateLimit | Format-List | Out-String)
         }
         $rateLimit | Should -Not -BeNullOrEmpty
     }
     It 'Invoke-GitHubAPI - Using -Context Anonymous' {
-        $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit' -Context Anonymous
+        $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit' -Context Anonymous | Select-Object -ExpandProperty Response
         LogGroup 'Rate Limit' {
-            Write-Host ($rateLimit | Format-List | Out-String)
-        }
-        $rateLimit | Should -Not -BeNullOrEmpty
-    }
-    It 'Get-GithubRateLimit - Using -Context Anonymous' {
-        $rateLimit = Get-GitHubRateLimit -Context Anonymous
-        LogGroup 'Rate Limit' {
-            Write-Host ($rateLimit | Format-List | Out-String)
+            Write-Host ($rateLimit | Format-Table | Out-String)
         }
         $rateLimit | Should -Not -BeNullOrEmpty
     }

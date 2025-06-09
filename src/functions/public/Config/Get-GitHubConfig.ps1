@@ -30,7 +30,7 @@
 
     process {
         if (-not $Name) {
-            return [GitHubConfig]($script:GitHub.Config)
+            Get-Context -ID $script:GitHub.Config.ID -Vault $script:GitHub.ContextVault | Select-Object -ExcludeProperty ID
         }
 
         $script:GitHub.Config.$Name
@@ -40,3 +40,4 @@
         Write-Debug "[$stackPath] - End"
     }
 }
+#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '8.0.2' }

@@ -1,4 +1,4 @@
-function Set-GitHubRepository {
+﻿function Set-GitHubRepository {
     <#
         .SYNOPSIS
         Creates or updates a repository.
@@ -206,7 +206,7 @@ function Set-GitHubRepository {
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [object] $Context = (Get-GitHubContext)
+        [object] $Context
     )
     begin {
         $stackPath = Get-PSCallStackPath

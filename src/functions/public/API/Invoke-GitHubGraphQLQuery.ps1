@@ -17,14 +17,18 @@
     #>
     [CmdletBinding()]
     param(
+        # If specified, makes an anonymous request to the GitHub API without authentication.
         [Parameter(Mandatory)]
         [string] $Query,
 
+        # Variables to pass to the GraphQL query.
         [Parameter()]
         [hashtable] $Variables,
 
+        # The context to run the command in. Used to get the details for the API call.
+        # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [object] $Context = (Get-GitHubContext)
+        [object] $Context
     )
 
     begin {

@@ -52,7 +52,7 @@
                 Remove-GitHubConfig -Name 'DefaultContext'
                 if (-not $Silent) {
                     Write-Warning 'There is no longer a default context!'
-                    Write-Warning "Please set a new default context using 'Set-GitHubDefaultContext -Name <context>'"
+                    Write-Warning "Please set a new default context using 'Switch-GitHubContext -Name <context>'"
                 }
             }
 

@@ -1,4 +1,4 @@
-filter Get-GitHubEnvironment {
+﻿filter Get-GitHubEnvironment {
     <#
         .SYNOPSIS
         Retrieves details of a specified GitHub environment or lists all environments for a repository.
@@ -89,7 +89,7 @@ filter Get-GitHubEnvironment {
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [object] $Context = (Get-GitHubContext)
+        [object] $Context
     )
 
     begin {

@@ -63,6 +63,7 @@ Describe 'Repositories' {
                 }
             }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+            Write-Host ('-' * 60)
         }
 
         It 'New-GitHubRepository - Creates a new repository' -Skip:($OwnerType -eq 'repository') {

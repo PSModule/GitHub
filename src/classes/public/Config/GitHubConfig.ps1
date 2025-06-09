@@ -3,7 +3,7 @@
     [string] $ID
 
     # The access token grace period in hours.
-    [int] $AccessTokenGracePeriodInHours
+    [System.Nullable[int]] $AccessTokenGracePeriodInHours
 
     # The default context.
     [string] $DefaultContext
@@ -27,16 +27,16 @@
     [string] $HttpVersion
 
     # The default value for the 'per_page' API parameter used in 'GET' functions that support paging.
-    [int] $PerPage
+    [System.Nullable[int]] $PerPage
 
     # The default value for retry count.
-    [int] $RetryCount
+    [System.Nullable[int]] $RetryCount
 
     # The default value for retry interval in seconds.
-    [int] $RetryInterval
+    [System.Nullable[int]] $RetryInterval
 
     # The tolerance time in seconds for JWT token validation.
-    [int] $JwtTimeTolerance
+    [System.Nullable[int]] $JwtTimeTolerance
 
     # Simple parameterless constructor
     GitHubConfig() {}

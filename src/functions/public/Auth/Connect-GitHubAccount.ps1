@@ -187,7 +187,7 @@
                 Repository  = [string]$Repository
             }
 
-            Write-Verbose ($context | Format-Table | Out-String)
+            $context | Format-Table | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
 
             switch ($authType) {
                 'UAT' {
@@ -293,7 +293,7 @@
                 }
             }
             $contextObj = Set-GitHubContext -Context $context -Default:(!$NotDefault) -PassThru
-            Write-Verbose ($contextObj | Format-List | Out-String)
+            $contextObj | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
             if (-not $Silent) {
                 $name = $contextObj.Username
                 if ($script:GitHub.EnvironmentType -eq 'GHA') {

@@ -75,6 +75,7 @@ Describe 'Releases' {
                 }
             }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+            Write-Host ('-' * 60)
         }
 
         Context 'Releases' -Skip:($OwnerType -eq 'repository') {

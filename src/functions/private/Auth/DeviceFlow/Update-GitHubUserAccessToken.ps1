@@ -85,7 +85,7 @@
         $Context.RefreshTokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.refresh_token_expires_in)
 
         if ($PSCmdlet.ShouldProcess('Access token', 'Update/refresh')) {
-            Set-Context -Context $Context -ID $Context.ID
+            Set-Context -Context $Context -Vault $script:GitHub.ContextVault
         }
 
         if ($PassThru) {
@@ -98,4 +98,4 @@
         Write-Debug "[$stackPath] - End"
     }
 }
-#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '7.0.2' }
+#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '8.0.2' }

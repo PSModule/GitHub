@@ -1,6 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '7.0.2' }
-
-function Get-GitHubContext {
+﻿function Get-GitHubContext {
     <#
         .SYNOPSIS
         Get the current GitHub context.
@@ -48,26 +46,24 @@ function Get-GitHubContext {
     process {
         switch ($PSCmdlet.ParameterSetName) {
             'NamedContext' {
-                Write-Verbose "NamedContext: [$Context]"
-                $ID = "$($script:GitHub.Config.ID)/$Context"
-                Write-Verbose "Getting available contexts for [$ID]"
+                Write-Debug "NamedContext: [$Context]"
+                $ID = $Context
             }
             'ListAvailableContexts' {
-                Write-Verbose "ListAvailable: [$ListAvailable]"
-                $ID = "$($script:GitHub.Config.ID)/*"
-                Write-Verbose "Getting available contexts for [$ID]"
+                Write-Debug "ListAvailable: [$ListAvailable]"
+                $ID = '*'
             }
             default {
-                Write-Verbose 'Getting default context.'
-                $ID = "$($script:GitHub.Config.ID)/$($script:GitHub.Config.DefaultContext)"
+                Write-Debug 'Getting default context.'
+                $ID = $script:GitHub.Config.DefaultContext
                 if ([string]::IsNullOrEmpty($ID)) {
-                    throw "No default GitHub context found. Please run 'Set-GitHubDefaultContext' or 'Connect-GitHub' to configure a GitHub context."
+                    throw "No default GitHub context found. Please run 'Switch-GitHubContext' or 'Connect-GitHub' to configure a GitHub context."
                 }
-                Write-Verbose "Getting the default context: [$ID]"
             }
         }
+        Write-Verbose "Getting the context: [$ID]"
 
-        Get-Context -ID $ID | ForEach-Object {
+        Get-Context -ID $ID -Vault $script:GitHub.ContextVault | Where-Object { $_.ID -ne $script:GitHub.DefaultConfig.ID } | ForEach-Object {
             $contextObj = $_
             Write-Verbose 'Context:'
             $contextObj | Select-Object * | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
@@ -94,3 +90,4 @@ function Get-GitHubContext {
         Write-Debug "[$stackPath] - End"
     }
 }
+#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '8.0.2' }

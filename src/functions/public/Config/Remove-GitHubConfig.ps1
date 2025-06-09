@@ -1,6 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '7.0.2' }
-
-function Remove-GitHubConfig {
+﻿function Remove-GitHubConfig {
     <#
         .SYNOPSIS
         Remove a GitHub module configuration.
@@ -39,10 +37,11 @@ function Remove-GitHubConfig {
             Write-Error (Get-PSCallStack | Format-Table | Out-String)
             throw 'Failed to connect to GitHub.'
         }
-        Set-Context -ID $script:GitHub.Config.ID -Context $script:GitHub.Config
+        Set-Context -Context $script:GitHub.Config -Vault $script:GitHub.ContextVault
     }
 
     end {
         Write-Debug "[$stackPath] - End"
     }
 }
+#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '8.0.2' }

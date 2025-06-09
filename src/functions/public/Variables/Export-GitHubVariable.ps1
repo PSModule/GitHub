@@ -1,4 +1,4 @@
-function Export-GitHubVariable {
+﻿function Export-GitHubVariable {
     <#
         .SYNOPSIS
         Exports a GitHub variable to the local environment.

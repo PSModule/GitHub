@@ -1,4 +1,4 @@
-function Update-GitHubVariable {
+﻿function Update-GitHubVariable {
     <#
         .SYNOPSIS
         Update a GitHub variable at the organization, repository, or environment level.
@@ -88,7 +88,7 @@ function Update-GitHubVariable {
 
         # The context to run the command in. Can be either a string or a GitHubContext object.
         [Parameter()]
-        [object] $Context = (Get-GitHubContext)
+        [object] $Context
     )
 
     begin {

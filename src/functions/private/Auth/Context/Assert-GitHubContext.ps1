@@ -35,33 +35,32 @@
 
     process {
         $command = (Get-PSCallStack)[1].Command
+        Write-Verbose "Context: $Context"
+        Write-Verbose "AuthType: $AuthType"
 
-        if ($Context) {
-            if ($Context.AuthType -in $AuthType) {
-                return
-            }
-            $PSCmdlet.ThrowTerminatingError(
-                [System.Management.Automation.ErrorRecord]::new(
-                    [System.Exception]::new("The context '$($Context.Name)' does not match the required AuthTypes [$AuthType] for [$command]."),
-                    "InvalidContextAuthType",
-                    [System.Management.Automation.ErrorCategory]::InvalidArgument,
-                    $Context
-                )
-            )
-        } else {
+        if (-not $Context) {
             if ('Anonymous' -in $AuthType) {
                 return
             }
             $PSCmdlet.ThrowTerminatingError(
                 [System.Management.Automation.ErrorRecord]::new(
                     [System.Exception]::new("Please provide a valid context or log in using 'Connect-GitHub'."),
-                    "InvalidContext",
+                    'InvalidContext',
                     [System.Management.Automation.ErrorCategory]::InvalidArgument,
                     $Context
                 )
             )
         }
-
+        if ($Context -eq 'Anonymous' -and $AuthType -contains 'Anonymous') { return }
+        if ($Context.AuthType -in $AuthType) { return }
+        $PSCmdlet.ThrowTerminatingError(
+            [System.Management.Automation.ErrorRecord]::new(
+                [System.Exception]::new("The context '$($Context.Name)' does not match the required AuthTypes [$AuthType] for [$command]."),
+                'InvalidContextAuthType',
+                [System.Management.Automation.ErrorCategory]::InvalidArgument,
+                $Context
+            )
+        )
         # TODO: Implement permission check
         # if ($Context.AuthType -in 'IAT' -and $Context.Permission -notin $Permission) {
         #     throw "The context '$($Context.Name)' does not match the required Permission [$Permission] for [$command]."

@@ -74,17 +74,17 @@
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [object] $Context = (Get-GitHubContext)
+        [object] $Context
     )
 
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
+        Assert-GitHubContext -Context $Context -AuthType App
     }
 
     process {
-        $Context = $Context | Resolve-GitHubContext
-        $Context | Assert-GitHubContext -AuthType 'App'
 
         $installations = Get-GitHubAppInstallation -Context $Context
         $selectedInstallations = @()
@@ -158,9 +158,9 @@
                 }
             }
             Write-Verbose 'Logging in using a managed installation access token...'
-            Write-Verbose ($contextParams | Format-Table | Out-String)
+            $contextParams | Format-Table | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
             $contextObj = [InstallationGitHubContext]::new((Set-GitHubContext -Context $contextParams.Clone() -PassThru -Default:$Default))
-            Write-Verbose ($contextObj | Format-List | Out-String)
+            $contextObj | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
             if (-not $Silent) {
                 $name = $contextObj.name
                 if ($script:GitHub.EnvironmentType -eq 'GHA') {
