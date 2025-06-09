@@ -44,7 +44,11 @@
         Write-Verbose "Context: [$Context]"
         Write-Verbose "Anonymous: [$Anonymous]"
         if ($Anonymous -or $Context -eq 'Anonymous') {
-            return 'Anonymous'
+            Write-Verbose 'Returning Anonymous context.'
+            return [GitHubContext]@{
+                Name     = 'Anonymous'
+                AuthType = 'Anonymous'
+            }
         }
 
         if ($Context -is [string]) {
