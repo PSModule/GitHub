@@ -757,16 +757,16 @@ Describe 'Anonymous - Functions that can run anonymously' {
         $rateLimit | Should -Not -BeNullOrEmpty
     }
     It 'Invoke-GitHubAPI - Using -Anonymous' {
-        $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit' -Anonymous -Debug -Verbose | Select-Object -ExpandProperty Response
+        $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit' -Anonymous | Select-Object -ExpandProperty Response
         LogGroup 'Rate Limit' {
             Write-Host ($rateLimit | Format-Table | Out-String)
         }
         $rateLimit | Should -Not -BeNullOrEmpty
     }
     It 'Get-GithubRateLimit - Using -Context Anonymous' {
-        $rateLimit = Get-GitHubRateLimit -Context Anonymous
+        $rateLimit = Get-GitHubRateLimit -Context Anonymous -Debug -Verbose
         LogGroup 'Rate Limit' {
-            Write-Host ($rateLimit | Format-Table | Out-String)
+            Write-Host ($rateLimit | Format-List | Out-String)
         }
         $rateLimit | Should -Not -BeNullOrEmpty
     }
