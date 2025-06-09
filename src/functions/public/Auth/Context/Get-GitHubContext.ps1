@@ -57,7 +57,9 @@
                 Write-Debug 'Getting default context.'
                 $ID = $script:GitHub.Config.DefaultContext
                 if ([string]::IsNullOrEmpty($ID)) {
-                    throw "No default GitHub context found. Please run 'Switch-GitHubContext' or 'Connect-GitHub' to configure a GitHub context."
+                    $msg = "No default GitHub context found. Please run 'Switch-GitHubContext' or 'Connect-GitHub' to configure a GitHub context."
+                    Write-Warning $msg
+                    return
                 }
             }
         }
