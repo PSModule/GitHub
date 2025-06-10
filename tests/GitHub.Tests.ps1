@@ -61,37 +61,34 @@ Describe 'Auth' {
             $context | Should -Not -BeNullOrEmpty
         }
 
-        # Tests for APP goes here
-        if ($AuthType -eq 'APP') {
-            It 'Connect-GitHubAccount - Connects using the provided credentials + AutoloadInstallations' {
-                LogGroup 'Connect-Github' {
-                    $context = Connect-GitHubAccount @connectParams -PassThru -Silent -AutoloadInstallations -Debug -Verbose
-                }
-                LogGroup 'Context' {
-                    Write-Host ($context | Format-List | Out-String)
-                }
-                $context | Should -Not -BeNullOrEmpty
+        It 'Connect-GitHubAccount - Connects using the provided credentials + AutoloadInstallations' -Skip:($AuthType -ne 'APP') {
+            LogGroup 'Connect-Github' {
+                $context = Connect-GitHubAccount @connectParams -PassThru -Silent -AutoloadInstallations -Debug -Verbose
             }
+            LogGroup 'Context' {
+                Write-Host ($context | Format-List | Out-String)
+            }
+            $context | Should -Not -BeNullOrEmpty
+        }
 
-            It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
-                LogGroup 'Connect-GithubApp' {
-                    $contexts = Connect-GitHubApp -PassThru -Silent -Debug -Verbose
-                }
-                LogGroup 'Contexts' {
-                    Write-Host ($contexts | Format-List | Out-String)
-                }
-                $contexts | Should -Not -BeNullOrEmpty
+        It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' -Skip:($AuthType -ne 'APP') {
+            LogGroup 'Connect-GithubApp' {
+                $contexts = Connect-GitHubApp -PassThru -Silent -Debug -Verbose
             }
+            LogGroup 'Contexts' {
+                Write-Host ($contexts | Format-List | Out-String)
+            }
+            $contexts | Should -Not -BeNullOrEmpty
+        }
 
-            It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
-                LogGroup 'Connect-GithubApp' {
-                    $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent -Debug -Verbose
-                }
-                LogGroup 'Context' {
-                    Write-Host ($context | Format-List | Out-String)
-                }
-                $context | Should -Not -BeNullOrEmpty
+        It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' -Skip:($AuthType -ne 'APP') {
+            LogGroup 'Connect-GithubApp' {
+                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent -Debug -Verbose
             }
+            LogGroup 'Context' {
+                Write-Host ($context | Format-List | Out-String)
+            }
+            $context | Should -Not -BeNullOrEmpty
         }
 
         # Tests for runners goes here
