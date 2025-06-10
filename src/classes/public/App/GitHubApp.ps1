@@ -61,6 +61,6 @@ class GitHubApp : GitHubNode {
         $this.UpdatedAt = $Object.updated_at
         $this.Permissions = $Object.permissions
         $this.Events = $Object.events
-        $this.InstallationsCount = $Object.installations_count
+        $this.Installations = $Object.installations_count
     }
 }
