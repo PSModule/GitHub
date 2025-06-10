@@ -75,13 +75,13 @@
         $this.NodeID = $Object.node_id
 
         # From GitHubOwner
-        $this.Name = $Object.login
+        $this.Name = $Object.slug ?? $Object.login
         $this.DisplayName = $Object.name
         $this.AvatarUrl = $Object.avatar_url
         $this.Url = $Object.html_url
         $this.Type = $Object.type
         $this.Company = $Object.company
-        $this.Blog = $Object.blog
+        $this.Blog = $Object.website_url ?? $Object.blog
         $this.Location = $Object.location
         $this.Email = $Object.email
         $this.TwitterUsername = $Object.twitter_username

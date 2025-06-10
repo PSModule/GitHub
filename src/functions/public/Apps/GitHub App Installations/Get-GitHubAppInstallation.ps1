@@ -11,13 +11,14 @@
         .LINK
         https://psmodule.io/GitHub/Functions/Apps/GitHub%20App%20Installations/Get-GitHubAppInstallation
     #>
-    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
+    [OutputType([GitHubAppInstallation[]])]
+    [CmdletBinding(DefaultParameterSetName = 'List installations for the authenticated app')]
     param(
         # The enterprise slug or ID.
         [Parameter(
             Mandatory,
             ValueFromPipelineByPropertyName,
-            ParameterSetName = 'Enterprise'
+            ParameterSetName = 'List installations on the Enterprise'
         )]
         [string] $Enterprise,
 
@@ -25,7 +26,7 @@
         [Parameter(
             Mandatory,
             ValueFromPipelineByPropertyName,
-            ParameterSetName = 'Enterprise'
+            ParameterSetName = 'List installations on the Enterprise'
         )]
         [Parameter(
             Mandatory,

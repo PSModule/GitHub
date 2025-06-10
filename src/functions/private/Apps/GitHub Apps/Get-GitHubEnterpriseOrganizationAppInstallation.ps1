@@ -16,7 +16,7 @@
         .NOTES
         [List GitHub Apps installed on an enterprise-owned organization]()
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([GitHubAppInstallation])]
     [CmdletBinding()]
     param(
         # The enterprise slug or ID.
@@ -58,7 +58,7 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            [GitHubAppInstallation]::new($_.Response)
         }
     }
 

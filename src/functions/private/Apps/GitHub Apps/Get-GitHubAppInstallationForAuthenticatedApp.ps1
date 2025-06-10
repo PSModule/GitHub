@@ -17,6 +17,7 @@
         .NOTES
         [List installations for the authenticated app](https://docs.github.com/rest/apps/apps#list-installations-for-the-authenticated-app)
     #>
+    [OutputType([GitHubAppInstallation])]
     [CmdletBinding()]
     param(
         # The context to run the command in. Used to get the details for the API call.
@@ -38,7 +39,7 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            [GitHubAppInstallation]::new($_.Response)
         }
     }
 
