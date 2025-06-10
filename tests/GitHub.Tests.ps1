@@ -64,7 +64,9 @@ Describe 'Auth' {
         # Tests for APP goes here
         if ($AuthType -eq 'APP') {
             It 'Connect-GitHubAccount - Connects using the provided credentials + AutoloadInstallations' {
-                $context = Connect-GitHubAccount @connectParams -PassThru -Silent -AutoloadInstallations
+                LogGroup 'Connect-Github' {
+                    $context = Connect-GitHubAccount @connectParams -PassThru -Silent -AutoloadInstallations -Debug -Verbose
+                }
                 LogGroup 'Context' {
                     Write-Host ($context | Format-List | Out-String)
                 }
@@ -72,7 +74,9 @@ Describe 'Auth' {
             }
 
             It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
-                $contexts = Connect-GitHubApp -PassThru -Silent
+                LogGroup 'Connect-GithubApp' {
+                    $contexts = Connect-GitHubApp -PassThru -Silent -Debug -Verbose
+                }
                 LogGroup 'Contexts' {
                     Write-Host ($contexts | Format-List | Out-String)
                 }
@@ -80,7 +84,9 @@ Describe 'Auth' {
             }
 
             It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
-                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
+                LogGroup 'Connect-GithubApp' {
+                    $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent -Debug -Verbose
+                }
                 LogGroup 'Context' {
                     Write-Host ($context | Format-List | Out-String)
                 }
