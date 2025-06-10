@@ -416,9 +416,9 @@ Describe 'Apps' {
                 }
                 It 'New-GitHubAppInstallationAccessToken - Can get app installation access tokens' {
                     $installations = Get-GitHubAppInstallation
-                    $installations | ForEach-Object {
-                        $token = New-GitHubAppInstallationAccessToken -InstallationID $_.id
-                        LogGroup 'Token' {
+                    LogGroup 'Tokens' {
+                        $installations | ForEach-Object {
+                            $token = New-GitHubAppInstallationAccessToken -InstallationID $_.id
                             Write-Host ($token | Format-List | Out-String)
                         }
                         $token | Should -Not -BeNullOrEmpty
