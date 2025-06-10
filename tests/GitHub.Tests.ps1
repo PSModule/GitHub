@@ -397,7 +397,30 @@ Describe 'Apps' {
                         Write-Host ($app | Format-Table | Out-String)
                     }
                     $app | Should -Not -BeNullOrEmpty
+                    $app | Should -BeOfType 'GitHubApp'
+                    $app.ID | Should -Not -BeNullOrEmpty
+                    $app.ClientID | Should -Not -BeNullOrEmpty
+                    $app.AppID | Should -Not -BeNullOrEmpty
+                    $app.Slug | Should -Not -BeNullOrEmpty
+                    $app.NodeID | Should -Not -BeNullOrEmpty
+                    $app.Owner | Should -BeOfType 'GitHubOwner'
+                    $app.Name | Should -Not -BeNullOrEmpty
+                    $app.Description | Should -Not -BeNullOrEmpty
+                    $app.ExternalUrl | Should -Not -BeNullOrEmpty
+                    $app.Url | Should -Not -BeNullOrEmpty
+                    $app.CreatedAt | Should -Not -BeNullOrEmpty
+                    $app.UpdatedAt | Should -Not -BeNullOrEmpty
+                    $app.Permissions | Should -Not -BeNullOrEmpty
+                    $app.Events | Should -BeOfType 'Object[]'
+                    $app.Installations | Should -Not -BeNullOrEmpty
                 }
+                # It 'Get-GitHubApp - Get an app by slug' {
+                #     $app = Get-GitHubApp -Name 'github-actions'
+                #     LogGroup 'App by slug' {
+                #         Write-Host ($app | Format-Table | Out-String)
+                #     }
+                #     $app | Should -Not -BeNullOrEmpty
+                # }
 
                 It 'Get-GitHubAppJSONWebToken - Can get a JWT for the app' {
                     $jwt = Get-GitHubAppJSONWebToken @connectParams
@@ -413,6 +436,24 @@ Describe 'Apps' {
                         Write-Host ($installations | Format-List | Out-String)
                     }
                     $installations | Should -Not -BeNullOrEmpty
+                    $githubApp = Get-GitHubApp
+                    foreach ($installation in $installations) {
+                        $installation | Should -BeOfType 'GitHubAppInstallation'
+                        $installation.ID | Should -Not -BeNullOrEmpty
+                        $installation.App | Should -BeOfType 'GitHubApp'
+                        $installation.App.ClientID | Should -Be $githubApp.ClientID
+                        $installation.App.AppID | Should -Not -BeNullOrEmpty
+                        $installation.App.AppSlug | Should -Not -BeNullOrEmpty
+                        $installation.Target | Should -BeOfType 'GitHubOwner'
+                        $installation.Type | Should -Not -BeNullOrEmpty
+                        $installation.RepositorySelection | Should -Not -BeNullOrEmpty
+                        $installation.Permissions | Should -Not -BeNullOrEmpty
+                        $installation.Events | Should -BeOfType 'Object[]'
+                        $installation.CreatedAt | Should -Not -BeNullOrEmpty
+                        $installation.UpdatedAt | Should -Not -BeNullOrEmpty
+                        $installation.SuspendedAt | Should -BeNullOrEmpty
+                        $installation.SuspendedBy | Should -BeOfType 'GitHubUser'
+                    }
                 }
                 It 'New-GitHubAppInstallationAccessToken - Can get app installation access tokens' {
                     $installations = Get-GitHubAppInstallation

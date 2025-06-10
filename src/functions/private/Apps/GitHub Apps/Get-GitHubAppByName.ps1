@@ -14,7 +14,7 @@
         .NOTES
         [Get an app](https://docs.github.com/rest/apps/apps#get-an-app)
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([GitHubApp])]
     [CmdletBinding()]
     param(
         # The AppSlug is just the URL-friendly name of a GitHub App.
@@ -43,7 +43,7 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            [GitHubApp]::new($_.Response)
         }
     }
     end {
