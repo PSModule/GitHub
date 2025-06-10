@@ -24,7 +24,7 @@ filter Install-GithubApp {
         $orgs = $installableOrgs | Where-Object { $_.login -like $organization }
         foreach ($org in $orgs) {
             foreach ($appIDitem in $AppID) {
-                Install-GitHubAppOnEnterpriseOrganization -Enterprise $Enterprise -Organization $org.login -ClientID $appIDitem -RepositorySelection all | ForEach-Object {
+                Install-GitHubApp -Enterprise $Enterprise -Organization $org.login -ClientID $appIDitem -RepositorySelection all | ForEach-Object {
                     [PSCustomObject]@{
                         Organization = $org.login
                         AppID        = $appIDitem
