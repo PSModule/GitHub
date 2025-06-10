@@ -400,7 +400,7 @@ Describe 'Apps' {
                 It 'Get-GitHubApp - Can get app details' {
                     $app = Get-GitHubApp
                     LogGroup 'App' {
-                        Write-Host ($app | Format-Table | Out-String)
+                        Write-Host ($app | Format-List | Out-String)
                     }
                     $app | Should -Not -BeNullOrEmpty
                     $app | Should -BeOfType 'GitHubApp'
@@ -438,7 +438,7 @@ Describe 'Apps' {
                 It 'Get-GitHubAppInstallation - Can get app installations' {
                     $installations = Get-GitHubAppInstallation
                     LogGroup 'Installations' {
-                        Write-Host ($installations | Format-Table | Out-String)
+                        Write-Host ($installations | Format-List | Out-String)
                     }
                     $installations | Should -Not -BeNullOrEmpty
                     $githubApp = Get-GitHubApp
@@ -448,7 +448,7 @@ Describe 'Apps' {
                         $installation.App | Should -BeOfType 'GitHubApp'
                         $installation.App.ClientID | Should -Be $githubApp.ClientID
                         $installation.App.AppID | Should -Not -BeNullOrEmpty
-                        $installation.App.AppSlug | Should -Not -BeNullOrEmpty
+                        $installation.App.Slug | Should -Not -BeNullOrEmpty
                         $installation.Target | Should -BeOfType 'GitHubOwner'
                         $installation.Type | Should -Not -BeNullOrEmpty
                         $installation.RepositorySelection | Should -Not -BeNullOrEmpty

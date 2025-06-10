@@ -60,7 +60,7 @@ class GitHubApp : GitHubNode {
         $this.CreatedAt = $Object.created_at
         $this.UpdatedAt = $Object.updated_at
         $this.Permissions = $Object.permissions
-        $this.Events = $Object.events
+        $this.Events = @($Object.events)
         $this.Installations = $Object.installations_count
     }
 }
