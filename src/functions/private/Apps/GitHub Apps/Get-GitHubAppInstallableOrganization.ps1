@@ -47,7 +47,7 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            [GitHubOrganization]::new($_.Response)
+            $_.Response | ForEach-Object { [GitHubOrganization]::new($_) }
         }
     }
 
