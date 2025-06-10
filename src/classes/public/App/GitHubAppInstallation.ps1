@@ -53,7 +53,7 @@
         $this.Type = $Object.target_type
         $this.RepositorySelection = $Object.repository_selection
         $this.Permissions = $Object.permissions
-        $this.Events = $Object.events
+        $this.Events = , ($Object.events)
         $this.FilePaths = $Object.single_file_paths
         $this.CreatedAt = $Object.created_at
         $this.UpdatedAt = $Object.updated_at
