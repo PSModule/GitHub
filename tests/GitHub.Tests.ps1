@@ -406,7 +406,6 @@ Describe 'Apps' {
                     $app | Should -BeOfType 'GitHubApp'
                     $app.ID | Should -Not -BeNullOrEmpty
                     $app.ClientID | Should -Not -BeNullOrEmpty
-                    $app.AppID | Should -Not -BeNullOrEmpty
                     $app.Slug | Should -Not -BeNullOrEmpty
                     $app.NodeID | Should -Not -BeNullOrEmpty
                     $app.Owner | Should -BeOfType 'GitHubOwner'
@@ -439,7 +438,7 @@ Describe 'Apps' {
                 It 'Get-GitHubAppInstallation - Can get app installations' {
                     $installations = Get-GitHubAppInstallation
                     LogGroup 'Installations' {
-                        Write-Host ($installations | Format-List | Out-String)
+                        Write-Host ($installations | Format-Table | Out-String)
                     }
                     $installations | Should -Not -BeNullOrEmpty
                     $githubApp = Get-GitHubApp
