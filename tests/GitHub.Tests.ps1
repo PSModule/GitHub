@@ -410,7 +410,7 @@ Describe 'Apps' {
                 It 'Get-GitHubAppInstallation - Can get app installations' {
                     $installations = Get-GitHubAppInstallation
                     LogGroup 'Installations' {
-                        Write-Host ($installations | Format-Table | Out-String)
+                        Write-Host ($installations | Format-List | Out-String)
                     }
                     $installations | Should -Not -BeNullOrEmpty
                 }
@@ -419,7 +419,7 @@ Describe 'Apps' {
                     $installations | ForEach-Object {
                         $token = New-GitHubAppInstallationAccessToken -InstallationID $_.id
                         LogGroup 'Token' {
-                            Write-Host ($token | Format-Table | Out-String)
+                            Write-Host ($token | Format-List | Out-String)
                         }
                         $token | Should -Not -BeNullOrEmpty
                     }

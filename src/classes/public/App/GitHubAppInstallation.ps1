@@ -6,7 +6,7 @@
     [GitHubApp] $App
 
     # The target of the installation.
-    [GitHubOwner]$Target
+    [GitHubOwner] $Target
 
     # The type of target.
     [string] $Type
