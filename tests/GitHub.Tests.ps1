@@ -138,8 +138,10 @@ Describe 'Auth' {
 Describe 'GitHub' {
     Context 'Config' {
         It 'Get-GitHubConfig - Gets the module configuration' {
-            $config = Get-GitHubConfig
-            Write-Host ($config | Format-Table | Out-String)
+            LogGroup 'Config' {
+                $config = Get-GitHubConfig
+                Write-Host ($config | Format-List | Out-String)
+            }
             $config | Should -Not -BeNullOrEmpty
         }
         It 'Get-GitHubConfig - Gets a configuration item by name' {
@@ -166,14 +168,18 @@ Describe 'GitHub' {
     }
     Context 'Actions' {
         It 'Get-GitHubEventData - Gets data about the event that triggered the workflow' {
-            $workflow = Get-GitHubEventData
-            Write-Host ($workflow | Format-List | Out-String)
-            $workflow | Should -Not -BeNullOrEmpty
+            LogGroup 'Event Data' {
+                $eventData = Get-GitHubEventData
+                Write-Host ($eventData | Format-List | Out-String)
+            }
+            $eventData | Should -Not -BeNullOrEmpty
         }
         It 'Get-GitHubRunnerData - Gets data about the runner that is running the workflow' {
-            $workflow = Get-GitHubRunnerData
-            Write-Host ($workflow | Format-List | Out-String)
-            $workflow | Should -Not -BeNullOrEmpty
+            LogGroup 'Runner Data' {
+                $runnerData = Get-GitHubRunnerData
+                Write-Host ($runnerData | Format-List | Out-String)
+            }
+            $runnerData | Should -Not -BeNullOrEmpty
         }
     }
     Context 'Status' -ForEach @('Public', 'Europe', 'Australia') {
