@@ -24,16 +24,16 @@
         https://psmodule.io/GitHub/Functions/Apps/GitHub%20App/Get-GitHubApp
     #>
     [OutputType([pscustomobject])]
-    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
+    [CmdletBinding(DefaultParameterSetName = 'Get the authenticated app')]
     param(
         # The AppSlug is just the URL-friendly name of a GitHub App.
         # You can find this on the settings page for your GitHub App (e.g., <https://github.com/settings/apps/{app_slug}>).
         # Example: 'github-actions'
         [Parameter(
             Mandatory,
-            ParameterSetName = 'BySlug'
+            ParameterSetName = 'Get an app by slug'
         )]
-        [Alias('AppSlug')]
+        [Alias('AppSlug', 'Slug')]
         [string] $Name,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -50,7 +50,7 @@
 
     process {
         switch ($PSCmdlet.ParameterSetName) {
-            'BySlug' {
+            'Get an app by slug' {
                 Get-GitHubAppByName -AppSlug $Name -Context $Context
             }
             default {
