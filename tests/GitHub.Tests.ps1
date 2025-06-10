@@ -415,8 +415,8 @@ Describe 'Apps' {
                     $app.Url | Should -Not -BeNullOrEmpty
                     $app.CreatedAt | Should -Not -BeNullOrEmpty
                     $app.UpdatedAt | Should -Not -BeNullOrEmpty
-                    $app.Permissions | Should -Not -BeNullOrEmpty
-                    $app.Events | Should -BeOfType 'Object[]'
+                    $app.Permissions | Should -BeOfType 'PSCustomObject'
+                    $app.Events | Should -BeOfType 'string'
                     $app.Installations | Should -Not -BeNullOrEmpty
                 }
                 # It 'Get-GitHubApp - Get an app by slug' {
@@ -452,8 +452,8 @@ Describe 'Apps' {
                         $installation.Target | Should -BeOfType 'GitHubOwner'
                         $installation.Type | Should -Not -BeNullOrEmpty
                         $installation.RepositorySelection | Should -Not -BeNullOrEmpty
-                        $installation.Permissions | Should -Not -BeNullOrEmpty
-                        $installation.Events | Should -BeOfType 'Object[]'
+                        $installation.Permissions | Should -BeOfType 'PSCustomObject'
+                        $installation.Events | Should -BeOfType 'string'
                         $installation.CreatedAt | Should -Not -BeNullOrEmpty
                         $installation.UpdatedAt | Should -Not -BeNullOrEmpty
                         $installation.SuspendedAt | Should -BeNullOrEmpty
