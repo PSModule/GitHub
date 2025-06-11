@@ -30,8 +30,8 @@ Describe 'Variables' {
 
     Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
         BeforeAll {
-            $context = Connect-GitHubAccount @connectParams -PassThru -Silent -Debug -Verbose
             LogGroup "Current Contexts" {
+                $context = Connect-GitHubAccount @connectParams -PassThru -Silent -Debug -Verbose
                 Write-Host (Get-GitHubContext -ListAvailable | Format-List | Out-String)
             }
             LogGroup 'Context' {
