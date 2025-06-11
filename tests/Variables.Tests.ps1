@@ -30,13 +30,19 @@ Describe 'Variables' {
 
     Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
         BeforeAll {
-            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
+            $context = Connect-GitHubAccount @connectParams -PassThru -Silent -Debug -Verbose
+            LogGroup "Current Contexts" {
+                Write-Host (Get-GitHubContext -ListAvailable | Format-List | Out-String)
+            }
             LogGroup 'Context' {
                 Write-Host ($context | Format-List | Out-String)
             }
             if ($AuthType -eq 'APP') {
+                LogGroup "Current Contexts" {
+                    Write-Host (Get-GitHubContext -ListAvailable | Format-List | Out-String)
+                }
                 LogGroup 'Context - Installation' {
-                    $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
+                    $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent -Debug -Verbose
                     Write-Host ($context | Format-List | Out-String)
                 }
             }
