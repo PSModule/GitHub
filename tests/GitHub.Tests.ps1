@@ -61,31 +61,34 @@ Describe 'Auth' {
             $context | Should -Not -BeNullOrEmpty
         }
 
-        # Tests for APP goes here
-        if ($AuthType -eq 'APP') {
-            It 'Connect-GitHubAccount - Connects using the provided credentials + AutoloadInstallations' {
+        It 'Connect-GitHubAccount - Connects using the provided credentials + AutoloadInstallations' -Skip:($AuthType -ne 'APP') {
+            LogGroup 'Connect-Github' {
                 $context = Connect-GitHubAccount @connectParams -PassThru -Silent -AutoloadInstallations
-                LogGroup 'Context' {
-                    Write-Host ($context | Format-List | Out-String)
-                }
-                $context | Should -Not -BeNullOrEmpty
             }
+            LogGroup 'Context' {
+                Write-Host ($context | Format-List | Out-String)
+            }
+            $context | Should -Not -BeNullOrEmpty
+        }
 
-            It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
+        It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' -Skip:($AuthType -ne 'APP') {
+            LogGroup 'Connect-GithubApp' {
                 $contexts = Connect-GitHubApp -PassThru -Silent
-                LogGroup 'Contexts' {
-                    Write-Host ($contexts | Format-List | Out-String)
-                }
-                $contexts | Should -Not -BeNullOrEmpty
             }
+            LogGroup 'Contexts' {
+                Write-Host ($contexts | Format-List | Out-String)
+            }
+            $contexts | Should -Not -BeNullOrEmpty
+        }
 
-            It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
+        It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' -Skip:($AuthType -ne 'APP') {
+            LogGroup 'Connect-GithubApp' {
                 $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
-                LogGroup 'Context' {
-                    Write-Host ($context | Format-List | Out-String)
-                }
-                $context | Should -Not -BeNullOrEmpty
             }
+            LogGroup 'Context' {
+                Write-Host ($context | Format-List | Out-String)
+            }
+            $context | Should -Not -BeNullOrEmpty
         }
 
         # Tests for runners goes here
@@ -135,8 +138,10 @@ Describe 'Auth' {
 Describe 'GitHub' {
     Context 'Config' {
         It 'Get-GitHubConfig - Gets the module configuration' {
-            $config = Get-GitHubConfig
-            Write-Host ($config | Format-Table | Out-String)
+            LogGroup 'Config' {
+                $config = Get-GitHubConfig
+                Write-Host ($config | Format-List | Out-String)
+            }
             $config | Should -Not -BeNullOrEmpty
         }
         It 'Get-GitHubConfig - Gets a configuration item by name' {
@@ -163,14 +168,18 @@ Describe 'GitHub' {
     }
     Context 'Actions' {
         It 'Get-GitHubEventData - Gets data about the event that triggered the workflow' {
-            $workflow = Get-GitHubEventData
-            Write-Host ($workflow | Format-List | Out-String)
-            $workflow | Should -Not -BeNullOrEmpty
+            LogGroup 'Event Data' {
+                $eventData = Get-GitHubEventData
+                Write-Host ($eventData | Format-List | Out-String)
+            }
+            $eventData | Should -Not -BeNullOrEmpty
         }
         It 'Get-GitHubRunnerData - Gets data about the runner that is running the workflow' {
-            $workflow = Get-GitHubRunnerData
-            Write-Host ($workflow | Format-List | Out-String)
-            $workflow | Should -Not -BeNullOrEmpty
+            LogGroup 'Runner Data' {
+                $runnerData = Get-GitHubRunnerData
+                Write-Host ($runnerData | Format-List | Out-String)
+            }
+            $runnerData | Should -Not -BeNullOrEmpty
         }
     }
     Context 'Status' -ForEach @('Public', 'Europe', 'Australia') {
@@ -391,10 +400,32 @@ Describe 'Apps' {
                 It 'Get-GitHubApp - Can get app details' {
                     $app = Get-GitHubApp
                     LogGroup 'App' {
-                        Write-Host ($app | Format-Table | Out-String)
+                        Write-Host ($app | Format-List | Out-String)
                     }
                     $app | Should -Not -BeNullOrEmpty
+                    $app | Should -BeOfType 'GitHubApp'
+                    $app.ID | Should -Not -BeNullOrEmpty
+                    $app.ClientID | Should -Not -BeNullOrEmpty
+                    $app.Slug | Should -Not -BeNullOrEmpty
+                    $app.NodeID | Should -Not -BeNullOrEmpty
+                    $app.Owner | Should -BeOfType 'GitHubOwner'
+                    $app.Name | Should -Not -BeNullOrEmpty
+                    $app.Description | Should -Not -BeNullOrEmpty
+                    $app.ExternalUrl | Should -Not -BeNullOrEmpty
+                    $app.Url | Should -Not -BeNullOrEmpty
+                    $app.CreatedAt | Should -Not -BeNullOrEmpty
+                    $app.UpdatedAt | Should -Not -BeNullOrEmpty
+                    $app.Permissions | Should -BeOfType 'PSCustomObject'
+                    $app.Events | Should -BeOfType 'string'
+                    $app.Installations | Should -Not -BeNullOrEmpty
                 }
+                # It 'Get-GitHubApp - Get an app by slug' {
+                #     $app = Get-GitHubApp -Name 'github-actions'
+                #     LogGroup 'App by slug' {
+                #         Write-Host ($app | Format-Table | Out-String)
+                #     }
+                #     $app | Should -Not -BeNullOrEmpty
+                # }
 
                 It 'Get-GitHubAppJSONWebToken - Can get a JWT for the app' {
                     $jwt = Get-GitHubAppJSONWebToken @connectParams
@@ -407,16 +438,34 @@ Describe 'Apps' {
                 It 'Get-GitHubAppInstallation - Can get app installations' {
                     $installations = Get-GitHubAppInstallation
                     LogGroup 'Installations' {
-                        Write-Host ($installations | Format-Table | Out-String)
+                        Write-Host ($installations | Format-List | Out-String)
                     }
                     $installations | Should -Not -BeNullOrEmpty
+                    $githubApp = Get-GitHubApp
+                    foreach ($installation in $installations) {
+                        $installation | Should -BeOfType 'GitHubAppInstallation'
+                        $installation.ID | Should -Not -BeNullOrEmpty
+                        $installation.App | Should -BeOfType 'GitHubApp'
+                        $installation.App.ClientID | Should -Be $githubApp.ClientID
+                        $installation.App.AppID | Should -Not -BeNullOrEmpty
+                        $installation.App.Slug | Should -Not -BeNullOrEmpty
+                        $installation.Target | Should -BeOfType 'GitHubOwner'
+                        $installation.Type | Should -Not -BeNullOrEmpty
+                        $installation.RepositorySelection | Should -Not -BeNullOrEmpty
+                        $installation.Permissions | Should -BeOfType 'PSCustomObject'
+                        $installation.Events | Should -BeOfType 'string'
+                        $installation.CreatedAt | Should -Not -BeNullOrEmpty
+                        $installation.UpdatedAt | Should -Not -BeNullOrEmpty
+                        $installation.SuspendedAt | Should -BeNullOrEmpty
+                        $installation.SuspendedBy | Should -BeOfType 'GitHubUser'
+                    }
                 }
                 It 'New-GitHubAppInstallationAccessToken - Can get app installation access tokens' {
                     $installations = Get-GitHubAppInstallation
-                    $installations | ForEach-Object {
-                        $token = New-GitHubAppInstallationAccessToken -InstallationID $_.id
-                        LogGroup 'Token' {
-                            Write-Host ($token | Format-Table | Out-String)
+                    LogGroup 'Tokens' {
+                        $installations | ForEach-Object {
+                            $token = New-GitHubAppInstallationAccessToken -InstallationID $_.id
+                            Write-Host ($token | Format-List | Out-String)
                         }
                         $token | Should -Not -BeNullOrEmpty
                     }

@@ -95,21 +95,21 @@
                     $userItem = $_
                     Write-Verbose "User filter:         [$userItem]."
                     $selectedInstallations += $installations | Where-Object {
-                        $_.target_type -eq 'User' -and $_.account.login -like $userItem
+                        $_.Type -eq 'User' -and $_.Target.Name -like $userItem
                     }
                 }
                 $Organization | ForEach-Object {
                     $organizationItem = $_
                     Write-Verbose "Organization filter: [$organizationItem]."
                     $selectedInstallations += $installations | Where-Object {
-                        $_.target_type -eq 'Organization' -and $_.account.login -like $organizationItem
+                        $_.Type -eq 'Organization' -and $_.Target.Name -like $organizationItem
                     }
                 }
                 $Enterprise | ForEach-Object {
                     $enterpriseItem = $_
                     Write-Verbose "Enterprise filter:   [$enterpriseItem]."
                     $selectedInstallations += $installations | Where-Object {
-                        $_.target_type -eq 'Enterprise' -and $_.account.slug -like $enterpriseItem
+                        $_.Type -eq 'Enterprise' -and $_.Target.Name -like $enterpriseItem
                     }
                 }
             }
@@ -122,7 +122,7 @@
         Write-Verbose "Found [$($selectedInstallations.Count)] installations for the target."
         $selectedInstallations | ForEach-Object {
             $installation = $_
-            Write-Verbose "Processing installation [$($installation.account.login)] [$($installation.id)]"
+            Write-Verbose "Processing installation [$($installation.Target.Name)] [$($installation.id)]"
             $token = New-GitHubAppInstallationAccessToken -Context $Context -InstallationID $installation.id
 
             $contextParams = @{
@@ -138,19 +138,19 @@
                 InstallationID      = [string]$installation.id
                 Permissions         = [pscustomobject]$installation.permissions
                 Events              = [string[]]$installation.events
-                InstallationType    = [string]$installation.target_type
+                InstallationType    = [string]$installation.Type
                 Token               = [securestring]$token.Token
                 TokenExpirationDate = [datetime]$token.ExpiresAt
             }
 
-            switch ($installation.target_type) {
+            switch ($installation.Type) {
                 'User' {
-                    $contextParams['InstallationName'] = [string]$installation.account.login
-                    $contextParams['Owner'] = [string]$installation.account.login
+                    $contextParams['InstallationName'] = [string]$installation.Target.Name
+                    $contextParams['Owner'] = [string]$installation.Target.Name
                 }
                 'Organization' {
-                    $contextParams['InstallationName'] = [string]$installation.account.login
-                    $contextParams['Owner'] = [string]$installation.account.login
+                    $contextParams['InstallationName'] = [string]$installation.Target.Name
+                    $contextParams['Owner'] = [string]$installation.Target.Name
                 }
                 'Enterprise' {
                     $contextParams['InstallationName'] = [string]$installation.account.slug

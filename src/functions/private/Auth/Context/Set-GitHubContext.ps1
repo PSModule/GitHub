@@ -78,7 +78,7 @@
                     if ([string]::IsNullOrEmpty($contextObj['DisplayName'])) {
                         try {
                             $app = Get-GitHubApp -Name $contextObj['Username'] -Context $contextObj
-                            $contextObj['DisplayName'] = [string]$app.name
+                            $contextObj['DisplayName'] = [string]$app.Name
                         } catch {
                             Write-Debug "Failed to get the GitHub App with the slug: [$($contextObj['Username'])]."
                         }
@@ -122,15 +122,15 @@
                 }
                 'App' {
                     $app = Get-GitHubApp -Context $contextObj
-                    $contextObj['Name'] = "$($contextObj['HostName'])/$($app.slug)"
-                    $contextObj['DisplayName'] = [string]$app.name
-                    $contextObj['Username'] = [string]$app.slug
-                    $contextObj['NodeID'] = [string]$app.node_id
-                    $contextObj['DatabaseID'] = [string]$app.id
-                    $contextObj['Permissions'] = [PSCustomObject]$app.permissions
-                    $contextObj['Events'] = [string[]]$app.events
-                    $contextObj['OwnerName'] = [string]$app.owner.login
-                    $contextObj['OwnerType'] = [string]$app.owner.type
+                    $contextObj['Name'] = "$($contextObj['HostName'])/$($app.Slug)"
+                    $contextObj['DisplayName'] = [string]$app.Name
+                    $contextObj['Username'] = [string]$app.Slug
+                    $contextObj['NodeID'] = [string]$app.NodeID
+                    $contextObj['DatabaseID'] = [string]$app.ID
+                    $contextObj['Permissions'] = [PSCustomObject]$app.Permissions
+                    $contextObj['Events'] = [string[]]$app.Events
+                    $contextObj['OwnerName'] = [string]$app.Owner.Name
+                    $contextObj['OwnerType'] = [string]$app.Owner.Type
                     $contextObj['Type'] = 'App'
                 }
                 default {

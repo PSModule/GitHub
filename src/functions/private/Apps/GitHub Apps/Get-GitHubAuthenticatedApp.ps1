@@ -20,7 +20,7 @@
         .NOTES
         [Get the authenticated app](https://docs.github.com/rest/apps/apps#get-an-app)
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([GitHubApp])]
     [CmdletBinding()]
     param(
         # The context to run the command in. Used to get the details for the API call.
@@ -42,7 +42,7 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            [GitHubApp]::new($_.Response)
         }
     }
     end {

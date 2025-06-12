@@ -14,11 +14,19 @@
 
         List installations for the authenticated app.
 
+        .OUTPUTS
+        GitHubAppInstallation[]
+
         .NOTES
         [List installations for the authenticated app](https://docs.github.com/rest/apps/apps#list-installations-for-the-authenticated-app)
     #>
+    [OutputType([GitHubAppInstallation])]
     [CmdletBinding()]
     param(
+        # The number of results per page (max 100).
+        [Parameter()]
+        [System.Nullable[int]] $PerPage,
+
         # The context to run the command in. Used to get the details for the API call.
         [Parameter(Mandatory)]
         [object] $Context
@@ -34,11 +42,14 @@
         $inputObject = @{
             Context     = $Context
             APIEndpoint = '/app/installations'
+            PerPage     = $PerPage
             Method      = 'GET'
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            $_.Response | ForEach-Object {
+                [GitHubAppInstallation]::new($_)
+            }
         }
     }
 
