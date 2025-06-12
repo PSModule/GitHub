@@ -13,9 +13,13 @@
         .EXAMPLE
         Get-GitHubAppInstallableOrganization -Enterprise 'msx'
 
+        .OUTPUTS
+        GitHubOrganization[]
+
         .LINK
         https://psmodule.io/GitHub/Functions/Apps/GitHub%20App/Get-GitHubAppInstallableOrganization
     #>
+    [OutputType([GitHubOrganization[]])]
     [CmdletBinding()]
     param(
         # The enterprise slug or ID.

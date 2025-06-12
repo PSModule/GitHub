@@ -14,6 +14,9 @@
 
         List installations for the authenticated app.
 
+        .OUTPUTS
+        GitHubAppInstallation[]
+
         .NOTES
         [List installations for the authenticated app](https://docs.github.com/rest/apps/apps#list-installations-for-the-authenticated-app)
     #>
