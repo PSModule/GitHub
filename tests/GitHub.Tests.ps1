@@ -63,7 +63,7 @@ Describe 'Auth' {
 
         It 'Connect-GitHubAccount - Connects using the provided credentials + AutoloadInstallations' -Skip:($AuthType -ne 'APP') {
             LogGroup 'Connect-Github' {
-                $context = Connect-GitHubAccount @connectParams -PassThru -Silent -AutoloadInstallations -Debug -Verbose
+                $context = Connect-GitHubAccount @connectParams -PassThru -Silent -AutoloadInstallations
             }
             LogGroup 'Context' {
                 Write-Host ($context | Format-List | Out-String)
@@ -73,7 +73,7 @@ Describe 'Auth' {
 
         It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' -Skip:($AuthType -ne 'APP') {
             LogGroup 'Connect-GithubApp' {
-                $contexts = Connect-GitHubApp -PassThru -Silent -Debug -Verbose
+                $contexts = Connect-GitHubApp -PassThru -Silent
             }
             LogGroup 'Contexts' {
                 Write-Host ($contexts | Format-List | Out-String)
@@ -83,7 +83,7 @@ Describe 'Auth' {
 
         It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' -Skip:($AuthType -ne 'APP') {
             LogGroup 'Connect-GithubApp' {
-                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent -Debug -Verbose
+                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
             }
             LogGroup 'Context' {
                 Write-Host ($context | Format-List | Out-String)
