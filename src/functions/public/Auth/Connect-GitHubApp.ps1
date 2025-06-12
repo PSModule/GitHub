@@ -109,7 +109,7 @@
                     $enterpriseItem = $_
                     Write-Verbose "Enterprise filter:   [$enterpriseItem]."
                     $selectedInstallations += $installations | Where-Object {
-                        $_.Type -eq 'Enterprise' -and $_.account.slug -like $enterpriseItem
+                        $_.Type -eq 'Enterprise' -and $_.Target.Name -like $enterpriseItem
                     }
                 }
             }
