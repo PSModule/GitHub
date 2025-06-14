@@ -527,7 +527,7 @@ Describe 'Apps' {
 
         # Tests for IAT UAT and PAT goes here
         It 'Get-GitHubApp - Get an app by slug' {
-            $app = Get-GitHubApp -Name 'github-actions'
+            $app = Get-GitHubApp -Slug 'github-actions'
             LogGroup 'App by slug' {
                 Write-Host ($app | Format-Table | Out-String)
             }
