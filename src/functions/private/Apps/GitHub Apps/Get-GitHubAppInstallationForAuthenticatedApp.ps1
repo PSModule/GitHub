@@ -40,10 +40,10 @@
 
     process {
         $inputObject = @{
-            Context     = $Context
+            Method      = 'GET'
             APIEndpoint = '/app/installations'
             PerPage     = $PerPage
-            Method      = 'GET'
+            Context     = $Context
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
