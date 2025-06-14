@@ -419,13 +419,6 @@ Describe 'Apps' {
                     $app.Events | Should -BeOfType 'string'
                     $app.Installations | Should -Not -BeNullOrEmpty
                 }
-                # It 'Get-GitHubApp - Get an app by slug' {
-                #     $app = Get-GitHubApp -Name 'github-actions'
-                #     LogGroup 'App by slug' {
-                #         Write-Host ($app | Format-Table | Out-String)
-                #     }
-                #     $app | Should -Not -BeNullOrEmpty
-                # }
 
                 It 'Get-GitHubAppJSONWebToken - Can get a JWT for the app' {
                     $jwt = Get-GitHubAppJSONWebToken @connectParams
@@ -433,6 +426,13 @@ Describe 'Apps' {
                         Write-Host ($jwt | Format-Table | Out-String)
                     }
                     $jwt | Should -Not -BeNullOrEmpty
+                }
+
+                It 'Get-GitHubAppInstallationRequest - Can get installation requests' {
+                    $installationRequests = Get-GitHubAppInstallationRequest
+                    LogGroup 'Installation requests' {
+                        Write-Host ($installationRequests | Format-List | Out-String)
+                    }
                 }
 
                 It 'Get-GitHubAppInstallation - Can get app installations' {
@@ -460,6 +460,7 @@ Describe 'Apps' {
                         $installation.SuspendedBy | Should -BeOfType 'GitHubUser'
                     }
                 }
+
                 It 'New-GitHubAppInstallationAccessToken - Can get app installation access tokens' {
                     $installations = Get-GitHubAppInstallation
                     LogGroup 'Tokens' {
@@ -525,6 +526,13 @@ Describe 'Apps' {
         if ($Type -eq 'GitHub Actions') {}
 
         # Tests for IAT UAT and PAT goes here
+        It 'Get-GitHubApp - Get an app by slug' {
+            $app = Get-GitHubApp -Name 'github-actions'
+            LogGroup 'App by slug' {
+                Write-Host ($app | Format-Table | Out-String)
+            }
+            $app | Should -Not -BeNullOrEmpty
+        }
     }
 }
 
