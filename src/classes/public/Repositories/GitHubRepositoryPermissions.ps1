@@ -1,4 +1,4 @@
-﻿class GitHubRepositoryPermissions {
+﻿class GitHubRepositoryPermission {
     # Full control over the repository, including managing settings and access. Can delete the repository and change roles for others.
     [System.Nullable[bool]] $Admin
 
@@ -16,9 +16,9 @@
     # Alias "Read"
     [System.Nullable[bool]] $Pull
 
-    GitHubRepositoryPermissions() {}
+    GitHubRepositoryPermission() {}
 
-    GitHubRepositoryPermissions([PSCustomObject]$Object) {
+    GitHubRepositoryPermission([PSCustomObject]$Object) {
         $this.Admin = $Object.admin
         $this.Maintain = $Object.maintain
         $this.Push = $Object.push
@@ -26,7 +26,7 @@
         $this.Pull = $Object.pull
     }
 
-    GitHubRepositoryPermissions([string]$Permission) {
+    GitHubRepositoryPermission([string]$Permission) {
         $Permission = $Permission.ToLower()
         if ($Permission -eq 'admin') {
             $this.Admin = $true
