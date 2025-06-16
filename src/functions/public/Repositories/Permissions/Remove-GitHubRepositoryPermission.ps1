@@ -14,9 +14,8 @@
         https://psmodule.io/GitHub/Functions/Repositories/Remove-GitHubRepositoryPermission/
 
         .NOTES
-        [Check team permissions for a repository](https://docs.github.com/rest/teams/teams#check-team-permissions-for-a-repository)
+        [Remove a repository from a team](https://docs.github.com/rest/teams/teams#remove-a-repository-from-a-team)
     #>
-    [OutputType([GitHubRepositoryPermission])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.
