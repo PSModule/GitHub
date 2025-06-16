@@ -24,9 +24,6 @@
 
         .LINK
         https://psmodule.io/GitHub/Functions/Apps/GitHub%20App%20Installations/Get-GitHubAppAccessibleRepository
-
-        .NOTES
-
     #>
     [OutputType([GitHubRepository[]])]
     [CmdletBinding(SupportsShouldProcess)]
