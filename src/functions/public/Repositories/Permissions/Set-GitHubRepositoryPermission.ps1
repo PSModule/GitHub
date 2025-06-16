@@ -4,11 +4,20 @@
         Set the permission level for a team on a repository
 
         .DESCRIPTION
+        Assigns or updates the permission level for a specific team on a GitHub repository. The permission can be
+        standard roles like 'pull', 'push', 'admin', or any custom roles defined in the organization. If the value
+        'None' is specified, the function removes the team's access to the repository.
 
         .EXAMPLE
+        Set-GitHubRepositoryPermission -Owner 'MyOrg' -Name 'MyRepo' -Team 'devs' -Permission 'push'
+
+        Grants the 'push' permission to the 'devs' team for the repository 'MyRepo' owned by 'MyOrg'.
 
         .INPUTS
         GitHubRepository
+
+        .OUTPUTS
+        void
 
         .LINK
         https://psmodule.io/GitHub/Functions/Repositories/Set-GitHubRepositoryPermission/

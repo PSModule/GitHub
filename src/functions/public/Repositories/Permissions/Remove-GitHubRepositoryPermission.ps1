@@ -4,11 +4,18 @@
         Remove the permission level for a team on a repository.
 
         .DESCRIPTION
+        This function removes a team's access to a specific repository within an organization.
 
         .EXAMPLE
+        Remove-GitHubRepositoryPermission -Owner 'my-org' -Name 'repo-name' -Team 'dev-team'
+
+        Removes the 'dev-team' permissions from the 'repo-name' repository under 'my-org'.
 
         .INPUTS
         GitHubRepository
+
+        .OUTPUTS
+        void
 
         .LINK
         https://psmodule.io/GitHub/Functions/Repositories/Remove-GitHubRepositoryPermission/
@@ -16,6 +23,7 @@
         .NOTES
         [Remove a repository from a team](https://docs.github.com/rest/teams/teams#remove-a-repository-from-a-team)
     #>
+    [OutputType([void])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.

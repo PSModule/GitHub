@@ -4,8 +4,21 @@
         Get the permission level for a team on a repository.
 
         .DESCRIPTION
+        Retrieves the permission level assigned to a specific team for a given GitHub repository.
 
         .EXAMPLE
+        Get-GitHubRepositoryPermission -Owner 'octocat' -Name 'Hello-World' -Team 'core'
+
+        Output:
+        ```powershell
+        Admin    : true
+        Maintain :
+        Push     :
+        Triage   :
+        Pull     :
+        ```
+
+        Retrieves the permission of the 'core' team on the 'Hello-World' repository owned by 'octocat'.
 
         .INPUTS
         GitHubRepository
@@ -14,7 +27,7 @@
         GitHubRepositoryPermission
 
         .LINK
-        https://psmodule.io/GitHub/Functions/Repositories/Get-GitHubRepositoryPermission/
+        https://psmodule.io/GitHub/Functions/Get-GitHubRepositoryPermission/
 
         .NOTES
         [Check team permissions for a repository](https://docs.github.com/rest/teams/teams#check-team-permissions-for-a-repository)
