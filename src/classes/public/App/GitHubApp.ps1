@@ -63,4 +63,8 @@ class GitHubApp : GitHubNode {
         $this.Events = , ($Object.events)
         $this.Installations = $Object.installations_count
     }
+
+    [string] ToString() {
+        return $this.Slug
+    }
 }
