@@ -72,7 +72,9 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            [GitHubRepository]::($_.Response)
+            foreach ($repo in $_.Response) {
+                [GitHubRepository]::new($repo)
+            }
         }
     }
 
