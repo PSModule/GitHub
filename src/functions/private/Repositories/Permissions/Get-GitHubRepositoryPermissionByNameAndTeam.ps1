@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryPermission {
+﻿filter Get-GitHubRepositoryPermissionByNameAndTeam {
     <#
         .SYNOPSIS
         Get the permission level for a team on a repository.
@@ -7,7 +7,7 @@
         Retrieves the permission level assigned to a specific team for a given GitHub repository.
 
         .EXAMPLE
-        Get-GitHubRepositoryPermission -Owner 'octocat' -Name 'Hello-World' -Team 'core'
+        Get-GitHubRepositoryPermissionByNameAndTeam -Owner 'octocat' -Name 'Hello-World' -Team 'core'
 
         Output:
         ```powershell
@@ -20,32 +20,16 @@
 
         Retrieves the permission of the 'core' team on the 'Hello-World' repository owned by 'octocat'.
 
-        .EXAMPLE
-        # Get a list of teams and their permissions for a specific GitHub repository
-        Get-GithubRepositoryPermission -Owner 'OrgName' -Repository 'RepoName'
-
-        # Get a list of repositories and their permissions for a specific GitHub team
-        # https://docs.github.com/en/rest/teams/teams?apiVersion=2022-11-28#list-team-repositories
-        Get-GithubRepositoryPermission -Owner 'OrgName' -Team 'TeamSlug'
-
-        # Get permission for a specific GitHub repository for a specific team
-        # https://docs.github.com/en/rest/teams/teams?apiVersion=2022-11-28#check-team-permissions-for-a-repository
-        Get-GithubRepositoryPermission -Owner 'OrgName' -Repository 'RepoName' -Team 'TeamSlug'
-
-
         .INPUTS
         GitHubRepository
 
         .OUTPUTS
-        GitHubRepositoryPermission
-
-        .LINK
-        https://psmodule.io/GitHub/Functions/Get-GitHubRepositoryPermission/
+        GitHubRepository
 
         .NOTES
         [Check team permissions for a repository](https://docs.github.com/rest/teams/teams#check-team-permissions-for-a-repository)
     #>
-    [OutputType([GitHubRepositoryPermission])]
+    [OutputType([GitHubRepository])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.
@@ -76,10 +60,10 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-        $TeamOwner = [string]::IsNullOrEmpty($TeamOwner) ? $Owner : $TeamOwner
     }
 
     process {
+        $TeamOwner = [string]::IsNullOrEmpty($TeamOwner) ? $Owner : $TeamOwner
         $inputObject = @{
             Method      = 'GET'
             APIEndpoint = "/orgs/$TeamOwner/teams/$Team/repos/$Owner/$Name"
@@ -88,7 +72,7 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            [GitHubRepositoryPermission]::new($_.Response)
+            [GitHubRepository]::new($_.Response)
         }
     }
 

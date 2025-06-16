@@ -20,19 +20,6 @@
 
         Retrieves the permission of the 'core' team on the 'Hello-World' repository owned by 'octocat'.
 
-        .EXAMPLE
-        # Get a list of teams and their permissions for a specific GitHub repository
-        Get-GithubRepositoryPermission -Owner 'OrgName' -Repository 'RepoName'
-
-        # Get a list of repositories and their permissions for a specific GitHub team
-        # https://docs.github.com/en/rest/teams/teams?apiVersion=2022-11-28#list-team-repositories
-        Get-GithubRepositoryPermission -Owner 'OrgName' -Team 'TeamSlug'
-
-        # Get permission for a specific GitHub repository for a specific team
-        # https://docs.github.com/en/rest/teams/teams?apiVersion=2022-11-28#check-team-permissions-for-a-repository
-        Get-GithubRepositoryPermission -Owner 'OrgName' -Repository 'RepoName' -Team 'TeamSlug'
-
-
         .INPUTS
         GitHubRepository
 
@@ -76,10 +63,10 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
-        $TeamOwner = [string]::IsNullOrEmpty($TeamOwner) ? $Owner : $TeamOwner
     }
 
     process {
+        $TeamOwner = [string]::IsNullOrEmpty($TeamOwner) ? $Owner : $TeamOwner
         $inputObject = @{
             Method      = 'GET'
             APIEndpoint = "/orgs/$TeamOwner/teams/$Team/repos/$Owner/$Name"
