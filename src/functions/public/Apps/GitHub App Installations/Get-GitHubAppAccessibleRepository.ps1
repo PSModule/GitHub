@@ -72,7 +72,7 @@
             foreach ($repo in $_.Response) {
                 [GitHubRepository]@{
                     ID       = $repo.id
-                    Name     = $repo.Name
+                    Name     = $repo.name
                     Owner    = [GitHubOwner]@{
                         Name = $Organization
                     }
