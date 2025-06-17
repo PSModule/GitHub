@@ -70,7 +70,14 @@
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             foreach ($repo in $_.Response) {
-                [GitHubRepository]::new($repo)
+                [GitHubRepository]@{
+                    ID       = $repo.id
+                    Name     = $repo.Name
+                    Owner    = [GitHubOwner]@{
+                        Name = $Organization
+                    }
+                    FullName = $repo.full_name
+                }
             }
         }
     }
