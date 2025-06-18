@@ -304,6 +304,19 @@ string
             } | Should -Not -Throw
             (Get-GitHubOutput).Config | Should -BeLike ''
         }
+        It 'Set-GitHubOutput + Empty string - Should not throw' {
+            {
+                Set-GitHubOutput -Name 'EmptyOutput' -Value ''
+            } | Should -Not -Throw
+            (Get-GitHubOutput).EmptyOutput | Should -Be ''
+        }
+        It 'Set-GitHubOutput + Null - Should not throw' {
+            {
+                Set-GitHubOutput -Name 'NullOutput' -Value $null
+            } | Should -Not -Throw
+            $nullValue = (Get-GitHubOutput).NullOutput
+            $nullValue | Should -Be $null
+        }
         It 'Get-GitHubOutput - Should not throw' {
             {
                 Get-GitHubOutput

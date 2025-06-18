@@ -77,7 +77,7 @@
                 # Check for empty value
                 if ([string]::IsNullOrWhiteSpace($value) -or [string]::IsNullOrEmpty($value) -or $value.Length -eq 0) {
                     Write-Debug ' - Single-line pattern - Empty value'
-                    $result[$key] = ''
+                    $result[$key] = $null
                     $i++
                     continue
                 }
@@ -122,7 +122,7 @@
                 # Check for empty value
                 if ([string]::IsNullOrWhiteSpace($value) -or [string]::IsNullOrEmpty($value) -or $value.Length -eq 0) {
                     Write-Debug " - key<<EOF pattern - [$key] - Empty value"
-                    $result[$key] = ''
+                    $result[$key] = $null
                     continue
                 }
 
