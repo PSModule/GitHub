@@ -310,6 +310,13 @@ string
             } | Should -Not -Throw
             Write-Host (Get-GitHubOutput | Format-List | Out-String)
         }
+        
+        It 'Reset-GitHubOutput - Should clear the outputs from the output file' {
+            Set-GitHubOutput -Name 'TestOutput' -Value 'TestValue'
+            (Get-GitHubOutput).TestOutput | Should -Be 'TestValue'
+            Reset-GitHubOutput
+            Get-GitHubOutput | Should -BeNullOrEmpty
+        }
         It 'Set-GitHubEnvironmentVariable - Should not throw' {
             {
                 Set-GitHubEnvironmentVariable -Name 'MyName' -Value 'MyValue'
