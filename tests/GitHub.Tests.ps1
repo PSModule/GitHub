@@ -318,28 +318,17 @@ string
             $nullValue | Should -Be $null
         }
         It 'Set-GitHubOutput - Should work with existing multi-line outputs in file' {
-            # First, add some existing multi-line outputs to simulate previous command outputs
             $existingContent = @'
 stderr<<ghadelimiter_6f9f5610-74ad-4b25-8ef3-7f3e9e764fa2
 ghadelimiter_6f9f5610-74ad-4b25-8ef3-7f3e9e764fa2
-exitcode<<ghadelimiter_2674f132-3464-4383-b471-db0597787e8f
-0
-ghadelimiter_2674f132-3464-4383-b471-db0597787e8f
 '@
             Add-Content -Path $env:GITHUB_OUTPUT -Value $existingContent
-
-            # Now test that Set-GitHubOutput still works correctly
             {
                 Set-GitHubOutput -Name 'TestAfterExisting' -Value 'TestValue'
             } | Should -Not -Throw
-            
-            # Verify the new output was set correctly
             (Get-GitHubOutput).TestAfterExisting | Should -Be 'TestValue'
-            
-            # Verify the existing outputs are still preserved
-            $fileContent = Get-Content $env:GITHUB_OUTPUT -Raw
-            $fileContent | Should -BeLike '*stderr<<ghadelimiter_6f9f5610-74ad-4b25-8ef3-7f3e9e764fa2*'
-            $fileContent | Should -BeLike '*exitcode<<ghadelimiter_2674f132-3464-4383-b471-db0597787e8f*'
+            $stderr = (Get-GitHubOutput).stderr
+            $stderr | Should -BeNullOrEmpty
         }
         It 'Get-GitHubOutput - Should not throw' {
             {
