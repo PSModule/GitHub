@@ -75,7 +75,7 @@
             if ($null -eq $value) {
                 $value = ''
             } elseif ($value -is [string]) {
-                if ($value -and (Test-Json $value -ErrorAction SilentlyContinue)) {
+                if (-not [string]::IsNullOrWhiteSpace($value) -and (Test-Json $value -ErrorAction SilentlyContinue)) {
                     # Normalize valid JSON strings to a consistent format.
                     $value = ($value | ConvertFrom-Json) | ConvertTo-Json -Depth 100
                 }
