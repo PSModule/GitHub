@@ -61,7 +61,6 @@
         if ($InputObject -is [hashtable]) {
             $InputObject = [PSCustomObject]$InputObject
         }
-
         foreach ($property in $InputObject.PSObject.Properties) {
             $key = $property.Name
             $value = $property.Value
@@ -71,23 +70,39 @@
             Write-Debug 'Property value:'
             Write-Debug ($InputObject | Out-String)
 
-            # For each property value:
-            if ($null -eq $value) {
-                $value = ''
-            } elseif ($value -is [string]) {
-                if (-not [string]::IsNullOrWhiteSpace($value) -and (Test-Json $value -ErrorAction SilentlyContinue)) {
-                    # Normalize valid JSON strings to a consistent format.
-                    $value = ($value | ConvertFrom-Json) | ConvertTo-Json -Depth 100
-                }
-            } else {
-                # For non-string values, convert to JSON.
-                $value = $value | ConvertTo-Json -Depth 100
-            }
-
             $guid = [Guid]::NewGuid().ToString()
             $EOFMarker = "EOF_$guid"
             $outputLines += "$key<<$EOFMarker"
-            $outputLines += $value
+
+            # Handle null values - leave a blank line between delimiters for empty string
+            # and no blank line for null
+            if ($null -eq $value) {
+                Write-Debug "Null value for key: $key"
+                # No output between delimiters for null
+            } elseif ($value -is [string] -and $value -eq '') {
+                Write-Debug "Empty string value for key: $key"
+                # Add a blank line for empty string
+                $outputLines += ''
+            } else {
+                # For each non-null, non-empty property value:
+                if ($value -is [string]) {
+                    if (Test-Json $value -ErrorAction SilentlyContinue) {
+                        # Normalize valid JSON strings to a consistent format.
+                        $value = ($value | ConvertFrom-Json) | ConvertTo-Json -Depth 100 -Compress
+                    }
+                } else {
+                    # For non-string values, convert to JSON.
+                    # Special handling for properties that may contain null values
+                    try {
+                        $value = $value | ConvertTo-Json -Depth 100 -Compress
+                    } catch {
+                        Write-Debug "Error converting value to JSON: $_"
+                        $value = if ($null -eq $value) { 'null' } else { $value.ToString() }
+                    }
+                }
+                $outputLines += $value
+            }
+
             $outputLines += $EOFMarker
         }
         Write-Debug 'Output lines:'
