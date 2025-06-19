@@ -19,7 +19,13 @@
                     <TableRowEntry>
                         <TableColumnItems>
                             <TableColumnItem>
-                                <PropertyName>"`e]8;;$($_.Url)`e\$($_.Name)`e]8;;`e\"</PropertyName>
+                                <PropertyName>
+                                    if ($Host.UI.SupportsVirtualTerminal) {
+                                    "`e]8;;$($_.Url)`e\$($_.Name)`e]8;;`e\"
+                                    } else {
+                                    $_.Name
+                                    }
+                                </PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Owner</PropertyName>

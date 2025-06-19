@@ -34,7 +34,13 @@
                                 <PropertyName>ID</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>"`e]8;;$($_.Url)`e\$($_.Name)`e]8;;`e\"</PropertyName>
+                                <PropertyName>
+                                    if ($Host.UI.SupportsVirtualTerminal) {
+                                    "`e]8;;$($_.Url)`e\$($_.Name)`e]8;;`e\"
+                                    } else {
+                                    $_.Name
+                                    }
+                                </PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <ScriptBlock>'{0:F2}' -f ([math]::Round($_.Size / 1KB, 2))</ScriptBlock>
