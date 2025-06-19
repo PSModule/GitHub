@@ -101,11 +101,9 @@
                 $eof_marker = $Matches[2]
                 Write-Debug " - Multi-line pattern' - [$key] - [$eof_marker] - Start"
                 $i++
-                $value_lines = @()
-
-                # Read lines until the EOF marker
+                $value_lines = @()                # Read lines until the EOF marker
                 while ($i -lt $lines.Count -and $lines[$i] -ne $eof_marker) {
-                    $valueItem = $lines[$i].Trim()
+                    $valueItem = $lines[$i]
                     Write-Debug " [$key] <- [$valueItem]"
                     $value_lines += $valueItem
                     $i++
@@ -117,19 +115,31 @@
                     $i++
                 }
 
-                $value = $value_lines -join [System.Environment]::NewLine
-
-                # Check for empty value
-                if ([string]::IsNullOrWhiteSpace($value) -or [string]::IsNullOrEmpty($value) -or $value.Length -eq 0) {
-                    Write-Debug " - key<<EOF pattern - [$key] - Empty value"
-                    $result[$key] = ''
+                # Handle special cases:
+                # 1. No lines between delimiters = null value
+                # 2. One empty line between delimiters = empty string
+                if ($value_lines.Count -eq 0) {
+                    Write-Debug " - key<<EOF pattern - [$key] - Null value"
+                    $result[$key] = $null
+                    continue
+                }
+                elseif ($value_lines.Count -eq 1 -and [string]::IsNullOrEmpty($value_lines[0])) {
+                    Write-Debug " - key<<EOF pattern - [$key] - Empty string"
+                    $result[$key] = ""
                     continue
                 }
 
-                # Attempt to parse JSON
+                $value = $value_lines -join [System.Environment]::NewLine                # Attempt to parse JSON
                 if (Test-Json $value -ErrorAction SilentlyContinue) {
                     Write-Debug " - key<<EOF pattern - [$key] - value is JSON"
-                    $value = ConvertFrom-Json $value -AsHashtable:$AsHashtable
+                    # Handle special JSON serialized values for null and empty string
+                    if ($value -eq 'null') {
+                        $value = $null
+                    } elseif ($value -eq '""') {
+                        $value = ''
+                    } else {
+                        $value = ConvertFrom-Json $value -AsHashtable:$AsHashtable
+                    }
                 }
 
                 $result[$key] = $value

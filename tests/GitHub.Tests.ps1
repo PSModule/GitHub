@@ -304,13 +304,54 @@ string
             } | Should -Not -Throw
             (Get-GitHubOutput).Config | Should -BeLike ''
         }
+        It 'Set-GitHubOutput + Empty string - Should not throw' {
+            {
+                Set-GitHubOutput -Name 'EmptyOutput' -Value ''
+            } | Should -Not -Throw
+            (Get-GitHubOutput).EmptyOutput | Should -Be ''
+        }
+        It 'Set-GitHubOutput + Null - Should not throw and store as null' {
+            {
+                Set-GitHubOutput -Name 'NullOutput' -Value $null
+            } | Should -Not -Throw
+            $nullValue = (Get-GitHubOutput).NullOutput
+            $nullValue | Should -Be $null
+
+            # Check the actual file content format
+            $content = Get-Content -Path $env:GITHUB_OUTPUT -Raw
+            $content | Should -Match 'NullOutput<<EOF_[a-z0-9-]+\r?\nEOF_[a-z0-9-]+'
+        }
+
+        It 'Set-GitHubOutput + Empty String - Should store as empty string' {
+            {
+                Set-GitHubOutput -Name 'EmptyStringOutput' -Value ''
+            } | Should -Not -Throw
+            (Get-GitHubOutput).EmptyStringOutput | Should -Be ''
+
+            # Check the actual file content format
+            $content = Get-Content -Path $env:GITHUB_OUTPUT -Raw
+            $content | Should -Match 'EmptyStringOutput<<EOF_[a-z0-9-]+\r?\n\r?\nEOF_[a-z0-9-]+'
+        }
+
+        It 'Set-GitHubOutput - Should work with existing multi-line outputs in file' {
+            $existingContent = @'
+stderr<<ghadelimiter_6f9f5610-74ad-4b25-8ef3-7f3e9e764fa2
+ghadelimiter_6f9f5610-74ad-4b25-8ef3-7f3e9e764fa2
+'@
+            Add-Content -Path $env:GITHUB_OUTPUT -Value $existingContent
+            {
+                Set-GitHubOutput -Name 'TestAfterExisting' -Value 'TestValue'
+            } | Should -Not -Throw
+            (Get-GitHubOutput).TestAfterExisting | Should -Be 'TestValue'
+            $stderr = (Get-GitHubOutput).stderr
+            $stderr | Should -Be $null
+        }
         It 'Get-GitHubOutput - Should not throw' {
             {
                 Get-GitHubOutput
             } | Should -Not -Throw
             Write-Host (Get-GitHubOutput | Format-List | Out-String)
-        }
-        
+        }       
         It 'Reset-GitHubOutput - Should clear the outputs from the output file' {
             Set-GitHubOutput -Name 'TestOutput' -Value 'TestValue'
             (Get-GitHubOutput).TestOutput | Should -Be 'TestValue'
