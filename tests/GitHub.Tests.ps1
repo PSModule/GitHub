@@ -351,7 +351,7 @@ ghadelimiter_6f9f5610-74ad-4b25-8ef3-7f3e9e764fa2
                 Get-GitHubOutput
             } | Should -Not -Throw
             Write-Host (Get-GitHubOutput | Format-List | Out-String)
-        }       
+        }
         It 'Reset-GitHubOutput - Should clear the outputs from the output file' {
             Set-GitHubOutput -Name 'TestOutput' -Value 'TestValue'
             (Get-GitHubOutput).TestOutput | Should -Be 'TestValue'

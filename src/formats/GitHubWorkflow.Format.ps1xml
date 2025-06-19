@@ -44,7 +44,7 @@
                                 </ScriptBlock>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>Name</PropertyName>
+                                <ScriptBlock>"`e]8;;$($_.Url)`e\$($_.Name)`e]8;;`e\"</ScriptBlock>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>ID</PropertyName>
