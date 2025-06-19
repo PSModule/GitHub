@@ -14,7 +14,7 @@
         .LINK
         https://psmodule.io/GitHub/Functions/Commands/Reset-GitHubOutput
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         # The path to the GitHub output file.
         [Parameter()]
@@ -36,7 +36,9 @@
             throw "File not found: $Path"
         }
 
-        '' | Set-Content -Path $Path -Force
+        if ($PSCmdlet.ShouldProcess('GitHub Output' , 'Reset')) {
+            '' | Set-Content -Path $Path -Force
+        }
     }
 
     end {
