@@ -17,24 +17,18 @@
                     <TableColumnHeader>
                         <Label>Owner</Label>
                     </TableColumnHeader>
-                    <TableColumnHeader>
-                        <Label>Url</Label>
-                    </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
                     <TableRowEntry>
                         <TableColumnItems>
                             <TableColumnItem>
-                                <PropertyName>Name</PropertyName>
+                                <PropertyName>"`e]8;;$($_.Url)`e\$($_.Name)`e]8;;`e\"</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Repository</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Owner</PropertyName>
-                            </TableColumnItem>
-                            <TableColumnItem>
-                                <PropertyName>Url</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>

@@ -23,15 +23,12 @@
                     <TableColumnHeader>
                         <Label>Plan</Label>
                     </TableColumnHeader>
-                    <TableColumnHeader>
-                        <Label>Url</Label>
-                    </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
                     <TableRowEntry>
                         <TableColumnItems>
                             <TableColumnItem>
-                                <PropertyName>Name</PropertyName>
+                                <PropertyName>"`e]8;;$($_.Url)`e\$($_.Name)`e]8;;`e\"</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>ID</PropertyName>
@@ -44,9 +41,6 @@
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Plan</PropertyName>
-                            </TableColumnItem>
-                            <TableColumnItem>
-                                <PropertyName>Url</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
