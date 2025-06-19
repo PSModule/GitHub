@@ -319,7 +319,7 @@ string
 
             # Check the actual file content format
             $content = Get-Content -Path $env:GITHUB_OUTPUT -Raw
-            $content | Should -Match "NullOutput<<EOF_[a-z0-9-]+\r?\nEOF_[a-z0-9-]+"
+            $content | Should -Match 'NullOutput<<EOF_[a-z0-9-]+\r?\nEOF_[a-z0-9-]+'
         }
 
         It 'Set-GitHubOutput + Empty String - Should store as empty string' {
@@ -330,7 +330,7 @@ string
 
             # Check the actual file content format
             $content = Get-Content -Path $env:GITHUB_OUTPUT -Raw
-            $content | Should -Match "EmptyStringOutput<<EOF_[a-z0-9-]+\r?\n\r?\nEOF_[a-z0-9-]+"
+            $content | Should -Match 'EmptyStringOutput<<EOF_[a-z0-9-]+\r?\n\r?\nEOF_[a-z0-9-]+'
         }
 
         It 'Set-GitHubOutput - Should work with existing multi-line outputs in file' {
@@ -345,7 +345,8 @@ ghadelimiter_6f9f5610-74ad-4b25-8ef3-7f3e9e764fa2
             (Get-GitHubOutput).TestAfterExisting | Should -Be 'TestValue'
             $stderr = (Get-GitHubOutput).stderr
             $stderr | Should -Be $null
-        }        It 'Get-GitHubOutput - Should not throw' {
+        }
+        It 'Get-GitHubOutput - Should not throw' {
             {
                 Get-GitHubOutput
             } | Should -Not -Throw
@@ -367,36 +368,36 @@ EOF_12a089b9-051e-4c4e-91c9-8e24fc2fbbf6
             $result = ConvertFrom-GitHubOutput -OutputContent $content
 
             $result.nullValue | Should -Be $null
-            $result.emptyValue | Should -Be ""
+            $result.emptyValue | Should -Be ''
             $result.emptyValue | Should -Not -Be $null
-            $result.normalValue | Should -Be "This is a normal value"
+            $result.normalValue | Should -Be 'This is a normal value'
 
             # Test with hashtable output
             $hashResult = ConvertFrom-GitHubOutput -OutputContent $content -AsHashtable
-            $hashResult["nullValue"] | Should -Be $null
-            $hashResult["emptyValue"] | Should -Be ""
-            $hashResult["normalValue"] | Should -Be "This is a normal value"
+            $hashResult['nullValue'] | Should -Be $null
+            $hashResult['emptyValue'] | Should -Be ''
+            $hashResult['normalValue'] | Should -Be 'This is a normal value'
         }
 
         It 'ConvertTo-GitHubOutput - Should format null and empty string values correctly' {
             $testObject = [PSCustomObject]@{
-                NullValue = $null
-                EmptyValue = ""
-                NormalValue = "Regular content"
+                NullValue   = $null
+                EmptyValue  = ''
+                NormalValue = 'Regular content'
             }
 
             $output = $testObject | ConvertTo-GitHubOutput
 
             # Check format for null value (no newline between delimiters)
-            $nullPattern = "NullValue<<EOF_.*\r?\nEOF_.*"
+            $nullPattern = 'NullValue<<EOF_.*\r?\nEOF_.*'
             $output -join "`n" | Should -Match $nullPattern
 
             # Check format for empty string (newline between delimiters)
-            $emptyPattern = "EmptyValue<<EOF_.*\r?\n\r?\nEOF_.*"
+            $emptyPattern = 'EmptyValue<<EOF_.*\r?\n\r?\nEOF_.*'
             $output -join "`n" | Should -Match $emptyPattern
 
             # Check normal value
-            $normalPattern = "NormalValue<<EOF_.*\r?\nRegular content\r?\nEOF_.*"
+            $normalPattern = 'NormalValue<<EOF_.*\r?\nRegular content\r?\nEOF_.*'
             $output -join "`n" | Should -Match $normalPattern
         }
         It 'Set-GitHubEnvironmentVariable - Should not throw' {
