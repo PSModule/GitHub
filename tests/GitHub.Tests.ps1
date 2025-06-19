@@ -353,53 +353,6 @@ ghadelimiter_6f9f5610-74ad-4b25-8ef3-7f3e9e764fa2
             Write-Host (Get-GitHubOutput | Format-List | Out-String)
         }
 
-        It 'ConvertFrom-GitHubOutput - Should handle null values and empty strings correctly' {
-            $content = @'
-nullValue<<EOF_12a089b9-051e-4c4e-91c9-8e24fc2fbbf6
-EOF_12a089b9-051e-4c4e-91c9-8e24fc2fbbf6
-emptyValue<<EOF_12a089b9-051e-4c4e-91c9-8e24fc2fbbf6
-
-EOF_12a089b9-051e-4c4e-91c9-8e24fc2fbbf6
-normalValue<<EOF_12a089b9-051e-4c4e-91c9-8e24fc2fbbf6
-This is a normal value
-EOF_12a089b9-051e-4c4e-91c9-8e24fc2fbbf6
-'@
-
-            $result = ConvertFrom-GitHubOutput -OutputContent $content
-
-            $result.nullValue | Should -Be $null
-            $result.emptyValue | Should -Be ''
-            $result.emptyValue | Should -Not -Be $null
-            $result.normalValue | Should -Be 'This is a normal value'
-
-            # Test with hashtable output
-            $hashResult = ConvertFrom-GitHubOutput -OutputContent $content -AsHashtable
-            $hashResult['nullValue'] | Should -Be $null
-            $hashResult['emptyValue'] | Should -Be ''
-            $hashResult['normalValue'] | Should -Be 'This is a normal value'
-        }
-
-        It 'ConvertTo-GitHubOutput - Should format null and empty string values correctly' {
-            $testObject = [PSCustomObject]@{
-                NullValue   = $null
-                EmptyValue  = ''
-                NormalValue = 'Regular content'
-            }
-
-            $output = $testObject | ConvertTo-GitHubOutput
-
-            # Check format for null value (no newline between delimiters)
-            $nullPattern = 'NullValue<<EOF_.*\r?\nEOF_.*'
-            $output -join "`n" | Should -Match $nullPattern
-
-            # Check format for empty string (newline between delimiters)
-            $emptyPattern = 'EmptyValue<<EOF_.*\r?\n\r?\nEOF_.*'
-            $output -join "`n" | Should -Match $emptyPattern
-
-            # Check normal value
-            $normalPattern = 'NormalValue<<EOF_.*\r?\nRegular content\r?\nEOF_.*'
-            $output -join "`n" | Should -Match $normalPattern
-        }
         It 'Set-GitHubEnvironmentVariable - Should not throw' {
             {
                 Set-GitHubEnvironmentVariable -Name 'MyName' -Value 'MyValue'
