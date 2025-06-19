@@ -58,12 +58,11 @@
             Write-Warning 'Cannot create output as the step has no ID.'
         }
 
-        switch -Regex ($value.GetType().Name) {
-            'SecureString' {
-                $Value = $Value | ConvertFrom-SecureString -AsPlainText
-                Add-GitHubMask -Value $Value
-            }
-            default {}
+        if ($null -eq $value) {
+            Write-Debug "Property value type: null"
+        } elseif ($value.GetType().Name -eq 'SecureString') {
+            $Value = $Value | ConvertFrom-SecureString -AsPlainText
+            Add-GitHubMask -Value $Value
         }
 
         Write-Verbose "Output: [$Name] = [$Value]"
