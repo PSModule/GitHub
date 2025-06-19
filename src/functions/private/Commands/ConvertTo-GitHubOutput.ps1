@@ -66,7 +66,7 @@
             $value = $property.Value
 
             Write-Debug "Processing property: $key"
-            Write-Debug "Property value type: $($value.GetType().Name)"
+            Write-Debug "Property value type: $($null -eq $value ? 'null' : $value.GetType().Name)"
             Write-Debug 'Property value:'
             Write-Debug ($InputObject | Out-String)
 
