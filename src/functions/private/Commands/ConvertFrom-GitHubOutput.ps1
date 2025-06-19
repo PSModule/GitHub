@@ -84,7 +84,7 @@
 
                 # Attempt to parse JSON
                 if (Test-Json $value -ErrorAction SilentlyContinue) {
-                    Write-Debug " - Single-line pattern - value is JSON"
+                    Write-Debug ' - Single-line pattern - value is JSON'
                     $value = ConvertFrom-Json $value -AsHashtable:$AsHashtable
                 }
 
@@ -122,10 +122,9 @@
                     Write-Debug " - key<<EOF pattern - [$key] - Null value"
                     $result[$key] = $null
                     continue
-                }
-                elseif ($value_lines.Count -eq 1 -and [string]::IsNullOrEmpty($value_lines[0])) {
+                } elseif ($value_lines.Count -eq 1 -and [string]::IsNullOrEmpty($value_lines[0])) {
                     Write-Debug " - key<<EOF pattern - [$key] - Empty string"
-                    $result[$key] = ""
+                    $result[$key] = ''
                     continue
                 }
 
