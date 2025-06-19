@@ -22,13 +22,7 @@
                     <TableRowEntry>
                         <TableColumnItems>
                             <TableColumnItem>
-                                <PropertyName>
-                                    if ($Host.UI.SupportsVirtualTerminal) {
-                                    "`e]8;;$($_.Url)`e\$($_.Name)`e]8;;`e\"
-                                    } else {
-                                    $_.Name
-                                    }
-                                </PropertyName>
+                                <ScriptBlock>"`e]8;;$($_.Url)`e\$($_.Name)`e]8;;`e\"</ScriptBlock>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Repository</PropertyName>

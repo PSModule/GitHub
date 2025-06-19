@@ -31,13 +31,7 @@
                     <TableRowEntry>
                         <TableColumnItems>
                             <TableColumnItem>
-                                <PropertyName>
-                                    if ($Host.UI.SupportsVirtualTerminal) {
-                                    "`e]8;;$($_.Url)`e\$($_.Tag)`e]8;;`e\"
-                                    } else {
-                                    $_.Tag
-                                    }
-                                </PropertyName>
+                                <ScriptBlock>"`e]8;;$($_.Url)`e\$($_.Tag)`e]8;;`e\"</ScriptBlock>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Owner</PropertyName>
