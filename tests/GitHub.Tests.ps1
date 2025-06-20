@@ -33,6 +33,9 @@ Describe 'Auth' {
             LogGroup 'Context' {
                 Write-Host ($context | Format-List | Out-String)
             }
+            LogGroup 'Context' {
+                Write-Host ($context | Select-Object * | Out-String)
+            }
             $context | Should -Not -BeNullOrEmpty
         }
 
