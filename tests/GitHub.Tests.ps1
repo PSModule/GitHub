@@ -71,8 +71,9 @@ Describe 'Auth' {
         }
 
         It 'Connect-GitHubAccount - Connects using the provided credentials + AutoloadInstallations' -Skip:($AuthType -ne 'APP') {
+            $context = Connect-GitHubAccount @connectParams -PassThru -Silent -AutoloadInstallations
             LogGroup 'Connect-Github' {
-                $context = Connect-GitHubAccount @connectParams -PassThru -Silent -AutoloadInstallations
+                Write-Host ($context | Out-String)
             }
             LogGroup 'Context' {
                 Write-Host ($context | Format-List | Out-String)
@@ -81,27 +82,29 @@ Describe 'Auth' {
         }
 
         It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' -Skip:($AuthType -ne 'APP') {
+            $contexts = Connect-GitHubApp -PassThru -Silent
             LogGroup 'Connect-GithubApp' {
-                $contexts = Connect-GitHubApp -PassThru -Silent
+                Write-Host ($contexts | Out-String)
             }
             LogGroup 'Context - Standard' {
-                Write-Host ($context | Out-String)
+                Write-Host ($contexts | Out-String)
             }
             LogGroup 'Context - Format-List' {
-                Write-Host ($context | Format-List | Out-String)
+                Write-Host ($contexts | Format-List | Out-String)
             }
             LogGroup 'Context - Format-Table' {
-                Write-Host ($context | Format-Table | Out-String)
+                Write-Host ($contexts | Format-Table | Out-String)
             }
             LogGroup 'Context - Full' {
-                Write-Host ($context | Select-Object * | Out-String)
+                Write-Host ($contexts | Select-Object * | Out-String)
             }
             $contexts | Should -Not -BeNullOrEmpty
         }
 
         It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' -Skip:($AuthType -ne 'APP') {
+            $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
             LogGroup 'Connect-GithubApp' {
-                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
+                $context
             }
             LogGroup 'Context' {
                 Write-Host ($context | Format-List | Out-String)
@@ -127,7 +130,7 @@ Describe 'Auth' {
         It 'Get-GitHubContext - Gets the default context' {
             $context = Get-GitHubContext
             LogGroup 'Default context' {
-                Write-Host ($viewer | Format-List | Out-String)
+                Write-Host ($context | Format-List | Out-String)
             }
         }
 

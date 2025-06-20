@@ -94,10 +94,19 @@
                                 <PropertyName>ApiBaseUri</PropertyName>
                             </ListItem>
                             <ListItem>
+                                <PropertyName>Enterprise</PropertyName>
+                            </ListItem>
+                            <ListItem>
                                 <PropertyName>Owner</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>Repository</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>HttpVersion</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>PerPage</PropertyName>
                             </ListItem>
                         </ListItems>
                     </ListEntry>
