@@ -38,9 +38,9 @@
         .LINK
         https://psmodule.io/GitHub/Functions/Get-GitHubAccessToken/
     #>
-    [OutputType([System.String], ParameterSetName = 'Get access token as plain text')]
     [OutputType([System.Security.SecureString], ParameterSetName = 'Get access token as SecureString')]
-    [CmdletBinding()]
+    [OutputType([System.String], ParameterSetName = 'Get access token as plain text')]
+    [CmdletBinding(DefaultParameterSetName = 'Get access token as SecureString')]
     param(
         # If specified, the token will be returned as plain text.
         [Parameter(Mandatory, ParameterSetName = 'Get access token as plain text')]
