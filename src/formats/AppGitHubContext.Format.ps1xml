@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Configuration>
     <ViewDefinitions>
-        <!-- AppGitHubContext Table View -->
         <View>
-            <n>AppGitHubContextTableView</n>
+            <Name>AppGitHubContextTableView</Name>
             <ViewSelectedBy>
                 <TypeName>AppGitHubContext</TypeName>
             </ViewSelectedBy>
@@ -43,9 +42,8 @@
             </TableControl>
         </View>
 
-        <!-- AppGitHubContext List View -->
         <View>
-            <n>AppGitHubContextListView</n>
+            <Name>AppGitHubContextListView</Name>
             <ViewSelectedBy>
                 <TypeName>AppGitHubContext</TypeName>
             </ViewSelectedBy>

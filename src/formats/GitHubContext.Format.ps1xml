@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Configuration>
     <ViewDefinitions>
-        <!-- Base GitHubContext Table View -->
         <View>
-            <n>GitHubContextTableView</n>
+            <Name>GitHubContextTableView</Name>
             <ViewSelectedBy>
                 <TypeName>GitHubContext</TypeName>
             </ViewSelectedBy>
@@ -13,13 +12,13 @@
                         <Label>Name</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>Type</Label>
-                    </TableColumnHeader>
-                    <TableColumnHeader>
                         <Label>AuthType</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
                         <Label>TokenType</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>TokenExpirationDate</Label>
                     </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
@@ -29,23 +28,21 @@
                                 <PropertyName>Name</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>Type</PropertyName>
-                            </TableColumnItem>
-                            <TableColumnItem>
                                 <PropertyName>AuthType</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>TokenType</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>TokenExpirationDate</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
                 </TableRowEntries>
             </TableControl>
         </View>
-
-        <!-- Base GitHubContext List View -->
         <View>
-            <n>GitHubContextListView</n>
+            <Name>GitHubContextListView</Name>
             <ViewSelectedBy>
                 <TypeName>GitHubContext</TypeName>
             </ViewSelectedBy>
@@ -57,7 +54,10 @@
                                 <PropertyName>Name</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>Type</PropertyName>
+                                <PropertyName>HostName</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>UserName</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>AuthType</PropertyName>
@@ -66,19 +66,40 @@
                                 <PropertyName>TokenType</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>HostName</PropertyName>
+                                <PropertyName>TokenExpirationDate</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>UserName</PropertyName>
+                                <PropertyName>Repo</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Scope</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>ApiBaseUri</PropertyName>
                             </ListItem>
                             <ListItem>
+                                <PropertyName>ApiVersion</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>AuthClientID</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>ClientID</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>DeviceFlowType</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>NodeID</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>ID</PropertyName>
+                            </ListItem>
+                            <ListItem>
                                 <PropertyName>Owner</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>Repository</PropertyName>
+                                <PropertyName>RefreshTokenExpirationDate</PropertyName>
                             </ListItem>
                         </ListItems>
                     </ListEntry>
