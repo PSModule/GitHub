@@ -165,13 +165,13 @@
             # If running on GitHub Actions and no access token is provided, use the GitHub token.
             if (($env:GITHUB_ACTIONS -eq 'true') -and $PSCmdlet.ParameterSetName -ne 'App') {
                 $customTokenProvided = -not [string]::IsNullOrEmpty($Token)
-                $gitHubToken = $env:GH_TOKEN ?? $env:GITHUB_TOKEN
-                $gitHubTokenPresent = -not [string]::IsNullOrEmpty($gitHubToken)
+                $gitHubTokenPresent = Test-GitHubToken
                 Write-Verbose "A token was provided:  [$customTokenProvided]"
                 Write-Verbose "Detected GitHub token: [$gitHubTokenPresent]"
-                if (-not $customTokenProvided -and $gitHubTokenPresent) {
+                $usingGitHubToken = $gitHubTokenPresent -and -not $customTokenProvided
+                if ($usingGitHubToken) {
                     $authType = 'Token'
-                    $Token = $gitHubToken
+                    $Token = Get-GitHubToken
                 }
             }
 
@@ -324,12 +324,5 @@
 
     end {
         Write-Debug "[$stackPath] - End"
-    }
-
-    clean {
-        Remove-Variable -Name tokenResponse -ErrorAction SilentlyContinue
-        Remove-Variable -Name context -ErrorAction SilentlyContinue
-        Remove-Variable -Name Token -ErrorAction SilentlyContinue
-        [System.GC]::Collect()
     }
 }

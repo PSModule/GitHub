@@ -153,6 +153,29 @@ Describe 'Auth' {
             $contexts = Get-GitHubContext
             $contexts | Should -BeNullOrEmpty
         }
+
+        It 'Get-GitHubAccessToken - Gets token as SecureString by default' {
+            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
+            $token = Get-GitHubAccessToken
+            $token | Should -BeOfType [System.Security.SecureString]
+        }
+
+        It 'Get-GitHubAccessToken - Gets token as plain text with -AsPlainText' {
+            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
+            $token = Get-GitHubAccessToken -AsPlainText
+            $token | Should -BeOfType [System.String]
+            $token | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Get-GitHubAccessToken - Works with explicit -Context parameter' {
+            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
+            $token = Get-GitHubAccessToken -Context $context -AsPlainText
+            $token | Should -BeOfType [System.String]
+            $token | Should -Not -BeNullOrEmpty
+
+            $secureToken = Get-GitHubAccessToken -Context $context
+            $secureToken | Should -BeOfType [System.Security.SecureString]
+        }
     }
 }
 
@@ -627,7 +650,7 @@ Describe 'API' {
                 {
                     $app = Invoke-GitHubAPI -ApiEndpoint '/app'
                     LogGroup 'App' {
-                        Write-Host ($app | Format-Table | Out-String)
+                        Write-Host ($app | Format-List | Out-String)
                     }
                 } | Should -Not -Throw
             }
@@ -650,14 +673,17 @@ Describe 'API' {
                 {
                     $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit'
                     LogGroup 'RateLimit' {
-                        Write-Host ($rateLimit | Format-Table | Out-String)
+                        Write-Host ($rateLimit | Format-List | Out-String)
+                    }
+                    LogGroup 'RateLimit - Header' {
+                        Write-Host ($rateLimit.Headers | Format-List | Out-String)
                     }
                 } | Should -Not -Throw
             }
 
-            It 'Invoke-GitHubAPI - Gets the rate limits directly using Uri' {
+            It 'Invoke-RestMethod - Gets the rate limits directly using Uri' {
                 {
-                    $rateLimit = Invoke-GitHubAPI -Uri ($context.ApiBaseUri + '/rate_limit')
+                    $rateLimit = Invoke-RestMethod -Uri ($context.ApiBaseUri + '/rate_limit') -Authentication Bearer -Token (Get-GitHubAccessToken)
                     LogGroup 'RateLimit' {
                         Write-Host ($rateLimit | Format-Table | Out-String)
                     }
