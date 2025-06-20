@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Configuration>
     <ViewDefinitions>
-        <!-- Base GitHubContext Table View -->
+        <!-- InstallationGitHubContext Table View -->
         <View>
-            <n>GitHubContextTableView</n>
+            <n>InstallationGitHubContextTableView</n>
             <ViewSelectedBy>
-                <TypeName>GitHubContext</TypeName>
+                <TypeName>InstallationGitHubContext</TypeName>
             </ViewSelectedBy>
             <TableControl>
                 <TableHeaders>
@@ -13,13 +13,13 @@
                         <Label>Name</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>Type</Label>
-                    </TableColumnHeader>
-                    <TableColumnHeader>
                         <Label>AuthType</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>TokenType</Label>
+                        <Label>InstallationID</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>TokenExpires</Label>
                     </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
@@ -29,13 +29,13 @@
                                 <PropertyName>Name</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>Type</PropertyName>
-                            </TableColumnItem>
-                            <TableColumnItem>
                                 <PropertyName>AuthType</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>TokenType</PropertyName>
+                                <PropertyName>InstallationID</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>TokenExpirationDate</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
@@ -43,11 +43,11 @@
             </TableControl>
         </View>
 
-        <!-- Base GitHubContext List View -->
+        <!-- InstallationGitHubContext List View -->
         <View>
-            <n>GitHubContextListView</n>
+            <n>InstallationGitHubContextListView</n>
             <ViewSelectedBy>
-                <TypeName>GitHubContext</TypeName>
+                <TypeName>InstallationGitHubContext</TypeName>
             </ViewSelectedBy>
             <ListControl>
                 <ListEntries>
@@ -70,6 +70,27 @@
                             </ListItem>
                             <ListItem>
                                 <PropertyName>UserName</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>ClientID</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>InstallationID</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>TokenExpirationDate</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>InstallationType</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>InstallationName</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Permissions</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Events</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>ApiBaseUri</PropertyName>

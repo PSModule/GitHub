@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Configuration>
     <ViewDefinitions>
-        <!-- Base GitHubContext Table View -->
+        <!-- AppGitHubContext Table View -->
         <View>
-            <n>GitHubContextTableView</n>
+            <n>AppGitHubContextTableView</n>
             <ViewSelectedBy>
-                <TypeName>GitHubContext</TypeName>
+                <TypeName>AppGitHubContext</TypeName>
             </ViewSelectedBy>
             <TableControl>
                 <TableHeaders>
@@ -13,13 +13,13 @@
                         <Label>Name</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>Type</Label>
-                    </TableColumnHeader>
-                    <TableColumnHeader>
                         <Label>AuthType</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>TokenType</Label>
+                        <Label>OwnerName</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>OwnerType</Label>
                     </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
@@ -29,13 +29,13 @@
                                 <PropertyName>Name</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>Type</PropertyName>
-                            </TableColumnItem>
-                            <TableColumnItem>
                                 <PropertyName>AuthType</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>TokenType</PropertyName>
+                                <PropertyName>OwnerName</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>OwnerType</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
@@ -43,11 +43,11 @@
             </TableControl>
         </View>
 
-        <!-- Base GitHubContext List View -->
+        <!-- AppGitHubContext List View -->
         <View>
-            <n>GitHubContextListView</n>
+            <n>AppGitHubContextListView</n>
             <ViewSelectedBy>
-                <TypeName>GitHubContext</TypeName>
+                <TypeName>AppGitHubContext</TypeName>
             </ViewSelectedBy>
             <ListControl>
                 <ListEntries>
@@ -70,6 +70,21 @@
                             </ListItem>
                             <ListItem>
                                 <PropertyName>UserName</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>ClientID</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>OwnerName</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>OwnerType</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Permissions</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Events</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>ApiBaseUri</PropertyName>
