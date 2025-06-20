@@ -30,10 +30,16 @@ Describe 'Auth' {
 
         It 'Connect-GitHubAccount - Connects using the provided credentials' {
             $context = Connect-GitHubAccount @connectParams -PassThru -Silent
-            LogGroup 'Context' {
+            LogGroup 'Context - Standard' {
+                Write-Host ($context | Out-String)
+            }
+            LogGroup 'Context - Format-List' {
                 Write-Host ($context | Format-List | Out-String)
             }
-            LogGroup 'Context' {
+            LogGroup 'Context - Format-Table' {
+                Write-Host ($context | Format-Table | Out-String)
+            }
+            LogGroup 'Context - Full' {
                 Write-Host ($context | Select-Object * | Out-String)
             }
             $context | Should -Not -BeNullOrEmpty
@@ -78,8 +84,17 @@ Describe 'Auth' {
             LogGroup 'Connect-GithubApp' {
                 $contexts = Connect-GitHubApp -PassThru -Silent
             }
-            LogGroup 'Contexts' {
-                Write-Host ($contexts | Format-List | Out-String)
+            LogGroup 'Context - Standard' {
+                Write-Host ($context | Out-String)
+            }
+            LogGroup 'Context - Format-List' {
+                Write-Host ($context | Format-List | Out-String)
+            }
+            LogGroup 'Context - Format-Table' {
+                Write-Host ($context | Format-Table | Out-String)
+            }
+            LogGroup 'Context - Full' {
+                Write-Host ($context | Select-Object * | Out-String)
             }
             $contexts | Should -Not -BeNullOrEmpty
         }

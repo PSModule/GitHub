@@ -2,9 +2,9 @@
 <Configuration>
     <ViewDefinitions>
         <View>
-            <Name>UserGitHubContextTableView</Name>
+            <Name>InstallationGitHubContextTableView</Name>
             <ViewSelectedBy>
-                <TypeName>UserGitHubContext</TypeName>
+                <TypeName>InstallationGitHubContext</TypeName>
             </ViewSelectedBy>
             <TableControl>
                 <TableHeaders>
@@ -15,10 +15,10 @@
                         <Label>AuthType</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>Scope</Label>
+                        <Label>TokenType</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>TokenExpires</Label>
+                        <Label>TokenExpirationDate</Label>
                     </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
@@ -31,7 +31,7 @@
                                 <PropertyName>AuthType</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>Scope</PropertyName>
+                                <PropertyName>TokenType</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>TokenExpirationDate</PropertyName>
@@ -43,9 +43,9 @@
         </View>
 
         <View>
-            <Name>UserGitHubContextListView</Name>
+            <Name>InstallationGitHubContextListView</Name>
             <ViewSelectedBy>
-                <TypeName>UserGitHubContext</TypeName>
+                <TypeName>InstallationGitHubContext</TypeName>
             </ViewSelectedBy>
             <ListControl>
                 <ListEntries>
@@ -70,19 +70,25 @@
                                 <PropertyName>UserName</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>AuthClientID</PropertyName>
+                                <PropertyName>ClientID</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>DeviceFlowType</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>Scope</PropertyName>
+                                <PropertyName>InstallationID</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>TokenExpirationDate</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>RefreshTokenExpirationDate</PropertyName>
+                                <PropertyName>InstallationType</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>InstallationName</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Permissions</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Events</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>ApiBaseUri</PropertyName>

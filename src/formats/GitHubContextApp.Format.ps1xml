@@ -15,10 +15,10 @@
                         <Label>AuthType</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>OwnerName</Label>
+                        <Label>TokenType</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>OwnerType</Label>
+                        <Label>TokenExpirationDate</Label>
                     </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
@@ -31,10 +31,10 @@
                                 <PropertyName>AuthType</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>OwnerName</PropertyName>
+                                <PropertyName>TokenType</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>OwnerType</PropertyName>
+                                <PropertyName>TokenExpirationDate</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
