@@ -51,28 +51,19 @@
                     <ListEntry>
                         <ListItems>
                             <ListItem>
+                                <PropertyName>ID</PropertyName>
+                            </ListItem>
+                            <ListItem>
                                 <PropertyName>Name</PropertyName>
                             </ListItem>
                             <ListItem>
+                                <PropertyName>DisplayName</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Type</PropertyName>
+                            </ListItem>
+                            <ListItem>
                                 <PropertyName>HostName</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>UserName</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>AuthType</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>TokenType</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>TokenExpirationDate</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>Repo</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>Scope</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>ApiBaseUri</PropertyName>
@@ -81,25 +72,34 @@
                                 <PropertyName>ApiVersion</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>AuthClientID</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>ClientID</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>DeviceFlowType</PropertyName>
+                                <PropertyName>AuthType</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>NodeID</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>ID</PropertyName>
+                                <PropertyName>DatabaseID</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>UserName</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>TokenType</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Enterprise</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>Owner</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>RefreshTokenExpirationDate</PropertyName>
+                                <PropertyName>Repository</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>HttpVersion</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>PerPage</PropertyName>
                             </ListItem>
                         </ListItems>
                     </ListEntry>

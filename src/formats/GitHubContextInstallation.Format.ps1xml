@@ -2,68 +2,99 @@
 <Configuration>
     <ViewDefinitions>
         <View>
-            <Name>GitHubReleaseTable</Name>
+            <Name>InstallationGitHubContextTableView</Name>
             <ViewSelectedBy>
-                <TypeName>GitHubRelease</TypeName>
+                <TypeName>InstallationGitHubContext</TypeName>
             </ViewSelectedBy>
             <TableControl>
                 <TableHeaders>
                     <TableColumnHeader>
-                        <Label>Tag</Label>
+                        <Label>Name</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>Owner</Label>
+                        <Label>AuthType</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>Repository</Label>
+                        <Label>TokenType</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>IsLatest</Label>
-                    </TableColumnHeader>
-                    <TableColumnHeader>
-                        <Label>IsPrerelease</Label>
-                    </TableColumnHeader>
-                    <TableColumnHeader>
-                        <Label>IsDraft</Label>
+                        <Label>TokenExpirationDate</Label>
                     </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
                     <TableRowEntry>
                         <TableColumnItems>
                             <TableColumnItem>
-                                <ScriptBlock>"`e]8;;$($_.Url)`e\$($_.Tag)`e]8;;`e\"</ScriptBlock>
+                                <PropertyName>Name</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>Owner</PropertyName>
+                                <PropertyName>AuthType</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>Repository</PropertyName>
+                                <PropertyName>TokenType</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>IsLatest</PropertyName>
-                            </TableColumnItem>
-                            <TableColumnItem>
-                                <PropertyName>IsPrerelease</PropertyName>
-                            </TableColumnItem>
-                            <TableColumnItem>
-                                <PropertyName>IsDraft</PropertyName>
+                                <PropertyName>TokenExpirationDate</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
                 </TableRowEntries>
             </TableControl>
         </View>
+
         <View>
-            <Name>GitHubReleaseList</Name>
+            <Name>InstallationGitHubContextListView</Name>
             <ViewSelectedBy>
-                <TypeName>GitHubRelease</TypeName>
+                <TypeName>InstallationGitHubContext</TypeName>
             </ViewSelectedBy>
             <ListControl>
                 <ListEntries>
                     <ListEntry>
                         <ListItems>
                             <ListItem>
-                                <PropertyName>Tag</PropertyName>
+                                <PropertyName>Name</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Type</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>AuthType</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>TokenType</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>HostName</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>UserName</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>ClientID</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>InstallationID</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>TokenExpirationDate</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>InstallationType</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>InstallationName</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Permissions</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Events</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>ApiBaseUri</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Enterprise</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>Owner</PropertyName>
@@ -72,37 +103,10 @@
                                 <PropertyName>Repository</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>Url</PropertyName>
+                                <PropertyName>HttpVersion</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>Author</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>Target</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>IsLatest</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>IsDraft</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>IsPrerelease</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>CreatedAt</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>PublishedAt</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>Assets</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>Name</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>Notes</PropertyName>
+                                <PropertyName>PerPage</PropertyName>
                             </ListItem>
                         </ListItems>
                     </ListEntry>

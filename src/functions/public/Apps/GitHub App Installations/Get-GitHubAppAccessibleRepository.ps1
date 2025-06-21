@@ -24,9 +24,6 @@
 
         .LINK
         https://psmodule.io/GitHub/Functions/Apps/GitHub%20App%20Installations/Get-GitHubAppAccessibleRepository
-
-        .NOTES
-
     #>
     [OutputType([GitHubRepository[]])]
     [CmdletBinding(SupportsShouldProcess)]
@@ -72,7 +69,16 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            [GitHubRepository]::($_.Response)
+            foreach ($repo in $_.Response) {
+                [GitHubRepository]@{
+                    ID       = $repo.id
+                    Name     = $repo.name
+                    Owner    = [GitHubOwner]@{
+                        Name = $Organization
+                    }
+                    FullName = $repo.full_name
+                }
+            }
         }
     }
 
