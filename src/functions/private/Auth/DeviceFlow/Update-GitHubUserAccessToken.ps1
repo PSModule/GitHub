@@ -50,17 +50,32 @@
         $minutes = $accessTokenValidity.Minutes.ToString().PadLeft(2, '0')
         $seconds = $accessTokenValidity.Seconds.ToString().PadLeft(2, '0')
         $accessTokenValidityText = "$hours`:$minutes`:$seconds"
+
+        # Determine color based on remaining hours
+        $tokenColor = if ($accessTokenValidity.TotalHours -gt 4) {
+            'Green'
+        } elseif ($accessTokenValidity.TotalHours -gt 1) {
+            'Yellow'
+        } elseif ($accessTokenValidity.TotalHours -gt 0) {
+            'DarkYellow'  # Orange equivalent in console colors
+        } else {
+            'Red'
+        }
         if ($accessTokenIsValid) {
             if ($accessTokenValidity.TotalHours -gt $script:GitHub.Config.AccessTokenGracePeriodInHours) {
                 if (-not $Silent) {
                     Write-Host '✓ ' -ForegroundColor Green -NoNewline
-                    Write-Host "Access token is still valid for $accessTokenValidityText ..."
+                    Write-Host 'Access token is still valid for ' -NoNewline
+                    Write-Host $accessTokenValidityText -ForegroundColor $tokenColor -NoNewline
+                    Write-Host ' ...'
                 }
                 return
             } else {
                 if (-not $Silent) {
                     Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
-                    Write-Host "Access token remaining validity $accessTokenValidityText. Refreshing access token..."
+                    Write-Host 'Access token remaining validity ' -NoNewline
+                    Write-Host $accessTokenValidityText -ForegroundColor $tokenColor -NoNewline
+                    Write-Host '. Refreshing access token...'
                 }
                 $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $authClientID -RefreshToken ($Context.RefreshToken) -HostName $Context.HostName
             }
