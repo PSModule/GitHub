@@ -20,6 +20,9 @@
                     <TableColumnHeader>
                         <Label>TokenExpirationDate</Label>
                     </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>TokenRemaining</Label>
+                    </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
                     <TableRowEntry>
@@ -35,6 +38,23 @@
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>TokenExpirationDate</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <ScriptBlock>
+                                    $text = $_.TokenRemainingTimeText
+                                    $color = $_.TokenValidityColor
+                                    if ($Host.UI.SupportsVirtualTerminal -and $text) {
+                                        $colorCode = switch ($color) {
+                                            'Green' { "`e[32m" }
+                                            'Yellow' { "`e[33m" }
+                                            'DarkYellow' { "`e[33m" }  # Orange
+                                            'Red' { "`e[31m" }
+                                            default { "`e[37m" }  # White/default
+                                        }
+                                        return "$colorCode$text`e[0m"
+                                    }
+                                    return $text
+                                </ScriptBlock>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
