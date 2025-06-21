@@ -154,6 +154,7 @@ Describe 'Auth' {
             $command.Parameters.Keys | Should -Contain 'ClientID'
             $command.Parameters.Keys | Should -Contain 'Token'
             $command.Parameters.Keys | Should -Contain 'InstallationToken'
+            $command.Parameters.Keys | Should -Contain 'Credentials'
             $command.Parameters.Keys | Should -Contain 'Context'
         }
 
