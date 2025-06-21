@@ -2,9 +2,9 @@
 <Configuration>
     <ViewDefinitions>
         <View>
-            <Name>GitHubContextTableView</Name>
+            <Name>UserGitHubContextTableView</Name>
             <ViewSelectedBy>
-                <TypeName>GitHubContext</TypeName>
+                <TypeName>UserGitHubContext</TypeName>
             </ViewSelectedBy>
             <TableControl>
                 <TableHeaders>
@@ -41,50 +41,51 @@
                 </TableRowEntries>
             </TableControl>
         </View>
+
         <View>
-            <Name>GitHubContextListView</Name>
+            <Name>UserGitHubContextListView</Name>
             <ViewSelectedBy>
-                <TypeName>GitHubContext</TypeName>
+                <TypeName>UserGitHubContext</TypeName>
             </ViewSelectedBy>
             <ListControl>
                 <ListEntries>
                     <ListEntry>
                         <ListItems>
                             <ListItem>
-                                <PropertyName>ID</PropertyName>
-                            </ListItem>
-                            <ListItem>
                                 <PropertyName>Name</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>DisplayName</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>Type</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>HostName</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>ApiBaseUri</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>ApiVersion</PropertyName>
-                            </ListItem>
-                            <ListItem>
                                 <PropertyName>AuthType</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>NodeID</PropertyName>
+                                <PropertyName>TokenType</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>DatabaseID</PropertyName>
+                                <PropertyName>HostName</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>UserName</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>TokenType</PropertyName>
+                                <PropertyName>AuthClientID</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>DeviceFlowType</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Scope</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>TokenExpirationDate</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>RefreshTokenExpirationDate</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>ApiBaseUri</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>Enterprise</PropertyName>

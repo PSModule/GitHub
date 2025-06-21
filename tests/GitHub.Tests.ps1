@@ -30,8 +30,17 @@ Describe 'Auth' {
 
         It 'Connect-GitHubAccount - Connects using the provided credentials' {
             $context = Connect-GitHubAccount @connectParams -PassThru -Silent
-            LogGroup 'Context' {
+            LogGroup 'Context - Standard' {
+                Write-Host ($context | Out-String)
+            }
+            LogGroup 'Context - Format-List' {
                 Write-Host ($context | Format-List | Out-String)
+            }
+            LogGroup 'Context - Format-Table' {
+                Write-Host ($context | Format-Table | Out-String)
+            }
+            LogGroup 'Context - Full' {
+                Write-Host ($context | Select-Object * | Out-String)
             }
             $context | Should -Not -BeNullOrEmpty
         }
@@ -62,8 +71,9 @@ Describe 'Auth' {
         }
 
         It 'Connect-GitHubAccount - Connects using the provided credentials + AutoloadInstallations' -Skip:($AuthType -ne 'APP') {
+            $context = Connect-GitHubAccount @connectParams -PassThru -Silent -AutoloadInstallations
             LogGroup 'Connect-Github' {
-                $context = Connect-GitHubAccount @connectParams -PassThru -Silent -AutoloadInstallations
+                Write-Host ($context | Out-String)
             }
             LogGroup 'Context' {
                 Write-Host ($context | Format-List | Out-String)
@@ -72,18 +82,29 @@ Describe 'Auth' {
         }
 
         It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' -Skip:($AuthType -ne 'APP') {
+            $contexts = Connect-GitHubApp -PassThru -Silent
             LogGroup 'Connect-GithubApp' {
-                $contexts = Connect-GitHubApp -PassThru -Silent
+                Write-Host ($contexts | Out-String)
             }
-            LogGroup 'Contexts' {
+            LogGroup 'Context - Standard' {
+                Write-Host ($contexts | Out-String)
+            }
+            LogGroup 'Context - Format-List' {
                 Write-Host ($contexts | Format-List | Out-String)
+            }
+            LogGroup 'Context - Format-Table' {
+                Write-Host ($contexts | Format-Table | Out-String)
+            }
+            LogGroup 'Context - Full' {
+                Write-Host ($contexts | Select-Object * | Out-String)
             }
             $contexts | Should -Not -BeNullOrEmpty
         }
 
         It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' -Skip:($AuthType -ne 'APP') {
+            $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
             LogGroup 'Connect-GithubApp' {
-                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
+                $context
             }
             LogGroup 'Context' {
                 Write-Host ($context | Format-List | Out-String)
@@ -109,7 +130,7 @@ Describe 'Auth' {
         It 'Get-GitHubContext - Gets the default context' {
             $context = Get-GitHubContext
             LogGroup 'Default context' {
-                Write-Host ($viewer | Format-List | Out-String)
+                Write-Host ($context | Format-List | Out-String)
             }
         }
 
@@ -131,6 +152,29 @@ Describe 'Auth' {
             { Get-GitHubContext } | Should -Not -Throw
             $contexts = Get-GitHubContext
             $contexts | Should -BeNullOrEmpty
+        }
+
+        It 'Get-GitHubAccessToken - Gets token as SecureString by default' {
+            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
+            $token = Get-GitHubAccessToken
+            $token | Should -BeOfType [System.Security.SecureString]
+        }
+
+        It 'Get-GitHubAccessToken - Gets token as plain text with -AsPlainText' {
+            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
+            $token = Get-GitHubAccessToken -AsPlainText
+            $token | Should -BeOfType [System.String]
+            $token | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Get-GitHubAccessToken - Works with explicit -Context parameter' {
+            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
+            $token = Get-GitHubAccessToken -Context $context -AsPlainText
+            $token | Should -BeOfType [System.String]
+            $token | Should -Not -BeNullOrEmpty
+
+            $secureToken = Get-GitHubAccessToken -Context $context
+            $secureToken | Should -BeOfType [System.Security.SecureString]
         }
     }
 }
@@ -606,7 +650,7 @@ Describe 'API' {
                 {
                     $app = Invoke-GitHubAPI -ApiEndpoint '/app'
                     LogGroup 'App' {
-                        Write-Host ($app | Format-Table | Out-String)
+                        Write-Host ($app | Format-List | Out-String)
                     }
                 } | Should -Not -Throw
             }
@@ -629,14 +673,17 @@ Describe 'API' {
                 {
                     $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit'
                     LogGroup 'RateLimit' {
-                        Write-Host ($rateLimit | Format-Table | Out-String)
+                        Write-Host ($rateLimit | Format-List | Out-String)
+                    }
+                    LogGroup 'RateLimit - Header' {
+                        Write-Host ($rateLimit.Headers | Format-List | Out-String)
                     }
                 } | Should -Not -Throw
             }
 
-            It 'Invoke-GitHubAPI - Gets the rate limits directly using Uri' {
+            It 'Invoke-RestMethod - Gets the rate limits directly using Uri' {
                 {
-                    $rateLimit = Invoke-GitHubAPI -Uri ($context.ApiBaseUri + '/rate_limit')
+                    $rateLimit = Invoke-RestMethod -Uri ($context.ApiBaseUri + '/rate_limit') -Authentication Bearer -Token (Get-GitHubAccessToken)
                     LogGroup 'RateLimit' {
                         Write-Host ($rateLimit | Format-Table | Out-String)
                     }

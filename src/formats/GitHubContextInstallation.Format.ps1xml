@@ -2,9 +2,9 @@
 <Configuration>
     <ViewDefinitions>
         <View>
-            <Name>GitHubContextTableView</Name>
+            <Name>InstallationGitHubContextTableView</Name>
             <ViewSelectedBy>
-                <TypeName>GitHubContext</TypeName>
+                <TypeName>InstallationGitHubContext</TypeName>
             </ViewSelectedBy>
             <TableControl>
                 <TableHeaders>
@@ -41,50 +41,57 @@
                 </TableRowEntries>
             </TableControl>
         </View>
+
         <View>
-            <Name>GitHubContextListView</Name>
+            <Name>InstallationGitHubContextListView</Name>
             <ViewSelectedBy>
-                <TypeName>GitHubContext</TypeName>
+                <TypeName>InstallationGitHubContext</TypeName>
             </ViewSelectedBy>
             <ListControl>
                 <ListEntries>
                     <ListEntry>
                         <ListItems>
                             <ListItem>
-                                <PropertyName>ID</PropertyName>
-                            </ListItem>
-                            <ListItem>
                                 <PropertyName>Name</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>DisplayName</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>Type</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>HostName</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>ApiBaseUri</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>ApiVersion</PropertyName>
-                            </ListItem>
-                            <ListItem>
                                 <PropertyName>AuthType</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>NodeID</PropertyName>
+                                <PropertyName>TokenType</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>DatabaseID</PropertyName>
+                                <PropertyName>HostName</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>UserName</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>TokenType</PropertyName>
+                                <PropertyName>ClientID</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>InstallationID</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>TokenExpirationDate</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>InstallationType</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>InstallationName</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Permissions</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Events</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>ApiBaseUri</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>Enterprise</PropertyName>
