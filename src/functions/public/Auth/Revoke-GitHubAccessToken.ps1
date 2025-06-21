@@ -1,4 +1,4 @@
-﻿function Revoke-GitHubToken {
+﻿function Revoke-GitHubAccessToken {
     <#
         .SYNOPSIS
         Revoke a GitHub access token
@@ -12,22 +12,22 @@
         For bulk revocation, you can provide an array of credentials to revoke multiple tokens at once.
 
         .EXAMPLE
-        Revoke-GitHubToken -ClientID 'your-client-id' -Token 'your-access-token'
+        Revoke-GitHubAccessToken -ClientID 'your-client-id' -Token 'your-access-token'
 
         Revokes an OAuth application access token.
 
         .EXAMPLE
-        Revoke-GitHubToken -InstallationToken
+        Revoke-GitHubAccessToken -InstallationToken
 
         Revokes the current installation access token.
 
         .EXAMPLE
-        Revoke-GitHubToken -Context $myContext
+        Revoke-GitHubAccessToken -Context $myContext
 
         Revokes the token from the specified context.
 
         .EXAMPLE
-        Revoke-GitHubToken -Credentials @('ghp_1234567890abcdef1234567890abcdef12345678', 'ghp_abcdef1234567890abcdef1234567890abcdef12')
+        Revoke-GitHubAccessToken -Credentials @('ghp_1234567890abcdef1234567890abcdef12345678', 'ghp_abcdef1234567890abcdef1234567890abcdef12')
 
         Revokes multiple credentials using the bulk revocation endpoint.
 
@@ -37,7 +37,7 @@
         [Revoke credentials](https://docs.github.com/rest/credentials/revoke)
 
         .LINK
-        https://psmodule.io/GitHub/Functions/Auth/Revoke-GitHubToken
+        https://psmodule.io/GitHub/Functions/Auth/Revoke-GitHubAccessToken
     #>
     [OutputType([void])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
@@ -91,32 +91,17 @@
         }
 
         if ($PSCmdlet.ParameterSetName -eq 'OAuth') {
-            $inputObject = @{
-                Method      = 'DELETE'
-                APIEndpoint = "/applications/$ClientID/token"
-                Body        = @{
-                    access_token = $Token
-                }
-                Context     = $Context
-            }
-            $targetDescription = "OAuth token for application [$ClientID]"
+            $apiCall = Remove-GitHubOAuthToken -ClientID $ClientID -Token $Token -Context $Context
+            $inputObject = $apiCall.InputObject
+            $targetDescription = $apiCall.TargetDescription
         } elseif ($InstallationToken) {
-            $inputObject = @{
-                Method      = 'DELETE'
-                APIEndpoint = '/installation/token'
-                Context     = $Context
-            }
-            $targetDescription = 'Installation access token'
+            $apiCall = Remove-GitHubInstallationToken -Context $Context
+            $inputObject = $apiCall.InputObject
+            $targetDescription = $apiCall.TargetDescription
         } elseif ($PSCmdlet.ParameterSetName -eq 'Credentials') {
-            $inputObject = @{
-                Method      = 'POST'
-                APIEndpoint = '/credentials/revoke'
-                Body        = @{
-                    credentials = $Credentials
-                }
-                Context     = $Context
-            }
-            $targetDescription = "$($Credentials.Count) credential(s)"
+            $apiCall = Remove-GitHubCredentials -Credentials $Credentials -Context $Context
+            $inputObject = $apiCall.InputObject
+            $targetDescription = $apiCall.TargetDescription
         }
 
         if ($PSCmdlet.ShouldProcess($targetDescription, 'REVOKE')) {
