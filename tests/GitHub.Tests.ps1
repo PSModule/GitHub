@@ -147,6 +147,16 @@ Describe 'Auth' {
             (Get-GitHubContext -ListAvailable).count | Should -Be 0
         }
 
+        It 'Revoke-GitHubToken - Should have proper function definition' -Skip:($TokenType -eq 'GITHUB_TOKEN') {
+            # Test that the function exists and has the right parameters
+            $command = Get-Command Revoke-GitHubToken -ErrorAction SilentlyContinue
+            $command | Should -Not -BeNullOrEmpty
+            $command.Parameters.Keys | Should -Contain 'ClientID'
+            $command.Parameters.Keys | Should -Contain 'Token'
+            $command.Parameters.Keys | Should -Contain 'InstallationToken'
+            $command.Parameters.Keys | Should -Contain 'Context'
+        }
+
         It 'Get-GitHubContext - Does not fail when there are 0 contexts' {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
             { Get-GitHubContext } | Should -Not -Throw
