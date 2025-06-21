@@ -85,33 +85,47 @@
     }
 
     process {
-
         $installations = Get-GitHubAppInstallation -Context $Context
         $selectedInstallations = @()
         Write-Verbose "Found [$($installations.Count)] installations."
+        $installations | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
         switch ($PSCmdlet.ParameterSetName) {
             'Filtered' {
-                $User | ForEach-Object {
-                    $userItem = $_
-                    Write-Verbose "User filter:         [$userItem]."
-                    $selectedInstallations += $installations | Where-Object {
+                foreach ($userItem in $User) {
+                    $userInstallations = $installations | Where-Object {
                         $_.Type -eq 'User' -and $_.Target.Name -like $userItem
                     }
+                    $selectedInstallations += $userInstallations
                 }
-                $Organization | ForEach-Object {
-                    $organizationItem = $_
-                    Write-Verbose "Organization filter: [$organizationItem]."
-                    $selectedInstallations += $installations | Where-Object {
+                foreach ($organizationItem in $Organization) {
+                    $organizationInstallations = $installations | Where-Object {
                         $_.Type -eq 'Organization' -and $_.Target.Name -like $organizationItem
                     }
+                    $selectedInstallations += $organizationInstallations
                 }
-                $Enterprise | ForEach-Object {
-                    $enterpriseItem = $_
-                    Write-Verbose "Enterprise filter:   [$enterpriseItem]."
-                    $selectedInstallations += $installations | Where-Object {
+                foreach ($enterpriseItem in $Enterprise) {
+                    $enterpriseInstallations = $installations | Where-Object {
                         $_.Type -eq 'Enterprise' -and $_.Target.Name -like $enterpriseItem
                     }
+                    $selectedInstallations += $enterpriseInstallations
                 }
+                $(
+                    [pscustomobject]@{
+                        Type   = 'User'
+                        Filter = $userItem
+                        Count  = $userInstallations.Count
+                    }
+                    [pscustomobject]@{
+                        Type   = 'Organization'
+                        Filter = $organizationItem
+                        Count  = $organizationInstallations.Count
+                    }
+                    [pscustomobject]@{
+                        Type   = 'Enterprise'
+                        Filter = $enterpriseItem
+                        Count  = $enterpriseInstallations.Count
+                    }
+                ) | Format-Table -AutoSize | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
             }
             default {
                 Write-Verbose 'No target specified. Connecting to all installations.'
@@ -120,8 +134,7 @@
         }
 
         Write-Verbose "Found [$($selectedInstallations.Count)] installations for the target."
-        $selectedInstallations | ForEach-Object {
-            $installation = $_
+        foreach ($installation in $selectedInstallations) {
             Write-Verbose "Processing installation [$($installation.Target.Name)] [$($installation.id)]"
             $token = New-GitHubAppInstallationAccessToken -Context $Context -InstallationID $installation.id
 
@@ -153,8 +166,8 @@
                     $contextParams['Owner'] = [string]$installation.Target.Name
                 }
                 'Enterprise' {
-                    $contextParams['InstallationName'] = [string]$installation.account.slug
-                    $contextParams['Enterprise'] = [string]$installation.account.slug
+                    $contextParams['InstallationName'] = [string]$installation.Target.Name
+                    $contextParams['Enterprise'] = [string]$installation.Target.Name
                 }
             }
             Write-Verbose 'Logging in using a managed installation access token...'

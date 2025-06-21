@@ -84,10 +84,10 @@
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             [pscustomobject]@{
-                Token               = $_.Response.token | ConvertTo-SecureString -AsPlainText -Force
-                ExpiresAt           = $_.Response.expires_at.ToLocalTime()
-                Permissions         = $_.Response.permissions
-                RepositorySelection = $_.Response.repository_selection
+                Token       = $_.Response.token | ConvertTo-SecureString -AsPlainText -Force
+                ExpiresAt   = $_.Response.expires_at.ToLocalTime()
+                Permissions = $_.Response.permissions
+                Selection   = $_.Response.repository_selection
             }
         }
     }

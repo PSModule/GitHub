@@ -7,7 +7,7 @@
         Update repository access for a GitHub App installation between all repositories and selected repositories.
 
         .EXAMPLE
-        Update-GitHubAppInstallationRepositoryAccess -Enterprise 'msx' -Organization 'PSModule' -InstallationID 12345678 -RepositorySelection 'all'
+        Update-GitHubAppInstallationRepositoryAccess -Enterprise 'msx' -Organization 'PSModule' -InstallationID 12345678
 
         Update the repository access for the GitHub App installation with the ID '12345678'
         to all repositories on the organization 'PSModule' in the enterprise 'msx'.
@@ -17,7 +17,6 @@
             Enterprise          = 'msx'
             Organization        = 'PSModule'
             InstallationID      = 12345678
-            RepositorySelection = 'selected'
             Repositories        = 'repo1', 'repo2'
         }
         Update-GitHubAppInstallationRepositoryAccess @params
@@ -28,6 +27,7 @@
         .LINK
         https://psmodule.io/GitHub/Functions/Apps/GitHub%20App%20Installations/Update-GitHubAppInstallationRepositoryAccess
     #>
+    
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The enterprise slug or ID.
@@ -52,13 +52,6 @@
         [Alias('installation_id', 'InstallationID')]
         [int] $ID,
 
-        # The repository selection for the GitHub App. Can be one of:
-        # - all - all repositories that the authenticated GitHub App installation can access.
-        # - selected - select specific repositories.
-        [Parameter(Mandatory)]
-        [ValidateSet('all', 'selected')]
-        [string] $RepositorySelection,
-
         # The names of the repositories to which the installation will be granted access.
         [Parameter()]
         [string[]] $Repositories = @(),
@@ -80,7 +73,7 @@
 
     process {
         $body = @{
-            repository_selection = $RepositorySelection
+            repository_selection = $Repositories.Count -gt 0 ? 'selected' : 'all'
             repositories         = $Repositories
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues

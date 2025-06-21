@@ -12,7 +12,7 @@
     [string] $Type
 
     # The type of repository selection.
-    [string] $RepositorySelection
+    [string] $Selection
 
     # The permissions that the app has on the target.
     [pscustomobject] $Permissions
@@ -51,7 +51,7 @@
         )
         $this.Target = [GitHubOwner]::new($Object.account)
         $this.Type = $Object.target_type
-        $this.RepositorySelection = $Object.repository_selection
+        $this.Selection = $Object.repository_selection
         $this.Permissions = $Object.permissions
         $this.Events = , ($Object.events)
         $this.FilePaths = $Object.single_file_paths

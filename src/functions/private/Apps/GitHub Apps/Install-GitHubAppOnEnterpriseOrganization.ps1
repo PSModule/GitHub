@@ -9,7 +9,9 @@
         The authenticated GitHub App must be installed on the enterprise and be granted the Enterprise/organization_installations (write) permission.
 
         .EXAMPLE
-        Install-GitHubAppOnEnterpriseOrganization -Enterprise 'msx' -Organization 'org' -ClientID '123456'
+        Install-GitHubAppOnEnterpriseOrganization -Enterprise 'msx' -Organization 'org' -ClientID '123456' -Selection All
+
+        Install the GitHub App on the organization 'org' in the enterprise 'msx' with the client ID '123456' and the selection 'All'.
     #>
     [CmdletBinding()]
     param(
@@ -30,7 +32,7 @@
         # - selected - select specific repositories.
         [Parameter(Mandatory)]
         [ValidateSet('all', 'selected')]
-        [string] $RepositorySelection,
+        [string] $Selection,
 
         # The names of the repositories to which the installation will be granted access.
         [Parameter()]
@@ -51,7 +53,7 @@
     process {
         $body = @{
             client_id            = $ClientID
-            repository_selection = $RepositorySelection
+            repository_selection = $Selection
             repositories         = $Repositories
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
