@@ -4,7 +4,8 @@
         Disconnects from GitHub and removes the GitHub context.
 
         .DESCRIPTION
-        Disconnects from GitHub and removes the GitHub context.
+        Disconnects from GitHub and removes the GitHub context. Optionally revokes the access token
+        to ensure it cannot be used after disconnection.
 
         .EXAMPLE
         Disconnect-GitHubAccount
@@ -15,6 +16,16 @@
         Disconnect-GithubAccount -Context 'github.com/Octocat'
 
         Disconnects from GitHub and removes the context 'github.com/Octocat'.
+
+        .EXAMPLE
+        Disconnect-GitHubAccount -RevokeToken
+
+        Disconnects from GitHub, revokes the access token, and removes the default GitHub context.
+
+        .EXAMPLE
+        Disconnect-GithubAccount -Context 'github.com/Octocat' -RevokeToken
+
+        Disconnects from GitHub, revokes the access token, and removes the context 'github.com/Octocat'.
 
         .LINK
         https://psmodule.io/GitHub/Functions/Auth/Disconnect-GitHubAccount
@@ -28,6 +39,10 @@
         [Parameter()]
         [Alias('Quiet')]
         [switch] $Silent,
+
+        # Revoke the access token when disconnecting.
+        [Parameter()]
+        [switch] $RevokeToken,
 
         # The context to run the command with.
         # Can be either a string or a GitHubContext object.
@@ -46,6 +61,38 @@
         }
         foreach ($contextItem in $Context) {
             $contextItem = Resolve-GitHubContext -Context $contextItem
+            if ($RevokeToken) {
+                try {
+                    if ($contextItem.Type -eq 'User' -and $contextItem.AuthType -eq 'UAT' -and $contextItem.AuthClientID) {
+                        # OAuth token revocation
+                        $apiCall = Remove-GitHubOAuthToken -ClientID $contextItem.AuthClientID -Token (Get-GitHubAccessToken -Context $contextItem -AsPlainText) -Context $contextItem
+                        if (-not $Silent) {
+                            Write-Host "Revoking OAuth token for [$($contextItem.Name)]..." -NoNewline
+                        }
+                        Invoke-GitHubAPI @($apiCall.InputObject)
+                        if (-not $Silent) {
+                            Write-Host " ✓" -ForegroundColor Green
+                        }
+                    } elseif ($contextItem.Type -eq 'Installation' -and $contextItem.AuthType -eq 'IAT') {
+                        # Installation token revocation
+                        $apiCall = Remove-GitHubInstallationToken -Context $contextItem
+                        if (-not $Silent) {
+                            Write-Host "Revoking installation token for [$($contextItem.Name)]..." -NoNewline
+                        }
+                        Invoke-GitHubAPI @($apiCall.InputObject)
+                        if (-not $Silent) {
+                            Write-Host " ✓" -ForegroundColor Green
+                        }
+                    } elseif (-not $Silent) {
+                        Write-Warning "Token revocation not supported for context type '$($contextItem.Type)' with auth type '$($contextItem.AuthType)'"
+                    }
+                } catch {
+                    if (-not $Silent) {
+                        Write-Warning "Failed to revoke token for [$($contextItem.Name)]: $($_.Exception.Message)"
+                    }
+                }
+            }
+
             Remove-GitHubContext -Context $contextItem
             $isDefaultContext = $contextItem.Name -eq $script:GitHub.Config.DefaultContext
             if ($isDefaultContext) {
