@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Types>
+    <Type>
+        <Name>InstallationGitHubContext</Name>
+        <Members>
+            <ScriptProperty>
+                <Name>TokenRemainingTime</Name>
+                <GetScriptBlock>
+                    if ($this.TokenExpirationDate) {
+                        $now = [datetime]::Now
+                        $expiration = $this.TokenExpirationDate
+                        return $expiration - $now
+                    }
+                    return $null
+                </GetScriptBlock>
+            </ScriptProperty>
+            <ScriptProperty>
+                <Name>TokenRemainingTimeText</Name>
+                <GetScriptBlock>
+                    if ($this.TokenRemainingTime) {
+                        $timeSpan = $this.TokenRemainingTime
+                        
+                        # Format timespan to the most appropriate unit
+                        if ($timeSpan.TotalDays -ge 1) {
+                            $days = [Math]::Floor($timeSpan.TotalDays)
+                            if ($days -eq 1) { return "1 day" }
+                            return "$days days"
+                        } elseif ($timeSpan.TotalHours -ge 1) {
+                            $hours = [Math]::Floor($timeSpan.TotalHours)
+                            if ($hours -eq 1) { return "1 hour" }
+                            return "$hours hours"
+                        } elseif ($timeSpan.TotalMinutes -ge 1) {
+                            $minutes = [Math]::Floor($timeSpan.TotalMinutes)
+                            if ($minutes -eq 1) { return "1 minute" }
+                            return "$minutes minutes"
+                        } elseif ($timeSpan.TotalSeconds -gt 0) {
+                            $seconds = [Math]::Floor($timeSpan.TotalSeconds)
+                            if ($seconds -eq 1) { return "1 second" }
+                            return "$seconds seconds"
+                        } else {
+                            return "expired"
+                        }
+                    }
+                    return $null
+                </GetScriptBlock>
+            </ScriptProperty>
+            <ScriptProperty>
+                <Name>TokenValidityColor</Name>
+                <GetScriptBlock>
+                    if ($this.TokenRemainingTime) {
+                        $timeSpan = $this.TokenRemainingTime
+                        
+                        if ($timeSpan.TotalHours -gt 4) {
+                            return 'Green'
+                        } elseif ($timeSpan.TotalHours -gt 1) {
+                            return 'Yellow'
+                        } elseif ($timeSpan.TotalHours -gt 0) {
+                            return 'DarkYellow'  # Orange equivalent
+                        } else {
+                            return 'Red'
+                        }
+                    }
+                    return 'Gray'
+                </GetScriptBlock>
+            </ScriptProperty>
+        </Members>
+    </Type>
+</Types>
