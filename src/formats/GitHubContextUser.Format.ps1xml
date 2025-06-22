@@ -42,8 +42,18 @@
                             <TableColumnItem>
                                 <ScriptBlock>
                                     $text = $_.TokenRemainingTimeText
-                                    $color = $_.TokenValidityColor
-                                    if ($Host.UI.SupportsVirtualTerminal -and $text) {
+                                    if ($Host.UI.SupportsVirtualTerminal -and $text -and $_.TokenRemainingTime) {
+                                        $timeSpan = $_.TokenRemainingTime
+                                        $color = if ($timeSpan.TotalHours -gt 4) {
+                                            'Green'
+                                        } elseif ($timeSpan.TotalHours -gt 1) {
+                                            'Yellow'
+                                        } elseif ($timeSpan.TotalHours -gt 0) {
+                                            'DarkYellow'  # Orange equivalent
+                                        } else {
+                                            'Red'
+                                        }
+                                        
                                         $colorCode = switch ($color) {
                                             'Green' { "`e[32m" }
                                             'Yellow' { "`e[33m" }
