@@ -146,12 +146,6 @@
                 if ($Default) {
                     Switch-GitHubContext -Context $contextObj['Name']
                 }
-                if ($script:GitHub.EnvironmentType -eq 'GHA') {
-                    if ($contextObj['AuthType'] -ne 'APP') {
-                        Set-GitHubGitConfig -Context $contextObj['Name']
-                        Connect-GitHubCli -Context $contextObj
-                    }
-                }
                 if ($PassThru) {
                     Get-GitHubContext -Context $($contextObj['Name'])
                 }

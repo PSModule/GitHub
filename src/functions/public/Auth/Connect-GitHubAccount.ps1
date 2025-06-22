@@ -305,6 +305,12 @@
                     Write-Host "Logged in as $name!"
                 }
             }
+            if ($script:GitHub.EnvironmentType -eq 'GHA') {
+                if ($contextObj['AuthType'] -ne 'APP') {
+                    Set-GitHubGitConfig -Context $contextObj['Name']
+                    Connect-GitHubCli -Context $contextObj
+                }
+            }
             if ($PassThru) {
                 Write-Debug "Passing context [$contextObj] to the pipeline."
                 $contextObj
