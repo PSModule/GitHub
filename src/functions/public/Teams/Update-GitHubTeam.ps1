@@ -14,13 +14,12 @@
             Description   = 'A new team'
             Visible       = $true
             Notifications = $true
-            Permission    = 'pull'
             ParentTeamID  = 123456
         }
         Update-GitHubTeam @params
 
         Updates the team with the slug 'team-name' in the `github` organization with the new name 'new team name', description 'A new team',
-        visibility set to 'closed', notifications enabled, permission set to 'pull', and the parent team ID set to 123456.
+        visibility set to 'closed', notifications enabled, and the parent team ID set to 123456.
 
         .NOTES
         [Update a team](https://docs.github.com/rest/teams/teams#update-a-team)
@@ -67,11 +66,6 @@
         [Parameter()]
         [bool] $Notifications,
 
-        # Closing down notice. The permission that new repositories will be added to the team with when none is specified.
-        [Parameter()]
-        [ValidateSet('pull', 'push')]
-        [string] $Permission,
-
         # The ID of a team to set as the parent team.
         [Parameter()]
         [int] $ParentTeamID,
@@ -97,7 +91,6 @@
             notification_setting = $PSBoundParameters.ContainsKey('Notifications') ? (
                 $Notifications ? 'notifications_enabled' : 'notifications_disabled'
             ) : $null
-            permission           = $Permission
             parent_team_id       = $ParentTeamID -eq 0 ? $null : $ParentTeamID
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues

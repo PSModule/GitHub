@@ -73,11 +73,6 @@
         [Parameter()]
         [bool] $Notifications = $true,
 
-        # Closing down notice. The permission that new repositories will be added to the team with when none is specified.
-        [Parameter()]
-        [ValidateSet('pull', 'push')]
-        [string] $Permission = 'pull',
-
         # The ID of a team to set as the parent team.
         [Parameter()]
         [System.Nullable[int]] $ParentTeamID,
@@ -107,7 +102,6 @@
             repo_names           = $RepoNames
             privacy              = $Visible ? 'closed' : 'secret'
             notification_setting = $Notifications ? 'notifications_enabled' : 'notifications_disabled'
-            permission           = $Permission
             parent_team_id       = $ParentTeamID
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
