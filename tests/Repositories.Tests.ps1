@@ -288,7 +288,8 @@ Describe 'Repositories' {
                 $permission = 'admin'
                 $repo = Get-GitHubRepository -Organization $owner -Name $repoName
                 LogGroup 'Set repository permission - Admin' {
-                    $r = Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-$permission"
+                    Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-$permission"
+                    $r = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission"
                     Write-Host ($r | Format-List | Out-String)
                 }
                 $repo.Permission | Should -Be $permission
@@ -297,7 +298,8 @@ Describe 'Repositories' {
                 $permission = 'maintain'
                 $repo = Get-GitHubRepository -Organization $owner -Name $repoName
                 LogGroup 'Set repository permission - Maintain' {
-                    $r = Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-$permission"
+                    Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-$permission"
+                    $r = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission"
                     Write-Host ($r | Format-List | Out-String)
                 }
                 $repo.Permission | Should -Be $permission
@@ -306,7 +308,8 @@ Describe 'Repositories' {
                 $permission = 'push'
                 $repo = Get-GitHubRepository -Organization $owner -Name $repoName
                 LogGroup 'Set repository permission - Push' {
-                    $r = Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-$permission"
+                    Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-$permission"
+                    $r = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission"
                     Write-Host ($r | Format-List | Out-String)
                 }
                 $repo.Permission | Should -Be $permission
@@ -315,7 +318,8 @@ Describe 'Repositories' {
                 $permission = 'write'
                 $repo = Get-GitHubRepository -Organization $owner -Name $repoName
                 LogGroup 'Set repository permission - Write' {
-                    $r = Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-$permission"
+                    Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-$permission"
+                    $r = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission"
                     Write-Host ($r | Format-List | Out-String)
                 }
                 $repo.Permission | Should -Be $permission
@@ -324,7 +328,8 @@ Describe 'Repositories' {
                 $permission = 'triage'
                 $repo = Get-GitHubRepository -Organization $owner -Name $repoName
                 LogGroup 'Set repository permission - Triage' {
-                    $r = Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-$permission"
+                    Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-$permission"
+                    $r = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission"
                     Write-Host ($r | Format-List | Out-String)
                 }
                 $repo.Permission | Should -Be $permission
@@ -333,7 +338,8 @@ Describe 'Repositories' {
                 $permission = 'pull'
                 $repo = Get-GitHubRepository -Organization $owner -Name $repoName
                 LogGroup 'Set repository permission - Pull' {
-                    $r = Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-$permission"
+                    Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-$permission"
+                    $r = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission"
                     Write-Host ($r | Format-List | Out-String)
                 }
                 $repo.Permission | Should -Be $permission
@@ -342,10 +348,20 @@ Describe 'Repositories' {
                 $permission = 'Read'
                 $repo = Get-GitHubRepository -Organization $owner -Name $repoName
                 LogGroup 'Set repository permission - Read' {
-                    $r = Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-$permission"
+                    Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-$permission"
+                    $r = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission"
                     Write-Host ($r | Format-List | Out-String)
                 }
                 $repo.Permission | Should -Be $permission
+            }
+            It 'Get-GitHubTeam - Gets a team with permissions to a repository' {
+                $permission = 'admin'
+                LogGroup 'Get repository team' {
+                    $team = Get-GitHubTeam -Organization $owner -Slug "$repoName-$permission"
+                    Write-Host ($team | Format-List | Out-String)
+                }
+                $team | Should -Not -BeNullOrEmpty
+                $team.Permission | Should -Be $permission
             }
         }
         It "Get-GitHubRepository - Gets the authenticated user's repositories" -Skip:($OwnerType -ne 'user') {
