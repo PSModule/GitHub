@@ -1,36 +1,29 @@
-﻿filter Get-GitHubRepositoryPermission {
+﻿filter Get-GitHubTeamListByRepo {
     <#
         .SYNOPSIS
-        Get the permission level for a team on a repository.
+        List team repositories.
 
         .DESCRIPTION
-        Retrieves the permission level assigned to a specific team for a given GitHub repository.
+        Lists a team's repositories visible to the authenticated user.
 
         .EXAMPLE
-        Get-GitHubRepositoryPermission -Owner 'octocat' -Name 'Hello-World' -Team 'core'
+        Get-GitHubTeamListByRepo -Owner 'octocat' -Name 'Hello-World'
 
         Output:
         ```powershell
-        Admin    : true
-        Maintain :
-        Push     :
-        Triage   :
-        Pull     :
+
         ```
 
-        Retrieves the permission of the 'core' team on the 'Hello-World' repository owned by 'octocat'.
+        Lists all teams that have access to the 'Hello-World' repository owned by 'octocat'.
 
         .INPUTS
         GitHubRepository
 
         .OUTPUTS
-        GitHubRepositoryPermission
-
-        .LINK
-        https://psmodule.io/GitHub/Functions/Get-GitHubRepositoryPermission/
+        GitHubTeam
 
         .NOTES
-        [Check team permissions for a repository](https://docs.github.com/rest/teams/teams#check-team-permissions-for-a-repository)
+        [List team repositories](https://docs.github.com/rest/teams/teams#list-team-repositories)
     #>
     [OutputType([GitHubRepositoryPermission])]
     [CmdletBinding(SupportsShouldProcess)]
@@ -66,7 +59,7 @@
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             foreach ($team in $_.Response) {
-                [GitHubRepositoryTeam]::new($team)
+                [GitHubTeam]::new($team)
             }
         }
     }

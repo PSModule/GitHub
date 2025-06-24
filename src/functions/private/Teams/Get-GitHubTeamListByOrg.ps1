@@ -31,76 +31,14 @@
 
     process {
         $inputObject = @{
-            Query     = @'
-query($org: String!, $after: String) {
-  organization(login: $org) {
-    teams(first: 100, after: $after) {
-      nodes {
-        id
-        name
-        slug
-        url
-        combinedSlug
-        databaseId
-        description
-        notificationSetting
-        privacy
-        parentTeam {
-          name
-          slug
+            Method      = 'GET'
+            APIEndpoint = "/orgs/$Organization/teams"
+            Context     = $Context
         }
-        childTeams(first: 100) {
-          nodes {
-            name
-          }
-        }
-        createdAt
-        updatedAt
-      }
-      pageInfo {
-        endCursor
-        hasNextPage
-      }
-    }
-  }
-}
-'@
-            Variables = @{
-                org = $Organization
-            }
-            Context   = $Context
-        }
-        $hasNextPage = $true
-        $after = $null
 
-        do {
-            # Update the cursor for pagination
-            $inputObject['Variables']['after'] = $after
-            $data = Invoke-GitHubGraphQLQuery @inputObject
-            $teams = $data.organization.teams
-            $teams.nodes | ForEach-Object {
-                [GitHubTeam](
-                    @{
-                        Name          = $_.name
-                        Slug          = $_.slug
-                        NodeID        = $_.id
-                        Url           = $_.url
-                        CombinedSlug  = $_.combinedSlug
-                        ID            = $_.databaseId
-                        Description   = $_.description
-                        Notifications = $_.notificationSetting -eq 'NOTIFICATIONS_ENABLED' ? $true : $false
-                        Visible       = $_.privacy -eq 'VISIBLE' ? $true : $false
-                        ParentTeam    = $_.parentTeam.slug
-                        Organization  = $Organization
-                        ChildTeams    = $_.childTeams.nodes.name
-                        CreatedAt     = $_.createdAt
-                        UpdatedAt     = $_.updatedAt
-                    }
-                )
-            }
-            $hasNextPage = $teams.pageInfo.hasNextPage
-            $after = $teams.pageInfo.endCursor
-        } while ($hasNextPage)
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Write-Output $_.Response
+        }
     }
 
     end {

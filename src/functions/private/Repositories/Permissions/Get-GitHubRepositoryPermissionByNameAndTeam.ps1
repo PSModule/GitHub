@@ -11,11 +11,7 @@
 
         Output:
         ```powershell
-        Admin    : true
-        Maintain :
-        Push     :
-        Triage   :
-        Pull     :
+        
         ```
 
         Retrieves the permission of the 'core' team on the 'Hello-World' repository owned by 'octocat'.
@@ -67,6 +63,7 @@
         $inputObject = @{
             Method      = 'GET'
             APIEndpoint = "/orgs/$TeamOwner/teams/$Team/repos/$Owner/$Name"
+            Accept      = 'application/vnd.github.v3.repository+json'
             Body        = $body
             Context     = $Context
         }

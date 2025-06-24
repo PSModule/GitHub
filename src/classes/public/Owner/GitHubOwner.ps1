@@ -15,7 +15,7 @@
     # Example: https://github.com/octocat
     [string] $Url
 
-    # The type of the owner: "User" or "Organization".
+    # The type of the owner: "User", "Organization" or "Enterprise".
     # Example: User
     [string] $Type
 

@@ -12,7 +12,7 @@
                         <Label>Name</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>Owner</Label>
+                        <Label>Organization</Label>
                     </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
@@ -22,7 +22,7 @@
                                 <ScriptBlock>"`e]8;;$($_.Url)`e\$($_.Name)`e]8;;`e\"</ScriptBlock>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>Owner</PropertyName>
+                                <PropertyName>Organization</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
