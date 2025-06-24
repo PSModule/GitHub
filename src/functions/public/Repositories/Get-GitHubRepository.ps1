@@ -28,12 +28,12 @@
         .EXAMPLE
         Get-GitHubRepository -Organization 'github' -Team 'my-team'
 
-        Gets repositories that the 'my-team' team has access to in the 'github' organization.
+        Gets repositories that the 'my-team' team has access to in the `github` organization.
 
         .EXAMPLE
         Get-GitHubRepository -Organization 'github' -Name 'octocat' -Team 'my-team'
 
-        Gets the repository and permission for the 'my-team' team on the 'octocat' repository in the 'github' organization.
+        Gets the repository and permission for the `my-team` team on the `octocat` repository in the `github` organization.
 
         .INPUTS
         GitHubOwner
