@@ -19,24 +19,21 @@
 
         Lists all teams that have access to the 'Hello-World' repository owned by 'octocat'.
 
-        .INPUTS
-        GitHubRepository
-
         .OUTPUTS
-        GitHubTeam
+        GitHubTeam[]
 
         .NOTES
         [List repository teams](https://docs.github.com/rest/repos/repos#list-repository-teams)
     #>
-    [OutputType([GitHubTeam])]
+    [OutputType([GitHubTeam[]])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.
-        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory)]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory)]
         [string] $Repository,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -61,7 +58,7 @@
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             foreach ($team in $_.Response) {
-                [GitHubTeam]::new($team)
+                [GitHubTeam]::new($team, $Organization)
             }
         }
     }

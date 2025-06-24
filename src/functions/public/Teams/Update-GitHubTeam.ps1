@@ -105,7 +105,7 @@
         if ($PSCmdlet.ShouldProcess("$Organization/$Slug", 'Update')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 foreach ($team in $_.Response) {
-                    [GitHubTeam]::new($team, $Organization, 'Organization')
+                    [GitHubTeam]::new($team, $Organization)
                 }
             }
         }

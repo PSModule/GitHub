@@ -9,6 +9,9 @@
 
         .EXAMPLE
         Get-GitHubTeamBySlug -Organization 'github' -Slug 'my-team-name'
+
+        .NOTES
+        [Get a team by name](https://docs.github.com/rest/teams/teams#get-a-team-by-name)
     #>
     [OutputType([GitHubTeam])]
     [CmdletBinding()]
@@ -42,7 +45,7 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            [GitHubTeam]::new($_.Response)
+            [GitHubTeam]::new($_.Response, $Organization)
         }
     }
 

@@ -14,13 +14,11 @@
 
         .EXAMPLE
         $params = @{
-            Organization = 'github'
-            Name         = 'team-name'
-            Description  = 'A new team'
-            Maintainers  = 'octocat'
-            RepoNames    = 'github/octocat'
-            Privacy      = 'closed'
-            Permission   = 'pull'
+            Organization  = 'github'
+            Name          = 'team-name'
+            Description   = 'A new team'
+            Visible       = $true
+            Notifications = $true
         }
         New-GitHubTeam @params
 
@@ -49,11 +47,6 @@
         # List GitHub IDs for organization members who will become team maintainers.
         [Parameter()]
         [string[]] $Maintainers,
-
-        # The full name of repositories to add the team to.
-        # Example: 'github/octocat' or 'octocat/Hello-World'
-        [Parameter()]
-        [string[]] $RepoNames,
 
         # The level of privacy this team should have. The options are:
         # For a non-nested team:
@@ -99,7 +92,6 @@
             name                 = $Name
             description          = $Description
             maintainers          = $Maintainers
-            repo_names           = $RepoNames
             privacy              = $Visible ? 'closed' : 'secret'
             notification_setting = $Notifications ? 'notifications_enabled' : 'notifications_disabled'
             parent_team_id       = $ParentTeamID
@@ -113,10 +105,10 @@
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("'$Name' in '$Organization'", 'Create team')) {
+        if ($PSCmdlet.ShouldProcess("team '$Name' in '$Organization'", 'Create')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
                 foreach ($team in $_.Response) {
-                    [GitHubTeam]::new($team, $Organization, 'Organization')
+                    [GitHubTeam]::new($team, $Organization)
                 }
             }
         }

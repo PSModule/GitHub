@@ -8,6 +8,12 @@
 
         .EXAMPLE
         Get-GitHubTeamListByOrg -Organization 'github'
+
+        .OUTPUTS
+        GitHubTeam[]
+
+        .NOTES
+        [List teams](https://docs.github.com/rest/teams/teams#list-teams)
     #>
     [OutputType([GitHubTeam[]])]
     [CmdletBinding()]
@@ -38,7 +44,7 @@
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             foreach ($team in $_.Response) {
-                [GitHubTeam]::new($team)
+                [GitHubTeam]::new($team, $Organization)
             }
         }
     }
