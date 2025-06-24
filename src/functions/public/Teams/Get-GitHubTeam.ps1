@@ -9,17 +9,17 @@
         and replaces spaces with a - separator. For example, "My TEam Näme" would become my-team-name.
 
         .EXAMPLE
-        Get-GitHubTeam -Organization 'GitHub'
+        Get-GitHubTeam -Owner 'GitHub'
 
         Gets all teams in the `github` organization.
 
         .EXAMPLE
-        Get-GitHubTeam -Organization 'github' -Slug 'my-team-name'
+        Get-GitHubTeam -Owner 'github' -Slug 'my-team-name'
 
         Gets the team with the slug 'my-team-name' in the `github` organization.
 
         .EXAMPLE
-        Get-GitHubTeam -Organization 'github' -Repository 'my-repo'
+        Get-GitHubTeam -Owner 'github' -Repository 'my-repo'
 
         Lists all teams that have access to the 'my-repo' repository owned by 'github'.
 
@@ -32,7 +32,7 @@
         # The organization name. The name is not case sensitive.
         # If not provided, the owner from the context will be used.
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
-        [string] $Organization,
+        [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'List all teams with access to a repository')]

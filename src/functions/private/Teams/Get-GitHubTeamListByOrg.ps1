@@ -37,7 +37,9 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            foreach ($team in $_.Response) {
+                [GitHubTeam]::new($team)
+            }
         }
     }
 

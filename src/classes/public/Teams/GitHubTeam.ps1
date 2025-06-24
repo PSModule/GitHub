@@ -5,11 +5,8 @@
     # The slug of the team.
     [string] $Slug
 
-    # The owner of the team.
-    [string] $Owner
-
-    # The type of the team, 'Organization' or 'Enterprise'.
-    [string] $Type
+    # The organization the team belongs to.
+    [string] $Organization
 
     # The description of the team.
     [string] $Description
@@ -34,13 +31,12 @@
 
     GitHubTeam() {}
 
-    GitHubTeam([PSCustomObject]$Object, [string]$Owner, [string]$Type) {
+    GitHubTeam([PSCustomObject]$Object, [string]$Organization) {
         $this.ID = $Object.id
         $this.NodeID = $Object.node_id
         $this.Name = $Object.name
         $this.Slug = $Object.slug
-        $this.Owner = $Owner
-        $this.Type = $Type
+        $this.Organization = $Organization
         $this.Description = $Object.description
         $this.Url = $Object.html_url
         $this.Notifications = $Object.notification_setting -eq 'notifications_enabled' ? $true : $false
