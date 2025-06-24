@@ -23,7 +23,7 @@
         GitHubRepository
 
         .OUTPUTS
-        GitHubRepositoryPermission
+        string
 
         .LINK
         https://psmodule.io/GitHub/Functions/Get-GitHubRepositoryPermission/
@@ -31,7 +31,7 @@
         .NOTES
         [Check team permissions for a repository](https://docs.github.com/rest/teams/teams#check-team-permissions-for-a-repository)
     #>
-    [OutputType([GitHubRepositoryPermission])]
+    [OutputType([string])]
     [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
@@ -81,5 +81,3 @@
         Write-Debug "[$stackPath] - End"
     }
 }
-
-#SkipTest:FunctionTest:Will add a test for this function in a future PR

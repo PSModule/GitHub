@@ -57,4 +57,19 @@
         }
         return $null
     }
+
+    static [string] GetPermissionString([PSCustomObject]$Permission) {
+        if ($Permission.Admin) {
+            return 'Admin'
+        } elseif ($Permission.Maintain) {
+            return 'Maintain'
+        } elseif ($Permission.Push) {
+            return 'Push'
+        } elseif ($Permission.Triage) {
+            return 'Triage'
+        } elseif ($Permission.Pull) {
+            return 'Pull'
+        }
+        return $null
+    }
 }

@@ -128,8 +128,8 @@
     [string] $DefaultBranch
 
     # Permission on the repository.
-    # Example: @{ Admin = $true; Maintain = $true; Pull = $true; Triage = $true; Push = $true }
-    [GitHubRepositoryPermission] $Permission
+    # Example: 'Admin'
+    [string] $Permission
 
     # Whether to allow squash merges for pull requests.
     # Example: true
@@ -285,7 +285,7 @@
             $this.Watchers = $Object.watchers_count
             $this.Stargazers = $Object.stargazers_count
             $this.DefaultBranch = $Object.default_branch
-            $this.Permission = [GitHubRepositoryPermission]::New($Object.permissions)
+            $this.Permission = [GitHubRepositoryPermission]::GetPermissionString($Object.permissions)
             $this.AllowSquashMerge = $Object.allow_squash_merge
             $this.AllowMergeCommit = $Object.allow_merge_commit
             $this.AllowRebaseMerge = $Object.allow_rebase_merge
@@ -338,7 +338,7 @@
             $this.Watchers = $Object.watchers.totalCount
             $this.Forks = $Object.forks.totalCount
             $this.DefaultBranch = $Object.defaultBranchRef.name
-            $this.Permission = [GitHubRepositoryPermission]::New($Object.viewerPermission)
+            $this.Permission = [GitHubRepositoryPermission]::GetPermissionString($Object.viewerPermission)
             $this.AllowSquashMerge = $Object.squashMergeAllowed
             $this.AllowMergeCommit = $Object.mergeCommitAllowed
             $this.AllowRebaseMerge = $Object.rebaseMergeAllowed

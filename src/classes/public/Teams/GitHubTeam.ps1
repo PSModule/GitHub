@@ -26,8 +26,8 @@
     [System.Nullable[bool]] $Visible
 
     # The permission level of the team on a repository.
-    # Example: @{ Admin = $true; Maintain = $true; Pull = $true; Triage = $true; Push = $true }
-    [GitHubRepositoryPermission] $Permission
+    # Example: 'Push'
+    [string] $Permission
 
     GitHubTeam() {}
 
@@ -41,6 +41,6 @@
         $this.Url = $Object.html_url
         $this.Notifications = $Object.notification_setting -eq 'notifications_enabled' ? $true : $false
         $this.Visible = $Object.privacy -eq 'closed' ? $true : $false
-        $this.Permission = [GitHubRepositoryPermission]::new($Object.permissions)
+        $this.Permission = [GitHubRepositoryPermission]::GetPermissionString($Object.permissions)
     }
 }
