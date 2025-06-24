@@ -40,7 +40,7 @@
     process {
         $inputObject = @{
             Method      = 'GET'
-            APIEndpoint = "/orgs/$Organization/teams/$Name"
+            APIEndpoint = "/orgs/$Organization/teams/$Slug"
             Context     = $Context
         }
 
