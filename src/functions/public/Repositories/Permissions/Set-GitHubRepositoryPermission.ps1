@@ -67,6 +67,12 @@
     }
 
     process {
+        $currentPermission = Get-GitHubRepositoryPermission -Owner $Owner -Name $Name -Team $Team -TeamOwner $TeamOwner -Context $Context
+        if ($currentPermission -eq $Permission -or ($Permission -eq 'None' -and [string]::IsNullOrEmpty($currentPermission))) {
+            Write-Debug "[$stackPath] - No change needed for [$Owner/$Name] team [$TeamOwner/$Team] permission [$Permission]"
+            return
+        }
+
         if ($Permission -eq 'None') {
             Remove-GitHubRepositoryPermission -Owner $Owner -Name $Name -Team $Team -TeamOwner $TeamOwner -Context $Context
             return
