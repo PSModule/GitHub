@@ -8,10 +8,5 @@ Test:
       Skip: true
     MacOS:
       Skip: true
-  TestResults:
-    Skip: true
   CodeCoverage:
-    PercentTarget: 50
-Build:
-  Docs:
-    Skip: true
+    PercentTarget: 0

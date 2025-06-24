@@ -1,31 +1,34 @@
-﻿filter Get-GitHubRepositoryPermissionByNameAndTeam {
+﻿filter Get-GitHubTeamListByRepo {
     <#
         .SYNOPSIS
-        Get the permission level for a team on a repository.
+        List repository teams.
 
         .DESCRIPTION
-        Retrieves the permission level assigned to a specific team for a given GitHub repository.
+        Lists the teams that have access to the specified repository and that are also visible to the authenticated user.
+        For a public repository, a team is listed only if that team added the public repository explicitly.
+        OAuth app tokens and personal access tokens (classic) need the public_repo or repo scope to use this endpoint with a public repository,
+        and repo scope to use this endpoint with a private repository.
 
         .EXAMPLE
-        Get-GitHubRepositoryPermissionByNameAndTeam -Owner 'octocat' -Name 'Hello-World' -Team 'core'
+        Get-GitHubTeamListByRepo -Owner 'octocat' -Repository 'Hello-World'
 
         Output:
         ```powershell
-        
+
         ```
 
-        Retrieves the permission of the 'core' team on the 'Hello-World' repository owned by 'octocat'.
+        Lists all teams that have access to the 'Hello-World' repository owned by 'octocat'.
 
         .INPUTS
         GitHubRepository
 
         .OUTPUTS
-        GitHubRepository
+        GitHubTeam
 
         .NOTES
-        [Check team permissions for a repository](https://docs.github.com/rest/teams/teams#check-team-permissions-for-a-repository)
+        [List repository teams](https://docs.github.com/rest/repos/repos#list-repository-teams)
     #>
-    [OutputType([GitHubRepository])]
+    [OutputType([GitHubTeam])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.
@@ -34,16 +37,7 @@
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
-        [string] $Name,
-
-        # The slug of the team to add or update repository permissions for.
-        [Parameter(Mandatory)]
-        [Alias('Slug', 'TeamSlug')]
-        [string] $Team,
-
-        # The owner of the team. If not specified, the owner will default to the value of -Owner.
-        [Parameter()]
-        [string] $TeamOwner,
+        [string] $Repository,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -59,17 +53,16 @@
     }
 
     process {
-        $TeamOwner = [string]::IsNullOrEmpty($TeamOwner) ? $Owner : $TeamOwner
         $inputObject = @{
             Method      = 'GET'
-            APIEndpoint = "/orgs/$TeamOwner/teams/$Team/repos/$Owner/$Name"
-            Accept      = 'application/vnd.github.v3.repository+json'
-            Body        = $body
+            APIEndpoint = "/repos/$Owner/$Repository/teams"
             Context     = $Context
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            [GitHubRepository]::new($_.Response)
+            foreach ($team in $_.Response) {
+                [GitHubTeam]::new($team)
+            }
         }
     }
 

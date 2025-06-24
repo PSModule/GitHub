@@ -1,40 +1,41 @@
-﻿filter Get-GitHubTeamListByRepo {
+﻿filter Get-GitHubRepositoryListByTeam {
     <#
         .SYNOPSIS
         List team repositories.
 
         .DESCRIPTION
+
         Lists a team's repositories visible to the authenticated user.
 
         .EXAMPLE
-        Get-GitHubTeamListByRepo -Owner 'octocat' -Name 'Hello-World'
+        Get-GitHubRepositoryListByTeam -Owner 'octocat' -Team 'core'
 
         Output:
         ```powershell
-
         ```
 
-        Lists all teams that have access to the 'Hello-World' repository owned by 'octocat'.
+        Lists all repositories that the 'core' team has access to in the organization owned by 'octocat'.
 
         .INPUTS
         GitHubRepository
 
         .OUTPUTS
-        GitHubTeam
+        GitHubRepository
 
         .NOTES
         [List team repositories](https://docs.github.com/rest/teams/teams#list-team-repositories)
     #>
-    [OutputType([GitHubRepositoryPermission])]
-    [CmdletBinding(SupportsShouldProcess)]
+    [OutputType([GitHubRepository])]
+    [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Owner,
 
-        # The name of the repository without the .git extension. The name is not case sensitive.
-        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
-        [string] $Name,
+        # The slug of the team to add or update repository permissions for.
+        [Parameter(Mandatory)]
+        [Alias('Slug', 'TeamSlug')]
+        [string] $Team,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -50,16 +51,15 @@
     }
 
     process {
-        $TeamOwner = [string]::IsNullOrEmpty($TeamOwner) ? $Owner : $TeamOwner
         $inputObject = @{
             Method      = 'GET'
-            APIEndpoint = "/repos/$Owner/$Name/teams"
+            APIEndpoint = "/orgs/$Owner/teams/$Team/repos"
             Context     = $Context
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            foreach ($team in $_.Response) {
-                [GitHubTeam]::new($team)
+            foreach ($repo in $_.Response) {
+                [GitHubRepository]::new($repo)
             }
         }
     }

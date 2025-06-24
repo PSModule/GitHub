@@ -18,8 +18,10 @@
 
         Gets the team with the slug 'my-team-name' in the `github` organization.
 
-        .NOTES
-        [List teams](https://docs.github.com/rest/teams/teams#list-teams)
+        .EXAMPLE
+        Get-GitHubTeam -Organization 'github' -Repository 'my-repo'
+
+        Lists all teams that have access to the 'my-repo' repository owned by 'github'.
 
         .LINK
         https://psmodule.io/GitHub/Functions/Teams/Get-GitHubTeam

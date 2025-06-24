@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryPermission {
+﻿filter Get-GitHubRepositoryByNameAndTeam {
     <#
         .SYNOPSIS
         Get the permission level for a team on a repository.
@@ -7,15 +7,11 @@
         Retrieves the permission level assigned to a specific team for a given GitHub repository.
 
         .EXAMPLE
-        Get-GitHubRepositoryPermission -Owner 'octocat' -Name 'Hello-World' -Team 'core'
+        Get-GitHubRepositoryByNameAndTeam -Owner 'octocat' -Name 'Hello-World' -Team 'core'
 
         Output:
         ```powershell
-        Admin    : true
-        Maintain :
-        Push     :
-        Triage   :
-        Pull     :
+
         ```
 
         Retrieves the permission of the 'core' team on the 'Hello-World' repository owned by 'octocat'.
@@ -24,15 +20,12 @@
         GitHubRepository
 
         .OUTPUTS
-        GitHubRepositoryPermission
-
-        .LINK
-        https://psmodule.io/GitHub/Functions/Get-GitHubRepositoryPermission/
+        GitHubRepository
 
         .NOTES
         [Check team permissions for a repository](https://docs.github.com/rest/teams/teams#check-team-permissions-for-a-repository)
     #>
-    [OutputType([GitHubRepositoryPermission])]
+    [OutputType([GitHubRepository])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.
@@ -69,7 +62,8 @@
         $TeamOwner = [string]::IsNullOrEmpty($TeamOwner) ? $Owner : $TeamOwner
         $inputObject = @{
             Method      = 'GET'
-            APIEndpoint = "/orgs/$Owner/teams/$Team/repos"
+            APIEndpoint = "/orgs/$TeamOwner/teams/$Team/repos/$Owner/$Name"
+            Accept      = 'application/vnd.github.v3.repository+json'
             Context     = $Context
         }
 

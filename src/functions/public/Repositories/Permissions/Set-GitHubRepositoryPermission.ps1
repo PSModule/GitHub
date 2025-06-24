@@ -71,6 +71,12 @@
             return
         }
 
+        if ($Permission -eq 'Write') {
+            $Permission = 'push'
+        }
+        if ($Permission -eq 'Read') {
+            $Permission = 'pull'
+        }
         $body = @{
             permission = $Permission
         }
@@ -82,7 +88,7 @@
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("Team [$TeamOwner/$Team] repository permission [$Permission] on [$Owner/$Name]", "Set")) {
+        if ($PSCmdlet.ShouldProcess("Team [$TeamOwner/$Team] repository permission [$Permission] on [$Owner/$Name]", 'Set')) {
             $null = Invoke-GitHubAPI @inputObject
         }
     }
