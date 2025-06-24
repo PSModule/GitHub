@@ -69,13 +69,12 @@
         $TeamOwner = [string]::IsNullOrEmpty($TeamOwner) ? $Owner : $TeamOwner
         $inputObject = @{
             Method      = 'GET'
-            APIEndpoint = "/orgs/$TeamOwner/teams/$Team/repos/$Owner/$Name"
-            Body        = $body
+            APIEndpoint = "/orgs/$Owner/teams/$Team/repos"
             Context     = $Context
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            [GitHubRepositoryPermission]::new($_.Response)
+            [GitHubRepository]::new($_.Response)
         }
     }
 

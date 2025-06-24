@@ -43,15 +43,6 @@
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Name,
 
-        # The slug of the team to add or update repository permissions for.
-        [Parameter(Mandatory)]
-        [Alias('Slug', 'TeamSlug')]
-        [string] $Team,
-
-        # The owner of the team. If not specified, the owner will default to the value of -Owner.
-        [Parameter()]
-        [string] $TeamOwner,
-
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
@@ -69,13 +60,14 @@
         $TeamOwner = [string]::IsNullOrEmpty($TeamOwner) ? $Owner : $TeamOwner
         $inputObject = @{
             Method      = 'GET'
-            APIEndpoint = "/orgs/$TeamOwner/teams/$Team/repos/$Owner/$Name"
-            Body        = $body
+            APIEndpoint = "/repos/$Owner/$Name/teams"
             Context     = $Context
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            [GitHubRepositoryPermission]::new($_.Response)
+            foreach ($team in $_.Response) {
+                [GitHubRepositoryTeam]::new($team)
+            }
         }
     }
 

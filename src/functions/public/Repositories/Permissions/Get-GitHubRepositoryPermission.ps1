@@ -32,7 +32,6 @@
         # https://docs.github.com/en/rest/teams/teams?apiVersion=2022-11-28#check-team-permissions-for-a-repository
         Get-GithubRepositoryPermission -Owner 'OrgName' -Repository 'RepoName' -Team 'TeamSlug'
 
-
         .INPUTS
         GitHubRepository
 

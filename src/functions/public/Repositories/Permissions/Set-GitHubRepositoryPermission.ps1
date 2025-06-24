@@ -67,7 +67,8 @@
 
     process {
         if ($Permission -eq 'None') {
-            return Remove-GitHubRepositoryPermission -Owner $Owner -Name $Name -Team $Team -TeamOwner $TeamOwner -Context $Context
+            Remove-GitHubRepositoryPermission -Owner $Owner -Name $Name -Team $Team -TeamOwner $TeamOwner -Context $Context
+            return
         }
 
         $body = @{

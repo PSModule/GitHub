@@ -32,8 +32,12 @@
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Organization,
 
+        # The name of the repository without the .git extension. The name is not case sensitive.
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'List all teams with access to a repository')]
+        [string] $Repository,
+
         # The slug of the team name.
-        [Parameter(Mandatory, ParameterSetName = 'BySlug')]
+        [Parameter(Mandatory, ParameterSetName = 'Get a specific team by slug')]
         [string] $Slug,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -55,8 +59,11 @@
             Context      = $Context
         }
         switch ($PSCmdlet.ParameterSetName) {
-            'BySlug' {
+            'Get a specific team by slug' {
                 Get-GitHubTeamBySlug @params -Slug $Slug
+            }
+            'List all teams with access to a repository' {
+                Get-GitHubTeamListByRepo @params -Repository $Repository
             }
             default {
                 Get-GitHubTeamListByOrg @params
