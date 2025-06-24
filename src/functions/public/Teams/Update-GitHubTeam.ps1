@@ -104,25 +104,9 @@
 
         if ($PSCmdlet.ShouldProcess("$Organization/$Slug", 'Update')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
-                $team = $_.Response
-                [GitHubTeam](
-                    @{
-                        Name          = $team.name
-                        Slug          = $team.slug
-                        NodeID        = $team.node_id
-                        Url           = $team.html_url
-                        CombinedSlug  = $Organization + '/' + $team.slug
-                        ID            = $team.id
-                        Description   = $team.description
-                        Notifications = $team.notification_setting -eq 'notifications_enabled' ? $true : $false
-                        Visible       = $team.privacy -eq 'closed' ? $true : $false
-                        ParentTeam    = $team.parent.slug
-                        Organization  = $Organization
-                        ChildTeams    = @()
-                        CreatedAt     = $team.created_at
-                        UpdatedAt     = $team.updated_at
-                    }
-                )
+                foreach ($team in $_.Response) {
+                    [GitHubTeam]::new($team, $Organization, 'Organization')
+                }
             }
         }
     }
