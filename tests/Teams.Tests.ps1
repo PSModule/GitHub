@@ -85,7 +85,7 @@ Describe 'Teams' {
 
             It 'Get-GitHubTeam - Gets a team' {
                 $teamName = "$teamPrefix`_NewTeam"
-                $team = Get-GitHubTeam -Organization $owner -Slug $teamName -Debug -Verbose
+                $team = Get-GitHubTeam -Organization $owner -Slug $teamName
                 LogGroup 'Get Team' {
                     Write-Host ($team | Format-List | Out-String)
                 }
@@ -131,7 +131,7 @@ Describe 'Teams' {
 
             It 'Remove-GitHubTeam - Removes a team' {
                 $teamName = "$teamPrefix`_UpdatedTeam"
-                $team = Get-GitHubTeam -Organization $owner -Slug $teamName -Debug -Verbose
+                $team = Get-GitHubTeam -Organization $owner -Slug $teamName
                 LogGroup 'Remove Team' {
                     Write-Host ($team | Format-List | Out-String)
                 }
