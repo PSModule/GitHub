@@ -211,7 +211,7 @@ Describe 'Apps' {
             It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
                 $githubApp = Get-GitHubApp
                 $config = Get-GitHubConfig
-                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
+                $context = Connect-GitHubApp @connectAppParams -PassThru -Silent
                 LogGroup 'Context' {
                     Write-Host ($context | Format-List | Out-String)
                 }
