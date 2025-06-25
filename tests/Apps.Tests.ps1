@@ -115,35 +115,10 @@ Describe 'Apps' {
                     }
                 }
 
-                It 'Get-GitHubAppInstallation - Enterprise' -Skip:($ownerType -ne 'enterprise') {
+                It 'Get-GitHubAppInstallation - <ownerType>' {
                     $githubApp = Get-GitHubApp
-                    $installation = Get-GitHubAppInstallation -Enterprise $owner
-                    LogGroup 'Installations - Enterprise' {
-                        Write-Host ($installation | Format-List | Out-String)
-                    }
-                    $installation | Should -Not -BeNullOrEmpty
-                    $installation | Should -BeOfType 'GitHubAppInstallation'
-                    $installation.ID | Should -Not -BeNullOrEmpty
-                    $installation.App | Should -BeOfType 'GitHubApp'
-                    $installation.App.ClientID | Should -Be $githubApp.ClientID
-                    $installation.App.AppID | Should -Not -BeNullOrEmpty
-                    $installation.App.Slug | Should -Not -BeNullOrEmpty
-                    $installation.Target | Should -BeOfType 'GitHubOwner'
-                    $installation.Target | Should -Be $owner
-                    $installation.Type | Should -Be $ownerType
-                    $installation.RepositorySelection | Should -Not -BeNullOrEmpty
-                    $installation.Permissions | Should -BeOfType 'PSCustomObject'
-                    $installation.Events | Should -BeOfType 'string'
-                    $installation.CreatedAt | Should -Not -BeNullOrEmpty
-                    $installation.UpdatedAt | Should -Not -BeNullOrEmpty
-                    $installation.SuspendedAt | Should -BeNullOrEmpty
-                    $installation.SuspendedBy | Should -BeOfType 'GitHubUser'
-                    $installation.SuspendedBy | Should -BeNullOrEmpty
-                }
-                It 'Get-GitHubAppInstallation - Organization' -Skip:($ownerType -ne 'organization') {
-                    $githubApp = Get-GitHubApp
-                    $installation = Get-GitHubAppInstallation -Organization $owner
-                    LogGroup 'Installations - Organization' {
+                    $installation = Get-GitHubAppInstallation | Where-Object { $_.Target -eq $owner -and $_.Type -eq $ownerType }
+                    LogGroup "Installation - $ownerType" {
                         Write-Host ($installation | Format-List | Out-String)
                     }
                     $installation | Should -Not -BeNullOrEmpty
