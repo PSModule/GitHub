@@ -91,8 +91,8 @@ Describe 'Apps' {
                         $installation.App.AppID | Should -Not -BeNullOrEmpty
                         $installation.App.Slug | Should -Not -BeNullOrEmpty
                         $installation.Target | Should -BeOfType 'GitHubOwner'
-                        $installation.Target | Should -Not -BeNullOrEmpty
-                        $installation.Type | Should -Not -BeNullOrEmpty
+                        $installation.Target | Should -Be $owner
+                        $installation.Type | Should -Be $ownerType
                         $installation.RepositorySelection | Should -Not -BeNullOrEmpty
                         $installation.Permissions | Should -BeOfType 'PSCustomObject'
                         $installation.Events | Should -BeOfType 'string'

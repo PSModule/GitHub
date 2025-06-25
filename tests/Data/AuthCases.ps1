@@ -70,7 +70,7 @@
         Case             = 'PEM + IAT'
         TokenType        = 'APP_ENT'
         Target           = 'Enterprise account'
-        Owner            = 'psmodule-test-org3'
+        Owner            = 'msx'
         OwnerType        = 'enterprise'
         ConnectParams    = @{
             ClientID   = $env:TEST_APP_ENT_CLIENT_ID
