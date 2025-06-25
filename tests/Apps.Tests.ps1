@@ -117,7 +117,7 @@ Describe 'Apps' {
 
                 It 'Get-GitHubAppInstallation - <ownerType>' {
                     $githubApp = Get-GitHubApp
-                    $installation = Get-GitHubAppInstallation | Where-Object { $_.Target -eq $owner -and $_.Type -eq $ownerType }
+                    $installation = Get-GitHubAppInstallation | Where-Object { ($_.Target.Name -eq $owner) -and ($_.Type -eq $ownerType) }
                     LogGroup "Installation - $ownerType" {
                         Write-Host ($installation | Format-List | Out-String)
                     }
