@@ -77,12 +77,12 @@ Describe 'Apps' {
                 }
 
                 It 'Get-GitHubAppInstallation - Can get app installations' {
+                    $githubApp = Get-GitHubApp
                     $installations = Get-GitHubAppInstallation
                     LogGroup 'Installations' {
                         Write-Host ($installations | Format-List | Out-String)
                     }
                     $installations | Should -Not -BeNullOrEmpty
-                    $githubApp = Get-GitHubApp
                     foreach ($installation in $installations) {
                         $installation | Should -BeOfType 'GitHubAppInstallation'
                         $installation.ID | Should -Not -BeNullOrEmpty
@@ -91,8 +91,8 @@ Describe 'Apps' {
                         $installation.App.AppID | Should -Not -BeNullOrEmpty
                         $installation.App.Slug | Should -Not -BeNullOrEmpty
                         $installation.Target | Should -BeOfType 'GitHubOwner'
-                        $installation.Target | Should -Be $owner
-                        $installation.Type | Should -Be $ownerType
+                        $installation.Target | Should -Not -BeNullOrEmpty
+                        $installation.Type | Should -BeIn @('Enterprise', 'Organization', 'User')
                         $installation.RepositorySelection | Should -Not -BeNullOrEmpty
                         $installation.Permissions | Should -BeOfType 'PSCustomObject'
                         $installation.Events | Should -BeOfType 'string'
@@ -113,6 +113,32 @@ Describe 'Apps' {
                         }
                         $token | Should -Not -BeNullOrEmpty
                     }
+                }
+
+                It 'Get-GitHubAppInstallation - Enterprise' -Skip($ownerType -ne 'enterprise') {
+                    $githubApp = Get-GitHubApp
+                    $installation = Get-GitHubAppInstallation -Enterprise $owner
+                    LogGroup 'Installations - Enterprise' {
+                        Write-Host ($installation | Format-List | Out-String)
+                    }
+                    $installation | Should -Not -BeNullOrEmpty
+                    $installation | Should -BeOfType 'GitHubAppInstallation'
+                    $installation.ID | Should -Not -BeNullOrEmpty
+                    $installation.App | Should -BeOfType 'GitHubApp'
+                    $installation.App.ClientID | Should -Be $githubApp.ClientID
+                    $installation.App.AppID | Should -Not -BeNullOrEmpty
+                    $installation.App.Slug | Should -Not -BeNullOrEmpty
+                    $installation.Target | Should -BeOfType 'GitHubOwner'
+                    $installation.Target | Should -Be $owner
+                    $installation.Type | Should -Be $ownerType
+                    $installation.RepositorySelection | Should -Not -BeNullOrEmpty
+                    $installation.Permissions | Should -BeOfType 'PSCustomObject'
+                    $installation.Events | Should -BeOfType 'string'
+                    $installation.CreatedAt | Should -Not -BeNullOrEmpty
+                    $installation.UpdatedAt | Should -Not -BeNullOrEmpty
+                    $installation.SuspendedAt | Should -BeNullOrEmpty
+                    $installation.SuspendedBy | Should -BeOfType 'GitHubUser'
+                    $installation.SuspendedBy | Should -BeNullOrEmpty
                 }
             }
 
@@ -158,10 +184,35 @@ Describe 'Apps' {
                 }
             }
             It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
+                $githubApp = Get-GitHubApp
+                $config = Get-GitHubConfig
                 $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
                 LogGroup 'Context' {
                     Write-Host ($context | Format-List | Out-String)
                 }
+                $context | Should -BeOfType 'InstallationGitHubContext'
+                $context.ClientID | Should -Be $githubApp.ClientID
+                $context.TokenExpirationDate | Should -BeOfType [datetime]
+                $context.InstallationID | Should -Be 29371
+                $context.Permissions | Should -BeOfType [PSCustomObject]
+                $context.Events | Should -BeOfType 'string'
+                $context.InstallationType | Should -Be $ownertype
+                $context.InstallationName | Should -Be $owner
+                $context.ID | Should -Be "$($config.HostName)/$($githubApp.Slug)/$ownertype/$owner"
+                $context.Name | Should -Be "$($config.HostName)/$($githubApp.Slug)/$ownertype/$owner"
+                $context.DisplayName | Should -Be $githubApp.Name
+                $context.Type | Should -Be 'Installation'
+                $context.HostName | Should -Be $config.HostName
+                $context.ApiBaseUri | Should -Be $config.ApiBaseUri
+                $context.ApiVersion | Should -Be $config.ApiVersion
+                $context.AuthType | Should -Be 'IAT'
+                $context.NodeID | Should -Not -BeNullOrEmpty
+                $context.DatabaseID | Should -Not -BeNullOrEmpty
+                $context.UserName | Should -Be $githubApp.Slug
+                $context.Token | Should -BeOfType [System.Security.SecureString]
+                $context.TokenType | Should -Be 'ghs'
+                $context.HttpVersion | Should -Be $config.HttpVersion
+                $context.PerPage | Should -Be $config.PerPage
             }
         }
 
