@@ -74,7 +74,7 @@ Describe 'Organizations' {
         }
 
         # Tests for IAT UAT and PAT goes here
-        It 'Get-GitHubOrganization - Gets the organizations for the authenticated user' -Skip:($OwnerType -in ('user')) {
+        It 'Get-GitHubOrganization - Gets the organizations for the authenticated user' -Skip:($OwnerType -notin ('user')) {
             { Get-GitHubOrganization } | Should -Not -Throw
         }
 
