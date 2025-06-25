@@ -65,21 +65,17 @@ Describe 'Organizations' {
             }
             $organizations | Should -Not -BeNullOrEmpty
         }
-        if ($OwnerType -ne 'user') {
-            It 'Get-GitHubOrganizationMember - Gets the members of a specific organization' {
-                $members = Get-GitHubOrganizationMember -Organization $owner
-                LogGroup 'Members' {
-                    Write-Host ($members | Select-Object * | Out-String)
-                }
-                $members | Should -Not -BeNullOrEmpty
+        It 'Get-GitHubOrganizationMember - Gets the members of a specific organization' -Skip:($OwnerType -in ('user', 'enterprise')) {
+            $members = Get-GitHubOrganizationMember -Organization $owner
+            LogGroup 'Members' {
+                Write-Host ($members | Select-Object * | Out-String)
             }
+            $members | Should -Not -BeNullOrEmpty
         }
 
         # Tests for IAT UAT and PAT goes here
-        if ($OwnerType -eq 'user') {
-            It 'Get-GitHubOrganization - Gets the organizations for the authenticated user' {
-                { Get-GitHubOrganization } | Should -Not -Throw
-            }
+        It 'Get-GitHubOrganization - Gets the organizations for the authenticated user' -Skip:($OwnerType -in ('user')) {
+            { Get-GitHubOrganization } | Should -Not -Throw
         }
 
         if ($OwnerType -eq 'organization' -and $Type -ne 'GitHub Actions') {

@@ -78,7 +78,7 @@ Describe 'Releases' {
             Write-Host ('-' * 60)
         }
 
-        Context 'Releases' -Skip:($OwnerType -eq 'repository') {
+        Context 'Releases' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             It 'New-GitHubRelease - Creates a new release' {
                 $release = New-GitHubRelease -Owner $Owner -Repository $repo -Tag 'v1.0' -Latest
                 LogGroup 'Release' {
@@ -316,7 +316,7 @@ Describe 'Releases' {
                 $notes.Notes | Should -Match $releaseTag
             }
         }
-        Context 'Release Assets' -Skip:($OwnerType -eq 'repository') {
+        Context 'Release Assets' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             BeforeAll {
                 $testFolderGuid = [Guid]::NewGuid().ToString().Substring(0, 8)
                 $testFolderName = "GHAssetTest-$testFolderGuid"
