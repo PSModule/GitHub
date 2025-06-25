@@ -40,7 +40,7 @@
 
     GitHubAppInstallation() {}
 
-    GitHubAppInstallation([PSCustomObject]$Object) {
+    GitHubAppInstallation([PSCustomObject] $Object) {
         $this.ID = $Object.id
         $this.App = [GitHubApp]::new(
             [PSCustomObject]@{
@@ -51,6 +51,27 @@
         )
         $this.Target = [GitHubOwner]::new($Object.account)
         $this.Type = $Object.target_type
+        $this.RepositorySelection = $Object.repository_selection
+        $this.Permissions = $Object.permissions
+        $this.Events = , ($Object.events)
+        $this.FilePaths = $Object.single_file_paths
+        $this.CreatedAt = $Object.created_at
+        $this.UpdatedAt = $Object.updated_at
+        $this.SuspendedAt = $Object.suspended_at
+        $this.SuspendedBy = [GitHubUser]::new($Object.suspended_by)
+    }
+
+    GitHubAppInstallation([PSCustomObject] $Object, [string] $Target, [string] $Type) {
+        $this.ID = $Object.id
+        $this.App = [GitHubApp]::new(
+            [PSCustomObject]@{
+                client_id = $Object.client_id
+                app_id    = $Object.app_id
+                app_slug  = $Object.app_slug
+            }
+        )
+        $this.Target = [GitHubOwner]::new($Target)
+        $this.Type = $Type
         $this.RepositorySelection = $Object.repository_selection
         $this.Permissions = $Object.permissions
         $this.Events = , ($Object.events)
