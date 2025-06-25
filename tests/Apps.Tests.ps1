@@ -217,11 +217,8 @@ Describe 'Apps' {
             }
         }
 
-        # Tests for runners goes here
-        if ($Type -eq 'GitHub Actions') {}
-
         # Tests for IAT UAT and PAT goes here
-        It 'Get-GitHubApp - Get an app by slug' {
+        It 'Get-GitHubApp - Get an app by slug' -Skip:($AuthType -eq 'APP') {
             $app = Get-GitHubApp -Slug 'github-actions'
             LogGroup 'App by slug' {
                 Write-Host ($app | Format-List | Out-String)
