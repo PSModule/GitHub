@@ -56,6 +56,7 @@
             PerPage = $PerPage
             Context = $Context
         }
+        Write-Debug "ParamSet: $($PSCmdlet.ParameterSetName)"
         switch ($PSCmdlet.ParameterSetName) {
             'List installations on an Enterprise' {
                 $params += @{
