@@ -115,7 +115,7 @@ Describe 'Apps' {
                     }
                 }
 
-                It 'Get-GitHubAppInstallation - Enterprise' -Skip($ownerType -ne 'enterprise') {
+                It 'Get-GitHubAppInstallation - Enterprise' -Skip:($ownerType -ne 'enterprise') {
                     $githubApp = Get-GitHubApp
                     $installation = Get-GitHubAppInstallation -Enterprise $owner
                     LogGroup 'Installations - Enterprise' {
