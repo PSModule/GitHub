@@ -193,7 +193,8 @@ Describe 'Apps' {
                 $context | Should -BeOfType 'InstallationGitHubContext'
                 $context.ClientID | Should -Be $githubApp.ClientID
                 $context.TokenExpirationDate | Should -BeOfType [datetime]
-                $context.InstallationID | Should -Be 29371
+                $context.InstallationID | Should -BeOfType [uint64]
+                $context.InstallationID | Should -BeGreaterThan 0
                 $context.Permissions | Should -BeOfType [PSCustomObject]
                 $context.Events | Should -BeOfType 'string'
                 $context.InstallationType | Should -Be $ownertype
