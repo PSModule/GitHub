@@ -1,4 +1,7 @@
-﻿$script:GitHub = [pscustomobject]@{
+﻿$script:IsGitHubActions = $env:GITHUB_ACTIONS -eq 'true'
+$script:IsFunctionApp = -not [string]::IsNullOrEmpty($env:WEBSITE_PLATFORM_VERSION)
+$script:IsLocal = -not ($script:IsGitHubActions -or $script:IsFunctionApp)
+$script:GitHub = [pscustomobject]@{
     ContextVault       = 'PSModule.GitHub'
     TokenPrefixPattern = '(?<=^(ghu|gho|ghs|github_pat|ghp)).*'
     EnvironmentType    = Get-GitHubEnvironmentType

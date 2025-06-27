@@ -163,7 +163,7 @@
             $contextObj | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
             if (-not $Silent) {
                 $name = $contextObj.Name
-                if ((Get-GitHubConfig).EnvironmentType -eq 'GHA') {
+                if ($script:IsGitHubActions) {
                     $green = $PSStyle.Foreground.Green
                     $reset = $PSStyle.Reset
                     Write-Host "$green✓$reset Connected $name!"
