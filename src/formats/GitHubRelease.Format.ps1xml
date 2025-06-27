@@ -34,9 +34,9 @@
                                 <ScriptBlock>
                                     if ($Host.UI.SupportsVirtualTerminal -and
                                     $script:GitHub.EnvironmentType -ne 'GHA') {
-                                    return "`e]8;;$($_.Url)`e\$($_.Tag)`e]8;;`e\"
+                                    $PSStyle.FormatHyperlink($_.Tag,$_.Url)
                                     } else {
-                                    return "$($_.Tag)"
+                                    $_.Tag
                                     }
                                 </ScriptBlock>
                             </TableColumnItem>

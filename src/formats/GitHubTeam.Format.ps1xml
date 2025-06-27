@@ -22,9 +22,9 @@
                                 <ScriptBlock>
                                     if ($Host.UI.SupportsVirtualTerminal -and
                                     $script:GitHub.EnvironmentType -ne 'GHA') {
-                                    return "`e]8;;$($_.Url)`e\$($_.Name)`e]8;;`e\"
+                                    $PSStyle.FormatHyperlink($_.Name,$_.Url)
                                     } else {
-                                    return "$($_.Name)"
+                                    $_.Name
                                     }
                                 </ScriptBlock>
                             </TableColumnItem>
