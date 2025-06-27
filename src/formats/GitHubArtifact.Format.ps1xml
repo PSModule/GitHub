@@ -37,7 +37,7 @@
                                 <ScriptBlock>
                                     if ($Host.UI.SupportsVirtualTerminal -and
                                     $script:GitHub.EnvironmentType -eq 'GHA') {
-                                    return "`e]8;;$($_.Url)`a$($_.Name)`e]8;;`a"
+                                    return "`e]8;;$($_.Url)`e\$($_.Name)`e]8;;`e\"
                                     } else {
                                     return "$($_.Name)"
                                     }
