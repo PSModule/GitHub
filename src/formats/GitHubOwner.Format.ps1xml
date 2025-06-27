@@ -5,6 +5,8 @@
             <Name>GitHubOwnerTable</Name>
             <ViewSelectedBy>
                 <TypeName>GitHubOwner</TypeName>
+                <TypeName>GitHubUser</TypeName>
+                <TypeName>GitHubOrganization</TypeName>
             </ViewSelectedBy>
             <TableControl>
                 <TableHeaders>
@@ -28,7 +30,14 @@
                     <TableRowEntry>
                         <TableColumnItems>
                             <TableColumnItem>
-                                <ScriptBlock>"`e]8;;$($_.Url)`e\$($_.Name)`e]8;;`e\"</ScriptBlock>
+                                <ScriptBlock>
+                                    if ($Host.UI.SupportsVirtualTerminal -and
+                                    ($env:GITHUB_ACTIONS -ne 'true')) {
+                                    $PSStyle.FormatHyperlink($_.Name,$_.Url)
+                                    } else {
+                                    $_.Name
+                                    }
+                                </ScriptBlock>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>ID</PropertyName>

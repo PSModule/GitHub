@@ -31,7 +31,14 @@
                     <TableRowEntry>
                         <TableColumnItems>
                             <TableColumnItem>
-                                <ScriptBlock>"`e]8;;$($_.Url)`e\$($_.Tag)`e]8;;`e\"</ScriptBlock>
+                                <ScriptBlock>
+                                    if ($Host.UI.SupportsVirtualTerminal -and
+                                    ($env:GITHUB_ACTIONS -ne 'true')) {
+                                    $PSStyle.FormatHyperlink($_.Tag,$_.Url)
+                                    } else {
+                                    $_.Tag
+                                    }
+                                </ScriptBlock>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Owner</PropertyName>

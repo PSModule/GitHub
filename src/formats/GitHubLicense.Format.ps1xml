@@ -31,7 +31,14 @@
                                 <PropertyName>Key</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <ScriptBlock>"`e]8;;$($_.Url)`e\$($_.Name)`e]8;;`e\"</ScriptBlock>
+                                <ScriptBlock>
+                                    if ($Host.UI.SupportsVirtualTerminal -and
+                                    ($env:GITHUB_ACTIONS -ne 'true')) {
+                                    $PSStyle.FormatHyperlink($_.Name,$_.Url)
+                                    } else {
+                                    $_.Name
+                                    }
+                                </ScriptBlock>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>SpdxId</PropertyName>
