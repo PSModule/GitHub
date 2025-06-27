@@ -18,7 +18,7 @@
     #>
     [OutputType([GitHubConfig], ParameterSetName = 'Get the module configuration')]
     [OutputType([object], ParameterSetName = 'Get a specific configuration item')]
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'Get the module configuration')]
     param(
         # The name of the configuration to get.
         [Parameter(Mandatory, ParameterSetName = 'Get a specific configuration item')]
