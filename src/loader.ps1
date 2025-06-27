@@ -6,7 +6,7 @@ if ($Host.UI.SupportsVirtualTerminal) {
     $PSStyle.OutputRendering = 'Ansi'
 }
 
-switch ($script:GitHub.EnvironmentType) {
+switch ((Get-GitHubConfig).EnvironmentType) {
     'GHA' {
         Write-Verbose 'Detected running on a GitHub Actions runner, preparing environment...'
         $env:GITHUB_REPOSITORY_NAME = $env:GITHUB_REPOSITORY -replace '.+/'

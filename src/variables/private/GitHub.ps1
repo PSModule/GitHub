@@ -16,6 +16,7 @@
         RetryCount                    = 0
         RetryInterval                 = 1
         JwtTimeTolerance              = 300
+        EnvironmentType               = Get-GitHubEnvironmentType
     }
     Config             = $null
     Event              = $null
