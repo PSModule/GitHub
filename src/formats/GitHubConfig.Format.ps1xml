@@ -17,19 +17,19 @@
                                 <PropertyName>ApiBaseUri</PropertyName>
                             </ListItem>
                             <ListItem>
+                                <PropertyName>GitHubAppClientID</PropertyName>
+                            </ListItem>
+                            <ListItem>
                                 <PropertyName>OAuthAppClientID</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>ID</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>AccessTokenGracePeriodInHours</PropertyName>
+                                <PropertyName>EnvironmentType</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>DefaultContext</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>GitHubAppClientID</PropertyName>
+                                <PropertyName>AccessTokenGracePeriodInHours</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>ApiVersion</PropertyName>
@@ -48,9 +48,6 @@
                             </ListItem>
                             <ListItem>
                                 <PropertyName>JwtTimeTolerance</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>EnvironmentType</PropertyName>
                             </ListItem>
                         </ListItems>
                     </ListEntry>
