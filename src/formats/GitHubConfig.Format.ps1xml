@@ -11,6 +11,15 @@
                     <ListEntry>
                         <ListItems>
                             <ListItem>
+                                <PropertyName>HostName</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>ApiBaseUri</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>OAuthAppClientID</PropertyName>
+                            </ListItem>
+                            <ListItem>
                                 <PropertyName>ID</PropertyName>
                             </ListItem>
                             <ListItem>
@@ -21,15 +30,6 @@
                             </ListItem>
                             <ListItem>
                                 <PropertyName>GitHubAppClientID</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>HostName</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>ApiBaseUri</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>OAuthAppClientID</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>ApiVersion</PropertyName>
