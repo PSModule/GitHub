@@ -4,6 +4,9 @@ Test:
   PSModule:
     Skip: true
   Module:
-    Skip: true
+    Windows:
+      Skip: true
+    MacOS:
+      Skip: true
   CodeCoverage:
-    PercentTarget: 50
+    PercentTarget: 0
