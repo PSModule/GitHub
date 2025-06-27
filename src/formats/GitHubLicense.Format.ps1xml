@@ -33,7 +33,7 @@
                             <TableColumnItem>
                                 <ScriptBlock>
                                     if ($Host.UI.SupportsVirtualTerminal -and
-                                    $script:GitHub.EnvironmentType -eq 'GHA') {
+                                    $script:GitHub.EnvironmentType -ne 'GHA') {
                                     return "`e]8;;$($_.Url)`e\$($_.Name)`e]8;;`e\"
                                     } else {
                                     return "$($_.Name)"
