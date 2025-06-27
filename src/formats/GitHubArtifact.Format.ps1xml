@@ -34,7 +34,14 @@
                                 <PropertyName>ID</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <ScriptBlock>"`e]8;;$($_.Url)`e\$($_.Name)`e]8;;`e\"</ScriptBlock>
+                                <ScriptBlock>
+                                    if ($Host.UI.SupportsVirtualTerminal -and
+                                    $script:GitHub.EnvironmentType -eq 'GHA') {
+                                    return "`e]8;;$($_.Url)`a$($_.Name)`e]8;;`a"
+                                    } else {
+                                    return "$($_.Name)"
+                                    }
+                                </ScriptBlock>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <ScriptBlock>'{0:F2}' -f ([math]::Round($_.Size / 1KB, 2))</ScriptBlock>
