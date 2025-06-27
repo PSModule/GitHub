@@ -21,7 +21,7 @@
                             <TableColumnItem>
                                 <ScriptBlock>
                                     if ($Host.UI.SupportsVirtualTerminal -and
-                                    ($script:GitHub.EnvironmentType -ne 'GHA')) {
+                                    ($env:GITHUB_ACTIONS -ne 'true')) {
                                     $PSStyle.FormatHyperlink($_.Name,$_.Url)
                                     } else {
                                     $_.Name
