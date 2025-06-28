@@ -67,8 +67,20 @@
     }
 
     process {
+        if ($Permission -eq 'Write') {
+            $Permission = 'push'
+        }
+        if ($Permission -eq 'Read') {
+            $Permission = 'pull'
+        }
         try {
             $currentPermission = Get-GitHubRepositoryPermission -Owner $Owner -Name $Name -Team $Team -TeamOwner $TeamOwner -Context $Context
+            if ($currentPermission -eq 'Write') {
+                $currentPermission = 'push'
+            }
+            if ($currentPermission -eq 'Read') {
+                $currentPermission = 'pull'
+            }
         } catch {
             Write-Debug "Team [$TeamOwner/$Team] was not found for repository [$Owner/$Name]."
         }
@@ -84,12 +96,7 @@
             Remove-GitHubRepositoryPermission -Owner $Owner -Name $Name -Team $Team -TeamOwner $TeamOwner -Context $Context
             return
         }
-        if ($Permission -eq 'Write') {
-            $Permission = 'push'
-        }
-        if ($Permission -eq 'Read') {
-            $Permission = 'pull'
-        }
+
         $body = @{
             permission = $Permission.ToLower()
         }
