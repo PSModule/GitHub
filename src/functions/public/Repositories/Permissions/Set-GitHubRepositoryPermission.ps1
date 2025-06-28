@@ -67,7 +67,7 @@
     }
 
     process {
-        $teamObject = Get-GitHubTeam -Organization $TeamOwner -Name $Team -Context $Context
+        $teamObject = Get-GitHubTeam -Organization $TeamOwner -Slug $Team -Context $Context
         if (-not $teamObject) {
             throw "Team [$TeamOwner/$Team] was not found."
         }
