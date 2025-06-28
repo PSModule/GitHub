@@ -354,7 +354,7 @@ Describe 'Repositories' {
                 }
                 $prm | Should -Be $permission
             }
-            It 'Get-GitHubTeam - Gets a team with permissions to a repository' {
+            It 'Get-GitHubRepository - Gets a team with permissions to a repository' {
                 $permission = 'admin'
                 LogGroup 'Get repository team' {
                     $team = Get-GitHubRepository -Organization $owner -Slug "$repoName-$permission"
