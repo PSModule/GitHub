@@ -316,13 +316,14 @@ Describe 'Repositories' {
             }
             It 'Set-GitHubRepositoryPermission - Sets the repository permissions - Write' {
                 $permission = 'write'
+                $expectedPermission = 'write'
                 $repo = Get-GitHubRepository -Organization $owner -Name $repoName
                 LogGroup 'Set repository permission - Write' {
                     Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-push"
                     $prm = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-push"
                     Write-Host ($prm | Format-List | Out-String)
                 }
-                $prm | Should -Be $permission
+                $prm | Should -Be $expectedPermission
             }
             It 'Set-GitHubRepositoryPermission - Sets the repository permissions - Triage' {
                 $permission = 'triage'
@@ -346,13 +347,14 @@ Describe 'Repositories' {
             }
             It 'Set-GitHubRepositoryPermission - Sets the repository permissions - Read' {
                 $permission = 'Read'
+                $expectedPermission = 'read'
                 $repo = Get-GitHubRepository -Organization $owner -Name $repoName
                 LogGroup 'Set repository permission - Read' {
                     Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-pull" -Debug -Verbose -Confirm:$false
                     $prm = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-pull"
                     Write-Host ($prm | Format-List | Out-String)
                 }
-                $prm | Should -Be $permission
+                $prm | Should -Be $expectedPermission
             }
             It 'Get-GitHubRepository - Gets a team with permissions to a repository' {
                 $permission = 'admin'
