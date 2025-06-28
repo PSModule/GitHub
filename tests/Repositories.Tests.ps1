@@ -348,7 +348,7 @@ Describe 'Repositories' {
                 $permission = 'Read'
                 $repo = Get-GitHubRepository -Organization $owner -Name $repoName
                 LogGroup 'Set repository permission - Read' {
-                    Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-$permission"
+                    Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-$permission" -Debug -Verbose -Confirm:$false
                     $prm = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission"
                     Write-Host ($prm | Format-List | Out-String)
                 }
@@ -357,7 +357,7 @@ Describe 'Repositories' {
             It 'Get-GitHubRepository - Gets a team with permissions to a repository' {
                 $permission = 'admin'
                 LogGroup 'Get repository team' {
-                    $team = Get-GitHubRepository -Organization $owner -Slug "$repoName-$permission"
+                    $team = Get-GitHubRepository -Organization $owner -Team "$repoName-$permission"
                     Write-Host ($team | Format-List | Out-String)
                 }
                 $team | Should -Not -BeNullOrEmpty

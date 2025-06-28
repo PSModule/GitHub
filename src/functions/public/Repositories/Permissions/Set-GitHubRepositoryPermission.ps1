@@ -73,14 +73,10 @@
         if ($Permission -eq 'Read') {
             $Permission = 'pull'
         }
+        Write-Debug "$(Get-FunctionParameter | Format-List | Out-String)"
         try {
             $currentPermission = Get-GitHubRepositoryPermission -Owner $Owner -Name $Name -Team $Team -TeamOwner $TeamOwner -Context $Context
-            if ($currentPermission -eq 'Write') {
-                $currentPermission = 'push'
-            }
-            if ($currentPermission -eq 'Read') {
-                $currentPermission = 'pull'
-            }
+            Write-Debug "$($currentPermission | Format-List | Out-String)"
         } catch {
             Write-Debug "Team [$TeamOwner/$Team] was not found for repository [$Owner/$Name]."
         }
