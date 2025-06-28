@@ -69,7 +69,7 @@
     process {
         try {
             $currentPermission = Get-GitHubRepositoryPermission -Owner $Owner -Name $Name -Team $Team -TeamOwner $TeamOwner -Context $Context
-        } finally {
+        } catch {
             Write-Debug "Team [$TeamOwner/$Team] was not found for repository [$Owner/$Name]."
         }
         if ($currentPermission -eq $Permission -or ($Permission -eq 'None' -and [string]::IsNullOrEmpty($currentPermission))) {
