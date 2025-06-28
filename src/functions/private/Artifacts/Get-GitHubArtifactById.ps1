@@ -68,7 +68,7 @@ function Get-GitHubArtifactById {
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            [GitHubArtifact]::new($_.Response, $Owner, $Repository)
+            [GitHubArtifact]::new($_.Response, $Owner, $Repository, $Context.HostName)
         }
     }
 

@@ -58,7 +58,9 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            [GitHubAppInstallation]::new($_.Response)
+            foreach ($installation in $_.Response.installations) {
+                [GitHubAppInstallation]::new($installation, $Organization, 'Organization')
+            }
         }
     }
 

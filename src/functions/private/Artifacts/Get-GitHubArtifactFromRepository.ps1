@@ -88,7 +88,7 @@ function Get-GitHubArtifactFromRepository {
         }
 
         $artifacts | ForEach-Object {
-            [GitHubArtifact]::new($_, $Owner, $Repository)
+            [GitHubArtifact]::new($_, $Owner, $Repository, $Context.HostName)
         }
     }
 

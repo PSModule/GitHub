@@ -7,7 +7,7 @@
     [datetime] $TokenExpirationDate
 
     # The installation ID.
-    [int] $InstallationID
+    [uint64] $InstallationID
 
     # The permissions that the app is requesting on the target
     [pscustomobject] $Permissions

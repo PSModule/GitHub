@@ -73,7 +73,7 @@ Describe 'Repositories' {
             Write-Host ('-' * 60)
         }
 
-        It 'New-GitHubRepository - Creates a new repository' -Skip:($OwnerType -eq 'repository') {
+        It 'New-GitHubRepository - Creates a new repository' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             LogGroup 'Repository - Creation' {
                 $params = @{
                     Name      = $repoName
@@ -118,7 +118,7 @@ Describe 'Repositories' {
                 $repo.IsArchived | Should -Be $false
             }
         }
-        It 'New-GitHubRepository - Creates a new repository with settings' -Skip:($OwnerType -eq 'repository') {
+        It 'New-GitHubRepository - Creates a new repository with settings' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             $name = "$repoName-settings"
             LogGroup 'Repository - Creation + Settings' {
                 $params = @{
@@ -186,7 +186,7 @@ Describe 'Repositories' {
                 $repo.Homepage | Should -Be 'https://example.com'
             }
         }
-        It 'New-GitHubRepository - Creates a new repository from a template' -Skip:($OwnerType -eq 'repository') {
+        It 'New-GitHubRepository - Creates a new repository from a template' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             $name = "$repoName-template"
             LogGroup 'Repository - Template' {
                 $params = @{
@@ -235,7 +235,7 @@ Describe 'Repositories' {
                 $repo.IsArchived | Should -Be $false
             }
         }
-        It 'New-GitHubRepository - Creates a new repository as a fork' -Skip:($OwnerType -eq 'repository') {
+        It 'New-GitHubRepository - Creates a new repository as a fork' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             $name = "$repoName-fork"
             LogGroup 'Repository - Fork' {
                 $params = @{
@@ -385,7 +385,7 @@ Describe 'Repositories' {
             }
             $repos | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubRepository - Gets a specific repository' -Skip:($OwnerType -eq 'repository') {
+        It 'Get-GitHubRepository - Gets a specific repository' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             LogGroup 'Repository' {
                 switch ($OwnerType) {
                     'user' {
@@ -399,7 +399,7 @@ Describe 'Repositories' {
             }
             $repo | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubRepository - Gets repositories with properties' -Skip:($OwnerType -eq 'repository') {
+        It 'Get-GitHubRepository - Gets repositories with properties' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             LogGroup 'Repository - Property' {
                 switch ($OwnerType) {
                     'user' {
@@ -421,7 +421,7 @@ Describe 'Repositories' {
                 $item.Owner | Should -BeNullOrEmpty
             }
         }
-        It 'Get-GitHubRepository - Gets repositories with additional properties' -Skip:($OwnerType -eq 'repository') {
+        It 'Get-GitHubRepository - Gets repositories with additional properties' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             LogGroup 'Repository - AdditionalProperty' {
                 switch ($OwnerType) {
                     'user' {
@@ -437,7 +437,7 @@ Describe 'Repositories' {
             $repo.CreatedAt | Should -Not -BeNullOrEmpty
             $repo.UpdatedAt | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubRepository - Gets repositories with properties - only name' -Skip:($OwnerType -eq 'repository') {
+        It 'Get-GitHubRepository - Gets repositories with properties - only name' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             LogGroup 'Repository - Property' {
                 switch ($OwnerType) {
                     'user' {
@@ -474,7 +474,7 @@ Describe 'Repositories' {
             }
             $repos.Count | Should -BeGreaterThan 0
         }
-        It 'Set-GitHubRepository - Updates an existing repository' -Skip:($OwnerType -eq 'repository') {
+        It 'Set-GitHubRepository - Updates an existing repository' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             $description = 'Updated description'
             LogGroup 'Repository - Set update' {
                 switch ($OwnerType) {
@@ -500,7 +500,7 @@ Describe 'Repositories' {
                 $changedProps.Count | Should -Be 2
             }
         }
-        It 'Set-GitHubRepository - Creates a new repository when missing' -Skip:($OwnerType -eq 'repository') {
+        It 'Set-GitHubRepository - Creates a new repository when missing' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             $newRepoName = "$repoName-new"
             LogGroup 'Repository - Set create' {
                 switch ($OwnerType) {
@@ -521,7 +521,7 @@ Describe 'Repositories' {
                 $repo | Should -Not -BeNullOrEmpty
             }
         }
-        It 'Update-GitHubRepository - Renames a repository' -Skip:($OwnerType -eq 'repository') {
+        It 'Update-GitHubRepository - Renames a repository' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             $newName = "$repoName-newname"
             LogGroup 'Repository - Renamed' {
                 switch ($OwnerType) {
@@ -553,7 +553,7 @@ Describe 'Repositories' {
                 $changedProps.Count | Should -Be 8
             }
         }
-        It 'Remove-GitHubRepository - Removes all repositories' -Skip:($OwnerType -eq 'repository') {
+        It 'Remove-GitHubRepository - Removes all repositories' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             switch ($OwnerType) {
                 'user' {
                     Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
@@ -564,7 +564,7 @@ Describe 'Repositories' {
                 }
             }
         }
-        It 'Get-GitHubRepository - Gets none repositories after removal' -Skip:($OwnerType -eq 'repository') {
+        It 'Get-GitHubRepository - Gets none repositories after removal' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             switch ($OwnerType) {
                 'user' {
                     $repos = Get-GitHubRepository -Username $Owner | Where-Object { $_.name -like "$repoName*" }
@@ -578,7 +578,7 @@ Describe 'Repositories' {
                 $repos | Should -BeNullOrEmpty
             }
         }
-        It 'Set-GitHubRepository - Creates and updates a repository from a template' -Skip:($OwnerType -eq 'repository') {
+        It 'Set-GitHubRepository - Creates and updates a repository from a template' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             $templateRepoName = "$repoName-template"
             $templateParams = @{
                 Name               = $templateRepoName
@@ -629,7 +629,7 @@ Describe 'Repositories' {
                 $changedProps.Count | Should -Be 4
             }
         }
-        It 'Set-GitHubRepository - Creates and updates a repository as a fork' -Skip:($OwnerType -eq 'repository') {
+        It 'Set-GitHubRepository - Creates and updates a repository as a fork' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             $name = "$repoName-fork3"
             $forkParams = @{
                 Name           = $name

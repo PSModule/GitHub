@@ -153,8 +153,8 @@
                     $contextParams['Owner'] = [string]$installation.Target.Name
                 }
                 'Enterprise' {
-                    $contextParams['InstallationName'] = [string]$installation.account.slug
-                    $contextParams['Enterprise'] = [string]$installation.account.slug
+                    $contextParams['InstallationName'] = [string]$installation.Target.Name
+                    $contextParams['Enterprise'] = [string]$installation.Target.Name
                 }
             }
             Write-Verbose 'Logging in using a managed installation access token...'
@@ -162,8 +162,8 @@
             $contextObj = [InstallationGitHubContext]::new((Set-GitHubContext -Context $contextParams.Clone() -PassThru -Default:$Default))
             $contextObj | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
             if (-not $Silent) {
-                $name = $contextObj.name
-                if ($script:GitHub.EnvironmentType -eq 'GHA') {
+                $name = $contextObj.Name
+                if ($script:IsGitHubActions) {
                     $green = $PSStyle.Foreground.Green
                     $reset = $PSStyle.Reset
                     Write-Host "$green✓$reset Connected $name!"
