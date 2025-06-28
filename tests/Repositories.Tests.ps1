@@ -318,8 +318,8 @@ Describe 'Repositories' {
                 $permission = 'write'
                 $repo = Get-GitHubRepository -Organization $owner -Name $repoName
                 LogGroup 'Set repository permission - Write' {
-                    Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-$permission"
-                    $prm = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission"
+                    Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-push"
+                    $prm = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-push"
                     Write-Host ($prm | Format-List | Out-String)
                 }
                 $prm | Should -Be $permission
@@ -348,8 +348,8 @@ Describe 'Repositories' {
                 $permission = 'Read'
                 $repo = Get-GitHubRepository -Organization $owner -Name $repoName
                 LogGroup 'Set repository permission - Read' {
-                    Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-$permission" -Debug -Verbose -Confirm:$false
-                    $prm = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission"
+                    Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-pull" -Debug -Verbose -Confirm:$false
+                    $prm = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-pull"
                     Write-Host ($prm | Format-List | Out-String)
                 }
                 $prm | Should -Be $permission
@@ -362,6 +362,13 @@ Describe 'Repositories' {
                 }
                 $team | Should -Not -BeNullOrEmpty
                 $team.Permission | Should -Be $permission
+            }
+            It 'Set-GitHubRepositoryPermission - Throws if the team does not exist' {
+                $permission = 'push'
+                $nonExistentTeam = "$repoName-nonexistent-team"
+                $repo = Get-GitHubRepository -Organization $owner -Name $repoName
+                { Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team $nonExistentTeam -ErrorAction Stop } |
+                    Should -Throw
             }
         }
         It "Get-GitHubRepository - Gets the authenticated user's repositories" -Skip:($OwnerType -ne 'user') {
