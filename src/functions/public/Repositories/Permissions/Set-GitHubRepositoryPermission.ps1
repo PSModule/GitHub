@@ -67,17 +67,23 @@
     }
 
     process {
-        $currentPermission = Get-GitHubRepositoryPermission -Owner $Owner -Name $Name -Team $Team -TeamOwner $TeamOwner -Context $Context
+        try {
+            $currentPermission = Get-GitHubRepositoryPermission -Owner $Owner -Name $Name -Team $Team -TeamOwner $TeamOwner -Context $Context
+        } finally {
+            Write-Debug "Team [$TeamOwner/$Team] was not found for repository [$Owner/$Name]."
+        }
         if ($currentPermission -eq $Permission -or ($Permission -eq 'None' -and [string]::IsNullOrEmpty($currentPermission))) {
             Write-Debug "[$stackPath] - No change needed for [$Owner/$Name] team [$TeamOwner/$Team] permission [$Permission]"
             return
         }
 
         if ($Permission -eq 'None') {
+            if (-not $currentPermission) {
+                return
+            }
             Remove-GitHubRepositoryPermission -Owner $Owner -Name $Name -Team $Team -TeamOwner $TeamOwner -Context $Context
             return
         }
-
         if ($Permission -eq 'Write') {
             $Permission = 'push'
         }
