@@ -4,7 +4,6 @@
         List team repositories.
 
         .DESCRIPTION
-
         Lists a team's repositories visible to the authenticated user.
 
         .EXAMPLE
@@ -68,5 +67,3 @@
         Write-Debug "[$stackPath] - End"
     }
 }
-
-#SkipTest:FunctionTest:Will add a test for this function in a future PR

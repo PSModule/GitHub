@@ -354,15 +354,15 @@ Describe 'Repositories' {
                 }
                 $prm | Should -Be $permission
             }
-            # It 'Get-GitHubTeam - Gets a team with permissions to a repository' {
-            #     $permission = 'admin'
-            #     LogGroup 'Get repository team' {
-            #         $team = Get-GitHubTeam -Organization $owner -Slug "$repoName-$permission"
-            #         Write-Host ($team | Format-List | Out-String)
-            #     }
-            #     $team | Should -Not -BeNullOrEmpty
-            #     $team.Permission | Should -Be $permission
-            # }
+            It 'Get-GitHubTeam - Gets a team with permissions to a repository' {
+                $permission = 'admin'
+                LogGroup 'Get repository team' {
+                    $team = Get-GitHubTeam -Organization $owner -Slug "$repoName-$permission"
+                    Write-Host ($team | Format-List | Out-String)
+                }
+                $team | Should -Not -BeNullOrEmpty
+                $team.Permission | Should -Be $permission
+            }
         }
         It "Get-GitHubRepository - Gets the authenticated user's repositories" -Skip:($OwnerType -ne 'user') {
             LogGroup 'Repositories' {
