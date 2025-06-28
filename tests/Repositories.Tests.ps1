@@ -316,7 +316,7 @@ Describe 'Repositories' {
             }
             It 'Set-GitHubRepositoryPermission - Sets the repository permissions - Write' {
                 $permission = 'write'
-                $expectedPermission = 'write'
+                $expectedPermission = 'push'
                 $repo = Get-GitHubRepository -Organization $owner -Name $repoName
                 LogGroup 'Set repository permission - Write' {
                     Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-push"
@@ -347,7 +347,7 @@ Describe 'Repositories' {
             }
             It 'Set-GitHubRepositoryPermission - Sets the repository permissions - Read' {
                 $permission = 'Read'
-                $expectedPermission = 'read'
+                $expectedPermission = 'pull'
                 $repo = Get-GitHubRepository -Organization $owner -Name $repoName
                 LogGroup 'Set repository permission - Read' {
                     Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-pull" -Debug -Verbose -Confirm:$false
