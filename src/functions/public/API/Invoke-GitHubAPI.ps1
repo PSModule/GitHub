@@ -1,7 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Uri'; RequiredVersion = '1.1.0' }
-#Requires -Modules @{ ModuleName = 'Hashtable'; RequiredVersion = '1.1.5' }
-
-filter Invoke-GitHubAPI {
+﻿filter Invoke-GitHubAPI {
     <#
         .SYNOPSIS
         Calls the GitHub API using the provided parameters.
@@ -300,7 +297,7 @@ filter Invoke-GitHubAPI {
                 Write-Debug '----------------------------------'
             }
             $headers = @{}
-            if ($failure.Exception.Response['Headers']) {
+            if ($failure.Exception.Response.Headers) {
                 foreach ($item in $failure.Exception.Response.Headers.GetEnumerator()) {
                     $headers[$item.Key] = ($item.Value).Trim() -join ', '
                 }
@@ -350,7 +347,7 @@ Request headers:
 $([pscustomobject]$APICall.Headers | Format-List | Out-String)
 ----------------------------------
 Request body:
-$(($APICall.Body | Out-String -Stream).Split('\n') -split '\n')
+$("$($APICall.Body | Out-String -Stream)".Split('\n') -split '\n')
 ----------------------------------
 Response headers:
 $($headers | Format-List | Out-String)
