@@ -74,12 +74,12 @@
             Team      = $Team
             TeamOwner = $TeamOwner
         }
-        $permission = Get-GitHubRepositoryByNameAndTeam @params
-        if ($null -eq $permission) {
+        $repo = Get-GitHubRepositoryByNameAndTeam @params
+        if ($null -eq $repo) {
             Write-Debug "[$stackPath] - No permission found for team '$Team' on repository '$Name' owned by '$Owner'."
             return $null
         }
-        $permission.Permission
+        $repo.Permission
     }
 
     end {
