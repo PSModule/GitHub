@@ -28,7 +28,13 @@
                     <TableRowEntry>
                         <TableColumnItems>
                             <TableColumnItem>
-                                <PropertyName>Name</PropertyName>
+                                <ScriptBlock>
+                                    if ($_.Name -eq (Get-GitHubConfig -Name DefaultContext)) {
+                                    "> $($_.Name)"
+                                    } else {
+                                    " $($_.Name)"
+                                    }
+                                </ScriptBlock>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>AuthType</PropertyName>
