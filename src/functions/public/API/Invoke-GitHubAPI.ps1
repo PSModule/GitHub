@@ -300,33 +300,34 @@ filter Invoke-GitHubAPI {
                 Write-Debug '----------------------------------'
             }
             $headers = @{}
-            foreach ($item in $failure.Exception.Response.Headers.GetEnumerator()) {
-                $headers[$item.Key] = ($item.Value).Trim() -join ', '
+            if ($failure.Exception.Response['Headers']) {
+                foreach ($item in $failure.Exception.Response.Headers.GetEnumerator()) {
+                    $headers[$item.Key] = ($item.Value).Trim() -join ', '
+                }
+                $headers = [pscustomobject]$headers
+                if ($headers.'x-ratelimit-reset') {
+                    $headers.'x-ratelimit-reset' = [DateTime]::UnixEpoch.AddSeconds(
+                        $headers.'x-ratelimit-reset'
+                    ).ToLocalTime().ToString('s')
+                }
+                if ($headers.'Date') {
+                    $headers.'Date' = [DateTime]::Parse(
+                        ($headers.'Date').Replace('UTC', '').Trim()
+                    ).ToLocalTime().ToString('s')
+                }
+                if ($headers.'github-authentication-token-expiration') {
+                    $headers.'github-authentication-token-expiration' = [DateTime]::Parse(
+                        ($headers.'github-authentication-token-expiration').Replace('UTC', '').Trim()
+                    ).ToLocalTime().ToString('s')
+                }
+                $sortedProperties = $headers.PSObject.Properties.Name | Sort-Object
+                $headers = $headers | Select-Object $sortedProperties
+                if ($debug) {
+                    Write-Debug 'Response headers:'
+                    $headers | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+                    Write-Debug '---------------------------'
+                }
             }
-            $headers = [pscustomobject]$headers
-            if ($headers.'x-ratelimit-reset') {
-                $headers.'x-ratelimit-reset' = [DateTime]::UnixEpoch.AddSeconds(
-                    $headers.'x-ratelimit-reset'
-                ).ToLocalTime().ToString('s')
-            }
-            if ($headers.'Date') {
-                $headers.'Date' = [DateTime]::Parse(
-                    ($headers.'Date').Replace('UTC', '').Trim()
-                ).ToLocalTime().ToString('s')
-            }
-            if ($headers.'github-authentication-token-expiration') {
-                $headers.'github-authentication-token-expiration' = [DateTime]::Parse(
-                    ($headers.'github-authentication-token-expiration').Replace('UTC', '').Trim()
-                ).ToLocalTime().ToString('s')
-            }
-            $sortedProperties = $headers.PSObject.Properties.Name | Sort-Object
-            $headers = $headers | Select-Object $sortedProperties
-            if ($debug) {
-                Write-Debug 'Response headers:'
-                $headers | Out-String -Stream | ForEach-Object { Write-Debug $_ }
-                Write-Debug '---------------------------'
-            }
-
             $errordetails = $failure.ErrorDetails | ConvertFrom-Json -AsHashtable
             $errors = $errordetails.errors
             $errorResult = [pscustomobject]@{
