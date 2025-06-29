@@ -116,6 +116,10 @@
             'List all organizations for the authenticated user' {
                 Get-GitHubMyOrganization -PerPage $PerPage -Context $Context
             }
+            default {
+                Write-Error "Invalid parameter set name: $($PSCmdlet.ParameterSetName)"
+                throw "Unsupported parameter set name: $($PSCmdlet.ParameterSetName)"
+            }
         }
     }
 
