@@ -33,7 +33,7 @@
                             <TableColumnItem>
                                 <ScriptBlock>
                                     if ($_.Name -eq (Get-GitHubConfig).DefaultContext) {
-                                    '>'
+                                    ">"
                                     }
                                 </ScriptBlock>
                             </TableColumnItem>
