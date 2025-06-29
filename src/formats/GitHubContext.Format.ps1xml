@@ -12,6 +12,9 @@
             <TableControl>
                 <TableHeaders>
                     <TableColumnHeader>
+                        <Label>*</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
                         <Label>Name</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
@@ -27,6 +30,13 @@
                 <TableRowEntries>
                     <TableRowEntry>
                         <TableColumnItems>
+                            <TableColumnItem>
+                                <ScriptBlock>
+                                    if ($_.Name -eq (Get-GitHubConfig).DefaultContext) {
+                                    ">"
+                                    }
+                                </ScriptBlock>
+                            </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Name</PropertyName>
                             </TableColumnItem>
