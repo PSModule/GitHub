@@ -14,13 +14,11 @@
 
         .EXAMPLE
         $params = @{
-            Organization = 'github'
-            Name         = 'team-name'
-            Description  = 'A new team'
-            Maintainers  = 'octocat'
-            RepoNames    = 'github/octocat'
-            Privacy      = 'closed'
-            Permission   = 'pull'
+            Organization  = 'github'
+            Name          = 'team-name'
+            Description   = 'A new team'
+            Visible       = $true
+            Notifications = $true
         }
         New-GitHubTeam @params
 
@@ -50,11 +48,6 @@
         [Parameter()]
         [string[]] $Maintainers,
 
-        # The full name of repositories to add the team to.
-        # Example: 'github/octocat' or 'octocat/Hello-World'
-        [Parameter()]
-        [string[]] $RepoNames,
-
         # The level of privacy this team should have. The options are:
         # For a non-nested team:
         # - secret - only visible to organization owners and members of this team.
@@ -72,11 +65,6 @@
         # Default: notifications_enabled
         [Parameter()]
         [bool] $Notifications = $true,
-
-        # Closing down notice. The permission that new repositories will be added to the team with when none is specified.
-        [Parameter()]
-        [ValidateSet('pull', 'push')]
-        [string] $Permission = 'pull',
 
         # The ID of a team to set as the parent team.
         [Parameter()]
@@ -104,10 +92,8 @@
             name                 = $Name
             description          = $Description
             maintainers          = $Maintainers
-            repo_names           = $RepoNames
             privacy              = $Visible ? 'closed' : 'secret'
             notification_setting = $Notifications ? 'notifications_enabled' : 'notifications_disabled'
-            permission           = $Permission
             parent_team_id       = $ParentTeamID
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
@@ -119,27 +105,11 @@
             Context     = $Context
         }
 
-        if ($PSCmdlet.ShouldProcess("'$Name' in '$Organization'", 'Create team')) {
+        if ($PSCmdlet.ShouldProcess("team '$Name' in '$Organization'", 'Create')) {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
-                $team = $_.Response
-                [GitHubTeam](
-                    @{
-                        Name          = $team.name
-                        Slug          = $team.slug
-                        NodeID        = $team.node_id
-                        Url           = $team.html_url
-                        CombinedSlug  = $Organization + '/' + $team.slug
-                        ID            = $team.id
-                        Description   = $team.description
-                        Notifications = $team.notification_setting -eq 'notifications_enabled' ? $true : $false
-                        Visible       = $team.privacy -eq 'closed' ? $true : $false
-                        ParentTeam    = $team.parent.slug
-                        Organization  = $Organization
-                        ChildTeams    = @()
-                        CreatedAt     = $team.created_at
-                        UpdatedAt     = $team.updated_at
-                    }
-                )
+                foreach ($team in $_.Response) {
+                    [GitHubTeam]::new($team, $Organization)
+                }
             }
         }
     }

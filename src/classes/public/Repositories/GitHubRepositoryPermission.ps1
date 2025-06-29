@@ -1,4 +1,4 @@
-﻿class GitHubRepositoryPermissions {
+﻿class GitHubRepositoryPermission {
     # Full control over the repository, including managing settings and access. Can delete the repository and change roles for others.
     [System.Nullable[bool]] $Admin
 
@@ -16,9 +16,9 @@
     # Alias "Read"
     [System.Nullable[bool]] $Pull
 
-    GitHubRepositoryPermissions() {}
+    GitHubRepositoryPermission() {}
 
-    GitHubRepositoryPermissions([PSCustomObject]$Object) {
+    GitHubRepositoryPermission([PSCustomObject]$Object) {
         $this.Admin = $Object.admin
         $this.Maintain = $Object.maintain
         $this.Push = $Object.push
@@ -26,17 +26,17 @@
         $this.Pull = $Object.pull
     }
 
-    GitHubRepositoryPermissions([string]$Permission) {
+    GitHubRepositoryPermission([string]$Permission) {
         $Permission = $Permission.ToLower()
         if ($Permission -eq 'admin') {
             $this.Admin = $true
         } elseif ($Permission -eq 'maintain') {
             $this.Maintain = $true
-        } elseif ($Permission -eq 'push') {
+        } elseif ($Permission -in ('push', 'write')) {
             $this.Push = $true
         } elseif ($Permission -eq 'triage') {
             $this.Triage = $true
-        } elseif ($Permission -eq 'pull') {
+        } elseif ($Permission -in ('pull', 'read')) {
             $this.Pull = $true
         }
     }
@@ -53,6 +53,21 @@
         } elseif ($this.Triage) {
             return 'Triage'
         } elseif ($this.Pull) {
+            return 'Pull'
+        }
+        return $null
+    }
+
+    static [string] GetPermissionString([PSCustomObject]$Permission) {
+        if ($Permission.Admin) {
+            return 'Admin'
+        } elseif ($Permission.Maintain) {
+            return 'Maintain'
+        } elseif ($Permission.Push) {
+            return 'Push'
+        } elseif ($Permission.Triage) {
+            return 'Triage'
+        } elseif ($Permission.Pull) {
             return 'Pull'
         }
         return $null
