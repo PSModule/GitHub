@@ -38,7 +38,25 @@
     # The account that suspended the installation.
     [GitHubUser] $SuspendedBy
 
+    # The URL to the target's profile based on the target type.
+    [string] $Url
+
     GitHubAppInstallation() {}
+
+    # Private helper method to generate URL based on target type and hostname
+    hidden [string] GenerateUrl([string] $hostname, [string] $targetName, [string] $targetType) {
+        if ([string]::IsNullOrWhiteSpace($hostname)) {
+            $hostname = 'github.com'
+        }
+        
+        $baseUrl = "https://$hostname"
+        
+        if ($targetType -eq 'Enterprise') {
+            return "$baseUrl/enterprises/$targetName"
+        } else {
+            return "$baseUrl/$targetName"
+        }
+    }
 
     GitHubAppInstallation([PSCustomObject] $Object) {
         $this.ID = $Object.id
@@ -59,6 +77,9 @@
         $this.UpdatedAt = $Object.updated_at
         $this.SuspendedAt = $Object.suspended_at
         $this.SuspendedBy = [GitHubUser]::new($Object.suspended_by)
+        
+        # Generate URL based on target type
+        $this.Url = $this.GenerateUrl('github.com', $this.Target.Name, $this.Type)
     }
 
     GitHubAppInstallation([PSCustomObject] $Object, [string] $Target, [string] $Type) {
@@ -80,5 +101,32 @@
         $this.UpdatedAt = $Object.updated_at
         $this.SuspendedAt = $Object.suspended_at
         $this.SuspendedBy = [GitHubUser]::new($Object.suspended_by)
+        
+        # Generate URL based on target type
+        $this.Url = $this.GenerateUrl('github.com', $this.Target.Name, $this.Type)
+    }
+
+    GitHubAppInstallation([PSCustomObject] $Object, [string] $Hostname) {
+        $this.ID = $Object.id
+        $this.App = [GitHubApp]::new(
+            [PSCustomObject]@{
+                client_id = $Object.client_id
+                app_id    = $Object.app_id
+                app_slug  = $Object.app_slug
+            }
+        )
+        $this.Target = [GitHubOwner]::new($Object.account)
+        $this.Type = $Object.target_type
+        $this.RepositorySelection = $Object.repository_selection
+        $this.Permissions = $Object.permissions
+        $this.Events = , ($Object.events)
+        $this.FilePaths = $Object.single_file_paths
+        $this.CreatedAt = $Object.created_at
+        $this.UpdatedAt = $Object.updated_at
+        $this.SuspendedAt = $Object.suspended_at
+        $this.SuspendedBy = [GitHubUser]::new($Object.suspended_by)
+        
+        # Generate URL based on target type and provided hostname
+        $this.Url = $this.GenerateUrl($Hostname, $this.Target.Name, $this.Type)
     }
 }
