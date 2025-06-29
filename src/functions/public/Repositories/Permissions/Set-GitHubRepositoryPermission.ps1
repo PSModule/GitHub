@@ -93,7 +93,8 @@
             if (-not $currentPermission) {
                 return
             }
-            Remove-GitHubRepositoryPermission -Owner $Owner -Name $Name -Team $Team -TeamOwner $TeamOwner -Context $Context
+            Remove-GitHubRepositoryPermission -Owner $Owner -Name $Name -Team $Team -TeamOwner $TeamOwner -Context $Context -Confirm:$false
+            Write-Debug "[$stackPath] - Removed team [$TeamOwner/$Team] permission"
             return
         }
 
