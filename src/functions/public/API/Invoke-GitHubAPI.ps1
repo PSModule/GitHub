@@ -1,4 +1,7 @@
-﻿filter Invoke-GitHubAPI {
+﻿#Requires -Modules @{ ModuleName = 'Uri'; RequiredVersion = '1.1.2' }
+#Requires -Modules @{ ModuleName = 'Hashtable'; RequiredVersion = '1.1.6' }
+
+function Invoke-GitHubAPI {
     <#
         .SYNOPSIS
         Calls the GitHub API using the provided parameters.
