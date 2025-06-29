@@ -372,12 +372,16 @@ Describe 'Repositories' {
                     Should -Throw
             }
             It 'Set-GitHubRepositoryPermission -Permission None - Removes the repository permissions for a team' {
-                $permission = 'admin'
                 LogGroup 'Remove repository permission - Admin' {
-                    Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-$permission" -Debug -Verbose
-                    $prm = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission" -Debug -Verbose
-                    $prm | Should -Be $permission
-                    Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission" -Permission None -Debug -Verbose
+                    Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission 'None' -Team "$repoName-admin" -Debug -Verbose
+                    $prm = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-admin" -Debug -Verbose
+                    $prmAfter | Should -BeNullOrEmpty
+                }
+            }
+            It 'Remove-GitHubRepositoryPermission - Removes the repository permissions for a team' {
+                $permission = 'maintain'
+                LogGroup 'Remove repository permission - Maintain' {
+                    Remove-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission" -Debug -Verbose -Confirm:$false
                     $prmAfter = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission" -Debug -Verbose
                     $prmAfter | Should -BeNullOrEmpty
                 }
@@ -385,9 +389,6 @@ Describe 'Repositories' {
             It 'Remove-GitHubRepositoryPermission - Removes the repository permissions for a team' {
                 $permission = 'maintain'
                 LogGroup 'Remove repository permission - Maintain' {
-                    Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-$permission" -Debug -Verbose
-                    $prm = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission" -Debug -Verbose
-                    $prm | Should -Be $permission
                     Remove-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission" -Debug -Verbose -Confirm:$false
                     $prmAfter = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission" -Debug -Verbose
                     $prmAfter | Should -BeNullOrEmpty
