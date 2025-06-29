@@ -11,7 +11,7 @@
 
         Output:
         ```powershell
-
+        
         ```
 
         Retrieves the permission of the 'core' team on the 'Hello-World' repository owned by 'octocat'.
@@ -66,9 +66,12 @@
             Accept      = 'application/vnd.github.v3.repository+json'
             Context     = $Context
         }
-
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
-            [GitHubRepository]::new($_.Response)
+        try {
+            Invoke-GitHubAPI @inputObject | ForEach-Object {
+                [GitHubRepository]::new($_.Response)
+            }
+        } catch {
+            Write-Debug "Team '$Team' does not have access to repository $Owner/$Name."
         }
     }
 
