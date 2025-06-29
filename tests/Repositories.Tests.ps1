@@ -286,7 +286,6 @@ Describe 'Repositories' {
         Context 'Permissions' -Skip:($OwnerType -ne 'Organization') {
             It 'Set-GitHubRepositoryPermission - Sets the repository permissions - Admin' {
                 $permission = 'admin'
-                $repo = Get-GitHubRepository -Organization $owner -Name $repoName
                 LogGroup 'Set repository permission - Admin' {
                     Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-$permission"
                     $prm = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission"
@@ -296,7 +295,6 @@ Describe 'Repositories' {
             }
             It 'Set-GitHubRepositoryPermission - Sets the repository permissions - Maintain' {
                 $permission = 'maintain'
-                $repo = Get-GitHubRepository -Organization $owner -Name $repoName
                 LogGroup 'Set repository permission - Maintain' {
                     Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-$permission"
                     $prm = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission"
@@ -306,7 +304,6 @@ Describe 'Repositories' {
             }
             It 'Set-GitHubRepositoryPermission - Sets the repository permissions - Push' {
                 $permission = 'push'
-                $repo = Get-GitHubRepository -Organization $owner -Name $repoName
                 LogGroup 'Set repository permission - Push' {
                     Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-$permission"
                     $prm = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission"
@@ -317,7 +314,6 @@ Describe 'Repositories' {
             It 'Set-GitHubRepositoryPermission - Sets the repository permissions - Write' {
                 $permission = 'write'
                 $expectedPermission = 'push'
-                $repo = Get-GitHubRepository -Organization $owner -Name $repoName
                 LogGroup 'Set repository permission - Write' {
                     Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-push"
                     $prm = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-push"
@@ -327,7 +323,6 @@ Describe 'Repositories' {
             }
             It 'Set-GitHubRepositoryPermission - Sets the repository permissions - Triage' {
                 $permission = 'triage'
-                $repo = Get-GitHubRepository -Organization $owner -Name $repoName
                 LogGroup 'Set repository permission - Triage' {
                     Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-$permission"
                     $prm = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission"
@@ -337,7 +332,6 @@ Describe 'Repositories' {
             }
             It 'Set-GitHubRepositoryPermission - Sets the repository permissions - Pull' {
                 $permission = 'pull'
-                $repo = Get-GitHubRepository -Organization $owner -Name $repoName
                 LogGroup 'Set repository permission - Pull' {
                     Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-$permission"
                     $prm = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission"
@@ -348,9 +342,8 @@ Describe 'Repositories' {
             It 'Set-GitHubRepositoryPermission - Sets the repository permissions - Read' {
                 $permission = 'Read'
                 $expectedPermission = 'pull'
-                $repo = Get-GitHubRepository -Organization $owner -Name $repoName
                 LogGroup 'Set repository permission - Read' {
-                    Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-pull" -Debug -Verbose -Confirm:$false
+                    Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-pull"
                     $prm = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-pull"
                     Write-Host ($prm | Format-List | Out-String)
                 }
@@ -366,31 +359,31 @@ Describe 'Repositories' {
                 $team.Permission | Should -Be $permission
             }
             It 'Set-GitHubRepositoryPermission - Throws if the team does not exist' {
-                $permission = 'push'
-                $nonExistentTeam = "$repoName-nonexistent-team"
-                { Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team $nonExistentTeam -ErrorAction Stop } |
-                    Should -Throw
+                $teamname = "$repoName-nonexistent-team"
+                {
+                    Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission push -Team $teamname -ErrorAction Stop
+                } | Should -Throw
             }
             It 'Set-GitHubRepositoryPermission -Permission None - Removes the repository permissions for a team' {
                 LogGroup 'Remove repository permission - Admin' {
-                    Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission 'None' -Team "$repoName-admin" -Debug -Verbose
-                    $prm = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-admin" -Debug -Verbose
+                    Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission 'None' -Team "$repoName-admin"
+                    $prm = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-admin"
                     $prmAfter | Should -BeNullOrEmpty
                 }
             }
             It 'Remove-GitHubRepositoryPermission - Removes the repository permissions for a team' {
                 $permission = 'maintain'
                 LogGroup 'Remove repository permission - Maintain' {
-                    Remove-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission" -Debug -Verbose -Confirm:$false
-                    $prmAfter = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission" -Debug -Verbose
+                    Remove-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission" -Confirm:$false
+                    $prmAfter = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission"
                     $prmAfter | Should -BeNullOrEmpty
                 }
             }
             It 'Remove-GitHubRepositoryPermission - Removes the repository permissions for a team' {
                 $permission = 'maintain'
                 LogGroup 'Remove repository permission - Maintain' {
-                    Remove-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission" -Debug -Verbose -Confirm:$false
-                    $prmAfter = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission" -Debug -Verbose
+                    Remove-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission" -Confirm:$false
+                    $prmAfter = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission"
                     $prmAfter | Should -BeNullOrEmpty
                 }
             }
