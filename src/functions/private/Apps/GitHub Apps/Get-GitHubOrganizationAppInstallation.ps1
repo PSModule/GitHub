@@ -12,6 +12,9 @@
 
         Gets all GitHub Apps in the organization `github`.
 
+        .OUTPUTS
+        GitHubAppInstallation
+
         .NOTES
         [List app installations for an organization](https://docs.github.com/rest/orgs/orgs#list-app-installations-for-an-organization)
     #>

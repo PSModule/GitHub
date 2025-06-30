@@ -13,6 +13,9 @@
 
         Gets all GitHub Apps in the organization `github` in the enterprise `msx`.
 
+        .OUTPUTS
+        GitHubAppInstallation
+
         .NOTES
         [List GitHub Apps installed on an enterprise-owned organization]()
     #>
@@ -58,8 +61,8 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            foreach ($installation in $_.Response.installations) {
-                [GitHubAppInstallation]::new($installation, $Organization, 'Organization')
+            foreach ($installation in $_.Response) {
+                [GitHubAppInstallation]::new($installation, $Organization, 'Organization', $context.HostName)
             }
         }
     }

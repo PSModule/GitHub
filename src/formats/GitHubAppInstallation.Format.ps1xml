@@ -28,13 +28,20 @@
                     <TableRowEntry>
                         <TableColumnItems>
                             <TableColumnItem>
-                                <PropertyName>ID</PropertyName>
+                                <ScriptBlock>
+                                    if ($Host.UI.SupportsVirtualTerminal -and
+                                    ($env:GITHUB_ACTIONS -ne 'true')) {
+                                    $PSStyle.FormatHyperlink($_.ID,$_.Url)
+                                    } else {
+                                    $_.ID
+                                    }
+                                </ScriptBlock>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <ScriptBlock>
                                     if ($Host.UI.SupportsVirtualTerminal -and
                                     ($env:GITHUB_ACTIONS -ne 'true')) {
-                                    $PSStyle.FormatHyperlink($_.Target.Name,$_.Url)
+                                    $PSStyle.FormatHyperlink($_.Target.Name,$_.Target.Url)
                                     } else {
                                     $_.Target.Name
                                     }
