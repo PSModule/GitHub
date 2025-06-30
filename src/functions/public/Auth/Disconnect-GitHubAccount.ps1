@@ -58,7 +58,9 @@
         foreach ($contextItem in $Context) {
             $contextItem = Resolve-GitHubContext -Context $contextItem
 
-            if ($contextItem.AuthType -eq 'IAT') {
+            $contextToken = Get-GitHubAccessToken -Context $contextItem -AsPlainText
+            $isGitHubToken = $contextToken -eq (Get-GitHubToken | ConvertFrom-SecureString -AsPlainText)
+            if (-not $isGitHubToken -and $contextItem.AuthType -eq 'IAT') {
                 Revoke-GitHubAppInstallationAccessToken -Context $contextItem
             }
 
