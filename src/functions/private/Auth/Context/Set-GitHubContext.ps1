@@ -83,7 +83,7 @@
                             Write-Debug "Failed to get the GitHub App with the slug: [$($contextObj['Username'])]."
                         }
                     }
-                    if ($script:GitHub.EnvironmentType -eq 'GHA') {
+                    if ($script:IsGitHubActions) {
                         $gitHubEvent = Get-Content -Path $env:GITHUB_EVENT_PATH -Raw | ConvertFrom-Json
                         $installationType = $gitHubEvent.repository.owner.type
                         $installationName = $gitHubEvent.repository.owner.login
@@ -146,7 +146,7 @@
                 if ($Default) {
                     Switch-GitHubContext -Context $contextObj['Name']
                 }
-                if ($script:GitHub.EnvironmentType -eq 'GHA') {
+                if ($script:IsGitHubActions) {
                     if ($contextObj['AuthType'] -ne 'APP') {
                         Set-GitHubGitConfig -Context $contextObj['Name']
                         Connect-GitHubCli -Context $contextObj
@@ -168,4 +168,4 @@
         Write-Debug "[$stackPath] - End"
     }
 }
-#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '8.0.3' }
+#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '8.1.0' }

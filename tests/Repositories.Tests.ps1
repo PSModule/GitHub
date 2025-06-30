@@ -48,6 +48,12 @@ Describe 'Repositories' {
                     Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
                 }
                 'organization' {
+                    Get-GitHubTeam -Organization $owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubTeam -Confirm:$false
+                    $teamAdmin = New-GitHubTeam -Organization $owner -Name "$repoName-admin"
+                    $teamMaintain = New-GitHubTeam -Organization $owner -Name "$repoName-maintain"
+                    $teamPush = New-GitHubTeam -Organization $owner -Name "$repoName-push"
+                    $teamTriage = New-GitHubTeam -Organization $owner -Name "$repoName-triage"
+                    $teamPull = New-GitHubTeam -Organization $owner -Name "$repoName-pull"
                     Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
                 }
             }
@@ -59,6 +65,7 @@ Describe 'Repositories' {
                     Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
                 }
                 'organization' {
+                    Get-GitHubTeam -Organization $owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubTeam -Confirm:$false
                     Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
                 }
             }
@@ -66,7 +73,7 @@ Describe 'Repositories' {
             Write-Host ('-' * 60)
         }
 
-        It 'New-GitHubRepository - Creates a new repository' -Skip:($OwnerType -eq 'repository') {
+        It 'New-GitHubRepository - Creates a new repository' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             LogGroup 'Repository - Creation' {
                 $params = @{
                     Name      = $repoName
@@ -111,7 +118,7 @@ Describe 'Repositories' {
                 $repo.IsArchived | Should -Be $false
             }
         }
-        It 'New-GitHubRepository - Creates a new repository with settings' -Skip:($OwnerType -eq 'repository') {
+        It 'New-GitHubRepository - Creates a new repository with settings' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             $name = "$repoName-settings"
             LogGroup 'Repository - Creation + Settings' {
                 $params = @{
@@ -179,7 +186,7 @@ Describe 'Repositories' {
                 $repo.Homepage | Should -Be 'https://example.com'
             }
         }
-        It 'New-GitHubRepository - Creates a new repository from a template' -Skip:($OwnerType -eq 'repository') {
+        It 'New-GitHubRepository - Creates a new repository from a template' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             $name = "$repoName-template"
             LogGroup 'Repository - Template' {
                 $params = @{
@@ -228,7 +235,7 @@ Describe 'Repositories' {
                 $repo.IsArchived | Should -Be $false
             }
         }
-        It 'New-GitHubRepository - Creates a new repository as a fork' -Skip:($OwnerType -eq 'repository') {
+        It 'New-GitHubRepository - Creates a new repository as a fork' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             $name = "$repoName-fork"
             LogGroup 'Repository - Fork' {
                 $params = @{
@@ -276,6 +283,111 @@ Describe 'Repositories' {
                 $repo.IsArchived | Should -Be $false
             }
         }
+        Context 'Permissions' -Skip:($OwnerType -ne 'Organization') {
+            It 'Set-GitHubRepositoryPermission - Sets the repository permissions - Admin' {
+                $permission = 'admin'
+                LogGroup 'Set repository permission - Admin' {
+                    Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-$permission"
+                    $prm = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission"
+                    Write-Host ($prm | Format-List | Out-String)
+                }
+                $prm | Should -Be $permission
+            }
+            It 'Set-GitHubRepositoryPermission - Sets the repository permissions - Maintain' {
+                $permission = 'maintain'
+                LogGroup 'Set repository permission - Maintain' {
+                    Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-$permission"
+                    $prm = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission"
+                    Write-Host ($prm | Format-List | Out-String)
+                }
+                $prm | Should -Be $permission
+            }
+            It 'Set-GitHubRepositoryPermission - Sets the repository permissions - Push' {
+                $permission = 'push'
+                LogGroup 'Set repository permission - Push' {
+                    Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-$permission"
+                    $prm = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission"
+                    Write-Host ($prm | Format-List | Out-String)
+                }
+                $prm | Should -Be $permission
+            }
+            It 'Set-GitHubRepositoryPermission - Sets the repository permissions - Write' {
+                $permission = 'write'
+                $expectedPermission = 'push'
+                LogGroup 'Set repository permission - Write' {
+                    Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-push"
+                    $prm = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-push"
+                    Write-Host ($prm | Format-List | Out-String)
+                }
+                $prm | Should -Be $expectedPermission
+            }
+            It 'Set-GitHubRepositoryPermission - Sets the repository permissions - Triage' {
+                $permission = 'triage'
+                LogGroup 'Set repository permission - Triage' {
+                    Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-$permission"
+                    $prm = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission"
+                    Write-Host ($prm | Format-List | Out-String)
+                }
+                $prm | Should -Be $permission
+            }
+            It 'Set-GitHubRepositoryPermission - Sets the repository permissions - Pull' {
+                $permission = 'pull'
+                LogGroup 'Set repository permission - Pull' {
+                    Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-$permission"
+                    $prm = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission"
+                    Write-Host ($prm | Format-List | Out-String)
+                }
+                $prm | Should -Be $permission
+            }
+            It 'Set-GitHubRepositoryPermission - Sets the repository permissions - Read' {
+                $permission = 'Read'
+                $expectedPermission = 'pull'
+                LogGroup 'Set repository permission - Read' {
+                    Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission $permission -Team "$repoName-pull"
+                    $prm = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-pull"
+                    Write-Host ($prm | Format-List | Out-String)
+                }
+                $prm | Should -Be $expectedPermission
+            }
+            It 'Get-GitHubRepository - Gets a team with permissions to a repository' {
+                $permission = 'admin'
+                LogGroup 'Get repository team' {
+                    $team = Get-GitHubRepository -Organization $owner -Team "$repoName-$permission"
+                    Write-Host ($team | Format-List | Out-String)
+                }
+                $team | Should -Not -BeNullOrEmpty
+                $team.Permission | Should -Be $permission
+            }
+            It 'Set-GitHubRepositoryPermission - Throws if the team does not exist' {
+                $teamname = "$repoName-nonexistent-team"
+                {
+                    Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission push -Team $teamname -ErrorAction Stop
+                } | Should -Throw
+            }
+            It 'Set-GitHubRepositoryPermission -Permission None - Removes the repository permissions for a team' {
+                LogGroup 'Remove repository permission - Admin' {
+                    Set-GitHubRepositoryPermission -Organization $owner -Name $repoName -Permission 'None' -Team "$repoName-admin"
+                    $prm = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-admin"
+                    $prmAfter | Should -BeNullOrEmpty
+                }
+            }
+            It 'Remove-GitHubRepositoryPermission - Removes the repository permissions for a team' {
+                $permission = 'maintain'
+                LogGroup 'Remove repository permission - Maintain' {
+                    Remove-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission" -Confirm:$false
+                    $prmAfter = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission"
+                    $prmAfter | Should -BeNullOrEmpty
+                }
+            }
+            It 'Remove-GitHubRepositoryPermission - Removes the repository permissions for a team' {
+                $permission = 'maintain'
+                LogGroup 'Remove repository permission - Maintain' {
+                    Remove-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission" -Confirm:$false
+                    $prmAfter = Get-GitHubRepositoryPermission -Organization $owner -Name $repoName -Team "$repoName-$permission"
+                    $prmAfter | Should -BeNullOrEmpty
+                }
+            }
+        }
         It "Get-GitHubRepository - Gets the authenticated user's repositories" -Skip:($OwnerType -ne 'user') {
             LogGroup 'Repositories' {
                 $repos = Get-GitHubRepository
@@ -297,7 +409,7 @@ Describe 'Repositories' {
             }
             $repos | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubRepository - Gets a specific repository' -Skip:($OwnerType -eq 'repository') {
+        It 'Get-GitHubRepository - Gets a specific repository' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             LogGroup 'Repository' {
                 switch ($OwnerType) {
                     'user' {
@@ -311,7 +423,7 @@ Describe 'Repositories' {
             }
             $repo | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubRepository - Gets repositories with properties' -Skip:($OwnerType -eq 'repository') {
+        It 'Get-GitHubRepository - Gets repositories with properties' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             LogGroup 'Repository - Property' {
                 switch ($OwnerType) {
                     'user' {
@@ -333,7 +445,7 @@ Describe 'Repositories' {
                 $item.Owner | Should -BeNullOrEmpty
             }
         }
-        It 'Get-GitHubRepository - Gets repositories with additional properties' -Skip:($OwnerType -eq 'repository') {
+        It 'Get-GitHubRepository - Gets repositories with additional properties' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             LogGroup 'Repository - AdditionalProperty' {
                 switch ($OwnerType) {
                     'user' {
@@ -349,7 +461,7 @@ Describe 'Repositories' {
             $repo.CreatedAt | Should -Not -BeNullOrEmpty
             $repo.UpdatedAt | Should -Not -BeNullOrEmpty
         }
-        It 'Get-GitHubRepository - Gets repositories with properties - only name' -Skip:($OwnerType -eq 'repository') {
+        It 'Get-GitHubRepository - Gets repositories with properties - only name' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             LogGroup 'Repository - Property' {
                 switch ($OwnerType) {
                     'user' {
@@ -386,7 +498,7 @@ Describe 'Repositories' {
             }
             $repos.Count | Should -BeGreaterThan 0
         }
-        It 'Set-GitHubRepository - Updates an existing repository' -Skip:($OwnerType -eq 'repository') {
+        It 'Set-GitHubRepository - Updates an existing repository' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             $description = 'Updated description'
             LogGroup 'Repository - Set update' {
                 switch ($OwnerType) {
@@ -412,7 +524,7 @@ Describe 'Repositories' {
                 $changedProps.Count | Should -Be 2
             }
         }
-        It 'Set-GitHubRepository - Creates a new repository when missing' -Skip:($OwnerType -eq 'repository') {
+        It 'Set-GitHubRepository - Creates a new repository when missing' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             $newRepoName = "$repoName-new"
             LogGroup 'Repository - Set create' {
                 switch ($OwnerType) {
@@ -433,7 +545,7 @@ Describe 'Repositories' {
                 $repo | Should -Not -BeNullOrEmpty
             }
         }
-        It 'Update-GitHubRepository - Renames a repository' -Skip:($OwnerType -eq 'repository') {
+        It 'Update-GitHubRepository - Renames a repository' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             $newName = "$repoName-newname"
             LogGroup 'Repository - Renamed' {
                 switch ($OwnerType) {
@@ -465,7 +577,7 @@ Describe 'Repositories' {
                 $changedProps.Count | Should -Be 8
             }
         }
-        It 'Remove-GitHubRepository - Removes all repositories' -Skip:($OwnerType -eq 'repository') {
+        It 'Remove-GitHubRepository - Removes all repositories' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             switch ($OwnerType) {
                 'user' {
                     Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
@@ -476,7 +588,7 @@ Describe 'Repositories' {
                 }
             }
         }
-        It 'Get-GitHubRepository - Gets none repositories after removal' -Skip:($OwnerType -eq 'repository') {
+        It 'Get-GitHubRepository - Gets none repositories after removal' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             switch ($OwnerType) {
                 'user' {
                     $repos = Get-GitHubRepository -Username $Owner | Where-Object { $_.name -like "$repoName*" }
@@ -490,7 +602,7 @@ Describe 'Repositories' {
                 $repos | Should -BeNullOrEmpty
             }
         }
-        It 'Set-GitHubRepository - Creates and updates a repository from a template' -Skip:($OwnerType -eq 'repository') {
+        It 'Set-GitHubRepository - Creates and updates a repository from a template' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             $templateRepoName = "$repoName-template"
             $templateParams = @{
                 Name               = $templateRepoName
@@ -541,7 +653,7 @@ Describe 'Repositories' {
                 $changedProps.Count | Should -Be 4
             }
         }
-        It 'Set-GitHubRepository - Creates and updates a repository as a fork' -Skip:($OwnerType -eq 'repository') {
+        It 'Set-GitHubRepository - Creates and updates a repository as a fork' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             $name = "$repoName-fork3"
             $forkParams = @{
                 Name           = $name

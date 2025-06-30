@@ -2,29 +2,29 @@
 <Configuration>
     <ViewDefinitions>
         <View>
-            <Name>GitHubReleaseTable</Name>
+            <Name>GitHubAppInstallationTable</Name>
             <ViewSelectedBy>
-                <TypeName>GitHubRelease</TypeName>
+                <TypeName>GitHubAppInstallation</TypeName>
             </ViewSelectedBy>
             <TableControl>
                 <TableHeaders>
                     <TableColumnHeader>
-                        <Label>Tag</Label>
+                        <Label>ID</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>Owner</Label>
+                        <Label>App</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>Repository</Label>
+                        <Label>Target</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>IsLatest</Label>
+                        <Label>Type</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>IsPrerelease</Label>
+                        <Label>CreatedAt</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>IsDraft</Label>
+                        <Label>UpdatedAt</Label>
                     </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
@@ -34,26 +34,33 @@
                                 <ScriptBlock>
                                     if ($Host.UI.SupportsVirtualTerminal -and
                                     ($env:GITHUB_ACTIONS -ne 'true')) {
-                                    $PSStyle.FormatHyperlink($_.Tag,$_.Url)
+                                    $PSStyle.FormatHyperlink($_.ID,$_.Url)
                                     } else {
-                                    $_.Tag
+                                    $_.ID
                                     }
                                 </ScriptBlock>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>Owner</PropertyName>
+                                <ScriptBlock>$_.App.Slug</ScriptBlock>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>Repository</PropertyName>
+                                <ScriptBlock>
+                                    if ($Host.UI.SupportsVirtualTerminal -and
+                                    ($env:GITHUB_ACTIONS -ne 'true')) {
+                                    $PSStyle.FormatHyperlink($_.Target.Name,$_.Target.Url)
+                                    } else {
+                                    $_.Target.Name
+                                    }
+                                </ScriptBlock>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>IsLatest</PropertyName>
+                                <PropertyName>Type</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>IsPrerelease</PropertyName>
+                                <PropertyName>CreatedAt</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>IsDraft</PropertyName>
+                                <PropertyName>UpdatedAt</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
@@ -61,55 +68,52 @@
             </TableControl>
         </View>
         <View>
-            <Name>GitHubReleaseList</Name>
+            <Name>GitHubAppInstallationList</Name>
             <ViewSelectedBy>
-                <TypeName>GitHubRelease</TypeName>
+                <TypeName>GitHubAppInstallation</TypeName>
             </ViewSelectedBy>
             <ListControl>
                 <ListEntries>
                     <ListEntry>
                         <ListItems>
                             <ListItem>
-                                <PropertyName>Tag</PropertyName>
+                                <PropertyName>ID</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>Owner</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>Repository</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>Url</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>Author</PropertyName>
+                                <PropertyName>App</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>Target</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>IsLatest</PropertyName>
+                                <PropertyName>Type</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>IsDraft</PropertyName>
+                                <PropertyName>Url</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>IsPrerelease</PropertyName>
+                                <PropertyName>RepositorySelection</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Permissions</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Events</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>FilePaths</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>CreatedAt</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>PublishedAt</PropertyName>
+                                <PropertyName>UpdatedAt</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>Assets</PropertyName>
+                                <PropertyName>SuspendedAt</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>Name</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>Notes</PropertyName>
+                                <PropertyName>SuspendedBy</PropertyName>
                             </ListItem>
                         </ListItems>
                     </ListEntry>

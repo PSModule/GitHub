@@ -38,9 +38,12 @@
     # The account that suspended the installation.
     [GitHubUser] $SuspendedBy
 
+    # The URL to the target's profile based on the target type.
+    [string] $Url
+
     GitHubAppInstallation() {}
 
-    GitHubAppInstallation([PSCustomObject]$Object) {
+    GitHubAppInstallation([PSCustomObject] $Object) {
         $this.ID = $Object.id
         $this.App = [GitHubApp]::new(
             [PSCustomObject]@{
@@ -59,5 +62,32 @@
         $this.UpdatedAt = $Object.updated_at
         $this.SuspendedAt = $Object.suspended_at
         $this.SuspendedBy = [GitHubUser]::new($Object.suspended_by)
+        $this.Url = $Object.html_url
+    }
+
+    GitHubAppInstallation([PSCustomObject] $Object, [string] $Target, [string] $Type, [string] $HostName) {
+        $this.ID = $Object.id
+        $this.App = [GitHubApp]::new(
+            [PSCustomObject]@{
+                client_id = $Object.client_id
+                app_id    = $Object.app_id
+                app_slug  = $Object.app_slug
+            }
+        )
+        $this.Target = [GitHubOwner]@{
+            Name = $Target
+            Type = $Type
+            Url  = "https://$HostName/$Target"
+        }
+        $this.Type = $Type
+        $this.RepositorySelection = $Object.repository_selection
+        $this.Permissions = $Object.permissions
+        $this.Events = , ($Object.events)
+        $this.FilePaths = $Object.single_file_paths
+        $this.CreatedAt = $Object.created_at
+        $this.UpdatedAt = $Object.updated_at
+        $this.SuspendedAt = $Object.suspended_at
+        $this.SuspendedBy = [GitHubUser]::new($Object.suspended_by)
+        $this.Url = "https://$HostName/$($Type.ToLower())s/$Target/settings/installations/$($Object.id)"
     }
 }

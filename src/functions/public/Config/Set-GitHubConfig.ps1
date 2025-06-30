@@ -11,9 +11,13 @@
 
         Sets the value of DefaultUser to 'Octocat' in the GitHub module configuration.
 
+        .OUTPUTS
+        GitHubConfig
+
         .LINK
         https://psmodule.io/GitHub/Functions/Config/Set-GitHubConfig
     #>
+    [OutputType([GitHubConfig])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # Set the access token type.
@@ -39,7 +43,10 @@
         Write-Verbose "Setting [$Name] to [$Value]"
         $script:GitHub.Config.$Name = $Value
         if ($PSCmdlet.ShouldProcess('ContextSetting', 'Set')) {
-            Set-Context -Context $script:GitHub.Config -Vault $script:GitHub.ContextVault -PassThru:$PassThru
+            $item = Set-Context -Context $script:GitHub.Config -Vault $script:GitHub.ContextVault -PassThru:$PassThru
+            if ($PassThru) {
+                [GitHubConfig]::new($item)
+            }
         }
     }
 
@@ -47,4 +54,4 @@
         Write-Debug "[$stackPath] - End"
     }
 }
-#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '8.0.3' }
+#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '8.1.0' }

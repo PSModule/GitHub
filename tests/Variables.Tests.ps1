@@ -328,7 +328,7 @@ Describe 'Variables' {
             }
         }
 
-        Context 'Repository' -Skip:($OwnerType -eq 'repository') {
+        Context 'Repository' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             BeforeAll {
                 $scope = @{
                     Owner      = $owner
@@ -447,7 +447,7 @@ Describe 'Variables' {
             }
         }
 
-        Context 'Environment' -Skip:($OwnerType -eq 'repository') {
+        Context 'Environment' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             BeforeAll {
                 $scope = @{
                     Owner      = $owner

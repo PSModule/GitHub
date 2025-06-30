@@ -104,7 +104,7 @@
             }
 
             if (-not $Silent) {
-                if ($script:GitHub.EnvironmentType -eq 'GHA') {
+                if ($script:IsGitHubActions) {
                     $green = $PSStyle.Foreground.Green
                     $reset = $PSStyle.Reset
                     Write-Host "$green✓$reset Logged out of GitHub! [$contextItem]"

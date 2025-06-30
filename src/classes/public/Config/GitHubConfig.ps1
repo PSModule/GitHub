@@ -38,6 +38,9 @@
     # The tolerance time in seconds for JWT token validation.
     [System.Nullable[int]] $JwtTimeTolerance
 
+    # The environment type, which is used to determine the context of the GitHub API calls.
+    [string] $EnvironmentType
+
     # Simple parameterless constructor
     GitHubConfig() {}
 

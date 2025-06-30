@@ -11,14 +11,17 @@
 
         Get the DefaultContext value from the GitHub module configuration.
 
+
+
         .LINK
         https://psmodule.io/GitHub/Functions/Config/Get-GitHubConfig
     #>
-    [OutputType([object], [GitHubConfig])]
-    [CmdletBinding()]
+    [OutputType([GitHubConfig], ParameterSetName = 'Get the module configuration')]
+    [OutputType([object], ParameterSetName = 'Get a specific configuration item')]
+    [CmdletBinding(DefaultParameterSetName = 'Get the module configuration')]
     param(
         # The name of the configuration to get.
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'Get a specific configuration item')]
         [string] $Name
     )
 
@@ -29,15 +32,19 @@
     }
 
     process {
-        if (-not $Name) {
-            Get-Context -ID $script:GitHub.Config.ID -Vault $script:GitHub.ContextVault | Select-Object -ExcludeProperty ID
+        switch ($PSCmdlet.ParameterSetName) {
+            'Get the module configuration' {
+                $item = Get-Context -ID $script:GitHub.Config.ID -Vault $script:GitHub.ContextVault | Select-Object -ExcludeProperty ID
+                [GitHubConfig]::new($item)
+            }
+            'Get a specific configuration item' {
+                $script:GitHub.Config.$Name
+            }
         }
-
-        $script:GitHub.Config.$Name
     }
 
     end {
         Write-Debug "[$stackPath] - End"
     }
 }
-#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '8.0.3' }
+#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '8.1.0' }
