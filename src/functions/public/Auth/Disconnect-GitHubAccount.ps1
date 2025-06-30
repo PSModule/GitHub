@@ -40,10 +40,6 @@
         [Alias('Quiet')]
         [switch] $Silent,
 
-        # Revoke the access token when disconnecting.
-        [Parameter()]
-        [switch] $RevokeToken,
-
         # The context to run the command with.
         # Can be either a string or a GitHubContext object.
         [Parameter(ValueFromPipeline)]
@@ -61,36 +57,9 @@
         }
         foreach ($contextItem in $Context) {
             $contextItem = Resolve-GitHubContext -Context $contextItem
-            if ($RevokeToken) {
-                try {
-                    if ($contextItem.Type -eq 'User' -and $contextItem.AuthType -eq 'UAT' -and $contextItem.AuthClientID) {
-                        # OAuth token revocation
-                        $apiCall = Remove-GitHubOAuthToken -ClientID $contextItem.AuthClientID -Token (Get-GitHubAccessToken -Context $contextItem -AsPlainText) -Context $contextItem
-                        if (-not $Silent) {
-                            Write-Host "Revoking OAuth token for [$($contextItem.Name)]..." -NoNewline
-                        }
-                        Invoke-GitHubAPI @($apiCall.InputObject)
-                        if (-not $Silent) {
-                            Write-Host " ✓" -ForegroundColor Green
-                        }
-                    } elseif ($contextItem.Type -eq 'Installation' -and $contextItem.AuthType -eq 'IAT') {
-                        # Installation token revocation
-                        $apiCall = Remove-GitHubInstallationToken -Context $contextItem
-                        if (-not $Silent) {
-                            Write-Host "Revoking installation token for [$($contextItem.Name)]..." -NoNewline
-                        }
-                        Invoke-GitHubAPI @($apiCall.InputObject)
-                        if (-not $Silent) {
-                            Write-Host " ✓" -ForegroundColor Green
-                        }
-                    } elseif (-not $Silent) {
-                        Write-Warning "Token revocation not supported for context type '$($contextItem.Type)' with auth type '$($contextItem.AuthType)'"
-                    }
-                } catch {
-                    if (-not $Silent) {
-                        Write-Warning "Failed to revoke token for [$($contextItem.Name)]: $($_.Exception.Message)"
-                    }
-                }
+
+            if ($contextItem.AuthType -eq 'IAT') {
+                Revoke-GitHubAppInstallationAccessToken -Context $contextItem
             }
 
             Remove-GitHubContext -Context $contextItem
