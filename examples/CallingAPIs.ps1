@@ -26,12 +26,6 @@ Get-GitHubApp
 # More complex example - output is parts of the web response
 Invoke-GitHubAPI -ApiEndpoint /app
 
-# Most complex example - output is the entire web response
-$context = Get-GitHubContext
-$jwt = Get-GitHubAppJSONWebToken -ClientId $context.ClientID -PrivateKey $context.Token
-Invoke-RestMethod -Uri "$($context.ApiBaseUri)/app" -Token ($jwt.token) -Authentication Bearer
-Invoke-WebRequest -Uri "$($context.ApiBaseUri)/app" -Token ($jwt.token) -Authentication Bearer
-
 #endregion
 
 

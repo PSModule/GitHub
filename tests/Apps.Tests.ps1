@@ -61,14 +61,6 @@ Describe 'Apps' {
                     $app.Installations | Should -Not -BeNullOrEmpty
                 }
 
-                It 'Get-GitHubAppJSONWebToken - Can get a JWT for the app' {
-                    $jwt = Get-GitHubAppJSONWebToken @connectParams
-                    LogGroup 'JWT' {
-                        Write-Host ($jwt | Format-Table | Out-String)
-                    }
-                    $jwt | Should -Not -BeNullOrEmpty
-                }
-
                 It 'Get-GitHubAppInstallationRequest - Can get installation requests' {
                     $installationRequests = Get-GitHubAppInstallationRequest
                     LogGroup 'Installation requests' {
