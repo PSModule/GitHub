@@ -38,6 +38,9 @@
     # The account that suspended the installation.
     [GitHubUser] $SuspendedBy
 
+    # The URL to the target's profile based on the target type.
+    [string] $Url
+
     GitHubAppInstallation() {}
 
     GitHubAppInstallation([PSCustomObject] $Object) {
@@ -59,9 +62,10 @@
         $this.UpdatedAt = $Object.updated_at
         $this.SuspendedAt = $Object.suspended_at
         $this.SuspendedBy = [GitHubUser]::new($Object.suspended_by)
+        $this.Url = $Object.html_url
     }
 
-    GitHubAppInstallation([PSCustomObject] $Object, [string] $Target, [string] $Type) {
+    GitHubAppInstallation([PSCustomObject] $Object, [string] $Target, [string] $Type, [string] $HostName) {
         $this.ID = $Object.id
         $this.App = [GitHubApp]::new(
             [PSCustomObject]@{
@@ -70,7 +74,11 @@
                 app_slug  = $Object.app_slug
             }
         )
-        $this.Target = [GitHubOwner]::new($Target)
+        $this.Target = [GitHubOwner]@{
+            Name = $Target
+            Type = $Type
+            Url  = "https://$HostName/$Target"
+        }
         $this.Type = $Type
         $this.RepositorySelection = $Object.repository_selection
         $this.Permissions = $Object.permissions
@@ -80,5 +88,6 @@
         $this.UpdatedAt = $Object.updated_at
         $this.SuspendedAt = $Object.suspended_at
         $this.SuspendedBy = [GitHubUser]::new($Object.suspended_by)
+        $this.Url = "https://$HostName/$($Type.ToLower())s/$Target/settings/installations/$($Object.id)"
     }
 }
