@@ -183,47 +183,53 @@ Describe 'Apps' {
                     }
                 }
             }
-            It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
-                $githubApp = Get-GitHubApp
-                $config = Get-GitHubConfig
-                $context = Connect-GitHubApp @connectAppParams -PassThru -Silent
-                LogGroup 'Context' {
-                    Write-Host ($context | Format-List | Out-String)
+
+            Context 'Installation' {
+                BeforeAll {
+                    $githubApp = Get-GitHubApp
+                    $config = Get-GitHubConfig
+                    $context = Connect-GitHubApp @connectAppParams -PassThru -Silent
+                    LogGroup 'Context' {
+                        Write-Host ($context | Format-List | Out-String)
+                    }
                 }
-                $context | Should -BeOfType 'InstallationGitHubContext'
-                $context.ClientID | Should -Be $githubApp.ClientID
-                $context.TokenExpirationDate | Should -BeOfType [datetime]
-                $context.InstallationID | Should -BeOfType [uint64]
-                $context.InstallationID | Should -BeGreaterThan 0
-                $context.Permissions | Should -BeOfType [PSCustomObject]
-                $context.Events | Should -BeOfType 'string'
-                $context.InstallationType | Should -Be $ownertype
-                $context.InstallationName | Should -Be $owner
-                $context.ID | Should -Be "$($config.HostName)/$($githubApp.Slug)/$ownertype/$owner"
-                $context.Name | Should -Be "$($config.HostName)/$($githubApp.Slug)/$ownertype/$owner"
-                $context.DisplayName | Should -Be $githubApp.Name
-                $context.Type | Should -Be 'Installation'
-                $context.HostName | Should -Be $config.HostName
-                $context.ApiBaseUri | Should -Be $config.ApiBaseUri
-                $context.ApiVersion | Should -Be $config.ApiVersion
-                $context.AuthType | Should -Be 'IAT'
-                $context.NodeID | Should -Not -BeNullOrEmpty
-                $context.DatabaseID | Should -Not -BeNullOrEmpty
-                $context.UserName | Should -Be $githubApp.Slug
-                $context.Token | Should -BeOfType [System.Security.SecureString]
-                $context.TokenType | Should -Be 'ghs'
-                $context.HttpVersion | Should -Be $config.HttpVersion
-                $context.PerPage | Should -Be $config.PerPage
-            }
 
-            It 'Revoked GitHub App token should fail on API call' {
-                $org = Get-GitHubOrganization -Name PSModule -Context $context
-                $org | Should -Not -BeNullOrEmpty
-                $context | Disconnect-GitHub
+                It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
+                    $context | Should -BeOfType 'InstallationGitHubContext'
+                    $context.ClientID | Should -Be $githubApp.ClientID
+                    $context.TokenExpirationDate | Should -BeOfType [datetime]
+                    $context.InstallationID | Should -BeOfType [uint64]
+                    $context.InstallationID | Should -BeGreaterThan 0
+                    $context.Permissions | Should -BeOfType [PSCustomObject]
+                    $context.Events | Should -BeOfType 'string'
+                    $context.InstallationType | Should -Be $ownertype
+                    $context.InstallationName | Should -Be $owner
+                    $context.ID | Should -Be "$($config.HostName)/$($githubApp.Slug)/$ownertype/$owner"
+                    $context.Name | Should -Be "$($config.HostName)/$($githubApp.Slug)/$ownertype/$owner"
+                    $context.DisplayName | Should -Be $githubApp.Name
+                    $context.Type | Should -Be 'Installation'
+                    $context.HostName | Should -Be $config.HostName
+                    $context.ApiBaseUri | Should -Be $config.ApiBaseUri
+                    $context.ApiVersion | Should -Be $config.ApiVersion
+                    $context.AuthType | Should -Be 'IAT'
+                    $context.NodeID | Should -Not -BeNullOrEmpty
+                    $context.DatabaseID | Should -Not -BeNullOrEmpty
+                    $context.UserName | Should -Be $githubApp.Slug
+                    $context.Token | Should -BeOfType [System.Security.SecureString]
+                    $context.TokenType | Should -Be 'ghs'
+                    $context.HttpVersion | Should -Be $config.HttpVersion
+                    $context.PerPage | Should -Be $config.PerPage
+                }
 
-                {
-                    Invoke-RestMethod -Method Get -Uri 'https://api.github.com/orgs/PSModule' -Authentication Bearer -Token $context.token
-                } | Should -Throw
+                It 'Revoked GitHub App token should fail on API call' {
+                    $org = Get-GitHubOrganization -Name PSModule -Context $context
+                    $org | Should -Not -BeNullOrEmpty
+                    $context | Disconnect-GitHub
+
+                    {
+                        Invoke-RestMethod -Method Get -Uri "$($context.ApiBaseUri)/orgs/PSModule" -Authentication Bearer -Token $context.token
+                    } | Should -Throw
+                }
             }
         }
 
