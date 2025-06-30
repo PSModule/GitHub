@@ -215,6 +215,16 @@ Describe 'Apps' {
                 $context.HttpVersion | Should -Be $config.HttpVersion
                 $context.PerPage | Should -Be $config.PerPage
             }
+
+            It 'Revoked GitHub App token should fail on API call' {
+                $org = Get-GitHubOrganization -Name PSModule -Context $context
+                $org | Should -Not -BeNullOrEmpty
+                $context | Disconnect-GitHub
+
+                {
+                    Invoke-RestMethod -Method Get -Uri 'https://api.github.com/orgs/PSModule' -Authentication Bearer -Token $context.token
+                } | Should -Throw
+            }
         }
 
         # Tests for IAT UAT and PAT goes here
