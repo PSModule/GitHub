@@ -12,6 +12,9 @@
                         <Label>ID</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
+                        <Label>App</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
                         <Label>Target</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
@@ -36,6 +39,9 @@
                                     $_.ID
                                     }
                                 </ScriptBlock>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <ScriptBlock>$_.App.Slug</ScriptBlock>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <ScriptBlock>
