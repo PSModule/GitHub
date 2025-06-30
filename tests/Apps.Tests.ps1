@@ -221,7 +221,7 @@ Describe 'Apps' {
                     $context.PerPage | Should -Be $config.PerPage
                 }
 
-                It 'Revoked GitHub App token should fail on API call' {
+                It 'Revoked GitHub App token should fail on API call' -Skip:($TokenType -eq 'GITHUB_TOKEN') {
                     $org = Get-GitHubOrganization -Name PSModule -Context $context
                     $org | Should -Not -BeNullOrEmpty
                     $context | Disconnect-GitHub
