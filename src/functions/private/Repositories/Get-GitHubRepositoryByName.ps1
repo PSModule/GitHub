@@ -66,7 +66,7 @@
             'Watchers',
             'Forks',
             'DefaultBranch',
-            'Permissions',
+            'Permission',
             'AllowSquashMerge',
             'AllowMergeCommit',
             'AllowRebaseMerge',
