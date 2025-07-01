@@ -26,6 +26,9 @@
                     <TableColumnHeader>
                         <Label>TokenExpirationDate</Label>
                     </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Remaining</Label>
+                    </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
                     <TableRowEntry>
@@ -48,6 +51,49 @@
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>TokenExpirationDate</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <ScriptBlock>
+                                    if ($null -eq $_.Remaining) {
+                                    return
+                                    }
+
+                                    if ($_.Remaining -lt 0) {
+                                    $text = "Expired"
+                                    } else {
+                                    $text = $_.Remaining | Format-TimeSpan -Precision 2
+                                    }
+
+                                    if ($Host.UI.SupportsVirtualTerminal -and
+                                    ($env:GITHUB_ACTIONS -ne 'true')) {
+                                    switch ($_.AuthType) {
+                                    'UAT' {
+                                    $MaxValue = [TimeSpan]::FromHours(8)
+                                    }
+                                    'IAT' {
+                                    $MaxValue = [TimeSpan]::FromHours(1)
+                                    }
+                                    }
+                                    $Value = $_.Remaining
+                                    $ratio = [Math]::Min(($Value / $MaxValue), 1)
+
+                                    if ($ratio -lt 0) {
+                                    $r = 255
+                                    $g = 0
+                                    } elseif ($ratio -le 0.5) {
+                                    $r = [Math]::Round(255 * (2 * $ratio))
+                                    $g = 255
+                                    } else {
+                                    $r = 255
+                                    $g = [Math]::Round(255 * (2 - 2 * $ratio))
+                                    }
+                                    $b = 0
+                                    $color = $PSStyle.Foreground.FromRgb($r, $g, $b)
+                                    "$color$Text$($PSStyle.Reset)"
+                                    } else {
+                                    $Text
+                                    }
+                                </ScriptBlock>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
