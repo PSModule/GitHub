@@ -152,7 +152,7 @@ function Invoke-GitHubAPI {
         $headers = @{
             Accept                 = $Accept
             'X-GitHub-Api-Version' = $ApiVersion
-            'User-Agent'           = "PSModule.GitHub $($script:PSModuleInfo.ModuleVersion)"
+            'User-Agent'           = $script:UserAgent
         }
         $headers | Remove-HashtableEntry -NullOrEmptyValues
 
