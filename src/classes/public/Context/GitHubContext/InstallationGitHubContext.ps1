@@ -4,10 +4,10 @@
 
     # The token expiration date.
     # 2024-01-01-00:00:00
-    [datetime] $TokenExpirationDate
+    [System.Nullable[datetime]] $TokenExpirationDate
 
     # The installation ID.
-    [uint64] $InstallationID
+    [System.Nullable[uint64]] $InstallationID
 
     # The permissions that the app is requesting on the target
     [pscustomobject] $Permissions
@@ -21,20 +21,33 @@
     # The target login or slug of the installation.
     [string] $InstallationName
 
-    # Simple parameterless constructor
     InstallationGitHubContext() {}
 
-    # Creates a context object from a hashtable of key-vaule pairs.
-    InstallationGitHubContext([hashtable]$Properties) {
-        foreach ($Property in $Properties.Keys) {
-            $this.$Property = $Properties.$Property
-        }
-    }
-
-    # Creates a context object from a PSCustomObject.
-    InstallationGitHubContext([PSCustomObject]$Object) {
-        $Object.PSObject.Properties | ForEach-Object {
-            $this.($_.Name) = $_.Value
-        }
+    InstallationGitHubContext([pscustomobject]$Object) {
+        $this.ID = $Object.ID
+        $this.Name = $Object.Name
+        $this.DisplayName = $Object.DisplayName
+        $this.Type = $Object.Type
+        $this.HostName = $Object.HostName
+        $this.ApiBaseUri = $Object.ApiBaseUri
+        $this.ApiVersion = $Object.ApiVersion
+        $this.AuthType = $Object.AuthType
+        $this.NodeID = $Object.NodeID
+        $this.DatabaseID = $Object.DatabaseID
+        $this.UserName = $Object.UserName
+        $this.Token = $Object.Token
+        $this.TokenType = $Object.TokenType
+        $this.Enterprise = $Object.Enterprise
+        $this.Owner = $Object.Owner
+        $this.Repository = $Object.Repository
+        $this.HttpVersion = $Object.HttpVersion
+        $this.PerPage = $Object.PerPage
+        $this.ClientID = $Object.ClientID
+        $this.TokenExpirationDate = $Object.TokenExpirationDate
+        $this.InstallationID = $Object.InstallationID
+        $this.Permissions = $Object.Permissions
+        $this.Events = $Object.Events
+        $this.InstallationType = $Object.InstallationType
+        $this.InstallationName = $Object.InstallationName
     }
 }

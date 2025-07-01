@@ -13,29 +13,41 @@
 
     # The token expiration date.
     # 2024-01-01-00:00:00
-    [datetime] $TokenExpirationDate
+    [System.Nullable[datetime]] $TokenExpirationDate
 
     # The refresh token.
     [securestring] $RefreshToken
 
     # The refresh token expiration date.
     # 2024-01-01-00:00:00
-    [datetime] $RefreshTokenExpirationDate
+    [System.Nullable[datetime]] $RefreshTokenExpirationDate
 
-    # Simple parameterless constructor
     UserGitHubContext() {}
 
-    # Creates a context object from a hashtable of key-vaule pairs.
-    UserGitHubContext([hashtable]$Properties) {
-        foreach ($Property in $Properties.Keys) {
-            $this.$Property = $Properties.$Property
-        }
-    }
-
-    # Creates a context object from a PSCustomObject.
     UserGitHubContext([PSCustomObject]$Object) {
-        $Object.PSObject.Properties | ForEach-Object {
-            $this.($_.Name) = $_.Value
-        }
+        $this.ID = $Object.ID
+        $this.Name = $Object.Name
+        $this.DisplayName = $Object.DisplayName
+        $this.Type = $Object.Type
+        $this.HostName = $Object.HostName
+        $this.ApiBaseUri = $Object.ApiBaseUri
+        $this.ApiVersion = $Object.ApiVersion
+        $this.AuthType = $Object.AuthType
+        $this.NodeID = $Object.NodeID
+        $this.DatabaseID = $Object.DatabaseID
+        $this.UserName = $Object.UserName
+        $this.Token = $Object.Token
+        $this.TokenType = $Object.TokenType
+        $this.Enterprise = $Object.Enterprise
+        $this.Owner = $Object.Owner
+        $this.Repository = $Object.Repository
+        $this.HttpVersion = $Object.HttpVersion
+        $this.PerPage = $Object.PerPage
+        $this.AuthClientID = $Object.AuthClientID
+        $this.DeviceFlowType = $Object.DeviceFlowType
+        $this.Scope = $Object.Scope
+        $this.TokenExpirationDate = $Object.TokenExpirationDate
+        $this.RefreshToken = $Object.RefreshToken
+        $this.RefreshTokenExpirationDate = $Object.RefreshTokenExpirationDate
     }
 }

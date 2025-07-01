@@ -62,8 +62,28 @@
     # The default value for the 'per_page' API parameter used in 'GET' functions that support paging.
     [int] $PerPage
 
-    # Simple parameterless constructor
     GitHubContext() {}
+
+    GitHubContext([pscustomobject]$Object) {
+        $this.ID = $Object.ID
+        $this.Name = $Object.Name
+        $this.DisplayName = $Object.DisplayName
+        $this.Type = $Object.Type
+        $this.HostName = $Object.HostName
+        $this.ApiBaseUri = $Object.ApiBaseUri
+        $this.ApiVersion = $Object.ApiVersion
+        $this.AuthType = $Object.AuthType
+        $this.NodeID = $Object.NodeID
+        $this.DatabaseID = $Object.DatabaseID
+        $this.UserName = $Object.UserName
+        $this.Token = $Object.Token
+        $this.TokenType = $Object.TokenType
+        $this.Enterprise = $Object.Enterprise
+        $this.Owner = $Object.Owner
+        $this.Repository = $Object.Repository
+        $this.HttpVersion = $Object.HttpVersion
+        $this.PerPage = $Object.PerPage
+    }
 
     [string] ToString() {
         return $this.Name
