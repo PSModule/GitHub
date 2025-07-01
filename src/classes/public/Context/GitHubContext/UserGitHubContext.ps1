@@ -13,14 +13,14 @@
 
     # The token expiration date.
     # 2024-01-01-00:00:00
-    [datetime] $TokenExpirationDate
+    [System.Nullable[datetime]] $TokenExpirationDate
 
     # The refresh token.
     [securestring] $RefreshToken
 
     # The refresh token expiration date.
     # 2024-01-01-00:00:00
-    [datetime] $RefreshTokenExpirationDate
+    [System.Nullable[datetime]] $RefreshTokenExpirationDate
 
     UserGitHubContext() {}
 

@@ -4,10 +4,10 @@
 
     # The token expiration date.
     # 2024-01-01-00:00:00
-    [datetime] $TokenExpirationDate
+    [System.Nullable[datetime]] $TokenExpirationDate
 
     # The installation ID.
-    [uint64] $InstallationID
+    [System.Nullable[uint64]] $InstallationID
 
     # The permissions that the app is requesting on the target
     [pscustomobject] $Permissions
