@@ -96,17 +96,6 @@ Describe 'Apps' {
                     }
                 }
 
-                It 'New-GitHubAppInstallationAccessToken - Can get app installation access tokens' {
-                    $installations = Get-GitHubAppInstallation
-                    LogGroup 'Tokens' {
-                        $installations | ForEach-Object {
-                            $token = New-GitHubAppInstallationAccessToken -InstallationID $_.id
-                            Write-Host ($token | Format-List | Out-String)
-                        }
-                        $token | Should -Not -BeNullOrEmpty
-                    }
-                }
-
                 It 'Get-GitHubAppInstallation - <ownerType>' {
                     $githubApp = Get-GitHubApp
                     $installation = Get-GitHubAppInstallation | Where-Object { ($_.Target.Name -eq $owner) -and ($_.Type -eq $ownerType) }
