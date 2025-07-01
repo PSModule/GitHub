@@ -4,7 +4,7 @@
         <Name>InstallationGitHubContext</Name>
         <Members>
             <ScriptProperty>
-                <Name>Remaining</Name>
+                <Name>RemainingTime</Name>
                 <GetScriptBlock>
                     if ($null -eq $this.TokenExpirationDate) { return }
                     New-TimeSpan -Start (Get-Date) -End $this.TokenExpirationDate
@@ -16,7 +16,7 @@
         <Name>UserGitHubContext</Name>
         <Members>
             <ScriptProperty>
-                <Name>Remaining</Name>
+                <Name>RemainingTime</Name>
                 <GetScriptBlock>
                     if ($null -eq $this.TokenExpirationDate) { return }
                     New-TimeSpan -Start (Get-Date) -End $this.TokenExpirationDate

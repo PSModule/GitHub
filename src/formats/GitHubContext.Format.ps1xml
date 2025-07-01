@@ -54,14 +54,14 @@
                             </TableColumnItem>
                             <TableColumnItem>
                                 <ScriptBlock>
-                                    if ($null -eq $_.Remaining) {
+                                    if ($null -eq $_.RemainingTime) {
                                     return
                                     }
 
-                                    if ($_.Remaining -lt 0) {
+                                    if ($_.RemainingTime -lt 0) {
                                     $text = "Expired"
                                     } else {
-                                    $text = $_.Remaining | Format-TimeSpan -Precision 2
+                                    $text = $_.RemainingTime | Format-TimeSpan -Precision 2
                                     }
 
                                     if ($Host.UI.SupportsVirtualTerminal -and
@@ -74,24 +74,27 @@
                                     $MaxValue = [TimeSpan]::FromHours(1)
                                     }
                                     }
-                                    $Value = $_.Remaining
+                                    $Value = $_.RemainingTime
                                     $ratio = [Math]::Min(($Value / $MaxValue), 1)
 
-                                    if ($ratio -lt 0) {
+                                    if ($ratio -ge 1) {
+                                    $r = 0
+                                    $g = 255
+                                    } elseif ($ratio -le 0) {
                                     $r = 255
                                     $g = 0
-                                    } elseif ($ratio -le 0.5) {
-                                    $r = [Math]::Round(255 * (2 * $ratio))
+                                    } elseif ($ratio -ge 0.5) {
+                                    $r = [Math]::Round(255 * (2 - 2 * $ratio))
                                     $g = 255
                                     } else {
                                     $r = 255
-                                    $g = [Math]::Round(255 * (2 - 2 * $ratio))
+                                    $g = [Math]::Round(255 * (2 * $ratio))
                                     }
                                     $b = 0
                                     $color = $PSStyle.Foreground.FromRgb($r, $g, $b)
-                                    "$color$Text$($PSStyle.Reset)"
+                                    "$color$text$($PSStyle.Reset)"
                                     } else {
-                                    $Text
+                                    $text
                                     }
                                 </ScriptBlock>
                             </TableColumnItem>
