@@ -4,7 +4,8 @@
         Disconnects from GitHub and removes the GitHub context.
 
         .DESCRIPTION
-        Disconnects from GitHub and removes the GitHub context.
+        Disconnects from GitHub and removes the GitHub context. Optionally revokes the access token
+        to ensure it cannot be used after disconnection.
 
         .EXAMPLE
         Disconnect-GitHubAccount
@@ -15,6 +16,16 @@
         Disconnect-GithubAccount -Context 'github.com/Octocat'
 
         Disconnects from GitHub and removes the context 'github.com/Octocat'.
+
+        .EXAMPLE
+        Disconnect-GitHubAccount -RevokeToken
+
+        Disconnects from GitHub, revokes the access token, and removes the default GitHub context.
+
+        .EXAMPLE
+        Disconnect-GithubAccount -Context 'github.com/Octocat' -RevokeToken
+
+        Disconnects from GitHub, revokes the access token, and removes the context 'github.com/Octocat'.
 
         .LINK
         https://psmodule.io/GitHub/Functions/Auth/Disconnect-GitHubAccount
@@ -46,6 +57,13 @@
         }
         foreach ($contextItem in $Context) {
             $contextItem = Resolve-GitHubContext -Context $contextItem
+
+            $contextToken = Get-GitHubAccessToken -Context $contextItem -AsPlainText
+            $isGitHubToken = $contextToken -eq (Get-GitHubToken | ConvertFrom-SecureString -AsPlainText)
+            if (-not $isGitHubToken -and $contextItem.AuthType -eq 'IAT') {
+                Revoke-GitHubAppInstallationAccessToken -Context $contextItem
+            }
+
             Remove-GitHubContext -Context $contextItem
             $isDefaultContext = $contextItem.Name -eq $script:GitHub.Config.DefaultContext
             if ($isDefaultContext) {
