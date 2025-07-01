@@ -4,7 +4,7 @@
         <Name>GitHubContext</Name>
         <Members>
             <ScriptProperty>
-                <Name>RemainingTime</Name>
+                <Name>Remaining</Name>
                 <GetScriptBlock>
                     if ($null -eq $this.TokenExpirationDate) { return }
                     New-TimeSpan -Start (Get-Date) -End $this.TokenExpirationDate
