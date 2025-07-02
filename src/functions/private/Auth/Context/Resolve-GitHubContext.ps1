@@ -59,26 +59,26 @@
             $contextName = $Context
             Write-Verbose "Getting context: [$contextName]"
             Write-Host "Getting context: [$contextName]"
-            $contextObject = Get-GitHubContext -Context $contextName
+            $Context = Get-GitHubContext -Context $contextName
         }
 
         if ($null -eq $Context) {
             Write-Verbose 'Context is null, returning default context.'
             Write-Host 'Context is null, returning default context.'
-            $contextObject = Get-GitHubContext
+            $Context = Get-GitHubContext
         }
 
-        switch ($contextObject.TokenType) {
+        switch ($Context.TokenType) {
             'ghu' {
                 Write-Verbose "Using GitHub User Access Token."
-                if (Test-GitHubAccessTokenRefreshRequired -Context $contextObject) {
-                    $contextObject.Token = Update-GitHubUserAccessToken -Context $contextObject -PassThru
+                if (Test-GitHubAccessTokenRefreshRequired -Context $Context) {
+                    $Context.Token = Update-GitHubUserAccessToken -Context $Context -PassThru
                 }
             }
             'PEM' {
                 Write-Verbose "Using GitHub App PEM Token."
-                $jwt = Get-GitHubAppJSONWebToken -ClientId $contextObject.ClientID -PrivateKey $contextObject.Token
-                $contextObject.Token = $jwt.Token
+                $jwt = Get-GitHubAppJSONWebToken -ClientId $Context.ClientID -PrivateKey $Context.Token
+                $Context.Token = $jwt.Token
             }
         }
 
@@ -96,7 +96,7 @@
         #     }
         # }
 
-        $contextObject
+        $Context
     }
 
     end {
