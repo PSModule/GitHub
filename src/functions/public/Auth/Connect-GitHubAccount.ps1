@@ -247,7 +247,7 @@
                 'App' {
                     Write-Verbose 'Logging in as a GitHub App...'
                     if ($PrivateKey -is [System.Security.SecureString]) {
-                        $PrivateKey = ConvertFrom-SecureString $PrivateKey -AsPlainText
+                        $PrivateKey = $PrivateKey | ConvertFrom-SecureString -AsPlainText
                     }
                     $context += @{
                         PrivateKey = $PrivateKey
