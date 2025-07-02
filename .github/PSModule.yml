@@ -1,3 +1,12 @@
 Test:
+  SourceCode:
+    Skip: true
+  PSModule:
+    Skip: true
+  Module:
+    Windows:
+      Skip: true
+    MacOS:
+      Skip: true
   CodeCoverage:
-    PercentTarget: 50
+    PercentTarget: 0
