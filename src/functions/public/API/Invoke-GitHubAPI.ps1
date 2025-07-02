@@ -196,20 +196,6 @@ function Invoke-GitHubAPI {
                 Write-Debug '----------------------------------'
             }
             do {
-                switch ($TokenType) {
-                    'ghu' {
-                        if (Test-GitHubAccessTokenRefreshRequired -Context $Context) {
-                            $Token = Update-GitHubUserAccessToken -Context $Context -PassThru
-                        }
-                    }
-                    'PEM' {
-                        if ($jwt.ExpiresAt -lt (Get-Date)) {
-                            $jwt = Get-GitHubAppJSONWebToken -ClientId $Context.ClientID -PrivateKey $Context.Token
-                            $Token = $jwt.Token
-                            $APICall['Token'] = $Token
-                        }
-                    }
-                }
                 $response = Invoke-WebRequest @APICall -ProgressAction 'SilentlyContinue' -Debug:$false -Verbose:$false
 
                 $headers = @{}
