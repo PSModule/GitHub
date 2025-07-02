@@ -43,8 +43,6 @@
     process {
         Write-Verbose "Context: [$Context]"
         Write-Verbose "Anonymous: [$Anonymous]"
-        Write-Host "Context: [$Context]"
-        Write-Host "Anonymous: [$Anonymous]"
         if ($Anonymous -or $Context -eq 'Anonymous') {
             Write-Verbose 'Returning Anonymous context.'
             return [GitHubContext]::new(
@@ -58,13 +56,11 @@
         if ($Context -is [string]) {
             $contextName = $Context
             Write-Verbose "Getting context: [$contextName]"
-            Write-Host "Getting context: [$contextName]"
             $Context = Get-GitHubContext -Context $contextName
         }
 
         if ($null -eq $Context) {
             Write-Verbose 'Context is null, returning default context.'
-            Write-Host 'Context is null, returning default context.'
             $Context = Get-GitHubContext
         }
 
