@@ -36,7 +36,7 @@ function Revoke-GitHubAppInstallationAccessToken {
         }
 
         if ($PSCmdlet.ShouldProcess('GitHub App installation access token', 'Revoke')) {
-            Invoke-GitHubAPI @InputObject
+            $null = Invoke-GitHubAPI @InputObject
         }
     }
 
