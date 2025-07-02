@@ -43,6 +43,8 @@
     process {
         Write-Verbose "Context: [$Context]"
         Write-Verbose "Anonymous: [$Anonymous]"
+        Write-Host "Context: [$Context]"
+        Write-Host "Anonymous: [$Anonymous]"
         if ($Anonymous -or $Context -eq 'Anonymous') {
             Write-Verbose 'Returning Anonymous context.'
             return [GitHubContext]::new(
@@ -56,21 +58,25 @@
         if ($Context -is [string]) {
             $contextName = $Context
             Write-Verbose "Getting context: [$contextName]"
+            Write-Host "Getting context: [$contextName]"
             $contextObject = Get-GitHubContext -Context $contextName
         }
 
         if ($null -eq $Context) {
             Write-Verbose 'Context is null, returning default context.'
+            Write-Host 'Context is null, returning default context.'
             $contextObject = Get-GitHubContext
         }
 
         switch ($contextObject.TokenType) {
             'ghu' {
+                Write-Verbose "Using GitHub User Access Token."
                 if (Test-GitHubAccessTokenRefreshRequired -Context $contextObject) {
                     $contextObject.Token = Update-GitHubUserAccessToken -Context $contextObject -PassThru
                 }
             }
             'PEM' {
+                Write-Verbose "Using GitHub App PEM Token."
                 $jwt = Get-GitHubAppJSONWebToken -ClientId $contextObject.ClientID -PrivateKey $contextObject.Token
                 $contextObject.Token = $jwt.Token
             }
