@@ -56,12 +56,24 @@
         if ($Context -is [string]) {
             $contextName = $Context
             Write-Verbose "Getting context: [$contextName]"
-            return Get-GitHubContext -Context $contextName
+            $contextObject = Get-GitHubContext -Context $contextName
         }
 
         if ($null -eq $Context) {
             Write-Verbose 'Context is null, returning default context.'
-            return Get-GitHubContext
+            $contextObject = Get-GitHubContext
+        }
+
+        switch ($contextObject.TokenType) {
+            'ghu' {
+                if (Test-GitHubAccessTokenRefreshRequired -Context $contextObject) {
+                    $contextObject.Token = Update-GitHubUserAccessToken -Context $contextObject -PassThru
+                }
+            }
+            'PEM' {
+                $jwt = Get-GitHubAppJSONWebToken -ClientId $contextObject.ClientID -PrivateKey $contextObject.Token
+                $contextObject.Token = $jwt.Token
+            }
         }
 
         # TODO: Implement App installation context resolution
@@ -78,7 +90,7 @@
         #     }
         # }
 
-        $Context
+        $contextObject
     }
 
     end {

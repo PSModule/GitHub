@@ -120,7 +120,6 @@ function Invoke-GitHubAPI {
 
     process {
         $Token = $Context.Token
-
         $HttpVersion = Resolve-GitHubContextSetting -Name 'HttpVersion' -Value $HttpVersion -Context $Context
         $ApiBaseUri = Resolve-GitHubContextSetting -Name 'ApiBaseUri' -Value $ApiBaseUri -Context $Context
         $ApiVersion = Resolve-GitHubContextSetting -Name 'ApiVersion' -Value $ApiVersion -Context $Context
@@ -135,18 +134,6 @@ function Invoke-GitHubAPI {
                 ApiVersion  = $ApiVersion
                 TokenType   = $TokenType
             } | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
-        }
-        $jwt = $null
-        switch ($TokenType) {
-            'ghu' {
-                if (Test-GitHubAccessTokenRefreshRequired -Context $Context) {
-                    $Token = Update-GitHubUserAccessToken -Context $Context -PassThru
-                }
-            }
-            'PEM' {
-                $jwt = Get-GitHubAppJSONWebToken -ClientId $Context.ClientID -PrivateKey $Context.Token
-                $Token = $jwt.Token
-            }
         }
 
         $headers = @{
