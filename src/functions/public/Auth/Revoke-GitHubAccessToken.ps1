@@ -44,7 +44,7 @@
                 Anonymous   = $true
             }
             if ($PSCmdlet.ShouldProcess('Tokens', 'Revoke')) {
-                Invoke-GitHubAPI @InputObject
+                $null = Invoke-GitHubAPI @InputObject
             }
         }
         Write-Debug "[$stackPath] - End"
