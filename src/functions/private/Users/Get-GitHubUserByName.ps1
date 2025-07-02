@@ -69,7 +69,9 @@
                     [GitHubOwner]::New($_.Response)
                 }
             }
-        } catch {}
+        } catch {
+            return
+        }
     }
 
     end {
