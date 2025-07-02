@@ -11,13 +11,14 @@
         .LINK
         https://psmodule.io/GitHub/Functions/Apps/GitHub%20App%20Installations/Get-GitHubAppInstallation
     #>
-    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
+    [OutputType([GitHubAppInstallation[]])]
+    [CmdletBinding(DefaultParameterSetName = 'List installations for the authenticated app')]
     param(
         # The enterprise slug or ID.
         [Parameter(
             Mandatory,
             ValueFromPipelineByPropertyName,
-            ParameterSetName = 'Enterprise'
+            ParameterSetName = 'List installations on an Enterprise'
         )]
         [string] $Enterprise,
 
@@ -25,24 +26,23 @@
         [Parameter(
             Mandatory,
             ValueFromPipelineByPropertyName,
-            ParameterSetName = 'Enterprise'
+            ParameterSetName = 'List installations on an Enterprise'
         )]
         [Parameter(
             Mandatory,
             ValueFromPipelineByPropertyName,
-            ParameterSetName = 'Organization'
+            ParameterSetName = 'List installations on an Organization'
         )]
         [string] $Organization,
 
         # The number of results per page (max 100).
-        [Parameter(ParameterSetName = 'Enterprise')]
-        [Parameter(ParameterSetName = 'Organization')]
+        [Parameter()]
         [System.Nullable[int]] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [object] $Context = (Get-GitHubContext)
+        [object] $Context
     )
 
     begin {
@@ -52,26 +52,27 @@
     }
 
     process {
+        $params = @{
+            PerPage = $PerPage
+            Context = $Context
+        }
+        Write-Debug "ParamSet: $($PSCmdlet.ParameterSetName)"
         switch ($PSCmdlet.ParameterSetName) {
-            'Enterprise' {
-                $params = @{
+            'List installations on an Enterprise' {
+                $params += @{
                     Enterprise   = $Enterprise
                     Organization = $Organization
-                    PerPage      = $PerPage
-                    Context      = $Context
                 }
                 Get-GitHubEnterpriseOrganizationAppInstallation @params
             }
-            'Organization' {
-                $params = @{
+            'List installations on an Organization' {
+                $params += @{
                     Organization = $Organization
-                    PerPage      = $PerPage
-                    Context      = $Context
                 }
                 Get-GitHubOrganizationAppInstallation @params
             }
-            default {
-                Get-GitHubAppInstallationForAuthenticatedApp -Context $Context
+            'List installations for the authenticated app' {
+                Get-GitHubAppInstallationForAuthenticatedApp @params
             }
         }
     }

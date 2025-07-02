@@ -18,8 +18,10 @@
 
         Gets the team with the slug 'my-team-name' in the `github` organization.
 
-        .NOTES
-        [List teams](https://docs.github.com/rest/teams/teams#list-teams)
+        .EXAMPLE
+        Get-GitHubTeam -Organization 'github' -Repository 'my-repo'
+
+        Lists all teams that have access to the 'my-repo' repository owned by `github`.
 
         .LINK
         https://psmodule.io/GitHub/Functions/Teams/Get-GitHubTeam
@@ -32,14 +34,18 @@
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Organization,
 
+        # The name of the repository without the .git extension. The name is not case sensitive.
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'List all teams with access to a repository')]
+        [string] $Repository,
+
         # The slug of the team name.
-        [Parameter(Mandatory, ParameterSetName = 'BySlug')]
+        [Parameter(Mandatory, ParameterSetName = 'Get a specific team by slug')]
         [string] $Slug,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [object] $Context = (Get-GitHubContext)
+        [object] $Context
     )
 
     begin {
@@ -55,8 +61,11 @@
             Context      = $Context
         }
         switch ($PSCmdlet.ParameterSetName) {
-            'BySlug' {
+            'Get a specific team by slug' {
                 Get-GitHubTeamBySlug @params -Slug $Slug
+            }
+            'List all teams with access to a repository' {
+                Get-GitHubTeamListByRepo @params -Repository $Repository
             }
             default {
                 Get-GitHubTeamListByOrg @params

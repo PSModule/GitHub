@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Types>
+    <Type>
+        <Name>UserGitHubContext</Name>
+        <Members>
+            <ScriptProperty>
+                <Name>Remaining</Name>
+                <GetScriptBlock>
+                    if ($null -eq $this.TokenExpirationDate) { return }
+                    New-TimeSpan -Start (Get-Date) -End $this.TokenExpirationDate
+                </GetScriptBlock>
+            </ScriptProperty>
+        </Members>
+    </Type>
+    <Type>
+        <Name>InstallationGitHubContext</Name>
+        <Members>
+            <ScriptProperty>
+                <Name>Remaining</Name>
+                <GetScriptBlock>
+                    if ($null -eq $this.TokenExpirationDate) { return }
+                    New-TimeSpan -Start (Get-Date) -End $this.TokenExpirationDate
+                </GetScriptBlock>
+            </ScriptProperty>
+        </Members>
+    </Type>
+</Types>

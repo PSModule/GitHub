@@ -18,9 +18,6 @@
                         <Label>Visibility</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>Url</Label>
-                    </TableColumnHeader>
-                    <TableColumnHeader>
                         <Label>Size (MB)</Label>
                     </TableColumnHeader>
                 </TableHeaders>
@@ -28,16 +25,20 @@
                     <TableRowEntry>
                         <TableColumnItems>
                             <TableColumnItem>
-                                <PropertyName>Name</PropertyName>
+                                <ScriptBlock>
+                                    if ($Host.UI.SupportsVirtualTerminal -and
+                                    ($env:GITHUB_ACTIONS -ne 'true')) {
+                                    $PSStyle.FormatHyperlink($_.Name,$_.Url)
+                                    } else {
+                                    $_.Name
+                                    }
+                                </ScriptBlock>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Owner</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Visibility</PropertyName>
-                            </TableColumnItem>
-                            <TableColumnItem>
-                                <PropertyName>Url</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <ScriptBlock>'{0:F2}' -f ([math]::Round($_.Size / 1KB, 2))</ScriptBlock>

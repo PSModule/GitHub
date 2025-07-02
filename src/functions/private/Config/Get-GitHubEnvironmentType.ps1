@@ -19,10 +19,10 @@
     }
 
     process {
-        if ($env:GITHUB_ACTIONS -eq 'true') {
+        if ($script:IsGitHubActions) {
             Write-Debug 'Detected GitHub Actions environment.'
             return 'GHA'
-        } elseif (-not [string]::IsNullOrEmpty($env:WEBSITE_PLATFORM_VERSION)) {
+        } elseif ($script:IsFunctionApp) {
             Write-Debug 'Detected Azure Functions environment.'
             return 'AFA'
         } else {

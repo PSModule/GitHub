@@ -55,7 +55,9 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            $_.Response | ForEach-Object { [GitHubOrganization]::new($_) }
+            foreach ($org in $_.Response) {
+                [GitHubOrganization]::new($org, $Context.HostName)
+            }
         }
     }
     end {

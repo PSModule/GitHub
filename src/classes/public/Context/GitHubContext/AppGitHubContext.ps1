@@ -14,20 +14,31 @@
     # The events that the app is subscribing to once installed
     [string[]] $Events
 
-    # Simple parameterless constructor
     AppGitHubContext() {}
 
-    # Creates a context object from a hashtable of key-vaule pairs.
-    AppGitHubContext([hashtable]$Properties) {
-        foreach ($Property in $Properties.Keys) {
-            $this.$Property = $Properties.$Property
-        }
-    }
-
-    # Creates a context object from a PSCustomObject.
-    AppGitHubContext([PSCustomObject]$Object) {
-        $Object.PSObject.Properties | ForEach-Object {
-            $this.($_.Name) = $_.Value
-        }
+    AppGitHubContext([pscustomobject]$Object) {
+        $this.ID = $Object.ID
+        $this.Name = $Object.Name
+        $this.DisplayName = $Object.DisplayName
+        $this.Type = $Object.Type
+        $this.HostName = $Object.HostName
+        $this.ApiBaseUri = $Object.ApiBaseUri
+        $this.ApiVersion = $Object.ApiVersion
+        $this.AuthType = $Object.AuthType
+        $this.NodeID = $Object.NodeID
+        $this.DatabaseID = $Object.DatabaseID
+        $this.UserName = $Object.UserName
+        $this.Token = $Object.Token
+        $this.TokenType = $Object.TokenType
+        $this.Enterprise = $Object.Enterprise
+        $this.Owner = $Object.Owner
+        $this.Repository = $Object.Repository
+        $this.HttpVersion = $Object.HttpVersion
+        $this.PerPage = $Object.PerPage
+        $this.ClientID = $Object.ClientID
+        $this.OwnerName = $Object.OwnerName
+        $this.OwnerType = $Object.OwnerType
+        $this.Permissions = $Object.Permissions
+        $this.Events = $Object.Events
     }
 }

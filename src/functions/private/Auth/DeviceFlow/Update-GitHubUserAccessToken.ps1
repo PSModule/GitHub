@@ -44,21 +44,21 @@
     process {
         Write-Verbose "Reusing previously stored ClientID: [$($Context.AuthClientID)]"
         $authClientID = $Context.AuthClientID
-        
+
         # Create a unique mutex name for this context to prevent concurrent token refresh
         $mutexName = "GitHubTokenRefresh_$($Context.ID -replace '[\\/:*?"<>|]', '_')"
         $mutex = $null
         $mutexAcquired = $false
-        
+
         try {
             # Try to create and acquire the mutex with a reasonable timeout
             $mutex = New-Object System.Threading.Mutex($false, $mutexName)
             $mutexAcquired = $mutex.WaitOne(30000) # 30 second timeout
-            
+
             if (-not $mutexAcquired) {
-                Write-Warning "Timeout waiting for token refresh mutex. Proceeding without synchronization."
+                Write-Warning 'Timeout waiting for token refresh mutex. Proceeding without synchronization.'
             }
-            
+
             # Double-check if we still need to refresh after acquiring the mutex
             # Another process might have already refreshed the token
             $accessTokenValidity = [datetime]($Context.TokenExpirationDate) - (Get-Date)
@@ -67,7 +67,7 @@
             $minutes = $accessTokenValidity.Minutes.ToString().PadLeft(2, '0')
             $seconds = $accessTokenValidity.Seconds.ToString().PadLeft(2, '0')
             $accessTokenValidityText = "$hours`:$minutes`:$seconds"
-            
+
             if ($accessTokenIsValid) {
                 if ($accessTokenValidity.TotalHours -gt $script:GitHub.Config.AccessTokenGracePeriodInHours) {
                     if (-not $Silent) {
@@ -96,7 +96,7 @@
                     $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $authClientID -Scope $Scope -HostName $Context.HostName
                 }
             }
-            
+
             # Only update the context if we actually got a token response
             if ($tokenResponse) {
                 $Context.Token = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
@@ -106,14 +106,14 @@
                 $Context.RefreshTokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.refresh_token_expires_in)
 
                 if ($PSCmdlet.ShouldProcess('Access token', 'Update/refresh')) {
-                    Set-Context -Context $Context -ID $Context.ID
+                    Set-Context -Context $Context -Vault $script:GitHub.ContextVault
                 }
             }
 
             if ($PassThru) {
                 $Context.Token
             }
-            
+
         } finally {
             # Always release the mutex and dispose of it properly
             if ($mutexAcquired -and $mutex) {
@@ -139,4 +139,4 @@
         Write-Debug "[$stackPath] - End"
     }
 }
-#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '7.0.2' }
+#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '8.1.0' }

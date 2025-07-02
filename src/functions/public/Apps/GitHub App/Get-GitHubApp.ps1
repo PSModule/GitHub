@@ -16,30 +16,34 @@
 
         Get the GitHub App with the slug 'github-actions'.
 
-        .NOTES
-        [Get an app](https://docs.github.com/rest/apps/apps#get-an-app)
-        [Get the authenticated app | GitHub Docs](https://docs.github.com/rest/apps/apps#get-the-authenticated-app)
+        .OUTPUTS
+        GitHubApp
 
         .LINK
         https://psmodule.io/GitHub/Functions/Apps/GitHub%20App/Get-GitHubApp
+
+        .NOTES
+        [Get an app](https://docs.github.com/rest/apps/apps#get-an-app)
+        [Get the authenticated app | GitHub Docs](https://docs.github.com/rest/apps/apps#get-the-authenticated-app)
     #>
-    [OutputType([pscustomobject])]
-    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
+    [OutputType([GitHubApp])]
+    [CmdletBinding(DefaultParameterSetName = 'Get the authenticated app')]
     param(
         # The AppSlug is just the URL-friendly name of a GitHub App.
         # You can find this on the settings page for your GitHub App (e.g., <https://github.com/settings/apps/{app_slug}>).
         # Example: 'github-actions'
         [Parameter(
             Mandatory,
-            ParameterSetName = 'BySlug'
+            ParameterSetName = 'Get an app by slug',
+            ValueFromPipeline,
+            ValueFromPipelineByPropertyName
         )]
-        [Alias('AppSlug')]
-        [string] $Name,
+        [string] $Slug,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [object] $Context = (Get-GitHubContext)
+        [object] $Context
     )
 
     begin {
@@ -50,8 +54,8 @@
 
     process {
         switch ($PSCmdlet.ParameterSetName) {
-            'BySlug' {
-                Get-GitHubAppByName -AppSlug $Name -Context $Context
+            'Get an app by slug' {
+                Get-GitHubAppBySlug -Slug $Slug -Context $Context
             }
             default {
                 Get-GitHubAuthenticatedApp -Context $Context

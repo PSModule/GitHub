@@ -30,11 +30,17 @@ Describe 'Variables' {
 
     Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
         BeforeAll {
-            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
+            LogGroup 'Current Contexts' {
+                $context = Connect-GitHubAccount @connectParams -PassThru -Silent
+                Write-Host (Get-GitHubContext -ListAvailable | Format-List | Out-String)
+            }
             LogGroup 'Context' {
                 Write-Host ($context | Format-List | Out-String)
             }
             if ($AuthType -eq 'APP') {
+                LogGroup 'Current Contexts' {
+                    Write-Host (Get-GitHubContext -ListAvailable | Format-List | Out-String)
+                }
                 LogGroup 'Context - Installation' {
                     $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
                     Write-Host ($context | Format-List | Out-String)
@@ -99,6 +105,7 @@ Describe 'Variables' {
                 }
             }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+            Write-Host ('-' * 60)
         }
 
         Context 'Organization' -Skip:($OwnerType -ne 'organization') {
@@ -321,7 +328,7 @@ Describe 'Variables' {
             }
         }
 
-        Context 'Repository' -Skip:($OwnerType -eq 'repository') {
+        Context 'Repository' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             BeforeAll {
                 $scope = @{
                     Owner      = $owner
@@ -440,7 +447,7 @@ Describe 'Variables' {
             }
         }
 
-        Context 'Environment' -Skip:($OwnerType -eq 'repository') {
+        Context 'Environment' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             BeforeAll {
                 $scope = @{
                     Owner      = $owner

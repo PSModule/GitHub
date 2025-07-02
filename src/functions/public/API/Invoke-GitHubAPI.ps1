@@ -1,7 +1,7 @@
-﻿#Requires -Modules @{ ModuleName = 'Uri'; RequiredVersion = '1.1.0' }
-#Requires -Modules @{ ModuleName = 'Hashtable'; RequiredVersion = '1.1.5' }
+﻿#Requires -Modules @{ ModuleName = 'Uri'; RequiredVersion = '1.1.2' }
+#Requires -Modules @{ ModuleName = 'Hashtable'; RequiredVersion = '1.1.6' }
 
-filter Invoke-GitHubAPI {
+function Invoke-GitHubAPI {
     <#
         .SYNOPSIS
         Calls the GitHub API using the provided parameters.
@@ -101,14 +101,14 @@ filter Invoke-GitHubAPI {
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [object] $Context = (Get-GitHubContext)
+        [object] $Context
     )
 
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         $debug = $DebugPreference -eq 'Continue'
-        $Context = Resolve-GitHubContext -Context $Context
+        $Context = Resolve-GitHubContext -Context $Context -Anonymous $Anonymous
         if ($debug) {
             Write-Debug 'Invoking GitHub API...'
             Write-Debug 'Parent function parameters:'
@@ -152,7 +152,7 @@ filter Invoke-GitHubAPI {
         $headers = @{
             Accept                 = $Accept
             'X-GitHub-Api-Version' = $ApiVersion
-            'User-Agent'           = "PSModule.GitHub $($script:PSModuleInfo.ModuleVersion)"
+            'User-Agent'           = $script:UserAgent
         }
         $headers | Remove-HashtableEntry -NullOrEmptyValues
 
@@ -173,7 +173,7 @@ filter Invoke-GitHubAPI {
         }
         $APICall | Remove-HashtableEntry -NullOrEmptyValues
 
-        if (-not $Anonymous -and $Context -ne 'Anonymous' -and -not [string]::IsNullOrEmpty($Context)) {
+        if (-not $Anonymous -and $Context.Name -ne 'Anonymous') {
             $APICall['Authentication'] = 'Bearer'
             $APICall['Token'] = $Token
         }
@@ -300,33 +300,34 @@ filter Invoke-GitHubAPI {
                 Write-Debug '----------------------------------'
             }
             $headers = @{}
-            foreach ($item in $failure.Exception.Response.Headers.GetEnumerator()) {
-                $headers[$item.Key] = ($item.Value).Trim() -join ', '
+            if ($failure.Exception.Response.Headers) {
+                foreach ($item in $failure.Exception.Response.Headers.GetEnumerator()) {
+                    $headers[$item.Key] = ($item.Value).Trim() -join ', '
+                }
+                $headers = [pscustomobject]$headers
+                if ($headers.'x-ratelimit-reset') {
+                    $headers.'x-ratelimit-reset' = [DateTime]::UnixEpoch.AddSeconds(
+                        $headers.'x-ratelimit-reset'
+                    ).ToLocalTime().ToString('s')
+                }
+                if ($headers.'Date') {
+                    $headers.'Date' = [DateTime]::Parse(
+                        ($headers.'Date').Replace('UTC', '').Trim()
+                    ).ToLocalTime().ToString('s')
+                }
+                if ($headers.'github-authentication-token-expiration') {
+                    $headers.'github-authentication-token-expiration' = [DateTime]::Parse(
+                        ($headers.'github-authentication-token-expiration').Replace('UTC', '').Trim()
+                    ).ToLocalTime().ToString('s')
+                }
+                $sortedProperties = $headers.PSObject.Properties.Name | Sort-Object
+                $headers = $headers | Select-Object $sortedProperties
+                if ($debug) {
+                    Write-Debug 'Response headers:'
+                    $headers | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+                    Write-Debug '---------------------------'
+                }
             }
-            $headers = [pscustomobject]$headers
-            if ($headers.'x-ratelimit-reset') {
-                $headers.'x-ratelimit-reset' = [DateTime]::UnixEpoch.AddSeconds(
-                    $headers.'x-ratelimit-reset'
-                ).ToLocalTime().ToString('s')
-            }
-            if ($headers.'Date') {
-                $headers.'Date' = [DateTime]::Parse(
-                    ($headers.'Date').Replace('UTC', '').Trim()
-                ).ToLocalTime().ToString('s')
-            }
-            if ($headers.'github-authentication-token-expiration') {
-                $headers.'github-authentication-token-expiration' = [DateTime]::Parse(
-                    ($headers.'github-authentication-token-expiration').Replace('UTC', '').Trim()
-                ).ToLocalTime().ToString('s')
-            }
-            $sortedProperties = $headers.PSObject.Properties.Name | Sort-Object
-            $headers = $headers | Select-Object $sortedProperties
-            if ($debug) {
-                Write-Debug 'Response headers:'
-                $headers | Out-String -Stream | ForEach-Object { Write-Debug $_ }
-                Write-Debug '---------------------------'
-            }
-
             $errordetails = $failure.ErrorDetails | ConvertFrom-Json -AsHashtable
             $errors = $errordetails.errors
             $errorResult = [pscustomobject]@{
@@ -349,7 +350,7 @@ Request headers:
 $([pscustomobject]$APICall.Headers | Format-List | Out-String)
 ----------------------------------
 Request body:
-$(($APICall.Body | Out-String -Stream).Split('\n') -split '\n')
+$("$($APICall.Body | Out-String -Stream)".Split('\n') -split '\n')
 ----------------------------------
 Response headers:
 $($headers | Format-List | Out-String)

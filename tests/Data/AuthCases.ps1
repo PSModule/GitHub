@@ -50,22 +50,6 @@
     }
     @{
         AuthType         = 'App'
-        Type             = 'a GitHub App from an Enterprise'
-        Case             = 'PEM + IAT'
-        TokenType        = 'APP_ENT'
-        Target           = 'organization account'
-        Owner            = 'psmodule-test-org3'
-        OwnerType        = 'organization'
-        ConnectParams    = @{
-            ClientID   = $env:TEST_APP_ENT_CLIENT_ID
-            PrivateKey = $env:TEST_APP_ENT_PRIVATE_KEY
-        }
-        ConnectAppParams = @{
-            Organization = 'psmodule-test-org3'
-        }
-    }
-    @{
-        AuthType         = 'App'
         Type             = 'a GitHub App from an Organization'
         Case             = 'PEM + IAT'
         TokenType        = 'APP_ORG'
@@ -81,3 +65,35 @@
         }
     }
 )
+@{
+    AuthType         = 'App'
+    Type             = 'a GitHub App from an Enterprise'
+    Case             = 'PEM + IAT'
+    TokenType        = 'APP_ENT'
+    Target           = 'organization account'
+    Owner            = 'psmodule-test-org3'
+    OwnerType        = 'organization'
+    ConnectParams    = @{
+        ClientID   = $env:TEST_APP_ENT_CLIENT_ID
+        PrivateKey = $env:TEST_APP_ENT_PRIVATE_KEY
+    }
+    ConnectAppParams = @{
+        Organization = 'psmodule-test-org3'
+    }
+}
+@{
+    AuthType         = 'App'
+    Type             = 'a GitHub App from an Enterprise'
+    Case             = 'PEM + IAT'
+    TokenType        = 'APP_ENT'
+    Target           = 'enterprise account'
+    Owner            = 'msx'
+    OwnerType        = 'enterprise'
+    ConnectParams    = @{
+        ClientID   = $env:TEST_APP_ENT_CLIENT_ID
+        PrivateKey = $env:TEST_APP_ENT_PRIVATE_KEY
+    }
+    ConnectAppParams = @{
+        Enterprise = 'msx'
+    }
+}

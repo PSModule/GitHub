@@ -5,6 +5,8 @@
             <Name>GitHubOwnerTable</Name>
             <ViewSelectedBy>
                 <TypeName>GitHubOwner</TypeName>
+                <TypeName>GitHubUser</TypeName>
+                <TypeName>GitHubOrganization</TypeName>
             </ViewSelectedBy>
             <TableControl>
                 <TableHeaders>
@@ -23,15 +25,19 @@
                     <TableColumnHeader>
                         <Label>Plan</Label>
                     </TableColumnHeader>
-                    <TableColumnHeader>
-                        <Label>Url</Label>
-                    </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
                     <TableRowEntry>
                         <TableColumnItems>
                             <TableColumnItem>
-                                <PropertyName>Name</PropertyName>
+                                <ScriptBlock>
+                                    if ($Host.UI.SupportsVirtualTerminal -and
+                                    ($env:GITHUB_ACTIONS -ne 'true')) {
+                                    $PSStyle.FormatHyperlink($_.Name,$_.Url)
+                                    } else {
+                                    $_.Name
+                                    }
+                                </ScriptBlock>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>ID</PropertyName>
@@ -44,9 +50,6 @@
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Plan</PropertyName>
-                            </TableColumnItem>
-                            <TableColumnItem>
-                                <PropertyName>Url</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>

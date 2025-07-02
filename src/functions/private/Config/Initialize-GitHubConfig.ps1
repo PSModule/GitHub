@@ -1,6 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '7.0.2' }
-
-function Initialize-GitHubConfig {
+﻿function Initialize-GitHubConfig {
     <#
         .SYNOPSIS
         Initialize the GitHub module configuration.
@@ -34,7 +32,7 @@ function Initialize-GitHubConfig {
         Write-Debug "Force:           [$Force]"
         if ($Force) {
             Write-Debug 'Forcing initialization of GitHubConfig.'
-            $context = Set-Context -ID $script:GitHub.DefaultConfig.ID -Context $script:GitHub.DefaultConfig -PassThru
+            $context = Set-Context -Context $script:GitHub.DefaultConfig -Vault $script:GitHub.ContextVault -PassThru
             $script:GitHub.Config = [GitHubConfig]$context
             return
         }
@@ -46,11 +44,11 @@ function Initialize-GitHubConfig {
         }
 
         Write-Debug 'Attempt to load the stored GitHubConfig from ContextVault'
-        $context = Get-Context -ID $script:GitHub.DefaultConfig.ID
+        $context = Get-Context -ID $script:GitHub.DefaultConfig.ID -Vault $script:GitHub.ContextVault
         if ($context) {
             Write-Debug 'GitHubConfig loaded into memory.'
 
-            Write-Debug "Checking if new default properties are available in the stored context."
+            Write-Debug 'Checking if new default properties are available in the stored context.'
             $needsUpdate = $false
             $defaultProperties = $script:GitHub.DefaultConfig.PSObject.Properties.Name
             foreach ($propName in $defaultProperties) {
@@ -62,14 +60,14 @@ function Initialize-GitHubConfig {
             }
             if ($needsUpdate) {
                 Write-Debug 'Updating stored context with new default properties'
-                $context = Set-Context -ID $script:GitHub.DefaultConfig.ID -Context $context -PassThru
+                $context = Set-Context -Context $context -Vault $script:GitHub.ContextVault -PassThru
             }
 
             $script:GitHub.Config = [GitHubConfig]$context
             return
         }
         Write-Debug 'Initializing GitHubConfig from defaults'
-        $context = Set-Context -ID $script:GitHub.DefaultConfig.ID -Context $script:GitHub.DefaultConfig -PassThru
+        $context = Set-Context -Context $script:GitHub.DefaultConfig -Vault $script:GitHub.ContextVault -PassThru
         $script:GitHub.Config = [GitHubConfig]$context
     }
 
@@ -77,3 +75,4 @@ function Initialize-GitHubConfig {
         Write-Debug "[$stackPath] - End"
     }
 }
+#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '8.1.0' }

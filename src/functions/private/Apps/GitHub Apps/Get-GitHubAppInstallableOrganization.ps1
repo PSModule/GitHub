@@ -13,9 +13,13 @@
         .EXAMPLE
         Get-GitHubAppInstallableOrganization -Enterprise 'msx'
 
+        .OUTPUTS
+        GitHubOrganization[]
+
         .LINK
         https://psmodule.io/GitHub/Functions/Apps/GitHub%20App/Get-GitHubAppInstallableOrganization
     #>
+    [OutputType([GitHubOrganization[]])]
     [CmdletBinding()]
     param(
         # The enterprise slug or ID.
@@ -27,15 +31,13 @@
         [System.Nullable[int]] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.
-        # Can be either a string or a GitHubContext object.
-        [Parameter()]
-        [object] $Context = (Get-GitHubContext)
+        [Parameter(Mandatory)]
+        [object] $Context
     )
 
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, UAT
         # enterprise_organization_installations=read
     }
@@ -49,7 +51,9 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            foreach ($organization in $_.Response) {
+                [GitHubOrganization]::new($organization, $Context.HostName)
+            }
         }
     }
 
@@ -57,5 +61,3 @@
         Write-Debug "[$stackPath] - End"
     }
 }
-
-#SkipTest:FunctionTest:Will add a test for this function in a future PR

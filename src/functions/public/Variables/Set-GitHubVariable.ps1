@@ -1,4 +1,4 @@
-function Set-GitHubVariable {
+﻿function Set-GitHubVariable {
     <#
         .SYNOPSIS
         Creates or updates a GitHub Actions variable at the organization, repository, or environment level.
@@ -82,7 +82,7 @@ function Set-GitHubVariable {
 
         # The context to run the command in. Can be either a string or a GitHubContext object.
         [Parameter()]
-        [object] $Context = (Get-GitHubContext)
+        [object] $Context
     )
 
     begin {

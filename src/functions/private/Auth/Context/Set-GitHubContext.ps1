@@ -1,6 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '7.0.2' }
-
-function Set-GitHubContext {
+﻿function Set-GitHubContext {
     <#
         .SYNOPSIS
         Sets the GitHub context and stores it in the context vault.
@@ -80,12 +78,12 @@ function Set-GitHubContext {
                     if ([string]::IsNullOrEmpty($contextObj['DisplayName'])) {
                         try {
                             $app = Get-GitHubApp -Name $contextObj['Username'] -Context $contextObj
-                            $contextObj['DisplayName'] = [string]$app.name
+                            $contextObj['DisplayName'] = [string]$app.Name
                         } catch {
                             Write-Debug "Failed to get the GitHub App with the slug: [$($contextObj['Username'])]."
                         }
                     }
-                    if ($script:GitHub.EnvironmentType -eq 'GHA') {
+                    if ($script:IsGitHubActions) {
                         $gitHubEvent = Get-Content -Path $env:GITHUB_EVENT_PATH -Raw | ConvertFrom-Json
                         $installationType = $gitHubEvent.repository.owner.type
                         $installationName = $gitHubEvent.repository.owner.login
@@ -124,15 +122,15 @@ function Set-GitHubContext {
                 }
                 'App' {
                     $app = Get-GitHubApp -Context $contextObj
-                    $contextObj['Name'] = "$($contextObj['HostName'])/$($app.slug)"
-                    $contextObj['DisplayName'] = [string]$app.name
-                    $contextObj['Username'] = [string]$app.slug
-                    $contextObj['NodeID'] = [string]$app.node_id
-                    $contextObj['DatabaseID'] = [string]$app.id
-                    $contextObj['Permissions'] = [PSCustomObject]$app.permissions
-                    $contextObj['Events'] = [string[]]$app.events
-                    $contextObj['OwnerName'] = [string]$app.owner.login
-                    $contextObj['OwnerType'] = [string]$app.owner.type
+                    $contextObj['Name'] = "$($contextObj['HostName'])/$($app.Slug)"
+                    $contextObj['DisplayName'] = [string]$app.Name
+                    $contextObj['Username'] = [string]$app.Slug
+                    $contextObj['NodeID'] = [string]$app.NodeID
+                    $contextObj['DatabaseID'] = [string]$app.ID
+                    $contextObj['Permissions'] = [PSCustomObject]$app.Permissions
+                    $contextObj['Events'] = [string[]]$app.Events
+                    $contextObj['OwnerName'] = [string]$app.Owner.Name
+                    $contextObj['OwnerType'] = [string]$app.Owner.Type
                     $contextObj['Type'] = 'App'
                 }
                 default {
@@ -143,12 +141,12 @@ function Set-GitHubContext {
             $contextObj | Out-String -Stream | ForEach-Object { Write-Debug $_ }
             Write-Debug '----------------------------------------------------'
             if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
-                Write-Debug "Saving context: [$($script:GitHub.Config.ID)/$($contextObj['Name'])]"
-                Set-Context -ID "$($script:GitHub.Config.ID)/$($contextObj['Name'])" -Context $contextObj
+                Write-Debug "Saving context: [$($contextObj['Name'])]"
+                Set-Context -ID $($contextObj['Name']) -Context $contextObj -Vault $script:GitHub.ContextVault
                 if ($Default) {
                     Switch-GitHubContext -Context $contextObj['Name']
                 }
-                if ($script:GitHub.EnvironmentType -eq 'GHA') {
+                if ($script:IsGitHubActions) {
                     if ($contextObj['AuthType'] -ne 'APP') {
                         Set-GitHubGitConfig -Context $contextObj['Name']
                         Connect-GitHubCli -Context $contextObj
@@ -170,3 +168,4 @@ function Set-GitHubContext {
         Write-Debug "[$stackPath] - End"
     }
 }
+#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '8.1.0' }

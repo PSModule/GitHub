@@ -58,12 +58,11 @@
             Write-Warning 'Cannot create output as the step has no ID.'
         }
 
-        switch -Regex ($value.GetType().Name) {
-            'SecureString' {
-                $Value = $Value | ConvertFrom-SecureString -AsPlainText
-                Add-GitHubMask -Value $Value
-            }
-            default {}
+        if ($null -eq $value) {
+            Write-Debug "Property value type: null"
+        } elseif ($value.GetType().Name -eq 'SecureString') {
+            $Value = $Value | ConvertFrom-SecureString -AsPlainText
+            Add-GitHubMask -Value $Value
         }
 
         Write-Verbose "Output: [$Name] = [$Value]"
@@ -72,7 +71,7 @@
         # else append the key-value pair directly.
         if ($env:PSMODULE_GITHUB_SCRIPT) {
             if ($Value -isnot [string]) {
-                $Value = $Value | ConvertTo-Json -Compress -Depth 100
+                $Value = $Value | ConvertTo-Json -Depth 100
             }
             Write-Debug "[$stackPath] - Running in GitHub-Script composite action"
             if (-not $outputs.ContainsKey('result')) {

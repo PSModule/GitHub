@@ -1,6 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '7.0.2' }
-
-###
+﻿###
 ### CONNECTING
 ###
 
@@ -40,16 +38,15 @@ Get-GitHubContext -ListAvailable
 Get-GitHubContext -Context 'msx.ghe.com/MariusStorhaug'
 
 # Take a name dynamically from Get-GitHubContext? Autocomplete the name
-Set-GitHubDefaultContext -Context 'msx.ghe.com/MariusStorhaug'
+Switch-GitHubContext -Context 'msx.ghe.com/MariusStorhaug'
 
 # Set a specific context as the default context using pipeline
-'msx.ghe.com/MariusStorhaug' | Set-GitHubDefaultContext
+'msx.ghe.com/MariusStorhaug' | Switch-GitHubContext
 
-Get-GitHubContext -Context 'github.com/MariusStorhaug' | Set-GitHubDefaultContext
+Get-GitHubContext -Context 'github.com/MariusStorhaug' | Switch-GitHubContext
 
 # Abstraction layers on GitHubContexts
 Get-GitHubContext -Context 'msx.ghe.com/MariusStorhaug'
-Get-Context -ID 'PSModule.GitHub/msx.ghe.com/MariusStorhaug'
 
 ###
 ### DISCONNECTING

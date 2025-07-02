@@ -1,4 +1,4 @@
-function New-GitHubVariable {
+﻿function New-GitHubVariable {
     <#
         .SYNOPSIS
         Creates a GitHub Actions variable at the organization, repository, or environment level.
@@ -86,7 +86,7 @@ function New-GitHubVariable {
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [object] $Context = (Get-GitHubContext)
+        [object] $Context
     )
 
     begin {

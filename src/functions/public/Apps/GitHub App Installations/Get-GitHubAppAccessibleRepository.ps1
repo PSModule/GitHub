@@ -19,9 +19,13 @@
 
         Get the repositories that can be made accessible to a GitHub App installed on the organization 'PSModule' in the enterprise 'msx'.
 
+        .OUTPUTS
+        GitHubRepository[]
+
         .LINK
         https://psmodule.io/GitHub/Functions/Apps/GitHub%20App%20Installations/Get-GitHubAppAccessibleRepository
     #>
+    [OutputType([GitHubRepository[]])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The enterprise slug or ID.
@@ -45,7 +49,7 @@
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [object] $Context = (Get-GitHubContext)
+        [object] $Context
     )
 
     begin {
@@ -65,7 +69,16 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            foreach ($repo in $_.Response) {
+                [GitHubRepository]@{
+                    ID       = $repo.id
+                    Name     = $repo.name
+                    Owner    = [GitHubOwner]@{
+                        Name = $Organization
+                    }
+                    FullName = $repo.full_name
+                }
+            }
         }
     }
 

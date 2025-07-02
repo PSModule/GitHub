@@ -100,6 +100,7 @@ Describe 'Secrets' {
                 }
             }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+            Write-Host ('-' * 60)
         }
 
         Context 'User' -Skip:($OwnerType -ne 'user') {
@@ -306,7 +307,7 @@ Describe 'Secrets' {
             }
         }
 
-        Context 'Repository' -Skip:($OwnerType -eq 'repository') {
+        Context 'Repository' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             BeforeAll {
                 $scope = @{
                     Owner      = $owner
@@ -419,7 +420,7 @@ Describe 'Secrets' {
             }
         }
 
-        Context 'Environment' -Skip:($OwnerType -eq 'repository') {
+        Context 'Environment' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             BeforeAll {
                 $scope = @{
                     Owner      = $owner

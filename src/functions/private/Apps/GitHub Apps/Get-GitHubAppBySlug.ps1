@@ -1,4 +1,4 @@
-﻿filter Get-GitHubAppByName {
+﻿function Get-GitHubAppBySlug {
     <#
         .SYNOPSIS
         Get an app
@@ -14,15 +14,14 @@
         .NOTES
         [Get an app](https://docs.github.com/rest/apps/apps#get-an-app)
     #>
-    [OutputType([pscustomobject])]
+    [OutputType([GitHubApp])]
     [CmdletBinding()]
     param(
         # The AppSlug is just the URL-friendly name of a GitHub App.
         # You can find this on the settings page for your GitHub App (e.g., https://github.com/settings/apps/<app_slug>).
         # Example: 'github-actions'
         [Parameter(Mandatory)]
-        [Alias('Name')]
-        [string] $AppSlug,
+        [string] $Slug,
 
         # The context to run the command in. Used to get the details for the API call.
         [Parameter(Mandatory)]
@@ -37,13 +36,13 @@
 
     process {
         $inputObject = @{
-            Context     = $Context
-            APIEndpoint = "/apps/$AppSlug"
             Method      = 'GET'
+            APIEndpoint = "/apps/$Slug"
+            Context     = $Context
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            [GitHubApp]::new($_.Response)
         }
     }
     end {

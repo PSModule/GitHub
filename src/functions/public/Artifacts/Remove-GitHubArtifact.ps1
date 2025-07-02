@@ -1,4 +1,4 @@
-function Remove-GitHubArtifact {
+﻿function Remove-GitHubArtifact {
     <#
         .SYNOPSIS
         Deletes an artifact from a GitHub repository by its unique ID.
@@ -48,12 +48,13 @@ function Remove-GitHubArtifact {
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [object] $Context = (Get-GitHubContext)
+        [object] $Context
     )
 
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
+        $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 

@@ -25,12 +25,22 @@ Describe 'Auth' {
     Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
         AfterAll {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+            Write-Host ('-' * 60)
         }
 
         It 'Connect-GitHubAccount - Connects using the provided credentials' {
             $context = Connect-GitHubAccount @connectParams -PassThru -Silent
-            LogGroup 'Context' {
+            LogGroup 'Context - Standard' {
+                Write-Host ($context | Out-String)
+            }
+            LogGroup 'Context - Format-List' {
                 Write-Host ($context | Format-List | Out-String)
+            }
+            LogGroup 'Context - Format-Table' {
+                Write-Host ($context | Format-Table | Out-String)
+            }
+            LogGroup 'Context - Full' {
+                Write-Host ($context | Select-Object * | Out-String)
             }
             $context | Should -Not -BeNullOrEmpty
         }
@@ -60,31 +70,46 @@ Describe 'Auth' {
             $context | Should -Not -BeNullOrEmpty
         }
 
-        # Tests for APP goes here
-        if ($AuthType -eq 'APP') {
-            It 'Connect-GitHubAccount - Connects using the provided credentials + AutoloadInstallations' {
-                $context = Connect-GitHubAccount @connectParams -PassThru -Silent -AutoloadInstallations
-                LogGroup 'Context' {
-                    Write-Host ($context | Format-List | Out-String)
-                }
-                $context | Should -Not -BeNullOrEmpty
+        It 'Connect-GitHubAccount - Connects using the provided credentials + AutoloadInstallations' -Skip:($AuthType -ne 'APP') {
+            $context = Connect-GitHubAccount @connectParams -PassThru -Silent -AutoloadInstallations
+            LogGroup 'Connect-Github' {
+                Write-Host ($context | Out-String)
             }
+            LogGroup 'Context' {
+                Write-Host ($context | Format-List | Out-String)
+            }
+            $context | Should -Not -BeNullOrEmpty
+        }
 
-            It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
-                $contexts = Connect-GitHubApp -PassThru -Silent
-                LogGroup 'Contexts' {
-                    Write-Host ($contexts | Format-List | Out-String)
-                }
-                $contexts | Should -Not -BeNullOrEmpty
+        It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' -Skip:($AuthType -ne 'APP') {
+            $contexts = Connect-GitHubApp -PassThru -Silent
+            LogGroup 'Connect-GithubApp' {
+                Write-Host ($contexts | Out-String)
             }
+            LogGroup 'Context - Standard' {
+                Write-Host ($contexts | Out-String)
+            }
+            LogGroup 'Context - Format-List' {
+                Write-Host ($contexts | Format-List | Out-String)
+            }
+            LogGroup 'Context - Format-Table' {
+                Write-Host ($contexts | Format-Table | Out-String)
+            }
+            LogGroup 'Context - Full' {
+                Write-Host ($contexts | Select-Object * | Out-String)
+            }
+            $contexts | Should -Not -BeNullOrEmpty
+        }
 
-            It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
-                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
-                LogGroup 'Context' {
-                    Write-Host ($context | Format-List | Out-String)
-                }
-                $context | Should -Not -BeNullOrEmpty
+        It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' -Skip:($AuthType -ne 'APP') {
+            $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
+            LogGroup 'Connect-GithubApp' {
+                $context
             }
+            LogGroup 'Context' {
+                Write-Host ($context | Format-List | Out-String)
+            }
+            $context | Should -Not -BeNullOrEmpty
         }
 
         # Tests for runners goes here
@@ -105,7 +130,7 @@ Describe 'Auth' {
         It 'Get-GitHubContext - Gets the default context' {
             $context = Get-GitHubContext
             LogGroup 'Default context' {
-                Write-Host ($viewer | Format-List | Out-String)
+                Write-Host ($context | Format-List | Out-String)
             }
         }
 
@@ -121,14 +146,46 @@ Describe 'Auth' {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
             (Get-GitHubContext -ListAvailable).count | Should -Be 0
         }
+
+        It 'Get-GitHubContext - Does not fail when there are 0 contexts' {
+            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+            { Get-GitHubContext } | Should -Not -Throw
+            $contexts = Get-GitHubContext
+            $contexts | Should -BeNullOrEmpty
+        }
+
+        It 'Get-GitHubAccessToken - Gets token as SecureString by default' {
+            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
+            $token = Get-GitHubAccessToken
+            $token | Should -BeOfType [System.Security.SecureString]
+        }
+
+        It 'Get-GitHubAccessToken - Gets token as plain text with -AsPlainText' {
+            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
+            $token = Get-GitHubAccessToken -AsPlainText
+            $token | Should -BeOfType [System.String]
+            $token | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Get-GitHubAccessToken - Works with explicit -Context parameter' {
+            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
+            $token = Get-GitHubAccessToken -Context $context -AsPlainText
+            $token | Should -BeOfType [System.String]
+            $token | Should -Not -BeNullOrEmpty
+
+            $secureToken = Get-GitHubAccessToken -Context $context
+            $secureToken | Should -BeOfType [System.Security.SecureString]
+        }
     }
 }
 
 Describe 'GitHub' {
     Context 'Config' {
         It 'Get-GitHubConfig - Gets the module configuration' {
-            $config = Get-GitHubConfig
-            Write-Host ($config | Format-Table | Out-String)
+            LogGroup 'Config' {
+                $config = Get-GitHubConfig
+                Write-Host ($config | Format-List | Out-String)
+            }
             $config | Should -Not -BeNullOrEmpty
         }
         It 'Get-GitHubConfig - Gets a configuration item by name' {
@@ -155,14 +212,18 @@ Describe 'GitHub' {
     }
     Context 'Actions' {
         It 'Get-GitHubEventData - Gets data about the event that triggered the workflow' {
-            $workflow = Get-GitHubEventData
-            Write-Host ($workflow | Format-List | Out-String)
-            $workflow | Should -Not -BeNullOrEmpty
+            LogGroup 'Event Data' {
+                $eventData = Get-GitHubEventData
+                Write-Host ($eventData | Format-List | Out-String)
+            }
+            $eventData | Should -Not -BeNullOrEmpty
         }
         It 'Get-GitHubRunnerData - Gets data about the runner that is running the workflow' {
-            $workflow = Get-GitHubRunnerData
-            Write-Host ($workflow | Format-List | Out-String)
-            $workflow | Should -Not -BeNullOrEmpty
+            LogGroup 'Runner Data' {
+                $runnerData = Get-GitHubRunnerData
+                Write-Host ($runnerData | Format-List | Out-String)
+            }
+            $runnerData | Should -Not -BeNullOrEmpty
         }
     }
     Context 'Status' -ForEach @('Public', 'Europe', 'Australia') {
@@ -287,11 +348,59 @@ string
             } | Should -Not -Throw
             (Get-GitHubOutput).Config | Should -BeLike ''
         }
+        It 'Set-GitHubOutput + Empty string - Should not throw' {
+            {
+                Set-GitHubOutput -Name 'EmptyOutput' -Value ''
+            } | Should -Not -Throw
+            (Get-GitHubOutput).EmptyOutput | Should -Be ''
+        }
+        It 'Set-GitHubOutput + Null - Should not throw and store as null' {
+            {
+                Set-GitHubOutput -Name 'NullOutput' -Value $null
+            } | Should -Not -Throw
+            $nullValue = (Get-GitHubOutput).NullOutput
+            $nullValue | Should -Be $null
+
+            # Check the actual file content format
+            $content = Get-Content -Path $env:GITHUB_OUTPUT -Raw
+            $content | Should -Match 'NullOutput<<EOF_[a-z0-9-]+\r?\nEOF_[a-z0-9-]+'
+        }
+
+        It 'Set-GitHubOutput + Empty String - Should store as empty string' {
+            {
+                Set-GitHubOutput -Name 'EmptyStringOutput' -Value ''
+            } | Should -Not -Throw
+            (Get-GitHubOutput).EmptyStringOutput | Should -Be ''
+
+            # Check the actual file content format
+            $content = Get-Content -Path $env:GITHUB_OUTPUT -Raw
+            $content | Should -Match 'EmptyStringOutput<<EOF_[a-z0-9-]+\r?\n\r?\nEOF_[a-z0-9-]+'
+        }
+
+        It 'Set-GitHubOutput - Should work with existing multi-line outputs in file' {
+            $existingContent = @'
+stderr<<ghadelimiter_6f9f5610-74ad-4b25-8ef3-7f3e9e764fa2
+ghadelimiter_6f9f5610-74ad-4b25-8ef3-7f3e9e764fa2
+'@
+            Add-Content -Path $env:GITHUB_OUTPUT -Value $existingContent
+            {
+                Set-GitHubOutput -Name 'TestAfterExisting' -Value 'TestValue'
+            } | Should -Not -Throw
+            (Get-GitHubOutput).TestAfterExisting | Should -Be 'TestValue'
+            $stderr = (Get-GitHubOutput).stderr
+            $stderr | Should -Be $null
+        }
         It 'Get-GitHubOutput - Should not throw' {
             {
                 Get-GitHubOutput
             } | Should -Not -Throw
             Write-Host (Get-GitHubOutput | Format-List | Out-String)
+        }
+        It 'Reset-GitHubOutput - Should clear the outputs from the output file' {
+            Set-GitHubOutput -Name 'TestOutput' -Value 'TestValue'
+            (Get-GitHubOutput).TestOutput | Should -Be 'TestValue'
+            Reset-GitHubOutput
+            Get-GitHubOutput | Should -BeNullOrEmpty
         }
         It 'Set-GitHubEnvironmentVariable - Should not throw' {
             {
@@ -361,115 +470,6 @@ line
     }
 }
 
-Describe 'Apps' {
-    $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
-
-    Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
-        BeforeAll {
-            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
-            LogGroup 'Context' {
-                Write-Host ($context | Format-List | Out-String)
-            }
-        }
-
-        AfterAll {
-            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
-        }
-
-        # Tests for APP goes here
-        if ($AuthType -eq 'APP') {
-            Context 'GitHub Apps' {
-                It 'Get-GitHubApp - Can get app details' {
-                    $app = Get-GitHubApp
-                    LogGroup 'App' {
-                        Write-Host ($app | Format-Table | Out-String)
-                    }
-                    $app | Should -Not -BeNullOrEmpty
-                }
-
-                It 'Get-GitHubAppJSONWebToken - Can get a JWT for the app' {
-                    $jwt = Get-GitHubAppJSONWebToken @connectParams
-                    LogGroup 'JWT' {
-                        Write-Host ($jwt | Format-Table | Out-String)
-                    }
-                    $jwt | Should -Not -BeNullOrEmpty
-                }
-
-                It 'Get-GitHubAppInstallation - Can get app installations' {
-                    $installations = Get-GitHubAppInstallation
-                    LogGroup 'Installations' {
-                        Write-Host ($installations | Format-Table | Out-String)
-                    }
-                    $installations | Should -Not -BeNullOrEmpty
-                }
-                It 'New-GitHubAppInstallationAccessToken - Can get app installation access tokens' {
-                    $installations = Get-GitHubAppInstallation
-                    $installations | ForEach-Object {
-                        $token = New-GitHubAppInstallationAccessToken -InstallationID $_.id
-                        LogGroup 'Token' {
-                            Write-Host ($token | Format-Table | Out-String)
-                        }
-                        $token | Should -Not -BeNullOrEmpty
-                    }
-                }
-            }
-
-            Context 'Webhooks' {
-                It 'Get-GitHubAppWebhookConfiguration - Can get the webhook configuration' {
-                    $webhookConfig = Get-GitHubAppWebhookConfiguration
-                    LogGroup 'Webhook config' {
-                        Write-Host ($webhookConfig | Format-Table | Out-String)
-                    }
-                    $webhookConfig | Should -Not -BeNullOrEmpty
-                }
-
-                It 'Update-GitHubAppWebhookConfiguration - Can update the webhook configuration' {
-                    { Update-GitHubAppWebhookConfiguration -ContentType 'form' } | Should -Not -Throw
-                    $webhookConfig = Get-GitHubAppWebhookConfiguration
-                    LogGroup 'Webhook config - form' {
-                        Write-Host ($webhookConfig | Format-Table | Out-String)
-                    }
-                    { Update-GitHubAppWebhookConfiguration -ContentType 'json' } | Should -Not -Throw
-                    $webhookConfig = Get-GitHubAppWebhookConfiguration
-                    LogGroup 'Webhook config - json' {
-                        Write-Host ($webhookConfig | Format-Table | Out-String)
-                    }
-                }
-
-                It 'Get-GitHubAppWebhookDelivery - Can get webhook deliveries' {
-                    $deliveries = Get-GitHubAppWebhookDelivery
-                    LogGroup 'Deliveries' {
-                        Write-Host ($deliveries | Format-Table | Out-String)
-                    }
-                    $deliveries | Should -Not -BeNullOrEmpty
-                }
-
-                It 'Get-GitHubAppWebhookDelivery - Can redeliver a webhook delivery' {
-                    $deliveries = Get-GitHubAppWebhookDelivery | Select-Object -First 1
-                    LogGroup 'Delivery - redeliver' {
-                        Write-Host ($deliveries | Format-Table | Out-String)
-                    }
-                    { Invoke-GitHubAppWebhookReDelivery -ID $deliveries.id } | Should -Not -Throw
-                    LogGroup 'Delivery - redeliver' {
-                        Write-Host ($deliveries | Format-Table | Out-String)
-                    }
-                }
-            }
-            It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
-                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
-                LogGroup 'Context' {
-                    Write-Host ($context | Format-List | Out-String)
-                }
-            }
-        }
-
-        # Tests for runners goes here
-        if ($Type -eq 'GitHub Actions') {}
-
-        # Tests for IAT UAT and PAT goes here
-    }
-}
-
 Describe 'API' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 
@@ -483,6 +483,7 @@ Describe 'API' {
         }
         AfterAll {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+            Write-Host ('-' * 60)
         }
 
         # Tests for APP goes here
@@ -491,7 +492,7 @@ Describe 'API' {
                 {
                     $app = Invoke-GitHubAPI -ApiEndpoint '/app'
                     LogGroup 'App' {
-                        Write-Host ($app | Format-Table | Out-String)
+                        Write-Host ($app | Format-List | Out-String)
                     }
                 } | Should -Not -Throw
             }
@@ -514,14 +515,17 @@ Describe 'API' {
                 {
                     $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit'
                     LogGroup 'RateLimit' {
-                        Write-Host ($rateLimit | Format-Table | Out-String)
+                        Write-Host ($rateLimit | Format-List | Out-String)
+                    }
+                    LogGroup 'RateLimit - Header' {
+                        Write-Host ($rateLimit.Headers | Format-List | Out-String)
                     }
                 } | Should -Not -Throw
             }
 
-            It 'Invoke-GitHubAPI - Gets the rate limits directly using Uri' {
+            It 'Invoke-RestMethod - Gets the rate limits directly using Uri' {
                 {
-                    $rateLimit = Invoke-GitHubAPI -Uri ($context.ApiBaseUri + '/rate_limit')
+                    $rateLimit = Invoke-RestMethod -Uri ($context.ApiBaseUri + '/rate_limit') -Authentication Bearer -Token (Get-GitHubAccessToken)
                     LogGroup 'RateLimit' {
                         Write-Host ($rateLimit | Format-Table | Out-String)
                     }
@@ -700,6 +704,7 @@ Describe 'Emojis' {
         }
         AfterAll {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+            Write-Host ('-' * 60)
         }
 
         # Tests for APP goes here
@@ -748,21 +753,14 @@ Describe 'Anonymous - Functions that can run anonymously' {
     It 'Get-GithubRateLimit - Using -Anonymous' {
         $rateLimit = Get-GitHubRateLimit -Anonymous
         LogGroup 'Rate Limit' {
-            Write-Host ($rateLimit | Format-List | Out-String)
+            Write-Host ($rateLimit | Format-Table | Out-String)
         }
         $rateLimit | Should -Not -BeNullOrEmpty
     }
     It 'Invoke-GitHubAPI - Using -Anonymous' {
-        $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit' -Anonymous
+        $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit' -Anonymous | Select-Object -ExpandProperty Response
         LogGroup 'Rate Limit' {
-            Write-Host ($rateLimit | Format-List | Out-String)
-        }
-        $rateLimit | Should -Not -BeNullOrEmpty
-    }
-    It 'Invoke-GitHubAPI - Using -Context Anonymous' {
-        $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit' -Context Anonymous
-        LogGroup 'Rate Limit' {
-            Write-Host ($rateLimit | Format-List | Out-String)
+            Write-Host ($rateLimit | Format-Table | Out-String)
         }
         $rateLimit | Should -Not -BeNullOrEmpty
     }
@@ -770,6 +768,13 @@ Describe 'Anonymous - Functions that can run anonymously' {
         $rateLimit = Get-GitHubRateLimit -Context Anonymous
         LogGroup 'Rate Limit' {
             Write-Host ($rateLimit | Format-List | Out-String)
+        }
+        $rateLimit | Should -Not -BeNullOrEmpty
+    }
+    It 'Invoke-GitHubAPI - Using -Context Anonymous' {
+        $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit' -Context Anonymous | Select-Object -ExpandProperty Response
+        LogGroup 'Rate Limit' {
+            Write-Host ($rateLimit | Format-Table | Out-String)
         }
         $rateLimit | Should -Not -BeNullOrEmpty
     }

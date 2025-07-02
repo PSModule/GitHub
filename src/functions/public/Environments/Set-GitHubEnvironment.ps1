@@ -1,4 +1,4 @@
-filter Set-GitHubEnvironment {
+﻿filter Set-GitHubEnvironment {
     <#
         .SYNOPSIS
         Create or update an environment.
@@ -109,7 +109,7 @@ filter Set-GitHubEnvironment {
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
-        [object] $Context = (Get-GitHubContext)
+        [object] $Context
     )
 
     begin {

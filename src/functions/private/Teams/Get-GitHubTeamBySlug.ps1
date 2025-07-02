@@ -9,6 +9,9 @@
 
         .EXAMPLE
         Get-GitHubTeamBySlug -Organization 'github' -Slug 'my-team-name'
+
+        .NOTES
+        [Get a team by name](https://docs.github.com/rest/teams/teams#get-a-team-by-name)
     #>
     [OutputType([GitHubTeam])]
     [CmdletBinding()]
@@ -36,61 +39,13 @@
 
     process {
         $inputObject = @{
-            Query     = @'
-query($org: String!, $teamSlug: String!) {
-  organization(login: $org) {
-    team(slug: $teamSlug) {
-      id
-      name
-      slug
-      url
-      combinedSlug
-      databaseId
-      description
-      notificationSetting
-      privacy
-      parentTeam {
-        name
-        slug
-      }
-      childTeams(first: 100) {
-        nodes {
-          name
+            Method      = 'GET'
+            APIEndpoint = "/orgs/$Organization/teams/$Slug"
+            Context     = $Context
         }
-      }
-      createdAt
-      updatedAt
-    }
-  }
-}
-'@
-            Variables = @{
-                org      = $Organization
-                teamSlug = $Slug
-            }
-            Context   = $Context
-        }
-        $data = Invoke-GitHubGraphQLQuery @inputObject
-        $team = $data.organization.team
-        if ($team) {
-            [GitHubTeam](
-                @{
-                    Name          = $team.name
-                    Slug          = $team.slug
-                    NodeID        = $team.id
-                    Url           = $team.url
-                    CombinedSlug  = $team.CombinedSlug
-                    ID            = $team.DatabaseId
-                    Description   = $team.description
-                    Notifications = $team.notificationSetting -eq 'NOTIFICATIONS_ENABLED' ? $true : $false
-                    Visible       = $team.privacy -eq 'VISIBLE' ? $true : $false
-                    ParentTeam    = $team.parentTeam.slug
-                    Organization  = $Organization
-                    ChildTeams    = $team.childTeams.nodes.name
-                    CreatedAt     = $team.createdAt
-                    UpdatedAt     = $team.updatedAt
-                }
-            )
+
+        Invoke-GitHubAPI @inputObject | ForEach-Object {
+            [GitHubTeam]::new($_.Response, $Organization)
         }
     }
 

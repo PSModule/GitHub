@@ -18,9 +18,6 @@
                         <Label>Repository</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>Url</Label>
-                    </TableColumnHeader>
-                    <TableColumnHeader>
                         <Label>IsLatest</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
@@ -34,16 +31,20 @@
                     <TableRowEntry>
                         <TableColumnItems>
                             <TableColumnItem>
-                                <PropertyName>Tag</PropertyName>
+                                <ScriptBlock>
+                                    if ($Host.UI.SupportsVirtualTerminal -and
+                                    ($env:GITHUB_ACTIONS -ne 'true')) {
+                                    $PSStyle.FormatHyperlink($_.Tag,$_.Url)
+                                    } else {
+                                    $_.Tag
+                                    }
+                                </ScriptBlock>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Owner</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Repository</PropertyName>
-                            </TableColumnItem>
-                            <TableColumnItem>
-                                <PropertyName>Url</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>IsLatest</PropertyName>

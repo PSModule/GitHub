@@ -1,8 +1,12 @@
-﻿$script:GitHub = [pscustomobject]@{
+﻿$script:IsGitHubActions = $env:GITHUB_ACTIONS -eq 'true'
+$script:IsFunctionApp = -not [string]::IsNullOrEmpty($env:WEBSITE_PLATFORM_VERSION)
+$script:IsLocal = -not ($script:IsGitHubActions -or $script:IsFunctionApp)
+$script:GitHub = [pscustomobject]@{
+    ContextVault       = 'PSModule.GitHub'
     TokenPrefixPattern = '(?<=^(ghu|gho|ghs|github_pat|ghp)).*'
     EnvironmentType    = Get-GitHubEnvironmentType
     DefaultConfig      = [GitHubConfig]@{
-        ID                            = 'PSModule.GitHub'
+        ID                            = 'Module'
         HostName                      = ($env:GITHUB_SERVER_URL ?? 'github.com') -replace '^https?://'
         ApiBaseUri                    = "https://api.$(($env:GITHUB_SERVER_URL ?? 'github.com') -replace '^https?://')"
         AccessTokenGracePeriodInHours = 4
@@ -15,6 +19,7 @@
         RetryCount                    = 0
         RetryInterval                 = 1
         JwtTimeTolerance              = 300
+        EnvironmentType               = Get-GitHubEnvironmentType
     }
     Config             = $null
     Event              = $null

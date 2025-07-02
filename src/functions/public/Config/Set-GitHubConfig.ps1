@@ -1,6 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '7.0.2' }
-
-function Set-GitHubConfig {
+﻿function Set-GitHubConfig {
     <#
         .SYNOPSIS
         Set a GitHub module configuration.
@@ -13,9 +11,13 @@ function Set-GitHubConfig {
 
         Sets the value of DefaultUser to 'Octocat' in the GitHub module configuration.
 
+        .OUTPUTS
+        GitHubConfig
+
         .LINK
         https://psmodule.io/GitHub/Functions/Config/Set-GitHubConfig
     #>
+    [OutputType([GitHubConfig])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # Set the access token type.
@@ -24,7 +26,11 @@ function Set-GitHubConfig {
 
         # Set the access token type.
         [Parameter()]
-        [string] $Value
+        [string] $Value,
+
+        # Pass the context through the pipeline.
+        [Parameter()]
+        [switch] $PassThru
     )
 
     begin {
@@ -37,7 +43,10 @@ function Set-GitHubConfig {
         Write-Verbose "Setting [$Name] to [$Value]"
         $script:GitHub.Config.$Name = $Value
         if ($PSCmdlet.ShouldProcess('ContextSetting', 'Set')) {
-            Set-Context -ID $script:GitHub.Config.ID -Context $script:GitHub.Config
+            $item = Set-Context -Context $script:GitHub.Config -Vault $script:GitHub.ContextVault -PassThru:$PassThru
+            if ($PassThru) {
+                [GitHubConfig]::new($item)
+            }
         }
     }
 
@@ -45,3 +54,4 @@ function Set-GitHubConfig {
         Write-Debug "[$stackPath] - End"
     }
 }
+#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '8.1.0' }

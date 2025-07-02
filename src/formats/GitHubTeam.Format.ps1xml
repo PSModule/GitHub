@@ -12,23 +12,24 @@
                         <Label>Name</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>Owner</Label>
-                    </TableColumnHeader>
-                    <TableColumnHeader>
-                        <Label>Url</Label>
+                        <Label>Organization</Label>
                     </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
                     <TableRowEntry>
                         <TableColumnItems>
                             <TableColumnItem>
-                                <PropertyName>Name</PropertyName>
+                                <ScriptBlock>
+                                    if ($Host.UI.SupportsVirtualTerminal -and
+                                    ($env:GITHUB_ACTIONS -ne 'true')) {
+                                    $PSStyle.FormatHyperlink($_.Name,$_.Url)
+                                    } else {
+                                    $_.Name
+                                    }
+                                </ScriptBlock>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>Owner</PropertyName>
-                            </TableColumnItem>
-                            <TableColumnItem>
-                                <PropertyName>Url</PropertyName>
+                                <PropertyName>Organization</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
