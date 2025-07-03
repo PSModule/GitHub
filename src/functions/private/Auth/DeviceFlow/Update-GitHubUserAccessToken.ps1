@@ -115,7 +115,7 @@
                     try {
                         if ($lock.WaitOne($TimeoutMs)) {
                             # Re-read context to get updated token from other process
-                            $updatedContext = Get-Context -Context $Context.ID -Vault $script:GitHub.ContextVault
+                            $updatedContext = Resolve-GitHubContext -Context $Context.ID
                             if ($updatedContext) {
                                 $Context.Token = $updatedContext.Token
                                 $Context.TokenExpirationDate = $updatedContext.TokenExpirationDate
