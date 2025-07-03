@@ -29,7 +29,7 @@ Describe 'Auth' {
         }
 
         It 'Connect-GitHubAccount - Connects using the provided credentials' {
-            $context = Connect-GitHubAccount @connectParams -PassThru -Silent -Debug -Verbose
+            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
             LogGroup 'Context - Standard' {
                 Write-Host ($context | Out-String)
             }
