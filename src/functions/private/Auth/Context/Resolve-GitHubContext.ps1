@@ -56,12 +56,24 @@
         if ($Context -is [string]) {
             $contextName = $Context
             Write-Verbose "Getting context: [$contextName]"
-            return Get-GitHubContext -Context $contextName
+            $Context = Get-GitHubContext -Context $contextName
         }
 
         if ($null -eq $Context) {
             Write-Verbose 'Context is null, returning default context.'
-            return Get-GitHubContext
+            $Context = Get-GitHubContext
+        }
+
+        switch ($Context.TokenType) {
+            'ghu' {
+                Write-Verbose 'Using GitHub User Access Token.'
+                $Context = Update-GitHubUserAccessToken -Context $Context -PassThru
+            }
+            'PEM' {
+                Write-Verbose 'Using GitHub App PEM Token.'
+                $jwt = Get-GitHubAppJSONWebToken -ClientId $Context.ClientID -PrivateKey $Context.PrivateKey
+                $Context.Token = $jwt.Token
+            }
         }
 
         # TODO: Implement App installation context resolution

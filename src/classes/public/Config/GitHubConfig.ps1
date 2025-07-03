@@ -3,7 +3,7 @@
     [string] $ID
 
     # The access token grace period in hours.
-    [System.Nullable[int]] $AccessTokenGracePeriodInHours
+    [System.Nullable[double]] $AccessTokenGracePeriodInHours
 
     # The default context.
     [string] $DefaultContext

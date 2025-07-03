@@ -85,7 +85,6 @@
     }
 
     process {
-
         $installations = Get-GitHubAppInstallation -Context $Context
         $selectedInstallations = @()
         Write-Verbose "Found [$($installations.Count)] installations."

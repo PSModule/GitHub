@@ -2,6 +2,9 @@
     # Client ID for GitHub Apps
     [string] $ClientID
 
+    # The private key for the app.
+    [securestring] $PrivateKey
+
     # Owner of the GitHub App
     [string] $OwnerName
 
@@ -36,6 +39,7 @@
         $this.HttpVersion = $Object.HttpVersion
         $this.PerPage = $Object.PerPage
         $this.ClientID = $Object.ClientID
+        $this.PrivateKey = $Object.PrivateKey
         $this.OwnerName = $Object.OwnerName
         $this.OwnerType = $Object.OwnerType
         $this.Permissions = $Object.Permissions

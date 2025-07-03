@@ -98,7 +98,7 @@
             Mandatory,
             ParameterSetName = 'App'
         )]
-        [string] $PrivateKey,
+        [object] $PrivateKey,
 
         # Automatically load installations for the GitHub App.
         [Parameter(
@@ -246,10 +246,13 @@
                 }
                 'App' {
                     Write-Verbose 'Logging in as a GitHub App...'
+                    if (-not($PrivateKey -is [System.Security.SecureString])) {
+                        $PrivateKey = $PrivateKey | ConvertTo-SecureString -AsPlainText
+                    }
                     $context += @{
-                        Token     = ConvertTo-SecureString -AsPlainText $PrivateKey
-                        TokenType = 'PEM'
-                        ClientID  = $ClientID
+                        PrivateKey = $PrivateKey
+                        TokenType  = 'PEM'
+                        ClientID   = $ClientID
                     }
                 }
                 'PAT' {
