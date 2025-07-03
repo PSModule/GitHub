@@ -20,7 +20,7 @@
         [Refreshing user access tokens](https://docs.github.com/apps/creating-github-apps/authenticating-with-a-github-app/refreshing-user-access-tokens)
     #>
     [CmdletBinding(SupportsShouldProcess)]
-    [OutputType([securestring])]
+    [OutputType([GitHubContext])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'Is the CLI part of the module.')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText', '', Justification = 'The tokens are recieved as clear text. Mitigating exposure by removing variables and performing garbage collection.')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Reason for suppressing')]
@@ -146,7 +146,7 @@
         }
 
         if ($PassThru) {
-            return $Context.Token
+            return $Context
         }
     }
 

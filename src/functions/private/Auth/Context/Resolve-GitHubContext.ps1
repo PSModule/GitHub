@@ -68,7 +68,7 @@
             'ghu' {
                 Write-Verbose "Using GitHub User Access Token."
                 if (Test-GitHubAccessTokenRefreshRequired -Context $Context) {
-                    $Context.Token = Update-GitHubUserAccessToken -Context $Context -PassThru
+                    $Context = Update-GitHubUserAccessToken -Context $Context -PassThru
                 }
             }
             'PEM' {
