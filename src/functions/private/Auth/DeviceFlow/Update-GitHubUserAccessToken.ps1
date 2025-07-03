@@ -42,56 +42,70 @@
     }
 
     process {
-        Write-Verbose "Reusing previously stored ClientID: [$($Context.AuthClientID)]"
-        $authClientID = $Context.AuthClientID
-        $accessTokenValidity = [datetime]($Context.TokenExpirationDate) - (Get-Date)
-        $accessTokenIsValid = $accessTokenValidity.Seconds -gt 0
-        $hours = $accessTokenValidity.Hours.ToString().PadLeft(2, '0')
-        $minutes = $accessTokenValidity.Minutes.ToString().PadLeft(2, '0')
-        $seconds = $accessTokenValidity.Seconds.ToString().PadLeft(2, '0')
-        $accessTokenValidityText = "$hours`:$minutes`:$seconds"
-        if ($accessTokenIsValid) {
-            if ($accessTokenValidity.TotalHours -gt $script:GitHub.Config.AccessTokenGracePeriodInHours) {
-                if (-not $Silent) {
-                    Write-Host '✓ ' -ForegroundColor Green -NoNewline
-                    Write-Host "Access token is still valid for $accessTokenValidityText ..."
+        $lockName = "PSModule.GitHub/$($Context.ID)"
+        $lock = [System.Threading.Mutex]::new($false, $lockName)
+        $updateToken = $lock.WaitOne(0)
+        $accessTokenRemainingValidity = [datetime]($Context.TokenExpirationDate) - ([datetime]::Now)
+        $accessTokenIsValid = $accessTokenRemainingValidity.Seconds -gt 60
+        $hours = $accessTokenRemainingValidity.Hours.ToString().PadLeft(2, '0')
+        $minutes = $accessTokenRemainingValidity.Minutes.ToString().PadLeft(2, '0')
+        $seconds = $accessTokenRemainingValidity.Seconds.ToString().PadLeft(2, '0')
+        $accessTokenRemainingValidityText = "$hours`:$minutes`:$seconds"
+
+        if ($updateToken) {
+            Write-Verbose "Reusing previously stored ClientID: [$($Context.AuthClientID)]"
+            $authClientID = $Context.AuthClientID
+            if ($accessTokenIsValid) {
+                if ($accessTokenRemainingValidity.TotalHours -gt $script:GitHub.Config.AccessTokenGracePeriodInHours) {
+                    if (-not $Silent) {
+                        Write-Host '✓ ' -ForegroundColor Green -NoNewline
+                        Write-Host "Access token is still valid for $accessTokenRemainingValidityText ..."
+                    }
+                } else {
+                    if (-not $Silent) {
+                        Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
+                        Write-Host "Access token remaining validity $accessTokenRemainingValidityText. Refreshing access token..."
+                    }
+                    $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $authClientID -RefreshToken ($Context.RefreshToken) -HostName $Context.HostName
                 }
-                return
             } else {
-                if (-not $Silent) {
-                    Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
-                    Write-Host "Access token remaining validity $accessTokenValidityText. Refreshing access token..."
+                $refreshTokenValidity = [datetime]($Context.RefreshTokenExpirationDate) - (Get-Date)
+                $refreshTokenIsValid = $refreshTokenValidity.Seconds -gt 0
+                if ($refreshTokenIsValid) {
+                    if (-not $Silent) {
+                        Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
+                        Write-Host 'Access token expired. Refreshing access token...'
+                    }
+                    $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $authClientID -RefreshToken ($Context.RefreshToken) -HostName $Context.HostName
+                } else {
+                    Write-Verbose "Using $Mode authentication..."
+                    $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $authClientID -Scope $Scope -HostName $Context.HostName
                 }
-                $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $authClientID -RefreshToken ($Context.RefreshToken) -HostName $Context.HostName
             }
+            $Context.Token = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
+            $Context.TokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.expires_in)
+            $Context.TokenType = $tokenResponse.access_token -replace $script:GitHub.TokenPrefixPattern
+            $Context.RefreshToken = ConvertTo-SecureString -AsPlainText $tokenResponse.refresh_token
+            $Context.RefreshTokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.refresh_token_expires_in)
+
+            if ($PSCmdlet.ShouldProcess('Access token', 'Update/refresh')) {
+                Set-Context -Context $Context -Vault $script:GitHub.ContextVault
+            }
+            $lock.ReleaseMutex()
         } else {
-            $refreshTokenValidity = [datetime]($Context.RefreshTokenExpirationDate) - (Get-Date)
-            $refreshTokenIsValid = $refreshTokenValidity.Seconds -gt 0
-            if ($refreshTokenIsValid) {
-                if (-not $Silent) {
-                    Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
-                    Write-Host 'Access token expired. Refreshing access token...'
-                }
-                $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $authClientID -RefreshToken ($Context.RefreshToken) -HostName $Context.HostName
+            if ($accessTokenIsValid) {
+                Write-Verbose "Access token is still valid for $accessTokenRemainingValidityText ..."
             } else {
-                Write-Verbose "Using $Mode authentication..."
-                $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $authClientID -Scope $Scope -HostName $Context.HostName
+                Write-Verbose 'Access token is not valid. Waiting for mutex to be released...'
+                # - the token is not valid, wait for the mutex to be released and taken by this process. Recheck the token validity again.
+                if ($lock.WaitOne()) {
+                    return Update-GitHubUserAccessToken -Context $Context -PassThru
+                }
             }
         }
-        $Context.Token = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
-        $Context.TokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.expires_in)
-        $Context.TokenType = $tokenResponse.access_token -replace $script:GitHub.TokenPrefixPattern
-        $Context.RefreshToken = ConvertTo-SecureString -AsPlainText $tokenResponse.refresh_token
-        $Context.RefreshTokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.refresh_token_expires_in)
-
-        if ($PSCmdlet.ShouldProcess('Access token', 'Update/refresh')) {
-            Set-Context -Context $Context -Vault $script:GitHub.ContextVault
-        }
-
         if ($PassThru) {
-            $Context.Token
+            return $Context.Token
         }
-
     }
 
     end {
