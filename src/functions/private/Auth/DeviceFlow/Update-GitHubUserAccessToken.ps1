@@ -65,10 +65,10 @@
                             Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
                             Write-Host 'Access token expired. Refreshing access token...'
                         }
-                        $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID ($Context.AuthClientID) -RefreshToken ($Context.RefreshToken) -HostName $Context.HostName
+                        $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $Context.AuthClientID -RefreshToken $Context.RefreshToken -HostName $Context.HostName
                     } else {
                         Write-Verbose "Using $($Context.DeviceFlowType) authentication..."
-                        $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID ($Context.AuthClientID) -HostName $Context.HostName
+                        $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $Context.AuthClientID -HostName $Context.HostName
                     }
                     $Context.Token = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
                     $Context.TokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.expires_in)
