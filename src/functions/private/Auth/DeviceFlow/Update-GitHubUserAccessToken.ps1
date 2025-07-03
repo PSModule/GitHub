@@ -50,59 +50,60 @@
     }
 
     process {
-        $lockName = "PSModule.GitHub/$($Context.ID)"
-        $lock = $null
-        try {
-            $lock = [System.Threading.Mutex]::new($false, $lockName)
-            $updateToken = $lock.WaitOne(0)
+        if (Test-GitHubAccessTokenRefreshRequired -Context $Context) {
+            $lockName = "PSModule.GitHub/$($Context.ID)"
+            $lock = $null
+            try {
+                $lock = [System.Threading.Mutex]::new($false, $lockName)
+                $updateToken = $lock.WaitOne(0)
 
-            if ($updateToken) {
-                try {
-                    $refreshTokenValidity = [datetime]($Context.RefreshTokenExpirationDate) - [datetime]::Now
-                    $refreshTokenIsValid = $refreshTokenValidity.TotalSeconds -gt 0
-                    if ($refreshTokenIsValid) {
-                        if (-not $Silent) {
-                            Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
-                            Write-Host 'Access token expired. Refreshing access token...'
+                if ($updateToken) {
+                    try {
+                        $refreshTokenValidity = [datetime]($Context.RefreshTokenExpirationDate) - [datetime]::Now
+                        $refreshTokenIsValid = $refreshTokenValidity.TotalSeconds -gt 0
+                        if ($refreshTokenIsValid) {
+                            if (-not $Silent) {
+                                Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
+                                Write-Host 'Access token expired. Refreshing access token...'
+                            }
+                            $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $Context.AuthClientID -RefreshToken $Context.RefreshToken -HostName $Context.HostName
+                        } else {
+                            Write-Verbose "Using $($Context.DeviceFlowType) authentication..."
+                            $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $Context.AuthClientID -HostName $Context.HostName
                         }
-                        $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $Context.AuthClientID -RefreshToken $Context.RefreshToken -HostName $Context.HostName
-                    } else {
-                        Write-Verbose "Using $($Context.DeviceFlowType) authentication..."
-                        $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $Context.AuthClientID -HostName $Context.HostName
-                    }
-                    $Context.Token = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
-                    $Context.TokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.expires_in)
-                    $Context.TokenType = $tokenResponse.access_token -replace $script:GitHub.TokenPrefixPattern
-                    $Context.RefreshToken = ConvertTo-SecureString -AsPlainText $tokenResponse.refresh_token
-                    $Context.RefreshTokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.refresh_token_expires_in)
+                        $Context.Token = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
+                        $Context.TokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.expires_in)
+                        $Context.TokenType = $tokenResponse.access_token -replace $script:GitHub.TokenPrefixPattern
+                        $Context.RefreshToken = ConvertTo-SecureString -AsPlainText $tokenResponse.refresh_token
+                        $Context.RefreshTokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.refresh_token_expires_in)
 
-                    if ($PSCmdlet.ShouldProcess('Access token', 'Update/refresh')) {
-                        Set-Context -Context $Context -Vault $script:GitHub.ContextVault
-                    }
-                } finally {
-                    $lock.ReleaseMutex()
-                }
-            } else {
-                Write-Verbose "Access token is not valid. Waiting for mutex to be released (timeout: $($TimeoutMs)ms)..."
-                try {
-                    if ($lock.WaitOne($TimeoutMs)) {
-                        # Re-read context to get updated token from other process
-                        $Context = Resolve-GitHubContext -Context $Context.ID
+                        if ($PSCmdlet.ShouldProcess('Access token', 'Update/refresh')) {
+                            Set-Context -Context $Context -Vault $script:GitHub.ContextVault
+                        }
+                    } finally {
                         $lock.ReleaseMutex()
-                    } else {
-                        Write-Warning 'Timeout waiting for token update. Proceeding with current token state.'
                     }
-                } catch [System.Threading.AbandonedMutexException] {
-                    Write-Debug 'Mutex was abandoned by another process. Re-checking token state...'
-                    $Context = Get-Context -Context $Context.ID -Vault $script:GitHub.ContextVault
+                } else {
+                    Write-Verbose "Access token is not valid. Waiting for mutex to be released (timeout: $($TimeoutMs)ms)..."
+                    try {
+                        if ($lock.WaitOne($TimeoutMs)) {
+                            # Re-read context to get updated token from other process
+                            $Context = Resolve-GitHubContext -Context $Context.ID
+                            $lock.ReleaseMutex()
+                        } else {
+                            Write-Warning 'Timeout waiting for token update. Proceeding with current token state.'
+                        }
+                    } catch [System.Threading.AbandonedMutexException] {
+                        Write-Debug 'Mutex was abandoned by another process. Re-checking token state...'
+                        $Context = Get-Context -Context $Context.ID -Vault $script:GitHub.ContextVault
+                    }
                 }
-            }
-        } finally {
-            if ($lock) {
-                $lock.Dispose()
+            } finally {
+                if ($lock) {
+                    $lock.Dispose()
+                }
             }
         }
-
         if ($PassThru) {
             return $Context
         }

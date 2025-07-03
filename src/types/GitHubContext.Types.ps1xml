@@ -7,7 +7,7 @@
                 <Name>Remaining</Name>
                 <GetScriptBlock>
                     if ($null -eq $this.TokenExpirationDate) { return }
-                    New-TimeSpan -Start (Get-Date) -End $this.TokenExpirationDate
+                    New-TimeSpan -Start ([datetime]::Now) -End $this.TokenExpirationDate
                 </GetScriptBlock>
             </ScriptProperty>
         </Members>
@@ -19,7 +19,7 @@
                 <Name>Remaining</Name>
                 <GetScriptBlock>
                     if ($null -eq $this.TokenExpirationDate) { return }
-                    New-TimeSpan -Start (Get-Date) -End $this.TokenExpirationDate
+                    New-TimeSpan -Start ([datetime]::Now) -End $this.TokenExpirationDate
                 </GetScriptBlock>
             </ScriptProperty>
         </Members>

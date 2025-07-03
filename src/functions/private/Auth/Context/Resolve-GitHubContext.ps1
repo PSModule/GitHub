@@ -66,13 +66,11 @@
 
         switch ($Context.TokenType) {
             'ghu' {
-                Write-Verbose "Using GitHub User Access Token."
-                if (Test-GitHubAccessTokenRefreshRequired -Context $Context) {
-                    $Context = Update-GitHubUserAccessToken -Context $Context -PassThru
-                }
+                Write-Verbose 'Using GitHub User Access Token.'
+                $Context = Update-GitHubUserAccessToken -Context $Context -PassThru
             }
             'PEM' {
-                Write-Verbose "Using GitHub App PEM Token."
+                Write-Verbose 'Using GitHub App PEM Token.'
                 $jwt = Get-GitHubAppJSONWebToken -ClientId $Context.ClientID -PrivateKey $Context.PrivateKey
                 $Context.Token = $jwt.Token
             }
