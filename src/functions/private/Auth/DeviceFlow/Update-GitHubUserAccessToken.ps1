@@ -58,8 +58,6 @@
 
             if ($updateToken) {
                 try {
-                    Write-Verbose "Reusing previously stored ClientID: [$($Context.AuthClientID)]"
-                    $authClientID = $Context.AuthClientID
                     $refreshTokenValidity = [datetime]($Context.RefreshTokenExpirationDate) - [datetime]::Now
                     $refreshTokenIsValid = $refreshTokenValidity.TotalSeconds -gt 0
                     if ($refreshTokenIsValid) {
@@ -67,10 +65,10 @@
                             Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
                             Write-Host 'Access token expired. Refreshing access token...'
                         }
-                        $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $authClientID -RefreshToken ($Context.RefreshToken) -HostName $Context.HostName
+                        $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID ($Context.AuthClientID) -RefreshToken ($Context.RefreshToken) -HostName $Context.HostName
                     } else {
                         Write-Verbose "Using $($Context.DeviceFlowType) authentication..."
-                        $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $authClientID -HostName $Context.HostName
+                        $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID ($Context.AuthClientID) -HostName $Context.HostName
                     }
                     $Context.Token = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
                     $Context.TokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.expires_in)
