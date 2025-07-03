@@ -60,7 +60,7 @@
                 try {
                     Write-Verbose "Reusing previously stored ClientID: [$($Context.AuthClientID)]"
                     $authClientID = $Context.AuthClientID
-                    $refreshTokenValidity = [datetime]($Context.RefreshTokenExpirationDate) - (Get-Date)
+                    $refreshTokenValidity = [datetime]($Context.RefreshTokenExpirationDate) - [datetime]::Now
                     $refreshTokenIsValid = $refreshTokenValidity.TotalSeconds -gt 0
                     if ($refreshTokenIsValid) {
                         if (-not $Silent) {
