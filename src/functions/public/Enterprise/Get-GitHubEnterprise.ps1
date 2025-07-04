@@ -29,7 +29,7 @@
         An object containing detailed information about the GitHub Enterprise instance, including billing info, URLs, and metadata.
 
         .LINK
-        https://psmodule.io/GitHub/Functions/Get-GitHubEnterprise/
+        https://psmodule.io/GitHub/Functions/Enterprise/Get-GitHubEnterprise/
     #>
     [OutputType([GitHubEnterprise])]
     [CmdletBinding()]

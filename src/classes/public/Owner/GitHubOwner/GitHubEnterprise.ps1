@@ -1,8 +1,10 @@
 ﻿class GitHubEnterprise : GitHubOwner {
-    # The description of the organization.
-    # Example: A great organization
+    # The description of the enterprise.
+    # Example: A great enterprise
     [string] $Description
 
+    # The description of the enterprise, as HTML.
+    # Example: <div>A great enterprise</div>
     [string] $DescriptionHTML
 
     # The billing information for the organization.
@@ -12,11 +14,13 @@
     # Example: org@example.com
     [string] $BillingEmail
 
-    # The readme of the organization.
+    # The readme of the enterprise.
+    # Example: This is the readme for the enterprise
     [string] $Readme
 
+    # The readme of the enterprise, as HTML.
+    # Example: <p>This is the readme for the enterprise</p>
     [string] $ReadmeHTML
-
 
     GitHubEnterprise() {}
 
