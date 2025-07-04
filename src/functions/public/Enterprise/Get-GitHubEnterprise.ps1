@@ -23,7 +23,10 @@
         Retrieves details about the GitHub Enterprise instance named 'my-enterprise'.
 
         .OUTPUTS
-        GitHubEnterprise. An object containing detailed information about the GitHub Enterprise instance, including billing info, URLs, and metadata.
+        GitHubEnterprise
+
+        .NOTES
+        An object containing detailed information about the GitHub Enterprise instance, including billing info, URLs, and metadata.
 
         .LINK
         https://psmodule.io/GitHub/Functions/Get-GitHubEnterprise/
