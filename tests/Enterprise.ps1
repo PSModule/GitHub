@@ -61,7 +61,6 @@ Describe 'Template' {
             $enterprise.BillingEmail | Should -Be 'marstor@hotmail.com'
             $enterprise.Url | Should -Be 'https://github.com/enterprises/msx'
             $enterprise.Type | Should -Be 'Enterprise'
-            
             $enterprise.BillingInfo | Should -BeOfType 'GitHubBillingInfo'
             $enterprise.BillingInfo.AllLicensableUsersCount | Should -Be 1
             $enterprise.BillingInfo.AssetPacks | Should -Be 0
