@@ -61,7 +61,7 @@ Describe 'Template' {
             $enterprise.Readme | Should -Be 'This is a test'
             $enterprise.ReadmeHTML | Should -Be '<p>This is a test</p>'
             $enterprise.CreatedAt | Should -BeOfType 'DateTime'
-            $enterprise.CreatedAt | Should -Be (Get-Date '18.09.2022 19:53:09')
+            $enterprise.CreatedAt | Should -Be '18.09.2022 19:53:09'
             $enterprise.UpdatedAt | Should -BeOfType 'DateTime'
             $enterprise.Description | Should -Be 'This is the description'
             $enterprise.Location | Should -Be 'Oslo, Norway'
@@ -87,7 +87,7 @@ Describe 'Template' {
             $enterprises.Readme | Should -Be 'This is a test'
             $enterprises.ReadmeHTML | Should -Be '<p>This is a test</p>'
             $enterprises.CreatedAt | Should -BeOfType 'DateTime'
-            $enterprises.CreatedAt | Should -Be (Get-Date '18.09.2022 19:53:09')
+            $enterprises.CreatedAt | Should -Be '18.09.2022 19:53:09'
             $enterprises.UpdatedAt | Should -BeOfType 'DateTime'
             $enterprises.Description | Should -Be 'This is the description'
             $enterprises.Location | Should -Be 'Oslo, Norway'

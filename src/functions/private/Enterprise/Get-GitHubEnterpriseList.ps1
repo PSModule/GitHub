@@ -64,7 +64,7 @@
         do {
             $enterpriseQuery = @{
                 query     = @"
-query {
+query(`$perPage: Int!, `$after: String) {
     viewer {
         enterprises(first: `$perPage, after: `$after) {
             nodes {
