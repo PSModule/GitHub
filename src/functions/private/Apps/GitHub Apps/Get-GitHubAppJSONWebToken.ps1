@@ -37,7 +37,6 @@
     )]
 
     [CmdletBinding(DefaultParameterSetName = 'PrivateKey')]
-    [Alias('Get-GitHubAppJWT')]
     [OutputType([GitHubJsonWebToken])]
     param(
         # The client ID of the GitHub App.
