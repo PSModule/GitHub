@@ -82,8 +82,8 @@ filter Get-GitHubEnvironmentList {
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            $_.Response.environments | ForEach-Object {
-                [GitHubEnvironment]::new($_, $Owner, $Repository, $Context)
+            foreach ($environment in $_.Response.environments) {
+                [GitHubEnvironment]::new($environment, $Owner, $Repository, $Context)
             }
         }
     }
