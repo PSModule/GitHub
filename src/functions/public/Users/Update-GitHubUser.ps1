@@ -40,7 +40,7 @@
         [Parameter()]
         [string] $Email,
 
-        # The new website URL of the user.
+        # The new site for the user.
         [Parameter()]
         [Alias('Blog')]
         [string] $Website,

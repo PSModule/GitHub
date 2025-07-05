@@ -8,9 +8,9 @@
         profile and member privileges.
 
         .EXAMPLE
-        Update-GitHubOrganization -Organization 'GitHub' -Website 'https://github.blog'
+        Update-GitHubOrganization -Organization 'GitHub' -Description 'The official GitHub organization.'
 
-        Sets the website URL for the organization 'GitHub' to '<https://github.blog>'.
+        Sets the description for the organization 'GitHub' to 'The official GitHub organization.'.
 
         .EXAMPLE
         $param = @{
@@ -134,7 +134,7 @@
         [Parameter(ValueFromPipelineByPropertyName)]
         [bool] $WebCommitSignoffRequired,
 
-        # Path to the organization's website.
+        # Path to the organization's site.
         [Parameter(ValueFromPipelineByPropertyName)]
         [string] $Website,
 
