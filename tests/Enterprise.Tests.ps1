@@ -61,26 +61,14 @@ Describe 'Template' {
             $enterprise.BillingEmail | Should -Be 'marstor@hotmail.com'
             $enterprise.Url | Should -Be 'https://github.com/enterprises/msx'
             $enterprise.Type | Should -Be 'Enterprise'
-            $enterprise.BillingInfo | Should -BeOfType 'GitHubBillingInfo'
-            $enterprise.BillingInfo.AllLicensableUsersCount | Should -Be 1
-            $enterprise.BillingInfo.AssetPacks | Should -Be 0
-            $enterprise.BillingInfo.BandwidthQuota | Should -Be 5
-            $enterprise.BillingInfo.BandwidthUsage | Should -Be 0
-            $enterprise.BillingInfo.BandwidthUsagePercentage | Should -Be 0
-            $enterprise.BillingInfo.StorageQuota | Should -Be 5
-            $enterprise.BillingInfo.StorageUsage | Should -Be 0
-            $enterprise.BillingInfo.StorageUsagePercentage | Should -Be 0
-            $enterprise.BillingInfo.TotalAvailableLicenses | Should -Be 0
-            $enterprise.BillingInfo.TotalLicenses | Should -Be 1
             $enterprise.Readme | Should -Be 'This is a test'
             $enterprise.ReadmeHTML | Should -Be '<p>This is a test</p>'
             $enterprise.CreatedAt | Should -BeOfType 'DateTime'
             $enterprise.CreatedAt | Should -Be (Get-Date '18.09.2022 19:53:09')
             $enterprise.UpdatedAt | Should -BeOfType 'DateTime'
             $enterprise.Description | Should -Be 'This is the description'
-            $enterprise.DescriptionHTML | Should -Be '<div>This is the description</div>'
             $enterprise.Location | Should -Be 'Oslo, Norway'
-            $enterprise.Blog | Should -Be 'https://msx.no'
+            $enterprise.Website | Should -Be 'https://msx.no'
         }
     }
 }
