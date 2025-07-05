@@ -56,7 +56,6 @@ Describe 'Template' {
             $enterprise.ID | Should -Be 15567
             $enterprise.NodeID | Should -Be 'E_kgDNPM8'
             $enterprise.AvatarUrl | Should -Be 'https://avatars.githubusercontent.com/b/15567?v=4'
-            $enterprise.BillingEmail | Should -Be 'marstor@hotmail.com'
             $enterprise.Url | Should -Be 'https://github.com/enterprises/msx'
             $enterprise.Type | Should -Be 'Enterprise'
             $enterprise.Readme | Should -Be 'This is a test'

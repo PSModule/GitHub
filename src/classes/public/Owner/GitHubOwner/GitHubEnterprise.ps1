@@ -1,8 +1,4 @@
 ﻿class GitHubEnterprise : GitHubOwner {
-    # The billing email address for the organization.
-    # Example: org@example.com
-    [string] $BillingEmail
-
     # The readme of the enterprise.
     # Example: This is the readme for the enterprise
     [string] $Readme
@@ -23,7 +19,6 @@
         CreatedAt    = 'createdAt'
         UpdatedAt    = 'updatedAt'
         Description  = 'description'
-        BillingEmail = 'billingEmail'
         Readme       = 'readme'
         ReadmeHTML   = 'readmeHTML'
     }
@@ -48,7 +43,6 @@
         $this.UpdatedAt = $Object.updatedAt
 
         # From GitHubEnterprise
-        $this.BillingEmail = $Object.billingEmail
         $this.Readme = $Object.readme
         $this.ReadmeHTML = $Object.readmeHTML
     }
