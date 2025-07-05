@@ -54,17 +54,21 @@ Describe 'Users' {
                 $user = Get-GitHubUser
                 { Update-GitHubUser -DisplayName 'Octocat' } | Should -Not -Throw
                 { Update-GitHubUser -Blog 'https://psmodule.io' } | Should -Not -Throw
+                { Update-GitHubUser -Website 'https://psmodule.io' } | Should -Not -Throw
                 { Update-GitHubUser -TwitterUsername 'PSModule' } | Should -Not -Throw
                 { Update-GitHubUser -Company 'PSModule' } | Should -Not -Throw
                 { Update-GitHubUser -Location 'USA' } | Should -Not -Throw
                 { Update-GitHubUser -Bio 'I love programming' } | Should -Not -Throw
+                { Update-GitHubUser -Description 'I love programming' } | Should -Not -Throw
                 $tmpUser = Get-GitHubUser
                 $tmpUser.DisplayName | Should -Be 'Octocat'
                 $tmpUser.Blog | Should -Be 'https://psmodule.io'
+                $tmpUser.Website | Should -Be 'https://psmodule.io'
                 $tmpUser.TwitterUsername | Should -Be 'PSModule'
                 $tmpUser.Company | Should -Be 'PSModule'
                 $tmpUser.Location | Should -Be 'USA'
                 $tmpUser.Bio | Should -Be 'I love programming'
+                $tmpUser.Description | Should -Be 'I love programming'
 
                 # Flaky tests
                 # { Update-GitHubUser -Hireable $true } | Should -Not -Throw

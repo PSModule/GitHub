@@ -23,7 +23,6 @@
     param(
         # The name of the context.
         [Parameter(Mandatory)]
-        [Alias('Name')]
         [string] $Context
     )
 

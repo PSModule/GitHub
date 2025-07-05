@@ -44,7 +44,7 @@
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
             if ($_.Response.type -eq 'Organization') {
-                [GitHubOrganization]::New($_.Response, $Context.HostName)
+                [GitHubOrganization]::New($_.Response, $Context)
             } elseif ($_.Response.type -eq 'User') {
                 [GitHubUser]::New($_.Response)
             } else {

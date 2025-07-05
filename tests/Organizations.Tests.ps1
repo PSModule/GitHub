@@ -94,7 +94,7 @@ Describe 'Organizations' {
                 { Update-GitHubOrganization -Name $owner -Description 'Test Organization' } | Should -Not -Throw
                 { Update-GitHubOrganization -Name $owner -DefaultRepositoryPermission read } | Should -Not -Throw
                 { Update-GitHubOrganization -Name $owner -MembersCanCreateRepositories $true } | Should -Not -Throw
-                { Update-GitHubOrganization -Name $owner -Blog 'https://psmodule.io' } | Should -Not -Throw
+                { Update-GitHubOrganization -Name $owner -Website 'https://psmodule.io' } | Should -Not -Throw
             }
         }
 

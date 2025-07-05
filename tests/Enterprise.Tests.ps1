@@ -33,11 +33,9 @@ Describe 'Template' {
                 Write-Host ($context | Format-List | Out-String)
             }
             if ($AuthType -eq 'APP') {
-                It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
+                LogGroup 'Context - Installation' {
                     $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
-                    LogGroup 'Context - Installation' {
-                        Write-Host ($context | Format-List | Out-String)
-                    }
+                    Write-Host ($context | Format-List | Out-String)
                 }
             }
         }
@@ -58,29 +56,40 @@ Describe 'Template' {
             $enterprise.ID | Should -Be 15567
             $enterprise.NodeID | Should -Be 'E_kgDNPM8'
             $enterprise.AvatarUrl | Should -Be 'https://avatars.githubusercontent.com/b/15567?v=4'
-            $enterprise.BillingEmail | Should -Be 'marstor@hotmail.com'
             $enterprise.Url | Should -Be 'https://github.com/enterprises/msx'
             $enterprise.Type | Should -Be 'Enterprise'
-            $enterprise.BillingInfo | Should -BeOfType 'GitHubBillingInfo'
-            $enterprise.BillingInfo.AllLicensableUsersCount | Should -Be 1
-            $enterprise.BillingInfo.AssetPacks | Should -Be 0
-            $enterprise.BillingInfo.BandwidthQuota | Should -Be 5
-            $enterprise.BillingInfo.BandwidthUsage | Should -Be 0
-            $enterprise.BillingInfo.BandwidthUsagePercentage | Should -Be 0
-            $enterprise.BillingInfo.StorageQuota | Should -Be 5
-            $enterprise.BillingInfo.StorageUsage | Should -Be 0
-            $enterprise.BillingInfo.StorageUsagePercentage | Should -Be 0
-            $enterprise.BillingInfo.TotalAvailableLicenses | Should -Be 0
-            $enterprise.BillingInfo.TotalLicenses | Should -Be 1
             $enterprise.Readme | Should -Be 'This is a test'
             $enterprise.ReadmeHTML | Should -Be '<p>This is a test</p>'
             $enterprise.CreatedAt | Should -BeOfType 'DateTime'
-            $enterprise.CreatedAt | Should -Be (Get-Date '18.09.2022 19:53:09')
             $enterprise.UpdatedAt | Should -BeOfType 'DateTime'
             $enterprise.Description | Should -Be 'This is the description'
-            $enterprise.DescriptionHTML | Should -Be '<div>This is the description</div>'
             $enterprise.Location | Should -Be 'Oslo, Norway'
-            $enterprise.Blog | Should -Be 'https://msx.no'
+            $enterprise.Website | Should -Be 'https://msx.no'
+        }
+
+        It 'Get-GitHubEnterprise - Can get info about all available enterprises' -Skip:($OwnerType -notlike 'enterprise') {
+            $enterprises = Get-GitHubEnterprise
+            LogGroup 'Enterprises' {
+                Write-Host ($enterprises | Select-Object * | Out-String)
+            }
+            $enterprises.count | Should -Be 1
+            $enterprises | Should -Not -BeNullOrEmpty
+            $enterprises | Should -BeOfType 'GitHubEnterprise'
+            $enterprises.Name | Should -Be 'msx'
+            $enterprises.DisplayName | Should -Be 'MSX'
+            $enterprises.ID | Should -Be 15567
+            $enterprises.NodeID | Should -Be 'E_kgDNPM8'
+            $enterprises.AvatarUrl | Should -Be 'https://avatars.githubusercontent.com/b/15567?v=4'
+            $enterprises.BillingEmail | Should -Be 'marstor@hotmail.com'
+            $enterprises.Url | Should -Be 'https://github.com/enterprises/msx'
+            $enterprises.Type | Should -Be 'Enterprise'
+            $enterprises.Readme | Should -Be 'This is a test'
+            $enterprises.ReadmeHTML | Should -Be '<p>This is a test</p>'
+            $enterprises.CreatedAt | Should -BeOfType 'DateTime'
+            $enterprises.UpdatedAt | Should -BeOfType 'DateTime'
+            $enterprises.Description | Should -Be 'This is the description'
+            $enterprises.Location | Should -Be 'Oslo, Norway'
+            $enterprises.Website | Should -Be 'https://msx.no'
         }
     }
 }

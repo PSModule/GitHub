@@ -37,14 +37,14 @@
 
     GitHubArtifact() {}
 
-    GitHubArtifact([PSCustomObject]$Object, [string]$Owner, [string]$Repository, [string]$HostName) {
+    GitHubArtifact([PSCustomObject]$Object, [string]$Owner, [string]$Repository, [GitHubContext]$Context) {
         $this.ID = $Object.id
         $this.NodeID = $Object.node_id
         $this.Name = $Object.name
         $this.Owner = $Owner
         $this.Repository = $Repository
         $this.Size = $Object.size_in_bytes
-        $this.Url = "https://$($HostName)/$Owner/$Repository/actions/runs/$($Object.workflow_run.id)/artifacts/$($Object.id)"
+        $this.Url = "https://$($Context.HostName)/$Owner/$Repository/actions/runs/$($Object.workflow_run.id)/artifacts/$($Object.id)"
         $this.ArchiveDownloadUrl = $Object.archive_download_url
         $this.Expired = $Object.expired
         $this.Digest = $Object.digest

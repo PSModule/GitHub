@@ -7,9 +7,13 @@
                 <TypeName>GitHubOwner</TypeName>
                 <TypeName>GitHubUser</TypeName>
                 <TypeName>GitHubOrganization</TypeName>
+                <TypeName>GitHubEnterprise</TypeName>
             </ViewSelectedBy>
             <TableControl>
                 <TableHeaders>
+                    <TableColumnHeader>
+                        <Label>DisplayName</Label>
+                    </TableColumnHeader>
                     <TableColumnHeader>
                         <Label>Name</Label>
                     </TableColumnHeader>
@@ -20,15 +24,15 @@
                         <Label>Type</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>Company</Label>
-                    </TableColumnHeader>
-                    <TableColumnHeader>
-                        <Label>Plan</Label>
+                        <Label>CreatedAt</Label>
                     </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
                     <TableRowEntry>
                         <TableColumnItems>
+                            <TableColumnItem>
+                                <PropertyName>DisplayName</PropertyName>
+                            </TableColumnItem>
                             <TableColumnItem>
                                 <ScriptBlock>
                                     if ($Host.UI.SupportsVirtualTerminal -and
@@ -46,10 +50,7 @@
                                 <PropertyName>Type</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>Company</PropertyName>
-                            </TableColumnItem>
-                            <TableColumnItem>
-                                <PropertyName>Plan</PropertyName>
+                                <PropertyName>CreatedAt</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
@@ -66,6 +67,9 @@
                     <ListEntry>
                         <ListItems>
                             <ListItem>
+                                <PropertyName>DisplayName</PropertyName>
+                            </ListItem>
+                            <ListItem>
                                 <PropertyName>Name</PropertyName>
                             </ListItem>
                             <ListItem>
@@ -73,9 +77,6 @@
                             </ListItem>
                             <ListItem>
                                 <PropertyName>NodeID</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>DisplayName</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>AvatarUrl</PropertyName>
@@ -87,28 +88,22 @@
                                 <PropertyName>Type</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>Company</PropertyName>
-                            </ListItem>
-                            <ListItem>
                                 <PropertyName>Location</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>Email</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>TwitterUsername</PropertyName>
+                                <PropertyName>Description</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>Blog</PropertyName>
+                                <PropertyName>Website</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>CreatedAt</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>UpdatedAt</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>Plan</PropertyName>
                             </ListItem>
                         </ListItems>
                     </ListEntry>
