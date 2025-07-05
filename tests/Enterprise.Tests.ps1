@@ -33,11 +33,9 @@ Describe 'Template' {
                 Write-Host ($context | Format-List | Out-String)
             }
             if ($AuthType -eq 'APP') {
-                It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
+                LogGroup 'Context - Installation' {
                     $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
-                    LogGroup 'Context - Installation' {
-                        Write-Host ($context | Format-List | Out-String)
-                    }
+                    Write-Host ($context | Format-List | Out-String)
                 }
             }
         }
