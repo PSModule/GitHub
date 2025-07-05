@@ -12,21 +12,21 @@
     [string] $ReadmeHTML
 
     static [hashtable] $PropertyToGraphQLMap = @{
-        ID              = 'databaseId'
-        NodeID          = 'id'
-        Name            = 'slug'
-        DisplayName     = 'name'
-        AvatarUrl       = 'avatarUrl'
-        Url             = 'url'
-        Type            = $Object.type ?? 'Enterprise'
-        Website         = 'websiteUrl'
-        Location        = 'location'
-        CreatedAt       = 'createdAt'
-        UpdatedAt       = 'updatedAt'
-        Description     = 'description'
-        BillingEmail    = 'billingEmail'
-        Readme          = 'readme'
-        ReadmeHTML      = 'readmeHTML'
+        ID           = 'databaseId'
+        NodeID       = 'id'
+        Name         = 'slug'
+        DisplayName  = 'name'
+        AvatarUrl    = 'avatarUrl'
+        Url          = 'url'
+        Type         = $Object.type ?? 'Enterprise'
+        Website      = 'websiteUrl'
+        Location     = 'location'
+        CreatedAt    = 'createdAt'
+        UpdatedAt    = 'updatedAt'
+        Description  = 'description'
+        BillingEmail = 'billingEmail'
+        Readme       = 'readme'
+        ReadmeHTML   = 'readmeHTML'
     }
 
     GitHubEnterprise() {}
