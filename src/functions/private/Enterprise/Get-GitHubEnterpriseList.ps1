@@ -31,6 +31,14 @@
         .NOTES
         An array of objects containing detailed information about the GitHub Enterprise instances, including billing info, URLs, and metadata.
     #>
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSUseDeclaredVarsMoreThanAssignments', 'hasNextPage', Scope = 'Function',
+        Justification = 'Unknown issue with var scoping in blocks.'
+    )]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSUseDeclaredVarsMoreThanAssignments', 'after', Scope = 'Function',
+        Justification = 'Unknown issue with var scoping in blocks.'
+    )]
     [OutputType([GitHubEnterprise[]])]
     [CmdletBinding()]
     param(
@@ -51,7 +59,7 @@
         $after = $null
         $perPageSetting = Resolve-GitHubContextSetting -Name 'PerPage' -Value $PerPage -Context $Context
 
-        $graphQLFields = [GitHubEnterprise]::PropertyToGraphQLMap
+        $graphQLFields = ([GitHubEnterprise]::PropertyToGraphQLMap).Values
 
         do {
             $enterpriseQuery = @{

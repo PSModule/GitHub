@@ -49,7 +49,7 @@
     }
 
     process {
-        $graphQLFields = [GitHubEnterprise]::PropertyToGraphQLMap
+        $graphQLFields = ([GitHubEnterprise]::PropertyToGraphQLMap).Values
 
         $enterpriseQuery = @{
             query     = @"
