@@ -19,9 +19,9 @@
         Update the authenticated user's location to 'San Francisco'
 
         .EXAMPLE
-        Update-GitHubUser -Hireable $true -Bio 'I love programming'
+        Update-GitHubUser -Hireable $true -Description 'I love programming'
 
-        Update the authenticated user's hiring availability to 'true' and their biography to 'I love programming'
+        Update the authenticated user's hiring availability to 'true' and their description to 'I love programming'
 
         .NOTES
         [Update the authenticated user](https://docs.github.com/rest/users/users#update-the-authenticated-user)
@@ -42,6 +42,7 @@
 
         # The new website URL of the user.
         [Parameter()]
+        [Alias('Blog')]
         [string] $Website,
 
         # The new Twitter username of the user.
@@ -62,7 +63,8 @@
 
         # The new short biography of the user.
         [Parameter()]
-        [string] $Bio,
+        [Alias('Bio')]
+        [string] $Description,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -86,7 +88,7 @@
             company          = $Company
             location         = $Location
             hireable         = $Hireable
-            bio              = $Bio
+            bio              = $Description
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 

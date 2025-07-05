@@ -1,7 +1,35 @@
 ﻿class GitHubOrganization : GitHubOwner {
-    # The description of the organization.
-    # Example: A great organization
-    [string] $Description
+    # The email of the account.
+    # Example: octocat@github.com
+    [string] $Email
+
+    # The company the account is affiliated with.
+    # Example: GitHub
+    [string] $Company
+
+    # The Twitter username.
+    # Example: monalisa
+    [string] $TwitterUsername
+
+    # The user's plan.
+    # Includes: Name, Collaborators, PrivateRepos, Space
+    [GitHubPlan] $Plan
+
+    # The number of public repositories.
+    # Example: 2
+    [System.Nullable[uint]] $PublicRepos
+
+    # The number of public gists.
+    # Example: 1
+    [System.Nullable[uint]] $PublicGists
+
+    # The number of followers.
+    # Example: 20
+    [System.Nullable[uint]] $Followers
+
+    # The number of accounts this account is following.
+    # Example: 0
+    [System.Nullable[uint]] $Following
 
     # The number of private gists.
     # Example: 81
@@ -147,21 +175,21 @@
         $this.AvatarUrl = $Object.avatar_url
         $this.Url = $Object.html_url ?? "https://$($Context.HostName)/$($Object.login)"
         $this.Type = $Object.type
-        $this.Company = $Object.company
-        $this.Website = $Object.blog
         $this.Location = $Object.location
+        $this.Description = $Object.description
+        $this.Website = $Object.blog
+        $this.CreatedAt = $Object.created_at
+        $this.UpdatedAt = $Object.updated_at
+
+        # From GitHubOrganization
         $this.Email = $Object.email
+        $this.Company = $Object.company
         $this.TwitterUsername = $Object.twitter_username
+        $this.Plan = [GitHubPlan]::New($Object.plan)
         $this.PublicRepos = $Object.public_repos
         $this.PublicGists = $Object.public_gists
         $this.Followers = $Object.followers
         $this.Following = $Object.following
-        $this.CreatedAt = $Object.created_at
-        $this.UpdatedAt = $Object.updated_at
-        $this.Plan = [GitHubPlan]::New($Object.plan)
-
-        # From GitHubOrganization
-        $this.Description = $Object.description
         $this.PrivateGists = $Object.total_private_gists
         $this.TotalPrivateRepos = $Object.total_private_repos
         $this.OwnedPrivateRepos = $Object.owned_private_repos
