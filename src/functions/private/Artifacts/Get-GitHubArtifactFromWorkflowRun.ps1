@@ -99,7 +99,7 @@ function Get-GitHubArtifactFromWorkflowRun {
         }
 
         $artifacts | ForEach-Object {
-            [GitHubArtifact]::new($_, $Owner, $Repository, $Context.HostName)
+            [GitHubArtifact]::new($_, $Owner, $Repository, $Context)
         }
     }
 

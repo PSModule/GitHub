@@ -136,7 +136,7 @@
 
     GitHubOrganization() {}
 
-    GitHubOrganization([PSCustomObject] $Object, [string] $HostName) {
+    GitHubOrganization([PSCustomObject] $Object, [GitHubContext] $Context) {
         # From GitHubNode
         $this.ID = $Object.id
         $this.NodeID = $Object.node_id
@@ -145,7 +145,7 @@
         $this.Name = $Object.login
         $this.DisplayName = $Object.name
         $this.AvatarUrl = $Object.avatar_url
-        $this.Url = $Object.html_url ?? "https://$($HostName)/$($Object.login)"
+        $this.Url = $Object.html_url ?? "https://$($Context.HostName)/$($Object.login)"
         $this.Type = $Object.type
         $this.Company = $Object.company
         $this.Blog = $Object.blog
