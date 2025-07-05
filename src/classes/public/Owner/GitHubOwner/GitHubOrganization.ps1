@@ -148,7 +148,7 @@
         $this.Url = $Object.html_url ?? "https://$($Context.HostName)/$($Object.login)"
         $this.Type = $Object.type
         $this.Company = $Object.company
-        $this.Blog = $Object.blog
+        $this.Website = $Object.blog
         $this.Location = $Object.location
         $this.Email = $Object.email
         $this.TwitterUsername = $Object.twitter_username

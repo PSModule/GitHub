@@ -8,9 +8,9 @@
         profile and member privileges.
 
         .EXAMPLE
-        Update-GitHubOrganization -Organization 'GitHub' -Blog 'https://github.blog'
+        Update-GitHubOrganization -Organization 'GitHub' -Website 'https://github.blog'
 
-        Sets the blog URL for the organization 'GitHub' to '<https://github.blog>'.
+        Sets the website URL for the organization 'GitHub' to '<https://github.blog>'.
 
         .EXAMPLE
         $param = @{
@@ -134,9 +134,9 @@
         [Parameter(ValueFromPipelineByPropertyName)]
         [bool] $WebCommitSignoffRequired,
 
-        # Path to the organization's blog.
+        # Path to the organization's website.
         [Parameter(ValueFromPipelineByPropertyName)]
-        [string] $Blog,
+        [string] $Website,
 
         # Whether secret scanning push protection is automatically enabled for new repositories.
         # To use this parameter, you must have admin permissions for the repository or be an owner or security manager for
@@ -171,7 +171,7 @@
         $body = @{
             name                                                         = $NewName
             billing_email                                                = $BillingEmail
-            blog                                                         = $Blog
+            blog                                                         = $Website
             company                                                      = $Company
             description                                                  = $Description
             email                                                        = $Email

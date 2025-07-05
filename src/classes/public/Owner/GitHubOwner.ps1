@@ -23,9 +23,9 @@
     # Example: GitHub
     [string] $Company
 
-    # The blog URL of the account.
+    # The website URL of the account.
     # Example: https://github.com/blog
-    [string] $Blog
+    [string] $Website
 
     # The location of the account.
     # Example: San Francisco
@@ -81,7 +81,7 @@
         $this.Url = $Object.html_url
         $this.Type = $Object.type
         $this.Company = $Object.company
-        $this.Blog = $Object.website_url ?? $Object.blog
+        $this.Website = $Object.website_url ?? $Object.blog
         $this.Location = $Object.location
         $this.Email = $Object.email
         $this.TwitterUsername = $Object.twitter_username

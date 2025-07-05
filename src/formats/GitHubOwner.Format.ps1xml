@@ -99,7 +99,7 @@
                                 <PropertyName>TwitterUsername</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>Blog</PropertyName>
+                                <PropertyName>Website</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>CreatedAt</PropertyName>

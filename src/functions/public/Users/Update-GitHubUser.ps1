@@ -40,9 +40,9 @@
         [Parameter()]
         [string] $Email,
 
-        # The new blog URL of the user.
+        # The new website URL of the user.
         [Parameter()]
-        [string] $Blog,
+        [string] $Website,
 
         # The new Twitter username of the user.
         [Parameter()]
@@ -81,7 +81,7 @@
         $body = @{
             name             = $DisplayName
             email            = $Email
-            blog             = $Blog
+            blog             = $Website
             twitter_username = $TwitterUsername
             company          = $Company
             location         = $Location
