@@ -8,19 +8,19 @@
     [string] $ReadmeHTML
 
     static [hashtable] $PropertyToGraphQLMap = @{
-        ID           = 'databaseId'
-        NodeID       = 'id'
-        Name         = 'slug'
-        DisplayName  = 'name'
-        AvatarUrl    = 'avatarUrl'
-        Url          = 'url'
-        Website      = 'websiteUrl'
-        Location     = 'location'
-        CreatedAt    = 'createdAt'
-        UpdatedAt    = 'updatedAt'
-        Description  = 'description'
-        Readme       = 'readme'
-        ReadmeHTML   = 'readmeHTML'
+        ID          = 'databaseId'
+        NodeID      = 'id'
+        Name        = 'slug'
+        DisplayName = 'name'
+        AvatarUrl   = 'avatarUrl'
+        Url         = 'url'
+        Website     = 'websiteUrl'
+        Location    = 'location'
+        CreatedAt   = 'createdAt'
+        UpdatedAt   = 'updatedAt'
+        Description = 'description'
+        Readme      = 'readme'
+        ReadmeHTML  = 'readmeHTML'
     }
 
     GitHubEnterprise() {}
