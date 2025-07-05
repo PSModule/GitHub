@@ -70,5 +70,31 @@ Describe 'Template' {
             $enterprise.Location | Should -Be 'Oslo, Norway'
             $enterprise.Website | Should -Be 'https://msx.no'
         }
+
+        It 'Get-GitHubEnterprise - Can get info about all available enterprises' -Skip:($OwnerType -notlike 'enterprise') {
+            $enterprises = Get-GitHubEnterprise
+            LogGroup 'Enterprises' {
+                Write-Host ($enterprises | Select-Object * | Out-String)
+            }
+            $enterprises.count | Should -Be 1
+            $enterprises | Should -Not -BeNullOrEmpty
+            $enterprises | Should -BeOfType 'GitHubEnterprise'
+            $enterprises.Name | Should -Be 'msx'
+            $enterprises.DisplayName | Should -Be 'MSX'
+            $enterprises.ID | Should -Be 15567
+            $enterprises.NodeID | Should -Be 'E_kgDNPM8'
+            $enterprises.AvatarUrl | Should -Be 'https://avatars.githubusercontent.com/b/15567?v=4'
+            $enterprises.BillingEmail | Should -Be 'marstor@hotmail.com'
+            $enterprises.Url | Should -Be 'https://github.com/enterprises/msx'
+            $enterprises.Type | Should -Be 'Enterprise'
+            $enterprises.Readme | Should -Be 'This is a test'
+            $enterprises.ReadmeHTML | Should -Be '<p>This is a test</p>'
+            $enterprises.CreatedAt | Should -BeOfType 'DateTime'
+            $enterprises.CreatedAt | Should -Be (Get-Date '18.09.2022 19:53:09')
+            $enterprises.UpdatedAt | Should -BeOfType 'DateTime'
+            $enterprises.Description | Should -Be 'This is the description'
+            $enterprises.Location | Should -Be 'Oslo, Norway'
+            $enterprises.Website | Should -Be 'https://msx.no'
+        }
     }
 }
