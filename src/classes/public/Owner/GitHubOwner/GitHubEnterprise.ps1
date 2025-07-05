@@ -18,7 +18,6 @@
         DisplayName  = 'name'
         AvatarUrl    = 'avatarUrl'
         Url          = 'url'
-        Type         = $Object.type ?? 'Enterprise'
         Website      = 'websiteUrl'
         Location     = 'location'
         CreatedAt    = 'createdAt'
