@@ -55,7 +55,7 @@
     }
 
     process {
-        $hasNextPage = $true
+        $hasNextPage = $false
         $after = $null
         $perPageSetting = Resolve-GitHubContextSetting -Name 'PerPage' -Value $PerPage -Context $Context
 
@@ -87,10 +87,9 @@ query(`$perPage: Int!, `$after: String) {
             Invoke-GitHubGraphQLQuery @enterpriseQuery | ForEach-Object {
                 foreach ($enterprise in $_.viewer.enterprises.nodes) {
                     [GitHubEnterprise]::new($enterprise)
-
-                    $hasNextPage = $_.viewer.enterprises.pageInfo.hasNextPage
-                    $after = $_.viewer.enterprises.pageInfo.endCursor
                 }
+                $hasNextPage = $_.viewer.enterprises.pageInfo.hasNextPage
+                $after = $_.viewer.enterprises.pageInfo.endCursor
             }
         } while ($hasNextPage)
     }
