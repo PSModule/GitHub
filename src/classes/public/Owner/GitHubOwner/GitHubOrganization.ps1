@@ -171,7 +171,7 @@
         NodeID                            = 'id'
         IsVerified                        = 'isVerified'
         MembersCanForkPrivateRepositories = 'membersCanForkPrivateRepositories'
-        RequiresTwoFactorAuthentication   = 'requiresTwoFactorAuthentication'
+        # RequiresTwoFactorAuthentication   = 'requiresTwoFactorAuthentication'
         TwitterUsername                   = 'twitterUsername'
         UpdatedAt                         = 'updatedAt'
         Url                               = 'url'
