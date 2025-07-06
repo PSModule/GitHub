@@ -1,14 +1,14 @@
-﻿function Get-GitHubOrganizationList {
+﻿function Get-GitHubOrganizationListForAuthUser {
     <#
         .SYNOPSIS
-        Retrieves a list of all GitHub organizations.
+        Retrieves a list of all GitHub organizations for the authenticated user.
 
         .DESCRIPTION
         This function retrieves detailed information about all GitHub organizations that the authenticated user belongs to, including their avatars,
         creation dates, member counts, and other metadata. It returns an array of objects of type GitHubOrganization populated with this information.
 
         .EXAMPLE
-        Get-GitHubOrganizationList
+        Get-GitHubOrganizationListForAuthUser
 
         Output:
         ```powershell
@@ -44,7 +44,7 @@
     param(
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
-        [Parameter()]
+        [Parameter(Mandatory)]
         [object] $Context
     )
 
