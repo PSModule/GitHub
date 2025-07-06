@@ -68,7 +68,8 @@ Describe 'Template' {
             $enterprise.Website | Should -Be 'https://msx.no'
         }
 
-        It 'Get-GitHubEnterprise - Can get info about all available enterprises' -Skip:($OwnerType -notlike 'enterprise') {
+        #-Skip:($OwnerType -notlike 'enterprise')
+        It 'Get-GitHubEnterprise - Can get info about all available enterprises' {
             $enterprises = Get-GitHubEnterprise
             LogGroup 'Enterprises' {
                 Write-Host ($enterprises | Select-Object * | Out-String)
