@@ -65,7 +65,7 @@
         $this.Url = $Object.html_url
     }
 
-    GitHubAppInstallation([PSCustomObject] $Object, [string] $Target, [string] $Type, [string] $HostName) {
+    GitHubAppInstallation([PSCustomObject] $Object, [string] $Target, [string] $Type, [GitHubContext] $Context) {
         $this.ID = $Object.id
         $this.App = [GitHubApp]::new(
             [PSCustomObject]@{
@@ -77,7 +77,7 @@
         $this.Target = [GitHubOwner]@{
             Name = $Target
             Type = $Type
-            Url  = "https://$HostName/$Target"
+            Url  = "https://$($Context.HostName)/$Target"
         }
         $this.Type = $Type
         $this.RepositorySelection = $Object.repository_selection
@@ -88,6 +88,6 @@
         $this.UpdatedAt = $Object.updated_at
         $this.SuspendedAt = $Object.suspended_at
         $this.SuspendedBy = [GitHubUser]::new($Object.suspended_by)
-        $this.Url = "https://$HostName/$($Type.ToLower())s/$Target/settings/installations/$($Object.id)"
+        $this.Url = "https://$($Context.HostName)/$($Type.ToLower())s/$Target/settings/installations/$($Object.id)"
     }
 }

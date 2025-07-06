@@ -19,7 +19,6 @@
         .LINK
         https://psmodule.io/GitHub/Functions/Repositories/Repositories/Get-GitHubRepositorySecurityFix
     #>
-    [Alias('Get-GitHubRepoSecurityFixes')]
     [CmdletBinding()]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     param(

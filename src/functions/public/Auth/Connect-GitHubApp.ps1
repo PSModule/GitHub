@@ -122,7 +122,7 @@
         $selectedInstallations | ForEach-Object {
             $installation = $_
             Write-Verbose "Processing installation [$($installation.Target.Name)] [$($installation.id)]"
-            $token = New-GitHubAppInstallationAccessToken -Context $Context -InstallationID $installation.id
+            $token = New-GitHubAppInstallationAccessToken -Context $Context -ID $installation.id
 
             $contextParams = @{
                 AuthType            = [string]'IAT'

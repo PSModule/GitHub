@@ -48,18 +48,15 @@
         'PSUseShouldProcessForStateChangingFunctions', '',
         Justification = 'No state is changed.'
     )]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText', '',
-        Justification = 'The tokens are received as clear text. Mitigating exposure by removing variables and performing garbage collection.')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSAvoidUsingConvertToSecureStringWithPlainText', '',
+        Justification = 'The tokens are received as clear text. Mitigating exposure by removing variables and performing garbage collection.'
+    )]
     [CmdletBinding()]
     param(
         # The unique identifier of the installation.
         # Example: '12345678'
-        [Parameter(
-            Mandatory,
-            ValueFromPipeline,
-            ValueFromPipelineByPropertyName
-        )]
-        [Alias('installation_id', 'InstallationID')]
+        [Parameter(Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName)]
         [int] $ID,
 
         # The context to run the command in. Used to get the details for the API call.
