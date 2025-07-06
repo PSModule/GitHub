@@ -175,8 +175,6 @@
         TwitterUsername                   = 'twitterUsername'
         UpdatedAt                         = 'updatedAt'
         Url                               = 'url'
-        IsAdmin                           = 'viewerIsAdmin'
-        IsMember                          = 'viewerIsAMember'
         RequireWebCommitSignoff           = 'webCommitSignoffRequired'
         Website                           = 'websiteUrl'
     }
