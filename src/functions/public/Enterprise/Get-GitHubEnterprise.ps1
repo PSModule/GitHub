@@ -70,6 +70,7 @@
     }
 
     process {
+        Write-Debug "ParameterSet: $($PSCmdlet.ParameterSetName)"
         switch ($PSCmdlet.ParameterSetName) {
             'Get enterprise by name' {
                 Get-GitHubEnterpriseByName -Name $Name -Context $Context
