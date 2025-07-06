@@ -70,6 +70,10 @@ query(`$perPage: Int!, `$after: String) {
             nodes {
                 $graphQLFields
             }
+            pageInfo {
+                endCursor
+                hasNextPage
+            }
         }
     }
 }
