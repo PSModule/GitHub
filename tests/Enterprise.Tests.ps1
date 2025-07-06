@@ -44,7 +44,8 @@ Describe 'Template' {
             Write-Host ('-' * 60)
         }
 
-        It 'Get-GitHubEnterprise - Can get info about an enterprise' -Skip:($OwnerType -notlike 'enterprise') {
+        # -Skip:(($OwnerType -ne 'enterprise') -or ())
+        It 'Get-GitHubEnterprise - Can get info about an enterprise' {
             $enterprise = Get-GitHubEnterprise -Name $Owner
             LogGroup 'Enterprise' {
                 Write-Host ($enterprise | Select-Object * | Out-String)
