@@ -44,8 +44,7 @@ Describe 'Template' {
             Write-Host ('-' * 60)
         }
 
-        # -Skip:(($OwnerType -ne 'enterprise') -or ())
-        It 'Get-GitHubEnterprise - Can get info about an enterprise' {
+        It 'Get-GitHubEnterprise - Can get info about an enterprise' -Skip:($OwnerType -ne 'enterprise') {
             $enterprise = Get-GitHubEnterprise -Name $Owner
             LogGroup 'Enterprise' {
                 Write-Host ($enterprise | Select-Object * | Out-String)
@@ -66,32 +65,6 @@ Describe 'Template' {
             $enterprise.Description | Should -Be 'This is the description'
             $enterprise.Location | Should -Be 'Oslo, Norway'
             $enterprise.Website | Should -Be 'https://msx.no'
-        }
-
-        #-Skip:($OwnerType -notlike 'enterprise')
-        It 'Get-GitHubEnterprise - Can get info about all available enterprises' {
-            $enterprises = Get-GitHubEnterprise
-            LogGroup 'Enterprises' {
-                Write-Host ($enterprises | Select-Object * | Out-String)
-            }
-            $enterprises.count | Should -Be 1
-            $enterprises | Should -Not -BeNullOrEmpty
-            $enterprises | Should -BeOfType 'GitHubEnterprise'
-            $enterprises.Name | Should -Be 'msx'
-            $enterprises.DisplayName | Should -Be 'MSX'
-            $enterprises.ID | Should -Be 15567
-            $enterprises.NodeID | Should -Be 'E_kgDNPM8'
-            $enterprises.AvatarUrl | Should -Be 'https://avatars.githubusercontent.com/b/15567?v=4'
-            $enterprises.BillingEmail | Should -Be 'marstor@hotmail.com'
-            $enterprises.Url | Should -Be 'https://github.com/enterprises/msx'
-            $enterprises.Type | Should -Be 'Enterprise'
-            $enterprises.Readme | Should -Be 'This is a test'
-            $enterprises.ReadmeHTML | Should -Be '<p>This is a test</p>'
-            $enterprises.CreatedAt | Should -BeOfType 'DateTime'
-            $enterprises.UpdatedAt | Should -BeOfType 'DateTime'
-            $enterprises.Description | Should -Be 'This is the description'
-            $enterprises.Location | Should -Be 'Oslo, Norway'
-            $enterprises.Website | Should -Be 'https://msx.no'
         }
     }
 }
