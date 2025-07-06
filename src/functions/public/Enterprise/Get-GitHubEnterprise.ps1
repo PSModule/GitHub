@@ -1,12 +1,30 @@
 ﻿function Get-GitHubEnterprise {
     <#
         .SYNOPSIS
-        Retrieves details about a GitHub Enterprise instance by name (slug).
+        Retrieves GitHub Enterprise instance details for the authenticated user.
 
         .DESCRIPTION
-        This function retrieves detailed information about a GitHub Enterprise instance, including its avatar, billing details, storage usage,
-        creation date, and other metadata based on the provided name (slug). It returns an object of type GitHubEnterprise populated with this
-        information.
+        Retrieves detailed information about GitHub Enterprise instances available to the authenticated user.
+        By default, the command lists all accessible instances, including metadata such as the enterprise name, slug, URL, and creation date. If a
+        specific enterprise name is provided, details about that single instance are returned.
+
+        .EXAMPLE
+        Get-GitHubEnterprise
+
+        Output:
+        ```powershell
+        Name              : My Enterprise
+        Slug              : my-enterprise
+        URL               : https://github.com/enterprises/my-enterprise
+        CreatedAt         : 2022-01-01T00:00:00Z
+
+        Name              : Another Enterprise
+        Slug              : another-enterprise
+        URL               : https://github.com/enterprises/another-enterprise
+        CreatedAt         : 2022-01-01T00:00:00Z
+        ```
+
+        Retrieves details about all GitHub Enterprise instances for the user.
 
         .EXAMPLE
         Get-GitHubEnterprise -Name 'my-enterprise'
@@ -17,7 +35,6 @@
         Slug              : my-enterprise
         URL               : https://github.com/enterprises/my-enterprise
         CreatedAt         : 2022-01-01T00:00:00Z
-        ViewerIsAdmin     : True
         ```
 
         Retrieves details about the GitHub Enterprise instance named 'my-enterprise'.
@@ -32,10 +49,10 @@
         https://psmodule.io/GitHub/Functions/Enterprise/Get-GitHubEnterprise/
     #>
     [OutputType([GitHubEnterprise])]
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'List enterprises for the authenticated user')]
     param(
         # The name (slug) of the GitHub Enterprise instance to retrieve.
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ParameterSetName = 'Get enterprise by name')]
         [Alias('Slug')]
         [string] $Name,
 
@@ -53,49 +70,16 @@
     }
 
     process {
-        $enterpriseQuery = @{
-            query     = @'
-query($Slug: String!) {
-  enterprise(slug: $Slug) {
-    avatarUrl
-    billingEmail
-    billingInfo {
-        allLicensableUsersCount
-        assetPacks
-        bandwidthQuota
-        bandwidthUsage
-        bandwidthUsagePercentage
-        storageQuota
-        storageUsage
-        storageUsagePercentage
-        totalAvailableLicenses
-        totalLicenses
-    }
-    createdAt
-    databaseId
-    description
-    descriptionHTML
-    id
-    location
-    name
-    readme
-    readmeHTML
-    resourcePath
-    slug
-    updatedAt
-    url
-    viewerIsAdmin
-    websiteUrl
-  }
-}
-'@
-            Variables = @{
-                Slug = $Name
+        Write-Debug "ParameterSet: $($PSCmdlet.ParameterSetName)"
+        switch ($PSCmdlet.ParameterSetName) {
+            'Get enterprise by name' {
+                Get-GitHubEnterpriseByName -Name $Name -Context $Context
+                break
             }
-            Context   = $Context
+            default {
+                Get-GitHubEnterpriseList -Context $Context
+            }
         }
-        $enterpriseResult = Invoke-GitHubGraphQLQuery @enterpriseQuery
-        [GitHubEnterprise]::new($enterpriseResult.enterprise)
     }
 
     end {

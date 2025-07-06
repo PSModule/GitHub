@@ -7,6 +7,14 @@
                 <Name>User</Name>
                 <GetScriptBlock>$this.Name</GetScriptBlock>
             </ScriptProperty>
+            <ScriptProperty>
+                <Name>Bio</Name>
+                <GetScriptBlock>$this.Description</GetScriptBlock>
+            </ScriptProperty>
+            <ScriptProperty>
+                <Name>Blog</Name>
+                <GetScriptBlock>$this.Website</GetScriptBlock>
+            </ScriptProperty>
         </Members>
     </Type>
 </Types>

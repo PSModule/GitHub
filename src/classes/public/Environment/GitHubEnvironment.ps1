@@ -28,12 +28,13 @@
 
     GitHubEnvironment() {}
 
-    GitHubEnvironment([PSCustomObject]$Object, [string]$Owner, [string]$Repository) {
+    GitHubEnvironment([PSCustomObject]$Object, [string]$Owner, [string]$Repository, [GitHubContext]$Context) {
         $this.ID = $Object.id
         $this.NodeID = $Object.node_id
         $this.Name = $Object.name
         $this.Owner = $Owner
         $this.Repository = $Repository
+        $this.Url = "https://$($Context.HostName)/$Owner/$Repository/settings/environments/$($Object.id)/edit"
         $this.CreatedAt = $Object.created_at
         $this.UpdatedAt = $Object.updated_at
         $this.AdminsCanBypass = $Object.can_admins_bypass

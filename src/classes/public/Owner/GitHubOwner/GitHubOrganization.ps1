@@ -1,7 +1,31 @@
 ﻿class GitHubOrganization : GitHubOwner {
-    # The description of the organization.
-    # Example: A great organization
-    [string] $Description
+    # The email of the account.
+    # Example: octocat@github.com
+    [string] $Email
+
+    # The Twitter username.
+    # Example: monalisa
+    [string] $TwitterUsername
+
+    # The user's plan.
+    # Includes: Name, Collaborators, PrivateRepos, Space
+    [GitHubPlan] $Plan
+
+    # The number of public repositories.
+    # Example: 2
+    [System.Nullable[uint]] $PublicRepos
+
+    # The number of public gists.
+    # Example: 1
+    [System.Nullable[uint]] $PublicGists
+
+    # The number of followers.
+    # Example: 20
+    [System.Nullable[uint]] $Followers
+
+    # The number of accounts this account is following.
+    # Example: 0
+    [System.Nullable[uint]] $Following
 
     # The number of private gists.
     # Example: 81
@@ -49,7 +73,7 @@
 
     # Whether two-factor authentication is required for members.
     # Example: $true
-    [System.Nullable[bool]] $TwoFactorRequirementEnabled
+    [System.Nullable[bool]] $RequiresTwoFactorAuthentication
 
     # The type of repositories members can create.
     # Example: all
@@ -134,54 +158,74 @@
     # The date and time when the organization was archived, if applicable.
     [System.Nullable[datetime]] $ArchivedAt
 
+    static [hashtable] $PropertyToGraphQLMap = @{
+        ArchivedAt      = 'archivedAt'
+        AvatarUrl       = 'avatarUrl'
+        CreatedAt       = 'createdAt'
+        Description     = 'description'
+        DisplayName     = 'name'
+        Email           = 'email'
+        ID              = 'databaseId'
+        Location        = 'location'
+        Name            = 'login'
+        NodeID          = 'id'
+        IsVerified      = 'isVerified'
+        # MembersCanForkPrivateRepositories = 'membersCanForkPrivateRepositories'
+        # RequiresTwoFactorAuthentication   = 'requiresTwoFactorAuthentication'
+        TwitterUsername = 'twitterUsername'
+        UpdatedAt       = 'updatedAt'
+        Url             = 'url'
+        # RequireWebCommitSignoff = 'webCommitSignoffRequired'
+        Website         = 'websiteUrl'
+    }
+
     GitHubOrganization() {}
 
-    GitHubOrganization([PSCustomObject] $Object, [string] $HostName) {
+    GitHubOrganization([PSCustomObject] $Object, [GitHubContext] $Context) {
         # From GitHubNode
-        $this.ID = $Object.id
-        $this.NodeID = $Object.node_id
+        $this.ID = $Object.databaseId ?? $Object.id
+        $this.NodeID = $Object.node_id ?? $Object.id
 
         # From GitHubOwner
         $this.Name = $Object.login
         $this.DisplayName = $Object.name
-        $this.AvatarUrl = $Object.avatar_url
-        $this.Url = $Object.html_url ?? "https://$($HostName)/$($Object.login)"
-        $this.Type = $Object.type
-        $this.Company = $Object.company
-        $this.Blog = $Object.blog
+        $this.AvatarUrl = $Object.avatar_url ?? $Object.avatarUrl
+        $this.Url = $Object.html_url ?? $Object.url ?? "https://$($Context.HostName)/$($Object.login)"
+        $this.Type = $Object.type ?? 'Organization'
         $this.Location = $Object.location
+        $this.Description = $Object.description
+        $this.Website = $Object.website ?? $Object.blog
+        $this.CreatedAt = $Object.created_at ?? $Object.createdAt
+        $this.UpdatedAt = $Object.updated_at ?? $Object.updatedAt
+
+        # From GitHubOrganization
         $this.Email = $Object.email
-        $this.TwitterUsername = $Object.twitter_username
+        $this.TwitterUsername = $Object.twitter_username ?? $Object.twitterUsername
+        $this.Plan = [GitHubPlan]::New($Object.plan)
         $this.PublicRepos = $Object.public_repos
         $this.PublicGists = $Object.public_gists
         $this.Followers = $Object.followers
         $this.Following = $Object.following
-        $this.CreatedAt = $Object.created_at
-        $this.UpdatedAt = $Object.updated_at
-        $this.Plan = [GitHubPlan]::New($Object.plan)
-
-        # From GitHubOrganization
-        $this.Description = $Object.description
         $this.PrivateGists = $Object.total_private_gists
         $this.TotalPrivateRepos = $Object.total_private_repos
         $this.OwnedPrivateRepos = $Object.owned_private_repos
         $this.DiskUsage = $Object.disk_usage
         $this.Collaborators = $Object.collaborators
-        $this.IsVerified = $Object.is_verified
+        $this.IsVerified = $Object.is_verified ?? $Object.isVerified
         $this.HasOrganizationProjects = $Object.has_organization_projects
         $this.HasRepositoryProjects = $Object.has_repository_projects
         $this.BillingEmail = $Object.billing_email
         $this.DefaultRepositoryPermission = $Object.default_repository_permission
         $this.MembersCanCreateRepositories = $Object.members_can_create_repositories
-        $this.TwoFactorRequirementEnabled = $Object.two_factor_requirement_enabled
+        $this.RequiresTwoFactorAuthentication = $Object.two_factor_requirement_enabled ?? $Object.requiresTwoFactorAuthentication
         $this.MembersAllowedRepositoryCreationType = $Object.members_allowed_repository_creation_type
         $this.MembersCanCreatePublicRepositories = $Object.members_can_create_public_repositories
         $this.MembersCanCreatePrivateRepositories = $Object.members_can_create_private_repositories
         $this.MembersCanCreateInternalRepositories = $Object.members_can_create_internal_repositories
         $this.MembersCanInviteCollaborators = $Object.members_can_invite_collaborators
         $this.MembersCanCreatePages = $Object.members_can_create_pages
-        $this.MembersCanForkPrivateRepositories = $Object.members_can_fork_private_repositories
-        $this.RequireWebCommitSignoff = $Object.web_commit_signoff_required
+        $this.MembersCanForkPrivateRepositories = $Object.members_can_fork_private_repositories ?? $Object.membersCanForkPrivateRepositories
+        $this.RequireWebCommitSignoff = $Object.web_commit_signoff_required ?? $Object.requiresTwoFactorAuthentication
         $this.DeployKeysEnabledForRepositories = $Object.deploy_keys_enabled_for_repositories
         $this.MembersCanCreatePublicPages = $Object.members_can_create_public_pages
         $this.MembersCanCreatePrivatePages = $Object.members_can_create_private_pages
@@ -194,7 +238,7 @@
         $this.SecretScanningPushProtectionCustomLinkEnabled = $Object.secret_scanning_push_protection_custom_link_enabled
         $this.SecretScanningPushProtectionCustomLink = $Object.secret_scanning_push_protection_custom_link
         $this.SecretScanningValidityChecksEnabled = $Object.secret_scanning_validity_checks_enabled
-        $this.ArchivedAt = $Object.archived_at
+        $this.ArchivedAt = $Object.archived_at ?? $Object.archivedAt
     }
 
     [string] ToString() {

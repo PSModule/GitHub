@@ -50,7 +50,6 @@ filter Get-GitHubEnvironmentByName {
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [Alias('Organization', 'User')]
         [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
@@ -88,9 +87,7 @@ filter Get-GitHubEnvironmentByName {
         }
         try {
             Invoke-GitHubAPI @inputObject | ForEach-Object {
-                $environment = [GitHubEnvironment]::new($_.Response, $Owner, $Repository)
-                $environment.Url = "https://$($Context.HostName)/$Owner/$Repository/settings/environments/$($environment.ID)/edit"
-                $environment
+                [GitHubEnvironment]::new($_.Response, $Owner, $Repository, $Context)
             }
         } catch {
             return
