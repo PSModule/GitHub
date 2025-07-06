@@ -69,7 +69,7 @@ Describe 'Template' {
         }
 
         It 'Get-GitHubEnterprise - Can get info about all available enterprises' -Skip:($OwnerType -notlike 'enterprise') {
-            $enterprises = Get-GitHubEnterprise -Debug -Verbose
+            $enterprises = Get-GitHubEnterprise
             LogGroup 'Enterprises' {
                 Write-Host ($enterprises | Select-Object * | Out-String)
             }
