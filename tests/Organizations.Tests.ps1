@@ -45,22 +45,12 @@ Describe 'Organizations' {
                 }
             }
             if ($OwnerType -eq 'enterprise') {
-                (Invoke-GitHubAPI -ApiEndpoint '/organizations').Response | Out-String
-                $orgs = Get-GitHubOrganization -Enterprise $owner # | Where-Object { $_.Name -like "$orgPrefix*" } | Out-String
-                LogGroup 'Organizations' {
-                    $orgs | Format-Table -AutoSize | Out-String
-                }
-                $orgs # | Remove-GitHubOrganization
+                Remove-GitHubOrganization -Name $orgName
             }
         }
         AfterAll {
             if ($OwnerType -eq 'enterprise') {
-                (Invoke-GitHubAPI -ApiEndpoint '/organizations').Response | Out-String
-                $orgs = Get-GitHubOrganization -Enterprise $owner # | Where-Object { $_.Name -like "$orgPrefix*" } | Out-String
-                LogGroup 'Organizations' {
-                    $orgs | Format-Table -AutoSize | Out-String
-                }
-                $orgs # | Remove-GitHubOrganization
+                Remove-GitHubOrganization -Name $orgName
             }
 
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
