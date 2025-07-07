@@ -24,7 +24,7 @@
         https://psmodule.io/GitHub/Functions/Organization/Remove-GitHubOrganization
     #>
     [OutputType([void])]
-    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
+    [CmdletBinding(DefaultParameterSetName = 'Remove an organization', SupportsShouldProcess, ConfirmImpact = 'High')]
     param(
         # The organization name. The name is not case sensitive.
         [Parameter(Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName)]
