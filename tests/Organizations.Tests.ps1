@@ -37,7 +37,14 @@ Describe 'Organizations' {
             $orgPrefix = "$testName-$os-"
             $orgName = "$orgPrefix$number"
 
-            if ($OwnerType -eq 'enterprise'){
+            # Tests for APP goes here
+            if ($AuthType -eq 'APP') {
+                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
+                LogGroup 'Context - Installation' {
+                    Write-Host ($context | Select-Object * | Out-String)
+                }
+            }
+            if ($OwnerType -eq 'enterprise') {
                 Get-GitHubOrganization | Where-Object { $_.Name -eq $orgPrefix } | Remove-GitHubOrganization -Confirm:$false
             }
         }
@@ -45,19 +52,6 @@ Describe 'Organizations' {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
             Write-Host ('-' * 60)
         }
-
-        # Tests for APP goes here
-        if ($AuthType -eq 'APP') {
-            It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
-                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
-                LogGroup 'Context' {
-                    Write-Host ($context | Select-Object * | Out-String)
-                }
-            }
-        }
-
-        # Tests for runners goes here
-        if ($Type -eq 'GitHub Actions') {}
 
         It "Get-GitHubOrganization - Gets a specific organization 'PSModule'" {
             $organization = Get-GitHubOrganization -Name 'PSModule'

@@ -11,6 +11,7 @@
         .EXAMPLE
         Install-GitHubAppOnEnterpriseOrganization -Enterprise 'msx' -Organization 'org' -ClientID '123456'
     #>
+    [OutputType([GitHubAppInstallation])]
     [CmdletBinding()]
     param(
         # The enterprise slug or ID.
@@ -29,7 +30,7 @@
         # - all - all repositories that the authenticated GitHub App installation can access.
         # - selected - select specific repositories.
         [Parameter(Mandatory)]
-        [ValidateSet('all', 'selected')]
+        [ValidateSet('All', 'Selected')]
         [string] $RepositorySelection,
 
         # The names of the repositories to which the installation will be granted access.
@@ -49,6 +50,9 @@
     }
 
     process {
+        if ($RepositorySelection) {
+            $RepositorySelection = $RepositorySelection.ToLower()
+        }
         $body = @{
             client_id            = $ClientID
             repository_selection = $RepositorySelection
@@ -64,7 +68,7 @@
         }
 
         Invoke-GitHubAPI @inputObject | ForEach-Object {
-            Write-Output $_.Response
+            [GitHubAppInstallation]::new($_.Response)
         }
     }
 
