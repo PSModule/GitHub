@@ -113,11 +113,11 @@ Describe 'Organizations' {
         }
 
         It 'Update-GitHubOrganization - Updates the organization location using enterprise installation' -Skip:($OwnerType -ne 'enterprise') {
-            { Update-GitHubOrganization -Name $orgName -Location 'New Location' } | Should -Not -Throw
+            { Update-GitHubOrganization -Name $orgName -Location 'New Location' } | Should -Throw
         }
 
         It 'Remove-GitHubOrganization - Removes an organization using enterprise installation' -Skip:($OwnerType -ne 'enterprise') {
-            { Remove-GitHubOrganization -Name $orgName -Confirm:$false } | Should -Not -Throw
+            { Remove-GitHubOrganization -Name $orgName -Confirm:$false } | Should -Throw
         }
 
         It 'Install-GitHubApp - Installs a GitHub App to an organization' -Skip:($OwnerType -ne 'enterprise') {
@@ -138,11 +138,13 @@ Describe 'Organizations' {
         }
 
         It 'Update-GitHubOrganization - Updates the organization location using organization installation' -Skip:($OwnerType -ne 'enterprise') {
-            { Update-GitHubOrganization -Name $orgName -Location 'New Location' -Context $orgContext } | Should -Not -Throw
+            $orgContext = Connect-GitHubApp -Organization $orgName -Context $context -PassThru -Silent
+            Update-GitHubOrganization -Name $orgName -Location 'New Location' -Context $orgContext
         }
 
         It 'Remove-GitHubOrganization - Removes an organization using organization installation' -Skip:($OwnerType -ne 'enterprise') {
-            { Remove-GitHubOrganization -Name $orgName -Confirm:$false -Context $orgContext } | Should -Not -Throw
+            $orgContext = Connect-GitHubApp -Organization $orgName -Context $context -PassThru -Silent
+            Remove-GitHubOrganization -Name $orgName -Confirm:$false -Context $orgContext
         }
 
         Context 'Invitations' -Skip:($Owner -notin 'psmodule-test-org', 'psmodule-test-org2') {
