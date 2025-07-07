@@ -315,6 +315,10 @@ function Invoke-GitHubAPI {
             }
 
             $exception = @"
+
+----------------------------------
+Context:
+$($Context | Format-List | Out-String)
 ----------------------------------
 Request:
 $([pscustomobject]$APICall | Select-Object -ExcludeProperty Body, Headers | Format-List | Out-String)
