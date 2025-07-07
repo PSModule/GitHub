@@ -15,4 +15,3 @@ Test:
     Skip: true
   CodeCoverage:
     PercentTarget: 50
-    Skip: true
