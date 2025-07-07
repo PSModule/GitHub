@@ -45,12 +45,20 @@ Describe 'Organizations' {
                 }
             }
             if ($OwnerType -eq 'enterprise') {
-                Get-GitHubOrganization | Where-Object { $_.Name -like "$orgPrefix*" } | Remove-GitHubOrganization
+                $orgs = Get-GitHubOrganization | Where-Object { $_.Name -like "$orgPrefix*" } | Out-String
+                LogGroup 'Organizations' {
+                    $orgs | Format-Table -AutoSize | Out-String
+                }
+                $orgs | Remove-GitHubOrganization
             }
         }
         AfterAll {
             if ($OwnerType -eq 'enterprise') {
-                Get-GitHubOrganization | Where-Object { $_.Name -like "$orgPrefix*" } | Remove-GitHubOrganization
+                $orgs = Get-GitHubOrganization | Where-Object { $_.Name -like "$orgPrefix*" } | Out-String
+                LogGroup 'Organizations' {
+                    $orgs | Format-Table -AutoSize | Out-String
+                }
+                $orgs | Remove-GitHubOrganization
             }
 
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
@@ -82,6 +90,10 @@ Describe 'Organizations' {
         }
 
         It 'Get-GitHubOrganization - Gets the organizations for the authenticated user' {
+            $orgs = Get-GitHubOrganization | Where-Object { $_.Name -like "$orgPrefix*" } | Out-String
+            LogGroup 'Organizations' {
+                $orgs | Format-Table -AutoSize | Out-String
+            }
             { Get-GitHubOrganization } | Should -Not -Throw
         }
 
