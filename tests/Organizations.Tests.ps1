@@ -49,6 +49,10 @@ Describe 'Organizations' {
             }
         }
         AfterAll {
+            if ($OwnerType -eq 'enterprise') {
+                Get-GitHubOrganization | Where-Object { $_.Name -eq $orgPrefix } | Remove-GitHubOrganization -Confirm:$false
+            }
+
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
             Write-Host ('-' * 60)
         }
