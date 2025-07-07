@@ -4,7 +4,6 @@ $orgParam = @{
     Owner        = 'GitHub-Automation'
     BillingEmail = 'post@msx.no'
 }
-
 $org = New-GitHubOrganization @orgParam
 
 $installAppParam = @{

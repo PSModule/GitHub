@@ -20,7 +20,9 @@
 param()
 
 BeforeAll {
-    # DEFAULTS ACCROSS ALL TESTS
+    $testName = 'MsxOrgTests'
+    $os = $env:RUNNER_OS
+    $number = Get-Random
 }
 
 Describe 'Organizations' {
@@ -31,6 +33,12 @@ Describe 'Organizations' {
             $context = Connect-GitHubAccount @connectParams -PassThru -Silent
             LogGroup 'Context' {
                 Write-Host ($context | Select-Object * | Out-String)
+            }
+            $orgPrefix = "$testName-$os-"
+            $orgName = "$orgPrefix$number"
+
+            if ($OwnerType -eq 'enterprise'){
+                Get-GitHubOrganization | Where-Object { $_.Name -eq $orgPrefix } | Remove-GitHubOrganization -Confirm:$false
             }
         }
         AfterAll {
@@ -58,6 +66,7 @@ Describe 'Organizations' {
             }
             $organization | Should -Not -BeNullOrEmpty
         }
+
         It "Get-GitHubOrganization - List public organizations for the user 'psmodule-user'" {
             $organizations = Get-GitHubOrganization -Username 'psmodule-user'
             LogGroup 'Organization' {
@@ -65,6 +74,7 @@ Describe 'Organizations' {
             }
             $organizations | Should -Not -BeNullOrEmpty
         }
+
         It 'Get-GitHubOrganizationMember - Gets the members of a specific organization' -Skip:($OwnerType -in ('user', 'enterprise')) {
             $members = Get-GitHubOrganizationMember -Organization $owner
             LogGroup 'Members' {
@@ -73,28 +83,38 @@ Describe 'Organizations' {
             $members | Should -Not -BeNullOrEmpty
         }
 
-        # Tests for IAT UAT and PAT goes here
         It 'Get-GitHubOrganization - Gets the organizations for the authenticated user' -Skip:($OwnerType -notin ('user')) {
             { Get-GitHubOrganization } | Should -Not -Throw
         }
 
-        if ($OwnerType -eq 'organization' -and $Type -ne 'GitHub Actions') {
-            It 'Update-GitHubOrganization - Sets the organization configuration' {
-                { Update-GitHubOrganization -Name $owner -Company 'ABC' } | Should -Not -Throw
-                {
-                    $email = (New-Guid).Guid + '@psmodule.io'
-                    Update-GitHubOrganization -Name $owner -BillingEmail $email
-                } | Should -Not -Throw
-                {
-                    $email = (New-Guid).Guid + '@psmodule.io'
-                    Update-GitHubOrganization -Name $owner -Email $email
-                } | Should -Not -Throw
-                { Update-GitHubOrganization -Name $owner -TwitterUsername 'PSModule' } | Should -Not -Throw
-                { Update-GitHubOrganization -Name $owner -Location 'USA' } | Should -Not -Throw
-                { Update-GitHubOrganization -Name $owner -Description 'Test Organization' } | Should -Not -Throw
-                { Update-GitHubOrganization -Name $owner -DefaultRepositoryPermission read } | Should -Not -Throw
-                { Update-GitHubOrganization -Name $owner -MembersCanCreateRepositories $true } | Should -Not -Throw
-                { Update-GitHubOrganization -Name $owner -Website 'https://psmodule.io' } | Should -Not -Throw
+        It 'Update-GitHubOrganization - Sets the organization configuration' -Skip:($OwnerType -ne 'organization' -or $Type -eq 'GitHub Actions') {
+            { Update-GitHubOrganization -Name $owner -Company 'ABC' } | Should -Not -Throw
+            {
+                $email = (New-Guid).Guid + '@psmodule.io'
+                Update-GitHubOrganization -Name $owner -BillingEmail $email
+            } | Should -Not -Throw
+            {
+                $email = (New-Guid).Guid + '@psmodule.io'
+                Update-GitHubOrganization -Name $owner -Email $email
+            } | Should -Not -Throw
+            { Update-GitHubOrganization -Name $owner -TwitterUsername 'PSModule' } | Should -Not -Throw
+            { Update-GitHubOrganization -Name $owner -Location 'USA' } | Should -Not -Throw
+            { Update-GitHubOrganization -Name $owner -Description 'Test Organization' } | Should -Not -Throw
+            { Update-GitHubOrganization -Name $owner -DefaultRepositoryPermission read } | Should -Not -Throw
+            { Update-GitHubOrganization -Name $owner -MembersCanCreateRepositories $true } | Should -Not -Throw
+            { Update-GitHubOrganization -Name $owner -Website 'https://psmodule.io' } | Should -Not -Throw
+        }
+
+        It 'New-GitHubOrganization - Creates a new organization' -Skip:($OwnerType -ne 'enterprise') {
+            $orgParam = @{
+                Enterprise   = 'msx'
+                Name         = $orgName
+                Owner        = 'MariusStorhaug'
+                BillingEmail = 'post@msx.no'
+            }
+            LogGroup 'Organization' {
+                $org = New-GitHubOrganization @orgParam
+                Write-Host ($org | Select-Object * | Out-String)
             }
         }
 

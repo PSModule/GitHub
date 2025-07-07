@@ -27,12 +27,12 @@
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param(
         # The organization name. The name is not case sensitive.
-        [Parameter(
-            Mandatory,
-            ValueFromPipeline,
-            ValueFromPipelineByPropertyName
-        )]
+        [Parameter(Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName)]
         [string] $Name,
+
+        # The input object to process. Can be a single or an array of GitHubOrganization objects.
+        [Parameter(Mandatory, ParameterSetName = 'ArrayInput', ValueFromPipeline)]
+        [GitHubOrganization[]] $InputObject,
 
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
@@ -48,14 +48,28 @@
     }
 
     process {
-        $inputObject = @{
-            Method      = 'DELETE'
-            APIEndpoint = "/orgs/$Name"
-            Context     = $Context
-        }
+        switch ($PSCmdlet.ParameterSetName) {
+            'ArrayInput' {
+                foreach ($item in $InputObject) {
+                    $params = @{
+                        Name    = $item.Name
+                        Context = $Context
+                    }
+                    Remove-GitHubOrganization @params
+                }
+                break
+            }
+            default {
+                $apiParams = @{
+                    Method      = 'DELETE'
+                    APIEndpoint = "/orgs/$Name"
+                    Context     = $Context
+                }
 
-        if ($PSCmdlet.ShouldProcess("organization [$Name]", 'DELETE')) {
-            $null = Invoke-GitHubAPI @inputObject
+                if ($PSCmdlet.ShouldProcess("organization [$Name]", 'Delete')) {
+                    $null = Invoke-GitHubAPI @apiParams
+                }
+            }
         }
     }
 
@@ -63,5 +77,3 @@
         Write-Debug "[$stackPath] - End"
     }
 }
-
-#SkipTest:FunctionTest:Will add a test for this function in a future PR
