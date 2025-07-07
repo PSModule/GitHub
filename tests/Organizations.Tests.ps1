@@ -45,6 +45,7 @@ Describe 'Organizations' {
                 }
             }
             if ($OwnerType -eq 'enterprise') {
+                (Invoke-GitHubAPI -ApiEndpoint '/organizations').Response | Out-String
                 $orgs = Get-GitHubOrganization -Enterprise $owner # | Where-Object { $_.Name -like "$orgPrefix*" } | Out-String
                 LogGroup 'Organizations' {
                     $orgs | Format-Table -AutoSize | Out-String
