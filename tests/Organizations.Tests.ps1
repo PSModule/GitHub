@@ -44,9 +44,6 @@ Describe 'Organizations' {
                     Write-Host ($context | Select-Object * | Out-String)
                 }
             }
-            if ($OwnerType -eq 'enterprise') {
-                Remove-GitHubOrganization -Name $orgName -Confirm:$false
-            }
         }
         AfterAll {
             if ($OwnerType -eq 'enterprise') {
