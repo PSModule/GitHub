@@ -66,6 +66,6 @@
     }
     if ($PSCmdlet.ShouldProcess("Creating organization '$Name' in enterprise '$Enterprise'")) {
         $orgresult = Invoke-GitHubGraphQLQuery @updateGraphQLInputs
-        [GitHubOrganization]::new($orgresult.createEnterpriseOrganization.organization)
+        [GitHubOrganization]::new($orgresult.createEnterpriseOrganization.organization, $Context)
     }
 }
