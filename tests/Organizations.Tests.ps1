@@ -81,7 +81,7 @@ Describe 'Organizations' {
             $members | Should -Not -BeNullOrEmpty
         }
 
-        It 'Get-GitHubOrganization - Gets the organizations for the authenticated user' -Skip:($OwnerType -notin ('user')) {
+        It 'Get-GitHubOrganization - Gets the organizations for the authenticated user' {
             { Get-GitHubOrganization } | Should -Not -Throw
         }
 

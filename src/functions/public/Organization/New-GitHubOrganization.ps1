@@ -18,15 +18,19 @@
     [OutputType([GitHubOrganization])]
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Medium')]
     param(
+        # The name of the enterprise to create the organization in.
         [Parameter()]
         [string]$Enterprise,
 
+        # The name of the organization to create.
         [Parameter(Mandatory)]
         [string]$Name,
 
+        # The owners of the organization. This should be a list of GitHub usernames.
         [Parameter(Mandatory)]
         [string[]]$Owner,
 
+        # The billing email for the organization.
         [Parameter()]
         [string]$BillingEmail,
 
@@ -36,36 +40,48 @@
         [object] $Context
     )
 
-
-    $enterpriseObject = Get-GitHubEnterprise -Name $Enterprise -Context $Context
-    Write-Verbose "Creating organization in enterprise: $($enterpriseObject.Name)"
-
-    $inputParams = @{
-        adminLogins  = $Owner
-        billingEmail = $BillingEmail
-        enterpriseId = $enterpriseObject.NodeID
-        login        = $Name
-        profileName  = $Name
+    begin {
+        $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT
     }
 
-    $updateGraphQLInputs = @{
-        Query     = @'
-    mutation($input:CreateEnterpriseOrganizationInput!) {
-        createEnterpriseOrganization(input:$input) {
-            organization {
-                id
-                login
-            }
+    process {
+        $enterpriseObject = Get-GitHubEnterprise -Name $Enterprise -Context $Context
+        Write-Verbose "Creating organization in enterprise: $($enterpriseObject.Name)"
+        $graphQLFields = ([GitHubOrganization]::PropertyToGraphQLMap).Values
+
+        $inputParams = @{
+            adminLogins  = $Owner
+            billingEmail = $BillingEmail
+            enterpriseId = $enterpriseObject.NodeID
+            login        = $Name
+            profileName  = $Name
         }
-    }
-'@
-        Variables = @{
-            input = $inputParams
+
+        $updateGraphQLInputs = @{
+            Query     = @"
+mutation(`$input:CreateEnterpriseOrganizationInput!) {
+    createEnterpriseOrganization(input:`$input) {
+        organization {
+            $graphQLFields
         }
-        Context   = $Context
-    }
-    if ($PSCmdlet.ShouldProcess("Creating organization '$Name' in enterprise '$Enterprise'")) {
-        $orgresult = Invoke-GitHubGraphQLQuery @updateGraphQLInputs
-        [GitHubOrganization]::new($orgresult.createEnterpriseOrganization.organization, $Context)
     }
 }
+"@
+            Variables = @{
+                input = $inputParams
+            }
+            Context   = $Context
+        }
+        if ($PSCmdlet.ShouldProcess("Creating organization '$Name' in enterprise '$Enterprise'")) {
+            $orgresult = Invoke-GitHubGraphQLQuery @updateGraphQLInputs
+            [GitHubOrganization]::new($orgresult.createEnterpriseOrganization.organization, $Context)
+        }
+    }
+
+    end {
+        Write-Debug "[$stackPath] - End"
+    }
+}
+
