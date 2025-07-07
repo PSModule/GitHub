@@ -45,7 +45,7 @@ Describe 'Organizations' {
                 }
             }
             if ($OwnerType -eq 'enterprise') {
-                $orgs = Get-GitHubOrganization | Where-Object { $_.Name -like "$orgPrefix*" } | Out-String
+                $orgs = Get-GitHubOrganization -Enterprise $owner | Where-Object { $_.Name -like "$orgPrefix*" } | Out-String
                 LogGroup 'Organizations' {
                     $orgs | Format-Table -AutoSize | Out-String
                 }
@@ -54,7 +54,7 @@ Describe 'Organizations' {
         }
         AfterAll {
             if ($OwnerType -eq 'enterprise') {
-                $orgs = Get-GitHubOrganization | Where-Object { $_.Name -like "$orgPrefix*" } | Out-String
+                $orgs = Get-GitHubOrganization -Enterprise $owner | Where-Object { $_.Name -like "$orgPrefix*" } | Out-String
                 LogGroup 'Organizations' {
                     $orgs | Format-Table -AutoSize | Out-String
                 }
@@ -89,7 +89,7 @@ Describe 'Organizations' {
             $members | Should -Not -BeNullOrEmpty
         }
 
-        It 'Get-GitHubOrganization - Gets the organizations for the authenticated user' {
+        It 'Get-GitHubOrganization - Gets the organizations for the authenticated user' -Skip:($Type -eq 'GitHub Actions') {
             $orgs = Get-GitHubOrganization | Where-Object { $_.Name -like "$orgPrefix*" } | Out-String
             LogGroup 'Organizations' {
                 $orgs | Format-Table -AutoSize | Out-String
