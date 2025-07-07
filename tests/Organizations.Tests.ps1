@@ -129,7 +129,7 @@ Describe 'Organizations' {
             $installation | Should -BeOfType 'GitHubAppInstallation'
         }
 
-        It 'Connect-GitHubApp - Connects as a GitHub App to the organization' -Skip:($OwnerType -ne 'organization') {
+        It 'Connect-GitHubApp - Connects as a GitHub App to the organization' -Skip:($OwnerType -ne 'enterprise') {
             $orgContext = Connect-GitHubApp -Organization $orgName -Context $context -PassThru -Silent
             LogGroup 'Context' {
                 Write-Host ($orgContext | Select-Object * | Out-String)
