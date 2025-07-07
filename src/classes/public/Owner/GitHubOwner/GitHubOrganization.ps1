@@ -225,7 +225,7 @@
         $this.MembersCanInviteCollaborators = $Object.members_can_invite_collaborators
         $this.MembersCanCreatePages = $Object.members_can_create_pages
         $this.MembersCanForkPrivateRepositories = $Object.members_can_fork_private_repositories ?? $Object.membersCanForkPrivateRepositories
-        $this.RequireWebCommitSignoff = $Object.web_commit_signoff_required ?? $Object.requiresTwoFactorAuthentication
+        $this.RequireWebCommitSignoff = $Object.web_commit_signoff_required ?? $Object.webCommitSignoffRequired
         $this.DeployKeysEnabledForRepositories = $Object.deploy_keys_enabled_for_repositories
         $this.MembersCanCreatePublicPages = $Object.members_can_create_public_pages
         $this.MembersCanCreatePrivatePages = $Object.members_can_create_private_pages

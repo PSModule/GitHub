@@ -20,7 +20,9 @@
 param()
 
 BeforeAll {
-    # DEFAULTS ACCROSS ALL TESTS
+    $testName = 'MsxOrgTests'
+    $os = $env:RUNNER_OS
+    $number = Get-Random
 }
 
 Describe 'Organizations' {
@@ -32,24 +34,20 @@ Describe 'Organizations' {
             LogGroup 'Context' {
                 Write-Host ($context | Select-Object * | Out-String)
             }
+            $orgPrefix = "$testName-$os-"
+            $orgName = "$orgPrefix$number"
+
+            if ($AuthType -eq 'APP') {
+                $installationContext = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
+                LogGroup 'Context - Installation' {
+                    Write-Host ($installationContext | Select-Object * | Out-String)
+                }
+            }
         }
         AfterAll {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
             Write-Host ('-' * 60)
         }
-
-        # Tests for APP goes here
-        if ($AuthType -eq 'APP') {
-            It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
-                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
-                LogGroup 'Context' {
-                    Write-Host ($context | Select-Object * | Out-String)
-                }
-            }
-        }
-
-        # Tests for runners goes here
-        if ($Type -eq 'GitHub Actions') {}
 
         It "Get-GitHubOrganization - Gets a specific organization 'PSModule'" {
             $organization = Get-GitHubOrganization -Name 'PSModule'
@@ -58,6 +56,7 @@ Describe 'Organizations' {
             }
             $organization | Should -Not -BeNullOrEmpty
         }
+
         It "Get-GitHubOrganization - List public organizations for the user 'psmodule-user'" {
             $organizations = Get-GitHubOrganization -Username 'psmodule-user'
             LogGroup 'Organization' {
@@ -65,6 +64,7 @@ Describe 'Organizations' {
             }
             $organizations | Should -Not -BeNullOrEmpty
         }
+
         It 'Get-GitHubOrganizationMember - Gets the members of a specific organization' -Skip:($OwnerType -in ('user', 'enterprise')) {
             $members = Get-GitHubOrganizationMember -Organization $owner
             LogGroup 'Members' {
@@ -73,29 +73,78 @@ Describe 'Organizations' {
             $members | Should -Not -BeNullOrEmpty
         }
 
-        # Tests for IAT UAT and PAT goes here
-        It 'Get-GitHubOrganization - Gets the organizations for the authenticated user' -Skip:($OwnerType -notin ('user')) {
+        It 'Get-GitHubOrganization - Gets the organizations for the authenticated user' -Skip:($Type -eq 'GitHub Actions') {
+            $orgs = Get-GitHubOrganization | Where-Object { $_.Name -like "$orgPrefix*" } | Out-String
+            LogGroup 'Organizations' {
+                $orgs | Format-Table -AutoSize | Out-String
+            }
             { Get-GitHubOrganization } | Should -Not -Throw
         }
 
-        if ($OwnerType -eq 'organization' -and $Type -ne 'GitHub Actions') {
-            It 'Update-GitHubOrganization - Sets the organization configuration' {
-                { Update-GitHubOrganization -Name $owner -Company 'ABC' } | Should -Not -Throw
-                {
-                    $email = (New-Guid).Guid + '@psmodule.io'
-                    Update-GitHubOrganization -Name $owner -BillingEmail $email
-                } | Should -Not -Throw
-                {
-                    $email = (New-Guid).Guid + '@psmodule.io'
-                    Update-GitHubOrganization -Name $owner -Email $email
-                } | Should -Not -Throw
-                { Update-GitHubOrganization -Name $owner -TwitterUsername 'PSModule' } | Should -Not -Throw
-                { Update-GitHubOrganization -Name $owner -Location 'USA' } | Should -Not -Throw
-                { Update-GitHubOrganization -Name $owner -Description 'Test Organization' } | Should -Not -Throw
-                { Update-GitHubOrganization -Name $owner -DefaultRepositoryPermission read } | Should -Not -Throw
-                { Update-GitHubOrganization -Name $owner -MembersCanCreateRepositories $true } | Should -Not -Throw
-                { Update-GitHubOrganization -Name $owner -Website 'https://psmodule.io' } | Should -Not -Throw
+        It 'Update-GitHubOrganization - Sets the organization configuration' -Skip:($OwnerType -ne 'organization' -or $Type -eq 'GitHub Actions') {
+            { Update-GitHubOrganization -Name $owner -Company 'ABC' } | Should -Not -Throw
+            {
+                $email = (New-Guid).Guid + '@psmodule.io'
+                Update-GitHubOrganization -Name $owner -BillingEmail $email
+            } | Should -Not -Throw
+            {
+                $email = (New-Guid).Guid + '@psmodule.io'
+                Update-GitHubOrganization -Name $owner -Email $email
+            } | Should -Not -Throw
+            { Update-GitHubOrganization -Name $owner -TwitterUsername 'PSModule' } | Should -Not -Throw
+            { Update-GitHubOrganization -Name $owner -Location 'USA' } | Should -Not -Throw
+            { Update-GitHubOrganization -Name $owner -Description 'Test Organization' } | Should -Not -Throw
+            { Update-GitHubOrganization -Name $owner -DefaultRepositoryPermission read } | Should -Not -Throw
+            { Update-GitHubOrganization -Name $owner -MembersCanCreateRepositories $true } | Should -Not -Throw
+            { Update-GitHubOrganization -Name $owner -Website 'https://psmodule.io' } | Should -Not -Throw
+        }
+
+        It 'New-GitHubOrganization - Creates a new organization' -Skip:($OwnerType -ne 'enterprise') {
+            $orgParam = @{
+                Enterprise   = 'msx'
+                Name         = $orgName
+                Owner        = 'MariusStorhaug'
+                BillingEmail = 'post@msx.no'
             }
+            LogGroup 'Organization' {
+                $org = New-GitHubOrganization @orgParam
+                Write-Host ($org | Select-Object * | Out-String)
+            }
+        }
+
+        It 'Update-GitHubOrganization - Updates the organization location using enterprise installation' -Skip:($OwnerType -ne 'enterprise') {
+            { Update-GitHubOrganization -Name $orgName -Location 'New Location' } | Should -Throw
+        }
+
+        It 'Remove-GitHubOrganization - Removes an organization using enterprise installation' -Skip:($OwnerType -ne 'enterprise') {
+            { Remove-GitHubOrganization -Name $orgName -Confirm:$false } | Should -Throw
+        }
+
+        It 'Install-GitHubApp - Installs a GitHub App to an organization' -Skip:($OwnerType -ne 'enterprise') {
+            $installation = Install-GitHubApp -Enterprise $owner -Organization $orgName -ClientID $installationContext.ClientID -RepositorySelection 'all'
+            LogGroup 'Installed App' {
+                Write-Host ($installation | Select-Object * | Out-String)
+            }
+            $installation | Should -Not -BeNullOrEmpty
+            $installation | Should -BeOfType 'GitHubAppInstallation'
+        }
+
+        It 'Connect-GitHubApp - Connects as a GitHub App to the organization' -Skip:($OwnerType -ne 'enterprise') {
+            $orgContext = Connect-GitHubApp -Organization $orgName -Context $context -PassThru -Silent
+            LogGroup 'Context' {
+                Write-Host ($orgContext | Select-Object * | Out-String)
+            }
+            $orgContext | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Update-GitHubOrganization - Updates the organization location using organization installation' -Skip:($OwnerType -ne 'enterprise') {
+            $orgContext = Connect-GitHubApp -Organization $orgName -Context $context -PassThru -Silent
+            Update-GitHubOrganization -Name $orgName -Location 'New Location' -Context $orgContext
+        }
+
+        It 'Remove-GitHubOrganization - Removes an organization using organization installation' -Skip:($OwnerType -ne 'enterprise') {
+            $orgContext = Connect-GitHubApp -Organization $orgName -Context $context -PassThru -Silent
+            Remove-GitHubOrganization -Name $orgName -Confirm:$false -Context $orgContext
         }
 
         Context 'Invitations' -Skip:($Owner -notin 'psmodule-test-org', 'psmodule-test-org2') {
