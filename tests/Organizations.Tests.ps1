@@ -39,17 +39,13 @@ Describe 'Organizations' {
 
             # Tests for APP goes here
             if ($AuthType -eq 'APP') {
-                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
+                $installationContext = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
                 LogGroup 'Context - Installation' {
-                    Write-Host ($context | Select-Object * | Out-String)
+                    Write-Host ($installationContext | Select-Object * | Out-String)
                 }
             }
         }
         AfterAll {
-            if ($OwnerType -eq 'enterprise') {
-                Remove-GitHubOrganization -Name $orgName -Confirm:$false
-            }
-
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
             Write-Host ('-' * 60)
         }
@@ -117,8 +113,37 @@ Describe 'Organizations' {
             }
         }
 
-        It 'Update-GitHubOrganization - Updates the organization location' -Skip:($OwnerType -ne 'enterprise') {
+        It 'Update-GitHubOrganization - Updates the organization location using enterprise installation' -Skip:($OwnerType -ne 'enterprise') {
             { Update-GitHubOrganization -Name $orgName -Location 'New Location' } | Should -Not -Throw
+        }
+
+        It 'Remove-GitHubOrganization - Removes an organization using enterprise installation' -Skip:($OwnerType -ne 'enterprise') {
+            { Remove-GitHubOrganization -Name $orgName -Confirm:$false } | Should -Not -Throw
+        }
+
+        It 'Install-GitHubApp - Installs a GitHub App to an organization' -Skip:($OwnerType -ne 'enterprise') {
+            $installation = Install-GitHubApp -Enterprise $owner -Organization $orgName -ClientID $installationContext.ClientID -RepositorySelection 'all'
+            LogGroup 'Installed App' {
+                Write-Host ($installation | Select-Object * | Out-String)
+            }
+            $installation | Should -Not -BeNullOrEmpty
+            $installation | Should -BeOfType 'GitHubAppInstallation'
+        }
+
+        It 'Connect-GitHubApp - Connects as a GitHub App to the organization' -Skip:($OwnerType -ne 'organization') {
+            $orgContext = Connect-GitHubApp -Organization $orgName -ClientID $installationContext.ClientID -PassThru -Silent
+            LogGroup 'Context' {
+                Write-Host ($orgContext | Select-Object * | Out-String)
+            }
+            $orgContext | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Update-GitHubOrganization - Updates the organization location using organization installation' -Skip:($OwnerType -ne 'enterprise') {
+            { Update-GitHubOrganization -Name $orgName -Location 'New Location' -Context $orgContext } | Should -Not -Throw
+        }
+
+        It 'Remove-GitHubOrganization - Removes an organization using organization installation' -Skip:($OwnerType -ne 'enterprise') {
+            { Remove-GitHubOrganization -Name $orgName -Confirm:$false -Context $orgContext } | Should -Not -Throw
         }
 
         Context 'Invitations' -Skip:($Owner -notin 'psmodule-test-org', 'psmodule-test-org2') {
