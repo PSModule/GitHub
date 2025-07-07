@@ -117,6 +117,10 @@ Describe 'Organizations' {
             }
         }
 
+        It 'Update-GitHubOrganization - Updates the organization location' -Skip:($OwnerType -ne 'enterprise') {
+            { Update-GitHubOrganization -Name $orgName -Location 'New Location' } | Should -Not -Throw
+        }
+
         Context 'Invitations' -Skip:($Owner -notin 'psmodule-test-org', 'psmodule-test-org2') {
             It 'New-GitHubOrganizationInvitation - Invites a user to an organization' {
                 {
