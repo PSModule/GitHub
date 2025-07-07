@@ -45,12 +45,12 @@ Describe 'Organizations' {
                 }
             }
             if ($OwnerType -eq 'enterprise') {
-                Get-GitHubOrganization | Where-Object { $_.Name -eq $orgPrefix } | Remove-GitHubOrganization -Confirm:$false
+                Get-GitHubOrganization | Where-Object { $_.Name -like "$orgPrefix*" } | Remove-GitHubOrganization -WhatIf
             }
         }
         AfterAll {
             if ($OwnerType -eq 'enterprise') {
-                Get-GitHubOrganization | Where-Object { $_.Name -eq $orgPrefix } | Remove-GitHubOrganization -Confirm:$false
+                Get-GitHubOrganization | Where-Object { $_.Name -like "$orgPrefix*" } | Remove-GitHubOrganization -WhatIf
             }
 
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
