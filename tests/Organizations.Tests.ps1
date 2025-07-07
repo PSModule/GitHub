@@ -37,7 +37,6 @@ Describe 'Organizations' {
             $orgPrefix = "$testName-$os-"
             $orgName = "$orgPrefix$number"
 
-            # Tests for APP goes here
             if ($AuthType -eq 'APP') {
                 $installationContext = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
                 LogGroup 'Context - Installation' {
@@ -131,7 +130,7 @@ Describe 'Organizations' {
         }
 
         It 'Connect-GitHubApp - Connects as a GitHub App to the organization' -Skip:($OwnerType -ne 'organization') {
-            $orgContext = Connect-GitHubApp -Organization $orgName -ClientID $installationContext.ClientID -PassThru -Silent
+            $orgContext = Connect-GitHubApp -Organization $orgName -Context $context -PassThru -Silent
             LogGroup 'Context' {
                 Write-Host ($orgContext | Select-Object * | Out-String)
             }
