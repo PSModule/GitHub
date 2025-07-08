@@ -1,4 +1,4 @@
-filter Block-GitHubUserByUser {
+﻿filter Block-GitHubUserByUser {
     <#
         .SYNOPSIS
         Block a user

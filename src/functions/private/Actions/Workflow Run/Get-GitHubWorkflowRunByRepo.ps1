@@ -1,4 +1,4 @@
-filter Get-GitHubWorkflowRunByRepo {
+﻿filter Get-GitHubWorkflowRunByRepo {
     <#
         .SYNOPSIS
         List workflow runs for a repository.

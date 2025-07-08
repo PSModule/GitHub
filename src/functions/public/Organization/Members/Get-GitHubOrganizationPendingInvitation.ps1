@@ -1,4 +1,4 @@
-function Get-GitHubOrganizationPendingInvitation {
+﻿function Get-GitHubOrganizationPendingInvitation {
     <#
         .SYNOPSIS
         List pending organization invitations

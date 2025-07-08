@@ -1,4 +1,4 @@
-filter Set-GitHubEnvironment {
+﻿filter Set-GitHubEnvironment {
     <#
         .SYNOPSIS
         Create or update an environment.

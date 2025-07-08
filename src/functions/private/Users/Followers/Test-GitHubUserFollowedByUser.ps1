@@ -1,4 +1,4 @@
-filter Test-GitHubUserFollowedByUser {
+﻿filter Test-GitHubUserFollowedByUser {
     <#
         .SYNOPSIS
         Check if a user follows another user

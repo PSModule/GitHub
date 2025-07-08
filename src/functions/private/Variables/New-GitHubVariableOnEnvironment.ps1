@@ -1,4 +1,4 @@
-function New-GitHubVariableOnEnvironment {
+﻿function New-GitHubVariableOnEnvironment {
     <#
         .SYNOPSIS
         Create an environment variable.

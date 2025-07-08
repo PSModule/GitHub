@@ -1,4 +1,4 @@
-function Get-GitHubArtifactFromRepository {
+﻿function Get-GitHubArtifactFromRepository {
     <#
         .SYNOPSIS
         Lists artifacts for a GitHub repository.

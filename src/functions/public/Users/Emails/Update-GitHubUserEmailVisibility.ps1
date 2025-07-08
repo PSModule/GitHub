@@ -1,4 +1,4 @@
-filter Update-GitHubUserEmailVisibility {
+﻿filter Update-GitHubUserEmailVisibility {
     <#
         .SYNOPSIS
         Set primary email visibility for the authenticated user

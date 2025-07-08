@@ -1,4 +1,4 @@
-filter Remove-GitHubReleaseAsset {
+﻿filter Remove-GitHubReleaseAsset {
     <#
         .SYNOPSIS
         Delete a release asset

@@ -1,4 +1,4 @@
-function Update-GitHubVariableOnOwner {
+﻿function Update-GitHubVariableOnOwner {
     <#
         .SYNOPSIS
         Update an organization variable.

@@ -1,4 +1,4 @@
-filter Get-GitHubRepositoryLanguage {
+﻿filter Get-GitHubRepositoryLanguage {
     <#
         .SYNOPSIS
         List repository languages

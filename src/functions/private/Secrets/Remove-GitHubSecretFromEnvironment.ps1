@@ -1,4 +1,4 @@
-function Remove-GitHubSecretFromEnvironment {
+﻿function Remove-GitHubSecretFromEnvironment {
     <#
         .SYNOPSIS
         Delete an environment secret.

@@ -1,4 +1,4 @@
-filter Get-GitHubRepositoryByNameAndTeam {
+﻿filter Get-GitHubRepositoryByNameAndTeam {
     <#
         .SYNOPSIS
         Get the permission level for a team on a repository.

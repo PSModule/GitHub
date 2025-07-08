@@ -1,4 +1,4 @@
-function Remove-GitHubSecretSelectedRepository {
+﻿function Remove-GitHubSecretSelectedRepository {
     <#
         .SYNOPSIS
         Remove selected repository from an organization secret.

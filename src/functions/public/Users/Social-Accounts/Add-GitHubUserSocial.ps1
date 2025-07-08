@@ -1,4 +1,4 @@
-filter Add-GitHubUserSocial {
+﻿filter Add-GitHubUserSocial {
     <#
         .SYNOPSIS
         Add social accounts for the authenticated user

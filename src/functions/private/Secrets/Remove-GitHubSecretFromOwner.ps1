@@ -1,4 +1,4 @@
-function Remove-GitHubSecretFromOwner {
+﻿function Remove-GitHubSecretFromOwner {
     <#
         .SYNOPSIS
         Delete an organization secret.

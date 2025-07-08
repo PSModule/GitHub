@@ -1,4 +1,4 @@
-filter Get-GitHubRateLimit {
+﻿filter Get-GitHubRateLimit {
     <#
         .SYNOPSIS
         Get rate limit status for the authenticated user

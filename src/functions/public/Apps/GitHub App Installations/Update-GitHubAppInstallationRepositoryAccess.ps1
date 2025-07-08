@@ -1,4 +1,4 @@
-function Update-GitHubAppInstallationRepositoryAccess {
+﻿function Update-GitHubAppInstallationRepositoryAccess {
     <#
         .SYNOPSIS
         Update the installation repository access between all repositories and selected repositories.

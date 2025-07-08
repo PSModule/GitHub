@@ -1,4 +1,4 @@
-filter Add-GitHubUserGpgKey {
+﻿filter Add-GitHubUserGpgKey {
     <#
         .SYNOPSIS
         Create a GPG key for the authenticated user

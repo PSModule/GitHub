@@ -1,4 +1,4 @@
-filter Update-GitHubReleaseAsset {
+﻿filter Update-GitHubReleaseAsset {
     <#
         .SYNOPSIS
         Update a release asset

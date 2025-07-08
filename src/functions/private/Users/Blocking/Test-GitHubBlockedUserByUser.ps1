@@ -1,4 +1,4 @@
-filter Test-GitHubBlockedUserByUser {
+﻿filter Test-GitHubBlockedUserByUser {
     <#
         .SYNOPSIS
         Check if a user is blocked by the authenticated user

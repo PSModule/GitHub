@@ -1,4 +1,4 @@
-function Get-GitHubVariableFromOrganization {
+﻿function Get-GitHubVariableFromOrganization {
     <#
         .SYNOPSIS
         List repository organization variables.

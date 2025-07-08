@@ -1,4 +1,4 @@
-filter Get-GitHubReleaseByTagName {
+﻿filter Get-GitHubReleaseByTagName {
     <#
         .SYNOPSIS
         Get a release by tag name

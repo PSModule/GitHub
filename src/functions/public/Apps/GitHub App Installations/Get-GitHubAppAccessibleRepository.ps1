@@ -1,4 +1,4 @@
-function Get-GitHubAppAccessibleRepository {
+﻿function Get-GitHubAppAccessibleRepository {
     <#
         .SYNOPSIS
         Get repositories belonging to an enterprise owned organization that can be made accessible to a GitHub App

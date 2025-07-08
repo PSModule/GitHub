@@ -1,4 +1,4 @@
-function Get-GitHubPublicKeyForActionOnRepository {
+﻿function Get-GitHubPublicKeyForActionOnRepository {
     <#
         .SYNOPSIS
         Get a repository public key.

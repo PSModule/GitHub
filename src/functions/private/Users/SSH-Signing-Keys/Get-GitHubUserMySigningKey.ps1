@@ -1,4 +1,4 @@
-filter Get-GitHubUserMySigningKey {
+﻿filter Get-GitHubUserMySigningKey {
     <#
         .SYNOPSIS
         List SSH signing keys for the authenticated user

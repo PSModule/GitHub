@@ -1,4 +1,4 @@
-filter Get-GitHubRepositoryAutolinkList {
+﻿filter Get-GitHubRepositoryAutolinkList {
     <#
         .SYNOPSIS
         List all autolinks of a repository

@@ -1,4 +1,4 @@
-filter Start-GitHubWorkflow {
+﻿filter Start-GitHubWorkflow {
     <#
         .SYNOPSIS
         Start a workflow run using the workflow's ID.

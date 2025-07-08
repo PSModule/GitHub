@@ -1,4 +1,4 @@
-function Uninstall-GitHubAppOnEnterpriseOrganization {
+﻿function Uninstall-GitHubAppOnEnterpriseOrganization {
     <#
         .SYNOPSIS
         Uninstall a GitHub App from an organization.

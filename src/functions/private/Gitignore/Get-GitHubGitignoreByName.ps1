@@ -1,4 +1,4 @@
-filter Get-GitHubGitignoreByName {
+﻿filter Get-GitHubGitignoreByName {
     <#
         .SYNOPSIS
         Get a gitignore template

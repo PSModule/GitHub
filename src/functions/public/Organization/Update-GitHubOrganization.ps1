@@ -1,4 +1,4 @@
-filter Update-GitHubOrganization {
+﻿filter Update-GitHubOrganization {
     <#
         .SYNOPSIS
         Update an organization

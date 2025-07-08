@@ -1,4 +1,4 @@
-function Remove-GitHubAppInstallationRepositoryAccess {
+﻿function Remove-GitHubAppInstallationRepositoryAccess {
     <#
         .SYNOPSIS
         Remove repository access to an organization installation.

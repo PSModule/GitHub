@@ -1,4 +1,4 @@
-filter Get-GitHubRepositorySecurityFix {
+﻿filter Get-GitHubRepositorySecurityFix {
     <#
         .SYNOPSIS
         Check if automated security fixes are enabled for a repository

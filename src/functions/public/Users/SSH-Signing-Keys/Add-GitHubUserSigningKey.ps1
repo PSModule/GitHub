@@ -1,4 +1,4 @@
-filter Add-GitHubUserSigningKey {
+﻿filter Add-GitHubUserSigningKey {
     <#
         .SYNOPSIS
         Create a SSH signing key for the authenticated user

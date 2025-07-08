@@ -1,4 +1,4 @@
-function Get-GitHubSecretRepositoryByName {
+﻿function Get-GitHubSecretRepositoryByName {
     <#
         .SYNOPSIS
         Get a repository secret.

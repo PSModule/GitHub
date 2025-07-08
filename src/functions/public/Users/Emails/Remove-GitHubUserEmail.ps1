@@ -1,4 +1,4 @@
-filter Remove-GitHubUserEmail {
+﻿filter Remove-GitHubUserEmail {
     <#
         .SYNOPSIS
         Delete an email address for the authenticated user

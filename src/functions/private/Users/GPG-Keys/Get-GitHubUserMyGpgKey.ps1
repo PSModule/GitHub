@@ -1,4 +1,4 @@
-filter Get-GitHubUserMyGpgKey {
+﻿filter Get-GitHubUserMyGpgKey {
     <#
         .SYNOPSIS
         List GPG keys for the authenticated user

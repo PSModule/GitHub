@@ -1,4 +1,4 @@
-filter Get-GitHubReleaseAssetFromLatest {
+﻿filter Get-GitHubReleaseAssetFromLatest {
     <#
         .SYNOPSIS
         Get the assets of the latest release

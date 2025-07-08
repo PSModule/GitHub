@@ -1,4 +1,4 @@
-filter Test-GitHubBlockedUserByOrganization {
+﻿filter Test-GitHubBlockedUserByOrganization {
     <#
         .SYNOPSIS
         Check if a user is blocked by an organization

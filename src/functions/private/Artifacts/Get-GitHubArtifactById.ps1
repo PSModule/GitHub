@@ -1,4 +1,4 @@
-function Get-GitHubArtifactById {
+﻿function Get-GitHubArtifactById {
     <#
         .SYNOPSIS
         Retrieves a specific artifact from a GitHub Actions workflow run.

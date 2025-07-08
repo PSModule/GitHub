@@ -1,4 +1,4 @@
-function Get-GitHubOrganizationMember {
+﻿function Get-GitHubOrganizationMember {
     <#
         .SYNOPSIS
         List organization members

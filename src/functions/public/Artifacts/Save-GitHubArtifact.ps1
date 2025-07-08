@@ -1,4 +1,4 @@
-function Save-GitHubArtifact {
+﻿function Save-GitHubArtifact {
     <#
         .SYNOPSIS
         Downloads a GitHub Actions artifact.

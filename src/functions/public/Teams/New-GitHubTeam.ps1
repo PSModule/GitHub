@@ -1,4 +1,4 @@
-function New-GitHubTeam {
+﻿function New-GitHubTeam {
     <#
         .SYNOPSIS
         Create a team

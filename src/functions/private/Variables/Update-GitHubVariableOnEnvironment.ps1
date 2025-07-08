@@ -1,4 +1,4 @@
-function Update-GitHubVariableOnEnvironment {
+﻿function Update-GitHubVariableOnEnvironment {
     <#
         .SYNOPSIS
         Update an environment variable.

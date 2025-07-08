@@ -1,4 +1,4 @@
-function New-GitHubVariableOnRepository {
+﻿function New-GitHubVariableOnRepository {
     <#
         .SYNOPSIS
         Create a repository variable.

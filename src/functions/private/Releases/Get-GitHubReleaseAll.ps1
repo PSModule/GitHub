@@ -1,4 +1,4 @@
-filter Get-GitHubReleaseAll {
+﻿filter Get-GitHubReleaseAll {
     <#
         .SYNOPSIS
         List releases

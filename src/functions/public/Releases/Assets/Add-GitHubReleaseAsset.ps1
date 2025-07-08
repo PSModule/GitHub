@@ -1,4 +1,4 @@
-filter Add-GitHubReleaseAsset {
+﻿filter Add-GitHubReleaseAsset {
     <#
         .SYNOPSIS
         Upload a release asset

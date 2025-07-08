@@ -1,4 +1,4 @@
-function Get-GitHubPublicKeyForCodespacesOnUser {
+﻿function Get-GitHubPublicKeyForCodespacesOnUser {
     <#
         .SYNOPSIS
         Get public key for the authenticated user.

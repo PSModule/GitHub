@@ -1,4 +1,4 @@
-function Get-GitHubEnterpriseOrganizationAppInstallation {
+﻿function Get-GitHubEnterpriseOrganizationAppInstallation {
     <#
         .SYNOPSIS
         List GitHub Apps installed on an enterprise-owned organization

@@ -1,4 +1,4 @@
-function Get-GitHubSecretFromOrganization {
+﻿function Get-GitHubSecretFromOrganization {
     <#
         .SYNOPSIS
         List repository organization secrets.

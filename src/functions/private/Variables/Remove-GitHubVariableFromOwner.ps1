@@ -1,4 +1,4 @@
-function Remove-GitHubVariableFromOwner {
+﻿function Remove-GitHubVariableFromOwner {
     <#
         .SYNOPSIS
         Delete an organization variable.

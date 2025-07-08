@@ -1,4 +1,4 @@
-function Save-GitHubReleaseAsset {
+﻿function Save-GitHubReleaseAsset {
     <#
         .SYNOPSIS
         Downloads a GitHub Release asset.

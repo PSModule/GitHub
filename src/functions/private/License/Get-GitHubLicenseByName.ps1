@@ -1,4 +1,4 @@
-filter Get-GitHubLicenseByName {
+﻿filter Get-GitHubLicenseByName {
     <#
         .SYNOPSIS
         Get a license

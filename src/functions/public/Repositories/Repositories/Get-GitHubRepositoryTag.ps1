@@ -1,4 +1,4 @@
-filter Get-GitHubRepositoryTag {
+﻿filter Get-GitHubRepositoryTag {
     <#
         .SYNOPSIS
         List repository tags

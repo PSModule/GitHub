@@ -1,4 +1,4 @@
-filter Get-GitHubEmoji {
+﻿filter Get-GitHubEmoji {
     <#
         .SYNOPSIS
         Get emojis

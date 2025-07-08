@@ -1,4 +1,4 @@
-$params = @{
+﻿$params = @{
     Owner                  = 'octocat'
     Name                   = 'Hello-World'
     AllowSquashMergingWith = 'Pull request title and description'

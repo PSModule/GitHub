@@ -1,4 +1,4 @@
-filter Get-GitHubRepositoryByName {
+﻿filter Get-GitHubRepositoryByName {
     <#
         .SYNOPSIS
         Get a repository

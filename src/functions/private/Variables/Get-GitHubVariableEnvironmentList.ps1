@@ -1,4 +1,4 @@
-function Get-GitHubVariableEnvironmentList {
+﻿function Get-GitHubVariableEnvironmentList {
     <#
         .SYNOPSIS
         Retrieves all variables for a specified environment in a GitHub repository.

@@ -1,4 +1,4 @@
-filter Get-GitHubMarkdown {
+﻿filter Get-GitHubMarkdown {
     <#
         .SYNOPSIS
         Render a Markdown document

@@ -1,4 +1,4 @@
-filter Block-GitHubUserByOrganization {
+﻿filter Block-GitHubUserByOrganization {
     <#
         .SYNOPSIS
         Block a user from an organization

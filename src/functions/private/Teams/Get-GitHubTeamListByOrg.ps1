@@ -1,4 +1,4 @@
-function Get-GitHubTeamListByOrg {
+﻿function Get-GitHubTeamListByOrg {
     <#
         .SYNOPSIS
         List teams

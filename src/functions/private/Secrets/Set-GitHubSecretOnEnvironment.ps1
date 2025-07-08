@@ -1,4 +1,4 @@
-function Set-GitHubSecretOnEnvironment {
+﻿function Set-GitHubSecretOnEnvironment {
     <#
         .SYNOPSIS
         Create or update an environment secret.

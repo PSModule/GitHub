@@ -1,4 +1,4 @@
-function New-GitHubVariableOnOwner {
+﻿function New-GitHubVariableOnOwner {
     <#
         .SYNOPSIS
         Create an organization variable.

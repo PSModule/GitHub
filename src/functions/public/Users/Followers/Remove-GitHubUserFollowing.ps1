@@ -1,4 +1,4 @@
-filter Remove-GitHubUserFollowing {
+﻿filter Remove-GitHubUserFollowing {
     <#
         .SYNOPSIS
         Unfollow a user

@@ -1,4 +1,4 @@
-filter New-GitHubRepositoryAutolink {
+﻿filter New-GitHubRepositoryAutolink {
     <#
         .SYNOPSIS
         Create an autolink reference for a repository

@@ -1,4 +1,4 @@
-filter Get-GitHubLicenseList {
+﻿filter Get-GitHubLicenseList {
     <#
         .SYNOPSIS
         Get all commonly used licenses

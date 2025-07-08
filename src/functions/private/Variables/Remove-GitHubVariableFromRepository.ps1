@@ -1,4 +1,4 @@
-function Remove-GitHubVariableFromRepository {
+﻿function Remove-GitHubVariableFromRepository {
     <#
         .SYNOPSIS
         Delete a repository variable.

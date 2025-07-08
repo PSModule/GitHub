@@ -1,4 +1,4 @@
-filter Test-GitHubUserFollowedByMe {
+﻿filter Test-GitHubUserFollowedByMe {
     <#
         .SYNOPSIS
         Check if a person is followed by the authenticated user

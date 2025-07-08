@@ -1,4 +1,4 @@
-filter Get-GitHubReleaseLatest {
+﻿filter Get-GitHubReleaseLatest {
     <#
         .SYNOPSIS
         Get the latest release

@@ -1,4 +1,4 @@
-function Get-GitHubAppInstallableOrganization {
+﻿function Get-GitHubAppInstallableOrganization {
     <#
         .SYNOPSIS
         Get enterprise-owned organizations that can have GitHub Apps installed
