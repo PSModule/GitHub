@@ -79,7 +79,7 @@
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'PATCH'
             APIEndpoint = '/app/hook/config'
             Body        = $body
@@ -87,7 +87,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess('webhook configuration', 'Update')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Invoke-GitHubAPI @apiParams | ForEach-Object {
                 Write-Output $_.Response
             }
         }

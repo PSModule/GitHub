@@ -36,13 +36,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = '/user'
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             if ($_.Response.type -eq 'Organization') {
                 [GitHubOrganization]::New($_.Response, $Context)
             } elseif ($_.Response.type -eq 'User') {

@@ -46,14 +46,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'PUT'
             APIEndpoint = "/repos/$Owner/$Repository/actions/workflows/$ID/disable"
             Context     = $Context
         }
 
         if ($PSCmdlet.ShouldProcess("$Owner/$Repository/$ID", 'Disable workflow')) {
-            $null = Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @apiParams
         }
     }
 

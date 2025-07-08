@@ -39,14 +39,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = '/app/hook/deliveries'
             PerPage     = $PerPage
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             $_.Response | ForEach-Object {
                 [GitHubWebhookDelivery]@{
                     ID             = $_.id

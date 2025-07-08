@@ -1,4 +1,4 @@
-function Get-GitHubSecretFromOrganization {
+﻿function Get-GitHubSecretFromOrganization {
     <#
         .SYNOPSIS
         List repository organization secrets.
@@ -81,7 +81,7 @@ function Get-GitHubSecretFromOrganization {
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/actions/organization-secrets"
             PerPage     = $PerPage
@@ -89,7 +89,7 @@ function Get-GitHubSecretFromOrganization {
         }
 
         try {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Invoke-GitHubAPI @apiParams | ForEach-Object {
                 $_.Response.secrets | ForEach-Object {
                     [GitHubSecret]::new($_, $Owner, $null, $null, $null)
                 }

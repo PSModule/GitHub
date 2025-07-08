@@ -42,14 +42,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'DELETE'
             APIEndpoint = "/orgs/$Organization/teams/$Slug"
             Context     = $Context
         }
 
         if ($PSCmdlet.ShouldProcess("$Organization/$Slug", 'DELETE')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Invoke-GitHubAPI @apiParams | ForEach-Object {
                 Write-Output $_.Response
             }
         }

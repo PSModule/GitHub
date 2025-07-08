@@ -92,7 +92,7 @@
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'POST'
             APIEndpoint = "/repos/$TemplateOwner/$TemplateRepository/generate"
             Body        = $body
@@ -100,7 +100,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("Repository [$Owner/$Name] from template [$TemplateOwner/$TemplateRepository]", 'Create')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Invoke-GitHubAPI @apiParams | ForEach-Object {
                 [GitHubRepository]::New($_.Response)
             }
         }

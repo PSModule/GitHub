@@ -1,4 +1,4 @@
-function New-GitHubVariableOnRepository {
+﻿function New-GitHubVariableOnRepository {
     <#
         .SYNOPSIS
         Create a repository variable.
@@ -53,7 +53,7 @@ function New-GitHubVariableOnRepository {
             value = $Value
         }
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'POST'
             APIEndpoint = "/repos/$Owner/$Repository/actions/variables"
             Body        = $body
@@ -61,7 +61,7 @@ function New-GitHubVariableOnRepository {
         }
 
         if ($PSCmdlet.ShouldProcess("variable [$Name] on [$Owner/$Repository]", 'Create')) {
-            $null = Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @apiParams
         }
     }
 

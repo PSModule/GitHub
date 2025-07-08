@@ -51,7 +51,7 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'DELETE'
             APIEndpoint = "/repos/$Owner/$Repository/autolinks/$ID"
             Body        = $body
@@ -59,7 +59,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("Autolink with ID [$ID] for repository [$Owner/$Repository]", 'DELETE')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Invoke-GitHubAPI @apiParams | ForEach-Object {
                 Write-Output $_.Response
             }
         }

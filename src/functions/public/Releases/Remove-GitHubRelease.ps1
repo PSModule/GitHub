@@ -53,14 +53,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'DELETE'
             APIEndpoint = "/repos/$Owner/$Repository/releases/$ID"
             Context     = $Context
         }
 
         if ($PSCmdlet.ShouldProcess("Release with ID [$ID] in [$Owner/$Repository]", 'Delete')) {
-            $null = Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @apiParams
         }
     }
 

@@ -1,4 +1,4 @@
-function Set-GitHubSecretOnOwner {
+﻿function Set-GitHubSecretOnOwner {
     <#
         .SYNOPSIS
         Create or update an organization secret.
@@ -78,7 +78,7 @@ function Set-GitHubSecretOnOwner {
             $body['selected_repository_ids'] = $SelectedRepositories
         }
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'PUT'
             APIEndpoint = "/orgs/$Owner/actions/secrets/$Name"
             Body        = $body
@@ -86,7 +86,7 @@ function Set-GitHubSecretOnOwner {
         }
 
         if ($PSCmdlet.ShouldProcess("secret [$Name] on [$Owner]", 'Set')) {
-            $null = Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @apiParams
         }
     }
 

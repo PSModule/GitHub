@@ -1,4 +1,4 @@
-function Get-GitHubVariableEnvironmentByName {
+﻿function Get-GitHubVariableEnvironmentByName {
     <#
         .SYNOPSIS
         Retrieves a specific variable from a GitHub repository.
@@ -64,13 +64,13 @@ function Get-GitHubVariableEnvironmentByName {
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/environments/$Environment/variables/$Name"
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             [GitHubVariable]::new($_.Response, $Owner, $Repository, $Environment, $null)
         }
     }

@@ -60,14 +60,14 @@
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'POST'
             APIEndpoint = "/enterprises/$Enterprise/apps/organizations/$Organization/installations"
             Body        = $body
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             [GitHubAppInstallation]::new($_.Response)
         }
     }

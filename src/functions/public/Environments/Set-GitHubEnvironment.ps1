@@ -173,7 +173,7 @@
         }
 
         $encodedName = [System.Uri]::EscapeDataString($Name)
-        $inputObject = @{
+        $apiParams = @{
             Method  = 'PUT'
             Uri     = $Context.ApiBaseUri + "/repos/$Owner/$Repository/environments/$encodedName"
             Body    = $body
@@ -181,7 +181,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("Environment [$Owner/$Repository/$Name]", 'Set')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Invoke-GitHubAPI @apiParams | ForEach-Object {
                 [GitHubEnvironment]::new($_.Response, $Owner, $Repository, $Context)
             }
         }

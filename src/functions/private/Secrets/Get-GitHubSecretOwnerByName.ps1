@@ -1,4 +1,4 @@
-function Get-GitHubSecretOwnerByName {
+﻿function Get-GitHubSecretOwnerByName {
     <#
         .SYNOPSIS
         Create or update an organization secret.
@@ -55,13 +55,13 @@ function Get-GitHubSecretOwnerByName {
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/orgs/$Owner/actions/secrets/$Name"
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             $selectedRepositories = @()
             if ($_.Response.visibility -eq 'selected') {
                 $selectedRepositories = Get-GitHubSecretSelectedRepository -Owner $Owner -Name $_.Response.name -Context $Context

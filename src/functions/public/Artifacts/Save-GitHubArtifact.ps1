@@ -99,13 +99,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/actions/artifacts/$ID/zip"
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             $headers = $_.Headers
             $itemType = $Path.EndsWith('.zip') ? 'File' : 'Directory'
             $isAbsolute = [System.IO.Path]::IsPathRooted($Path)

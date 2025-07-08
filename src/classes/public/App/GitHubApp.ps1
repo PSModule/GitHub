@@ -1,4 +1,4 @@
-class GitHubApp : GitHubNode {
+﻿class GitHubApp : GitHubNode {
     # The unique ID of the app
     [System.Nullable[UInt64]] $ID
 

@@ -39,14 +39,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = '/app/installations'
             PerPage     = $PerPage
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             foreach ($installation in $_.Response) {
                 [GitHubAppInstallation]::new($installation)
             }

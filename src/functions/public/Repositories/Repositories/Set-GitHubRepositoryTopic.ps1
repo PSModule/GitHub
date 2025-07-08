@@ -50,7 +50,7 @@
             names = $Topic | ForEach-Object { $_.ToLower() }
         }
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'PUT'
             APIEndpoint = "/repos/$Owner/$Name/topics"
             Body        = $body
@@ -58,7 +58,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("topics for repo [$Owner/$Name]", 'Set')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Invoke-GitHubAPI @apiParams | ForEach-Object {
                 Write-Output $_.Response.names
             }
         }

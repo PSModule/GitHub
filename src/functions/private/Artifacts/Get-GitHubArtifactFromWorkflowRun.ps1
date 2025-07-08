@@ -1,4 +1,4 @@
-function Get-GitHubArtifactFromWorkflowRun {
+﻿function Get-GitHubArtifactFromWorkflowRun {
     <#
         .SYNOPSIS
         Retrieves artifacts from a specific GitHub Actions workflow run.
@@ -80,14 +80,14 @@ function Get-GitHubArtifactFromWorkflowRun {
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/actions/runs/$ID/artifacts"
             Body        = $body
             Context     = $Context
         }
 
-        $response = Invoke-GitHubAPI @inputObject
+        $response = Invoke-GitHubAPI @apiParams
 
         $artifacts = $response.Response.artifacts |
             Sort-Object -Property created_at -Descending

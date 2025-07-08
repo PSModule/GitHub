@@ -1,4 +1,4 @@
-function Get-GitHubSecretRepositoryByName {
+﻿function Get-GitHubSecretRepositoryByName {
     <#
         .SYNOPSIS
         Get a repository secret.
@@ -51,13 +51,13 @@ function Get-GitHubSecretRepositoryByName {
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/actions/secrets/$Name"
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             [GitHubSecret]::new($_.Response, $Owner, $Repository, $null, $null)
         }
     }

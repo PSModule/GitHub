@@ -73,13 +73,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'POST'
             APIEndpoint = "/app/installations/$ID/access_tokens"
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             [pscustomobject]@{
                 Token               = $_.Response.token | ConvertTo-SecureString -AsPlainText -Force
                 ExpiresAt           = $_.Response.expires_at.ToLocalTime()

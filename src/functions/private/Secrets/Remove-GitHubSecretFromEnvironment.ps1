@@ -1,4 +1,4 @@
-function Remove-GitHubSecretFromEnvironment {
+﻿function Remove-GitHubSecretFromEnvironment {
     <#
         .SYNOPSIS
         Delete an environment secret.
@@ -47,14 +47,14 @@ function Remove-GitHubSecretFromEnvironment {
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'DELETE'
             APIEndpoint = "/repos/$Owner/$Repository/environments/$Environment/secrets/$Name"
             Context     = $Context
         }
 
         if ($PSCmdlet.ShouldProcess("secret [$Name] on [$Owner/$Repository/$Environment]", 'Delete')) {
-            $null = Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @apiParams
         }
     }
 

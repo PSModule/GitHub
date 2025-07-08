@@ -45,13 +45,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = '/user/codespaces/secrets/public-key'
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             [GitHubPublicKey]::new($_.Response, 'codespaces', $Context.UserName, $null, $null)
         }
     }

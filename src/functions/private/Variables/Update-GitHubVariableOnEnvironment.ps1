@@ -1,4 +1,4 @@
-function Update-GitHubVariableOnEnvironment {
+﻿function Update-GitHubVariableOnEnvironment {
     <#
         .SYNOPSIS
         Update an environment variable.
@@ -73,7 +73,7 @@ function Update-GitHubVariableOnEnvironment {
             $body.value = $Value
         }
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'PATCH'
             APIEndpoint = "/repos/$Owner/$Repository/environments/$Environment/variables/$Name"
             Body        = $body
@@ -81,7 +81,7 @@ function Update-GitHubVariableOnEnvironment {
         }
 
         if ($PSCmdlet.ShouldProcess("variable [$Name] on [$Owner/$Repository/$Environment]", 'Update')) {
-            $null = Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @apiParams
         }
     }
 

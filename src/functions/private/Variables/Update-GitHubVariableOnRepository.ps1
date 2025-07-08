@@ -1,4 +1,4 @@
-function Update-GitHubVariableOnRepository {
+﻿function Update-GitHubVariableOnRepository {
     <#
         .SYNOPSIS
         Update a repository variable.
@@ -60,7 +60,7 @@ function Update-GitHubVariableOnRepository {
             $body.value = $Value
         }
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'PATCH'
             APIEndpoint = "/repos/$Owner/$Repository/actions/variables/$Name"
             Body        = $body
@@ -68,7 +68,7 @@ function Update-GitHubVariableOnRepository {
         }
 
         if ($PSCmdlet.ShouldProcess("variable [$Name] on [$Owner/$Repository]", 'Update')) {
-            $null = Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @apiParams
         }
     }
 

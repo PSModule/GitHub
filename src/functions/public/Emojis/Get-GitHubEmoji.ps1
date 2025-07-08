@@ -50,13 +50,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = '/emojis'
             Context     = $Context
         }
 
-        $response = Invoke-GitHubAPI @inputObject | Select-Object -ExpandProperty Response
+        $response = Invoke-GitHubAPI @apiParams | Select-Object -ExpandProperty Response
 
         switch ($PSCmdlet.ParameterSetName) {
             'Download' {

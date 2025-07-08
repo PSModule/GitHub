@@ -1,4 +1,4 @@
-function Get-GitHubSecretOwnerList {
+﻿function Get-GitHubSecretOwnerList {
     <#
         .SYNOPSIS
         List organization secrets.
@@ -46,13 +46,13 @@ function Get-GitHubSecretOwnerList {
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/orgs/$Owner/actions/secrets"
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             $_.Response.secrets | ForEach-Object {
                 $selectedRepositories = @()
                 if ($_.visibility -eq 'selected') {

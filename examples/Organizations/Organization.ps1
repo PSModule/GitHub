@@ -1,4 +1,4 @@
-$orgParam = @{
+﻿$orgParam = @{
     Enterprise   = 'msx'
     Name         = 'Marius-Test7'
     Owner        = 'GitHub-Automation'
