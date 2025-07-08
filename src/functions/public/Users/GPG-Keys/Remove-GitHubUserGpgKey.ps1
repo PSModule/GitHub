@@ -1,4 +1,4 @@
-﻿filter Remove-GitHubUserGpgKey {
+filter Remove-GitHubUserGpgKey {
     <#
         .SYNOPSIS
         Delete a GPG key for the authenticated user
@@ -20,7 +20,7 @@
         https://psmodule.io/GitHub/Functions/Users/GPG-Keys/Remove-GitHubUserGpgKey
     #>
     [OutputType([pscustomobject])]
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param(
         # The ID of the GPG key.
         [Parameter(

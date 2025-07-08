@@ -1,4 +1,4 @@
-﻿filter Remove-GitHubWorkflowRun {
+filter Remove-GitHubWorkflowRun {
     <#
         .SYNOPSIS
         Delete a workflow run
@@ -22,7 +22,7 @@
         .NOTES
         [Delete a workflow run](https://docs.github.com/rest/actions/workflow-runs#delete-a-workflow-run)
     #>
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]

@@ -1,4 +1,4 @@
-﻿function Remove-GitHubOrganizationInvitation {
+function Remove-GitHubOrganizationInvitation {
     <#
         .SYNOPSIS
         Cancel an organization invitation
@@ -26,7 +26,7 @@
         https://psmodule.io/GitHub/Functions/Organization/Members/Remove-GitHubOrganizationInvitation
     #>
     [OutputType([void])]
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param(
         # The organization name. The name is not case sensitive.
         [Parameter(Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName)]

@@ -17,7 +17,7 @@
         https://psmodule.io/GitHub/Functions/Teams/Remove-GitHubTeam
     #>
     [OutputType([void])]
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param(
         # The organization name. The name is not case sensitive.
         # If not provided, the organization from the context is used.

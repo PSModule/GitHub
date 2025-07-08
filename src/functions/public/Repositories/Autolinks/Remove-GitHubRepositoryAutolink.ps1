@@ -1,4 +1,4 @@
-﻿filter Remove-GitHubRepositoryAutolink {
+filter Remove-GitHubRepositoryAutolink {
     <#
         .SYNOPSIS
         Delete an autolink reference from a repository
@@ -20,7 +20,7 @@
         https://psmodule.io/GitHub/Functions/Repositories/Autolinks/Remove-GitHubRepositoryAutolink
     #>
     [OutputType([pscustomobject])]
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]

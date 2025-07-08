@@ -1,4 +1,4 @@
-﻿function Remove-GitHubAppInstallationRepositoryAccess {
+function Remove-GitHubAppInstallationRepositoryAccess {
     <#
         .SYNOPSIS
         Remove repository access to an organization installation.
@@ -21,7 +21,7 @@
         .LINK
         https://psmodule.io/GitHub/Functions/Apps/GitHub%20App%20Installations/Remove-GitHubAppInstallationRepositoryAccess
     #>
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param(
         # The enterprise slug or ID.
         [Parameter(

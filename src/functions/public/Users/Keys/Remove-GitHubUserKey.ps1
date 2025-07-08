@@ -1,4 +1,4 @@
-﻿filter Remove-GitHubUserKey {
+filter Remove-GitHubUserKey {
     <#
         .SYNOPSIS
         Delete a public SSH key for the authenticated user
@@ -21,7 +21,7 @@
     #>
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param(
         # The unique identifier of the key.
         [Parameter(

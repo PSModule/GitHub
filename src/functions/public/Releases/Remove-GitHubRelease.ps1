@@ -1,4 +1,4 @@
-﻿filter Remove-GitHubRelease {
+filter Remove-GitHubRelease {
     <#
         .SYNOPSIS
         Delete a release
@@ -24,7 +24,7 @@
         [Delete a release](https://docs.github.com/rest/releases/releases#delete-a-release)
     #>
     [OutputType([void])]
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]

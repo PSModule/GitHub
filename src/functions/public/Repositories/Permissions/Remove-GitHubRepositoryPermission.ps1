@@ -1,4 +1,4 @@
-﻿filter Remove-GitHubRepositoryPermission {
+filter Remove-GitHubRepositoryPermission {
     <#
         .SYNOPSIS
         Remove the permission level for a team on a repository.
@@ -24,7 +24,7 @@
         [Remove a repository from a team](https://docs.github.com/rest/teams/teams#remove-a-repository-from-a-team)
     #>
     [OutputType([void])]
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
