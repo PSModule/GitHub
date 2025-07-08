@@ -1,4 +1,4 @@
-﻿function Get-GitHubEnterpriseOrganizationAppInstallation {
+function Get-GitHubEnterpriseOrganizationAppInstallation {
     <#
         .SYNOPSIS
         List GitHub Apps installed on an enterprise-owned organization
@@ -53,14 +53,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/enterprises/$Enterprise/apps/organizations/$Organization/installations"
             PerPage     = $PerPage
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             foreach ($installation in $_.Response) {
                 [GitHubAppInstallation]::new($installation, $Organization, 'Organization', $Context)
             }

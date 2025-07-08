@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryLanguage {
+filter Get-GitHubRepositoryLanguage {
     <#
         .SYNOPSIS
         List repository languages
@@ -45,13 +45,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Name/languages"
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             Write-Output $_.Response
         }
     }

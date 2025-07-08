@@ -1,4 +1,4 @@
-﻿filter Test-GitHubUserFollowedByUser {
+filter Test-GitHubUserFollowedByUser {
     <#
         .SYNOPSIS
         Check if a user follows another user
@@ -45,13 +45,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/users/$Username/following/$Follows"
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject
+        Invoke-GitHubAPI @apiParams
     }
 
     end {

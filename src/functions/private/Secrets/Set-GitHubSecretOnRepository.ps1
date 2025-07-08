@@ -59,7 +59,7 @@ function Set-GitHubSecretOnRepository {
             key_id          = $KeyID
         }
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'PUT'
             APIEndpoint = "/repos/$Owner/$Repository/actions/secrets/$Name"
             Body        = $body
@@ -67,7 +67,7 @@ function Set-GitHubSecretOnRepository {
         }
 
         if ($PSCmdlet.ShouldProcess("secret [$Name] on [$Owner/$Repository]", 'Set')) {
-            $null = Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @apiParams
         }
     }
 

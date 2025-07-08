@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryAutolinkById {
+filter Get-GitHubRepositoryAutolinkById {
     <#
         .SYNOPSIS
         Get an autolink reference of a repository
@@ -48,13 +48,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/autolinks/$ID"
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             Write-Output $_.Response
         }
     }

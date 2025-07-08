@@ -1,4 +1,4 @@
-﻿function Get-GitHubOrganizationPendingInvitation {
+function Get-GitHubOrganizationPendingInvitation {
     <#
         .SYNOPSIS
         List pending organization invitations
@@ -64,7 +64,7 @@
             invitation_source = $InvitationSource
         }
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/orgs/$Organization/invitations"
             Body        = $body
@@ -72,7 +72,7 @@
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             Write-Output $_.Response
         }
     }

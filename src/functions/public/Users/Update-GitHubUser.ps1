@@ -1,4 +1,4 @@
-﻿filter Update-GitHubUser {
+filter Update-GitHubUser {
     <#
         .SYNOPSIS
         Update the authenticated user
@@ -92,7 +92,7 @@
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'PATCH'
             APIEndpoint = '/user'
             Body        = $body
@@ -100,7 +100,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess('authenticated user', 'Set')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Invoke-GitHubAPI @apiParams | ForEach-Object {
                 [GitHubUser]::New($_.Response)
             }
         }

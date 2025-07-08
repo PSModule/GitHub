@@ -1,4 +1,4 @@
-﻿filter Get-GitHubMyRepositoryByName {
+filter Get-GitHubMyRepositoryByName {
     <#
         .SYNOPSIS
         List repositories for the authenticated user.
@@ -105,7 +105,7 @@
         }
         $graphQLFields = ConvertTo-GitHubGraphQLField @graphParams
 
-        $inputObject = @{
+        $apiParams = @{
             Query     = @"
 query(
     `$Name: String!
@@ -125,7 +125,7 @@ $graphQLFields
             Context   = $Context
         }
 
-        Invoke-GitHubGraphQLQuery @inputObject | ForEach-Object {
+        Invoke-GitHubGraphQLQuery @apiParams | ForEach-Object {
             [GitHubRepository]::new($_.viewer.repository)
         }
     }

@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryRuleSuiteById {
+filter Get-GitHubRepositoryRuleSuiteById {
     <#
         .SYNOPSIS
         Get a repository rule suite
@@ -48,13 +48,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/rulesets/rule-suites/$ID"
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             Write-Output $_.Response
         }
     }

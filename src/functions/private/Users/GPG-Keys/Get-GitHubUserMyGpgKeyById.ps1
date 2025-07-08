@@ -1,4 +1,4 @@
-﻿filter Get-GitHubUserMyGpgKeyById {
+filter Get-GitHubUserMyGpgKeyById {
     <#
         .SYNOPSIS
         Get a GPG key for the authenticated user
@@ -40,13 +40,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/user/gpg_keys/$ID"
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             Write-Output $_.Response
         }
     }

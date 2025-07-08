@@ -1,4 +1,4 @@
-﻿filter Get-GitHubGitignoreByName {
+filter Get-GitHubGitignoreByName {
     <#
         .SYNOPSIS
         Get a gitignore template
@@ -34,14 +34,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/gitignore/templates/$Name"
             Accept      = 'application/vnd.github.raw+json'
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             Write-Output $_.Response
         }
     }

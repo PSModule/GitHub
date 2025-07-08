@@ -1,4 +1,4 @@
-﻿function Get-GitHubAppAccessibleRepository {
+function Get-GitHubAppAccessibleRepository {
     <#
         .SYNOPSIS
         Get repositories belonging to an enterprise owned organization that can be made accessible to a GitHub App
@@ -61,14 +61,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/enterprises/$Enterprise/apps/installable_organizations/$Organization/accessible_repositories"
             PerPage     = $PerPage
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             foreach ($repo in $_.Response) {
                 [GitHubRepository]@{
                     ID       = $repo.id

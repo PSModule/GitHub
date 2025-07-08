@@ -1,4 +1,4 @@
-﻿filter Enable-GitHubWorkflow {
+filter Enable-GitHubWorkflow {
     <#
         .SYNOPSIS
 
@@ -43,14 +43,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'PUT'
             APIEndpoint = "/repos/$Owner/$Repository/actions/workflows/$ID/enable"
             Context     = $Context
         }
 
         if ($PSCmdlet.ShouldProcess("$Owner/$Repository/$ID", 'Enable workflow')) {
-            $null = Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @apiParams
         }
     }
 

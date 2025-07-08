@@ -1,4 +1,4 @@
-﻿function Get-GitHubOrganizationAppInstallation {
+function Get-GitHubOrganizationAppInstallation {
     <#
         .SYNOPSIS
         List app installations for an organization
@@ -45,14 +45,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/orgs/$Organization/installations"
             PerPage     = $PerPage
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             foreach ($installation in $_.Response.installations) {
                 [GitHubAppInstallation]::new($installation)
             }

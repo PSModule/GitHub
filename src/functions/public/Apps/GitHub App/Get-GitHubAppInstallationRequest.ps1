@@ -1,4 +1,4 @@
-﻿filter Get-GitHubAppInstallationRequest {
+filter Get-GitHubAppInstallationRequest {
     <#
         .SYNOPSIS
         List installation requests for the authenticated app.
@@ -37,13 +37,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = '/app/installation-requests'
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             $_.Response | ForEach-Object {
                 [GitHubAppInstallationRequest]::new($_)
             }

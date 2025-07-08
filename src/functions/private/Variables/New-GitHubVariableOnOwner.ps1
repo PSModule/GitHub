@@ -72,7 +72,7 @@ function New-GitHubVariableOnOwner {
             $body['selected_repository_ids'] = $SelectedRepositories
         }
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'POST'
             APIEndpoint = "/orgs/$Owner/actions/variables"
             Body        = $body
@@ -80,7 +80,7 @@ function New-GitHubVariableOnOwner {
         }
 
         if ($PSCmdlet.ShouldProcess("variable [$Name] on [$Owner]", 'Create')) {
-            $null = Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @apiParams
         }
     }
 

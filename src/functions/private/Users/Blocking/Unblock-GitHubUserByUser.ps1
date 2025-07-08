@@ -1,4 +1,4 @@
-﻿filter Unblock-GitHubUserByUser {
+filter Unblock-GitHubUserByUser {
     <#
         .SYNOPSIS
         Unblock a user
@@ -40,13 +40,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'DELETE'
             APIEndpoint = "/user/blocks/$Username"
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject
+        Invoke-GitHubAPI @apiParams
     }
 
     end {

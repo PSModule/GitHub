@@ -1,4 +1,4 @@
-﻿function Add-GitHubAppInstallationRepositoryAccess {
+function Add-GitHubAppInstallationRepositoryAccess {
     <#
         .SYNOPSIS
         Grant repository access to an organization installation.
@@ -70,7 +70,7 @@
             repositories = $Repositories
         }
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'PATCH'
             APIEndpoint = "/enterprises/$Enterprise/apps/organizations/$Organization/installations/$ID/repositories/add"
             Body        = $body
@@ -78,7 +78,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("$Enterprise/$Organization", 'Add repo access to installation')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Invoke-GitHubAPI @apiParams | ForEach-Object {
                 Write-Output $_.Response
             }
         }

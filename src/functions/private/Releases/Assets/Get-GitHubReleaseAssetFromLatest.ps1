@@ -1,4 +1,4 @@
-﻿filter Get-GitHubReleaseAssetFromLatest {
+filter Get-GitHubReleaseAssetFromLatest {
     <#
         .SYNOPSIS
         Get the assets of the latest release
@@ -70,7 +70,7 @@
         $perPageSetting = Resolve-GitHubContextSetting -Name 'PerPage' -Value $PerPage -Context $Context
 
         do {
-            $inputObject = @{
+            $apiParams = @{
                 Query     = @"
 query(`$owner: String!, `$repository: String!, `$perPage: Int, `$after: String) {
   repository(owner: `$owner, name: `$repository) {
@@ -108,7 +108,7 @@ query(`$owner: String!, `$repository: String!, `$perPage: Int, `$after: String) 
                 Context   = $Context
             }
 
-            Invoke-GitHubGraphQLQuery @inputObject | ForEach-Object {
+            Invoke-GitHubGraphQLQuery @apiParams | ForEach-Object {
                 $release = $_.repository.latestRelease
                 $assets = $release.releaseAssets
                 foreach ($asset in $assets.nodes) {

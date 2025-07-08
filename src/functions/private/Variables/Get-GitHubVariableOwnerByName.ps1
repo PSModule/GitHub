@@ -54,13 +54,13 @@ function Get-GitHubVariableOwnerByName {
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/orgs/$Owner/actions/variables/$Name"
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             $selectedRepositories = @()
             if ($_.Response.visibility -eq 'selected') {
                 $selectedRepositories = Get-GitHubVariableSelectedRepository -Owner $Owner -Name $_.Response.name -Context $Context

@@ -1,4 +1,4 @@
-﻿function Add-GitHubSecretSelectedRepository {
+function Add-GitHubSecretSelectedRepository {
     <#
         .SYNOPSIS
         Add selected repository to an organization secret.
@@ -67,13 +67,13 @@
             Write-Debug 'Repo is already selected, returning'
             return
         }
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'PUT'
             APIEndpoint = "/orgs/$Owner/actions/secrets/$Name/repositories/$RepositoryID"
             Context     = $Context
         }
 
-        $null = Invoke-GitHubAPI @inputObject
+        $null = Invoke-GitHubAPI @apiParams
     }
 
     end {

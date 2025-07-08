@@ -1,4 +1,4 @@
-﻿filter Get-GitHubReleaseAssetByTag {
+filter Get-GitHubReleaseAssetByTag {
     <#
         .SYNOPSIS
         Get release assets by tag name
@@ -70,7 +70,7 @@
         $perPageSetting = Resolve-GitHubContextSetting -Name 'PerPage' -Value $PerPage -Context $Context
 
         do {
-            $inputObject = @{
+            $apiParams = @{
                 Query     = @"
 query(`$owner: String!, `$repository: String!, `$tag: String!, `$perPage: Int, `$after: String) {
   repository(owner: `$owner, name: `$repository) {
@@ -109,7 +109,7 @@ query(`$owner: String!, `$repository: String!, `$tag: String!, `$perPage: Int, `
                 Context   = $Context
             }
 
-            Invoke-GitHubGraphQLQuery @inputObject | ForEach-Object {
+            Invoke-GitHubGraphQLQuery @apiParams | ForEach-Object {
                 $release = $_.repository.release
                 $assets = $release.releaseAssets
                 foreach ($asset in $assets.nodes) {

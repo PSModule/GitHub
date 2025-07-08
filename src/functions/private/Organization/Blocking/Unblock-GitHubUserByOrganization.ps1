@@ -1,4 +1,4 @@
-﻿filter Unblock-GitHubUserByOrganization {
+filter Unblock-GitHubUserByOrganization {
     <#
         .SYNOPSIS
         Unblock a user from an organization
@@ -49,12 +49,12 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'DELETE'
             APIEndpoint = "/orgs/$Organization/blocks/$Username"
             Context     = $Context
         }
-        Invoke-GitHubAPI @inputObject
+        Invoke-GitHubAPI @apiParams
     }
 
     end {

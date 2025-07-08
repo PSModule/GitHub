@@ -1,4 +1,4 @@
-﻿function Update-GitHubAppInstallationRepositoryAccess {
+function Update-GitHubAppInstallationRepositoryAccess {
     <#
         .SYNOPSIS
         Update the installation repository access between all repositories and selected repositories.
@@ -85,7 +85,7 @@
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'PATCH'
             APIEndpoint = "/enterprises/$Enterprise/apps/organizations/$Organization/installations/$ID/repositories"
             Body        = $body
@@ -93,7 +93,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("$Enterprise/$Organization", 'Update repository access')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Invoke-GitHubAPI @apiParams | ForEach-Object {
                 Write-Output $_.Response
             }
         }

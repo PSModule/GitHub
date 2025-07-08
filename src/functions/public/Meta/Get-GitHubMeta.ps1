@@ -1,4 +1,4 @@
-﻿filter Get-GitHubMeta {
+filter Get-GitHubMeta {
     <#
         .SYNOPSIS
         Get GitHub meta information.
@@ -46,13 +46,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             ApiEndpoint = '/meta'
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             Write-Output $_.Response
         }
     }

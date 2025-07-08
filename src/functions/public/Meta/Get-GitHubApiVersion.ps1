@@ -1,4 +1,4 @@
-﻿filter Get-GitHubApiVersion {
+filter Get-GitHubApiVersion {
     <#
         .SYNOPSIS
         Get all API versions.
@@ -38,13 +38,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             ApiEndpoint = '/versions'
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             Write-Output $_.Response
         }
     }

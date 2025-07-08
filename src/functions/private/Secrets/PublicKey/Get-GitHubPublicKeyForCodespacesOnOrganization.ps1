@@ -1,4 +1,4 @@
-﻿function Get-GitHubPublicKeyForCodespacesOnOrganization {
+function Get-GitHubPublicKeyForCodespacesOnOrganization {
     <#
         .SYNOPSIS
         Get an organization public key.
@@ -48,13 +48,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/orgs/$Owner/codespaces/secrets/public-key"
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             [GitHubPublicKey]::new($_.Response, 'codespaces', $Owner, $null, $null)
         }
     }

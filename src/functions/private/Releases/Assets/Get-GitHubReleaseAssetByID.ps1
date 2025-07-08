@@ -1,4 +1,4 @@
-﻿filter Get-GitHubReleaseAssetByID {
+filter Get-GitHubReleaseAssetByID {
     <#
         .SYNOPSIS
         Get a release asset by ID
@@ -48,13 +48,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/releases/assets/$ID"
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             [GitHubReleaseAsset]($_.Response)
         }
     }

@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryTag {
+filter Get-GitHubRepositoryTag {
     <#
         .SYNOPSIS
         List repository tags
@@ -48,14 +48,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Name/tags"
             PerPage     = $PerPage
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             Write-Output $_.Response
         }
     }

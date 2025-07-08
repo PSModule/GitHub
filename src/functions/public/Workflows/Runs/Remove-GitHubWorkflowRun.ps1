@@ -1,4 +1,4 @@
-﻿filter Remove-GitHubWorkflowRun {
+filter Remove-GitHubWorkflowRun {
     <#
         .SYNOPSIS
         Delete a workflow run
@@ -50,7 +50,7 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'DELETE'
             APIEndpoint = "repos/$Owner/$Repository/actions/runs/$ID"
             Context     = $Context
@@ -58,7 +58,7 @@
 
         if ($PSCmdlet.ShouldProcess("$Owner/$Repository/$ID", 'Delete workflow run')) {
             Write-Verbose "Deleted workflow run [$ID] in [$Owner/$Repository]"
-            $null = Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @apiParams
         }
     }
 

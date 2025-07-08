@@ -1,4 +1,4 @@
-﻿filter New-GitHubRepositoryAsFork {
+filter New-GitHubRepositoryAsFork {
     <#
         .SYNOPSIS
         Create a fork
@@ -83,7 +83,7 @@
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'POST'
             APIEndpoint = "/repos/$ForkOwner/$ForkRepository/forks"
             Body        = $body
@@ -91,7 +91,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("Repository [$Owner/$Name] as fork of [$ForkOwner/$ForkRepository]", 'Create')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Invoke-GitHubAPI @apiParams | ForEach-Object {
                 [GitHubRepository]::New($_.Response)
             }
         }

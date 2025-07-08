@@ -1,4 +1,4 @@
-﻿function Get-GitHubAppInstallationRepositoryAccess {
+function Get-GitHubAppInstallationRepositoryAccess {
     <#
         .SYNOPSIS
         Get the repositories accessible to a given GitHub App installation.
@@ -67,14 +67,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/enterprises/$Enterprise/apps/organizations/$Organization/installations/$ID/repositories"
             PerPage     = $PerPage
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             Write-Output $_.Response
         }
     }

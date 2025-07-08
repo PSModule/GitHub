@@ -1,4 +1,4 @@
-﻿filter Stop-GitHubWorkflowRun {
+filter Stop-GitHubWorkflowRun {
     <#
         .SYNOPSIS
         Cancel a workflow run
@@ -49,7 +49,7 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'POST'
             APIEndpoint = "/repos/$Owner/$Repository/actions/runs/$ID/cancel"
             Context     = $Context
@@ -57,7 +57,7 @@
 
         if ($PSCmdlet.ShouldProcess("$Owner/$Repository/$ID", 'Cancel/Stop workflow run')) {
             Write-Verbose "Cancelled workflow run [$ID] in [$Owner/$Repository]"
-            $null = Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @apiParams
         }
     }
 

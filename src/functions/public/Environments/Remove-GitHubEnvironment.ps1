@@ -1,4 +1,4 @@
-﻿filter Remove-GitHubEnvironment {
+filter Remove-GitHubEnvironment {
     <#
         .SYNOPSIS
         Deletes an environment from a repository.
@@ -49,14 +49,14 @@
 
     process {
         $encodedName = [System.Uri]::EscapeDataString($Name)
-        $inputObject = @{
+        $apiParams = @{
             Method  = 'DELETE'
             Uri     = $Context.ApiBaseUri + "/repos/$Owner/$Repository/environments/$encodedName"
             Context = $Context
         }
 
         if ($PSCmdlet.ShouldProcess("Environment [$Owner/$Repository/$Name]", 'Delete')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Invoke-GitHubAPI @apiParams | ForEach-Object {
                 Write-Output $_.Response
             }
         }

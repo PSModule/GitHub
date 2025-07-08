@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRoot {
+filter Get-GitHubRoot {
     <#
         .SYNOPSIS
         GitHub API Root.
@@ -37,13 +37,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = '/'
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             Write-Output $_.Response
         }
     }

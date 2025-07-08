@@ -1,4 +1,4 @@
-﻿function Get-GitHubAppBySlug {
+function Get-GitHubAppBySlug {
     <#
         .SYNOPSIS
         Get an app
@@ -35,13 +35,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/apps/$Slug"
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             [GitHubApp]::new($_.Response)
         }
     }

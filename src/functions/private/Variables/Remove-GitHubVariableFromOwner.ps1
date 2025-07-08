@@ -41,14 +41,14 @@ function Remove-GitHubVariableFromOwner {
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'DELETE'
             APIEndpoint = "/orgs/$Owner/actions/variables/$Name"
             Context     = $Context
         }
 
         if ($PSCmdlet.ShouldProcess("variable [$Name] on [$Owner]", 'Delete')) {
-            $null = Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @apiParams
         }
     }
 

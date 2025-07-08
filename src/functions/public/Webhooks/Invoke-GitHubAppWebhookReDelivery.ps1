@@ -1,4 +1,4 @@
-﻿function Invoke-GitHubAppWebhookReDelivery {
+function Invoke-GitHubAppWebhookReDelivery {
     <#
         .SYNOPSIS
         Redeliver a delivery for an app webhook
@@ -49,14 +49,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'POST'
             APIEndpoint = "/app/hook/deliveries/$ID/attempts"
             Context     = $Context
         }
 
         if ($PSCmdlet.ShouldProcess("[$ID]", 'Redeliver event')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Invoke-GitHubAPI @apiParams | ForEach-Object {
                 Write-Output $_.Response
             }
         }

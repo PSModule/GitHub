@@ -1,4 +1,4 @@
-﻿filter New-GitHubReleaseNote {
+filter New-GitHubReleaseNote {
     <#
         .SYNOPSIS
         Generate release notes content for a release.
@@ -118,7 +118,7 @@
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'POST'
             APIEndpoint = "/repos/$Owner/$Repository/releases/generate-notes"
             Body        = $body
@@ -126,7 +126,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("release notes for release on $Owner/$Repository", 'Create')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Invoke-GitHubAPI @apiParams | ForEach-Object {
                 [PSCustomObject]@{
                     Name  = $_.Response.name
                     Notes = $_.Response.body

@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRateLimit {
+filter Get-GitHubRateLimit {
     <#
         .SYNOPSIS
         Get rate limit status for the authenticated user
@@ -54,13 +54,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = '/rate_limit'
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             $_.Response.Resources.PSObject.Properties | ForEach-Object {
                 [GitHubRateLimitResource]@{
                     Name      = $_.Name

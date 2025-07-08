@@ -1,4 +1,4 @@
-﻿function Get-GitHubTeamBySlug {
+function Get-GitHubTeamBySlug {
     <#
         .SYNOPSIS
         Get a team by name
@@ -38,13 +38,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/orgs/$Organization/teams/$Slug"
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             [GitHubTeam]::new($_.Response, $Organization)
         }
     }

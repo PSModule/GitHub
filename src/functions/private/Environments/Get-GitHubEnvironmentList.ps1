@@ -74,14 +74,14 @@ filter Get-GitHubEnvironmentList {
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/environments"
             PerPage     = $PerPage
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             foreach ($environment in $_.Response.environments) {
                 [GitHubEnvironment]::new($environment, $Owner, $Repository, $Context)
             }

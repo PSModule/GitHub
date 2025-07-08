@@ -1,4 +1,4 @@
-﻿function Get-GitHubSecretSelectedRepository {
+function Get-GitHubSecretSelectedRepository {
     <#
         .SYNOPSIS
         List selected repositories for an organization secret.
@@ -72,13 +72,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/orgs/$Owner/actions/secrets/$Name/repositories"
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             $_.Response.repositories | ForEach-Object {
                 [GitHubRepository]::New($_)
             }

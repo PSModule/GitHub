@@ -80,13 +80,13 @@ filter Get-GitHubEnvironmentByName {
 
     process {
         $encodedName = [System.Uri]::EscapeDataString($Name)
-        $inputObject = @{
+        $apiParams = @{
             Method  = 'GET'
             Uri     = $Context.ApiBaseUri + "/repos/$Owner/$Repository/environments/$encodedName"
             Context = $Context
         }
         try {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Invoke-GitHubAPI @apiParams | ForEach-Object {
                 [GitHubEnvironment]::new($_.Response, $Owner, $Repository, $Context)
             }
         } catch {

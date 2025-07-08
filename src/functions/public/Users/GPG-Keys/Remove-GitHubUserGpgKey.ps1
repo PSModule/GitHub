@@ -1,4 +1,4 @@
-﻿filter Remove-GitHubUserGpgKey {
+filter Remove-GitHubUserGpgKey {
     <#
         .SYNOPSIS
         Delete a GPG key for the authenticated user
@@ -43,14 +43,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'DELETE'
             APIEndpoint = "/user/gpg_keys/$ID"
             Context     = $Context
         }
 
         if ($PSCmdlet.ShouldProcess("GPG key with ID [$ID]", 'DELETE')) {
-            Invoke-GitHubAPI @inputObject
+            Invoke-GitHubAPI @apiParams
         }
     }
 

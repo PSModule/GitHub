@@ -1,4 +1,4 @@
-﻿filter Get-GitHubBlockedUserByOrganization {
+filter Get-GitHubBlockedUserByOrganization {
     <#
         .SYNOPSIS
         List users blocked by an organization
@@ -39,14 +39,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/orgs/$Organization/blocks"
             PerPage     = $PerPage
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             Write-Output $_.Response
         }
     }

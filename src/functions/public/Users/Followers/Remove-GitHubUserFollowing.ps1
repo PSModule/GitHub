@@ -1,4 +1,4 @@
-﻿filter Remove-GitHubUserFollowing {
+filter Remove-GitHubUserFollowing {
     <#
         .SYNOPSIS
         Unfollow a user
@@ -43,14 +43,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'DELETE'
             APIEndpoint = "/user/following/$Username"
             Context     = $Context
         }
 
         if ($PSCmdlet.ShouldProcess("User [$Username]", 'Unfollow')) {
-            Invoke-GitHubAPI @inputObject
+            Invoke-GitHubAPI @apiParams
         }
     }
 

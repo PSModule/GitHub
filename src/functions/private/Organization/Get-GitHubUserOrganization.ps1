@@ -1,4 +1,4 @@
-﻿filter Get-GitHubUserOrganization {
+filter Get-GitHubUserOrganization {
     <#
         .SYNOPSIS
         List organizations for a user
@@ -47,14 +47,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/users/$Username/orgs"
             PerPage     = $PerPage
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             foreach ($organization in $_.Response) {
                 [GitHubOrganization]::new($organization, $Context)
             }

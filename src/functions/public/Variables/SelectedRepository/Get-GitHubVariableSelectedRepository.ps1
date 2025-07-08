@@ -1,4 +1,4 @@
-﻿function Get-GitHubVariableSelectedRepository {
+function Get-GitHubVariableSelectedRepository {
     <#
         .SYNOPSIS
         List selected repositories for an organization variable.
@@ -56,13 +56,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/orgs/$Owner/actions/variables/$Name/repositories"
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             $_.Response.repositories | ForEach-Object {
                 [GitHubRepository]::New($_)
             }

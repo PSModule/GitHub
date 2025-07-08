@@ -1,4 +1,4 @@
-﻿filter Get-GitHubWorkflow {
+filter Get-GitHubWorkflow {
     <#
         .SYNOPSIS
         Lists the workflows in a repository.
@@ -61,7 +61,7 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/actions/workflows"
             Body        = $body
@@ -69,7 +69,7 @@
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             Write-Output $_.Response.workflows | Where-Object { $_.name -like $Name } | ForEach-Object {
                 [GitHubWorkflow]::new($_, $Owner, $Repository)
             }

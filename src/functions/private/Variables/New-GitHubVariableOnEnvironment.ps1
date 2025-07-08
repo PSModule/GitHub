@@ -65,7 +65,7 @@ function New-GitHubVariableOnEnvironment {
             value = $Value
         }
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'POST'
             APIEndpoint = "/repos/$Owner/$Repository/environments/$Environment/variables"
             Body        = $body
@@ -73,7 +73,7 @@ function New-GitHubVariableOnEnvironment {
         }
 
         if ($PSCmdlet.ShouldProcess("variable [$Name] on [$Owner/$Repository/$Environment]", 'Create')) {
-            $null = Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @apiParams
         }
     }
 

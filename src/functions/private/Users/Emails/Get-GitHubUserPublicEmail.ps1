@@ -1,4 +1,4 @@
-﻿filter Get-GitHubUserPublicEmail {
+filter Get-GitHubUserPublicEmail {
     <#
         .SYNOPSIS
         List public email addresses for the authenticated user
@@ -38,14 +38,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = '/user/public_emails'
             PerPage     = $PerPage
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             Write-Output $_.Response
         }
     }

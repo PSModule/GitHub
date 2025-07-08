@@ -1,4 +1,4 @@
-﻿function Uninstall-GitHubAppOnEnterpriseOrganization {
+function Uninstall-GitHubAppOnEnterpriseOrganization {
     <#
         .SYNOPSIS
         Uninstall a GitHub App from an organization.
@@ -40,13 +40,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'DELETE'
             APIEndpoint = "/enterprises/$Enterprise/apps/organizations/$Organization/installations/$ID"
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             Write-Output $_.Response
         }
     }

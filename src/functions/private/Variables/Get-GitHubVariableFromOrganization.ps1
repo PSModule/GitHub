@@ -84,7 +84,7 @@ function Get-GitHubVariableFromOrganization {
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/actions/organization-variables"
             PerPage     = $PerPage
@@ -92,7 +92,7 @@ function Get-GitHubVariableFromOrganization {
         }
 
         try {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Invoke-GitHubAPI @apiParams | ForEach-Object {
                 $_.Response.variables | ForEach-Object {
                     [GitHubVariable]::new($_, $Owner, $null, $null, $null)
                 }

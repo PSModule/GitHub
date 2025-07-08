@@ -1,4 +1,4 @@
-﻿function New-GitHubOrganizationInvitation {
+function New-GitHubOrganizationInvitation {
     <#
         .SYNOPSIS
         Create an organization invitation
@@ -86,7 +86,7 @@
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'POST'
             APIEndpoint = "/orgs/$Organization/invitations"
             Body        = $body
@@ -94,7 +94,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("$InviteeID$Email to organization $Organization", 'Invite')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Invoke-GitHubAPI @apiParams | ForEach-Object {
                 Write-Output $_.Response
             }
         }

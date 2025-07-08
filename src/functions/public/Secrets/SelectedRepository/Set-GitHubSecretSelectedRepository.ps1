@@ -1,4 +1,4 @@
-﻿function Set-GitHubSecretSelectedRepository {
+function Set-GitHubSecretSelectedRepository {
     <#
         .SYNOPSIS
         Set selected repositories for an organization secret.
@@ -56,7 +56,7 @@
         $body = @{
             selected_repository_ids = @($RepositoryID)
         }
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'PUT'
             APIEndpoint = "/orgs/$Owner/actions/secrets/$Name/repositories"
             Body        = $body
@@ -64,7 +64,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("access to secret [$Owner/$Name] for repository [$RepositoryID]", 'Set')) {
-            $null = Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @apiParams
         }
     }
 

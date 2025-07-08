@@ -1,4 +1,4 @@
-﻿filter Get-GitHubUserSigningKeyForUser {
+filter Get-GitHubUserSigningKeyForUser {
     <#
         .SYNOPSIS
         List SSH signing keys for a user
@@ -43,14 +43,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/users/$Username/ssh_signing_keys"
             PerPage     = $PerPage
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             Write-Output $_.Response
         }
     }

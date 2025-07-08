@@ -1,4 +1,4 @@
-﻿function New-GitHubTeam {
+function New-GitHubTeam {
     <#
         .SYNOPSIS
         Create a team
@@ -98,7 +98,7 @@
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'POST'
             APIEndpoint = "/orgs/$Organization/teams"
             Body        = $body
@@ -106,7 +106,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("team '$Name' in '$Organization'", 'Create')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Invoke-GitHubAPI @apiParams | ForEach-Object {
                 foreach ($team in $_.Response) {
                     [GitHubTeam]::new($team, $Organization)
                 }

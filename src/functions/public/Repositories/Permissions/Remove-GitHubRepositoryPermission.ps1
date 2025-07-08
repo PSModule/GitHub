@@ -1,4 +1,4 @@
-﻿filter Remove-GitHubRepositoryPermission {
+filter Remove-GitHubRepositoryPermission {
     <#
         .SYNOPSIS
         Remove the permission level for a team on a repository.
@@ -59,14 +59,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'DELETE'
             APIEndpoint = "/orgs/$TeamOwner/teams/$Team/repos/$Owner/$Name"
             Context     = $Context
         }
 
         if ($PSCmdlet.ShouldProcess("Team [$TeamOwner/$Team] repository permission on [$Owner/$Name]", 'Remove')) {
-            $null = Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @apiParams
         }
     }
 

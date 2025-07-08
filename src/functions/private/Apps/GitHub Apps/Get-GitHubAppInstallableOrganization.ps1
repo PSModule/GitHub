@@ -1,4 +1,4 @@
-﻿function Get-GitHubAppInstallableOrganization {
+function Get-GitHubAppInstallableOrganization {
     <#
         .SYNOPSIS
         Get enterprise-owned organizations that can have GitHub Apps installed
@@ -43,14 +43,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/enterprises/$Enterprise/apps/installable_organizations"
             PerPage     = $PerPage
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             foreach ($organization in $_.Response) {
                 [GitHubOrganization]::new($organization, $Context)
             }

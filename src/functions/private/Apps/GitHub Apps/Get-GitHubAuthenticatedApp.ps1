@@ -1,4 +1,4 @@
-﻿filter Get-GitHubAuthenticatedApp {
+filter Get-GitHubAuthenticatedApp {
     <#
         .SYNOPSIS
         Get the authenticated app
@@ -35,13 +35,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = '/app'
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             [GitHubApp]::new($_.Response)
         }
     }

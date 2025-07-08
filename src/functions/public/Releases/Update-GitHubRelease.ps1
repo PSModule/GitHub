@@ -1,4 +1,4 @@
-﻿filter Update-GitHubRelease {
+filter Update-GitHubRelease {
     <#
         .SYNOPSIS
         Update a release
@@ -175,7 +175,7 @@
             $body['draft'] = [bool]$Draft
         }
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'PATCH'
             APIEndpoint = "/repos/$Owner/$Repository/releases/$ID"
             Body        = $body
@@ -184,7 +184,7 @@
 
         if ($PSCmdlet.ShouldProcess("release with ID [$ID] in [$Owner/$Repository]", 'Update')) {
             $resultLatest = $PSBoundParameters.ContainsKey('Latest') ? $Latest : $release.IsLatest
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Invoke-GitHubAPI @apiParams | ForEach-Object {
                 [GitHubRelease]::new($_.Response , $Owner, $Repository, $resultLatest)
             }
         }

@@ -71,7 +71,7 @@ function Set-GitHubSecretOnEnvironment {
             key_id          = $KeyID
         }
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'PUT'
             APIEndpoint = "/repos/$Owner/$Repository/environments/$Environment/secrets/$Name"
             Body        = $body
@@ -79,7 +79,7 @@ function Set-GitHubSecretOnEnvironment {
         }
 
         if ($PSCmdlet.ShouldProcess("secret [$Name] on [$Owner/$Repository/$Environment]", 'Set')) {
-            $null = Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @apiParams
         }
     }
 

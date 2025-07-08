@@ -1,4 +1,4 @@
-﻿filter Add-GitHubUserGpgKey {
+filter Add-GitHubUserGpgKey {
     <#
         .SYNOPSIS
         Create a GPG key for the authenticated user
@@ -63,14 +63,14 @@
             armored_public_key = $ArmoredPublicKey
         }
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'POST'
             APIEndpoint = '/user/gpg_keys'
             Body        = $body
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             Write-Output $_.Response
         }
     }

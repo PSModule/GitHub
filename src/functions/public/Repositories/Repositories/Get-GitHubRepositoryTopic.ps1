@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryTopic {
+filter Get-GitHubRepositoryTopic {
     <#
         .SYNOPSIS
         Get all repository topics
@@ -44,14 +44,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Name/topics"
             PerPage     = $PerPage
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             Write-Output $_.Response.names
         }
     }

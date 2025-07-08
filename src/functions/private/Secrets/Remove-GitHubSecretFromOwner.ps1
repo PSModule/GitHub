@@ -40,14 +40,14 @@ function Remove-GitHubSecretFromOwner {
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'DELETE'
             APIEndpoint = "/orgs/$Owner/actions/secrets/$Name"
             Context     = $Context
         }
 
         if ($PSCmdlet.ShouldProcess("secret [$Name] on [$Owner]", 'Delete')) {
-            $null = Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @apiParams
         }
     }
 

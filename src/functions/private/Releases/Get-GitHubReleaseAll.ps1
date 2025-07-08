@@ -1,4 +1,4 @@
-﻿filter Get-GitHubReleaseAll {
+filter Get-GitHubReleaseAll {
     <#
         .SYNOPSIS
         List releases
@@ -63,7 +63,7 @@
         $perPageSetting = Resolve-GitHubContextSetting -Name 'PerPage' -Value $PerPage -Context $Context
 
         do {
-            $inputObject = @{
+            $apiParams = @{
                 Query     = @'
 query($owner: String!, $repository: String!, $perPage: Int, $after: String) {
   repository(owner: $owner, name: $repository) {
@@ -102,7 +102,7 @@ query($owner: String!, $repository: String!, $perPage: Int, $after: String) {
                 Context   = $Context
             }
 
-            Invoke-GitHubGraphQLQuery @inputObject | ForEach-Object {
+            Invoke-GitHubGraphQLQuery @apiParams | ForEach-Object {
                 foreach ($release in $_.repository.releases.nodes) {
                     [GitHubRelease]::new($release, $Owner, $Repository, $null)
                 }

@@ -1,4 +1,4 @@
-﻿function Get-GitHubTeamListByOrg {
+function Get-GitHubTeamListByOrg {
     <#
         .SYNOPSIS
         List teams
@@ -36,13 +36,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/orgs/$Organization/teams"
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             foreach ($team in $_.Response) {
                 [GitHubTeam]::new($team, $Organization)
             }

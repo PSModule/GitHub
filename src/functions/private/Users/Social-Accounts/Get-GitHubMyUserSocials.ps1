@@ -1,4 +1,4 @@
-﻿filter Get-GitHubMyUserSocials {
+filter Get-GitHubMyUserSocials {
     <#
         .SYNOPSIS
         List social accounts for the authenticated user
@@ -35,14 +35,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = '/user/social_accounts'
             PerPage     = $PerPage
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             Write-Output $_.Response
         }
     }

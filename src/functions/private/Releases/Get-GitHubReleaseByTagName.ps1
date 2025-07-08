@@ -1,4 +1,4 @@
-﻿filter Get-GitHubReleaseByTagName {
+filter Get-GitHubReleaseByTagName {
     <#
         .SYNOPSIS
         Get a release by tag name
@@ -48,7 +48,7 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Query     = @'
 query($owner: String!, $repository: String!, $tag: String!) {
   repository(owner: $owner, name: $repository) {
@@ -80,7 +80,7 @@ query($owner: String!, $repository: String!, $tag: String!) {
             Context   = $Context
         }
 
-        Invoke-GitHubGraphQLQuery @inputObject | ForEach-Object {
+        Invoke-GitHubGraphQLQuery @apiParams | ForEach-Object {
             $release = $_.repository.release
             if ($release) {
                 [GitHubRelease]::new($release, $Owner, $Repository, $null)

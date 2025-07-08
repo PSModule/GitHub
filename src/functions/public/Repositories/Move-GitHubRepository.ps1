@@ -1,4 +1,4 @@
-﻿filter Move-GitHubRepository {
+filter Move-GitHubRepository {
     <#
         .SYNOPSIS
         Transfer a repository
@@ -72,14 +72,14 @@
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'POST'
             APIEndpoint = "/repos/$Owner/$Name/transfer"
             Body        = $body
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             [GitHubRepository]::New($_.Response)
         }
     }

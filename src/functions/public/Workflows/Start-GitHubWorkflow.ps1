@@ -1,4 +1,4 @@
-﻿filter Start-GitHubWorkflow {
+filter Start-GitHubWorkflow {
     <#
         .SYNOPSIS
         Start a workflow run using the workflow's ID.
@@ -62,7 +62,7 @@
             inputs = $Inputs
         }
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'POST'
             APIEndpoint = "/repos/$Owner/$Repository/actions/workflows/$ID/dispatches"
             Body        = $body
@@ -70,7 +70,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("$Owner/$Repository/$ID", 'Start workflow')) {
-            $null = Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @apiParams
         }
     }
 

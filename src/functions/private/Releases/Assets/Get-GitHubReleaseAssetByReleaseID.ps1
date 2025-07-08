@@ -1,4 +1,4 @@
-﻿filter Get-GitHubReleaseAssetByReleaseID {
+filter Get-GitHubReleaseAssetByReleaseID {
     <#
         .SYNOPSIS
         List release assets
@@ -55,14 +55,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/releases/$ID/assets"
             PerPage     = $PerPage
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             foreach ($asset in $_.Response) {
                 if ($PSBoundParameters.ContainsKey('Name')) {
                     if ($asset.name -eq $Name) {

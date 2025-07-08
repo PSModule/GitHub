@@ -1,4 +1,4 @@
-﻿filter Get-GitHubMarkdown {
+filter Get-GitHubMarkdown {
     <#
         .SYNOPSIS
         Render a Markdown document
@@ -63,14 +63,14 @@
             text    = $Text
         }
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'POST'
             APIEndpoint = '/markdown'
             Body        = $body
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             Write-Output $_.Response
         }
     }

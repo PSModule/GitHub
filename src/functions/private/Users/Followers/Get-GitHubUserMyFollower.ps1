@@ -1,4 +1,4 @@
-﻿filter Get-GitHubUserMyFollower {
+filter Get-GitHubUserMyFollower {
     <#
         .SYNOPSIS
         List followers of the authenticated user
@@ -39,14 +39,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = '/user/followers'
             PerPage     = $PerPage
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             Write-Output $_.Response
         }
     }

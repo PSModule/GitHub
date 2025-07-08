@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryListByOwner {
+filter Get-GitHubRepositoryListByOwner {
     <#
         .SYNOPSIS
         List repositories for a user
@@ -93,7 +93,7 @@
         $graphQLFields = ConvertTo-GitHubGraphQLField @graphParams
 
         do {
-            $inputObject = @{
+            $apiParams = @{
                 Query     = @"
 query(
     `$Owner: String!,
@@ -141,7 +141,7 @@ query(
                 Context   = $Context
             }
 
-            Invoke-GitHubGraphQLQuery @inputObject | ForEach-Object {
+            Invoke-GitHubGraphQLQuery @apiParams | ForEach-Object {
                 foreach ($repository in $_.repositoryOwner.repositories.nodes) {
                     [GitHubRepository]::new($repository)
                 }

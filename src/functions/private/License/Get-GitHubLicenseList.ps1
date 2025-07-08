@@ -1,4 +1,4 @@
-﻿filter Get-GitHubLicenseList {
+filter Get-GitHubLicenseList {
     <#
         .SYNOPSIS
         Get all commonly used licenses
@@ -35,13 +35,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = '/licenses'
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             $_.Response | ForEach-Object { [GitHubLicense]::New($_) }
         }
     }

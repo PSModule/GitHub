@@ -1,4 +1,4 @@
-﻿filter Enable-GitHubRepositorySecurityFix {
+filter Enable-GitHubRepositorySecurityFix {
     <#
         .SYNOPSIS
         Enable automated security fixes
@@ -44,14 +44,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'PUT'
             APIEndpoint = "/repos/$Owner/$Name/automated-security-fixes"
             Context     = $Context
         }
 
         if ($PSCmdlet.ShouldProcess("Security Fixes for [$Owner/$Name]", 'Enable')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Invoke-GitHubAPI @apiParams | ForEach-Object {
                 Write-Output $_.Response
             }
         }

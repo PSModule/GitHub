@@ -1,4 +1,4 @@
-﻿filter Get-GitHubUserKeyForUser {
+filter Get-GitHubUserKeyForUser {
     <#
         .SYNOPSIS
         List public SSH keys for a user
@@ -43,14 +43,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/users/$Username/keys"
             PerPage     = $PerPage
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             Write-Output $_.Response
         }
     }

@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryAutolinkList {
+filter Get-GitHubRepositoryAutolinkList {
     <#
         .SYNOPSIS
         List all autolinks of a repository
@@ -40,13 +40,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/autolinks"
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             Write-Output $_.Response
         }
     }

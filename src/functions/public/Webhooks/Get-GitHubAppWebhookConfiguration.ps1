@@ -1,4 +1,4 @@
-﻿function Get-GitHubAppWebhookConfiguration {
+function Get-GitHubAppWebhookConfiguration {
     <#
         .SYNOPSIS
         Get a webhook configuration for an app
@@ -37,13 +37,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = '/app/hook/config'
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             [GitHubWebhookConfiguration]::new($_.Response)
         }
     }

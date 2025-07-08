@@ -1,4 +1,4 @@
-﻿filter Get-GitHubMarkdownRaw {
+filter Get-GitHubMarkdownRaw {
     <#
         .SYNOPSIS
         Render a Markdown document in raw mode
@@ -48,7 +48,7 @@
             text = $Text
         }
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'POST'
             APIEndpoint = '/markdown/raw'
             ContentType = 'text/plain'
@@ -56,7 +56,7 @@
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             Write-Output $_.Response
         }
     }

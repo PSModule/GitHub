@@ -1,4 +1,4 @@
-﻿function Remove-GitHubAppInstallationRepositoryAccess {
+function Remove-GitHubAppInstallationRepositoryAccess {
     <#
         .SYNOPSIS
         Remove repository access to an organization installation.
@@ -70,7 +70,7 @@
             repositories = $Repositories
         }
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'PATCH'
             APIEndpoint = "/enterprises/$Enterprise/apps/organizations/$Organization/installations/$ID/repositories/remove"
             Body        = $body
@@ -78,7 +78,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("$Enterprise/$Organization - $Repositories", 'Remove repository access')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Invoke-GitHubAPI @apiParams | ForEach-Object {
                 Write-Output $_.Response
             }
         }

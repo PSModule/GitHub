@@ -1,4 +1,4 @@
-﻿filter Update-GitHubOrganization {
+filter Update-GitHubOrganization {
     <#
         .SYNOPSIS
         Update an organization
@@ -195,7 +195,7 @@
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'PATCH'
             APIEndpoint = "/orgs/$Name"
             Body        = $body
@@ -203,7 +203,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("organization [$Name]", 'Set')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Invoke-GitHubAPI @apiParams | ForEach-Object {
                 [GitHubOrganization]::new($_.Response, $Context)
             }
         }

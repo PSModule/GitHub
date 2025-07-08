@@ -1,4 +1,4 @@
-﻿filter Remove-GitHubUserEmail {
+filter Remove-GitHubUserEmail {
     <#
         .SYNOPSIS
         Delete an email address for the authenticated user
@@ -47,7 +47,7 @@
             emails = $Email
         }
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'DELETE'
             APIEndpoint = '/user/emails'
             Body        = $body
@@ -55,7 +55,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("Email addresses [$($Email -join ', ')]", 'DELETE')) {
-            $null = Invoke-GitHubAPI @inputObject | ForEach-Object {
+            $null = Invoke-GitHubAPI @apiParams | ForEach-Object {
                 Write-Output $_.Response
             }
         }

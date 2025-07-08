@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryByName {
+filter Get-GitHubRepositoryByName {
     <#
         .SYNOPSIS
         Get a repository
@@ -108,7 +108,7 @@
         }
         $graphQLFields = ConvertTo-GitHubGraphQLField @graphParams
 
-        $inputObject = @{
+        $apiParams = @{
             Query     = @"
 query(
     `$Owner: String!,
@@ -132,7 +132,7 @@ $graphQLFields
             Context   = $Context
         }
 
-        Invoke-GitHubGraphQLQuery @inputObject | ForEach-Object {
+        Invoke-GitHubGraphQLQuery @apiParams | ForEach-Object {
             [GitHubRepository]::new($_.repositoryOwner.repository)
         }
     }

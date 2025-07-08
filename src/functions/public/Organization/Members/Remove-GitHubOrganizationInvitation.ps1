@@ -1,4 +1,4 @@
-﻿function Remove-GitHubOrganizationInvitation {
+function Remove-GitHubOrganizationInvitation {
     <#
         .SYNOPSIS
         Cancel an organization invitation
@@ -51,14 +51,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'DELETE'
             APIEndpoint = "/orgs/$Organization/invitations/$ID"
             Context     = $Context
         }
 
         if ($PSCmdlet.ShouldProcess('GitHub Organization invitation', 'Remove')) {
-            $null = Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @apiParams
         }
     }
 

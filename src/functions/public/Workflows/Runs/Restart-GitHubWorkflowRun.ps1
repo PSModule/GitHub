@@ -1,4 +1,4 @@
-﻿filter Restart-GitHubWorkflowRun {
+filter Restart-GitHubWorkflowRun {
     <#
         .SYNOPSIS
         Re-run a workflow
@@ -46,7 +46,7 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'POST'
             APIEndpoint = "/repos/$Owner/$Repository/actions/runs/$ID/rerun"
             Context     = $Context
@@ -54,7 +54,7 @@
 
         if ($PSCmdlet.ShouldProcess("workflow with ID [$ID] in [$Owner/$Repository]", 'Re-run')) {
             Write-Verbose "Re-run workflow [$ID] in [$Owner/$Repository]"
-            $null = Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @apiParams
         }
     }
 

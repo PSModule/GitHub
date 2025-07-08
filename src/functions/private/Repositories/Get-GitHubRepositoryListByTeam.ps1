@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryListByTeam {
+filter Get-GitHubRepositoryListByTeam {
     <#
         .SYNOPSIS
         List team repositories.
@@ -50,13 +50,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/orgs/$Owner/teams/$Team/repos"
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             foreach ($repo in $_.Response) {
                 [GitHubRepository]::new($repo)
             }

@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryCodeownersError {
+filter Get-GitHubRepositoryCodeownersError {
     <#
         .SYNOPSIS
         List CODEOWNERS errors
@@ -57,14 +57,14 @@
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Name/codeowners/errors"
             Body        = $body
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             Write-Output $_.Response
         }
     }

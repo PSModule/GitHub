@@ -1,4 +1,4 @@
-﻿filter Update-GitHubReleaseAsset {
+filter Update-GitHubReleaseAsset {
     <#
         .SYNOPSIS
         Update a release asset
@@ -74,7 +74,7 @@
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'PATCH'
             APIEndpoint = "/repos/$Owner/$Repository/releases/assets/$ID"
             Body        = $body
@@ -82,7 +82,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("assets for release with ID [$ID] in [$Owner/$Repository]", 'Set')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Invoke-GitHubAPI @apiParams | ForEach-Object {
                 [GitHubReleaseAsset]($_.Response)
             }
         }

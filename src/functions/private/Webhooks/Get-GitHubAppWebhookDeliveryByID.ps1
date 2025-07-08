@@ -1,4 +1,4 @@
-﻿function Get-GitHubAppWebhookDeliveryByID {
+function Get-GitHubAppWebhookDeliveryByID {
     <#
         .SYNOPSIS
         Get a delivery for an app webhook
@@ -40,13 +40,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/app/hook/deliveries/$ID"
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             [GitHubWebhookDelivery]::new($_.Response)
         }
     }

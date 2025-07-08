@@ -1,4 +1,4 @@
-﻿filter New-GitHubRelease {
+filter New-GitHubRelease {
     <#
         .SYNOPSIS
         Create a release
@@ -132,7 +132,7 @@
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'POST'
             APIEndpoint = "/repos/$Owner/$Repository/releases"
             Body        = $body
@@ -140,7 +140,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("$Owner/$Repository", 'Create a release')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Invoke-GitHubAPI @apiParams | ForEach-Object {
                 [GitHubRelease]::new($_.Response , $Owner, $Repository, $Latest)
             }
         }

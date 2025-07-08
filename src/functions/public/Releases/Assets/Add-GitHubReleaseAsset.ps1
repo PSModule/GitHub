@@ -1,4 +1,4 @@
-﻿filter Add-GitHubReleaseAsset {
+filter Add-GitHubReleaseAsset {
     <#
         .SYNOPSIS
         Upload a release asset
@@ -172,7 +172,7 @@
         }
         $uploadUrl = New-Uri @urlParams
 
-        $inputObject = @{
+        $apiParams = @{
             Method         = 'POST'
             Uri            = $uploadUrl
             ContentType    = $ContentType
@@ -180,7 +180,7 @@
             Context        = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             [GitHubReleaseAsset]($_.Response)
         }
     }

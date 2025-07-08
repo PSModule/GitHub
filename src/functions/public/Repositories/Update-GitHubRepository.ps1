@@ -1,4 +1,4 @@
-﻿filter Update-GitHubRepository {
+filter Update-GitHubRepository {
     <#
         .SYNOPSIS
         Update a repository
@@ -281,7 +281,7 @@
             [pscustomobject]$body | Out-String -Stream | ForEach-Object { Write-Debug $_ }
         }
         if ($body.Keys.Count -gt 0) {
-            $inputObject = @{
+            $apiParams = @{
                 Method      = 'PATCH'
                 APIEndpoint = "/repos/$Owner/$Name"
                 Body        = $body
@@ -289,7 +289,7 @@
             }
 
             if ($PSCmdlet.ShouldProcess("Repository [$Owner/$Name]", 'Update')) {
-                $updatedRepo = Invoke-GitHubAPI @inputObject | Select-Object -ExpandProperty Response
+                $updatedRepo = Invoke-GitHubAPI @apiParams | Select-Object -ExpandProperty Response
             }
             if ($DebugPreference -eq 'Continue') {
                 Write-Debug 'Repo has been updated'

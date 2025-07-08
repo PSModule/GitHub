@@ -1,4 +1,4 @@
-﻿function Update-GitHubTeam {
+function Update-GitHubTeam {
     <#
         .SYNOPSIS
         Update a team
@@ -95,7 +95,7 @@
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'PATCH'
             APIEndpoint = "/orgs/$Organization/teams/$Slug"
             Body        = $body
@@ -103,7 +103,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("$Organization/$Slug", 'Update')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Invoke-GitHubAPI @apiParams | ForEach-Object {
                 foreach ($team in $_.Response) {
                     [GitHubTeam]::new($team, $Organization)
                 }

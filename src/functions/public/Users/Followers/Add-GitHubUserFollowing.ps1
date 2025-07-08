@@ -1,4 +1,4 @@
-﻿filter Add-GitHubUserFollowing {
+filter Add-GitHubUserFollowing {
     <#
         .SYNOPSIS
         Follow a user
@@ -45,13 +45,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'PUT'
             APIEndpoint = "/user/following/$Username"
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject
+        Invoke-GitHubAPI @apiParams
     }
 
     end {

@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryByNameAndTeam {
+filter Get-GitHubRepositoryByNameAndTeam {
     <#
         .SYNOPSIS
         Get the permission level for a team on a repository.
@@ -60,14 +60,14 @@
 
     process {
         $TeamOwner = [string]::IsNullOrEmpty($TeamOwner) ? $Owner : $TeamOwner
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/orgs/$TeamOwner/teams/$Team/repos/$Owner/$Name"
             Accept      = 'application/vnd.github.v3.repository+json'
             Context     = $Context
         }
         try {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Invoke-GitHubAPI @apiParams | ForEach-Object {
                 [GitHubRepository]::new($_.Response)
             }
         } catch {

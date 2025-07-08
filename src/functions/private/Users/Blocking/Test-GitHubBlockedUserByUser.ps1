@@ -1,4 +1,4 @@
-﻿filter Test-GitHubBlockedUserByUser {
+filter Test-GitHubBlockedUserByUser {
     <#
         .SYNOPSIS
         Check if a user is blocked by the authenticated user
@@ -46,14 +46,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/user/blocks/$Username"
             PerPage     = $PerPage
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject
+        Invoke-GitHubAPI @apiParams
     }
 
     end {
