@@ -37,7 +37,7 @@
 
         # The stamp to check status for.
         [Parameter()]
-        [ValidateSet(@($script:StatusBaseURL.Keys))]
+        [ValidateSet('Public', 'Europe', 'Australia', 'US')]
         [string] $Stamp = 'Public'
     )
 
