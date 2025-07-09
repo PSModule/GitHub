@@ -28,7 +28,7 @@
         Justification = 'Long links'
     )]
     [OutputType([void])]
-    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Low')]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
@@ -66,14 +66,14 @@
             Write-Debug 'Repo is not selected, returning'
             return
         }
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'DELETE'
             APIEndpoint = "/orgs/$Owner/actions/secrets/$Name/repositories/$RepositoryID"
             Context     = $Context
         }
 
         if ($PSCmdlet.ShouldProcess("access to secret [$Owner/$Name] for repository [$RepositoryID]", 'Remove')) {
-            $null = Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @apiParams
         }
     }
 

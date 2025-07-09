@@ -54,14 +54,14 @@
             'html' { 'application/vnd.github.html+json' }
         }
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/license"
             ContentType = $contentType
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             $Response = $_.Response
             $rawContent = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($Response.content))
             $Response | Add-Member -NotePropertyName 'raw_content' -NotePropertyValue $rawContent -Force

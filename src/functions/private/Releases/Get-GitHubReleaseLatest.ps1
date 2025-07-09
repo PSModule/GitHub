@@ -46,7 +46,7 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Query     = @'
 query($owner: String!, $repository: String!) {
   repository(owner: $owner, name: $repository) {
@@ -77,7 +77,7 @@ query($owner: String!, $repository: String!) {
             Context   = $Context
         }
 
-        Invoke-GitHubGraphQLQuery @inputObject | ForEach-Object {
+        Invoke-GitHubGraphQLQuery @apiParams | ForEach-Object {
             $release = $_.repository.latestRelease
             if ($release) {
                 [GitHubRelease]::new($release, $Owner, $Repository, $null)

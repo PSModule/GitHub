@@ -53,7 +53,7 @@
             visibility = $Visibility.ToLower()
         }
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'PATCH'
             APIEndpoint = '/user/email/visibility'
             Body        = $body
@@ -61,7 +61,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("Email visibility [$Visibility]", 'Set')) {
-            $null = Invoke-GitHubAPI @inputObject | ForEach-Object {
+            $null = Invoke-GitHubAPI @apiParams | ForEach-Object {
                 Write-Output $_.Response
             }
         }

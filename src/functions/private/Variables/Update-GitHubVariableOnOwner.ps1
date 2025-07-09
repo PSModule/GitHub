@@ -1,4 +1,4 @@
-function Update-GitHubVariableOnOwner {
+﻿function Update-GitHubVariableOnOwner {
     <#
         .SYNOPSIS
         Update an organization variable.
@@ -84,7 +84,7 @@ function Update-GitHubVariableOnOwner {
             $body['selected_repository_ids'] = $SelectedRepositories
         }
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'PATCH'
             APIEndpoint = "/orgs/$Owner/actions/variables/$Name"
             Body        = $body
@@ -92,7 +92,7 @@ function Update-GitHubVariableOnOwner {
         }
 
         if ($PSCmdlet.ShouldProcess("variable [$Name] on [$Owner]", 'Update')) {
-            $null = Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @apiParams
         }
     }
 

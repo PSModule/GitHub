@@ -1,4 +1,4 @@
-﻿filter Remove-GitHubReleaseAsset {
+filter Remove-GitHubReleaseAsset {
     <#
         .SYNOPSIS
         Delete a release asset
@@ -20,7 +20,7 @@
         .NOTES
         [Delete a release asset](https://docs.github.com/rest/releases/assets#delete-a-release-asset)
     #>
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
@@ -49,14 +49,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'DELETE'
             APIEndpoint = "/repos/$Owner/$Repository/releases/assets/$ID"
             Context     = $Context
         }
 
         if ($PSCmdlet.ShouldProcess("Asset with ID [$ID] in [$Owner/$Repository]", 'DELETE')) {
-            $null = Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @apiParams
         }
     }
 

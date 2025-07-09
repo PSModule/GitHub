@@ -67,13 +67,13 @@
             Write-Debug 'Repo is already selected, returning'
             return
         }
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'PUT'
             APIEndpoint = "/orgs/$Owner/actions/variables/$Name/repositories/$RepositoryID"
             Context     = $Context
         }
 
-        $null = Invoke-GitHubAPI @inputObject
+        $null = Invoke-GitHubAPI @apiParams
     }
 
     end {

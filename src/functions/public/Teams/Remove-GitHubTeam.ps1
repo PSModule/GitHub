@@ -17,7 +17,7 @@
         https://psmodule.io/GitHub/Functions/Teams/Remove-GitHubTeam
     #>
     [OutputType([void])]
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param(
         # The organization name. The name is not case sensitive.
         # If not provided, the organization from the context is used.
@@ -42,14 +42,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'DELETE'
             APIEndpoint = "/orgs/$Organization/teams/$Slug"
             Context     = $Context
         }
 
         if ($PSCmdlet.ShouldProcess("$Organization/$Slug", 'DELETE')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Invoke-GitHubAPI @apiParams | ForEach-Object {
                 Write-Output $_.Response
             }
         }

@@ -1,4 +1,4 @@
-function Get-GitHubArtifactById {
+﻿function Get-GitHubArtifactById {
     <#
         .SYNOPSIS
         Retrieves a specific artifact from a GitHub Actions workflow run.
@@ -61,13 +61,13 @@ function Get-GitHubArtifactById {
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/actions/artifacts/$ID"
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             [GitHubArtifact]::new($_.Response, $Owner, $Repository, $Context)
         }
     }

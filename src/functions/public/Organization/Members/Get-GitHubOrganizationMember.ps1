@@ -58,7 +58,7 @@
             role   = $Role
         }
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/orgs/$Organization/members"
             Body        = $body
@@ -66,7 +66,7 @@
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             foreach ($user in $_.Response) {
                 [GitHubUser]::new($user)
             }

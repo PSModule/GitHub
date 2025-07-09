@@ -32,7 +32,7 @@
         'PSShouldProcess', '', Scope = 'Function',
         Justification = 'This check is performed in the private functions.'
     )]
-    [CmdletBinding(DefaultParameterSetName = 'AuthenticatedUser', SupportsShouldProcess)]
+    [CmdletBinding(DefaultParameterSetName = 'AuthenticatedUser', SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory, ParameterSetName = 'Organization', ValueFromPipelineByPropertyName)]

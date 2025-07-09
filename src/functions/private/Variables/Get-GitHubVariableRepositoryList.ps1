@@ -1,4 +1,4 @@
-function Get-GitHubVariableRepositoryList {
+﻿function Get-GitHubVariableRepositoryList {
     <#
         .SYNOPSIS
         List repository variables.
@@ -62,13 +62,13 @@ function Get-GitHubVariableRepositoryList {
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/actions/variables"
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             $_.Response.variables | ForEach-Object {
                 [GitHubVariable]::new($_, $Owner, $Repository, $null, $null)
             }

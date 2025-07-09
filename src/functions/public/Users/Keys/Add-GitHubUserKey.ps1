@@ -57,14 +57,14 @@
             key   = $Key
         }
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'POST'
             APIEndpoint = '/user/keys'
             Body        = $body
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             Write-Output $_.Response
         }
     }

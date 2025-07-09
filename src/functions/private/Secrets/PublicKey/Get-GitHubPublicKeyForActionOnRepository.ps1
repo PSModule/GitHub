@@ -53,13 +53,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/actions/secrets/public-key"
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             [GitHubPublicKey]::new($_.Response, 'actions', $Owner, $Repository, $null)
         }
     }

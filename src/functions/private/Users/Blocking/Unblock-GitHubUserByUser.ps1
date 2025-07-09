@@ -40,13 +40,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'DELETE'
             APIEndpoint = "/user/blocks/$Username"
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject
+        Invoke-GitHubAPI @apiParams
     }
 
     end {

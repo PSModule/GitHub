@@ -46,7 +46,7 @@
             account_urls = $URL
         }
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'DELETE'
             APIEndpoint = '/user/social_accounts'
             Body        = $body
@@ -54,7 +54,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("Social accounts [$($URL -join ', ')]", 'DELETE')) {
-            Invoke-GitHubAPI @inputObject
+            Invoke-GitHubAPI @apiParams
         }
     }
 

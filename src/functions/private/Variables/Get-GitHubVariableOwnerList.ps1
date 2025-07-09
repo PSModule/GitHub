@@ -1,4 +1,4 @@
-function Get-GitHubVariableOwnerList {
+﻿function Get-GitHubVariableOwnerList {
     <#
         .SYNOPSIS
         List organization variables
@@ -77,13 +77,13 @@ function Get-GitHubVariableOwnerList {
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/orgs/$Owner/actions/variables"
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             $_.Response.variables | ForEach-Object {
                 $selectedRepositories = @()
                 if ($_.visibility -eq 'selected') {

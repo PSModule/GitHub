@@ -47,14 +47,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'DELETE'
             APIEndpoint = "/repos/$Owner/$Name"
             Context     = $Context
         }
 
         if ($PSCmdlet.ShouldProcess("repo [$Owner/$Name]", 'Delete')) {
-            $null = Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @apiParams
             Write-Verbose "Repository [$Owner/$Name] deleted."
         }
     }

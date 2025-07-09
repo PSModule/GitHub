@@ -1,4 +1,4 @@
-function Remove-GitHubVariableFromEnvironment {
+﻿function Remove-GitHubVariableFromEnvironment {
     <#
         .SYNOPSIS
         Delete an environment variable.
@@ -48,14 +48,14 @@ function Remove-GitHubVariableFromEnvironment {
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'DELETE'
             APIEndpoint = "/repos/$Owner/$Repository/environments/$Environment/variables/$Name"
             Context     = $Context
         }
 
         if ($PSCmdlet.ShouldProcess("variable [$Name] on [$Owner/$Repository/$Environment]", 'Delete')) {
-            $null = Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @apiParams
         }
     }
 

@@ -44,7 +44,7 @@
             variables = $Variables
         }
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'POST'
             APIEndpoint = '/graphql'
             Body        = $body
@@ -52,7 +52,7 @@
         }
 
         try {
-            $apiResponse = Invoke-GitHubAPI @inputObject
+            $apiResponse = Invoke-GitHubAPI @apiParams
             $graphQLResponse = $apiResponse.Response
             # Handle GraphQL-specific errors (200 OK with errors in response)
             if ($graphQLResponse.errors) {

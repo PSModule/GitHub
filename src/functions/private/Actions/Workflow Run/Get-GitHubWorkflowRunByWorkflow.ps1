@@ -113,7 +113,7 @@
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
-        $inputObject = @{
+        $apiParams = @{
             Context     = $Context
             APIEndpoint = "/repos/$Owner/$Repository/actions/workflows/$ID/runs"
             Method      = 'GET'
@@ -121,7 +121,7 @@
             Body        = $body
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             $_.Response.workflow_runs | ForEach-Object {
                 [GitHubWorkflowRun]::new($_)
             }

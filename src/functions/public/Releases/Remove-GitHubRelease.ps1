@@ -1,4 +1,4 @@
-﻿filter Remove-GitHubRelease {
+filter Remove-GitHubRelease {
     <#
         .SYNOPSIS
         Delete a release
@@ -24,7 +24,7 @@
         [Delete a release](https://docs.github.com/rest/releases/releases#delete-a-release)
     #>
     [OutputType([void])]
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
@@ -53,14 +53,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'DELETE'
             APIEndpoint = "/repos/$Owner/$Repository/releases/$ID"
             Context     = $Context
         }
 
         if ($PSCmdlet.ShouldProcess("Release with ID [$ID] in [$Owner/$Repository]", 'Delete')) {
-            $null = Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @apiParams
         }
     }
 

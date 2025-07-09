@@ -152,13 +152,13 @@
         }
 
         # Now download the asset
-        $inputObject = @{
+        $apiParams = @{
             Method  = 'GET'
             Uri     = $asset.Url
             Context = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             $itemType = $Path.EndsWith('.zip') ? 'File' : 'Directory'
             $isAbsolute = [System.IO.Path]::IsPathRooted($Path)
             $filename = $asset.Name

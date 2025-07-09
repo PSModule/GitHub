@@ -85,7 +85,7 @@
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/rulesets/rule-suites"
             Body        = $body
@@ -93,7 +93,7 @@
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             Write-Output $_.Response
         }
     }

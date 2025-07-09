@@ -1,4 +1,4 @@
-function Get-GitHubSecretEnvironmentList {
+﻿function Get-GitHubSecretEnvironmentList {
     <#
         .SYNOPSIS
         List environment secrets.
@@ -64,13 +64,13 @@ function Get-GitHubSecretEnvironmentList {
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/environments/$Environment/secrets"
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             $_.Response.secrets | ForEach-Object {
                 [GitHubSecret]::new($_, $Owner, $Repository, $Environment, $null)
             }

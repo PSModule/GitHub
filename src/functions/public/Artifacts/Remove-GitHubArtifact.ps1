@@ -1,4 +1,4 @@
-﻿function Remove-GitHubArtifact {
+function Remove-GitHubArtifact {
     <#
         .SYNOPSIS
         Deletes an artifact from a GitHub repository by its unique ID.
@@ -31,7 +31,7 @@
         [Delete an artifact](https://docs.github.com/rest/actions/artifacts#delete-an-artifact)
     #>
     [OutputType([GitHubArtifact])]
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
@@ -59,14 +59,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'DELETE'
             APIEndpoint = "/repos/$Owner/$Repository/actions/artifacts/$ID"
             Context     = $Context
         }
 
         if ($PSCmdlet.ShouldProcess("artifact [$Owner/$Repository/$ID]", 'Remove')) {
-            $null = Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @apiParams
         }
     }
 

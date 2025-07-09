@@ -49,13 +49,13 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'PUT'
             APIEndpoint = "/orgs/$Organization/blocks/$Username"
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject
+        Invoke-GitHubAPI @apiParams
     }
 
     end {

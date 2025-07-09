@@ -1,4 +1,4 @@
-filter Get-GitHubWorkflowRunByRepo {
+﻿filter Get-GitHubWorkflowRunByRepo {
     <#
         .SYNOPSIS
         List workflow runs for a repository.
@@ -108,7 +108,7 @@ filter Get-GitHubWorkflowRunByRepo {
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = "/repos/$Owner/$Repository/actions/runs"
             Body        = $body
@@ -116,7 +116,7 @@ filter Get-GitHubWorkflowRunByRepo {
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             $_.Response.workflow_runs | ForEach-Object {
                 [GitHubWorkflowRun]::new($_)
             }

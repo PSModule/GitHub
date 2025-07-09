@@ -49,7 +49,7 @@
             since = $Since
         }
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'GET'
             APIEndpoint = '/users'
             Body        = $body
@@ -57,7 +57,7 @@
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             foreach ($account in $_.Response) {
                 if ($account.type -eq 'Organization') {
                     [GitHubOrganization]::New($account, $Context)

@@ -182,7 +182,7 @@
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'POST'
             APIEndpoint = "/orgs/$Organization/repos"
             Body        = $body
@@ -190,7 +190,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("Repository [$Name] in organization [$Organization]", 'Create')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Invoke-GitHubAPI @apiParams | ForEach-Object {
                 [GitHubRepository]::New($_.Response)
             }
         }

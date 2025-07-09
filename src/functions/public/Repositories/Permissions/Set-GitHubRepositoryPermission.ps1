@@ -102,7 +102,7 @@
             permission = $Permission.ToLower()
         }
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'PUT'
             APIEndpoint = "/orgs/$TeamOwner/teams/$Team/repos/$Owner/$Name"
             Body        = $body
@@ -110,7 +110,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("Team [$TeamOwner/$Team] repository permission [$Permission] on [$Owner/$Name]", 'Set')) {
-            $null = Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @apiParams
         }
     }
 

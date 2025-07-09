@@ -42,7 +42,7 @@
         Justification = 'This check is performed in the private functions.'
     )]
     [OutputType([void])]
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory, ParameterSetName = 'Organization', ValueFromPipelineByPropertyName)]

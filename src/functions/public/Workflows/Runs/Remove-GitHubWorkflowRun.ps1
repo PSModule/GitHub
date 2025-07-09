@@ -1,4 +1,4 @@
-﻿filter Remove-GitHubWorkflowRun {
+filter Remove-GitHubWorkflowRun {
     <#
         .SYNOPSIS
         Delete a workflow run
@@ -22,7 +22,7 @@
         .NOTES
         [Delete a workflow run](https://docs.github.com/rest/actions/workflow-runs#delete-a-workflow-run)
     #>
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
@@ -50,7 +50,7 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'DELETE'
             APIEndpoint = "repos/$Owner/$Repository/actions/runs/$ID"
             Context     = $Context
@@ -58,7 +58,7 @@
 
         if ($PSCmdlet.ShouldProcess("$Owner/$Repository/$ID", 'Delete workflow run')) {
             Write-Verbose "Deleted workflow run [$ID] in [$Owner/$Repository]"
-            $null = Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @apiParams
         }
     }
 

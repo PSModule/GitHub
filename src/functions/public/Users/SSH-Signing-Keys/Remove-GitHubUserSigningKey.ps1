@@ -1,4 +1,4 @@
-﻿filter Remove-GitHubUserSigningKey {
+filter Remove-GitHubUserSigningKey {
     <#
         .SYNOPSIS
         Delete an SSH signing key for the authenticated user
@@ -22,7 +22,7 @@
     #>
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param(
         # The unique identifier of the SSH signing key.
         [Parameter(
@@ -45,14 +45,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'DELETE'
             APIEndpoint = "/user/ssh_signing_keys/$ID"
             Context     = $Context
         }
 
         if ($PSCmdlet.ShouldProcess("SSH signing key with ID [$ID]", 'DELETE')) {
-            Invoke-GitHubAPI @inputObject
+            Invoke-GitHubAPI @apiParams
         }
     }
 

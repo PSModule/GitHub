@@ -1,4 +1,4 @@
-function Revoke-GitHubAppInstallationAccessToken {
+﻿function Revoke-GitHubAppInstallationAccessToken {
     <#
         .SYNOPSIS
         Revoke an installation access token.

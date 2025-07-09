@@ -83,14 +83,14 @@
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'POST'
             APIEndpoint = "/repos/$Owner/$Name/dispatches"
             Body        = $body
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @inputObject | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             Write-Output $_.Response
         }
     }

@@ -62,7 +62,7 @@
             inputs = $Inputs
         }
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'POST'
             APIEndpoint = "/repos/$Owner/$Repository/actions/workflows/$ID/dispatches"
             Body        = $body
@@ -70,7 +70,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("$Owner/$Repository/$ID", 'Start workflow')) {
-            $null = Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @apiParams
         }
     }
 

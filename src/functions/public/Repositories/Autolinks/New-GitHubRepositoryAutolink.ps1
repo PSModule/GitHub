@@ -67,7 +67,7 @@
             is_alphanumeric = $IsAlphanumeric
         }
 
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'POST'
             APIEndpoint = "/repos/$Owner/$Repository/autolinks"
             Body        = $body
@@ -75,7 +75,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("Autolink for repository [$Owner/$Repository]", 'Create')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Invoke-GitHubAPI @apiParams | ForEach-Object {
                 Write-Output $_.Response
             }
         }

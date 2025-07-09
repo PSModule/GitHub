@@ -85,7 +85,7 @@
         $graphQLFields = ConvertTo-GitHubGraphQLField @graphParams
 
         do {
-            $inputObject = @{
+            $apiParams = @{
                 Query     = @"
 query(
     `$PerPage: Int!,
@@ -126,7 +126,7 @@ $graphQLFields
                 Context   = $Context
             }
 
-            Invoke-GitHubGraphQLQuery @inputObject | ForEach-Object {
+            Invoke-GitHubGraphQLQuery @apiParams | ForEach-Object {
                 $_.viewer.repositories.nodes | ForEach-Object {
                     [GitHubRepository]::new($_)
                 }

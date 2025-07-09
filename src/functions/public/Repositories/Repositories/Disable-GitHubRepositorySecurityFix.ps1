@@ -44,14 +44,14 @@
     }
 
     process {
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'DELETE'
             APIEndpoint = "/repos/$Owner/$Name/automated-security-fixes"
             Context     = $Context
         }
 
         if ($PSCmdlet.ShouldProcess("Security Fixes for [$Owner/$Name]", 'Disable')) {
-            Invoke-GitHubAPI @inputObject | ForEach-Object {
+            Invoke-GitHubAPI @apiParams | ForEach-Object {
                 Write-Output $_.Response
             }
         }

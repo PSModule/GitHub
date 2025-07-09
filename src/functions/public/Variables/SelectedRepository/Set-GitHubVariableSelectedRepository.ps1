@@ -56,7 +56,7 @@
         $body = @{
             selected_repository_ids = @($RepositoryID)
         }
-        $inputObject = @{
+        $apiParams = @{
             Method      = 'PUT'
             APIEndpoint = "/orgs/$Owner/actions/variables/$Name/repositories"
             Body        = $body
@@ -64,7 +64,7 @@
         }
 
         if ($PSCmdlet.ShouldProcess("access to variable [$Owner/$Name] for repository [$RepositoryID]", 'Set')) {
-            $null = Invoke-GitHubAPI @inputObject
+            $null = Invoke-GitHubAPI @apiParams
         }
     }
 
