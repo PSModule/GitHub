@@ -1,4 +1,4 @@
-﻿filter Remove-GitHubEnvironment {
+filter Remove-GitHubEnvironment {
     <#
         .SYNOPSIS
         Deletes an environment from a repository.
@@ -19,7 +19,7 @@
         [Delete environments](https://docs.github.com/rest/deployments/environments?#delete-an-environment)
     #>
     [OutputType([void])]
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param(
         # The name of the organization.
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
