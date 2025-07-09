@@ -85,7 +85,7 @@
 
     # The start time of the latest run. Resets on re-run.
     # Example: "2023-01-01T12:01:00Z"
-    [System.Nullable[datetime]] $RunStartedAt
+    [System.Nullable[datetime]] $StartedAt
 
     # The head commit details.
     # Example: (nullable-simple-commit object)
@@ -126,7 +126,7 @@
         $this.PullRequests = $_.pull_requests
         $this.CreatedAt = $_.created_at
         $this.UpdatedAt = $_.updated_at
-        $this.RunStartedAt = $_.run_started_at
+        $this.StartedAt = $_.run_started_at
         $this.Actor = [GitHubUser]::new($_.actor)
         $this.TriggeringActor = [GitHubUser]::new($_.triggering_actor)
         $this.HeadCommit = $_.head_commit
