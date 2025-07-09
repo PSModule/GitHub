@@ -21,7 +21,7 @@
     [OutputType([void])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [Alias('Remove-GitHubUserSocials')]
-    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         # Full URLs for the social media profiles to add.
         [Parameter(Mandatory)]

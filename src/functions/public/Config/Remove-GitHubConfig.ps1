@@ -1,4 +1,4 @@
-function Remove-GitHubConfig {
+﻿function Remove-GitHubConfig {
     <#
         .SYNOPSIS
         Remove a GitHub module configuration.
@@ -14,7 +14,7 @@ function Remove-GitHubConfig {
         .LINK
         https://psmodule.io/GitHub/Functions/Config/Remove-GitHubConfig
     #>
-    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         # Set the access token type.
         [Parameter()]

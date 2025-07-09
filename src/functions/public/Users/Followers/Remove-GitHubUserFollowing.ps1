@@ -1,4 +1,4 @@
-filter Remove-GitHubUserFollowing {
+﻿filter Remove-GitHubUserFollowing {
     <#
         .SYNOPSIS
         Unfollow a user
@@ -19,7 +19,7 @@ filter Remove-GitHubUserFollowing {
     #>
     [OutputType([pscustomobject])]
     [Alias('Unfollow-GitHubUser')]
-    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         # The handle for the GitHub user account.
         [Parameter(

@@ -1,4 +1,4 @@
-filter Remove-GitHubUserEmail {
+﻿filter Remove-GitHubUserEmail {
     <#
         .SYNOPSIS
         Delete an email address for the authenticated user
@@ -19,7 +19,7 @@ filter Remove-GitHubUserEmail {
     #>
     [OutputType([pscustomobject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
-    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         # Email addresses associated with the GitHub user account.
         [Parameter(

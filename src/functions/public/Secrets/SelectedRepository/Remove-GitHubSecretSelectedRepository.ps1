@@ -28,7 +28,7 @@
         Justification = 'Long links'
     )]
     [OutputType([void])]
-    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory)]
