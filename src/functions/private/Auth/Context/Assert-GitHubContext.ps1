@@ -55,7 +55,7 @@
         if ($Context.AuthType -in $AuthType) { return }
         $PSCmdlet.ThrowTerminatingError(
             [System.Management.Automation.ErrorRecord]::new(
-                [System.Exception]::new("The context '$($Context.Name)' does not match the required AuthTypes [$AuthType] for [$command]."),
+                [System.Exception]::new("The context '$($Context.Name)' is of type [$($Context.AuthType)] which does not match the required types [$($AuthType -join ', ')] for [$command]."),
                 'InvalidContextAuthType',
                 [System.Management.Automation.ErrorCategory]::InvalidArgument,
                 $Context
