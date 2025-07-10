@@ -53,9 +53,12 @@
         }
         if ($Context -eq 'Anonymous' -and $AuthType -contains 'Anonymous') { return }
         if ($Context.AuthType -in $AuthType) { return }
+
+        $errorText = "The context '$($Context.Name)' is of type [$($Context.AuthType)] which does not match the required" +
+        "types [$($AuthType -join ', ')] for [$command]."
         $PSCmdlet.ThrowTerminatingError(
             [System.Management.Automation.ErrorRecord]::new(
-                [System.Exception]::new("The context '$($Context.Name)' is of type [$($Context.AuthType)] which does not match the required types [$($AuthType -join ', ')] for [$command]."),
+                [System.Exception]::new($errorText),
                 'InvalidContextAuthType',
                 [System.Management.Automation.ErrorCategory]::InvalidArgument,
                 $Context
