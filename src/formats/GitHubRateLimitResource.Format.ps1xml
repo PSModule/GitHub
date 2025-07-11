@@ -21,7 +21,10 @@
                         <Label>Remaining</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>Reset</Label>
+                        <Label>ResetsAt</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>ResetsIn</Label>
                     </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
@@ -40,7 +43,10 @@
                                 <PropertyName>Remaining</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>Reset</PropertyName>
+                                <PropertyName>ResetsAt</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>ResetsIn</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>

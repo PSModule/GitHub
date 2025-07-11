@@ -34,7 +34,7 @@
     }
 
     process {
-        $checkPoint = (Get-Date).AddHours($TimeSpan)
+        $checkPoint = ([DateTime]::Now).AddHours($TimeSpan)
         Get-GitHubAppWebhookDeliveryByList -Context $Context -PerPage $PerPage | Where-Object { $_.DeliveredAt -gt $checkPoint } |
             Group-Object -Property GUID | Where-Object { $_.Group.Status -notcontains 'OK' } | ForEach-Object {
                 $refObject = $_.Group | Sort-Object -Property DeliveredAt

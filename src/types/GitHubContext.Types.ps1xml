@@ -4,10 +4,25 @@
         <Name>UserGitHubContext</Name>
         <Members>
             <ScriptProperty>
-                <Name>Remaining</Name>
+                <Name>TokenExpiresIn</Name>
                 <GetScriptBlock>
-                    if ($null -eq $this.TokenExpirationDate) { return }
-                    New-TimeSpan -Start ([datetime]::Now) -End $this.TokenExpirationDate
+                    if ($null -eq $this.TokenExpiresAt) { return }
+                    $timeRemaining = $this.TokenExpiresAt - [DateTime]::Now
+                    if ($timeRemaining.TotalSeconds -lt 0) {
+                    return [TimeSpan]::Zero
+                    }
+                    return $timeRemaining
+                </GetScriptBlock>
+            </ScriptProperty>
+            <ScriptProperty>
+                <Name>RefreshTokenExpiresIn</Name>
+                <GetScriptBlock>
+                    if ($null -eq $this.RefreshTokenExpiresAt) { return }
+                    $timeRemaining = $this.RefreshTokenExpiresAt - [DateTime]::Now
+                    if ($timeRemaining.TotalSeconds -lt 0) {
+                    return [TimeSpan]::Zero
+                    }
+                    return $timeRemaining
                 </GetScriptBlock>
             </ScriptProperty>
         </Members>
@@ -16,10 +31,14 @@
         <Name>InstallationGitHubContext</Name>
         <Members>
             <ScriptProperty>
-                <Name>Remaining</Name>
+                <Name>TokenExpiresIn</Name>
                 <GetScriptBlock>
-                    if ($null -eq $this.TokenExpirationDate) { return }
-                    New-TimeSpan -Start ([datetime]::Now) -End $this.TokenExpirationDate
+                    if ($null -eq $this.TokenExpiresAt) { return }
+                    $timeRemaining = $this.TokenExpiresAt - [DateTime]::Now
+                    if ($timeRemaining.TotalSeconds -lt 0) {
+                    return [TimeSpan]::Zero
+                    }
+                    return $timeRemaining
                 </GetScriptBlock>
             </ScriptProperty>
         </Members>
