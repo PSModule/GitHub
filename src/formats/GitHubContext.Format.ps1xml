@@ -27,7 +27,7 @@
                         <Label>TokenExpiresAt</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>Remaining</Label>
+                        <Label>TokenExpiresIn</Label>
                     </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
@@ -270,6 +270,9 @@
                                 <PropertyName>TokenExpiresAt</PropertyName>
                             </ListItem>
                             <ListItem>
+                                <PropertyName>TokenExpiresIn</PropertyName>
+                            </ListItem>
+                            <ListItem>
                                 <PropertyName>InstallationType</PropertyName>
                             </ListItem>
                             <ListItem>
@@ -344,7 +347,13 @@
                                 <PropertyName>TokenExpiresAt</PropertyName>
                             </ListItem>
                             <ListItem>
+                                <PropertyName>TokenExpiresIn</PropertyName>
+                            </ListItem>
+                            <ListItem>
                                 <PropertyName>RefreshTokenExpiresAt</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>RefreshTokenExpiresIn</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>ApiBaseUri</PropertyName>
