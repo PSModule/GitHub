@@ -9,7 +9,7 @@
                     if ($null -eq $this.ExpiresAt) { return }
                     $timeRemaining = $this.ExpiresAt - [DateTime]::Now
                     if ($timeRemaining.TotalSeconds -lt 0) {
-                        return [TimeSpan]::Zero
+                    return [TimeSpan]::Zero
                     }
                     return $timeRemaining
                 </GetScriptBlock>

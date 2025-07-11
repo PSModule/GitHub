@@ -4,10 +4,6 @@
         <Name>UserGitHubContext</Name>
         <Members>
             <ScriptProperty>
-                <Name>TokenExpiresAt</Name>
-                <GetScriptBlock>$this.TokenExpiresAt</GetScriptBlock>
-            </ScriptProperty>
-            <ScriptProperty>
                 <Name>TokenExpiresIn</Name>
                 <GetScriptBlock>
                     if ($null -eq $this.TokenExpiresAt) { return }
@@ -17,10 +13,6 @@
                     }
                     return $timeRemaining
                 </GetScriptBlock>
-            </ScriptProperty>
-            <ScriptProperty>
-                <Name>RefreshTokenExpiresAt</Name>
-                <GetScriptBlock>$this.RefreshTokenExpiresAt</GetScriptBlock>
             </ScriptProperty>
             <ScriptProperty>
                 <Name>RefreshTokenExpiresIn</Name>
@@ -38,10 +30,6 @@
     <Type>
         <Name>InstallationGitHubContext</Name>
         <Members>
-            <ScriptProperty>
-                <Name>TokenExpiresAt</Name>
-                <GetScriptBlock>$this.TokenExpiresAt</GetScriptBlock>
-            </ScriptProperty>
             <ScriptProperty>
                 <Name>TokenExpiresIn</Name>
                 <GetScriptBlock>
