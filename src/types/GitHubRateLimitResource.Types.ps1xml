@@ -4,10 +4,6 @@
         <Name>GitHubRateLimitResource</Name>
         <Members>
             <ScriptProperty>
-                <Name>ResetsAt</Name>
-                <GetScriptBlock>$this.ResetsAt</GetScriptBlock>
-            </ScriptProperty>
-            <ScriptProperty>
                 <Name>ResetsIn</Name>
                 <GetScriptBlock>
                     if ($null -eq $this.ResetsAt) { return }
