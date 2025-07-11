@@ -72,10 +72,10 @@
                             $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $Context.AuthClientID -HostName $Context.HostName
                         }
                         $Context.Token = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
-                        $Context.TokenExpiresAt = (Get-Date).AddSeconds($tokenResponse.expires_in)
+                        $Context.TokenExpiresAt = ([DateTime]::Now).AddSeconds($tokenResponse.expires_in)
                         $Context.TokenType = $tokenResponse.access_token -replace $script:GitHub.TokenPrefixPattern
                         $Context.RefreshToken = ConvertTo-SecureString -AsPlainText $tokenResponse.refresh_token
-                        $Context.RefreshTokenExpiresAt = (Get-Date).AddSeconds($tokenResponse.refresh_token_expires_in)
+                        $Context.RefreshTokenExpiresAt = ([DateTime]::Now).AddSeconds($tokenResponse.refresh_token_expires_in)
 
                         if ($PSCmdlet.ShouldProcess('Access token', 'Update/refresh')) {
                             Set-Context -Context $Context -Vault $script:GitHub.ContextVault
