@@ -580,26 +580,53 @@ Describe 'API' {
             }
         }
 
-        Context 'Rate-Limit' {
+        Context 'RateLimit' {
+            BeforeAll {
+                $rateLimits = Get-GitHubRateLimit
+            }
             It 'Get-GitHubRateLimit - Gets the rate limit status for the authenticated user' {
-                $rateLimit = Get-GitHubRateLimit
                 LogGroup 'RateLimit' {
-                    Write-Host ($rateLimit | Format-Table | Out-String)
+                    Write-Host ($rateLimits | Format-Table | Out-String)
                 }
-                $rateLimit | Should -Not -BeNullOrEmpty
+                $rateLimits | Should -Not -BeNullOrEmpty
             }
 
             It 'Get-GitHubRateLimit - ResetsAt property should be a datetime' {
-                $rateLimit = Get-GitHubRateLimit | Select-Object -First 1
+                $rateLimit = $rateLimits | Select-Object -First 1
                 $rateLimit.ResetsAt | Should -BeOfType [DateTime]
                 $rateLimit.ResetsAt | Should -BeGreaterThan ([DateTime]::Now)
             }
 
             It 'Get-GitHubRateLimit - ResetsIn property should be calculated correctly' {
-                $rateLimit = Get-GitHubRateLimit | Select-Object -First 1
+                $rateLimit = $rateLimits | Select-Object -First 1
                 $rateLimit.ResetsIn | Should -BeOfType [TimeSpan]
                 $rateLimit.ResetsIn.TotalSeconds | Should -BeGreaterThan 0
                 $rateLimit.ResetsIn.TotalHours | Should -BeLessOrEqual 1
+            }
+
+            It 'Get-GitHubRateLimit - Should return objects with names core and rate' {
+                LogGroup 'RateLimit Names' {
+                    Write-Host ($rateLimits.Name | Out-String)
+                }
+                $rateLimits.Name | Should -Contain 'core'
+                $rateLimits.Name | Should -Contain 'rate'
+            }
+
+            It 'Get-GitHubRateLimit - Objects should be of type GitHubRateLimitResource' {
+                $rateLimits | Should -BeOfType 'GitHubRateLimitResource'
+            }
+
+            It 'Get-GitHubRateLimit - Should have correct property types for all objects' {
+                $rateLimits.Name | Should -BeOfType [String]
+                $rateLimits.Limit | Should -BeOfType [UInt64]
+                $rateLimits.Used | Should -BeOfType [UInt64]
+                $rateLimits.Remaining | Should -BeOfType [UInt64]
+                $rateLimits.ResetsAt | Should -BeOfType [DateTime]
+                $rateLimits.ResetsIn | Should -BeOfType [TimeSpan]
+                $rateLimits.Name | Should -Not -BeNullOrEmpty
+                $rateLimits.Limit | Should -BeGreaterOrEqual 0
+                $rateLimits.Used | Should -BeGreaterOrEqual 0
+                $rateLimits.Remaining | Should -BeGreaterOrEqual 0
             }
         }
 
