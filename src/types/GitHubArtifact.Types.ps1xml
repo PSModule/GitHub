@@ -13,7 +13,6 @@
                     }
                     return $timeRemaining
                 </GetScriptBlock>
-                <ScriptPropertyType>TimeSpan</ScriptPropertyType>
             </ScriptProperty>
         </Members>
     </Type>
