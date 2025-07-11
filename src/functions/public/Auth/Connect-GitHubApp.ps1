@@ -125,21 +125,21 @@
             $token = New-GitHubAppInstallationAccessToken -Context $Context -ID $installation.id
 
             $contextParams = @{
-                AuthType            = [string]'IAT'
-                TokenType           = [string]'ghs'
-                DisplayName         = [string]$Context.DisplayName
-                ApiBaseUri          = [string]$Context.ApiBaseUri
-                ApiVersion          = [string]$Context.ApiVersion
-                HostName            = [string]$Context.HostName
-                HttpVersion         = [string]$Context.HttpVersion
-                PerPage             = [int]$Context.PerPage
-                ClientID            = [string]$Context.ClientID
-                InstallationID      = [string]$installation.id
-                Permissions         = [pscustomobject]$installation.permissions
-                Events              = [string[]]$installation.events
-                InstallationType    = [string]$installation.Type
-                Token               = [securestring]$token.Token
-                TokenExpiresAt      = [datetime]$token.ExpiresAt
+                AuthType         = [string]'IAT'
+                TokenType        = [string]'ghs'
+                DisplayName      = [string]$Context.DisplayName
+                ApiBaseUri       = [string]$Context.ApiBaseUri
+                ApiVersion       = [string]$Context.ApiVersion
+                HostName         = [string]$Context.HostName
+                HttpVersion      = [string]$Context.HttpVersion
+                PerPage          = [int]$Context.PerPage
+                ClientID         = [string]$Context.ClientID
+                InstallationID   = [string]$installation.id
+                Permissions      = [pscustomobject]$installation.permissions
+                Events           = [string[]]$installation.events
+                InstallationType = [string]$installation.Type
+                Token            = [securestring]$token.Token
+                TokenExpiresAt   = [datetime]$token.ExpiresAt
             }
 
             switch ($installation.Type) {
