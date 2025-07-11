@@ -12,22 +12,17 @@
     [UInt64] $Remaining
 
     # The time when the rate limit will reset.
-    [DateTime] $Reset
+    [DateTime] $ResetsAt
 
     # Simple parameterless constructor
     GitHubRateLimitResource() {}
 
-    # Constructor that initializes the class from a hashtable
-    GitHubRateLimitResource([hashtable]$Properties) {
-        foreach ($Property in $Properties.Keys) {
-            $this.$Property = $Properties.$Property
-        }
-    }
-
     # Constructor that initializes the class from a PSCustomObject
-    GitHubRateLimitResource([PSCustomObject]$Object) {
-        $Object.PSObject.Properties | ForEach-Object {
-            $this.($_.Name) = $_.Value
-        }
+    GitHubRateLimitResource([pscustomobject]$Object) {
+        $this.Name = $Object.name
+        $this.Limit = $Object.limit
+        $this.Used = $Object.used
+        $this.Remaining = $Object.remaining
+        $this.ResetsAt = [DateTime]::UnixEpoch.AddSeconds($Object.reset).ToLocalTime()
     }
 }

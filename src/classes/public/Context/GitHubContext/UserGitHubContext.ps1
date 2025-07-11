@@ -13,14 +13,14 @@
 
     # The token expiration date.
     # 2024-01-01-00:00:00
-    [System.Nullable[datetime]] $TokenExpirationDate
+    [System.Nullable[datetime]] $TokenExpiresAt
 
     # The refresh token.
     [securestring] $RefreshToken
 
     # The refresh token expiration date.
     # 2024-01-01-00:00:00
-    [System.Nullable[datetime]] $RefreshTokenExpirationDate
+    [System.Nullable[datetime]] $RefreshTokenExpiresAt
 
     UserGitHubContext() {}
 
@@ -46,8 +46,8 @@
         $this.AuthClientID = $Object.AuthClientID
         $this.DeviceFlowType = $Object.DeviceFlowType
         $this.Scope = $Object.Scope
-        $this.TokenExpirationDate = $Object.TokenExpirationDate
+        $this.TokenExpiresAt = $Object.TokenExpiresAt
         $this.RefreshToken = $Object.RefreshToken
-        $this.RefreshTokenExpirationDate = $Object.RefreshTokenExpirationDate
+        $this.RefreshTokenExpiresAt = $Object.RefreshTokenExpiresAt
     }
 }

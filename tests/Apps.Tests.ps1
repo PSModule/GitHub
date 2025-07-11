@@ -178,7 +178,7 @@ Describe 'Apps' {
                 It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
                     $context | Should -BeOfType 'InstallationGitHubContext'
                     $context.ClientID | Should -Be $githubApp.ClientID
-                    $context.TokenExpirationDate | Should -BeOfType [datetime]
+                    $context.TokenExpiresAt | Should -BeOfType [datetime]
                     $context.InstallationID | Should -BeOfType [uint64]
                     $context.InstallationID | Should -BeGreaterThan 0
                     $context.Permissions | Should -BeOfType [PSCustomObject]
@@ -200,6 +200,12 @@ Describe 'Apps' {
                     $context.TokenType | Should -Be 'ghs'
                     $context.HttpVersion | Should -Be $config.HttpVersion
                     $context.PerPage | Should -Be $config.PerPage
+                }
+
+                It 'Connect-GitHubApp - TokenExpiresIn property should be calculated correctly' {
+                    $context.TokenExpiresIn | Should -BeOfType [TimeSpan]
+                    $context.TokenExpiresIn.TotalMinutes | Should -BeGreaterThan 0
+                    $context.TokenExpiresIn.TotalMinutes | Should -BeLessOrEqual 60
                 }
 
                 It 'Revoked GitHub App token should fail on API call' -Skip:($TokenType -eq 'GITHUB_TOKEN') {

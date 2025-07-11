@@ -24,7 +24,7 @@
                         <Label>TokenType</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>TokenExpirationDate</Label>
+                        <Label>TokenExpiresAt</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
                         <Label>Remaining</Label>
@@ -50,7 +50,7 @@
                                 <PropertyName>TokenType</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>TokenExpirationDate</PropertyName>
+                                <PropertyName>TokenExpiresAt</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <ScriptBlock>
@@ -61,7 +61,8 @@
                                     if ($_.Remaining -lt 0) {
                                     $text = "Expired"
                                     } else {
-                                    $text = "$($_.Remaining.Hours)h $($_.Remaining.Minutes)m $($_.Remaining.Seconds)s"
+                                    $text = "$($_.Remaining.Hours)h $($_.Remaining.Minutes)m
+                                    $($_.Remaining.Seconds)s"
                                     }
 
                                     if ($Host.UI.SupportsVirtualTerminal -and
@@ -266,7 +267,7 @@
                                 <PropertyName>InstallationID</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>TokenExpirationDate</PropertyName>
+                                <PropertyName>TokenExpiresAt</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>InstallationType</PropertyName>
@@ -340,10 +341,10 @@
                                 <PropertyName>Scope</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>TokenExpirationDate</PropertyName>
+                                <PropertyName>TokenExpiresAt</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>RefreshTokenExpirationDate</PropertyName>
+                                <PropertyName>RefreshTokenExpiresAt</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>ApiBaseUri</PropertyName>

@@ -218,14 +218,14 @@
                     switch ($Mode) {
                         'GitHubApp' {
                             $context += @{
-                                Token                      = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
-                                TokenExpirationDate        = (Get-Date).AddSeconds($tokenResponse.expires_in)
-                                TokenType                  = $tokenResponse.access_token -replace $script:GitHub.TokenPrefixPattern
-                                AuthClientID               = $authClientID
-                                DeviceFlowType             = $Mode
-                                RefreshToken               = ConvertTo-SecureString -AsPlainText $tokenResponse.refresh_token
-                                RefreshTokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.refresh_token_expires_in)
-                                Scope                      = $tokenResponse.scope
+                                Token                    = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
+                                TokenExpiresAt           = (Get-Date).AddSeconds($tokenResponse.expires_in)
+                                TokenType                = $tokenResponse.access_token -replace $script:GitHub.TokenPrefixPattern
+                                AuthClientID             = $authClientID
+                                DeviceFlowType           = $Mode
+                                RefreshToken             = ConvertTo-SecureString -AsPlainText $tokenResponse.refresh_token
+                                RefreshTokenExpiresAt    = (Get-Date).AddSeconds($tokenResponse.refresh_token_expires_in)
+                                Scope                    = $tokenResponse.scope
                             }
                         }
                         'OAuthApp' {

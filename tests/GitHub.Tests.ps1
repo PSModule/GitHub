@@ -588,6 +588,19 @@ Describe 'API' {
                 }
                 $rateLimit | Should -Not -BeNullOrEmpty
             }
+
+            It 'Get-GitHubRateLimit - ResetsAt property should be a datetime' {
+                $rateLimit = Get-GitHubRateLimit | Select-Object -First 1
+                $rateLimit.ResetsAt | Should -BeOfType [DateTime]
+                $rateLimit.ResetsAt | Should -BeGreaterThan ([DateTime]::Now)
+            }
+
+            It 'Get-GitHubRateLimit - ResetsIn property should be calculated correctly' {
+                $rateLimit = Get-GitHubRateLimit | Select-Object -First 1
+                $rateLimit.ResetsIn | Should -BeOfType [TimeSpan]
+                $rateLimit.ResetsIn.TotalSeconds | Should -BeGreaterThan 0
+                $rateLimit.ResetsIn.TotalHours | Should -BeLessOrEqual 1
+            }
         }
 
         Context 'License' {

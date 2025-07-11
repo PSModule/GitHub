@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Types>
+    <Type>
+        <Name>GitHubJsonWebToken</Name>
+        <Members>
+            <ScriptProperty>
+                <Name>ExpiresIn</Name>
+                <GetScriptBlock>
+                    if ($null -eq $this.ExpiresAt) { return }
+                    $timeRemaining = $this.ExpiresAt - [DateTime]::Now
+                    if ($timeRemaining.TotalSeconds -lt 0) {
+                        return [TimeSpan]::Zero
+                    }
+                    return $timeRemaining
+                </GetScriptBlock>
+                <ScriptPropertyType>TimeSpan</ScriptPropertyType>
+            </ScriptProperty>
+        </Members>
+    </Type>
+</Types>

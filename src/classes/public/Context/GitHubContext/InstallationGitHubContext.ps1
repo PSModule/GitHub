@@ -4,7 +4,7 @@
 
     # The token expiration date.
     # 2024-01-01-00:00:00
-    [System.Nullable[datetime]] $TokenExpirationDate
+    [System.Nullable[datetime]] $TokenExpiresAt
 
     # The installation ID.
     [System.Nullable[uint64]] $InstallationID
@@ -43,7 +43,7 @@
         $this.HttpVersion = $Object.HttpVersion
         $this.PerPage = $Object.PerPage
         $this.ClientID = $Object.ClientID
-        $this.TokenExpirationDate = $Object.TokenExpirationDate
+        $this.TokenExpiresAt = $Object.TokenExpiresAt
         $this.InstallationID = $Object.InstallationID
         $this.Permissions = $Object.Permissions
         $this.Events = $Object.Events

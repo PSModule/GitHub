@@ -139,7 +139,7 @@
                 Events              = [string[]]$installation.events
                 InstallationType    = [string]$installation.Type
                 Token               = [securestring]$token.Token
-                TokenExpirationDate = [datetime]$token.ExpiresAt
+                TokenExpiresAt      = [datetime]$token.ExpiresAt
             }
 
             switch ($installation.Type) {
