@@ -1,24 +1,3 @@
 Test:
-  SourceCode:
-    Windows:
-      Skip: true
-    MacOS:
-      Skip: true
-  PSModule:
-    Windows:
-      Skip: true
-    MacOS:
-      Skip: true
-  Module:
-    Windows:
-      Skip: true
-    MacOS:
-      Skip: true
-  TestResults:
-    Skip: true
   CodeCoverage:
-    Skip: true
     PercentTarget: 50
-Build:
-  Docs:
-    Skip: true
