@@ -59,23 +59,22 @@
                                     }
 
                                     if ($_.TokenExpiresIn -lt 0) {
-                                    $text = "Expired"
+                                    $text = 'Expired'
                                     } else {
-                                    $text = $_.TokenExpiresIn | Format-TimeSpan -Precision 3
-                                    -BaseUnit Hours
+                                    $text = $_.TokenExpiresIn.ToString('hh\:mm\:ss')
                                     }
 
-                                    if ($HostObject.UI.SupportsVirtualTerminal -and
+                                    if ($Host.UI.SupportsVirtualTerminal -and
                                     ($env:GITHUB_ACTIONS -ne 'true')) {
                                     switch ($_.AuthType) {
                                     'UAT' {
-                                    $MaxValue = [TimeSpan]::FromHours(8)
+                                    $maxValue = [TimeSpan]::FromHours(8)
                                     }
                                     'IAT' {
-                                    $MaxValue = [TimeSpan]::FromHours(1)
+                                    $maxValue = [TimeSpan]::FromHours(1)
                                     }
                                     }
-                                    $ratio = [Math]::Min(($_.TokenExpiresIn / $MaxValue), 1)
+                                    $ratio = [Math]::Min(($_.TokenExpiresIn / $maxValue), 1)
                                     [GitHubFormatter]::FormatColorByRatio($ratio, $text)
                                     } else {
                                     $text

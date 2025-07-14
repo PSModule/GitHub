@@ -54,21 +54,20 @@
                                     if ($_.ResetsIn -lt 0) {
                                     $text = 'Expired'
                                     } else {
-                                    $text = $_.ResetsIn | Format-TimeSpan -Precision 3 -BaseUnit
-                                    Hours
+                                    $text = $_.ResetsIn.ToString('hh\:mm\:ss')
                                     }
 
-                                    if ($HostObject.UI.SupportsVirtualTerminal -and
+                                    if ($Host.UI.SupportsVirtualTerminal -and
                                     ($env:GITHUB_ACTIONS -ne 'true')) {
-                                    $MaxValue = if ($_.Name -in @('source_import',
+                                    if ($_.Name -in @('source_import',
                                     'dependency_snapshots', 'code_scanning_autofix', 'search',
                                     'dependency_sbom', 'code_search')) {
-                                    [TimeSpan]::FromMinutes(1)
+                                    $maxValue = [TimeSpan]::FromMinutes(1)
                                     } else {
-                                    [TimeSpan]::FromHours(1)
+                                    $maxValue = [TimeSpan]::FromHours(1)
                                     }
 
-                                    $ratio = [Math]::Min(($_.ResetsIn / $MaxValue), 1)
+                                    $ratio = [Math]::Min(($_.ResetsIn / $maxValue), 1)
                                     [GitHubFormatter]::FormatColorByRatio($ratio, $text)
                                     } else {
                                     $text
