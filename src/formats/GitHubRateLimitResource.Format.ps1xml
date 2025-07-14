@@ -54,7 +54,8 @@
                                     if ($_.ResetsIn -lt 0) {
                                     $text = 'Expired'
                                     } else {
-                                    $text = $_.ResetsIn | Format-TimeSpan
+                                    $text = $_.ResetsIn | Format-TimeSpan -Precision 3 -BaseUnit
+                                    Hours
                                     }
 
                                     $MaxValue = if ($_.Name -in @('source_import',
