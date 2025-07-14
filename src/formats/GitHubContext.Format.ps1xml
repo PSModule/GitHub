@@ -64,8 +64,6 @@
                                     $text = $_.TokenExpiresIn | Format-TimeSpan
                                     }
 
-                                    if ($Host.UI.SupportsVirtualTerminal -and
-                                    ($env:GITHUB_ACTIONS -ne 'true')) {
                                     switch ($_.AuthType) {
                                     'UAT' {
                                     $MaxValue = [TimeSpan]::FromHours(8)
@@ -75,26 +73,8 @@
                                     }
                                     }
                                     $ratio = [Math]::Min(($_.TokenExpiresIn / $MaxValue), 1)
-
-                                    if ($ratio -ge 1) {
-                                    $r = 0
-                                    $g = 255
-                                    } elseif ($ratio -le 0) {
-                                    $r = 255
-                                    $g = 0
-                                    } elseif ($ratio -ge 0.5) {
-                                    $r = [Math]::Round(255 * (2 - 2 * $ratio))
-                                    $g = 255
-                                    } else {
-                                    $r = 255
-                                    $g = [Math]::Round(255 * (2 * $ratio))
-                                    }
-                                    $b = 0
-                                    $color = $PSStyle.Foreground.FromRgb($r, $g, $b)
-                                    "$color$text$($PSStyle.Reset)"
-                                    } else {
-                                    $text
-                                    }
+                                    [GitHubFormatter]::FormatColorByRatio($ratio, $text, $Host,
+                                    $PSStyle)
                                 </ScriptBlock>
                             </TableColumnItem>
                         </TableColumnItems>
