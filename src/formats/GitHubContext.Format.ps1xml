@@ -54,15 +54,14 @@
                             </TableColumnItem>
                             <TableColumnItem>
                                 <ScriptBlock>
-                                    if ($null -eq $_.Remaining) {
+                                    if ($null -eq $_.TokenExpiresIn) {
                                     return
                                     }
 
-                                    if ($_.Remaining -lt 0) {
+                                    if ($_.TokenExpiresIn -lt 0) {
                                     $text = "Expired"
                                     } else {
-                                    $text = "$($_.Remaining.Hours)h $($_.Remaining.Minutes)m
-                                    $($_.Remaining.Seconds)s"
+                                    $text = $_.TokenExpiresIn | Format-TimeSpan
                                     }
 
                                     if ($Host.UI.SupportsVirtualTerminal -and
@@ -75,7 +74,7 @@
                                     $MaxValue = [TimeSpan]::FromHours(1)
                                     }
                                     }
-                                    $ratio = [Math]::Min(($_.Remaining / $MaxValue), 1)
+                                    $ratio = [Math]::Min(($_.TokenExpiresIn / $MaxValue), 1)
 
                                     if ($ratio -ge 1) {
                                     $r = 0
