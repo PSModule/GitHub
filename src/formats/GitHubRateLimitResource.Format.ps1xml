@@ -58,6 +58,8 @@
                                     Hours
                                     }
 
+                                    if ($HostObject.UI.SupportsVirtualTerminal -and
+                                    ($env:GITHUB_ACTIONS -ne 'true')) {
                                     $MaxValue = if ($_.Name -in @('source_import',
                                     'dependency_snapshots', 'code_scanning_autofix', 'search',
                                     'dependency_sbom', 'code_search')) {
@@ -67,8 +69,10 @@
                                     }
 
                                     $ratio = [Math]::Min(($_.ResetsIn / $MaxValue), 1)
-                                    [GitHubFormatter]::FormatColorByRatio($ratio, $text, $Host,
-                                    $PSStyle)
+                                    [GitHubFormatter]::FormatColorByRatio($ratio, $text)
+                                    } else {
+                                    $text
+                                    }
                                 </ScriptBlock>
                             </TableColumnItem>
                         </TableColumnItems>

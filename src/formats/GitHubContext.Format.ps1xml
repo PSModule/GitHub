@@ -65,6 +65,8 @@
                                     -BaseUnit Hours
                                     }
 
+                                    if ($HostObject.UI.SupportsVirtualTerminal -and
+                                    ($env:GITHUB_ACTIONS -ne 'true')) {
                                     switch ($_.AuthType) {
                                     'UAT' {
                                     $MaxValue = [TimeSpan]::FromHours(8)
@@ -74,8 +76,10 @@
                                     }
                                     }
                                     $ratio = [Math]::Min(($_.TokenExpiresIn / $MaxValue), 1)
-                                    [GitHubFormatter]::FormatColorByRatio($ratio, $text, $Host,
-                                    $PSStyle)
+                                    [GitHubFormatter]::FormatColorByRatio($ratio, $text)
+                                    } else {
+                                    $text
+                                    }
                                 </ScriptBlock>
                             </TableColumnItem>
                         </TableColumnItems>
