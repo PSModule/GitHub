@@ -46,7 +46,33 @@
                                 <PropertyName>ResetsAt</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>ResetsIn</PropertyName>
+                                <ScriptBlock>
+                                    if ($null -eq $_.ResetsIn) {
+                                    return
+                                    }
+
+                                    if ($_.ResetsIn -lt 0) {
+                                    $text = 'Expired'
+                                    } else {
+                                    $text = $_.ResetsIn.ToString('hh\:mm\:ss')
+                                    }
+
+                                    if ($Host.UI.SupportsVirtualTerminal -and
+                                    ($env:GITHUB_ACTIONS -ne 'true')) {
+                                    if ($_.Name -in @('source_import',
+                                    'dependency_snapshots', 'code_scanning_autofix', 'search',
+                                    'dependency_sbom', 'code_search')) {
+                                    $maxValue = [TimeSpan]::FromMinutes(1)
+                                    } else {
+                                    $maxValue = [TimeSpan]::FromHours(1)
+                                    }
+
+                                    $ratio = [Math]::Min(($_.ResetsIn / $maxValue), 1)
+                                    [GitHubFormatter]::FormatColorByRatio($ratio, $text)
+                                    } else {
+                                    $text
+                                    }
+                                </ScriptBlock>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
