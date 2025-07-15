@@ -45,27 +45,18 @@
                             </TableColumnItem>
                             <TableColumnItem>
                                 <ScriptBlock>
-                                    if ($_.Size -lt 1KB) {
-                                    '{0} B' -f $_.Size
-                                    } elseif ($_.Size -lt 1MB) {
-                                    '{0:F1} KB' -f ($_.Size / 1KB)
-                                    } elseif ($_.Size -lt 1GB) {
-                                    '{0:F1} MB' -f ($_.Size / 1MB)
-                                    } else {
-                                    '{0:F1} GB' -f ($_.Size / 1GB)
-                                    }
+                                    [GitHubFormatter]::FormatFileSize($_.Size)
                                 </ScriptBlock>
                                 <Alignment>Right</Alignment>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>DownloadCount</PropertyName>
-                                <Alignment>Right</Alignment>
+                                <PropertyName>Downloads</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <ScriptBlock>$_.CreatedAt.ToString('yyyy-MM-dd HH:mm')</ScriptBlock>
+                                <PropertyName>CreatedAt</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <ScriptBlock>$_.UpdatedAt.ToString('yyyy-MM-dd HH:mm')</ScriptBlock>
+                                <PropertyName>UpdatedAt</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
