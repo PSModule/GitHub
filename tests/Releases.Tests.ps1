@@ -655,9 +655,20 @@ ID,Name,Value
                 $assets.Count | Should -BeGreaterThan 0
                 foreach ($asset in $assets) {
                     $asset.ID | Should -Not -BeNullOrEmpty
+                    $asset.NodeID | Should -Not -BeNullOrEmpty
+                    $asset.Url | Should -Not -BeNullOrEmpty
                     $asset.Name | Should -Not -BeNullOrEmpty
+                    $asset.Label | Should -Not -BeNullOrEmpty
+                    $asset.State | Should -Be 'uploaded'
+                    $asset.ContentType | Should -Not -BeNullOrEmpty
                     $asset.Size | Should -BeGreaterOrEqual 0
-                    $asset.DownloadCount | Should -BeGreaterOrEqual 0
+                    $asset.Downloads | Should -BeGreaterOrEqual 0
+                    $asset.CreatedAt | Should -Not -BeNullOrEmpty
+                    $asset.CreatedAt | Should -BeOfType 'DateTime'
+                    $asset.UpdatedAt | Should -Not -BeNullOrEmpty
+                    $asset.UpdatedAt | Should -BeOfType 'DateTime'
+                    $asset.UploadedBy | Should -Not -BeNullOrEmpty
+                    $asset.UploadedBy | Should -BeOfType 'GitHubUser'
                 }
             }
         }
