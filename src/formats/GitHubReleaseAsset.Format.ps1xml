@@ -51,6 +51,7 @@
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Downloads</PropertyName>
+                                <Alignment>Right</Alignment>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>CreatedAt</PropertyName>
