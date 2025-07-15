@@ -21,13 +21,11 @@
         https://psmodule.io/GitHub/Functions/Apps/GitHub%20App/New-GitHubJWT
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-        'PSAvoidLongLines',
-        '',
+        'PSAvoidLongLines', '',
         Justification = 'Contains a long link.'
     )]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-        'PSAvoidUsingConvertToSecureStringWithPlainText',
-        '',
+        'PSAvoidUsingConvertToSecureStringWithPlainText', '',
         Justification = 'Generated JWT is a plaintext string.'
     )]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
