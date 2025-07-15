@@ -65,54 +65,21 @@
     }
 
     process {
+        # Create unsigned JWT (header.payload)
+        $unsignedJWT = New-GitHubAppJWT -ClientId $ClientId
+
+        # Add signature to the JWT using local RSA signing
         if ($PrivateKeyFilePath) {
-            if (-not (Test-Path -Path $PrivateKeyFilePath)) {
-                throw "The private key path [$PrivateKeyFilePath] does not exist."
-            }
-
-            $PrivateKey = Get-Content -Path $PrivateKeyFilePath -Raw
+            $jwt = Add-GitHubJWTSignature -UnsignedJWT $unsignedJWT -PrivateKeyFilePath $PrivateKeyFilePath
+        } else {
+            $jwt = Add-GitHubJWTSignature -UnsignedJWT $unsignedJWT -PrivateKey $PrivateKey
         }
 
-        if ($PrivateKey -is [securestring]) {
-            $PrivateKey = $PrivateKey | ConvertFrom-SecureString -AsPlainText
-        }
-
-        $header = [Convert]::ToBase64String(
-            [System.Text.Encoding]::UTF8.GetBytes(
-                (
-                    ConvertTo-Json -InputObject @{
-                        alg = 'RS256'
-                        typ = 'JWT'
-                    }
-                )
-            )
-        ).TrimEnd('=').Replace('+', '-').Replace('/', '_')
-
+        # Extract timing information for the response object
         $iat = [System.DateTimeOffset]::UtcNow.AddSeconds(-$script:GitHub.Config.JwtTimeTolerance).ToUnixTimeSeconds()
         $exp = [System.DateTimeOffset]::UtcNow.AddSeconds($script:GitHub.Config.JwtTimeTolerance).ToUnixTimeSeconds()
-        $payload = [Convert]::ToBase64String(
-            [System.Text.Encoding]::UTF8.GetBytes(
-                (
-                    ConvertTo-Json -InputObject @{
-                        iat = $iat
-                        exp = $exp
-                        iss = $ClientId
-                    }
-                )
-            )
-        ).TrimEnd('=').Replace('+', '-').Replace('/', '_')
 
-        $rsa = [System.Security.Cryptography.RSA]::Create()
-        $rsa.ImportFromPem($PrivateKey)
-
-        $signature = [Convert]::ToBase64String(
-            $rsa.SignData(
-                [System.Text.Encoding]::UTF8.GetBytes("$header.$payload"),
-                [System.Security.Cryptography.HashAlgorithmName]::SHA256,
-                [System.Security.Cryptography.RSASignaturePadding]::Pkcs1
-            )
-        ).TrimEnd('=').Replace('+', '-').Replace('/', '_')
-        $jwt = "$header.$payload.$signature"
+        # Return GitHubJsonWebToken object
         [GitHubJsonWebToken]@{
             Token     = ConvertTo-SecureString -String $jwt -AsPlainText
             IssuedAt  = [DateTime]::UnixEpoch.AddSeconds($iat)
@@ -127,8 +94,7 @@
 
     clean {
         Remove-Variable -Name jwt -ErrorAction SilentlyContinue
-        Remove-Variable -Name rsa -ErrorAction SilentlyContinue
-        Remove-Variable -Name signature -ErrorAction SilentlyContinue
+        Remove-Variable -Name unsignedJWT -ErrorAction SilentlyContinue
         [System.GC]::Collect()
     }
 }
