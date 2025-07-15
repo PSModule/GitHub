@@ -651,7 +651,7 @@ ID,Name,Value
                     Write-Host ($assets | Format-List -Property * | Out-String)
                 }
                 $assets | Should -Not -BeNullOrEmpty
-                $assets | Should -BeOfType 'GitHubReleaseAsset'
+                $assets | Should -BeOfType [GitHubReleaseAsset]
                 $assets.Count | Should -BeGreaterThan 0
                 foreach ($asset in $assets) {
                     $asset.ID | Should -Not -BeNullOrEmpty
