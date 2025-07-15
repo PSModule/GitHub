@@ -66,11 +66,11 @@
             foreach ($asset in $_.Response) {
                 if ($PSBoundParameters.ContainsKey('Name')) {
                     if ($asset.name -eq $Name) {
-                        [GitHubReleaseAsset]($asset)
+                        [GitHubReleaseAsset]::new($asset)
                         break
                     }
                 } else {
-                    [GitHubReleaseAsset]($asset)
+                    [GitHubReleaseAsset]::new($asset)
                 }
             }
         }

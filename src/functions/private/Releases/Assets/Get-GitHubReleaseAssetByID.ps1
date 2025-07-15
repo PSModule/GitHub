@@ -55,7 +55,7 @@
         }
 
         Invoke-GitHubAPI @apiParams | ForEach-Object {
-            [GitHubReleaseAsset]($_.Response)
+            [GitHubReleaseAsset]::new($_.Response)
         }
     }
 
