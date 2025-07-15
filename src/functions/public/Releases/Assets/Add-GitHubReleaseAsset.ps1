@@ -181,7 +181,7 @@
         }
 
         Invoke-GitHubAPI @apiParams | ForEach-Object {
-            [GitHubReleaseAsset]new::($_.Response)
+            [GitHubReleaseAsset]::new($_.Response)
         }
     }
 

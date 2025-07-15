@@ -651,14 +651,14 @@ ID,Name,Value
                     Write-Host ($assets | Format-List -Property * | Out-String)
                 }
                 $assets | Should -Not -BeNullOrEmpty
-                $assets | Should -BeOfType [GitHubReleaseAsset]
                 $assets.Count | Should -BeGreaterThan 0
                 foreach ($asset in $assets) {
+                    $asset | Should -BeOfType [GitHubReleaseAsset]
                     $asset.ID | Should -Not -BeNullOrEmpty
                     $asset.NodeID | Should -Not -BeNullOrEmpty
                     $asset.Url | Should -Not -BeNullOrEmpty
                     $asset.Name | Should -Not -BeNullOrEmpty
-                    $asset.Label | Should -Not -BeNullOrEmpty
+                    # $asset.Label | Should -Not -BeNullOrEmpty - Label is optional and may not be set
                     $asset.State | Should -Be 'uploaded'
                     $asset.ContentType | Should -Not -BeNullOrEmpty
                     $asset.Size | Should -BeGreaterOrEqual 0
