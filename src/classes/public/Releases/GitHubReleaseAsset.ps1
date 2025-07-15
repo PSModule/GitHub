@@ -52,8 +52,8 @@
             $this.ContentType = $Object.content_type
             $this.Size = $Object.size
             $this.Downloads = $Object.download_count
-            $this.CreatedAt = [datetime]::Parse($Object.created_at)
-            $this.UpdatedAt = [datetime]::Parse($Object.updated_at)
+            $this.CreatedAt = $Object.created_at
+            $this.UpdatedAt = $Object.updated_at
             $this.UploadedBy = [GitHubUser]::new($Object.uploader)
         } else {
             $this.NodeID = $Object.id
@@ -62,8 +62,8 @@
             $this.ContentType = $Object.contentType
             $this.Size = $Object.size
             $this.Downloads = $Object.downloadCount
-            $this.CreatedAt = [datetime]::Parse($Object.createdAt)
-            $this.UpdatedAt = [datetime]::Parse($Object.updatedAt)
+            $this.CreatedAt = $Object.createdAt
+            $this.UpdatedAt = $Object.updatedAt
             $this.UploadedBy = [GitHubUser]::new($Object.uploadedBy)
         }
     }

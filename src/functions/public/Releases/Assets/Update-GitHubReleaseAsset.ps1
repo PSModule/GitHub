@@ -83,7 +83,7 @@
 
         if ($PSCmdlet.ShouldProcess("assets for release with ID [$ID] in [$Owner/$Repository]", 'Set')) {
             Invoke-GitHubAPI @apiParams | ForEach-Object {
-                [GitHubReleaseAsset]($_.Response)
+                [GitHubReleaseAsset]::new($_.Response)
             }
         }
     }
