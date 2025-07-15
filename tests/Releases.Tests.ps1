@@ -644,6 +644,22 @@ ID,Name,Value
                 Test-Path -Path $downloadedFile.FullName | Should -BeTrue
                 $downloadedFile.Name | Should -Be $asset.Name
             }
+
+            It 'Get-GitHubReleaseAsset - Gets assets from release using pipeline' {
+                $assets = Get-GitHubRelease -Owner ryanoasis -Repository nerd-fonts | Get-GitHubReleaseAsset
+                LogGroup 'Release assets from pipeline' {
+                    Write-Host ($assets | Format-List -Property * | Out-String)
+                }
+                $assets | Should -Not -BeNullOrEmpty
+                $assets | Should -BeOfType 'GitHubReleaseAsset'
+                $assets.Count | Should -BeGreaterThan 0
+                foreach ($asset in $assets) {
+                    $asset.ID | Should -Not -BeNullOrEmpty
+                    $asset.Name | Should -Not -BeNullOrEmpty
+                    $asset.Size | Should -BeGreaterOrEqual 0
+                    $asset.DownloadCount | Should -BeGreaterOrEqual 0
+                }
+            }
         }
     }
 }
