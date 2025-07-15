@@ -71,7 +71,7 @@
             }
             'PEM' {
                 Write-Verbose 'Using GitHub App PEM Token.'
-                $jwt = Get-GitHubAppJSONWebToken -ClientId $Context.ClientID -PrivateKey $Context.PrivateKey
+                $jwt = New-GitHubJWT -Context $Context
                 $Context.Token = $jwt.Token
             }
         }

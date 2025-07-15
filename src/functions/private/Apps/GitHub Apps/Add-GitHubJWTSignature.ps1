@@ -12,11 +12,6 @@ function Add-GitHubJWTSignature {
 
         Adds a signature to the unsigned JWT using the provided private key.
 
-        .EXAMPLE
-        Add-GitHubJWTSignature -UnsignedJWT 'eyJ0eXAiOi...' -PrivateKeyFilePath '/path/to/private-key.pem'
-
-        Adds a signature to the unsigned JWT using the private key from the specified file.
-
         .OUTPUTS
         String
 
@@ -31,25 +26,15 @@ function Add-GitHubJWTSignature {
         '',
         Justification = 'Used to handle secure string private keys.'
     )]
-    [CmdletBinding(DefaultParameterSetName = 'PrivateKey')]
+    [CmdletBinding()]
     [OutputType([string])]
     param(
         # The unsigned JWT (header.payload) to sign.
         [Parameter(Mandatory)]
         [string] $UnsignedJWT,
 
-        # The path to the private key file of the GitHub App.
-        [Parameter(
-            Mandatory,
-            ParameterSetName = 'FilePath'
-        )]
-        [string] $PrivateKeyFilePath,
-
         # The private key of the GitHub App.
-        [Parameter(
-            Mandatory,
-            ParameterSetName = 'PrivateKey'
-        )]
+        [Parameter(Mandatory)]
         [object] $PrivateKey
     )
 
@@ -59,25 +44,14 @@ function Add-GitHubJWTSignature {
     }
 
     process {
-        # Load private key from file if path provided
-        if ($PrivateKeyFilePath) {
-            if (-not (Test-Path -Path $PrivateKeyFilePath)) {
-                throw "The private key path [$PrivateKeyFilePath] does not exist."
-            }
-            $PrivateKey = Get-Content -Path $PrivateKeyFilePath -Raw
-        }
-
-        # Convert SecureString to plain text if needed
         if ($PrivateKey -is [securestring]) {
             $PrivateKey = $PrivateKey | ConvertFrom-SecureString -AsPlainText
         }
 
-        # Create RSA instance and import the private key
         $rsa = [System.Security.Cryptography.RSA]::Create()
         $rsa.ImportFromPem($PrivateKey)
 
         try {
-            # Sign the unsigned JWT
             $signature = [Convert]::ToBase64String(
                 $rsa.SignData(
                     [System.Text.Encoding]::UTF8.GetBytes($UnsignedJWT),
@@ -85,8 +59,6 @@ function Add-GitHubJWTSignature {
                     [System.Security.Cryptography.RSASignaturePadding]::Pkcs1
                 )
             ).TrimEnd('=').Replace('+', '-').Replace('/', '_')
-
-            # Return the complete signed JWT
             return "$UnsignedJWT.$signature"
         } finally {
             # Clean up RSA instance

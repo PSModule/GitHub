@@ -1,4 +1,4 @@
-function New-GitHubAppJWT {
+function New-GitHubUnsignedJWT {
     <#
         .SYNOPSIS
         Creates an unsigned JSON Web Token (JWT) for a GitHub App.
@@ -9,7 +9,7 @@ function New-GitHubAppJWT {
         that can be passed to a signing function.
 
         .EXAMPLE
-        New-GitHubAppJWT -ClientId 'Iv987654321'
+        New-GitHubUnsignedJWT -ClientId 'Iv987654321'
 
         Creates an unsigned JWT for a GitHub App using the specified client ID.
 
@@ -17,11 +17,12 @@ function New-GitHubAppJWT {
         String
 
         .NOTES
-        This function separates JWT creation from signing to support multiple signing methods.
-
-        .LINK
-        https://psmodule.io/GitHub/Functions/Apps/GitHub%20App/New-GitHubAppJWT
+        This function generates a JWT for a GitHub App that can be signed using a private key.
     #>
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSUseShouldProcessForStateChangingFunctions', '',
+        Justification = 'Function creates an unsigned JWT token without modifying system state'
+    )]
     [CmdletBinding()]
     [OutputType([string])]
     param(
@@ -64,7 +65,6 @@ function New-GitHubAppJWT {
             )
         ).TrimEnd('=').Replace('+', '-').Replace('/', '_')
 
-        # Return unsigned JWT (header.payload)
         return "$header.$payload"
     }
 
