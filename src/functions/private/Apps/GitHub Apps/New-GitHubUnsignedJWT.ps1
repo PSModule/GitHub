@@ -21,7 +21,7 @@ function New-GitHubUnsignedJWT {
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSUseShouldProcessForStateChangingFunctions', '',
-        Justification = 'Function creates an unsigned JWT token without modifying system state'
+        Justification = 'Function creates an unsigned JWT without modifying system state'
     )]
     [CmdletBinding()]
     [OutputType([string])]

@@ -30,7 +30,10 @@
         '',
         Justification = 'Generated JWT is a plaintext string.'
     )]
-
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSUseShouldProcessForStateChangingFunctions', '',
+        Justification = 'Function creates a JWT without modifying system state'
+    )]
     [CmdletBinding()]
     [OutputType([GitHubJsonWebToken])]
     param(
