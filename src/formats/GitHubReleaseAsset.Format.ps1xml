@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuration>
+    <ViewDefinitions>
+        <View>
+            <Name>GitHubReleaseAssetTable</Name>
+            <ViewSelectedBy>
+                <TypeName>GitHubReleaseAsset</TypeName>
+            </ViewSelectedBy>
+            <TableControl>
+                <TableHeaders>
+                    <TableColumnHeader>
+                        <Label>Name</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>State</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Size</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Downloads</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>CreatedAt</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>UpdatedAt</Label>
+                    </TableColumnHeader>
+                </TableHeaders>
+                <TableRowEntries>
+                    <TableRowEntry>
+                        <TableColumnItems>
+                            <TableColumnItem>
+                                <ScriptBlock>
+                                    if ($Host.UI.SupportsVirtualTerminal -and
+                                    ($env:GITHUB_ACTIONS -ne 'true')) {
+                                    $PSStyle.FormatHyperlink($_.Name,$_.Url)
+                                    } else {
+                                    $_.Name
+                                    }
+                                </ScriptBlock>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>State</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <ScriptBlock>
+                                    if ($_.Size -lt 1KB) {
+                                    '{0} B' -f $_.Size
+                                    } elseif ($_.Size -lt 1MB) {
+                                    '{0:F1} KB' -f ($_.Size / 1KB)
+                                    } elseif ($_.Size -lt 1GB) {
+                                    '{0:F1} MB' -f ($_.Size / 1MB)
+                                    } else {
+                                    '{0:F1} GB' -f ($_.Size / 1GB)
+                                    }
+                                </ScriptBlock>
+                                <Alignment>Right</Alignment>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>DownloadCount</PropertyName>
+                                <Alignment>Right</Alignment>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <ScriptBlock>$_.CreatedAt.ToString('yyyy-MM-dd HH:mm')</ScriptBlock>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <ScriptBlock>$_.UpdatedAt.ToString('yyyy-MM-dd HH:mm')</ScriptBlock>
+                            </TableColumnItem>
+                        </TableColumnItems>
+                    </TableRowEntry>
+                </TableRowEntries>
+            </TableControl>
+        </View>
+    </ViewDefinitions>
+</Configuration>
