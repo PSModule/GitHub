@@ -3,10 +3,10 @@
     <Type>
         <Name>GitHubNode</Name>
         <Members>
-            <ScriptProperty>
+            <AliasProperty>
                 <Name>DatabaseID</Name>
-                <GetScriptBlock>$this.ID</GetScriptBlock>
-            </ScriptProperty>
+                <ReferencedMemberName>ID</ReferencedMemberName>
+            </AliasProperty>
         </Members>
     </Type>
 </Types>

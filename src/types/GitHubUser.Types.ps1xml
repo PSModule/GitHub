@@ -3,18 +3,18 @@
     <Type>
         <Name>GitHubUser</Name>
         <Members>
-            <ScriptProperty>
+            <AliasProperty>
                 <Name>User</Name>
-                <GetScriptBlock>$this.Name</GetScriptBlock>
-            </ScriptProperty>
-            <ScriptProperty>
+                <ReferencedMemberName>Name</ReferencedMemberName>
+            </AliasProperty>
+            <AliasProperty>
                 <Name>Bio</Name>
-                <GetScriptBlock>$this.Description</GetScriptBlock>
-            </ScriptProperty>
-            <ScriptProperty>
+                <ReferencedMemberName>Description</ReferencedMemberName>
+            </AliasProperty>
+            <AliasProperty>
                 <Name>Blog</Name>
-                <GetScriptBlock>$this.Website</GetScriptBlock>
-            </ScriptProperty>
+                <ReferencedMemberName>Website</ReferencedMemberName>
+            </AliasProperty>
         </Members>
     </Type>
 </Types>

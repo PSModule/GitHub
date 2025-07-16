@@ -3,10 +3,10 @@
     <Type>
         <Name>GitHubEnvironment</Name>
         <Members>
-            <ScriptProperty>
+            <AliasProperty>
                 <Name>Environment</Name>
-                <GetScriptBlock>$this.Name</GetScriptBlock>
-            </ScriptProperty>
+                <ReferencedMemberName>Name</ReferencedMemberName>
+            </AliasProperty>
         </Members>
     </Type>
 </Types>
