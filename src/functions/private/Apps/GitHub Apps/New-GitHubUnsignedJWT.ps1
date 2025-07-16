@@ -24,12 +24,12 @@ function New-GitHubUnsignedJWT {
         Justification = 'Function creates an unsigned JWT without modifying system state'
     )]
     [CmdletBinding()]
-    [OutputType([string])]
+    [OutputType([pscustomobject])]
     param(
         # The client ID of the GitHub App.
         # Can use the GitHub App ID or the client ID.
         [Parameter(Mandatory)]
-        [string] $ClientId
+        [string] $ClientID
     )
 
     begin {
@@ -38,7 +38,6 @@ function New-GitHubUnsignedJWT {
     }
 
     process {
-        # Create JWT header
         $header = [Convert]::ToBase64String(
             [System.Text.Encoding]::UTF8.GetBytes(
                 (
@@ -49,23 +48,26 @@ function New-GitHubUnsignedJWT {
                 )
             )
         ).TrimEnd('=').Replace('+', '-').Replace('/', '_')
-
-        # Create JWT payload with timestamps
-        $iat = [System.DateTimeOffset]::UtcNow.AddSeconds(-$script:GitHub.Config.JwtTimeTolerance).ToUnixTimeSeconds()
-        $exp = [System.DateTimeOffset]::UtcNow.AddSeconds($script:GitHub.Config.JwtTimeTolerance).ToUnixTimeSeconds()
+        $now = [System.DateTimeOffset]::UtcNow
+        $iat = $now.AddSeconds(-$script:GitHub.Config.JwtTimeTolerance).ToUnixTimeSeconds()
+        $exp = $now.AddSeconds($script:GitHub.Config.JwtTimeTolerance).ToUnixTimeSeconds()
         $payload = [Convert]::ToBase64String(
             [System.Text.Encoding]::UTF8.GetBytes(
                 (
                     ConvertTo-Json -InputObject @{
                         iat = $iat
                         exp = $exp
-                        iss = $ClientId
+                        iss = $ClientID
                     }
                 )
             )
         ).TrimEnd('=').Replace('+', '-').Replace('/', '_')
-
-        return "$header.$payload"
+        [pscustomobject]@{
+            Base      = "$header.$payload"
+            IssuedAt  = $iat
+            ExpiresAt = $exp
+            Issuer    = $ClientID
+        }
     }
 
     end {

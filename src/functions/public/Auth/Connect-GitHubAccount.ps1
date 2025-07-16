@@ -251,7 +251,7 @@
                     }
                     $context += @{
                         PrivateKey = $PrivateKey
-                        TokenType  = 'PEM'
+                        TokenType  = 'JWT'
                         ClientID   = $ClientID
                     }
                 }

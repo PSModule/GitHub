@@ -21,16 +21,25 @@
     #>
     [CmdletBinding(SupportsShouldProcess)]
     [OutputType([GitHubContext])]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'Is the CLI part of the module.')]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText', '', Justification = 'The tokens are recieved as clear text. Mitigating exposure by removing variables and performing garbage collection.')]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Reason for suppressing')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSAvoidUsingWriteHost', '',
+        Justification = 'Is the CLI part of the module.'
+    )]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSAvoidUsingConvertToSecureStringWithPlainText', '',
+        Justification = 'The tokens are recieved as clear text. Mitigating exposure by removing variables and performing garbage collection.'
+    )]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSAvoidLongLines', '',
+        Justification = 'Reason for suppressing'
+    )]
     param(
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter(Mandatory)]
         [object] $Context,
 
-        # Return the new access token.
+        # Return the updated context.
         [Parameter()]
         [switch] $PassThru,
 
@@ -87,7 +96,6 @@
                     Write-Verbose "Access token is not valid. Waiting for mutex to be released (timeout: $($TimeoutMs)ms)..."
                     try {
                         if ($lock.WaitOne($TimeoutMs)) {
-                            # Re-read context to get updated token from other process
                             $Context = Resolve-GitHubContext -Context $Context.ID
                             $lock.ReleaseMutex()
                         } else {
@@ -95,7 +103,7 @@
                         }
                     } catch [System.Threading.AbandonedMutexException] {
                         Write-Debug 'Mutex was abandoned by another process. Re-checking token state...'
-                        $Context = Get-Context -Context $Context.ID -Vault $script:GitHub.ContextVault
+                        $Context = Resolve-GitHubContext -Context $Context.ID
                     }
                 }
             } finally {
@@ -113,4 +121,3 @@
         Write-Debug "[$stackPath] - End"
     }
 }
-#Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '8.1.0' }

@@ -44,8 +44,12 @@
     [securestring] $Token
 
     # The token type.
-    # ghu / gho / ghp / github_pat / PEM / ghs /
+    # ghu / gho / ghp / github_pat / JWT / ghs /
     [string] $TokenType
+
+    # The token expiration date.
+    # 2024-01-01-00:00:00
+    [System.Nullable[datetime]] $TokenExpiresAt
 
     # The default value for the Enterprise parameter.
     [string] $Enterprise

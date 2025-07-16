@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Types>
     <Type>
-        <Name>UserGitHubContext</Name>
+        <Name>GitHubUserContext</Name>
         <Members>
             <ScriptProperty>
                 <Name>TokenExpiresIn</Name>
@@ -28,7 +28,7 @@
         </Members>
     </Type>
     <Type>
-        <Name>InstallationGitHubContext</Name>
+        <Name>GitHubAppInstallationContext</Name>
         <Members>
             <ScriptProperty>
                 <Name>TokenExpiresIn</Name>

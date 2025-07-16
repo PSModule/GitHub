@@ -61,7 +61,6 @@ function Add-GitHubJWTSignature {
             ).TrimEnd('=').Replace('+', '-').Replace('/', '_')
             return "$UnsignedJWT.$signature"
         } finally {
-            # Clean up RSA instance
             if ($rsa) {
                 $rsa.Dispose()
             }

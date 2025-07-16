@@ -1,24 +1,24 @@
-﻿function New-GitHubJWT {
+﻿function Update-GitHubAppJWT {
     <#
         .SYNOPSIS
-        Generates a JSON Web Token (JWT) for a GitHub App.
+        Updates a JSON Web Token (JWT) for a GitHub App context.
 
         .DESCRIPTION
-        Generates a JSON Web Token (JWT) for a GitHub App.
+        Updates a JSON Web Token (JWT) for a GitHub App context.
 
         .EXAMPLE
-        New-GitHubJWT -Context $Context
+        Update-GitHubAppJWT -Context $Context
 
-        Generates a JSON Web Token (JWT) for a GitHub App using the specified context containing the client ID and private key.
+        Updates the JSON Web Token (JWT) for a GitHub App using the specified context.
 
         .OUTPUTS
-        GitHubJsonWebToken
+        securestring
 
         .NOTES
         [Generating a JSON Web Token (JWT) for a GitHub App | GitHub Docs](https://docs.github.com/apps/creating-github-apps/authenticating-with-a-github-app/generating-a-json-web-token-jwt-for-a-github-app#example-using-powershell-to-generate-a-jwt)
 
         .LINK
-        https://psmodule.io/GitHub/Functions/Apps/GitHub%20App/New-GitHubJWT
+        https://psmodule.io/GitHub/Functions/Apps/GitHub%20App/Update-GitHubAppJWT
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSAvoidLongLines', '',
@@ -33,12 +33,16 @@
         Justification = 'Function creates a JWT without modifying system state'
     )]
     [CmdletBinding()]
-    [OutputType([GitHubJsonWebToken])]
+    [OutputType([object])]
     param(
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter(Mandatory)]
-        [AppGitHubContext] $Context
+        [GitHubAppContext] $Context,
+
+        # Return the updated context.
+        [Parameter()]
+        [switch] $PassThru
     )
 
     begin {
@@ -48,16 +52,10 @@
 
     process {
         $unsignedJWT = New-GitHubUnsignedJWT -ClientId $Context.ClientID
-        $jwt = Add-GitHubJWTSignature -UnsignedJWT $unsignedJWT -PrivateKey $Context.PrivateKey
-        $now = [System.DateTimeOffset]::UtcNow
-        $iat = $now.AddSeconds(-$script:GitHub.Config.JwtTimeTolerance).ToUnixTimeSeconds()
-        $exp = $now.AddSeconds($script:GitHub.Config.JwtTimeTolerance).ToUnixTimeSeconds()
-        [GitHubJsonWebToken]@{
-            Token     = ConvertTo-SecureString -String $jwt -AsPlainText
-            IssuedAt  = [DateTime]::UnixEpoch.AddSeconds($iat)
-            ExpiresAt = [DateTime]::UnixEpoch.AddSeconds($exp)
-            Issuer    = $Context.ClientID
-        }
+        $jwt = Add-GitHubJWTSignature -UnsignedJWT $unsignedJWT.Base -PrivateKey $Context.PrivateKey
+        $Context.Token = ConvertTo-SecureString -String $jwt -AsPlainText
+        $Context.TokenExpiresAt = $unsignedJWT.ExpiresAt
+        Set-Context -Context $Context -Vault $script:GitHub.ContextVault -PassThru:$PassThru
     }
 
     end {

@@ -73,13 +73,13 @@
             Write-Verbose "Converting to: [$($contextObj.Type)GitHubContext]"
             switch ($contextObj.Type) {
                 'User' {
-                    [UserGitHubContext]::new([pscustomobject]$contextObj)
+                    [GitHubUserContext]::new([pscustomobject]$contextObj)
                 }
                 'App' {
-                    [AppGitHubContext]::new([pscustomobject]$contextObj)
+                    [GitHubAppContext]::new([pscustomobject]$contextObj)
                 }
                 'Installation' {
-                    [InstallationGitHubContext]::new([pscustomobject]$contextObj)
+                    [GitHubAppInstallationContext]::new([pscustomobject]$contextObj)
                 }
                 default {
                     throw "Unknown context type: [$($contextObj.Type)]"
