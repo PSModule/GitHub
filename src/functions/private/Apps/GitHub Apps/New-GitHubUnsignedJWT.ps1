@@ -49,14 +49,14 @@ function New-GitHubUnsignedJWT {
             )
         ).TrimEnd('=').Replace('+', '-').Replace('/', '_')
         $now = [System.DateTimeOffset]::UtcNow
-        $iat = $now.AddSeconds(-$script:GitHub.Config.JwtTimeTolerance).ToUnixTimeSeconds()
-        $exp = $now.AddSeconds($script:GitHub.Config.JwtTimeTolerance).ToUnixTimeSeconds()
+        $iat = $now.AddSeconds(-$script:GitHub.Config.JwtTimeTolerance)
+        $exp = $now.AddSeconds($script:GitHub.Config.JwtTimeTolerance)
         $payload = [Convert]::ToBase64String(
             [System.Text.Encoding]::UTF8.GetBytes(
                 (
                     ConvertTo-Json -InputObject @{
-                        iat = $iat
-                        exp = $exp
+                        iat = $iat.ToUnixTimeSeconds()
+                        exp = $exp.ToUnixTimeSeconds()
                         iss = $ClientID
                     }
                 )
@@ -64,8 +64,8 @@ function New-GitHubUnsignedJWT {
         ).TrimEnd('=').Replace('+', '-').Replace('/', '_')
         [pscustomobject]@{
             Base      = "$header.$payload"
-            IssuedAt  = $iat
-            ExpiresAt = $exp
+            IssuedAt  = $iat.DateTime
+            ExpiresAt = $exp.DateTime
             Issuer    = $ClientID
         }
     }
