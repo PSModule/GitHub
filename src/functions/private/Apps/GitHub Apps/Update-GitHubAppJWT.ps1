@@ -55,7 +55,12 @@
         $jwt = Add-GitHubJWTSignature -UnsignedJWT $unsignedJWT.Base -PrivateKey $Context.PrivateKey
         $Context.Token = ConvertTo-SecureString -String $jwt -AsPlainText
         $Context.TokenExpiresAt = $unsignedJWT.ExpiresAt
-        Set-Context -Context $Context -Vault $script:GitHub.ContextVault -PassThru:$PassThru
+        if ($Context.ID) {
+            $Context = Set-Context -Context $Context -Vault $script:GitHub.ContextVault
+        }
+        if ($PassThru) {
+            $Context
+        }
     }
 
     end {
