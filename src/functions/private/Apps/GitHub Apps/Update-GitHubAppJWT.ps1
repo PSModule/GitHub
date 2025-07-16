@@ -56,7 +56,7 @@
         $Context.Token = ConvertTo-SecureString -String $jwt -AsPlainText
         $Context.TokenExpiresAt = $unsignedJWT.ExpiresAt
         if ($Context.ID) {
-            $Context = Set-Context -Context $Context -Vault $script:GitHub.ContextVault
+            $Context = Set-Context -Context $Context -Vault $script:GitHub.ContextVault -PassThru
         }
         if ($PassThru) {
             $Context
