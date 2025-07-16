@@ -3,10 +3,10 @@
     <Type>
         <Name>GitHubTeam</Name>
         <Members>
-            <ScriptProperty>
+            <AliasProperty>
                 <Name>Team</Name>
-                <GetScriptBlock>$this.Slug</GetScriptBlock>
-            </ScriptProperty>
+                <ReferencedMemberName>Slug</ReferencedMemberName>
+            </AliasProperty>
         </Members>
     </Type>
 </Types>

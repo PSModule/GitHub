@@ -158,7 +158,7 @@
             }
             Write-Verbose 'Logging in using a managed installation access token...'
             $contextParams | Format-Table | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
-            $contextObj = [InstallationGitHubContext]::new((Set-GitHubContext -Context $contextParams.Clone() -PassThru -Default:$Default))
+            $contextObj = [GitHubAppInstallationContext]::new((Set-GitHubContext -Context $contextParams.Clone() -PassThru -Default:$Default))
             $contextObj | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
             if (-not $Silent) {
                 $name = $contextObj.Name

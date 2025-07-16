@@ -1,4 +1,4 @@
-﻿class AppGitHubContext : GitHubContext {
+﻿class GitHubAppContext : GitHubContext {
     # Client ID for GitHub Apps
     [string] $ClientID
 
@@ -17,9 +17,9 @@
     # The events that the app is subscribing to once installed
     [string[]] $Events
 
-    AppGitHubContext() {}
+    GitHubAppContext() {}
 
-    AppGitHubContext([pscustomobject]$Object) {
+    GitHubAppContext([pscustomobject]$Object) {
         $this.ID = $Object.ID
         $this.Name = $Object.Name
         $this.DisplayName = $Object.DisplayName
@@ -33,6 +33,7 @@
         $this.UserName = $Object.UserName
         $this.Token = $Object.Token
         $this.TokenType = $Object.TokenType
+        $this.TokenExpiresAt = $Object.TokenExpiresAt
         $this.Enterprise = $Object.Enterprise
         $this.Owner = $Object.Owner
         $this.Repository = $Object.Repository

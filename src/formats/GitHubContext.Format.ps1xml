@@ -4,9 +4,9 @@
         <View>
             <Name>GitHubContextTableView</Name>
             <ViewSelectedBy>
-                <TypeName>AppGitHubContext</TypeName>
-                <TypeName>InstallationGitHubContext</TypeName>
-                <TypeName>UserGitHubContext</TypeName>
+                <TypeName>GitHubAppContext</TypeName>
+                <TypeName>GitHubAppInstallationContext</TypeName>
+                <TypeName>GitHubUserContext</TypeName>
                 <TypeName>GitHubContext</TypeName>
             </ViewSelectedBy>
             <TableControl>
@@ -152,9 +152,9 @@
             </ListControl>
         </View>
         <View>
-            <Name>AppGitHubContextListView</Name>
+            <Name>GitHubAppContextListView</Name>
             <ViewSelectedBy>
-                <TypeName>AppGitHubContext</TypeName>
+                <TypeName>GitHubAppContext</TypeName>
             </ViewSelectedBy>
             <ListControl>
                 <ListEntries>
@@ -217,9 +217,9 @@
             </ListControl>
         </View>
         <View>
-            <Name>InstallationGitHubContextListView</Name>
+            <Name>GitHubAppInstallationContextListView</Name>
             <ViewSelectedBy>
-                <TypeName>InstallationGitHubContext</TypeName>
+                <TypeName>GitHubAppInstallationContext</TypeName>
             </ViewSelectedBy>
             <ListControl>
                 <ListEntries>
@@ -291,9 +291,9 @@
             </ListControl>
         </View>
         <View>
-            <Name>UserGitHubContextListView</Name>
+            <Name>GitHubUserContextListView</Name>
             <ViewSelectedBy>
-                <TypeName>UserGitHubContext</TypeName>
+                <TypeName>GitHubUserContext</TypeName>
             </ViewSelectedBy>
             <ListControl>
                 <ListEntries>

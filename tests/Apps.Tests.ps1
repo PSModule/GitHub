@@ -176,7 +176,7 @@ Describe 'Apps' {
                 }
 
                 It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
-                    $context | Should -BeOfType 'InstallationGitHubContext'
+                    $context | Should -BeOfType 'GitHubAppInstallationContext'
                     $context.ClientID | Should -Be $githubApp.ClientID
                     $context.TokenExpiresAt | Should -BeOfType [datetime]
                     $context.InstallationID | Should -BeOfType [uint64]

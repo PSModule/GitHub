@@ -3,10 +3,10 @@
     <Type>
         <Name>GitHubWorkflowRun</Name>
         <Members>
-            <ScriptProperty>
+            <AliasProperty>
                 <Name>WorkflowRun</Name>
-                <GetScriptBlock>$this.ID</GetScriptBlock>
-            </ScriptProperty>
+                <ReferencedMemberName>ID</ReferencedMemberName>
+            </AliasProperty>
         </Members>
     </Type>
 </Types>

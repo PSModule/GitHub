@@ -1,10 +1,6 @@
-﻿class InstallationGitHubContext : GitHubContext {
+﻿class GitHubAppInstallationContext : GitHubContext {
     # Client ID for GitHub Apps
     [string] $ClientID
-
-    # The token expiration date.
-    # 2024-01-01-00:00:00
-    [System.Nullable[datetime]] $TokenExpiresAt
 
     # The installation ID.
     [System.Nullable[uint64]] $InstallationID
@@ -21,9 +17,9 @@
     # The target login or slug of the installation.
     [string] $InstallationName
 
-    InstallationGitHubContext() {}
+    GitHubAppInstallationContext() {}
 
-    InstallationGitHubContext([pscustomobject]$Object) {
+    GitHubAppInstallationContext([pscustomobject]$Object) {
         $this.ID = $Object.ID
         $this.Name = $Object.Name
         $this.DisplayName = $Object.DisplayName
@@ -37,13 +33,13 @@
         $this.UserName = $Object.UserName
         $this.Token = $Object.Token
         $this.TokenType = $Object.TokenType
+        $this.TokenExpiresAt = $Object.TokenExpiresAt
         $this.Enterprise = $Object.Enterprise
         $this.Owner = $Object.Owner
         $this.Repository = $Object.Repository
         $this.HttpVersion = $Object.HttpVersion
         $this.PerPage = $Object.PerPage
         $this.ClientID = $Object.ClientID
-        $this.TokenExpiresAt = $Object.TokenExpiresAt
         $this.InstallationID = $Object.InstallationID
         $this.Permissions = $Object.Permissions
         $this.Events = $Object.Events

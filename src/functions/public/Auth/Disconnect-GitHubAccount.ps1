@@ -64,7 +64,7 @@
                 Revoke-GitHubAppInstallationAccessToken -Context $contextItem
             }
 
-            Remove-GitHubContext -Context $contextItem
+            Remove-GitHubContext -Context $contextItem.ID
             $isDefaultContext = $contextItem.Name -eq $script:GitHub.Config.DefaultContext
             if ($isDefaultContext) {
                 Remove-GitHubConfig -Name 'DefaultContext'

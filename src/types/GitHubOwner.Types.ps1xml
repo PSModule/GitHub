@@ -3,10 +3,10 @@
     <Type>
         <Name>GitHubOwner</Name>
         <Members>
-            <ScriptProperty>
+            <AliasProperty>
                 <Name>Owner</Name>
-                <GetScriptBlock>$this.Name</GetScriptBlock>
-            </ScriptProperty>
+                <ReferencedMemberName>Name</ReferencedMemberName>
+            </AliasProperty>
         </Members>
     </Type>
 </Types>
