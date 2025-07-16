@@ -5,6 +5,9 @@
     # The private key for the app.
     [securestring] $PrivateKey
 
+    # Azure Key Vault key reference for JWT signing (alternative to PrivateKey).
+    [string] $KeyVaultKey
+
     # Owner of the GitHub App
     [string] $OwnerName
 
@@ -41,6 +44,7 @@
         $this.PerPage = $Object.PerPage
         $this.ClientID = $Object.ClientID
         $this.PrivateKey = $Object.PrivateKey
+        $this.KeyVaultKey = $Object.KeyVaultKey
         $this.OwnerName = $Object.OwnerName
         $this.OwnerType = $Object.OwnerType
         $this.Permissions = $Object.Permissions

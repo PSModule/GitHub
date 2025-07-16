@@ -91,6 +91,10 @@
             Mandatory,
             ParameterSetName = 'App'
         )]
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'AppKeyVault'
+        )]
         [string] $ClientID,
 
         # The private key for the GitHub App when authenticating as a GitHub App.
@@ -100,9 +104,21 @@
         )]
         [object] $PrivateKey,
 
+        # Azure Key Vault key reference for GitHub App JWT signing.
+        # When provided, JWT signing will be performed via Azure Key Vault instead of using a local private key.
+        # Example format: 'https://vault-name.vault.azure.net/keys/key-name/key-version'
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'AppKeyVault'
+        )]
+        [string] $KeyVaultKey,
+
         # Automatically load installations for the GitHub App.
         [Parameter(
             ParameterSetName = 'App'
+        )]
+        [Parameter(
+            ParameterSetName = 'AppKeyVault'
         )]
         [switch] $AutoloadInstallations,
 
@@ -255,6 +271,14 @@
                         ClientID   = $ClientID
                     }
                 }
+                'AppKeyVault' {
+                    Write-Verbose 'Logging in as a GitHub App using Azure Key Vault...'
+                    $context += @{
+                        KeyVaultKey = $KeyVaultKey
+                        TokenType   = 'JWT'
+                        ClientID    = $ClientID
+                    }
+                }
                 'PAT' {
                     Write-Debug "UseAccessToken is set to [$UseAccessToken]. Using provided access token..."
                     Write-Verbose 'Logging in using personal access token...'
@@ -313,7 +337,7 @@
                 $contextObj
             }
 
-            if ($authType -eq 'App' -and $AutoloadInstallations) {
+            if ($authType -in @('App', 'AppKeyVault') -and $AutoloadInstallations) {
                 Write-Verbose 'Loading GitHub App Installation contexts...'
                 Connect-GitHubApp -Silent:$Silent
             }

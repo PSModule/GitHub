@@ -52,7 +52,17 @@
 
     process {
         $unsignedJWT = New-GitHubUnsignedJWT -ClientId $Context.ClientID
-        $jwt = Add-GitHubJWTSignature -UnsignedJWT $unsignedJWT.Base -PrivateKey $Context.PrivateKey
+        
+        if ($Context.KeyVaultKey) {
+            Write-Verbose 'Using Azure Key Vault for JWT signing'
+            $jwt = Add-GitHubJWTSignature -UnsignedJWT $unsignedJWT.Base -KeyVaultKey $Context.KeyVaultKey
+        } elseif ($Context.PrivateKey) {
+            Write-Verbose 'Using local private key for JWT signing'
+            $jwt = Add-GitHubJWTSignature -UnsignedJWT $unsignedJWT.Base -PrivateKey $Context.PrivateKey
+        } else {
+            throw 'No signing method available. Either PrivateKey or KeyVaultKey must be provided in the context.'
+        }
+        
         $Context.Token = ConvertTo-SecureString -String $jwt -AsPlainText
         $Context.TokenExpiresAt = $unsignedJWT.ExpiresAt
         if ($Context.ID) {
