@@ -7,7 +7,7 @@
         Generates a JSON Web Token (JWT) for a GitHub App.
 
         .EXAMPLE
-        Get-GitHubAppJWT -Context $Context
+        New-GitHubJWT -Context $Context
 
         Generates a JSON Web Token (JWT) for a GitHub App using the specified context containing the client ID and private key.
 
