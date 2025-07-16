@@ -49,8 +49,9 @@
     process {
         $unsignedJWT = New-GitHubUnsignedJWT -ClientId $Context.ClientID
         $jwt = Add-GitHubJWTSignature -UnsignedJWT $unsignedJWT -PrivateKey $Context.PrivateKey
-        $iat = [System.DateTimeOffset]::UtcNow.AddSeconds(-$script:GitHub.Config.JwtTimeTolerance).ToUnixTimeSeconds()
-        $exp = [System.DateTimeOffset]::UtcNow.AddSeconds($script:GitHub.Config.JwtTimeTolerance).ToUnixTimeSeconds()
+        $now = [System.DateTimeOffset]::UtcNow
+        $iat = $now.AddSeconds(-$script:GitHub.Config.JwtTimeTolerance).ToUnixTimeSeconds()
+        $exp = $now.AddSeconds($script:GitHub.Config.JwtTimeTolerance).ToUnixTimeSeconds()
         [GitHubJsonWebToken]@{
             Token     = ConvertTo-SecureString -String $jwt -AsPlainText
             IssuedAt  = [DateTime]::UnixEpoch.AddSeconds($iat)
