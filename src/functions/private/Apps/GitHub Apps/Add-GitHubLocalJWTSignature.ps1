@@ -1,4 +1,4 @@
-function Add-GitHubJWTSignature {
+function Add-GitHubLocalJWTSignature {
     <#
         .SYNOPSIS
         Signs a JSON Web Token (JWT) using a local RSA private key.
@@ -8,7 +8,7 @@ function Add-GitHubJWTSignature {
         This function handles the RSA signing process and returns the complete signed JWT.
 
         .EXAMPLE
-        Add-GitHubJWTSignature -UnsignedJWT 'eyJ0eXAiOi...' -PrivateKey '--- BEGIN RSA PRIVATE KEY --- ... --- END RSA PRIVATE KEY ---'
+        Add-GitHubLocalJWTSignature -UnsignedJWT 'eyJ0eXAiOi...' -PrivateKey '--- BEGIN RSA PRIVATE KEY --- ... --- END RSA PRIVATE KEY ---'
 
         Adds a signature to the unsigned JWT using the provided private key.
 
@@ -19,7 +19,7 @@ function Add-GitHubJWTSignature {
         This function isolates the signing logic to enable support for multiple signing methods.
 
         .LINK
-        https://psmodule.io/GitHub/Functions/Apps/GitHub%20App/Add-GitHubJWTSignature
+        https://psmodule.io/GitHub/Functions/Apps/GitHub%20App/Add-GitHubLocalJWTSignature
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSAvoidUsingConvertToSecureStringWithPlainText',

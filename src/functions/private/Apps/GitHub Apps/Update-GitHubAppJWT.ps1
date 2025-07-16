@@ -52,7 +52,7 @@
 
     process {
         $unsignedJWT = New-GitHubUnsignedJWT -ClientId $Context.ClientID
-        $jwt = Add-GitHubJWTSignature -UnsignedJWT $unsignedJWT.Base -PrivateKey $Context.PrivateKey
+        $jwt = Add-GitHubLocalJWTSignature -UnsignedJWT $unsignedJWT.Base -PrivateKey $Context.PrivateKey
         $Context.Token = ConvertTo-SecureString -String $jwt -AsPlainText
         $Context.TokenExpiresAt = $unsignedJWT.ExpiresAt
         if ($Context.ID) {
