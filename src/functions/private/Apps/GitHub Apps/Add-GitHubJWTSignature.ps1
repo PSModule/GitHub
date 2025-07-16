@@ -7,7 +7,7 @@ function Add-GitHubJWTSignature {
         Takes an unsigned JWT (header.payload) and adds a signature using either:
         - A provided RSA private key (local signing)
         - An Azure Key Vault key reference (remote signing)
-        
+
         When a KeyVaultKey is provided, the function will use Azure Key Vault for signing instead of local RSA operations.
 
         .EXAMPLE
@@ -63,7 +63,7 @@ function Add-GitHubJWTSignature {
 
     process {
         $dataToSign = [System.Text.Encoding]::UTF8.GetBytes($UnsignedJWT)
-        
+
         if ($PSCmdlet.ParameterSetName -eq 'KeyVault') {
             Write-Verbose 'Signing JWT using Azure Key Vault'
             try {

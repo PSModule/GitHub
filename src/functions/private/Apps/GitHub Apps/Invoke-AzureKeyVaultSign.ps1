@@ -100,14 +100,14 @@ function Invoke-KeyVaultSignWithAzCli {
 
     try {
         # Check if Azure CLI is available and authenticated
-        $azAccount = & az account show --output json 2>$null
+        $null = & az account show --output json 2>$null
         if ($LASTEXITCODE -ne 0) {
             Write-Verbose 'Azure CLI not authenticated or not available'
             return $null
         }
 
         Write-Verbose 'Using Azure CLI for Key Vault signing'
-        
+
         # Build the command
         $azCommand = @('az', 'keyvault', 'key', 'sign')
         $azCommand += @('--vault-name', $VaultName)
@@ -159,7 +159,7 @@ function Invoke-KeyVaultSignWithAzPowerShell {
         }
 
         Write-Verbose 'Using Az PowerShell for Key Vault signing'
-        
+
         # Build parameters for Invoke-AzKeyVaultKeyOperation
         $params = @{
             VaultName = $VaultName
@@ -197,7 +197,7 @@ function Invoke-KeyVaultSignWithRestApi {
         }
 
         Write-Verbose 'Using REST API for Key Vault signing'
-        
+
         # Prepare the request
         $signUrl = "$KeyVaultKey/sign?api-version=7.3"
         $headers = @{
@@ -230,18 +230,18 @@ function Get-AzureAccessToken {
             Uri = $metadataUri
             Method = 'GET'
             Headers = @{ 'Metadata' = 'true' }
-            Body = @{ 
+            Body = @{
                 'api-version' = '2018-02-01'
                 'resource' = 'https://vault.azure.net'
             }
             TimeoutSec = 5
         }
-        
+
         $response = Invoke-RestMethod @params
         return $response.access_token
     } catch {
         Write-Verbose "Failed to get managed identity token: $_"
-        
+
         # Try Az PowerShell if available
         try {
             if (Get-Module -Name Az.Accounts -ListAvailable) {
@@ -251,7 +251,7 @@ function Get-AzureAccessToken {
         } catch {
             Write-Verbose "Failed to get token via Az PowerShell: $_"
         }
-        
+
         return $null
     }
 }
