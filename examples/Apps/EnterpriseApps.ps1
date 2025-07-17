@@ -1,40 +1,23 @@
-﻿$appIDs = @(
-    'qweqweqwe',
-    'qweqweqweqwe'
+﻿$ClientID = ''
+$PrivateKey = @'
+-----BEGIN RSA PRIVATE KEY-----
+
+-----END RSA PRIVATE KEY-----
+'@
+Connect-GitHub -ClientID $ClientID -PrivateKey $PrivateKey
+Connect-GitHubApp -Enterprise 'msx'
+
+# The apps you want to install on orgs in the enterprise
+$ClientIDs = @(
+    'Iv1.f26b61bc99e69405'
 )
+$Enterprise = 'msx'
+$Organization = '*'
 
-$organization = '*'
-filter Install-GithubApp {
-    param(
-        [Parameter()]
-        [string] $Enterprise = 'msx',
-
-        [Parameter()]
-        [string] $Organization = '*',
-
-        [Parameter(
-            Mandatory,
-            ValueFromPipeline
-        )]
-        [string] $AppID
-    )
-
-    process {
-        $installableOrgs = Get-GitHubOrganization -Enterprise $Enterprise
-        $orgs = $installableOrgs | Where-Object { $_.login -like $organization }
-        foreach ($org in $orgs) {
-            foreach ($appIDitem in $AppID) {
-                Install-GitHubApp -Enterprise $Enterprise -Organization $org.login -ClientID $appIDitem -RepositorySelection all | ForEach-Object {
-                    [PSCustomObject]@{
-                        Organization = $org.login
-                        AppID        = $appIDitem
-                    }
-                }
-            }
-        }
+$installableOrgs = Get-GitHubOrganization -Enterprise $Enterprise
+$orgs = $installableOrgs | Where-Object { $_.Name -like $Organization }
+foreach ($org in $orgs) {
+    foreach ($ClientID in $ClientIDs) {
+        Install-GitHubApp -Enterprise $Enterprise -Organization $org.Name -ClientID $ClientID -RepositorySelection all
     }
 }
-
-$appIDs | Install-GitHubApp -Organization $organization
-
-$installation = Get-GitHubAppInstallation
