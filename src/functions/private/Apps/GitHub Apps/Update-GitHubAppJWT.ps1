@@ -75,7 +75,7 @@
 
     process {
         if (Test-GitHubJWTRefreshRequired -Context $Context) {
-            $lockName = "PSModule.GitHub.JWT/$($Context.ID)"
+            $lockName = "PSModule.GitHub-$($Context.ID)".Replace('/', '-')
             $lock = $null
             try {
                 $lock = [System.Threading.Mutex]::new($false, $lockName)

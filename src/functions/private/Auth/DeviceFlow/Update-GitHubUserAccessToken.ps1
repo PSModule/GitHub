@@ -59,7 +59,7 @@
 
     process {
         if (Test-GitHubAccessTokenRefreshRequired -Context $Context) {
-            $lockName = "PSModule.GitHub/$($Context.ID)"
+            $lockName = "PSModule.GitHub-$($Context.ID)".Replace('/', '-')
             $lock = $null
             try {
                 $lock = [System.Threading.Mutex]::new($false, $lockName)
