@@ -156,7 +156,7 @@ Using this approach, the module will autogenerate a JWT every time you run a com
 
 #### Using a GitHub App with Azure Key Vault
 
-For enhanced security, you can store your GitHub App's private key in Azure Key Vault and authenticate using Key Vault as the key source.
+For enhanced security, you can store your GitHub App's keys in Azure Key Vault and use that as way to signing the JWTs.
 This approach requires a pre-authenticated session with either Azure CLI or Azure PowerShell.
 
 **Prerequisites:**

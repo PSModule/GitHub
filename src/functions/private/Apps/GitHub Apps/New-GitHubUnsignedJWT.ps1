@@ -45,10 +45,8 @@
             }
         )
         $now = [System.DateTimeOffset]::UtcNow
-        $iat = $now.AddSeconds(-300)
-        $exp = $now.AddSeconds(300)
-        # $iat = $now.AddSeconds(-$script:GitHub.Config.JwtTimeTolerance)
-        # $exp = $now.AddSeconds($script:GitHub.Config.JwtTimeTolerance)
+        $iat = $now.AddSeconds(-$script:GitHub.Config.JwtTimeTolerance)
+        $exp = $now.AddSeconds($script:GitHub.Config.JwtTimeTolerance)
         $payload = [GitHubJWTComponent]::ToBase64UrlString(
             @{
                 iat = $iat.ToUnixTimeSeconds()

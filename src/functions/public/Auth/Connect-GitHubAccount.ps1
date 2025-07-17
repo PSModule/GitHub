@@ -169,7 +169,7 @@
             $ApiBaseUri = "https://api.$HostName"
 
             # If running on GitHub Actions and no access token is provided, use the GitHub token.
-            if ($script:IsGitHubActions -and $PSCmdlet.ParameterSetName -ne 'App') {
+            if ($script:IsGitHubActions -and $PSCmdlet.ParameterSetName -notin @('GitHub App using a PrivateKey', 'GitHub App using a KeyVault Key Reference')) {
                 $customTokenProvided = -not [string]::IsNullOrEmpty($Token)
                 $gitHubTokenPresent = Test-GitHubToken
                 Write-Verbose "A token was provided:  [$customTokenProvided]"

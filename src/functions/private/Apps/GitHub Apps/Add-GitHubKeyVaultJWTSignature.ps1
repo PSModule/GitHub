@@ -47,8 +47,7 @@
     process {
         if (Test-GitHubAzureCLI) {
             try {
-                $accessToken = az account get-access-token --resource 'https://vault.azure.net/' --output json | ConvertFrom-Json |
-                    Select-Object -ExpandProperty accessToken | ConvertTo-SecureString -AsPlainText
+                $accessToken = (az account get-access-token --resource 'https://vault.azure.net/' --output json | ConvertFrom-Json).accessToken
             } catch {
                 Write-Error "Failed to get access token from Azure CLI: $_"
                 return
@@ -60,6 +59,13 @@
                 Write-Error "Failed to get access token from Az PowerShell: $_"
                 return
             }
+        } else {
+            Write-Error 'Azure authentication is required. Please ensure you are logged in using either Azure CLI or Az PowerShell.'
+            return
+        }
+
+        if ($accessToken -isnot [securestring]) {
+            $accessToken = ConvertTo-SecureString -String $accessToken -AsPlainText
         }
 
         $hash64url = [GitHubJWTComponent]::ConvertToBase64UrlFormat(
