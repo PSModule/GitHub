@@ -31,26 +31,8 @@ function Test-GitHubJWTRefreshRequired {
 
     process {
         try {
-            if ($null -eq $Context.TokenExpiresAt) {
-                Write-Debug 'TokenExpiresAt is null, refresh required'
-                return $true
-            }
-
-            $tokenExpiresAt = $Context.TokenExpiresAt
-            $currentDateTime = [datetime]::Now
-            $remainingDuration = [datetime]$tokenExpiresAt - $currentDateTime
-
-            Write-Debug "JWT expires at: $tokenExpiresAt"
-            Write-Debug "Current time: $currentDateTime"
-            Write-Debug "Remaining duration: $($remainingDuration.TotalSeconds) seconds"
-
-            # Refresh on half-life
-            $refreshRequired = $remainingDuration.TotalSeconds -le ($script:GitHub.Config.JwtTimeTolerance / 2)
-            Write-Debug "Refresh required: $refreshRequired"
-
-            return $refreshRequired
+            ($Context.TokenExpiresAt - [datetime]::Now).TotalSeconds -le ($script:GitHub.Config.JwtTimeTolerance / 2)
         } catch {
-            Write-Debug "Error checking JWT expiration: $_"
             return $true
         }
     }

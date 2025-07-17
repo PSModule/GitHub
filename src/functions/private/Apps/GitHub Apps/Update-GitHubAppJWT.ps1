@@ -83,11 +83,6 @@
 
                 if ($acquiredLock) {
                     try {
-                        if (-not $Silent) {
-                            Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
-                            Write-Host 'JWT token nearing expiration. Refreshing JWT...'
-                        }
-
                         # Generate new JWT
                         $unsignedJWT = New-GitHubUnsignedJWT -ClientId $Context.ClientID
 
@@ -103,8 +98,10 @@
 
                         $Context.TokenExpiresAt = $unsignedJWT.ExpiresAt
 
-                        if ($PSCmdlet.ShouldProcess('JWT token', 'Update/refresh')) {
-                            Set-Context -Context $Context -Vault $script:GitHub.ContextVault
+                        if ($Context.ID) {
+                            if ($PSCmdlet.ShouldProcess('JWT token', 'Update/refresh')) {
+                                Set-Context -Context $Context -Vault $script:GitHub.ContextVault
+                            }
                         }
                     } finally {
                         $lock.ReleaseMutex()
