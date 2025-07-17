@@ -24,8 +24,8 @@ Describe 'Apps' {
 
     Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
         BeforeAll {
-            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
             LogGroup 'Context' {
+                $context = Connect-GitHubAccount @connectParams -PassThru -Silent -Debug -Verbose
                 Write-Host ($context | Format-List | Out-String)
             }
         }
