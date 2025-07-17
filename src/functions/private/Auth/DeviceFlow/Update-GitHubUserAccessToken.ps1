@@ -43,10 +43,6 @@
         [Parameter()]
         [switch] $PassThru,
 
-        # Suppress output messages.
-        [Parameter()]
-        [switch] $Silent,
-
         # Timeout in milliseconds for waiting on mutex. Default is 30 seconds.
         [Parameter()]
         [int] $TimeoutMs = 30000
@@ -70,10 +66,7 @@
                         $refreshTokenValidity = [datetime]($Context.RefreshTokenExpiresAt) - [datetime]::Now
                         $refreshTokenIsValid = $refreshTokenValidity.TotalSeconds -gt 0
                         if ($refreshTokenIsValid) {
-                            if (-not $Silent) {
-                                Write-Host '⚠ ' -ForegroundColor Yellow -NoNewline
-                                Write-Host 'Access token expired. Refreshing access token...'
-                            }
+                            Write-Debug '⚠ Access token expired. Refreshing access token...'
                             $tokenResponse = Invoke-GitHubDeviceFlowLogin -ClientID $Context.AuthClientID -RefreshToken $Context.RefreshToken -HostName $Context.HostName
                         } else {
                             Write-Verbose "Using $($Context.DeviceFlowType) authentication..."

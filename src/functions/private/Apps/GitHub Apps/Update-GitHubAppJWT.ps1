@@ -59,10 +59,6 @@
         [Parameter()]
         [switch] $PassThru,
 
-        # Suppress output messages.
-        [Parameter()]
-        [switch] $Silent,
-
         # Timeout in milliseconds for waiting on mutex. Default is 30 seconds.
         [Parameter()]
         [int] $TimeoutMs = 30000
@@ -83,7 +79,7 @@
 
                 if ($acquiredLock) {
                     try {
-                        # Generate new JWT
+                        Write-Debug '⚠ JWT token nearing expiration. Refreshing JWT...'
                         $unsignedJWT = New-GitHubUnsignedJWT -ClientId $Context.ClientID
 
                         if ($Context.KeyVaultKeyReference) {
