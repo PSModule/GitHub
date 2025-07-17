@@ -52,8 +52,17 @@
 
     process {
         $unsignedJWT = New-GitHubUnsignedJWT -ClientId $Context.ClientID
-        $jwt = Add-GitHubLocalJWTSignature -UnsignedJWT $unsignedJWT.Base -PrivateKey $Context.PrivateKey
-        $Context.Token = ConvertTo-SecureString -String $jwt -AsPlainText
+
+        if ($Context.KeyVaultKeyReference) {
+            Write-Debug "Using KeyVault Key Reference: $($Context.KeyVaultKeyReference)"
+            $Context.Token = Add-GitHubKeyVaultJWTSignature -UnsignedJWT $unsignedJWT.Base -KeyVaultKeyReference $Context.KeyVaultKeyReference
+        } elseif ($Context.PrivateKey) {
+            Write-Debug 'Using Private Key from context.'
+            $Context.Token = Add-GitHubLocalJWTSignature -UnsignedJWT $unsignedJWT.Base -PrivateKey $Context.PrivateKey
+        } else {
+            throw 'No Private Key or KeyVault Key Reference provided in the context.'
+        }
+
         $Context.TokenExpiresAt = $unsignedJWT.ExpiresAt
         if ($Context.ID) {
             $Context = Set-Context -Context $Context -Vault $script:GitHub.ContextVault -PassThru
