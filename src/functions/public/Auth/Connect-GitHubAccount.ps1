@@ -109,8 +109,8 @@
         [string] $KeyVaultKeyReference,
 
         # Automatically load installations for the GitHub App.
-        [Parameter(Mandatory, ParameterSetName = 'GitHub App using a PrivateKey')]
-        [Parameter(Mandatory, ParameterSetName = 'GitHub App using a KeyVault Key Reference')]
+        [Parameter(ParameterSetName = 'GitHub App using a PrivateKey')]
+        [Parameter(ParameterSetName = 'GitHub App using a KeyVault Key Reference')]
         [switch] $AutoloadInstallations,
 
         # The default enterprise to use in commands.
