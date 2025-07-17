@@ -41,7 +41,8 @@
     }
 
     process {
-        Write-Verbose "Context: [$Context]"
+        Write-Verbose "Context:"
+        $Context | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
         Write-Verbose "Anonymous: [$Anonymous]"
         if ($Anonymous -or $Context -eq 'Anonymous') {
             Write-Verbose 'Returning Anonymous context.'
