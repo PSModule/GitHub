@@ -45,7 +45,7 @@ function Test-GitHubJWTRefreshRequired {
             Write-Debug "Remaining duration: $($remainingDuration.TotalSeconds) seconds"
 
             # Refresh on half-life
-            $refreshRequired = $remainingDuration.TotalSeconds -le ($script:GitHub.Config.JwtRefreshThreshold / 2)
+            $refreshRequired = $remainingDuration.TotalSeconds -le ($script:GitHub.Config.JwtTimeTolerance / 2)
             Write-Debug "Refresh required: $refreshRequired"
 
             return $refreshRequired
