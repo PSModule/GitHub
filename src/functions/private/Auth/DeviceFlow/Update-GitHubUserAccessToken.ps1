@@ -55,7 +55,6 @@
     begin {
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
-        Assert-GitHubContext -Context $Context -AuthType UAT
     }
 
     process {
