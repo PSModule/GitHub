@@ -179,6 +179,37 @@ Describe 'Auth' {
     }
 }
 
+Describe 'Anonymous - Functions that can run anonymously' {
+    It 'Get-GithubRateLimit - Using -Anonymous' {
+        $rateLimit = Get-GitHubRateLimit -Anonymous
+        LogGroup 'Rate Limit' {
+            Write-Host ($rateLimit | Format-Table | Out-String)
+        }
+        $rateLimit | Should -Not -BeNullOrEmpty
+    }
+    It 'Invoke-GitHubAPI - Using -Anonymous' {
+        $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit' -Anonymous | Select-Object -ExpandProperty Response
+        LogGroup 'Rate Limit' {
+            Write-Host ($rateLimit | Format-Table | Out-String)
+        }
+        $rateLimit | Should -Not -BeNullOrEmpty
+    }
+    It 'Get-GithubRateLimit - Using -Context Anonymous' {
+        $rateLimit = Get-GitHubRateLimit -Context Anonymous
+        LogGroup 'Rate Limit' {
+            Write-Host ($rateLimit | Format-List | Out-String)
+        }
+        $rateLimit | Should -Not -BeNullOrEmpty
+    }
+    It 'Invoke-GitHubAPI - Using -Context Anonymous' {
+        $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit' -Context Anonymous | Select-Object -ExpandProperty Response
+        LogGroup 'Rate Limit' {
+            Write-Host ($rateLimit | Format-Table | Out-String)
+        }
+        $rateLimit | Should -Not -BeNullOrEmpty
+    }
+}
+
 Describe 'GitHub' {
     Context 'Config' {
         It 'Get-GitHubConfig - Gets the module configuration' {
@@ -780,42 +811,40 @@ Describe 'Emojis' {
 }
 
 Describe 'Webhooks' {
-    It 'Test-GitHubWebhookSignature - Validates the webhook payload using known correct signature' {
+    BeforeAll {
         $secret = "It's a Secret to Everybody"
         $payload = 'Hello, World!'
         $signature = 'sha256=757107ea0eb2509fc211221cce984b8a37570b6d7586c22c46f4379c8b043e17'
+    }
+
+    It 'Test-GitHubWebhookSignature - Validates the webhook payload using known correct signature (SHA256)' {
         $result = Test-GitHubWebhookSignature -Secret $secret -Body $payload -Signature $signature
         $result | Should -Be $true
     }
-}
 
-Describe 'Anonymous - Functions that can run anonymously' {
-    It 'Get-GithubRateLimit - Using -Anonymous' {
-        $rateLimit = Get-GitHubRateLimit -Anonymous
-        LogGroup 'Rate Limit' {
-            Write-Host ($rateLimit | Format-Table | Out-String)
+    It 'Test-GitHubWebhookSignature - Validates the webhook using Request object' {
+        $mockRequest = [PSCustomObject]@{
+            RawBody = $payload
+            Headers = @{
+                'X-Hub-Signature-256' = $signature
+            }
         }
-        $rateLimit | Should -Not -BeNullOrEmpty
+        $result = Test-GitHubWebhookSignature -Secret $secret -Request $mockRequest
+        $result | Should -Be $true
     }
-    It 'Invoke-GitHubAPI - Using -Anonymous' {
-        $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit' -Anonymous | Select-Object -ExpandProperty Response
-        LogGroup 'Rate Limit' {
-            Write-Host ($rateLimit | Format-Table | Out-String)
-        }
-        $rateLimit | Should -Not -BeNullOrEmpty
+
+    It 'Test-GitHubWebhookSignature - Should fail with invalid signature' {
+        $invalidSignature = 'sha256=invalid'
+        $result = Test-GitHubWebhookSignature -Secret $secret -Body $payload -Signature $invalidSignature
+        $result | Should -Be $false
     }
-    It 'Get-GithubRateLimit - Using -Context Anonymous' {
-        $rateLimit = Get-GitHubRateLimit -Context Anonymous
-        LogGroup 'Rate Limit' {
-            Write-Host ($rateLimit | Format-List | Out-String)
+
+    It 'Test-GitHubWebhookSignature - Should throw when signature header is missing from request' {
+        $mockRequest = [PSCustomObject]@{
+            RawBody = $payload
+            Headers = @{}
         }
-        $rateLimit | Should -Not -BeNullOrEmpty
-    }
-    It 'Invoke-GitHubAPI - Using -Context Anonymous' {
-        $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit' -Context Anonymous | Select-Object -ExpandProperty Response
-        LogGroup 'Rate Limit' {
-            Write-Host ($rateLimit | Format-Table | Out-String)
-        }
-        $rateLimit | Should -Not -BeNullOrEmpty
+
+        { Test-GitHubWebhookSignature -Secret $secret -Request $mockRequest } | Should -Throw
     }
 }
