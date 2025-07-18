@@ -84,52 +84,64 @@
         [string] $Algorithm = 'SHA256'
     )
 
-    # Handle parameter sets
-    if ($PSCmdlet.ParameterSetName -eq 'ByRequest') {
-        $Body = $Request.RawBody
+    begin {
+        # $stackPath = Get-PSCallStackPath
+        Write-Debug "[$stackPath] - Start"
+    }
 
-        # Get signature based on the specified algorithm
+    process {
+        # Handle parameter sets
+        if ($PSCmdlet.ParameterSetName -eq 'ByRequest') {
+            $Body = $Request.RawBody
+
+            # Get signature based on the specified algorithm
+            switch ($Algorithm) {
+                'SHA1' {
+                    $Signature = $Request.Headers['X-Hub-Signature']
+                    $expectedHeader = 'X-Hub-Signature'
+                }
+                'SHA256' {
+                    $Signature = $Request.Headers['X-Hub-Signature-256']
+                    $expectedHeader = 'X-Hub-Signature-256'
+                }
+            }
+
+            # If signature not found, throw an error
+            if (-not $Signature) {
+                throw "No webhook signature found in request headers. Expected '$expectedHeader' for $Algorithm algorithm."
+            }
+        }
+
+        $keyBytes = [Text.Encoding]::UTF8.GetBytes($Secret)
+        $payloadBytes = [Text.Encoding]::UTF8.GetBytes($Body)
+
+        # Create HMAC object based on algorithm
         switch ($Algorithm) {
             'SHA1' {
-                $Signature = $Request.Headers['X-Hub-Signature']
-                $expectedHeader = 'X-Hub-Signature'
+                $hmac = [System.Security.Cryptography.HMACSHA1]::new()
+                $algorithmPrefix = 'sha1='
             }
             'SHA256' {
-                $Signature = $Request.Headers['X-Hub-Signature-256']
-                $expectedHeader = 'X-Hub-Signature-256'
+                $hmac = [System.Security.Cryptography.HMACSHA256]::new()
+                $algorithmPrefix = 'sha256='
             }
         }
 
-        # If signature not found, throw an error
-        if (-not $Signature) {
-            throw "No webhook signature found in request headers. Expected '$expectedHeader' for $Algorithm algorithm."
-        }
+        $hmac.Key = $keyBytes
+        $hashBytes = $hmac.ComputeHash($payloadBytes)
+        $computedSignature = $algorithmPrefix + (($hashBytes | ForEach-Object { $_.ToString('x2') }) -join '')
+
+        # Dispose of the HMAC object
+        $hmac.Dispose()
+
+        [System.Security.Cryptography.CryptographicOperations]::FixedTimeEquals(
+            [Text.Encoding]::UTF8.GetBytes($computedSignature),
+            [Text.Encoding]::UTF8.GetBytes($Signature)
+        )
     }
 
-    $keyBytes = [Text.Encoding]::UTF8.GetBytes($Secret)
-    $payloadBytes = [Text.Encoding]::UTF8.GetBytes($Body)
-
-    # Create HMAC object based on algorithm
-    switch ($Algorithm) {
-        'SHA1' {
-            $hmac = [System.Security.Cryptography.HMACSHA1]::new()
-            $algorithmPrefix = 'sha1='
-        }
-        'SHA256' {
-            $hmac = [System.Security.Cryptography.HMACSHA256]::new()
-            $algorithmPrefix = 'sha256='
-        }
+    end {
+        Write-Debug "[$stackPath] - End"
     }
-
-    $hmac.Key = $keyBytes
-    $hashBytes = $hmac.ComputeHash($payloadBytes)
-    $computedSignature = $algorithmPrefix + (($hashBytes | ForEach-Object { $_.ToString('x2') }) -join '')
-
-    # Dispose of the HMAC object
-    $hmac.Dispose()
-
-    [System.Security.Cryptography.CryptographicOperations]::FixedTimeEquals(
-        [Text.Encoding]::UTF8.GetBytes($computedSignature),
-        [Text.Encoding]::UTF8.GetBytes($Signature)
-    )
 }
+

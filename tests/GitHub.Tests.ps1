@@ -780,12 +780,87 @@ Describe 'Emojis' {
 }
 
 Describe 'Webhooks' {
-    It 'Test-GitHubWebhookSignature - Validates the webhook payload using known correct signature' {
+    It 'Test-GitHubWebhookSignature - Validates the webhook payload using known correct signature (SHA256)' {
         $secret = "It's a Secret to Everybody"
         $payload = 'Hello, World!'
         $signature = 'sha256=757107ea0eb2509fc211221cce984b8a37570b6d7586c22c46f4379c8b043e17'
         $result = Test-GitHubWebhookSignature -Secret $secret -Body $payload -Signature $signature
         $result | Should -Be $true
+    }
+
+    It 'Test-GitHubWebhookSignature - Validates the webhook payload using SHA1 algorithm (ByBody)' {
+        $secret = "It's a Secret to Everybody"
+        $payload = 'Hello, World!'
+        $signature = 'sha1=52b1e138fb48dc4dd289b79c8be56db42b32b4b4'
+        $result = Test-GitHubWebhookSignature -Secret $secret -Body $payload -Signature $signature -Algorithm SHA1
+        $result | Should -Be $true
+    }
+
+    It 'Test-GitHubWebhookSignature - Validates the webhook using Request object with SHA256' {
+        $secret = "It's a Secret to Everybody"
+        $payload = 'Hello, World!'
+        $signature = 'sha256=757107ea0eb2509fc211221cce984b8a37570b6d7586c22c46f4379c8b043e17'
+
+        $mockRequest = [PSCustomObject]@{
+            RawBody = $payload
+            Headers = @{
+                'X-Hub-Signature-256' = $signature
+            }
+        }
+
+        $result = Test-GitHubWebhookSignature -Secret $secret -Request $mockRequest -Algorithm SHA256
+        $result | Should -Be $true
+    }
+
+    It 'Test-GitHubWebhookSignature - Validates the webhook using Request object with SHA1' {
+        $secret = "It's a Secret to Everybody"
+        $payload = 'Hello, World!'
+        $signature = 'sha1=52b1e138fb48dc4dd289b79c8be56db42b32b4b4'
+
+        $mockRequest = [PSCustomObject]@{
+            RawBody = $payload
+            Headers = @{
+                'X-Hub-Signature' = $signature
+            }
+        }
+
+        $result = Test-GitHubWebhookSignature -Secret $secret -Request $mockRequest -Algorithm SHA1
+        $result | Should -Be $true
+    }
+
+    It 'Test-GitHubWebhookSignature - Should fail with invalid signature' {
+        $secret = "It's a Secret to Everybody"
+        $payload = 'Hello, World!'
+        $invalidSignature = 'sha256=invalid'
+        $result = Test-GitHubWebhookSignature -Secret $secret -Body $payload -Signature $invalidSignature
+        $result | Should -Be $false
+    }
+
+    It 'Test-GitHubWebhookSignature - Should throw when signature header is missing from request' {
+        $secret = "It's a Secret to Everybody"
+        $payload = 'Hello, World!'
+
+        $mockRequest = [PSCustomObject]@{
+            RawBody = $payload
+            Headers = @{}
+        }
+
+        { Test-GitHubWebhookSignature -Secret $secret -Request $mockRequest } | Should -Throw
+    }
+
+    It 'Test-GitHubWebhookSignature - Should throw when wrong signature header is present for SHA1' {
+        $secret = "It's a Secret to Everybody"
+        $payload = 'Hello, World!'
+        $signature = 'sha256=757107ea0eb2509fc211221cce984b8a37570b6d7586c22c46f4379c8b043e17'
+
+        $mockRequest = [PSCustomObject]@{
+            RawBody = $payload
+            Headers = @{
+                'X-Hub-Signature-256' = $signature
+            }
+        }
+
+        { Test-GitHubWebhookSignature -Secret $secret -Request $mockRequest -Algorithm SHA1 } | Should -Throw
     }
 }
 
