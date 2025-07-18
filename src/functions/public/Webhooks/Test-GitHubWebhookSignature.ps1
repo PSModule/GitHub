@@ -6,7 +6,7 @@
         .DESCRIPTION
         This function validates the integrity and authenticity of a GitHub webhook request by comparing
         the received HMAC signature against a computed hash of the payload using a shared secret.
-        It supports both SHA-1 and SHA-256 algorithms and uses a constant-time comparison to mitigate
+        It uses the SHA-256 algorithm and employs a constant-time comparison to mitigate
         timing attacks. The function returns a boolean indicating whether the signature is valid.
 
         .EXAMPLE
