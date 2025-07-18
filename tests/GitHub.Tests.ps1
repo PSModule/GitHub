@@ -19,7 +19,6 @@
 [CmdletBinding()]
 param()
 
-<#
 Describe 'Auth' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 
@@ -810,7 +809,7 @@ Describe 'Emojis' {
         }
     }
 }
-#>
+
 
 Describe 'Webhooks' {
     BeforeAll {
