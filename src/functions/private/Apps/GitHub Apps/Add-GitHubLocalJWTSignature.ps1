@@ -1,4 +1,4 @@
-function Add-GitHubJWTSignature {
+﻿function Add-GitHubLocalJWTSignature {
     <#
         .SYNOPSIS
         Signs a JSON Web Token (JWT) using a local RSA private key.
@@ -8,26 +8,25 @@ function Add-GitHubJWTSignature {
         This function handles the RSA signing process and returns the complete signed JWT.
 
         .EXAMPLE
-        Add-GitHubJWTSignature -UnsignedJWT 'eyJ0eXAiOi...' -PrivateKey '--- BEGIN RSA PRIVATE KEY --- ... --- END RSA PRIVATE KEY ---'
+        Add-GitHubLocalJWTSignature -UnsignedJWT 'eyJ0eXAiOi...' -PrivateKey '--- BEGIN RSA PRIVATE KEY --- ... --- END RSA PRIVATE KEY ---'
 
         Adds a signature to the unsigned JWT using the provided private key.
 
         .OUTPUTS
-        String
+        securestring
 
         .NOTES
         This function isolates the signing logic to enable support for multiple signing methods.
 
         .LINK
-        https://psmodule.io/GitHub/Functions/Apps/GitHub%20App/Add-GitHubJWTSignature
+        https://psmodule.io/GitHub/Functions/Apps/GitHub%20App/Add-GitHubLocalJWTSignature
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-        'PSAvoidUsingConvertToSecureStringWithPlainText',
-        '',
+        'PSAvoidUsingConvertToSecureStringWithPlainText', '',
         Justification = 'Used to handle secure string private keys.'
     )]
     [CmdletBinding()]
-    [OutputType([string])]
+    [OutputType([securestring])]
     param(
         # The unsigned JWT (header.payload) to sign.
         [Parameter(Mandatory)]
@@ -52,14 +51,16 @@ function Add-GitHubJWTSignature {
         $rsa.ImportFromPem($PrivateKey)
 
         try {
-            $signature = [Convert]::ToBase64String(
-                $rsa.SignData(
-                    [System.Text.Encoding]::UTF8.GetBytes($UnsignedJWT),
-                    [System.Security.Cryptography.HashAlgorithmName]::SHA256,
-                    [System.Security.Cryptography.RSASignaturePadding]::Pkcs1
+            $signature = [GitHubJWTComponent]::ConvertToBase64UrlFormat(
+                [System.Convert]::ToBase64String(
+                    $rsa.SignData(
+                        [System.Text.Encoding]::UTF8.GetBytes($UnsignedJWT),
+                        [System.Security.Cryptography.HashAlgorithmName]::SHA256,
+                        [System.Security.Cryptography.RSASignaturePadding]::Pkcs1
+                    )
                 )
-            ).TrimEnd('=').Replace('+', '-').Replace('/', '_')
-            return "$UnsignedJWT.$signature"
+            )
+            return (ConvertTo-SecureString -String "$UnsignedJWT.$signature" -AsPlainText)
         } finally {
             if ($rsa) {
                 $rsa.Dispose()

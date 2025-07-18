@@ -1,4 +1,4 @@
-function New-GitHubUnsignedJWT {
+﻿function New-GitHubUnsignedJWT {
     <#
         .SYNOPSIS
         Creates an unsigned JSON Web Token (JWT) for a GitHub App.
@@ -38,30 +38,22 @@ function New-GitHubUnsignedJWT {
     }
 
     process {
-        $header = [Convert]::ToBase64String(
-            [System.Text.Encoding]::UTF8.GetBytes(
-                (
-                    ConvertTo-Json -InputObject @{
-                        alg = 'RS256'
-                        typ = 'JWT'
-                    }
-                )
-            )
-        ).TrimEnd('=').Replace('+', '-').Replace('/', '_')
+        $header = [GitHubJWTComponent]::ToBase64UrlString(
+            @{
+                alg = 'RS256'
+                typ = 'JWT'
+            }
+        )
         $now = [System.DateTimeOffset]::UtcNow
         $iat = $now.AddSeconds(-$script:GitHub.Config.JwtTimeTolerance)
         $exp = $now.AddSeconds($script:GitHub.Config.JwtTimeTolerance)
-        $payload = [Convert]::ToBase64String(
-            [System.Text.Encoding]::UTF8.GetBytes(
-                (
-                    ConvertTo-Json -InputObject @{
-                        iat = $iat.ToUnixTimeSeconds()
-                        exp = $exp.ToUnixTimeSeconds()
-                        iss = $ClientID
-                    }
-                )
-            )
-        ).TrimEnd('=').Replace('+', '-').Replace('/', '_')
+        $payload = [GitHubJWTComponent]::ToBase64UrlString(
+            @{
+                iat = $iat.ToUnixTimeSeconds()
+                exp = $exp.ToUnixTimeSeconds()
+                iss = $ClientID
+            }
+        )
         [pscustomobject]@{
             Base      = "$header.$payload"
             IssuedAt  = $iat.DateTime

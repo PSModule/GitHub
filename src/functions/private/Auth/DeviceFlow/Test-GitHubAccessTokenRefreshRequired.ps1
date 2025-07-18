@@ -26,8 +26,11 @@
     }
 
     process {
-        $updateToken = ($Context.TokenExpiresAt - [datetime]::Now).TotalHours -lt $script:GitHub.Config.AccessTokenGracePeriodInHours
-        $updateToken
+        try {
+            ($Context.TokenExpiresAt - [datetime]::Now).TotalHours -lt $script:GitHub.Config.AccessTokenGracePeriodInHours
+        } catch {
+            return $true
+        }
     }
 
     end {
