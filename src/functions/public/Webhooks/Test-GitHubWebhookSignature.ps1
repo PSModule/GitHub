@@ -29,16 +29,6 @@
 
         Validates the webhook request using the entire request object, automatically extracting the body and signature.
 
-        .EXAMPLE
-        Test-GitHubWebhookSignature -Secret $env:WEBHOOK_SECRET -Body $Request.RawBody -Signature $Request.Headers['X-Hub-Signature'] -Algorithm SHA1
-
-        Output:
-        ```powershell
-        True
-        ```
-
-        Validates the webhook using SHA-1 algorithm instead of the default SHA-256.
-
         .OUTPUTS
         bool
 
@@ -68,20 +58,14 @@
         [string] $Body,
 
         # The signature received from GitHub to compare against.
-        # Example: 'sha256=abc123...' or 'sha1=def456...'
+        # Example: 'sha256=abc123...'
         [Parameter(Mandatory, ParameterSetName = 'ByBody')]
         [string] $Signature,
 
         # The entire request object containing RawBody and Headers.
         # Used in Azure Function Apps or similar environments.
         [Parameter(Mandatory, ParameterSetName = 'ByRequest')]
-        [PSObject] $Request,
-
-        # The hash algorithm to use for signature verification.
-        # Defaults to SHA256 for maximum security.
-        [Parameter()]
-        [ValidateSet('SHA1', 'SHA256')]
-        [string] $Algorithm = 'SHA256'
+        [PSObject] $Request
     )
 
     begin {
@@ -93,39 +77,20 @@
         # Handle parameter sets
         if ($PSCmdlet.ParameterSetName -eq 'ByRequest') {
             $Body = $Request.RawBody
-
-            # Get signature based on the specified algorithm
-            switch ($Algorithm) {
-                'SHA1' {
-                    $Signature = $Request.Headers['X-Hub-Signature']
-                    $expectedHeader = 'X-Hub-Signature'
-                }
-                'SHA256' {
-                    $Signature = $Request.Headers['X-Hub-Signature-256']
-                    $expectedHeader = 'X-Hub-Signature-256'
-                }
-            }
+            $Signature = $Request.Headers['X-Hub-Signature-256']
 
             # If signature not found, throw an error
             if (-not $Signature) {
-                throw "No webhook signature found in request headers. Expected '$expectedHeader' for $Algorithm algorithm."
+                throw "No webhook signature found in request headers. Expected 'X-Hub-Signature-256' for SHA256 algorithm."
             }
         }
 
         $keyBytes = [Text.Encoding]::UTF8.GetBytes($Secret)
         $payloadBytes = [Text.Encoding]::UTF8.GetBytes($Body)
 
-        # Create HMAC object based on algorithm
-        switch ($Algorithm) {
-            'SHA1' {
-                $hmac = [System.Security.Cryptography.HMACSHA1]::new()
-                $algorithmPrefix = 'sha1='
-            }
-            'SHA256' {
-                $hmac = [System.Security.Cryptography.HMACSHA256]::new()
-                $algorithmPrefix = 'sha256='
-            }
-        }
+        # Create HMAC SHA256 object
+        $hmac = [System.Security.Cryptography.HMACSHA256]::new()
+        $algorithmPrefix = 'sha256='
 
         $hmac.Key = $keyBytes
         $hashBytes = $hmac.ComputeHash($payloadBytes)

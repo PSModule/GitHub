@@ -814,39 +814,22 @@ Describe 'Webhooks' {
     BeforeAll {
         $secret = "It's a Secret to Everybody"
         $payload = 'Hello, World!'
-        $signature256 = 'sha256=757107ea0eb2509fc211221cce984b8a37570b6d7586c22c46f4379c8b043e17'
-        $signature = 'sha1=01dc10d0c83e72ed246219cdd91669667fe2ca59'
+        $signature = 'sha256=757107ea0eb2509fc211221cce984b8a37570b6d7586c22c46f4379c8b043e17'
     }
 
     It 'Test-GitHubWebhookSignature - Validates the webhook payload using known correct signature (SHA256)' {
-        $result = Test-GitHubWebhookSignature -Secret $secret -Body $payload -Signature $signature256
+        $result = Test-GitHubWebhookSignature -Secret $secret -Body $payload -Signature $signature
         $result | Should -Be $true
     }
 
-    It 'Test-GitHubWebhookSignature - Validates the webhook payload using SHA1 algorithm (ByBody)' {
-        $result = Test-GitHubWebhookSignature -Secret $secret -Body $payload -Signature $signature -Algorithm SHA1
-        $result | Should -Be $true
-    }
-
-    It 'Test-GitHubWebhookSignature - Validates the webhook using Request object with SHA256' {
+    It 'Test-GitHubWebhookSignature - Validates the webhook using Request object' {
         $mockRequest = [PSCustomObject]@{
             RawBody = $payload
             Headers = @{
-                'X-Hub-Signature-256' = $signature256
+                'X-Hub-Signature-256' = $signature
             }
         }
-        $result = Test-GitHubWebhookSignature -Secret $secret -Request $mockRequest -Algorithm SHA256
-        $result | Should -Be $true
-    }
-
-    It 'Test-GitHubWebhookSignature - Validates the webhook using Request object with SHA1' {
-        $mockRequest = [PSCustomObject]@{
-            RawBody = $payload
-            Headers = @{
-                'X-Hub-Signature' = $signature
-            }
-        }
-        $result = Test-GitHubWebhookSignature -Secret $secret -Request $mockRequest -Algorithm SHA1
+        $result = Test-GitHubWebhookSignature -Secret $secret -Request $mockRequest
         $result | Should -Be $true
     }
 
@@ -863,16 +846,5 @@ Describe 'Webhooks' {
         }
 
         { Test-GitHubWebhookSignature -Secret $secret -Request $mockRequest } | Should -Throw
-    }
-
-    It 'Test-GitHubWebhookSignature - Should throw when wrong signature header is present for SHA1' {
-        $mockRequest = [PSCustomObject]@{
-            RawBody = $payload
-            Headers = @{
-                'X-Hub-Signature-256' = $signature256
-            }
-        }
-
-        { Test-GitHubWebhookSignature -Secret $secret -Request $mockRequest -Algorithm SHA1 } | Should -Throw
     }
 }
