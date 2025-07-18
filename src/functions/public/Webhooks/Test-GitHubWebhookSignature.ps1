@@ -69,7 +69,7 @@
     )
 
     begin {
-        # $stackPath = Get-PSCallStackPath
+        $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
     }
 
