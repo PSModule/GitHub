@@ -5,9 +5,9 @@
 
         .DESCRIPTION
         This function validates the integrity and authenticity of a GitHub webhook request by comparing
-        the received HMAC SHA-256 signature against a computed hash of the payload using a shared secret.
-        It uses a constant-time comparison to mitigate timing attacks and returns a boolean indicating
-        whether the signature is valid.
+        the received HMAC signature against a computed hash of the payload using a shared secret.
+        It supports both SHA-1 and SHA-256 algorithms and uses a constant-time comparison to mitigate
+        timing attacks. The function returns a boolean indicating whether the signature is valid.
 
         .EXAMPLE
         Test-GitHubWebhookSignature -Secret $env:WEBHOOK_SECRET -Body $Request.RawBody -Signature $Request.Headers['X-Hub-Signature-256']
@@ -19,6 +19,26 @@
 
         Validates the provided webhook payload against the HMAC SHA-256 signature using the given secret.
 
+        .EXAMPLE
+        Test-GitHubWebhookSignature -Secret $env:WEBHOOK_SECRET -Request $Request
+
+        Output:
+        ```powershell
+        True
+        ```
+
+        Validates the webhook request using the entire request object, automatically extracting the body and signature.
+
+        .EXAMPLE
+        Test-GitHubWebhookSignature -Secret $env:WEBHOOK_SECRET -Body $Request.RawBody -Signature $Request.Headers['X-Hub-Signature'] -Algorithm SHA1
+
+        Output:
+        ```powershell
+        True
+        ```
+
+        Validates the webhook using SHA-1 algorithm instead of the default SHA-256.
+
         .OUTPUTS
         bool
 
@@ -29,11 +49,12 @@
         .LINK
         https://psmodule.io/GitHub/Functions/Webhooks/Test-GitHubWebhookSignature
 
-        .LINK
-        https://docs.github.com/webhooks/using-webhooks/validating-webhook-deliveries
+        .NOTES
+        [Validating Webhook Deliveries | GitHub Docs](https://docs.github.com/webhooks/using-webhooks/validating-webhook-deliveries)
+        [Webhook events and payloads | GitHub Docs](https://docs.github.com/en/webhooks/webhook-events-and-payloads)
     #>
     [OutputType([bool])]
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'ByBody')]
     param (
         # The secret key used to compute the HMAC hash.
         # Example: 'mysecret'
@@ -43,22 +64,69 @@
         # The JSON body of the GitHub webhook request.
         # This must be the compressed JSON payload received from GitHub.
         # Example: '{"action":"opened"}'
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ParameterSetName = 'ByBody')]
         [string] $Body,
 
         # The signature received from GitHub to compare against.
-        # Example: 'sha256=abc123...'
-        [Parameter(Mandatory)]
-        [string] $Signature
+        # Example: 'sha256=abc123...' or 'sha1=def456...'
+        [Parameter(Mandatory, ParameterSetName = 'ByBody')]
+        [string] $Signature,
+
+        # The entire request object containing RawBody and Headers.
+        # Used in Azure Function Apps or similar environments.
+        [Parameter(Mandatory, ParameterSetName = 'ByRequest')]
+        [PSObject] $Request,
+
+        # The hash algorithm to use for signature verification.
+        # Defaults to SHA256 for maximum security.
+        [Parameter()]
+        [ValidateSet('SHA1', 'SHA256')]
+        [string] $Algorithm = 'SHA256'
     )
+
+    # Handle parameter sets
+    if ($PSCmdlet.ParameterSetName -eq 'ByRequest') {
+        $Body = $Request.RawBody
+
+        # Get signature based on the specified algorithm
+        switch ($Algorithm) {
+            'SHA1' {
+                $Signature = $Request.Headers['X-Hub-Signature']
+                $expectedHeader = 'X-Hub-Signature'
+            }
+            'SHA256' {
+                $Signature = $Request.Headers['X-Hub-Signature-256']
+                $expectedHeader = 'X-Hub-Signature-256'
+            }
+        }
+
+        # If signature not found, throw an error
+        if (-not $Signature) {
+            throw "No webhook signature found in request headers. Expected '$expectedHeader' for $Algorithm algorithm."
+        }
+    }
 
     $keyBytes = [Text.Encoding]::UTF8.GetBytes($Secret)
     $payloadBytes = [Text.Encoding]::UTF8.GetBytes($Body)
 
-    $hmac = [System.Security.Cryptography.HMACSHA256]::new()
+    # Create HMAC object based on algorithm
+    switch ($Algorithm) {
+        'SHA1' {
+            $hmac = [System.Security.Cryptography.HMACSHA1]::new()
+            $algorithmPrefix = 'sha1='
+        }
+        'SHA256' {
+            $hmac = [System.Security.Cryptography.HMACSHA256]::new()
+            $algorithmPrefix = 'sha256='
+        }
+    }
+
     $hmac.Key = $keyBytes
     $hashBytes = $hmac.ComputeHash($payloadBytes)
-    $computedSignature = 'sha256=' + (($hashBytes | ForEach-Object { $_.ToString('x2') }) -join '')
+    $computedSignature = $algorithmPrefix + (($hashBytes | ForEach-Object { $_.ToString('x2') }) -join '')
+
+    # Dispose of the HMAC object
+    $hmac.Dispose()
 
     [System.Security.Cryptography.CryptographicOperations]::FixedTimeEquals(
         [Text.Encoding]::UTF8.GetBytes($computedSignature),
