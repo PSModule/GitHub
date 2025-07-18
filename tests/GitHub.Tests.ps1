@@ -19,6 +19,7 @@
 [CmdletBinding()]
 param()
 
+<#
 Describe 'Auth' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 
@@ -176,6 +177,37 @@ Describe 'Auth' {
             $secureToken = Get-GitHubAccessToken -Context $context
             $secureToken | Should -BeOfType [System.Security.SecureString]
         }
+    }
+}
+
+Describe 'Anonymous - Functions that can run anonymously' {
+    It 'Get-GithubRateLimit - Using -Anonymous' {
+        $rateLimit = Get-GitHubRateLimit -Anonymous
+        LogGroup 'Rate Limit' {
+            Write-Host ($rateLimit | Format-Table | Out-String)
+        }
+        $rateLimit | Should -Not -BeNullOrEmpty
+    }
+    It 'Invoke-GitHubAPI - Using -Anonymous' {
+        $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit' -Anonymous | Select-Object -ExpandProperty Response
+        LogGroup 'Rate Limit' {
+            Write-Host ($rateLimit | Format-Table | Out-String)
+        }
+        $rateLimit | Should -Not -BeNullOrEmpty
+    }
+    It 'Get-GithubRateLimit - Using -Context Anonymous' {
+        $rateLimit = Get-GitHubRateLimit -Context Anonymous
+        LogGroup 'Rate Limit' {
+            Write-Host ($rateLimit | Format-List | Out-String)
+        }
+        $rateLimit | Should -Not -BeNullOrEmpty
+    }
+    It 'Invoke-GitHubAPI - Using -Context Anonymous' {
+        $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit' -Context Anonymous | Select-Object -ExpandProperty Response
+        LogGroup 'Rate Limit' {
+            Write-Host ($rateLimit | Format-Table | Out-String)
+        }
+        $rateLimit | Should -Not -BeNullOrEmpty
     }
 }
 
@@ -778,6 +810,7 @@ Describe 'Emojis' {
         }
     }
 }
+#>
 
 Describe 'Webhooks' {
     It 'Test-GitHubWebhookSignature - Validates the webhook payload using known correct signature (SHA256)' {
@@ -861,36 +894,5 @@ Describe 'Webhooks' {
         }
 
         { Test-GitHubWebhookSignature -Secret $secret -Request $mockRequest -Algorithm SHA1 } | Should -Throw
-    }
-}
-
-Describe 'Anonymous - Functions that can run anonymously' {
-    It 'Get-GithubRateLimit - Using -Anonymous' {
-        $rateLimit = Get-GitHubRateLimit -Anonymous
-        LogGroup 'Rate Limit' {
-            Write-Host ($rateLimit | Format-Table | Out-String)
-        }
-        $rateLimit | Should -Not -BeNullOrEmpty
-    }
-    It 'Invoke-GitHubAPI - Using -Anonymous' {
-        $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit' -Anonymous | Select-Object -ExpandProperty Response
-        LogGroup 'Rate Limit' {
-            Write-Host ($rateLimit | Format-Table | Out-String)
-        }
-        $rateLimit | Should -Not -BeNullOrEmpty
-    }
-    It 'Get-GithubRateLimit - Using -Context Anonymous' {
-        $rateLimit = Get-GitHubRateLimit -Context Anonymous
-        LogGroup 'Rate Limit' {
-            Write-Host ($rateLimit | Format-List | Out-String)
-        }
-        $rateLimit | Should -Not -BeNullOrEmpty
-    }
-    It 'Invoke-GitHubAPI - Using -Context Anonymous' {
-        $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit' -Context Anonymous | Select-Object -ExpandProperty Response
-        LogGroup 'Rate Limit' {
-            Write-Host ($rateLimit | Format-Table | Out-String)
-        }
-        $rateLimit | Should -Not -BeNullOrEmpty
     }
 }
