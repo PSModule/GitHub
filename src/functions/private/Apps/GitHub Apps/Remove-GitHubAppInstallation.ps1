@@ -24,7 +24,7 @@ function Remove-GitHubAppInstallation {
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param(
-        # The unique identifier of the installation.
+        # The ID of the GitHub App installation to uninstall.
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $ID,
 

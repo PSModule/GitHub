@@ -9,7 +9,7 @@
         The authenticated GitHub App must be installed on the enterprise and be granted the Enterprise/organization_installations (write) permission.
 
         .EXAMPLE
-        Uninstall-GitHubAppOnEnterpriseOrganization -Enterprise 'github' -Organization 'octokit' -InstallationID '123456'
+        Uninstall-GitHubAppOnEnterpriseOrganization -Enterprise 'github' -Organization 'octokit' -ID '123456'
 
         Uninstall the GitHub App with the installation ID `123456` from the organization `octokit` in the enterprise `github`.
     #>
@@ -23,7 +23,7 @@
         [Parameter(Mandatory)]
         [string] $Organization,
 
-        # The client ID of the GitHub App to install.
+        # The ID of the GitHub App installation to uninstall.
         [Parameter(Mandatory)]
         [string] $ID,
 

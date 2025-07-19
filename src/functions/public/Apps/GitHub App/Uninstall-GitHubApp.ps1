@@ -24,7 +24,7 @@
         [Parameter(Mandatory, ParameterSetName = 'EnterpriseOrganization', ValueFromPipelineByPropertyName)]
         [string] $Organization,
 
-        # The client ID of the GitHub App to install.
+        # The ID of the GitHub App installation to uninstall.
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $ID,
 
@@ -41,15 +41,15 @@
     }
 
     process {
-        switch ($PSCmdlet.ParameterSetName) {
-            'Delete an installation for the authenticated app' {
+        switch ($Context.AuthType) {
+            'App' {
                 $params = @{
                     ID      = $ID
                     Context = $Context
                 }
                 Remove-GitHubAppInstallation @params
             }
-            'EnterpriseOrganization' {
+            'IAT' {
                 $params = @{
                     Enterprise   = $Enterprise
                     Organization = $Organization
