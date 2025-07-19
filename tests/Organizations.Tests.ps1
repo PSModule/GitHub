@@ -42,6 +42,19 @@ Describe 'Organizations' {
                 LogGroup 'Context - Installation' {
                     Write-Host ($installationContext | Select-Object * | Out-String)
                 }
+
+                # Clean up any existing app installations for this organization to start with a clean slate
+                LogGroup 'Pre-test Cleanup - App Installations' {
+                    try {
+                        $existingInstallations = Get-GitHubAppInstallation -Context $context | Where-Object { $_.Target.Name -eq $orgName }
+                        foreach ($installation in $existingInstallations) {
+                            Write-Host "Removing existing app installation ID: $($installation.ID) for organization: $($installation.Target.Name)"
+                            Uninstall-GitHubApp -Enterprise $owner -Organization $orgName -ID $installation.ID -Context $context
+                        }
+                    } catch {
+                        Write-Host "Failed to clean up existing installations: $($_.Exception.Message)"
+                    }
+                }
             }
         }
         AfterAll {
@@ -145,6 +158,25 @@ Describe 'Organizations' {
         It 'Remove-GitHubOrganization - Removes an organization using organization installation' -Skip:($OwnerType -ne 'enterprise') {
             $orgContext = Connect-GitHubApp -Organization $orgName -Context $context -PassThru -Silent
             Remove-GitHubOrganization -Name $orgName -Confirm:$false -Context $orgContext
+        }
+
+        It 'Uninstall-GitHubApp - Removes app installation after organization deletion' -Skip:($OwnerType -ne 'enterprise') {
+            LogGroup 'Post-deletion Cleanup - App Installations' {
+                try {
+                    # Get all installations and find any that target the deleted organization
+                    $installations = Get-GitHubAppInstallation -Context $context | Where-Object { $_.Target.Name -eq $orgName }
+                    foreach ($installation in $installations) {
+                        Write-Host "Removing app installation ID: $($installation.ID) for deleted organization: $($installation.Target.Name)"
+                        Uninstall-GitHubApp -Enterprise $owner -Organization $orgName -ID $installation.ID -Context $context
+                    }
+                    # Verify no installations remain for the deleted organization
+                    $remainingInstallations = Get-GitHubAppInstallation -Context $context | Where-Object { $_.Target.Name -eq $orgName }
+                    $remainingInstallations | Should -BeNullOrEmpty
+                } catch {
+                    Write-Host "Failed to clean up app installations after organization deletion: $($_.Exception.Message)"
+                    throw
+                }
+            }
         }
 
         Context 'Invitations' -Skip:($Owner -notin 'psmodule-test-org', 'psmodule-test-org2') {

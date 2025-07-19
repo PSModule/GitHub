@@ -14,30 +14,18 @@
         .LINK
         https://psmodule.io/GitHub/Functions/Apps/GitHub%20App/Uninstall-GitHubApp
     #>
-    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
+    [CmdletBinding(DefaultParameterSetName = 'Delete an installation for the authenticated app')]
     param(
         # The enterprise slug or ID.
-        [Parameter(
-            Mandatory,
-            ParameterSetName = 'EnterpriseOrganization',
-            ValueFromPipelineByPropertyName
-        )]
+        [Parameter(Mandatory, ParameterSetName = 'EnterpriseOrganization', ValueFromPipelineByPropertyName)]
         [string] $Enterprise,
 
         # The organization name. The name is not case sensitive.
-        [Parameter(
-            Mandatory,
-            ParameterSetName = 'EnterpriseOrganization',
-            ValueFromPipelineByPropertyName
-        )]
+        [Parameter(Mandatory, ParameterSetName = 'EnterpriseOrganization', ValueFromPipelineByPropertyName)]
         [string] $Organization,
 
         # The client ID of the GitHub App to install.
-        [Parameter(
-            Mandatory,
-            ValueFromPipelineByPropertyName
-        )]
-        [Alias('installation_id', 'InstallationID')]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $ID,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -54,6 +42,13 @@
 
     process {
         switch ($PSCmdlet.ParameterSetName) {
+            'Delete an installation for the authenticated app' {
+                $params = @{
+                    ID      = $ID
+                    Context = $Context
+                }
+                Remove-GitHubAppInstallation @params
+            }
             'EnterpriseOrganization' {
                 $params = @{
                     Enterprise   = $Enterprise
