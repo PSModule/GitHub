@@ -7,22 +7,30 @@ Connect-GitHub
 
 # Log on to a specific instance of GitHub (enterprise)
 Connect-GitHub -Host 'msx.ghe.com'
-Get-GitHubRepository -Context 'msx.ghe.com/MariusStorhaug' # Contexts should be selectable/overrideable on any call
+Get-GitHubRepository -Context 'msx.ghe.com/MariusStorhaug' # Contexts are selectable/overrideable on any call
 
-# Connect to GitHub interactively using OAuth App and Device Flow (should not use this, should we even support it?)
+# Connect to GitHub interactively using OAuth App and Device Flow.
 Connect-GitHub -Mode 'OAuthApp' -Scope 'gist read:org repo workflow'
 
-# Connect to GitHub interactively using less desired PAT flow
+# Connect to GitHub interactively using less desired PAT flow, supports both fine-grained and classic PATs
 Connect-GitHub -UseAccessToken
+
+# Connect to GitHub programatically (GitHub App Installation Access Token or PAT)
+Connect-GitHub -Token ***********
 
 # Connect to GitHub programatically (GitHub Actions)
 Connect-GitHub # Looks for the GITHUB_TOKEN variable
 
-# Connect to GitHub programatically (GitHub App, for GitHub Actions or external applications, JWT login)
+# Connect using a GitHub App and its private key (local signing of JWT)
 Connect-GitHub -ClientID '<client_id>' -PrivateKey '<private_key>'
 
-# Connect to GitHub programatically (GitHub App Installation Access Token or PAT)
-Connect-GitHub -Token ***********
+# Connect using a GitHub App and the Key vault for signing the JWT.
+# Prereq: The private key is stored in an Azure Key Vault and the shell has an authenticated Azure PowerShell or Azure CLI session
+$ClientID = 'Iv23lieHcDQDwVV3alK1'
+$KeyVaultKeyReference = 'https://psmodule-test-vault.vault.azure.net/keys/psmodule-ent-app'
+Connect-GitHub -ClientID $ClientID -KeyVaultKeyReference $KeyVaultKeyReference
+Connect-GitHubApp -Organization 'dnb-tooling'
+
 
 ###
 ### Contexts / Profiles
@@ -37,13 +45,11 @@ Get-GitHubContext -ListAvailable
 # Returns a specific context, autocomplete the name.
 Get-GitHubContext -Context 'msx.ghe.com/MariusStorhaug'
 
-# Take a name dynamically from Get-GitHubContext? Autocomplete the name
+# Take a name dynamically from Get-GitHubContext? tab-complete the name
 Switch-GitHubContext -Context 'msx.ghe.com/MariusStorhaug'
 
 # Set a specific context as the default context using pipeline
-'msx.ghe.com/MariusStorhaug' | Switch-GitHubContext
-
-Get-GitHubContext -Context 'github.com/MariusStorhaug' | Switch-GitHubContext
+'msx.ghe.com/MariusStorhaug' | Switch-GitHubCwontext
 
 # Abstraction layers on GitHubContexts
 Get-GitHubContext -Context 'msx.ghe.com/MariusStorhaug'
