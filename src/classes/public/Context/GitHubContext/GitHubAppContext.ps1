@@ -1,9 +1,12 @@
-﻿class AppGitHubContext : GitHubContext {
+﻿class GitHubAppContext : GitHubContext {
     # Client ID for GitHub Apps
     [string] $ClientID
 
     # The private key for the app.
     [securestring] $PrivateKey
+
+    # Azure Key Vault key reference for JWT signing (alternative to PrivateKey).
+    [string] $KeyVaultKeyReference
 
     # Owner of the GitHub App
     [string] $OwnerName
@@ -17,9 +20,9 @@
     # The events that the app is subscribing to once installed
     [string[]] $Events
 
-    AppGitHubContext() {}
+    GitHubAppContext() {}
 
-    AppGitHubContext([pscustomobject]$Object) {
+    GitHubAppContext([pscustomobject]$Object) {
         $this.ID = $Object.ID
         $this.Name = $Object.Name
         $this.DisplayName = $Object.DisplayName
@@ -33,6 +36,7 @@
         $this.UserName = $Object.UserName
         $this.Token = $Object.Token
         $this.TokenType = $Object.TokenType
+        $this.TokenExpiresAt = $Object.TokenExpiresAt
         $this.Enterprise = $Object.Enterprise
         $this.Owner = $Object.Owner
         $this.Repository = $Object.Repository
@@ -40,6 +44,7 @@
         $this.PerPage = $Object.PerPage
         $this.ClientID = $Object.ClientID
         $this.PrivateKey = $Object.PrivateKey
+        $this.KeyVaultKeyReference = $Object.KeyVaultKeyReference
         $this.OwnerName = $Object.OwnerName
         $this.OwnerType = $Object.OwnerType
         $this.Permissions = $Object.Permissions

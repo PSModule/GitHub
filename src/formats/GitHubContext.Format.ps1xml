@@ -4,9 +4,9 @@
         <View>
             <Name>GitHubContextTableView</Name>
             <ViewSelectedBy>
-                <TypeName>AppGitHubContext</TypeName>
-                <TypeName>InstallationGitHubContext</TypeName>
-                <TypeName>UserGitHubContext</TypeName>
+                <TypeName>GitHubAppContext</TypeName>
+                <TypeName>GitHubAppInstallationContext</TypeName>
+                <TypeName>GitHubUserContext</TypeName>
                 <TypeName>GitHubContext</TypeName>
             </ViewSelectedBy>
             <TableControl>
@@ -24,10 +24,10 @@
                         <Label>TokenType</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>TokenExpirationDate</Label>
+                        <Label>TokenExpiresAt</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>Remaining</Label>
+                        <Label>TokenExpiresIn</Label>
                     </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
@@ -50,48 +50,32 @@
                                 <PropertyName>TokenType</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>TokenExpirationDate</PropertyName>
+                                <PropertyName>TokenExpiresAt</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <ScriptBlock>
-                                    if ($null -eq $_.Remaining) {
+                                    if ($null -eq $_.TokenExpiresIn) {
                                     return
                                     }
 
-                                    if ($_.Remaining -lt 0) {
-                                    $text = "Expired"
+                                    if ($_.TokenExpiresIn -lt 0) {
+                                    $text = 'Expired'
                                     } else {
-                                    $text = "$($_.Remaining.Hours)h $($_.Remaining.Minutes)m $($_.Remaining.Seconds)s"
+                                    $text = $_.TokenExpiresIn.ToString('hh\:mm\:ss')
                                     }
 
                                     if ($Host.UI.SupportsVirtualTerminal -and
                                     ($env:GITHUB_ACTIONS -ne 'true')) {
                                     switch ($_.AuthType) {
                                     'UAT' {
-                                    $MaxValue = [TimeSpan]::FromHours(8)
+                                    $maxValue = [TimeSpan]::FromHours(8)
                                     }
                                     'IAT' {
-                                    $MaxValue = [TimeSpan]::FromHours(1)
+                                    $maxValue = [TimeSpan]::FromHours(1)
                                     }
                                     }
-                                    $ratio = [Math]::Min(($_.Remaining / $MaxValue), 1)
-
-                                    if ($ratio -ge 1) {
-                                    $r = 0
-                                    $g = 255
-                                    } elseif ($ratio -le 0) {
-                                    $r = 255
-                                    $g = 0
-                                    } elseif ($ratio -ge 0.5) {
-                                    $r = [Math]::Round(255 * (2 - 2 * $ratio))
-                                    $g = 255
-                                    } else {
-                                    $r = 255
-                                    $g = [Math]::Round(255 * (2 * $ratio))
-                                    }
-                                    $b = 0
-                                    $color = $PSStyle.Foreground.FromRgb($r, $g, $b)
-                                    "$color$text$($PSStyle.Reset)"
+                                    $ratio = [Math]::Min(($_.TokenExpiresIn / $maxValue), 1)
+                                    [GitHubFormatter]::FormatColorByRatio($ratio, $text)
                                     } else {
                                     $text
                                     }
@@ -168,9 +152,9 @@
             </ListControl>
         </View>
         <View>
-            <Name>AppGitHubContextListView</Name>
+            <Name>GitHubAppContextListView</Name>
             <ViewSelectedBy>
-                <TypeName>AppGitHubContext</TypeName>
+                <TypeName>GitHubAppContext</TypeName>
             </ViewSelectedBy>
             <ListControl>
                 <ListEntries>
@@ -233,9 +217,9 @@
             </ListControl>
         </View>
         <View>
-            <Name>InstallationGitHubContextListView</Name>
+            <Name>GitHubAppInstallationContextListView</Name>
             <ViewSelectedBy>
-                <TypeName>InstallationGitHubContext</TypeName>
+                <TypeName>GitHubAppInstallationContext</TypeName>
             </ViewSelectedBy>
             <ListControl>
                 <ListEntries>
@@ -266,7 +250,10 @@
                                 <PropertyName>InstallationID</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>TokenExpirationDate</PropertyName>
+                                <PropertyName>TokenExpiresAt</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>TokenExpiresIn</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>InstallationType</PropertyName>
@@ -304,9 +291,9 @@
             </ListControl>
         </View>
         <View>
-            <Name>UserGitHubContextListView</Name>
+            <Name>GitHubUserContextListView</Name>
             <ViewSelectedBy>
-                <TypeName>UserGitHubContext</TypeName>
+                <TypeName>GitHubUserContext</TypeName>
             </ViewSelectedBy>
             <ListControl>
                 <ListEntries>
@@ -340,10 +327,16 @@
                                 <PropertyName>Scope</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>TokenExpirationDate</PropertyName>
+                                <PropertyName>TokenExpiresAt</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>RefreshTokenExpirationDate</PropertyName>
+                                <PropertyName>TokenExpiresIn</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>RefreshTokenExpiresAt</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>RefreshTokenExpiresIn</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>ApiBaseUri</PropertyName>

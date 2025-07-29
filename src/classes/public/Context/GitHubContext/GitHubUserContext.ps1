@@ -1,4 +1,4 @@
-﻿class UserGitHubContext : GitHubContext {
+﻿class GitHubUserContext : GitHubContext {
     # The authentication client ID.
     # Client ID for UAT
     [string] $AuthClientID
@@ -11,20 +11,16 @@
     # 'gist read:org repo workflow'
     [string] $Scope
 
-    # The token expiration date.
-    # 2024-01-01-00:00:00
-    [System.Nullable[datetime]] $TokenExpirationDate
-
     # The refresh token.
     [securestring] $RefreshToken
 
     # The refresh token expiration date.
     # 2024-01-01-00:00:00
-    [System.Nullable[datetime]] $RefreshTokenExpirationDate
+    [System.Nullable[datetime]] $RefreshTokenExpiresAt
 
-    UserGitHubContext() {}
+    GitHubUserContext() {}
 
-    UserGitHubContext([PSCustomObject]$Object) {
+    GitHubUserContext([PSCustomObject]$Object) {
         $this.ID = $Object.ID
         $this.Name = $Object.Name
         $this.DisplayName = $Object.DisplayName
@@ -38,6 +34,7 @@
         $this.UserName = $Object.UserName
         $this.Token = $Object.Token
         $this.TokenType = $Object.TokenType
+        $this.TokenExpiresAt = $Object.TokenExpiresAt
         $this.Enterprise = $Object.Enterprise
         $this.Owner = $Object.Owner
         $this.Repository = $Object.Repository
@@ -46,8 +43,7 @@
         $this.AuthClientID = $Object.AuthClientID
         $this.DeviceFlowType = $Object.DeviceFlowType
         $this.Scope = $Object.Scope
-        $this.TokenExpirationDate = $Object.TokenExpirationDate
         $this.RefreshToken = $Object.RefreshToken
-        $this.RefreshTokenExpirationDate = $Object.RefreshTokenExpirationDate
+        $this.RefreshTokenExpiresAt = $Object.RefreshTokenExpiresAt
     }
 }

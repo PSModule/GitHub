@@ -179,6 +179,37 @@ Describe 'Auth' {
     }
 }
 
+Describe 'Anonymous - Functions that can run anonymously' {
+    It 'Get-GithubRateLimit - Using -Anonymous' {
+        $rateLimit = Get-GitHubRateLimit -Anonymous
+        LogGroup 'Rate Limit' {
+            Write-Host ($rateLimit | Format-Table | Out-String)
+        }
+        $rateLimit | Should -Not -BeNullOrEmpty
+    }
+    It 'Invoke-GitHubAPI - Using -Anonymous' {
+        $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit' -Anonymous | Select-Object -ExpandProperty Response
+        LogGroup 'Rate Limit' {
+            Write-Host ($rateLimit | Format-Table | Out-String)
+        }
+        $rateLimit | Should -Not -BeNullOrEmpty
+    }
+    It 'Get-GithubRateLimit - Using -Context Anonymous' {
+        $rateLimit = Get-GitHubRateLimit -Context Anonymous
+        LogGroup 'Rate Limit' {
+            Write-Host ($rateLimit | Format-List | Out-String)
+        }
+        $rateLimit | Should -Not -BeNullOrEmpty
+    }
+    It 'Invoke-GitHubAPI - Using -Context Anonymous' {
+        $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit' -Context Anonymous | Select-Object -ExpandProperty Response
+        LogGroup 'Rate Limit' {
+            Write-Host ($rateLimit | Format-Table | Out-String)
+        }
+        $rateLimit | Should -Not -BeNullOrEmpty
+    }
+}
+
 Describe 'GitHub' {
     Context 'Config' {
         It 'Get-GitHubConfig - Gets the module configuration' {
@@ -580,13 +611,53 @@ Describe 'API' {
             }
         }
 
-        Context 'Rate-Limit' {
+        Context 'RateLimit' {
+            BeforeAll {
+                $rateLimits = Get-GitHubRateLimit
+            }
             It 'Get-GitHubRateLimit - Gets the rate limit status for the authenticated user' {
-                $rateLimit = Get-GitHubRateLimit
                 LogGroup 'RateLimit' {
-                    Write-Host ($rateLimit | Format-Table | Out-String)
+                    Write-Host ($rateLimits | Format-Table | Out-String)
                 }
-                $rateLimit | Should -Not -BeNullOrEmpty
+                $rateLimits | Should -Not -BeNullOrEmpty
+            }
+
+            It 'Get-GitHubRateLimit - ResetsAt property should be a datetime' {
+                $rateLimit = $rateLimits | Select-Object -First 1
+                $rateLimit.ResetsAt | Should -BeOfType [DateTime]
+                $rateLimit.ResetsAt | Should -BeGreaterThan ([DateTime]::Now)
+            }
+
+            It 'Get-GitHubRateLimit - ResetsIn property should be calculated correctly' {
+                $rateLimit = $rateLimits | Select-Object -First 1
+                $rateLimit.ResetsIn | Should -BeOfType [TimeSpan]
+                $rateLimit.ResetsIn.TotalSeconds | Should -BeGreaterThan 0
+                $rateLimit.ResetsIn.TotalHours | Should -BeLessOrEqual 1
+            }
+
+            It 'Get-GitHubRateLimit - Should return objects with names core and rate' {
+                LogGroup 'RateLimit Names' {
+                    Write-Host ($rateLimits.Name | Out-String)
+                }
+                $rateLimits.Name | Should -Contain 'core'
+                $rateLimits.Name | Should -Contain 'rate'
+            }
+
+            It 'Get-GitHubRateLimit - Objects should be of type GitHubRateLimitResource' {
+                $rateLimits | Should -BeOfType 'GitHubRateLimitResource'
+            }
+
+            It 'Get-GitHubRateLimit - Should have correct property types for all objects' {
+                $rateLimits.Name | Should -BeOfType [String]
+                $rateLimits.Limit | Should -BeOfType [UInt64]
+                $rateLimits.Used | Should -BeOfType [UInt64]
+                $rateLimits.Remaining | Should -BeOfType [UInt64]
+                $rateLimits.ResetsAt | Should -BeOfType [DateTime]
+                $rateLimits.ResetsIn | Should -BeOfType [TimeSpan]
+                $rateLimits.Name | Should -Not -BeNullOrEmpty
+                $rateLimits.Limit | Should -BeGreaterOrEqual 0
+                $rateLimits.Used | Should -BeGreaterOrEqual 0
+                $rateLimits.Remaining | Should -BeGreaterOrEqual 0
             }
         }
 
@@ -740,42 +811,40 @@ Describe 'Emojis' {
 }
 
 Describe 'Webhooks' {
-    It 'Test-GitHubWebhookSignature - Validates the webhook payload using known correct signature' {
+    BeforeAll {
         $secret = "It's a Secret to Everybody"
         $payload = 'Hello, World!'
         $signature = 'sha256=757107ea0eb2509fc211221cce984b8a37570b6d7586c22c46f4379c8b043e17'
+    }
+
+    It 'Test-GitHubWebhookSignature - Validates the webhook payload using known correct signature (SHA256)' {
         $result = Test-GitHubWebhookSignature -Secret $secret -Body $payload -Signature $signature
         $result | Should -Be $true
     }
-}
 
-Describe 'Anonymous - Functions that can run anonymously' {
-    It 'Get-GithubRateLimit - Using -Anonymous' {
-        $rateLimit = Get-GitHubRateLimit -Anonymous
-        LogGroup 'Rate Limit' {
-            Write-Host ($rateLimit | Format-Table | Out-String)
+    It 'Test-GitHubWebhookSignature - Validates the webhook using Request object' {
+        $mockRequest = [PSCustomObject]@{
+            RawBody = $payload
+            Headers = @{
+                'X-Hub-Signature-256' = $signature
+            }
         }
-        $rateLimit | Should -Not -BeNullOrEmpty
+        $result = Test-GitHubWebhookSignature -Secret $secret -Request $mockRequest
+        $result | Should -Be $true
     }
-    It 'Invoke-GitHubAPI - Using -Anonymous' {
-        $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit' -Anonymous | Select-Object -ExpandProperty Response
-        LogGroup 'Rate Limit' {
-            Write-Host ($rateLimit | Format-Table | Out-String)
-        }
-        $rateLimit | Should -Not -BeNullOrEmpty
+
+    It 'Test-GitHubWebhookSignature - Should fail with invalid signature' {
+        $invalidSignature = 'sha256=invalid'
+        $result = Test-GitHubWebhookSignature -Secret $secret -Body $payload -Signature $invalidSignature
+        $result | Should -Be $false
     }
-    It 'Get-GithubRateLimit - Using -Context Anonymous' {
-        $rateLimit = Get-GitHubRateLimit -Context Anonymous
-        LogGroup 'Rate Limit' {
-            Write-Host ($rateLimit | Format-List | Out-String)
+
+    It 'Test-GitHubWebhookSignature - Should throw when signature header is missing from request' {
+        $mockRequest = [PSCustomObject]@{
+            RawBody = $payload
+            Headers = @{}
         }
-        $rateLimit | Should -Not -BeNullOrEmpty
-    }
-    It 'Invoke-GitHubAPI - Using -Context Anonymous' {
-        $rateLimit = Invoke-GitHubAPI -ApiEndpoint '/rate_limit' -Context Anonymous | Select-Object -ExpandProperty Response
-        LogGroup 'Rate Limit' {
-            Write-Host ($rateLimit | Format-Table | Out-String)
-        }
-        $rateLimit | Should -Not -BeNullOrEmpty
+
+        { Test-GitHubWebhookSignature -Secret $secret -Request $mockRequest } | Should -Throw
     }
 }

@@ -644,6 +644,33 @@ ID,Name,Value
                 Test-Path -Path $downloadedFile.FullName | Should -BeTrue
                 $downloadedFile.Name | Should -Be $asset.Name
             }
+
+            It 'Get-GitHubReleaseAsset - Gets assets from release using pipeline' {
+                $assets = Get-GitHubRelease -Owner ryanoasis -Repository nerd-fonts | Get-GitHubReleaseAsset
+                LogGroup 'Release assets from pipeline' {
+                    Write-Host ($assets | Format-List -Property * | Out-String)
+                }
+                $assets | Should -Not -BeNullOrEmpty
+                $assets.Count | Should -BeGreaterThan 0
+                foreach ($asset in $assets) {
+                    $asset | Should -BeOfType [GitHubReleaseAsset]
+                    $asset.ID | Should -Not -BeNullOrEmpty
+                    $asset.NodeID | Should -Not -BeNullOrEmpty
+                    $asset.Url | Should -Not -BeNullOrEmpty
+                    $asset.Name | Should -Not -BeNullOrEmpty
+                    # $asset.Label | Should -Not -BeNullOrEmpty - Label is optional and may not be set
+                    $asset.State | Should -Be 'uploaded'
+                    $asset.ContentType | Should -Not -BeNullOrEmpty
+                    $asset.Size | Should -BeGreaterOrEqual 0
+                    $asset.Downloads | Should -BeGreaterOrEqual 0
+                    $asset.CreatedAt | Should -Not -BeNullOrEmpty
+                    $asset.CreatedAt | Should -BeOfType 'DateTime'
+                    $asset.UpdatedAt | Should -Not -BeNullOrEmpty
+                    $asset.UpdatedAt | Should -BeOfType 'DateTime'
+                    $asset.UploadedBy | Should -Not -BeNullOrEmpty
+                    $asset.UploadedBy | Should -BeOfType 'GitHubUser'
+                }
+            }
         }
     }
 }

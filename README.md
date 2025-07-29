@@ -154,6 +154,48 @@ Connect-GitHubAccount -ClientID $ClientID -PrivateKey $PrivateKey
 
 Using this approach, the module will autogenerate a JWT every time you run a command. I.e. Get-GitHubApp.
 
+#### Using a GitHub App with Azure Key Vault
+
+For enhanced security, you can store your GitHub App's keys in Azure Key Vault and use that as way to signing the JWTs.
+This approach requires a pre-authenticated session with either Azure CLI or Azure PowerShell.
+
+**Prerequisites:**
+- Azure CLI authenticated session (`az login`) or Azure PowerShell authenticated session (`Connect-AzAccount`)
+- GitHub App private key stored as a key in Azure Key Vault, with 'Sign' as a permitted operation
+- Appropriate permissions to read keys from the Key Vault, like 'Key Vault Crypto User'
+
+**Using Azure CLI authentication:**
+
+```powershell
+# Ensure you're authenticated with Azure CLI
+az login
+
+# Connect using Key Vault key reference (URI with or without version)
+Connect-GitHubAccount -ClientID $ClientID -KeyVaultKeyReference 'https://my-keyvault.vault.azure.net/keys/github-app-private-key'
+✓ Logged in as my-github-app!
+```
+
+**Using Azure PowerShell authentication:**
+
+```powershell
+# Ensure you're authenticated with Azure PowerShell
+Connect-AzAccount
+
+# Connect using Key Vault key reference (URI with or without version)
+Connect-GitHubAccount -ClientID $ClientID -KeyVaultKeyReference 'https://my-keyvault.vault.azure.net/keys/github-app-private-key'
+✓ Logged in as my-github-app!
+```
+
+**Using Key Vault key reference with version:**
+
+```powershell
+# Connect using Key Vault key reference with specific version
+Connect-GitHubAccount -ClientID $ClientID -KeyVaultKeyReference 'https://my-keyvault.vault.azure.net/keys/github-app-private-key/abc123def456'
+✓ Logged in as my-github-app!
+```
+
+This method ensures that your private key is securely stored in Azure Key Vault and never exposed in your scripts or configuration files.
+
 #### Using a different host
 
 If you are using GitHub Enterprise, you can use the `-Host` (or `-HostName`) parameter to specify the host you want to connect to.

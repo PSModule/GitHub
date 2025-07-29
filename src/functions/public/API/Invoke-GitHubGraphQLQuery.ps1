@@ -60,21 +60,23 @@
                 $queryLines = $Query -split "`n" | ForEach-Object { $_.Trim() }
                 foreach ($errorItem in $graphQLResponse.errors) {
                     $errorMessages += @"
+
+GraphQL errors occurred:
+Full Error:
+$($errorItem | ConvertTo-Json -Depth 10 | Out-String)
+
 GraphQL Error [$($errorItem.type)]:
 Message:    $($errorItem.message)
 Path:       $($errorItem.path -join '/')
 Locations:
 $($errorItem.locations | ForEach-Object { " - [$($_.line):$($_.column)] - $($queryLines[$_.line - 1])" })
 
-Full Error:
-$($errorItem | ConvertTo-Json -Depth 10 | Out-String -Stream)
-
 "@
 
                 }
                 $PSCmdlet.ThrowTerminatingError(
                     [System.Management.Automation.ErrorRecord]::new(
-                        [System.Exception]::new("GraphQL errors occurred:`n$($errorMessages -join "`n`n")"),
+                        [System.Exception]::new($errorMessages),
                         'GraphQLError',
                         [System.Management.Automation.ErrorCategory]::InvalidOperation,
                         $graphQLResponse

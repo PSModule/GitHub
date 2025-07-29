@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Types>
+    <Type>
+        <Name>GitHubRateLimitResource</Name>
+        <Members>
+            <ScriptProperty>
+                <Name>ResetsIn</Name>
+                <GetScriptBlock>
+                    if ($null -eq $this.ResetsAt) { return }
+                    $timeRemaining = $this.ResetsAt - [DateTime]::Now
+                    if ($timeRemaining.TotalSeconds -lt 0) {
+                    return [TimeSpan]::Zero
+                    }
+                    return $timeRemaining
+                </GetScriptBlock>
+            </ScriptProperty>
+        </Members>
+    </Type>
+</Types>

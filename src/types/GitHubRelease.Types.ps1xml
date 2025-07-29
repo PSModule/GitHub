@@ -3,10 +3,10 @@
     <Type>
         <Name>GitHubRelease</Name>
         <Members>
-            <ScriptProperty>
+            <AliasProperty>
                 <Name>Release</Name>
-                <GetScriptBlock>$this.ID</GetScriptBlock>
-            </ScriptProperty>
+                <ReferencedMemberName>ID</ReferencedMemberName>
+            </AliasProperty>
         </Members>
     </Type>
 </Types>

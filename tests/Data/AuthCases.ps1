@@ -51,7 +51,7 @@
     @{
         AuthType         = 'App'
         Type             = 'a GitHub App from an Organization'
-        Case             = 'PEM + IAT'
+        Case             = 'JWT + IAT'
         TokenType        = 'APP_ORG'
         Target           = 'organization account'
         Owner            = 'psmodule-test-org'
@@ -67,7 +67,7 @@
     @{
         AuthType         = 'App'
         Type             = 'a GitHub App from an Enterprise'
-        Case             = 'PEM + IAT'
+        Case             = 'JWT + IAT'
         TokenType        = 'APP_ENT'
         Target           = 'organization account'
         Owner            = 'psmodule-test-org3'
@@ -83,7 +83,7 @@
     @{
         AuthType         = 'App'
         Type             = 'a GitHub App from an Enterprise'
-        Case             = 'PEM + IAT'
+        Case             = 'JWT + IAT'
         TokenType        = 'APP_ENT'
         Target           = 'enterprise account'
         Owner            = 'msx'

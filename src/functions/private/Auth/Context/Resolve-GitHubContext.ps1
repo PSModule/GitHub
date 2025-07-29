@@ -41,7 +41,8 @@
     }
 
     process {
-        Write-Verbose "Context: [$Context]"
+        Write-Verbose "Context:"
+        $Context | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
         Write-Verbose "Anonymous: [$Anonymous]"
         if ($Anonymous -or $Context -eq 'Anonymous') {
             Write-Verbose 'Returning Anonymous context.'
@@ -66,13 +67,12 @@
 
         switch ($Context.TokenType) {
             'ghu' {
-                Write-Verbose 'Using GitHub User Access Token.'
+                Write-Verbose 'Update GitHub User Access Token.'
                 $Context = Update-GitHubUserAccessToken -Context $Context -PassThru
             }
-            'PEM' {
-                Write-Verbose 'Using GitHub App PEM Token.'
-                $jwt = Get-GitHubAppJSONWebToken -ClientId $Context.ClientID -PrivateKey $Context.PrivateKey
-                $Context.Token = $jwt.Token
+            'JWT' {
+                Write-Verbose 'Update GitHub App JWT Token.'
+                $Context = Update-GitHubAppJWT -Context $Context -PassThru
             }
         }
 

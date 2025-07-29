@@ -48,9 +48,18 @@
     #>
     [Alias('Connect-GitHub')]
     [OutputType([void])]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Long links for documentation.')]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'Is the CLI part of the module.')]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText', '', Justification = 'The tokens are received as clear text. Mitigating exposure by removing variables and performing garbage collection.')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSAvoidLongLines', '',
+        Justification = 'Long links for documentation.'
+    )]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSAvoidUsingWriteHost', '',
+        Justification = 'Is the CLI part of the module.'
+    )]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSAvoidUsingConvertToSecureStringWithPlainText', '',
+        Justification = 'The tokens are received as clear text. Mitigating exposure by removing variables and performing garbage collection.'
+    )]
     [CmdletBinding(DefaultParameterSetName = 'UAT')]
     param(
         # Choose between authentication methods, either OAuthApp or GitHubApp.
@@ -69,41 +78,39 @@
 
 
         # The user will be prompted to enter the token.
-        [Parameter(
-            Mandatory,
-            ParameterSetName = 'PAT'
-        )]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [switch] $UseAccessToken,
 
         # An access token to use for authentication. Can be both a string or a SecureString.
         # Supports both personal access tokens (PAT) and GitHub App installation access tokens (IAT).
         # Example: 'ghp_1234567890abcdef'
         # Example: 'ghs_1234567890abcdef'
-        [Parameter(
-            Mandatory,
-            ParameterSetName = 'Token'
-        )]
+        [Parameter(Mandatory, ParameterSetName = 'Token')]
         [object] $Token,
 
         # The client ID for the GitHub App to use for authentication.
         [Parameter(ParameterSetName = 'UAT')]
-        [Parameter(
-            Mandatory,
-            ParameterSetName = 'App'
-        )]
+        [Parameter(Mandatory, ParameterSetName = 'GitHub App using a PrivateKey')]
+        [Parameter(Mandatory, ParameterSetName = 'GitHub App using a KeyVault Key Reference')]
         [string] $ClientID,
 
-        # The private key for the GitHub App when authenticating as a GitHub App.
-        [Parameter(
-            Mandatory,
-            ParameterSetName = 'App'
-        )]
+        # The private key that is used to sign JWTs for the GitHub App.
+        [Parameter(Mandatory, ParameterSetName = 'GitHub App using a PrivateKey')]
         [object] $PrivateKey,
 
+        # The KeyVault Key Reference that can sign JWTs for the GitHub App.
+        [Parameter(Mandatory, ParameterSetName = 'GitHub App using a KeyVault Key Reference')]
+        [ValidateScript({
+                if ($_ -notlike 'https://*.vault.azure.net/keys/*') {
+                    throw "Invalid Key Vault key reference format: $_"
+                }
+                return $true
+            })]
+        [string] $KeyVaultKeyReference,
+
         # Automatically load installations for the GitHub App.
-        [Parameter(
-            ParameterSetName = 'App'
-        )]
+        [Parameter(ParameterSetName = 'GitHub App using a PrivateKey')]
+        [Parameter(ParameterSetName = 'GitHub App using a KeyVault Key Reference')]
         [switch] $AutoloadInstallations,
 
         # The default enterprise to use in commands.
@@ -160,10 +167,9 @@
             $ApiVersion = $script:GitHub.Config.ApiVersion
             $HostName = $HostName -replace '^https?://'
             $ApiBaseUri = "https://api.$HostName"
-            $authType = $PSCmdlet.ParameterSetName
 
             # If running on GitHub Actions and no access token is provided, use the GitHub token.
-            if (($env:GITHUB_ACTIONS -eq 'true') -and $PSCmdlet.ParameterSetName -ne 'App') {
+            if ($script:IsGitHubActions -and $PSCmdlet.ParameterSetName -notin @('GitHub App using a PrivateKey', 'GitHub App using a KeyVault Key Reference')) {
                 $customTokenProvided = -not [string]::IsNullOrEmpty($Token)
                 $gitHubTokenPresent = Test-GitHubToken
                 Write-Verbose "A token was provided:  [$customTokenProvided]"
@@ -181,7 +187,6 @@
                 HostName    = [string]$HostName
                 HttpVersion = [string]$httpVersion
                 PerPage     = [int]$perPage
-                AuthType    = [string]$authType
                 Enterprise  = [string]$Enterprise
                 Owner       = [string]$Owner
                 Repository  = [string]$Repository
@@ -189,7 +194,7 @@
 
             $context | Format-Table | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
 
-            switch ($authType) {
+            switch ($PSCmdlet.ParameterSetName) {
                 'UAT' {
                     Write-Verbose 'Logging in using device flow...'
                     if (-not [string]::IsNullOrEmpty($ClientID)) {
@@ -218,18 +223,20 @@
                     switch ($Mode) {
                         'GitHubApp' {
                             $context += @{
-                                Token                      = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
-                                TokenExpirationDate        = (Get-Date).AddSeconds($tokenResponse.expires_in)
-                                TokenType                  = $tokenResponse.access_token -replace $script:GitHub.TokenPrefixPattern
-                                AuthClientID               = $authClientID
-                                DeviceFlowType             = $Mode
-                                RefreshToken               = ConvertTo-SecureString -AsPlainText $tokenResponse.refresh_token
-                                RefreshTokenExpirationDate = (Get-Date).AddSeconds($tokenResponse.refresh_token_expires_in)
-                                Scope                      = $tokenResponse.scope
+                                AuthType              = 'UAT'
+                                Token                 = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
+                                TokenExpiresAt        = ([DateTime]::Now).AddSeconds($tokenResponse.expires_in)
+                                TokenType             = $tokenResponse.access_token -replace $script:GitHub.TokenPrefixPattern
+                                AuthClientID          = $authClientID
+                                DeviceFlowType        = $Mode
+                                RefreshToken          = ConvertTo-SecureString -AsPlainText $tokenResponse.refresh_token
+                                RefreshTokenExpiresAt = ([DateTime]::Now).AddSeconds($tokenResponse.refresh_token_expires_in)
+                                Scope                 = $tokenResponse.scope
                             }
                         }
                         'OAuthApp' {
                             $context += @{
+                                AuthType       = 'UAT'
                                 Token          = ConvertTo-SecureString -AsPlainText $tokenResponse.access_token
                                 TokenType      = $tokenResponse.access_token -replace $script:GitHub.TokenPrefixPattern
                                 AuthClientID   = $authClientID
@@ -244,15 +251,25 @@
                         }
                     }
                 }
-                'App' {
-                    Write-Verbose 'Logging in as a GitHub App...'
+                'GitHub App using a PrivateKey' {
+                    Write-Verbose 'Logging in as a GitHub App using PrivateKey...'
                     if (-not($PrivateKey -is [System.Security.SecureString])) {
                         $PrivateKey = $PrivateKey | ConvertTo-SecureString -AsPlainText
                     }
                     $context += @{
+                        AuthType   = 'APP'
                         PrivateKey = $PrivateKey
-                        TokenType  = 'PEM'
+                        TokenType  = 'JWT'
                         ClientID   = $ClientID
+                    }
+                }
+                'GitHub App using a KeyVault Key Reference' {
+                    Write-Verbose 'Logging in as a GitHub App using KeyVault Key Reference...'
+                    $context += @{
+                        AuthType             = 'APP'
+                        KeyVaultKeyReference = $KeyVaultKeyReference
+                        TokenType            = 'JWT'
+                        ClientID             = $ClientID
                     }
                 }
                 'PAT' {
@@ -264,6 +281,7 @@
                     $Token = ConvertFrom-SecureString $accessTokenValue -AsPlainText
                     $tokenType = $Token -replace $script:GitHub.TokenPrefixPattern
                     $context += @{
+                        AuthType  = 'PAT'
                         Token     = ConvertTo-SecureString -AsPlainText $Token
                         TokenType = $tokenType
                     }
@@ -294,6 +312,7 @@
                         }
                     }
                 }
+                default {}
             }
             $contextObj = Set-GitHubContext -Context $context -Default:(!$NotDefault) -PassThru
             $contextObj | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
