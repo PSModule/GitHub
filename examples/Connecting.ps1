@@ -49,7 +49,7 @@ Get-GitHubContext -Context 'msx.ghe.com/MariusStorhaug'
 Switch-GitHubContext -Context 'msx.ghe.com/MariusStorhaug'
 
 # Set a specific context as the default context using pipeline
-'msx.ghe.com/MariusStorhaug' | Switch-GitHubCwontext
+'msx.ghe.com/MariusStorhaug' | Switch-GitHubContext
 
 # Abstraction layers on GitHubContexts
 Get-GitHubContext -Context 'msx.ghe.com/MariusStorhaug'
