@@ -59,8 +59,13 @@
             $contextItem = Resolve-GitHubContext -Context $contextItem
 
             $contextToken = Get-GitHubAccessToken -Context $contextItem -AsPlainText
-            $isGitHubToken = $contextToken -eq (Get-GitHubToken | ConvertFrom-SecureString -AsPlainText)
-            if ((-not $isGitHubToken) -and ($contextItem.AuthType -eq 'IAT') -and ($contextItem.TokenExpiresIn -ne 0)) {
+            $isNotGitHubToken = -not ($contextToken -eq (Get-GitHubToken | ConvertFrom-SecureString -AsPlainText))
+            $isIATAuthType = $contextItem.AuthType -eq 'IAT'
+            $isNotExpired = (-not $contextItem.TokenExpiresIn -eq 0)
+            Write-Debug "isNotGitHubToken: $isGitHubToken"
+            Write-Debug "isIATAuthType:    $isIATAuthType"
+            Write-Debug "isNotExpired:     $isExpired"
+            if ($isNotGitHubToken -and $isIATAuthType -and $isNotExpired) {
                 Revoke-GitHubAppInstallationAccessToken -Context $contextItem
             }
 
