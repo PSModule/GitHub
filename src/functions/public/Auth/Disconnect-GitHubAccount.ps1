@@ -60,7 +60,7 @@
 
             $contextToken = Get-GitHubAccessToken -Context $contextItem -AsPlainText
             $isGitHubToken = $contextToken -eq (Get-GitHubToken | ConvertFrom-SecureString -AsPlainText)
-            if (-not $isGitHubToken -and $contextItem.AuthType -eq 'IAT') {
+            if ((-not $isGitHubToken) -and ($contextItem.AuthType -eq 'IAT') -and ($contextItem.TokenExpiresIn -ne 0)) {
                 Revoke-GitHubAppInstallationAccessToken -Context $contextItem
             }
 
