@@ -61,7 +61,7 @@
             $contextToken = Get-GitHubAccessToken -Context $contextItem -AsPlainText
             $isNotGitHubToken = -not ($contextToken -eq (Get-GitHubToken | ConvertFrom-SecureString -AsPlainText))
             $isIATAuthType = $contextItem.AuthType -eq 'IAT'
-            $isNotExpired = (-not $contextItem.TokenExpiresIn -eq 0)
+            $isNotExpired = $contextItem.TokenExpiresIn -gt 0
             Write-Debug "isNotGitHubToken: $isNotGitHubToken"
             Write-Debug "isIATAuthType:    $isIATAuthType"
             Write-Debug "isNotExpired:     $isNotExpired"
