@@ -82,6 +82,7 @@
         $this.UserName = $Object.UserName
         $this.Token = $Object.Token
         $this.TokenType = $Object.TokenType
+        $this.TokenExpiresAt = $Object.TokenExpiresAt
         $this.Enterprise = $Object.Enterprise
         $this.Owner = $Object.Owner
         $this.Repository = $Object.Repository
