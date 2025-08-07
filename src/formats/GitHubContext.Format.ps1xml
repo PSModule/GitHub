@@ -71,11 +71,7 @@
                                     $maxValue = [TimeSpan]::FromHours(8)
                                     }
                                     'IAT' {
-                                    $maxValue = [TimeSpan]::FromHours(1)
-                                    }
-                                    'APP' {
-                                    $maxValue = [TimeSpan]::FromSeconds((Get-GithubConfig -Name
-                                    'JwtTimeTolerance'))
+                                    $maxValue = [TimeSpan]::FromSeconds(300)
                                     }
                                     }
                                     $ratio = [Math]::Min(($_.TokenExpiresIn / $maxValue), 1)
