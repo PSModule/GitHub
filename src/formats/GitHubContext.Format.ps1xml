@@ -58,7 +58,7 @@
                                     return
                                     }
 
-                                    if ($_.TokenExpiresIn -lt 0) {
+                                    if ($_.TokenExpiresIn -le 0) {
                                     $text = 'Expired'
                                     } else {
                                     $text = $_.TokenExpiresIn.ToString('hh\:mm\:ss')
