@@ -43,4 +43,20 @@
             </ScriptProperty>
         </Members>
     </Type>
+    <Type>
+        <Name>GitHubAppContext</Name>
+        <Members>
+            <ScriptProperty>
+                <Name>TokenExpiresIn</Name>
+                <GetScriptBlock>
+                    if ($null -eq $this.TokenExpiresAt) { return }
+                    $timeRemaining = $this.TokenExpiresAt - [DateTime]::Now
+                    if ($timeRemaining.TotalSeconds -lt 0) {
+                    return [TimeSpan]::Zero
+                    }
+                    return $timeRemaining
+                </GetScriptBlock>
+            </ScriptProperty>
+        </Members>
+    </Type>
 </Types>
