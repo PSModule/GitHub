@@ -56,8 +56,8 @@
         )
         [pscustomobject]@{
             Base      = "$header.$payload"
-            IssuedAt  = $iat.DateTime
-            ExpiresAt = $exp.DateTime
+            IssuedAt  = $iat.DateTime.ToLocalTime()
+            ExpiresAt = $exp.DateTime.ToLocalTime()
             Issuer    = $ClientID
         }
     }
