@@ -73,6 +73,10 @@
                                     'IAT' {
                                     $maxValue = [TimeSpan]::FromSeconds(300)
                                     }
+                                    'APP' {
+                                    $seconds = (Get-GitHubConfig -Name 'JwtTimeTolerance')
+                                    $maxValue = [TimeSpan]::FromSeconds($seconds)
+                                    }
                                     }
                                     $ratio = [Math]::Min(($_.TokenExpiresIn / $maxValue), 1)
                                     [GitHubFormatter]::FormatColorByRatio($ratio, $text)
