@@ -1,10 +1,10 @@
 ﻿function Uninstall-GitHubAppOnEnterpriseOrganization {
     <#
         .SYNOPSIS
-        Uninstall a GitHub App from an organization.
+        Uninstall a GitHub App from an enterprise-owned organization.
 
         .DESCRIPTION
-        Uninstall a GitHub App from an organization.
+        Uninstall a GitHub App from an enterprise-owned organization.
 
         The authenticated GitHub App must be installed on the enterprise and be granted the Enterprise/organization_installations (write) permission.
 
@@ -12,8 +12,15 @@
         Uninstall-GitHubAppOnEnterpriseOrganization -Enterprise 'github' -Organization 'octokit' -ID '123456'
 
         Uninstall the GitHub App with the installation ID `123456` from the organization `octokit` in the enterprise `github`.
+
+        .NOTES
+        [Uninstall a GitHub App from an enterprise-owned organization](https://docs.github.com/enterprise-cloud@latest/rest/enterprise-admin/organization-installations#uninstall-a-github-app-from-an-enterprise-owned-organization)
     #>
-    [CmdletBinding()]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSAvoidLongLines', '',
+        Justification = 'Contains a long link.'
+    )]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         # The enterprise slug or ID.
         [Parameter(Mandatory)]
@@ -46,8 +53,9 @@
             Context     = $Context
         }
 
-        Invoke-GitHubAPI @apiParams | ForEach-Object {
-            Write-Output $_.Response
+        if ($PSCmdlet.ShouldProcess("GitHub App Installation: $Enterprise/$Organization/$ID", 'Uninstall')) {
+            $null = Invoke-GitHubAPI @apiParams
+            Write-Verbose "Successfully removed installation: $Enterprise/$Organization/$ID"
         }
     }
 
