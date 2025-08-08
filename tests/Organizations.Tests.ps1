@@ -167,7 +167,7 @@ Describe 'Organizations' {
                     $installations = Get-GitHubAppInstallation -Context $context | Where-Object { $_.Target.Name -eq $orgName }
                     foreach ($installation in $installations) {
                         Write-Host "Removing app installation ID: $($installation.ID) for deleted organization: $($installation.Target.Name)"
-                        Uninstall-GitHubApp -Enterprise $owner -Organization $orgName -ID $installation.ID -Context $context
+                        Uninstall-GitHubApp -Target $orgName -Context $context
                     }
                     # Verify no installations remain for the deleted organization
                     $remainingInstallations = Get-GitHubAppInstallation -Context $context | Where-Object { $_.Target.Name -eq $orgName }
