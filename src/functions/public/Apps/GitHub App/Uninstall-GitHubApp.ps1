@@ -28,33 +28,32 @@
         .LINK
         https://psmodule.io/GitHub/Functions/Apps/GitHub%20App/Uninstall-GitHubApp
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines','',Justification='Contains a long link.')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
     [CmdletBinding(DefaultParameterSetName = 'App-ByTarget')]
     param(
         # As APP: target to uninstall. Accepts a name (enterprise/org/user) or an installation ID.
-        [Parameter(Mandatory, ParameterSetName='App-ByTarget', ValueFromPipelineByPropertyName)]
-        [Parameter(ParameterSetName='App-ByObject')]
+        [Parameter(Mandatory, ParameterSetName = 'App-ByTarget', ValueFromPipelineByPropertyName)]
+        [Parameter(ParameterSetName = 'App-ByObject')]
         [Alias('Name')]
         [object] $Target,
 
         # As APP via pipeline: installation objects.
-        [Parameter(Mandatory, ParameterSetName='App-ByObject', ValueFromPipeline)]
+        [Parameter(Mandatory, ParameterSetName = 'App-ByObject', ValueFromPipeline)]
         [GitHubAppInstallation[]] $InstallationObject,
 
         # As Enterprise (IAT/UAT): organization where the app is installed.
-    [Parameter(Mandatory, ParameterSetName='Enterprise-ByID')]
-        [Parameter(Mandatory, ParameterSetName='Enterprise-BySlug')]
-    [Alias('Target')]
-    [string] $Organization,
+        [Parameter(Mandatory, ParameterSetName = 'Enterprise-ByID')]
+        [Parameter(Mandatory, ParameterSetName = 'Enterprise-BySlug')]
+        [string] $Organization,
 
         # As Enterprise (IAT/UAT): installation ID to remove.
-        [Parameter(Mandatory, ParameterSetName='Enterprise-ByID')]
+        [Parameter(Mandatory, ParameterSetName = 'Enterprise-ByID')]
         [Alias('ID')]
         [UInt64] $InstallationID,
 
         # As Enterprise (IAT/UAT): app slug to uninstall (when the installation ID is unknown).
-    [Parameter(Mandatory, ParameterSetName='Enterprise-BySlug')]
-    [Alias('Slug','AppName')]
+        [Parameter(Mandatory, ParameterSetName = 'Enterprise-BySlug')]
+        [Alias('Slug', 'AppName')]
         [string] $AppSlug,
 
         # Common: explicit context (APP for app mode; IAT/UAT with Enterprise for enterprise mode)
