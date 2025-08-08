@@ -46,6 +46,11 @@
         [Parameter(Mandatory, ParameterSetName = 'Enterprise-BySlug')]
         [string] $Organization,
 
+        # As Enterprise (IAT/UAT): enterprise slug or ID. Optional if the context already has Enterprise set.
+        [Parameter(ParameterSetName = 'Enterprise-ByID')]
+        [Parameter(ParameterSetName = 'Enterprise-BySlug')]
+        [string] $Enterprise,
+
         # As Enterprise (IAT/UAT): installation ID to remove.
         [Parameter(Mandatory, ParameterSetName = 'Enterprise-ByID')]
         [Alias('ID')]
@@ -105,11 +110,10 @@
             }
 
             'Enterprise-ByID' {
-                if (-not $Context.Enterprise) {
-                    throw 'Enterprise-ByID requires an enterprise context (IAT/UAT) with Enterprise set.'
-                }
+                $effectiveEnterprise = if ($Enterprise) { $Enterprise } else { $Context.Enterprise }
+                if (-not $effectiveEnterprise) { throw 'Enterprise-ByID requires an enterprise to be specified (via -Enterprise or Context.Enterprise).' }
                 $params = @{
-                    Enterprise   = $Context.Enterprise
+                    Enterprise   = $effectiveEnterprise
                     Organization = $Organization
                     ID           = $InstallationID
                     Context      = $Context
@@ -118,15 +122,14 @@
             }
 
             'Enterprise-BySlug' {
-                if (-not $Context.Enterprise) {
-                    throw 'Enterprise-BySlug requires an enterprise context (IAT/UAT) with Enterprise set.'
-                }
+                $effectiveEnterprise = if ($Enterprise) { $Enterprise } else { $Context.Enterprise }
+                if (-not $effectiveEnterprise) { throw 'Enterprise-BySlug requires an enterprise to be specified (via -Enterprise or Context.Enterprise).' }
                 # Resolve the installation ID for the specified app slug in the org
-                $inst = Get-GitHubEnterpriseOrganizationAppInstallation -Enterprise $Context.Enterprise -Organization $Organization -Context $Context |
+                $inst = Get-GitHubEnterpriseOrganizationAppInstallation -Enterprise $effectiveEnterprise -Organization $Organization -Context $Context |
                     Where-Object { $_.App.Slug -eq $AppSlug } | Select-Object -First 1
                 if (-not $inst) { throw "No installation found for app slug '$AppSlug' in org '$Organization'." }
                 $params = @{
-                    Enterprise   = $Context.Enterprise
+                    Enterprise   = $effectiveEnterprise
                     Organization = $Organization
                     ID           = $inst.ID
                     Context      = $Context
