@@ -29,7 +29,7 @@
         https://psmodule.io/GitHub/Functions/Apps/GitHub%20App/Uninstall-GitHubApp
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains a long link.')]
-    [CmdletBinding(DefaultParameterSetName = 'App-ByTarget')]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High', DefaultParameterSetName = 'App-ByTarget')]
     param(
         # As APP: target to uninstall. Accepts a name (enterprise/org/user) or an installation ID.
         [Parameter(Mandatory, ParameterSetName = 'App-ByTarget', ValueFromPipelineByPropertyName)]
@@ -42,24 +42,28 @@
         [GitHubAppInstallation[]] $InstallationObject,
 
         # As Enterprise (IAT/UAT): organization where the app is installed.
-        [Parameter(Mandatory, ParameterSetName = 'Enterprise-ByID')]
-        [Parameter(Mandatory, ParameterSetName = 'Enterprise-BySlug')]
-        [string] $Organization,
+    [Parameter(Mandatory, ParameterSetName = 'Enterprise-ByID')]
+    [Parameter(Mandatory, ParameterSetName = 'Enterprise-BySlug')]
+    [ValidateNotNullOrEmpty()]
+    [string] $Organization,
 
         # As Enterprise (IAT/UAT): enterprise slug or ID. Optional if the context already has Enterprise set.
-        [Parameter(ParameterSetName = 'Enterprise-ByID')]
-        [Parameter(ParameterSetName = 'Enterprise-BySlug')]
-        [string] $Enterprise,
+    [Parameter(ParameterSetName = 'Enterprise-ByID')]
+    [Parameter(ParameterSetName = 'Enterprise-BySlug')]
+    [ValidateNotNullOrEmpty()]
+    [string] $Enterprise,
 
         # As Enterprise (IAT/UAT): installation ID to remove.
-        [Parameter(Mandatory, ParameterSetName = 'Enterprise-ByID')]
-        [Alias('ID')]
-        [UInt64] $InstallationID,
+    [Parameter(Mandatory, ParameterSetName = 'Enterprise-ByID')]
+    [Alias('ID')]
+    [ValidateRange(1, [UInt64]::MaxValue)]
+    [UInt64] $InstallationID,
 
         # As Enterprise (IAT/UAT): app slug to uninstall (when the installation ID is unknown).
-        [Parameter(Mandatory, ParameterSetName = 'Enterprise-BySlug')]
-        [Alias('Slug', 'AppName')]
-        [string] $AppSlug,
+    [Parameter(Mandatory, ParameterSetName = 'Enterprise-BySlug')]
+    [Alias('Slug', 'AppName')]
+    [ValidateNotNullOrEmpty()]
+    [string] $AppSlug,
 
         # Common: explicit context (APP for app mode; IAT/UAT with Enterprise for enterprise mode)
         [Parameter()]
@@ -86,7 +90,9 @@
                 elseif ($Target -is [string] -and ($Target -as [uint64])) { $id = [uint64]$Target }
 
                 if ($id) {
-                    Uninstall-GitHubAppAsApp -ID $id -Context $Context
+                    if ($PSCmdlet.ShouldProcess("GitHub App Installation: $id", 'Uninstall')) {
+                        Uninstall-GitHubAppAsApp -ID $id -Context $Context -Confirm:$false
+                    }
                     return
                 }
 
@@ -95,7 +101,9 @@
                 $instMatches = $installations | Where-Object { $_.Target.Name -like "*$Target*" }
                 if (-not $instMatches) { throw "No installations found matching target '$Target'." }
                 foreach ($inst in $instMatches) {
-                    Uninstall-GitHubAppAsApp -ID $inst.ID -Context $Context
+                    if ($PSCmdlet.ShouldProcess("GitHub App Installation: $($inst.ID) [$($inst.Target.Type)/$($inst.Target.Name)]", 'Uninstall')) {
+                        Uninstall-GitHubAppAsApp -ID $inst.ID -Context $Context -Confirm:$false
+                    }
                 }
             }
 
@@ -105,7 +113,9 @@
                 }
                 foreach ($inst in $InstallationObject) {
                     if (-not $inst.ID) { continue }
-                    Uninstall-GitHubAppAsApp -ID $inst.ID -Context $Context
+                    if ($PSCmdlet.ShouldProcess("GitHub App Installation: $($inst.ID) [$($inst.Target.Type)/$($inst.Target.Name)]", 'Uninstall')) {
+                        Uninstall-GitHubAppAsApp -ID $inst.ID -Context $Context -Confirm:$false
+                    }
                 }
             }
 
@@ -118,7 +128,9 @@
                     ID           = $InstallationID
                     Context      = $Context
                 }
-                Uninstall-GitHubAppOnEnterpriseOrganization @params
+                if ($PSCmdlet.ShouldProcess("GitHub App Installation: $effectiveEnterprise/$Organization/$InstallationID", 'Uninstall')) {
+                    Uninstall-GitHubAppOnEnterpriseOrganization @params -Confirm:$false
+                }
             }
 
             'Enterprise-BySlug' {
@@ -134,7 +146,9 @@
                     ID           = $inst.ID
                     Context      = $Context
                 }
-                Uninstall-GitHubAppOnEnterpriseOrganization @params
+                if ($PSCmdlet.ShouldProcess("GitHub App Installation: $effectiveEnterprise/$Organization/$($inst.ID) (app '$AppSlug')", 'Uninstall')) {
+                    Uninstall-GitHubAppOnEnterpriseOrganization @params -Confirm:$false
+                }
             }
         }
     }

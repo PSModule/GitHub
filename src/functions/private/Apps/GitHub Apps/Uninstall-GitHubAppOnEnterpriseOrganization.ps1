@@ -20,22 +20,27 @@
         'PSAvoidLongLines', '',
         Justification = 'Contains a long link.'
     )]
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param(
         # The enterprise slug or ID.
         [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [string] $Enterprise,
 
         # The organization name. The name is not case sensitive.
         [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [string] $Organization,
 
         # The ID of the GitHub App installation to uninstall.
         [Parameter(Mandatory)]
-        [string] $ID,
+        [Alias('InstallationID')]
+        [ValidateRange(1, [UInt64]::MaxValue)]
+        [UInt64] $ID,
 
         # The context to run the command in. Used to get the details for the API call.
         [Parameter(Mandatory)]
+        [ValidateNotNull()]
         [object] $Context
     )
 

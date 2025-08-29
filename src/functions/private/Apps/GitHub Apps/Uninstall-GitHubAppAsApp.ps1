@@ -14,15 +14,21 @@ function Uninstall-GitHubAppAsApp {
         .NOTES
         [Delete an installation for the authenticated app](https://docs.github.com/rest/apps/installations#delete-an-installation-for-the-authenticated-app)
     #>
-    [CmdletBinding(SupportsShouldProcess)]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSAvoidLongLines', '',
+        Justification = 'Contains a long link.'
+    )]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param(
         # The installation ID to remove.
         [Parameter(Mandatory)]
         [Alias('InstallationID')]
+        [ValidateRange(1, [UInt64]::MaxValue)]
         [UInt64] $ID,
 
         # The context to run the command in.
         [Parameter(Mandatory)]
+        [ValidateNotNull()]
         [object] $Context
     )
 
