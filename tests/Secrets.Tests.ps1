@@ -139,7 +139,9 @@ Describe 'Secrets' {
                 }
 
                 It 'Get-GitHubPublicKey - Codespaces' {
-                    switch ($org.plan.name) {
+                    $plan = $org.plan.name
+                    Write-Host "Running with plan [$plan]"
+                    switch ($plan) {
                         'free' {
                             { Get-GitHubPublicKey @scope -Type codespaces } | Should -Throw
                         }
