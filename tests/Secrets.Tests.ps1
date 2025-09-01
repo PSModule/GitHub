@@ -129,6 +129,7 @@ Describe 'Secrets' {
                     Write-Host ($org | Format-List | Out-String)
                 }
             }
+
             Context 'PublicKey' {
                 It 'Get-GitHubPublicKey - Action' {
                     $result = Get-GitHubPublicKey @scope
