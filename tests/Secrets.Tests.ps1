@@ -129,6 +129,7 @@ Describe 'Secrets' {
                     Write-Host ($org | Format-List | Out-String)
                 }
             }
+
             Context 'PublicKey' {
                 It 'Get-GitHubPublicKey - Action' {
                     $result = Get-GitHubPublicKey @scope
@@ -139,18 +140,13 @@ Describe 'Secrets' {
                 }
 
                 It 'Get-GitHubPublicKey - Codespaces' {
-                    switch ($org.plan.name) {
-                        'free' {
-                            { Get-GitHubPublicKey @scope -Type codespaces } | Should -Throw
-                        }
-                        default {
-                            $result = Get-GitHubPublicKey @scope -Type codespaces
-                            LogGroup 'PublicKey' {
-                                Write-Host "$($result | Select-Object * | Format-Table -AutoSize | Out-String)"
-                            }
-                            $result | Should -Not -BeNullOrEmpty
-                        }
+                    $plan = $org.plan.name
+                    Write-Host "Running with plan [$plan]"
+                    $result = Get-GitHubPublicKey @scope -Type codespaces
+                    LogGroup 'PublicKey' {
+                        Write-Host "$($result | Select-Object * | Format-Table -AutoSize | Out-String)"
                     }
+                    $result | Should -Not -BeNullOrEmpty
                 }
             }
 
