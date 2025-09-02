@@ -70,34 +70,7 @@ Press Enter to open github.com in your browser...:  #-> Press enter and paste th
 After this you will need to install the GitHub App on the repos you want to manage. You can do this by visiting the
 [PowerShell for GitHub](https://github.com/apps/powershell-for-github) app page.
 
-> Info: We will be looking to include this as a check in the module in the future. So it becomes a part of the regular sign in process.
 
-Consecutive runs of the `Connect-GitHubAccount` will not require you to paste the code again unless you revoke the token
-or you change the type of authentication you want to use. Instead, it checks the remaining duration of the access token and
-uses the refresh token to get a new access token if its less than 4 hours remaining.
-
-```powershell
-Connect-GitHubAccount
-✓ Access token is still valid for 05:30:41 ...
-✓ Logged in as octocat!
-```
-
-This is also happening automatically when you run a command that requires authentication. The validity of the token is checked before the command is executed.
-If it is no longer valid, the token is refreshed and the command is executed.
-
-```powershell
-Connect-GitHubAccount
-⚠ Access token remaining validity 01:22:31. Refreshing access token...
-✓ Logged in as octocat!
-```
-
-If the timer has gone out, we still have your back. It will just refresh as long as the refresh token is valid.
-
-```powershell
-Connect-GitHubAccount
-⚠ Access token expired. Refreshing access token...
-✓ Logged in as octocat!
-```
 
 #### Personal authentication - User access tokens with OAuth app
 
@@ -222,6 +195,15 @@ You can use the `-ClientID` parameters to specify the app you want to use.
 Connect-GitHubAccount -Host 'https://msx.ghe.com' -ClientID 'lv123456789'
 ✓ Logged in as octocat!
 ```
+
+#### Automatic token renewal
+
+The module automatically manages short‑lived tokens for GitHub Apps:
+
+- User access tokens (when you authenticate via a GitHub App) are short‑lived and include a refresh token. The module refreshes them automatically before/when they expire—no extra steps are required.
+- App JWTs (when the context is a GitHub App) are generated and rotated automatically per call as needed. You never need to create or renew the JWT yourself.
+
+Note: Long‑lived tokens like classic/fine‑grained PATs and provided installation tokens (GH_TOKEN/GITHUB_TOKEN) are not refreshed by the module.
 
 ### Command Exploration
 
