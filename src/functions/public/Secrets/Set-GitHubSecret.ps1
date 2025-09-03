@@ -143,4 +143,4 @@
         Write-Debug "[$stackPath] - End"
     }
 }
-#Requires -Modules @{ ModuleName = 'Sodium'; RequiredVersion = '2.2.0'}
+#Requires -Modules @{ ModuleName = 'Sodium'; RequiredVersion = '2.2.2'}
