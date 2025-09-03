@@ -42,28 +42,28 @@
         [GitHubAppInstallation[]] $InstallationObject,
 
         # As Enterprise (IAT/UAT): organization where the app is installed.
-    [Parameter(Mandatory, ParameterSetName = 'Enterprise-ByID')]
-    [Parameter(Mandatory, ParameterSetName = 'Enterprise-BySlug')]
-    [ValidateNotNullOrEmpty()]
-    [string] $Organization,
+        [Parameter(Mandatory, ParameterSetName = 'Enterprise-ByID')]
+        [Parameter(Mandatory, ParameterSetName = 'Enterprise-BySlug')]
+        [ValidateNotNullOrEmpty()]
+        [string] $Organization,
 
         # As Enterprise (IAT/UAT): enterprise slug or ID. Optional if the context already has Enterprise set.
-    [Parameter(ParameterSetName = 'Enterprise-ByID')]
-    [Parameter(ParameterSetName = 'Enterprise-BySlug')]
-    [ValidateNotNullOrEmpty()]
-    [string] $Enterprise,
+        [Parameter(ParameterSetName = 'Enterprise-ByID')]
+        [Parameter(ParameterSetName = 'Enterprise-BySlug')]
+        [ValidateNotNullOrEmpty()]
+        [string] $Enterprise,
 
         # As Enterprise (IAT/UAT): installation ID to remove.
-    [Parameter(Mandatory, ParameterSetName = 'Enterprise-ByID')]
-    [Alias('ID')]
-    [ValidateRange(1, [UInt64]::MaxValue)]
-    [UInt64] $InstallationID,
+        [Parameter(Mandatory, ParameterSetName = 'Enterprise-ByID')]
+        [Alias('ID')]
+        [ValidateRange(1, [UInt64]::MaxValue)]
+        [UInt64] $InstallationID,
 
         # As Enterprise (IAT/UAT): app slug to uninstall (when the installation ID is unknown).
-    [Parameter(Mandatory, ParameterSetName = 'Enterprise-BySlug')]
-    [Alias('Slug', 'AppName')]
-    [ValidateNotNullOrEmpty()]
-    [string] $AppSlug,
+        [Parameter(Mandatory, ParameterSetName = 'Enterprise-BySlug')]
+        [Alias('Slug', 'AppName')]
+        [ValidateNotNullOrEmpty()]
+        [string] $AppSlug,
 
         # Common: explicit context (APP for app mode; IAT/UAT with Enterprise for enterprise mode)
         [Parameter()]
@@ -157,5 +157,3 @@
         Write-Debug "[$stackPath] - End"
     }
 }
-
-#SkipTest:FunctionTest:Will add a test for this function in a future PR
