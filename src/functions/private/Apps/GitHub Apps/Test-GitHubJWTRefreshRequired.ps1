@@ -31,7 +31,7 @@ function Test-GitHubJWTRefreshRequired {
 
     process {
         try {
-            ($Context.TokenExpiresAt - [datetime]::Now).TotalMinutes -le 5
+            ($Context.TokenExpiresAt - [datetime]::Now).TotalMinutes -le 1
         } catch {
             return $true
         }
