@@ -49,7 +49,7 @@ Describe 'Organizations' {
                         $existingInstallations = Get-GitHubAppInstallation -Context $context | Where-Object { $_.Target.Name -eq $orgName }
                         foreach ($installation in $existingInstallations) {
                             Write-Host "Removing existing app installation ID: $($installation.ID) for organization: $($installation.Target.Name)"
-                            Uninstall-GitHubApp -Enterprise $owner -Organization $orgName -ID $installation.ID -Context $context
+                            Uninstall-GitHubApp -Enterprise $owner -Organization $orgName -ID $installation.ID -Context $context -Confirm:$false
                         }
                     } catch {
                         Write-Host "Failed to clean up existing installations: $($_.Exception.Message)"
@@ -168,7 +168,7 @@ Describe 'Organizations' {
                     $installations = Get-GitHubAppInstallation -Context $context | Where-Object { $_.Target.Name -eq $orgName }
                     foreach ($installation in $installations) {
                         Write-Host "Removing app installation ID: $($installation.ID) for deleted organization: $($installation.Target.Name)"
-                        Uninstall-GitHubApp -Target $orgName -Context $context
+                        Uninstall-GitHubApp -Target $orgName -Context $context -Confirm:$false
                     }
                     # Verify no installations remain for the deleted organization
                     $remainingInstallations = Get-GitHubAppInstallation -Context $context | Where-Object { $_.Target.Name -eq $orgName }
