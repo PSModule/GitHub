@@ -79,6 +79,9 @@ Describe 'Auth' {
                 Write-Host ($context | Format-List | Out-String)
             }
             $context | Should -Not -BeNullOrEmpty
+            $context | Should -BeOfType [GitHubContext]
+            $context.TokenExpiresAt | Should -BeOfType [DateTime]
+            $context.TokenExpiresIn | Should -BeOfType [TimeSpan]
         }
 
         It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' -Skip:($AuthType -ne 'APP') {
@@ -106,6 +109,8 @@ Describe 'Auth' {
             LogGroup 'Connect-GithubApp' {
                 $context
             }
+            $context.TokenExpiresAt | Should -BeOfType [DateTime]
+            $context.TokenExpiresIn | Should -BeOfType [TimeSpan]
             LogGroup 'Context' {
                 Write-Host ($context | Format-List | Out-String)
             }

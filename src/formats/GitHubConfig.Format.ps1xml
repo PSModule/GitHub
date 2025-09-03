@@ -32,9 +32,6 @@
                                 <PropertyName>AccessTokenGracePeriodInHours</PropertyName>
                             </ListItem>
                             <ListItem>
-                                <PropertyName>JwtTimeTolerance</PropertyName>
-                            </ListItem>
-                            <ListItem>
                                 <PropertyName>ApiVersion</PropertyName>
                             </ListItem>
                             <ListItem>
