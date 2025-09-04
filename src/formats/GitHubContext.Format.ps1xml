@@ -58,7 +58,7 @@
                                     return
                                     }
 
-                                    if ($_.TokenExpiresIn -lt 0) {
+                                    if ($_.TokenExpiresIn -le 0) {
                                     $text = 'Expired'
                                     } else {
                                     $text = $_.TokenExpiresIn.ToString('hh\:mm\:ss')
@@ -72,6 +72,9 @@
                                     }
                                     'IAT' {
                                     $maxValue = [TimeSpan]::FromHours(1)
+                                    }
+                                    'APP' {
+                                    $maxValue = [TimeSpan]::FromMinutes(10)
                                     }
                                     }
                                     $ratio = [Math]::Min(($_.TokenExpiresIn / $maxValue), 1)
@@ -173,6 +176,12 @@
                                 <PropertyName>TokenType</PropertyName>
                             </ListItem>
                             <ListItem>
+                                <PropertyName>TokenExpiresAt</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>TokenExpiresIn</PropertyName>
+                            </ListItem>
+                            <ListItem>
                                 <PropertyName>HostName</PropertyName>
                             </ListItem>
                             <ListItem>
@@ -238,6 +247,12 @@
                                 <PropertyName>TokenType</PropertyName>
                             </ListItem>
                             <ListItem>
+                                <PropertyName>TokenExpiresAt</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>TokenExpiresIn</PropertyName>
+                            </ListItem>
+                            <ListItem>
                                 <PropertyName>HostName</PropertyName>
                             </ListItem>
                             <ListItem>
@@ -248,12 +263,6 @@
                             </ListItem>
                             <ListItem>
                                 <PropertyName>InstallationID</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>TokenExpiresAt</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>TokenExpiresIn</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>InstallationType</PropertyName>
@@ -312,6 +321,12 @@
                                 <PropertyName>TokenType</PropertyName>
                             </ListItem>
                             <ListItem>
+                                <PropertyName>TokenExpiresAt</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>TokenExpiresIn</PropertyName>
+                            </ListItem>
+                            <ListItem>
                                 <PropertyName>HostName</PropertyName>
                             </ListItem>
                             <ListItem>
@@ -325,12 +340,6 @@
                             </ListItem>
                             <ListItem>
                                 <PropertyName>Scope</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>TokenExpiresAt</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>TokenExpiresIn</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>RefreshTokenExpiresAt</PropertyName>
