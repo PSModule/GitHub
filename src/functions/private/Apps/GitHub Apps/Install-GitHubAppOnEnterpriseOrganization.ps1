@@ -30,7 +30,7 @@
         # - all - all repositories that the authenticated GitHub App installation can access.
         # - selected - select specific repositories.
         [Parameter(Mandatory)]
-        [ValidateSet('All', 'Selected')]
+        [ValidateSet('all', 'selected', 'none')]
         [string] $RepositorySelection,
 
         # The names of the repositories to which the installation will be granted access.

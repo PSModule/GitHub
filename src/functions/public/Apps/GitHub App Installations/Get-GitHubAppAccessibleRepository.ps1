@@ -24,7 +24,14 @@
 
         .LINK
         https://psmodule.io/GitHub/Functions/Apps/GitHub%20App%20Installations/Get-GitHubAppAccessibleRepository
+
+        .NOTES
+        [Get repositories belonging to an enterprise-owned organization](https://docs.github.com/enterprise-cloud@latest/rest/enterprise-admin/organization-installations#get-repositories-belonging-to-an-enterprise-owned-organization)
     #>
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSAvoidLongLines', '',
+        Justification = 'Long links'
+    )]
     [OutputType([GitHubRepository[]])]
     [CmdletBinding(SupportsShouldProcess)]
     param(

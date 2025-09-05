@@ -25,7 +25,14 @@
 
         .LINK
         https://psmodule.io/GitHub/Functions/Apps/GitHub%20App/Install-GitHubApp
+
+        .NOTES
+        [List GitHub Apps installed on an enterprise-owned organization](https://docs.github.com/enterprise-cloud@latest/rest/enterprise-admin/organization-installations#install-a-github-app-on-an-enterprise-owned-organization)
     #>
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSAvoidLongLines', '',
+        Justification = 'Long links'
+    )]
     [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
     param(
         # The enterprise slug or ID.
@@ -49,11 +56,12 @@
         [string] $ClientID,
 
         # The repository selection for the GitHub App. Can be one of:
-        # - all - all repositories that the authenticated GitHub App installation can access.
-        # - selected - select specific repositories.
+        # All - the installation can access all repositories in the organization.
+        # Selected - the installation can access only the listed repositories.
+        # None - no repository permissions are requested. Only use when the app does not request repository permissions.
         [Parameter()]
-        [ValidateSet('all', 'selected')]
-        [string] $RepositorySelection = 'selected',
+        [ValidateSet('All', 'Selected', 'None', $null)]
+        [string] $RepositorySelection = 'None',
 
         # The names of the repositories to which the installation will be granted access.
         [Parameter()]
@@ -76,11 +84,14 @@
     process {
         switch ($PSCmdlet.ParameterSetName) {
             'EnterpriseOrganization' {
+                if ($Repositories.Count -gt 0) {
+                    $RepositorySelection = 'selected'
+                }
                 $params = @{
                     Enterprise          = $Enterprise
                     Organization        = $Organization
                     ClientID            = $ClientID
-                    RepositorySelection = $RepositorySelection
+                    RepositorySelection = $RepositorySelection.ToLower()
                     Repositories        = $Repositories
                     Context             = $Context
                 }

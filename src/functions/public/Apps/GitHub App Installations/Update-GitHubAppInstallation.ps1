@@ -1,4 +1,4 @@
-﻿function Update-GitHubAppInstallationRepositoryAccess {
+﻿function Update-GitHubAppInstallation {
     <#
         .SYNOPSIS
         Update the installation repository access between all repositories and selected repositories.
@@ -7,7 +7,7 @@
         Update repository access for a GitHub App installation between all repositories and selected repositories.
 
         .EXAMPLE
-        Update-GitHubAppInstallationRepositoryAccess -Enterprise 'msx' -Organization 'PSModule' -InstallationID 12345678 -RepositorySelection 'all'
+        Update-GitHubAppInstallation -Enterprise 'msx' -Organization 'PSModule' -InstallationID 12345678 -RepositorySelection 'all'
 
         Update the repository access for the GitHub App installation with the ID '12345678'
         to all repositories on the organization 'PSModule' in the enterprise 'msx'.
@@ -20,14 +20,15 @@
             RepositorySelection = 'selected'
             Repositories        = 'repo1', 'repo2'
         }
-        Update-GitHubAppInstallationRepositoryAccess @params
+        Update-GitHubAppInstallation @params
 
         Update the repository access for the GitHub App installation with the ID '12345678'
         to the repositories 'repo1' and 'repo2' on the organization 'PSModule' in the enterprise 'msx'.
 
         .LINK
-        https://psmodule.io/GitHub/Functions/Apps/GitHub%20App%20Installations/Update-GitHubAppInstallationRepositoryAccess
+        https://psmodule.io/GitHub/Functions/Apps/GitHub%20App%20Installations/Update-GitHubAppInstallation
     #>
+    [OutputType([GitHubAppInstallation])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # The enterprise slug or ID.
@@ -52,13 +53,6 @@
         [Alias('installation_id', 'InstallationID')]
         [int] $ID,
 
-        # The repository selection for the GitHub App. Can be one of:
-        # - all - all repositories that the authenticated GitHub App installation can access.
-        # - selected - select specific repositories.
-        [Parameter(Mandatory)]
-        [ValidateSet('all', 'selected')]
-        [string] $RepositorySelection,
-
         # The names of the repositories to which the installation will be granted access.
         [Parameter()]
         [string[]] $Repositories = @(),
@@ -79,11 +73,13 @@
     }
 
     process {
-        $body = @{
-            repository_selection = $RepositorySelection
-            repositories         = $Repositories
+        #TODO: If Repositories is empty, then do not provide a body. The API will revert to default behavior.
+        if ($Repositories.Count -ne 0) {
+            $body = @{
+                repository_selection = $RepositorySelection
+                repositories         = $Repositories
+            }
         }
-        $body | Remove-HashtableEntry -NullOrEmptyValues
 
         $apiParams = @{
             Method      = 'PATCH'

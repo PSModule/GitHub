@@ -18,7 +18,14 @@
 
         .LINK
         https://psmodule.io/GitHub/Functions/Apps/GitHub%20App/Get-GitHubAppInstallableOrganization
+
+        .NOTES
+        [Get enterprise-owned organizations that can have GitHub Apps installed](https://docs.github.com/enterprise-cloud@latest/rest/enterprise-admin/organization-installations#get-enterprise-owned-organizations-that-can-have-github-apps-installed)
     #>
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSAvoidLongLines', '',
+        Justification = 'Long links'
+    )]
     [OutputType([GitHubOrganization[]])]
     [CmdletBinding()]
     param(

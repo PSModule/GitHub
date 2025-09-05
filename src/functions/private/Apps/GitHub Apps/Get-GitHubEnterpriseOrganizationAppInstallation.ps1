@@ -17,8 +17,12 @@
         GitHubAppInstallation
 
         .NOTES
-        [List GitHub Apps installed on an enterprise-owned organization]()
+        [List GitHub Apps installed on an enterprise-owned organization](https://docs.github.com/enterprise-cloud@latest/rest/enterprise-admin/organization-installations#list-github-apps-installed-on-an-enterprise-owned-organization)
     #>
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSAvoidLongLines', '',
+        Justification = 'Long links'
+    )]
     [OutputType([GitHubAppInstallation])]
     [CmdletBinding()]
     param(
