@@ -18,7 +18,6 @@ $script:GitHub = [pscustomobject]@{
         PerPage                       = 100
         RetryCount                    = 0
         RetryInterval                 = 1
-        JwtTimeTolerance              = 300
         EnvironmentType               = Get-GitHubEnvironmentType
     }
     Config             = $null

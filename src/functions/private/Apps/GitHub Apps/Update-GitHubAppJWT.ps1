@@ -92,7 +92,11 @@
                             throw 'No Private Key or KeyVault Key Reference provided in the context.'
                         }
 
-                        $Context.TokenExpiresAt = $unsignedJWT.ExpiresAt
+                        $expiresAt = $unsignedJWT.ExpiresAt
+                        if ($expiresAt.Kind -eq [DateTimeKind]::Utc) {
+                            $expiresAt = $expiresAt.ToLocalTime()
+                        }
+                        $Context.TokenExpiresAt = $expiresAt
 
                         if ($Context.ID) {
                             if ($PSCmdlet.ShouldProcess('JWT token', 'Update/refresh')) {
@@ -122,7 +126,6 @@
                 }
             }
         } else {
-            # JWT is still valid, no refresh needed
             Write-Debug 'JWT is still valid, no refresh needed'
         }
 

@@ -176,6 +176,12 @@
                                 <PropertyName>TokenType</PropertyName>
                             </ListItem>
                             <ListItem>
+                                <PropertyName>TokenExpiresAt</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>TokenExpiresIn</PropertyName>
+                            </ListItem>
+                            <ListItem>
                                 <PropertyName>HostName</PropertyName>
                             </ListItem>
                             <ListItem>
@@ -241,6 +247,12 @@
                                 <PropertyName>TokenType</PropertyName>
                             </ListItem>
                             <ListItem>
+                                <PropertyName>TokenExpiresAt</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>TokenExpiresIn</PropertyName>
+                            </ListItem>
+                            <ListItem>
                                 <PropertyName>HostName</PropertyName>
                             </ListItem>
                             <ListItem>
@@ -251,12 +263,6 @@
                             </ListItem>
                             <ListItem>
                                 <PropertyName>InstallationID</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>TokenExpiresAt</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>TokenExpiresIn</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>InstallationType</PropertyName>
@@ -315,6 +321,12 @@
                                 <PropertyName>TokenType</PropertyName>
                             </ListItem>
                             <ListItem>
+                                <PropertyName>TokenExpiresAt</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>TokenExpiresIn</PropertyName>
+                            </ListItem>
+                            <ListItem>
                                 <PropertyName>HostName</PropertyName>
                             </ListItem>
                             <ListItem>
@@ -328,12 +340,6 @@
                             </ListItem>
                             <ListItem>
                                 <PropertyName>Scope</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>TokenExpiresAt</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>TokenExpiresIn</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>RefreshTokenExpiresAt</PropertyName>

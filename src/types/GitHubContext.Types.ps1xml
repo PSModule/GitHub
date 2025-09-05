@@ -6,23 +6,15 @@
             <ScriptProperty>
                 <Name>TokenExpiresIn</Name>
                 <GetScriptBlock>
-                    if ($null -eq $this.TokenExpiresAt) { return }
-                    $timeRemaining = $this.TokenExpiresAt - [DateTime]::Now
-                    if ($timeRemaining.TotalSeconds -lt 0) {
-                    return [TimeSpan]::Zero
-                    }
-                    return $timeRemaining
+                    if ($null -eq $this.TokenExpiresAt) { return [TimeSpan]::Zero }
+                    $this.TokenExpiresAt - [DateTime]::Now
                 </GetScriptBlock>
             </ScriptProperty>
             <ScriptProperty>
                 <Name>RefreshTokenExpiresIn</Name>
                 <GetScriptBlock>
-                    if ($null -eq $this.RefreshTokenExpiresAt) { return }
-                    $timeRemaining = $this.RefreshTokenExpiresAt - [DateTime]::Now
-                    if ($timeRemaining.TotalSeconds -lt 0) {
-                    return [TimeSpan]::Zero
-                    }
-                    return $timeRemaining
+                    if ($null -eq $this.RefreshTokenExpiresAt) { return [TimeSpan]::Zero }
+                    $this.RefreshTokenExpiresAt - [DateTime]::Now
                 </GetScriptBlock>
             </ScriptProperty>
         </Members>
@@ -33,12 +25,20 @@
             <ScriptProperty>
                 <Name>TokenExpiresIn</Name>
                 <GetScriptBlock>
+                    if ($null -eq $this.TokenExpiresAt) { return [TimeSpan]::Zero }
+                    $this.TokenExpiresAt - [DateTime]::Now
+                </GetScriptBlock>
+            </ScriptProperty>
+        </Members>
+    </Type>
+    <Type>
+        <Name>GitHubAppContext</Name>
+        <Members>
+            <ScriptProperty>
+                <Name>TokenExpiresIn</Name>
+                <GetScriptBlock>
                     if ($null -eq $this.TokenExpiresAt) { return }
-                    $timeRemaining = $this.TokenExpiresAt - [DateTime]::Now
-                    if ($timeRemaining.TotalSeconds -lt 0) {
-                    return [TimeSpan]::Zero
-                    }
-                    return $timeRemaining
+                    $this.TokenExpiresAt - [DateTime]::Now
                 </GetScriptBlock>
             </ScriptProperty>
         </Members>
