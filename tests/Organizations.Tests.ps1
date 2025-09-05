@@ -163,13 +163,11 @@ Describe 'Organizations' {
         It 'Uninstall-GitHubApp - Removes app installation after organization deletion' -Skip:($OwnerType -ne 'enterprise') {
             LogGroup 'Post-deletion Cleanup - App Installations' {
                 try {
-                    # Get all installations and find any that target the deleted organization
                     $installations = Get-GitHubAppInstallation -Context $context | Where-Object { $_.Target.Name -eq $orgName }
                     foreach ($installation in $installations) {
                         Write-Host "Removing app installation ID: $($installation.ID) for deleted organization: $($installation.Target.Name)"
                         Uninstall-GitHubApp -Target $orgName -Context $context -Confirm:$false
                     }
-                    # Verify no installations remain for the deleted organization
                     $remainingInstallations = Get-GitHubAppInstallation -Context $context | Where-Object { $_.Target.Name -eq $orgName }
                     $remainingInstallations | Should -BeNullOrEmpty
                 } catch {
