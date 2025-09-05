@@ -44,9 +44,9 @@
                 typ = 'JWT'
             }
         )
-        $now = [System.DateTimeOffset]::UtcNow
-        $iat = $now.AddMinutes(-10)
-        $exp = $now.AddMinutes(10)
+        $nowUtc = [System.DateTimeOffset]::UtcNow
+        $iat = $nowUtc.AddMinutes(-10)
+        $exp = $nowUtc.AddMinutes(10)
         $payload = [GitHubJWTComponent]::ToBase64UrlString(
             @{
                 iat = $iat.ToUnixTimeSeconds()
@@ -56,8 +56,8 @@
         )
         [pscustomobject]@{
             Base      = "$header.$payload"
-            IssuedAt  = $iat.DateTime
-            ExpiresAt = $exp.DateTime
+            IssuedAt  = $iat.LocalDateTime
+            ExpiresAt = $exp.LocalDateTime
             Issuer    = $ClientID
         }
     }
