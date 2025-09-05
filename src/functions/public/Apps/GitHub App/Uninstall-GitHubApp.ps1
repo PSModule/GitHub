@@ -9,21 +9,25 @@
         - As an enterprise installation (IAT/UAT context with Enterprise): remove an app from an organization by InstallationID or AppSlug.
 
         .EXAMPLE
-        # As an App: uninstall by target name (enterprise/org/user) or by exact installation ID
         Uninstall-GitHubApp -Target 'octocat'
         Uninstall-GitHubApp -Target 12345
 
+        As an App: uninstall by target name (enterprise/org/user) or by exact installation ID
+
         .EXAMPLE
-        # As an App: uninstall using pipeline objects
         Get-GitHubAppInstallation | Uninstall-GitHubApp
 
-        .EXAMPLE
-        # As an enterprise installation: uninstall by installation ID in an org
-        Uninstall-GitHubApp -Organization 'org' -InstallationID 123456 -Context (Connect-GitHubApp -Enterprise 'msx' -PassThru)
+        As an App: uninstall using pipeline objects
 
         .EXAMPLE
-        # As an enterprise installation: uninstall by app slug in an org
+        Uninstall-GitHubApp -Organization 'org' -InstallationID 123456 -Context (Connect-GitHubApp -Enterprise 'msx' -PassThru)
+
+        As an enterprise installation: uninstall by installation ID in an org
+
+        .EXAMPLE
         Uninstall-GitHubApp -Organization 'org' -AppSlug 'my-app' -Context (Connect-GitHubApp -Enterprise 'msx' -PassThru)
+
+        As an enterprise installation: uninstall by app slug in an org
 
         .LINK
         https://psmodule.io/GitHub/Functions/Apps/GitHub%20App/Uninstall-GitHubApp
@@ -84,7 +88,6 @@
                     throw 'App-ByTarget requires APP authentication. Provide an App context or connect as an App.'
                 }
 
-                # If target is numeric, treat as installation ID. Otherwise treat as name.
                 $id = $null
                 if ($Target -is [int] -or $Target -is [long] -or $Target -is [uint64]) { $id = [uint64]$Target }
                 elseif ($Target -is [string] -and ($Target -as [uint64])) { $id = [uint64]$Target }
@@ -96,7 +99,6 @@
                     return
                 }
 
-                # Name-based: find installation(s) whose Target.Name matches (case-insensitive, substring allowed)
                 $installations = Get-GitHubAppInstallation -Context $Context
                 $instMatches = $installations | Where-Object { $_.Target.Name -like "*$Target*" }
                 if (-not $instMatches) { throw "No installations found matching target '$Target'." }
@@ -136,7 +138,6 @@
             'Enterprise-BySlug' {
                 $effectiveEnterprise = if ($Enterprise) { $Enterprise } else { $Context.Enterprise }
                 if (-not $effectiveEnterprise) { throw 'Enterprise-BySlug requires an enterprise to be specified (via -Enterprise or Context.Enterprise).' }
-                # Resolve the installation ID for the specified app slug in the org
                 $inst = Get-GitHubEnterpriseOrganizationAppInstallation -Enterprise $effectiveEnterprise -Organization $Organization -Context $Context |
                     Where-Object { $_.App.Slug -eq $AppSlug } | Select-Object -First 1
                 if (-not $inst) { throw "No installation found for app slug '$AppSlug' in org '$Organization'." }
