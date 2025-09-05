@@ -43,7 +43,6 @@ Describe 'Organizations' {
                     Write-Host ($installationContext | Select-Object * | Out-String)
                 }
 
-                # Clean up any existing app installations for this organization to start with a clean slate
                 LogGroup 'Pre-test Cleanup - App Installations' {
                     try {
                         $existingInstallations = Get-GitHubAppInstallation -Context $context | Where-Object { $_.Target.Name -eq $orgName }
