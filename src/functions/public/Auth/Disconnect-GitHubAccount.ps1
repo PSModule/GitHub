@@ -66,7 +66,12 @@
             Write-Debug "isIATAuthType:    $isIATAuthType"
             Write-Debug "isNotExpired:     $isNotExpired"
             if ($isNotGitHubToken -and $isIATAuthType -and $isNotExpired) {
-                Revoke-GitHubAppInstallationAccessToken -Context $contextItem
+                try {
+                    Revoke-GitHubAppInstallationAccessToken -Context $contextItem
+                } catch {
+                    Write-Debug "[$stackPath] - Failed to revoke token:"
+                    Write-Debug $_
+                }
             }
 
             Remove-GitHubContext -Context $contextItem.ID

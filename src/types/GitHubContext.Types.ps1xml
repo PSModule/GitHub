@@ -37,7 +37,7 @@
             <ScriptProperty>
                 <Name>TokenExpiresIn</Name>
                 <GetScriptBlock>
-                    if ($null -eq $this.TokenExpiresAt) { return }
+                    if ($null -eq $this.TokenExpiresAt) { return [TimeSpan]::Zero }
                     $this.TokenExpiresAt - [DateTime]::Now
                 </GetScriptBlock>
             </ScriptProperty>
