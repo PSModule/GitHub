@@ -15,7 +15,7 @@
                         <Label>Name</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>Size (KB)</Label>
+                        <Label>Size</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
                         <Label>Expired</Label>
@@ -44,7 +44,7 @@
                                 </ScriptBlock>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <ScriptBlock>'{0:F2}' -f ([math]::Round($_.Size / 1KB, 2))</ScriptBlock>
+                                <ScriptBlock>[GitHubFormatter]::FormatFileSize($_.Size)</ScriptBlock>
                                 <Alignment>Right</Alignment>
                             </TableColumnItem>
                             <TableColumnItem>

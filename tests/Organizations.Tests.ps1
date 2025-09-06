@@ -61,6 +61,19 @@ Describe 'Organizations' {
                 Write-Host ($organization | Select-Object * | Out-String)
             }
             $organization | Should -Not -BeNullOrEmpty
+            $organization | Should -BeOfType 'GitHubOrganization'
+        }
+
+        It 'GitHubOrganization.Size - Stores size in bytes (nullable UInt64)' -Skip:($OwnerType -ne 'organization') {
+            $organization = Get-GitHubOrganization -Name $Owner
+            LogGroup 'Organization' {
+                Write-Host "$($organization | Select-Object * | Out-String)"
+            }
+            if ($null -ne $organization.Size) {
+                $organization.Size | Should -BeOfType [System.UInt64]
+            } else {
+                $organization.Size | Should -BeNullOrEmpty
+            }
         }
 
         It "Get-GitHubOrganization - List public organizations for the user 'psmodule-user'" {
