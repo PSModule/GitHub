@@ -61,10 +61,11 @@ Describe 'Organizations' {
                 Write-Host ($organization | Select-Object * | Out-String)
             }
             $organization | Should -Not -BeNullOrEmpty
+            $organization | Should -BeOfType 'GitHubOrganization'
         }
 
-        It 'GitHubOrganization.Size - Stores size in bytes (nullable UInt64)' {
-            $organization = Get-GitHubOrganization -Name 'PSModule'
+        It 'GitHubOrganization.Size - Stores size in bytes (nullable UInt64)' -Skip:($OwnerType -ne 'organization') {
+            $organization = Get-GitHubOrganization -Name $Owner
             LogGroup 'Organization Size Test' {
                 Write-Host "Organization size: $($organization.Size) bytes (may be null)"
             }
