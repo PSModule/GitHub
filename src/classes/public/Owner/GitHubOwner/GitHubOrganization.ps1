@@ -41,7 +41,7 @@
 
     # The size of the organization's repositories, in bytes.
     # Example: 10240000
-    [System.Nullable[uint]] $Size
+    [System.Nullable[UInt64]] $Size
 
     # The number of collaborators on private repositories.
     # Example: 8
@@ -209,7 +209,10 @@
         $this.PrivateGists = $Object.total_private_gists
         $this.TotalPrivateRepos = $Object.total_private_repos
         $this.OwnedPrivateRepos = $Object.owned_private_repos
-        $this.Size = $Object.disk_usage * 1KB
+        if ($null -ne $Object.disk_usage) {
+            # disk_usage is returned in KB from the REST API; convert to bytes and store as UInt64
+            $this.Size = [uint64]($Object.disk_usage * 1KB)
+        }
         $this.Collaborators = $Object.collaborators
         $this.IsVerified = $Object.is_verified ?? $Object.isVerified
         $this.HasOrganizationProjects = $Object.has_organization_projects

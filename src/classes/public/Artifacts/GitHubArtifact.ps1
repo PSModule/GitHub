@@ -8,8 +8,8 @@
     # The name of the repository the variable is associated with.
     [string] $Repository
 
-    # The size of the artifact in bytes.
-    [int64] $Size
+    # The size of the artifact in bytes (nullable if API omits value).
+    [System.Nullable[UInt64]] $Size
 
     # The API URL for accessing the artifact.
     [string] $Url
@@ -43,7 +43,9 @@
         $this.Name = $Object.name
         $this.Owner = $Owner
         $this.Repository = $Repository
-        $this.Size = $Object.size_in_bytes
+        if ($null -ne $Object.size_in_bytes) {
+            $this.Size = [uint64]$Object.size_in_bytes
+        }
         $this.Url = "https://$($Context.HostName)/$Owner/$Repository/actions/runs/$($Object.workflow_run.id)/artifacts/$($Object.id)"
         $this.ArchiveDownloadUrl = $Object.archive_download_url
         $this.Expired = $Object.expired

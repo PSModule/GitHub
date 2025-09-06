@@ -7,10 +7,6 @@
                 <Name>Organization</Name>
                 <ReferencedMemberName>Name</ReferencedMemberName>
             </AliasProperty>
-            <AliasProperty>
-                <Name>DiskUsage</Name>
-                <ReferencedMemberName>Size</ReferencedMemberName>
-            </AliasProperty>
         </Members>
     </Type>
 </Types>

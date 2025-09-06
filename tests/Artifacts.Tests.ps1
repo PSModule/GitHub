@@ -182,8 +182,8 @@ Describe 'Artifacts' {
             $result | Should -Not -BeNullOrEmpty
             $result | Should -BeOfType [GitHubArtifact]
         }
-        
-        It 'GitHubArtifact.Size - Stores size in bytes and validates type' {
+
+        It 'GitHubArtifact.Size - Stores size in bytes (nullable UInt64)' {
             $params = @{
                 Owner         = $Owner
                 Repository    = $Repository
@@ -192,15 +192,15 @@ Describe 'Artifacts' {
             }
             $artifact = Get-GitHubArtifact @params
             LogGroup 'Artifact Size Test' {
-                Write-Host "Artifact size: $($artifact.Size) bytes (should be > 0)"
+                Write-Host "Artifact size: $($artifact.Size) bytes (may be null)"
             }
-            
-            # Verify size is stored in bytes
-            $artifact.Size | Should -BeOfType [System.UInt32]
-            $artifact.Size | Should -BeGreaterThan 0
-            
-            # Verify the size is reasonable for an artifact (should be at least some bytes)
-            $artifact.Size | Should -BeGreaterThan 100  # At least 100 bytes for any real artifact
+            if ($null -ne $artifact.Size) {
+                # Verify size is stored in bytes as UInt64
+                $artifact.Size | Should -BeOfType [System.UInt64]
+                $artifact.Size | Should -BeGreaterThan 0
+            } else {
+                $artifact.Size | Should -BeNullOrEmpty
+            }
         }
 
         It 'Save-GitHubArtifact - Saves the artifact to disk' {

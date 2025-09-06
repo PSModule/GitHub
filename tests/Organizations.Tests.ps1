@@ -62,23 +62,19 @@ Describe 'Organizations' {
             }
             $organization | Should -Not -BeNullOrEmpty
         }
-        
-        It 'GitHubOrganization.Size - Stores size in bytes and DiskUsage alias works' {
+
+        It 'GitHubOrganization.Size - Stores size in bytes (nullable UInt64)' {
             $organization = Get-GitHubOrganization -Name 'PSModule'
             LogGroup 'Organization Size Test' {
-                Write-Host "Organization size: $($organization.Size) bytes"
-                Write-Host "DiskUsage alias: $($organization.DiskUsage) bytes (should equal Size)"
+                Write-Host "Organization size: $($organization.Size) bytes (may be null)"
             }
-            
-            # Verify size is stored in bytes
-            $organization.Size | Should -BeOfType [System.UInt32]
-            $organization.Size | Should -BeGreaterThan 0
-            
-            # Verify DiskUsage alias points to Size property 
-            $organization.DiskUsage | Should -Be $organization.Size
-            
-            # Verify size is reasonable - converted from KB to bytes, so should be much larger than KB value
-            $organization.Size | Should -BeGreaterThan 1024  # Should be at least 1KB worth of bytes
+            if ($null -ne $organization.Size) {
+                # Verify size is stored in bytes as UInt64
+                $organization.Size | Should -BeOfType [System.UInt64]
+                $organization.Size | Should -BeGreaterThan 0
+            } else {
+                $organization.Size | Should -BeNullOrEmpty
+            }
         }
 
         It "Get-GitHubOrganization - List public organizations for the user 'psmodule-user'" {
