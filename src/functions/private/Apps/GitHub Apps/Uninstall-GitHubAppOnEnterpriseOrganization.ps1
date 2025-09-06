@@ -52,6 +52,7 @@
     }
 
     process {
+        Write-Verbose "Uninstalling GitHub App [$Enterprise/$Organization/$ID]"
         $apiParams = @{
             Method      = 'DELETE'
             APIEndpoint = "/enterprises/$Enterprise/apps/organizations/$Organization/installations/$ID"
