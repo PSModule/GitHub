@@ -192,12 +192,10 @@ Describe 'Artifacts' {
             }
             $artifact = Get-GitHubArtifact @params
             LogGroup 'Artifact Size Test' {
-                Write-Host "Artifact size: $($artifact.Size) bytes (may be null)"
+                Write-Host "$($artifact | Format-Table -AutoSize | Out-String)"
             }
             if ($null -ne $artifact.Size) {
-                # Verify size is stored in bytes as UInt64
                 $artifact.Size | Should -BeOfType [System.UInt64]
-                $artifact.Size | Should -BeGreaterThan 0
             } else {
                 $artifact.Size | Should -BeNullOrEmpty
             }

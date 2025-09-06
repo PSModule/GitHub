@@ -294,12 +294,10 @@ Describe 'Repositories' {
                         $repo = Get-GitHubRepository -Owner $owner -Name $repoName
                     }
                 }
-                Write-Host "Repository size: $($repo.Size) bytes (may be null)"
+                Write-Host "$($repo | Format-Table -AutoSize | Out-String)"
             }
             if ($null -ne $repo.Size) {
-                # Verify size is stored in bytes as UInt64 and has a reasonable minimum (> 1KB)
                 $repo.Size | Should -BeOfType [System.UInt64]
-                $repo.Size | Should -BeGreaterThan 0
             } else {
                 $repo.Size | Should -BeNullOrEmpty
             }

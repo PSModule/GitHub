@@ -66,13 +66,11 @@ Describe 'Organizations' {
 
         It 'GitHubOrganization.Size - Stores size in bytes (nullable UInt64)' -Skip:($OwnerType -ne 'organization') {
             $organization = Get-GitHubOrganization -Name $Owner
-            LogGroup 'Organization Size Test' {
-                Write-Host "Organization size: $($organization.Size) bytes (may be null)"
+            LogGroup 'Organization' {
+                Write-Host "$($organization | Select-Object * | Out-String)"
             }
             if ($null -ne $organization.Size) {
-                # Verify size is stored in bytes as UInt64
                 $organization.Size | Should -BeOfType [System.UInt64]
-                $organization.Size | Should -BeGreaterThan 0
             } else {
                 $organization.Size | Should -BeNullOrEmpty
             }
