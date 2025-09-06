@@ -39,6 +39,8 @@ function Uninstall-GitHubAppAsApp {
     }
 
     process {
+        Write-Verbose "Uninstalling GitHub App Installation: $ID"
+
         $apiParams = @{
             Method      = 'DELETE'
             APIEndpoint = "/app/installations/$ID"
