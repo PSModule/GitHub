@@ -8,8 +8,8 @@
     # The name of the repository the variable is associated with.
     [string] $Repository
 
-    # The size of the artifact in bytes (nullable if API omits value).
-    [System.Nullable[UInt64]] $Size
+    # The size of the artifact in bytes.
+    [uint64] $Size
 
     # The API URL for accessing the artifact.
     [string] $Url

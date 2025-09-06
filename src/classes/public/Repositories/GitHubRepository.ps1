@@ -39,9 +39,9 @@
     # Example: https://github.com
     [string] $Homepage
 
-    # The size of the repository, in bytes (nullable if API omits the field).
+    # The size of the repository, in bytes.
     # Example: 110592
-    [System.Nullable[UInt64]] $Size
+    [System.Nullable[uint64]] $Size
 
     # The primary language of the repository.
     # Example: null
@@ -264,7 +264,6 @@
             $this.Homepage = $Object.homepage
             $this.Url = $Object.html_url
             if ($null -ne $Object.size) {
-                # REST API returns size in KB; convert to bytes and cast to UInt64
                 $this.Size = [uint64]($Object.size * 1KB)
             }
             $this.Language = [GitHubRepositoryLanguage]::new($Object.language)
