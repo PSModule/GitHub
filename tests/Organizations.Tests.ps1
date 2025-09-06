@@ -38,21 +38,14 @@ Describe 'Organizations' {
             $orgName = "$orgPrefix$number"
 
             if ($AuthType -eq 'APP') {
+                LogGroup 'Pre-test Cleanup - App Installations' {
+                    Get-GitHubAppInstallation -Context $context | Where-Object { $_.Target.Name -like "$orgPrefix*" } |
+                        Uninstall-GitHubApp -Confirm:$false
+                }
+
                 $installationContext = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
                 LogGroup 'Context - Installation' {
                     Write-Host ($installationContext | Select-Object * | Out-String)
-                }
-
-                LogGroup 'Pre-test Cleanup - App Installations' {
-                    try {
-                        $existingInstallations = Get-GitHubAppInstallation -Context $context | Where-Object { $_.Target.Name -eq $orgName }
-                        foreach ($installation in $existingInstallations) {
-                            Write-Host "Removing existing app installation ID: $($installation.ID) for organization: $($installation.Target.Name)"
-                            Uninstall-GitHubApp -Enterprise $owner -Organization $orgName -ID $installation.ID -Context $context -Confirm:$false
-                        }
-                    } catch {
-                        Write-Host "Failed to clean up existing installations: $($_.Exception.Message)"
-                    }
                 }
             }
         }
