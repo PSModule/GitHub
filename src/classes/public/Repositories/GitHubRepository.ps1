@@ -39,8 +39,8 @@
     # Example: https://github.com
     [string] $Homepage
 
-    # The size of the repository, in kilobytes.
-    # Example: 108
+    # The size of the repository, in bytes.
+    # Example: 110592
     [System.Nullable[uint]] $Size
 
     # The primary language of the repository.
@@ -263,7 +263,7 @@
             $this.Description = $Object.description
             $this.Homepage = $Object.homepage
             $this.Url = $Object.html_url
-            $this.Size = $Object.size
+            $this.Size = $Object.size * 1KB
             $this.Language = [GitHubRepositoryLanguage]::new($Object.language)
             $this.IsFork = $Object.fork
             $this.IsArchived = $Object.archived
@@ -317,7 +317,7 @@
             $this.PushedAt = $Object.pushedAt
             $this.ArchivedAt = $Object.archivedAt
             $this.Homepage = $Object.homepageUrl
-            $this.Size = $Object.diskUsage
+            $this.Size = $Object.diskUsage * 1KB
             $this.Language = [GitHubRepositoryLanguage]::new($Object.primaryLanguage)
             $this.HasIssues = $Object.hasIssuesEnabled
             $this.HasProjects = $Object.hasProjectsEnabled

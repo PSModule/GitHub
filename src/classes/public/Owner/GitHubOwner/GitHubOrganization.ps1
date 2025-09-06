@@ -39,9 +39,9 @@
     # Example: 100
     [System.Nullable[uint]] $OwnedPrivateRepos
 
-    # The disk usage in kilobytes.
-    # Example: 10000
-    [System.Nullable[uint]] $DiskUsage
+    # The size of the organization's repositories, in bytes.
+    # Example: 10240000
+    [System.Nullable[uint]] $Size
 
     # The number of collaborators on private repositories.
     # Example: 8
@@ -209,7 +209,7 @@
         $this.PrivateGists = $Object.total_private_gists
         $this.TotalPrivateRepos = $Object.total_private_repos
         $this.OwnedPrivateRepos = $Object.owned_private_repos
-        $this.DiskUsage = $Object.disk_usage
+        $this.Size = $Object.disk_usage * 1KB
         $this.Collaborators = $Object.collaborators
         $this.IsVerified = $Object.is_verified ?? $Object.isVerified
         $this.HasOrganizationProjects = $Object.has_organization_projects
