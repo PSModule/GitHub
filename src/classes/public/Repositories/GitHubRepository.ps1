@@ -320,7 +320,6 @@
             $this.ArchivedAt = $Object.archivedAt
             $this.Homepage = $Object.homepageUrl
             if ($null -ne $Object.diskUsage) {
-                # GraphQL returns diskUsage in KB; convert to bytes and cast to UInt64
                 $this.Size = [uint64]($Object.diskUsage * 1KB)
             }
             $this.Language = [GitHubRepositoryLanguage]::new($Object.primaryLanguage)
