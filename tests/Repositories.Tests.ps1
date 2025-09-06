@@ -283,6 +283,26 @@ Describe 'Repositories' {
                 $repo.IsArchived | Should -Be $false
             }
         }
+
+        It 'GitHubRepository.Size - Stores size in bytes (nullable UInt64)' -Skip:($OwnerType -in ('repository', 'enterprise')) {
+            LogGroup 'Repository Size Test' {
+                switch ($OwnerType) {
+                    'user' {
+                        $repo = Get-GitHubRepository -Name $repoName
+                    }
+                    'organization' {
+                        $repo = Get-GitHubRepository -Owner $owner -Name $repoName
+                    }
+                }
+                Write-Host "$($repo | Format-Table -AutoSize | Out-String)"
+            }
+            if ($null -ne $repo.Size) {
+                $repo.Size | Should -BeOfType [System.UInt64]
+            } else {
+                $repo.Size | Should -BeNullOrEmpty
+            }
+        }
+
         Context 'Permissions' -Skip:($OwnerType -ne 'Organization') {
             It 'Set-GitHubRepositoryPermission - Sets the repository permissions - Admin' {
                 $permission = 'admin'

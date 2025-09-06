@@ -183,6 +183,24 @@ Describe 'Artifacts' {
             $result | Should -BeOfType [GitHubArtifact]
         }
 
+        It 'GitHubArtifact.Size - Stores size in bytes (nullable UInt64)' {
+            $params = @{
+                Owner         = $Owner
+                Repository    = $Repository
+                WorkflowRunId = $WorkflowRunId
+                Name          = $ArtifactName
+            }
+            $artifact = Get-GitHubArtifact @params
+            LogGroup 'Artifact Size Test' {
+                Write-Host "$($artifact | Format-Table -AutoSize | Out-String)"
+            }
+            if ($null -ne $artifact.Size) {
+                $artifact.Size | Should -BeOfType [System.UInt64]
+            } else {
+                $artifact.Size | Should -BeNullOrEmpty
+            }
+        }
+
         It 'Save-GitHubArtifact - Saves the artifact to disk' {
             $params = @{
                 Owner      = $Owner
