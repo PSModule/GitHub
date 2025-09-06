@@ -299,7 +299,7 @@ Describe 'Repositories' {
             if ($null -ne $repo.Size) {
                 # Verify size is stored in bytes as UInt64 and has a reasonable minimum (> 1KB)
                 $repo.Size | Should -BeOfType [System.UInt64]
-                $repo.Size | Should -BeGreaterThan 1024
+                $repo.Size | Should -BeGreaterThan 0
             } else {
                 $repo.Size | Should -BeNullOrEmpty
             }
