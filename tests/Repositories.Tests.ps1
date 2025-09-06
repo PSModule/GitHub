@@ -283,6 +283,28 @@ Describe 'Repositories' {
                 $repo.IsArchived | Should -Be $false
             }
         }
+        
+        It 'GitHubRepository.Size - Stores size in bytes and validates type' -Skip:($OwnerType -in ('repository', 'enterprise')) {
+            LogGroup 'Repository Size Test' {
+                switch ($OwnerType) {
+                    'user' {
+                        $repo = Get-GitHubRepository -Name $repoName
+                    }
+                    'organization' {
+                        $repo = Get-GitHubRepository -Owner $owner -Name $repoName
+                    }
+                }
+                Write-Host "Repository size: $($repo.Size) bytes (should be > 0 and stored as bytes)"
+            }
+            # Verify size is stored in bytes (should be > 0 and of correct type)
+            $repo.Size | Should -BeOfType [System.UInt32]
+            $repo.Size | Should -BeGreaterThan 0
+            
+            # Verify size is reasonable for a repository (likely several KB when converted from API)
+            # API typically returns values in KB, so stored bytes should be much larger
+            $repo.Size | Should -BeGreaterThan 1024  # At least 1KB worth of bytes
+        }
+        
         Context 'Permissions' -Skip:($OwnerType -ne 'Organization') {
             It 'Set-GitHubRepositoryPermission - Sets the repository permissions - Admin' {
                 $permission = 'admin'
