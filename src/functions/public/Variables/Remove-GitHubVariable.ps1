@@ -84,15 +84,38 @@
         switch ($PSCmdlet.ParameterSetName) {
             'ArrayInput' {
                 foreach ($item in $InputObject) {
-                    $params = @{
-                        Owner       = $item.Owner
-                        Repository  = $item.Repository
-                        Environment = $item.Environment
-                        Name        = $item.Name
-                        Context     = $item.Context
+                    switch ($item.Scope) {
+                        'environment' {
+                            $params = @{
+                                Owner       = $item.Owner
+                                Repository  = $item.Repository
+                                Environment = $item.Environment
+                                Name        = $item.Name
+                                Context     = $Context
+                            }
+                            Remove-GitHubVariableFromEnvironment @params
+                        }
+                        'repository' {
+                            $params = @{
+                                Owner      = $item.Owner
+                                Repository = $item.Repository
+                                Name       = $item.Name
+                                Context    = $Context
+                            }
+                            Remove-GitHubVariableFromRepository @params
+                        }
+                        'organization' {
+                            $params = @{
+                                Owner   = $item.Owner
+                                Name    = $item.Name
+                                Context = $Context
+                            }
+                            Remove-GitHubVariableFromOwner @params
+                        }
+                        default {
+                            throw "Variable '$($item.Name)' has unsupported Scope value '$($item.Scope)'."
+                        }
                     }
-                    $params | Remove-HashtableEntry -NullOrEmptyValues
-                    Remove-GitHubVariable @params
                 }
                 break
             }
