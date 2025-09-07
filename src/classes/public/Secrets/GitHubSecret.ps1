@@ -1,29 +1,29 @@
 ﻿class GitHubSecret {
-    # The key ID of the public key.
+    # The name of the secret.
     [string] $Name
 
-    # The scope of the variable, organization, repository, or environment.
+    # The scope of the secret, organization, repository, or environment.
     [string] $Scope
 
-    # The name of the organization or user the Public Key is associated with.
+    # The name of the organization or user the secret is stored in.
     [string] $Owner
 
-    # The name of the repository the Public Key is associated with.
+    # The name of the repository the secret is stored in.
     [string] $Repository
 
-    # The name of the environment the Public Key is associated with.
+    # The name of the environment the secret is stored in.
     [string] $Environment
 
-    # The date and time the variable was created.
+    # The date and time the secret was created.
     [datetime] $CreatedAt
 
-    # The date and time the variable was last updated.
+    # The date and time the secret was last updated.
     [datetime] $UpdatedAt
 
-    # The visibility of the variable.
+    # The visibility of the secret.
     [string] $Visibility
 
-    # The ids of the repositories that the variable is visible to.
+    # The ids of the repositories that the secret is visible to.
     [GitHubRepository[]] $SelectedRepositories
 
     GitHubSecret() {}
