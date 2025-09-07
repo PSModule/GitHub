@@ -78,15 +78,40 @@
         switch ($PSCmdlet.ParameterSetName) {
             'ArrayInput' {
                 foreach ($item in $InputObject) {
-                    $params = @{
-                        Owner       = $item.Owner
-                        Repository  = $item.Repository
-                        Environment = $item.Environment
-                        Name        = $item.Name
-                        Context     = $item.Context
+                    # Determine the scope based on which values are present and not empty/whitespace
+                    $hasOwner = ![string]::IsNullOrWhiteSpace($item.Owner)
+                    $hasRepository = ![string]::IsNullOrWhiteSpace($item.Repository)
+                    $hasEnvironment = ![string]::IsNullOrWhiteSpace($item.Environment)
+                    if ($hasOwner -and $hasRepository -and $hasEnvironment) {
+                        # Environment scope
+                        $params = @{
+                            Owner       = $item.Owner
+                            Repository  = $item.Repository
+                            Environment = $item.Environment
+                            Name        = $item.Name
+                            Context     = $Context
+                        }
+                        Remove-GitHubSecretFromEnvironment @params
+                    } elseif ($hasOwner -and $hasRepository) {
+                        # Repository scope
+                        $params = @{
+                            Owner      = $item.Owner
+                            Repository = $item.Repository
+                            Name       = $item.Name
+                            Context    = $Context
+                        }
+                        Remove-GitHubSecretFromRepository @params
+                    } elseif ($hasOwner) {
+                        # Organization scope
+                        $params = @{
+                            Owner   = $item.Owner
+                            Name    = $item.Name
+                            Context = $Context
+                        }
+                        Remove-GitHubSecretFromOwner @params
+                    } else {
+                        throw "Unable to determine scope for secret '$($item.Name)'. Owner must be specified."
                     }
-                    $params | Remove-HashtableEntry -NullOrEmptyValues
-                    Remove-GitHubSecret @params
                 }
                 break
             }
