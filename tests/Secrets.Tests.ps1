@@ -215,7 +215,7 @@ Describe 'Secrets' {
                 }
             }
 
-            It 'Remove-GitHubSecret' {
+            It 'Remove-GitHubSecret via pipeline' {
                 $testSecretName = "$secretName`TestSecret*"
                 LogGroup 'Before remove' {
                     $before = Get-GitHubSecret @scope -Name $testSecretName
@@ -229,6 +229,30 @@ Describe 'Secrets' {
                     Write-Host "$($after | Format-List | Out-String)"
                 }
                 $after.Count | Should -Be 0
+            }
+
+            It 'Remove-GitHubSecret via pipeline - edge case with empty properties' {
+                # Test the specific issue #388 - piping GitHubSecret objects with empty properties
+                $pipelineTestSecretName = "$secretName`PipelineTest"
+                LogGroup 'Create test secret for pipeline removal' {
+                    $createResult = Set-GitHubSecret @scope -Name $pipelineTestSecretName -Value 'PipelineTestValue'
+                    Write-Host "$($createResult | Format-List | Out-String)"
+                }
+                LogGroup 'Get secret and modify to simulate edge case' {
+                    $secretToRemove = Get-GitHubSecret @scope -Name $pipelineTestSecretName
+                    # Ensure empty properties are empty strings (not null) to test the original issue
+                    $secretToRemove.Repository = ''
+                    $secretToRemove.Environment = ''
+                    Write-Host "$($secretToRemove | Format-List | Out-String)"
+                }
+                LogGroup 'Remove via pipeline (this would fail before the fix)' {
+                    { $secretToRemove | Remove-GitHubSecret } | Should -Not -Throw
+                }
+                LogGroup 'Verify removal' {
+                    $after = Get-GitHubSecret @scope -Name $pipelineTestSecretName
+                    Write-Host "$($after | Format-List | Out-String)"
+                    $after | Should -BeNullOrEmpty
+                }
             }
 
             Context 'SelectedRepository' {
@@ -402,7 +426,7 @@ Describe 'Secrets' {
                 }
             }
 
-            It 'Remove-GitHubSecret' {
+            It 'Remove-GitHubSecret via pipeline' {
                 $before = Get-GitHubSecret @scope -Name "*$os*"
                 LogGroup 'Secrets - Before' {
                     Write-Host "$($before | Format-Table | Out-String)"
@@ -413,6 +437,29 @@ Describe 'Secrets' {
                     Write-Host "$($after | Format-Table | Out-String)"
                 }
                 $after.Count | Should -Be 0
+            }
+
+            It 'Remove-GitHubSecret via pipeline - edge case with empty properties' {
+                # Test the specific issue #388 - piping GitHubSecret objects with empty properties
+                $pipelineTestSecretName = "$secretName`PipelineTest"
+                LogGroup 'Create test secret for pipeline removal' {
+                    $createResult = Set-GitHubSecret @scope -Name $pipelineTestSecretName -Value 'PipelineTestValue'
+                    Write-Host "$($createResult | Format-List | Out-String)"
+                }
+                LogGroup 'Get secret and modify to simulate edge case' {
+                    $secretToRemove = Get-GitHubSecret @scope -Name $pipelineTestSecretName
+                    # Ensure empty properties are empty strings (not null) to test the original issue
+                    $secretToRemove.Environment = ''
+                    Write-Host "$($secretToRemove | Format-List | Out-String)"
+                }
+                LogGroup 'Remove via pipeline (this would fail before the fix)' {
+                    { $secretToRemove | Remove-GitHubSecret } | Should -Not -Throw
+                }
+                LogGroup 'Verify removal' {
+                    $after = Get-GitHubSecret @scope -Name $pipelineTestSecretName
+                    Write-Host "$($after | Format-List | Out-String)"
+                    $after | Should -BeNullOrEmpty
+                }
             }
         }
 
@@ -512,7 +559,7 @@ Describe 'Secrets' {
                 }
             }
 
-            It 'Remove-GitHubSecret' {
+            It 'Remove-GitHubSecret via pipeline' {
                 LogGroup 'Secrets - Before' {
                     $before = Get-GitHubSecret @scope -Name "*$os*"
                     Write-Host "$($before | Format-Table | Out-String)"
@@ -523,6 +570,28 @@ Describe 'Secrets' {
                     Write-Host "$($after | Format-Table | Out-String)"
                 }
                 $after.Count | Should -Be 0
+            }
+
+            It 'Remove-GitHubSecret via pipeline - edge case with whitespace properties' {
+                # Test the specific issue #388 - piping GitHubSecret objects with whitespace properties
+                $pipelineTestSecretName = "$secretName`PipelineTest"
+                LogGroup 'Create test secret for pipeline removal' {
+                    $createResult = Set-GitHubSecret @scope -Name $pipelineTestSecretName -Value 'PipelineTestValue'
+                    Write-Host "$($createResult | Format-List | Out-String)"
+                }
+                LogGroup 'Get secret and test whitespace handling' {
+                    $secretToRemove = Get-GitHubSecret @scope -Name $pipelineTestSecretName
+                    Write-Host "$($secretToRemove | Format-List | Out-String)"
+                    Write-Host "Testing that environment secrets with valid Environment property work correctly"
+                }
+                LogGroup 'Remove via pipeline' {
+                    { $secretToRemove | Remove-GitHubSecret } | Should -Not -Throw
+                }
+                LogGroup 'Verify removal' {
+                    $after = Get-GitHubSecret @scope -Name $pipelineTestSecretName
+                    Write-Host "$($after | Format-List | Out-String)"
+                    $after | Should -BeNullOrEmpty
+                }
             }
         }
     }
