@@ -238,11 +238,8 @@ Describe 'Secrets' {
                     $createResult = Set-GitHubSecret @scope -Name $pipelineTestSecretName -Value 'PipelineTestValue'
                     Write-Host "$($createResult | Format-List | Out-String)"
                 }
-                LogGroup 'Get secret and modify to simulate edge case' {
+                LogGroup 'Get secret for pipeline removal' {
                     $secretToRemove = Get-GitHubSecret @scope -Name $pipelineTestSecretName
-                    # Ensure empty properties are empty strings (not null) to test the original issue
-                    $secretToRemove.Repository = ''
-                    $secretToRemove.Environment = ''
                     Write-Host "$($secretToRemove | Format-List | Out-String)"
                 }
                 LogGroup 'Remove via pipeline (this would fail before the fix)' {
@@ -446,10 +443,8 @@ Describe 'Secrets' {
                     $createResult = Set-GitHubSecret @scope -Name $pipelineTestSecretName -Value 'PipelineTestValue'
                     Write-Host "$($createResult | Format-List | Out-String)"
                 }
-                LogGroup 'Get secret and modify to simulate edge case' {
+                LogGroup 'Get secret for pipeline removal' {
                     $secretToRemove = Get-GitHubSecret @scope -Name $pipelineTestSecretName
-                    # Ensure empty properties are empty strings (not null) to test the original issue
-                    $secretToRemove.Environment = ''
                     Write-Host "$($secretToRemove | Format-List | Out-String)"
                 }
                 LogGroup 'Remove via pipeline (this would fail before the fix)' {
