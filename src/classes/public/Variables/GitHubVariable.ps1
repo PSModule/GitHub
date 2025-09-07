@@ -8,13 +8,13 @@
     # The scope of the variable, organization, repository, or environment.
     [string] $Scope
 
-    # The name of the organization or user the variable is associated with.
+    # The name of the organization or user the variable is stored in.
     [string] $Owner
 
-    # The name of the repository the variable is associated with.
+    # The name of the repository the variable is stored in.
     [string] $Repository
 
-    # The name of the environment the variable is associated with.
+    # The name of the environment the variable is stored in.
     [string] $Environment
 
     # The date and time the variable was created.

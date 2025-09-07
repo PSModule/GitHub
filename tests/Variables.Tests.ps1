@@ -240,20 +240,41 @@ Describe 'Variables' {
                 }
             }
 
-            It 'Remove-GitHubVariable' {
-                $testVarName = "$variableName`TestVariable*"
-                LogGroup 'Before remove' {
-                    $before = Get-GitHubVariable @scope -Name $testVarName
-                    Write-Host "$($before | Format-List | Out-String)"
+            It 'Remove-GitHubVariable via pipeline - using pipeline' {
+                LogGroup 'Create variable(s) for pipeline removal' {
+                    $create = Set-GitHubVariable @scope -Name "$variableName`PipelineRemoval" -Value 'PipelineTestValue'
+                    Write-Host "$($create | Format-List | Out-String)"
                 }
-                LogGroup 'Remove' {
-                    $before | Remove-GitHubVariable
+                $before = Get-GitHubVariable @scope -Name "*$os*"
+                LogGroup 'Variables - Before' {
+                    Write-Host "$($before | Format-Table | Out-String)"
                 }
-                LogGroup 'After remove' {
-                    $after = Get-GitHubVariable @scope -Name $testVarName
-                    Write-Host "$($after | Format-List | Out-String)"
+                Get-GitHubVariable @scope -Name "*$os*" | Remove-GitHubVariable
+                $after = Get-GitHubVariable @scope -Name "*$os*"
+                LogGroup 'Variables -After' {
+                    Write-Host "$($after | Format-Table | Out-String)"
                 }
                 $after.Count | Should -Be 0
+            }
+
+            It 'Remove-GitHubVariable via pipeline - using variable' {
+                $pipelineTestVariableName = "$variableName`PipelineTest"
+                LogGroup 'Create test variable for pipeline removal' {
+                    $createResult = Set-GitHubVariable @scope -Name $pipelineTestVariableName -Value 'PipelineTestValue'
+                    Write-Host "$($createResult | Format-List | Out-String)"
+                }
+                LogGroup 'Get variable for pipeline removal' {
+                    $variableToRemove = Get-GitHubVariable @scope -Name $pipelineTestVariableName
+                    Write-Host "$($variableToRemove | Format-List | Out-String)"
+                }
+                LogGroup 'Remove via pipeline' {
+                    { $variableToRemove | Remove-GitHubVariable } | Should -Not -Throw
+                }
+                LogGroup 'Verify removal' {
+                    $after = Get-GitHubVariable @scope -Name $pipelineTestVariableName
+                    Write-Host "$($after | Format-List | Out-String)"
+                    $after | Should -BeNullOrEmpty
+                }
             }
 
             Context 'SelectedRepository' -Tag 'Flaky' {
@@ -433,17 +454,41 @@ Describe 'Variables' {
                 }
             }
 
-            It 'Remove-GitHubVariable' {
+            It 'Remove-GitHubVariable via pipeline - using pipeline' {
+                LogGroup 'Create variable(s) for pipeline removal' {
+                    $create = Set-GitHubVariable @scope -Name "$variableName`PipelineRemoval" -Value 'PipelineTestValue'
+                    Write-Host "$($create | Format-List | Out-String)"
+                }
                 $before = Get-GitHubVariable @scope -Name "*$os*"
                 LogGroup 'Variables - Before' {
                     Write-Host "$($before | Format-Table | Out-String)"
                 }
-                $before | Remove-GitHubVariable
+                Get-GitHubVariable @scope -Name "*$os*" | Remove-GitHubVariable
                 $after = Get-GitHubVariable @scope -Name "*$os*"
                 LogGroup 'Variables -After' {
                     Write-Host "$($after | Format-Table | Out-String)"
                 }
                 $after.Count | Should -Be 0
+            }
+
+            It 'Remove-GitHubVariable via pipeline - using variable' {
+                $pipelineTestVariableName = "$variableName`PipelineTest"
+                LogGroup 'Create test variable for pipeline removal' {
+                    $createResult = Set-GitHubVariable @scope -Name $pipelineTestVariableName -Value 'PipelineTestValue'
+                    Write-Host "$($createResult | Format-List | Out-String)"
+                }
+                LogGroup 'Get variable for pipeline removal' {
+                    $variableToRemove = Get-GitHubVariable @scope -Name $pipelineTestVariableName
+                    Write-Host "$($variableToRemove | Format-List | Out-String)"
+                }
+                LogGroup 'Remove via pipeline' {
+                    { $variableToRemove | Remove-GitHubVariable } | Should -Not -Throw
+                }
+                LogGroup 'Verify removal' {
+                    $after = Get-GitHubVariable @scope -Name $pipelineTestVariableName
+                    Write-Host "$($after | Format-List | Out-String)"
+                    $after | Should -BeNullOrEmpty
+                }
             }
         }
 
@@ -560,17 +605,42 @@ Describe 'Variables' {
                 }
             }
 
-            It 'Remove-GitHubVariable' {
+            It 'Remove-GitHubVariable via pipeline - using pipeline' {
+                LogGroup 'Create variable(s) for pipeline removal' {
+                    $create = Set-GitHubVariable @scope -Name "$variableName`PipelineRemoval" -Value 'PipelineTestValue'
+                    Write-Host "$($create | Format-List | Out-String)"
+                }
                 LogGroup 'Variables - Before' {
                     $before = Get-GitHubVariable @scope -Name "*$os*"
                     Write-Host "$($before | Format-Table | Out-String)"
                 }
-                $before | Remove-GitHubVariable
+                Get-GitHubVariable @scope -Name "*$os*" | Remove-GitHubVariable
                 LogGroup 'Variables - After' {
                     $after = Get-GitHubVariable @scope -Name "*$os*"
                     Write-Host "$($after | Format-Table | Out-String)"
                 }
                 $after.Count | Should -Be 0
+            }
+
+            It 'Remove-GitHubVariable via pipeline - using variable' {
+                $pipelineTestVariableName = "$variableName`PipelineTest"
+                LogGroup 'Create test variable for pipeline removal' {
+                    $createResult = Set-GitHubVariable @scope -Name $pipelineTestVariableName -Value 'PipelineTestValue'
+                    Write-Host "$($createResult | Format-List | Out-String)"
+                }
+                LogGroup 'Get variable and test whitespace handling' {
+                    $variableToRemove = Get-GitHubVariable @scope -Name $pipelineTestVariableName
+                    Write-Host "$($variableToRemove | Format-List | Out-String)"
+                    Write-Host "Testing that environment variables with valid Environment property work correctly"
+                }
+                LogGroup 'Remove via pipeline' {
+                    { $variableToRemove | Remove-GitHubVariable } | Should -Not -Throw
+                }
+                LogGroup 'Verify removal' {
+                    $after = Get-GitHubVariable @scope -Name $pipelineTestVariableName
+                    Write-Host "$($after | Format-List | Out-String)"
+                    $after | Should -BeNullOrEmpty
+                }
             }
         }
     }

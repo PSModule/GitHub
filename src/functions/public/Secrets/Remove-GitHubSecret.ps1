@@ -78,15 +78,38 @@
         switch ($PSCmdlet.ParameterSetName) {
             'ArrayInput' {
                 foreach ($item in $InputObject) {
-                    $params = @{
-                        Owner       = $item.Owner
-                        Repository  = $item.Repository
-                        Environment = $item.Environment
-                        Name        = $item.Name
-                        Context     = $item.Context
+                    switch ($item.Scope) {
+                        'environment' {
+                            $params = @{
+                                Owner       = $item.Owner
+                                Repository  = $item.Repository
+                                Environment = $item.Environment
+                                Name        = $item.Name
+                                Context     = $Context
+                            }
+                            Remove-GitHubSecretFromEnvironment @params
+                        }
+                        'repository' {
+                            $params = @{
+                                Owner      = $item.Owner
+                                Repository = $item.Repository
+                                Name       = $item.Name
+                                Context    = $Context
+                            }
+                            Remove-GitHubSecretFromRepository @params
+                        }
+                        'organization' {
+                            $params = @{
+                                Owner   = $item.Owner
+                                Name    = $item.Name
+                                Context = $Context
+                            }
+                            Remove-GitHubSecretFromOwner @params
+                        }
+                        default {
+                            throw "Secret '$($item.Name)' has unsupported Scope value '$scope'."
+                        }
                     }
-                    $params | Remove-HashtableEntry -NullOrEmptyValues
-                    Remove-GitHubSecret @params
                 }
                 break
             }

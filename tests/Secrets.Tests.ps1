@@ -215,20 +215,44 @@ Describe 'Secrets' {
                 }
             }
 
-            It 'Remove-GitHubSecret' {
+            It 'Remove-GitHubSecret via pipeline - using pipeline' {
                 $testSecretName = "$secretName`TestSecret*"
+                LogGroup 'Create secret(s) for pipeline removal' {
+                    $create = Set-GitHubSecret @scope -Name "$secretName`TestSecretPipeline" -Value 'PipelineTestValue'
+                    Write-Host "$($create | Format-List | Out-String)"
+                }
                 LogGroup 'Before remove' {
                     $before = Get-GitHubSecret @scope -Name $testSecretName
                     Write-Host "$($before | Format-List | Out-String)"
                 }
                 LogGroup 'Remove' {
-                    $before | Remove-GitHubSecret
+                    Get-GitHubSecret @scope -Name $testSecretName | Remove-GitHubSecret
                 }
                 LogGroup 'After remove' {
                     $after = Get-GitHubSecret @scope -Name $testSecretName
                     Write-Host "$($after | Format-List | Out-String)"
                 }
                 $after.Count | Should -Be 0
+            }
+
+            It 'Remove-GitHubSecret via pipeline - using variable' {
+                $pipelineTestSecretName = "$secretName`PipelineTest"
+                LogGroup 'Create test secret for pipeline removal' {
+                    $createResult = Set-GitHubSecret @scope -Name $pipelineTestSecretName -Value 'PipelineTestValue'
+                    Write-Host "$($createResult | Format-List | Out-String)"
+                }
+                LogGroup 'Get secret for pipeline removal' {
+                    $secretToRemove = Get-GitHubSecret @scope -Name $pipelineTestSecretName
+                    Write-Host "$($secretToRemove | Format-List | Out-String)"
+                }
+                LogGroup 'Remove via pipeline' {
+                    { $secretToRemove | Remove-GitHubSecret } | Should -Not -Throw
+                }
+                LogGroup 'Verify removal' {
+                    $after = Get-GitHubSecret @scope -Name $pipelineTestSecretName
+                    Write-Host "$($after | Format-List | Out-String)"
+                    $after | Should -BeNullOrEmpty
+                }
             }
 
             Context 'SelectedRepository' {
@@ -402,17 +426,41 @@ Describe 'Secrets' {
                 }
             }
 
-            It 'Remove-GitHubSecret' {
+            It 'Remove-GitHubSecret via pipeline - using pipeline' {
+                LogGroup 'Create secret(s) for pipeline removal' {
+                    $create = Set-GitHubSecret @scope -Name "$secretName`PipelineRemoval" -Value 'PipelineTestValue'
+                    Write-Host "$($create | Format-List | Out-String)"
+                }
                 $before = Get-GitHubSecret @scope -Name "*$os*"
                 LogGroup 'Secrets - Before' {
                     Write-Host "$($before | Format-Table | Out-String)"
                 }
-                $before | Remove-GitHubSecret
+                Get-GitHubSecret @scope -Name "*$os*" | Remove-GitHubSecret
                 $after = Get-GitHubSecret @scope -Name "*$os*"
                 LogGroup 'Secrets -After' {
                     Write-Host "$($after | Format-Table | Out-String)"
                 }
                 $after.Count | Should -Be 0
+            }
+
+            It 'Remove-GitHubSecret via pipeline - using variable' {
+                $pipelineTestSecretName = "$secretName`PipelineTest"
+                LogGroup 'Create test secret for pipeline removal' {
+                    $createResult = Set-GitHubSecret @scope -Name $pipelineTestSecretName -Value 'PipelineTestValue'
+                    Write-Host "$($createResult | Format-List | Out-String)"
+                }
+                LogGroup 'Get secret for pipeline removal' {
+                    $secretToRemove = Get-GitHubSecret @scope -Name $pipelineTestSecretName
+                    Write-Host "$($secretToRemove | Format-List | Out-String)"
+                }
+                LogGroup 'Remove via pipeline' {
+                    { $secretToRemove | Remove-GitHubSecret } | Should -Not -Throw
+                }
+                LogGroup 'Verify removal' {
+                    $after = Get-GitHubSecret @scope -Name $pipelineTestSecretName
+                    Write-Host "$($after | Format-List | Out-String)"
+                    $after | Should -BeNullOrEmpty
+                }
             }
         }
 
@@ -512,17 +560,42 @@ Describe 'Secrets' {
                 }
             }
 
-            It 'Remove-GitHubSecret' {
+            It 'Remove-GitHubSecret via pipeline - using pipeline' {
+                LogGroup 'Create secret(s) for pipeline removal' {
+                    $create = Set-GitHubSecret @scope -Name "$secretName`PipelineRemoval" -Value 'PipelineTestValue'
+                    Write-Host "$($create | Format-List | Out-String)"
+                }
                 LogGroup 'Secrets - Before' {
                     $before = Get-GitHubSecret @scope -Name "*$os*"
                     Write-Host "$($before | Format-Table | Out-String)"
                 }
-                $before | Remove-GitHubSecret
+                Get-GitHubSecret @scope -Name "*$os*" | Remove-GitHubSecret
                 LogGroup 'Secrets - After' {
                     $after = Get-GitHubSecret @scope -Name "*$os*"
                     Write-Host "$($after | Format-Table | Out-String)"
                 }
                 $after.Count | Should -Be 0
+            }
+
+            It 'Remove-GitHubSecret via pipeline - using variable' {
+                $pipelineTestSecretName = "$secretName`PipelineTest"
+                LogGroup 'Create test secret for pipeline removal' {
+                    $createResult = Set-GitHubSecret @scope -Name $pipelineTestSecretName -Value 'PipelineTestValue'
+                    Write-Host "$($createResult | Format-List | Out-String)"
+                }
+                LogGroup 'Get secret and test whitespace handling' {
+                    $secretToRemove = Get-GitHubSecret @scope -Name $pipelineTestSecretName
+                    Write-Host "$($secretToRemove | Format-List | Out-String)"
+                    Write-Host "Testing that environment secrets with valid Environment property work correctly"
+                }
+                LogGroup 'Remove via pipeline' {
+                    { $secretToRemove | Remove-GitHubSecret } | Should -Not -Throw
+                }
+                LogGroup 'Verify removal' {
+                    $after = Get-GitHubSecret @scope -Name $pipelineTestSecretName
+                    Write-Host "$($after | Format-List | Out-String)"
+                    $after | Should -BeNullOrEmpty
+                }
             }
         }
     }
