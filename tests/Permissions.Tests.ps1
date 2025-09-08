@@ -40,6 +40,50 @@ Describe 'Permissions' {
                 $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
                 Write-Host ($context | Format-List | Out-String)
             }
+
+            It 'App context should have Permissions property populated' -Skip:($AuthType -ne 'APP') {
+                $context.Permissions | Should -Not -BeNullOrEmpty
+                $context.Permissions | Should -BeOfType [pscustomobject]
+            }
+
+            It 'All app installation permissions should exist in permission catalog and be valid options' -Skip:($AuthType -ne 'APP') {
+                # Get catalog definitions
+                $catalog = Get-GitHubPermissionDefinition
+                $catalogNames = $catalog.Name
+
+                # Flatten context permission hashtable/object into name/value pairs (value is access level like read/write/admin)
+                $granted = @()
+                $context.Permissions.PSObject.Properties | ForEach-Object {
+                    if ($_.Name -eq 'metadata') { return } # metadata is mandatory; still in catalog but just proceed normally
+                    $granted += [pscustomobject]@{ Name = $_.Name; Level = [string]$_.Value }
+                }
+
+                # Unknown permissions (present in context but not in catalog)
+                $unknown = $granted | Where-Object { $_.Name -notin $catalogNames }
+                if ($unknown) {
+                    throw "Unknown permission(s) detected in app installation: $($unknown.Name -join ', ')"
+                }
+
+                # For each granted permission ensure level is one of the catalog options
+                foreach ($g in $granted) {
+                    $def = $catalog | Where-Object Name -EQ $g.Name
+                    $def | Should -Not -BeNullOrEmpty
+                    $def.Options | Should -Contain $g.Level
+                }
+            }
+
+            It 'Permission catalog should contain all permissions granted to the app installation' -Skip:($AuthType -ne 'APP') {
+                $catalog = Get-GitHubPermissionDefinition
+                $missing = @()
+                $context.Permissions.PSObject.Properties | ForEach-Object {
+                    if ($_.Name -notin $catalog.Name) {
+                        $missing += $_.Name
+                    }
+                }
+                if ($missing.Count -gt 0) {
+                    throw "Missing permission definitions for: $($missing -join ', ')"
+                }
+            }
         }
     }
 
