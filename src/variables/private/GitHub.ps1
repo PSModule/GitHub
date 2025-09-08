@@ -23,4 +23,5 @@ $script:GitHub = [pscustomobject]@{
     Config             = $null
     Event              = $null
     Runner             = $null
+    Permissions        = $null
 }
