@@ -1,4 +1,11 @@
 # Populate the GitHub.Permissions property with all GitHub permission definitions
+# 
+# Note: File path-specific permissions are intentionally excluded from this list.
+# These permissions are handled differently by the GitHub API - they appear under
+# the FilePaths property in GitHub App installation data rather than as named
+# permissions. They represent user-specified file paths with read/write access
+# and don't have standardized names or descriptions like the permissions below.
+#
 $script:GitHub.Permissions = @(
     # Repository Fine-Grained Permissions
     [GitHubPermission]::new('actions', 'Actions', 'Manage GitHub Actions workflow runs, artifacts, and caches', 'https://docs.github.com/en/rest/authentication/permissions-required-for-fine-grained-personal-access-tokens#repository-permissions', @('read', 'write'), 'Fine-grained', 'Repository'),

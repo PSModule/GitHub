@@ -8,6 +8,10 @@ function Get-GitHubPermissionDefinition {
         This includes fine-grained permissions for repositories, organizations, and user accounts.
         The function supports filtering by permission type and scope to help you find specific permissions.
 
+        File path-specific permissions are excluded from this list as they are handled differently 
+        by the GitHub API (they appear under the FilePaths property in installation data rather 
+        than as named permissions).
+
         .EXAMPLE
         Get-GitHubPermissionDefinition
 
@@ -38,6 +42,8 @@ function Get-GitHubPermissionDefinition {
         The data includes permission names, display names, descriptions, available options, and scopes.
         
         File path permissions are excluded from this list as they are handled differently by the GitHub API.
+        These permissions are user-specified paths with read/write access that appear in the FilePaths 
+        property of GitHub App installation data, not as standard named permissions.
     #>
     [OutputType([GitHubPermission[]])]
     [CmdletBinding()]
