@@ -25,9 +25,9 @@ $script:GitHub = [pscustomobject]@{
     Runner             = $null
     Permissions        = @(
         # ------------------------------
-        # Repository Fine-Grained Permissions
+        # Repository Fine-Grained Permission Definitions
         # ------------------------------
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'actions',
             'Actions',
             'Workflows, workflow runs and artifacts.',
@@ -40,7 +40,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'administration',
             'Administration',
             'Repository creation, deletion, settings, teams, and collaborators.',
@@ -53,7 +53,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'attestations',
             'Attestations',
             'Create and retrieve attestations for a repository.',
@@ -66,7 +66,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'checks',
             'Checks',
             'Checks on code.',
@@ -79,7 +79,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'security_events',
             'Code scanning alerts',
             'View and manage code scanning alerts.',
@@ -92,7 +92,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'codespaces',
             'Codespaces',
             'Create, edit, delete and list Codespaces.',
@@ -105,7 +105,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'codespaces_lifecycle_admin',
             'Codespaces lifecycle admin',
             'Manage the lifecycle of Codespaces, including starting and stopping.',
@@ -118,7 +118,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'codespaces_metadata',
             'Codespaces metadata',
             'Access Codespaces metadata including the devcontainers and machine type.',
@@ -130,7 +130,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'codespaces_secrets',
             'Codespaces secrets',
             'Restrict Codespaces user secrets modifications to specific repositories.',
@@ -143,7 +143,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'statuses',
             'Commit statuses',
             'Commit statuses.',
@@ -156,7 +156,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'contents',
             'Contents',
             'Repository contents, commits, branches, downloads, releases, and merges.',
@@ -169,7 +169,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'repository_custom_properties',
             'Custom properties',
             'Read and write repository custom properties values at the repository level, when allowed by the property.',
@@ -182,7 +182,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'vulnerability_alerts',
             'Dependabot alerts',
             'Retrieve Dependabot alerts.',
@@ -195,7 +195,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'dependabot_secrets',
             'Dependabot secrets',
             'Manage Dependabot repository secrets.',
@@ -208,7 +208,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'deployments',
             'Deployments',
             'Deployments and deployment statuses.',
@@ -221,7 +221,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'discussions',
             'Discussions',
             'Discussions and related comments and labels.',
@@ -234,7 +234,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'environments',
             'Environments',
             'Manage repository environments.',
@@ -247,7 +247,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'issues',
             'Issues',
             'Issues and related comments, assignees, labels, and milestones.',
@@ -260,7 +260,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'merge_queues',
             'Merge queues',
             "Manage a repository's merge queues",
@@ -273,7 +273,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermission]::new( #Mandatory
+        [GitHubPermissionDefinition]::new( #Mandatory
             'metadata',
             'Metadata',
             'Search repositories, list collaborators, and access repository metadata.',
@@ -285,7 +285,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'packages',
             'Packages',
             'Packages published to the GitHub Package Platform.',
@@ -298,7 +298,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'pages',
             'Pages',
             'Retrieve Pages statuses, configuration, and builds, as well as create new builds.',
@@ -311,7 +311,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'repository_projects',
             'Projects',
             'Manage classic projects within a repository.',
@@ -325,7 +325,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'pull_requests',
             'Pull requests',
             'Pull requests and related comments, assignees, labels, milestones, and merges.',
@@ -338,7 +338,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'repository_advisories',
             'Repository security advisories',
             'View and manage repository security advisories.',
@@ -351,7 +351,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'repo_secret_scanning_dismissal_requests',
             'Secret scanning alert dismissal requests',
             'View and manage secret scanning alert dismissal requests',
@@ -364,7 +364,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'secret_scanning_alerts',
             'Secret scanning alerts',
             'View and manage secret scanning alerts.',
@@ -377,7 +377,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'secret_scanning_bypass_requests',
             'Secret scanning push protection bypass requests',
             'Review and manage repository secret scanning push protection bypass requests.',
@@ -390,7 +390,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'secrets',
             'Secrets',
             'Manage Actions repository secrets.',
@@ -403,7 +403,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'single_file',
             'Single file',
             'Manage just a single file.',
@@ -416,7 +416,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'actions_variables',
             'Variables',
             'Manage Actions repository variables.',
@@ -429,7 +429,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'repository_hooks',
             'Webhooks',
             'Manage the post-receive hooks for a repository.',
@@ -442,7 +442,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'workflows',
             'Workflows',
             'Update GitHub Action workflow files.',
@@ -457,9 +457,9 @@ $script:GitHub = [pscustomobject]@{
         ),
 
         # ------------------------------
-        # Organization Fine-Grained Permissions
+        # Organization Fine-Grained Permission Definitions
         # ------------------------------
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'organization_api_insights',
             'API Insights',
             'View statistics on how the API is being used for an organization.',
@@ -471,7 +471,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'organization_administration',
             'Administration',
             'Manage access to an organization.',
@@ -484,7 +484,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'organization_user_blocking',
             'Blocking users',
             'View and manage users blocked by the organization.',
@@ -497,7 +497,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'organization_campaigns',
             'Campaigns',
             'Manage campaigns.',
@@ -510,7 +510,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'organization_custom_org_roles',
             'Custom organization roles',
             'Create, edit, delete and list custom organization roles. View system organization roles.',
@@ -523,7 +523,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'organization_custom_properties',
             'Custom properties',
             'Read and write repository custom properties values and administer definitions at the organization level.',
@@ -537,7 +537,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'organization_custom_roles',
             'Custom repository roles',
             'Create, edit, delete and list custom repository roles.',
@@ -550,7 +550,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'organization_events',
             'Events',
             'View events triggered by an activity in an organization.',
@@ -562,7 +562,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'organization_copilot_seat_management',
             'GitHub Copilot Business',
             'Manage Copilot Business seats and settings',
@@ -575,7 +575,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'issue_fields',
             'Issue Fields',
             'Manage issue fields for an organization.',
@@ -588,7 +588,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'issue_types',
             'Issue Types',
             'Manage issue types for an organization.',
@@ -601,7 +601,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'organization_knowledge_bases',
             'Knowledge bases',
             'View and manage knowledge bases for an organization.',
@@ -614,7 +614,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'members',
             'Members',
             'Organization members and teams.',
@@ -627,7 +627,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'organization_models',
             'Models',
             'Manage model access for an organization.',
@@ -639,7 +639,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'organization_network_configurations',
             'Network configurations',
             'View and manage hosted compute network configurations available to an organization.',
@@ -652,7 +652,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'organization_announcement_banners',
             'Organization announcement banners',
             'View and modify announcement banners for an organization.',
@@ -665,7 +665,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'organization_secret_scanning_bypass_requests',
             'Organization bypass requests for secret scanning',
             'Review and manage secret scanning push protection bypass requests.',
@@ -678,7 +678,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'organization_codespaces',
             'Organization codespaces',
             'Manage Codespaces for an organization.',
@@ -691,7 +691,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'organization_codespaces_secrets',
             'Organization codespaces secrets',
             'Manage Codespaces Secrets for an organization.',
@@ -704,7 +704,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'organization_codespaces_settings',
             'Organization codespaces settings',
             'Manage Codespaces settings for an organization.',
@@ -717,7 +717,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'organization_dependabot_secrets',
             'Organization dependabot secrets',
             'Manage Dependabot organization secrets.',
@@ -730,7 +730,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'organization_code_scanning_dismissal_requests',
             'Organization dismissal requests for code scanning',
             'Review and manage code scanning alert dismissal requests.',
@@ -743,7 +743,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'organization_private_registries',
             'Organization private registries',
             'Manage private registries for an organization.',
@@ -756,7 +756,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'organization_personal_access_token_requests',
             'Personal access token requests',
             'Manage personal access token requests from organization members.',
@@ -769,7 +769,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'organization_personal_access_tokens',
             'Personal access tokens',
             'View and revoke personal access tokens that have been granted access to an organization.',
@@ -782,7 +782,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'organization_plan',
             'Plan',
             "View an organization's plan.",
@@ -794,7 +794,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'organization_projects',
             'Projects',
             'Manage projects for an organization.',
@@ -808,7 +808,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'secret_scanning_dismissal_requests',
             'Secret scanning alert dismissal requests',
             'Review and manage secret scanning alert dismissal requests',
@@ -821,7 +821,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'organization_secrets',
             'Secrets',
             'Manage Actions organization secrets.',
@@ -834,7 +834,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'organization_self_hosted_runners',
             'Self-hosted runners',
             'View and manage Actions self-hosted runners available to an organization.',
@@ -847,7 +847,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'team_discussions',
             'Team discussions',
             'Manage team discussions and related comments.',
@@ -860,7 +860,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'organization_actions_variables',
             'Variables',
             'Manage Actions organization variables.',
@@ -873,7 +873,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'organization_hooks',
             'Webhooks',
             'Manage the post-receive hooks for an organization.',
@@ -888,9 +888,9 @@ $script:GitHub = [pscustomobject]@{
         ),
 
         # ------------------------------
-        # User (Account) Fine-Grained Permissions
+        # User (Account) Fine-Grained Permission Definitions
         # ------------------------------
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'blocking',
             'Block another user',
             'View and manage users blocked by the user.',
@@ -903,7 +903,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'User'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'codespaces_user_secrets',
             'Codespaces user secrets',
             'Manage Codespaces user secrets.',
@@ -916,7 +916,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'User'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'copilot_messages',
             'Copilot Chat',
             'This application will receive your GitHub ID, your GitHub Copilot Chat session messages ' +
@@ -930,7 +930,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'User'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'copilot_editor_context',
             'Copilot Editor Context',
             'This application will receive bits of Editor Context (e.g. currently opened file) whenever you send it a message through Copilot Chat.',
@@ -942,7 +942,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'User'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'emails',
             'Email addresses',
             "Manage a user's email addresses.",
@@ -955,7 +955,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'User'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'user_events',
             'Events',
             "View events triggered by a user's activity.",
@@ -967,7 +967,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'User'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'followers',
             'Followers',
             "A user's followers",
@@ -980,7 +980,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'User'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'gpg_keys',
             'GPG keys',
             "View and manage a user's GPG keys.",
@@ -993,7 +993,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'User'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'gists',
             'Gists',
             "Create and modify a user's gists and comments.",
@@ -1006,7 +1006,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'User'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'keys',
             'Git SSH keys',
             'Git SSH keys',
@@ -1019,7 +1019,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'User'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'interaction_limits',
             'Interaction limits',
             'Interaction limits on repositories',
@@ -1032,7 +1032,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'User'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'knowledge_bases',
             'Knowledge bases',
             'View knowledge bases for a user.',
@@ -1045,7 +1045,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'User'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'user_models',
             'Models',
             'Allows access to GitHub Models.',
@@ -1057,7 +1057,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'User'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'plan',
             'Plan',
             "View a user's plan.",
@@ -1069,7 +1069,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'User'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'profile',
             'Profile',
             "Manage a user's profile settings.",
@@ -1082,7 +1082,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'User'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'git_signing_ssh_public_keys',
             'SSH signing keys',
             "View and manage a user's SSH signing keys.",
@@ -1095,7 +1095,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'User'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'starring',
             'Starring',
             'List and manage repositories a user is starring.',
@@ -1108,7 +1108,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'User'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'watching',
             'Watching',
             'List and change repositories a user is subscribed to.',
@@ -1123,9 +1123,9 @@ $script:GitHub = [pscustomobject]@{
         ),
 
         # ------------------------------
-        # Enterprise Fine-Grained Permissions
+        # Enterprise Fine-Grained Permission Definitions
         # ------------------------------
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'enterprise_custom_properties',
             'Custom properties',
             'View repository custom properties and administer definitions at the enterprise level.',
@@ -1138,7 +1138,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Enterprise'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'enterprise_organization_installation_repositories',
             'Enterprise organization installation repositories',
             'Manage repository access of GitHub Apps on Enterprise-owned organizations',
@@ -1151,7 +1151,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Enterprise'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'enterprise_organization_installations',
             'Enterprise organization installations',
             'Manage installation of GitHub Apps on Enterprise-owned organizations',
@@ -1164,7 +1164,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Enterprise'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'enterprise_organizations',
             'Enterprise organizations',
             'Create and remove enterprise organizations',
@@ -1176,7 +1176,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Enterprise'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'enterprise_people',
             'Enterprise people',
             'Manage user access to the enterprise',
@@ -1189,7 +1189,7 @@ $script:GitHub = [pscustomobject]@{
             'Fine-grained',
             'Enterprise'
         ),
-        [GitHubPermission]::new(
+        [GitHubPermissionDefinition]::new(
             'enterprise_sso',
             'Enterprise single sign-on',
             'View and manage enterprise single sign-on configuration',

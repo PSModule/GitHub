@@ -35,26 +35,19 @@ Describe 'Permissions' {
             Write-Host ('-' * 60)
         }
 
-        # Lazily initialize an app installation context only if/when APP-specific tests execute
-        $script:__appInstallationContext = $null
-
         It 'App context should have Permissions property populated' -Skip:($AuthType -ne 'APP') {
-            if (-not $script:__appInstallationContext) {
-                LogGroup 'Context - Installation' {
-                    $script:__appInstallationContext = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
-                    Write-Host ($script:__appInstallationContext | Format-List | Out-String)
-                }
+            LogGroup 'Context - Installation' {
+                $installationContext = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
+                Write-Host ($installationContext | Format-List | Out-String)
             }
-            $script:__appInstallationContext.Permissions | Should -Not -BeNullOrEmpty
-            $script:__appInstallationContext.Permissions | Should -BeOfType [pscustomobject]
+            $installationContext.Permissions | Should -Not -BeNullOrEmpty
+            $installationContext.Permissions | Should -BeOfType [pscustomobject]
         }
 
         It 'All app installation permissions should exist in permission catalog and be valid options' -Skip:($AuthType -ne 'APP') {
-            if (-not $script:__appInstallationContext) {
-                LogGroup 'Context - Installation' {
-                    $script:__appInstallationContext = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
-                    Write-Host ($script:__appInstallationContext | Format-List | Out-String)
-                }
+            LogGroup 'Context - Installation' {
+                $installationContext = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
+                Write-Host ($installationContext | Format-List | Out-String)
             }
 
             # Get catalog definitions
@@ -63,7 +56,7 @@ Describe 'Permissions' {
 
             # Flatten context permission hashtable/object into name/value pairs (value is access level like read/write/admin)
             $granted = @()
-            $script:__appInstallationContext.Permissions.PSObject.Properties | ForEach-Object {
+            $installationContext.Permissions.PSObject.Properties | ForEach-Object {
                 if ($_.Name -eq 'metadata') { return } # metadata is mandatory; still in catalog but just proceed normally
                 $granted += [pscustomobject]@{ Name = $_.Name; Level = [string]$_.Value }
             }
@@ -83,15 +76,13 @@ Describe 'Permissions' {
         }
 
         It 'Permission catalog should contain all permissions granted to the app installation' -Skip:($AuthType -ne 'APP') {
-            if (-not $script:__appInstallationContext) {
-                LogGroup 'Context - Installation' {
-                    $script:__appInstallationContext = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
-                    Write-Host ($script:__appInstallationContext | Format-List | Out-String)
-                }
+            LogGroup 'Context - Installation' {
+                $installationContext = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
+                Write-Host ($installationContext | Format-List | Out-String)
             }
             $catalog = Get-GitHubPermissionDefinition
             $missing = @()
-            $script:__appInstallationContext.Permissions.PSObject.Properties | ForEach-Object {
+            $installationContext.Permissions.PSObject.Properties | ForEach-Object {
                 if ($_.Name -notin $catalog.Name) {
                     $missing += $_.Name
                 }
@@ -106,42 +97,42 @@ Describe 'Permissions' {
         It 'Should return all permission definitions when called without parameters' {
             $result = Get-GitHubPermissionDefinition
             $result | Should -Not -BeNullOrEmpty
-            $result | Should -BeOfType [GitHubPermission]
+            $result | Should -BeOfType [GitHubPermissionDefinition]
             ($result | Measure-Object).Count | Should -BeGreaterThan 0
         }
 
         It 'Should return only Fine-grained permissions when filtered by Type' {
             $result = Get-GitHubPermissionDefinition -Type Fine-grained
             $result | Should -Not -BeNullOrEmpty
-            $result | Should -BeOfType [GitHubPermission]
+            $result | Should -BeOfType [GitHubPermissionDefinition]
             $result | ForEach-Object { $_.Type | Should -Be 'Fine-grained' }
         }
 
         It 'Should return only Repository permissions when filtered by Scope' {
             $result = Get-GitHubPermissionDefinition -Scope Repository
             $result | Should -Not -BeNullOrEmpty
-            $result | Should -BeOfType [GitHubPermission]
+            $result | Should -BeOfType [GitHubPermissionDefinition]
             $result | ForEach-Object { $_.Scope | Should -Be 'Repository' }
         }
 
         It 'Should return only Organization permissions when filtered by Scope' {
             $result = Get-GitHubPermissionDefinition -Scope Organization
             $result | Should -Not -BeNullOrEmpty
-            $result | Should -BeOfType [GitHubPermission]
+            $result | Should -BeOfType [GitHubPermissionDefinition]
             $result | ForEach-Object { $_.Scope | Should -Be 'Organization' }
         }
 
         It 'Should return only User permissions when filtered by Scope' {
             $result = Get-GitHubPermissionDefinition -Scope User
             $result | Should -Not -BeNullOrEmpty
-            $result | Should -BeOfType [GitHubPermission]
+            $result | Should -BeOfType [GitHubPermissionDefinition]
             $result | ForEach-Object { $_.Scope | Should -Be 'User' }
         }
 
         It 'Should filter by both Type and Scope when both are specified' {
             $result = Get-GitHubPermissionDefinition -Type Fine-grained -Scope Repository
             $result | Should -Not -BeNullOrEmpty
-            $result | Should -BeOfType [GitHubPermission]
+            $result | Should -BeOfType [GitHubPermissionDefinition]
             $result | ForEach-Object {
                 $_.Type | Should -Be 'Fine-grained'
                 $_.Scope | Should -Be 'Repository'
@@ -194,7 +185,7 @@ Describe 'Permissions' {
 
     Context 'GitHubPermission Class' {
         It 'Should create a GitHubPermission object with all properties' {
-            $permission = [GitHubPermission]@{
+            $permission = [GitHubPermissionDefinition]@{
                 Name        = 'test'
                 DisplayName = 'Test Permission'
                 Description = 'A test permission'
@@ -216,7 +207,7 @@ Describe 'Permissions' {
         }
 
         It 'Should have a meaningful ToString() method' {
-            $permission = [GitHubPermission]@{
+            $permission = [GitHubPermissionDefinition]@{
                 Name        = 'test'
                 DisplayName = 'Test Permission'
                 Description = 'A test permission'

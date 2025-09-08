@@ -1,4 +1,4 @@
-class GitHubPermission {
+class GitHubPermissionDefinition {
     # The programmatic name of the permission as returned by the GitHub API
     [string] $Name
 

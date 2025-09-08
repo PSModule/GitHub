@@ -44,8 +44,11 @@ function Get-GitHubPermissionDefinition {
         File path permissions are excluded from this list as they are handled differently by the GitHub API.
         These permissions are user-specified paths with read/write access that appear in the FilePaths
         property of GitHub App installation data, not as standard named permissions.
+
+        .LINK
+        https://psmodule.io/GitHub/Functions/Permission/Get-GitHubPermissionDefinition
     #>
-    [OutputType([GitHubPermission[]])]
+    [OutputType([GitHubPermissionDefinition[]])]
     [CmdletBinding()]
     param(
         # Filter by permission name (supports multiple values & wildcards)
@@ -79,7 +82,6 @@ function Get-GitHubPermissionDefinition {
                 return $false
             }
 
-            # Always perform filtering using provided (or default '*') patterns
             $result = $script:GitHub.Permissions | Where-Object {
                 (& $test -Value $_.Name -Patterns $Name) -and
                 (& $test -Value $_.Type -Patterns $Type) -and
