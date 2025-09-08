@@ -33,7 +33,8 @@ $script:GitHub = [pscustomobject]@{
             'Workflows, workflow runs and artifacts.',
             'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-actions',
             @(
-                'read'
+                'read',
+                'write'
             ),
             'Fine-grained',
             'Repository'
