@@ -82,7 +82,7 @@ function Get-GitHubPermissionDefinition {
             }
 
             # Always perform filtering using provided (or default '*') patterns
-            $result = $script:GitHubPermissions | Where-Object {
+            $result = $script:GitHub.Permissions | Where-Object {
                 (_Test-Match -Value $_.Name -Patterns $Name) -and
                 (_Test-Match -Value $_.Type -Patterns $Type) -and
                 (_Test-Match -Value $_.Scope -Patterns $Scope)
