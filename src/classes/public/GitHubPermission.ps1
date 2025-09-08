@@ -2,7 +2,7 @@ class GitHubPermission {
     # The programmatic name of the permission as returned by the GitHub API
     [string] $Name
 
-    # The human-friendly name of the permission as shown in the GitHub UI  
+    # The human-friendly name of the permission as shown in the GitHub UI
     [string] $DisplayName
 
     # A brief description of what access the permission grants
@@ -32,17 +32,7 @@ class GitHubPermission {
         $this.Scope = $Scope
     }
 
-    GitHubPermission([PSCustomObject]$Object) {
-        $this.Name = $Object.Name
-        $this.DisplayName = $Object.DisplayName
-        $this.Description = $Object.Description
-        $this.URL = [uri]$Object.URL
-        $this.Options = $Object.Options
-        $this.Type = $Object.Type
-        $this.Scope = $Object.Scope
-    }
-
     [string] ToString() {
-        return "$($this.DisplayName) ($($this.Name))"
+        return $this.Name
     }
 }

@@ -8,8 +8,8 @@ function Get-GitHubPermissionDefinition {
         This includes fine-grained permissions for repositories, organizations, and user accounts.
         The function supports filtering by permission type and scope to help you find specific permissions.
 
-        File path-specific permissions are excluded from this list as they are handled differently 
-        by the GitHub API (they appear under the FilePaths property in installation data rather 
+        File path-specific permissions are excluded from this list as they are handled differently
+        by the GitHub API (they appear under the FilePaths property in installation data rather
         than as named permissions).
 
         .EXAMPLE
@@ -33,30 +33,32 @@ function Get-GitHubPermissionDefinition {
         Gets all fine-grained permission definitions that apply to organization scope.
 
         .EXAMPLE
-        Get-GitHubPermissionDefinition | Where-Object Name -eq 'contents'
+        Get-GitHubPermissionDefinition -Name contents
 
         Gets the specific permission definition for 'contents' permission.
 
         .NOTES
         This function provides access to a curated list of GitHub permission definitions maintained within the module.
         The data includes permission names, display names, descriptions, available options, and scopes.
-        
+
         File path permissions are excluded from this list as they are handled differently by the GitHub API.
-        These permissions are user-specified paths with read/write access that appear in the FilePaths 
+        These permissions are user-specified paths with read/write access that appear in the FilePaths
         property of GitHub App installation data, not as standard named permissions.
     #>
     [OutputType([GitHubPermission[]])]
     [CmdletBinding()]
     param(
-        # Filter by permission type
+        # Filter by permission name (supports multiple values & wildcards)
         [Parameter()]
-        [ValidateSet('Fine-grained', 'Classic')]
-        [string] $Type,
+        [string[]] $Name = '*',
 
-        # Filter by permission scope
+        # Filter by permission type (supports multiple values & wildcards)
         [Parameter()]
-        [ValidateSet('Repository', 'Organization', 'User', 'Enterprise')]
-        [string] $Scope
+        [string[]] $Type = '*',
+
+        # Filter by permission scope (supports multiple values & wildcards)
+        [Parameter()]
+        [string[]] $Scope = '*'
     )
 
     begin {
@@ -66,21 +68,27 @@ function Get-GitHubPermissionDefinition {
 
     process {
         try {
-            # Start with all permissions
-            $permissions = $script:GitHub.Permissions
-
-            # Apply Type filter if specified
-            if ($PSBoundParameters.ContainsKey('Type')) {
-                $permissions = $permissions | Where-Object { $_.Type -eq $Type }
+            # Helper: returns $true if $Value matches any pattern in $Patterns (wildcards supported)
+            function _Test-Match {
+                param(
+                    [Parameter(Mandatory)][string] $Value,
+                    [Parameter()][string[]] $Patterns
+                )
+                if (-not $Patterns -or $Patterns.Count -eq 0) { return $true }
+                foreach ($p in $Patterns) {
+                    if ($Value -like $p) { return $true }
+                }
+                return $false
             }
 
-            # Apply Scope filter if specified
-            if ($PSBoundParameters.ContainsKey('Scope')) {
-                $permissions = $permissions | Where-Object { $_.Scope -eq $Scope }
+            # Always perform filtering using provided (or default '*') patterns
+            $result = $script:GitHubPermissions | Where-Object {
+                (_Test-Match -Value $_.Name -Patterns $Name) -and
+                (_Test-Match -Value $_.Type -Patterns $Type) -and
+                (_Test-Match -Value $_.Scope -Patterns $Scope)
             }
 
-            # Return the filtered results
-            return $permissions
+            return $result
         } catch {
             Write-Error "Failed to retrieve GitHub permission definitions: $($_.Exception.Message)"
             throw
