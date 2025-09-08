@@ -31,7 +31,8 @@ $script:GitHub = [pscustomobject]@{
             'actions',
             'Actions',
             'Workflows, workflow runs and artifacts.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-actions',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#repository-permissions-for-actions',
             @(
                 'read',
                 'write'
@@ -43,7 +44,8 @@ $script:GitHub = [pscustomobject]@{
             'administration',
             'Administration',
             'Repository creation, deletion, settings, teams, and collaborators.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-administration',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#repository-permissions-for-administration',
             @(
                 'read',
                 'write'
@@ -55,7 +57,8 @@ $script:GitHub = [pscustomobject]@{
             'attestations',
             'Attestations',
             'Create and retrieve attestations for a repository.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-attestations',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#repository-permissions-for-attestations',
             @(
                 'read',
                 'write'
@@ -67,7 +70,8 @@ $script:GitHub = [pscustomobject]@{
             'checks',
             'Checks',
             'Checks on code.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-checks',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#repository-permissions-for-checks',
             @(
                 'read',
                 'write'
@@ -79,7 +83,8 @@ $script:GitHub = [pscustomobject]@{
             'security_events',
             'Code scanning alerts',
             'View and manage code scanning alerts.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-code-scanning-alerts',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#repository-permissions-for-code-scanning-alerts',
             @(
                 'read',
                 'write'
@@ -91,7 +96,8 @@ $script:GitHub = [pscustomobject]@{
             'codespaces',
             'Codespaces',
             'Create, edit, delete and list Codespaces.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-codespaces',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#repository-permissions-for-codespaces',
             @(
                 'read',
                 'write'
@@ -103,7 +109,8 @@ $script:GitHub = [pscustomobject]@{
             'codespaces_lifecycle_admin',
             'Codespaces lifecycle admin',
             'Manage the lifecycle of Codespaces, including starting and stopping.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-codespaces-lifecycle-admin',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#repository-permissions-for-codespaces-lifecycle-admin',
             @(
                 'read',
                 'write'
@@ -115,7 +122,8 @@ $script:GitHub = [pscustomobject]@{
             'codespaces_metadata',
             'Codespaces metadata',
             'Access Codespaces metadata including the devcontainers and machine type.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-codespaces-metadata',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#repository-permissions-for-codespaces-metadata',
             @(
                 'read'
             ),
@@ -126,7 +134,8 @@ $script:GitHub = [pscustomobject]@{
             'codespaces_secrets',
             'Codespaces secrets',
             'Restrict Codespaces user secrets modifications to specific repositories.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-codespaces-secrets',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#repository-permissions-for-codespaces-secrets',
             @(
                 'read',
                 'write'
@@ -138,7 +147,8 @@ $script:GitHub = [pscustomobject]@{
             'statuses',
             'Commit statuses',
             'Commit statuses.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-commit-statuses',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#repository-permissions-for-commit-statuses',
             @(
                 'read',
                 'write'
@@ -150,7 +160,8 @@ $script:GitHub = [pscustomobject]@{
             'contents',
             'Contents',
             'Repository contents, commits, branches, downloads, releases, and merges.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-contents',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#repository-permissions-for-contents',
             @(
                 'read',
                 'write'
@@ -162,7 +173,8 @@ $script:GitHub = [pscustomobject]@{
             'repository_custom_properties',
             'Custom properties',
             'Read and write repository custom properties values at the repository level, when allowed by the property.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-custom-properties',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#repository-permissions-for-custom-properties',
             @(
                 'read',
                 'write'
@@ -174,7 +186,8 @@ $script:GitHub = [pscustomobject]@{
             'vulnerability_alerts',
             'Dependabot alerts',
             'Retrieve Dependabot alerts.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-dependabot-alerts',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#repository-permissions-for-dependabot-alerts',
             @(
                 'read',
                 'write'
@@ -186,7 +199,8 @@ $script:GitHub = [pscustomobject]@{
             'dependabot_secrets',
             'Dependabot secrets',
             'Manage Dependabot repository secrets.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-dependabot-secrets',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#repository-permissions-for-dependabot-secrets',
             @(
                 'read',
                 'write'
@@ -198,7 +212,8 @@ $script:GitHub = [pscustomobject]@{
             'deployments',
             'Deployments',
             'Deployments and deployment statuses.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-deployments',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#repository-permissions-for-deployments',
             @(
                 'read',
                 'write'
@@ -210,7 +225,8 @@ $script:GitHub = [pscustomobject]@{
             'discussions',
             'Discussions',
             'Discussions and related comments and labels.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-discussions',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#repository-permissions-for-discussions',
             @(
                 'read',
                 'write'
@@ -222,7 +238,8 @@ $script:GitHub = [pscustomobject]@{
             'environments',
             'Environments',
             'Manage repository environments.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-environments',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#repository-permissions-for-environments',
             @(
                 'read',
                 'write'
@@ -234,7 +251,8 @@ $script:GitHub = [pscustomobject]@{
             'issues',
             'Issues',
             'Issues and related comments, assignees, labels, and milestones.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-issues',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#repository-permissions-for-issues',
             @(
                 'read',
                 'write'
@@ -246,7 +264,8 @@ $script:GitHub = [pscustomobject]@{
             'merge_queues',
             'Merge queues',
             "Manage a repository's merge queues",
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-merge-queues',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#repository-permissions-for-merge-queues',
             @(
                 'read',
                 'write'
@@ -258,7 +277,8 @@ $script:GitHub = [pscustomobject]@{
             'metadata',
             'Metadata',
             'Search repositories, list collaborators, and access repository metadata.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-metadata',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#repository-permissions-for-metadata',
             @(
                 'read'
             ),
@@ -269,7 +289,8 @@ $script:GitHub = [pscustomobject]@{
             'packages',
             'Packages',
             'Packages published to the GitHub Package Platform.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-packages',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#repository-permissions-for-packages',
             @(
                 'read',
                 'write'
@@ -281,7 +302,8 @@ $script:GitHub = [pscustomobject]@{
             'pages',
             'Pages',
             'Retrieve Pages statuses, configuration, and builds, as well as create new builds.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-pages',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#repository-permissions-for-pages',
             @(
                 'read',
                 'write'
@@ -293,7 +315,8 @@ $script:GitHub = [pscustomobject]@{
             'repository_projects',
             'Projects',
             'Manage classic projects within a repository.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-projects',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#repository-permissions-for-projects',
             @(
                 'read',
                 'write',
@@ -306,7 +329,8 @@ $script:GitHub = [pscustomobject]@{
             'pull_requests',
             'Pull requests',
             'Pull requests and related comments, assignees, labels, milestones, and merges.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-pull-requests',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#repository-permissions-for-pull-requests',
             @(
                 'read',
                 'write'
@@ -318,7 +342,8 @@ $script:GitHub = [pscustomobject]@{
             'repository_advisories',
             'Repository security advisories',
             'View and manage repository security advisories.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-repository-security-advisories',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#repository-permissions-for-repository-security-advisories',
             @(
                 'read',
                 'write'
@@ -330,7 +355,8 @@ $script:GitHub = [pscustomobject]@{
             'repo_secret_scanning_dismissal_requests',
             'Secret scanning alert dismissal requests',
             'View and manage secret scanning alert dismissal requests',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-secret-scanning-alert-dismissal-requests',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#repository-permissions-for-secret-scanning-alert-dismissal-requests',
             @(
                 'read',
                 'write'
@@ -342,7 +368,8 @@ $script:GitHub = [pscustomobject]@{
             'secret_scanning_alerts',
             'Secret scanning alerts',
             'View and manage secret scanning alerts.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-secret-scanning-alerts',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#repository-permissions-for-secret-scanning-alerts',
             @(
                 'read',
                 'write'
@@ -354,7 +381,8 @@ $script:GitHub = [pscustomobject]@{
             'secret_scanning_bypass_requests',
             'Secret scanning push protection bypass requests',
             'Review and manage repository secret scanning push protection bypass requests.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-secret-scanning-push-protection-bypass-requests',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#repository-permissions-for-secret-scanning-push-protection-bypass-requests',
             @(
                 'read',
                 'write'
@@ -366,7 +394,8 @@ $script:GitHub = [pscustomobject]@{
             'secrets',
             'Secrets',
             'Manage Actions repository secrets.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-secrets',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#repository-permissions-for-secrets',
             @(
                 'read',
                 'write'
@@ -378,7 +407,8 @@ $script:GitHub = [pscustomobject]@{
             'single_file',
             'Single file',
             'Manage just a single file.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-single-file',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#repository-permissions-for-single-file',
             @(
                 'read',
                 'write'
@@ -390,7 +420,8 @@ $script:GitHub = [pscustomobject]@{
             'actions_variables',
             'Variables',
             'Manage Actions repository variables.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-variables',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#repository-permissions-for-variables',
             @(
                 'read',
                 'write'
@@ -402,7 +433,8 @@ $script:GitHub = [pscustomobject]@{
             'repository_hooks',
             'Webhooks',
             'Manage the post-receive hooks for a repository.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-webhooks',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#repository-permissions-for-webhooks',
             @(
                 'read',
                 'write'
@@ -414,7 +446,8 @@ $script:GitHub = [pscustomobject]@{
             'workflows',
             'Workflows',
             'Update GitHub Action workflow files.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-workflows',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#repository-permissions-for-workflows',
             @(
                 'read',
                 'write'
@@ -430,7 +463,8 @@ $script:GitHub = [pscustomobject]@{
             'organization_api_insights',
             'API Insights',
             'View statistics on how the API is being used for an organization.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#organization-permissions-for-api-insights',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#organization-permissions-for-api-insights',
             @(
                 'read'
             ),
@@ -441,7 +475,8 @@ $script:GitHub = [pscustomobject]@{
             'organization_administration',
             'Administration',
             'Manage access to an organization.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#organization-permissions-for-administration',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#organization-permissions-for-administration',
             @(
                 'read',
                 'write'
@@ -453,7 +488,8 @@ $script:GitHub = [pscustomobject]@{
             'organization_user_blocking',
             'Blocking users',
             'View and manage users blocked by the organization.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#organization-permissions-for-blocking-users',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#organization-permissions-for-blocking-users',
             @(
                 'read',
                 'write'
@@ -465,7 +501,8 @@ $script:GitHub = [pscustomobject]@{
             'organization_campaigns',
             'Campaigns',
             'Manage campaigns.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#organization-permissions-for-campaigns',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#organization-permissions-for-campaigns',
             @(
                 'read',
                 'write'
@@ -477,7 +514,8 @@ $script:GitHub = [pscustomobject]@{
             'organization_custom_org_roles',
             'Custom organization roles',
             'Create, edit, delete and list custom organization roles. View system organization roles.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#organization-permissions-for-custom-organization-roles',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#organization-permissions-for-custom-organization-roles',
             @(
                 'read',
                 'write'
@@ -489,7 +527,8 @@ $script:GitHub = [pscustomobject]@{
             'organization_custom_properties',
             'Custom properties',
             'Read and write repository custom properties values and administer definitions at the organization level.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#organization-permissions-for-custom-properties',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#organization-permissions-for-custom-properties',
             @(
                 'read',
                 'write',
@@ -502,7 +541,8 @@ $script:GitHub = [pscustomobject]@{
             'organization_custom_roles',
             'Custom repository roles',
             'Create, edit, delete and list custom repository roles.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#organization-permissions-for-custom-repository-roles',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#organization-permissions-for-custom-repository-roles',
             @(
                 'read',
                 'write'
@@ -514,7 +554,8 @@ $script:GitHub = [pscustomobject]@{
             'organization_events',
             'Events',
             'View events triggered by an activity in an organization.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#organization-permissions-for-events',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#organization-permissions-for-events',
             @(
                 'read'
             ),
@@ -525,7 +566,8 @@ $script:GitHub = [pscustomobject]@{
             'organization_copilot_seat_management',
             'GitHub Copilot Business',
             'Manage Copilot Business seats and settings',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#organization-permissions-for-github-copilot-business',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#organization-permissions-for-github-copilot-business',
             @(
                 'read',
                 'write'
@@ -537,7 +579,8 @@ $script:GitHub = [pscustomobject]@{
             'issue_fields',
             'Issue Fields',
             'Manage issue fields for an organization.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#organization-permissions-for-issue-fields',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#organization-permissions-for-issue-fields',
             @(
                 'read',
                 'write'
@@ -549,7 +592,8 @@ $script:GitHub = [pscustomobject]@{
             'issue_types',
             'Issue Types',
             'Manage issue types for an organization.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#organization-permissions-for-issue-types',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#organization-permissions-for-issue-types',
             @(
                 'read',
                 'write'
@@ -561,7 +605,8 @@ $script:GitHub = [pscustomobject]@{
             'organization_knowledge_bases',
             'Knowledge bases',
             'View and manage knowledge bases for an organization.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#organization-permissions-for-knowledge-bases',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#organization-permissions-for-knowledge-bases',
             @(
                 'read',
                 'write'
@@ -573,7 +618,8 @@ $script:GitHub = [pscustomobject]@{
             'members',
             'Members',
             'Organization members and teams.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#organization-permissions-for-members',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#organization-permissions-for-members',
             @(
                 'read',
                 'write'
@@ -585,7 +631,8 @@ $script:GitHub = [pscustomobject]@{
             'organization_models',
             'Models',
             'Manage model access for an organization.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#organization-permissions-for-models',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#organization-permissions-for-models',
             @(
                 'read'
             ),
@@ -596,7 +643,8 @@ $script:GitHub = [pscustomobject]@{
             'organization_network_configurations',
             'Network configurations',
             'View and manage hosted compute network configurations available to an organization.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#organization-permissions-for-network-configurations',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#organization-permissions-for-network-configurations',
             @(
                 'read',
                 'write'
@@ -608,7 +656,8 @@ $script:GitHub = [pscustomobject]@{
             'organization_announcement_banners',
             'Organization announcement banners',
             'View and modify announcement banners for an organization.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#organization-permissions-for-organization-announcement-banners',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#organization-permissions-for-organization-announcement-banners',
             @(
                 'read',
                 'write'
@@ -620,7 +669,8 @@ $script:GitHub = [pscustomobject]@{
             'organization_secret_scanning_bypass_requests',
             'Organization bypass requests for secret scanning',
             'Review and manage secret scanning push protection bypass requests.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#organization-permissions-for-organization-bypass-requests-for-secret-scanning',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#organization-permissions-for-organization-bypass-requests-for-secret-scanning',
             @(
                 'read',
                 'write'
@@ -632,7 +682,8 @@ $script:GitHub = [pscustomobject]@{
             'organization_codespaces',
             'Organization codespaces',
             'Manage Codespaces for an organization.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#organization-permissions-for-organization-codespaces',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#organization-permissions-for-organization-codespaces',
             @(
                 'read',
                 'write'
@@ -644,7 +695,8 @@ $script:GitHub = [pscustomobject]@{
             'organization_codespaces_secrets',
             'Organization codespaces secrets',
             'Manage Codespaces Secrets for an organization.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#organization-permissions-for-organization-codespaces-secrets',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#organization-permissions-for-organization-codespaces-secrets',
             @(
                 'read',
                 'write'
@@ -656,7 +708,8 @@ $script:GitHub = [pscustomobject]@{
             'organization_codespaces_settings',
             'Organization codespaces settings',
             'Manage Codespaces settings for an organization.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#organization-permissions-for-organization-codespaces-settings',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#organization-permissions-for-organization-codespaces-settings',
             @(
                 'read',
                 'write'
@@ -668,7 +721,8 @@ $script:GitHub = [pscustomobject]@{
             'organization_dependabot_secrets',
             'Organization dependabot secrets',
             'Manage Dependabot organization secrets.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#organization-permissions-for-organization-dependabot-secrets',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#organization-permissions-for-organization-dependabot-secrets',
             @(
                 'read',
                 'write'
@@ -680,7 +734,8 @@ $script:GitHub = [pscustomobject]@{
             'organization_code_scanning_dismissal_requests',
             'Organization dismissal requests for code scanning',
             'Review and manage code scanning alert dismissal requests.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#organization-permissions-for-organization-dismissal-requests-for-code-scanning',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#organization-permissions-for-organization-dismissal-requests-for-code-scanning',
             @(
                 'read',
                 'write'
@@ -692,7 +747,8 @@ $script:GitHub = [pscustomobject]@{
             'organization_private_registries',
             'Organization private registries',
             'Manage private registries for an organization.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#organization-permissions-for-organization-private-registries',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#organization-permissions-for-organization-private-registries',
             @(
                 'read',
                 'write'
@@ -704,7 +760,8 @@ $script:GitHub = [pscustomobject]@{
             'organization_personal_access_token_requests',
             'Personal access token requests',
             'Manage personal access token requests from organization members.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#organization-permissions-for-personal-access-token-requests',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#organization-permissions-for-personal-access-token-requests',
             @(
                 'read',
                 'write'
@@ -716,7 +773,8 @@ $script:GitHub = [pscustomobject]@{
             'organization_personal_access_tokens',
             'Personal access tokens',
             'View and revoke personal access tokens that have been granted access to an organization.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#organization-permissions-for-personal-access-tokens',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#organization-permissions-for-personal-access-tokens',
             @(
                 'read',
                 'write'
@@ -728,7 +786,8 @@ $script:GitHub = [pscustomobject]@{
             'organization_plan',
             'Plan',
             "View an organization's plan.",
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#organization-permissions-for-plan',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#organization-permissions-for-plan',
             @(
                 'read'
             ),
@@ -739,7 +798,8 @@ $script:GitHub = [pscustomobject]@{
             'organization_projects',
             'Projects',
             'Manage projects for an organization.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#organization-permissions-for-projects',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#organization-permissions-for-projects',
             @(
                 'read',
                 'write',
@@ -752,7 +812,8 @@ $script:GitHub = [pscustomobject]@{
             'secret_scanning_dismissal_requests',
             'Secret scanning alert dismissal requests',
             'Review and manage secret scanning alert dismissal requests',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#organization-permissions-for-secret-scanning-alert-dismissal-requests',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#organization-permissions-for-secret-scanning-alert-dismissal-requests',
             @(
                 'read',
                 'write'
@@ -764,7 +825,8 @@ $script:GitHub = [pscustomobject]@{
             'organization_secrets',
             'Secrets',
             'Manage Actions organization secrets.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#organization-permissions-for-secrets',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#organization-permissions-for-secrets',
             @(
                 'read',
                 'write'
@@ -776,7 +838,8 @@ $script:GitHub = [pscustomobject]@{
             'organization_self_hosted_runners',
             'Self-hosted runners',
             'View and manage Actions self-hosted runners available to an organization.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#organization-permissions-for-self-hosted-runners',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#organization-permissions-for-self-hosted-runners',
             @(
                 'read',
                 'write'
@@ -788,7 +851,8 @@ $script:GitHub = [pscustomobject]@{
             'team_discussions',
             'Team discussions',
             'Manage team discussions and related comments.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#organization-permissions-for-team-discussions',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#organization-permissions-for-team-discussions',
             @(
                 'read',
                 'write'
@@ -800,7 +864,8 @@ $script:GitHub = [pscustomobject]@{
             'organization_actions_variables',
             'Variables',
             'Manage Actions organization variables.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#organization-permissions-for-variables',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#organization-permissions-for-variables',
             @(
                 'read',
                 'write'
@@ -812,7 +877,8 @@ $script:GitHub = [pscustomobject]@{
             'organization_hooks',
             'Webhooks',
             'Manage the post-receive hooks for an organization.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#organization-permissions-for-webhooks',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#organization-permissions-for-webhooks',
             @(
                 'read',
                 'write'
@@ -828,7 +894,8 @@ $script:GitHub = [pscustomobject]@{
             'blocking',
             'Block another user',
             'View and manage users blocked by the user.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#user-permissions-for-block-another-user',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#user-permissions-for-block-another-user',
             @(
                 'read',
                 'write'
@@ -840,7 +907,8 @@ $script:GitHub = [pscustomobject]@{
             'codespaces_user_secrets',
             'Codespaces user secrets',
             'Manage Codespaces user secrets.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#user-permissions-for-codespaces-user-secrets',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#user-permissions-for-codespaces-user-secrets',
             @(
                 'read',
                 'write'
@@ -851,8 +919,11 @@ $script:GitHub = [pscustomobject]@{
         [GitHubPermission]::new(
             'copilot_messages',
             'Copilot Chat',
-            'This application will receive your GitHub ID, your GitHub Copilot Chat session messages (not including messages sent to another application), and timestamps of provided GitHub Copilot Chat session messages. This permission must be enabled for Copilot Extensions.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#user-permissions-for-copilot-chat',
+            'This application will receive your GitHub ID, your GitHub Copilot Chat session messages ' +
+            '(not including messages sent to another application), and timestamps of provided GitHub Copilot ' +
+            'Chat session messages. This permission must be enabled for Copilot Extensions.',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#user-permissions-for-copilot-chat',
             @(
                 'read'
             ),
@@ -863,7 +934,8 @@ $script:GitHub = [pscustomobject]@{
             'copilot_editor_context',
             'Copilot Editor Context',
             'This application will receive bits of Editor Context (e.g. currently opened file) whenever you send it a message through Copilot Chat.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#user-permissions-for-copilot-editor-context',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#user-permissions-for-copilot-editor-context',
             @(
                 'read'
             ),
@@ -874,7 +946,8 @@ $script:GitHub = [pscustomobject]@{
             'emails',
             'Email addresses',
             "Manage a user's email addresses.",
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#user-permissions-for-email-addresses',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#user-permissions-for-email-addresses',
             @(
                 'read',
                 'write'
@@ -886,7 +959,8 @@ $script:GitHub = [pscustomobject]@{
             'user_events',
             'Events',
             "View events triggered by a user's activity.",
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#user-permissions-for-events',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#user-permissions-for-events',
             @(
                 'read'
             ),
@@ -897,7 +971,8 @@ $script:GitHub = [pscustomobject]@{
             'followers',
             'Followers',
             "A user's followers",
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#user-permissions-for-followers',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#user-permissions-for-followers',
             @(
                 'read',
                 'write'
@@ -909,7 +984,8 @@ $script:GitHub = [pscustomobject]@{
             'gpg_keys',
             'GPG keys',
             "View and manage a user's GPG keys.",
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#user-permissions-for-gpg-keys',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#user-permissions-for-gpg-keys',
             @(
                 'read',
                 'write'
@@ -921,7 +997,8 @@ $script:GitHub = [pscustomobject]@{
             'gists',
             'Gists',
             "Create and modify a user's gists and comments.",
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#user-permissions-for-gists',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#user-permissions-for-gists',
             @(
                 'read',
                 'write'
@@ -933,7 +1010,8 @@ $script:GitHub = [pscustomobject]@{
             'keys',
             'Git SSH keys',
             'Git SSH keys',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#user-permissions-for-git-ssh-keys',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#user-permissions-for-git-ssh-keys',
             @(
                 'read',
                 'write'
@@ -945,7 +1023,8 @@ $script:GitHub = [pscustomobject]@{
             'interaction_limits',
             'Interaction limits',
             'Interaction limits on repositories',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#user-permissions-for-interaction-limits',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#user-permissions-for-interaction-limits',
             @(
                 'read',
                 'write'
@@ -957,7 +1036,8 @@ $script:GitHub = [pscustomobject]@{
             'knowledge_bases',
             'Knowledge bases',
             'View knowledge bases for a user.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#user-permissions-for-knowledge-bases',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#user-permissions-for-knowledge-bases',
             @(
                 'read',
                 'write'
@@ -969,7 +1049,8 @@ $script:GitHub = [pscustomobject]@{
             'user_models',
             'Models',
             'Allows access to GitHub Models.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#user-permissions-for-models',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#user-permissions-for-models',
             @(
                 'read'
             ),
@@ -980,7 +1061,8 @@ $script:GitHub = [pscustomobject]@{
             'plan',
             'Plan',
             "View a user's plan.",
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#user-permissions-for-plan',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#user-permissions-for-plan',
             @(
                 'read'
             ),
@@ -991,7 +1073,8 @@ $script:GitHub = [pscustomobject]@{
             'profile',
             'Profile',
             "Manage a user's profile settings.",
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#user-permissions-for-profile',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#user-permissions-for-profile',
             @(
                 'read',
                 'write'
@@ -1003,7 +1086,8 @@ $script:GitHub = [pscustomobject]@{
             'git_signing_ssh_public_keys',
             'SSH signing keys',
             "View and manage a user's SSH signing keys.",
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#user-permissions-for-ssh-signing-keys',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#user-permissions-for-ssh-signing-keys',
             @(
                 'read',
                 'write'
@@ -1015,7 +1099,8 @@ $script:GitHub = [pscustomobject]@{
             'starring',
             'Starring',
             'List and manage repositories a user is starring.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#user-permissions-for-starring',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#user-permissions-for-starring',
             @(
                 'read',
                 'write'
@@ -1027,7 +1112,8 @@ $script:GitHub = [pscustomobject]@{
             'watching',
             'Watching',
             'List and change repositories a user is subscribed to.',
-            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#user-permissions-for-watching',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+            '#user-permissions-for-watching',
             @(
                 'read',
                 'write'
@@ -1043,7 +1129,8 @@ $script:GitHub = [pscustomobject]@{
             'enterprise_custom_properties',
             'Custom properties',
             'View repository custom properties and administer definitions at the enterprise level.',
-            'https://docs.github.com/enterprise-cloud@latest/rest/overview/permissions-required-for-github-apps#enterprise-permissions-for-custom-properties',
+            'https://docs.github.com/enterprise-cloud@latest/rest/overview/permissions-required-for-github-apps' +
+            '#enterprise-permissions-for-custom-properties',
             @(
                 'read',
                 'write'
@@ -1055,7 +1142,8 @@ $script:GitHub = [pscustomobject]@{
             'enterprise_organization_installation_repositories',
             'Enterprise organization installation repositories',
             'Manage repository access of GitHub Apps on Enterprise-owned organizations',
-            'https://docs.github.com/enterprise-cloud@latest/rest/overview/permissions-required-for-github-apps#enterprise-permissions-for-enterprise-organization-installation-repositories',
+            'https://docs.github.com/enterprise-cloud@latest/rest/overview/permissions-required-for-github-apps' +
+            '#enterprise-permissions-for-enterprise-organization-installation-repositories',
             @(
                 'read',
                 'write'
@@ -1067,7 +1155,8 @@ $script:GitHub = [pscustomobject]@{
             'enterprise_organization_installations',
             'Enterprise organization installations',
             'Manage installation of GitHub Apps on Enterprise-owned organizations',
-            'https://docs.github.com/enterprise-cloud@latest/rest/overview/permissions-required-for-github-apps#enterprise-permissions-for-enterprise-organization-installations',
+            'https://docs.github.com/enterprise-cloud@latest/rest/overview/permissions-required-for-github-apps' +
+            '#enterprise-permissions-for-enterprise-organization-installations',
             @(
                 'read',
                 'write'
@@ -1079,7 +1168,8 @@ $script:GitHub = [pscustomobject]@{
             'enterprise_organizations',
             'Enterprise organizations',
             'Create and remove enterprise organizations',
-            'https://docs.github.com/enterprise-cloud@latest/rest/overview/permissions-required-for-github-apps#enterprise-permissions-for-enterprise-organizations',
+            'https://docs.github.com/enterprise-cloud@latest/rest/overview/permissions-required-for-github-apps' +
+            '#enterprise-permissions-for-enterprise-organizations',
             @(
                 'write'
             ),
@@ -1090,7 +1180,8 @@ $script:GitHub = [pscustomobject]@{
             'enterprise_people',
             'Enterprise people',
             'Manage user access to the enterprise',
-            'https://docs.github.com/enterprise-cloud@latest/rest/overview/permissions-required-for-github-apps#enterprise-permissions-for-enterprise-people',
+            'https://docs.github.com/enterprise-cloud@latest/rest/overview/permissions-required-for-github-apps' +
+            '#enterprise-permissions-for-enterprise-people',
             @(
                 'read',
                 'write'
@@ -1102,7 +1193,8 @@ $script:GitHub = [pscustomobject]@{
             'enterprise_sso',
             'Enterprise single sign-on',
             'View and manage enterprise single sign-on configuration',
-            'https://docs.github.com/enterprise-cloud@latest/rest/overview/permissions-required-for-github-apps#enterprise-permissions-for-enterprise-single-sign-on',
+            'https://docs.github.com/enterprise-cloud@latest/rest/overview/permissions-required-for-github-apps' +
+            '#enterprise-permissions-for-enterprise-single-sign-on',
             @(
                 'read',
                 'write'
