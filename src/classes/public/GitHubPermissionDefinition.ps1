@@ -20,9 +20,17 @@ class GitHubPermissionDefinition {
     # The scope at which this permission applies (Repository, Organization, User, Enterprise)
     [string] $Scope
 
-    GitHubPermission() {}
+    GitHubPermissionDefinition() {}
 
-    GitHubPermission([string]$Name, [string]$DisplayName, [string]$Description, [string]$URL, [string[]]$Options, [string]$Type, [string]$Scope) {
+    GitHubPermissionDefinition(
+        [string]$Name,
+        [string]$DisplayName,
+        [string]$Description,
+        [string]$URL,
+        [string[]]$Options,
+        [string]$Type,
+        [string]$Scope
+    ) {
         $this.Name = $Name
         $this.DisplayName = $DisplayName
         $this.Description = $Description

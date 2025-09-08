@@ -82,13 +82,11 @@ function Get-GitHubPermissionDefinition {
                 return $false
             }
 
-            $result = $script:GitHub.Permissions | Where-Object {
+            $script:GitHub.Permissions | Where-Object {
                 (& $test -Value $_.Name -Patterns $Name) -and
                 (& $test -Value $_.Type -Patterns $Type) -and
                 (& $test -Value $_.Scope -Patterns $Scope)
             }
-
-            return $result
         } catch {
             Write-Error "Failed to retrieve GitHub permission definitions: $($_.Exception.Message)"
             throw
