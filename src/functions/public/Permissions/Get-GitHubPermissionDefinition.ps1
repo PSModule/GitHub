@@ -68,13 +68,11 @@ function Get-GitHubPermissionDefinition {
 
     process {
         try {
-            # Helper: returns $true if $Value matches any pattern in $Patterns (wildcards supported)
-            function _Test-Match {
+            [scriptblock]$test = {
                 param(
                     [Parameter(Mandatory)][string] $Value,
-                    [Parameter()][string[]] $Patterns
+                    [Parameter(Mandatory)][string[]] $Patterns
                 )
-                if (-not $Patterns -or $Patterns.Count -eq 0) { return $true }
                 foreach ($p in $Patterns) {
                     if ($Value -like $p) { return $true }
                 }
@@ -83,9 +81,9 @@ function Get-GitHubPermissionDefinition {
 
             # Always perform filtering using provided (or default '*') patterns
             $result = $script:GitHub.Permissions | Where-Object {
-                (_Test-Match -Value $_.Name -Patterns $Name) -and
-                (_Test-Match -Value $_.Type -Patterns $Type) -and
-                (_Test-Match -Value $_.Scope -Patterns $Scope)
+                (& $test -Value $_.Name -Patterns $Name) -and
+                (& $test -Value $_.Type -Patterns $Type) -and
+                (& $test -Value $_.Scope -Patterns $Scope)
             }
 
             return $result
