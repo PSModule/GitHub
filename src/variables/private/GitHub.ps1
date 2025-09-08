@@ -27,18 +27,17 @@ $script:GitHub = [pscustomobject]@{
         # ------------------------------
         # Repository Fine-Grained Permissions
         # ------------------------------
-        # [GitHubPermission]::new(
-        #     'actions',
-        #     'Actions',
-        #     'Workflows, workflow runs and artifacts.',
-        #     'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-actions',
-        #     @(
-        #         'read',
-        #         'write'
-        #     ),
-        #     'Fine-grained',
-        #     'Repository'
-        # ),
+        [GitHubPermission]::new(
+            'actions',
+            'Actions',
+            'Workflows, workflow runs and artifacts.',
+            'https://docs.github.com/rest/overview/permissions-required-for-github-apps#repository-permissions-for-actions',
+            @(
+                'read'
+            ),
+            'Fine-grained',
+            'Repository'
+        ),
         [GitHubPermission]::new(
             'administration',
             'Administration',
