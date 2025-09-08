@@ -22,7 +22,7 @@ param()
 Describe 'Permissions' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 
-    Context 'As <Type> using <Case> on <Target>' -ForEach $authCases -Skip:$true {
+    Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
         BeforeAll {
             $context = Connect-GitHubAccount @connectParams -PassThru -Silent
             LogGroup 'Context' {
@@ -227,7 +227,7 @@ Describe 'Permissions' {
             }
 
             $result = $permission.ToString()
-            $result | Should -Be 'Test Permission (test)'
+            $result | Should -Be 'test'
         }
     }
 }
