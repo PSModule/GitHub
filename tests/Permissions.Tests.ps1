@@ -35,60 +35,55 @@ Describe 'Permissions' {
             Write-Host ('-' * 60)
         }
 
-        It 'App context should have Permissions property populated' -Skip:($AuthType -ne 'APP') {
-            LogGroup 'Context - Installation' {
+        Context 'For Apps' -Skip:($AuthType -ne 'APP') {
+            BeforeAll {
                 $installationContext = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
-                Write-Host ($installationContext | Format-List | Out-String)
-            }
-            $installationContext.Permissions | Should -Not -BeNullOrEmpty
-            $installationContext.Permissions | Should -BeOfType [pscustomobject]
-        }
-
-        It 'All app installation permissions should exist in permission catalog and be valid options' -Skip:($AuthType -ne 'APP') {
-            LogGroup 'Context - Installation' {
-                $installationContext = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
-                Write-Host ($installationContext | Format-List | Out-String)
-            }
-
-            # Get catalog definitions
-            $catalog = Get-GitHubPermissionDefinition
-            $catalogNames = $catalog.Name
-
-            # Flatten context permission hashtable/object into name/value pairs (value is access level like read/write/admin)
-            $granted = @()
-            $installationContext.Permissions.PSObject.Properties | ForEach-Object {
-                if ($_.Name -eq 'metadata') { return } # metadata is mandatory; still in catalog but just proceed normally
-                $granted += [pscustomobject]@{ Name = $_.Name; Level = [string]$_.Value }
-            }
-
-            # Unknown permissions (present in context but not in catalog)
-            $unknown = $granted | Where-Object { $_.Name -notin $catalogNames }
-            if ($unknown) {
-                throw "Unknown permission(s) detected in app installation: $($unknown.Name -join ', ')"
-            }
-
-            # For each granted permission ensure level is one of the catalog options
-            foreach ($g in $granted) {
-                $def = $catalog | Where-Object Name -EQ $g.Name
-                $def | Should -Not -BeNullOrEmpty
-                $def.Options | Should -Contain $g.Level
-            }
-        }
-
-        It 'Permission catalog should contain all permissions granted to the app installation' -Skip:($AuthType -ne 'APP') {
-            LogGroup 'Context - Installation' {
-                $installationContext = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
-                Write-Host ($installationContext | Format-List | Out-String)
-            }
-            $catalog = Get-GitHubPermissionDefinition
-            $missing = @()
-            $installationContext.Permissions.PSObject.Properties | ForEach-Object {
-                if ($_.Name -notin $catalog.Name) {
-                    $missing += $_.Name
+                LogGroup 'Context - Installation' {
+                    Write-Host ($installationContext | Format-List | Out-String)
                 }
             }
-            if ($missing.Count -gt 0) {
-                throw "Missing permission definitions for: $($missing -join ', ')"
+
+            It 'App context should have Permissions property populated' -Skip:($AuthType -ne 'APP') {
+                $installationContext.Permissions | Should -Not -BeNullOrEmpty
+                $installationContext.Permissions | Should -BeOfType [pscustomobject]
+            }
+
+            It 'All app installation permissions should exist in permission catalog and be valid options' -Skip:($AuthType -ne 'APP') {
+                $catalog = Get-GitHubPermissionDefinition
+                $catalogNames = $catalog.Name
+
+                # Flatten context permission hashtable/object into name/value pairs (value is access level like read/write/admin)
+                $granted = @()
+                $installationContext.Permissions.PSObject.Properties | ForEach-Object {
+                    if ($_.Name -eq 'metadata') { return } # metadata is mandatory; still in catalog but just proceed normally
+                    $granted += [pscustomobject]@{ Name = $_.Name; Level = [string]$_.Value }
+                }
+
+                # Unknown permissions (present in context but not in catalog)
+                $unknown = $granted | Where-Object { $_.Name -notin $catalogNames }
+                if ($unknown) {
+                    throw "Unknown permission(s) detected in app installation: $($unknown.Name -join ', ')"
+                }
+
+                # For each granted permission ensure level is one of the catalog options
+                foreach ($g in $granted) {
+                    $def = $catalog | Where-Object Name -EQ $g.Name
+                    $def | Should -Not -BeNullOrEmpty
+                    $def.Options | Should -Contain $g.Level
+                }
+            }
+
+            It 'Permission catalog should contain all permissions granted to the app installation' -Skip:($AuthType -ne 'APP') {
+                $catalog = Get-GitHubPermissionDefinition
+                $missing = @()
+                $installationContext.Permissions.PSObject.Properties | ForEach-Object {
+                    if ($_.Name -notin $catalog.Name) {
+                        $missing += $_.Name
+                    }
+                }
+                if ($missing.Count -gt 0) {
+                    throw "Missing permission definitions for: $($missing -join ', ')"
+                }
             }
         }
     }
@@ -184,7 +179,7 @@ Describe 'Permissions' {
     }
 
     Context 'GitHubPermission Class' {
-        It 'Should create a GitHubPermission object with all properties' {
+        BeforeAll {
             $permission = [GitHubPermissionDefinition]@{
                 Name        = 'test'
                 DisplayName = 'Test Permission'
@@ -194,7 +189,9 @@ Describe 'Permissions' {
                 Type        = 'Fine-grained'
                 Scope       = 'Repository'
             }
+        }
 
+        It 'Should create a GitHubPermission object with all properties' {
             $permission | Should -Not -BeNullOrEmpty
             $permission.Name | Should -Be 'test'
             $permission.DisplayName | Should -Be 'Test Permission'
@@ -207,16 +204,6 @@ Describe 'Permissions' {
         }
 
         It 'Should have a meaningful ToString() method' {
-            $permission = [GitHubPermissionDefinition]@{
-                Name        = 'test'
-                DisplayName = 'Test Permission'
-                Description = 'A test permission'
-                URL         = 'https://docs.github.com/test'
-                Options     = @('read', 'write')
-                Type        = 'Fine-grained'
-                Scope       = 'Repository'
-            }
-
             $result = $permission.ToString()
             $result | Should -Be 'test'
         }
