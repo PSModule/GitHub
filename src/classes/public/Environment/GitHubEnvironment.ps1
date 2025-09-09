@@ -9,12 +9,15 @@
     [string] $Owner
 
     # URL to the owner/organization profile.
+    # Example: https://github.com/octocat
     [string] $OwnerUrl
 
     # URL to the repository.
+    # Example: https://github.com/octocat/Hello-World
     [string] $RepositoryUrl
 
     # URL of the environment.
+    # Example: https://github.com/octocat/Hello-World/settings/environments/123/edit
     [string] $Url
 
     # The date and time the environment was created.
