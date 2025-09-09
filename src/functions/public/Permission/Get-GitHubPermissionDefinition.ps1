@@ -55,6 +55,10 @@ function Get-GitHubPermissionDefinition {
         [Parameter()]
         [string[]] $Name = '*',
 
+        # Filter by permission display name (supports multiple values & wildcards)
+        [Parameter()]
+        [string[]] $DisplayName = '*',
+
         # Filter by permission type (supports multiple values & wildcards)
         [Parameter()]
         [string[]] $Type = '*',
@@ -84,6 +88,7 @@ function Get-GitHubPermissionDefinition {
 
             $script:GitHub.Permissions | Where-Object {
                 (& $test -Value $_.Name -Patterns $Name) -and
+                (& $test -Value $_.DisplayName -Patterns $DisplayName) -and
                 (& $test -Value $_.Type -Patterns $Type) -and
                 (& $test -Value $_.Scope -Patterns $Scope)
             }
