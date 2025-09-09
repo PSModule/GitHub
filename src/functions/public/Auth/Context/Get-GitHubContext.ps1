@@ -19,12 +19,12 @@
         Justification = 'Encapsulated in a function. Never leaves as a plain text.'
     )]
     [OutputType([GitHubContext])]
-    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
+    [CmdletBinding(DefaultParameterSetName = 'Get default context')]
     param(
         # The name of the context.
         [Parameter(
             Mandatory,
-            ParameterSetName = 'NamedContext'
+            ParameterSetName = 'Get a named context'
         )]
         [Alias('Name')]
         [string] $Context,
@@ -32,7 +32,7 @@
         # List all available contexts.
         [Parameter(
             Mandatory,
-            ParameterSetName = 'ListAvailableContexts'
+            ParameterSetName = 'List all available contexts'
         )]
         [switch] $ListAvailable
     )
@@ -45,11 +45,11 @@
 
     process {
         switch ($PSCmdlet.ParameterSetName) {
-            'NamedContext' {
-                Write-Debug "NamedContext: [$Context]"
+            'Get a named context' {
+                Write-Debug "Get a named context: [$Context]"
                 $ID = $Context
             }
-            'ListAvailableContexts' {
+            'List all available contexts' {
                 Write-Debug "ListAvailable: [$ListAvailable]"
                 $ID = '*'
             }
