@@ -9,10 +9,10 @@
             <TableControl>
                 <TableHeaders>
                     <TableColumnHeader>
-                        <Label>Name</Label>
+                        <Label>Scope</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>Scope</Label>
+                        <Label>DisplayName</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
                         <Label>Description</Label>
@@ -22,17 +22,17 @@
                     <TableRowEntry>
                         <TableColumnItems>
                             <TableColumnItem>
+                                <PropertyName>Scope</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
                                 <ScriptBlock>
                                     if ($Host.UI.SupportsVirtualTerminal -and
                                     ($env:GITHUB_ACTIONS -ne 'true') -and $_.Url) {
-                                    $PSStyle.FormatHyperlink($_.Name, $_.Url)
+                                    $PSStyle.FormatHyperlink($_.DisplayName, $_.Url)
                                     } else {
-                                    $_.Name
+                                    $_.DisplayName
                                     }
                                 </ScriptBlock>
-                            </TableColumnItem>
-                            <TableColumnItem>
-                                <PropertyName>Scope</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Description</PropertyName>
