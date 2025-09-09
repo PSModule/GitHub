@@ -8,6 +8,12 @@
     # The owner of the environment.
     [string] $Owner
 
+    # URL to the owner/organization profile.
+    [string] $OwnerUrl
+
+    # URL to the repository.
+    [string] $RepositoryUrl
+
     # URL of the environment.
     [string] $Url
 
@@ -34,6 +40,8 @@
         $this.Name = $Object.name
         $this.Owner = $Owner
         $this.Repository = $Repository
+        $this.OwnerUrl = "https://$($Context.HostName)/$Owner"
+        $this.RepositoryUrl = "https://$($Context.HostName)/$Owner/$Repository"
         $this.Url = "https://$($Context.HostName)/$Owner/$Repository/settings/environments/$($Object.id)/edit"
         $this.CreatedAt = $Object.created_at
         $this.UpdatedAt = $Object.updated_at
