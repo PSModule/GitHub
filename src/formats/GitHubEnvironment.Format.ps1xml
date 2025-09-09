@@ -32,10 +32,24 @@
                                 </ScriptBlock>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>Repository</PropertyName>
+                                <ScriptBlock>
+                                    if ($Host.UI.SupportsVirtualTerminal -and
+                                    ($env:GITHUB_ACTIONS -ne 'true')) {
+                                    $PSStyle.FormatHyperlink($_.Repository,$_.RepositoryUrl)
+                                    } else {
+                                    $_.Repository
+                                    }
+                                </ScriptBlock>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>Owner</PropertyName>
+                                <ScriptBlock>
+                                    if ($Host.UI.SupportsVirtualTerminal -and
+                                    ($env:GITHUB_ACTIONS -ne 'true')) {
+                                    $PSStyle.FormatHyperlink($_.Owner,$_.OwnerUrl)
+                                    } else {
+                                    $_.Owner
+                                    }
+                                </ScriptBlock>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
