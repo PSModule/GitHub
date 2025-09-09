@@ -85,7 +85,7 @@
                     throw "Unknown context type: [$($contextObj.Type)]"
                 }
             }
-        }
+        } | Sort-Object -Property Name
     }
 
     end {
