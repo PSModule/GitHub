@@ -2,9 +2,9 @@
 <Configuration>
     <ViewDefinitions>
         <View>
-            <Name>GitHubPermissionTable</Name>
+            <Name>GitHubPermissionDefinitionTable</Name>
             <ViewSelectedBy>
-                <TypeName>GitHubPermission</TypeName>
+                <TypeName>GitHubPermissionDefinition</TypeName>
             </ViewSelectedBy>
             <TableControl>
                 <TableHeaders>
