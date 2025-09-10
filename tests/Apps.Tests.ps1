@@ -229,4 +229,43 @@ Describe 'Apps' {
             $app | Should -Not -BeNullOrEmpty
         }
     }
+
+    # Test tab-completion functionality for Connect-GitHubApp (not auth-dependent)
+    Context 'Connect-GitHubApp Tab Completion' {
+        It 'Connect-GitHubApp completers file should exist and be loadable' {
+            $completerPath = "$PSScriptRoot/../src/functions/public/Auth/completers.ps1"
+            $completerPath | Should -Exist
+            
+            # Test that the file can be loaded without syntax errors
+            { . $completerPath } | Should -Not -Throw
+        }
+
+        It 'Connect-GitHubApp completers should contain all required parameter completers' {
+            $completerPath = "$PSScriptRoot/../src/functions/public/Auth/completers.ps1"
+            $content = Get-Content $completerPath -Raw
+            
+            # Check for User parameter completer
+            $content | Should -Match 'Register-ArgumentCompleter.*Connect-GitHubApp.*User'
+            
+            # Check for Organization parameter completer
+            $content | Should -Match 'Register-ArgumentCompleter.*Connect-GitHubApp.*Organization'
+            
+            # Check for Enterprise parameter completer
+            $content | Should -Match 'Register-ArgumentCompleter.*Connect-GitHubApp.*Enterprise'
+        }
+
+        It 'Connect-GitHubApp completers should use Get-GitHubAppInstallation' {
+            $completerPath = "$PSScriptRoot/../src/functions/public/Auth/completers.ps1"
+            $content = Get-Content $completerPath -Raw
+            
+            # Verify that each completer uses Get-GitHubAppInstallation
+            $userMatch = $content -match 'Register-ArgumentCompleter.*User.*\{[^}]*Get-GitHubAppInstallation[^}]*\}'
+            $orgMatch = $content -match 'Register-ArgumentCompleter.*Organization.*\{[^}]*Get-GitHubAppInstallation[^}]*\}'
+            $entMatch = $content -match 'Register-ArgumentCompleter.*Enterprise.*\{[^}]*Get-GitHubAppInstallation[^}]*\}'
+            
+            $userMatch | Should -Be $true
+            $orgMatch | Should -Be $true
+            $entMatch | Should -Be $true
+        }
+    }
 }
