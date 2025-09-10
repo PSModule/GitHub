@@ -1,12 +1,15 @@
 ﻿Register-ArgumentCompleter -CommandName ($script:PSModuleInfo.FunctionsToExport |
         Where-Object { $_ -like '*GitHubVariable' }) -ParameterName Name -ScriptBlock {
-    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
-    $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter
+    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
+    $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
 
     $params = @{
-        Owner       = $fakeBoundParameter.Owner
-        Repository  = $fakeBoundParameter.Repository
-        Environment = $fakeBoundParameter.Environment
+        Owner       = $fakeBoundParameters.Owner
+        Repository  = $fakeBoundParameters.Repository
+        Environment = $fakeBoundParameters.Environment
+        Context     = $fakeBoundParameters.Context
+        Verbose     = $false
+        Debug       = $false
     }
     $params | Remove-HashtableEntry -NullOrEmptyValues
     Get-GitHubVariable @params | Where-Object { $_.Name -like "$wordToComplete*" } | ForEach-Object {
