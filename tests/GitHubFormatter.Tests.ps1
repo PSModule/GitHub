@@ -46,8 +46,8 @@ Describe 'Size Property Standardization Tests' {
             # They document what the GitHubFormatter::FormatFileSize method should produce
 
             $testCases = @(
-                @{ Bytes = 0; ExpectedPattern = '\d+\s+B' }           # "0  B"
-                @{ Bytes = 512; ExpectedPattern = '\d+\s+B' }         # "512  B"
+                @{ Bytes = 0; ExpectedPattern = '\d+\.\d{2}\s+B' }   # "0.00 B"
+                @{ Bytes = 512; ExpectedPattern = '\d+\.\d{2}\s+B' } # "512.00 B"
                 @{ Bytes = 1024; ExpectedPattern = '\d+\.\d{2} KB' }  # "1.00 KB"
                 @{ Bytes = 1048576; ExpectedPattern = '\d+\.\d{2} MB' } # "1.00 MB"
                 @{ Bytes = 1073741824; ExpectedPattern = '\d+\.\d{2} GB' } # "1.00 GB"
@@ -57,6 +57,31 @@ Describe 'Size Property Standardization Tests' {
             foreach ($case in $testCases) {
                 # Document expected pattern - actual formatting tested in integration tests
                 $case.ExpectedPattern | Should -Match '\w+'  # Verify pattern is non-empty
+            }
+        }
+
+        It 'Validates GitHubFormatter.FormatFileSize produces aligned output' {
+            # Import the GitHubFormatter class for actual testing
+            . "$PSScriptRoot/../src/classes/public/GitHubFormatter.ps1"
+            
+            # Test that all units use consistent decimal formatting for alignment
+            [GitHubFormatter]::FormatFileSize(0) | Should -Be '0.00 B'
+            [GitHubFormatter]::FormatFileSize(512) | Should -Be '512.00 B'
+            [GitHubFormatter]::FormatFileSize(1024) | Should -Be '1.00 KB'
+            [GitHubFormatter]::FormatFileSize(1048576) | Should -Be '1.00 MB'
+            [GitHubFormatter]::FormatFileSize(1073741824) | Should -Be '1.00 GB'
+            
+            # Validate that all formats use 2 decimal places for consistent alignment
+            $results = @(
+                [GitHubFormatter]::FormatFileSize(0),
+                [GitHubFormatter]::FormatFileSize(512),
+                [GitHubFormatter]::FormatFileSize(1024),
+                [GitHubFormatter]::FormatFileSize(1048576)
+            )
+            
+            # All should match the pattern of having exactly 2 decimal places
+            foreach ($result in $results) {
+                $result | Should -Match '\d+\.\d{2}\s+[A-Z]+'
             }
         }
     }
