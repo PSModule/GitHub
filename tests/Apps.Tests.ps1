@@ -267,5 +267,23 @@ Describe 'Apps' {
             $orgMatch | Should -Be $true
             $entMatch | Should -Be $true
         }
+
+        It 'Connect-GitHubApp completers should resolve context properly' {
+            $completerPath = "$PSScriptRoot/../src/functions/public/Auth/completers.ps1"
+            $content = Get-Content $completerPath -Raw
+            
+            # Verify that each completer resolves context using Resolve-GitHubContext
+            $content | Should -Match 'Resolve-GitHubContext -Context \$fakeBoundParameter\.Context'
+            
+            # Verify that the resolved context is passed to Get-GitHubAppInstallation
+            $content | Should -Match 'Get-GitHubAppInstallation -Context \$context'
+            
+            # Count the occurrences to ensure all three completers have been updated
+            $contextMatches = [regex]::Matches($content, 'Resolve-GitHubContext -Context \$fakeBoundParameter\.Context')
+            $installationMatches = [regex]::Matches($content, 'Get-GitHubAppInstallation -Context \$context')
+            
+            $contextMatches.Count | Should -Be 3
+            $installationMatches.Count | Should -Be 3
+        }
     }
 }
