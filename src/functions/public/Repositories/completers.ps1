@@ -2,12 +2,12 @@
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
     $params = @{
-        Context = $fakeBoundParameters.Context
-        Verbose = $false
-        Debug   = $false
+        Anonymous = $true
+        Verbose   = $false
+        Debug     = $false
     }
-    (Get-GitHubGitignore @params).Name | Where-Object { $_ -like "$wordToComplete*" } | ForEach-Object {
-        [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
+    Get-GitHubGitignore @params | Where-Object { $_ -like "$wordToComplete*" } | ForEach-Object {
+        [System.Management.Automation.CompletionResult]::new($_.Name, $_.Name, 'ParameterValue', $_.Name)
     }
 }
 
@@ -15,12 +15,12 @@ Register-ArgumentCompleter -CommandName New-GitHubRepository -ParameterName Lice
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
     $params = @{
-        Context = $fakeBoundParameters.Context
-        Verbose = $false
-        Debug   = $false
+        Anonymous = $true
+        Verbose   = $false
+        Debug     = $false
     }
-    (Get-GitHubLicense @params).Name | Where-Object { $_ -like "$wordToComplete*" } | ForEach-Object {
-        [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
+    Get-GitHubLicense @params | Where-Object { $_.Name -like "$wordToComplete*" } | ForEach-Object {
+        [System.Management.Automation.CompletionResult]::new($_.Name, $_.Name, 'ParameterValue', $_.Name)
     }
 }
 
