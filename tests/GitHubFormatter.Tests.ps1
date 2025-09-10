@@ -46,8 +46,8 @@ Describe 'Size Property Standardization Tests' {
             # They document what the GitHubFormatter::FormatFileSize method should produce
 
             $testCases = @(
-                @{ Bytes = 0; ExpectedPattern = '\d+\.\d{2}\s+B' }   # "0.00 B"
-                @{ Bytes = 512; ExpectedPattern = '\d+\.\d{2}\s+B' } # "512.00 B"
+                @{ Bytes = 0; ExpectedPattern = '\d+\.\d{2}\s{2}B' }   # "0.00  B"
+                @{ Bytes = 512; ExpectedPattern = '\d+\.\d{2}\s{2}B' } # "512.00  B"
                 @{ Bytes = 1024; ExpectedPattern = '\d+\.\d{2} KB' }  # "1.00 KB"
                 @{ Bytes = 1048576; ExpectedPattern = '\d+\.\d{2} MB' } # "1.00 MB"
                 @{ Bytes = 1073741824; ExpectedPattern = '\d+\.\d{2} GB' } # "1.00 GB"
@@ -65,8 +65,8 @@ Describe 'Size Property Standardization Tests' {
             . "$PSScriptRoot/../src/classes/public/GitHubFormatter.ps1"
             
             # Test that all units use consistent decimal formatting for alignment
-            [GitHubFormatter]::FormatFileSize(0) | Should -Be '0.00 B'
-            [GitHubFormatter]::FormatFileSize(512) | Should -Be '512.00 B'
+            [GitHubFormatter]::FormatFileSize(0) | Should -Be '0.00  B'
+            [GitHubFormatter]::FormatFileSize(512) | Should -Be '512.00  B'
             [GitHubFormatter]::FormatFileSize(1024) | Should -Be '1.00 KB'
             [GitHubFormatter]::FormatFileSize(1048576) | Should -Be '1.00 MB'
             [GitHubFormatter]::FormatFileSize(1073741824) | Should -Be '1.00 GB'
