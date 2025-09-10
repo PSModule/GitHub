@@ -7,11 +7,7 @@
 [CmdletBinding()]
 param()
 
-# This test file validates size property standardization across GitHub classes
-# It focuses on unit conversion and formatting expectations rather than live API calls
-
 Describe 'Size Property Standardization Tests' {
-
     Context 'Unit Conversion Logic' {
         It 'Validates KB to Bytes conversion formula' {
             # Test the conversion used in GitHubRepository and GitHubOrganization
@@ -41,23 +37,19 @@ Describe 'Size Property Standardization Tests' {
     }
 
     Context 'Expected Format Output Patterns' {
-        It 'Validates expected format patterns for size display' {
-            # These tests verify the expected output patterns without requiring the actual formatter
-            # They document what the GitHubFormatter::FormatFileSize method should produce
+        $testCases = @(
+            @{ Bytes = 0; ExpectedPattern = '\d+[.,]\d{2}\s{2}B' }       #   "0.00  B"
+            @{ Bytes = 512; ExpectedPattern = '\d+[.,]\d{2}\s{2}B' }     # "512.00  B"
+            @{ Bytes = 1024; ExpectedPattern = '\d+[.,]\d{2} KB' }       #   "1.00 KB"
+            @{ Bytes = 1048576; ExpectedPattern = '\d+[.,]\d{2} MB' }    #   "1.00 MB"
+            @{ Bytes = 1073741824; ExpectedPattern = '\d+[.,]\d{2} GB' } #   "1.00 GB"
+            @{ Bytes = 110592; ExpectedPattern = '\d+[.,]\d{2} KB' }     # "108.00 KB"
+        )
 
-            $testCases = @(
-                @{ Bytes = 0; ExpectedPattern = '\d+\s+B' }           # "0  B"
-                @{ Bytes = 512; ExpectedPattern = '\d+\s+B' }         # "512  B"
-                @{ Bytes = 1024; ExpectedPattern = '\d+\.\d{2} KB' }  # "1.00 KB"
-                @{ Bytes = 1048576; ExpectedPattern = '\d+\.\d{2} MB' } # "1.00 MB"
-                @{ Bytes = 1073741824; ExpectedPattern = '\d+\.\d{2} GB' } # "1.00 GB"
-                @{ Bytes = 110592; ExpectedPattern = '\d+\.\d{2} KB' } # "108.00 KB"
-            )
-
-            foreach ($case in $testCases) {
-                # Document expected pattern - actual formatting tested in integration tests
-                $case.ExpectedPattern | Should -Match '\w+'  # Verify pattern is non-empty
-            }
+        It 'Validates formatter output pattern for <Bytes> bytes' -ForEach $testCases {
+            # Test the formatter against the expected pattern
+            $result = [GitHubFormatter]::FormatFileSize($Bytes)
+            $result | Should -Match $ExpectedPattern
         }
     }
 

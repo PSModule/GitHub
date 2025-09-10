@@ -28,6 +28,6 @@
             { $_ -ge 1MB } { return '{0:N2} MB' -f ($size / 1MB) }
             { $_ -ge 1KB } { return '{0:N2} KB' -f ($size / 1KB) }
         }
-        return "$size B"
+        return '{0:N2}  B' -f $size
     }
 }
