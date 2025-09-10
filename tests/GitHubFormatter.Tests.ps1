@@ -41,6 +41,11 @@ Describe 'Size Property Standardization Tests' {
     }
 
     Context 'Expected Format Output Patterns' {
+        BeforeAll {
+            # Import the GitHubFormatter class once for all tests
+            . "$PSScriptRoot/../src/classes/public/GitHubFormatter.ps1"
+        }
+
         $testCases = @(
             @{ Bytes = 0; ExpectedPattern = '\d+\.\d{2}\s{2}B' }   # "0.00  B"
             @{ Bytes = 512; ExpectedPattern = '\d+\.\d{2}\s{2}B' } # "512.00  B"
@@ -51,18 +56,12 @@ Describe 'Size Property Standardization Tests' {
         )
 
         It 'Validates formatter output pattern for <Bytes> bytes' -ForEach $testCases {
-            # Import the GitHubFormatter class for actual testing
-            . "$PSScriptRoot/../src/classes/public/GitHubFormatter.ps1"
-            
             # Test the formatter against the expected pattern
             $result = [GitHubFormatter]::FormatFileSize($Bytes)
             $result | Should -Match $ExpectedPattern
         }
 
         It 'Validates GitHubFormatter.FormatFileSize produces aligned output' {
-            # Import the GitHubFormatter class for actual testing
-            . "$PSScriptRoot/../src/classes/public/GitHubFormatter.ps1"
-            
             # Test that all units use consistent decimal formatting for alignment
             [GitHubFormatter]::FormatFileSize(0) | Should -Be '0.00  B'
             [GitHubFormatter]::FormatFileSize(512) | Should -Be '512.00  B'
