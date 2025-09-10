@@ -57,7 +57,7 @@
             Context = $Context
         }
         Write-Debug "ParamSet: $($PSCmdlet.ParameterSetName)"
-        switch ($PSCmdlet.ParameterSetName) {
+        $installations = switch ($PSCmdlet.ParameterSetName) {
             'List installations on an Enterprise' {
                 $params += @{
                     Enterprise   = $Enterprise
@@ -78,6 +78,7 @@
     }
 
     end {
+        $installations | Sort-Object -Property Type, Target
         Write-Debug "[$stackPath] - End"
     }
 }
