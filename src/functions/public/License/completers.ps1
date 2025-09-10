@@ -6,7 +6,7 @@
         Verbose = $false
         Debug   = $false
     }
-    Get-GitHubLicense -Anonymous -Verbose:$false -Debug:$false | Where-Object { $_.Name -like "$wordToComplete*" } | ForEach-Object {
+    Get-GitHubLicense @params | Where-Object { $_.Name -like "$wordToComplete*" } | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_.Name, $_.Name, 'ParameterValue', $_.Name)
     }
 }
