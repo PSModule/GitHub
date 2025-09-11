@@ -3,7 +3,7 @@
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
 
     $params = @{
-        Context = $fakeBoundParameters.Context ?? (Get-GitHubContext -ErrorAction SilentlyContinue -WarningAction SilentlyContinue)
+        Context = $fakeBoundParameters.Context
         Verbose = $false
         Debug   = $false
     }
