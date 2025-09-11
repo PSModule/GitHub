@@ -32,8 +32,8 @@
         Write-Debug "Force:           [$Force]"
         if ($Force) {
             Write-Debug 'Forcing initialization of GitHubConfig.'
-            $context = Set-Context -Context $script:GitHub.DefaultConfig -Vault $script:GitHub.ContextVault -PassThru
-            $script:GitHub.Config = [GitHubConfig]$context
+            $config = Set-Context -Context $script:GitHub.DefaultConfig -Vault $script:GitHub.ContextVault -PassThru
+            $script:GitHub.Config = [GitHubConfig]$config
             return
         }
 
@@ -44,27 +44,25 @@
         }
 
         Write-Debug 'Attempt to load the stored GitHubConfig from ContextVault'
-        $context = Get-Context -ID $script:GitHub.DefaultConfig.ID -Vault $script:GitHub.ContextVault
-        if ($context) {
+        $config = Get-Context -ID $script:GitHub.DefaultConfig.ID -Vault $script:GitHub.ContextVault
+        if ($config) {
             Write-Debug 'GitHubConfig loaded into memory.'
 
             Write-Debug 'Synchronizing stored context with GitHubConfig class definition.'
             $needsUpdate = $false
-            
-            # Get the valid properties from the GitHubConfig class
             $validProperties = [GitHubConfig].GetProperties().Name
-            $storedProperties = $context.PSObject.Properties.Name
-            
+            $storedProperties = $config.PSObject.Properties.Name
+
             # Add missing properties from DefaultConfig
             foreach ($propName in $validProperties) {
                 if (-not $storedProperties.Contains($propName)) {
                     Write-Debug "Adding missing property [$propName] from DefaultConfig"
                     $defaultValue = $script:GitHub.DefaultConfig.$propName
-                    $context | Add-Member -MemberType NoteProperty -Name $propName -Value $defaultValue
+                    $config | Add-Member -MemberType NoteProperty -Name $propName -Value $defaultValue
                     $needsUpdate = $true
                 }
             }
-            
+
             # Remove obsolete properties that are no longer supported
             $propertiesToRemove = @()
             foreach ($propName in $storedProperties) {
@@ -74,23 +72,23 @@
                     $needsUpdate = $true
                 }
             }
-            
+
             # Remove the obsolete properties
             foreach ($propName in $propertiesToRemove) {
-                $context.PSObject.Properties.Remove($propName)
-            }
-            
-            if ($needsUpdate) {
-                Write-Debug 'Updating stored context with synchronized properties'
-                $context = Set-Context -Context $context -Vault $script:GitHub.ContextVault -PassThru
+                $config.PSObject.Properties.Remove($propName)
             }
 
-            $script:GitHub.Config = [GitHubConfig]$context
+            if ($needsUpdate) {
+                Write-Debug 'Updating stored context with synchronized properties'
+                $config = Set-Context -Context $config -Vault $script:GitHub.ContextVault -PassThru
+            }
+
+            $script:GitHub.Config = [GitHubConfig]$config
             return
         }
         Write-Debug 'Initializing GitHubConfig from defaults'
-        $context = Set-Context -Context $script:GitHub.DefaultConfig -Vault $script:GitHub.ContextVault -PassThru
-        $script:GitHub.Config = [GitHubConfig]$context
+        $config = Set-Context -Context $script:GitHub.DefaultConfig -Vault $script:GitHub.ContextVault -PassThru
+        $script:GitHub.Config = [GitHubConfig]$config
     }
 
     end {
@@ -98,4 +96,3 @@
     }
 }
 #Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '8.1.3' }
-
