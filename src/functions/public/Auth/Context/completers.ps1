@@ -12,9 +12,9 @@
         $contexts += 'Anonymous'
     }
 
-    $contexts += (Get-GitHubContext -ListAvailable -Verbose:$false -Debug:$false).Name
-    $contexts = $contexts | Sort-Object -Unique
-    $contexts | Where-Object { $_ -like "$wordToComplete*" } | ForEach-Object {
-        [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
+    $contexts += Get-GitHubContext -ListAvailable -Verbose:$false -Debug:$false
+    $contexts = $contexts | Sort-Object -Property Name
+    $contexts | Where-Object { $_.Name -like "$wordToComplete*" } | ForEach-Object {
+        [System.Management.Automation.CompletionResult]::new($_.Name, $_.Name, 'ParameterValue', $_.Name)
     }
 }
