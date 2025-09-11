@@ -2,7 +2,6 @@
         Where-Object { $_ -like '*GitHubVariable' }) -ParameterName Name -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
-
     $params = @{
         Owner       = $fakeBoundParameters.Owner
         Repository  = $fakeBoundParameters.Repository

@@ -16,7 +16,6 @@
 Register-ArgumentCompleter -CommandName ($script:PSModuleInfo.FunctionsToExport) -ParameterName Team -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
-
     $params = @{
         Organization = $fakeBoundParameters.Organization ?? $fakeBoundParameters.Owner
         Context      = $fakeBoundParameters.Context

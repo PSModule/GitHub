@@ -2,7 +2,6 @@
         Where-Object { $_ -like '*GitHubWorkflow' }) -ParameterName Name -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
-
     $params = @{
         Owner      = $fakeBoundParameters.Owner
         Repository = $fakeBoundParameters.Repository
@@ -19,7 +18,6 @@ Register-ArgumentCompleter -CommandName ($script:PSModuleInfo.FunctionsToExport 
         Where-Object { $_ -like '*GitHubWorkflow' }) -ParameterName ID -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
-
     $params = @{
         Owner      = $fakeBoundParameters.Owner
         Repository = $fakeBoundParameters.Repository
