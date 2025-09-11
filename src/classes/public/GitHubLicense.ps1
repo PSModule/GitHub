@@ -24,16 +24,16 @@
 
 class GitHubLicense {
     # The license name, used as an identifier.
-    # Example: 'mit'
+    # Example: 'MIT'
     [string] $Name
 
     # The display name of the license.
     # Example: 'MIT License'
     [string] $DisplayName
 
-    # Customary short name if applicable (e.g, GPLv3).
-    # Example: 'MIT'
-    [string] $NickName
+    # The license key.
+    # Example: 'mit'
+    [string] $Key
 
     # The SPDX identifier of the license, or $null.
     # Example: 'MIT'
@@ -78,8 +78,9 @@ class GitHubLicense {
     GitHubLicense() {}
 
     GitHubLicense([PSCustomObject]$Object) {
-        $this.Name = $Object.key
+        $this.Name = $Object.spdx_id ?? $Object.spdxId
         $this.DisplayName = $Object.name
+        $this.Key = $Object.key
         $this.NickName = $Object.nickname
         $this.SpdxId = $Object.spdx_id ?? $Object.spdxId
         $this.NodeID = $Object.node_id ?? $Object.id
