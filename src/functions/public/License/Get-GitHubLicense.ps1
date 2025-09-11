@@ -60,10 +60,13 @@
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context -Anonymous $Anonymous
-        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT, Anonymous
+        Assert-GitHubContext -Context $Context -AuthType App, IAT, PAT, UAT, Anonymous
     }
 
     process {
+        if ($Context.AuthType -eq 'APP') {
+            $Context = 'Anonymous'
+        }
         $params = @{
             Context = $Context
         }
