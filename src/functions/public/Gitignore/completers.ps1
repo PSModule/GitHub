@@ -6,7 +6,7 @@
         Verbose = $false
         Debug   = $false
     }
-    Get-GitHubGitignore @params | Where-Object { $_ -like "$wordToComplete*" } | ForEach-Object {
+    Get-GitHubGitignore @params | Where-Object { $_ -like (Get-GitHubCompletionPattern -WordToComplete $wordToComplete) } | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
     }
 }

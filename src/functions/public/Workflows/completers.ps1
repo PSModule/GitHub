@@ -2,6 +2,7 @@
         Where-Object { $_ -like '*GitHubWorkflow' }) -ParameterName Name -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
+    $pattern = Get-GitHubCompletionPattern -WordToComplete $wordToComplete
     $params = @{
         Owner      = $fakeBoundParameters.Owner
         Repository = $fakeBoundParameters.Repository
@@ -10,7 +11,7 @@
         Debug      = $false
     }
     $params | Remove-HashtableEntry -NullOrEmptyValues
-    Get-GitHubWorkflow @params | Where-Object { $_.Name -like "$wordToComplete*" } | ForEach-Object {
+    Get-GitHubWorkflow @params | Where-Object { $_.Name -like $pattern } | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_.Name, $_.Name, 'ParameterValue', $_.Name)
     }
 }
@@ -18,6 +19,7 @@ Register-ArgumentCompleter -CommandName ($script:PSModuleInfo.FunctionsToExport 
         Where-Object { $_ -like '*GitHubWorkflow' }) -ParameterName ID -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
+    $pattern = Get-GitHubCompletionPattern -WordToComplete $wordToComplete
     $params = @{
         Owner      = $fakeBoundParameters.Owner
         Repository = $fakeBoundParameters.Repository
@@ -26,7 +28,7 @@ Register-ArgumentCompleter -CommandName ($script:PSModuleInfo.FunctionsToExport 
         Debug      = $false
     }
     $params | Remove-HashtableEntry -NullOrEmptyValues
-    Get-GitHubWorkflow @params | Where-Object { $_.ID -like "$wordToComplete*" } | ForEach-Object {
+    Get-GitHubWorkflow @params | Where-Object { $_.ID -like $pattern } | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_.ID, "$($_.Name) ($($_.ID))", 'ParameterValue', "$($_.Name) ($($_.ID))"  )
     }
 }

@@ -6,7 +6,7 @@
         Verbose = $false
         Debug   = $false
     }
-    Get-GitHubGitignore @params | Where-Object { $_ -like "$wordToComplete*" } | ForEach-Object {
+    Get-GitHubGitignore @params | Where-Object { $_ -like (Get-GitHubCompletionPattern -WordToComplete $wordToComplete) } | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
     }
 }
@@ -19,7 +19,7 @@ Register-ArgumentCompleter -CommandName New-GitHubRepository -ParameterName Lice
         Verbose = $false
         Debug   = $false
     }
-    Get-GitHubLicense @params | Where-Object { $_.Name -like "$wordToComplete*" } | ForEach-Object {
+    Get-GitHubLicense @params | Where-Object { $_.Name -like (Get-GitHubCompletionPattern -WordToComplete $wordToComplete) } | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_.Name, $_.Name, 'ParameterValue', $_.Name)
     }
 }
@@ -27,7 +27,7 @@ Register-ArgumentCompleter -CommandName New-GitHubRepository -ParameterName Lice
 Register-ArgumentCompleter -CommandName Get-GitHubRepository -ParameterName AdditionalProperty -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
-    [GitHubRepository].GetProperties().Name | Where-Object { $_ -like "$wordToComplete*" } | ForEach-Object {
+    [GitHubRepository].GetProperties().Name | Where-Object { $_ -like (Get-GitHubCompletionPattern -WordToComplete $wordToComplete) } | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
     }
 }
@@ -35,7 +35,7 @@ Register-ArgumentCompleter -CommandName Get-GitHubRepository -ParameterName Addi
 Register-ArgumentCompleter -CommandName Get-GitHubRepository -ParameterName Property -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
-    [GitHubRepository].GetProperties().Name | Where-Object { $_ -like "$wordToComplete*" } | ForEach-Object {
+    [GitHubRepository].GetProperties().Name | Where-Object { $_ -like (Get-GitHubCompletionPattern -WordToComplete $wordToComplete) } | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
     }
 }
@@ -49,7 +49,7 @@ Register-ArgumentCompleter -CommandName ($script:PSModuleInfo.FunctionsToExport)
         Verbose = $false
         Debug   = $false
     }
-    Get-GitHubRepository @params | Where-Object { $_.Name -like "$wordToComplete*" } | ForEach-Object {
+    Get-GitHubRepository @params | Where-Object { $_.Name -like (Get-GitHubCompletionPattern -WordToComplete $wordToComplete) } | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_.Name, $_.Name, 'ParameterValue', $_.Name)
     }
 }
@@ -64,7 +64,7 @@ Register-ArgumentCompleter -CommandName ($script:PSModuleInfo.FunctionsToExport 
         Verbose = $false
         Debug   = $false
     }
-    Get-GitHubRepository @params | Where-Object { $_.Name -like "$wordToComplete*" } | ForEach-Object {
+    Get-GitHubRepository @params | Where-Object { $_.Name -like (Get-GitHubCompletionPattern -WordToComplete $wordToComplete) } | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_.Name, $_.Name, 'ParameterValue', $_.Name)
     }
 }

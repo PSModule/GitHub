@@ -11,7 +11,7 @@
         Debug       = $false
     }
     $params | Remove-HashtableEntry -NullOrEmptyValues
-    Get-GitHubVariable @params | Where-Object { $_.Name -like "$wordToComplete*" } | ForEach-Object {
+    Get-GitHubVariable @params | Where-Object { $_.Name -like (Get-GitHubCompletionPattern -WordToComplete $wordToComplete) } | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_.Name, $_.Name, 'ParameterValue', $_.Name)
     }
 }

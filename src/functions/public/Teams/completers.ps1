@@ -8,7 +8,7 @@
         Verbose      = $false
         Debug        = $false
     }
-    Get-GitHubTeam @params | Where-Object { $_.Slug -like "$wordToComplete*" } | ForEach-Object {
+    Get-GitHubTeam @params | Where-Object { $_.Slug -like (Get-GitHubCompletionPattern -WordToComplete $wordToComplete) } | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_.Slug, $_.Slug, 'ParameterValue', $_.Slug)
     }
 }
@@ -22,7 +22,7 @@ Register-ArgumentCompleter -CommandName ($script:PSModuleInfo.FunctionsToExport)
         Verbose      = $false
         Debug        = $false
     }
-    Get-GitHubTeam @params | Where-Object { $_.Slug -like "$wordToComplete*" } | ForEach-Object {
+    Get-GitHubTeam @params | Where-Object { $_.Slug -like (Get-GitHubCompletionPattern -WordToComplete $wordToComplete) } | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_.Slug, $_.Slug, 'ParameterValue', $_.Slug)
     }
 }

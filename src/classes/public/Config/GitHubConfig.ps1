@@ -38,6 +38,9 @@
     # The environment type, which is used to determine the context of the GitHub API calls.
     [string] $EnvironmentType
 
+    # The completion mode for argument completers. Options: 'StartsWith', 'Contains'.
+    [string] $CompletionMode
+
     # Simple parameterless constructor
     GitHubConfig() {}
 

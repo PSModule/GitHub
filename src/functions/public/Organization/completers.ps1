@@ -7,7 +7,7 @@
         Verbose = $false
         Debug   = $false
     }
-    Get-GitHubOrganization @params | Where-Object { $_.Name -like "$wordToComplete*" } | ForEach-Object {
+    Get-GitHubOrganization @params | Where-Object { $_.Name -like (Get-GitHubCompletionPattern -WordToComplete $wordToComplete) } | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_.Name, $_.Name, 'ParameterValue', $_.Name)
     }
 }
@@ -20,7 +20,7 @@ Register-ArgumentCompleter -CommandName ($script:PSModuleInfo.FunctionsToExport)
         Verbose = $false
         Debug   = $false
     }
-    Get-GitHubOrganization @params | Where-Object { $_.Name -like "$wordToComplete*" } | ForEach-Object {
+    Get-GitHubOrganization @params | Where-Object { $_.Name -like (Get-GitHubCompletionPattern -WordToComplete $wordToComplete) } | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_.Name, $_.Name, 'ParameterValue', $_.Name)
     }
 }
@@ -33,7 +33,7 @@ Register-ArgumentCompleter -CommandName ($script:PSModuleInfo.FunctionsToExport)
         Verbose = $false
         Debug   = $false
     }
-    Get-GitHubOrganization @params | Where-Object { $_.Name -like "$wordToComplete*" } | ForEach-Object {
+    Get-GitHubOrganization @params | Where-Object { $_.Name -like (Get-GitHubCompletionPattern -WordToComplete $wordToComplete) } | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_.Name, $_.Name, 'ParameterValue', $_.Name)
     }
 }
