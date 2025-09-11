@@ -1,8 +1,12 @@
 ﻿Register-ArgumentCompleter -CommandName New-GitHubRepository -ParameterName Gitignore -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
+    # Try to resolve an existing default context; if none exists fall back to anonymous requests.
+    $context = $fakeBoundParameters.Context ?? (Get-GitHubContext -ErrorAction SilentlyContinue -WarningAction SilentlyContinue)
+
     $params = @{
-        Anonymous = $true
+        Anonymous = ($null -eq $context) ? $true : $false
+        Context   = ($null -ne $context) ? $context : $null
         Verbose   = $false
         Debug     = $false
     }
@@ -14,11 +18,16 @@
 Register-ArgumentCompleter -CommandName New-GitHubRepository -ParameterName License -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
+    # Try to resolve an existing default context; if none exists fall back to anonymous requests.
+    $context = $fakeBoundParameters.Context ?? (Get-GitHubContext -ErrorAction SilentlyContinue -WarningAction SilentlyContinue)
+
     $params = @{
-        Anonymous = $true
+        Anonymous = ($null -eq $context) ? $true : $false
+        Context   = ($null -ne $context) ? $context : $null
         Verbose   = $false
         Debug     = $false
     }
+
     Get-GitHubLicense @params | Where-Object { $_.Name -like "$wordToComplete*" } | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_.Name, $_.Name, 'ParameterValue', $_.Name)
     }
@@ -44,14 +53,13 @@ Register-ArgumentCompleter -CommandName ($script:PSModuleInfo.FunctionsToExport)
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
     $params = @{
-        Owner    = $fakeBoundParameters.Owner ?? $fakeBoundParameters.Organization
-        Property = 'Name'
-        Context  = $fakeBoundParameters.Context
-        Verbose  = $false
-        Debug    = $false
+        Owner   = $fakeBoundParameters.Owner ?? $fakeBoundParameters.Organization
+        Context = $fakeBoundParameters.Context
+        Verbose = $false
+        Debug   = $false
     }
-    (Get-GitHubRepository @params).Name | Where-Object { $_ -like "$wordToComplete*" } | ForEach-Object {
-        [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
+    Get-GitHubRepository @params | Where-Object { $_.Name -like "$wordToComplete*" } | ForEach-Object {
+        [System.Management.Automation.CompletionResult]::new($_.Name, $_.Name, 'ParameterValue', $_.Name)
     }
 }
 
@@ -60,13 +68,12 @@ Register-ArgumentCompleter -CommandName ($script:PSModuleInfo.FunctionsToExport 
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
     $params = @{
-        Owner    = $fakeBoundParameters.Owner ?? $fakeBoundParameters.Organization
-        Property = 'Name'
-        Context  = $fakeBoundParameters.Context
-        Verbose  = $false
-        Debug    = $false
+        Owner   = $fakeBoundParameters.Owner ?? $fakeBoundParameters.Organization
+        Context = $fakeBoundParameters.Context
+        Verbose = $false
+        Debug   = $false
     }
-    (Get-GitHubRepository @params).Name | Where-Object { $_ -like "$wordToComplete*" } | ForEach-Object {
-        [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
+    Get-GitHubRepository @params | Where-Object { $_.Name -like "$wordToComplete*" } | ForEach-Object {
+        [System.Management.Automation.CompletionResult]::new($_.Name, $_.Name, 'ParameterValue', $_.Name)
     }
 }
