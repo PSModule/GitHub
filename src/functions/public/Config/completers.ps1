@@ -6,3 +6,16 @@
         [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_ )
     }
 }
+
+Register-ArgumentCompleter -CommandName Set-GitHubConfig -ParameterName Value -ScriptBlock {
+    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
+    $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
+    
+    # Provide completion for CompletionMode values
+    if ($fakeBoundParameters.Name -eq 'CompletionMode') {
+        $pattern = Get-GitHubCompletionPattern -WordToComplete $wordToComplete
+        @('StartsWith', 'Contains') | Where-Object { $_ -like $pattern } | ForEach-Object {
+            [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
+        }
+    }
+}

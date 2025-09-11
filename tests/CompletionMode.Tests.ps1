@@ -52,6 +52,12 @@ Describe 'CompletionMode Configuration' {
             $result = Get-GitHubCompletionPattern -WordToComplete ''
             $result | Should -Be '**'
         }
+
+        It 'Works with special characters in word to complete' {
+            $script:GitHub.Config.CompletionMode = 'Contains'
+            $result = Get-GitHubCompletionPattern -WordToComplete 'test-word'
+            $result | Should -Be '*test-word*'
+        }
     }
 
     Context 'GitHubConfig Class' {
