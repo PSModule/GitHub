@@ -135,7 +135,7 @@ Describe 'Repositories' {
                     AllowAutoMerge         = $true
                     IsTemplate             = $true
                     AddReadme              = $true
-                    License                = 'mit'
+                    License                = 'MIT'
                     Visibility             = 'Private'
                     Gitignore              = 'VisualStudio'
                     Homepage               = 'https://example.com'
@@ -182,7 +182,7 @@ Describe 'Repositories' {
                 $repo.SuggestUpdateBranch | Should -Be $true
                 $repo.DeleteBranchOnMerge | Should -Be $true
                 # $repo.AllowAutoMerge | Should -Be $true
-                $repo.License | Should -Be 'MIT License'
+                $repo.License | Should -Be 'MIT'
                 $repo.Homepage | Should -Be 'https://example.com'
             }
         }

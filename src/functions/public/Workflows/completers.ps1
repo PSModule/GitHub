@@ -1,11 +1,13 @@
 ﻿Register-ArgumentCompleter -CommandName ($script:PSModuleInfo.FunctionsToExport |
         Where-Object { $_ -like '*GitHubWorkflow' }) -ParameterName Name -ScriptBlock {
-    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
-    $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter
-
+    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
+    $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
     $params = @{
-        Owner      = $fakeBoundParameter.Owner
-        Repository = $fakeBoundParameter.Repository
+        Owner      = $fakeBoundParameters.Owner
+        Repository = $fakeBoundParameters.Repository
+        Context    = $fakeBoundParameters.Context
+        Verbose    = $false
+        Debug      = $false
     }
     $params | Remove-HashtableEntry -NullOrEmptyValues
     Get-GitHubWorkflow @params | Where-Object { $_.Name -like "$wordToComplete*" } | ForEach-Object {
@@ -14,12 +16,14 @@
 }
 Register-ArgumentCompleter -CommandName ($script:PSModuleInfo.FunctionsToExport |
         Where-Object { $_ -like '*GitHubWorkflow' }) -ParameterName ID -ScriptBlock {
-    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
-    $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter
-
+    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
+    $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
     $params = @{
-        Owner      = $fakeBoundParameter.Owner
-        Repository = $fakeBoundParameter.Repository
+        Owner      = $fakeBoundParameters.Owner
+        Repository = $fakeBoundParameters.Repository
+        Context    = $fakeBoundParameters.Context
+        Verbose    = $false
+        Debug      = $false
     }
     $params | Remove-HashtableEntry -NullOrEmptyValues
     Get-GitHubWorkflow @params | Where-Object { $_.ID -like "$wordToComplete*" } | ForEach-Object {

@@ -218,7 +218,7 @@
         IsArchived               = 'isArchived'
         IsTemplate               = 'isTemplate'
         IsFork                   = 'isFork'
-        License                  = 'licenseInfo { name }'
+        License                  = 'licenseInfo { name key spdxId }'
         AllowForking             = 'forkingAllowed'
         RequireWebCommitSignoff  = 'webCommitSignoffRequired'
         Topics                   = 'repositoryTopics(first: 20) { nodes { topic { name } } }'

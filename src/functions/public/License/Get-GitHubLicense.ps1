@@ -60,10 +60,13 @@
         $stackPath = Get-PSCallStackPath
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context -Anonymous $Anonymous
-        Assert-GitHubContext -Context $Context -AuthType IAT, PAT, UAT, Anonymous
+        Assert-GitHubContext -Context $Context -AuthType App, IAT, PAT, UAT, Anonymous
     }
 
     process {
+        if ($Context.AuthType -eq 'APP') {
+            $Context = 'Anonymous'
+        }
         $params = @{
             Context = $Context
         }
@@ -82,13 +85,5 @@
 
     end {
         Write-Debug "[$stackPath] - End"
-    }
-}
-
-Register-ArgumentCompleter -CommandName Get-GitHubLicense -ParameterName Name -ScriptBlock {
-    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
-    $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter
-    Get-GitHubLicense -Anonymous | Select-Object -ExpandProperty Name | Where-Object { $_ -like "$wordToComplete*" } | ForEach-Object {
-        [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
     }
 }

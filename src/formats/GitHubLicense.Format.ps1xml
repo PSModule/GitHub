@@ -9,27 +9,15 @@
             <TableControl>
                 <TableHeaders>
                     <TableColumnHeader>
-                        <Label>Key</Label>
-                    </TableColumnHeader>
-                    <TableColumnHeader>
                         <Label>Name</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>SpdxId</Label>
-                    </TableColumnHeader>
-                    <TableColumnHeader>
-                        <Label>ApiUrl</Label>
-                    </TableColumnHeader>
-                    <TableColumnHeader>
-                        <Label>NodeID</Label>
+                        <Label>DisplayName</Label>
                     </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
                     <TableRowEntry>
                         <TableColumnItems>
-                            <TableColumnItem>
-                                <PropertyName>Key</PropertyName>
-                            </TableColumnItem>
                             <TableColumnItem>
                                 <ScriptBlock>
                                     if ($Host.UI.SupportsVirtualTerminal -and
@@ -41,47 +29,12 @@
                                 </ScriptBlock>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>SpdxId</PropertyName>
-                            </TableColumnItem>
-                            <TableColumnItem>
-                                <PropertyName>ApiUrl</PropertyName>
-                            </TableColumnItem>
-                            <TableColumnItem>
-                                <PropertyName>NodeID</PropertyName>
+                                <PropertyName>DisplayName</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
                 </TableRowEntries>
             </TableControl>
-        </View>
-        <View>
-            <Name>GitHubLicenseListView</Name>
-            <ViewSelectedBy>
-                <TypeName>GitHubLicense</TypeName>
-            </ViewSelectedBy>
-            <ListControl>
-                <ListEntries>
-                    <ListEntry>
-                        <ListItems>
-                            <ListItem>
-                                <PropertyName>Key</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>Name</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>SpdxId</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>ApiUrl</PropertyName>
-                            </ListItem>
-                            <ListItem>
-                                <PropertyName>NodeID</PropertyName>
-                            </ListItem>
-                        </ListItems>
-                    </ListEntry>
-                </ListEntries>
-            </ListControl>
         </View>
     </ViewDefinitions>
 </Configuration>
