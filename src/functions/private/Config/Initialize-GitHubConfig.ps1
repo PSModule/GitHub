@@ -48,18 +48,40 @@
         if ($context) {
             Write-Debug 'GitHubConfig loaded into memory.'
 
-            Write-Debug 'Checking if new default properties are available in the stored context.'
+            Write-Debug 'Synchronizing stored context with GitHubConfig class definition.'
             $needsUpdate = $false
-            $defaultProperties = $script:GitHub.DefaultConfig.PSObject.Properties.Name
-            foreach ($propName in $defaultProperties) {
-                if (-not $context.PSObject.Properties.Name.Contains($propName)) {
+            
+            # Get the valid properties from the GitHubConfig class
+            $validProperties = [GitHubConfig].GetProperties().Name
+            $storedProperties = $context.PSObject.Properties.Name
+            
+            # Add missing properties from DefaultConfig
+            foreach ($propName in $validProperties) {
+                if (-not $storedProperties.Contains($propName)) {
                     Write-Debug "Adding missing property [$propName] from DefaultConfig"
-                    $context | Add-Member -MemberType NoteProperty -Name $propName -Value $script:GitHub.DefaultConfig.$propName
+                    $defaultValue = $script:GitHub.DefaultConfig.$propName
+                    $context | Add-Member -MemberType NoteProperty -Name $propName -Value $defaultValue
                     $needsUpdate = $true
                 }
             }
+            
+            # Remove obsolete properties that are no longer supported
+            $propertiesToRemove = @()
+            foreach ($propName in $storedProperties) {
+                if (-not $validProperties.Contains($propName)) {
+                    Write-Debug "Removing obsolete property [$propName] from stored context"
+                    $propertiesToRemove += $propName
+                    $needsUpdate = $true
+                }
+            }
+            
+            # Remove the obsolete properties
+            foreach ($propName in $propertiesToRemove) {
+                $context.PSObject.Properties.Remove($propName)
+            }
+            
             if ($needsUpdate) {
-                Write-Debug 'Updating stored context with new default properties'
+                Write-Debug 'Updating stored context with synchronized properties'
                 $context = Set-Context -Context $context -Vault $script:GitHub.ContextVault -PassThru
             }
 
