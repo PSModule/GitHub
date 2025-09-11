@@ -81,7 +81,6 @@ class GitHubLicense {
         $this.Name = $Object.spdx_id ?? $Object.spdxId
         $this.DisplayName = $Object.name
         $this.Key = $Object.key
-        $this.NickName = $Object.nickname
         $this.SpdxId = $Object.spdx_id ?? $Object.spdxId
         $this.NodeID = $Object.node_id ?? $Object.id
         $this.Url = $Object.html_url ?? $Object.url
