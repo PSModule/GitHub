@@ -7,62 +7,29 @@ function Get-GitHubCompletionPattern {
         Get the completion pattern based on the current GitHub configuration CompletionMode setting.
         Returns either a 'StartsWith' pattern ($wordToComplete*) or 'Contains' pattern (*$wordToComplete*).
 
-        .PARAMETER WordToComplete
-        The word being completed.
-
         .EXAMPLE
         Get-GitHubCompletionPattern -WordToComplete 'test'
 
         Returns 'test*' when CompletionMode is 'StartsWith', or '*test*' when CompletionMode is 'Contains'.
 
         .OUTPUTS
-        [string] The pattern to use for completion matching.
+        string
     #>
     [OutputType([string])]
     [CmdletBinding()]
     param (
         # The word being completed
         [Parameter(Mandatory)]
-        [AllowEmptyString()]
         [string] $WordToComplete
     )
+    $completionMode = $script:GitHub.Config.CompletionMode
+    Write-Debug "CompletionMode: [$completionMode]"
 
-    begin {
-        if (Get-Command -Name 'Get-PSCallStackPath' -ErrorAction SilentlyContinue) {
-            $stackPath = Get-PSCallStackPath
-            Write-Debug "[$stackPath] - Start"
-        }
-        if (Get-Command -Name 'Initialize-GitHubConfig' -ErrorAction SilentlyContinue) {
-            Initialize-GitHubConfig
-        }
+    $pattern = switch ($completionMode) {
+        'Contains' { "*$WordToComplete*" }
+        default { "$WordToComplete*" }
     }
 
-    process {
-        $completionMode = $script:GitHub.Config.CompletionMode
-        if (Get-Command -Name 'Write-Debug' -ErrorAction SilentlyContinue) {
-            Write-Debug "CompletionMode: [$completionMode]"
-        }
-
-        switch ($completionMode) {
-            'Contains' {
-                $pattern = "*$WordToComplete*"
-            }
-            default {
-                # Default to 'StartsWith' for backward compatibility
-                $pattern = "$WordToComplete*"
-            }
-        }
-
-        if (Get-Command -Name 'Write-Debug' -ErrorAction SilentlyContinue) {
-            Write-Debug "Pattern: [$pattern]"
-        }
-        return $pattern
-    }
-
-    end {
-        if (Get-Command -Name 'Get-PSCallStackPath' -ErrorAction SilentlyContinue) {
-            $stackPath = Get-PSCallStackPath
-            Write-Debug "[$stackPath] - End"
-        }
-    }
+    Write-Debug "Pattern: [$pattern]"
+    $pattern
 }
