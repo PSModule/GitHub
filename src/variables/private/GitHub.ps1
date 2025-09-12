@@ -4,7 +4,6 @@ $script:IsLocal = -not ($script:IsGitHubActions -or $script:IsFunctionApp)
 $script:GitHub = [pscustomobject]@{
     ContextVault       = 'PSModule.GitHub'
     TokenPrefixPattern = '(?<=^(ghu|gho|ghs|github_pat|ghp)).*'
-    EnvironmentType    = Get-GitHubEnvironmentType
     DefaultConfig      = [GitHubConfig]@{
         ID                            = 'Module'
         HostName                      = ($env:GITHUB_SERVER_URL ?? 'github.com') -replace '^https?://'
