@@ -37,7 +37,6 @@
             return
         }
 
-        Write-Debug "GitHubConfig ID: [$($script:GitHub.Config.ID)]"
         if ($null -ne $script:GitHub.Config) {
             Write-Debug 'GitHubConfig already initialized and available in memory.'
             return
@@ -55,6 +54,7 @@
 
             # Add missing properties from DefaultConfig
             foreach ($propName in $validProperties) {
+                Write-Debug "Validating property [$propName]"
                 if (-not $storedProperties.Contains($propName)) {
                     Write-Debug "Adding missing property [$propName] from DefaultConfig"
                     $defaultValue = $script:GitHub.DefaultConfig.$propName
@@ -66,6 +66,7 @@
             # Remove obsolete properties that are no longer supported
             $propertiesToRemove = @()
             foreach ($propName in $storedProperties) {
+                Write-Debug "Checking property [$propName] for obsolescence"
                 if (-not $validProperties.Contains($propName)) {
                     Write-Debug "Removing obsolete property [$propName] from stored context"
                     $propertiesToRemove += $propName
