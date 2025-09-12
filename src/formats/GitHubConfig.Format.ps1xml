@@ -46,6 +46,9 @@
                             <ListItem>
                                 <PropertyName>RetryInterval</PropertyName>
                             </ListItem>
+                            <ListItem>
+                                <PropertyName>CompletionMode</PropertyName>
+                            </ListItem>
                         </ListItems>
                     </ListEntry>
                 </ListEntries>

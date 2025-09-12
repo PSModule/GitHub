@@ -24,7 +24,8 @@
         # The name of the context.
         [Parameter(
             Mandatory,
-            ParameterSetName = 'Get a named context'
+            ParameterSetName = 'Get a named context',
+            Position = 0
         )]
         [Alias('Name')]
         [string] $Context,

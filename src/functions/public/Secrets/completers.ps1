@@ -2,6 +2,7 @@
         Where-Object { $_ -like '*GitHubSecret' }) -ParameterName Name -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
+    $pattern = switch (Get-GitHubConfig -Name CompletionMode) { 'Contains' { "*$wordToComplete*" } default { "$wordToComplete*" } }
     $params = @{
         Owner       = $fakeBoundParameters.Owner
         Repository  = $fakeBoundParameters.Repository
@@ -11,7 +12,7 @@
         Debug       = $false
     }
     $params | Remove-HashtableEntry -NullOrEmptyValues
-    Get-GitHubSecret @params | Where-Object { $_.Name -like "$wordToComplete*" } | ForEach-Object {
+    Get-GitHubSecret @params | Where-Object { $_.Name -like $pattern } | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_.Name, $_.Name, 'ParameterValue', $_.Name)
     }
 }

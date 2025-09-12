@@ -32,43 +32,64 @@
         Write-Debug "Force:           [$Force]"
         if ($Force) {
             Write-Debug 'Forcing initialization of GitHubConfig.'
-            $context = Set-Context -Context $script:GitHub.DefaultConfig -Vault $script:GitHub.ContextVault -PassThru
-            $script:GitHub.Config = [GitHubConfig]$context
+            $config = Set-Context -Context $script:GitHub.DefaultConfig -Vault $script:GitHub.ContextVault -PassThru
+            $script:GitHub.Config = [GitHubConfig]$config
             return
         }
 
-        Write-Debug "GitHubConfig ID: [$($script:GitHub.Config.ID)]"
         if ($null -ne $script:GitHub.Config) {
             Write-Debug 'GitHubConfig already initialized and available in memory.'
             return
         }
 
         Write-Debug 'Attempt to load the stored GitHubConfig from ContextVault'
-        $context = Get-Context -ID $script:GitHub.DefaultConfig.ID -Vault $script:GitHub.ContextVault
-        if ($context) {
+        $config = Get-Context -ID $script:GitHub.DefaultConfig.ID -Vault $script:GitHub.ContextVault
+        if ($config) {
             Write-Debug 'GitHubConfig loaded into memory.'
 
-            Write-Debug 'Checking if new default properties are available in the stored context.'
+            Write-Debug 'Synchronizing stored context with GitHubConfig class definition.'
             $needsUpdate = $false
-            $defaultProperties = $script:GitHub.DefaultConfig.PSObject.Properties.Name
-            foreach ($propName in $defaultProperties) {
-                if (-not $context.PSObject.Properties.Name.Contains($propName)) {
+            $validProperties = [GitHubConfig].GetProperties().Name
+            $storedProperties = $config.PSObject.Properties.Name
+
+            # Add missing properties from DefaultConfig
+            foreach ($propName in $validProperties) {
+                Write-Debug "Validating property [$propName]"
+                if (-not $storedProperties.Contains($propName)) {
                     Write-Debug "Adding missing property [$propName] from DefaultConfig"
-                    $context | Add-Member -MemberType NoteProperty -Name $propName -Value $script:GitHub.DefaultConfig.$propName
+                    $defaultValue = $script:GitHub.DefaultConfig.$propName
+                    $config | Add-Member -MemberType NoteProperty -Name $propName -Value $defaultValue
                     $needsUpdate = $true
                 }
             }
-            if ($needsUpdate) {
-                Write-Debug 'Updating stored context with new default properties'
-                $context = Set-Context -Context $context -Vault $script:GitHub.ContextVault -PassThru
+
+            # Remove obsolete properties that are no longer supported
+            $propertiesToRemove = @()
+            foreach ($propName in $storedProperties) {
+                Write-Debug "Checking property [$propName] for obsolescence"
+                if (-not $validProperties.Contains($propName)) {
+                    Write-Debug "Removing obsolete property [$propName] from stored context"
+                    $propertiesToRemove += $propName
+                    $needsUpdate = $true
+                }
             }
 
-            $script:GitHub.Config = [GitHubConfig]$context
+            # Remove the obsolete properties
+            foreach ($propName in $propertiesToRemove) {
+                $config.PSObject.Properties.Remove($propName)
+            }
+
+            if ($needsUpdate) {
+                Write-Debug 'Updating stored context with synchronized properties'
+                $config = Set-Context -Context $config -Vault $script:GitHub.ContextVault -PassThru
+            }
+
+            $script:GitHub.Config = [GitHubConfig]$config
             return
         }
         Write-Debug 'Initializing GitHubConfig from defaults'
-        $context = Set-Context -Context $script:GitHub.DefaultConfig -Vault $script:GitHub.ContextVault -PassThru
-        $script:GitHub.Config = [GitHubConfig]$context
+        $config = Set-Context -Context $script:GitHub.DefaultConfig -Vault $script:GitHub.ContextVault -PassThru
+        $script:GitHub.Config = [GitHubConfig]$config
     }
 
     end {
@@ -76,4 +97,3 @@
     }
 }
 #Requires -Modules @{ ModuleName = 'Context'; RequiredVersion = '8.1.3' }
-

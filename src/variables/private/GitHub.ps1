@@ -19,6 +19,7 @@ $script:GitHub = [pscustomobject]@{
         RetryCount                    = 0
         RetryInterval                 = 1
         EnvironmentType               = Get-GitHubEnvironmentType
+        CompletionMode                = 'StartsWith'
     }
     Config             = $null
     Event              = $null
