@@ -1,7 +1,7 @@
 ﻿Register-ArgumentCompleter -CommandName New-GitHubRepository -ParameterName Gitignore -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
-    $pattern = Get-GitHubCompletionPattern -WordToComplete $wordToComplete
+    $pattern = switch (Get-GitHubConfig -Name CompletionMode) { 'Contains' { "*$wordToComplete*" } default { "$wordToComplete*" } }
     $params = @{
         Context = $fakeBoundParameters.Context
         Verbose = $false
@@ -15,7 +15,7 @@
 Register-ArgumentCompleter -CommandName New-GitHubRepository -ParameterName License -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
-    $pattern = Get-GitHubCompletionPattern -WordToComplete $wordToComplete
+    $pattern = switch (Get-GitHubConfig -Name CompletionMode) { 'Contains' { "*$wordToComplete*" } default { "$wordToComplete*" } }
     $params = @{
         Context = $fakeBoundParameters.Context
         Verbose = $false
@@ -29,7 +29,7 @@ Register-ArgumentCompleter -CommandName New-GitHubRepository -ParameterName Lice
 Register-ArgumentCompleter -CommandName Get-GitHubRepository -ParameterName AdditionalProperty -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
-    $pattern = Get-GitHubCompletionPattern -WordToComplete $wordToComplete
+    $pattern = switch (Get-GitHubConfig -Name CompletionMode) { 'Contains' { "*$wordToComplete*" } default { "$wordToComplete*" } }
     [GitHubRepository].GetProperties().Name | Where-Object { $_ -like $pattern } | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
     }
@@ -38,7 +38,7 @@ Register-ArgumentCompleter -CommandName Get-GitHubRepository -ParameterName Addi
 Register-ArgumentCompleter -CommandName Get-GitHubRepository -ParameterName Property -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
-    $pattern = Get-GitHubCompletionPattern -WordToComplete $wordToComplete
+    $pattern = switch (Get-GitHubConfig -Name CompletionMode) { 'Contains' { "*$wordToComplete*" } default { "$wordToComplete*" } }
     [GitHubRepository].GetProperties().Name | Where-Object { $_ -like $pattern } | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
     }
@@ -47,7 +47,7 @@ Register-ArgumentCompleter -CommandName Get-GitHubRepository -ParameterName Prop
 Register-ArgumentCompleter -CommandName ($script:PSModuleInfo.FunctionsToExport) -ParameterName Repository -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
-    $pattern = Get-GitHubCompletionPattern -WordToComplete $wordToComplete
+    $pattern = switch (Get-GitHubConfig -Name CompletionMode) { 'Contains' { "*$wordToComplete*" } default { "$wordToComplete*" } }
     $params = @{
         Owner   = $fakeBoundParameters.Owner ?? $fakeBoundParameters.Organization
         Context = $fakeBoundParameters.Context
@@ -63,7 +63,7 @@ Register-ArgumentCompleter -CommandName ($script:PSModuleInfo.FunctionsToExport 
         Where-Object { $_ -like '*GitHubRepository' }) -ParameterName Name -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
-    $pattern = Get-GitHubCompletionPattern -WordToComplete $wordToComplete
+    $pattern = switch (Get-GitHubConfig -Name CompletionMode) { 'Contains' { "*$wordToComplete*" } default { "$wordToComplete*" } }
     $params = @{
         Owner   = $fakeBoundParameters.Owner ?? $fakeBoundParameters.Organization
         Context = $fakeBoundParameters.Context

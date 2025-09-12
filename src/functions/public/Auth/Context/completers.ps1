@@ -1,8 +1,7 @@
 ﻿Register-ArgumentCompleter -CommandName ($script:PSModuleInfo.FunctionsToExport) -ParameterName Context -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
-
-    $pattern = Get-GitHubCompletionPattern -WordToComplete $wordToComplete
+    $pattern = switch (Get-GitHubConfig -Name CompletionMode) { 'Contains' { "*$wordToComplete*" } default { "$wordToComplete*" } }
     $contexts = @()
     $hasAnonymousParameter = $false
     $command = Get-Command -Name $commandName -ErrorAction SilentlyContinue

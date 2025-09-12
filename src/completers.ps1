@@ -1,7 +1,7 @@
 ﻿Register-ArgumentCompleter -CommandName Connect-GitHubApp -ParameterName User -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
-    $pattern = Get-GitHubCompletionPattern -WordToComplete $wordToComplete
+    $pattern = switch (Get-GitHubConfig -Name CompletionMode) { 'Contains' { "*$wordToComplete*" } default { "$wordToComplete*" } }
     $params = @{
         Context = $fakeBoundParameters.Context
         Verbose = $false
@@ -14,7 +14,7 @@
 Register-ArgumentCompleter -CommandName Connect-GitHubApp -ParameterName Organization -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
-    $pattern = Get-GitHubCompletionPattern -WordToComplete $wordToComplete
+    $pattern = switch (Get-GitHubConfig -Name CompletionMode) { 'Contains' { "*$wordToComplete*" } default { "$wordToComplete*" } }
     $params = @{
         Context = $fakeBoundParameters.Context
         Verbose = $false
@@ -27,7 +27,7 @@ Register-ArgumentCompleter -CommandName Connect-GitHubApp -ParameterName Organiz
 Register-ArgumentCompleter -CommandName Connect-GitHubApp -ParameterName Enterprise -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
-    $pattern = Get-GitHubCompletionPattern -WordToComplete $wordToComplete
+    $pattern = switch (Get-GitHubConfig -Name CompletionMode) { 'Contains' { "*$wordToComplete*" } default { "$wordToComplete*" } }
     $params = @{
         Context = $fakeBoundParameters.Context
         Verbose = $false

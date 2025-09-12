@@ -2,7 +2,7 @@
         Where-Object { $_ -like '*GitHubOrganization' }) -ParameterName Name -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
-    $pattern = Get-GitHubCompletionPattern -WordToComplete $wordToComplete
+    $pattern = switch (Get-GitHubConfig -Name CompletionMode) { 'Contains' { "*$wordToComplete*" } default { "$wordToComplete*" } }
     $params = @{
         Context = $fakeBoundParameters.Context
         Verbose = $false
@@ -16,7 +16,7 @@
 Register-ArgumentCompleter -CommandName ($script:PSModuleInfo.FunctionsToExport) -ParameterName Owner -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
-    $pattern = Get-GitHubCompletionPattern -WordToComplete $wordToComplete
+    $pattern = switch (Get-GitHubConfig -Name CompletionMode) { 'Contains' { "*$wordToComplete*" } default { "$wordToComplete*" } }
     $params = @{
         Context = $fakeBoundParameters.Context
         Verbose = $false
@@ -30,7 +30,7 @@ Register-ArgumentCompleter -CommandName ($script:PSModuleInfo.FunctionsToExport)
 Register-ArgumentCompleter -CommandName ($script:PSModuleInfo.FunctionsToExport) -ParameterName Organization -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
-    $pattern = Get-GitHubCompletionPattern -WordToComplete $wordToComplete
+    $pattern = switch (Get-GitHubConfig -Name CompletionMode) { 'Contains' { "*$wordToComplete*" } default { "$wordToComplete*" } }
     $params = @{
         Context = $fakeBoundParameters.Context
         Verbose = $false

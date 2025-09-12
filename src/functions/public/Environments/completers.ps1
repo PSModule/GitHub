@@ -2,7 +2,7 @@
         Where-Object { $_ -like '*GitHubEnvironment' }) -ParameterName Name -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
-    $pattern = Get-GitHubCompletionPattern -WordToComplete $wordToComplete
+    $pattern = switch (Get-GitHubConfig -Name CompletionMode) { 'Contains' { "*$wordToComplete*" } default { "$wordToComplete*" } }
     $params = @{
         Owner      = $fakeBoundParameters.Owner
         Repository = $fakeBoundParameters.Repository
@@ -19,7 +19,7 @@
 Register-ArgumentCompleter -CommandName ($script:PSModuleInfo.FunctionsToExport) -ParameterName Environment -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
-    $pattern = Get-GitHubCompletionPattern -WordToComplete $wordToComplete
+    $pattern = switch (Get-GitHubConfig -Name CompletionMode) { 'Contains' { "*$wordToComplete*" } default { "$wordToComplete*" } }
     $params = @{
         Owner      = $fakeBoundParameters.Owner
         Repository = $fakeBoundParameters.Repository

@@ -2,7 +2,7 @@
         Where-Object { $_ -like '*GitHubSecret' }) -ParameterName Name -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
-    $pattern = Get-GitHubCompletionPattern -WordToComplete $wordToComplete
+    $pattern = switch (Get-GitHubConfig -Name CompletionMode) { 'Contains' { "*$wordToComplete*" } default { "$wordToComplete*" } }
     $params = @{
         Owner       = $fakeBoundParameters.Owner
         Repository  = $fakeBoundParameters.Repository
