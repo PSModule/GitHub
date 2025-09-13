@@ -41,7 +41,7 @@
         $this.PerPage = $Object.PerPage
         $this.ClientID = $Object.ClientID
         $this.InstallationID = $Object.InstallationID
-        $this.Permissions = [GitHubPermission]::newFromObject($Object.Permissions)
+        $this.Permissions = $Object.Permissions
         $this.Events = $Object.Events
         $this.InstallationType = $Object.InstallationType
         $this.InstallationName = $Object.InstallationName

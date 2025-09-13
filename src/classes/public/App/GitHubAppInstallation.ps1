@@ -14,8 +14,8 @@
     # The type of repository selection.
     [string] $RepositorySelection
 
-    # The permissions that the app has on the target.
-    [pscustomobject] $Permissions
+    # The permissions that the app has on the target (full catalog for applicable scopes).
+    [GitHubPermission[]] $Permissions
 
     # The events that the app is subscribing to.
     [string[]] $Events
@@ -47,23 +47,26 @@
     GitHubAppInstallation() {}
 
     # Helper method to compare installation permissions and events with app configuration
-    hidden [string] CompareWithAppConfiguration([pscustomobject] $AppPermissions, [string[]] $AppEvents) {
+    hidden [string] CompareWithAppConfiguration([GitHubPermission[]] $AppPermissions, [string[]] $AppEvents) {
         if ($null -eq $AppPermissions -or $null -eq $AppEvents) {
             return 'Unknown'
         }
 
-        # Compare permissions - check if installation has all the permissions that the app requires
-        $permissionsMatch = $true
-        if ($AppPermissions.PSObject.Properties) {
-            foreach ($permission in $AppPermissions.PSObject.Properties) {
-                $appPermissionLevel = $permission.Value
-                $installationPermissionLevel = $this.Permissions.PSObject.Properties[$permission.Name]?.Value
+        # Build lookup tables
+        $appLookup = @{}
+        foreach ($p in $AppPermissions) { $appLookup[$p.Name] = $p }
+        $instLookup = @{}
+        foreach ($p in $this.Permissions) { $instLookup[$p.Name] = $p }
 
-                # If app requires a permission but installation doesn't have it, or has lower level
-                if ($appPermissionLevel -ne 'none' -and $installationPermissionLevel -ne $appPermissionLevel) {
-                    $permissionsMatch = $false
-                    break
-                }
+        # Compare permissions - check if installation has all the permissions that the app requires (for its scope)
+        $permissionsMatch = $true
+        foreach ($appPerm in $AppPermissions) {
+            # Only evaluate permissions with a value (requested). Missing (null) == no access required.
+            if ([string]::IsNullOrEmpty($appPerm.Value)) { continue }
+            $instValue = $instLookup[$appPerm.Name].Value
+            if ($instValue -ne $appPerm.Value) {
+                $permissionsMatch = $false
+                break
             }
         }
 
@@ -101,7 +104,7 @@
         $this.Target = [GitHubOwner]::new($Object.account)
         $this.Type = $Object.target_type
         $this.RepositorySelection = $Object.repository_selection
-        $this.Permissions = $Object.permissions
+        $this.Permissions = [GitHubPermission]::NewFullCatalog($Object.permissions, $this.Type)
         $this.Events = , ($Object.events)
         $this.FilePaths = $Object.single_file_paths
         $this.CreatedAt = $Object.created_at
@@ -118,7 +121,7 @@
         $this.Target = [GitHubOwner]::new($Object.account)
         $this.Type = $Object.target_type
         $this.RepositorySelection = $Object.repository_selection
-        $this.Permissions = $Object.permissions
+        $this.Permissions = [GitHubPermission]::NewFullCatalog($Object.permissions, $this.Type)
         $this.Events = , ($Object.events)
         $this.FilePaths = $Object.single_file_paths
         $this.CreatedAt = $Object.created_at
@@ -145,7 +148,7 @@
         }
         $this.Type = $Type
         $this.RepositorySelection = $Object.repository_selection
-        $this.Permissions = $Object.permissions
+        $this.Permissions = [GitHubPermission]::NewFullCatalog($Object.permissions, $this.Type)
         $this.Events = , ($Object.events)
         $this.FilePaths = $Object.single_file_paths
         $this.CreatedAt = $Object.created_at
@@ -166,7 +169,7 @@
         }
         $this.Type = $Type
         $this.RepositorySelection = $Object.repository_selection
-        $this.Permissions = $Object.permissions
+        $this.Permissions = [GitHubPermission]::NewFullCatalog($Object.permissions, $this.Type)
         $this.Events = , ($Object.events)
         $this.FilePaths = $Object.single_file_paths
         $this.CreatedAt = $Object.created_at

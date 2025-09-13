@@ -1291,4 +1291,47 @@ class GitHubPermission : GitHubPermissionDefinition {
         }
         return $result | Sort-Object Scope, DisplayName
     }
+
+    # Returns a full catalog of permissions, ensuring all known permissions are present.
+    # If an object with granted permissions is provided, its values are merged.
+    static [GitHubPermission[]] NewFullCatalog([pscustomobject] $Object, [string] $InstallationType) {
+        $granted = [GitHubPermission]::newFromObject($Object)
+        $grantedLookup = @{}
+        foreach ($g in $granted) { $grantedLookup[$g.Name] = $g }
+
+        $full = @()
+        foreach ($definition in [GitHubPermissionDefinition]::List) {
+            if ($grantedLookup.ContainsKey($definition.Name)) {
+                $full += $grantedLookup[$definition.Name]
+            } else {
+                $perm = [GitHubPermission]::new()
+                $perm.Name = $definition.Name
+                $perm.DisplayName = $definition.DisplayName
+                $perm.Description = $definition.Description
+                $perm.URL = $definition.URL
+                $perm.Options = $definition.Options
+                $perm.Type = $definition.Type
+                $perm.Scope = $definition.Scope
+                $perm.Value = $null
+                $full += $perm
+            }
+        }
+
+        # Include unknown permissions (those not in catalog) as-is
+        foreach ($g in $granted) {
+            if (-not ([GitHubPermissionDefinition]::List.Name -contains $g.Name)) {
+                $full += $g
+            }
+        }
+        $full = $full | Sort-Object Scope, DisplayName
+
+        if (-not $InstallationType) { return $full }
+
+        switch ($InstallationType) {
+            'Enterprise' { return $full | Where-Object { $_.Scope -eq 'Enterprise' } }
+            'Organization' { return $full | Where-Object { $_.Scope -in @('Organization','Repository') } }
+            'User' { return $full | Where-Object { $_.Scope -in @('User','Repository') } }
+            default { return $full }
+        }
+    }
 }
