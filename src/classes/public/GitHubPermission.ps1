@@ -1136,6 +1136,19 @@ class GitHubPermissionDefinition {
             'Enterprise'
         ),
         [GitHubPermissionDefinition]::new(
+            'enterprise_custom_org_roles',
+            'Enterprise custom organization roles',
+            'Create, edit, delete and list custom organization roles at the enterprise level. View system organization roles.',
+            'https://docs.github.com/enterprise-cloud@latest/rest/overview/permissions-required-for-github-apps' +
+            '#enterprise-permissions-for-enterprise-custom-organization-roles',
+            @(
+                'read',
+                'write'
+            ),
+            'Fine-grained',
+            'Enterprise'
+        ),
+        [GitHubPermissionDefinition]::new(
             'enterprise_organization_installation_repositories',
             'Enterprise organization installation repositories',
             'Manage repository access of GitHub Apps on Enterprise-owned organizations',
