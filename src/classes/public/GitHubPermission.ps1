@@ -1073,7 +1073,6 @@ class GitHubPermissionDefinition {
             'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
             '#user-permissions-for-profile',
             @(
-                'read',
                 'write'
             ),
             'Fine-grained',
