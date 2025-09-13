@@ -1242,7 +1242,11 @@ class GitHubPermission : GitHubPermissionDefinition {
             $this.Options = $definition.Options
             $this.Type = $definition.Type
             $this.Scope = $definition.Scope
+            if ($Value -and ($definition.Options -notcontains $Value)) {
+                throw "Invalid permission value: $Value for permission: $Permission"
+            }
         } else {
+            # Unknown permission: accept any value without validation
             $this.Name = $Permission
             $this.DisplayName = $Permission
             $this.Description = 'Unknown permission - Open issue to add metadata'
@@ -1250,43 +1254,20 @@ class GitHubPermission : GitHubPermissionDefinition {
             $this.Options = @()
             $this.Type = 'Unknown'
             $this.Scope = 'Unknown'
-
-        }
-
-
-        if ($Value -and ($definition.Options -notcontains $Value)) {
-            throw "Invalid permission value: $Value for permission: $Permission"
         }
         $this.Value = $Value
     }
 
-    static [GitHubPermission[]] newFromObject([pscustomobject] $Object) {
+    static [GitHubPermission[]] newPermission([pscustomobject] $Object) {
         if (-not $Object) { return @() }
         $result = @()
         foreach ($name in ($Object | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name)) {
             $tmpValue = $Object.$name
-            $definition = [GitHubPermissionDefinition]::List | Where-Object { $_.Name -eq $name }
-            if ($definition) {
-                if ($tmpValue -and ($definition.Options -notcontains $tmpValue)) {
-                    # Skip invalid value for known permission
-                    continue
-                }
-                $perm = [GitHubPermission]::new()
-                $perm.Name = $definition.Name
-                $perm.DisplayName = $definition.DisplayName
-                $perm.Description = $definition.Description
-                $perm.URL = $definition.URL
-                $perm.Options = $definition.Options
-                $perm.Type = $definition.Type
-                $perm.Scope = $definition.Scope
-                $perm.Value = $tmpValue
-                $result += $perm
-            } else {
-                # Unknown permission: create minimal object without metadata
-                $perm = [GitHubPermission]::new()
-                $perm.Name = $name
-                $perm.Value = $tmpValue
-                $result += $perm
+            try {
+                $result += [GitHubPermission]::new($name, $tmpValue)
+            } catch {
+                # Skip invalid value for known permission (constructor throws); preserves original behavior.
+                continue
             }
         }
         return $result | Sort-Object Scope, DisplayName
@@ -1294,8 +1275,8 @@ class GitHubPermission : GitHubPermissionDefinition {
 
     # Returns a full catalog of permissions, ensuring all known permissions are present.
     # If an object with granted permissions is provided, its values are merged.
-    static [GitHubPermission[]] NewFullCatalog([pscustomobject] $Object, [string] $InstallationType) {
-        $granted = [GitHubPermission]::newFromObject($Object)
+    static [GitHubPermission[]] newPermissionList([pscustomobject] $Object, [string] $InstallationType) {
+        $granted = [GitHubPermission]::newPermission($Object)
         $grantedLookup = @{}
         foreach ($g in $granted) { $grantedLookup[$g.Name] = $g }
 
@@ -1317,7 +1298,6 @@ class GitHubPermission : GitHubPermissionDefinition {
             }
         }
 
-        # Include unknown permissions (those not in catalog) as-is
         foreach ($g in $granted) {
             if (-not ([GitHubPermissionDefinition]::List.Name -contains $g.Name)) {
                 $full += $g
