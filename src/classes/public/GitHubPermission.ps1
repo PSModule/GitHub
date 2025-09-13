@@ -1234,16 +1234,25 @@ class GitHubPermission : GitHubPermissionDefinition {
 
     GitHubPermission([string] $Permission, [string] $Value) : base() {
         $definition = [GitHubPermissionDefinition]::List | Where-Object { $_.Name -eq $Permission }
-        if (-not $definition) {
-            throw "Invalid permission name: $Permission"
+        if ($definition) {
+            $this.Name = $definition.Name
+            $this.DisplayName = $definition.DisplayName
+            $this.Description = $definition.Description
+            $this.URL = $definition.URL
+            $this.Options = $definition.Options
+            $this.Type = $definition.Type
+            $this.Scope = $definition.Scope
+        } else {
+            $this.Name = $Permission
+            $this.DisplayName = $Permission
+            $this.Description = 'Unknown permission - Open issue to add metadata'
+            $this.URL = $null
+            $this.Options = @()
+            $this.Type = 'Unknown'
+            $this.Scope = 'Unknown'
+
         }
-        $this.Name = $definition.Name
-        $this.DisplayName = $definition.DisplayName
-        $this.Description = $definition.Description
-        $this.URL = $definition.URL
-        $this.Options = $definition.Options
-        $this.Type = $definition.Type
-        $this.Scope = $definition.Scope
+
 
         if ($Value -and ($definition.Options -notcontains $Value)) {
             throw "Invalid permission value: $Value for permission: $Permission"
