@@ -1285,8 +1285,6 @@ class GitHubPermission : GitHubPermissionDefinition {
         return $result | Sort-Object Scope, DisplayName
     }
 
-    # Returns a full catalog of permissions, ensuring all known permissions are present.
-    # If an object with granted permissions is provided, its values are merged.
     static [GitHubPermission[]] newPermissionList([pscustomobject] $Object, [string] $InstallationType) {
         $granted = [GitHubPermission]::newPermission($Object)
         $grantedLookup = @{}
