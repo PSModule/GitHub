@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuration>
+    <ViewDefinitions>
+        <View>
+            <Name>GitHubPermissionTable</Name>
+            <ViewSelectedBy>
+                <TypeName>GitHubPermission</TypeName>
+            </ViewSelectedBy>
+            <TableControl>
+                <TableHeaders>
+                    <TableColumnHeader>
+                        <Label>Scope</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>DisplayName</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Value</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Description</Label>
+                    </TableColumnHeader>
+                </TableHeaders>
+                <TableRowEntries>
+                    <TableRowEntry>
+                        <TableColumnItems>
+                            <TableColumnItem>
+                                <PropertyName>Scope</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <ScriptBlock>
+                                    if ($Host.UI.SupportsVirtualTerminal -and
+                                    ($env:GITHUB_ACTIONS -ne 'true') -and $_.Url) {
+                                    $PSStyle.FormatHyperlink($_.DisplayName, $_.Url)
+                                    } else {
+                                    $_.DisplayName
+                                    }
+                                </ScriptBlock>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Value</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Description</PropertyName>
+                            </TableColumnItem>
+                        </TableColumnItems>
+                    </TableRowEntry>
+                </TableRowEntries>
+            </TableControl>
+        </View>
+    </ViewDefinitions>
+</Configuration>

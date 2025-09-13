@@ -15,7 +15,7 @@
     [string] $OwnerType
 
     # The permissions that the app is requesting on the target
-    [pscustomobject] $Permissions
+    [GitHubPermission[]] $Permissions
 
     # The events that the app is subscribing to once installed
     [string[]] $Events
@@ -47,7 +47,7 @@
         $this.KeyVaultKeyReference = $Object.KeyVaultKeyReference
         $this.OwnerName = $Object.OwnerName
         $this.OwnerType = $Object.OwnerType
-        $this.Permissions = $Object.Permissions
+        $this.Permissions = [GitHubPermission]::newFromObject($Object.Permissions)
         $this.Events = $Object.Events
     }
 }

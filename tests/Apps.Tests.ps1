@@ -93,6 +93,9 @@ Describe 'Apps' {
                         $installation.SuspendedAt | Should -BeNullOrEmpty
                         $installation.SuspendedBy | Should -BeOfType 'GitHubUser'
                         $installation.SuspendedBy | Should -BeNullOrEmpty
+                        # Validate the new Status property
+                        $installation.Status | Should -Not -BeNullOrEmpty
+                        $installation.Status | Should -BeIn @('Unknown', 'UpToDate', 'PermissionsOutdated', 'EventsOutdated', 'PermissionsAndEventsOutdated')
                     }
                 }
 
@@ -120,6 +123,38 @@ Describe 'Apps' {
                     $installation.SuspendedAt | Should -BeNullOrEmpty
                     $installation.SuspendedBy | Should -BeOfType 'GitHubUser'
                     $installation.SuspendedBy | Should -BeNullOrEmpty
+                    # Validate the new Status property
+                    $installation.Status | Should -Not -BeNullOrEmpty
+                    $installation.Status | Should -BeIn @('Unknown', 'UpToDate', 'PermissionsOutdated', 'EventsOutdated', 'PermissionsAndEventsOutdated')
+                }
+
+                It 'Get-GitHubAppInstallation - Status tracking functionality' {
+                    $githubApp = Get-GitHubApp
+                    $installations = Get-GitHubAppInstallation
+                    LogGroup 'Status tracking test' {
+                        Write-Host "Testing installation status tracking against app configuration"
+                        Write-Host "App Permissions: $($githubApp.Permissions | ConvertTo-Json -Compress)"
+                        Write-Host "App Events: $($githubApp.Events -join ', ')"
+                    }
+                    
+                    foreach ($installation in $installations) {
+                        LogGroup "Installation $($installation.ID) Status" {
+                            Write-Host "Installation ID: $($installation.ID)"
+                            Write-Host "Target: $($installation.Target.Name)"
+                            Write-Host "Status: $($installation.Status)"
+                            Write-Host "Installation Permissions: $($installation.Permissions | ConvertTo-Json -Compress)"
+                            Write-Host "Installation Events: $($installation.Events -join ', ')"
+                        }
+                        
+                        # The status should be calculated based on app vs installation comparison
+                        $installation.Status | Should -BeIn @('Unknown', 'UpToDate', 'PermissionsOutdated', 'EventsOutdated', 'PermissionsAndEventsOutdated')
+                        
+                        # When we have app information (which we do in this context), status should not be Unknown
+                        # for authenticated app installations
+                        if ($PSCmdlet.ParameterSetName -eq 'List installations for the authenticated app') {
+                            $installation.Status | Should -Not -Be 'Unknown'
+                        }
+                    }
                 }
             }
 

@@ -127,7 +127,7 @@
                     $contextObj['Username'] = [string]$app.Slug
                     $contextObj['NodeID'] = [string]$app.NodeID
                     $contextObj['DatabaseID'] = [string]$app.ID
-                    $contextObj['Permissions'] = [PSCustomObject]$app.Permissions
+                    $contextObj['Permissions'] = [GitHubPermission[]]$app.Permissions
                     $contextObj['Events'] = [string[]]$app.Events
                     $contextObj['OwnerName'] = [string]$app.Owner.Name
                     $contextObj['OwnerType'] = [string]$app.Owner.Type
