@@ -1331,7 +1331,7 @@ class GitHubPermission : GitHubPermissionDefinition {
             'Enterprise' { return $full | Where-Object { $_.Scope -eq 'Enterprise' } }
             'Organization' { return $full | Where-Object { $_.Scope -in @('Organization', 'Repository') } }
             'User' { return $full | Where-Object { $_.Scope -in @('User', 'Repository') } }
-            default { return $full }
         }
+        return $full
     }
 }
