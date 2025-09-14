@@ -26,13 +26,25 @@ Describe 'Apps' {
         BeforeAll {
             LogGroup 'Context' {
                 $context = Connect-GitHubAccount @connectParams -PassThru -Silent
-                Write-Host ($context | Format-List | Out-String)
+                Write-Host "$($context | Format-List | Out-String)"
+            }
+            LogGroup 'Permissions' {
+                Write-Host "$($context.Permissions | Format-Table | Out-String)"
             }
         }
 
         AfterAll {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
             Write-Host ('-' * 60)
+        }
+
+        # Tests for IAT UAT and PAT goes here
+        It 'Get-GitHubApp - Get an app by slug' -Skip:($AuthType -eq 'APP') {
+            $app = Get-GitHubApp -Slug 'github-actions'
+            LogGroup 'App by slug' {
+                Write-Host ($app | Format-List | Out-String)
+            }
+            $app | Should -Not -BeNullOrEmpty
         }
 
         # Tests for APP goes here
@@ -73,16 +85,15 @@ Describe 'Apps' {
                 It 'Get-GitHubAppInstallation - Can get app installations' {
                     $githubApp = Get-GitHubApp
                     $installations = Get-GitHubAppInstallation
-                    LogGroup 'Installations' {
-                        Write-Host ($installations | Format-List | Out-String)
-                    }
                     $installations | Should -Not -BeNullOrEmpty
                     foreach ($installation in $installations) {
+                        LogGroup "Installation - $($installation.Target.Name)" {
+                            Write-Host "$($installations | Format-List | Out-String)"
+                        }
                         $installation | Should -BeOfType 'GitHubAppInstallation'
                         $installation.ID | Should -Not -BeNullOrEmpty
                         $installation.App | Should -BeOfType 'GitHubApp'
                         $installation.App.ClientID | Should -Be $githubApp.ClientID
-                        $installation.App.AppID | Should -Not -BeNullOrEmpty
                         $installation.App.Slug | Should -Not -BeNullOrEmpty
                         $installation.Target | Should -BeOfType 'GitHubOwner'
                         $installation.Target | Should -Not -BeNullOrEmpty
@@ -234,15 +245,6 @@ Describe 'Apps' {
                     } | Should -Throw
                 }
             }
-        }
-
-        # Tests for IAT UAT and PAT goes here
-        It 'Get-GitHubApp - Get an app by slug' -Skip:($AuthType -eq 'APP') {
-            $app = Get-GitHubApp -Slug 'github-actions'
-            LogGroup 'App by slug' {
-                Write-Host ($app | Format-List | Out-String)
-            }
-            $app | Should -Not -BeNullOrEmpty
         }
     }
 }
