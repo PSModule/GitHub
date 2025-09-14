@@ -1277,8 +1277,9 @@ class GitHubPermission : GitHubPermissionDefinition {
             'Organization' { $all | Where-Object { $_.Scope -in @('Organization', 'Repository') } }
             'User' { $all | Where-Object { $_.Scope -in @('Repository') } }
         }
-        $full = foreach ($def in $expectedDefs) {
-            [GitHubPermission]::new($def.Name, $null)
+        $full = @()
+        foreach ($def in $expectedDefs) {
+            $full += [GitHubPermission]::new($def.Name, $null)
         }
         return $full
     }
@@ -1297,3 +1298,11 @@ class GitHubPermission : GitHubPermissionDefinition {
         return $permissions | Sort-Object Scope, DisplayName
     }
 }
+
+$Object = [pscustomobject]@{
+    contents = 'read'
+    issues = 'write'
+    unknown_permission = 'custom_value'
+}
+
+$InstallationType = 'Organization'
