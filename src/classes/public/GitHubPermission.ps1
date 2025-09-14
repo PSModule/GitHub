@@ -1270,58 +1270,30 @@ class GitHubPermission : GitHubPermissionDefinition {
         $this.Value = $Value
     }
 
-    static [GitHubPermission[]] newPermission([pscustomobject] $Object) {
-        if (-not $Object) { return @() }
-        $result = @()
-        foreach ($name in ($Object | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name)) {
-            $tmpValue = $Object.$name
-            try {
-                $result += [GitHubPermission]::new($name, $tmpValue)
-            } catch {
-                # Skip invalid value for known permission (constructor throws); preserves original behavior.
-                continue
-            }
+    static [GitHubPermission[]] newPermissionListTemplate ([string] $InstallationType) {
+        $all = [GitHubPermissionDefinition]::List
+        $expectedDefs = switch ($InstallationType) {
+            'Enterprise' { $all | Where-Object { $_.Scope -eq 'Enterprise' } }
+            'Organization' { $all | Where-Object { $_.Scope -in @('Organization', 'Repository') } }
+            'User' { $all | Where-Object { $_.Scope -in @('Repository') } }
         }
-        return $result | Sort-Object Scope, DisplayName
+        $full = foreach ($def in $expectedDefs) {
+            [GitHubPermission]::new($def.Name, $null)
+        }
+        return $full
     }
 
     static [GitHubPermission[]] newPermissionList([pscustomobject] $Object, [string] $InstallationType) {
-        $granted = [GitHubPermission]::newPermission($Object)
-        $grantedLookup = @{}
-        foreach ($g in $granted) { $grantedLookup[$g.Name] = $g }
+        $permissions = [GitHubPermission]::newPermissionListTemplate($InstallationType)
 
-        $full = @()
-        foreach ($definition in [GitHubPermissionDefinition]::List) {
-            if ($grantedLookup.ContainsKey($definition.Name)) {
-                $full += $grantedLookup[$definition.Name]
+        foreach ($prop in $Object.PSObject.Properties) {
+            $knownPermission = $permissions | Where-Object { $_.Name -eq $prop.Name }
+            if ($knownPermission) {
+                $knownPermission.Value = $prop.Value
             } else {
-                $perm = [GitHubPermission]::new()
-                $perm.Name = $definition.Name
-                $perm.DisplayName = $definition.DisplayName
-                $perm.Description = $definition.Description
-                $perm.URL = $definition.URL
-                $perm.Options = $definition.Options
-                $perm.Type = $definition.Type
-                $perm.Scope = $definition.Scope
-                $perm.Value = $null
-                $full += $perm
+                $permissions += [GitHubPermission]::new($prop.Name, $prop.Value)
             }
         }
-
-        foreach ($g in $granted) {
-            if (-not ([GitHubPermissionDefinition]::List.Name -contains $g.Name)) {
-                $full += $g
-            }
-        }
-        $full = $full | Sort-Object Scope, DisplayName
-
-        if (-not $InstallationType) { return $full }
-
-        switch ($InstallationType) {
-            'Enterprise' { return $full | Where-Object { $_.Scope -eq 'Enterprise' } }
-            'Organization' { return $full | Where-Object { $_.Scope -in @('Organization', 'Repository') } }
-            'User' { return $full | Where-Object { $_.Scope -in @('Repository') } }
-        }
-        return $full
+        return $permissions | Sort-Object Scope, DisplayName
     }
 }

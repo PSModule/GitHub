@@ -56,7 +56,9 @@ Describe 'Apps' {
                     $app.Url | Should -Not -BeNullOrEmpty
                     $app.CreatedAt | Should -Not -BeNullOrEmpty
                     $app.UpdatedAt | Should -Not -BeNullOrEmpty
-                    $app.Permissions | Should -BeOfType 'PSCustomObject'
+                    $app.Permissions.Count | Should -BeGreaterThan 0
+                    $app.Permissions | Should -BeOfType 'GitHubPermission'
+                    $app.Permissions.Name | Should -BeIn ([GitHubPermissionDefinition]::List).Name
                     $app.Events | Should -BeOfType 'string'
                     $app.Installations | Should -Not -BeNullOrEmpty
                 }
@@ -86,16 +88,17 @@ Describe 'Apps' {
                         $installation.Target | Should -Not -BeNullOrEmpty
                         $installation.Type | Should -BeIn @('Enterprise', 'Organization', 'User')
                         $installation.RepositorySelection | Should -Not -BeNullOrEmpty
-                        $installation.Permissions | Should -BeOfType 'PSCustomObject'
+                        $installation.Permissions.Count | Should -BeGreaterThan 0
+                        $installation.Permissions | Should -BeOfType [GitHubPermission]
+                        $installation.Permissions.Name | Should -BeIn ([GitHubPermissionDefinition]::List).Name
                         $installation.Events | Should -BeOfType 'string'
                         $installation.CreatedAt | Should -Not -BeNullOrEmpty
                         $installation.UpdatedAt | Should -Not -BeNullOrEmpty
                         $installation.SuspendedAt | Should -BeNullOrEmpty
                         $installation.SuspendedBy | Should -BeOfType 'GitHubUser'
                         $installation.SuspendedBy | Should -BeNullOrEmpty
-                        # Validate the new Status property
                         $installation.Status | Should -Not -BeNullOrEmpty
-                        $installation.Status | Should -BeIn @('Unknown', 'UpToDate', 'PermissionsOutdated', 'EventsOutdated', 'PermissionsAndEventsOutdated')
+                        $installation.Status | Should -BeIn @('Ok', 'Outdated')
                     }
                 }
 
@@ -116,45 +119,17 @@ Describe 'Apps' {
                     $installation.Target | Should -Be $owner
                     $installation.Type | Should -Be $ownerType
                     $installation.RepositorySelection | Should -Not -BeNullOrEmpty
-                    $installation.Permissions | Should -BeOfType 'PSCustomObject'
+                    $installation.Permissions.Count | Should -BeGreaterThan 0
+                    $installation.Permissions | Should -BeOfType [GitHubPermission]
+                    $installation.Permissions.Name | Should -BeIn ([GitHubPermissionDefinition]::List).Name
                     $installation.Events | Should -BeOfType 'string'
                     $installation.CreatedAt | Should -Not -BeNullOrEmpty
                     $installation.UpdatedAt | Should -Not -BeNullOrEmpty
                     $installation.SuspendedAt | Should -BeNullOrEmpty
                     $installation.SuspendedBy | Should -BeOfType 'GitHubUser'
                     $installation.SuspendedBy | Should -BeNullOrEmpty
-                    # Validate the new Status property
                     $installation.Status | Should -Not -BeNullOrEmpty
-                    $installation.Status | Should -BeIn @('Unknown', 'UpToDate', 'PermissionsOutdated', 'EventsOutdated', 'PermissionsAndEventsOutdated')
-                }
-
-                It 'Get-GitHubAppInstallation - Status tracking functionality' {
-                    $githubApp = Get-GitHubApp
-                    $installations = Get-GitHubAppInstallation
-                    LogGroup 'Status tracking test' {
-                        Write-Host "Testing installation status tracking against app configuration"
-                        Write-Host "App Permissions: $($githubApp.Permissions | ConvertTo-Json -Compress)"
-                        Write-Host "App Events: $($githubApp.Events -join ', ')"
-                    }
-                    
-                    foreach ($installation in $installations) {
-                        LogGroup "Installation $($installation.ID) Status" {
-                            Write-Host "Installation ID: $($installation.ID)"
-                            Write-Host "Target: $($installation.Target.Name)"
-                            Write-Host "Status: $($installation.Status)"
-                            Write-Host "Installation Permissions: $($installation.Permissions | ConvertTo-Json -Compress)"
-                            Write-Host "Installation Events: $($installation.Events -join ', ')"
-                        }
-                        
-                        # The status should be calculated based on app vs installation comparison
-                        $installation.Status | Should -BeIn @('Unknown', 'UpToDate', 'PermissionsOutdated', 'EventsOutdated', 'PermissionsAndEventsOutdated')
-                        
-                        # When we have app information (which we do in this context), status should not be Unknown
-                        # for authenticated app installations
-                        if ($PSCmdlet.ParameterSetName -eq 'List installations for the authenticated app') {
-                            $installation.Status | Should -Not -Be 'Unknown'
-                        }
-                    }
+                    $installation.Status | Should -BeIn @('Ok', 'Outdated')
                 }
             }
 
@@ -235,6 +210,12 @@ Describe 'Apps' {
                     $context.TokenType | Should -Be 'ghs'
                     $context.HttpVersion | Should -Be $config.HttpVersion
                     $context.PerPage | Should -Be $config.PerPage
+                    $context.Permissions.Count | Should -BeGreaterThan 0
+                    $context.Permissions | Should -BeOfType [GitHubPermission]
+                    $context.Permissions.Name | Should -BeIn ([GitHubPermission]::List).Name
+                    $context.Permissions.Value | Should -BeIn ([GitHubPermission]::List)
+                    $context.Events | Should -BeOfType 'string'
+
                 }
 
                 It 'Connect-GitHubApp - TokenExpiresIn property should be calculated correctly' {
