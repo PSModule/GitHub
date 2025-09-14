@@ -1298,11 +1298,3 @@ class GitHubPermission : GitHubPermissionDefinition {
         return $permissions | Sort-Object Scope, DisplayName
     }
 }
-
-$Object = [pscustomobject]@{
-    contents = 'read'
-    issues = 'write'
-    unknown_permission = 'custom_value'
-}
-
-$InstallationType = 'Organization'
