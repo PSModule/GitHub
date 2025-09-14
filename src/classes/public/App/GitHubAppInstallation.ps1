@@ -151,7 +151,7 @@
                 $this.App.Permissions | Where-Object { $_.Scope -in @('Organization', 'Repository') }
             }
             'User' {
-                $this.App.Permissions | Where-Object { $_.Scope -in @('User', 'Repository') }
+                $this.App.Permissions | Where-Object { $_.Scope -in @('Repository') }
             }
             default {
                 $this.App.Permissions
