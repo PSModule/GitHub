@@ -1276,6 +1276,7 @@ class GitHubPermission : GitHubPermissionDefinition {
             'Enterprise' { $all | Where-Object { $_.Scope -eq 'Enterprise' } }
             'Organization' { $all | Where-Object { $_.Scope -in @('Organization', 'Repository') } }
             'User' { $all | Where-Object { $_.Scope -in @('Repository') } }
+            default { $all }
         }
         $full = @()
         foreach ($def in $expectedDefs) {
