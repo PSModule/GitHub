@@ -1303,16 +1303,17 @@ class GitHubPermission : GitHubPermissionDefinition {
     # Create a new list of all permissions with values from a PSCustomObject
     static [System.Collections.Generic.List[GitHubPermission]] NewPermissionList([pscustomobject] $Object) {
         $all = [GitHubPermission]::NewPermissionList()
-        foreach ($prop in $Object.PSObject.Properties) {
-            $knownPermission = $all | Where-Object { $_.Name -eq $prop.Name }
+        foreach ($name in $Object.PSObject.Properties.Name) {
+            $objectValue = $Object.$name
+            $knownPermission = $all | Where-Object { $_.Name -eq $name }
             if ($knownPermission) {
-                $knownPermission.Value = $prop.Value
+                $knownPermission.Value = $objectValue
             } else {
                 $all.Add(
                     [GitHubPermission]@{
-                        Name        = $prop.Name
-                        Value       = $prop.Value
-                        DisplayName = $prop.Name
+                        Name        = $name
+                        Value       = $objectValue
+                        DisplayName = $name
                         Description = 'Unknown permission - Open issue to add metadata'
                         URL         = $null
                         Options     = @()
@@ -1328,16 +1329,17 @@ class GitHubPermission : GitHubPermissionDefinition {
     # Create a new list of permissions filtered by installation type with values from a PSCustomObject
     static [System.Collections.Generic.List[GitHubPermission]] NewPermissionList([pscustomobject] $Object, [string] $InstallationType) {
         $all = [GitHubPermission]::NewPermissionList()
-        foreach ($prop in $Object.PSObject.Properties) {
-            $knownPermission = $all | Where-Object { $_.Name -eq $prop.Name }
+        foreach ($name in $Object.PSObject.Properties.Name) {
+            $objectValue = $Object.$name
+            $knownPermission = $all | Where-Object { $_.Name -eq $name }
             if ($knownPermission) {
-                $knownPermission.Value = $prop.Value
+                $knownPermission.Value = $objectValue
             } else {
                 $all.Add(
                     [GitHubPermission]@{
-                        Name        = $prop.Name
-                        Value       = $prop.Value
-                        DisplayName = $prop.Name
+                        Name        = $name
+                        Value       = $objectValue
+                        DisplayName = $name
                         Description = 'Unknown permission - Open issue to add metadata'
                         URL         = $null
                         Options     = @()
