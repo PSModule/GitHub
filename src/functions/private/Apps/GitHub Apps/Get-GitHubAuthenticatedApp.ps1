@@ -41,8 +41,7 @@
             Context     = $Context
         }
 
-        $response = Invoke-GitHubAPI @apiParams
-         | ForEach-Object {
+        Invoke-GitHubAPI @apiParams | ForEach-Object {
             [GitHubApp]::new($_.Response)
         }
     }
