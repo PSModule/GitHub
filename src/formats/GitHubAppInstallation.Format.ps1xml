@@ -60,15 +60,7 @@
                                 <PropertyName>Type</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <ScriptBlock>
-                                    switch ($_.Status) {
-                                        'UpToDate' { if ($Host.UI.SupportsVirtualTerminal -and ($env:GITHUB_ACTIONS -ne 'true')) { "$($PSStyle.Foreground.Green)✓$($PSStyle.Reset)" } else { 'UpToDate' } }
-                                        'PermissionsOutdated' { if ($Host.UI.SupportsVirtualTerminal -and ($env:GITHUB_ACTIONS -ne 'true')) { "$($PSStyle.Foreground.Yellow)⚠P$($PSStyle.Reset)" } else { 'PermissionsOutdated' } }
-                                        'EventsOutdated' { if ($Host.UI.SupportsVirtualTerminal -and ($env:GITHUB_ACTIONS -ne 'true')) { "$($PSStyle.Foreground.Yellow)⚠E$($PSStyle.Reset)" } else { 'EventsOutdated' } }
-                                        'PermissionsAndEventsOutdated' { if ($Host.UI.SupportsVirtualTerminal -and ($env:GITHUB_ACTIONS -ne 'true')) { "$($PSStyle.Foreground.Red)✗$($PSStyle.Reset)" } else { 'PermissionsAndEventsOutdated' } }
-                                        default { if ($Host.UI.SupportsVirtualTerminal -and ($env:GITHUB_ACTIONS -ne 'true')) { "$($PSStyle.Foreground.BrightBlack)?$($PSStyle.Reset)" } else { $_.Status } }
-                                    }
-                                </ScriptBlock>
+                                <PropertyName>Status</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>CreatedAt</PropertyName>
