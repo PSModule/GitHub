@@ -46,13 +46,13 @@ Describe 'Permissions' {
                 }
             }
 
-            It 'App context should have Permissions property populated' -Skip:($AuthType -ne 'APP') {
+            It 'App context should have Permissions property populated' {
                 $installationContext.Permissions.Count | Should -BeGreaterThan 0
                 $installationContext.Permissions | Should -BeOfType [GitHubPermission]
                 $installationContext.Permissions | Should -BeIn $permissionsDefinitions.Name
             }
 
-            It 'All app installation permissions should exist in permission catalog and be valid options' -Skip:($AuthType -ne 'APP') {
+            It 'All app installation permissions should exist in permission catalog and be valid options' {
                 $catalog = Get-GitHubPermissionDefinition
                 $catalogNames = $catalog.Name
 
@@ -77,7 +77,7 @@ Describe 'Permissions' {
                 }
             }
 
-            It 'Permission catalog should contain all permissions granted to the app installation' -Skip:($AuthType -ne 'APP') {
+            It 'Permission catalog should contain all permissions granted to the app installation' {
                 $catalog = Get-GitHubPermissionDefinition
                 $missing = @()
                 $installationContext.Permissions.PSObject.Properties | ForEach-Object {
