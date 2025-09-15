@@ -85,7 +85,7 @@ Describe 'Apps' {
                 $installations | Should -Not -BeNullOrEmpty
                 foreach ($installation in $installations) {
                     LogGroup "Installation - $($installation.Target.Name)" {
-                        Write-Host "$($installations | Format-List | Out-String)"
+                        Write-Host "$($installation | Format-List | Out-String)"
                     }
                     $installation | Should -BeOfType 'GitHubAppInstallation'
                     $installation.ID | Should -Not -BeNullOrEmpty
