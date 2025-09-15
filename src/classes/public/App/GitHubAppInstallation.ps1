@@ -14,7 +14,7 @@
     # The type of repository selection.
     [string] $RepositorySelection
 
-    # The permissions that the app has on the target (full catalog for applicable scopes).
+    # The permissions that the app has on the target.
     [GitHubPermission[]] $Permissions
 
     # The events that the app is subscribing to.
