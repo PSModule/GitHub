@@ -2,7 +2,7 @@
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
     $pattern = switch (Get-GitHubConfig -Name CompletionMode) { 'Contains' { "*$wordToComplete*" } default { "$wordToComplete*" } }
-    $script:GitHub.Permissions.Name | Sort-Object -Unique | Where-Object { $_ -like $pattern } | ForEach-Object {
+    [GitHubPermissionDefinition]::List.Name | Sort-Object -Unique | Where-Object { $_ -like $pattern } | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
     }
 }
@@ -11,7 +11,7 @@ Register-ArgumentCompleter -CommandName Get-GitHubPermissionDefinition -Paramete
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
     $pattern = switch (Get-GitHubConfig -Name CompletionMode) { 'Contains' { "*$wordToComplete*" } default { "$wordToComplete*" } }
-    $script:GitHub.Permissions.DisplayName | Sort-Object -Unique | Where-Object { $_ -like $pattern } | ForEach-Object {
+    [GitHubPermissionDefinition]::List.DisplayName | Sort-Object -Unique | Where-Object { $_ -like $pattern } | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
     }
 }
@@ -20,7 +20,7 @@ Register-ArgumentCompleter -CommandName Get-GitHubPermissionDefinition -Paramete
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
     $pattern = switch (Get-GitHubConfig -Name CompletionMode) { 'Contains' { "*$wordToComplete*" } default { "$wordToComplete*" } }
-    $script:GitHub.Permissions.Type | Sort-Object -Unique | Where-Object { $_ -like $pattern } | ForEach-Object {
+    [GitHubPermissionDefinition]::List.Type | Sort-Object -Unique | Where-Object { $_ -like $pattern } | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
     }
 }
@@ -29,7 +29,7 @@ Register-ArgumentCompleter -CommandName Get-GitHubPermissionDefinition -Paramete
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
     $pattern = switch (Get-GitHubConfig -Name CompletionMode) { 'Contains' { "*$wordToComplete*" } default { "$wordToComplete*" } }
-    $script:GitHub.Permissions.Scope | Sort-Object -Unique | Where-Object { $_ -like $pattern } | ForEach-Object {
+    [GitHubPermissionDefinition]::List.Scope | Sort-Object -Unique | Where-Object { $_ -like $pattern } | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
     }
 }

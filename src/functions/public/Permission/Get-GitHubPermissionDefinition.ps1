@@ -86,7 +86,7 @@ function Get-GitHubPermissionDefinition {
                 return $false
             }
 
-            $script:GitHub.Permissions | Where-Object {
+            [GitHubPermissionDefinition]::List | Where-Object {
                 (& $test -Value $_.Name -Patterns $Name) -and
                 (& $test -Value $_.DisplayName -Patterns $DisplayName) -and
                 (& $test -Value $_.Type -Patterns $Type) -and

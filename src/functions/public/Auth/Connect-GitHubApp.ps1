@@ -134,9 +134,9 @@
                 HttpVersion      = [string]$Context.HttpVersion
                 PerPage          = [int]$Context.PerPage
                 ClientID         = [string]$Context.ClientID
-                InstallationID   = [string]$installation.id
-                Permissions      = [pscustomobject]$installation.permissions
-                Events           = [string[]]$installation.events
+                InstallationID   = [string]$installation.ID
+                Permissions      = [GitHubPermission[]]$installation.Permissions
+                Events           = [string[]]$installation.Events
                 InstallationType = [string]$installation.Type
                 Token            = [securestring]$token.Token
                 TokenExpiresAt   = [datetime]$token.ExpiresAt

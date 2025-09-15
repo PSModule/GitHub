@@ -6,7 +6,7 @@
     [System.Nullable[uint64]] $InstallationID
 
     # The permissions that the app is requesting on the target
-    [pscustomobject] $Permissions
+    [GitHubPermission[]] $Permissions
 
     # The events that the app is subscribing to once installed
     [string[]] $Events
@@ -41,7 +41,7 @@
         $this.PerPage = $Object.PerPage
         $this.ClientID = $Object.ClientID
         $this.InstallationID = $Object.InstallationID
-        $this.Permissions = $Object.Permissions
+        $this.Permissions = [GitHubPermission]::NewPermissionList($Object.Permissions, $Object.InstallationType)
         $this.Events = $Object.Events
         $this.InstallationType = $Object.InstallationType
         $this.InstallationName = $Object.InstallationName

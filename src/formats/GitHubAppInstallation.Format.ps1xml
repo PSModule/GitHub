@@ -21,6 +21,9 @@
                         <Label>Type</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
+                        <Label>Status</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
                         <Label>CreatedAt</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
@@ -57,6 +60,9 @@
                                 <PropertyName>Type</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
+                                <PropertyName>Status</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
                                 <PropertyName>CreatedAt</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
@@ -87,6 +93,9 @@
                             </ListItem>
                             <ListItem>
                                 <PropertyName>Type</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Status</PropertyName>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>Url</PropertyName>

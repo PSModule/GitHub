@@ -36,7 +36,7 @@
     [System.Nullable[datetime]] $UpdatedAt
 
     # The permissions that the app is requesting.
-    [pscustomobject] $Permissions
+    [GitHubPermission[]] $Permissions
 
     # The events that the app is subscribing to on its target.
     [string[]] $Events
@@ -59,7 +59,7 @@
         $this.Url = $Object.html_url
         $this.CreatedAt = $Object.created_at
         $this.UpdatedAt = $Object.updated_at
-        $this.Permissions = $Object.permissions
+        $this.Permissions = [GitHubPermission]::NewPermissionList($Object.permissions)
         $this.Events = , ($Object.events)
         $this.Installations = $Object.installations_count
     }

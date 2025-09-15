@@ -124,6 +124,7 @@ Describe 'Auth' {
         It 'Connect-GitHubAccount - Connects to GitHub CLI on runners' {
             [string]::IsNullOrEmpty($(gh auth token)) | Should -Be $false
         }
+
         It 'Get-GitHubViewer - Gets the logged in context' {
             $viewer = Get-GitHubViewer
             LogGroup 'Viewer' {
