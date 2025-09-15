@@ -1271,25 +1271,26 @@ class GitHubPermission : GitHubPermissionDefinition {
     }
 
     # Create a new list of all known permissions with null values
-    static [System.Collections.Generic.List[GitHubPermission]] NewPermissionList() {
-        $tmpList = [System.Collections.Generic.List[GitHubPermission]]::new()
+    static [System.Collections.ArrayList] NewPermissionList() {
+        $tmpList = [System.Collections.ArrayList]::new()
         foreach ($def in [GitHubPermissionDefinition]::List) {
-            $tmpList.Add([GitHubPermission]@{
-                    Name        = $def.Name
-                    Value       = $null
-                    DisplayName = $def.DisplayName
-                    Description = $def.Description
-                    URL         = $def.URL
-                    Options     = $def.Options
-                    Type        = $def.Type
-                    Scope       = $def.Scope
-                })
+            $object = [GitHubPermission]@{
+                Name        = $def.Name
+                Value       = $null
+                DisplayName = $def.DisplayName
+                Description = $def.Description
+                URL         = $def.URL
+                Options     = $def.Options
+                Type        = $def.Type
+                Scope       = $def.Scope
+            }
+            $tmpList.Add($object)
         }
         return $tmpList | Sort-Object Scope, DisplayName
     }
 
     # Create a new list of permissions filtered by installation typem with null values
-    static [System.Collections.Generic.List[GitHubPermission]] NewPermissionList([string] $InstallationType) {
+    static [System.Collections.ArrayList] NewPermissionList([string] $InstallationType) {
         $all = [GitHubPermission]::NewPermissionList()
         $returned = switch ($InstallationType) {
             'Enterprise' { $all | Where-Object { $_.Scope -eq 'Enterprise' } }
@@ -1301,7 +1302,7 @@ class GitHubPermission : GitHubPermissionDefinition {
     }
 
     # Create a new list of all permissions with values from a PSCustomObject
-    static [System.Collections.Generic.List[GitHubPermission]] NewPermissionList([pscustomobject] $Object) {
+    static [System.Collections.ArrayList] NewPermissionList([pscustomobject] $Object) {
         $all = [GitHubPermission]::NewPermissionList()
         foreach ($name in $Object.PSObject.Properties.Name) {
             $objectValue = $Object.$name
@@ -1327,7 +1328,7 @@ class GitHubPermission : GitHubPermissionDefinition {
     }
 
     # Create a new list of permissions filtered by installation type with values from a PSCustomObject
-    static [System.Collections.Generic.List[GitHubPermission]] NewPermissionList([pscustomobject] $Object, [string] $InstallationType) {
+    static [System.Collections.ArrayList] NewPermissionList([pscustomobject] $Object, [string] $InstallationType) {
         $all = [GitHubPermission]::NewPermissionList()
         foreach ($name in $Object.PSObject.Properties.Name) {
             $objectValue = $Object.$name

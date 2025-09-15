@@ -58,7 +58,7 @@
         $this.Target = [GitHubOwner]::new($Object.account)
         $this.Type = $Object.target_type
         $this.RepositorySelection = $Object.repository_selection
-        $this.Permissions = [GitHubPermission]::newPermissionList($Object.permissions, $this.Type)
+        $this.Permissions = [GitHubPermission]::NewPermissionList($Object.permissions, $this.Type)
         $this.Events = , ($Object.events)
         $this.FilePaths = $Object.single_file_paths
         $this.CreatedAt = $Object.created_at
@@ -75,7 +75,7 @@
         $this.Target = [GitHubOwner]::new($Object.account)
         $this.Type = $Object.target_type
         $this.RepositorySelection = $Object.repository_selection
-        $this.Permissions = [GitHubPermission]::newPermissionList($Object.permissions, $this.Type)
+        $this.Permissions = [GitHubPermission]::NewPermissionList($Object.permissions, $this.Type)
         $this.Events = , ($Object.events)
         $this.FilePaths = $Object.single_file_paths
         $this.CreatedAt = $Object.created_at
@@ -102,7 +102,7 @@
         }
         $this.Type = $Type
         $this.RepositorySelection = $Object.repository_selection
-        $this.Permissions = [GitHubPermission]::newPermissionList($Object.permissions, $this.Type)
+        $this.Permissions = [GitHubPermission]::NewPermissionList($Object.permissions, $this.Type)
         $this.Events = , ($Object.events)
         $this.FilePaths = $Object.single_file_paths
         $this.CreatedAt = $Object.created_at
@@ -123,7 +123,7 @@
         }
         $this.Type = $Type
         $this.RepositorySelection = $Object.repository_selection
-        $this.Permissions = [GitHubPermission]::newPermissionList($Object.permissions, $this.Type)
+        $this.Permissions = [GitHubPermission]::NewPermissionList($Object.permissions, $this.Type)
         $this.Events = , ($Object.events)
         $this.FilePaths = $Object.single_file_paths
         $this.CreatedAt = $Object.created_at
