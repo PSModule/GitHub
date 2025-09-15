@@ -93,7 +93,7 @@ Describe 'Permissions' {
             $result = Get-GitHubPermissionDefinition
             $result | Should -Not -BeNullOrEmpty
             $result | Should -BeOfType [GitHubPermissionDefinition]
-            ($result | Measure-Object).Count | Should -BeGreaterThan 0
+            $result.Count | Should -BeGreaterThan 0
         }
 
         It 'Should return only Fine-grained permissions when filtered by Type' {
