@@ -1318,13 +1318,11 @@ class GitHubPermission : GitHubPermissionDefinition {
     static [GitHubPermission[]] NewPermissionList([object[]] $Objects) {
         $all = [GitHubPermission]::NewPermissionList()
         foreach ($obj in $Objects) {
-            $name = $obj.Name
-            $value = $obj.Value
-            $knownPermission = $all | Where-Object { $_.Name -eq $name }
+            $knownPermission = $all | Where-Object { $_.Name -eq $obj.Name }
             if ($knownPermission) {
-                $knownPermission.Value = $value
+                $knownPermission.Value = $obj.Value
             } else {
-                $all += [GitHubPermission]::new($name, $value)
+                $all += [GitHubPermission]::new($obj.Name, $obj.Value)
             }
         }
         return $all | Sort-Object Scope, DisplayName
@@ -1334,13 +1332,11 @@ class GitHubPermission : GitHubPermissionDefinition {
     static [GitHubPermission[]] NewPermissionList([object[]] $Objects, [string] $InstallationType) {
         $all = [GitHubPermission]::NewPermissionList($InstallationType)
         foreach ($obj in $Objects) {
-            $name = $obj.Name
-            $value = $obj.Value
-            $knownPermission = $all | Where-Object { $_.Name -eq $name }
+            $knownPermission = $all | Where-Object { $_.Name -eq $obj.Name }
             if ($knownPermission) {
-                $knownPermission.Value = $value
+                $knownPermission.Value = $obj.Value
             } else {
-                $all += [GitHubPermission]::new($name, $value)
+                $all += [GitHubPermission]::new($obj.Name, $obj.Value)
             }
         }
         return $all | Sort-Object Scope, DisplayName
