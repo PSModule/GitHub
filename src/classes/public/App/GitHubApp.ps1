@@ -59,7 +59,7 @@
         $this.Url = $Object.html_url
         $this.CreatedAt = $Object.created_at
         $this.UpdatedAt = $Object.updated_at
-        $this.Permissions = [GitHubPermission]::newPermissionList($Object.permissions, $null)
+        $this.Permissions = [GitHubPermission]::newPermissionList($Object.permissions)
         $this.Events = , ($Object.events)
         $this.Installations = $Object.installations_count
     }

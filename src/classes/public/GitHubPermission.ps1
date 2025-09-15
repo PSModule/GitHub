@@ -1270,32 +1270,83 @@ class GitHubPermission : GitHubPermissionDefinition {
         $this.Value = $Value
     }
 
-    static [GitHubPermission[]] newPermissionListTemplate ([string] $InstallationType) {
-        $all = [GitHubPermissionDefinition]::List
-        $expectedDefs = switch ($InstallationType) {
+    # Create a new list of all known permissions with null values
+    static [System.Collections.Generic.List[GitHubPermission]] NewPermissionList() {
+        $tmpList = [System.Collections.Generic.List[GitHubPermission]]::new()
+        foreach ($def in [GitHubPermissionDefinition]::List) {
+            $tmpList.Add([GitHubPermission]@{
+                    Name        = $def.Name
+                    Value       = $null
+                    DisplayName = $def.DisplayName
+                    Description = $def.Description
+                    URL         = $def.URL
+                    Options     = $def.Options
+                    Type        = $def.Type
+                    Scope       = $def.Scope
+                })
+        }
+        return $tmpList | Sort-Object Scope, DisplayName
+    }
+
+    # Create a new list of permissions filtered by installation typem with null values
+    static [System.Collections.Generic.List[GitHubPermission]] NewPermissionList([string] $InstallationType) {
+        $all = [GitHubPermission]::NewPermissionList()
+        $returned = switch ($InstallationType) {
             'Enterprise' { $all | Where-Object { $_.Scope -eq 'Enterprise' } }
             'Organization' { $all | Where-Object { $_.Scope -in @('Organization', 'Repository') } }
             'User' { $all | Where-Object { $_.Scope -in @('Repository') } }
             default { $all }
         }
-        $full = @()
-        foreach ($def in $expectedDefs) {
-            $full += [GitHubPermission]::new($def.Name, $null)
-        }
-        return $full
+        return $returned | Sort-Object Scope, DisplayName
     }
 
-    static [GitHubPermission[]] newPermissionList([pscustomobject] $Object, [string] $InstallationType) {
-        $permissions = [GitHubPermission]::newPermissionListTemplate($InstallationType)
-
+    # Create a new list of all permissions with values from a PSCustomObject
+    static [System.Collections.Generic.List[GitHubPermission]] NewPermissionList([pscustomobject] $Object) {
+        $all = [GitHubPermission]::NewPermissionList()
         foreach ($prop in $Object.PSObject.Properties) {
-            $knownPermission = $permissions | Where-Object { $_.Name -eq $prop.Name }
+            $knownPermission = $all | Where-Object { $_.Name -eq $prop.Name }
             if ($knownPermission) {
                 $knownPermission.Value = $prop.Value
             } else {
-                $permissions += [GitHubPermission]::new($prop.Name, $prop.Value)
+                $all.Add(
+                    [GitHubPermission]@{
+                        Name        = $prop.Name
+                        Value       = $prop.Value
+                        DisplayName = $prop.Name
+                        Description = 'Unknown permission - Open issue to add metadata'
+                        URL         = $null
+                        Options     = @()
+                        Type        = 'Unknown'
+                        Scope       = 'Unknown'
+                    }
+                )
             }
         }
-        return $permissions | Sort-Object Scope, DisplayName
+        return $all | Sort-Object Scope, DisplayName
+    }
+
+    # Create a new list of permissions filtered by installation type with values from a PSCustomObject
+    static [System.Collections.Generic.List[GitHubPermission]] NewPermissionList([pscustomobject] $Object, [string] $InstallationType) {
+        $all = [GitHubPermission]::NewPermissionList()
+        foreach ($prop in $Object.PSObject.Properties) {
+            $knownPermission = $all | Where-Object { $_.Name -eq $prop.Name }
+            if ($knownPermission) {
+                $knownPermission.Value = $prop.Value
+            } else {
+                $all.Add(
+                    [GitHubPermission]@{
+                        Name        = $prop.Name
+                        Value       = $prop.Value
+                        DisplayName = $prop.Name
+                        Description = 'Unknown permission - Open issue to add metadata'
+                        URL         = $null
+                        Options     = @()
+                        Type        = 'Unknown'
+                        Scope       = 'Unknown'
+                    }
+                )
+            }
+        }
+        return $all | Sort-Object Scope, DisplayName
     }
 }
