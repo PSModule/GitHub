@@ -39,13 +39,17 @@ Describe 'Permissions' {
             BeforeAll {
                 $installationContext = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
                 LogGroup 'Context - Installation' {
-                    Write-Host ($installationContext | Format-List | Out-String)
+                    Write-Host "$($installationContext | Format-List | Out-String)"
+                }
+                LogGroup 'Permissions' {
+                    Write-Host "$($installationContext.Permissions | Format-List | Out-String)"
                 }
             }
 
             It 'App context should have Permissions property populated' -Skip:($AuthType -ne 'APP') {
-                $installationContext.Permissions | Should -Not -BeNullOrEmpty
-                $installationContext.Permissions | Should -BeOfType [pscustomobject]
+                $installationContext.Permissions.Count | Should -BeGreaterThan 0
+                $installationContext.Permissions | Should -BeOfType [GitHubPermission]
+                $installationContext.Permissions | Should -BeIn $permissionsDefinitions.Name
             }
 
             It 'All app installation permissions should exist in permission catalog and be valid options' -Skip:($AuthType -ne 'APP') {
