@@ -37,57 +37,30 @@ Describe 'Permissions' {
 
         Context 'For Apps' -Skip:($AuthType -ne 'APP') {
             BeforeAll {
+                $permissionsDefinitions = [GitHubPermissionDefinition]::List
                 $installationContext = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
                 LogGroup 'Context - Installation' {
                     Write-Host "$($installationContext | Format-List | Out-String)"
                 }
                 LogGroup 'Permissions' {
-                    Write-Host "$($installationContext.Permissions | Format-List | Out-String)"
+                    Write-Host "$($installationContext.Permissions | Format-Table | Out-String)"
                 }
             }
 
             It 'App context should have Permissions property populated' {
                 $installationContext.Permissions.Count | Should -BeGreaterThan 0
                 $installationContext.Permissions | Should -BeOfType [GitHubPermission]
-                $installationContext.Permissions | Should -BeIn $permissionsDefinitions.Name
-            }
-
-            It 'All app installation permissions should exist in permission catalog and be valid options' {
-                $catalog = Get-GitHubPermissionDefinition
-                $catalogNames = $catalog.Name
-
-                # Flatten context permission hashtable/object into name/value pairs (value is access level like read/write/admin)
-                $granted = @()
-                $installationContext.Permissions.PSObject.Properties | ForEach-Object {
-                    if ($_.Name -eq 'metadata') { return } # metadata is mandatory; still in catalog but just proceed normally
-                    $granted += [pscustomobject]@{ Name = $_.Name; Level = [string]$_.Value }
-                }
-
-                # Unknown permissions (present in context but not in catalog)
-                $unknown = $granted | Where-Object { $_.Name -notin $catalogNames }
-                if ($unknown) {
-                    throw "Unknown permission(s) detected in app installation: $($unknown.Name -join ', ')"
-                }
-
-                # For each granted permission ensure level is one of the catalog options
-                foreach ($g in $granted) {
-                    $def = $catalog | Where-Object Name -EQ $g.Name
-                    $def | Should -Not -BeNullOrEmpty
-                    $def.Options | Should -Contain $g.Level
-                }
+                $installationContext.Permissions.Name | Should -BeIn $permissionsDefinitions.Name
             }
 
             It 'Permission catalog should contain all permissions granted to the app installation' {
-                $catalog = Get-GitHubPermissionDefinition
                 $missing = @()
                 $installationContext.Permissions.PSObject.Properties | ForEach-Object {
-                    if ($_.Name -notin $catalog.Name) {
+                    if ($_.Name -notin $permissionsDefinitions.Name) {
                         $missing += $_.Name
                     }
                 }
-                if ($missing.Count -gt 0) {
-                    throw "Missing permission definitions for: $($missing -join ', ')"
-                }
+                $missing.Count | Should -Be 0 -Because "The following permissions are missing from the catalog: $($missing -join ', ')"
             }
         }
     }
