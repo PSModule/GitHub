@@ -1300,7 +1300,7 @@ class GitHubPermission : GitHubPermissionDefinition {
     }
 
     # Create a new list of permissions filtered by installation type with values from a PSCustomObject
-    static [System.Collections.ArrayList] NewPermissionList([pscustomobject] $Object, [string] $InstallationType) {
+    static [GitHubPermission[]] NewPermissionList([pscustomobject] $Object, [string] $InstallationType) {
         $all = [GitHubPermission]::NewPermissionList($InstallationType)
         foreach ($name in $Object.PSObject.Properties.Name) {
             $objectValue = $Object.$name
@@ -1309,6 +1309,38 @@ class GitHubPermission : GitHubPermissionDefinition {
                 $knownPermission.Value = $objectValue
             } else {
                 $all += [GitHubPermission]::new($name, $objectValue)
+            }
+        }
+        return $all | Sort-Object Scope, DisplayName
+    }
+
+    # Create a new list of permissions with values from an array of objects (import functionality)
+    static [GitHubPermission[]] NewPermissionList([object[]] $Objects) {
+        $all = [GitHubPermission]::NewPermissionList()
+        foreach ($obj in $Objects) {
+            $name = $obj.Name
+            $value = $obj.Value
+            $knownPermission = $all | Where-Object { $_.Name -eq $name }
+            if ($knownPermission) {
+                $knownPermission.Value = $value
+            } else {
+                $all += [GitHubPermission]::new($name, $value)
+            }
+        }
+        return $all | Sort-Object Scope, DisplayName
+    }
+
+    # Create a new list of permissions filtered by installation type with values from an array of objects (import functionality)
+    static [GitHubPermission[]] NewPermissionList([object[]] $Objects, [string] $InstallationType) {
+        $all = [GitHubPermission]::NewPermissionList($InstallationType)
+        foreach ($obj in $Objects) {
+            $name = $obj.Name
+            $value = $obj.Value
+            $knownPermission = $all | Where-Object { $_.Name -eq $name }
+            if ($knownPermission) {
+                $knownPermission.Value = $value
+            } else {
+                $all += [GitHubPermission]::new($name, $value)
             }
         }
         return $all | Sort-Object Scope, DisplayName
