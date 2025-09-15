@@ -55,7 +55,7 @@ Describe 'Permissions' {
 
             It 'Permission catalog should contain all permissions granted to the app installation' {
                 $missing = @()
-                $installationContext.Permissions.PSObject.Properties | ForEach-Object {
+                $installationContext.Permissions | ForEach-Object {
                     if ($_.Name -notin $permissionsDefinitions.Name) {
                         $missing += $_.Name
                     }
