@@ -14,7 +14,11 @@
 
     $contexts += Get-GitHubContext -ListAvailable -Verbose:$false -Debug:$false
     $contexts = $contexts | Sort-Object -Property Name
-    $contexts | Where-Object { $_.Name -like $pattern } | ForEach-Object {
+    $filteredOptions = $contexts | Where-Object { $_.Name -like $pattern }
+    if (-not $filteredOptions) {
+        return $null
+    }
+    $filteredOptions | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_.Name, $_.Name, 'ParameterValue', $_.Name)
     }
 }

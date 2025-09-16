@@ -8,7 +8,11 @@
         Verbose = $false
         Debug   = $false
     }
-    Get-GitHubOrganization @params | Where-Object { $_.Name -like $pattern } | ForEach-Object {
+    $filteredOptions = Get-GitHubOrganization @params | Where-Object { $_.Name -like $pattern }
+    if (-not $filteredOptions) {
+        return $null
+    }
+    $filteredOptions | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_.Name, $_.Name, 'ParameterValue', $_.Name)
     }
 }
@@ -22,7 +26,11 @@ Register-ArgumentCompleter -CommandName ($script:PSModuleInfo.FunctionsToExport)
         Verbose = $false
         Debug   = $false
     }
-    Get-GitHubOrganization @params | Where-Object { $_.Name -like $pattern } | ForEach-Object {
+    $filteredOptions = Get-GitHubOrganization @params | Where-Object { $_.Name -like $pattern }
+    if (-not $filteredOptions) {
+        return $null
+    }
+    $filteredOptions | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_.Name, $_.Name, 'ParameterValue', $_.Name)
     }
 }
@@ -36,7 +44,11 @@ Register-ArgumentCompleter -CommandName ($script:PSModuleInfo.FunctionsToExport)
         Verbose = $false
         Debug   = $false
     }
-    Get-GitHubOrganization @params | Where-Object { $_.Name -like $pattern } | ForEach-Object {
+    $filteredOptions = Get-GitHubOrganization @params | Where-Object { $_.Name -like $pattern }
+    if (-not $filteredOptions) {
+        return $null
+    }
+    $filteredOptions | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_.Name, $_.Name, 'ParameterValue', $_.Name)
     }
 }

@@ -7,7 +7,11 @@
         Verbose = $false
         Debug   = $false
     }
-    Get-GitHubAppInstallation @params | Where-Object { $_.Type -eq 'User' -and $_.Target.Name -like $pattern } | ForEach-Object {
+    $filteredOptions = Get-GitHubAppInstallation @params | Where-Object { $_.Type -eq 'User' -and $_.Target.Name -like $pattern }
+    if (-not $filteredOptions) {
+        return $null
+    }
+    $filteredOptions | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_.Target.Name, $_.Target.Name, 'ParameterValue', $_.Target.Name)
     }
 }
@@ -20,7 +24,11 @@ Register-ArgumentCompleter -CommandName Connect-GitHubApp -ParameterName Organiz
         Verbose = $false
         Debug   = $false
     }
-    Get-GitHubAppInstallation @params | Where-Object { $_.Type -eq 'Organization' -and $_.Target.Name -like $pattern } | ForEach-Object {
+    $filteredOptions = Get-GitHubAppInstallation @params | Where-Object { $_.Type -eq 'Organization' -and $_.Target.Name -like $pattern }
+    if (-not $filteredOptions) {
+        return $null
+    }
+    $filteredOptions | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_.Target.Name, $_.Target.Name, 'ParameterValue', $_.Target.Name)
     }
 }
@@ -33,7 +41,11 @@ Register-ArgumentCompleter -CommandName Connect-GitHubApp -ParameterName Enterpr
         Verbose = $false
         Debug   = $false
     }
-    Get-GitHubAppInstallation @params | Where-Object { $_.Type -eq 'Enterprise' -and $_.Target.Name -like $pattern } | ForEach-Object {
+    $filteredOptions = Get-GitHubAppInstallation @params | Where-Object { $_.Type -eq 'Enterprise' -and $_.Target.Name -like $pattern }
+    if (-not $filteredOptions) {
+        return $null
+    }
+    $filteredOptions | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_.Target.Name, $_.Target.Name, 'ParameterValue', $_.Target.Name)
     }
 }
