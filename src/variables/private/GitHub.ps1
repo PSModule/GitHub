@@ -19,6 +19,7 @@ $script:GitHub = [pscustomobject]@{
         RetryInterval                 = 1
         EnvironmentType               = Get-GitHubEnvironmentType
         CompletionMode                = 'StartsWith'
+        ExpandAppPermissions          = -not ($script:IsGitHubActions -or $script:IsFunctionApp)
     }
     Config             = $null
     Event              = $null

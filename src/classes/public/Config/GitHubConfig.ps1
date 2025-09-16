@@ -41,6 +41,9 @@
     # The completion mode for argument completers. Options: 'StartsWith', 'Contains'.
     [string] $CompletionMode
 
+    # Whether to expand app permissions with rich metadata or return raw data for efficiency.
+    [System.Nullable[bool]] $ExpandAppPermissions
+
     # Simple parameterless constructor
     GitHubConfig() {}
 
