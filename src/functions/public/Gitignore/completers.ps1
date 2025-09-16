@@ -7,7 +7,11 @@
         Verbose = $false
         Debug   = $false
     }
-    Get-GitHubGitignore @params | Where-Object { $_ -like $pattern } | ForEach-Object {
+    $filteredOptions = Get-GitHubGitignore @params | Where-Object { $_ -like $pattern }
+    if (-not $filteredOptions) {
+        return $null
+    }
+    $filteredOptions | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
     }
 }

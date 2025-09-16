@@ -12,7 +12,11 @@
         Debug       = $false
     }
     $params | Remove-HashtableEntry -NullOrEmptyValues
-    Get-GitHubSecret @params | Where-Object { $_.Name -like $pattern } | ForEach-Object {
+    $filteredOptions = Get-GitHubSecret @params | Where-Object { $_.Name -like $pattern }
+    if (-not $filteredOptions) {
+        return $null
+    }
+    $filteredOptions | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_.Name, $_.Name, 'ParameterValue', $_.Name)
     }
 }
