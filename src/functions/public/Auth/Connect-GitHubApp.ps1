@@ -76,7 +76,7 @@
         # The maximum number of parallel operations to run at once.
         [Parameter(ParameterSetName = 'Filtered')]
         [Parameter(ParameterSetName = 'Installation')]
-        [uint] $ThrottleLimit = ([Environment]::ProcessorCount * 2),
+        [uint] $ThrottleLimit = ([Environment]::ProcessorCount),
 
         # Passes the context object to the pipeline.
         [Parameter()]
@@ -147,6 +147,7 @@
                     }
                     Write-Verbose 'Logging in using a managed installation access token...'
                     $contextParams | Format-Table | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
+                    $attempts = 0
                     while ($true) {
                         try {
                             $contextObj = [GitHubAppInstallationContext]::new(
@@ -182,8 +183,22 @@
                     return
                 }
 
-                $Installation | ForEach-Object - -ThrottleLimit $ThrottleLimit -UseNewRunspace -Parallel {
-                    Import-Module -Name 'GitHub' -RequiredVersion $using:moduleVersion
+                $Installation | ForEach-Object -ThrottleLimit $ThrottleLimit -UseNewRunspace -Parallel {
+                    $attempts = 0
+                    while ($true) {
+                        try {
+                            Import-Module -Name 'GitHub' -RequiredVersion $using:moduleVersion
+                            break
+                        } catch {
+                            if ($attempts -lt 3) {
+                                $attempts++
+                                Start-Sleep -Seconds (1 * $attempts)
+                            } else {
+                                throw $_
+                            }
+                        }
+                    }
+
                     $params = @{
                         Installation = $_
                         Context      = $using:Context
@@ -221,7 +236,20 @@
                     }
                 }
                 $selectedInstallations | ForEach-Object -ThrottleLimit $ThrottleLimit -UseNewRunspace -Parallel {
-                    Import-Module -Name 'GitHub' -RequiredVersion $using:moduleVersion
+                    $attempts = 0
+                    while ($true) {
+                        try {
+                            Import-Module -Name 'GitHub' -RequiredVersion $using:moduleVersion
+                            break
+                        } catch {
+                            if ($attempts -lt 3) {
+                                $attempts++
+                                Start-Sleep -Seconds (1 * $attempts)
+                            } else {
+                                throw $_
+                            }
+                        }
+                    }
                     $params = @{
                         Installation = $_
                         Context      = $using:Context
@@ -237,7 +265,20 @@
                 Write-Verbose 'No target specified. Connecting to all installations.'
                 $selectedInstallations = Get-GitHubAppInstallation -Context $Context
                 $selectedInstallations | ForEach-Object -ThrottleLimit $ThrottleLimit -UseNewRunspace -Parallel {
-                    Import-Module -Name 'GitHub' -RequiredVersion $using:moduleVersion
+                    $attempts = 0
+                    while ($true) {
+                        try {
+                            Import-Module -Name 'GitHub' -RequiredVersion $using:moduleVersion
+                            break
+                        } catch {
+                            if ($attempts -lt 3) {
+                                $attempts++
+                                Start-Sleep -Seconds (1 * $attempts)
+                            } else {
+                                throw $_
+                            }
+                        }
+                    }
                     $params = @{
                         Installation = $_
                         Context      = $using:Context
