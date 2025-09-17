@@ -103,6 +103,7 @@
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType App
         $selectedInstallations = @()
+        $moduleVersion = $script:PSModuleInfo.ModuleVersion
     }
 
     process {
@@ -132,16 +133,16 @@
 
                     switch ($Installation.Type) {
                         'User' {
-                            $contextParams['InstallationName'] = [string]$installation.Target.Name
-                            $contextParams['Owner'] = [string]$installation.Target.Name
+                            $contextParams['InstallationName'] = [string]$Installation.Target.Name
+                            $contextParams['Owner'] = [string]$Installation.Target.Name
                         }
                         'Organization' {
-                            $contextParams['InstallationName'] = [string]$installation.Target.Name
-                            $contextParams['Owner'] = [string]$installation.Target.Name
+                            $contextParams['InstallationName'] = [string]$Installation.Target.Name
+                            $contextParams['Owner'] = [string]$Installation.Target.Name
                         }
                         'Enterprise' {
-                            $contextParams['InstallationName'] = [string]$installation.Target.Name
-                            $contextParams['Enterprise'] = [string]$installation.Target.Name
+                            $contextParams['InstallationName'] = [string]$Installation.Target.Name
+                            $contextParams['Enterprise'] = [string]$Installation.Target.Name
                         }
                     }
                     Write-Verbose 'Logging in using a managed installation access token...'
@@ -149,6 +150,7 @@
                     while ($true) {
                         try {
                             $contextObj = [GitHubAppInstallationContext]::new((Set-GitHubContext -Context $contextParams.Clone() -PassThru -Default:$Default))
+                            break
                         } catch {
                             if ($attempts -lt 3) {
                                 $attempts++
@@ -178,9 +180,9 @@
                     return
                 }
 
-                $Installation | ForEach-Object -ThrottleLimit $ThrottleLimit -UseNewRunspace -Parallel {
-                    Write-Host "Using GitHub $($script:PSModuleInfo.ModuleVersion)"
-                    Import-Module -Name 'GitHub' -RequiredVersion $script:PSModuleInfo.ModuleVersion
+                $Installation | ForEach-Object - -ThrottleLimit $ThrottleLimit -UseNewRunspace -Parallel {
+                    Write-Host "Using GitHub $using:moduleVersion"
+                    Import-Module -Name 'GitHub' -RequiredVersion $using:moduleVersion
                     $params = @{
                         Installation = $_
                         Context      = $using:Context
@@ -218,7 +220,8 @@
                     }
                 }
                 $selectedInstallations | ForEach-Object -ThrottleLimit $ThrottleLimit -UseNewRunspace -Parallel {
-                    Import-Module -Name 'GitHub' -RequiredVersion $script:PSModuleInfo.ModuleVersion -Force
+                    Write-Host "Using GitHub $using:moduleVersion"
+                    Import-Module -Name 'GitHub' -RequiredVersion $using:moduleVersion
                     $params = @{
                         Installation = $_
                         Context      = $using:Context
@@ -234,7 +237,8 @@
                 Write-Verbose 'No target specified. Connecting to all installations.'
                 $selectedInstallations = Get-GitHubAppInstallation -Context $Context
                 $selectedInstallations | ForEach-Object -ThrottleLimit $ThrottleLimit -UseNewRunspace -Parallel {
-                    Import-Module -Name 'GitHub' -RequiredVersion $script:PSModuleInfo.ModuleVersion -Force
+                    Write-Host "Using GitHub $using:moduleVersion"
+                    Import-Module -Name 'GitHub' -RequiredVersion $using:moduleVersion
                     $params = @{
                         Installation = $_
                         Context      = $using:Context
