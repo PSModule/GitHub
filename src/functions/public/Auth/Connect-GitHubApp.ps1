@@ -149,7 +149,9 @@
                     $contextParams | Format-Table | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
                     while ($true) {
                         try {
-                            $contextObj = [GitHubAppInstallationContext]::new((Set-GitHubContext -Context $contextParams.Clone() -PassThru -Default:$Default))
+                            $contextObj = [GitHubAppInstallationContext]::new(
+                                (Set-GitHubContext -Context $contextParams.Clone() -PassThru -Default:$Default)
+                            )
                             break
                         } catch {
                             if ($attempts -lt 3) {
@@ -181,7 +183,6 @@
                 }
 
                 $Installation | ForEach-Object - -ThrottleLimit $ThrottleLimit -UseNewRunspace -Parallel {
-                    Write-Host "Using GitHub $using:moduleVersion"
                     Import-Module -Name 'GitHub' -RequiredVersion $using:moduleVersion
                     $params = @{
                         Installation = $_
@@ -220,7 +221,6 @@
                     }
                 }
                 $selectedInstallations | ForEach-Object -ThrottleLimit $ThrottleLimit -UseNewRunspace -Parallel {
-                    Write-Host "Using GitHub $using:moduleVersion"
                     Import-Module -Name 'GitHub' -RequiredVersion $using:moduleVersion
                     $params = @{
                         Installation = $_
@@ -237,7 +237,6 @@
                 Write-Verbose 'No target specified. Connecting to all installations.'
                 $selectedInstallations = Get-GitHubAppInstallation -Context $Context
                 $selectedInstallations | ForEach-Object -ThrottleLimit $ThrottleLimit -UseNewRunspace -Parallel {
-                    Write-Host "Using GitHub $using:moduleVersion"
                     Import-Module -Name 'GitHub' -RequiredVersion $using:moduleVersion
                     $params = @{
                         Installation = $_
