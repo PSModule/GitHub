@@ -11,13 +11,6 @@
 
         Get the DefaultContext value from the GitHub module configuration.
 
-        .EXAMPLE
-        Get-GitHubConfig -Name ExpandAppPermissions
-
-        Get the current value of ExpandAppPermissions to see whether the module will enrich app permissions with metadata (true) or return raw data (false).
-
-
-
         .LINK
         https://psmodule.io/GitHub/Functions/Config/Get-GitHubConfig
     #>

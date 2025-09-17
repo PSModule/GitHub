@@ -11,11 +11,6 @@
 
         Sets the value of DefaultUser to 'Octocat' in the GitHub module configuration.
 
-        .EXAMPLE
-        Set-GitHubConfig -Name ExpandAppPermissions -Value $false
-
-        Sets ExpandAppPermissions to false, which makes the module return raw permission data instead of enriched GitHubPermission objects for better performance in automation scenarios.
-
         .OUTPUTS
         GitHubConfig
 
