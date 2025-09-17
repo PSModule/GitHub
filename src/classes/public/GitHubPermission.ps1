@@ -1135,6 +1135,19 @@ class GitHubPermissionDefinition {
             'Enterprise'
         ),
         [GitHubPermissionDefinition]::new(
+            'enterprise_scim',
+            'Enterprise SCIM',
+            'View and manage enterprise SCIM configuration',
+            'https://docs.github.com/enterprise-cloud@latest/rest/overview/permissions-required-for-github-apps' +
+            '#enterprise-permissions-for-enterprise-scim',
+            @(
+                'read',
+                'write'
+            ),
+            'Fine-grained',
+            'Enterprise'
+        ),
+        [GitHubPermissionDefinition]::new(
             'enterprise_custom_org_roles',
             'Enterprise custom organization roles',
             'Create, edit, delete and list custom organization roles at the enterprise level. View system organization roles.',
