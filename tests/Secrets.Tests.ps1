@@ -111,7 +111,7 @@ Describe 'Secrets' {
 
                 It 'Get-GitHubPublicKey - Codespaces' {
                     $result = Get-GitHubPublicKey -Type codespaces
-                    LogGroup 'PublicKey - Codespaces' {
+                    LogGroup 'PublicKey' {
                         Write-Host "$($result | Select-Object * | Format-Table -AutoSize | Out-String)"
                     }
                     $result | Should -Not -BeNullOrEmpty
@@ -140,13 +140,21 @@ Describe 'Secrets' {
                 }
 
                 It 'Get-GitHubPublicKey - Codespaces' {
-                    $plan = $org.plan.name
-                    Write-Host "Running with plan [$plan]"
-                    $result = Get-GitHubPublicKey @scope -Type codespaces
-                    LogGroup 'PublicKey' {
-                        Write-Host "$($result | Select-Object * | Format-Table -AutoSize | Out-String)"
+                    LogGroup 'Plan' {
+                        Write-Host "$($org.plan | Select-Object * | Out-String)"
                     }
-                    $result | Should -Not -BeNullOrEmpty
+                    switch ($org.plan.name) {
+                        'free' {
+                            { Get-GitHubPublicKey @scope -Type codespaces } | Should -Throw
+                        }
+                        default {
+                            $result = Get-GitHubPublicKey @scope -Type codespaces
+                            LogGroup 'PublicKey - Codespaces' {
+                                Write-Host "$($result | Select-Object * | Format-Table -AutoSize | Out-String)"
+                            }
+                            $result | Should -Not -BeNullOrEmpty
+                        }
+                    }
                 }
             }
 
@@ -586,7 +594,7 @@ Describe 'Secrets' {
                 LogGroup 'Get secret and test whitespace handling' {
                     $secretToRemove = Get-GitHubSecret @scope -Name $pipelineTestSecretName
                     Write-Host "$($secretToRemove | Format-List | Out-String)"
-                    Write-Host "Testing that environment secrets with valid Environment property work correctly"
+                    Write-Host 'Testing that environment secrets with valid Environment property work correctly'
                 }
                 LogGroup 'Remove via pipeline' {
                     { $secretToRemove | Remove-GitHubSecret } | Should -Not -Throw
