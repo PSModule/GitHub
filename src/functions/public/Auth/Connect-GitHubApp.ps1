@@ -122,15 +122,15 @@
                         HttpVersion      = [string]$Context.HttpVersion
                         PerPage          = [int]$Context.PerPage
                         ClientID         = [string]$Context.ClientID
-                        InstallationID   = [string]$installation.ID
-                        Permissions      = [GitHubPermission[]]$installation.Permissions
-                        Events           = [string[]]$installation.Events
-                        InstallationType = [string]$installation.Type
+                        InstallationID   = [string]$Installation.ID
+                        Permissions      = [GitHubPermission[]]$Installation.Permissions
+                        Events           = [string[]]$Installation.Events
+                        InstallationType = [string]$Installation.Type
                         Token            = [securestring]$token.Token
                         TokenExpiresAt   = [datetime]$token.ExpiresAt
                     }
 
-                    switch ($installation.Type) {
+                    switch ($Installation.Type) {
                         'User' {
                             $contextParams['InstallationName'] = [string]$installation.Target.Name
                             $contextParams['Owner'] = [string]$installation.Target.Name
@@ -146,7 +146,19 @@
                     }
                     Write-Verbose 'Logging in using a managed installation access token...'
                     $contextParams | Format-Table | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
-                    $contextObj = [GitHubAppInstallationContext]::new((Set-GitHubContext -Context $contextParams.Clone() -PassThru -Default:$Default))
+                    while ($true) {
+                        try {
+                            $contextObj = [GitHubAppInstallationContext]::new((Set-GitHubContext -Context $contextParams.Clone() -PassThru -Default:$Default))
+                        } catch {
+                            if ($attempts -lt 3) {
+                                $attempts++
+                                Write-Warning "Failed to create context. Retrying... [$attempts]"
+                                Start-Sleep -Seconds (1 * $attempts)
+                            } else {
+                                throw $_
+                            }
+                        }
+                    }
                     $contextObj | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
                     if (-not $Silent) {
                         $name = $contextObj.Name
@@ -166,13 +178,15 @@
                     return
                 }
 
-                $Installation | ForEach-Object -ThrottleLimit $ThrottleLimit -Parallel {
+                $Installation | ForEach-Object -ThrottleLimit $ThrottleLimit -UseNewRunspace -Parallel {
+                    Write-Host "Using GitHub $($script:PSModuleInfo.ModuleVersion)"
+                    Import-Module -Name 'GitHub' -RequiredVersion $script:PSModuleInfo.ModuleVersion
                     $params = @{
-                        ID       = $_.ID
-                        Context  = $using:Context
-                        PassThru = $using:PassThru
-                        Silent   = $using:Silent
-                        Default  = $using:Default
+                        Installation = $_
+                        Context      = $using:Context
+                        PassThru     = $using:PassThru
+                        Silent       = $using:Silent
+                        Default      = $using:Default
                     }
                     Connect-GitHubApp @params
                 }
@@ -203,13 +217,14 @@
                         $_.Type -eq 'Enterprise' -and $_.Target.Name -like $enterpriseItem
                     }
                 }
-                $selectedInstallations | ForEach-Object -ThrottleLimit $ThrottleLimit -Parallel {
+                $selectedInstallations | ForEach-Object -ThrottleLimit $ThrottleLimit -UseNewRunspace -Parallel {
+                    Import-Module -Name 'GitHub' -RequiredVersion $script:PSModuleInfo.ModuleVersion -Force
                     $params = @{
-                        ID       = $_.ID
-                        Context  = $using:Context
-                        PassThru = $using:PassThru
-                        Silent   = $using:Silent
-                        Default  = $using:Default
+                        Installation = $_
+                        Context      = $using:Context
+                        PassThru     = $using:PassThru
+                        Silent       = $using:Silent
+                        Default      = $using:Default
                     }
                     Connect-GitHubApp @params
                 }
@@ -218,13 +233,14 @@
             'All Installations' {
                 Write-Verbose 'No target specified. Connecting to all installations.'
                 $selectedInstallations = Get-GitHubAppInstallation -Context $Context
-                $selectedInstallations | ForEach-Object -ThrottleLimit $ThrottleLimit -Parallel {
+                $selectedInstallations | ForEach-Object -ThrottleLimit $ThrottleLimit -UseNewRunspace -Parallel {
+                    Import-Module -Name 'GitHub' -RequiredVersion $script:PSModuleInfo.ModuleVersion -Force
                     $params = @{
-                        ID       = $_.ID
-                        Context  = $using:Context
-                        PassThru = $using:PassThru
-                        Silent   = $using:Silent
-                        Default  = $using:Default
+                        Installation = $_
+                        Context      = $using:Context
+                        PassThru     = $using:PassThru
+                        Silent       = $using:Silent
+                        Default      = $using:Default
                     }
                     Connect-GitHubApp @params
                 }
