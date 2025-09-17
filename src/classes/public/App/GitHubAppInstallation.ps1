@@ -102,7 +102,7 @@
         }
         $this.Type = $Type
         $this.RepositorySelection = $Object.repository_selection
-        $this.Permissions = $this.GetPermissions($Object.permissions, $this.Type)
+        $this.Permissions = [GitHubPermission]::NewPermissionList($Object.permissions, $Type)
         $this.Events = , ($Object.events)
         $this.FilePaths = $Object.single_file_paths
         $this.CreatedAt = $Object.created_at
@@ -123,7 +123,7 @@
         }
         $this.Type = $Type
         $this.RepositorySelection = $Object.repository_selection
-        $this.Permissions = $this.GetPermissions($Object.permissions, $this.Type)
+        $this.Permissions = [GitHubPermission]::NewPermissionList($Object.permissions, $Type)
         $this.Events = , ($Object.events)
         $this.FilePaths = $Object.single_file_paths
         $this.CreatedAt = $Object.created_at
@@ -192,26 +192,5 @@
         }
 
         $this.Status = $permissionsMatch ? 'Ok' : 'Outdated'
-    }
-
-    # Helper method to get permissions based on ExpandAppPermissions setting
-    [object] GetPermissions([PSCustomObject] $PermissionData, [string] $InstallationType) {
-        try {
-            # Try to get the config setting, with fallback to default behavior
-            $expandPermissions = $true  # Default to enriched mode
-            
-            if ($null -ne $script:GitHub -and $null -ne $script:GitHub.Config) {
-                $expandPermissions = $script:GitHub.Config.ExpandAppPermissions
-            }
-            
-            if ($expandPermissions) {
-                return [GitHubPermission]::NewPermissionList($PermissionData, $InstallationType)
-            } else {
-                return $PermissionData
-            }
-        } catch {
-            # If anything fails, fall back to enriched permissions (backward compatibility)
-            return [GitHubPermission]::NewPermissionList($PermissionData, $InstallationType)
-        }
     }
 }

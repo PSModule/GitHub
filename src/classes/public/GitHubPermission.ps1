@@ -1255,6 +1255,27 @@ class GitHubPermission : GitHubPermissionDefinition {
         $this.Scope = 'Unknown'
     }
 
+    # Helper method to get permissions based on ExpandAppPermissions setting
+    [object] GetPermissions([PSCustomObject] $PermissionData, [string] $InstallationType) {
+        try {
+            # Try to get the config setting, with fallback to default behavior
+            $expandPermissions = $true  # Default to enriched mode
+
+            if ($null -ne $script:GitHub -and $null -ne $script:GitHub.Config) {
+                $expandPermissions = $script:GitHub.Config.ExpandAppPermissions
+            }
+
+            if ($expandPermissions) {
+                return [GitHubPermission]::NewPermissionList($PermissionData, $InstallationType)
+            } else {
+                return $PermissionData
+            }
+        } catch {
+            # If anything fails, fall back to enriched permissions (backward compatibility)
+            return [GitHubPermission]::NewPermissionList($PermissionData, $InstallationType)
+        }
+    }
+
     # Create a new list of all known permissions with null values
     static [GitHubPermission[]] NewPermissionList() {
         $tmpList = foreach ($def in [GitHubPermissionDefinition]::List) {

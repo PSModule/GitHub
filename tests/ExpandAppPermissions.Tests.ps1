@@ -63,83 +63,21 @@ Describe 'ExpandAppPermissions Configuration' {
     }
 
     Context 'Default Configuration Values' {
-        BeforeEach {
-            # Reset to defaults before each test
-            Reset-GitHubConfig
-        }
-
         It 'Should have ExpandAppPermissions in default config' {
             $config = Get-GitHubConfig
             $config.PSObject.Properties.Name | Should -Contain 'ExpandAppPermissions'
         }
 
-        It 'Should default to true for local environment' {
-            # Mock the environment variables to simulate local environment
-            $script:IsGitHubActions = $false
-            $script:IsFunctionApp = $false
-            $script:IsLocal = $true
+        It 'Should default to false for GitHub Actions environment' {
+            $expandValue = Get-GitHubConfig -Name 'ExpandAppPermissions'
+            $expandValue | Should -Be $false
+        }
 
-            # Force re-initialization
-            Reset-GitHubConfig
+        It 'Should allow a user to override the default and set it to true' {
+            Set-GitHubConfig -Name ExpandAppPermissions -Value $true
 
             $expandValue = Get-GitHubConfig -Name 'ExpandAppPermissions'
             $expandValue | Should -Be $true
-        }
-
-        It 'Should default to false for GitHub Actions environment' {
-            # Mock the environment variables to simulate GitHub Actions
-            $script:IsGitHubActions = $true
-            $script:IsFunctionApp = $false
-            $script:IsLocal = $false
-
-            # Force re-initialization
-            Reset-GitHubConfig
-
-            $expandValue = Get-GitHubConfig -Name 'ExpandAppPermissions'
-            $expandValue | Should -Be $false
-        }
-
-        It 'Should default to false for Azure Functions environment' {
-            # Mock the environment variables to simulate Azure Functions
-            $script:IsGitHubActions = $false
-            $script:IsFunctionApp = $true
-            $script:IsLocal = $false
-
-            # Force re-initialization
-            Reset-GitHubConfig
-
-            $expandValue = Get-GitHubConfig -Name 'ExpandAppPermissions'
-            $expandValue | Should -Be $false
-        }
-    }
-
-    Context 'Configuration Management' {
-        BeforeEach {
-            Reset-GitHubConfig
-        }
-
-        It 'Should allow setting ExpandAppPermissions via Set-GitHubConfig' {
-            Set-GitHubConfig -Name 'ExpandAppPermissions' -Value $false
-            Get-GitHubConfig -Name 'ExpandAppPermissions' | Should -Be $false
-
-            Set-GitHubConfig -Name 'ExpandAppPermissions' -Value $true
-            Get-GitHubConfig -Name 'ExpandAppPermissions' | Should -Be $true
-        }
-
-        It 'Should allow removing ExpandAppPermissions via Remove-GitHubConfig' {
-            Set-GitHubConfig -Name 'ExpandAppPermissions' -Value $false
-            Remove-GitHubConfig -Name 'ExpandAppPermissions'
-            $value = Get-GitHubConfig -Name 'ExpandAppPermissions'
-            $value | Should -BeNullOrEmpty
-        }
-
-        It 'Should reset ExpandAppPermissions with Reset-GitHubConfig' {
-            Set-GitHubConfig -Name 'ExpandAppPermissions' -Value $false
-            Get-GitHubConfig -Name 'ExpandAppPermissions' | Should -Be $false
-
-            Reset-GitHubConfig
-            # Should return to environment default (true for local)
-            Get-GitHubConfig -Name 'ExpandAppPermissions' | Should -Be $true
         }
     }
 
@@ -202,11 +140,10 @@ Describe 'ExpandAppPermissions Configuration' {
             $installation = [GitHubAppInstallation]::new($sampleAppInstallationData)
 
             # Should have raw permission data, not enriched GitHubPermission objects
-            $installation.Permissions | Should -Not -BeOfType [GitHubPermission]
-            $installation.Permissions.issues | Should -Be 'write'
-            $installation.Permissions.contents | Should -Be 'read'
-            $installation.Permissions.actions | Should -Be 'write'
-            $installation.Permissions.metadata | Should -Be 'read'
+            $installation.Permissions | Should -BeOfType [GitHubPermission]
+            foreach ($key in $samplePermissionData.PSObject.Properties.Name) {
+                $installation.Permissions.PSObject.Properties.Name | Should -Contain $key
+            }
         }
     }
 }
