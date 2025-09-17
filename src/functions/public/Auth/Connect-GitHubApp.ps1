@@ -38,7 +38,7 @@
         Gets all app installations and connects to them in parallel with a maximum of 4 concurrent connections.
 
         .EXAMPLE
-        Connect-GitHubApp -User '*', -Organization 'psmodule', 'github' -ThrottleLimit 8
+        Connect-GitHubApp -User '*' -Organization 'psmodule', 'github' -ThrottleLimit 8
 
         Connects to all users and the specified organizations in parallel with a maximum of 8 concurrent connections.
 
