@@ -48,19 +48,15 @@
 
     GitHubAppInstallation([PSCustomObject] $Object) {
         $this.ID = $Object.id
-        $this.App = [GitHubApp]::new(
-            [PSCustomObject]@{
-                client_id = $Object.client_id
-                app_id    = $Object.app_id
-                app_slug  = $Object.app_slug
-            }
-        )
+        $this.App = [GitHubApp]::new()
+        $this.App.ClientID = $Object.client_id
+        $this.App.Slug = $Object.app_slug
         $this.Target = [GitHubOwner]::new($Object.account)
         $this.Type = $Object.target_type
         $this.RepositorySelection = $Object.repository_selection
         $this.Permissions = [GitHubPermission]::NewPermissionList($Object.permissions, $this.Type)
         $this.Events = , ($Object.events)
-        $this.FilePaths = $Object.single_file_paths
+        $this.FilePaths = , ($Object.single_file_paths)
         $this.CreatedAt = $Object.created_at
         $this.UpdatedAt = $Object.updated_at
         $this.SuspendedAt = $Object.suspended_at
@@ -69,36 +65,47 @@
         $this.Status = 'Unknown'
     }
 
-    GitHubAppInstallation([PSCustomObject] $Object, [GitHubApp] $App) {
+    GitHubAppInstallation([PSCustomObject] $Object, [GitHubAppContext] $AppContext) {
         $this.ID = $Object.id
-        $this.App = $App
+        $this.App = [GitHubApp]::new()
+        $this.App.ID = $AppContext.ID
+        $this.App.ClientID = $AppContext.ClientID
+        $this.App.Slug = $AppContext.Slug
+        $this.App.NodeID = $AppContext.NodeID
+        $this.App.DatabaseID = $AppContext.DatabaseID
+        $this.App.Owner = $AppContext.Owner
+        $this.App.Name = $AppContext.Name
+        $this.App.Description = $AppContext.Description
+        $this.App.ExternalUrl = $AppContext.ExternalUrl
+        $this.App.Url = $AppContext.Url
+        $this.App.CreatedAt = $AppContext.CreatedAt
+        $this.App.UpdatedAt = $AppContext.UpdatedAt
+        $this.App.Permissions = $AppContext.Permissions
+        $this.App.Events = $AppContext.Events
+        $this.App.Installations = $AppContext.Installations
         $this.Target = [GitHubOwner]::new($Object.account)
         $this.Type = $Object.target_type
         $this.RepositorySelection = $Object.repository_selection
         $this.Permissions = [GitHubPermission]::NewPermissionList($Object.permissions, $this.Type)
         $this.Events = , ($Object.events)
-        $this.FilePaths = $Object.single_file_paths
+        $this.FilePaths = , ($Object.single_file_paths)
         $this.CreatedAt = $Object.created_at
         $this.UpdatedAt = $Object.updated_at
         $this.SuspendedAt = $Object.suspended_at
         $this.SuspendedBy = [GitHubUser]::new($Object.suspended_by)
         $this.Url = $Object.html_url
-        $this.UpdateStatus()
+        $this.SetStatus()
     }
 
-    GitHubAppInstallation([PSCustomObject] $Object, [string] $Target, [string] $Type, [GitHubContext] $Context) {
+    GitHubAppInstallation([PSCustomObject] $Object, [string] $Target, [string] $Type, [string] $HostName) {
         $this.ID = $Object.id
-        $this.App = [GitHubApp]::new(
-            [PSCustomObject]@{
-                client_id = $Object.client_id
-                app_id    = $Object.app_id
-                app_slug  = $Object.app_slug
-            }
-        )
+        $this.App = [GitHubApp]::new()
+        $this.App.ClientID = $Object.client_id
+        $this.App.Slug = $Object.app_slug
         $this.Target = [GitHubOwner]@{
             Name = $Target
             Type = $Type
-            Url  = "https://$($Context.HostName)/$Target"
+            Url  = "https://$HostName/$Target"
         }
         $this.Type = $Type
         $this.RepositorySelection = $Object.repository_selection
@@ -109,35 +116,18 @@
         $this.UpdatedAt = $Object.updated_at
         $this.SuspendedAt = $Object.suspended_at
         $this.SuspendedBy = [GitHubUser]::new($Object.suspended_by)
-        $this.Url = "https://$($Context.HostName)/$($Type.ToLower())s/$Target/settings/installations/$($Object.id)"
+        $this.Url = "https://$HostName/$($Type.ToLower())s/$Target/settings/installations/$($Object.id)"
         $this.Status = 'Unknown'
     }
 
-    GitHubAppInstallation([PSCustomObject] $Object, [string] $Target, [string] $Type, [GitHubContext] $Context, [GitHubApp] $App) {
-        $this.ID = $Object.id
-        $this.App = $App
-        $this.Target = [GitHubOwner]@{
-            Name = $Target
-            Type = $Type
-            Url  = "https://$($Context.HostName)/$Target"
-        }
-        $this.Type = $Type
-        $this.RepositorySelection = $Object.repository_selection
-        $this.Permissions = [GitHubPermission]::NewPermissionList($Object.permissions, $this.Type)
-        $this.Events = , ($Object.events)
-        $this.FilePaths = $Object.single_file_paths
-        $this.CreatedAt = $Object.created_at
-        $this.UpdatedAt = $Object.updated_at
-        $this.SuspendedAt = $Object.suspended_at
-        $this.SuspendedBy = [GitHubUser]::new($Object.suspended_by)
-        $this.Url = "https://$($Context.HostName)/$($Type.ToLower())s/$Target/settings/installations/$($Object.id)"
-        $this.UpdateStatus()
-    }
-
-    # Updates the Status property by comparing installation permissions with app permissions
+    # Sets the Status property by comparing installation permissions with app permissions
     # filtered by the appropriate scope based on installation type
-    [void] UpdateStatus() {
+    [void] SetStatus() {
         if (-not $this.App -or -not $this.App.Permissions) {
+            $this.Status = 'Unknown'
+            return
+        }
+        if (-not $this.Permissions) {
             $this.Status = 'Unknown'
             return
         }
@@ -158,38 +148,7 @@
             }
         }
 
-        # Compare permissions by creating lookup dictionaries
-        $appPermissionLookup = @{}
-        foreach ($perm in $appPermissionsFiltered) {
-            $appPermissionLookup[$perm.Name] = $perm.Value
-        }
-
-        $installationPermissionLookup = @{}
-        foreach ($perm in $this.Permissions) {
-            $installationPermissionLookup[$perm.Name] = $perm.Value
-        }
-
-        # Check if permissions match
-        $permissionsMatch = $true
-
-        # Check if all app permissions exist in installation with same values
-        foreach ($name in $appPermissionLookup.Keys) {
-            if (-not $installationPermissionLookup.ContainsKey($name) -or
-                $installationPermissionLookup[$name] -ne $appPermissionLookup[$name]) {
-                $permissionsMatch = $false
-                break
-            }
-        }
-
-        # Check if installation has any extra permissions not in the app
-        if ($permissionsMatch) {
-            foreach ($name in $installationPermissionLookup.Keys) {
-                if (-not $appPermissionLookup.ContainsKey($name)) {
-                    $permissionsMatch = $false
-                    break
-                }
-            }
-        }
+        $permissionsMatch = [GitHubPermission]::ComparePermissionLists($this.Permissions, $appPermissionsFiltered)
 
         $this.Status = $permissionsMatch ? 'Ok' : 'Outdated'
     }

@@ -12,7 +12,7 @@
         Get the authenticated app.
 
         .EXAMPLE
-        Get-GitHubApp -Name 'github-actions'
+        Get-GitHubApp -Slug 'github-actions'
 
         Get the GitHub App with the slug 'github-actions'.
 
@@ -58,7 +58,7 @@
                 Get-GitHubAppBySlug -Slug $Slug -Context $Context
             }
             default {
-                Get-GitHubAuthenticatedApp -Context $Context
+                Get-GitHubAppAsAuthenticatedApp -Context $Context
             }
         }
     }

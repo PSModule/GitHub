@@ -1135,6 +1135,19 @@ class GitHubPermissionDefinition {
             'Enterprise'
         ),
         [GitHubPermissionDefinition]::new(
+            'enterprise_scim',
+            'Enterprise SCIM',
+            'View and manage enterprise SCIM configuration',
+            'https://docs.github.com/enterprise-cloud@latest/rest/overview/permissions-required-for-github-apps' +
+            '#enterprise-permissions-for-enterprise-scim',
+            @(
+                'read',
+                'write'
+            ),
+            'Fine-grained',
+            'Enterprise'
+        ),
+        [GitHubPermissionDefinition]::new(
             'enterprise_custom_org_roles',
             'Enterprise custom organization roles',
             'Create, edit, delete and list custom organization roles at the enterprise level. View system organization roles.',
@@ -1238,7 +1251,7 @@ class GitHubPermissionDefinition {
     }
 }
 
-class GitHubPermission : GitHubPermissionDefinition {
+class GitHubPermission : GitHubPermissionDefinition, System.IEquatable[Object] {
     # The value assigned to the permission. Must be one of the options defined in the parent class.
     [string] $Value
 
@@ -1340,5 +1353,25 @@ class GitHubPermission : GitHubPermissionDefinition {
             }
         }
         return $all | Sort-Object Scope, DisplayName
+    }
+
+    [bool] Equals([object] $obj) {
+        return ($this.Name -eq $obj.Name) -and ($this.Value -eq $obj.Value)
+    }
+
+    # Compare two collections of permission objects for equality.
+    # Returns true if both contain the same set of permission names with identical values.
+    static [bool] ComparePermissionLists([System.Collections.IEnumerable] $First, [System.Collections.IEnumerable] $Second) {
+        foreach ($permission in $First) {
+            $appPermission = $Second | Where-Object { $_.Name -eq $permission.Name }
+            if ($permission -ne $appPermission) {
+                return $false
+            }
+        }
+        return $true
+    }
+
+    [string] ToString() {
+        return "$($this.Name)"
     }
 }

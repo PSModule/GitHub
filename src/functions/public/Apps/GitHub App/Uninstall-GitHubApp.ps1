@@ -138,7 +138,7 @@
             'Enterprise-BySlug' {
                 $effectiveEnterprise = if ($Enterprise) { $Enterprise } else { $Context.Enterprise }
                 if (-not $effectiveEnterprise) { throw 'Enterprise-BySlug requires an enterprise to be specified (via -Enterprise or Context.Enterprise).' }
-                $inst = Get-GitHubEnterpriseOrganizationAppInstallation -Enterprise $effectiveEnterprise -Organization $Organization -Context $Context |
+                $inst = Get-GitHubAppInstallationForEnterpriseOrganization -Enterprise $effectiveEnterprise -Organization $Organization -Context $Context |
                     Where-Object { $_.App.Slug -eq $AppSlug } | Select-Object -First 1
                 if (-not $inst) { throw "No installation found for app slug '$AppSlug' in org '$Organization'." }
                 $params = @{

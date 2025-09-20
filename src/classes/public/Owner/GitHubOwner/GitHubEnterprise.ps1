@@ -31,14 +31,14 @@
         $this.NodeID = $Object.id
 
         # From GitHubOwner
-        $this.Name = $Object.slug
+        $this.Name = $Object.slug ?? $Object.Name
         $this.DisplayName = $Object.name
         $this.AvatarUrl = $Object.avatarUrl
         $this.Url = $Object.url
         $this.Type = $Object.type ?? 'Enterprise'
         $this.Location = $Object.location
         $this.Description = $Object.description
-        $this.Website = $Object.websiteUrl
+        $this.Website = $Object.websiteUrl ?? $Object.Website
         $this.CreatedAt = $Object.createdAt
         $this.UpdatedAt = $Object.updatedAt
 
