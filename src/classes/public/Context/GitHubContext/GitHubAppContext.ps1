@@ -1,4 +1,7 @@
 ﻿class GitHubAppContext : GitHubContext {
+    # The App that this context represents.
+    [GitHubApp] $App
+
     # Client ID for GitHub Apps
     [string] $ClientID
 
@@ -49,5 +52,6 @@
         $this.OwnerType = $Object.OwnerType
         $this.Permissions = [GitHubPermission]::NewPermissionList($Object.Permissions)
         $this.Events = , ($Object.Events)
+        $this.App = $Object.App
     }
 }
