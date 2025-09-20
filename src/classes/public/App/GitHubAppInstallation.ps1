@@ -67,22 +67,7 @@
 
     GitHubAppInstallation([PSCustomObject] $Object, [GitHubAppContext] $AppContext) {
         $this.ID = $Object.id
-        $this.App = [GitHubApp]::new()
-        $this.App.ID = $AppContext.ID
-        $this.App.ClientID = $AppContext.ClientID
-        $this.App.Slug = $AppContext.Slug
-        $this.App.NodeID = $AppContext.NodeID
-        $this.App.DatabaseID = $AppContext.DatabaseID
-        $this.App.Owner = $AppContext.Owner
-        $this.App.Name = $AppContext.Name
-        $this.App.Description = $AppContext.Description
-        $this.App.ExternalUrl = $AppContext.ExternalUrl
-        $this.App.Url = $AppContext.Url
-        $this.App.CreatedAt = $AppContext.CreatedAt
-        $this.App.UpdatedAt = $AppContext.UpdatedAt
-        $this.App.Permissions = $AppContext.Permissions
-        $this.App.Events = $AppContext.Events
-        $this.App.Installations = $AppContext.Installations
+        $this.App = $AppContext.App
         $this.Target = [GitHubOwner]::new($Object.account)
         $this.Type = $Object.target_type
         $this.RepositorySelection = $Object.repository_selection
