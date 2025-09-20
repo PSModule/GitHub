@@ -188,6 +188,14 @@
                     while ($true) {
                         try {
                             Import-Module -Name 'GitHub' -RequiredVersion $using:moduleVersion
+                            $params = @{
+                                Installation = $_
+                                Context      = $using:Context
+                                PassThru     = $using:PassThru
+                                Silent       = $using:Silent
+                                Default      = $using:Default
+                            }
+                            Connect-GitHubApp @params
                             break
                         } catch {
                             if ($attempts -lt 3) {
@@ -198,15 +206,6 @@
                             }
                         }
                     }
-
-                    $params = @{
-                        Installation = $_
-                        Context      = $using:Context
-                        PassThru     = $using:PassThru
-                        Silent       = $using:Silent
-                        Default      = $using:Default
-                    }
-                    Connect-GitHubApp @params
                 }
                 return
             }
@@ -240,6 +239,14 @@
                     while ($true) {
                         try {
                             Import-Module -Name 'GitHub' -RequiredVersion $using:moduleVersion
+                            $params = @{
+                                Installation = $_
+                                Context      = $using:Context
+                                PassThru     = $using:PassThru
+                                Silent       = $using:Silent
+                                Default      = $using:Default
+                            }
+                            Connect-GitHubApp @params
                             break
                         } catch {
                             if ($attempts -lt 3) {
@@ -250,14 +257,6 @@
                             }
                         }
                     }
-                    $params = @{
-                        Installation = $_
-                        Context      = $using:Context
-                        PassThru     = $using:PassThru
-                        Silent       = $using:Silent
-                        Default      = $using:Default
-                    }
-                    Connect-GitHubApp @params
                 }
                 return
             }
@@ -269,6 +268,14 @@
                     while ($true) {
                         try {
                             Import-Module -Name 'GitHub' -RequiredVersion $using:moduleVersion
+                            $params = @{
+                                Installation = $_
+                                Context      = $using:Context
+                                PassThru     = $using:PassThru
+                                Silent       = $using:Silent
+                                Default      = $using:Default
+                            }
+                            Connect-GitHubApp @params
                             break
                         } catch {
                             if ($attempts -lt 3) {
@@ -279,14 +286,6 @@
                             }
                         }
                     }
-                    $params = @{
-                        Installation = $_
-                        Context      = $using:Context
-                        PassThru     = $using:PassThru
-                        Silent       = $using:Silent
-                        Default      = $using:Default
-                    }
-                    Connect-GitHubApp @params
                 }
                 return
             }
