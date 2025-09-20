@@ -43,30 +43,30 @@
     GitHubUser([PSCustomObject]$Object) {
         # From GitHubNode
         $this.ID = $Object.id
-        $this.NodeID = $Object.node_id
+        $this.NodeID = $Object.node_id ?? $Object.NodeID
 
         # From GitHubOwner
-        $this.Name = $Object.login
-        $this.DisplayName = $Object.name
-        $this.AvatarUrl = $Object.avatar_url
-        $this.Url = $Object.html_url
+        $this.Name = $Object.login ?? $Object.Name
+        $this.DisplayName = $Object.name ?? $Object.DisplayName
+        $this.AvatarUrl = $Object.avatar_url ?? $Object.AvatarUrl
+        $this.Url = $Object.html_url ?? $Object.Url
         $this.Type = $Object.type
         $this.Location = $Object.location
         $this.Description = $Object.bio
-        $this.Website = $Object.blog
-        $this.CreatedAt = $Object.created_at
-        $this.UpdatedAt = $Object.updated_at
+        $this.Website = $Object.blog ?? $Object.Website
+        $this.CreatedAt = $Object.created_at ?? $Object.CreatedAt
+        $this.UpdatedAt = $Object.updated_at ?? $Object.UpdatedAt
 
         # From GitHubUser
         $this.Email = $Object.email
         $this.Hireable = $Object.hireable
         $this.Company = $Object.company
-        $this.TwitterUsername = $Object.twitter_username
-        $this.PublicRepos = $Object.public_repos
-        $this.PublicGists = $Object.public_gists
-        $this.Followers = $Object.followers
-        $this.Following = $Object.following
-        $this.NotificationEmail = $Object.notification_email
+        $this.TwitterUsername = $Object.twitter_username ?? $this.TwitterUsername
+        $this.PublicRepos = $Object.public_repos ?? $this.PublicRepos
+        $this.PublicGists = $Object.public_gists ?? $this.PublicGists
+        $this.Followers = $Object.followers ?? $this.Followers
+        $this.Following = $Object.following ?? $this.Following
+        $this.NotificationEmail = $Object.notification_email ?? $this.NotificationEmail
         $this.Plan = [GitHubPlan]::New($Object.plan)
     }
 

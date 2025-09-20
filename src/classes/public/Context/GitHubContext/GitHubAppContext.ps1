@@ -52,6 +52,6 @@
         $this.OwnerType = $Object.OwnerType
         $this.Permissions = [GitHubPermission]::NewPermissionList($Object.Permissions)
         $this.Events = , ($Object.Events)
-        $this.App = $Object.App
+        $this.App = [GitHubApp]::New($Object.App)
     }
 }

@@ -44,19 +44,19 @@
     GitHubOwner([PSCustomObject]$Object) {
         # From GitHubNode
         $this.ID = $Object.id
-        $this.NodeID = $Object.node_id
+        $this.NodeID = $Object.node_id ?? $Object.NodeID
 
         # From GitHubOwner
-        $this.Name = $Object.slug ?? $Object.login
-        $this.DisplayName = $Object.name
-        $this.AvatarUrl = $Object.avatar_url
+        $this.Name = $Object.slug ?? $Object.login ?? $Object.name
+        $this.DisplayName = $Object.DisplayName ?? $Object.name
+        $this.AvatarUrl = $Object.avatar_url ?? $Object.AvatarUrl
         $this.Url = $Object.html_url ?? $Object.url
         $this.Type = $Object.type
         $this.Location = $Object.location
         $this.Description = $Object.description ?? $Object.bio
-        $this.Website = $Object.websiteUrl ?? $Object.blog
-        $this.CreatedAt = $Object.created_at
-        $this.UpdatedAt = $Object.updated_at
+        $this.Website = $Object.websiteUrl ?? $Object.blog ?? $Object.Website
+        $this.CreatedAt = $Object.created_at ?? $Object.createdAt
+        $this.UpdatedAt = $Object.updated_at ?? $Object.updatedAt
     }
 
     [string] ToString() {
