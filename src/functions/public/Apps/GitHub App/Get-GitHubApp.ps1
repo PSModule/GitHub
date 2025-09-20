@@ -12,7 +12,7 @@
         Get the authenticated app.
 
         .EXAMPLE
-        Get-GitHubApp -Name 'github-actions'
+        Get-GitHubApp -Slug 'github-actions'
 
         Get the GitHub App with the slug 'github-actions'.
 
