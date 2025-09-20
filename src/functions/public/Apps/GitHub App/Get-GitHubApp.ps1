@@ -58,7 +58,7 @@
                 Get-GitHubAppBySlug -Slug $Slug -Context $Context
             }
             default {
-                Get-GitHubAuthenticatedApp -Context $Context
+                Get-GitHubAppAsAuthenticatedApp -Context $Context
             }
         }
     }
