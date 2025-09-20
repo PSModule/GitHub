@@ -42,7 +42,7 @@
         $this.ClientID = $Object.ClientID
         $this.InstallationID = $Object.InstallationID
         $this.Permissions = [GitHubPermission]::NewPermissionList($Object.Permissions, $Object.InstallationType)
-        $this.Events = $Object.Events
+        $this.Events = , ($Object.Events)
         $this.InstallationType = $Object.InstallationType
         $this.InstallationName = $Object.InstallationName
     }
