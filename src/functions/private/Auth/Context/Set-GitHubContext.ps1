@@ -58,7 +58,7 @@
                         $contextObj['DisplayName'] = [string]$viewer.name
                     }
                     if ([string]::IsNullOrEmpty($contextObj['Username'])) {
-                        $login = [string]($viewer.login -Replace '\[bot\]')
+                        $login = [string]($viewer.login -replace '\[bot\]')
                         $contextObj['Username'] = $login
                     }
                     if ([string]::IsNullOrEmpty($contextObj['NodeID'])) {
@@ -77,10 +77,11 @@
                     $contextObj['Type'] = 'Installation'
                     if ([string]::IsNullOrEmpty($contextObj['DisplayName'])) {
                         try {
-                            $app = Get-GitHubApp -Name $contextObj['Username'] -Context $contextObj
+                            $app = Get-GitHubApp -Slug $contextObj['Username'] -Context $contextObj
                             $contextObj['DisplayName'] = [string]$app.Name
+                            # TODO: $contextObj['App'] = $app
                         } catch {
-                            Write-Debug "Failed to get the GitHub App with the slug: [$($contextObj['Username'])]."
+                            Write-Warning "Failed to get the GitHub App with the slug: [$($contextObj['Username'])]."
                         }
                     }
                     if ($script:IsGitHubActions) {
@@ -131,6 +132,7 @@
                     $contextObj['Events'] = [string[]]$app.Events
                     $contextObj['OwnerName'] = [string]$app.Owner.Name
                     $contextObj['OwnerType'] = [string]$app.Owner.Type
+                    $contextObj['App'] = $app
                     $contextObj['Type'] = 'App'
                 }
                 default {
