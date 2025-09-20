@@ -63,16 +63,16 @@
                     Enterprise   = $Enterprise
                     Organization = $Organization
                 }
-                Get-GitHubEnterpriseOrganizationAppInstallation @params
+                Get-GitHubAppInstallationForEnterpriseOrganization @params
             }
             'List installations on an Organization' {
                 $params += @{
                     Organization = $Organization
                 }
-                Get-GitHubOrganizationAppInstallation @params
+                Get-GitHubAppInstallationForOrganization @params
             }
             'List installations for the authenticated app' {
-                Get-GitHubAppInstallationForAuthenticatedApp @params
+                Get-GitHubAppInstallationForAuthenticatedAppAsList @params
             }
         }
     }

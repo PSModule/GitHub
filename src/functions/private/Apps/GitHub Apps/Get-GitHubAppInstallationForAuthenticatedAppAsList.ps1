@@ -1,4 +1,4 @@
-﻿function Get-GitHubAppInstallationForAuthenticatedApp {
+﻿function Get-GitHubAppInstallationForAuthenticatedAppAsList {
     <#
         .SYNOPSIS
         List installations for the authenticated app.
@@ -10,7 +10,7 @@
         to access this endpoint.
 
         .EXAMPLE
-        Get-GitHubAppInstallationForAuthenticatedApp
+        Get-GitHubAppInstallationForAuthenticatedAppAsList
 
         List installations for the authenticated app.
 

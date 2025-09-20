@@ -1251,7 +1251,7 @@ class GitHubPermissionDefinition {
     }
 }
 
-class GitHubPermission : GitHubPermissionDefinition {
+class GitHubPermission : GitHubPermissionDefinition, System.IEquatable[Object] {
     # The value assigned to the permission. Must be one of the options defined in the parent class.
     [string] $Value
 
@@ -1353,5 +1353,19 @@ class GitHubPermission : GitHubPermissionDefinition {
             }
         }
         return $all | Sort-Object Scope, DisplayName
+    }
+
+    [int] GetHashCode() {
+        return [System.HashCode]::Combine($this.Name, $this.Value)
+    }
+
+    [bool] Equals([object] $obj) {
+        if ($null -eq $obj) { return $false }
+        if (-not ($obj -is [GitHubPermission])) { return $false }
+        return $this.Equals([GitHubPermission]$obj)
+    }
+
+    [string] ToString() {
+        return "$($this.Name)"
     }
 }

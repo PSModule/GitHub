@@ -1,4 +1,4 @@
-﻿Get-GitHubOrganizationAppInstallation -OrganizationName 'PSModule'
+﻿Get-GitHubAppInstallation -Organization 'PSModule'
 
 $user = Get-GitHubUser
 $user.social_accounts
