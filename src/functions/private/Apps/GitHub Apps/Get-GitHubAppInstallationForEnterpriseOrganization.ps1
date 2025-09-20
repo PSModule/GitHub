@@ -62,7 +62,7 @@
 
         Invoke-GitHubAPI @apiParams | ForEach-Object {
             foreach ($installation in $_.Response) {
-                [GitHubAppInstallation]::new($installation, $Organization, 'Organization', $Context)
+                [GitHubAppInstallation]::new($installation, $Organization, 'Organization', $Context.HostName)
             }
         }
     }

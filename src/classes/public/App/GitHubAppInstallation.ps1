@@ -48,10 +48,9 @@
 
     GitHubAppInstallation([PSCustomObject] $Object) {
         $this.ID = $Object.id
-        $this.App = [GitHubApp]@{
-            ClientID = $Object.client_id
-            Slug     = $Object.app_slug
-        }
+        $this.App = [GitHubApp]::new()
+        $this.App.ClientID = $Object.client_id
+        $this.App.Slug = $Object.app_slug
         $this.Target = [GitHubOwner]::new($Object.account)
         $this.Type = $Object.target_type
         $this.RepositorySelection = $Object.repository_selection
@@ -68,23 +67,22 @@
 
     GitHubAppInstallation([PSCustomObject] $Object, [GitHubAppContext] $AppContext) {
         $this.ID = $Object.id
-        $this.App = [GitHubApp]@{
-            ID            = $AppContext.ID
-            ClientID      = $AppContext.ClientID
-            Slug          = $AppContext.Slug
-            NodeID        = $AppContext.NodeID
-            DatabaseID    = $AppContext.DatabaseID
-            Owner         = $AppContext.Owner
-            Name          = $AppContext.Name
-            Description   = $AppContext.Description
-            ExternalUrl   = $AppContext.ExternalUrl
-            Url           = $AppContext.Url
-            CreatedAt     = $AppContext.CreatedAt
-            UpdatedAt     = $AppContext.UpdatedAt
-            Permissions   = $AppContext.Permissions
-            Events        = $AppContext.Events
-            Installations = $AppContext.Installations
-        }
+        $this.App = [GitHubApp]::new()
+        $this.App.ID = $AppContext.ID
+        $this.App.ClientID = $AppContext.ClientID
+        $this.App.Slug = $AppContext.Slug
+        $this.App.NodeID = $AppContext.NodeID
+        $this.App.DatabaseID = $AppContext.DatabaseID
+        $this.App.Owner = $AppContext.Owner
+        $this.App.Name = $AppContext.Name
+        $this.App.Description = $AppContext.Description
+        $this.App.ExternalUrl = $AppContext.ExternalUrl
+        $this.App.Url = $AppContext.Url
+        $this.App.CreatedAt = $AppContext.CreatedAt
+        $this.App.UpdatedAt = $AppContext.UpdatedAt
+        $this.App.Permissions = $AppContext.Permissions
+        $this.App.Events = $AppContext.Events
+        $this.App.Installations = $AppContext.Installations
         $this.Target = [GitHubOwner]::new($Object.account)
         $this.Type = $Object.target_type
         $this.RepositorySelection = $Object.repository_selection
@@ -99,16 +97,15 @@
         $this.SetStatus()
     }
 
-    GitHubAppInstallation([PSCustomObject] $Object, [string] $Target, [string] $Type, [GitHubAppContext] $AppContext) {
+    GitHubAppInstallation([PSCustomObject] $Object, [string] $Target, [string] $Type, [string] $HostName) {
         $this.ID = $Object.id
-        $this.App = [GitHubApp]@{
-            ClientID = $Object.client_id
-            Slug     = $Object.app_slug
-        }
+        $this.App = [GitHubApp]::new()
+        $this.App.ClientID = $Object.client_id
+        $this.App.Slug = $Object.app_slug
         $this.Target = [GitHubOwner]@{
             Name = $Target
             Type = $Type
-            Url  = "https://$($AppContext.HostName)/$Target"
+            Url  = "https://$HostName/$Target"
         }
         $this.Type = $Type
         $this.RepositorySelection = $Object.repository_selection
@@ -119,7 +116,7 @@
         $this.UpdatedAt = $Object.updated_at
         $this.SuspendedAt = $Object.suspended_at
         $this.SuspendedBy = [GitHubUser]::new($Object.suspended_by)
-        $this.Url = "https://$($AppContext.HostName)/$($Type.ToLower())s/$Target/settings/installations/$($Object.id)"
+        $this.Url = "https://$HostName/$($Type.ToLower())s/$Target/settings/installations/$($Object.id)"
         $this.Status = 'Unknown'
     }
 
