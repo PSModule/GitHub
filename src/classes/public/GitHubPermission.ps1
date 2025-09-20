@@ -1355,14 +1355,20 @@ class GitHubPermission : GitHubPermissionDefinition, System.IEquatable[Object] {
         return $all | Sort-Object Scope, DisplayName
     }
 
-    [int] GetHashCode() {
-        return [System.HashCode]::Combine($this.Name, $this.Value)
+    [bool] Equals([object] $obj) {
+        return ($this.Name -eq $obj.Name) -and ($this.Value -eq $obj.Value)
     }
 
-    [bool] Equals([object] $obj) {
-        if ($null -eq $obj) { return $false }
-        if (-not ($obj -is [GitHubPermission])) { return $false }
-        return $this.Equals([GitHubPermission]$obj)
+    # Compare two collections of permission objects for equality.
+    # Returns true if both contain the same set of permission names with identical values.
+    static [bool] ComparePermissionLists([System.Collections.IEnumerable] $First, [System.Collections.IEnumerable] $Second) {
+        foreach ($permission in $First) {
+            $appPermission = $Second | Where-Object { $_.Name -eq $permission.Name }
+            if ($permission -ne $appPermission) {
+                return $false
+            }
+        }
+        return $true
     }
 
     [string] ToString() {
