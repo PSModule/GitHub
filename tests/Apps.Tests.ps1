@@ -195,6 +195,9 @@ Describe 'Apps' {
                 LogGroup 'Permissions' {
                     Write-Host "$($context.Permissions | Format-Table | Out-String)"
                 }
+                LogGroup 'App' {
+                    Write-Host "$($githubApp | Format-Table | Out-String)"
+                }
             }
 
             It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
