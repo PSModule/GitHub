@@ -113,7 +113,7 @@
 
     # Updates the Status property by comparing installation permissions with app permissions
     # filtered by the appropriate scope based on installation type
-    [void] UpdateStatus() {
+    [void] SetStatus() {
         if (-not $this.App -or -not $this.App.Permissions) {
             $this.Status = 'Unknown'
             return
