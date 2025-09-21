@@ -965,7 +965,8 @@ class GitHubPermission : System.IEquatable[Object] {
             [GitHubPermission]::new(
                 'copilot_editor_context',
                 'Copilot Editor Context',
-                'This application will receive bits of Editor Context (e.g. currently opened file) whenever you send it a message through Copilot Chat.',
+                'This application will receive bits of Editor Context (e.g. currently opened file) ' +
+                'whenever you send it a message through Copilot Chat.',
                 'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
                 '#user-permissions-for-copilot-editor-context',
                 @(
