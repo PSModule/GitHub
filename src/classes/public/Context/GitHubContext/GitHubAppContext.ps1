@@ -50,8 +50,12 @@
         $this.KeyVaultKeyReference = $Object.KeyVaultKeyReference
         $this.OwnerName = $Object.OwnerName
         $this.OwnerType = $Object.OwnerType
-        $this.Permissions = [GitHubPermission]::NewPermissionList($Object.Permissions)
+        if ($Object.Permissions) {
+            $this.Permissions = [GitHubPermission]::NewPermissionList($Object.Permissions)
+        }
         $this.Events = , ($Object.Events)
-        $this.App = [GitHubApp]::New($Object.App)
+        if ($Object.App) {
+            $this.App = [GitHubApp]::New($Object.App)
+        }
     }
 }

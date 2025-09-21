@@ -48,9 +48,10 @@
 
     GitHubAppInstallation([PSCustomObject] $Object) {
         $this.ID = $Object.id
-        $this.App = [GitHubApp]::new()
-        $this.App.ClientID = $Object.client_id
-        $this.App.Slug = $Object.app_slug
+        $this.App = [GitHubApp]@{
+            ClientID = $Object.client_id
+            Slug     = $Object.app_slug
+        }
         $this.Target = [GitHubOwner]::new($Object.account)
         $this.Type = $Object.target_type
         $this.RepositorySelection = $Object.repository_selection
@@ -84,9 +85,10 @@
 
     GitHubAppInstallation([PSCustomObject] $Object, [string] $Target, [string] $Type, [string] $HostName) {
         $this.ID = $Object.id
-        $this.App = [GitHubApp]::new()
-        $this.App.ClientID = $Object.client_id
-        $this.App.Slug = $Object.app_slug
+        $this.App = [GitHubApp]@{
+            ClientID = $Object.client_id
+            Slug     = $Object.app_slug
+        }
         $this.Target = [GitHubOwner]@{
             Name = $Target
             Type = $Type

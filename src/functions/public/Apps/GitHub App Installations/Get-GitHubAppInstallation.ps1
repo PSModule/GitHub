@@ -45,7 +45,9 @@
         [int] $ID,
 
         # The number of results per page (max 100).
-        [Parameter()]
+        [Parameter(ParameterSetName = 'List installations for the authenticated app')]
+        [Parameter(ParameterSetName = 'List installations on an Enterprise Organization')]
+        [Parameter(ParameterSetName = 'List installations on an Organization')]
         [System.Nullable[int]] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -80,11 +82,11 @@
                 }
                 Get-GitHubAppInstallationForOrganization @params
             }
-            'Get installation for the authenticated app by ID' {
-                Get-GitHubAppInstallationForAuthenticatedAppByID -ID $ID -Context $Context
-            }
             'List installations for the authenticated app' {
                 Get-GitHubAppInstallationForAuthenticatedAppAsList @params
+            }
+            'Get installation for the authenticated app by ID' {
+                Get-GitHubAppInstallationForAuthenticatedAppByID -ID $ID -Context $Context
             }
         }
     }
