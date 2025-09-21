@@ -82,10 +82,10 @@
         $this.SuspendedAt = $Object.suspended_at
         $this.SuspendedBy = [GitHubUser]::new($Object.suspended_by)
         $this.Url = $Object.html_url
-        $this.UpdateStatus()
+        $this.SetStatus()
     }
 
-    GitHubAppInstallation([PSCustomObject] $Object, [string] $Target, [string] $Type, [GitHubContext] $Context) {
+    GitHubAppInstallation([PSCustomObject] $Object, [string] $Target, [string] $Type, [string] $HostName) {
         $this.ID = $Object.id
         $this.App = [GitHubApp]::new(
             [PSCustomObject]@{
@@ -96,7 +96,7 @@
         $this.Target = [GitHubOwner]@{
             Name = $Target
             Type = $Type
-            Url  = "https://$($Context.HostName)/$Target"
+            Url  = "https://$HostName/$Target"
         }
         $this.Type = $Type
         $this.RepositorySelection = $Object.repository_selection
@@ -107,7 +107,7 @@
         $this.UpdatedAt = $Object.updated_at
         $this.SuspendedAt = $Object.suspended_at
         $this.SuspendedBy = [GitHubUser]::new($Object.suspended_by)
-        $this.Url = "https://$($Context.HostName)/$($Type.ToLower())s/$Target/settings/installations/$($Object.id)"
+        $this.Url = "https://$HostName/$($Type.ToLower())s/$Target/settings/installations/$($Object.id)"
         $this.Status = 'Unknown'
     }
 
@@ -139,38 +139,7 @@
             }
         }
 
-        # Compare permissions by creating lookup dictionaries
-        $appPermissionLookup = @{}
-        foreach ($perm in $appPermissionsFiltered) {
-            $appPermissionLookup[$perm.Name] = $perm.Value
-        }
-
-        $installationPermissionLookup = @{}
-        foreach ($perm in $this.Permissions) {
-            $installationPermissionLookup[$perm.Name] = $perm.Value
-        }
-
-        # Check if permissions match
-        $permissionsMatch = $true
-
-        # Check if all app permissions exist in installation with same values
-        foreach ($name in $appPermissionLookup.Keys) {
-            if (-not $installationPermissionLookup.ContainsKey($name) -or
-                $installationPermissionLookup[$name] -ne $appPermissionLookup[$name]) {
-                $permissionsMatch = $false
-                break
-            }
-        }
-
-        # Check if installation has any extra permissions not in the app
-        if ($permissionsMatch) {
-            foreach ($name in $installationPermissionLookup.Keys) {
-                if (-not $appPermissionLookup.ContainsKey($name)) {
-                    $permissionsMatch = $false
-                    break
-                }
-            }
-        }
+        $permissionsMatch = Compare-Object -ReferenceObject $appPermissionsFiltered -DifferenceObject $this.Permissions | Measure-Object
 
         $this.Status = $permissionsMatch ? 'Ok' : 'Outdated'
     }
