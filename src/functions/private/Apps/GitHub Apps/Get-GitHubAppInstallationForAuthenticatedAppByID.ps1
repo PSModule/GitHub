@@ -45,8 +45,11 @@
             Context     = $Context
         }
 
+        # Get the authenticated app to compare permissions and events
+        $authenticatedApp = Get-GitHubAuthenticatedApp -Context $Context
+
         Invoke-GitHubAPI @apiParams | ForEach-Object {
-            [GitHubAppInstallation]::new($_.Response, $Context)
+            [GitHubAppInstallation]::new($_.Response, $authenticatedApp)
         }
     }
 
