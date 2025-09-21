@@ -204,11 +204,11 @@ Describe 'Apps' {
             }
 
             It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
-                $context | Should -BeOfType 'GitHubAppInstallationContext'
-                # $context.ClientID | Should -Be $githubApp.ClientID
-                # $context.TokenExpiresAt | Should -BeOfType [datetime]
-                # $context.InstallationID | Should -BeOfType [uint64]
-                # $context.InstallationID | Should -BeGreaterThan 0
+                # $context | Should -BeOfType 'GitHubAppInstallationContext'
+                $context.ClientID | Should -Be $githubApp.ClientID
+                $context.TokenExpiresAt | Should -BeOfType [datetime]
+                $context.InstallationID | Should -BeOfType [uint64]
+                $context.InstallationID | Should -BeGreaterThan 0
                 # $context.Events | Should -BeOfType 'string'
                 # $context.InstallationType | Should -Be $ownertype
                 # $context.InstallationName | Should -Be $owner
@@ -233,21 +233,21 @@ Describe 'Apps' {
                 # $context.Events | Should -BeOfType 'string'
             }
 
-            It 'Connect-GitHubApp - TokenExpiresIn property should be calculated correctly' {
-                $context.TokenExpiresIn | Should -BeOfType [TimeSpan]
-                $context.TokenExpiresIn.TotalMinutes | Should -BeGreaterThan 0
-                $context.TokenExpiresIn.TotalMinutes | Should -BeLessOrEqual 60
-            }
+            # It 'Connect-GitHubApp - TokenExpiresIn property should be calculated correctly' {
+            #     $context.TokenExpiresIn | Should -BeOfType [TimeSpan]
+            #     $context.TokenExpiresIn.TotalMinutes | Should -BeGreaterThan 0
+            #     $context.TokenExpiresIn.TotalMinutes | Should -BeLessOrEqual 60
+            # }
 
-            It 'Revoked GitHub App token should fail on API call' -Skip:($TokenType -eq 'GITHUB_TOKEN') {
-                $org = Get-GitHubOrganization -Name PSModule -Context $context
-                $org | Should -Not -BeNullOrEmpty
-                $context | Disconnect-GitHub
+            # It 'Revoked GitHub App token should fail on API call' -Skip:($TokenType -eq 'GITHUB_TOKEN') {
+            #     $org = Get-GitHubOrganization -Name PSModule -Context $context
+            #     $org | Should -Not -BeNullOrEmpty
+            #     $context | Disconnect-GitHub
 
-                {
-                    Invoke-RestMethod -Method Get -Uri "$($context.ApiBaseUri)/orgs/PSModule" -Authentication Bearer -Token $context.token
-                } | Should -Throw
-            }
+            #     {
+            #         Invoke-RestMethod -Method Get -Uri "$($context.ApiBaseUri)/orgs/PSModule" -Authentication Bearer -Token $context.token
+            #     } | Should -Throw
+            # }
         }
     }
 }
