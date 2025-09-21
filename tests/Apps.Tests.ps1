@@ -192,6 +192,9 @@ Describe 'Apps' {
                 LogGroup 'Context' {
                     Write-Host "$($context | Format-List | Out-String)"
                 }
+                LogGroup 'Context' {
+                    Write-Host "$(Get-GitHubContext -ListAvailable | Format-List | Out-String)"
+                }
                 LogGroup 'Permissions' {
                     Write-Host "$($context.Permissions | Format-Table | Out-String)"
                 }
