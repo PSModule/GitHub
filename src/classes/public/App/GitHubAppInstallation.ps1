@@ -135,7 +135,7 @@
             }
         }
 
-        $permissionsMatch = [GitHubPermission]::ComparePermissionLists($this.Permissions, $appPermissionsFiltered)
+        $permissionsMatch = Compare-Object -ReferenceObject $appPermissionsFiltered -DifferenceObject $this.Permissions | Measure-Object
 
         $this.Status = $permissionsMatch ? 'Ok' : 'Outdated'
     }
