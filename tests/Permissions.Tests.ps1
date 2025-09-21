@@ -37,7 +37,7 @@ Describe 'Permissions' {
 
         Context 'For Apps' -Skip:($AuthType -ne 'APP') {
             BeforeAll {
-                $permissionsDefinitions = [GitHubPermissionDefinition]::List
+                $permissionsDefinitions = [GitHubPermission]::NewList()
                 $installationContext = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
                 LogGroup 'Context - Installation' {
                     Write-Host "$($installationContext | Format-List | Out-String)"
@@ -65,99 +65,9 @@ Describe 'Permissions' {
         }
     }
 
-    Context 'Get-GitHubPermissionDefinition' {
-        It 'Should return all permission definitions when called without parameters' {
-            $result = Get-GitHubPermissionDefinition
-            $result | Should -Not -BeNullOrEmpty
-            $result | Should -BeOfType [GitHubPermissionDefinition]
-            $result.Count | Should -BeGreaterThan 0
-        }
-
-        It 'Should return only Fine-grained permissions when filtered by Type' {
-            $result = Get-GitHubPermissionDefinition -Type Fine-grained
-            $result | Should -Not -BeNullOrEmpty
-            $result | Should -BeOfType [GitHubPermissionDefinition]
-            $result | ForEach-Object { $_.Type | Should -Be 'Fine-grained' }
-        }
-
-        It 'Should return only Repository permissions when filtered by Scope' {
-            $result = Get-GitHubPermissionDefinition -Scope Repository
-            $result | Should -Not -BeNullOrEmpty
-            $result | Should -BeOfType [GitHubPermissionDefinition]
-            $result | ForEach-Object { $_.Scope | Should -Be 'Repository' }
-        }
-
-        It 'Should return only Organization permissions when filtered by Scope' {
-            $result = Get-GitHubPermissionDefinition -Scope Organization
-            $result | Should -Not -BeNullOrEmpty
-            $result | Should -BeOfType [GitHubPermissionDefinition]
-            $result | ForEach-Object { $_.Scope | Should -Be 'Organization' }
-        }
-
-        It 'Should return only User permissions when filtered by Scope' {
-            $result = Get-GitHubPermissionDefinition -Scope User
-            $result | Should -Not -BeNullOrEmpty
-            $result | Should -BeOfType [GitHubPermissionDefinition]
-            $result | ForEach-Object { $_.Scope | Should -Be 'User' }
-        }
-
-        It 'Should filter by both Type and Scope when both are specified' {
-            $result = Get-GitHubPermissionDefinition -Type Fine-grained -Scope Repository
-            $result | Should -Not -BeNullOrEmpty
-            $result | Should -BeOfType [GitHubPermissionDefinition]
-            $result | ForEach-Object {
-                $_.Type | Should -Be 'Fine-grained'
-                $_.Scope | Should -Be 'Repository'
-            }
-        }
-
-        It 'Should include expected properties for each permission' {
-            $result = Get-GitHubPermissionDefinition | Select-Object -First 1
-            $result.Name | Should -Not -BeNullOrEmpty
-            $result.DisplayName | Should -Not -BeNullOrEmpty
-            $result.Description | Should -Not -BeNullOrEmpty
-            $result.URL | Should -Not -BeNullOrEmpty
-            $result.Options | Should -Not -BeNullOrEmpty
-            $result.Type | Should -Not -BeNullOrEmpty
-            $result.Scope | Should -Not -BeNullOrEmpty
-        }
-
-        It 'Should include the contents permission for repositories' {
-            $result = Get-GitHubPermissionDefinition | Where-Object { $_.Name -eq 'contents' }
-            $result | Should -Not -BeNullOrEmpty
-            $result.Name | Should -Be 'contents'
-            $result.DisplayName | Should -Be 'Contents'
-            $result.Scope | Should -Be 'Repository'
-            $result.Type | Should -Be 'Fine-grained'
-            $result.Options | Should -Contain 'read'
-            $result.Options | Should -Contain 'write'
-        }
-
-        It 'Should include the members permission for organizations' {
-            $result = Get-GitHubPermissionDefinition | Where-Object { $_.Name -eq 'members' }
-            $result | Should -Not -BeNullOrEmpty
-            $result.Name | Should -Be 'members'
-            $result.DisplayName | Should -Be 'Members'
-            $result.Scope | Should -Be 'Organization'
-            $result.Type | Should -Be 'Fine-grained'
-            $result.Options | Should -Contain 'read'
-            $result.Options | Should -Contain 'write'
-        }
-
-        It 'Should include profile permission for users' {
-            $result = Get-GitHubPermissionDefinition | Where-Object { $_.Name -eq 'profile' }
-            $result | Should -Not -BeNullOrEmpty
-            $result.Name | Should -Be 'profile'
-            $result.DisplayName | Should -Be 'Profile'
-            $result.Scope | Should -Be 'User'
-            $result.Type | Should -Be 'Fine-grained'
-            $result.Options | Should -Contain 'write'
-        }
-    }
-
     Context 'GitHubPermission Class' {
         BeforeAll {
-            $permission = [GitHubPermissionDefinition]@{
+            $permission = [GitHubPermission]@{
                 Name        = 'test'
                 DisplayName = 'Test Permission'
                 Description = 'A test permission'
