@@ -37,7 +37,7 @@ Describe 'Permissions' {
 
         Context 'For Apps' -Skip:($AuthType -ne 'APP') {
             BeforeAll {
-                $permissionsDefinitions = [GitHubPermission]::NewList()
+                $permissionsDefinitions = [GitHubPermission]::NewPermissionList()
                 $installationContext = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
                 LogGroup 'Context - Installation' {
                     Write-Host "$($installationContext | Format-List | Out-String)"

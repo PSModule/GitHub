@@ -54,7 +54,7 @@ class GitHubPermission : System.IEquatable[Object] {
         $this.Scope = 'Unknown'
     }
 
-    static [GitHubPermission[]] NewList() {
+    static [GitHubPermission[]] NewPermissionList() {
         return @(
             # ------------------------------
             # Repository Fine-Grained Permission Definitions
@@ -1264,7 +1264,7 @@ class GitHubPermission : System.IEquatable[Object] {
 
     # Create a new list of permissions filtered by installation type with null values
     static [GitHubPermission[]] NewPermissionList([string] $InstallationType) {
-        $all = [GitHubPermission]::NewList()
+        $all = [GitHubPermission]::NewPermissionList()
         $returned = switch ($InstallationType) {
             'Enterprise' { $all | Where-Object { $_.Scope -eq 'Enterprise' } }
             'Organization' { $all | Where-Object { $_.Scope -in @('Organization', 'Repository') } }

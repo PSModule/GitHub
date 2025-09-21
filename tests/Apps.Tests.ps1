@@ -24,7 +24,7 @@ Describe 'Apps' {
 
     Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
         BeforeAll {
-            $permissionsList = [GitHubPermission]::NewList()
+            $permissionsList = [GitHubPermission]::NewPermissionList()
             LogGroup 'Context' {
                 $context = Connect-GitHubAccount @connectParams -PassThru -Silent
                 Write-Host "$($context | Format-List | Out-String)"
@@ -187,7 +187,7 @@ Describe 'Apps' {
             BeforeAll {
                 $githubApp = Get-GitHubApp
                 $config = Get-GitHubConfig
-                $permissionsList = [GitHubPermission]::NewList()
+                $permissionsList = [GitHubPermission]::NewPermissionList()
                 $context = Connect-GitHubApp @connectAppParams -PassThru -Silent
                 LogGroup 'Context' {
                     Write-Host "$($context | Format-List | Out-String)"
