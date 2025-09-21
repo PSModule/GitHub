@@ -59,7 +59,7 @@
         $this.RepositorySelection = $Object.repository_selection
         $this.Permissions = [GitHubPermission]::NewPermissionList($Object.permissions, $this.Type)
         $this.Events = , ($Object.events)
-        $this.FilePaths = $Object.single_file_paths
+        $this.FilePaths = , ($Object.single_file_paths)
         $this.CreatedAt = $Object.created_at
         $this.UpdatedAt = $Object.updated_at
         $this.SuspendedAt = $Object.suspended_at
@@ -76,7 +76,7 @@
         $this.RepositorySelection = $Object.repository_selection
         $this.Permissions = [GitHubPermission]::NewPermissionList($Object.permissions, $this.Type)
         $this.Events = , ($Object.events)
-        $this.FilePaths = $Object.single_file_paths
+        $this.FilePaths = , ($Object.single_file_paths)
         $this.CreatedAt = $Object.created_at
         $this.UpdatedAt = $Object.updated_at
         $this.SuspendedAt = $Object.suspended_at
@@ -111,31 +111,14 @@
         $this.Status = 'Unknown'
     }
 
-    GitHubAppInstallation([PSCustomObject] $Object, [string] $Target, [string] $Type, [GitHubContext] $Context, [GitHubApp] $App) {
-        $this.ID = $Object.id
-        $this.App = $App
-        $this.Target = [GitHubOwner]@{
-            Name = $Target
-            Type = $Type
-            Url  = "https://$($Context.HostName)/$Target"
-        }
-        $this.Type = $Type
-        $this.RepositorySelection = $Object.repository_selection
-        $this.Permissions = [GitHubPermission]::NewPermissionList($Object.permissions, $this.Type)
-        $this.Events = , ($Object.events)
-        $this.FilePaths = $Object.single_file_paths
-        $this.CreatedAt = $Object.created_at
-        $this.UpdatedAt = $Object.updated_at
-        $this.SuspendedAt = $Object.suspended_at
-        $this.SuspendedBy = [GitHubUser]::new($Object.suspended_by)
-        $this.Url = "https://$($Context.HostName)/$($Type.ToLower())s/$Target/settings/installations/$($Object.id)"
-        $this.UpdateStatus()
-    }
-
     # Updates the Status property by comparing installation permissions with app permissions
     # filtered by the appropriate scope based on installation type
     [void] UpdateStatus() {
         if (-not $this.App -or -not $this.App.Permissions) {
+            $this.Status = 'Unknown'
+            return
+        }
+        if (-not $this.Permissions) {
             $this.Status = 'Unknown'
             return
         }

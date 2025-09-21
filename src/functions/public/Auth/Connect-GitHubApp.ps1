@@ -41,7 +41,7 @@
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'Is the CLI part of the module.')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText', '',
         Justification = 'The tokens are received as clear text. Mitigating exposure by removing variables and performing garbage collection.')]
-    [CmdletBinding(DefaultParameterSetName = '__AllParameterSets')]
+    [CmdletBinding(DefaultParameterSetName = 'All Installations')]
     param(
         # The user account to connect to.
         [Parameter(ParameterSetName = 'Filtered')]
@@ -57,6 +57,10 @@
         [Parameter(ParameterSetName = 'Filtered')]
         [SupportsWildcards()]
         [string[]] $Enterprise,
+
+        # Installation objects from pipeline for parallel processing.
+        [Parameter(Mandatory, ParameterSetName = 'Installation', ValueFromPipeline)]
+        [GitHubAppInstallation[]] $Installation,
 
         # Passes the context object to the pipeline.
         [Parameter()]

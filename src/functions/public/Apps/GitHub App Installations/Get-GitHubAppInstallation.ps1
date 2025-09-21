@@ -1,12 +1,13 @@
 ﻿function Get-GitHubAppInstallation {
     <#
         .SYNOPSIS
-        List installations for the authenticated app, on organization or enterprise organization.
+        List installations for the authenticated app, on organization or enterprise organization, or get a single installation by ID.
 
         .DESCRIPTION
         Lists the installations for the authenticated app.
         If the app is installed on an enterprise, the installations for the enterprise are returned.
         If the app is installed on an organization, the installations for the organization are returned.
+        You can also retrieve a single installation by its unique ID.
 
         .LINK
         https://psmodule.io/GitHub/Functions/Apps/GitHub%20App%20Installations/Get-GitHubAppInstallation
@@ -18,7 +19,7 @@
         [Parameter(
             Mandatory,
             ValueFromPipelineByPropertyName,
-            ParameterSetName = 'List installations on an Enterprise'
+            ParameterSetName = 'List installations on an Enterprise Organization'
         )]
         [string] $Enterprise,
 
@@ -26,7 +27,7 @@
         [Parameter(
             Mandatory,
             ValueFromPipelineByPropertyName,
-            ParameterSetName = 'List installations on an Enterprise'
+            ParameterSetName = 'List installations on an Enterprise Organization'
         )]
         [Parameter(
             Mandatory,
@@ -35,8 +36,18 @@
         )]
         [string] $Organization,
 
+        # The unique identifier of the installation.
+        [Parameter(
+            Mandatory,
+            ValueFromPipelineByPropertyName,
+            ParameterSetName = 'Get installation for the authenticated app by ID'
+        )]
+        [int] $ID,
+
         # The number of results per page (max 100).
-        [Parameter()]
+        [Parameter(ParameterSetName = 'List installations for the authenticated app')]
+        [Parameter(ParameterSetName = 'List installations on an Enterprise Organization')]
+        [Parameter(ParameterSetName = 'List installations on an Organization')]
         [System.Nullable[int]] $PerPage,
 
         # The context to run the command in. Used to get the details for the API call.
@@ -58,21 +69,24 @@
         }
         Write-Debug "ParamSet: $($PSCmdlet.ParameterSetName)"
         $installations = switch ($PSCmdlet.ParameterSetName) {
-            'List installations on an Enterprise' {
+            'List installations on an Enterprise Organization' {
                 $params += @{
                     Enterprise   = $Enterprise
                     Organization = $Organization
                 }
-                Get-GitHubEnterpriseOrganizationAppInstallation @params
+                Get-GitHubAppInstallationForEnterpriseOrganization @params
             }
             'List installations on an Organization' {
                 $params += @{
                     Organization = $Organization
                 }
-                Get-GitHubOrganizationAppInstallation @params
+                Get-GitHubAppInstallationForOrganization @params
             }
             'List installations for the authenticated app' {
-                Get-GitHubAppInstallationForAuthenticatedApp @params
+                Get-GitHubAppInstallationForAuthenticatedAppAsList @params
+            }
+            'Get installation for the authenticated app by ID' {
+                Get-GitHubAppInstallationForAuthenticatedAppByID -ID $ID -Context $Context
             }
         }
     }
