@@ -1,4 +1,4 @@
-﻿function Get-GitHubAppInstallationForAuthenticatedApp {
+﻿function Get-GitHubAppInstallationForAuthenticatedAppAsList {
     <#
         .SYNOPSIS
         List installations for the authenticated app.
@@ -10,7 +10,7 @@
         to access this endpoint.
 
         .EXAMPLE
-        Get-GitHubAppInstallationForAuthenticatedApp
+        Get-GitHubAppInstallationForAuthenticatedAppAsList
 
         List installations for the authenticated app.
 
@@ -46,12 +46,9 @@
             Context     = $Context
         }
 
-        # Get the authenticated app to compare permissions and events
-        $authenticatedApp = Get-GitHubAuthenticatedApp -Context $Context
-
         Invoke-GitHubAPI @apiParams | ForEach-Object {
             foreach ($installation in $_.Response) {
-                [GitHubAppInstallation]::new($installation, $authenticatedApp)
+                [GitHubAppInstallation]::new($installation, $Context)
             }
         }
     }
