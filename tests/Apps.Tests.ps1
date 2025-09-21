@@ -24,7 +24,7 @@ Describe 'Apps' {
 
     Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
         BeforeAll {
-            $permissionsDefinitions = [GitHubPermissionDefinition]::List
+            $permissionsList = [GitHubPermission]::NewList()
             LogGroup 'Context' {
                 $context = Connect-GitHubAccount @connectParams -PassThru -Silent
                 Write-Host "$($context | Format-List | Out-String)"
@@ -68,7 +68,7 @@ Describe 'Apps' {
                 $app.UpdatedAt | Should -Not -BeNullOrEmpty
                 $app.Permissions.Count | Should -BeGreaterThan 0
                 $app.Permissions | Should -BeOfType 'GitHubPermission'
-                $app.Permissions.Name | Should -BeIn $permissionsDefinitions.Name
+                $app.Permissions.Name | Should -BeIn $permissionsList.Name
                 $app.Events | Should -BeOfType 'string'
                 $app.Installations | Should -Not -BeNullOrEmpty
             }
@@ -99,7 +99,7 @@ Describe 'Apps' {
                     $installation.RepositorySelection | Should -Not -BeNullOrEmpty
                     $installation.Permissions.Count | Should -BeGreaterThan 0
                     $installation.Permissions | Should -BeOfType [GitHubPermission]
-                    $installation.Permissions.Name | Should -BeIn $permissionsDefinitions.Name
+                    $installation.Permissions.Name | Should -BeIn $permissionsList.Name
                     $installation.Events | Should -BeOfType 'string'
                     $installation.CreatedAt | Should -Not -BeNullOrEmpty
                     $installation.UpdatedAt | Should -Not -BeNullOrEmpty
@@ -129,7 +129,7 @@ Describe 'Apps' {
                 $installation.RepositorySelection | Should -Not -BeNullOrEmpty
                 $installation.Permissions.Count | Should -BeGreaterThan 0
                 $installation.Permissions | Should -BeOfType [GitHubPermission]
-                $installation.Permissions.Name | Should -BeIn $permissionsDefinitions.Name
+                $installation.Permissions.Name | Should -BeIn $permissionsList.Name
                 $installation.Events | Should -BeOfType 'string'
                 $installation.CreatedAt | Should -Not -BeNullOrEmpty
                 $installation.UpdatedAt | Should -Not -BeNullOrEmpty
@@ -187,7 +187,7 @@ Describe 'Apps' {
             BeforeAll {
                 $githubApp = Get-GitHubApp
                 $config = Get-GitHubConfig
-                $permissionsDefinitions = [GitHubPermissionDefinition]::List
+                $permissionsList = [GitHubPermission]::NewList()
                 $context = Connect-GitHubApp @connectAppParams -PassThru -Silent
                 LogGroup 'Context' {
                     Write-Host "$($context | Format-List | Out-String)"
@@ -229,7 +229,7 @@ Describe 'Apps' {
                 # $context.PerPage | Should -Be $config.PerPage
                 # $context.Permissions.Count | Should -BeGreaterThan 0
                 # $context.Permissions | Should -BeOfType [GitHubPermission]
-                # $context.Permissions.Name | Should -BeIn $permissionsDefinitions.Name
+                # $context.Permissions.Name | Should -BeIn $permissionsList.Name
                 # $context.Events | Should -BeOfType 'string'
             }
 
