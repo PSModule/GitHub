@@ -51,7 +51,6 @@
         $this.App = [GitHubApp]::new(
             [PSCustomObject]@{
                 client_id = $Object.client_id
-                app_id    = $Object.app_id
                 app_slug  = $Object.app_slug
             }
         )
@@ -91,7 +90,6 @@
         $this.App = [GitHubApp]::new(
             [PSCustomObject]@{
                 client_id = $Object.client_id
-                app_id    = $Object.app_id
                 app_slug  = $Object.app_slug
             }
         )
