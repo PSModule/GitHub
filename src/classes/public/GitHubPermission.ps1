@@ -1362,11 +1362,9 @@ class GitHubPermission : GitHubPermissionDefinition, System.IEquatable[Object] {
     # Compare two collections of permission objects for equality.
     # Returns true if both contain the same set of permission names with identical values.
     static [bool] ComparePermissionLists([System.Collections.IEnumerable] $First, [System.Collections.IEnumerable] $Second) {
-        foreach ($permission in $First) {
-            $appPermission = $Second | Where-Object { $_.Name -eq $permission.Name }
-            if ($permission -ne $appPermission) {
-                return $false
-            }
+        $comparrison = Compare-Object -ReferenceObject $First -DifferenceObject $Second
+        if ($comparrison) {
+            return $false
         }
         return $true
     }
