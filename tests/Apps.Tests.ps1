@@ -48,8 +48,17 @@ Describe 'Apps' {
         }
 
         Context 'GitHub Apps' -Skip:($AuthType -ne 'APP') {
-            It 'Get-GitHubApp - Can get app details' {
+            BeforeAll {
                 $app = Get-GitHubApp
+                $installations = Get-GitHubAppInstallation
+                $installationRequests = Get-GitHubAppInstallationRequest
+                LogGroup 'All Installations (cached)' {
+                    Write-Host ($installations | Out-String)
+                }
+                $installationSample = $installations | Select-Object -First 1
+            }
+
+            It 'Get-GitHubApp - Can get app details' {
                 LogGroup 'App' {
                     Write-Host ($app | Format-List | Out-String)
                 }
@@ -74,15 +83,12 @@ Describe 'Apps' {
             }
 
             It 'Get-GitHubAppInstallationRequest - Can get installation requests' {
-                $installationRequests = Get-GitHubAppInstallationRequest
                 LogGroup 'Installation requests' {
                     Write-Host ($installationRequests | Format-List | Out-String)
                 }
             }
 
             It 'Get-GitHubAppInstallation - Can get app installations' {
-                $githubApp = Get-GitHubApp
-                $installations = Get-GitHubAppInstallation
                 $installations | Should -Not -BeNullOrEmpty
                 foreach ($installation in $installations) {
                     LogGroup "Installation - $($installation.Target.Name)" {
@@ -91,7 +97,7 @@ Describe 'Apps' {
                     $installation | Should -BeOfType 'GitHubAppInstallation'
                     $installation.ID | Should -Not -BeNullOrEmpty
                     $installation.App | Should -BeOfType 'GitHubApp'
-                    $installation.App.ClientID | Should -Be $githubApp.ClientID
+                    $installation.App.ClientID | Should -Be $app.ClientID
                     $installation.App.Slug | Should -Not -BeNullOrEmpty
                     $installation.Target | Should -BeOfType 'GitHubOwner'
                     $installation.Target | Should -Not -BeNullOrEmpty
@@ -111,9 +117,35 @@ Describe 'Apps' {
                 }
             }
 
+            It 'Get-GitHubAppInstallation -ID <ID>' {
+                $installationSample | Should -Not -BeNullOrEmpty
+                $installationByID = Get-GitHubAppInstallation -ID $installationSample.ID
+                LogGroup "Installation By ID [$($installationSample.ID)]" {
+                    Write-Host ($installationByID | Format-List | Out-String)
+                }
+                $installationByID | Should -Not -BeNullOrEmpty
+                $installationByID | Should -BeOfType 'GitHubAppInstallation'
+                $installationByID.ID | Should -Be $installationSample.ID
+                $installationByID.Target.Name | Should -Be $installationSample.Target.Name
+                $installationByID.Type | Should -Be $installationSample.Type
+                $installationByID.Permissions.Count | Should -BeGreaterThan 0
+            }
+
+            It 'New-GitHubAppInstallationAccessToken - Can create installation access token' {
+                $installationSample | Should -Not -BeNullOrEmpty
+                $accessToken = New-GitHubAppInstallationAccessToken -ID $installationSample.ID -Context $context
+                LogGroup "Installation Access Token [$($installationSample.ID)]" {
+                    Write-Host ($accessToken | Format-List | Out-String)
+                }
+                $accessToken | Should -Not -BeNullOrEmpty
+                $accessToken.Token | Should -BeOfType [System.Security.SecureString]
+                $accessToken.ExpiresAt | Should -BeGreaterThan (Get-Date)
+                $accessToken.Permissions | Should -Not -BeNullOrEmpty
+                $accessToken.RepositorySelection | Should -Not -BeNullOrEmpty
+            }
+
             It 'Get-GitHubAppInstallation - <ownerType>' {
-                $githubApp = Get-GitHubApp
-                $installation = Get-GitHubAppInstallation | Where-Object { ($_.Target.Name -eq $owner) -and ($_.Type -eq $ownerType) }
+                $installation = $installations | Where-Object { ($_.Target.Name -eq $owner) -and ($_.Type -eq $ownerType) }
                 LogGroup "Installation - $ownerType" {
                     Write-Host ($installation | Format-List | Out-String)
                 }
@@ -121,7 +153,7 @@ Describe 'Apps' {
                 $installation | Should -BeOfType 'GitHubAppInstallation'
                 $installation.ID | Should -Not -BeNullOrEmpty
                 $installation.App | Should -BeOfType 'GitHubApp'
-                $installation.App.ClientID | Should -Be $githubApp.ClientID
+                $installation.App.ClientID | Should -Be $app.ClientID
                 $installation.App.Slug | Should -Not -BeNullOrEmpty
                 $installation.Target | Should -BeOfType 'GitHubOwner'
                 $installation.Target | Should -Be $owner
