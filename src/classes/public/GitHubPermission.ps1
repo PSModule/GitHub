@@ -1,4 +1,4 @@
-class GitHubPermissionDefinition {
+class GitHubPermission : System.IEquatable[Object] {
     # The programmatic name of the permission as returned by the GitHub API
     [string] $Name
 
@@ -20,11 +20,45 @@ class GitHubPermissionDefinition {
     # The scope at which this permission applies (Repository, Organization, User, Enterprise)
     [string] $Scope
 
-    static [GitHubPermissionDefinition[]] $List = @(
+    # The value assigned to the permission. Must be one of the options defined in the parent class.
+    [string] $Value
+
+    GitHubPermission() {}
+
+    GitHubPermission(
+        [string]$Name,
+        [string]$DisplayName,
+        [string]$Description,
+        [string]$URL,
+        [string[]]$Options,
+        [string]$Type,
+        [string]$Scope
+    ) {
+        $this.Name = $Name
+        $this.DisplayName = $DisplayName
+        $this.Description = $Description
+        $this.URL = [uri]$URL
+        $this.Options = $Options
+        $this.type = $Type
+        $this.Scope = $Scope
+    }
+
+    GitHubPermission([string] $Permission, [string] $Value) {
+        $this.Name = $Permission
+        $this.Value = $Value
+        $this.DisplayName = $Permission
+        $this.Description = 'Unknown permission - Open issue to add metadata'
+        $this.URL = $null
+        $this.Options = @()
+        $this.type = 'Unknown'
+        $this.Scope = 'Unknown'
+    }
+
+    static [GitHubPermission[]] $List = @(
         # ------------------------------
         # Repository Fine-Grained Permission Definitions
         # ------------------------------
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'actions',
             'Actions',
             'Workflows, workflow runs and artifacts.',
@@ -37,7 +71,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'administration',
             'Administration',
             'Repository creation, deletion, settings, teams, and collaborators.',
@@ -50,7 +84,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'attestations',
             'Attestations',
             'Create and retrieve attestations for a repository.',
@@ -63,7 +97,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'checks',
             'Checks',
             'Checks on code.',
@@ -76,7 +110,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'security_events',
             'Code scanning alerts',
             'View and manage code scanning alerts.',
@@ -89,7 +123,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'codespaces',
             'Codespaces',
             'Create, edit, delete and list Codespaces.',
@@ -102,7 +136,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'codespaces_lifecycle_admin',
             'Codespaces lifecycle admin',
             'Manage the lifecycle of Codespaces, including starting and stopping.',
@@ -115,7 +149,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'codespaces_metadata',
             'Codespaces metadata',
             'Access Codespaces metadata including the devcontainers and machine type.',
@@ -127,7 +161,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'codespaces_secrets',
             'Codespaces secrets',
             'Restrict Codespaces user secrets modifications to specific repositories.',
@@ -140,7 +174,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'statuses',
             'Commit statuses',
             'Commit statuses.',
@@ -153,7 +187,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'contents',
             'Contents',
             'Repository contents, commits, branches, downloads, releases, and merges.',
@@ -166,7 +200,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'repository_custom_properties',
             'Custom properties',
             'Read and write repository custom properties values at the repository level, when allowed by the property.',
@@ -179,7 +213,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'vulnerability_alerts',
             'Dependabot alerts',
             'Retrieve Dependabot alerts.',
@@ -192,7 +226,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'dependabot_secrets',
             'Dependabot secrets',
             'Manage Dependabot repository secrets.',
@@ -205,7 +239,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'deployments',
             'Deployments',
             'Deployments and deployment statuses.',
@@ -218,7 +252,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'discussions',
             'Discussions',
             'Discussions and related comments and labels.',
@@ -231,7 +265,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'environments',
             'Environments',
             'Manage repository environments.',
@@ -244,7 +278,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'issues',
             'Issues',
             'Issues and related comments, assignees, labels, and milestones.',
@@ -257,7 +291,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'merge_queues',
             'Merge queues',
             "Manage a repository's merge queues",
@@ -270,7 +304,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermissionDefinition]::new( #Mandatory
+        [GitHubPermission]::new( #Mandatory
             'metadata',
             'Metadata',
             'Search repositories, list collaborators, and access repository metadata.',
@@ -282,7 +316,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'packages',
             'Packages',
             'Packages published to the GitHub Package Platform.',
@@ -295,7 +329,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'pages',
             'Pages',
             'Retrieve Pages statuses, configuration, and builds, as well as create new builds.',
@@ -308,7 +342,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'repository_projects',
             'Projects',
             'Manage classic projects within a repository.',
@@ -322,7 +356,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'pull_requests',
             'Pull requests',
             'Pull requests and related comments, assignees, labels, milestones, and merges.',
@@ -335,7 +369,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'repository_advisories',
             'Repository security advisories',
             'View and manage repository security advisories.',
@@ -348,7 +382,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'repo_secret_scanning_dismissal_requests',
             'Secret scanning alert dismissal requests',
             'View and manage secret scanning alert dismissal requests',
@@ -361,7 +395,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'secret_scanning_alerts',
             'Secret scanning alerts',
             'View and manage secret scanning alerts.',
@@ -374,7 +408,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'secret_scanning_bypass_requests',
             'Secret scanning push protection bypass requests',
             'Review and manage repository secret scanning push protection bypass requests.',
@@ -387,7 +421,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'secrets',
             'Secrets',
             'Manage Actions repository secrets.',
@@ -400,7 +434,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'single_file',
             'Single file',
             'Manage just a single file.',
@@ -413,7 +447,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'actions_variables',
             'Variables',
             'Manage Actions repository variables.',
@@ -426,7 +460,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'repository_hooks',
             'Webhooks',
             'Manage the post-receive hooks for a repository.',
@@ -439,7 +473,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Repository'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'workflows',
             'Workflows',
             'Update GitHub Action workflow files.',
@@ -456,7 +490,7 @@ class GitHubPermissionDefinition {
         # ------------------------------
         # Organization Fine-Grained Permission Definitions
         # ------------------------------
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'organization_api_insights',
             'API Insights',
             'View statistics on how the API is being used for an organization.',
@@ -468,7 +502,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'organization_administration',
             'Administration',
             'Manage access to an organization.',
@@ -481,7 +515,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'organization_user_blocking',
             'Blocking users',
             'View and manage users blocked by the organization.',
@@ -494,7 +528,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'organization_campaigns',
             'Campaigns',
             'Manage campaigns.',
@@ -507,7 +541,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'organization_custom_org_roles',
             'Custom organization roles',
             'Create, edit, delete and list custom organization roles. View system organization roles.',
@@ -520,7 +554,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'organization_custom_properties',
             'Custom properties',
             'Read and write repository custom properties values and administer definitions at the organization level.',
@@ -534,7 +568,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'organization_custom_roles',
             'Custom repository roles',
             'Create, edit, delete and list custom repository roles.',
@@ -547,7 +581,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'organization_events',
             'Events',
             'View events triggered by an activity in an organization.',
@@ -559,7 +593,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'organization_copilot_seat_management',
             'GitHub Copilot Business',
             'Manage Copilot Business seats and settings',
@@ -572,7 +606,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'issue_fields',
             'Issue Fields',
             'Manage issue fields for an organization.',
@@ -585,7 +619,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'issue_types',
             'Issue Types',
             'Manage issue types for an organization.',
@@ -598,7 +632,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'organization_knowledge_bases',
             'Knowledge bases',
             'View and manage knowledge bases for an organization.',
@@ -611,7 +645,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'members',
             'Members',
             'Organization members and teams.',
@@ -624,7 +658,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'organization_models',
             'Models',
             'Manage model access for an organization.',
@@ -636,7 +670,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'organization_network_configurations',
             'Network configurations',
             'View and manage hosted compute network configurations available to an organization.',
@@ -649,7 +683,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'organization_announcement_banners',
             'Organization announcement banners',
             'View and modify announcement banners for an organization.',
@@ -662,7 +696,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'organization_secret_scanning_bypass_requests',
             'Organization bypass requests for secret scanning',
             'Review and manage secret scanning push protection bypass requests.',
@@ -675,7 +709,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'organization_codespaces',
             'Organization codespaces',
             'Manage Codespaces for an organization.',
@@ -688,7 +722,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'organization_codespaces_secrets',
             'Organization codespaces secrets',
             'Manage Codespaces Secrets for an organization.',
@@ -701,7 +735,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'organization_codespaces_settings',
             'Organization codespaces settings',
             'Manage Codespaces settings for an organization.',
@@ -714,7 +748,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'organization_dependabot_secrets',
             'Organization dependabot secrets',
             'Manage Dependabot organization secrets.',
@@ -727,7 +761,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'organization_code_scanning_dismissal_requests',
             'Organization dismissal requests for code scanning',
             'Review and manage code scanning alert dismissal requests.',
@@ -740,7 +774,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'organization_private_registries',
             'Organization private registries',
             'Manage private registries for an organization.',
@@ -753,7 +787,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'organization_personal_access_token_requests',
             'Personal access token requests',
             'Manage personal access token requests from organization members.',
@@ -766,7 +800,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'organization_personal_access_tokens',
             'Personal access tokens',
             'View and revoke personal access tokens that have been granted access to an organization.',
@@ -779,7 +813,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'organization_plan',
             'Plan',
             "View an organization's plan.",
@@ -791,7 +825,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'organization_projects',
             'Projects',
             'Manage projects for an organization.',
@@ -805,7 +839,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'secret_scanning_dismissal_requests',
             'Secret scanning alert dismissal requests',
             'Review and manage secret scanning alert dismissal requests',
@@ -818,7 +852,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'organization_secrets',
             'Secrets',
             'Manage Actions organization secrets.',
@@ -831,7 +865,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'organization_self_hosted_runners',
             'Self-hosted runners',
             'View and manage Actions self-hosted runners available to an organization.',
@@ -844,7 +878,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'team_discussions',
             'Team discussions',
             'Manage team discussions and related comments.',
@@ -857,7 +891,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'organization_actions_variables',
             'Variables',
             'Manage Actions organization variables.',
@@ -870,7 +904,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Organization'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'organization_hooks',
             'Webhooks',
             'Manage the post-receive hooks for an organization.',
@@ -887,7 +921,7 @@ class GitHubPermissionDefinition {
         # ------------------------------
         # User (Account) Fine-Grained Permission Definitions
         # ------------------------------
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'blocking',
             'Block another user',
             'View and manage users blocked by the user.',
@@ -900,7 +934,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'User'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'codespaces_user_secrets',
             'Codespaces user secrets',
             'Manage Codespaces user secrets.',
@@ -913,7 +947,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'User'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'copilot_messages',
             'Copilot Chat',
             'This application will receive your GitHub ID, your GitHub Copilot Chat session messages ' +
@@ -927,7 +961,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'User'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'copilot_editor_context',
             'Copilot Editor Context',
             'This application will receive bits of Editor Context (e.g. currently opened file) whenever you send it a message through Copilot Chat.',
@@ -939,7 +973,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'User'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'emails',
             'Email addresses',
             "Manage a user's email addresses.",
@@ -952,7 +986,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'User'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'user_events',
             'Events',
             "View events triggered by a user's activity.",
@@ -964,7 +998,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'User'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'followers',
             'Followers',
             "A user's followers",
@@ -977,7 +1011,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'User'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'gpg_keys',
             'GPG keys',
             "View and manage a user's GPG keys.",
@@ -990,7 +1024,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'User'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'gists',
             'Gists',
             "Create and modify a user's gists and comments.",
@@ -1003,7 +1037,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'User'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'keys',
             'Git SSH keys',
             'Git SSH keys',
@@ -1016,7 +1050,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'User'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'interaction_limits',
             'Interaction limits',
             'Interaction limits on repositories',
@@ -1029,7 +1063,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'User'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'knowledge_bases',
             'Knowledge bases',
             'View knowledge bases for a user.',
@@ -1042,7 +1076,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'User'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'user_models',
             'Models',
             'Allows access to GitHub Models.',
@@ -1054,7 +1088,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'User'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'plan',
             'Plan',
             "View a user's plan.",
@@ -1066,7 +1100,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'User'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'profile',
             'Profile',
             "Manage a user's profile settings.",
@@ -1078,7 +1112,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'User'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'git_signing_ssh_public_keys',
             'SSH signing keys',
             "View and manage a user's SSH signing keys.",
@@ -1091,7 +1125,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'User'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'starring',
             'Starring',
             'List and manage repositories a user is starring.',
@@ -1104,7 +1138,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'User'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'watching',
             'Watching',
             'List and change repositories a user is subscribed to.',
@@ -1121,7 +1155,7 @@ class GitHubPermissionDefinition {
         # ------------------------------
         # Enterprise Fine-Grained Permission Definitions
         # ------------------------------
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'enterprise_custom_properties',
             'Custom properties',
             'View repository custom properties and administer definitions at the enterprise level.',
@@ -1134,7 +1168,20 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Enterprise'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
+            'enterprise_scim',
+            'Enterprise SCIM',
+            'View and manage enterprise SCIM configuration',
+            'https://docs.github.com/enterprise-cloud@latest/rest/overview/permissions-required-for-github-apps' +
+            '#enterprise-permissions-for-enterprise-scim',
+            @(
+                'read',
+                'write'
+            ),
+            'Fine-grained',
+            'Enterprise'
+        ),
+        [GitHubPermission]::new(
             'enterprise_custom_org_roles',
             'Enterprise custom organization roles',
             'Create, edit, delete and list custom organization roles at the enterprise level. View system organization roles.',
@@ -1147,7 +1194,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Enterprise'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'enterprise_organization_installation_repositories',
             'Enterprise organization installation repositories',
             'Manage repository access of GitHub Apps on Enterprise-owned organizations',
@@ -1160,7 +1207,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Enterprise'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'enterprise_organization_installations',
             'Enterprise organization installations',
             'Manage installation of GitHub Apps on Enterprise-owned organizations',
@@ -1173,7 +1220,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Enterprise'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'enterprise_organizations',
             'Enterprise organizations',
             'Create and remove enterprise organizations',
@@ -1185,7 +1232,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Enterprise'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'enterprise_people',
             'Enterprise people',
             'Manage user access to the enterprise',
@@ -1198,7 +1245,7 @@ class GitHubPermissionDefinition {
             'Fine-grained',
             'Enterprise'
         ),
-        [GitHubPermissionDefinition]::new(
+        [GitHubPermission]::new(
             'enterprise_sso',
             'Enterprise single sign-on',
             'View and manage enterprise single sign-on configuration',
@@ -1213,68 +1260,13 @@ class GitHubPermissionDefinition {
         )
     )
 
-    GitHubPermissionDefinition() {}
-
-    GitHubPermissionDefinition(
-        [string]$Name,
-        [string]$DisplayName,
-        [string]$Description,
-        [string]$URL,
-        [string[]]$Options,
-        [string]$Type,
-        [string]$Scope
-    ) {
-        $this.Name = $Name
-        $this.DisplayName = $DisplayName
-        $this.Description = $Description
-        $this.URL = [uri]$URL
-        $this.Options = $Options
-        $this.Type = $Type
-        $this.Scope = $Scope
-    }
-
-    [string] ToString() {
-        return $this.Name
-    }
-}
-
-class GitHubPermission : GitHubPermissionDefinition {
-    # The value assigned to the permission. Must be one of the options defined in the parent class.
-    [string] $Value
-
-    GitHubPermission() : base() {}
-
-    GitHubPermission([string] $Permission, [string] $Value) : base() {
-        $this.Name = $Permission
-        $this.Value = $Value
-        $this.DisplayName = $Permission
-        $this.Description = 'Unknown permission - Open issue to add metadata'
-        $this.URL = $null
-        $this.Options = @()
-        $this.Type = 'Unknown'
-        $this.Scope = 'Unknown'
-    }
-
-    # Create a new list of all known permissions with null values
-    static [GitHubPermission[]] NewPermissionList() {
-        $tmpList = foreach ($def in [GitHubPermissionDefinition]::List) {
-            [GitHubPermission]@{
-                Name        = $def.Name
-                Value       = $null
-                DisplayName = $def.DisplayName
-                Description = $def.Description
-                URL         = $def.URL
-                Options     = $def.Options
-                Type        = $def.Type
-                Scope       = $def.Scope
-            }
-        }
-        return $tmpList | Sort-Object Scope, DisplayName
+    static [GitHubPermission[]] NewList() {
+        return ([GitHubPermission]::List.Clone())
     }
 
     # Create a new list of permissions filtered by installation type with null values
     static [GitHubPermission[]] NewPermissionList([string] $InstallationType) {
-        $all = [GitHubPermission]::NewPermissionList()
+        $all = [GitHubPermission]::List()
         $returned = switch ($InstallationType) {
             'Enterprise' { $all | Where-Object { $_.Scope -eq 'Enterprise' } }
             'Organization' { $all | Where-Object { $_.Scope -in @('Organization', 'Repository') } }
@@ -1340,5 +1332,9 @@ class GitHubPermission : GitHubPermissionDefinition {
             }
         }
         return $all | Sort-Object Scope, DisplayName
+    }
+
+    [string] ToString() {
+        return $this.Name
     }
 }

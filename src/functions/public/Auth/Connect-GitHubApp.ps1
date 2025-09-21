@@ -166,14 +166,9 @@
             $contextObj | Format-List | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
             if (-not $Silent) {
                 $name = $contextObj.Name
-                if ($script:IsGitHubActions) {
-                    $green = $PSStyle.Foreground.Green
-                    $reset = $PSStyle.Reset
-                    Write-Host "$green✓$reset Connected $name!"
-                } else {
-                    Write-Host '✓ ' -ForegroundColor Green -NoNewline
-                    Write-Host "Connected $name!"
-                }
+                $green = $PSStyle.Foreground.Green
+                $reset = $PSStyle.Reset
+                Write-Host "$green✓$reset Connected $name!"
             }
             if ($PassThru) {
                 Write-Debug "Passing context [$contextObj] to the pipeline."
@@ -181,7 +176,6 @@
             }
             $contextParams.Clear()
         }
-
     }
 
     end {
