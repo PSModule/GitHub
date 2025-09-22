@@ -220,6 +220,7 @@ Describe 'Apps' {
                 $githubApp = Get-GitHubApp
                 $config = Get-GitHubConfig
                 $permissionsList = [GitHubPermission]::NewPermissionList()
+                $installation = Get-GitHubAppInstallation @connectAppParams
                 $context = Connect-GitHubApp @connectAppParams -PassThru -Silent
                 LogGroup 'Context' {
                     Write-Host "$($context | Format-List | Out-String)"
@@ -279,6 +280,22 @@ Describe 'Apps' {
                 {
                     Invoke-RestMethod -Method Get -Uri "$($context.ApiBaseUri)/orgs/PSModule" -Authentication Bearer -Token $context.token
                 } | Should -Throw
+            }
+
+            It 'Connect-GitHubApp - Connects using -ID parameter for a single installation' {
+                $installationId = $installation.ID
+                $installationId | Should -BeGreaterThan 0
+
+                $idContext = Connect-GitHubApp -ID $installationId -PassThru -Silent
+                LogGroup "Connect-GitHubApp -ID $installationId" {
+                    Write-Host ($idContext | Format-List | Out-String)
+                }
+
+                $idContext | Should -BeOfType 'GitHubAppInstallationContext'
+                $idContext.ClientID | Should -Be $context.ClientID
+                $idContext.AuthType | Should -Be 'IAT'
+                $idContext.Token | Should -BeOfType [System.Security.SecureString]
+                $idContext.TokenType | Should -Be 'ghs'
             }
         }
     }

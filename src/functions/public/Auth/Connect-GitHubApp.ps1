@@ -58,9 +58,11 @@
         [SupportsWildcards()]
         [string[]] $Enterprise,
 
-        # Installation objects from pipeline for parallel processing.
-        [Parameter(Mandatory, ParameterSetName = 'Installation', ValueFromPipeline)]
-        [GitHubAppInstallation[]] $Installation,
+        # The installation ID(s) to connect to directly.
+        # Accepts input from the pipeline by property name (e.g. objects with an ID property)
+        [Parameter(Mandatory, ParameterSetName = 'InstallationID', ValueFromPipelineByPropertyName)]
+        [Alias('InstallationID')]
+        [int[]] $ID,
 
         # Passes the context object to the pipeline.
         [Parameter()]
@@ -89,11 +91,11 @@
     }
 
     process {
-        $installations = Get-GitHubAppInstallation -Context $Context
         $selectedInstallations = @()
-        Write-Verbose "Found [$($installations.Count)] installations."
         switch ($PSCmdlet.ParameterSetName) {
             'Filtered' {
+                $installations = Get-GitHubAppInstallation -Context $Context
+                Write-Verbose "Found [$($installations.Count)] installations."
                 $User | ForEach-Object {
                     $userItem = $_
                     Write-Verbose "User filter:         [$userItem]."
@@ -116,8 +118,22 @@
                     }
                 }
             }
+            'InstallationID' {
+                Write-Verbose 'Selecting installations by explicit ID.'
+                foreach ($installationId in $ID) {
+                    Write-Verbose "Looking up installation ID [$installationId]"
+                    $found = Get-GitHubAppInstallation -ID $installationId -Context $Context
+                    if (-not $found) {
+                        Write-Warning "No installation found for ID [$installationId]."
+                        continue
+                    }
+                    $selectedInstallations += $found
+                }
+            }
             default {
                 Write-Verbose 'No target specified. Connecting to all installations.'
+                $installations = Get-GitHubAppInstallation -Context $Context
+                Write-Verbose "Found [$($installations.Count)] installations."
                 $selectedInstallations = $installations
             }
         }
