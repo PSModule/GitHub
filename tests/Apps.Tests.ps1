@@ -133,7 +133,7 @@ Describe 'Apps' {
 
             It 'New-GitHubAppInstallationAccessToken - Can create installation access token' {
                 $installationSample | Should -Not -BeNullOrEmpty
-                $accessToken = New-GitHubAppInstallationAccessToken -ID $installationSample.ID -Context $context
+                $accessToken = New-GitHubAppInstallationAccessToken -ID $installationSample.ID
                 LogGroup "Installation Access Token [$($installationSample.ID)]" {
                     Write-Host ($accessToken | Format-List | Out-String)
                 }
@@ -220,16 +220,16 @@ Describe 'Apps' {
                 $githubApp = Get-GitHubApp
                 $config = Get-GitHubConfig
                 $permissionsList = [GitHubPermission]::NewPermissionList()
-                $installation = Get-GitHubAppInstallation @connectAppParams
-                $context = Connect-GitHubApp @connectAppParams -PassThru -Silent
+                $installation = Get-GitHubAppInstallation @connectAppParams -Context $context
+                $installationContext = Connect-GitHubApp @connectAppParams -PassThru -Silent
                 LogGroup 'Context' {
-                    Write-Host "$($context | Format-List | Out-String)"
+                    Write-Host "$($installationContext | Format-List | Out-String)"
                 }
                 LogGroup 'Context - -ListAvailable' {
                     Write-Host "$(Get-GitHubContext -ListAvailable | Format-List | Out-String)"
                 }
                 LogGroup 'Permissions' {
-                    Write-Host "$($context.Permissions | Format-Table | Out-String)"
+                    Write-Host "$($installationContext.Permissions | Format-Table | Out-String)"
                 }
                 LogGroup 'App' {
                     Write-Host "$($githubApp | Format-Table | Out-String)"
@@ -286,16 +286,16 @@ Describe 'Apps' {
                 $installationId = $installation.ID
                 $installationId | Should -BeGreaterThan 0
 
-                $idContext = Connect-GitHubApp -ID $installationId -PassThru -Silent
+                $installationIDContext = Connect-GitHubApp -ID $installationId -PassThru -Silent
                 LogGroup "Connect-GitHubApp -ID $installationId" {
-                    Write-Host ($idContext | Format-List | Out-String)
+                    Write-Host ($installationIDContext | Format-List | Out-String)
                 }
 
-                $idContext | Should -BeOfType 'GitHubAppInstallationContext'
-                $idContext.ClientID | Should -Be $context.ClientID
-                $idContext.AuthType | Should -Be 'IAT'
-                $idContext.Token | Should -BeOfType [System.Security.SecureString]
-                $idContext.TokenType | Should -Be 'ghs'
+                $installationIDContext | Should -BeOfType 'GitHubAppInstallationContext'
+                $installationIDContext.ClientID | Should -Be $context.ClientID
+                $installationIDContext.AuthType | Should -Be 'IAT'
+                $installationIDContext.Token | Should -BeOfType [System.Security.SecureString]
+                $installationIDContext.TokenType | Should -Be 'ghs'
             }
         }
     }
