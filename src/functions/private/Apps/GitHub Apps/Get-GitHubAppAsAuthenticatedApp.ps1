@@ -1,4 +1,4 @@
-﻿filter Get-GitHubAuthenticatedApp {
+﻿filter Get-GitHubAppAsAuthenticatedApp {
     <#
         .SYNOPSIS
         Get the authenticated app
@@ -13,7 +13,7 @@
         to access this endpoint.
 
         .EXAMPLE
-        Get-GitHubAuthenticatedApp
+        Get-GitHubAppAsAuthenticatedApp
 
         Get the authenticated app.
 

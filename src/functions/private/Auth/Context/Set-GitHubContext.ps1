@@ -44,12 +44,14 @@
     }
 
     process {
-        Write-Debug 'Context:'
-        $contextObj | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+        if ($DebugPreference -eq 'Continue') {
+            Write-Debug 'Context:'
+            $contextObj | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+            Write-Debug "Getting info on the context [$($contextObj['AuthType'])]."
+        }
 
         # Run functions to get info on the temporary context.
         try {
-            Write-Debug "Getting info on the context [$($contextObj['AuthType'])]."
             switch -Regex (($contextObj['AuthType'])) {
                 'PAT|UAT|IAT' {
                     $viewer = Get-GitHubViewer -Context $contextObj
@@ -58,7 +60,7 @@
                         $contextObj['DisplayName'] = [string]$viewer.name
                     }
                     if ([string]::IsNullOrEmpty($contextObj['Username'])) {
-                        $login = [string]($viewer.login -Replace '\[bot\]')
+                        $login = [string]($viewer.login -replace '\[bot\]')
                         $contextObj['Username'] = $login
                     }
                     if ([string]::IsNullOrEmpty($contextObj['NodeID'])) {
@@ -77,10 +79,10 @@
                     $contextObj['Type'] = 'Installation'
                     if ([string]::IsNullOrEmpty($contextObj['DisplayName'])) {
                         try {
-                            $app = Get-GitHubApp -Name $contextObj['Username'] -Context $contextObj
+                            $app = Get-GitHubApp -Slug $contextObj['Username'] -Context $contextObj
                             $contextObj['DisplayName'] = [string]$app.Name
                         } catch {
-                            Write-Debug "Failed to get the GitHub App with the slug: [$($contextObj['Username'])]."
+                            Write-Warning "Unable to get the GitHub App: [$($contextObj['Username'])]."
                         }
                     }
                     if ($script:IsGitHubActions) {
@@ -113,12 +115,9 @@
                         if ([string]::IsNullOrEmpty($contextObj['InstallationName'])) {
                             $contextObj['InstallationName'] = [string]$installationName
                         }
-                        $contextObj['Name'] = "$($contextObj['HostName'])/$($contextObj['Username'])/" +
-                        "$($contextObj['InstallationType'])/$($contextObj['InstallationName'])"
-                    } else {
-                        $contextObj['Name'] = "$($contextObj['HostName'])/$($contextObj['Username'])/" +
-                        "$($contextObj['InstallationType'])/$($contextObj['InstallationName'])"
                     }
+                    $contextObj['Name'] = "$($contextObj['HostName'])/$($contextObj['Username'])/" +
+                    "$($contextObj['InstallationType'])/$($contextObj['InstallationName'])"
                 }
                 'App' {
                     $app = Get-GitHubApp -Context $contextObj
@@ -137,11 +136,13 @@
                     throw 'Failed to get info on the context. Unknown logon type.'
                 }
             }
-            Write-Debug "Found [$($contextObj['Type'])] with login: [$($contextObj['Name'])]"
-            $contextObj | Out-String -Stream | ForEach-Object { Write-Debug $_ }
-            Write-Debug '----------------------------------------------------'
-            if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
+            if ($DebugPreference -eq 'Continue') {
+                Write-Debug "Found [$($contextObj['Type'])] with login: [$($contextObj['Name'])]"
+                $contextObj | Out-String -Stream | ForEach-Object { Write-Debug $_ }
+                Write-Debug '----------------------------------------------------'
                 Write-Debug "Saving context: [$($contextObj['Name'])]"
+            }
+            if ($PSCmdlet.ShouldProcess('Context', 'Set')) {
                 Set-Context -ID $($contextObj['Name']) -Context $contextObj -Vault $script:GitHub.ContextVault
                 if ($Default) {
                     Switch-GitHubContext -Context $contextObj['Name']

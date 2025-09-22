@@ -1,4 +1,4 @@
-﻿function Get-GitHubOrganizationAppInstallation {
+﻿function Get-GitHubAppInstallationForOrganization {
     <#
         .SYNOPSIS
         List app installations for an organization
@@ -8,7 +8,7 @@
         You must be an organization owner with `admin:read` scope to use this endpoint.
 
         .EXAMPLE
-        Get-GitHubOrganizationAppInstallation -Organization 'github'
+        Get-GitHubAppInstallationForOrganization -Organization 'github'
 
         Gets all GitHub Apps in the organization `github`.
 

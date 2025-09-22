@@ -24,7 +24,7 @@ Describe 'Apps' {
 
     Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
         BeforeAll {
-            $permissionsDefinitions = [GitHubPermissionDefinition]::List
+            $permissionsList = [GitHubPermission]::NewPermissionList()
             LogGroup 'Context' {
                 $context = Connect-GitHubAccount @connectParams -PassThru -Silent
                 Write-Host "$($context | Format-List | Out-String)"
@@ -48,8 +48,17 @@ Describe 'Apps' {
         }
 
         Context 'GitHub Apps' -Skip:($AuthType -ne 'APP') {
-            It 'Get-GitHubApp - Can get app details' {
+            BeforeAll {
                 $app = Get-GitHubApp
+                $installations = Get-GitHubAppInstallation
+                $installationRequests = Get-GitHubAppInstallationRequest
+                LogGroup 'All Installations (cached)' {
+                    Write-Host ($installations | Out-String)
+                }
+                $installationSample = $installations | Select-Object -First 1
+            }
+
+            It 'Get-GitHubApp - Can get app details' {
                 LogGroup 'App' {
                     Write-Host ($app | Format-List | Out-String)
                 }
@@ -68,21 +77,18 @@ Describe 'Apps' {
                 $app.UpdatedAt | Should -Not -BeNullOrEmpty
                 $app.Permissions.Count | Should -BeGreaterThan 0
                 $app.Permissions | Should -BeOfType 'GitHubPermission'
-                $app.Permissions.Name | Should -BeIn $permissionsDefinitions.Name
+                $app.Permissions.Name | Should -BeIn $permissionsList.Name
                 $app.Events | Should -BeOfType 'string'
                 $app.Installations | Should -Not -BeNullOrEmpty
             }
 
             It 'Get-GitHubAppInstallationRequest - Can get installation requests' {
-                $installationRequests = Get-GitHubAppInstallationRequest
                 LogGroup 'Installation requests' {
                     Write-Host ($installationRequests | Format-List | Out-String)
                 }
             }
 
             It 'Get-GitHubAppInstallation - Can get app installations' {
-                $githubApp = Get-GitHubApp
-                $installations = Get-GitHubAppInstallation
                 $installations | Should -Not -BeNullOrEmpty
                 foreach ($installation in $installations) {
                     LogGroup "Installation - $($installation.Target.Name)" {
@@ -91,7 +97,7 @@ Describe 'Apps' {
                     $installation | Should -BeOfType 'GitHubAppInstallation'
                     $installation.ID | Should -Not -BeNullOrEmpty
                     $installation.App | Should -BeOfType 'GitHubApp'
-                    $installation.App.ClientID | Should -Be $githubApp.ClientID
+                    $installation.App.ClientID | Should -Be $app.ClientID
                     $installation.App.Slug | Should -Not -BeNullOrEmpty
                     $installation.Target | Should -BeOfType 'GitHubOwner'
                     $installation.Target | Should -Not -BeNullOrEmpty
@@ -99,7 +105,7 @@ Describe 'Apps' {
                     $installation.RepositorySelection | Should -Not -BeNullOrEmpty
                     $installation.Permissions.Count | Should -BeGreaterThan 0
                     $installation.Permissions | Should -BeOfType [GitHubPermission]
-                    $installation.Permissions.Name | Should -BeIn $permissionsDefinitions.Name
+                    $installation.Permissions.Name | Should -BeIn $permissionsList.Name
                     $installation.Events | Should -BeOfType 'string'
                     $installation.CreatedAt | Should -Not -BeNullOrEmpty
                     $installation.UpdatedAt | Should -Not -BeNullOrEmpty
@@ -111,9 +117,35 @@ Describe 'Apps' {
                 }
             }
 
+            It 'Get-GitHubAppInstallation -ID <ID>' {
+                $installationSample | Should -Not -BeNullOrEmpty
+                $installationByID = Get-GitHubAppInstallation -ID $installationSample.ID
+                LogGroup "Installation By ID [$($installationSample.ID)]" {
+                    Write-Host ($installationByID | Format-List | Out-String)
+                }
+                $installationByID | Should -Not -BeNullOrEmpty
+                $installationByID | Should -BeOfType 'GitHubAppInstallation'
+                $installationByID.ID | Should -Be $installationSample.ID
+                $installationByID.Target.Name | Should -Be $installationSample.Target.Name
+                $installationByID.Type | Should -Be $installationSample.Type
+                $installationByID.Permissions.Count | Should -BeGreaterThan 0
+            }
+
+            It 'New-GitHubAppInstallationAccessToken - Can create installation access token' {
+                $installationSample | Should -Not -BeNullOrEmpty
+                $accessToken = New-GitHubAppInstallationAccessToken -ID $installationSample.ID -Context $context
+                LogGroup "Installation Access Token [$($installationSample.ID)]" {
+                    Write-Host ($accessToken | Format-List | Out-String)
+                }
+                $accessToken | Should -Not -BeNullOrEmpty
+                $accessToken.Token | Should -BeOfType [System.Security.SecureString]
+                $accessToken.ExpiresAt | Should -BeGreaterThan (Get-Date)
+                $accessToken.Permissions | Should -Not -BeNullOrEmpty
+                $accessToken.RepositorySelection | Should -Not -BeNullOrEmpty
+            }
+
             It 'Get-GitHubAppInstallation - <ownerType>' {
-                $githubApp = Get-GitHubApp
-                $installation = Get-GitHubAppInstallation | Where-Object { ($_.Target.Name -eq $owner) -and ($_.Type -eq $ownerType) }
+                $installation = $installations | Where-Object { ($_.Target.Name -eq $owner) -and ($_.Type -eq $ownerType) }
                 LogGroup "Installation - $ownerType" {
                     Write-Host ($installation | Format-List | Out-String)
                 }
@@ -121,7 +153,7 @@ Describe 'Apps' {
                 $installation | Should -BeOfType 'GitHubAppInstallation'
                 $installation.ID | Should -Not -BeNullOrEmpty
                 $installation.App | Should -BeOfType 'GitHubApp'
-                $installation.App.ClientID | Should -Be $githubApp.ClientID
+                $installation.App.ClientID | Should -Be $app.ClientID
                 $installation.App.Slug | Should -Not -BeNullOrEmpty
                 $installation.Target | Should -BeOfType 'GitHubOwner'
                 $installation.Target | Should -Be $owner
@@ -129,7 +161,7 @@ Describe 'Apps' {
                 $installation.RepositorySelection | Should -Not -BeNullOrEmpty
                 $installation.Permissions.Count | Should -BeGreaterThan 0
                 $installation.Permissions | Should -BeOfType [GitHubPermission]
-                $installation.Permissions.Name | Should -BeIn $permissionsDefinitions.Name
+                $installation.Permissions.Name | Should -BeIn $permissionsList.Name
                 $installation.Events | Should -BeOfType 'string'
                 $installation.CreatedAt | Should -Not -BeNullOrEmpty
                 $installation.UpdatedAt | Should -Not -BeNullOrEmpty
@@ -187,13 +219,19 @@ Describe 'Apps' {
             BeforeAll {
                 $githubApp = Get-GitHubApp
                 $config = Get-GitHubConfig
-                $permissionsDefinitions = [GitHubPermissionDefinition]::List
+                $permissionsList = [GitHubPermission]::NewPermissionList()
                 $context = Connect-GitHubApp @connectAppParams -PassThru -Silent
                 LogGroup 'Context' {
                     Write-Host "$($context | Format-List | Out-String)"
                 }
+                LogGroup 'Context - -ListAvailable' {
+                    Write-Host "$(Get-GitHubContext -ListAvailable | Format-List | Out-String)"
+                }
                 LogGroup 'Permissions' {
                     Write-Host "$($context.Permissions | Format-Table | Out-String)"
+                }
+                LogGroup 'App' {
+                    Write-Host "$($githubApp | Format-Table | Out-String)"
                 }
             }
 
@@ -223,9 +261,8 @@ Describe 'Apps' {
                 $context.PerPage | Should -Be $config.PerPage
                 $context.Permissions.Count | Should -BeGreaterThan 0
                 $context.Permissions | Should -BeOfType [GitHubPermission]
-                $context.Permissions.Name | Should -BeIn $permissionsDefinitions.Name
+                $context.Permissions.Name | Should -BeIn $permissionsList.Name
                 $context.Events | Should -BeOfType 'string'
-
             }
 
             It 'Connect-GitHubApp - TokenExpiresIn property should be calculated correctly' {

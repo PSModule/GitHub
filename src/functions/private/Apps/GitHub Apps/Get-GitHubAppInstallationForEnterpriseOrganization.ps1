@@ -1,4 +1,4 @@
-﻿function Get-GitHubEnterpriseOrganizationAppInstallation {
+﻿function Get-GitHubAppInstallationForEnterpriseOrganization {
     <#
         .SYNOPSIS
         List GitHub Apps installed on an enterprise-owned organization
@@ -9,7 +9,7 @@
         The authenticated GitHub App must be installed on the enterprise and be granted the Enterprise/organization_installations (read) permission.
 
         .EXAMPLE
-        Get-GitHubEnterpriseOrganizationAppInstallation -ENterprise 'msx' -Organization 'github'
+        Get-GitHubAppInstallationForEnterpriseOrganization -Enterprise 'msx' -Organization 'github'
 
         Gets all GitHub Apps in the organization `github` in the enterprise `msx`.
 
@@ -62,7 +62,7 @@
 
         Invoke-GitHubAPI @apiParams | ForEach-Object {
             foreach ($installation in $_.Response) {
-                [GitHubAppInstallation]::new($installation, $Organization, 'Organization', $Context)
+                [GitHubAppInstallation]::new($installation, $Organization, 'Organization', $Context.HostName)
             }
         }
     }

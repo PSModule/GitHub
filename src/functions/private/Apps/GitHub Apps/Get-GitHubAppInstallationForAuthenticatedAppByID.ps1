@@ -1,31 +1,31 @@
-﻿function Get-GitHubAppInstallationForAuthenticatedApp {
+﻿function Get-GitHubAppInstallationForAuthenticatedAppByID {
     <#
         .SYNOPSIS
-        List installations for the authenticated app.
+        Get an installation for the authenticated app.
 
         .DESCRIPTION
-        The permissions the installation has are included under the `permissions` key.
+        Enables an authenticated GitHub App to find an installation's information using the installation id..
 
         You must use a [JWT](https://docs.github.com/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app)
         to access this endpoint.
 
         .EXAMPLE
-        Get-GitHubAppInstallationForAuthenticatedApp
+        Get-GitHubAppInstallationForAuthenticatedAppByID -ID 123456
 
-        List installations for the authenticated app.
+        Get an installation for the authenticated app with the specified ID.
 
         .OUTPUTS
-        GitHubAppInstallation[]
+        GitHubAppInstallation
 
         .NOTES
-        [List installations for the authenticated app](https://docs.github.com/rest/apps/apps#list-installations-for-the-authenticated-app)
+        [Get an installation for the authenticated app](https://docs.github.com/rest/apps/apps#get-an-installation-for-the-authenticated-app)
     #>
     [OutputType([GitHubAppInstallation])]
     [CmdletBinding()]
     param(
-        # The number of results per page (max 100).
-        [Parameter()]
-        [System.Nullable[int]] $PerPage,
+        # The unique identifier of the installation.
+        [Parameter(Mandatory)]
+        [int] $ID,
 
         # The context to run the command in. Used to get the details for the API call.
         [Parameter(Mandatory)]
@@ -41,18 +41,15 @@
     process {
         $apiParams = @{
             Method      = 'GET'
-            APIEndpoint = '/app/installations'
-            PerPage     = $PerPage
+            APIEndpoint = "/app/installations/$ID"
             Context     = $Context
         }
 
         # Get the authenticated app to compare permissions and events
-        $authenticatedApp = Get-GitHubAuthenticatedApp -Context $Context
+        $authenticatedApp = Get-GitHubAppAsAuthenticatedApp -Context $Context
 
         Invoke-GitHubAPI @apiParams | ForEach-Object {
-            foreach ($installation in $_.Response) {
-                [GitHubAppInstallation]::new($installation, $authenticatedApp)
-            }
+            [GitHubAppInstallation]::new($_.Response, $authenticatedApp)
         }
     }
 
