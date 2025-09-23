@@ -59,8 +59,14 @@
         [string[]] $Enterprise,
 
         # Installation objects from pipeline for parallel processing.
-        [Parameter(Mandatory, ParameterSetName = 'Installation', ValueFromPipeline)]
+        [Parameter(Mandatory, ParameterSetName = 'Installation object', ValueFromPipeline)]
         [GitHubAppInstallation[]] $Installation,
+
+        # The installation ID(s) to connect to directly.
+        # Accepts input from the pipeline by property name (e.g. objects with an ID property)
+        [Parameter(Mandatory, ParameterSetName = 'Installation ID', ValueFromPipelineByPropertyName)]
+        [Alias('InstallationID')]
+        [int[]] $ID,
 
         # Passes the context object to the pipeline.
         [Parameter()]
@@ -89,36 +95,58 @@
     }
 
     process {
-        $installations = Get-GitHubAppInstallation -Context $Context
-        $selectedInstallations = @()
-        Write-Verbose "Found [$($installations.Count)] installations."
+        $selectedInstallations = [System.Collections.ArrayList]::new()
         switch ($PSCmdlet.ParameterSetName) {
             'Filtered' {
+                $installations = Get-GitHubAppInstallation -Context $Context
+                Write-Verbose "Found [$($installations.Count)] installations."
                 $User | ForEach-Object {
                     $userItem = $_
                     Write-Verbose "User filter:         [$userItem]."
-                    $selectedInstallations += $installations | Where-Object {
-                        $_.Type -eq 'User' -and $_.Target.Name -like $userItem
+                    $installations | Where-Object { $_.Type -eq 'User' -and $_.Target.Name -like $userItem } | ForEach-Object {
+                        $null = $selectedInstallations.Add($_)
                     }
                 }
                 $Organization | ForEach-Object {
                     $organizationItem = $_
                     Write-Verbose "Organization filter: [$organizationItem]."
-                    $selectedInstallations += $installations | Where-Object {
-                        $_.Type -eq 'Organization' -and $_.Target.Name -like $organizationItem
+                    $installations | Where-Object { $_.Type -eq 'Organization' -and $_.Target.Name -like $organizationItem } | ForEach-Object {
+                        $null = $selectedInstallations.Add($_)
                     }
                 }
                 $Enterprise | ForEach-Object {
                     $enterpriseItem = $_
                     Write-Verbose "Enterprise filter:   [$enterpriseItem]."
-                    $selectedInstallations += $installations | Where-Object {
-                        $_.Type -eq 'Enterprise' -and $_.Target.Name -like $enterpriseItem
+                    $installations | Where-Object { $_.Type -eq 'Enterprise' -and $_.Target.Name -like $enterpriseItem } | ForEach-Object {
+                        $null = $selectedInstallations.Add($_)
                     }
                 }
+                break
+            }
+            'Installation ID' {
+                Write-Verbose 'Selecting installations by explicit ID.'
+                foreach ($installationId in $ID) {
+                    Write-Verbose "Looking up installation ID [$installationId]"
+                    $found = Get-GitHubAppInstallation -ID $installationId -Context $Context
+                    if (-not $found) {
+                        Write-Warning "No installation found for ID [$installationId]."
+                        continue
+                    }
+                    $null = $selectedInstallations.Add($found)
+                }
+                break
+            }
+            'Installation object' {
+                Write-Verbose 'Selecting installations from the pipeline.'
+                foreach ($installationObject in $Installation) {
+                    $null = $selectedInstallations.Add($installationObject)
+                }
+                break
             }
             default {
                 Write-Verbose 'No target specified. Connecting to all installations.'
-                $selectedInstallations = $installations
+                $selectedInstallations.AddRange((Get-GitHubAppInstallation -Context $Context))
+                Write-Verbose "Found [$($selectedInstallations.Count)] installations."
             }
         }
 
