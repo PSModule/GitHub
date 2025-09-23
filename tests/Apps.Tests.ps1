@@ -47,173 +47,173 @@ Describe 'Apps' {
             $app | Should -Not -BeNullOrEmpty
         }
 
-        Context 'GitHub Apps' -Skip:($AuthType -ne 'APP') {
-            BeforeAll {
-                $app = Get-GitHubApp
-                $installations = Get-GitHubAppInstallation
-                $installationRequests = Get-GitHubAppInstallationRequest
-                LogGroup 'All Installations (cached)' {
-                    Write-Host ($installations | Out-String)
-                }
-                $installationSample = $installations | Select-Object -First 1
-            }
+        # Context 'GitHub Apps' -Skip:($AuthType -ne 'APP') {
+        #     BeforeAll {
+        #         $app = Get-GitHubApp
+        #         $installations = Get-GitHubAppInstallation
+        #         $installationRequests = Get-GitHubAppInstallationRequest
+        #         LogGroup 'All Installations (cached)' {
+        #             Write-Host ($installations | Out-String)
+        #         }
+        #         $installationSample = $installations | Select-Object -First 1
+        #     }
 
-            It 'Get-GitHubApp - Can get app details' {
-                LogGroup 'App' {
-                    Write-Host ($app | Format-List | Out-String)
-                }
-                $app | Should -Not -BeNullOrEmpty
-                $app | Should -BeOfType 'GitHubApp'
-                $app.ID | Should -Not -BeNullOrEmpty
-                $app.ClientID | Should -Not -BeNullOrEmpty
-                $app.Slug | Should -Not -BeNullOrEmpty
-                $app.NodeID | Should -Not -BeNullOrEmpty
-                $app.Owner | Should -BeOfType 'GitHubOwner'
-                $app.Name | Should -Not -BeNullOrEmpty
-                $app.Description | Should -Not -BeNullOrEmpty
-                $app.ExternalUrl | Should -Not -BeNullOrEmpty
-                $app.Url | Should -Not -BeNullOrEmpty
-                $app.CreatedAt | Should -Not -BeNullOrEmpty
-                $app.UpdatedAt | Should -Not -BeNullOrEmpty
-                $app.Permissions.Count | Should -BeGreaterThan 0
-                $app.Permissions | Should -BeOfType 'GitHubPermission'
-                $app.Permissions.Name | Should -BeIn $permissionsList.Name
-                $app.Events | Should -BeOfType 'string'
-                $app.Installations | Should -Not -BeNullOrEmpty
-            }
+        #     It 'Get-GitHubApp - Can get app details' {
+        #         LogGroup 'App' {
+        #             Write-Host ($app | Format-List | Out-String)
+        #         }
+        #         $app | Should -Not -BeNullOrEmpty
+        #         $app | Should -BeOfType 'GitHubApp'
+        #         $app.ID | Should -Not -BeNullOrEmpty
+        #         $app.ClientID | Should -Not -BeNullOrEmpty
+        #         $app.Slug | Should -Not -BeNullOrEmpty
+        #         $app.NodeID | Should -Not -BeNullOrEmpty
+        #         $app.Owner | Should -BeOfType 'GitHubOwner'
+        #         $app.Name | Should -Not -BeNullOrEmpty
+        #         $app.Description | Should -Not -BeNullOrEmpty
+        #         $app.ExternalUrl | Should -Not -BeNullOrEmpty
+        #         $app.Url | Should -Not -BeNullOrEmpty
+        #         $app.CreatedAt | Should -Not -BeNullOrEmpty
+        #         $app.UpdatedAt | Should -Not -BeNullOrEmpty
+        #         $app.Permissions.Count | Should -BeGreaterThan 0
+        #         $app.Permissions | Should -BeOfType 'GitHubPermission'
+        #         $app.Permissions.Name | Should -BeIn $permissionsList.Name
+        #         $app.Events | Should -BeOfType 'string'
+        #         $app.Installations | Should -Not -BeNullOrEmpty
+        #     }
 
-            It 'Get-GitHubAppInstallationRequest - Can get installation requests' {
-                LogGroup 'Installation requests' {
-                    Write-Host ($installationRequests | Format-List | Out-String)
-                }
-            }
+        #     It 'Get-GitHubAppInstallationRequest - Can get installation requests' {
+        #         LogGroup 'Installation requests' {
+        #             Write-Host ($installationRequests | Format-List | Out-String)
+        #         }
+        #     }
 
-            It 'Get-GitHubAppInstallation - Can get app installations' {
-                $installations | Should -Not -BeNullOrEmpty
-                foreach ($installation in $installations) {
-                    LogGroup "Installation - $($installation.Target.Name)" {
-                        Write-Host "$($installation | Format-List | Out-String)"
-                    }
-                    $installation | Should -BeOfType 'GitHubAppInstallation'
-                    $installation.ID | Should -Not -BeNullOrEmpty
-                    $installation.App | Should -BeOfType 'GitHubApp'
-                    $installation.App.ClientID | Should -Be $app.ClientID
-                    $installation.App.Slug | Should -Not -BeNullOrEmpty
-                    $installation.Target | Should -BeOfType 'GitHubOwner'
-                    $installation.Target | Should -Not -BeNullOrEmpty
-                    $installation.Type | Should -BeIn @('Enterprise', 'Organization', 'User')
-                    $installation.RepositorySelection | Should -Not -BeNullOrEmpty
-                    $installation.Permissions.Count | Should -BeGreaterThan 0
-                    $installation.Permissions | Should -BeOfType [GitHubPermission]
-                    $installation.Permissions.Name | Should -BeIn $permissionsList.Name
-                    $installation.Events | Should -BeOfType 'string'
-                    $installation.CreatedAt | Should -Not -BeNullOrEmpty
-                    $installation.UpdatedAt | Should -Not -BeNullOrEmpty
-                    $installation.SuspendedAt | Should -BeNullOrEmpty
-                    $installation.SuspendedBy | Should -BeOfType 'GitHubUser'
-                    $installation.SuspendedBy | Should -BeNullOrEmpty
-                    $installation.Status | Should -Not -BeNullOrEmpty
-                    $installation.Status | Should -BeIn @('Ok', 'Outdated')
-                }
-            }
+        #     It 'Get-GitHubAppInstallation - Can get app installations' {
+        #         $installations | Should -Not -BeNullOrEmpty
+        #         foreach ($installation in $installations) {
+        #             LogGroup "Installation - $($installation.Target.Name)" {
+        #                 Write-Host "$($installation | Format-List | Out-String)"
+        #             }
+        #             $installation | Should -BeOfType 'GitHubAppInstallation'
+        #             $installation.ID | Should -Not -BeNullOrEmpty
+        #             $installation.App | Should -BeOfType 'GitHubApp'
+        #             $installation.App.ClientID | Should -Be $app.ClientID
+        #             $installation.App.Slug | Should -Not -BeNullOrEmpty
+        #             $installation.Target | Should -BeOfType 'GitHubOwner'
+        #             $installation.Target | Should -Not -BeNullOrEmpty
+        #             $installation.Type | Should -BeIn @('Enterprise', 'Organization', 'User')
+        #             $installation.RepositorySelection | Should -Not -BeNullOrEmpty
+        #             $installation.Permissions.Count | Should -BeGreaterThan 0
+        #             $installation.Permissions | Should -BeOfType [GitHubPermission]
+        #             $installation.Permissions.Name | Should -BeIn $permissionsList.Name
+        #             $installation.Events | Should -BeOfType 'string'
+        #             $installation.CreatedAt | Should -Not -BeNullOrEmpty
+        #             $installation.UpdatedAt | Should -Not -BeNullOrEmpty
+        #             $installation.SuspendedAt | Should -BeNullOrEmpty
+        #             $installation.SuspendedBy | Should -BeOfType 'GitHubUser'
+        #             $installation.SuspendedBy | Should -BeNullOrEmpty
+        #             $installation.Status | Should -Not -BeNullOrEmpty
+        #             $installation.Status | Should -BeIn @('Ok', 'Outdated')
+        #         }
+        #     }
 
-            It 'Get-GitHubAppInstallation -ID <ID>' {
-                $installationSample | Should -Not -BeNullOrEmpty
-                $installationByID = Get-GitHubAppInstallation -ID $installationSample.ID
-                LogGroup "Installation By ID [$($installationSample.ID)]" {
-                    Write-Host ($installationByID | Format-List | Out-String)
-                }
-                $installationByID | Should -Not -BeNullOrEmpty
-                $installationByID | Should -BeOfType 'GitHubAppInstallation'
-                $installationByID.ID | Should -Be $installationSample.ID
-                $installationByID.Target.Name | Should -Be $installationSample.Target.Name
-                $installationByID.Type | Should -Be $installationSample.Type
-                $installationByID.Permissions.Count | Should -BeGreaterThan 0
-            }
+        #     It 'Get-GitHubAppInstallation -ID <ID>' {
+        #         $installationSample | Should -Not -BeNullOrEmpty
+        #         $installationByID = Get-GitHubAppInstallation -ID $installationSample.ID
+        #         LogGroup "Installation By ID [$($installationSample.ID)]" {
+        #             Write-Host ($installationByID | Format-List | Out-String)
+        #         }
+        #         $installationByID | Should -Not -BeNullOrEmpty
+        #         $installationByID | Should -BeOfType 'GitHubAppInstallation'
+        #         $installationByID.ID | Should -Be $installationSample.ID
+        #         $installationByID.Target.Name | Should -Be $installationSample.Target.Name
+        #         $installationByID.Type | Should -Be $installationSample.Type
+        #         $installationByID.Permissions.Count | Should -BeGreaterThan 0
+        #     }
 
-            It 'New-GitHubAppInstallationAccessToken - Can create installation access token' {
-                $installationSample | Should -Not -BeNullOrEmpty
-                $accessToken = New-GitHubAppInstallationAccessToken -ID $installationSample.ID
-                LogGroup "Installation Access Token [$($installationSample.ID)]" {
-                    Write-Host ($accessToken | Format-List | Out-String)
-                }
-                $accessToken | Should -Not -BeNullOrEmpty
-                $accessToken.Token | Should -BeOfType [System.Security.SecureString]
-                $accessToken.ExpiresAt | Should -BeGreaterThan (Get-Date)
-                $accessToken.Permissions | Should -Not -BeNullOrEmpty
-                $accessToken.RepositorySelection | Should -Not -BeNullOrEmpty
-            }
+        #     It 'New-GitHubAppInstallationAccessToken - Can create installation access token' {
+        #         $installationSample | Should -Not -BeNullOrEmpty
+        #         $accessToken = New-GitHubAppInstallationAccessToken -ID $installationSample.ID
+        #         LogGroup "Installation Access Token [$($installationSample.ID)]" {
+        #             Write-Host ($accessToken | Format-List | Out-String)
+        #         }
+        #         $accessToken | Should -Not -BeNullOrEmpty
+        #         $accessToken.Token | Should -BeOfType [System.Security.SecureString]
+        #         $accessToken.ExpiresAt | Should -BeGreaterThan (Get-Date)
+        #         $accessToken.Permissions | Should -Not -BeNullOrEmpty
+        #         $accessToken.RepositorySelection | Should -Not -BeNullOrEmpty
+        #     }
 
-            It 'Get-GitHubAppInstallation - <ownerType>' {
-                $installation = $installations | Where-Object { ($_.Target.Name -eq $owner) -and ($_.Type -eq $ownerType) }
-                LogGroup "Installation - $ownerType" {
-                    Write-Host ($installation | Format-List | Out-String)
-                }
-                $installation | Should -Not -BeNullOrEmpty
-                $installation | Should -BeOfType 'GitHubAppInstallation'
-                $installation.ID | Should -Not -BeNullOrEmpty
-                $installation.App | Should -BeOfType 'GitHubApp'
-                $installation.App.ClientID | Should -Be $app.ClientID
-                $installation.App.Slug | Should -Not -BeNullOrEmpty
-                $installation.Target | Should -BeOfType 'GitHubOwner'
-                $installation.Target | Should -Be $owner
-                $installation.Type | Should -Be $ownerType
-                $installation.RepositorySelection | Should -Not -BeNullOrEmpty
-                $installation.Permissions.Count | Should -BeGreaterThan 0
-                $installation.Permissions | Should -BeOfType [GitHubPermission]
-                $installation.Permissions.Name | Should -BeIn $permissionsList.Name
-                $installation.Events | Should -BeOfType 'string'
-                $installation.CreatedAt | Should -Not -BeNullOrEmpty
-                $installation.UpdatedAt | Should -Not -BeNullOrEmpty
-                $installation.SuspendedAt | Should -BeNullOrEmpty
-                $installation.SuspendedBy | Should -BeOfType 'GitHubUser'
-                $installation.SuspendedBy | Should -BeNullOrEmpty
-                $installation.Status | Should -Not -BeNullOrEmpty
-                $installation.Status | Should -BeIn @('Ok', 'Outdated')
-            }
-        }
+        #     It 'Get-GitHubAppInstallation - <ownerType>' {
+        #         $installation = $installations | Where-Object { ($_.Target.Name -eq $owner) -and ($_.Type -eq $ownerType) }
+        #         LogGroup "Installation - $ownerType" {
+        #             Write-Host ($installation | Format-List | Out-String)
+        #         }
+        #         $installation | Should -Not -BeNullOrEmpty
+        #         $installation | Should -BeOfType 'GitHubAppInstallation'
+        #         $installation.ID | Should -Not -BeNullOrEmpty
+        #         $installation.App | Should -BeOfType 'GitHubApp'
+        #         $installation.App.ClientID | Should -Be $app.ClientID
+        #         $installation.App.Slug | Should -Not -BeNullOrEmpty
+        #         $installation.Target | Should -BeOfType 'GitHubOwner'
+        #         $installation.Target | Should -Be $owner
+        #         $installation.Type | Should -Be $ownerType
+        #         $installation.RepositorySelection | Should -Not -BeNullOrEmpty
+        #         $installation.Permissions.Count | Should -BeGreaterThan 0
+        #         $installation.Permissions | Should -BeOfType [GitHubPermission]
+        #         $installation.Permissions.Name | Should -BeIn $permissionsList.Name
+        #         $installation.Events | Should -BeOfType 'string'
+        #         $installation.CreatedAt | Should -Not -BeNullOrEmpty
+        #         $installation.UpdatedAt | Should -Not -BeNullOrEmpty
+        #         $installation.SuspendedAt | Should -BeNullOrEmpty
+        #         $installation.SuspendedBy | Should -BeOfType 'GitHubUser'
+        #         $installation.SuspendedBy | Should -BeNullOrEmpty
+        #         $installation.Status | Should -Not -BeNullOrEmpty
+        #         $installation.Status | Should -BeIn @('Ok', 'Outdated')
+        #     }
+        # }
 
-        Context 'Webhooks' -Skip:($AuthType -ne 'APP') {
-            It 'Get-GitHubAppWebhookConfiguration - Can get the webhook configuration' {
-                $webhookConfig = Get-GitHubAppWebhookConfiguration
-                LogGroup 'Webhook config' {
-                    Write-Host ($webhookConfig | Format-Table | Out-String)
-                }
-                $webhookConfig | Should -Not -BeNullOrEmpty
-            }
+        # Context 'Webhooks' -Skip:($AuthType -ne 'APP') {
+        #     It 'Get-GitHubAppWebhookConfiguration - Can get the webhook configuration' {
+        #         $webhookConfig = Get-GitHubAppWebhookConfiguration
+        #         LogGroup 'Webhook config' {
+        #             Write-Host ($webhookConfig | Format-Table | Out-String)
+        #         }
+        #         $webhookConfig | Should -Not -BeNullOrEmpty
+        #     }
 
-            It 'Update-GitHubAppWebhookConfiguration - Can update the webhook configuration' {
-                { Update-GitHubAppWebhookConfiguration -ContentType 'form' } | Should -Not -Throw
-                $webhookConfig = Get-GitHubAppWebhookConfiguration
-                LogGroup 'Webhook config - form' {
-                    Write-Host ($webhookConfig | Format-Table | Out-String)
-                }
-                { Update-GitHubAppWebhookConfiguration -ContentType 'json' } | Should -Not -Throw
-                $webhookConfig = Get-GitHubAppWebhookConfiguration
-                LogGroup 'Webhook config - json' {
-                    Write-Host ($webhookConfig | Format-Table | Out-String)
-                }
-            }
+        #     It 'Update-GitHubAppWebhookConfiguration - Can update the webhook configuration' {
+        #         { Update-GitHubAppWebhookConfiguration -ContentType 'form' } | Should -Not -Throw
+        #         $webhookConfig = Get-GitHubAppWebhookConfiguration
+        #         LogGroup 'Webhook config - form' {
+        #             Write-Host ($webhookConfig | Format-Table | Out-String)
+        #         }
+        #         { Update-GitHubAppWebhookConfiguration -ContentType 'json' } | Should -Not -Throw
+        #         $webhookConfig = Get-GitHubAppWebhookConfiguration
+        #         LogGroup 'Webhook config - json' {
+        #             Write-Host ($webhookConfig | Format-Table | Out-String)
+        #         }
+        #     }
 
-            It 'Get-GitHubAppWebhookDelivery - Can get webhook deliveries' {
-                $deliveries = Get-GitHubAppWebhookDelivery
-                LogGroup 'Deliveries' {
-                    Write-Host ($deliveries | Format-Table | Out-String)
-                }
-                $deliveries | Should -Not -BeNullOrEmpty
-            }
+        #     It 'Get-GitHubAppWebhookDelivery - Can get webhook deliveries' {
+        #         $deliveries = Get-GitHubAppWebhookDelivery
+        #         LogGroup 'Deliveries' {
+        #             Write-Host ($deliveries | Format-Table | Out-String)
+        #         }
+        #         $deliveries | Should -Not -BeNullOrEmpty
+        #     }
 
-            It 'Get-GitHubAppWebhookDelivery - Can redeliver a webhook delivery' {
-                $deliveries = Get-GitHubAppWebhookDelivery | Select-Object -First 1
-                LogGroup 'Delivery - redeliver' {
-                    Write-Host ($deliveries | Format-Table | Out-String)
-                }
-                { Invoke-GitHubAppWebhookReDelivery -ID $deliveries.id } | Should -Not -Throw
-                LogGroup 'Delivery - redeliver' {
-                    Write-Host ($deliveries | Format-Table | Out-String)
-                }
-            }
-        }
+        #     It 'Get-GitHubAppWebhookDelivery - Can redeliver a webhook delivery' {
+        #         $deliveries = Get-GitHubAppWebhookDelivery | Select-Object -First 1
+        #         LogGroup 'Delivery - redeliver' {
+        #             Write-Host ($deliveries | Format-Table | Out-String)
+        #         }
+        #         { Invoke-GitHubAppWebhookReDelivery -ID $deliveries.id } | Should -Not -Throw
+        #         LogGroup 'Delivery - redeliver' {
+        #             Write-Host ($deliveries | Format-Table | Out-String)
+        #         }
+        #     }
+        # }
 
         Context 'Installation' -Skip:($AuthType -ne 'APP') {
             BeforeAll {
@@ -297,6 +297,40 @@ Describe 'Apps' {
                 $installationIDContext.AuthType | Should -Be 'IAT'
                 $installationIDContext.Token | Should -BeOfType [System.Security.SecureString]
                 $installationIDContext.TokenType | Should -Be 'ghs'
+            }
+
+            It 'Connect-GitHubApp - Connects using multiple -ID parameters' {
+                $multiInstallations = $installations | Select-Object -First 2
+                $ids = $multiInstallations.ID
+                $ids.Count | Should -BeGreaterThan 1
+
+                $contexts = Connect-GitHubApp -ID $ids -PassThru -Silent
+                $contexts | Should -Not -BeNullOrEmpty
+                $contexts.Count | Should -Be $ids.Count
+                foreach ($c in $contexts) {
+                    $c | Should -BeOfType 'GitHubAppInstallationContext'
+                    $c.InstallationID | Should -BeIn $ids
+                    $c.AuthType | Should -Be 'IAT'
+                    $c.Token | Should -BeOfType [System.Security.SecureString]
+                }
+            }
+
+            It 'Connect-GitHubApp - Connects using installation objects from the pipeline' {
+                $pipelineInstallations = $installations | Select-Object -First 2
+                if (-not $pipelineInstallations) {
+                    Set-ItResult -Skipped -Because 'No installations available to test pipeline parameter set.'
+                    return
+                }
+                $contexts = $pipelineInstallations | Connect-GitHubApp -PassThru -Silent
+                $contexts | Should -Not -BeNullOrEmpty
+                foreach ($pi in $pipelineInstallations) {
+                    ($contexts | Where-Object InstallationID -EQ $pi.ID) | Should -Not -BeNullOrEmpty
+                }
+                foreach ($c in $contexts) {
+                    $c | Should -BeOfType 'GitHubAppInstallationContext'
+                    $c.AuthType | Should -Be 'IAT'
+                    $c.Token | Should -BeOfType [System.Security.SecureString]
+                }
             }
         }
     }

@@ -58,9 +58,13 @@
         [SupportsWildcards()]
         [string[]] $Enterprise,
 
+        # Installation objects from pipeline for parallel processing.
+        [Parameter(Mandatory, ParameterSetName = 'Installation object', ValueFromPipeline)]
+        [GitHubAppInstallation[]] $Installation,
+
         # The installation ID(s) to connect to directly.
         # Accepts input from the pipeline by property name (e.g. objects with an ID property)
-        [Parameter(Mandatory, ParameterSetName = 'InstallationID', ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ParameterSetName = 'Installation ID', ValueFromPipelineByPropertyName)]
         [Alias('InstallationID')]
         [int[]] $ID,
 
@@ -119,7 +123,7 @@
                 }
                 break
             }
-            'InstallationID' {
+            'Installation ID' {
                 Write-Verbose 'Selecting installations by explicit ID.'
                 foreach ($installationId in $ID) {
                     Write-Verbose "Looking up installation ID [$installationId]"
@@ -129,6 +133,13 @@
                         continue
                     }
                     $null = $selectedInstallations.Add($found)
+                }
+                break
+            }
+            'Installation object' {
+                Write-Verbose 'Selecting installations from the pipeline.'
+                foreach ($installationObject in $Installation) {
+                    $null = $selectedInstallations.Add($installationObject)
                 }
                 break
             }
