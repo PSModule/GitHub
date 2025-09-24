@@ -43,8 +43,8 @@
 
     GitHubOwner([PSCustomObject]$Object) {
         # From GitHubNode
-        $this.ID = $Object.id
-        $this.NodeID = $Object.node_id ?? $Object.NodeID
+        $this.ID = $Object.databaseId ?? $Object.id
+        $this.NodeID = $Object.node_id ?? $Object.NodeID ?? $Object.id
 
         # From GitHubOwner
         $this.Name = $Object.slug ?? $Object.login ?? $Object.name

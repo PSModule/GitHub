@@ -27,11 +27,11 @@
 
     GitHubPlan([PSCustomObject]$Object) {
         $this.Name = $Object.name
-        $this.PrivateRepos = $Object.private_repos
+        $this.PrivateRepos = $Object.private_repos ?? $Object.PrivateRepos
         $this.Collaborators = $Object.collaborators
         $this.Space = $Object.space
         $this.Seats = $Object.seats
-        $this.FilledSeats = $Object.filled_seats
+        $this.FilledSeats = $Object.filled_seats ?? $Object.FilledSeats
     }
 
     [string] ToString() {

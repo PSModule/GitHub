@@ -27,12 +27,12 @@
 
     GitHubEnterprise([PSCustomObject] $Object) {
         # From GitHubNode
-        $this.ID = $Object.databaseId
-        $this.NodeID = $Object.id
+        $this.ID = $Object.databaseId ?? $Object.id
+        $this.NodeID = $Object.node_id ?? $Object.NodeID ?? $Object.id
 
         # From GitHubOwner
         $this.Name = $Object.slug ?? $Object.Name
-        $this.DisplayName = $Object.name
+        $this.DisplayName = $Object.name ?? $this.DisplayName
         $this.AvatarUrl = $Object.avatarUrl
         $this.Url = $Object.url
         $this.Type = $Object.type ?? 'Enterprise'

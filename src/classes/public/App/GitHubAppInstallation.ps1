@@ -5,6 +5,9 @@
     # The app that is installed.
     [GitHubApp] $App
 
+    # The full installation object (if available).
+    [GitHubAppInstallation] $Installation
+
     # The target of the installation.
     [GitHubOwner] $Target
 
@@ -52,7 +55,13 @@
             ClientID = $Object.client_id
             Slug     = $Object.app_slug
         }
-        $this.Target = [GitHubOwner]::new($Object.account)
+        $this.Target = if ($null -ne $Object.Target) {
+            [GitHubOwner]::new($Object.Target)
+        } elseif ($null -ne $Object.Account) {
+            [GitHubOwner]::new($Object.Account)
+        } else {
+            $null
+        }
         $this.Type = $Object.target_type
         $this.RepositorySelection = $Object.repository_selection
         $this.Permissions = [GitHubPermission]::NewPermissionList($Object.permissions, $this.Type)

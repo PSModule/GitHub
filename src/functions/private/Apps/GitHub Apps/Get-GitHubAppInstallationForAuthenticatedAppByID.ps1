@@ -46,6 +46,8 @@
         }
 
         Invoke-GitHubAPI @apiParams | ForEach-Object {
+            $installation = $_.Response
+            $installation
             [GitHubAppInstallation]::new($_.Response, $Context)
         }
     }
