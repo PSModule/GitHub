@@ -70,13 +70,19 @@
         [string[]] $Enterprise,
 
         # Installation objects from pipeline for parallel processing.
-        [Parameter(Mandatory, ParameterSetName = 'Installation', ValueFromPipeline)]
+        [Parameter(Mandatory, ParameterSetName = 'Installation object', ValueFromPipeline)]
         [GitHubAppInstallation[]] $Installation,
 
         # The maximum number of parallel operations to run at once.
         [Parameter(ParameterSetName = 'Filtered')]
         [Parameter(ParameterSetName = 'Installation')]
         [uint] $ThrottleLimit = ([Environment]::ProcessorCount),
+
+        # The installation ID(s) to connect to directly.
+        # Accepts input from the pipeline by property name (e.g. objects with an ID property)
+        [Parameter(Mandatory, ParameterSetName = 'Installation ID', ValueFromPipelineByPropertyName)]
+        [Alias('InstallationID')]
+        [int[]] $ID,
 
         # Passes the context object to the pipeline.
         [Parameter()]
@@ -107,6 +113,7 @@
     }
 
     process {
+        $selectedInstallations = [System.Collections.ArrayList]::new()
         switch ($PSCmdlet.ParameterSetName) {
             'Installation' {
                 if ($Installation.Count -eq 1) {
@@ -213,22 +220,22 @@
                 $User | ForEach-Object {
                     $userItem = $_
                     Write-Verbose "User filter:         [$userItem]."
-                    $selectedInstallations += $installations | Where-Object {
-                        $_.Type -eq 'User' -and $_.Target.Name -like $userItem
+                    $installations | Where-Object { $_.Type -eq 'User' -and $_.Target.Name -like $userItem } | ForEach-Object {
+                        $null = $selectedInstallations.Add($_)
                     }
                 }
                 $Organization | ForEach-Object {
                     $organizationItem = $_
                     Write-Verbose "Organization filter: [$organizationItem]."
-                    $selectedInstallations += $installations | Where-Object {
-                        $_.Type -eq 'Organization' -and $_.Target.Name -like $organizationItem
+                    $installations | Where-Object { $_.Type -eq 'Organization' -and $_.Target.Name -like $organizationItem } | ForEach-Object {
+                        $null = $selectedInstallations.Add($_)
                     }
                 }
                 $Enterprise | ForEach-Object {
                     $enterpriseItem = $_
                     Write-Verbose "Enterprise filter:   [$enterpriseItem]."
-                    $selectedInstallations += $installations | Where-Object {
-                        $_.Type -eq 'Enterprise' -and $_.Target.Name -like $enterpriseItem
+                    $installations | Where-Object { $_.Type -eq 'Enterprise' -and $_.Target.Name -like $enterpriseItem } | ForEach-Object {
+                        $null = $selectedInstallations.Add($_)
                     }
                 }
                 $selectedInstallations | ForEach-Object -ThrottleLimit $ThrottleLimit -UseNewRunspace -Parallel {
@@ -256,6 +263,27 @@
                     }
                 }
                 return
+                break
+            }
+            'Installation ID' {
+                Write-Verbose 'Selecting installations by explicit ID.'
+                foreach ($installationId in $ID) {
+                    Write-Verbose "Looking up installation ID [$installationId]"
+                    $found = Get-GitHubAppInstallation -ID $installationId -Context $Context
+                    if (-not $found) {
+                        Write-Warning "No installation found for ID [$installationId]."
+                        continue
+                    }
+                    $null = $selectedInstallations.Add($found)
+                }
+                break
+            }
+            'Installation object' {
+                Write-Verbose 'Selecting installations from the pipeline.'
+                foreach ($installationObject in $Installation) {
+                    $null = $selectedInstallations.Add($installationObject)
+                }
+                break
             }
             'All Installations' {
                 Write-Verbose 'No target specified. Connecting to all installations.'
@@ -283,8 +311,49 @@
                             }
                         }
                     }
+                    $selectedInstallations.AddRange((Get-GitHubAppInstallation -Context $Context))
+                    Write-Verbose "Found [$($selectedInstallations.Count)] installations."
                 }
-                return
+            }
+        }
+
+        Write-Verbose "Found [$($selectedInstallations.Count)] installations for the target."
+        $selectedInstallations | ForEach-Object {
+            $installation = $_
+            Write-Verbose "Processing installation [$($installation.Target.Name)] [$($installation.id)]"
+            $token = New-GitHubAppInstallationAccessToken -Context $Context -ID $installation.id
+
+            $contextParams = @{
+                AuthType         = [string]'IAT'
+                TokenType        = [string]'ghs'
+                DisplayName      = [string]$Context.DisplayName
+                ApiBaseUri       = [string]$Context.ApiBaseUri
+                ApiVersion       = [string]$Context.ApiVersion
+                HostName         = [string]$Context.HostName
+                HttpVersion      = [string]$Context.HttpVersion
+                PerPage          = [int]$Context.PerPage
+                ClientID         = [string]$Context.ClientID
+                InstallationID   = [string]$installation.ID
+                Permissions      = [GitHubPermission[]]$installation.Permissions
+                Events           = [string[]]$installation.Events
+                InstallationType = [string]$installation.Type
+                Token            = [securestring]$token.Token
+                TokenExpiresAt   = [datetime]$token.ExpiresAt
+            }
+
+            switch ($installation.Type) {
+                'User' {
+                    $contextParams['InstallationName'] = [string]$installation.Target.Name
+                    $contextParams['Owner'] = [string]$installation.Target.Name
+                }
+                'Organization' {
+                    $contextParams['InstallationName'] = [string]$installation.Target.Name
+                    $contextParams['Owner'] = [string]$installation.Target.Name
+                }
+                'Enterprise' {
+                    $contextParams['InstallationName'] = [string]$installation.Target.Name
+                    $contextParams['Enterprise'] = [string]$installation.Target.Name
+                }
             }
         }
     }
