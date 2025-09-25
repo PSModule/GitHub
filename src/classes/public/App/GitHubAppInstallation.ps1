@@ -5,9 +5,6 @@
     # The app that is installed.
     [GitHubApp] $App
 
-    # The full installation object (if available).
-    [GitHubAppInstallation] $Installation
-
     # The target of the installation.
     [GitHubOwner] $Target
 
@@ -75,9 +72,9 @@
         $this.Status = 'Unknown'
     }
 
-    GitHubAppInstallation([PSCustomObject] $Object, [GitHubAppContext] $AppContext) {
+    GitHubAppInstallation([PSCustomObject] $Object, [GitHubApp] $App) {
         $this.ID = $Object.id
-        $this.App = $AppContext.App
+        $this.App = $App
         $this.Target = [GitHubOwner]::new($Object.account)
         $this.Type = $Object.target_type
         $this.RepositorySelection = $Object.repository_selection
