@@ -48,8 +48,7 @@
 
         Invoke-GitHubAPI @apiParams | ForEach-Object {
             foreach ($installation in $_.Response) {
-                $installation | Add-Member -NotePropertyName App -NotePropertyValue $Context.App -Force
-                [GitHubAppInstallation]::new($installation)
+                [GitHubAppInstallation]::new($installation, $Context.App)
             }
         }
     }
