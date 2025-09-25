@@ -52,7 +52,7 @@
         $this.Url = $Object.html_url ?? $Object.Url
         $this.Type = $Object.type
         $this.Location = $Object.location
-        $this.Description = $Object.bio
+        $this.Description = $Object.bio ?? $Object.Description
         $this.Website = $Object.blog ?? $Object.Website
         $this.CreatedAt = $Object.created_at ?? $Object.CreatedAt
         $this.UpdatedAt = $Object.updated_at ?? $Object.UpdatedAt
@@ -64,8 +64,8 @@
         $this.TwitterUsername = $Object.twitter_username ?? $this.TwitterUsername
         $this.PublicRepos = $Object.public_repos ?? $this.PublicRepos
         $this.PublicGists = $Object.public_gists ?? $this.PublicGists
-        $this.Followers = $Object.followers ?? $this.Followers
-        $this.Following = $Object.following ?? $this.Following
+        $this.Followers = $Object.followers
+        $this.Following = $Object.following
         $this.NotificationEmail = $Object.notification_email ?? $this.NotificationEmail
         $this.Plan = [GitHubPlan]::New($Object.plan)
     }

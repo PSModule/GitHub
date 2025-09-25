@@ -48,9 +48,13 @@
 
     GitHubAppInstallation([PSCustomObject] $Object) {
         $this.ID = $Object.id
-        $this.App = [GitHubApp]@{
-            ClientID = $Object.client_id
-            Slug     = $Object.app_slug
+        $this.App = if ($null -ne $Object.App) {
+            $Object.App
+        } else {
+            [GitHubApp]@{
+                ClientID = $Object.client_id
+                Slug     = $Object.app_slug
+            }
         }
         $this.Target = if ($null -ne $Object.Target) {
             [GitHubOwner]::new($Object.Target)
