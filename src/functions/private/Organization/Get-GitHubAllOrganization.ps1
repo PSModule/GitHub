@@ -59,8 +59,7 @@
 
         Invoke-GitHubAPI @apiParams | ForEach-Object {
             foreach ($organization in $_.Response) {
-                $organization | Add-Member -NotePropertyName Url -NotePropertyValue "$($Context.HostName)/$($organization.login)" -Force
-                [GitHubOrganization]::new($organization)
+                [GitHubOrganization]::new($organization, "$($Context.HostName)/$($organization.login)")
             }
         }
     }

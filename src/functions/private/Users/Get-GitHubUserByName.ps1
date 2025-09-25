@@ -63,8 +63,7 @@
             Invoke-GitHubAPI @apiParams | ForEach-Object {
                 $account = $_.Response
                 if ($account.type -eq 'Organization') {
-                    $account | Add-Member -NotePropertyName Url -NotePropertyValue "$($Context.HostName)/$($account.login)" -Force
-                    [GitHubOrganization]::New($account)
+                    [GitHubOrganization]::New($account, "$($Context.HostName)/$($account.login)")
                 } elseif ($account.type -eq 'User') {
                     [GitHubUser]::New($account)
                 } else {

@@ -205,8 +205,7 @@
         if ($PSCmdlet.ShouldProcess("organization [$Name]", 'Set')) {
             Invoke-GitHubAPI @apiParams | ForEach-Object {
                 $org = $_.Response
-                $org | Add-Member -NotePropertyName Url -NotePropertyValue "$($Context.HostName)/$($org.login)" -Force
-                [GitHubOrganization]::new($org)
+                [GitHubOrganization]::New($org, "$($Context.HostName)/$($org.login)")
             }
         }
     }
