@@ -181,7 +181,17 @@
 
     GitHubOrganization() {}
 
-    GitHubOrganization([PSCustomObject] $Object, [string] $HostName) {
+    GitHubOrganization([PSCustomObject] $Object) {
+        $this.InitializeFromObject($Object)
+    }
+
+    GitHubOrganization([PSCustomObject] $Object, [string] $Url) {
+        $this.InitializeFromObject($Object)
+        # Override URL with provided value
+        $this.Url = $Url
+    }
+
+    hidden [void] InitializeFromObject([PSCustomObject] $Object) {
         # From GitHubNode
         $this.ID = $Object.databaseId ?? $Object.id
         $this.NodeID = $Object.node_id ?? $Object.NodeID ?? $Object.id
@@ -190,7 +200,7 @@
         $this.Name = $Object.login ?? $this.Name
         $this.DisplayName = $Object.name ?? $Object.DisplayName
         $this.AvatarUrl = $Object.avatar_url ?? $Object.avatarUrl
-        $this.Url = $Object.html_url ?? $Object.url ?? "https://$HostName/$($this.Name)"
+        $this.Url = $Object.html_url ?? $Object.url
         $this.Type = $Object.type ?? 'Organization'
         $this.Location = $Object.location
         $this.Description = $Object.description
