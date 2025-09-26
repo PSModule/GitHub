@@ -5,9 +5,6 @@
     # The app that is installed.
     [GitHubApp] $App
 
-    # The full installation object (if available).
-    [GitHubAppInstallation] $Installation
-
     # The target of the installation.
     [GitHubOwner] $Target
 
@@ -51,9 +48,13 @@
 
     GitHubAppInstallation([PSCustomObject] $Object) {
         $this.ID = $Object.id
-        $this.App = [GitHubApp]@{
-            ClientID = $Object.client_id
-            Slug     = $Object.app_slug
+        $this.App = if ($null -ne $Object.App) {
+            $Object.App
+        } else {
+            [GitHubApp]@{
+                ClientID = $Object.client_id
+                Slug     = $Object.app_slug
+            }
         }
         $this.Target = if ($null -ne $Object.Target) {
             [GitHubOwner]::new($Object.Target)
@@ -72,12 +73,12 @@
         $this.SuspendedAt = $Object.suspended_at
         $this.SuspendedBy = [GitHubUser]::new($Object.suspended_by)
         $this.Url = $Object.html_url
-        $this.Status = 'Unknown'
+        $this.Status = $Object.Status ?? 'Unknown'
     }
 
-    GitHubAppInstallation([PSCustomObject] $Object, [GitHubAppContext] $AppContext) {
+    GitHubAppInstallation([PSCustomObject] $Object, [GitHubApp] $App) {
         $this.ID = $Object.id
-        $this.App = $AppContext.App
+        $this.App = $App
         $this.Target = [GitHubOwner]::new($Object.account)
         $this.Type = $Object.target_type
         $this.RepositorySelection = $Object.repository_selection

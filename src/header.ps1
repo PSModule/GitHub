@@ -3,3 +3,8 @@
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidLongLines', '', Justification = 'Contains long links.')]
 [CmdletBinding()]
 param()
+
+function Get-LocalModule {
+    $MyInvocation.MyCommand.Module
+}
+$script:Module = Get-LocalModule

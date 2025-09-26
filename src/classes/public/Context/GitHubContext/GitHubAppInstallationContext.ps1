@@ -1,7 +1,4 @@
 ﻿class GitHubAppInstallationContext : GitHubContext {
-    # The App that this context represents.
-    [GitHubAppInstallation] $Installation
-
     # Client ID for GitHub Apps
     [string] $ClientID
 
@@ -48,6 +45,5 @@
         $this.Events = , ($Object.Events)
         $this.InstallationType = $Object.InstallationType
         $this.InstallationName = $Object.InstallationName
-        $this.Installation = [GitHubAppInstallation]::New($Object.Installation)
     }
 }
