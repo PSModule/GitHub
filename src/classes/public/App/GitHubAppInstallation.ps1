@@ -73,7 +73,7 @@
         $this.SuspendedAt = $Object.suspended_at
         $this.SuspendedBy = [GitHubUser]::new($Object.suspended_by)
         $this.Url = $Object.html_url
-        $this.Status = 'Unknown'
+        $this.Status = $Object.Status ?? 'Unknown'
     }
 
     GitHubAppInstallation([PSCustomObject] $Object, [GitHubApp] $App) {

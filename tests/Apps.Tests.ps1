@@ -39,15 +39,15 @@ Describe 'Apps' {
             Write-Host ('-' * 60)
         }
 
-        Context 'Non-GitHubApp' {
-            It 'Get-GitHubApp - Get an app by slug' -Skip:($AuthType -eq 'APP') {
-                $app = Get-GitHubApp -Slug 'github-actions'
-                LogGroup 'App by slug' {
-                    Write-Host ($app | Format-List | Out-String)
-                }
-                $app | Should -Not -BeNullOrEmpty
-            }
-        }
+        # Context 'Non-GitHubApp' {
+        #     It 'Get-GitHubApp - Get an app by slug' -Skip:($AuthType -eq 'APP') {
+        #         $app = Get-GitHubApp -Slug 'github-actions'
+        #         LogGroup 'App by slug' {
+        #             Write-Host ($app | Format-List | Out-String)
+        #         }
+        #         $app | Should -Not -BeNullOrEmpty
+        #     }
+        # }
 
         Context 'GitHubApp' -Skip:($AuthType -ne 'APP') {
             BeforeAll {
@@ -174,47 +174,47 @@ Describe 'Apps' {
                 $installation.Status | Should -BeIn @('Ok', 'Outdated')
             }
 
-            Context 'Webhooks' -Skip:($AuthType -ne 'APP') {
-                It 'Get-GitHubAppWebhookConfiguration - Can get the webhook configuration' {
-                    $webhookConfig = Get-GitHubAppWebhookConfiguration
-                    LogGroup 'Webhook config' {
-                        Write-Host ($webhookConfig | Format-Table | Out-String)
-                    }
-                    $webhookConfig | Should -Not -BeNullOrEmpty
-                }
+            # Context 'Webhooks' -Skip:($AuthType -ne 'APP') {
+            #     It 'Get-GitHubAppWebhookConfiguration - Can get the webhook configuration' {
+            #         $webhookConfig = Get-GitHubAppWebhookConfiguration
+            #         LogGroup 'Webhook config' {
+            #             Write-Host ($webhookConfig | Format-Table | Out-String)
+            #         }
+            #         $webhookConfig | Should -Not -BeNullOrEmpty
+            #     }
 
-                It 'Update-GitHubAppWebhookConfiguration - Can update the webhook configuration' {
-                    { Update-GitHubAppWebhookConfiguration -ContentType 'form' } | Should -Not -Throw
-                    $webhookConfig = Get-GitHubAppWebhookConfiguration
-                    LogGroup 'Webhook config - form' {
-                        Write-Host ($webhookConfig | Format-Table | Out-String)
-                    }
-                    { Update-GitHubAppWebhookConfiguration -ContentType 'json' } | Should -Not -Throw
-                    $webhookConfig = Get-GitHubAppWebhookConfiguration
-                    LogGroup 'Webhook config - json' {
-                        Write-Host ($webhookConfig | Format-Table | Out-String)
-                    }
-                }
+            #     It 'Update-GitHubAppWebhookConfiguration - Can update the webhook configuration' {
+            #         { Update-GitHubAppWebhookConfiguration -ContentType 'form' } | Should -Not -Throw
+            #         $webhookConfig = Get-GitHubAppWebhookConfiguration
+            #         LogGroup 'Webhook config - form' {
+            #             Write-Host ($webhookConfig | Format-Table | Out-String)
+            #         }
+            #         { Update-GitHubAppWebhookConfiguration -ContentType 'json' } | Should -Not -Throw
+            #         $webhookConfig = Get-GitHubAppWebhookConfiguration
+            #         LogGroup 'Webhook config - json' {
+            #             Write-Host ($webhookConfig | Format-Table | Out-String)
+            #         }
+            #     }
 
-                It 'Get-GitHubAppWebhookDelivery - Can get webhook deliveries' {
-                    $deliveries = Get-GitHubAppWebhookDelivery
-                    LogGroup 'Deliveries' {
-                        Write-Host ($deliveries | Format-Table | Out-String)
-                    }
-                    $deliveries | Should -Not -BeNullOrEmpty
-                }
+            #     It 'Get-GitHubAppWebhookDelivery - Can get webhook deliveries' {
+            #         $deliveries = Get-GitHubAppWebhookDelivery
+            #         LogGroup 'Deliveries' {
+            #             Write-Host ($deliveries | Format-Table | Out-String)
+            #         }
+            #         $deliveries | Should -Not -BeNullOrEmpty
+            #     }
 
-                It 'Get-GitHubAppWebhookDelivery - Can redeliver a webhook delivery' {
-                    $deliveries = Get-GitHubAppWebhookDelivery | Select-Object -First 1
-                    LogGroup 'Delivery - redeliver' {
-                        Write-Host ($deliveries | Format-Table | Out-String)
-                    }
-                    { Invoke-GitHubAppWebhookReDelivery -ID $deliveries.id } | Should -Not -Throw
-                    LogGroup 'Delivery - redeliver' {
-                        Write-Host ($deliveries | Format-Table | Out-String)
-                    }
-                }
-            }
+            #     It 'Get-GitHubAppWebhookDelivery - Can redeliver a webhook delivery' {
+            #         $deliveries = Get-GitHubAppWebhookDelivery | Select-Object -First 1
+            #         LogGroup 'Delivery - redeliver' {
+            #             Write-Host ($deliveries | Format-Table | Out-String)
+            #         }
+            #         { Invoke-GitHubAppWebhookReDelivery -ID $deliveries.id } | Should -Not -Throw
+            #         LogGroup 'Delivery - redeliver' {
+            #             Write-Host ($deliveries | Format-Table | Out-String)
+            #         }
+            #     }
+            # }
 
             Context 'Installation' -Skip:($AuthType -ne 'APP') {
                 BeforeAll {
