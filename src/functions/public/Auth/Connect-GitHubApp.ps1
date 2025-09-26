@@ -199,13 +199,10 @@
             }
             $contextParams
         }
-        foreach ($contextParams in $contextParamList) {
-            $null = $contextObjects.Add($contextParams)
-        }
     }
 
     end {
-        foreach ($contextParams in $contextObjects) {
+        foreach ($contextParams in $contextParamList) {
             Write-Verbose 'Logging in using a managed installation access token...'
             $contextParams | Format-Table | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
             $contextObj = [GitHubAppInstallationContext]::new((Set-GitHubContext -Context $contextParams.Clone() -PassThru -Default:$Default))
