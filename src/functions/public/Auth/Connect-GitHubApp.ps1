@@ -198,7 +198,9 @@
             }
             [pscustomobject]$contextParams
         }
-        $contextObjects.AddRange($contextParamList)
+        foreach ($contextParams in $contextParamList) {
+            $null = $contextObjects.Add($contextParams)
+        }
         $null = $selectedInstallations.Clear()
     }
 
