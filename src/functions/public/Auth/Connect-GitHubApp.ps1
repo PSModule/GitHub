@@ -81,6 +81,10 @@
         [Parameter()]
         [switch] $Default,
 
+        # The maximum number of parallel threads to use when connecting to multiple installations.
+        [Parameter()]
+        [int] $ThrottleLimit = [System.Environment]::ProcessorCount,
+
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
@@ -92,6 +96,7 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType App
+        $contextObjects = [System.Collections.ArrayList]::new()
     }
 
     process {
@@ -151,7 +156,8 @@
         }
 
         Write-Verbose "Found [$($selectedInstallations.Count)] installations for the target."
-        $selectedInstallations | ForEach-Object {
+        $contextParamList = $selectedInstallations | ForEach-Object -ThrottleLimit $ThrottleLimit -Parallel {
+            Import-Module -Name $script:PSModuleInfo.Name -RequiredVersion $script:PSModuleInfo.Version -Force -ErrorAction Stop
             $installation = $_
             Write-Verbose "Processing installation [$($installation.Target.Name)] [$($installation.id)]"
             $token = New-GitHubAppInstallationAccessToken -Context $Context -ID $installation.id
@@ -159,13 +165,13 @@
             $contextParams = @{
                 AuthType         = [string]'IAT'
                 TokenType        = [string]'ghs'
-                DisplayName      = [string]$Context.DisplayName
-                ApiBaseUri       = [string]$Context.ApiBaseUri
-                ApiVersion       = [string]$Context.ApiVersion
-                HostName         = [string]$Context.HostName
-                HttpVersion      = [string]$Context.HttpVersion
-                PerPage          = [int]$Context.PerPage
-                ClientID         = [string]$Context.ClientID
+                DisplayName      = [string]$using:Context.DisplayName
+                ApiBaseUri       = [string]$using:Context.ApiBaseUri
+                ApiVersion       = [string]$using:Context.ApiVersion
+                HostName         = [string]$using:Context.HostName
+                HttpVersion      = [string]$using:Context.HttpVersion
+                PerPage          = [int]$using:Context.PerPage
+                ClientID         = [string]$using:Context.ClientID
                 InstallationID   = [string]$installation.ID
                 Permissions      = [GitHubPermission[]]$installation.Permissions
                 Events           = [string[]]$installation.Events
@@ -188,6 +194,14 @@
                     $contextParams['Enterprise'] = [string]$installation.Target.Name
                 }
             }
+            $contextParams
+        }
+        $contextObjects.AddRange($contextParamList)
+        $null = $selectedInstallations.Clear()
+    }
+
+    end {
+        foreach ($contextParams in $contextObjects) {
             Write-Verbose 'Logging in using a managed installation access token...'
             $contextParams | Format-Table | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
             $contextObj = [GitHubAppInstallationContext]::new((Set-GitHubContext -Context $contextParams.Clone() -PassThru -Default:$Default))
@@ -204,9 +218,6 @@
             }
             $contextParams.Clear()
         }
-    }
-
-    end {
         Write-Debug "[$stackPath] - End"
     }
 }
