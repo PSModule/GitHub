@@ -43,6 +43,7 @@
         # The context to run the command with.
         # Can be either a string or a GitHubContext object.
         [Parameter(ValueFromPipeline)]
+        [SupportsWildcards()]
         [object[]] $Context
     )
 
@@ -55,7 +56,14 @@
         if (-not $Context) {
             $Context = Get-GitHubContext
         }
-        foreach ($contextItem in $Context) {
+        if ($Context.Contains('*')) {
+            $Context = Get-GitHubContext -Name $Context
+        }
+        $moduleName = $script:Module.Name
+        $moduleVersion = $script:PSModuleInfo.ModuleVersion
+        $Context | ForEach-Object -ThrottleLimit $ThrottleLimit -Parallel {
+            Import-Module -Name $using:moduleName -RequiredVersion $using:moduleVersion -Force -ErrorAction Stop
+            $contextItem = $_
             $contextItem = Resolve-GitHubContext -Context $contextItem
 
             $contextToken = Get-GitHubAccessToken -Context $contextItem -AsPlainText
@@ -85,14 +93,9 @@
             }
 
             if (-not $Silent) {
-                if ($script:IsGitHubActions) {
-                    $green = $PSStyle.Foreground.Green
-                    $reset = $PSStyle.Reset
-                    Write-Host "$green✓$reset Logged out of GitHub! [$contextItem]"
-                } else {
-                    Write-Host '✓ ' -ForegroundColor Green -NoNewline
-                    Write-Host "Logged out of GitHub! [$contextItem]"
-                }
+                $green = $PSStyle.Foreground.Green
+                $reset = $PSStyle.Reset
+                Write-Host "$green✓$reset Logged out of GitHub! [$contextItem]"
             }
         }
     }
