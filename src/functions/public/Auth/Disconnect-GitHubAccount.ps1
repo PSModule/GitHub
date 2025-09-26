@@ -40,6 +40,10 @@
         [Alias('Quiet')]
         [switch] $Silent,
 
+        # The maximum number of parallel threads to use when disconnecting multiple installations.
+        [Parameter()]
+        [int] $ThrottleLimit = [System.Environment]::ProcessorCount,
+
         # The context to run the command with.
         # Can be either a string or a GitHubContext object.
         [Parameter(ValueFromPipeline)]

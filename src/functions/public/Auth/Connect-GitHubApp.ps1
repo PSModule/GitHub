@@ -96,7 +96,6 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType App
-        $contextObjects = [System.Collections.ArrayList]::new()
     }
 
     process {
