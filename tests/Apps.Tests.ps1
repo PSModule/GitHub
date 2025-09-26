@@ -223,7 +223,7 @@ Describe 'Apps' {
                     $permissionsList = [GitHubPermission]::NewPermissionList()
                     $installations = Get-GitHubAppInstallation
                     $installation = $installations | Where-Object { $_.Target.Name -eq $owner }
-                    $installationContext = Connect-GitHubApp @connectAppParams -PassThru -Silent
+                    $installationContext = Connect-GitHubApp @connectAppParams -PassThru -Silent -Debug -Verbose
                     LogGroup 'Context' {
                         Write-Host "$($installationContext | Format-List | Out-String)"
                     }
