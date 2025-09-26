@@ -159,11 +159,11 @@
         $moduleName = $script:Module.Name
         $moduleVersion = $script:PSModuleInfo.ModuleVersion
         $contextParamList = , @()
-        $contextParamList = $selectedInstallations | ForEach-Object -ThrottleLimit $ThrottleLimit -Parallel {
+        $contextParamList += $selectedInstallations | ForEach-Object -ThrottleLimit $ThrottleLimit -Parallel {
             Import-Module -Name $using:moduleName -RequiredVersion $using:moduleVersion -Force -ErrorAction Stop
             $installation = $_
             Write-Verbose "Processing installation [$($installation.Target.Name)] [$($installation.id)]"
-            $token = New-GitHubAppInstallationAccessToken -Context $Context -ID $installation.id
+            $token = New-GitHubAppInstallationAccessToken -Context $using:Context -ID $installation.id
 
             $contextParams = @{
                 AuthType         = [string]'IAT'
@@ -202,7 +202,6 @@
         foreach ($contextParams in $contextParamList) {
             $null = $contextObjects.Add($contextParams)
         }
-        $null = $selectedInstallations.Clear()
     }
 
     end {
