@@ -156,8 +156,10 @@
         }
 
         Write-Verbose "Found [$($selectedInstallations.Count)] installations for the target."
+        $moduleName = $script:Module.Name
+        $moduleVersion = $script:PSModuleInfo.ModuleVersion
         $contextParamList = $selectedInstallations | ForEach-Object -ThrottleLimit $ThrottleLimit -Parallel {
-            Import-Module -Name $script:Module.Name -RequiredVersion $script:PSModuleInfo.ModuleVersion -Force -ErrorAction Stop
+            Import-Module -Name $using:moduleName -RequiredVersion $using:moduleVersion -Force -ErrorAction Stop
             $installation = $_
             Write-Verbose "Processing installation [$($installation.Target.Name)] [$($installation.id)]"
             $token = New-GitHubAppInstallationAccessToken -Context $Context -ID $installation.id
