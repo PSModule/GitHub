@@ -44,8 +44,8 @@
         [Parameter()]
         [int] $ThrottleLimit = [System.Environment]::ProcessorCount,
 
-        # The context to run the command with.
-        # Can be either a string or a GitHubContext object.
+        # One or more contexts (names / IDs) or GitHubContext objects to disconnect.
+        # Supports wildcard patterns when passing strings (delegated to Get-GitHubContext).
         [Parameter(ValueFromPipeline)]
         [SupportsWildcards()]
         [object[]] $Context
@@ -57,21 +57,41 @@
     }
 
     process {
-        if (-not $Context) {
-            $Context = Get-GitHubContext
+        # Resolve contexts using new multi-string + wildcard support in Get-GitHubContext
+        $resolvedContexts = @()
+        if (-not $PSBoundParameters.ContainsKey('Context') -or -not $Context) {
+            # No specific context supplied – operate on the default
+            $resolvedContexts += Get-GitHubContext
+        } else {
+            $stringInputs = $Context | Where-Object { $_ -is [string] }
+            $objectInputs = $Context | Where-Object { $_ -isnot [string] }
+            if ($stringInputs) {
+                # Batch resolve all string / wildcard patterns in a single call (or as few as possible)
+                $resolvedContexts += Get-GitHubContext -Context $stringInputs -ErrorAction SilentlyContinue
+            }
+            if ($objectInputs) { $resolvedContexts += $objectInputs }
         }
-        if ($Context.Contains('*')) {
-            $Context = Get-GitHubContext -Name $Context
+
+        $resolvedContexts = $resolvedContexts | Where-Object { $_ } | Select-Object -Unique
+        if (-not $resolvedContexts) {
+            if (-not $Silent) { Write-Warning 'No GitHub contexts matched.' }
+            return
         }
+
+        # Determine if the default context will be removed (handle after parallel block once)
+        $defaultContextName = $script:GitHub.Config.DefaultContext
+        $removingDefault = $resolvedContexts | Where-Object { $_.Name -eq $defaultContextName }
+
         $moduleName = $script:Module.Name
         $moduleVersion = $script:PSModuleInfo.ModuleVersion
-        $Context | ForEach-Object -ThrottleLimit $ThrottleLimit -Parallel {
+        $resolvedContexts | ForEach-Object -ThrottleLimit $ThrottleLimit -Parallel {
             Import-Module -Name $using:moduleName -RequiredVersion $using:moduleVersion -Force -ErrorAction Stop
             $contextItem = $_
             $contextItem = Resolve-GitHubContext -Context $contextItem
 
             $contextToken = Get-GitHubAccessToken -Context $contextItem -AsPlainText
-            $isNotGitHubToken = -not ($contextToken -eq (Get-GitHubToken | ConvertFrom-SecureString -AsPlainText))
+            $gitHubToken = Get-GitHubToken | ConvertFrom-SecureString -AsPlainText
+            $isNotGitHubToken = $contextToken -ne $gitHubToken
             $isIATAuthType = $contextItem.AuthType -eq 'IAT'
             $isNotExpired = $contextItem.TokenExpiresIn -gt 0
             Write-Debug "isNotGitHubToken: $isNotGitHubToken"
@@ -81,25 +101,28 @@
                 try {
                     Revoke-GitHubAppInstallationAccessToken -Context $contextItem
                 } catch {
-                    Write-Debug "[$stackPath] - Failed to revoke token:"
+                    Write-Debug '[Disconnect-GitHubAccount] - Failed to revoke token:'
                     Write-Debug $_
                 }
             }
 
             Remove-GitHubContext -Context $contextItem.ID
-            $isDefaultContext = $contextItem.Name -eq $script:GitHub.Config.DefaultContext
-            if ($isDefaultContext) {
+
+            if (-not $using:Silent) {
+                $green = $PSStyle.Foreground.Green
+                $reset = $PSStyle.Reset
+                Write-Host "$green✓$reset Logged out of GitHub! [$contextItem]"
+            }
+        }
+
+        if ($removingDefault) {
+            # Double-check that the default still points to a removed context before clearing
+            if ($script:GitHub.Config.DefaultContext -eq $defaultContextName) {
                 Remove-GitHubConfig -Name 'DefaultContext'
                 if (-not $Silent) {
                     Write-Warning 'There is no longer a default context!'
                     Write-Warning "Please set a new default context using 'Switch-GitHubContext -Name <context>'"
                 }
-            }
-
-            if (-not $Silent) {
-                $green = $PSStyle.Foreground.Green
-                $reset = $PSStyle.Reset
-                Write-Host "$green✓$reset Logged out of GitHub! [$contextItem]"
             }
         }
     }
