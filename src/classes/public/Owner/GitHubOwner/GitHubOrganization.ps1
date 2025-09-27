@@ -185,9 +185,9 @@
         $this.InitializeFromObject($Object)
     }
 
-    GitHubOrganization([PSCustomObject] $Object, [string] $Url) {
+    GitHubOrganization([PSCustomObject] $Object, [GitHubContext] $Context) {
         $this.InitializeFromObject($Object)
-        $this.Url = $Url
+        $this.Url = "https://$($Context.HostName)/$($Object.login)"
     }
 
     hidden [void] InitializeFromObject([PSCustomObject] $Object) {

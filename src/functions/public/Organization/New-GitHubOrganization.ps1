@@ -78,7 +78,7 @@ mutation(`$input:CreateEnterpriseOrganizationInput!) {
         if ($PSCmdlet.ShouldProcess("Creating organization '$Name' in enterprise '$Enterprise'")) {
             $orgresult = Invoke-GitHubGraphQLQuery @updateGraphQLInputs
             $org = $orgresult.createEnterpriseOrganization.organization
-            [GitHubOrganization]::New($org, "$($Context.HostName)/$($org.login)")
+            [GitHubOrganization]::New($org, $Context)
         }
     }
 

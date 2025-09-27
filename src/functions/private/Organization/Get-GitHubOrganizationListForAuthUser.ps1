@@ -90,7 +90,7 @@ query(`$perPage: Int!, `$after: String) {
             }
             Invoke-GitHubGraphQLQuery @organizationQuery | ForEach-Object {
                 foreach ($organization in $_.viewer.organizations.nodes) {
-                    [GitHubOrganization]::new($organization, "$($Context.HostName)/$($organization.login)")
+                    [GitHubOrganization]::new($organization, $Context)
                 }
                 $hasNextPage = $_.viewer.organizations.pageInfo.hasNextPage
                 $after = $_.viewer.organizations.pageInfo.endCursor
