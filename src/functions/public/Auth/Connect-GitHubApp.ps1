@@ -157,7 +157,7 @@
         Write-Verbose "Found [$($selectedInstallations.Count)] installations for the target."
         $moduleName = $script:Module.Name
         $moduleVersion = $script:PSModuleInfo.ModuleVersion
-        $contextParamList = , @()
+        $contextParamList = @()
         $contextParamList += $selectedInstallations | ForEach-Object -ThrottleLimit $ThrottleLimit -Parallel {
             Import-Module -Name $using:moduleName -RequiredVersion $using:moduleVersion -Force -ErrorAction Stop
             $installation = $_
@@ -201,7 +201,7 @@
     }
 
     end {
-        foreach ($contextParams in $contextParamList) {
+        foreach ($contextParams in ($contextParamList | Where-Object { $_ -is [hashtable] })) {
             Write-Verbose 'Logging in using a managed installation access token...'
             $contextParams | Format-Table | Out-String -Stream | ForEach-Object { Write-Verbose $_ }
             $contextObj = [GitHubAppInstallationContext]::new((Set-GitHubContext -Context $contextParams.Clone() -PassThru -Default:$Default))
