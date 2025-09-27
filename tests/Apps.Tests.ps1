@@ -224,17 +224,23 @@ Describe 'Apps' {
                     $installations = Get-GitHubAppInstallation
                     $installation = $installations | Where-Object { $_.Target.Name -eq $owner }
                     $installationContext = Connect-GitHubApp @connectAppParams -PassThru -Silent
+                    LogGroup 'App' {
+                        Write-Host "$($githubApp | Format-List | Out-String)"
+                    }
+                    LogGroup 'Config' {
+                        Write-Host "$($config | Format-List | Out-String)"
+                    }
+                    LogGroup "Installation" {
+                        Write-Host "$($installation | Format-List | Out-String)"
+                    }
+                    LogGroup 'Permissions' {
+                        Write-Host "$($installationContext.Permissions | Format-Table | Out-String)"
+                    }
                     LogGroup 'Context' {
                         Write-Host "$($installationContext | Format-List | Out-String)"
                     }
                     LogGroup 'Context - -ListAvailable' {
                         Write-Host "$(Get-GitHubContext -ListAvailable | Format-List | Out-String)"
-                    }
-                    LogGroup 'Permissions' {
-                        Write-Host "$($installationContext.Permissions | Format-Table | Out-String)"
-                    }
-                    LogGroup 'App' {
-                        Write-Host "$($githubApp | Format-Table | Out-String)"
                     }
                 }
 

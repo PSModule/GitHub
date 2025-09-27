@@ -181,16 +181,25 @@
 
     GitHubOrganization() {}
 
-    GitHubOrganization([PSCustomObject] $Object, [GitHubContext] $Context) {
+    GitHubOrganization([PSCustomObject] $Object) {
+        $this.InitializeFromObject($Object)
+    }
+
+    GitHubOrganization([PSCustomObject] $Object, [string] $Url) {
+        $this.InitializeFromObject($Object)
+        $this.Url = $Url
+    }
+
+    hidden [void] InitializeFromObject([PSCustomObject] $Object) {
         # From GitHubNode
         $this.ID = $Object.databaseId ?? $Object.id
-        $this.NodeID = $Object.node_id ?? $Object.id
+        $this.NodeID = $Object.node_id ?? $Object.NodeID ?? $Object.id
 
         # From GitHubOwner
-        $this.Name = $Object.login
-        $this.DisplayName = $Object.name
+        $this.Name = $Object.login ?? $this.Name
+        $this.DisplayName = $Object.name ?? $Object.DisplayName
         $this.AvatarUrl = $Object.avatar_url ?? $Object.avatarUrl
-        $this.Url = $Object.html_url ?? $Object.url ?? "https://$($Context.HostName)/$($Object.login)"
+        $this.Url = $Object.html_url ?? $Object.url
         $this.Type = $Object.type ?? 'Organization'
         $this.Location = $Object.location
         $this.Description = $Object.description
@@ -202,44 +211,56 @@
         $this.Email = $Object.email
         $this.TwitterUsername = $Object.twitter_username ?? $Object.twitterUsername
         $this.Plan = [GitHubPlan]::New($Object.plan)
-        $this.PublicRepos = $Object.public_repos
-        $this.PublicGists = $Object.public_gists
+        $this.PublicRepos = $Object.public_repos ?? $Object.PublicRepos
+        $this.PublicGists = $Object.public_gists ?? $Object.PublicGists
         $this.Followers = $Object.followers
         $this.Following = $Object.following
-        $this.PrivateGists = $Object.total_private_gists
-        $this.TotalPrivateRepos = $Object.total_private_repos
-        $this.OwnedPrivateRepos = $Object.owned_private_repos
-        if ($null -ne $Object.disk_usage) {
-            $this.Size = [uint64]($Object.disk_usage * 1KB)
+        $this.PrivateGists = $Object.total_private_gists ?? $Object.PrivateGists
+        $this.TotalPrivateRepos = $Object.total_private_repos ?? $Object.TotalPrivateRepos
+        $this.OwnedPrivateRepos = $Object.owned_private_repos ?? $Object.OwnedPrivateRepos
+        $this.Size = if ($null -ne $Object.disk_usage) {
+            [uint64]($Object.disk_usage * 1KB)
+        } else {
+            $Object.Size
         }
         $this.Collaborators = $Object.collaborators
         $this.IsVerified = $Object.is_verified ?? $Object.isVerified
-        $this.HasOrganizationProjects = $Object.has_organization_projects
-        $this.HasRepositoryProjects = $Object.has_repository_projects
-        $this.BillingEmail = $Object.billing_email
-        $this.DefaultRepositoryPermission = $Object.default_repository_permission
-        $this.MembersCanCreateRepositories = $Object.members_can_create_repositories
-        $this.RequiresTwoFactorAuthentication = $Object.two_factor_requirement_enabled ?? $Object.requiresTwoFactorAuthentication
-        $this.MembersAllowedRepositoryCreationType = $Object.members_allowed_repository_creation_type
-        $this.MembersCanCreatePublicRepositories = $Object.members_can_create_public_repositories
-        $this.MembersCanCreatePrivateRepositories = $Object.members_can_create_private_repositories
-        $this.MembersCanCreateInternalRepositories = $Object.members_can_create_internal_repositories
-        $this.MembersCanInviteCollaborators = $Object.members_can_invite_collaborators
-        $this.MembersCanCreatePages = $Object.members_can_create_pages
+        $this.HasOrganizationProjects = $Object.has_organization_projects ?? $Object.HasOrganizationProjects
+        $this.HasRepositoryProjects = $Object.has_repository_projects ?? $Object.HasRepositoryProjects
+        $this.BillingEmail = $Object.billing_email ?? $Object.BillingEmail
+        $this.DefaultRepositoryPermission = $Object.default_repository_permission ?? $Object.DefaultRepositoryPermission
+        $this.MembersCanCreateRepositories = $Object.members_can_create_repositories ?? $Object.MembersCanCreateRepositories
+        $this.RequiresTwoFactorAuthentication = $Object.two_factor_requirement_enabled ?? $Object.requiresTwoFactorAuthentication ??
+        $Object.RequiresTwoFactorAuthentication
+        $this.MembersAllowedRepositoryCreationType = $Object.members_allowed_repository_creation_type ?? $Object.MembersAllowedRepositoryCreationType
+        $this.MembersCanCreatePublicRepositories = $Object.members_can_create_public_repositories ?? $Object.MembersCanCreatePublicRepositories
+        $this.MembersCanCreatePrivateRepositories = $Object.members_can_create_private_repositories ?? $Object.MembersCanCreatePrivateRepositories
+        $this.MembersCanCreateInternalRepositories = $Object.members_can_create_internal_repositories ?? $Object.MembersCanCreateInternalRepositories
+        $this.MembersCanInviteCollaborators = $Object.members_can_invite_collaborators ?? $Object.MembersCanInviteCollaborators
+        $this.MembersCanCreatePages = $Object.members_can_create_pages ?? $Object.MembersCanCreatePages
         $this.MembersCanForkPrivateRepositories = $Object.members_can_fork_private_repositories ?? $Object.membersCanForkPrivateRepositories
-        $this.RequireWebCommitSignoff = $Object.web_commit_signoff_required ?? $Object.webCommitSignoffRequired
-        $this.DeployKeysEnabledForRepositories = $Object.deploy_keys_enabled_for_repositories
-        $this.MembersCanCreatePublicPages = $Object.members_can_create_public_pages
-        $this.MembersCanCreatePrivatePages = $Object.members_can_create_private_pages
-        $this.AdvancedSecurityEnabledForNewRepositories = $Object.advanced_security_enabled_for_new_repositories
-        $this.DependabotAlertsEnabledForNewRepositories = $Object.dependabot_alerts_enabled_for_new_repositories
-        $this.DependabotSecurityUpdatesEnabledForNewRepositories = $Object.dependabot_security_updates_enabled_for_new_repositories
-        $this.DependencyGraphEnabledForNewRepositories = $Object.dependency_graph_enabled_for_new_repositories
-        $this.SecretScanningEnabledForNewRepositories = $Object.secret_scanning_enabled_for_new_repositories
-        $this.SecretScanningPushProtectionEnabledForNewRepositories = $Object.secret_scanning_push_protection_enabled_for_new_repositories
-        $this.SecretScanningPushProtectionCustomLinkEnabled = $Object.secret_scanning_push_protection_custom_link_enabled
-        $this.SecretScanningPushProtectionCustomLink = $Object.secret_scanning_push_protection_custom_link
-        $this.SecretScanningValidityChecksEnabled = $Object.secret_scanning_validity_checks_enabled
+        $this.RequireWebCommitSignoff = $Object.web_commit_signoff_required ?? $Object.webCommitSignoffRequired ?? $Object.RequireWebCommitSignoff
+        $this.DeployKeysEnabledForRepositories = $Object.deploy_keys_enabled_for_repositories ?? $Object.deployKeysEnabledForRepositories
+        $this.MembersCanCreatePublicPages = $Object.members_can_create_public_pages ?? $Object.MembersCanCreatePublicPages
+        $this.MembersCanCreatePrivatePages = $Object.members_can_create_private_pages ?? $Object.MembersCanCreatePrivatePages
+        $this.AdvancedSecurityEnabledForNewRepositories = $Object.advanced_security_enabled_for_new_repositories ??
+        $Object.advancedSecurityEnabledForNewRepositories
+        $this.DependabotAlertsEnabledForNewRepositories = $Object.dependabot_alerts_enabled_for_new_repositories ??
+        $Object.dependabotAlertsEnabledForNewRepositories
+        $this.DependabotSecurityUpdatesEnabledForNewRepositories = $Object.dependabot_security_updates_enabled_for_new_repositories ??
+        $Object.dependabotSecurityUpdatesEnabledForNewRepositories
+        $this.DependencyGraphEnabledForNewRepositories = $Object.dependency_graph_enabled_for_new_repositories ??
+        $Object.dependencyGraphEnabledForNewRepositories
+        $this.SecretScanningEnabledForNewRepositories = $Object.secret_scanning_enabled_for_new_repositories ??
+        $Object.secretScanningEnabledForNewRepositories
+        $this.SecretScanningPushProtectionEnabledForNewRepositories = $Object.secret_scanning_push_protection_enabled_for_new_repositories ??
+        $Object.secretScanningPushProtectionEnabledForNewRepositories
+        $this.SecretScanningPushProtectionCustomLinkEnabled = $Object.secret_scanning_push_protection_custom_link_enabled ??
+        $Object.secretScanningPushProtectionCustomLinkEnabled
+        $this.SecretScanningPushProtectionCustomLink = $Object.secret_scanning_push_protection_custom_link ??
+        $Object.secretScanningPushProtectionCustomLink
+        $this.SecretScanningValidityChecksEnabled = $Object.secret_scanning_validity_checks_enabled ??
+        $Object.secretScanningValidityChecksEnabled
         $this.ArchivedAt = $Object.archived_at ?? $Object.archivedAt
     }
 

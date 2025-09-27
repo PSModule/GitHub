@@ -48,13 +48,21 @@
 
     GitHubAppInstallation([PSCustomObject] $Object) {
         $this.ID = $Object.id
-        $this.App = [GitHubApp]::new(
-            [PSCustomObject]@{
-                client_id = $Object.client_id
-                app_slug  = $Object.app_slug
+        $this.App = if ($null -ne $Object.App) {
+            $Object.App
+        } else {
+            [GitHubApp]@{
+                ClientID = $Object.client_id
+                Slug     = $Object.app_slug
             }
-        )
-        $this.Target = [GitHubOwner]::new($Object.account)
+        }
+        $this.Target = if ($null -ne $Object.Target) {
+            [GitHubOwner]::new($Object.Target)
+        } elseif ($null -ne $Object.Account) {
+            [GitHubOwner]::new($Object.Account)
+        } else {
+            $null
+        }
         $this.Type = $Object.target_type
         $this.RepositorySelection = $Object.repository_selection
         $this.Permissions = [GitHubPermission]::NewPermissionList($Object.permissions, $this.Type)
@@ -65,7 +73,7 @@
         $this.SuspendedAt = $Object.suspended_at
         $this.SuspendedBy = [GitHubUser]::new($Object.suspended_by)
         $this.Url = $Object.html_url
-        $this.Status = 'Unknown'
+        $this.Status = $Object.Status ?? 'Unknown'
     }
 
     GitHubAppInstallation([PSCustomObject] $Object, [GitHubApp] $App) {
@@ -87,12 +95,10 @@
 
     GitHubAppInstallation([PSCustomObject] $Object, [string] $Target, [string] $Type, [string] $HostName) {
         $this.ID = $Object.id
-        $this.App = [GitHubApp]::new(
-            [PSCustomObject]@{
-                client_id = $Object.client_id
-                app_slug  = $Object.app_slug
-            }
-        )
+        $this.App = [GitHubApp]@{
+            ClientID = $Object.client_id
+            Slug     = $Object.app_slug
+        }
         $this.Target = [GitHubOwner]@{
             Name = $Target
             Type = $Type
@@ -111,7 +117,7 @@
         $this.Status = 'Unknown'
     }
 
-    # Updates the Status property by comparing installation permissions with app permissions
+    # Sets the Status property by comparing installation permissions with app permissions
     # filtered by the appropriate scope based on installation type
     [void] SetStatus() {
         if (-not $this.App -or -not $this.App.Permissions) {
