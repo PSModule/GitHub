@@ -196,7 +196,7 @@
         $this.NodeID = $Object.node_id ?? $Object.NodeID ?? $Object.id
 
         # From GitHubOwner
-        $this.Name = $Object.login ?? $this.Name
+        $this.Name = $Object.login ?? $Object.Name
         $this.DisplayName = $Object.name ?? $Object.DisplayName
         $this.AvatarUrl = $Object.avatar_url ?? $Object.avatarUrl
         $this.Url = $Object.html_url ?? $Object.url

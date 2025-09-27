@@ -61,12 +61,12 @@
         $this.Email = $Object.email
         $this.Hireable = $Object.hireable
         $this.Company = $Object.company
-        $this.TwitterUsername = $Object.twitter_username ?? $this.TwitterUsername
-        $this.PublicRepos = $Object.public_repos ?? $this.PublicRepos
-        $this.PublicGists = $Object.public_gists ?? $this.PublicGists
+        $this.TwitterUsername = $Object.twitter_username ?? $Object.TwitterUsername
+        $this.PublicRepos = $Object.public_repos ?? $Object.PublicRepos
+        $this.PublicGists = $Object.public_gists ?? $Object.PublicGists
         $this.Followers = $Object.followers
         $this.Following = $Object.following
-        $this.NotificationEmail = $Object.notification_email ?? $this.NotificationEmail
+        $this.NotificationEmail = $Object.notification_email ?? $Object.NotificationEmail
         $this.Plan = [GitHubPlan]::New($Object.plan)
     }
 

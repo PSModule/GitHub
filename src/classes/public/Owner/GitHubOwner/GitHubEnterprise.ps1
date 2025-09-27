@@ -32,7 +32,7 @@
 
         # From GitHubOwner
         $this.Name = $Object.slug ?? $Object.Name
-        $this.DisplayName = $Object.name ?? $this.DisplayName
+        $this.DisplayName = $Object.name ?? $Object.DisplayName
         $this.AvatarUrl = $Object.avatarUrl
         $this.Url = $Object.url
         $this.Type = $Object.type ?? 'Enterprise'
