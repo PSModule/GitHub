@@ -81,8 +81,8 @@
                         }
                     }
                 }
-                $rawContexts = $collected | Where-Object { $_ } | Select-Object -Unique
-                Write-Debug ('Total contexts after de-duplication: {0}' -f ($rawContexts | Measure-Object | Select-Object -ExpandProperty Count))
+                $rawContexts = $collected | Sort-Object -Property Name -Unique
+                Write-Debug "Total contexts after de-duplication (Sort-Object -Unique on Name): $($rawContexts.Count)"
             }
             'List all available contexts' {
                 Write-Debug "ListAvailable: [$ListAvailable]"
