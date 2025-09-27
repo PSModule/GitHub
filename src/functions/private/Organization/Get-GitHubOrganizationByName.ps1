@@ -56,7 +56,8 @@
         }
 
         Invoke-GitHubAPI @apiParams | ForEach-Object {
-            [GitHubOrganization]::new($_.Response, $Context)
+            $organization = $_.Response
+            [GitHubOrganization]::new($organization, "$($Context.HostName)/$($organization.login)")
         }
     }
     end {
