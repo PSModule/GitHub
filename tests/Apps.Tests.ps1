@@ -232,7 +232,7 @@ Describe 'Apps' {
                     LogGroup "Installation" {
                         Write-Host "$($installation | Format-List | Out-String)"
                     }
-                    $installationContext = Connect-GitHubApp @connectAppParams -PassThru -Silent
+                    $installationContext = Connect-GitHubApp @connectAppParams -PassThru -Silent -Debug -Verbose
                     LogGroup 'Permissions' {
                         Write-Host "$($installationContext.Permissions | Format-Table | Out-String)"
                     }
