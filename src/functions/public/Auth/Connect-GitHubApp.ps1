@@ -96,6 +96,7 @@
         Write-Debug "[$stackPath] - Start"
         $Context = Resolve-GitHubContext -Context $Context
         Assert-GitHubContext -Context $Context -AuthType App
+        $contextParamList = @()
     }
 
     process {
@@ -157,7 +158,7 @@
         Write-Verbose "Found [$($selectedInstallations.Count)] installations for the target."
         $moduleName = $script:Module.Name
         $moduleVersion = $script:PSModuleInfo.ModuleVersion
-        $contextParamList = @()
+        # Append results so pipeline usage with multiple installation objects retains earlier items.
         $contextParamList += $selectedInstallations | ForEach-Object -ThrottleLimit $ThrottleLimit -Parallel {
             Import-Module -Name $using:moduleName -RequiredVersion $using:moduleVersion -Force -ErrorAction Stop
             $installation = $_
