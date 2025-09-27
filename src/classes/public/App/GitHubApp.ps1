@@ -45,19 +45,19 @@
 
     GitHubApp([object]$Object) {
         $this.ID = $Object.id
-        $this.ClientID = $Object.client_id
+        $this.ClientID = $Object.client_id ?? $Object.ClientID
         $this.Slug = $Object.app_slug ?? $Object.slug
-        $this.NodeID = $Object.node_id
+        $this.NodeID = $Object.node_id ?? $Object.NodeID
         $this.Owner = [GitHubOwner]::new($Object.owner)
         $this.Name = $Object.name
         $this.Description = $Object.description
-        $this.ExternalUrl = $Object.external_url
-        $this.Url = $Object.html_url
-        $this.CreatedAt = $Object.created_at
-        $this.UpdatedAt = $Object.updated_at
+        $this.ExternalUrl = $Object.external_url ?? $Object.ExternalUrl
+        $this.Url = $Object.html_url ?? $Object.Url
+        $this.CreatedAt = $Object.created_at ?? $Object.createdAt
+        $this.UpdatedAt = $Object.updated_at ?? $Object.updatedAt
         $this.Permissions = [GitHubPermission]::NewPermissionList($Object.permissions)
         $this.Events = , ($Object.events)
-        $this.Installations = $Object.installations_count
+        $this.Installations = $Object.installations_count ?? $Object.Installations
     }
 
     [string] ToString() {

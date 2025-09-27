@@ -81,6 +81,7 @@
                         try {
                             $app = Get-GitHubApp -Slug $contextObj['Username'] -Context $contextObj
                             $contextObj['DisplayName'] = [string]$app.Name
+                            $contextObj['App'] = [GitHubApp]$app
                         } catch {
                             Write-Warning "Unable to get the GitHub App: [$($contextObj['Username'])]."
                         }
@@ -130,6 +131,7 @@
                     $contextObj['Events'] = [string[]]$app.Events
                     $contextObj['OwnerName'] = [string]$app.Owner.Name
                     $contextObj['OwnerType'] = [string]$app.Owner.Type
+                    $contextObj['App'] = [GitHubApp]$app
                     $contextObj['Type'] = 'App'
                 }
                 default {

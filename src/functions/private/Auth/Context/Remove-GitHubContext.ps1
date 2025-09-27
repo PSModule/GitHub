@@ -33,7 +33,7 @@
     }
 
     process {
-        if ($PSCmdlet.ShouldProcess($context.Name, 'Remove context')) {
+        if ($PSCmdlet.ShouldProcess($Context.Name, 'Remove context')) {
             Remove-Context -ID $Context -Vault $script:GitHub.ContextVault
         }
     }
