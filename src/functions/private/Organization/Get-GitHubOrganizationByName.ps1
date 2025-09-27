@@ -56,8 +56,7 @@
         }
 
         Invoke-GitHubAPI @apiParams | ForEach-Object {
-            $organization = $_.Response
-            [GitHubOrganization]::new($organization, $Context)
+            [GitHubOrganization]::new($_.Response, $Context)
         }
     }
     end {

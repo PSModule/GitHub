@@ -61,13 +61,12 @@
 
         try {
             Invoke-GitHubAPI @apiParams | ForEach-Object {
-                $account = $_.Response
-                if ($account.type -eq 'Organization') {
-                    [GitHubOrganization]::New($account, $Context)
-                } elseif ($account.type -eq 'User') {
-                    [GitHubUser]::New($account)
+                if ($_.Response.type -eq 'Organization') {
+                    [GitHubOrganization]::New($_.Response, $Context)
+                } elseif ($_.Response.type -eq 'User') {
+                    [GitHubUser]::New($_.Response)
                 } else {
-                    [GitHubOwner]::New($account)
+                    [GitHubOwner]::New($_.Response)
                 }
             }
         } catch {

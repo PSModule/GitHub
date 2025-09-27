@@ -204,8 +204,7 @@
 
         if ($PSCmdlet.ShouldProcess("organization [$Name]", 'Set')) {
             Invoke-GitHubAPI @apiParams | ForEach-Object {
-                $org = $_.Response
-                [GitHubOrganization]::New($org, $Context)
+                [GitHubOrganization]::new($_.Response, $Context)
             }
         }
     }
