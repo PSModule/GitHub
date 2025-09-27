@@ -219,22 +219,28 @@ Describe 'Apps' {
             Context 'Installation' -Skip:($AuthType -ne 'APP') {
                 BeforeAll {
                     $githubApp = Get-GitHubApp
+                    LogGroup 'App' {
+                        Write-Host "$($githubApp | Format-List | Out-String)"
+                    }
                     $config = Get-GitHubConfig
+                    LogGroup 'Config' {
+                        Write-Host "$($config | Format-List | Out-String)"
+                    }
                     $permissionsList = [GitHubPermission]::NewPermissionList()
                     $installations = Get-GitHubAppInstallation
                     $installation = $installations | Where-Object { $_.Target.Name -eq $owner }
+                    LogGroup "Installation" {
+                        Write-Host "$($installation | Format-List | Out-String)"
+                    }
                     $installationContext = Connect-GitHubApp @connectAppParams -PassThru -Silent
+                    LogGroup 'Permissions' {
+                        Write-Host "$($installationContext.Permissions | Format-Table | Out-String)"
+                    }
                     LogGroup 'Context' {
                         Write-Host "$($installationContext | Format-List | Out-String)"
                     }
                     LogGroup 'Context - -ListAvailable' {
                         Write-Host "$(Get-GitHubContext -ListAvailable | Format-List | Out-String)"
-                    }
-                    LogGroup 'Permissions' {
-                        Write-Host "$($installationContext.Permissions | Format-Table | Out-String)"
-                    }
-                    LogGroup 'App' {
-                        Write-Host "$($githubApp | Format-Table | Out-String)"
                     }
                 }
 
