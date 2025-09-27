@@ -33,8 +33,12 @@
     }
 
     process {
-        if ($PSCmdlet.ShouldProcess($context.Name, 'Remove context')) {
+        # $context variable does not exist here; we only have the string parameter $Context
+        if ($PSCmdlet.ShouldProcess($Context, 'Remove context')) {
+            Write-Debug ("Removing context from vault: [$Context]")
             Remove-Context -ID $Context -Vault $script:GitHub.ContextVault
+        } else {
+            Write-Debug ("ShouldProcess declined removal of context: [$Context]")
         }
     }
 

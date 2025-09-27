@@ -51,28 +51,38 @@
             'Get named contexts' {
                 $patterns = $Context
                 Write-Debug ('Requested context patterns: [{0}]' -f ($patterns -join ', '))
-                $hasWildcard = $patterns | Where-Object { [System.Management.Automation.WildcardPattern]::ContainsWildcardCharacters($_) } | Select-Object -First 1
+                $hasWildcard = $patterns | Where-Object { [System.Management.Automation.WildcardPattern]::ContainsWildcardCharacters($_) } |
+                    Select-Object -First 1
                 $all = $null
                 if ($hasWildcard) {
                     Write-Debug 'Wildcard detected - loading all contexts once.'
                     $all = Get-Context -ID '*' -Vault $script:GitHub.ContextVault
+                    if ($all) { Write-Debug ('Loaded contexts (count): {0}' -f ($all.Count)) } else { Write-Debug 'Loaded contexts: 0' }
                 }
 
                 $collected = foreach ($pattern in $patterns) {
+                    $initialPatternCount = if ($all) { $all.Count } else { 0 }
                     if ([System.Management.Automation.WildcardPattern]::ContainsWildcardCharacters($pattern)) {
                         Write-Debug "Wildcard match for pattern: [$pattern]"
-                        ($all | Where-Object { $_.ID -like $pattern -or $_.Name -like $pattern })
+                        $patternMatches = ($all | Where-Object { $_.ID -like $pattern -or $_.Name -like $pattern })
+                        Write-Debug ("Pattern [$pattern] matched {0} context(s)." -f ($patternMatches | Measure-Object | Select-Object -ExpandProperty Count))
+                        $patternMatches
                     } else {
                         if ($all) {
                             Write-Debug "Exact match search (cached all) for: [$pattern]"
-                            ($all | Where-Object { $_.ID -eq $pattern -or $_.Name -eq $pattern })
+                            $patternMatches = ($all | Where-Object { $_.ID -eq $pattern -or $_.Name -eq $pattern })
+                            Write-Debug ("Exact pattern [$pattern] resolved to {0} context(s)." -f ($patternMatches | Measure-Object | Select-Object -ExpandProperty Count))
+                            $patternMatches
                         } else {
                             Write-Debug "Exact match direct lookup for: [$pattern]"
-                            (Get-Context -ID $pattern -Vault $script:GitHub.ContextVault)
+                            $match = (Get-Context -ID $pattern -Vault $script:GitHub.ContextVault)
+                            Write-Debug ("Direct lookup for [$pattern] returned: {0}" -f ($(if ($match) { 1 } else { 0 })))
+                            $match
                         }
                     }
                 }
                 $rawContexts = $collected | Where-Object { $_ } | Select-Object -Unique
+                Write-Debug ('Total contexts after de-duplication: {0}' -f ($rawContexts | Measure-Object | Select-Object -ExpandProperty Count))
             }
             'List all available contexts' {
                 Write-Debug "ListAvailable: [$ListAvailable]"
