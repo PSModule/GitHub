@@ -65,15 +65,48 @@ Execution steps:
    - When uncertain, default to Repository (can promote to Organization later)
    - Organization content must be generic enough for automation management
 
+   **Unified Frontmatter Specification (applies to ALL instruction files)**
+   Frontmatter MUST:
+   - Contain exactly 2 fields in this order:
+     1. `description`: Single-line string describing the file's purpose
+     2. `applyTo`: Single string with one or more glob patterns (comma-separated if multiple)
+   - Use only one YAML document block at the very top of the file (`---` ... `---`)
+   - Avoid inline comments or extra keys
+   - Represent multiple patterns in a single line, never as YAML arrays
+  - Maintain field order: `description` first, then `applyTo`
+
+   Examples:
+   ```yaml
+  ---
+  description: "Universal code-writing guidelines for the organization"
+  applyTo: "**/*"
+  ---
+   ```
+   ```yaml
+  ---
+  description: "PowerShell code-writing guidelines for organization projects"
+  applyTo: "**/*.ps1, **/*.psm1, **/*.psd1"
+  ---
+   ```
+   ```yaml
+  ---
+  description: "Project-specific TypeScript patterns for {RepositoryName}"
+  applyTo: "src/**/*.ts, scripts/**/*.ts"
+  ---
+   ```
+
+   Validation rules enforced later (Step 7):
+  - Exactly two keys present: `description`, `applyTo`
+   - Both values non-empty strings
+   - `applyTo` contains one or more glob patterns separated by commas in a single string
+   - No duplicate normalized glob patterns
+   - No table of contents headings in file content
+
 4. **Generate Organization Instructions** - For each discovered language/technology:
 
-   Create `$OrganizationInstructionsPath/main.instructions.md`:
-   ```yaml
-   ---
-   applyTo: "**/*"
-   description: "Universal code-writing guidelines for the organization"
-   ---
-   ```
+  Create `$OrganizationInstructionsPath/main.instructions.md` frontmatter using the Unified Frontmatter Specification (do not re-document rules here):
+  - description: "Universal code-writing guidelines for the organization"
+  - applyTo: `**/*`
 
    Content must include:
    - **File Organization**: How to structure new files, where to place components
@@ -81,13 +114,9 @@ Execution steps:
    - **Documentation**: Required comment patterns, doc-string formats with examples
    - **Build Integration**: How code integrates with organization build processes
 
-   Create `$OrganizationInstructionsPath/{Language}/main.instructions.md`:
-   ```yaml
-   ---
-   applyTo: "**/*.{ext}"
-   description: "Code-writing guidelines for {Language} in organization projects"
-   ---
-   ```
+  Create `$OrganizationInstructionsPath/{Language}/main.instructions.md` frontmatter (unified spec) with:
+  - description: "Code-writing guidelines for {Language} in organization projects"
+  - applyTo: `**/*.{ext}`
 
    Content must include specific, actionable rules:
    - **Syntax Style**: Exact formatting rules (e.g., "Place opening brace on same line", "Use 4-space indentation")
@@ -104,13 +133,9 @@ Execution steps:
 
 5. **Generate Repository Instructions** - Create project-specific guidance:
 
-   Create `$RepositoryInstructionsPath/main.instructions.md`:
-   ```yaml
-   ---
-   applyTo: "**/*"
-   description: "Project-specific code-writing guidance for {RepositoryName}"
-   ---
-   ```
+  Create `$RepositoryInstructionsPath/main.instructions.md` frontmatter (unified spec) with:
+  - description: "Project-specific code-writing guidance for {RepositoryName}"
+  - applyTo: `**/*`
 
    Content must include:
    - **Repository Purpose**: What this project does and why
@@ -119,13 +144,9 @@ Execution steps:
    - **Workflows**: Development, testing, deployment processes
    - **Dependencies**: Key external dependencies and how they're used
 
-   Create `$RepositoryInstructionsPath/{Language}/main.instructions.md`:
-   ```yaml
-   ---
-   applyTo: "{specific-pattern}"
-   description: "How to write {Language} code in this specific project"
-   ---
-   ```
+  Create `$RepositoryInstructionsPath/{Language}/main.instructions.md` frontmatter (unified spec) with:
+  - description: "How to write {Language} code in this specific project"
+  - applyTo: `{specific-pattern}`
 
    Content must include concrete examples from the actual codebase:
    - **Project Patterns**: Specific architectural patterns used (e.g., "Use Factory pattern in src/factories/")
@@ -144,8 +165,11 @@ Execution steps:
 
 7. **Validation** - Verify generated instruction system:
    - **Structural Validation**:
-     * All instruction files have valid YAML frontmatter
-     * `applyTo` glob patterns are correct and non-overlapping
+  * All instruction files have valid YAML frontmatter per the Unified Frontmatter Specification
+     * `description` is a single string
+     * `applyTo` is a single string containing glob pattern(s) - comma-separated if multiple
+  * Field order is `description` first, then `applyTo`
+     * No table of contents sections in any instruction file
      * File structure matches specification hierarchy
 
    - **Content Validation**:
@@ -154,6 +178,8 @@ Execution steps:
      * Instructions contain specific, actionable code-writing guidance (not vague principles)
      * Examples are concrete and relevant to the codebase
      * No duplicate or contradictory guidance across files
+     * Content is concise - no unnecessary sections or philosophical discussions
+     * Each section provides actionable patterns, not generic advice
 
    - **Coverage Validation**:
      * All file types in repository are covered by appropriate instructions
@@ -176,6 +202,13 @@ Execution steps:
 
 Behavior rules:
 
+- **Frontmatter Requirements**: Follow the Unified Frontmatter Specification (single two-key block, no inline comments, order enforced).
+- **No Table of Contents**: Instruction files MUST NOT include a table of contents or navigation sections. Start directly with actionable content.
+- **Conciseness Required**: Keep instructions minimal and focused. Every section must provide actionable code-writing guidance. Remove:
+  * Philosophical discussions or "why" explanations beyond brief context
+  * Redundant examples that don't add new patterns
+  * Generic advice that applies universally (e.g., "write clean code")
+  * Sections that don't apply to the specific project/language
 - **Code-Specific Focus**: Instructions must be about *how to write code*, not general principles. Replace "Follow best practices" with "Use StringBuilder for string concatenation inside loops to avoid O(n²) performance".
 - **Actionable Guidance**: Every rule must be specific enough to execute. Replace "Handle errors appropriately" with "Wrap all I/O operations in try-catch blocks with context-aware error messages".
 - **Concrete Examples**: Include before/after code examples, especially for common patterns.
@@ -230,15 +263,13 @@ Context for instruction generation: $ARGUMENTS
 
 ### Template for language oriented instructions
 
-Here’s the ready-to-use template:
+Use this minimal template when creating a new language/project instruction file. Omit sections that are not relevant.
 
 ```markdown
 ---
-applyTo: "**/*.{ext}"             # A single string Glob pattern for applicable files
 description: "Code-writing guidelines for {Language} in this organization/project/repository"
+applyTo: "**/*.{ext}"
 ---
-
-# {Language} Instructions
 
 ## Style & Formatting
 - Indentation: {n} spaces
@@ -246,7 +277,7 @@ description: "Code-writing guidelines for {Language} in this organization/projec
 - Trailing whitespace: disallowed
 - Braces/blocks: {rule}
 - Imports/using/order: {rule}
-- Naming conventions: {rule} (classes, methods, variables, constants)
+- Naming conventions: {rule}
 
 **Example:**
 ```{ext}
@@ -255,134 +286,55 @@ function  foo ( )  {return 42}
 
 // AFTER: correct formatting
 function foo() {
-    return 42;
+  return 42;
 }
 ```
 
-## Project Structure
-
-* **Directory layout** (example tree):
-
-```
-src/
-  services/
-  models/
-  tests/
-```
-* Rules for file placement (public APIs, internal modules)
-* Location of configuration files
-
-## Patterns (Do / Don’t)
-
+## Patterns (Do / Don't)
 * ✅ Prefer {X} over {Y}
-* ❌ Do not {anti-pattern}
-
-**Example:**
+* ❌ Avoid {anti-pattern}
 
 ```{ext}
 // BEFORE
 const result = JSON.parse(fs.readFileSync(path))
-
 // AFTER
 const result = await loadConfig(path)
 ```
 
 ## Error Handling
-
 * Use `{error construct}` for {scenarios}
-* Wrap I/O and network calls in try/catch
-* Always include context in error messages
-* Example with logging + rethrow
+* Include context in thrown errors
 
 ## Testing
-
-* Testing framework: `{testFramework}`
-* Test file layout and naming conventions
-* Assertion style: {rule}
-* Fixtures/mocks: {approach}
-* Coverage floor: {percent}%
-
-**Example:**
+* Framework: `{testFramework}`
+* Layout & naming conventions
 
 ```{ext}
 test("should compute total", () => {
-    expect(sum([1, 2, 3])).toBe(6);
+  expect(sum([1, 2, 3])).toBe(6);
 });
 ```
 
-## Build Frameworks
-
-* Build tool: `{buildTool}`
-* Build tasks/scripts location: `{path}`
-
-## CI Frameworks
-
-* CI integration: how builds and tests are executed in pipelines
-
-## Logging & Telemetry
-
-* Use `{logger API}` only
-* Levels: DEBUG / INFO / WARN / ERROR — with examples
-* Correlation IDs: required for async workflows
-* No secrets/PII in logs
-* Required structured fields: {list}
-
 ## Performance
-
-* Optimize hot paths {rule}
-* Guidelines on allocations, I/O usage
-* Profiling steps & recommended tools
-
-**Example:**
-
 ```{ext}
-// BEFORE
+// BEFORE (inefficient)
 let result = "";
-for (const item of items) {
-    result += item;
-}
-
+for (const item of items) { result += item; }
 // AFTER
 let result = items.join("");
 ```
 
-## Dependencies
-
-* Allowed package sources: {registry}
-* Pin versions using {approach}
-* Dependency injection patterns: {rule}
-* Banned packages: {list}
-
 ## Documentation
-
-* Required doc-block style: {docStyle}
-* Inline documentation example:
-
 ```{ext}
 /**
  * Adds two numbers.
- * @param {number} a
- * @param {number} b
- * @returns {number}
  */
 function add(a, b) { return a + b; }
 ```
-* Location for usage samples (e.g., `/docs/examples/`)
-* Link to ADRs or design notes if relevant
-
-## Snippets
-
-Provide canonical ready-to-use snippets for:
-
-* Service/module/class boilerplate
-* Unit test boilerplate
-* Common error-handling pattern
-* Logger usage example
 
 ## Forbidden
+* ❌ {anti-pattern} → ✅ Use {preferred pattern}
 
-* ❌ Explicitly disallow {anti-pattern} with rationale
-* ❌ Avoid {package/tool} because {reason}
-* Provide alternatives: ✅ “Use {X} instead of {Y}”
-
+<!-- TEMPLATE NOTES:
+Keep files concise. Remove any unused sections. Each rule must be actionable with a concrete example. -->
 ```
