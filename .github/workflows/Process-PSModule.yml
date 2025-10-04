@@ -1,8 +1,9 @@
 name: Process-PSModule
 
-run-name: "Process-PSModule - [${{ github.event.pull_request.title }} #${{ github.event.pull_request.number }}] by @${{ github.actor }}"
-
 on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
   pull_request:
     branches:
       - main
@@ -26,13 +27,5 @@ permissions:
 
 jobs:
   Process-PSModule:
-    uses: PSModule/Process-PSModule/.github/workflows/workflow.yml@v4
-    secrets:
-      APIKey: ${{ secrets.APIKey }}
-      TEST_APP_ENT_CLIENT_ID: ${{ secrets.TEST_APP_ENT_CLIENT_ID }}
-      TEST_APP_ENT_PRIVATE_KEY: ${{ secrets.TEST_APP_ENT_PRIVATE_KEY }}
-      TEST_APP_ORG_CLIENT_ID: ${{ secrets.TEST_APP_ORG_CLIENT_ID }}
-      TEST_APP_ORG_PRIVATE_KEY: ${{ secrets.TEST_APP_ORG_PRIVATE_KEY }}
-      TEST_USER_ORG_FG_PAT: ${{ secrets.TEST_USER_ORG_FG_PAT }}
-      TEST_USER_USER_FG_PAT: ${{ secrets.TEST_USER_USER_FG_PAT }}
-      TEST_USER_PAT: ${{ secrets.TEST_USER_PAT }}
+    uses: PSModule/Process-PSModule/.github/workflows/workflow.yml@v5
+    secrets: inherit
