@@ -11,10 +11,6 @@
         Get-GitHubRepositoryListByTeam -Owner 'octocat' -Team 'core'
         ```
 
-        Output:
-        ```powershell
-        ```
-
         Lists all repositories that the 'core' team has access to in the organization owned by 'octocat'.
 
         .INPUTS

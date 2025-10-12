@@ -11,7 +11,10 @@
 
         .EXAMPLE
         ```powershell
+        Set-GitHubVariableSelectedRepository -Owner 'octocat' -Name 'MY_VARIABLE' -RepositoryID 12345678, 87654321 -Context (Get-GitHubContext)
         ```
+
+        This command sets the repositories with IDs 12345678 and 87654321 to have access to the organization variable 'MY_VARIABLE' in the organization owned by 'octocat'.
 
         .LINK
         https://psmodule.io/GitHub/Functions/Variables/SelectedRepository/Set-GitHubVariableSelectedRepository

@@ -18,11 +18,6 @@
 
         Retrieves the permission of the 'core' team on the 'Hello-World' repository owned by 'octocat'.
 
-        .EXAMPLE
-        ```powershell
-        ```
-
-
         .INPUTS
         GitHubRepository
 

@@ -13,10 +13,6 @@
         Get-GitHubSecretOwnerList -Owner 'PSModule' -Context (Get-GitHubContext)
         ```
 
-        Output:
-        ```powershell
-        ```
-
         Retrieves all secrets from the specified organization.
 
         .OUTPUTS
