@@ -6,11 +6,10 @@
         .DESCRIPTION
         Deletes one or more social accounts from the authenticated user's profile. This endpoint is accessible with the `user` scope.
 
-        .PARAMETER AccountUrls
-        Parameter description
-
         .EXAMPLE
+        ```pwsh
         Remove-GitHubUserSocial -AccountUrls 'https://twitter.com/MyTwitterAccount'
+        ```
 
         .NOTES
         [Delete social accounts for the authenticated user](https://docs.github.com/rest/users/social-accounts#delete-social-accounts-for-the-authenticated-user)

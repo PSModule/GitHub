@@ -13,12 +13,16 @@
         and "[Best practices for using the REST API](https://docs.github.com/rest/guides/best-practices-for-using-the-rest-api)."
 
         .EXAMPLE
+        ```pwsh
         New-GitHubOrganizationInvitation -Organization 'PSModule' -InviteeID 123456789 -Role 'admin'
+        ```
 
         Invites the user with the ID `12345679` to the organization `PSModule` with the role `admin`.
 
         .EXAMPLE
+        ```pwsh
         New-GitHubOrganizationInvitation -Organization 'PSModule' -Email 'user@psmodule.io'
+        ```
 
         Invites the user with the email `user@psmodule.io` to the organization `PSModule`.
 

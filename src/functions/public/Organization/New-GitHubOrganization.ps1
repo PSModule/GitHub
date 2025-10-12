@@ -7,7 +7,9 @@
         This function creates a new GitHub organization within the specified enterprise.
 
         .EXAMPLE
+        ```pwsh
         New-GitHubOrganization -Enterprise 'my-enterprise' -Name 'my-org' -Owner 'user1' -BillingEmail 'billing@example.com'
+        ```
 
         .OUTPUTS
         GitHubOrganization

@@ -8,9 +8,12 @@
         [Replace all repository topics](https://docs.github.com/rest/repos/repos#replace-all-repository-topics) endpoint.
 
         .EXAMPLE
+        ```pwsh
         Update-GitHubRepository -Name 'octocat' -Description 'Hello-World' -Homepage 'https://github.com'
+        ```
 
         .EXAMPLE
+        ```pwsh
         $params = @{
             Owner       = 'octocat'
             Name        = 'Hello-World'
@@ -19,6 +22,9 @@
             Homepage    = 'https://github.com'
         }
         Update-GitHubRepository @params
+        ```
+
+        Updates the repository `Hello-World` owned by `octocat` with a new name, description, and homepage URL.
 
         .INPUTS
         GitHubRepository
