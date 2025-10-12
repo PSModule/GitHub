@@ -277,7 +277,7 @@ Describe 'Variables' {
                 }
             }
 
-            Context 'SelectedRepository' -Tag 'Flaky' {
+            Context 'SelectedRepository' {
                 It 'Get-GitHubVariableSelectedRepository - gets a list of selected repositories' {
                     LogGroup "SelectedRepositories - [$orgVariableName]" {
                         $result = Get-GitHubVariableSelectedRepository -Owner $owner -Name $orgVariableName
