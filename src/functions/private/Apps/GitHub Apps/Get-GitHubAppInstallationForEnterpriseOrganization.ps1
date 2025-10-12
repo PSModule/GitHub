@@ -9,7 +9,7 @@ function Get-GitHubAppInstallationForEnterpriseOrganization {
         The authenticated GitHub App must be installed on the enterprise and be granted the Enterprise/organization_installations (read) permission.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubAppInstallationForEnterpriseOrganization -Enterprise 'msx' -Organization 'github'
         ```
 

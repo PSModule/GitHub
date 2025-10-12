@@ -7,7 +7,7 @@ function Uninstall-GitHubAppAsApp {
         Deletes a GitHub App installation using the authenticated App context.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Uninstall-GitHubAppAsApp -ID 123456 -Context $appContext
         ```
 

@@ -10,7 +10,7 @@ function Get-GitHubAppInstallationForAuthenticatedAppByID {
         to access this endpoint.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubAppInstallationForAuthenticatedAppByID -ID 123456
         ```
 

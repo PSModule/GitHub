@@ -7,7 +7,7 @@ function Test-GitHubJWTRefreshRequired {
         Test if the GitHub JWT should be refreshed. JWTs are refreshed when they have 150 seconds or less remaining before expiration.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Test-GitHubJWTRefreshRequired -Context $Context
         ```
 

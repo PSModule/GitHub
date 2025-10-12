@@ -9,7 +9,7 @@ function New-GitHubUnsignedJWT {
         that can be passed to a signing function.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         New-GitHubUnsignedJWT -ClientId 'Iv987654321'
         ```
 

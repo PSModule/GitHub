@@ -11,7 +11,7 @@ function Get-GitHubAppInstallableOrganization {
         - enterprise_organization_installations: read
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubAppInstallableOrganization -Enterprise 'msx'
         ```
 

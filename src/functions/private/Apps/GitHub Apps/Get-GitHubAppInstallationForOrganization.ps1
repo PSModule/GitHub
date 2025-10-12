@@ -8,7 +8,7 @@ function Get-GitHubAppInstallationForOrganization {
         You must be an organization owner with `admin:read` scope to use this endpoint.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubAppInstallationForOrganization -Organization 'github'
         ```
 

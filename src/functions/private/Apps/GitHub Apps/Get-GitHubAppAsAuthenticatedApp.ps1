@@ -13,7 +13,7 @@ filter Get-GitHubAppAsAuthenticatedApp {
         to access this endpoint.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubAppAsAuthenticatedApp
         ```
 

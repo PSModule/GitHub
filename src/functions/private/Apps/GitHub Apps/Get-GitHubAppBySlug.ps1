@@ -7,7 +7,7 @@ function Get-GitHubAppBySlug {
         Gets a single GitHub App using the app's slug.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubAppByName -AppSlug 'github-actions'
         ```
 
