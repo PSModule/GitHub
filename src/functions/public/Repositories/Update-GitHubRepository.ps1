@@ -1,4 +1,4 @@
-﻿filter Update-GitHubRepository {
+filter Update-GitHubRepository {
     <#
         .SYNOPSIS
         Update a repository
@@ -9,10 +9,13 @@
 
         .EXAMPLE
         ```pwsh
+        ```pwsh
         Update-GitHubRepository -Name 'octocat' -Description 'Hello-World' -Homepage 'https://github.com'
+        ```
         ```
 
         .EXAMPLE
+        ```pwsh
         ```pwsh
         $params = @{
             Owner       = 'octocat'
@@ -22,6 +25,7 @@
             Homepage    = 'https://github.com'
         }
         Update-GitHubRepository @params
+        ```
         ```
 
         Updates the repository `Hello-World` owned by `octocat` with a new name, description, and homepage URL.

@@ -8,7 +8,9 @@ function Test-GitHubAzPowerShell {
         It verifies both the availability of the module and the authentication status.
 
         .EXAMPLE
+        ```pwsh
         Test-GitHubAzPowerShell
+        ```
 
         Returns $true if Azure PowerShell module is installed and authenticated, $false otherwise.
 

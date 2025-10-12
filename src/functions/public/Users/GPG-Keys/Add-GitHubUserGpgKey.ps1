@@ -1,4 +1,4 @@
-﻿filter Add-GitHubUserGpgKey {
+filter Add-GitHubUserGpgKey {
     <#
         .SYNOPSIS
         Create a GPG key for the authenticated user
@@ -9,9 +9,11 @@
         [scope](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
 
         .EXAMPLE
+        ```pwsh
         Add-GitHubUserGpgKey -Name 'GPG key for GitHub' -ArmoredPublicKey @'
         -----BEGIN PGP PUBLIC KEY BLOCK-----
         Version: GnuPG v1
+        ```
 
         mQINBFnZ2ZIBEADQ2Z7Z7
         -----END PGP PUBLIC KEY BLOCK-----

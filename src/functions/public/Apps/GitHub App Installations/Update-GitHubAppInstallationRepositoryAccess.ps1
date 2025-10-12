@@ -1,4 +1,4 @@
-﻿function Update-GitHubAppInstallationRepositoryAccess {
+function Update-GitHubAppInstallationRepositoryAccess {
     <#
         .SYNOPSIS
         Update the installation repository access between all repositories and selected repositories.
@@ -7,12 +7,15 @@
         Update repository access for a GitHub App installation between all repositories and selected repositories.
 
         .EXAMPLE
+        ```pwsh
         Update-GitHubAppInstallationRepositoryAccess -Enterprise 'msx' -Organization 'PSModule' -InstallationID 12345678 -RepositorySelection 'all'
+        ```
 
         Update the repository access for the GitHub App installation with the ID '12345678'
         to all repositories on the organization 'PSModule' in the enterprise 'msx'.
 
         .EXAMPLE
+        ```pwsh
         $params = @{
             Enterprise          = 'msx'
             Organization        = 'PSModule'
@@ -21,6 +24,7 @@
             Repositories        = 'repo1', 'repo2'
         }
         Update-GitHubAppInstallationRepositoryAccess @params
+        ```
 
         Update the repository access for the GitHub App installation with the ID '12345678'
         to the repositories 'repo1' and 'repo2' on the organization 'PSModule' in the enterprise 'msx'.

@@ -1,4 +1,4 @@
-﻿function Get-GitHubEnterpriseByName {
+function Get-GitHubEnterpriseByName {
     <#
         .SYNOPSIS
         Retrieves details about a GitHub Enterprise instance by name (slug).
@@ -9,10 +9,12 @@
         information.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubEnterpriseByName -Name 'my-enterprise'
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         Name              : My Enterprise
         Slug              : my-enterprise
         URL               : https://github.com/enterprises/my-enterprise

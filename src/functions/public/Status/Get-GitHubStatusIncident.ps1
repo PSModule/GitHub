@@ -1,4 +1,4 @@
-﻿function Get-GitHubStatusIncident {
+function Get-GitHubStatusIncident {
     <#
         .SYNOPSIS
         Gets the status of GitHub incidents
@@ -12,12 +12,16 @@
         Impact: None (black), Minor (yellow), Major (orange), or Critical (red)
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubStatusIncident
+        ```
 
         Gets the status of GitHub incidents
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubStatusIncident -Unresolved
+        ```
 
         Gets the status of GitHub incidents that are unresolved
 

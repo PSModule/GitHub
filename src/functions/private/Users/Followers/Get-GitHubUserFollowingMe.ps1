@@ -1,4 +1,4 @@
-﻿filter Get-GitHubUserFollowingMe {
+filter Get-GitHubUserFollowingMe {
     <#
         .SYNOPSIS
         List the people the authenticated user follows
@@ -7,7 +7,9 @@
         Lists the people who the authenticated user follows.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubUserFollowingMe
+        ```
 
         Gets all people the authenticated user follows.
 

@@ -1,4 +1,4 @@
-﻿function Get-GitHubVariableRepositoryList {
+function Get-GitHubVariableRepositoryList {
     <#
         .SYNOPSIS
         List repository variables.
@@ -9,10 +9,12 @@
         OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubVariableRepositoryList -Owner 'PSModule' -Repository 'Hello-World' -Context (Get-GitHubContext)
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         Name                 : NAME
         Value                : John Doe
         Owner                : octocat

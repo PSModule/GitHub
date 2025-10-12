@@ -1,4 +1,4 @@
-﻿filter ConvertFrom-GitHubOutput {
+filter ConvertFrom-GitHubOutput {
     <#
         .SYNOPSIS
         Gets the GitHub output.
@@ -8,6 +8,7 @@
         supporting both single-line and multi-line values, and parsing JSON values.
 
         .EXAMPLE
+        ```pwsh
         $content = @'
         zen=something else
         result={"MyOutput":"Hello, World!","Status":"Success"}
@@ -19,6 +20,7 @@
         Config={"Nested":{"SubSetting":"SubValue"},"Setting1":"Value1","Setting2":2}
         Numbers=12345
         '@
+        ```
 
         ConvertFrom-GitHubOutput -OutputContent $content
 

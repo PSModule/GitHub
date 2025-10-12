@@ -1,4 +1,4 @@
-﻿function Get-GitHubVariableOwnerList {
+function Get-GitHubVariableOwnerList {
     <#
         .SYNOPSIS
         List organization variables
@@ -10,10 +10,12 @@
         the `repo` scope is also required.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubVariableOwnerList -Owner 'PSModule' -Context (Get-GitHubContext)
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         Name                 : AVAILVAR
         Value                : ValueVar
         Owner                : PSModule

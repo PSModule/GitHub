@@ -1,4 +1,4 @@
-﻿function Enable-GitHubCommand {
+function Enable-GitHubCommand {
     <#
         .SYNOPSIS
         Resumes workflow commands
@@ -10,7 +10,9 @@
         that you used to stop workflow commands to the Enable-GitHubCommand.
 
         .EXAMPLE
+        ```pwsh
         Enable-GitHubCommand "123"
+        ```
 
         Resumes processing any workflow commands.
 

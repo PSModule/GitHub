@@ -1,4 +1,4 @@
-﻿function Get-GitHubAppInstallableOrganization {
+function Get-GitHubAppInstallableOrganization {
     <#
         .SYNOPSIS
         Get enterprise-owned organizations that can have GitHub Apps installed
@@ -11,7 +11,9 @@
         - enterprise_organization_installations: read
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubAppInstallableOrganization -Enterprise 'msx'
+        ```
 
         .OUTPUTS
         GitHubOrganization[]

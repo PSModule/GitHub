@@ -1,4 +1,4 @@
-﻿function Get-GitHubVariableSelectedRepository {
+function Get-GitHubVariableSelectedRepository {
     <#
         .SYNOPSIS
         List selected repositories for an organization variable.
@@ -10,7 +10,9 @@
         the `repo` scope is also required.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubVariableSelectedRepository -Owner 'PSModule' -Name 'SELECTEDVAR'
+        ```
 
         .OUTPUTS
         GitHubRepository

@@ -1,4 +1,4 @@
-﻿function Reset-GitHubConfig {
+function Reset-GitHubConfig {
     <#
         .SYNOPSIS
         Re-initializes the GitHub module configuration.
@@ -7,7 +7,9 @@
         Re-initializes the GitHub module configuration.
 
         .EXAMPLE
+        ```pwsh
         Reset-GitHubConfig
+        ```
 
         Re-initializes the GitHub module configuration.
 

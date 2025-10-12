@@ -1,4 +1,4 @@
-﻿filter Test-GitHubUserFollowing {
+filter Test-GitHubUserFollowing {
     <#
         .SYNOPSIS
         Check if a given user or the authenticated user follows a person
@@ -8,13 +8,17 @@
         Returns a 404 if the user is not followed by a given user or the authenticated user.
 
         .EXAMPLE
+        ```pwsh
         Test-GitHubUserFollowing -Follows 'octocat'
         Test-GitHubUserFollowing 'octocat'
+        ```
 
         Checks if the authenticated user follows the user 'octocat'.
 
         .EXAMPLE
+        ```pwsh
         Test-GitHubUserFollowing -Username 'octocat' -Follows 'ratstallion'
+        ```
 
         Checks if the user 'octocat' follows the user 'ratstallion'.
 

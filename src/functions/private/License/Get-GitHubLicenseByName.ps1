@@ -1,4 +1,4 @@
-﻿filter Get-GitHubLicenseByName {
+filter Get-GitHubLicenseByName {
     <#
         .SYNOPSIS
         Get a license
@@ -8,7 +8,9 @@
         For more information, see "[Licensing a repository ](https://docs.github.com/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/licensing-a-repository)."
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubGitignoreList
+        ```
 
         Get all gitignore templates
 

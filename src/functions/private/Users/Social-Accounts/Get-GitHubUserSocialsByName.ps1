@@ -1,4 +1,4 @@
-﻿filter Get-GitHubUserSocialsByName {
+filter Get-GitHubUserSocialsByName {
     <#
         .SYNOPSIS
         List social accounts for a user
@@ -7,7 +7,9 @@
         Lists social media accounts for a user. This endpoint is accessible by anyone.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubUserSocialsByName -Username 'octocat'
+        ```
 
         Lists social media accounts for the user 'octocat'.
 

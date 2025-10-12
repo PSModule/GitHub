@@ -1,4 +1,4 @@
-﻿filter New-GitHubRepositoryOrg {
+filter New-GitHubRepositoryOrg {
     <#
         .SYNOPSIS
         Create an organization repository
@@ -14,6 +14,7 @@
         * `repo` scope to create a private repository
 
         .EXAMPLE
+        ```pwsh
         $params = @{
             Owner                    = 'PSModule'
             Name                     = 'Hello-World'
@@ -31,6 +32,7 @@
             SquashMergeCommitMessage = 'PR_BODY'
         }
         New-GitHubRepositoryOrg @params
+        ```
 
         Creates a new public repository named "Hello-World" owned by the organization "PSModule".
 

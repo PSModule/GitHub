@@ -1,4 +1,4 @@
-﻿filter Add-GitHubUserSigningKey {
+filter Add-GitHubUserSigningKey {
     <#
         .SYNOPSIS
         Create a SSH signing key for the authenticated user
@@ -10,7 +10,9 @@
         "[Understanding scopes for OAuth apps](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/)."
 
         .EXAMPLE
+        ```pwsh
         Add-GitHubUserSigningKey -Title 'ssh-rsa AAAAB3NzaC1yc2EAAA' -Key '2Sg8iYjAxxmI2LvUXpJjkYrMxURPc8r+dB7TJyvv1234'
+        ```
 
         Creates a new SSH signing key for the authenticated user's GitHub account.
 

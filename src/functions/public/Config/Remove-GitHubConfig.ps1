@@ -1,4 +1,4 @@
-﻿function Remove-GitHubConfig {
+function Remove-GitHubConfig {
     <#
         .SYNOPSIS
         Remove a GitHub module configuration.
@@ -7,7 +7,9 @@
         Remove a GitHub module configuration.
 
         .EXAMPLE
+        ```pwsh
         Remove-GitHubConfig -Name DefaultUser
+        ```
 
         Removes the 'DefaultUser' item in the GitHub module configuration.
 

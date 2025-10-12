@@ -1,4 +1,4 @@
-﻿filter Get-GitHubBranchList {
+filter Get-GitHubBranchList {
     <#
         .SYNOPSIS
         List branches
@@ -7,7 +7,9 @@
         Lists all branches from a repository
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubBranchList -Owner 'octocat' -Repository 'Hello-World'
+        ```
 
         Gets all the branches from the 'Hello-World' repository owned by 'octocat'
 

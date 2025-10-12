@@ -1,4 +1,4 @@
-﻿function Get-GitHubUser {
+function Get-GitHubUser {
     <#
         .SYNOPSIS
         List user(s)
@@ -9,17 +9,23 @@
         Lists all users, in the order that they signed up on GitHub - if '-All' is provided.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubUser
+        ```
 
         Get the authenticated user.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubUser -Name 'octocat'
+        ```
 
         Get the 'octocat' user.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubUser -All -Since 17722253
+        ```
 
         Get a list of users, starting with the user 'MariusStorhaug'.
 

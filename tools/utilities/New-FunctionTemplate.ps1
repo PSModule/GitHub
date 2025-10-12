@@ -1,4 +1,4 @@
-﻿function New-FunctionTemplate {
+function New-FunctionTemplate {
     <#
         .SYNOPSIS
         Short description
@@ -7,7 +7,9 @@
         Long description
 
         .EXAMPLE
+        ```pwsh
         An example
+        ```
 
         .NOTES
         [Ttle](link)

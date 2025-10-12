@@ -1,4 +1,4 @@
-﻿function Save-GitHubReleaseAsset {
+function Save-GitHubReleaseAsset {
     <#
         .SYNOPSIS
         Downloads a GitHub Release asset.
@@ -9,10 +9,12 @@
         personal access tokens (classic) or OAuth tokens with the `repo` scope are required.
 
         .EXAMPLE
+        ```pwsh
         Save-GitHubReleaseAsset -Owner 'octocat' -Repository 'Hello-World' -ID '123456' -Path 'C:\Assets'
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         Directory: C:\Assets
 
         Mode                 LastWriteTime         Length Name
@@ -23,10 +25,12 @@
         Downloads release asset ID '123456' from the 'Hello-World' repository owned by 'octocat' to the specified path.
 
         .EXAMPLE
+        ```pwsh
         Save-GitHubReleaseAsset -Owner 'octocat' -Repository 'Hello-World' -Tag 'v1.0.0' -Name 'binary.zip' -Path 'C:\Assets\app' -Expand -Force
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         Directory: C:\Assets\app
 
         Mode                 LastWriteTime         Length Name
@@ -39,6 +43,7 @@
         to the specified path, overwriting existing files during download and extraction.
 
         .EXAMPLE
+        ```pwsh
         $params = @{
             Owner         = 'octocat'
             Repository    = 'Hello-World'
@@ -47,6 +52,7 @@
             Name          = 'binary.zip'
         }
         Get-GitHubReleaseAsset @params | Save-GitHubReleaseAsset -Path 'C:\Assets' -Expand -Force
+        ```
 
         Pipes a release asset object directly to the Save-GitHubReleaseAsset function, which downloads and extracts it.
 

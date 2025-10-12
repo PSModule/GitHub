@@ -1,4 +1,4 @@
-﻿filter Restart-GitHubWorkflowRun {
+filter Restart-GitHubWorkflowRun {
     <#
         .SYNOPSIS
         Re-run a workflow
@@ -7,7 +7,9 @@
         Re-runs your workflow run using its `run_id`. You can also specify a branch or tag name to re-run a workflow run from a branch
 
         .EXAMPLE
+        ```pwsh
         Start-GitHubWorkflowReRun -Owner 'octocat' -Repository 'Hello-World' -ID 123456789
+        ```
 
         .INPUTS
         GitHubWorkflowRun

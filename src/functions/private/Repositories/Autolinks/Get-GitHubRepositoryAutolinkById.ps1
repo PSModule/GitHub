@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryAutolinkById {
+filter Get-GitHubRepositoryAutolinkById {
     <#
         .SYNOPSIS
         Get an autolink reference of a repository
@@ -9,7 +9,9 @@
         Information about autolinks are only available to repository administrators.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubRepositoryAutolinkById -Owner 'octocat' -Repository 'Hello-World' -ID 1
+        ```
 
         Gets the autolink with the ID 1 for the repository 'Hello-World' owned by 'octocat'.
 

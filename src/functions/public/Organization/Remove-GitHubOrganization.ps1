@@ -1,4 +1,4 @@
-﻿filter Remove-GitHubOrganization {
+filter Remove-GitHubOrganization {
     <#
         .SYNOPSIS
         Delete an organization
@@ -10,7 +10,9 @@
         regarding account deletion before using this endpoint.
 
         .EXAMPLE
+        ```pwsh
         Remove-GitHubOrganization -Name 'GitHub'
+        ```
 
         Deletes the organization 'GitHub' and all its repositories.
 

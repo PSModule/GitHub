@@ -1,4 +1,4 @@
-﻿function Test-GitHubToken {
+function Test-GitHubToken {
     <#
         .SYNOPSIS
         Tests if the GitHub token is set in the environment variables.
@@ -7,7 +7,9 @@
         This function checks if the GitHub token is available in the environment variables.
 
         .EXAMPLE
+        ```pwsh
         Test-GitHubToken
+        ```
     #>
     [OutputType([bool])]
     [CmdletBinding()]

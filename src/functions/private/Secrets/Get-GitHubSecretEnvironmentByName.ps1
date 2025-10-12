@@ -1,4 +1,4 @@
-﻿function Get-GitHubSecretEnvironmentByName {
+function Get-GitHubSecretEnvironmentByName {
     <#
         .SYNOPSIS
         Get an environment secret.
@@ -8,10 +8,12 @@
         create, update, or read secrets. OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubSecretEnvironmentByName -Owner 'octocat' -Repository 'Hello-World' -Environment 'dev' -Name 'SECRET1' -Context $GitHubContext
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         Name                 : SECRET1
         Owner                : octocat
         Repository           : Hello-World

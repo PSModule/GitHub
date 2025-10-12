@@ -1,4 +1,4 @@
-﻿function Update-GitHubUserAccessToken {
+function Update-GitHubUserAccessToken {
     <#
         .SYNOPSIS
         Updates the GitHub access token.
@@ -7,12 +7,16 @@
         Updates the GitHub access token. If the access token is still valid, it will not be refreshed.
 
         .EXAMPLE
+        ```pwsh
         Update-GitHubUserAccessToken
+        ```
 
         This will update the GitHub access token for the default context.
 
         .EXAMPLE
+        ```pwsh
         Update-GitHubUserAccessToken -Context 'github.com/mojombo'
+        ```
 
         This will update the GitHub access token for the context 'github.com/mojombo'.
 

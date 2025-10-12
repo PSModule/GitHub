@@ -1,4 +1,4 @@
-﻿function Get-GitHubVariableEnvironmentList {
+function Get-GitHubVariableEnvironmentList {
     <#
         .SYNOPSIS
         Retrieves all variables for a specified environment in a GitHub repository.
@@ -9,10 +9,12 @@
         OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubVariableEnvironmentList -Owner 'octocat' -Repository 'Hello-World' -Environment 'dev' -Context $GitHubContext
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         Name                 : NAME
         Value                : John Doe
         Owner                : octocat

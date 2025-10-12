@@ -1,4 +1,4 @@
-﻿function Switch-GitHubContext {
+function Switch-GitHubContext {
     <#
         .SYNOPSIS
         Set the default context.
@@ -7,7 +7,9 @@
         Set the default context for the GitHub module.
 
         .EXAMPLE
+        ```pwsh
         Switch-GitHubContext -Context 'github.com/Octocat'
+        ```
 
         .LINK
         https://psmodule.io/GitHub/Functions/Auth/Context/Switch-GitHubContext

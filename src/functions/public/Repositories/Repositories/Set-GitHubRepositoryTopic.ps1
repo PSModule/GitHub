@@ -1,4 +1,4 @@
-﻿filter Set-GitHubRepositoryTopic {
+filter Set-GitHubRepositoryTopic {
     <#
         .SYNOPSIS
         Replace all repository topics
@@ -7,7 +7,9 @@
         Replace all repository topics
 
         .EXAMPLE
+        ```pwsh
         Set-GitHubRepositoryTopic -Owner 'octocat' -Name 'hello-world' -Topic 'octocat', 'octo', 'octocat/hello-world'
+        ```
 
         Replaces all topics for the repository 'octocat/hello-world' with the topics 'octocat', 'octo', 'octocat/hello-world'.
 

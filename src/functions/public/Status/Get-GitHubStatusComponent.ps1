@@ -1,4 +1,4 @@
-﻿function Get-GitHubStatusComponent {
+function Get-GitHubStatusComponent {
     <#
         .SYNOPSIS
         Gets the status of GitHub components
@@ -8,7 +8,9 @@
         degraded_performance, partial_outage, or major_outage.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubStatusComponent
+        ```
 
         Gets the status of GitHub components
 

@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryCustomProperty {
+filter Get-GitHubRepositoryCustomProperty {
     <#
         .SYNOPSIS
         Get all custom property values for a repository
@@ -8,7 +8,9 @@
         Users with read access to the repository can use this endpoint.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubRepositoryCustomProperty -Owner 'octocat' -Repository 'hello-world'
+        ```
 
         Gets all custom property values that are set for the 'hello-world' repository.
 

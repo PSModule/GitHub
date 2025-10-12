@@ -1,4 +1,4 @@
-﻿filter Get-GitHubLicenseList {
+filter Get-GitHubLicenseList {
     <#
         .SYNOPSIS
         Get all commonly used licenses
@@ -8,7 +8,9 @@
         For more information, see "[Licensing a repository ](https://docs.github.com/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/licensing-a-repository)."
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubLicenseList
+        ```
 
         Get all commonly used licenses.
 

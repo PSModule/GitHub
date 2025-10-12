@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRateLimit {
+filter Get-GitHubRateLimit {
     <#
         .SYNOPSIS
         Get rate limit status for the authenticated user
@@ -22,7 +22,9 @@
         instead of the `rate` object. The `core` object contains the same information that is present in the `rate` object.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubRateLimit
+        ```
 
         Gets the rate limit status for the authenticated user.
 

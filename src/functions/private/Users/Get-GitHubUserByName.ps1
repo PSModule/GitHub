@@ -1,4 +1,4 @@
-﻿filter Get-GitHubUserByName {
+filter Get-GitHubUserByName {
     <#
         .SYNOPSIS
         Get a user
@@ -18,7 +18,9 @@
         For more information, see "[Emails API](https://docs.github.com/rest/users/emails)".
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubUserByName -Name 'octocat'
+        ```
 
         Get the 'octocat' user.
 

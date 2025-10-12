@@ -8,7 +8,9 @@ function Test-GitHubAzureCLI {
         It verifies both the availability of the CLI tool and the authentication status.
 
         .EXAMPLE
+        ```pwsh
         Test-GitHubAzureCLI
+        ```
 
         Returns $true if Azure CLI is installed and authenticated, $false otherwise.
 

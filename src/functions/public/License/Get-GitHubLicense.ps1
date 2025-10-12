@@ -1,4 +1,4 @@
-﻿filter Get-GitHubLicense {
+filter Get-GitHubLicense {
     <#
         .SYNOPSIS
         Get a license template, list of all popular license templates or a license for a repository
@@ -9,17 +9,23 @@
         If the Owner and Repo parameters are specified, the function will return the license for the specified repository.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubLicense
+        ```
 
         Get all license templates
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubLicense -Name mit
+        ```
 
         Get the mit license template
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubLicense -Owner 'octocat' -Repository 'Hello-World'
+        ```
 
         Get the license for the Hello-World repository from the octocat account.
 

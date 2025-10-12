@@ -1,4 +1,4 @@
-﻿filter Get-GitHubUserFollowersOfUser {
+filter Get-GitHubUserFollowersOfUser {
     <#
         .SYNOPSIS
         List followers of a user
@@ -7,7 +7,9 @@
         Lists the people following the specified user.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubUserFollowersOfUser -Username 'octocat'
+        ```
 
         Gets all followers of user 'octocat'.
 

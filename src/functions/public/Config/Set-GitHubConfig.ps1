@@ -1,4 +1,4 @@
-﻿function Set-GitHubConfig {
+function Set-GitHubConfig {
     <#
         .SYNOPSIS
         Set a GitHub module configuration.
@@ -7,7 +7,9 @@
         Set a GitHub module configuration.
 
         .EXAMPLE
+        ```pwsh
         Set-GitHubConfig -Name DefaultUser -Value 'Octocat'
+        ```
 
         Sets the value of DefaultUser to 'Octocat' in the GitHub module configuration.
 

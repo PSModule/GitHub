@@ -1,4 +1,4 @@
-﻿function Remove-GitHubSecretFromOwner {
+function Remove-GitHubSecretFromOwner {
     <#
         .SYNOPSIS
         Delete an organization secret.
@@ -9,7 +9,9 @@
         is private, OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        ```pwsh
         Remove-GitHubSecretFromOwner -Owner 'octocat' -Name 'HOST_NAME' -Context $GitHubContext
+        ```
 
         Deletes the specified secret from the specified organization.
 

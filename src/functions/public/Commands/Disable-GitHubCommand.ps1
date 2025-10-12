@@ -1,4 +1,4 @@
-﻿function Disable-GitHubCommand {
+function Disable-GitHubCommand {
     <#
         .SYNOPSIS
         Stops workflow commands
@@ -11,7 +11,9 @@
         that you used to stop workflow commands to the Enable-GitHubCommand.
 
         .EXAMPLE
+        ```pwsh
         Disable-GitHubCommand "123"
+        ```
 
         Stops processing any workflow commands.
 

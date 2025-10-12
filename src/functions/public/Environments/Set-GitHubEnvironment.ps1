@@ -1,4 +1,4 @@
-﻿filter Set-GitHubEnvironment {
+filter Set-GitHubEnvironment {
     <#
         .SYNOPSIS
         Create or update an environment.
@@ -15,6 +15,7 @@
         OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        ```pwsh
         $params = @{
             Owner                  = "my-org"
             Repository             = "my-repo"
@@ -24,9 +25,10 @@
             DeploymentBranchPolicy = 'CustomBranchPolicies'
         }
         Set-GitHubEnvironment @params
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         id                       : 5944178128
         node_id                  : EN_kwDOOJqfM88AAAABYkz10A
         name                     : test

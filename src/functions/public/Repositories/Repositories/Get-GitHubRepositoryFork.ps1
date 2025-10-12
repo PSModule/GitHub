@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryFork {
+filter Get-GitHubRepositoryFork {
     <#
         .SYNOPSIS
         List forks
@@ -7,7 +7,9 @@
         List forks of a named repository.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubRepositoryFork -Owner 'octocat' -Name 'Hello-World'
+        ```
 
         List forks of the 'Hello-World' repository owned by 'octocat'.
 

@@ -1,4 +1,4 @@
-﻿filter Get-GitHubReleaseAll {
+filter Get-GitHubReleaseAll {
     <#
         .SYNOPSIS
         List releases
@@ -9,7 +9,9 @@
         Information about published releases are available to everyone. Only users with push access will receive listings for draft releases.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubReleaseAll -Owner 'octocat' -Repository 'hello-world'
+        ```
 
         Gets all the releases for the repository 'hello-world' owned by 'octocat'.
 

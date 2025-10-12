@@ -1,4 +1,4 @@
-﻿filter Get-GitHubUserGpgKeyForUser {
+filter Get-GitHubUserGpgKeyForUser {
     <#
         .SYNOPSIS
         List GPG keys for a user
@@ -7,7 +7,9 @@
         Lists the GPG keys for a user. This information is accessible by anyone.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubUserGpgKeyForUser -Username 'octocat'
+        ```
 
         Gets all GPG keys for the 'octocat' user.
 

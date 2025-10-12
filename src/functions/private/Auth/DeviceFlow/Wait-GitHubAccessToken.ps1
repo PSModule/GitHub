@@ -1,4 +1,4 @@
-﻿function Wait-GitHubAccessToken {
+function Wait-GitHubAccessToken {
     <#
         .SYNOPSIS
         Waits for the GitHub Device Flow to complete.
@@ -8,12 +8,16 @@
         This will poll the GitHub API until the user has entered the code.
 
         .EXAMPLE
+        ```pwsh
         Wait-GitHubAccessToken -DeviceCode $deviceCode -ClientID $ClientID -Interval $interval
+        ```
 
         This will poll the GitHub API until the user has entered the code.
 
         .EXAMPLE
+        ```pwsh
         Wait-GitHubAccessToken -Refresh -ClientID $ClientID
+        ```
 
         .NOTES
         For more info about the Device Flow visit:

@@ -1,4 +1,4 @@
-﻿filter Get-GitHubMeta {
+filter Get-GitHubMeta {
     <#
         .SYNOPSIS
         Get GitHub meta information.
@@ -15,7 +15,9 @@
         documentation for each feature to determine if IPv6 is supported.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubMeta
+        ```
 
         Returns meta information about GitHub, including a list of GitHub's IP addresses.
 

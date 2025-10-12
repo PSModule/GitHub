@@ -1,4 +1,4 @@
-﻿filter Get-GitHubOctocat {
+filter Get-GitHubOctocat {
     <#
         .SYNOPSIS
         Get Octocat.
@@ -7,12 +7,16 @@
         Get the octocat as ASCII art.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubOctocat
+        ```
 
         Get the octocat as ASCII art
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubOctocat -S "Hello world"
+        ```
 
         Get the octocat as ASCII art with a custom saying
 

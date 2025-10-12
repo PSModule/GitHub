@@ -1,4 +1,4 @@
-﻿filter Get-GitHubGitignoreList {
+filter Get-GitHubGitignoreList {
     <#
         .SYNOPSIS
         Get all gitignore templates
@@ -8,7 +8,9 @@
         [creating a repository](https://docs.github.com/rest/repos/repos#create-a-repository-for-the-authenticated-user).
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubGitignoreList
+        ```
 
         Get all gitignore templates
 

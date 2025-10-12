@@ -1,4 +1,4 @@
-﻿filter Remove-GitHubRepositoryPermission {
+filter Remove-GitHubRepositoryPermission {
     <#
         .SYNOPSIS
         Remove the permission level for a team on a repository.
@@ -7,7 +7,9 @@
         This function removes a team's access to a specific repository within an organization.
 
         .EXAMPLE
+        ```pwsh
         Remove-GitHubRepositoryPermission -Owner 'my-org' -Name 'repo-name' -Team 'dev-team'
+        ```
 
         Removes the 'dev-team' permissions from the 'repo-name' repository under 'my-org'.
 

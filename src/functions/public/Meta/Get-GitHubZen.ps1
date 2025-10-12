@@ -1,4 +1,4 @@
-﻿filter Get-GitHubZen {
+filter Get-GitHubZen {
     <#
         .SYNOPSIS
         Get the Zen of GitHub.
@@ -7,7 +7,9 @@
         Get a random sentence from the Zen of GitHub.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubZen
+        ```
 
         Get a random sentence from the Zen of GitHub.
 

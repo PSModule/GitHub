@@ -1,4 +1,4 @@
-﻿filter Get-GitHubWorkflowRun {
+filter Get-GitHubWorkflowRun {
     <#
         .SYNOPSIS
         List workflow runs for a repository or a workflow
@@ -12,22 +12,30 @@
         `event`, `head_sha`, `status`.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubWorkflowRun -Owner 'owner' -Repository 'repo'
+        ```
 
         Lists all workflow runs for a repository.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubWorkflowRun -Owner 'owner' -Repository 'repo' -Actor 'octocat' -Branch 'main' -Event 'push' -Status 'success'
+        ```
 
         Lists all workflow runs for a repository with the specified actor, branch, event, and status.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubWorkflowRun -Owner 'octocat' -Repository 'Hello-World' -ID '42'
+        ```
 
         Gets all workflow runs for the workflow with the ID `42` in the repository `Hello-World` owned by `octocat`.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubWorkflowRun -Owner 'octocat' -Repository 'Hello-World' -Name 'nightly.yml' -Actor 'octocat' -Branch 'main' -Event 'push' -Status 'success'
+        ```
 
         Gets all workflow runs for the workflow with the name `nightly.yml` in the repository `Hello-World` owned by `octocat` that were triggered by
         the user `octocat` on the branch `main` and have the status `success`.

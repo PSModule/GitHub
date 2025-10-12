@@ -1,4 +1,4 @@
-﻿filter Disable-GitHubRepositorySecurityFix {
+filter Disable-GitHubRepositorySecurityFix {
     <#
         .SYNOPSIS
         Disable automated security fixes
@@ -9,7 +9,9 @@
         "[Configuring automated security fixes](https://docs.github.com/articles/configuring-automated-security-fixes)".
 
         .EXAMPLE
+        ```pwsh
         Disable-GitHubRepositorySecurityFix -Owner 'PSModule' -Name 'GitHub'
+        ```
 
         Disables automated security fixes for the repository.
 

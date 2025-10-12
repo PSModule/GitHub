@@ -1,4 +1,4 @@
-﻿function Connect-GitHubAccount {
+function Connect-GitHubAccount {
     <#
         .SYNOPSIS
         Connects to GitHub.
@@ -17,26 +17,34 @@
         the app will be able to make API calls with a new access token.
 
         .EXAMPLE
+        ```pwsh
         Connect-GitHubAccount
+        ```
 
         Connects to GitHub using a device flow login.
         If the user has already logged in, the access token will be refreshed.
 
         .EXAMPLE
+        ```pwsh
         $env:GH_TOKEN = '***'
         Connect-GitHubAccount
+        ```
 
         Connects to GitHub using the access token from environment variable, assuming unattended mode.
 
         .EXAMPLE
+        ```pwsh
         Connect-GitHubAccount -UseAccessToken
         ! Enter your personal access token: *************
+        ```
 
         User gets prompted for the access token and stores it in the context.
         The token is used when connecting to GitHub.
 
         .EXAMPLE
+        ```pwsh
         Connect-GitHubAccount -Mode 'OAuthApp' -Scope 'gist read:org repo workflow'
+        ```
 
         Connects to GitHub using a device flow login and sets the scope of the access token.
 

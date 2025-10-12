@@ -1,4 +1,4 @@
-﻿filter Get-GitHubAppInstallationRequest {
+filter Get-GitHubAppInstallationRequest {
     <#
         .SYNOPSIS
         List installation requests for the authenticated app.
@@ -7,7 +7,9 @@
         Lists all the pending installation requests for the authenticated GitHub App.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubAppInstallationRequest
+        ```
 
         Lists all the pending installation requests for the authenticated GitHub App.
 

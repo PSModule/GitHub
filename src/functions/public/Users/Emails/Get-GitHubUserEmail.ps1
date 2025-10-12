@@ -1,4 +1,4 @@
-﻿filter Get-GitHubUserEmail {
+filter Get-GitHubUserEmail {
     <#
         .SYNOPSIS
         List email addresses for the authenticated user
@@ -9,12 +9,16 @@
         authenticated user](https://docs.github.com/rest/users/emails#set-primary-email-visibility-for-the-authenticated-user) endpoint.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubUserEmail
+        ```
 
         Gets all email addresses for the authenticated user.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubUserEmail -Public
+        ```
 
         Gets the publicly visible email address for the authenticated user.
 

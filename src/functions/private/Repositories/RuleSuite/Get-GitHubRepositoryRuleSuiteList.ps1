@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryRuleSuiteList {
+filter Get-GitHubRepositoryRuleSuiteList {
     <#
         .SYNOPSIS
         List repository rule suites
@@ -8,6 +8,7 @@
         For more information, see"[Managing rulesets for a repository](https://docs.github.com/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/managing-rulesets-for-a-repository#viewing-insights-for-rulesets)."
 
         .EXAMPLE
+        ```pwsh
         $params = @{
             Owner           = 'octocat'
             Repo            = 'hello-world'
@@ -17,6 +18,7 @@
             RuleSuiteResult = 'all'
         }
         Get-GitHubRepositoryRuleSuiteList @params
+        ```
 
         Gets a list of rule suites for the main branch of the hello-world repository owned by octocat.
 

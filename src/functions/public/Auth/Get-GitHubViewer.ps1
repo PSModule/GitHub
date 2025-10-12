@@ -1,4 +1,4 @@
-﻿function Get-GitHubViewer {
+function Get-GitHubViewer {
     <#
         .SYNOPSIS
         Gets the currently authenticated user.
@@ -7,7 +7,9 @@
         Gets the currently authenticated user.
 
         .EXAMPLE
+        ```pwsh
         Get-GithubViewer
+        ```
 
         Gets the currently authenticated user.
 

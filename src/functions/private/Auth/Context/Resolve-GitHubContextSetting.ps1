@@ -1,4 +1,4 @@
-﻿function Resolve-GitHubContextSetting {
+function Resolve-GitHubContextSetting {
     <#
         .SYNOPSIS
         Resolves a GitHub context setting based on a provided name.
@@ -9,30 +9,36 @@
         it will return the default value from the GitHub configuration. This is useful for resolving API-related settings dynamically.
 
         .EXAMPLE
+        ```pwsh
         Resolve-GitHubContextSetting -Name 'Repository' -Value 'MyRepo'
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         MyRepo
         ```
 
         Returns the provided value 'MyRepo' for the 'Repository' setting.
 
         .EXAMPLE
+        ```pwsh
         Resolve-GitHubContextSetting -Name 'Repository' -Context $GitHubContext
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         MyRepository
         ```
 
         Retrieves the 'Repository' setting from the provided GitHub context object.
 
         .EXAMPLE
+        ```pwsh
         Resolve-GitHubContextSetting -Name 'ApiBaseUrl'
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         https://api.github.com
         ```
 

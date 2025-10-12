@@ -1,4 +1,4 @@
-﻿filter Get-GitHubReleaseByTagName {
+filter Get-GitHubReleaseByTagName {
     <#
         .SYNOPSIS
         Get a release by tag name
@@ -7,7 +7,9 @@
         Get a published release with the specified tag.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubReleaseByTagName -Owner 'octocat' -Repository 'hello-world' -Tag 'v1.0.0'
+        ```
 
         Gets the release with the tag 'v1.0.0' for the repository 'hello-world' owned by 'octocat'.
 

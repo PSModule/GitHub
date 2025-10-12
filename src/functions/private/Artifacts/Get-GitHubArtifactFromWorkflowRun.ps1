@@ -1,4 +1,4 @@
-﻿function Get-GitHubArtifactFromWorkflowRun {
+function Get-GitHubArtifactFromWorkflowRun {
     <#
         .SYNOPSIS
         Retrieves artifacts from a specific GitHub Actions workflow run.
@@ -9,10 +9,12 @@
         The function can optionally filter artifacts by name or return only the latest version per artifact name.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubArtifactFromWorkflowRun -Owner 'octocat' -Repository 'demo' -ID '123456789'
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         ID                 : 10
         NodeID             : MDEwOkFydGlmYWN0MQ==
         Name               : build-logs

@@ -1,4 +1,4 @@
-﻿function Start-GitHubLogGroup {
+function Start-GitHubLogGroup {
     <#
         .SYNOPSIS
         Starts a log group in GitHub Actions
@@ -15,7 +15,9 @@
 
         .EXAMPLE
         ```pwsh
+        ```pwsh
         Start-GitHubLogGroup 'MyGroup'
+        ```
         ```
 
         Starts a new log group named 'MyGroup'. All subsequent log output will be grouped under this expandable section
@@ -23,11 +25,13 @@
 
         .EXAMPLE
         ```pwsh
+        ```pwsh
         Start-GitHubLogGroup 'Building application'
         Write-Host 'Step 1: Restoring packages'
         Write-Host 'Step 2: Compiling code'
         Write-Host 'Step 3: Running tests'
         Stop-GitHubLogGroup
+        ```
         ```
 
         Creates a collapsible log group containing the build steps. The output will appear nested under the

@@ -1,4 +1,4 @@
-﻿filter Test-GitHubUserFollowedByUser {
+filter Test-GitHubUserFollowedByUser {
     <#
         .SYNOPSIS
         Check if a user follows another user
@@ -7,7 +7,9 @@
         Checks if a user follows another user.
 
         .EXAMPLE
+        ```pwsh
         Test-GitHubUserFollowedByUser -Username 'octocat' -Follows 'ratstallion'
+        ```
 
         Checks if the user 'octocat' follows the user 'ratstallion'.
 

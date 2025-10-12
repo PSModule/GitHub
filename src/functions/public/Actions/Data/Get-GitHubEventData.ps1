@@ -1,4 +1,4 @@
-﻿function Get-GitHubEventData {
+function Get-GitHubEventData {
     <#
         .SYNOPSIS
         Gets data about the event that triggered the workflow.
@@ -7,7 +7,9 @@
         Gets data about the event that triggered the workflow.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubEventData
+        ```
 
         .LINK
         https://psmodule.io/GitHub/Functions/Actions/Data/Get-GitHubEventData

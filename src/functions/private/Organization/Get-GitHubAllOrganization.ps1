@@ -1,4 +1,4 @@
-﻿filter Get-GitHubAllOrganization {
+filter Get-GitHubAllOrganization {
     <#
         .SYNOPSIS
         List organizations
@@ -10,7 +10,9 @@
         Use the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers) to get the URL for the next page of organizations.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubAllOrganization -Since 142951047
+        ```
 
         List organizations, starting with PSModule
 

@@ -1,4 +1,4 @@
-﻿function Get-GitHubAccessToken {
+function Get-GitHubAccessToken {
     <#
         .SYNOPSIS
         Retrieves the GitHub access token from the specified context.
@@ -10,20 +10,24 @@
         Use this function to extract authentication tokens for subsequent API requests.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubAccessToken
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         System.Security.SecureString
         ```
 
         Retrieves the access token from the default context as a secure string.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubAccessToken -Context $myGitHubContext -AsPlainText
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         ghp_exampletoken1234567890
         ```
 

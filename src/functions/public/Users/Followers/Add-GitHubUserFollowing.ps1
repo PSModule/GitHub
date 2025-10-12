@@ -1,4 +1,4 @@
-﻿filter Add-GitHubUserFollowing {
+filter Add-GitHubUserFollowing {
     <#
         .SYNOPSIS
         Follow a user
@@ -9,7 +9,9 @@
         Following a user requires the user to be logged in and authenticated with basic auth or OAuth with the `user:follow` scope.
 
         .EXAMPLE
+        ```pwsh
         Follow-GitHubUser -Username 'octocat'
+        ```
 
         Follows the user with the username 'octocat'.
 

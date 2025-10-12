@@ -1,4 +1,4 @@
-﻿function Connect-GitHubApp {
+function Connect-GitHubApp {
     <#
         .SYNOPSIS
         Connects to GitHub as a installation using a GitHub App.
@@ -12,22 +12,30 @@
         - Enterprise
 
         .EXAMPLE
+        ```pwsh
         Connect-GitHubApp
+        ```
 
         Connects to GitHub as all available targets using the logged in GitHub App.
 
         .EXAMPLE
+        ```pwsh
         Connect-GitHubApp -User 'octocat'
+        ```
 
         Connects to GitHub as the user 'octocat' using the logged in GitHub App.
 
         .EXAMPLE
+        ```pwsh
         Connect-GitHubApp -Organization 'psmodule' -Default
+        ```
 
         Connects to GitHub as the organization 'psmodule' using the logged in GitHub App and sets it as the default context.
 
         .EXAMPLE
+        ```pwsh
         Connect-GitHubApp -Enterprise 'msx'
+        ```
 
         Connects to GitHub as the enterprise 'msx' using the logged in GitHub App.
 

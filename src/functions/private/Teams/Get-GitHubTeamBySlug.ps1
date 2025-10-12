@@ -1,4 +1,4 @@
-﻿function Get-GitHubTeamBySlug {
+function Get-GitHubTeamBySlug {
     <#
         .SYNOPSIS
         Get a team by name
@@ -8,7 +8,9 @@
         and replaces spaces with a - separator. For example, "My TEam Näme" would become my-team-name.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubTeamBySlug -Organization 'github' -Slug 'my-team-name'
+        ```
 
         .NOTES
         [Get a team by name](https://docs.github.com/rest/teams/teams#get-a-team-by-name)

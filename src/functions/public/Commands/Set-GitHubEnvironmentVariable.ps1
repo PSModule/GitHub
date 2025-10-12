@@ -1,4 +1,4 @@
-﻿function Set-GitHubEnvironmentVariable {
+function Set-GitHubEnvironmentVariable {
     <#
         .SYNOPSIS
         Setting an environment variable
@@ -7,7 +7,9 @@
         Set a GitHub environment variable
 
         .EXAMPLE
+        ```pwsh
         Set-GitHubEnv -Name 'MyVariable' -Value 'MyValue'
+        ```
 
         .NOTES
         [Setting an environment variable](https://docs.github.com/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions#setting-an-environment-variable)

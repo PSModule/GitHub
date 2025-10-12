@@ -1,4 +1,4 @@
-﻿function Get-GitHubRunnerData {
+function Get-GitHubRunnerData {
     <#
         .SYNOPSIS
         Gets data about the runner thats running the workflow.
@@ -7,7 +7,9 @@
         Gets data about the runner thats running the workflow.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubRunnerData
+        ```
 
         .LINK
         https://psmodule.io/GitHub/Functions/Actions/Data/Get-GitHubRunnerData

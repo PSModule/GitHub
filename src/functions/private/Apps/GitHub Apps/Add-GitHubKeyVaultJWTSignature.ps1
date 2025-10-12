@@ -1,4 +1,4 @@
-﻿function Add-GitHubKeyVaultJWTSignature {
+function Add-GitHubKeyVaultJWTSignature {
     <#
         .SYNOPSIS
         Adds a JWT signature using Azure Key Vault.
@@ -8,10 +8,12 @@
         The function supports authentication via Azure CLI or Az PowerShell module and returns the signed JWT as a secure string.
 
         .EXAMPLE
+        ```pwsh
         Add-GitHubKeyVaultJWTSignature -UnsignedJWT 'header.payload' -KeyVaultKeyReference 'https://myvault.vault.azure.net/keys/mykey'
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         System.Security.SecureString
         ```
 

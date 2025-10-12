@@ -1,4 +1,4 @@
-﻿filter New-GitHubAppInstallationAccessToken {
+filter New-GitHubAppInstallationAccessToken {
     <#
         .SYNOPSIS
         Create an installation access token for an app
@@ -28,13 +28,17 @@
         to access this endpoint.
 
         .EXAMPLE
+        ```pwsh
         New-GitHubAppInstallationAccessToken -InstallationID 12345678
+        ```
 
         Creates an installation access token for the installation with the ID `12345678`.
 
         .EXAMPLE
+        ```pwsh
         Connect-GitHub -ClientID $ClientID -PrivateKey $PrivateKey
         Get-GitHubAppInstallation | New-GitHubAppInstallationAccessToken
+        ```
 
         Gets the GitHub App installations and creates an installation access token for each installation.
 

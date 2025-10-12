@@ -1,4 +1,4 @@
-﻿filter Start-GitHubWorkflow {
+filter Start-GitHubWorkflow {
     <#
         .SYNOPSIS
         Start a workflow run using the workflow's ID.
@@ -7,12 +7,14 @@
         Start a workflow run using the workflow's ID.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubWorkflow | Where-Object name -NotLike '.*' | Start-GitHubWorkflow -Inputs @{
             staticValidation = $true
             deploymentValidation = $false
             removeDeployment = $true
             prerelease = $false
         }
+        ```
 
         .LINK
         https://psmodule.io/GitHub/Functions/Workflows/Start-GitHubWorkflow/

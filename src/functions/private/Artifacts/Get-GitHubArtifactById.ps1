@@ -1,4 +1,4 @@
-﻿function Get-GitHubArtifactById {
+function Get-GitHubArtifactById {
     <#
         .SYNOPSIS
         Retrieves a specific artifact from a GitHub Actions workflow run.
@@ -9,10 +9,12 @@
         The function returns a custom GitHubArtifact object containing metadata and download information for the artifact.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubArtifactById -Owner 'octocat' -Repository 'hello-world' -ID '123456'
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         Name               : build-artifact
         ID                 : 123456
         Url                : https://api.github.com/repos/octocat/hello-world/actions/artifacts/123456

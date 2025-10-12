@@ -1,4 +1,4 @@
-﻿function New-GitHubOrganization {
+function New-GitHubOrganization {
     <#
         .SYNOPSIS
         Creates a new GitHub organization within a specified enterprise.
@@ -8,7 +8,9 @@
 
         .EXAMPLE
         ```pwsh
+        ```pwsh
         New-GitHubOrganization -Enterprise 'my-enterprise' -Name 'my-org' -Owner 'user1' -BillingEmail 'billing@example.com'
+        ```
         ```
 
         .OUTPUTS

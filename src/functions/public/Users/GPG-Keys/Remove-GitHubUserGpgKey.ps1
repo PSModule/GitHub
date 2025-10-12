@@ -9,7 +9,9 @@ filter Remove-GitHubUserGpgKey {
         [scope](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
 
         .EXAMPLE
+        ```pwsh
         Remove-GitHubUserGpgKey -ID '1234567'
+        ```
 
         Gets the GPG key with ID '1234567' for the authenticated user.
 

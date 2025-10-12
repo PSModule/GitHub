@@ -1,4 +1,4 @@
-﻿filter Unblock-GitHubUserByOrganization {
+filter Unblock-GitHubUserByOrganization {
     <#
         .SYNOPSIS
         Unblock a user from an organization
@@ -7,7 +7,9 @@
         Unblocks the given user on behalf of the specified organization.
 
         .EXAMPLE
+        ```pwsh
         Unblock-GitHubUserByOrganization -Organization 'github' -Username 'octocat'
+        ```
 
         Unblocks the user 'octocat' from the organization 'github'.
         Returns $true if successful.

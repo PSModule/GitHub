@@ -1,4 +1,4 @@
-﻿function Set-GitHubNoCommandGroup {
+function Set-GitHubNoCommandGroup {
     <#
         .SYNOPSIS
         Disables workflow commands for a block of code.
@@ -8,18 +8,22 @@
         Allows for colapsing of code in IDE for code that belong together.
 
         .EXAMPLE
+        ```pwsh
         Set-GitHubNoCommandGroup {
             Write-Host 'Hello, World!'
             Write-GithubError 'This is an error'
         }
+        ```
 
         Groups commands where no workflow commands are run.
 
         .EXAMPLE
+        ```pwsh
         NoLogGroup 'MyGroup' {
             Write-Host 'Hello, World!'
             Write-GithubError 'This is an error'
         }
+        ```
 
         Groups commands where no workflow commands are run, using an alias and DSL approach.
 

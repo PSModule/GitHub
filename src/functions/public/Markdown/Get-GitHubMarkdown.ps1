@@ -1,4 +1,4 @@
-﻿filter Get-GitHubMarkdown {
+filter Get-GitHubMarkdown {
     <#
         .SYNOPSIS
         Render a Markdown document
@@ -7,8 +7,10 @@
         Converts Markdown to HTML
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubMarkdown -Text "Hello **world**"
         "<p>Hello <strong>world</strong></p>"
+        ```
 
         Renders the Markdown text "Hello **world**" to HTML.
 

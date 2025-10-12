@@ -1,4 +1,4 @@
-﻿function Get-GitHubArtifactFromRepository {
+function Get-GitHubArtifactFromRepository {
     <#
         .SYNOPSIS
         Lists artifacts for a GitHub repository.
@@ -10,10 +10,12 @@
         By default, only the latest version of each artifact is returned unless -AllVersions is specified.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubArtifactFromRepository -Owner 'octocat' -Repository 'demo-repo' -AllVersions
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         Name        : build-output
         ID          : 4567890
         Expired     : False

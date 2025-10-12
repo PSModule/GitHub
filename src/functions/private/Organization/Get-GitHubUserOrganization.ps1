@@ -1,4 +1,4 @@
-﻿filter Get-GitHubUserOrganization {
+filter Get-GitHubUserOrganization {
     <#
         .SYNOPSIS
         List organizations for a user
@@ -13,7 +13,9 @@
         API instead.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubUserOrganization -Username 'octocat'
+        ```
 
         List public organizations for the user 'octocat'.
 

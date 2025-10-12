@@ -1,4 +1,4 @@
-﻿function Get-GitHubEnterpriseList {
+function Get-GitHubEnterpriseList {
     <#
         .SYNOPSIS
         Retrieves a list of all GitHub Enterprise instances.
@@ -8,10 +8,12 @@
         creation dates, and other metadata. It returns an array of objects of type GitHubEnterprise populated with this information.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubEnterpriseList
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         Name              : My Enterprise
         Slug              : my-enterprise
         URL               : https://github.com/enterprises/my-enterprise

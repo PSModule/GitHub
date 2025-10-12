@@ -1,4 +1,4 @@
-﻿filter Get-GitHubEmoji {
+filter Get-GitHubEmoji {
     <#
         .SYNOPSIS
         Get emojis
@@ -8,12 +8,16 @@
         If you pass the `Path` parameter, the emojis will be downloaded to the specified destination.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubEmoji
+        ```
 
         Gets all the emojis available to use on GitHub.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubEmoji -Path 'C:\Users\user\Documents\GitHub\Emojis'
+        ```
 
         Downloads all the emojis available to use on GitHub to the specified destination.
 

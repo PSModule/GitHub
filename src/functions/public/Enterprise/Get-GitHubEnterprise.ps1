@@ -1,4 +1,4 @@
-﻿function Get-GitHubEnterprise {
+function Get-GitHubEnterprise {
     <#
         .SYNOPSIS
         Retrieves GitHub Enterprise instance details for the authenticated user.
@@ -9,10 +9,12 @@
         specific enterprise name is provided, details about that single instance are returned.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubEnterprise
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         Name              : My Enterprise
         Slug              : my-enterprise
         URL               : https://github.com/enterprises/my-enterprise
@@ -27,10 +29,12 @@
         Retrieves details about all GitHub Enterprise instances for the user.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubEnterprise -Name 'my-enterprise'
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         Name              : My Enterprise
         Slug              : my-enterprise
         URL               : https://github.com/enterprises/my-enterprise

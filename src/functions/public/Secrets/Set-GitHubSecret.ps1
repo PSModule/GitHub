@@ -1,4 +1,4 @@
-﻿function Set-GitHubSecret {
+function Set-GitHubSecret {
     <#
         .SYNOPSIS
         Updates a GitHub secret for an organization, repository, or user.
@@ -8,12 +8,15 @@
         It encrypts the secret value before storing it and supports different visibility levels.
 
         .EXAMPLE
+        ```pwsh
         $secret = ConvertTo-SecureString "my-secret-value" -AsPlainText -Force
         Set-GitHubSecret -Repository 'MyRepo' -Owner 'MyUser' -Name 'MySecret' -Value $secret
+        ```
 
         Updates the secret `MySecret` in the `MyRepo` repository for the owner `MyUser`.
 
         .EXAMPLE
+        ```pwsh
         $params = @{
             Organization = 'MyOrg'
             Name         = 'MySecret'
@@ -22,10 +25,12 @@
             Visibility   = 'Private'
         }
         Set-GitHubSecret @params
+        ```
 
         Updates the secret `MySecret` at the organization level for GitHub Actions, setting visibility to private.
 
         .EXAMPLE
+        ```pwsh
         $params = @{
             Owner       = 'MyUser'
             Repository  = 'MyRepo'
@@ -34,6 +39,7 @@
             Value       = (ConvertTo-SecureString "my-secret-value" -AsPlainText -Force)
         }
         Set-GitHubSecret @params
+        ```
 
         Updates the secret `MySecret` in the `Production` environment of the `MyRepo` repository for `MyUser`.
 

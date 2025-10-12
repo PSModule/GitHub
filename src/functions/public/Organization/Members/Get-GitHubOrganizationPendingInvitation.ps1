@@ -1,4 +1,4 @@
-﻿function Get-GitHubOrganizationPendingInvitation {
+function Get-GitHubOrganizationPendingInvitation {
     <#
         .SYNOPSIS
         List pending organization invitations
@@ -10,12 +10,16 @@
         member, the `login` field in the return hash will be `null`.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubOrganizationPendingInvitation -Organization 'github'
+        ```
 
         List all pending organization invitations for the organization `github`.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubOrganizationPendingInvitation -Organization 'github' -Role 'admin'
+        ```
 
         List all pending organization invitations for the organization `github` with the role `admin`.
 

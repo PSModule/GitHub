@@ -1,4 +1,4 @@
-﻿function ConvertTo-GitHubGraphQLField {
+function ConvertTo-GitHubGraphQLField {
     <#
         .SYNOPSIS
         Converts property names to their corresponding GitHub GraphQL field syntax.
@@ -10,8 +10,10 @@
         Properties not found in the mapping table are skipped with a warning.
 
         .EXAMPLE
+        ```pwsh
         $fields = ConvertTo-GitHubGraphQLField -Property @('Name','Owner') -AdditionalProperty 'Url' -PropertyToGraphQLMap $map
         Returns the GraphQL fields for Name, Owner, and Url.
+        ```
 
         .OUTPUTS
         string

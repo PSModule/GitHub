@@ -1,4 +1,4 @@
-﻿function Get-GitHubAppInstallationForAuthenticatedAppByID {
+function Get-GitHubAppInstallationForAuthenticatedAppByID {
     <#
         .SYNOPSIS
         Get an installation for the authenticated app.
@@ -10,7 +10,9 @@
         to access this endpoint.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubAppInstallationForAuthenticatedAppByID -ID 123456
+        ```
 
         Get an installation for the authenticated app with the specified ID.
 

@@ -1,4 +1,4 @@
-﻿function Get-GitHubPublicKeyForCodespacesOnUser {
+function Get-GitHubPublicKeyForCodespacesOnUser {
     <#
         .SYNOPSIS
         Get public key for the authenticated user.
@@ -9,10 +9,12 @@
         OAuth app tokens and personal access tokens (classic) need the `codespace` or `codespace:secrets` scope to use this endpoint.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubPublicKeyForCodespacesOnUser -Context $GitHubContext
+        ```
 
         Outputs:
-        ```powershell
+        ```pwsh
         ID          : 3380189982652154440
         Key         : dpr7ea5wmASt3ewAYNR/wPiPd6qakxN0060jdBmun0Y=                    #gitleaks:allow
         Type        : codespaces

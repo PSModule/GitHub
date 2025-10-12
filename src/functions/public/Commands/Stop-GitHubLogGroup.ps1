@@ -1,4 +1,4 @@
-﻿function Stop-GitHubLogGroup {
+function Stop-GitHubLogGroup {
     <#
         .SYNOPSIS
         Stops the current log group in GitHub Actions
@@ -14,18 +14,22 @@
 
         .EXAMPLE
         ```pwsh
+        ```pwsh
         Stop-GitHubLogGroup
+        ```
         ```
 
         Stops the current log group in GitHub Actions.
 
         .EXAMPLE
         ```pwsh
+        ```pwsh
         Start-GitHubLogGroup 'Deployment Steps'
         Write-Host 'Deploying to staging...'
         Write-Host 'Deployment complete'
         Stop-GitHubLogGroup
         Write-Host 'This output is not in the group'
+        ```
         ```
 
         Creates a log group for deployment steps. The final Write-Host command outputs text outside of the group

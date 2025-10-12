@@ -1,4 +1,4 @@
-﻿function Invoke-GitHubAppWebhookReDelivery {
+function Invoke-GitHubAppWebhookReDelivery {
     <#
         .SYNOPSIS
         Redeliver a delivery for an app webhook
@@ -10,7 +10,9 @@
         to access this endpoint.
 
         .EXAMPLE
+        ```pwsh
         Invoke-GitHubAppWebhookReDelivery -ID 12345
+        ```
 
         Redelivers the delivery with the ID `12345`.
 

@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRoot {
+filter Get-GitHubRoot {
     <#
         .SYNOPSIS
         GitHub API Root.
@@ -7,7 +7,9 @@
         Get Hypermedia links to resources accessible in GitHub's REST API.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubRoot
+        ```
 
         Get the root endpoint for the GitHub API.
 

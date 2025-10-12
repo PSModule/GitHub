@@ -1,4 +1,4 @@
-﻿function Initialize-GitHubConfig {
+function Initialize-GitHubConfig {
     <#
         .SYNOPSIS
         Initialize the GitHub module configuration.
@@ -7,12 +7,16 @@
         Initialize the GitHub module configuration.
 
         .EXAMPLE
+        ```pwsh
         Initialize-GitHubConfig
+        ```
 
         Initializes the GitHub module configuration.
 
         .EXAMPLE
+        ```pwsh
         Initialize-GitHubConfig -Force
+        ```
 
         Forces the initialization of the GitHub module configuration.
     #>

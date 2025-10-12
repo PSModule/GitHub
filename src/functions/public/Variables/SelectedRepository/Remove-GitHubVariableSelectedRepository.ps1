@@ -1,4 +1,4 @@
-﻿function Remove-GitHubVariableSelectedRepository {
+function Remove-GitHubVariableSelectedRepository {
     <#
         .SYNOPSIS
         Remove selected repository from an organization variable.
@@ -16,7 +16,9 @@
         'Metadata' repository permissions (read).
 
         .EXAMPLE
+        ```pwsh
         Remove-GitHubVariableSelectedRepository -Owner 'my-org' -Name 'ENV_SECRET' -RepositoryID 123456
+        ```
 
         Removes repository with ID 123456 from the organization variable 'ENV_SECRET' in 'my-org'.
 

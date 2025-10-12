@@ -1,4 +1,4 @@
-﻿function Get-GitHubTeam {
+function Get-GitHubTeam {
     <#
         .SYNOPSIS
         List teams from an org or get a team by name
@@ -9,17 +9,23 @@
         and replaces spaces with a - separator. For example, "My TEam Näme" would become my-team-name.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubTeam -Organization 'GitHub'
+        ```
 
         Gets all teams in the `github` organization.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubTeam -Organization 'github' -Slug 'my-team-name'
+        ```
 
         Gets the team with the slug 'my-team-name' in the `github` organization.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubTeam -Organization 'github' -Repository 'my-repo'
+        ```
 
         Lists all teams that have access to the 'my-repo' repository owned by `github`.
 

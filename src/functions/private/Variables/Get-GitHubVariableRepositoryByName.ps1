@@ -1,4 +1,4 @@
-﻿function Get-GitHubVariableRepositoryByName {
+function Get-GitHubVariableRepositoryByName {
     <#
         .SYNOPSIS
         Get a repository variable
@@ -9,10 +9,12 @@
         OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubVariableRepositoryByName -Owner 'PSModule' -Repository 'Hello-World' -Name 'EMAIL' -Context (Get-GitHubContext)
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         Name                 : EMAIL
         Value                : John.Doe@example.com
         Owner                : octocat

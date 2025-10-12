@@ -1,4 +1,4 @@
-﻿function Get-GitHubConfig {
+function Get-GitHubConfig {
     <#
         .SYNOPSIS
         Get a GitHub module configuration.
@@ -7,7 +7,9 @@
         Get a GitHub module configuration.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubConfig -Name DefaultContext
+        ```
 
         Get the DefaultContext value from the GitHub module configuration.
 

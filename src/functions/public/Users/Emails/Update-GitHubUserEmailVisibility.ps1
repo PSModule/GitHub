@@ -1,4 +1,4 @@
-﻿filter Update-GitHubUserEmailVisibility {
+filter Update-GitHubUserEmailVisibility {
     <#
         .SYNOPSIS
         Set primary email visibility for the authenticated user
@@ -7,12 +7,16 @@
         Sets the visibility for your primary email addresses.
 
         .EXAMPLE
+        ```pwsh
         Set-GitHubUserEmailVisibility -Visibility Public
+        ```
 
         Sets the visibility for your primary email addresses to public.
 
         .EXAMPLE
+        ```pwsh
         Set-GitHubUserEmailVisibility -Visibility Private
+        ```
 
         Sets the visibility for your primary email addresses to private.
 

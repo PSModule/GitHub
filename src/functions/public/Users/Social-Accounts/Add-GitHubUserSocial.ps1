@@ -1,4 +1,4 @@
-﻿filter Add-GitHubUserSocial {
+filter Add-GitHubUserSocial {
     <#
         .SYNOPSIS
         Add social accounts for the authenticated user
@@ -8,7 +8,9 @@
 
         .EXAMPLE
         ```pwsh
+        ```pwsh
         Add-GitHubUserSocial -AccountUrls 'https://twitter.com/MyTwitterAccount', 'https://www.linkedin.com/company/MyCompany'
+        ```
         ```
 
         Adds the Twitter and LinkedIn accounts to the authenticated user's profile.

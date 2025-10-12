@@ -1,4 +1,4 @@
-﻿function Request-GitHubAccessToken {
+function Request-GitHubAccessToken {
     <#
         .SYNOPSIS
         Request a GitHub token using the Device Flow.
@@ -8,7 +8,9 @@
         This will poll the GitHub API until the user has entered the code.
 
         .EXAMPLE
+        ```pwsh
         Request-GitHubAccessToken -DeviceCode $deviceCode -ClientID $ClientID -HostName 'github.com'
+        ```
 
         This will poll the GitHub API until the user has entered the code.
 

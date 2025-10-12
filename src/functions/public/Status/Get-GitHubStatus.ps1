@@ -1,4 +1,4 @@
-﻿function Get-GitHubStatus {
+function Get-GitHubStatus {
     <#
         .SYNOPSIS
         Gets the status of GitHub services
@@ -11,12 +11,16 @@
         and "Major Service Outage".
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubStatus
+        ```
 
         Gets the status of GitHub services
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubStatus -Summary
+        ```
 
         Gets a summary of the status page, including a status indicator, component statuses, unresolved incidents,
         and any upcoming or in-progress scheduled maintenances.

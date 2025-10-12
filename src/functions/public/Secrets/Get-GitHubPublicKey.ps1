@@ -1,4 +1,4 @@
-﻿function Get-GitHubPublicKey {
+function Get-GitHubPublicKey {
     <#
         .SYNOPSIS
         Gets a public key.
@@ -7,17 +7,23 @@
         Gets your public key, which you need to encrypt secrets.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubPublicKey
+        ```
 
         Gets a public key for the authenticated user.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubPublicKey -Organization 'octocat'
+        ```
 
         Gets a public key for the 'octocat' organization.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubPublicKey -Owner 'octocat' -Repository 'hello-world' -Type 'codespaces'
+        ```
 
         Gets a public key for the 'hello-world' repository in the 'octocat' organization for codespaces.
 

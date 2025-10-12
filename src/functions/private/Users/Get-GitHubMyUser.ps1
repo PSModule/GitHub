@@ -1,4 +1,4 @@
-﻿filter Get-GitHubMyUser {
+filter Get-GitHubMyUser {
     <#
         .SYNOPSIS
         Get the authenticated user
@@ -10,7 +10,9 @@
         profile information.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubMyUser
+        ```
 
         Get the authenticated user
 

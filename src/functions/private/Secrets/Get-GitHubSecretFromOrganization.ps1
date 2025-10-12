@@ -1,4 +1,4 @@
-﻿function Get-GitHubSecretFromOrganization {
+function Get-GitHubSecretFromOrganization {
     <#
         .SYNOPSIS
         List repository organization secrets.
@@ -9,10 +9,12 @@
         this endpoint.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubSecretFromOrganization -Owner 'octocat' -Repository 'helloworld' -Context (Get-GitHubContext)
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         Name                 : SECRET1
         Owner                : octocat
         Repository           :

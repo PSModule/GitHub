@@ -1,4 +1,4 @@
-﻿filter Get-GitHubBlockedUserByUser {
+filter Get-GitHubBlockedUserByUser {
     <#
         .SYNOPSIS
         List users blocked by the authenticated user
@@ -7,7 +7,9 @@
         List the users you've blocked on your personal account.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubBlockedUserByUser
+        ```
 
         Returns a list of users blocked by the authenticated user.
 

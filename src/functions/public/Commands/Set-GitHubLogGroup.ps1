@@ -1,4 +1,4 @@
-﻿function Set-GitHubLogGroup {
+function Set-GitHubLogGroup {
     <#
         .SYNOPSIS
         Encapsulates commands with a log group in GitHub Actions
@@ -8,16 +8,20 @@
         Allows for colapsing of code in IDE for code that belong together.
 
         .EXAMPLE
+        ```pwsh
         Set-GitHubLogGroup -Name 'MyGroup' -ScriptBlock {
             Write-Host 'Hello, World!'
         }
+        ```
 
         Creates a new log group named 'MyGroup' and writes 'Hello, World!' to the output.
 
         .EXAMPLE
+        ```pwsh
         LogGroup 'MyGroup' {
             Write-Host 'Hello, World!'
         }
+        ```
 
         Uses the alias 'LogGroup' to create a new log group named 'MyGroup' and writes 'Hello, World!' to the output.
 

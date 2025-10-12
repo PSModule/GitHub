@@ -1,4 +1,4 @@
-﻿filter Get-GitHubReleaseAssetByReleaseID {
+filter Get-GitHubReleaseAssetByReleaseID {
     <#
         .SYNOPSIS
         List release assets
@@ -7,12 +7,16 @@
         List release assets
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubReleaseAssetByReleaseID -Owner 'octocat' -Repository 'hello-world' -ID '1234567'
+        ```
 
         Gets the release assets for the release with the ID '1234567' for the repository 'octocat/hello-world'.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubReleaseAssetByReleaseID -Owner 'octocat' -Repository 'hello-world' -ID '1234567' -Name 'example.zip'
+        ```
 
         Gets only the release asset named 'example.zip' for the release with the ID '1234567'.
 

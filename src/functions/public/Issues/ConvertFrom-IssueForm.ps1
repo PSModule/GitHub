@@ -1,4 +1,4 @@
-﻿function ConvertFrom-IssueForm {
+function ConvertFrom-IssueForm {
     <#
         .SYNOPSIS
         Converts the issue form content into a hashtable or object.
@@ -8,10 +8,12 @@
         Section titles become keys and their content becomes values.
 
         .EXAMPLE
+        ```pwsh
         @'
         ### Section 1
         Content 1
         Content 2
+        ```
 
         ### Section 2
         - [ ] Item 1

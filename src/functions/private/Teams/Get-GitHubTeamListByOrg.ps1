@@ -1,4 +1,4 @@
-﻿function Get-GitHubTeamListByOrg {
+function Get-GitHubTeamListByOrg {
     <#
         .SYNOPSIS
         List teams
@@ -7,7 +7,9 @@
         Lists all teams in an organization that are visible to the authenticated user.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubTeamListByOrg -Organization 'github'
+        ```
 
         .OUTPUTS
         GitHubTeam[]

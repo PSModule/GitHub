@@ -1,4 +1,4 @@
-﻿filter Unblock-GitHubUserByUser {
+filter Unblock-GitHubUserByUser {
     <#
         .SYNOPSIS
         Unblock a user
@@ -7,7 +7,9 @@
         Unblocks the given user and returns a 204.
 
         .EXAMPLE
+        ```pwsh
         Unblock-GitHubUserByUser -Username 'octocat'
+        ```
 
         Unblocks the user 'octocat' for the authenticated user.
         Returns $true if successful.

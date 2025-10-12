@@ -1,4 +1,4 @@
-﻿filter Assert-GitHubContext {
+filter Assert-GitHubContext {
     <#
         .SYNOPSIS
         Check if the context meets the requirements for the command.
@@ -8,7 +8,9 @@
         If the context does not meet the requirements, an error is thrown.
 
         .EXAMPLE
+        ```pwsh
         Assert-GitHubContext -Context 'github.com/Octocat' -AuthType 'App'
+        ```
     #>
     [OutputType([void])]
     [CmdletBinding()]

@@ -1,4 +1,4 @@
-﻿function Get-GitHubScheduledMaintenance {
+function Get-GitHubScheduledMaintenance {
     <#
         .SYNOPSIS
         Gets the status of GitHub scheduled maintenance
@@ -13,18 +13,24 @@
         Impact: None (black), Minor (yellow), Major (orange), or Critical (red)
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubScheduledMaintenance
+        ```
 
         Get a list of the 50 most recent scheduled maintenances.
         This includes scheduled maintenances as described in the above two endpoints, as well as those in the Completed state.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubScheduledMaintenance -Active
+        ```
 
         Get a list of any active maintenances.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubScheduledMaintenance -Upcoming
+        ```
 
         Get a list of any upcoming maintenances.
 

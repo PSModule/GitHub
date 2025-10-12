@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryRuleSuiteById {
+filter Get-GitHubRepositoryRuleSuiteById {
     <#
         .SYNOPSIS
         Get a repository rule suite
@@ -8,7 +8,9 @@
         For more information, see "[Managing rulesets for a repository](https://docs.github.com/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/managing-rulesets-for-a-repository#viewing-insights-for-rulesets)."
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubRepositoryRuleSuiteById -Owner 'octocat' -Repository 'hello-world' -RuleSuiteId 123456789
+        ```
 
         Gets information about a suite of rule evaluations with ID 123456789 from within the octocat/hello-world repository.
 

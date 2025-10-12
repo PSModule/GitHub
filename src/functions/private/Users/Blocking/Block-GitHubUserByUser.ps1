@@ -1,4 +1,4 @@
-﻿filter Block-GitHubUserByUser {
+filter Block-GitHubUserByUser {
     <#
         .SYNOPSIS
         Block a user
@@ -7,7 +7,9 @@
         Blocks the given user and returns a 204. If the authenticated user cannot block the given user a 422 is returned.
 
         .EXAMPLE
+        ```pwsh
         Block-GitHubUserByUser -Username 'octocat'
+        ```
 
         Blocks the user 'octocat' for the authenticated user.
         Returns $true if successful, $false if not.

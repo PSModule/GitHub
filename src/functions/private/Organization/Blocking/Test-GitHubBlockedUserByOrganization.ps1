@@ -1,4 +1,4 @@
-﻿filter Test-GitHubBlockedUserByOrganization {
+filter Test-GitHubBlockedUserByOrganization {
     <#
         .SYNOPSIS
         Check if a user is blocked by an organization
@@ -8,7 +8,9 @@
         Returns a 404 if the organization is not blocking the user, or if the user account has been identified as spam by GitHub.
 
         .EXAMPLE
+        ```pwsh
         Test-GitHubBlockedUserByOrganization -Organization 'PSModule' -Username 'octocat'
+        ```
 
         Checks if the user `octocat` is blocked by the organization `PSModule`.
         Returns true if the user is blocked, false if not.

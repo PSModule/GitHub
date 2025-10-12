@@ -1,4 +1,4 @@
-﻿filter Get-GitHubUserPublicEmail {
+filter Get-GitHubUserPublicEmail {
     <#
         .SYNOPSIS
         List public email addresses for the authenticated user
@@ -9,7 +9,9 @@
         endpoint. This endpoint is accessible with the `user:email` scope.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubUserPublicEmail
+        ```
 
         Gets all public email addresses for the authenticated user.
 

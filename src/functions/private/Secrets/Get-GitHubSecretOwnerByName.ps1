@@ -1,4 +1,4 @@
-﻿function Get-GitHubSecretOwnerByName {
+function Get-GitHubSecretOwnerByName {
     <#
         .SYNOPSIS
         Create or update an organization secret.
@@ -12,10 +12,12 @@
         the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubSecretOwnerByName -Owner 'octocat' -Name 'SECRET_THING' -Context (Get-GitHubContext)
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         Name                 : SECRET_THING
         Owner                : octocat
         Repository           :

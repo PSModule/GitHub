@@ -1,4 +1,4 @@
-﻿filter Get-GitHubReleaseAssetByID {
+filter Get-GitHubReleaseAssetByID {
     <#
         .SYNOPSIS
         Get a release asset by ID
@@ -10,7 +10,9 @@
         possible. API clients should handle both a `200` or `302` response.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubReleaseAssetByID -Owner 'octocat' -Repository 'hello-world' -ID '1234567'
+        ```
 
         Gets the release asset with the ID '1234567' for the repository 'octocat/hello-world'.
 

@@ -1,4 +1,4 @@
-﻿filter Get-GitHubOrganization {
+filter Get-GitHubOrganization {
     <#
         .SYNOPSIS
         List organization
@@ -10,27 +10,37 @@
         Get an organization - if a organization name is provided.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubOrganization
+        ```
 
         List all organizations for the authenticated user.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubOrganization -Username 'octocat'
+        ```
 
         List public organizations for a specific user.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubOrganization -All -Since 142951047
+        ```
 
         List all organizations made after an ID.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubOrganization -Name 'PSModule'
+        ```
 
         Get a specific organization.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubOrganization -Enterprise 'msx'
+        ```
 
         Get the organizations belonging to an Enterprise.
 

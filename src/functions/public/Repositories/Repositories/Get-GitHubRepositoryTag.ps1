@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryTag {
+filter Get-GitHubRepositoryTag {
     <#
         .SYNOPSIS
         List repository tags
@@ -7,7 +7,9 @@
         List repository tags
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubRepositoryTag -Owner 'PSModule' -Name 'GitHub'
+        ```
 
         Gets all tags of the GitHub repository.
 

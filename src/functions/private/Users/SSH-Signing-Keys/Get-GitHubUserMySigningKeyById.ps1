@@ -1,4 +1,4 @@
-﻿filter Get-GitHubUserMySigningKeyById {
+filter Get-GitHubUserMySigningKeyById {
     <#
         .SYNOPSIS
         Get an SSH signing key for the authenticated user
@@ -10,7 +10,9 @@
         "[Understanding scopes for OAuth apps](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/)."
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubUserMySigningKeyById -ID '1234567'
+        ```
 
         Gets the SSH signing key with the ID '1234567' for the authenticated user.
 

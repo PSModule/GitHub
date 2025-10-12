@@ -1,4 +1,4 @@
-﻿function Remove-GitHubVariableFromOwner {
+function Remove-GitHubVariableFromOwner {
     <#
         .SYNOPSIS
         Delete an organization variable.
@@ -10,7 +10,9 @@
         OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        ```pwsh
         Remove-GitHubVariableFromOwner -Owner 'octocat' -Name 'HOST_NAME' -Context $GitHubContext
+        ```
 
         Deletes the specified variable from the specified organization.
 

@@ -1,4 +1,4 @@
-﻿filter Get-GitHubAppAsAuthenticatedApp {
+filter Get-GitHubAppAsAuthenticatedApp {
     <#
         .SYNOPSIS
         Get the authenticated app
@@ -13,7 +13,9 @@
         to access this endpoint.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubAppAsAuthenticatedApp
+        ```
 
         Get the authenticated app.
 

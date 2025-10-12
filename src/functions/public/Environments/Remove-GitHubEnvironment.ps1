@@ -8,7 +8,9 @@ filter Remove-GitHubEnvironment {
         The function supports ShouldProcess for confirmation before execution.
 
         .EXAMPLE
+        ```pwsh
         Remove-GitHubEnvironment -Owner 'PSModule' -Repository 'GitHub' -Name 'Production'
+        ```
 
         Deletes the 'Production' environment from the 'PSModule/GitHub' repository.
 

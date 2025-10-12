@@ -1,4 +1,4 @@
-﻿function Test-GitHubWebhookSignature {
+function Test-GitHubWebhookSignature {
     <#
         .SYNOPSIS
         Verifies a GitHub webhook signature using a shared secret.
@@ -10,20 +10,24 @@
         timing attacks. The function returns a boolean indicating whether the signature is valid.
 
         .EXAMPLE
+        ```pwsh
         Test-GitHubWebhookSignature -Secret $env:WEBHOOK_SECRET -Body $Request.RawBody -Signature $Request.Headers['X-Hub-Signature-256']
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         True
         ```
 
         Validates the provided webhook payload against the HMAC SHA-256 signature using the given secret.
 
         .EXAMPLE
+        ```pwsh
         Test-GitHubWebhookSignature -Secret $env:WEBHOOK_SECRET -Request $Request
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         True
         ```
 

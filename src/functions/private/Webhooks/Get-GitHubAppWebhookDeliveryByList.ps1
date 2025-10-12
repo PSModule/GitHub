@@ -1,4 +1,4 @@
-﻿function Get-GitHubAppWebhookDeliveryByList {
+function Get-GitHubAppWebhookDeliveryByList {
     <#
         .SYNOPSIS
         List deliveries for an app webhook
@@ -10,7 +10,9 @@
         to access this endpoint.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubAppWebhookDeliveryByList
+        ```
 
         Returns the webhook configuration for the authenticated app.
 

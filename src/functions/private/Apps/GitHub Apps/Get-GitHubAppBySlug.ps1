@@ -1,4 +1,4 @@
-﻿function Get-GitHubAppBySlug {
+function Get-GitHubAppBySlug {
     <#
         .SYNOPSIS
         Get an app
@@ -7,7 +7,9 @@
         Gets a single GitHub App using the app's slug.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubAppByName -AppSlug 'github-actions'
+        ```
 
         Gets the GitHub App with the slug 'github-actions'.
 

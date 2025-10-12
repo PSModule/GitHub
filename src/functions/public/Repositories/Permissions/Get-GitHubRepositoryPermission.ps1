@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryPermission {
+filter Get-GitHubRepositoryPermission {
     <#
         .SYNOPSIS
         Get the permission level for a team on a repository.
@@ -7,16 +7,20 @@
         Retrieves the permission level assigned to a specific team for a given GitHub repository.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubRepositoryPermission -Owner 'octocat' -Name 'Hello-World' -Team 'core'
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         Admin
         ```
 
         Retrieves the permission of the 'core' team on the 'Hello-World' repository owned by 'octocat'.
 
         .EXAMPLE
+        ```pwsh
+        ```
 
 
         .INPUTS

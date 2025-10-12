@@ -1,4 +1,4 @@
-﻿filter Move-GitHubRepository {
+filter Move-GitHubRepository {
     <#
         .SYNOPSIS
         Transfer a repository
@@ -12,7 +12,9 @@
         a fine-grained personal access token cannot be used because they are only granted access to a single account.
 
         .EXAMPLE
+        ```pwsh
         Move-GitHubRepository -Owner 'PSModule' -Name 'GitHub' -NewOwner 'GitHub' -NewName 'PowerShell'
+        ```
 
         Moves the GitHub repository to the PSModule organization and renames it to GitHub.
 

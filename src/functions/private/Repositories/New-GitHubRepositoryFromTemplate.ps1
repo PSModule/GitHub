@@ -1,4 +1,4 @@
-﻿filter New-GitHubRepositoryFromTemplate {
+filter New-GitHubRepositoryFromTemplate {
     <#
         .SYNOPSIS
         Create a repository using a template
@@ -18,6 +18,7 @@
         * `repo` scope to create a private repository
 
         .EXAMPLE
+        ```pwsh
         $params = @{
             TemplateOwner      = 'GitHub'
             TemplateRepository = 'octocat'
@@ -28,6 +29,7 @@
             Private            = $true
         }
         New-GitHubRepositoryFromTemplate @params
+        ```
 
         Creates a new private repository named `MyNewRepo` from the `octocat` template repository owned by `GitHub`.
 

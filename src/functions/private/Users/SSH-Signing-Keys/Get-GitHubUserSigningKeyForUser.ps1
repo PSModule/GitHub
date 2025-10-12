@@ -1,4 +1,4 @@
-﻿filter Get-GitHubUserSigningKeyForUser {
+filter Get-GitHubUserSigningKeyForUser {
     <#
         .SYNOPSIS
         List SSH signing keys for a user
@@ -7,7 +7,9 @@
         List SSH signing keys for a user
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubUserSigningKeyForUser -Username 'octocat'
+        ```
 
         Gets the SSH signing keys for the user 'octocat'.
 

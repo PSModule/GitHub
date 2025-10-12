@@ -1,4 +1,4 @@
-﻿function Write-GitHubError {
+function Write-GitHubError {
     <#
         .SYNOPSIS
         Write a error message in GitHub Actions
@@ -7,7 +7,9 @@
         Write a error message in GitHub Actions. The message will be displayed in the GitHub Actions log.
 
         .EXAMPLE
+        ```pwsh
         Write-GitHubError -Message 'Hello, World!'
+        ```
 
         Writes a error message 'Hello, World!'.
 

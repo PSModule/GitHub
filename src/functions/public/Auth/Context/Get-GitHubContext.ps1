@@ -1,4 +1,4 @@
-﻿function Get-GitHubContext {
+function Get-GitHubContext {
     <#
         .SYNOPSIS
         Get the current GitHub context.
@@ -7,7 +7,9 @@
         Get the current GitHub context.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubContext
+        ```
 
         Gets the current GitHub context.
 

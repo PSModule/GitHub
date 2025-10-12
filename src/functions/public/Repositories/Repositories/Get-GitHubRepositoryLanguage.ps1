@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryLanguage {
+filter Get-GitHubRepositoryLanguage {
     <#
         .SYNOPSIS
         List repository languages
@@ -8,7 +8,9 @@
         bytes of code written in that language.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubRepositoryLanguage -Owner 'octocat' -Name 'hello-world'
+        ```
 
         Gets the languages for the 'hello-world' repository owned by 'octocat'.
 

@@ -1,4 +1,4 @@
-﻿filter Add-GitHubReleaseAsset {
+filter Add-GitHubReleaseAsset {
     <#
         .SYNOPSIS
         Upload a release asset
@@ -37,12 +37,16 @@
         the old file before you can re-upload the new asset.
 
         .EXAMPLE
+        ```pwsh
         Add-GitHubReleaseAsset -Owner 'octocat' -Repository 'hello-world' -ID '7654321' -Path 'C:\Users\octocat\Downloads\hello-world.zip'
+        ```
 
         Gets the release assets for the release with the ID '1234567' for the repository 'octocat/hello-world'.
 
         .EXAMPLE
+        ```pwsh
         Add-GitHubReleaseAsset -Owner 'octocat' -Repository 'hello-world' -ID '7654321' -Path 'C:\Users\octocat\Projects\MyApp'
+        ```
 
         Automatically creates a ZIP file from the contents of the MyApp directory and uploads it as a release asset.
 

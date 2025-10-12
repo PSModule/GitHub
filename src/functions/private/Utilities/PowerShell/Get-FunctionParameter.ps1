@@ -1,4 +1,4 @@
-﻿function Get-FunctionParameter {
+function Get-FunctionParameter {
     <#
         .SYNOPSIS
         Get the parameters and their final value in a function.
@@ -9,17 +9,23 @@
         If a parameter is not provided, it will attempt to retrieve the default value.
 
         .EXAMPLE
+        ```pwsh
         Get-FunctionParameter
+        ```
 
         This will return all the parameters and their final value in the current function.
 
         .EXAMPLE
+        ```pwsh
         Get-FunctionParameter -IncludeCommonParameters
+        ```
 
         This will return all the parameters and their final value in the current function, including common parameters.
 
         .EXAMPLE
+        ```pwsh
         Get-FunctionParameter -Scope 2
+        ```
 
         This will return all the parameters and their final value in the grandparent function.
     #>

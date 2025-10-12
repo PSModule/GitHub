@@ -1,4 +1,4 @@
-﻿filter New-GitHubRepositoryUser {
+filter New-GitHubRepositoryUser {
     <#
         .SYNOPSIS
         Create a repository for the authenticated user
@@ -14,6 +14,7 @@
         * `repo` scope to create a private repository.
 
         .EXAMPLE
+        ```pwsh
         $params = @{
             Name                     = 'Hello-World'
             Description              = 'This is your first repository'
@@ -30,6 +31,7 @@
             SquashMergeCommitMessage = 'PR_BODY'
         }
         New-GitHubRepositoryUser @params
+        ```
 
         Creates a new public repository named "Hello-World" owned by the authenticated user.
 

@@ -1,4 +1,4 @@
-﻿filter Remove-GitHubRepositoryAutolink {
+filter Remove-GitHubRepositoryAutolink {
     <#
         .SYNOPSIS
         Delete an autolink reference from a repository
@@ -9,7 +9,9 @@
         Information about autolinks are only available to repository administrators.
 
         .EXAMPLE
+        ```pwsh
         Remove-GitHubRepositoryAutolink -Owner 'octocat' -Repository 'Hello-World' -AutolinkId 1
+        ```
 
         Deletes the autolink with ID 1 for the repository 'Hello-World' owned by 'octocat'.
 

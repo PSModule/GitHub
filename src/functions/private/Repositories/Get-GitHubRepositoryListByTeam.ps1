@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryListByTeam {
+filter Get-GitHubRepositoryListByTeam {
     <#
         .SYNOPSIS
         List team repositories.
@@ -7,10 +7,12 @@
         Lists a team's repositories visible to the authenticated user.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubRepositoryListByTeam -Owner 'octocat' -Team 'core'
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         ```
 
         Lists all repositories that the 'core' team has access to in the organization owned by 'octocat'.

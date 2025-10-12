@@ -1,4 +1,4 @@
-﻿function Save-GitHubArtifact {
+function Save-GitHubArtifact {
     <#
         .SYNOPSIS
         Downloads a GitHub Actions artifact.
@@ -9,10 +9,12 @@
         personal access tokens (classic) or OAuth tokens with the `repo` scope are required.
 
         .EXAMPLE
+        ```pwsh
         Save-GitHubArtifact -Owner 'octocat' -Repository 'Hello-World' -ID '123456' -Path 'C:\Artifacts'
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         Directory: C:\Artifacts
 
         Mode                 LastWriteTime         Length Name
@@ -23,10 +25,12 @@
         Downloads artifact ID '123456' from the 'Hello-World' repository owned by 'octocat' to the specified path.
 
         .EXAMPLE
+        ```pwsh
         Save-GitHubArtifact -Owner 'octocat' -Repository 'Hello-World' -Name 'module' -Path 'C:\Artifacts\module' -Expand -Force
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         Directory: C:\Artifacts
 
         Mode                 LastWriteTime         Length Name

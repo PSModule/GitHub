@@ -1,4 +1,4 @@
-﻿function Get-GitHubAppInstallationForAuthenticatedAppAsList {
+function Get-GitHubAppInstallationForAuthenticatedAppAsList {
     <#
         .SYNOPSIS
         List installations for the authenticated app.
@@ -10,7 +10,9 @@
         to access this endpoint.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubAppInstallationForAuthenticatedAppAsList
+        ```
 
         List installations for the authenticated app.
 

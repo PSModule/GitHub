@@ -1,4 +1,4 @@
-﻿function Write-GitHubWarning {
+function Write-GitHubWarning {
     <#
         .SYNOPSIS
         Write a warning message in GitHub Actions
@@ -7,7 +7,9 @@
         Write a warning message in GitHub Actions. The message will be displayed in the GitHub Actions log.
 
         .EXAMPLE
+        ```pwsh
         Write-GitHubWarning -Message 'Hello, World!'
+        ```
 
         Writes a warning message 'Hello, World!'.
 

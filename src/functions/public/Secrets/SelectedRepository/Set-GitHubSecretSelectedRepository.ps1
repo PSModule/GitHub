@@ -1,4 +1,4 @@
-﻿function Set-GitHubSecretSelectedRepository {
+function Set-GitHubSecretSelectedRepository {
     <#
         .SYNOPSIS
         Set selected repositories for an organization secret.
@@ -10,7 +10,9 @@
         tokens (classic) need the `admin:org` scope to use this endpoint. If the repository is private, the `repo` scope is also required.
 
         .EXAMPLE
+        ```pwsh
         Set-GitHubSecretSelectedRepository -Owner 'octocat' -Name 'mysecret' -RepositoryID 1234567890
+        ```
 
         Sets the selected repositories for the secret `mysecret` in the organization `octocat` to the repository with ID `1234567890`.
 

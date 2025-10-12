@@ -1,4 +1,4 @@
-﻿filter New-GitHubRepositoryAutolink {
+filter New-GitHubRepositoryAutolink {
     <#
         .SYNOPSIS
         Create an autolink reference for a repository
@@ -7,7 +7,9 @@
         Users with admin access to the repository can create an autolink.
 
         .EXAMPLE
+        ```pwsh
         New-GitHubRepositoryAutolink -Owner 'octocat' -Repository 'Hello-World' -KeyPrefix 'GH-' -UrlTemplate 'https://www.example.com/issue/<num>'
+        ```
 
         Creates an autolink for the repository 'Hello-World' owned by 'octocat' that links to <https://www.example.com/issue/123>
         when the prefix 'GH-' is found in an issue, pull request, or commit.

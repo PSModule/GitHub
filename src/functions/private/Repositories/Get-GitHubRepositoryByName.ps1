@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryByName {
+filter Get-GitHubRepositoryByName {
     <#
         .SYNOPSIS
         Get a repository
@@ -11,7 +11,9 @@
         For more information, see "[Managing security managers in your organization](https://docs.github.com/organizations/managing-peoples-access-to-your-organization-with-roles/managing-security-managers-in-your-organization)."
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubRepositoryByName -Owner 'octocat' -Name 'Hello-World'
+        ```
 
         Gets the repository 'Hello-World' for the organization 'octocat'.
 

@@ -7,7 +7,9 @@ filter Remove-GitHubReleaseAsset {
         Delete a release asset
 
         .EXAMPLE
+        ```pwsh
         Remove-GitHubReleaseAsset -Owner 'octocat' -Repository 'hello-world' -ID '1234567'
+        ```
 
         Deletes the release asset with the ID '1234567' for the repository 'octocat/hello-world'.
 

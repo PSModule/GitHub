@@ -1,4 +1,4 @@
-﻿function Get-GitHubAppWebhookDeliveryToRedeliver {
+function Get-GitHubAppWebhookDeliveryToRedeliver {
     <#
         .SYNOPSIS
         Short description
@@ -7,7 +7,9 @@
         Long description
 
         .EXAMPLE
+        ```pwsh
         An example
+        ```
 
         .NOTES
         [Ttle](link)

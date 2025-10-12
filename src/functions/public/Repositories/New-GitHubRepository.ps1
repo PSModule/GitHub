@@ -1,4 +1,4 @@
-﻿filter New-GitHubRepository {
+filter New-GitHubRepository {
     <#
         .SYNOPSIS
         Create a repository for a user or an organization.
@@ -14,6 +14,7 @@
         * `repo` scope to create a private repository
 
         .EXAMPLE
+        ```pwsh
         $params = @{
             Name                     = 'Hello-World'
             Description              = 'This is your first repository'
@@ -31,10 +32,12 @@
             SquashMergeCommitMessage = 'PR_BODY'
         }
         New-GitHubRepository @params
+        ```
 
         Creates a new public repository named "Hello-World" owned by the authenticated user.
 
         .EXAMPLE
+        ```pwsh
         $params = @{
             Organization             = 'PSModule'
             Name                     = 'Hello-World'
@@ -52,10 +55,12 @@
             SquashMergeCommitMessage = 'PR_BODY'
         }
         New-GitHubRepository @params
+        ```
 
         Creates a new public repository named "Hello-World" owned by the organization "PSModule".
 
         .EXAMPLE
+        ```pwsh
         $params = @{
             TemplateOwner      = 'GitHub'
             TemplateRepository = 'octocat'
@@ -66,10 +71,12 @@
             Visibility         = 'Private'
         }
         New-GitHubRepository @params
+        ```
 
         Creates a new private repository named `MyNewRepo` from the `octocat` template repository owned by `GitHub`.
 
         .EXAMPLE
+        ```pwsh
         $params = @{
             ForkOwner         = 'octocat'
             ForkRepo          = 'Hello-World'
@@ -78,6 +85,7 @@
             DefaultBranchOnly = $true
         }
         New-GitHubRepository @params
+        ```
 
         Creates a new repository named `MyNewRepo` as a fork of `Hello-World` owned by `octocat`.
         Only the default branch will be forked.

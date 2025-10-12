@@ -1,4 +1,4 @@
-﻿filter Get-GitHubEnvironmentList {
+filter Get-GitHubEnvironmentList {
     <#
         .SYNOPSIS
         Lists the environments for a repository.
@@ -10,7 +10,9 @@
         to use this endpoint with a private repository.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubEnvironmentList -Owner 'PSModule' -Repository 'EnvironmentTest'
+        ```
 
         Output:
         ```pwsh

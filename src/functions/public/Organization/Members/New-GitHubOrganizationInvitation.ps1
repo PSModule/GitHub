@@ -1,4 +1,4 @@
-﻿function New-GitHubOrganizationInvitation {
+function New-GitHubOrganizationInvitation {
     <#
         .SYNOPSIS
         Create an organization invitation
@@ -14,14 +14,18 @@
 
         .EXAMPLE
         ```pwsh
+        ```pwsh
         New-GitHubOrganizationInvitation -Organization 'PSModule' -InviteeID 123456789 -Role 'admin'
+        ```
         ```
 
         Invites the user with the ID `12345679` to the organization `PSModule` with the role `admin`.
 
         .EXAMPLE
         ```pwsh
+        ```pwsh
         New-GitHubOrganizationInvitation -Organization 'PSModule' -Email 'user@psmodule.io'
+        ```
         ```
 
         Invites the user with the email `user@psmodule.io` to the organization `PSModule`.

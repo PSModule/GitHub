@@ -1,4 +1,4 @@
-﻿function Request-GitHubDeviceCode {
+function Request-GitHubDeviceCode {
     <#
         .SYNOPSIS
         Request a GitHub Device Code.
@@ -7,7 +7,9 @@
         Request a GitHub Device Code.
 
         .EXAMPLE
+        ```pwsh
         Request-GitHubDeviceCode -ClientID $ClientID -Mode $Mode -HostName 'github.com'
+        ```
 
         This will request a GitHub Device Code.
 

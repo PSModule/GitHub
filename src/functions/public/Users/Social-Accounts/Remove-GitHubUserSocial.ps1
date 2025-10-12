@@ -1,4 +1,4 @@
-﻿filter Remove-GitHubUserSocial {
+filter Remove-GitHubUserSocial {
     <#
         .SYNOPSIS
         Delete social accounts for the authenticated user
@@ -8,7 +8,9 @@
 
         .EXAMPLE
         ```pwsh
+        ```pwsh
         Remove-GitHubUserSocial -AccountUrls 'https://twitter.com/MyTwitterAccount'
+        ```
         ```
 
         .NOTES

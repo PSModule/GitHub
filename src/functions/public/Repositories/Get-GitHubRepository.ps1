@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepository {
+filter Get-GitHubRepository {
     <#
         .SYNOPSIS
         Gets a specific repository or list of repositories.
@@ -11,27 +11,37 @@
         Can also be used with the name parameter to get a specific repository.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubRepository
+        ```
 
         Gets the repositories for the authenticated user.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubRepository -Username 'octocat'
+        ```
 
         Gets the repositories for the specified user.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubRepository -Organization 'github' -Name 'octocat'
+        ```
 
         Gets the specified repository.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubRepository -Organization 'github' -Team 'my-team'
+        ```
 
         Gets repositories that the 'my-team' team has access to in the `github` organization.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubRepository -Organization 'github' -Name 'octocat' -Team 'my-team'
+        ```
 
         Gets the repository and permission for the `my-team` team on the `octocat` repository in the `github` organization.
 

@@ -1,4 +1,4 @@
-﻿filter Block-GitHubUserByOrganization {
+filter Block-GitHubUserByOrganization {
     <#
         .SYNOPSIS
         Block a user from an organization
@@ -8,7 +8,9 @@
         If the organization cannot block the given user a 422 is returned.
 
         .EXAMPLE
+        ```pwsh
         Block-GitHubUserByOrganization -Organization 'github' -Username 'octocat'
+        ```
 
         Blocks the user 'octocat' from the organization 'github'.
         Returns $true if successful, $false if not.

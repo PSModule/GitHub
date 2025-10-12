@@ -1,4 +1,4 @@
-﻿filter Get-GitHubMyRepositoryByName {
+filter Get-GitHubMyRepositoryByName {
     <#
         .SYNOPSIS
         List repositories for the authenticated user.
@@ -9,7 +9,9 @@
         they are a collaborator, and repositories that they can access through an organization membership.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubMyRepositoryByName
+        ```
 
         Gets the repositories for the authenticated user.
 

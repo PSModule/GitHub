@@ -1,4 +1,4 @@
-﻿function Write-GitHubLog {
+function Write-GitHubLog {
     <#
         .SYNOPSIS
         Write a colored message in GitHub Actions or locally
@@ -9,17 +9,23 @@
         When not running in GitHub Actions, uses standard Write-Host.
 
         .EXAMPLE
+        ```pwsh
         Write-GitHubLog -Message 'Hello, World!'
+        ```
 
         Writes 'Hello, World!' to the log.
 
         .EXAMPLE
+        ```pwsh
         Write-GitHubLog -Message 'Error occurred!' -ForegroundColor Red
+        ```
 
         Writes 'Error occurred!' in red text.
 
         .EXAMPLE
+        ```pwsh
         Write-GitHubLog -Message 'Success!' -ForegroundColor Green -BackgroundColor Black
+        ```
 
         Writes 'Success!' in green text on a black background.
 

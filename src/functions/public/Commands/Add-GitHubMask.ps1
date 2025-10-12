@@ -1,4 +1,4 @@
-﻿filter Add-GitHubMask {
+filter Add-GitHubMask {
     <#
         .SYNOPSIS
         Masks a value in a log
@@ -10,12 +10,16 @@
         set that value as an output.
 
         .EXAMPLE
+        ```pwsh
         Add-Mask $SecretValue
+        ```
 
         Masks the value of $SecretValue so that its printed like ***.
 
         .EXAMPLE
+        ```pwsh
         $SecretValue1, $SecretValue2 | Mask
+        ```
 
         Masks the value of $SecretValue1 and $SecretValue2 so that its printed like ***, using the pipeline
 

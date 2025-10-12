@@ -10,7 +10,9 @@ filter Remove-GitHubUserSigningKey {
         "[Understanding scopes for OAuth apps](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/)."
 
         .EXAMPLE
+        ```pwsh
         Remove-GitHubUserSigningKey -ID '1234567'
+        ```
 
         Removes the SSH signing key with the ID of `1234567` from the authenticated user's GitHub account.
 

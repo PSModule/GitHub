@@ -1,4 +1,4 @@
-﻿filter Get-GitHubUserKey {
+filter Get-GitHubUserKey {
     <#
         .SYNOPSIS
         List public SSH keys for a given user or the authenticated user.
@@ -10,17 +10,23 @@
         Keys from a given user are accessible by anyone.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubUserKey
+        ```
 
         Gets all GPG keys for the authenticated user.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubUserKey -ID '1234567'
+        ```
 
         Gets the public SSH key with the ID '1234567' for the authenticated user.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubUserKey -Username 'octocat'
+        ```
 
         Gets all GPG keys for the 'octocat' user.
 

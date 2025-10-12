@@ -1,4 +1,4 @@
-﻿filter Get-GitHubUserKeyForUser {
+filter Get-GitHubUserKeyForUser {
     <#
         .SYNOPSIS
         List public SSH keys for a user
@@ -7,7 +7,9 @@
         Lists the _verified_ public SSH keys for a user. This is accessible by anyone.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubUserKeyForUser -Username 'octocat'
+        ```
 
         Gets all public SSH keys for the 'octocat' user.
 

@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositorySecurityFix {
+filter Get-GitHubRepositorySecurityFix {
     <#
         .SYNOPSIS
         Check if automated security fixes are enabled for a repository
@@ -9,7 +9,9 @@
         "[Configuring automated security fixes](https://docs.github.com/articles/configuring-automated-security-fixes)".
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubRepositorySecurityFix -Owner 'PSModule' -Name 'GitHub'
+        ```
 
         Gets the automated security fixes status for the GitHub repository.
 

@@ -1,4 +1,4 @@
-﻿filter Get-GitHubReleaseAssetFromLatest {
+filter Get-GitHubReleaseAssetFromLatest {
     <#
         .SYNOPSIS
         Get the assets of the latest release
@@ -9,12 +9,16 @@
         The `created_at` attribute is the date of the commit used for the release, and not the date when the release was drafted or published.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubReleaseAssetFromLatest -Owner 'octocat' -Repository 'hello-world'
+        ```
 
         Gets the assets for the latest release of the repository 'hello-world' owned by 'octocat'.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubReleaseAssetFromLatest -Owner 'octocat' -Repository 'hello-world' -Name 'asset-name'
+        ```
 
         Gets the assets for the latest release of the repository 'hello-world' owned by 'octocat'.
 

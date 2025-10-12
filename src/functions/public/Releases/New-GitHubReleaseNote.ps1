@@ -1,4 +1,4 @@
-﻿filter New-GitHubReleaseNote {
+filter New-GitHubReleaseNote {
     <#
         .SYNOPSIS
         Generate release notes content for a release.
@@ -9,18 +9,21 @@
         The generated release notes are not saved anywhere. They are intended to be generated and used when creating a new release.
 
         .EXAMPLE
+        ```pwsh
         $params = @{
             Owner = 'octocat'
             Repository = 'hello-world'
             Tag = 'v1.0.0'
         }
         New-GitHubReleaseNote @params
+        ```
 
         Creates a new release notes draft for the repository 'hello-world' owned by 'octocat' with the tag name 'v1.0.0'.
         In this example the tag 'v1.0.0' has to exist in the repository.
         The configuration file '.github/release.yml' or '.github/release.yaml' will be used.
 
         .EXAMPLE
+        ```pwsh
         $params = @{
             Owner = 'octocat'
             Repository = 'hello-world'
@@ -28,11 +31,13 @@
             Target = 'main'
         }
         New-GitHubReleaseNote @params
+        ```
 
         Creates a new release notes draft for the repository 'hello-world' owned by 'octocat' with the tag name 'v1.0.0'.
         In this example the tag 'v1.0.0' has to exist in the repository.
 
         .EXAMPLE
+        ```pwsh
         $params = @{
             Owner = 'octocat'
             Repository = 'hello-world'
@@ -42,6 +47,7 @@
             ConfigurationFilePath = '.github/custom_release_config.yml'
         }
         New-GitHubReleaseNote @params
+        ```
 
         Creates a new release notes draft for the repository 'hello-world' owned by 'octocat' with the tag name 'v1.0.0'.
         The release notes will be based on the changes between the tags 'v0.9.2' and 'v1.0.0' and generated based on the

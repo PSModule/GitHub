@@ -1,4 +1,4 @@
-﻿filter Start-GitHubRepositoryEvent {
+filter Start-GitHubRepositoryEvent {
     <#
         .SYNOPSIS
         Create a repository dispatch event
@@ -25,6 +25,7 @@
         This input example shows how you can use the `client_payload` as a test to debug your workflow.
 
         .EXAMPLE
+        ```pwsh
         $params = @{
             EventType = 'on-demand-test'
             ClientPayload = @{
@@ -33,6 +34,7 @@
             }
         }
         Start-GitHubRepositoryEvent @params
+        ```
 
         Starts a repository event with the name `on-demand-test` and a `client_payload` that includes `unit` and `integration`.
 

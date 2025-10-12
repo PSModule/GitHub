@@ -1,4 +1,4 @@
-﻿function Reset-GitHubOutput {
+function Reset-GitHubOutput {
     <#
         .SYNOPSIS
         Resets the GitHub output.
@@ -7,7 +7,9 @@
         Resets the GitHub output by clearing the contents of $env:GITHUB_OUTPUT.
 
         .EXAMPLE
+        ```pwsh
         Reset-GitHubOutput
+        ```
 
         Resets the content in the GitHub output file.
 

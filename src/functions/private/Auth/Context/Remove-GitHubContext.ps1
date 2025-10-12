@@ -1,4 +1,4 @@
-﻿filter Remove-GitHubContext {
+filter Remove-GitHubContext {
     <#
         .SYNOPSIS
         Removes a context from the context vault.
@@ -9,12 +9,16 @@
         If the specified context(s) exist, they will be removed from the vault.
 
         .EXAMPLE
+        ```pwsh
         Remove-Context
+        ```
 
         Removes all contexts from the vault.
 
         .EXAMPLE
+        ```pwsh
         Remove-Context -ID 'MyContext'
+        ```
 
         Removes the context called 'MyContext' from the vault.
     #>

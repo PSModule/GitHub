@@ -1,4 +1,4 @@
-﻿function Remove-GitHubTeam {
+function Remove-GitHubTeam {
     <#
         .SYNOPSIS
         Delete a team
@@ -8,7 +8,9 @@
         If you are an organization owner, deleting a parent team will delete all of its child teams as well.
 
         .EXAMPLE
+        ```pwsh
         Remove-GitHubTeam -Organization 'github' -Name 'team-name'
+        ```
 
         .NOTES
         [Delete a team](https://docs.github.com/rest/teams/teams#delete-a-team)

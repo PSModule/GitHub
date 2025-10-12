@@ -1,4 +1,4 @@
-﻿function Get-GitHubAppInstallationForEnterpriseOrganization {
+function Get-GitHubAppInstallationForEnterpriseOrganization {
     <#
         .SYNOPSIS
         List GitHub Apps installed on an enterprise-owned organization
@@ -9,7 +9,9 @@
         The authenticated GitHub App must be installed on the enterprise and be granted the Enterprise/organization_installations (read) permission.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubAppInstallationForEnterpriseOrganization -Enterprise 'msx' -Organization 'github'
+        ```
 
         Gets all GitHub Apps in the organization `github` in the enterprise `msx`.
 

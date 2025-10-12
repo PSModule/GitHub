@@ -1,4 +1,4 @@
-﻿function Get-GitHubSecret {
+function Get-GitHubSecret {
     <#
         .SYNOPSIS
         Retrieve GitHub secret(s) without revealing encrypted value(s).
@@ -11,17 +11,23 @@
         The function returns an array of PSObjects containing metadata about the secrets.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubSecret -Owner PSModule -Repo Demo -Type actions
+        ```
 
         Retrieves all Actions secrets from the 'Demo' repository under the 'PSModule' organization.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubSecret -Owner PSModule -Type organization
+        ```
 
         Retrieves all organization-level secrets under the 'PSModule' organization.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubSecret -Owner PSModule -Repo Demo -Environment Staging
+        ```
 
         Retrieves all secrets for the 'Staging' environment in the 'Demo' repository under 'PSModule'.
 

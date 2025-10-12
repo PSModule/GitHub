@@ -1,4 +1,4 @@
-﻿function Update-GitHubAppWebhookConfiguration {
+function Update-GitHubAppWebhookConfiguration {
     <#
         .SYNOPSIS
         Update a webhook configuration for an app
@@ -12,11 +12,13 @@
 
         .EXAMPLE
         ```pwsh
+        ```pwsh
         Update-GitHubAppWebhookConfiguration -URL 'https://example.com' -ContentType 'json' -Secret 'mysecret' -EnableSsl
+        ```
         ```
 
         Output:
-        ```powershell
+        ```pwsh
         ContentType: json
         UseSsl:      True
         Secret:      mysecret

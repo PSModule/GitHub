@@ -1,4 +1,4 @@
-﻿function Test-GitHubAccessTokenRefreshRequired {
+function Test-GitHubAccessTokenRefreshRequired {
     <#
         .SYNOPSIS
         Test if the GitHub access token should be refreshed.
@@ -7,7 +7,9 @@
         Test if the GitHub access token should be refreshed.
 
         .EXAMPLE
+        ```pwsh
         Test-GitHubAccessTokenRefreshRequired
+        ```
 
         This will test if the GitHub access token should be refreshed.
     #>

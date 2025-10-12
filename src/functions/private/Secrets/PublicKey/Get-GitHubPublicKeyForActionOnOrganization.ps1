@@ -1,4 +1,4 @@
-﻿function Get-GitHubPublicKeyForActionOnOrganization {
+function Get-GitHubPublicKeyForActionOnOrganization {
     <#
         .SYNOPSIS
         Get an organization public key.
@@ -10,10 +10,12 @@
         need the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubPublicKeyForActionOnOrganization -Owner 'octocat' -Context $GitHubContext
+        ```
 
         Outputs:
-        ```powershell
+        ```pwsh
         ID          : 3380204578043523366
         Key         : hwzclrjNNtZxYby19+0fiG7LazGFZxaM1IEbB25fkwo=                    #gitleaks:allow
         Type        : actions

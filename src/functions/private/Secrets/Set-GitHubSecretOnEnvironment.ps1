@@ -1,4 +1,4 @@
-﻿function Set-GitHubSecretOnEnvironment {
+function Set-GitHubSecretOnEnvironment {
     <#
         .SYNOPSIS
         Create or update an environment secret.
@@ -11,6 +11,7 @@
         OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        ```pwsh
         $params = @{
             Owner       = 'octocat'
             Repository  = 'Hello-World'
@@ -20,6 +21,7 @@
             Context     = $GitHubContext
         }
         Set-GitHubSecretOnEnvironment @params
+        ```
 
         Creates a new environment secret named `SECRET1` with the value `secret_value` in the specified environment.
 

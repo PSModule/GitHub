@@ -1,4 +1,4 @@
-﻿function Invoke-GitHubDeviceFlowLogin {
+function Invoke-GitHubDeviceFlowLogin {
     <#
         .SYNOPSIS
         Starts the GitHub Device Flow login process.
@@ -7,7 +7,9 @@
         Starts the GitHub Device Flow login process. This will prompt the user to visit a URL and enter a code.
 
         .EXAMPLE
+        ```pwsh
         Invoke-GitHubDeviceFlowLogin
+        ```
 
         This will start the GitHub Device Flow login process.
         The user gets prompted to visit a URL and enter a code.

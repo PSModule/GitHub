@@ -1,4 +1,4 @@
-﻿function Get-GitHubEnterpriseOrganization {
+function Get-GitHubEnterpriseOrganization {
     <#
         .SYNOPSIS
         Get the list of organizations in a GitHub Enterprise instance.
@@ -7,7 +7,9 @@
         Use this function to retrieve the list of organizations in a GitHub Enterprise instance.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubEnterpriseOrganization -Enterprise 'msx'
+        ```
 
         .LINK
         https://psmodule.io/GitHub/Functions/Enterprise/Get-GitHubEnterpriseOrganization

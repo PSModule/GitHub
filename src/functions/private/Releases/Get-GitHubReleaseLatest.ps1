@@ -1,4 +1,4 @@
-﻿filter Get-GitHubReleaseLatest {
+filter Get-GitHubReleaseLatest {
     <#
         .SYNOPSIS
         Get the latest release
@@ -9,7 +9,9 @@
         The `created_at` attribute is the date of the commit used for the release, and not the date when the release was drafted or published.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubReleaseLatest -Owner 'octocat' -Repository 'hello-world'
+        ```
 
         Gets the latest releases for the repository 'hello-world' owned by 'octocat'.
 

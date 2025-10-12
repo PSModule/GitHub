@@ -1,4 +1,4 @@
-﻿function New-GitHubVariableOnRepository {
+function New-GitHubVariableOnRepository {
     <#
         .SYNOPSIS
         Create a repository variable.
@@ -9,7 +9,9 @@
         OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        ```pwsh
         New-GitHubVariableOnRepository -Owner 'octocat' -Repository 'Hello-World' -Name 'HOST_NAME' -Value 'github.com' -Context $GitHubContext
+        ```
 
         Creates a new repository variable named `HOST_NAME` with the value `github.com` in the specified repository.
 

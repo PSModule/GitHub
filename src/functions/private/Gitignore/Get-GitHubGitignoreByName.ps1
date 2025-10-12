@@ -1,4 +1,4 @@
-﻿filter Get-GitHubGitignoreByName {
+filter Get-GitHubGitignoreByName {
     <#
         .SYNOPSIS
         Get a gitignore template
@@ -8,7 +8,9 @@
         Use the raw [media type](https://docs.github.com/rest/overview/media-types/) to get the raw contents.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubGitignoreList
+        ```
 
         Get all gitignore templates
 

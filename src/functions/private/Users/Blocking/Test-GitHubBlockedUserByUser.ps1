@@ -1,4 +1,4 @@
-﻿filter Test-GitHubBlockedUserByUser {
+filter Test-GitHubBlockedUserByUser {
     <#
         .SYNOPSIS
         Check if a user is blocked by the authenticated user
@@ -9,7 +9,9 @@
         or if the given user account has been identified as spam by GitHub.
 
         .EXAMPLE
+        ```pwsh
         Test-GitHubBlockedUserByUser -Username 'octocat'
+        ```
 
         Checks if the user `octocat` is blocked by the authenticated user.
         Returns true if the user is blocked, false if not.

@@ -1,4 +1,4 @@
-﻿filter Enable-GitHubWorkflow {
+filter Enable-GitHubWorkflow {
     <#
         .SYNOPSIS
         Enable a workflow
@@ -11,14 +11,18 @@
 
         .EXAMPLE
         ```pwsh
+        ```pwsh
         Enable-GitHubWorkflow -Owner 'PSModule' -Repository 'GitHub' -ID 'main.yaml'
+        ```
         ```
 
         Enables the workflow with the file name 'main.yaml' in the PSModule/GitHub repository.
 
         .EXAMPLE
         ```pwsh
+        ```pwsh
         Enable-GitHubWorkflow -Owner 'PSModule' -Repository 'GitHub' -ID 161335
+        ```
         ```
 
         Enables the workflow with the ID 161335 in the PSModule/GitHub repository.

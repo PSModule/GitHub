@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryContributor {
+filter Get-GitHubRepositoryContributor {
     <#
         .SYNOPSIS
         List repository contributors
@@ -12,7 +12,9 @@
         in the repository link to GitHub users. The rest will appear as anonymous contributors without associated GitHub user information.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubRepositoryContributor -Owner 'PSModule' -Name 'GitHub'
+        ```
 
         Gets all contributors to the GitHub repository.
 

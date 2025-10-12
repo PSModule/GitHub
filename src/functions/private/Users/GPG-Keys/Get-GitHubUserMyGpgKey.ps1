@@ -1,4 +1,4 @@
-﻿filter Get-GitHubUserMyGpgKey {
+filter Get-GitHubUserMyGpgKey {
     <#
         .SYNOPSIS
         List GPG keys for the authenticated user
@@ -9,7 +9,9 @@
         [scope](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubUserMyGpgKey
+        ```
 
         Gets all GPG keys for the authenticated user.
 

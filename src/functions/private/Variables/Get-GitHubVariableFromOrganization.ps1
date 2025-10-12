@@ -1,4 +1,4 @@
-﻿function Get-GitHubVariableFromOrganization {
+function Get-GitHubVariableFromOrganization {
     <#
         .SYNOPSIS
         List repository organization variables.
@@ -9,10 +9,12 @@
         OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubVariableFromOrganization -Owner 'PSModule' -Repository 'GitHub' -Context (Get-GitHubContext)
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         Name                 : AVAILVAR
         Value                : ValueVar
         Owner                : PSModule

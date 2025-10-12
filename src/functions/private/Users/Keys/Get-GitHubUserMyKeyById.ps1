@@ -1,4 +1,4 @@
-﻿filter Get-GitHubUserMyKeyById {
+filter Get-GitHubUserMyKeyById {
     <#
         .SYNOPSIS
         Get a public SSH key for the authenticated user
@@ -9,7 +9,9 @@
         [scope](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubUserMyKeyById -ID '1234567'
+        ```
 
         Gets the public SSH key with the ID '1234567' for the authenticated user.
 

@@ -1,4 +1,4 @@
-﻿function Get-GitHubVariableOwnerByName {
+function Get-GitHubVariableOwnerByName {
     <#
         .SYNOPSIS
         Get an organization variable.
@@ -10,10 +10,12 @@
         OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubVariableOwnerByName -Owner 'PSModule' -Name 'SELECTEDVAR' -Context (Get-GitHubContext)
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         Name                 : SELECTEDVAR
         Value                : Varselected
         Owner                : PSModule

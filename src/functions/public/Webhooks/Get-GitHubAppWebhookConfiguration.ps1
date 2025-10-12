@@ -1,4 +1,4 @@
-﻿function Get-GitHubAppWebhookConfiguration {
+function Get-GitHubAppWebhookConfiguration {
     <#
         .SYNOPSIS
         Get a webhook configuration for an app
@@ -11,7 +11,9 @@
         to access this endpoint.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubAppWebhookConfiguration
+        ```
 
         Returns the webhook configuration for the authenticated app.
 

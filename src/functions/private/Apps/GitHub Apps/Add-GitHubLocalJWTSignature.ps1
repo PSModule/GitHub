@@ -1,4 +1,4 @@
-﻿function Add-GitHubLocalJWTSignature {
+function Add-GitHubLocalJWTSignature {
     <#
         .SYNOPSIS
         Signs a JSON Web Token (JWT) using a local RSA private key.
@@ -8,7 +8,9 @@
         This function handles the RSA signing process and returns the complete signed JWT.
 
         .EXAMPLE
+        ```pwsh
         Add-GitHubLocalJWTSignature -UnsignedJWT 'eyJ0eXAiOi...' -PrivateKey '--- BEGIN RSA PRIVATE KEY --- ... --- END RSA PRIVATE KEY ---'
+        ```
 
         Adds a signature to the unsigned JWT using the provided private key.
 

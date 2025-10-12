@@ -1,4 +1,4 @@
-﻿filter Get-GitHubEnvironmentByName {
+filter Get-GitHubEnvironmentByName {
     <#
         .SYNOPSIS
         Retrieves details of a specified GitHub environment.
@@ -13,7 +13,9 @@
         to use this function with a private repository.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubEnvironment -Owner 'PSModule' -Repository 'EnvironmentTest' -Name 'test'
+        ```
 
         Output:
         ```pwsh

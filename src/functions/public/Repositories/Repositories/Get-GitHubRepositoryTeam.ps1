@@ -1,4 +1,4 @@
-﻿filter Get-GitHubRepositoryTeam {
+filter Get-GitHubRepositoryTeam {
     <#
         .SYNOPSIS
         List repository teams
@@ -15,7 +15,9 @@
         This endpoint is not compatible with fine-grained personal access tokens.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubRepositoryTeam -Owner 'PSModule' -Name 'GitHub'
+        ```
 
         Lists the teams that have access to the specified repository and that are also visible to the authenticated user.
 

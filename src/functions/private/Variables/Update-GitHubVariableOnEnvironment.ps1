@@ -1,4 +1,4 @@
-﻿function Update-GitHubVariableOnEnvironment {
+function Update-GitHubVariableOnEnvironment {
     <#
         .SYNOPSIS
         Update an environment variable.
@@ -10,6 +10,7 @@
 
 
         .EXAMPLE
+        ```pwsh
         $params = @{
             Owner       = 'octocat'
             Repository  = 'Hello-World'
@@ -19,6 +20,7 @@
             Context     = $GitHubContext
         }
         Update-GitHubVariableOnEnvironment @params
+        ```
 
         Updates the environment variable named `HOST_NAME` with the value `github.com` in the specified environment.
 

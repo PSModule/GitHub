@@ -1,4 +1,4 @@
-﻿function Get-GitHubOrganizationListForAuthUser {
+function Get-GitHubOrganizationListForAuthUser {
     <#
         .SYNOPSIS
         Retrieves a list of all GitHub organizations for the authenticated user.
@@ -8,10 +8,12 @@
         creation dates, member counts, and other metadata. It returns an array of objects of type GitHubOrganization populated with this information.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubOrganizationListForAuthUser
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         Name              : MyOrganization
         Login             : my-org
         URL               : https://github.com/my-org

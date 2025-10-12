@@ -1,4 +1,4 @@
-﻿function Add-GitHubSecretSelectedRepository {
+function Add-GitHubSecretSelectedRepository {
     <#
         .SYNOPSIS
         Add selected repository to an organization secret.
@@ -11,7 +11,9 @@
         and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        ```pwsh
         Add-GitHubSecretSelectedRepository -Owner 'my-org' -Name 'API_KEY' -RepositoryID '654321'
+        ```
 
         Adds the repository 'test-repo' to the 'API_KEY' secret in the organization 'my-org'.
 

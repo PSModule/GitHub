@@ -1,4 +1,4 @@
-﻿filter Remove-GitHubRepository {
+filter Remove-GitHubRepository {
     <#
         .SYNOPSIS
         Delete a repository
@@ -10,7 +10,9 @@
         repositories, you will get a `403 Forbidden` response.
 
         .EXAMPLE
+        ```pwsh
         Remove-GitHubRepository -Owner 'PSModule' -Name 'Hello-World'
+        ```
 
         Deletes the repository `Hello-World` in the `PSModule` organization.
 

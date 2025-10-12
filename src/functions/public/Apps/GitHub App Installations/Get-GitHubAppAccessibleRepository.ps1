@@ -1,4 +1,4 @@
-﻿function Get-GitHubAppAccessibleRepository {
+function Get-GitHubAppAccessibleRepository {
     <#
         .SYNOPSIS
         Get repositories belonging to an enterprise owned organization that can be made accessible to a GitHub App
@@ -11,11 +11,13 @@
         permission.
 
         .EXAMPLE
+        ```pwsh
         $params = @{
             Enterprise   = 'msx'
             Organization = 'PSModule'
         }
         Get-GitHubAppAccessibleRepository @params
+        ```
 
         Get the repositories that can be made accessible to a GitHub App installed on the organization 'PSModule' in the enterprise 'msx'.
 

@@ -1,4 +1,4 @@
-﻿filter Add-GitHubUserEmail {
+filter Add-GitHubUserEmail {
     <#
         .SYNOPSIS
         Add an email address for the authenticated user
@@ -8,7 +8,9 @@
 
         .EXAMPLE
         ```pwsh
+        ```pwsh
         Add-GitHubUserEmail -Email 'octocat@github.com','firstname.lastname@work.com'
+        ```
         ```
 
         Adds the email addresses `octocat@github.com` and `firstname.lastname@work.com` to the authenticated user's account.

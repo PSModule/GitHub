@@ -1,4 +1,4 @@
-﻿function Update-GitHubTeam {
+function Update-GitHubTeam {
     <#
         .SYNOPSIS
         Update a team
@@ -7,6 +7,7 @@
         To edit a team, the authenticated user must either be an organization owner or a team maintainer.
 
         .EXAMPLE
+        ```pwsh
         $params = @{
             Organization  = 'github'
             Slug          = 'team-name'
@@ -17,6 +18,7 @@
             ParentTeamID  = 123456
         }
         Update-GitHubTeam @params
+        ```
 
         Updates the team with the slug 'team-name' in the `github` organization with the new name 'new team name', description 'A new team',
         visibility set to 'closed', notifications enabled, and the parent team ID set to 123456.

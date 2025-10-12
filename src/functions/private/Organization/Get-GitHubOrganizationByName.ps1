@@ -1,4 +1,4 @@
-﻿filter Get-GitHubOrganizationByName {
+filter Get-GitHubOrganizationByName {
     <#
         .SYNOPSIS
         Get an organization
@@ -15,7 +15,9 @@
         for details. For an example response, see 'Response with GitHub plan information' below."
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubOrganizationByName -Name 'github'
+        ```
 
         Get the 'GitHub' organization
 

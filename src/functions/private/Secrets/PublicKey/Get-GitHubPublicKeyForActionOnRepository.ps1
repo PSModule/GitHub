@@ -1,4 +1,4 @@
-﻿function Get-GitHubPublicKeyForActionOnRepository {
+function Get-GitHubPublicKeyForActionOnRepository {
     <#
         .SYNOPSIS
         Get a repository public key.
@@ -9,10 +9,12 @@
         the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubPublicKeyForActionOnRepository -Owner 'octocat' -Repository 'hello-world' -Context $GitHubContext
+        ```
 
         Outputs:
-        ```powershell
+        ```pwsh
         ID          : 3380204578043523366
         Key         : WkwZZ0xWbxZMqWrfUxLgvnALbrfdZSWxrhBcfTKshDY=                    #gitleaks:allow
         Type        : actions

@@ -1,4 +1,4 @@
-﻿filter Get-GitHubMyUserSocials {
+filter Get-GitHubMyUserSocials {
     <#
         .SYNOPSIS
         List social accounts for the authenticated user
@@ -7,7 +7,9 @@
         Lists all of your social accounts.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubMyUserSocials
+        ```
 
         Lists all of your social accounts.
 

@@ -1,4 +1,4 @@
-﻿function Get-GitHubToken {
+function Get-GitHubToken {
     <#
         .SYNOPSIS
         Retrieves a GitHub token from environment variables as plaintext or a secure string.
@@ -10,20 +10,24 @@
         either a raw token value or a secure version for sensitive operations.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubToken
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         System.Security.SecureString
         ```
 
         Returns the GitHub token as a secure string for safer handling in scripts or automation.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubToken -AsPlainText
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         ghp_XXXXXXXXXXXXXXXXXXXXXX
         ```
 

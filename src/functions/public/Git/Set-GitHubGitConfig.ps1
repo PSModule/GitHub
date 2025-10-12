@@ -1,4 +1,4 @@
-﻿function Set-GitHubGitConfig {
+function Set-GitHubGitConfig {
     <#
         .SYNOPSIS
         Set the Git configuration for the GitHub context.
@@ -7,12 +7,16 @@
         Sets the Git configuration for the GitHub context. This command sets the `user.name`, `user.email`, and `url.<host>.insteadOf` git configs.
 
         .EXAMPLE
+        ```pwsh
         Set-GitHubGitConfig
+        ```
 
         Sets the Git configuration for the default GitHub context.
 
         .EXAMPLE
+        ```pwsh
         Set-GitHubGitConfig -Context 'MyContext'
+        ```
 
         Sets the Git configuration for the GitHub context named 'MyContext'.
 

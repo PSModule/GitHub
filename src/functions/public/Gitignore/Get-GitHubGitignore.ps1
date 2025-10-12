@@ -1,4 +1,4 @@
-﻿filter Get-GitHubGitignore {
+filter Get-GitHubGitignore {
     <#
         .SYNOPSIS
         Get a gitignore template or list of all gitignore templates names
@@ -8,12 +8,16 @@
         If the Name parameter is specified, the function will return the gitignore template for the specified name.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubGitignoreList
+        ```
 
         Get all gitignore templates
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubGitignore -Name 'VisualStudio'
+        ```
 
         Get a gitignore template for VisualStudio
 

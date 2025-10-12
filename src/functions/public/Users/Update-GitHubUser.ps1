@@ -1,4 +1,4 @@
-﻿filter Update-GitHubUser {
+filter Update-GitHubUser {
     <#
         .SYNOPSIS
         Update the authenticated user
@@ -9,17 +9,23 @@
         displayed on your public profile or via the API.
 
         .EXAMPLE
+        ```pwsh
         Update-GitHubUser -Name 'octocat'
+        ```
 
         Update the authenticated user's name to 'octocat'
 
         .EXAMPLE
+        ```pwsh
         Update-GitHubUser -Location 'San Francisco'
+        ```
 
         Update the authenticated user's location to 'San Francisco'
 
         .EXAMPLE
+        ```pwsh
         Update-GitHubUser -Hireable $true -Description 'I love programming'
+        ```
 
         Update the authenticated user's hiring availability to 'true' and their description to 'I love programming'
 

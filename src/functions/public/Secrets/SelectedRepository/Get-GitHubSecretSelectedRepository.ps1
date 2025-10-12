@@ -1,4 +1,4 @@
-﻿function Get-GitHubSecretSelectedRepository {
+function Get-GitHubSecretSelectedRepository {
     <#
         .SYNOPSIS
         List selected repositories for an organization secret.
@@ -9,10 +9,12 @@
         need the `admin:org` scope to use this endpoint. If the repository is private, the `repo` scope is also required.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubSecretSelectedRepository -Owner 'octocat' -Name 'hello-world'
+        ```
 
         Outputs:
-        ```powershell
+        ```pwsh
         Name        : hello-world
         NodeID      : m_MDXNcwMAwMMA
         ID          : 123456789

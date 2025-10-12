@@ -1,4 +1,4 @@
-﻿function Invoke-GitHubGraphQLQuery {
+function Invoke-GitHubGraphQLQuery {
     <#
         .SYNOPSIS
         Invoke a GraphQL requests against the GitHub GraphQL API
@@ -7,7 +7,9 @@
         Use this function to invoke a GraphQL query and mutations against the GitHub GraphQL API with proper error handling.
 
         .EXAMPLE
+        ```pwsh
         Invoke-GitHubGraphQLQuery -Query $query -Variables $Variables
+        ```
 
         .LINK
         https://psmodule.io/GitHub/Functions/API/Invoke-GitHubGraphQLQuery

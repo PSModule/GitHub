@@ -1,4 +1,4 @@
-﻿function Write-GitHubDebug {
+function Write-GitHubDebug {
     <#
         .SYNOPSIS
         Write a debug message in GitHub Actions
@@ -11,7 +11,9 @@
         If both the secret and variable are set, the value of the secret takes precedence over the variable.
 
         .EXAMPLE
+        ```pwsh
         Write-GitHubDebug -Message 'Hello, World!'
+        ```
 
         Writes a debug message 'Hello, World!'.
 

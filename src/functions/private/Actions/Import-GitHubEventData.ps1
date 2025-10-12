@@ -1,4 +1,4 @@
-﻿#Requires -Modules @{ ModuleName = 'CasingStyle'; RequiredVersion = '1.0.2' }
+#Requires -Modules @{ ModuleName = 'CasingStyle'; RequiredVersion = '1.0.2' }
 
 function Import-GitHubEventData {
     <#
@@ -9,7 +9,9 @@ function Import-GitHubEventData {
         Import data from the event that triggered the workflow.
 
         .EXAMPLE
+        ```pwsh
         Import-GitHubEventData
+        ```
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSUseShouldProcessForStateChangingFunctions', '',

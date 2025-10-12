@@ -1,4 +1,4 @@
-﻿filter Connect-GitHubCli {
+filter Connect-GitHubCli {
     <#
         .SYNOPSIS
         Authenticates to GitHub CLI using a secure token from the provided context.
@@ -9,11 +9,13 @@
         If authentication fails, a warning is displayed, and `LASTEXITCODE` is reset to `0`.
 
         .EXAMPLE
+        ```pwsh
         $context = Connect-GitHubAccount
         $context | Connect-GitHubCli
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         (No output unless an error occurs)
         ```
 

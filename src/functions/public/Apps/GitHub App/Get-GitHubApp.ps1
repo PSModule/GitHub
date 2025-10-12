@@ -1,4 +1,4 @@
-﻿filter Get-GitHubApp {
+filter Get-GitHubApp {
     <#
         .SYNOPSIS
         Get the authenticated app or a specific app by its slug.
@@ -7,12 +7,16 @@
         Returns a GitHub App associated with the authentication credentials used or the provided app-slug.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubApp
+        ```
 
         Get the authenticated app.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubApp -Slug 'github-actions'
+        ```
 
         Get the GitHub App with the slug 'github-actions'.
 

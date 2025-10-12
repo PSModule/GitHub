@@ -1,4 +1,4 @@
-﻿function Get-GitHubVariableEnvironmentByName {
+function Get-GitHubVariableEnvironmentByName {
     <#
         .SYNOPSIS
         Retrieves a specific variable from a GitHub repository.
@@ -9,10 +9,12 @@
         OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        ```pwsh
         Get-GitHubVariableEnvironmentByName -Owner 'octocat' -Repository 'Hello-World' -Environment 'dev' -Name 'NAME' -Context $GitHubContext
+        ```
 
         Output:
-        ```powershell
+        ```pwsh
         Name                 : NAME
         Value                : John Doe
         Owner                : octocat

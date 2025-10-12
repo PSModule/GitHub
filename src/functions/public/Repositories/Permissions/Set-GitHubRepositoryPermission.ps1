@@ -1,4 +1,4 @@
-﻿filter Set-GitHubRepositoryPermission {
+filter Set-GitHubRepositoryPermission {
     <#
         .SYNOPSIS
         Set the permission level for a team on a repository
@@ -9,7 +9,9 @@
         'None' is specified, the function removes the team's access to the repository.
 
         .EXAMPLE
+        ```pwsh
         Set-GitHubRepositoryPermission -Owner 'MyOrg' -Name 'MyRepo' -Team 'devs' -Permission 'push'
+        ```
 
         Grants the 'push' permission to the 'devs' team for the repository 'MyRepo' owned by 'MyOrg'.
 

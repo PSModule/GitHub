@@ -1,4 +1,4 @@
-﻿function Uninstall-GitHubAppOnEnterpriseOrganization {
+function Uninstall-GitHubAppOnEnterpriseOrganization {
     <#
         .SYNOPSIS
         Uninstall a GitHub App from an enterprise-owned organization.
@@ -9,7 +9,9 @@
         The authenticated GitHub App must be installed on the enterprise and be granted the Enterprise/organization_installations (write) permission.
 
         .EXAMPLE
+        ```pwsh
         Uninstall-GitHubAppOnEnterpriseOrganization -Enterprise 'github' -Organization 'octokit' -ID '123456'
+        ```
 
         Uninstall the GitHub App with the installation ID `123456` from the organization `octokit` in the enterprise `github`.
 

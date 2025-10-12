@@ -1,4 +1,4 @@
-﻿function New-GitHubUnsignedJWT {
+function New-GitHubUnsignedJWT {
     <#
         .SYNOPSIS
         Creates an unsigned JSON Web Token (JWT) for a GitHub App.
@@ -9,7 +9,9 @@
         that can be passed to a signing function.
 
         .EXAMPLE
+        ```pwsh
         New-GitHubUnsignedJWT -ClientId 'Iv987654321'
+        ```
 
         Creates an unsigned JWT for a GitHub App using the specified client ID.
 
