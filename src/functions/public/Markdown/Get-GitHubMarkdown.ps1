@@ -7,7 +7,7 @@ filter Get-GitHubMarkdown {
         Converts Markdown to HTML
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubMarkdown -Text "Hello **world**"
         "<p>Hello <strong>world</strong></p>"
         ```

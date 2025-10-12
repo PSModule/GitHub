@@ -7,7 +7,7 @@ function Get-GitHubOutput {
         Gets the GitHub output from $env:GITHUB_OUTPUT and creates an object with key-value pairs, supporting both single-line and multi-line values
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubOutput
         MY_VALUE         result                       zen
         --------         ------                       ---
@@ -17,7 +17,7 @@ function Get-GitHubOutput {
         Gets the GitHub output and returns an object with key-value pairs.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubOutput -AsHashtable
         ```
 

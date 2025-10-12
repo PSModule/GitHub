@@ -7,14 +7,14 @@ function Update-GitHubUserAccessToken {
         Updates the GitHub access token. If the access token is still valid, it will not be refreshed.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Update-GitHubUserAccessToken
         ```
 
         This will update the GitHub access token for the default context.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Update-GitHubUserAccessToken -Context 'github.com/mojombo'
         ```
 

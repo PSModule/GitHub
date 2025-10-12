@@ -8,7 +8,7 @@ function Test-GitHubAzPowerShell {
         It verifies both the availability of the module and the authentication status.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Test-GitHubAzPowerShell
         ```
 

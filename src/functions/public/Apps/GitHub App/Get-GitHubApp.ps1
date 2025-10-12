@@ -7,14 +7,14 @@ filter Get-GitHubApp {
         Returns a GitHub App associated with the authentication credentials used or the provided app-slug.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubApp
         ```
 
         Get the authenticated app.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubApp -Slug 'github-actions'
         ```
 

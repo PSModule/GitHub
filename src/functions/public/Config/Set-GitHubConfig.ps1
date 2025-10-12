@@ -7,7 +7,7 @@ function Set-GitHubConfig {
         Set a GitHub module configuration.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Set-GitHubConfig -Name DefaultUser -Value 'Octocat'
         ```
 

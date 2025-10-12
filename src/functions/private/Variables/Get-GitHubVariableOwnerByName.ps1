@@ -10,12 +10,12 @@ function Get-GitHubVariableOwnerByName {
         OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubVariableOwnerByName -Owner 'PSModule' -Name 'SELECTEDVAR' -Context (Get-GitHubContext)
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         Name                 : SELECTEDVAR
         Value                : Varselected
         Owner                : PSModule

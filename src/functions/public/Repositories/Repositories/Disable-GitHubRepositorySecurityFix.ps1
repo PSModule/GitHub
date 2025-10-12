@@ -9,7 +9,7 @@ filter Disable-GitHubRepositorySecurityFix {
         "[Configuring automated security fixes](https://docs.github.com/articles/configuring-automated-security-fixes)".
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Disable-GitHubRepositorySecurityFix -Owner 'PSModule' -Name 'GitHub'
         ```
 

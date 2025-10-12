@@ -7,7 +7,7 @@ function Test-GitHubAccessTokenRefreshRequired {
         Test if the GitHub access token should be refreshed.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Test-GitHubAccessTokenRefreshRequired
         ```
 

@@ -8,7 +8,7 @@ filter Get-GitHubRepositoryLanguage {
         bytes of code written in that language.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubRepositoryLanguage -Owner 'octocat' -Name 'hello-world'
         ```
 

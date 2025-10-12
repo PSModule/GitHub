@@ -15,7 +15,7 @@ filter Get-GitHubMeta {
         documentation for each feature to determine if IPv6 is supported.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubMeta
         ```
 

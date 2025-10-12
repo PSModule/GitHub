@@ -9,13 +9,13 @@ filter Connect-GitHubCli {
         If authentication fails, a warning is displayed, and `LASTEXITCODE` is reset to `0`.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         $context = Connect-GitHubAccount
         $context | Connect-GitHubCli
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         (No output unless an error occurs)
         ```
 

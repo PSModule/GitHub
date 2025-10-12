@@ -12,14 +12,14 @@ function Get-GitHubStatusIncident {
         Impact: None (black), Minor (yellow), Major (orange), or Critical (red)
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubStatusIncident
         ```
 
         Gets the status of GitHub incidents
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubStatusIncident -Unresolved
         ```
 

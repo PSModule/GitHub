@@ -8,7 +8,7 @@ function Set-GitHubContext {
         The context is used to authenticate with the GitHub API.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         $context = @{
             ApiBaseUri = 'https://api.github.com'
             ApiVersion = '2022-11-28'

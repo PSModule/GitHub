@@ -9,21 +9,21 @@ filter Get-GitHubLicense {
         If the Owner and Repo parameters are specified, the function will return the license for the specified repository.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubLicense
         ```
 
         Get all license templates
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubLicense -Name mit
         ```
 
         Get the mit license template
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubLicense -Owner 'octocat' -Repository 'Hello-World'
         ```
 

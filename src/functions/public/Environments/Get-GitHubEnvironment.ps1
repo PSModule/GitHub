@@ -12,12 +12,12 @@ filter Get-GitHubEnvironment {
         to use this function with a private repository.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubEnvironment -Owner 'PSModule' -Repository 'EnvironmentTest' -Name 'test'
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         id                       : 5944178128
         node_id                  : EN_kwDOOJqfM88AAAABYkz10A
         name                     : test
@@ -35,12 +35,12 @@ filter Get-GitHubEnvironment {
         Retrieves details of the "test" environment in the specified repository.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubEnvironment -Owner 'PSModule' -Repository 'EnvironmentTest'
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         id                       : 5944178128
         node_id                  : EN_kwDOOJqfM88AAAABYkz10A
         name                     : test

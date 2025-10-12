@@ -10,7 +10,7 @@ function Remove-GitHubSecretSelectedRepository {
         tokens (classic) need the `admin:org` scope to use this endpoint. If the repository is private, the `repo` scope is also required.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Remove-GitHubSecretSelectedRepository -Owner 'my-org' -Name 'ENV_SECRET' -RepositoryID 123456
         ```
 

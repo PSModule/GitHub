@@ -18,7 +18,7 @@ filter New-GitHubRepositoryFromTemplate {
         * `repo` scope to create a private repository
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         $params = @{
             TemplateOwner      = 'GitHub'
             TemplateRepository = 'octocat'

@@ -9,7 +9,7 @@ filter Add-GitHubUserGpgKey {
         [scope](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Add-GitHubUserGpgKey -Name 'GPG key for GitHub' -ArmoredPublicKey @'
         -----BEGIN PGP PUBLIC KEY BLOCK-----
         Version: GnuPG v1

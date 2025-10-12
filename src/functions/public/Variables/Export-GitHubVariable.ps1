@@ -12,7 +12,7 @@ function Export-GitHubVariable {
         The function accepts pipeline input, allowing GitHub variables retrieved using `Get-GitHubVariable` to be exported seamlessly.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubVariable -Owner 'octocat' -Repository 'Hello-World' -Environment 'staging' | Export-GitHubVariable
         ```
 

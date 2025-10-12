@@ -7,7 +7,7 @@ filter Get-GitHubReleaseByTagName {
         Get a published release with the specified tag.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubReleaseByTagName -Owner 'octocat' -Repository 'hello-world' -Tag 'v1.0.0'
         ```
 

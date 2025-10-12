@@ -7,7 +7,7 @@ function New-FunctionTemplate {
         Long description
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         An example
         ```
 

@@ -10,14 +10,14 @@ filter Add-GitHubMask {
         set that value as an output.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Add-Mask $SecretValue
         ```
 
         Masks the value of $SecretValue so that its printed like ***.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         $SecretValue1, $SecretValue2 | Mask
         ```
 

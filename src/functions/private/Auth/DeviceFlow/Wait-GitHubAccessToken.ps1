@@ -8,14 +8,14 @@ function Wait-GitHubAccessToken {
         This will poll the GitHub API until the user has entered the code.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Wait-GitHubAccessToken -DeviceCode $deviceCode -ClientID $ClientID -Interval $interval
         ```
 
         This will poll the GitHub API until the user has entered the code.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Wait-GitHubAccessToken -Refresh -ClientID $ClientID
         ```
 

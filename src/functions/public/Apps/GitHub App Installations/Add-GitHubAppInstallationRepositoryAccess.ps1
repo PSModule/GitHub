@@ -7,7 +7,7 @@ function Add-GitHubAppInstallationRepositoryAccess {
         Grant repository access to an organization installation.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         $params = @{
             Enterprise          = 'msx'
             Organization        = 'PSModule'

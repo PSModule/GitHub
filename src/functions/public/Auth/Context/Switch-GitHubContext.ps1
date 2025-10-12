@@ -7,7 +7,7 @@ function Switch-GitHubContext {
         Set the default context for the GitHub module.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Switch-GitHubContext -Context 'github.com/Octocat'
         ```
 

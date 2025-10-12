@@ -9,7 +9,7 @@ filter Get-GitHubRepositoryAutolinkById {
         Information about autolinks are only available to repository administrators.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubRepositoryAutolinkById -Owner 'octocat' -Repository 'Hello-World' -ID 1
         ```
 

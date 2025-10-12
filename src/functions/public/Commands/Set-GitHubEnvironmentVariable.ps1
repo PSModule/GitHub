@@ -7,7 +7,7 @@ function Set-GitHubEnvironmentVariable {
         Set a GitHub environment variable
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Set-GitHubEnv -Name 'MyVariable' -Value 'MyValue'
         ```
 

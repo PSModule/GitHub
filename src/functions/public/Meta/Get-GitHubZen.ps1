@@ -7,7 +7,7 @@ filter Get-GitHubZen {
         Get a random sentence from the Zen of GitHub.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubZen
         ```
 

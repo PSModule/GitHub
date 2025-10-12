@@ -11,7 +11,7 @@ function Get-GitHubAppWebhookDeliveryByID {
 
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubAppWebhookDeliveryByID -ID 123456
         ```
 

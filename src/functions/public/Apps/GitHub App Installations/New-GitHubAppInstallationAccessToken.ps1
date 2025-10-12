@@ -28,14 +28,14 @@ filter New-GitHubAppInstallationAccessToken {
         to access this endpoint.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         New-GitHubAppInstallationAccessToken -InstallationID 12345678
         ```
 
         Creates an installation access token for the installation with the ID `12345678`.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Connect-GitHub -ClientID $ClientID -PrivateKey $PrivateKey
         Get-GitHubAppInstallation | New-GitHubAppInstallationAccessToken
         ```

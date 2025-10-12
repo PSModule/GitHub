@@ -8,12 +8,12 @@ function Get-GitHubOrganizationListForAuthUser {
         creation dates, member counts, and other metadata. It returns an array of objects of type GitHubOrganization populated with this information.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubOrganizationListForAuthUser
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         Name              : MyOrganization
         Login             : my-org
         URL               : https://github.com/my-org

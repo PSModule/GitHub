@@ -8,7 +8,7 @@ filter Assert-GitHubContext {
         If the context does not meet the requirements, an error is thrown.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Assert-GitHubContext -Context 'github.com/Octocat' -AuthType 'App'
         ```
     #>

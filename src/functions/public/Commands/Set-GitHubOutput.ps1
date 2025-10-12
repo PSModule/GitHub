@@ -13,14 +13,14 @@ function Set-GitHubOutput {
         The Value parameter accepts null values, which will be correctly preserved and set as the output.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Set-GitHubOutput -Name 'ID' -Value '123123123'
         ```
 
         Sets the output variable 'ID' to '123123123' in the GitHub Actions output file.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Set-GitHubOutput -Name 'result' -Value @{
             ID   = '123123123'
             name = 'test'

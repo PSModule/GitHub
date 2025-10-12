@@ -7,7 +7,7 @@ filter Get-GitHubBlockedUserByUser {
         List the users you've blocked on your personal account.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubBlockedUserByUser
         ```
 

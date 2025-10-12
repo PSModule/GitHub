@@ -9,7 +9,7 @@ filter Get-GitHubUserPublicEmail {
         endpoint. This endpoint is accessible with the `user:email` scope.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubUserPublicEmail
         ```
 

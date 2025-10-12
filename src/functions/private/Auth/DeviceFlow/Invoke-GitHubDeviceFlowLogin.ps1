@@ -7,7 +7,7 @@ function Invoke-GitHubDeviceFlowLogin {
         Starts the GitHub Device Flow login process. This will prompt the user to visit a URL and enter a code.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Invoke-GitHubDeviceFlowLogin
         ```
 

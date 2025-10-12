@@ -14,7 +14,7 @@ filter New-GitHubRepositoryUser {
         * `repo` scope to create a private repository.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         $params = @{
             Name                     = 'Hello-World'
             Description              = 'This is your first repository'

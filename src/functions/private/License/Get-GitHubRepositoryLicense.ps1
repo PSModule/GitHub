@@ -10,7 +10,7 @@ filter Get-GitHubRepositoryLicense {
         [custom media types](https://docs.github.com/rest/overview/media-types) for retrieving the raw license content or rendered license HTML.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubRepositoryLicense -Owner 'octocat' -Repository 'Hello-World'
         ```
 

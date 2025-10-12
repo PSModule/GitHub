@@ -9,7 +9,7 @@ filter Get-GitHubReleaseLatest {
         The `created_at` attribute is the date of the commit used for the release, and not the date when the release was drafted or published.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubReleaseLatest -Owner 'octocat' -Repository 'hello-world'
         ```
 

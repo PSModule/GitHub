@@ -7,7 +7,7 @@ filter Remove-GitHubRelease {
         Users with push access to the repository can delete a release.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Remove-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -ID '1234567'
         ```
 

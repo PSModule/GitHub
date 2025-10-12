@@ -10,7 +10,7 @@ function ConvertTo-GitHubGraphQLField {
         Properties not found in the mapping table are skipped with a warning.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         $fields = ConvertTo-GitHubGraphQLField -Property @('Name','Owner') -AdditionalProperty 'Url' -PropertyToGraphQLMap $map
         Returns the GraphQL fields for Name, Owner, and Url.
         ```

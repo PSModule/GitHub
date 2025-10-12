@@ -10,7 +10,7 @@ function Get-GitHubVariableSelectedRepository {
         the `repo` scope is also required.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubVariableSelectedRepository -Owner 'PSModule' -Name 'SELECTEDVAR'
         ```
 

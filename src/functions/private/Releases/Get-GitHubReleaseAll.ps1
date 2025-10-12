@@ -9,7 +9,7 @@ filter Get-GitHubReleaseAll {
         Information about published releases are available to everyone. Only users with push access will receive listings for draft releases.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubReleaseAll -Owner 'octocat' -Repository 'hello-world'
         ```
 

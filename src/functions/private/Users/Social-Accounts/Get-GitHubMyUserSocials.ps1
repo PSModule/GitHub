@@ -7,7 +7,7 @@ filter Get-GitHubMyUserSocials {
         Lists all of your social accounts.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubMyUserSocials
         ```
 

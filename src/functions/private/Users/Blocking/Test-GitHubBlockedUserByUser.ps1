@@ -9,7 +9,7 @@ filter Test-GitHubBlockedUserByUser {
         or if the given user account has been identified as spam by GitHub.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Test-GitHubBlockedUserByUser -Username 'octocat'
         ```
 

@@ -14,7 +14,7 @@ filter New-GitHubRepositoryOrg {
         * `repo` scope to create a private repository
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         $params = @{
             Owner                    = 'PSModule'
             Name                     = 'Hello-World'

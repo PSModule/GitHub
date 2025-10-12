@@ -8,7 +8,7 @@ function Remove-GitHubTeam {
         If you are an organization owner, deleting a parent team will delete all of its child teams as well.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Remove-GitHubTeam -Organization 'github' -Name 'team-name'
         ```
 

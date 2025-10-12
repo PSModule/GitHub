@@ -7,8 +7,8 @@ filter Remove-GitHubUserEmail {
         This endpoint is accessible with the `user` scope.
 
         .EXAMPLE
-        ```pwsh
-        ```pwsh
+        ```powershell
+        ```powershell
         Remove-GitHubUserEmail -Emails 'octocat@github.com','firstname.lastname@work.com'
         ```
         ```

@@ -9,12 +9,12 @@ function Get-GitHubVariableEnvironmentByName {
         OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubVariableEnvironmentByName -Owner 'octocat' -Repository 'Hello-World' -Environment 'dev' -Name 'NAME' -Context $GitHubContext
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         Name                 : NAME
         Value                : John Doe
         Owner                : octocat

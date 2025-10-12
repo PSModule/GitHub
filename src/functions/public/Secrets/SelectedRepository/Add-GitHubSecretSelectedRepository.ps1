@@ -11,7 +11,7 @@ function Add-GitHubSecretSelectedRepository {
         and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Add-GitHubSecretSelectedRepository -Owner 'my-org' -Name 'API_KEY' -RepositoryID '654321'
         ```
 

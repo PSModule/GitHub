@@ -7,14 +7,14 @@ filter Get-GitHubReleaseAssetByReleaseID {
         List release assets
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubReleaseAssetByReleaseID -Owner 'octocat' -Repository 'hello-world' -ID '1234567'
         ```
 
         Gets the release assets for the release with the ID '1234567' for the repository 'octocat/hello-world'.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubReleaseAssetByReleaseID -Owner 'octocat' -Repository 'hello-world' -ID '1234567' -Name 'example.zip'
         ```
 

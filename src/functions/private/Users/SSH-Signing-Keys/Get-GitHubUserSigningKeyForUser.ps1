@@ -7,7 +7,7 @@ filter Get-GitHubUserSigningKeyForUser {
         List SSH signing keys for a user
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubUserSigningKeyForUser -Username 'octocat'
         ```
 

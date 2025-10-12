@@ -7,7 +7,7 @@ function Update-GitHubTeam {
         To edit a team, the authenticated user must either be an organization owner or a team maintainer.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         $params = @{
             Organization  = 'github'
             Slug          = 'team-name'

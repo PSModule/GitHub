@@ -7,7 +7,7 @@ filter Block-GitHubUserByUser {
         Blocks the given user and returns a 204. If the authenticated user cannot block the given user a 422 is returned.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Block-GitHubUserByUser -Username 'octocat'
         ```
 

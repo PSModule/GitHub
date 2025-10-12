@@ -12,7 +12,7 @@ filter Move-GitHubRepository {
         a fine-grained personal access token cannot be used because they are only granted access to a single account.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Move-GitHubRepository -Owner 'PSModule' -Name 'GitHub' -NewOwner 'GitHub' -NewName 'PowerShell'
         ```
 

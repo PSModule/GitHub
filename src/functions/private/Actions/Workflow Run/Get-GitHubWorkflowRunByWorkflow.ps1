@@ -13,14 +13,14 @@ filter Get-GitHubWorkflowRunByWorkflow {
         `created`, `event`, `head_sha`, `status`.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubWorkflowRunByWorkflow -Owner 'octocat' -Repository 'Hello-World' -ID '42'
         ```
 
         Gets all workflow runs for the workflow with the ID `42` in the repository `Hello-World` owned by `octocat`.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubWorkflowRunByWorkflow -Owner 'octocat' -Repository 'Hello-World' -ID '42' -Actor 'octocat' -Branch 'main' -Event 'push' -Status 'success'
         ```
 

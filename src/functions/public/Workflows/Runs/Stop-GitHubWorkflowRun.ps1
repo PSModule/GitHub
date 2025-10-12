@@ -7,7 +7,7 @@ filter Stop-GitHubWorkflowRun {
         Cancels a workflow run using its `run_id`. You can use this endpoint to cancel a workflow run that is in progress or waiting
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Stop-GitHubWorkflowRun -Owner 'octocat' -Repository 'Hello-World' -ID 123456789
         ```
 

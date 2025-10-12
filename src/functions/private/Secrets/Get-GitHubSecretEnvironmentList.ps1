@@ -9,12 +9,12 @@ function Get-GitHubSecretEnvironmentList {
         endpoint.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubSecretEnvironmentList -Owner 'octocat' -Repository 'Hello-World' -Environment 'dev' -Context $GitHubContext
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         Name                 : SECRET1
         Owner                : octocat
         Repository           : Hello-World

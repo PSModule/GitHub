@@ -8,7 +8,7 @@ filter Get-GitHubRepositoryCustomProperty {
         Users with read access to the repository can use this endpoint.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubRepositoryCustomProperty -Owner 'octocat' -Repository 'hello-world'
         ```
 

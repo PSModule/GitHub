@@ -7,7 +7,7 @@
     Long description
 
     .EXAMPLE
-    ```pwsh
+    ```powershell
     New-Function -Path '/user/emails' -Method 'POST'
     ```
 

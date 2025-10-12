@@ -8,7 +8,7 @@ filter Get-GitHubLicenseByName {
         For more information, see "[Licensing a repository ](https://docs.github.com/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/licensing-a-repository)."
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubGitignoreList
         ```
 

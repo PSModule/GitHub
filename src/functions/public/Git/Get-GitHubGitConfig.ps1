@@ -7,7 +7,7 @@ function Get-GitHubGitConfig {
         Gets the global Git configuration.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubGitConfig
         ```
 

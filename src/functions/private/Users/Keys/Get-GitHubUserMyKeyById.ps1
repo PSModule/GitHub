@@ -9,7 +9,7 @@ filter Get-GitHubUserMyKeyById {
         [scope](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubUserMyKeyById -ID '1234567'
         ```
 

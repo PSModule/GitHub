@@ -11,14 +11,14 @@ filter Resolve-GitHubContext {
         If the context is a App, it will look at the available contexts and return the one that matches the scope of the command being run.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         $Context = Resolve-GitHubContext -Context 'github.com/Octocat'
         ```
 
         This will resolve the context 'github.com/Octocat' into a GitHubContext object.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         $Context = Resolve-GitHubContext -Context $GitHubContext
         ```
 

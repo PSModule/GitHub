@@ -7,7 +7,7 @@ filter Get-GitHubAppInstallationRequest {
         Lists all the pending installation requests for the authenticated GitHub App.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubAppInstallationRequest
         ```
 

@@ -7,7 +7,7 @@ filter Remove-GitHubRepositoryPermission {
         This function removes a team's access to a specific repository within an organization.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Remove-GitHubRepositoryPermission -Owner 'my-org' -Name 'repo-name' -Team 'dev-team'
         ```
 

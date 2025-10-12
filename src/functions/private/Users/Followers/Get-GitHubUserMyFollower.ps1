@@ -7,7 +7,7 @@ filter Get-GitHubUserMyFollower {
         Lists the people following the authenticated user.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubUserMyFollowers
         ```
 

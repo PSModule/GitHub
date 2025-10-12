@@ -7,7 +7,7 @@ filter Set-GitHubRepositoryTopic {
         Replace all repository topics
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Set-GitHubRepositoryTopic -Owner 'octocat' -Name 'hello-world' -Topic 'octocat', 'octo', 'octocat/hello-world'
         ```
 

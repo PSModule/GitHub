@@ -9,12 +9,12 @@ function Get-GitHubArtifactFromWorkflowRun {
         The function can optionally filter artifacts by name or return only the latest version per artifact name.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubArtifactFromWorkflowRun -Owner 'octocat' -Repository 'demo' -ID '123456789'
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         ID                 : 10
         NodeID             : MDEwOkFydGlmYWN0MQ==
         Name               : build-logs

@@ -9,7 +9,7 @@ filter Add-GitHubUserFollowing {
         Following a user requires the user to be logged in and authenticated with basic auth or OAuth with the `user:follow` scope.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Follow-GitHubUser -Username 'octocat'
         ```
 

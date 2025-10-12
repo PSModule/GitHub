@@ -10,12 +10,12 @@ function Get-GitHubVariableOwnerList {
         the `repo` scope is also required.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubVariableOwnerList -Owner 'PSModule' -Context (Get-GitHubContext)
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         Name                 : AVAILVAR
         Value                : ValueVar
         Owner                : PSModule

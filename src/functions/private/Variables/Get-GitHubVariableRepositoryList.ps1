@@ -9,12 +9,12 @@ function Get-GitHubVariableRepositoryList {
         OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubVariableRepositoryList -Owner 'PSModule' -Repository 'Hello-World' -Context (Get-GitHubContext)
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         Name                 : NAME
         Value                : John Doe
         Owner                : octocat

@@ -11,7 +11,7 @@ function Disable-GitHubCommand {
         that you used to stop workflow commands to the Enable-GitHubCommand.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Disable-GitHubCommand "123"
         ```
 

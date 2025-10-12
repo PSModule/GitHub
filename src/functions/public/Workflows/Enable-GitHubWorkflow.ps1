@@ -10,8 +10,8 @@ filter Enable-GitHubWorkflow {
         OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
-        ```pwsh
-        ```pwsh
+        ```powershell
+        ```powershell
         Enable-GitHubWorkflow -Owner 'PSModule' -Repository 'GitHub' -ID 'main.yaml'
         ```
         ```
@@ -19,8 +19,8 @@ filter Enable-GitHubWorkflow {
         Enables the workflow with the file name 'main.yaml' in the PSModule/GitHub repository.
 
         .EXAMPLE
-        ```pwsh
-        ```pwsh
+        ```powershell
+        ```powershell
         Enable-GitHubWorkflow -Owner 'PSModule' -Repository 'GitHub' -ID 161335
         ```
         ```

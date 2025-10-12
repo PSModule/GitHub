@@ -11,7 +11,7 @@ function Get-GitHubAppAccessibleRepository {
         permission.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         $params = @{
             Enterprise   = 'msx'
             Organization = 'PSModule'

@@ -9,12 +9,12 @@ function Get-GitHubArtifactById {
         The function returns a custom GitHubArtifact object containing metadata and download information for the artifact.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubArtifactById -Owner 'octocat' -Repository 'hello-world' -ID '123456'
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         Name               : build-artifact
         ID                 : 123456
         Url                : https://api.github.com/repos/octocat/hello-world/actions/artifacts/123456

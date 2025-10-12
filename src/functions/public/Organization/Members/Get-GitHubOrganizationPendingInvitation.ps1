@@ -10,14 +10,14 @@ function Get-GitHubOrganizationPendingInvitation {
         member, the `login` field in the return hash will be `null`.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubOrganizationPendingInvitation -Organization 'github'
         ```
 
         List all pending organization invitations for the organization `github`.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubOrganizationPendingInvitation -Organization 'github' -Role 'admin'
         ```
 

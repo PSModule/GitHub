@@ -8,7 +8,7 @@ function Request-GitHubAccessToken {
         This will poll the GitHub API until the user has entered the code.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Request-GitHubAccessToken -DeviceCode $deviceCode -ClientID $ClientID -HostName 'github.com'
         ```
 

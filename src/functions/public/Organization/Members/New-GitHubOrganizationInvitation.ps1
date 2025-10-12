@@ -13,8 +13,8 @@ function New-GitHubOrganizationInvitation {
         and "[Best practices for using the REST API](https://docs.github.com/rest/guides/best-practices-for-using-the-rest-api)."
 
         .EXAMPLE
-        ```pwsh
-        ```pwsh
+        ```powershell
+        ```powershell
         New-GitHubOrganizationInvitation -Organization 'PSModule' -InviteeID 123456789 -Role 'admin'
         ```
         ```
@@ -22,8 +22,8 @@ function New-GitHubOrganizationInvitation {
         Invites the user with the ID `12345679` to the organization `PSModule` with the role `admin`.
 
         .EXAMPLE
-        ```pwsh
-        ```pwsh
+        ```powershell
+        ```powershell
         New-GitHubOrganizationInvitation -Organization 'PSModule' -Email 'user@psmodule.io'
         ```
         ```

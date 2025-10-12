@@ -8,14 +8,14 @@ filter Get-GitHubGitignore {
         If the Name parameter is specified, the function will return the gitignore template for the specified name.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubGitignoreList
         ```
 
         Get all gitignore templates
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubGitignore -Name 'VisualStudio'
         ```
 

@@ -7,7 +7,7 @@ function Get-GitHubConfig {
         Get a GitHub module configuration.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubConfig -Name DefaultContext
         ```
 

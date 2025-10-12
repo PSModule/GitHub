@@ -9,12 +9,12 @@ function Get-GitHubVariableEnvironmentList {
         OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubVariableEnvironmentList -Owner 'octocat' -Repository 'Hello-World' -Environment 'dev' -Context $GitHubContext
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         Name                 : NAME
         Value                : John Doe
         Owner                : octocat

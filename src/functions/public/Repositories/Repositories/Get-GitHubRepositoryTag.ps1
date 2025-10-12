@@ -7,7 +7,7 @@ filter Get-GitHubRepositoryTag {
         List repository tags
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubRepositoryTag -Owner 'PSModule' -Name 'GitHub'
         ```
 

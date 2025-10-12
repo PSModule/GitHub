@@ -10,24 +10,24 @@ function Get-GitHubToken {
         either a raw token value or a secure version for sensitive operations.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubToken
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         System.Security.SecureString
         ```
 
         Returns the GitHub token as a secure string for safer handling in scripts or automation.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubToken -AsPlainText
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         ghp_XXXXXXXXXXXXXXXXXXXXXX
         ```
 

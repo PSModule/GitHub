@@ -16,35 +16,35 @@ filter Set-GitHubRelease {
         When using the 'Latest' parameter, the release will be promoted from draft/prerelease status to a full release.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Set-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -Tag 'v1.0.0' -Target 'main' -Notes 'Release notes'
         ```
 
         Creates a new release with tag 'v1.0.0' targeting the 'main' branch.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Set-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -Tag 'v1.0.0' -Notes 'Updated release notes'
         ```
 
         Updates an existing release with tag 'v1.0.0' to have new release notes.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Set-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -Tag 'v1.0.0' -Draft
         ```
 
         Creates or updates a release as a draft release.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Set-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -Tag 'v1.0.0' -Prerelease
         ```
 
         Creates or updates a release as a prerelease.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Set-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -Tag 'v1.0.0' -Latest
         ```
 
@@ -52,14 +52,14 @@ filter Set-GitHubRelease {
         it will be promoted to a full release.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Set-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -Tag 'v1.0.0' -GenerateReleaseNotes
         ```
 
         Creates or updates a release with automatically generated release notes based on pull requests and commits.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubRepository -Owner 'octocat' -Repository 'hello-world' | Set-GitHubRelease -Tag 'v1.0.0' -Notes 'Release notes'
         ```
 

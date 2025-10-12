@@ -10,7 +10,7 @@ filter Remove-GitHubRepository {
         repositories, you will get a `403 Forbidden` response.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Remove-GitHubRepository -Owner 'PSModule' -Name 'Hello-World'
         ```
 

@@ -9,12 +9,12 @@ function Get-GitHubSecretSelectedRepository {
         need the `admin:org` scope to use this endpoint. If the repository is private, the `repo` scope is also required.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubSecretSelectedRepository -Owner 'octocat' -Name 'hello-world'
         ```
 
         Outputs:
-        ```pwsh
+        ```powershell
         Name        : hello-world
         NodeID      : m_MDXNcwMAwMMA
         ID          : 123456789

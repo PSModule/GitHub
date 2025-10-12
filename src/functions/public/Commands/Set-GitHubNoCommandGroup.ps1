@@ -8,7 +8,7 @@ function Set-GitHubNoCommandGroup {
         Allows for colapsing of code in IDE for code that belong together.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Set-GitHubNoCommandGroup {
             Write-Host 'Hello, World!'
             Write-GithubError 'This is an error'
@@ -18,7 +18,7 @@ function Set-GitHubNoCommandGroup {
         Groups commands where no workflow commands are run.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         NoLogGroup 'MyGroup' {
             Write-Host 'Hello, World!'
             Write-GithubError 'This is an error'

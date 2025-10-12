@@ -7,7 +7,7 @@ filter Get-GitHubUserSocialsByName {
         Lists social media accounts for a user. This endpoint is accessible by anyone.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubUserSocialsByName -Username 'octocat'
         ```
 

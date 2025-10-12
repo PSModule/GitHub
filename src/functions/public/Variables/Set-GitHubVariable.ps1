@@ -13,14 +13,14 @@ function Set-GitHubVariable {
         - Environment-level variables require collaborator access to the repository.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Set-GitHubVariable -Owner 'octocat' -Repository 'Hello-World' -Name 'HOST_NAME' -Value 'github.com' -Context $GitHubContext
         ```
 
         Creates or updates a repository variable named `HOST_NAME` with the value `github.com` in the specified repository.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Set-GitHubVariable -Owner 'octocat' -Name 'HOST_NAME' -Value 'github.com' -Visibility 'all' -Context $GitHubContext
         ```
 
@@ -28,7 +28,7 @@ function Set-GitHubVariable {
         makes it available to all repositories in the organization.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Set-GitHubVariable -Owner 'octocat' -Repository 'Hello-World' -Environment 'dev' -Name 'HOST_NAME' -Value 'github.com' -Context $GitHubContext
         ```
 

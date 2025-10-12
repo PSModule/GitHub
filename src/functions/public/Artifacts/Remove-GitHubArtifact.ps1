@@ -10,7 +10,7 @@ function Remove-GitHubArtifact {
         The function uses the GitHub REST API to perform the deletion and supports `ShouldProcess` for safe execution.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Remove-GitHubArtifact -Owner 'octocat' -Repository 'demo-repo' -ID '123456'
         ```
 

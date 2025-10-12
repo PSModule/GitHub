@@ -7,7 +7,7 @@ function Test-GitHubToken {
         This function checks if the GitHub token is available in the environment variables.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Test-GitHubToken
         ```
     #>

@@ -12,7 +12,7 @@ filter Get-GitHubRepositoryContributor {
         in the repository link to GitHub users. The rest will appear as anonymous contributors without associated GitHub user information.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubRepositoryContributor -Owner 'PSModule' -Name 'GitHub'
         ```
 

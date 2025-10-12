@@ -15,7 +15,7 @@ filter Get-GitHubOrganizationByName {
         for details. For an example response, see 'Response with GitHub plan information' below."
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubOrganizationByName -Name 'github'
         ```
 

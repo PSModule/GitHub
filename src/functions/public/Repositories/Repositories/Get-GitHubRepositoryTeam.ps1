@@ -15,7 +15,7 @@ filter Get-GitHubRepositoryTeam {
         This endpoint is not compatible with fine-grained personal access tokens.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubRepositoryTeam -Owner 'PSModule' -Name 'GitHub'
         ```
 

@@ -9,14 +9,14 @@ filter Get-GitHubWorkflow {
         GitHub Apps must have the actions:read permission to use this endpoint.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubWorkflow -Owner 'octocat' -Repository 'hello-world'
         ```
 
         Gets all workflows in the 'octocat/hello-world' repository.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubWorkflow -Owner 'octocat' -Repository 'hello-world' -Name 'hello-world.yml'
         ```
 

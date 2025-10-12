@@ -9,12 +9,12 @@ function Get-GitHubEnterprise {
         specific enterprise name is provided, details about that single instance are returned.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubEnterprise
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         Name              : My Enterprise
         Slug              : my-enterprise
         URL               : https://github.com/enterprises/my-enterprise
@@ -29,12 +29,12 @@ function Get-GitHubEnterprise {
         Retrieves details about all GitHub Enterprise instances for the user.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubEnterprise -Name 'my-enterprise'
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         Name              : My Enterprise
         Slug              : my-enterprise
         URL               : https://github.com/enterprises/my-enterprise

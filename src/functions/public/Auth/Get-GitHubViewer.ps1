@@ -7,7 +7,7 @@ function Get-GitHubViewer {
         Gets the currently authenticated user.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GithubViewer
         ```
 

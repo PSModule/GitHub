@@ -8,7 +8,7 @@ filter Test-GitHubUserFollowedByMe {
         Returns a 404 if the user is not followed by the authenticated user.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Test-GitHubUserFollowedByMe -Username 'octocat'
         ```
 

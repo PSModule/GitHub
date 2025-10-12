@@ -9,12 +9,12 @@ function Get-GitHubEnterpriseByName {
         information.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubEnterpriseByName -Name 'my-enterprise'
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         Name              : My Enterprise
         Slug              : my-enterprise
         URL               : https://github.com/enterprises/my-enterprise

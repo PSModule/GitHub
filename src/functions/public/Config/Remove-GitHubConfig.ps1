@@ -7,7 +7,7 @@ function Remove-GitHubConfig {
         Remove a GitHub module configuration.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Remove-GitHubConfig -Name DefaultUser
         ```
 

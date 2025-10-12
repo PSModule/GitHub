@@ -11,7 +11,7 @@ function Set-GitHubSecretOnRepository {
         OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Set-GitHubSecretOnRepository -Owner 'octocat' -Repository 'Hello-World' -Name 'SECRET1' -Value 'SECRET_VALUE' -Context $GitHubContext
         ```
 

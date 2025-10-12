@@ -10,35 +10,35 @@ filter Get-GitHubOrganization {
         Get an organization - if a organization name is provided.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubOrganization
         ```
 
         List all organizations for the authenticated user.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubOrganization -Username 'octocat'
         ```
 
         List public organizations for a specific user.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubOrganization -All -Since 142951047
         ```
 
         List all organizations made after an ID.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubOrganization -Name 'PSModule'
         ```
 
         Get a specific organization.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubOrganization -Enterprise 'msx'
         ```
 

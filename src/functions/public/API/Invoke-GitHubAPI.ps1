@@ -11,21 +11,21 @@ function Invoke-GitHubAPI {
         It automatically handles the endpoint URI construction, headers, and token authentication.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Invoke-GitHubAPI -ApiEndpoint '/repos/user/repo/pulls' -Method GET
         ```
 
         Gets all open pull requests for the specified repository.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Invoke-GitHubAPI -ApiEndpoint '/repos/user/repo/pulls' -Method GET -Body @{ state = 'open' }
         ```
 
         Gets all open pull requests for the specified repository, filtered by the 'state' parameter.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Invoke-GitHubAPI -ApiEndpoint '/repos/user/repo/pulls' -Method GET -Body @{ state = 'open' } -Accept 'application/vnd.github.v3+json'
         ```
 

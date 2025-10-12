@@ -11,7 +11,7 @@ function Add-GitHubVariableSelectedRepository {
         Fine-grained tokens must have 'Variables' organization permission (write) and 'Metadata' repository permission (read).
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Add-GitHubVariableSelectedRepository -Owner 'my-org' -Name 'API_KEY' -RepositoryID '654321'
         ```
 

@@ -11,14 +11,14 @@ function Get-GitHubStatus {
         and "Major Service Outage".
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubStatus
         ```
 
         Gets the status of GitHub services
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubStatus -Summary
         ```
 

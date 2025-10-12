@@ -9,7 +9,7 @@ function Get-GitHubAppInstallationRepositoryAccess {
         The authenticated GitHub App must be installed on the enterprise and be granted the Enterprise/organization_installations (read) permission.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         $params = @{
             Enterprise          = 'msx'
             Organization        = 'PSModule'

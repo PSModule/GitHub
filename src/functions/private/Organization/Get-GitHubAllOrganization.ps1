@@ -10,7 +10,7 @@ filter Get-GitHubAllOrganization {
         Use the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers) to get the URL for the next page of organizations.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubAllOrganization -Since 142951047
         ```
 

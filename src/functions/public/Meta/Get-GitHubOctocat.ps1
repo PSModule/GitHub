@@ -7,14 +7,14 @@ filter Get-GitHubOctocat {
         Get the octocat as ASCII art.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubOctocat
         ```
 
         Get the octocat as ASCII art
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubOctocat -S "Hello world"
         ```
 

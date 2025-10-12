@@ -14,21 +14,21 @@ function Remove-GitHubVariable {
         - `repo` for repository and environment-level variables.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubVariable -Owner 'octocat' -Repository 'Hello-World' | Remove-GitHubVariable
         ```
 
         Removes all variables retrieved from the specified repository.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Remove-GitHubVariable -Owner 'octocat' -Name 'HOST_NAME' -Context $GitHubContext
         ```
 
         Deletes the specified variable from the specified organization.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Remove-GitHubVariable -Variable $variablesArray
         ```
 

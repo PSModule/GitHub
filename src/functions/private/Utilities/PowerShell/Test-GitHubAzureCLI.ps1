@@ -8,7 +8,7 @@ function Test-GitHubAzureCLI {
         It verifies both the availability of the CLI tool and the authentication status.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Test-GitHubAzureCLI
         ```
 

@@ -9,7 +9,7 @@ function Set-GitHubRepository {
         provided parameters. The updated or newly created repository is returned.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Set-GitHubRepository -Name 'Hello-World' -Description 'My repo'
         ```
 
@@ -17,7 +17,7 @@ function Set-GitHubRepository {
         or updates it if it already exists. The repository uses GitHub's default settings.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         $params = @{
             Owner                  = 'octocat'
             Name                   = 'Hello-World'

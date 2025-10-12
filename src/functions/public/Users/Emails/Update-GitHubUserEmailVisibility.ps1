@@ -7,14 +7,14 @@ filter Update-GitHubUserEmailVisibility {
         Sets the visibility for your primary email addresses.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Set-GitHubUserEmailVisibility -Visibility Public
         ```
 
         Sets the visibility for your primary email addresses to public.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Set-GitHubUserEmailVisibility -Visibility Private
         ```
 

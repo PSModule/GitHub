@@ -7,7 +7,7 @@ filter Test-GitHubUserFollowedByUser {
         Checks if a user follows another user.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Test-GitHubUserFollowedByUser -Username 'octocat' -Follows 'ratstallion'
         ```
 

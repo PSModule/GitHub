@@ -7,7 +7,7 @@ filter Unblock-GitHubUserByUser {
         Unblocks the given user and returns a 204.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Unblock-GitHubUserByUser -Username 'octocat'
         ```
 

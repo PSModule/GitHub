@@ -7,21 +7,21 @@ function Get-GitHubPublicKey {
         Gets your public key, which you need to encrypt secrets.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubPublicKey
         ```
 
         Gets a public key for the authenticated user.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubPublicKey -Organization 'octocat'
         ```
 
         Gets a public key for the 'octocat' organization.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubPublicKey -Owner 'octocat' -Repository 'hello-world' -Type 'codespaces'
         ```
 

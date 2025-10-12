@@ -9,7 +9,7 @@ filter Remove-GitHubWorkflowRun {
         this endpoint.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Remove-GitHubWorkflowRun -Owner 'octocat' -Repository 'Hello-World' -ID 123456789
         ```
 

@@ -37,14 +37,14 @@ filter Add-GitHubReleaseAsset {
         the old file before you can re-upload the new asset.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Add-GitHubReleaseAsset -Owner 'octocat' -Repository 'hello-world' -ID '7654321' -Path 'C:\Users\octocat\Downloads\hello-world.zip'
         ```
 
         Gets the release assets for the release with the ID '1234567' for the repository 'octocat/hello-world'.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Add-GitHubReleaseAsset -Owner 'octocat' -Repository 'hello-world' -ID '7654321' -Path 'C:\Users\octocat\Projects\MyApp'
         ```
 

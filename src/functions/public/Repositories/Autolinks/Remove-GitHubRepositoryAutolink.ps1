@@ -9,7 +9,7 @@ filter Remove-GitHubRepositoryAutolink {
         Information about autolinks are only available to repository administrators.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Remove-GitHubRepositoryAutolink -Owner 'octocat' -Repository 'Hello-World' -AutolinkId 1
         ```
 

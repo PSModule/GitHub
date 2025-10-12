@@ -9,7 +9,7 @@ filter Get-GitHubRepositoryRuleSuite {
         For more information, see"[Managing rulesets for a repository](https://docs.github.com/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/managing-rulesets-for-a-repository#viewing-insights-for-rulesets)."
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         $params = @{
             Owner           = 'octocat'
             Repo            = 'hello-world'
@@ -24,7 +24,7 @@ filter Get-GitHubRepositoryRuleSuite {
         Gets a list of rule suites for the main branch of the hello-world repository owned by octocat.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubRepositoryRuleSuite -Owner 'octocat' -Repository 'hello-world' -RuleSuiteId 123456789
         ```
 

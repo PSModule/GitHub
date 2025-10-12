@@ -8,7 +8,7 @@ function Get-GitHubStatusComponent {
         degraded_performance, partial_outage, or major_outage.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubStatusComponent
         ```
 

@@ -7,7 +7,7 @@ function Invoke-GitHubGraphQLQuery {
         Use this function to invoke a GraphQL query and mutations against the GitHub GraphQL API with proper error handling.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Invoke-GitHubGraphQLQuery -Query $query -Variables $Variables
         ```
 

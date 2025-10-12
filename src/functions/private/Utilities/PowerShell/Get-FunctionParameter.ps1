@@ -9,21 +9,21 @@ function Get-FunctionParameter {
         If a parameter is not provided, it will attempt to retrieve the default value.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-FunctionParameter
         ```
 
         This will return all the parameters and their final value in the current function.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-FunctionParameter -IncludeCommonParameters
         ```
 
         This will return all the parameters and their final value in the current function, including common parameters.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-FunctionParameter -Scope 2
         ```
 

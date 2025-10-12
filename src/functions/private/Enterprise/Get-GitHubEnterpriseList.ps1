@@ -8,12 +8,12 @@ function Get-GitHubEnterpriseList {
         creation dates, and other metadata. It returns an array of objects of type GitHubEnterprise populated with this information.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubEnterpriseList
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         Name              : My Enterprise
         Slug              : my-enterprise
         URL               : https://github.com/enterprises/my-enterprise

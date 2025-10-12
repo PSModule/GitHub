@@ -7,7 +7,7 @@ function Write-GitHubWarning {
         Write a warning message in GitHub Actions. The message will be displayed in the GitHub Actions log.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Write-GitHubWarning -Message 'Hello, World!'
         ```
 

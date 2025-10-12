@@ -7,7 +7,7 @@ filter New-GitHubRepositoryAutolink {
         Users with admin access to the repository can create an autolink.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         New-GitHubRepositoryAutolink -Owner 'octocat' -Repository 'Hello-World' -KeyPrefix 'GH-' -UrlTemplate 'https://www.example.com/issue/<num>'
         ```
 

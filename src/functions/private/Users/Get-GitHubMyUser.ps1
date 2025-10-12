@@ -10,7 +10,7 @@ filter Get-GitHubMyUser {
         profile information.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubMyUser
         ```
 

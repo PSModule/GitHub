@@ -8,7 +8,7 @@ filter Block-GitHubUserByOrganization {
         If the organization cannot block the given user a 422 is returned.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Block-GitHubUserByOrganization -Organization 'github' -Username 'octocat'
         ```
 

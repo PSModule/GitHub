@@ -8,28 +8,28 @@ function Disconnect-GitHubAccount {
         to ensure it cannot be used after disconnection.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Disconnect-GitHubAccount
         ```
 
         Disconnects from GitHub and removes the default GitHub context.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Disconnect-GithubAccount -Context 'github.com/Octocat'
         ```
 
         Disconnects from GitHub and removes the context 'github.com/Octocat'.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Disconnect-GitHubAccount -RevokeToken
         ```
 
         Disconnects from GitHub, revokes the access token, and removes the default GitHub context.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Disconnect-GithubAccount -Context 'github.com/Octocat' -RevokeToken
         ```
 

@@ -8,7 +8,7 @@ function Get-GitHubTeamBySlug {
         and replaces spaces with a - separator. For example, "My TEam Näme" would become my-team-name.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubTeamBySlug -Organization 'github' -Slug 'my-team-name'
         ```
 

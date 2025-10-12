@@ -9,7 +9,7 @@ filter Get-GitHubMyRepositoryByName {
         they are a collaborator, and repositories that they can access through an organization membership.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubMyRepositoryByName
         ```
 

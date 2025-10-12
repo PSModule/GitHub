@@ -7,7 +7,7 @@ filter Get-GitHubRoot {
         Get Hypermedia links to resources accessible in GitHub's REST API.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubRoot
         ```
 

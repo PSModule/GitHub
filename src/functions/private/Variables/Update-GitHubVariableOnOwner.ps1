@@ -10,7 +10,7 @@ function Update-GitHubVariableOnOwner {
         the `repo` scope is also required.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Update-GitHubVariableOnOwner -Owner 'octocat' -Name 'HOST_NAME' -Value 'github.com' -Context $GitHubContext
         ```
 

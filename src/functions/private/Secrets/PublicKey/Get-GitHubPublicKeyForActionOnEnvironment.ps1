@@ -9,12 +9,12 @@ function Get-GitHubPublicKeyForActionOnEnvironment {
         access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubPublicKeyForActionOnEnvironment -Owner 'octocat' -Repository 'hello-world' -Environment 'prod' -Context $GitHubContext
         ```
 
         Outputs:
-        ```pwsh
+        ```powershell
         ID          : 3380204578043523366
         Key         : ypK8XbFOtcXsCaqJOfdWjpCNumPmF3sfAbbv7x+3uSE=                    #gitleaks:allow
         Type        : actions

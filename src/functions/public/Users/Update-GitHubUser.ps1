@@ -9,21 +9,21 @@ filter Update-GitHubUser {
         displayed on your public profile or via the API.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Update-GitHubUser -Name 'octocat'
         ```
 
         Update the authenticated user's name to 'octocat'
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Update-GitHubUser -Location 'San Francisco'
         ```
 
         Update the authenticated user's location to 'San Francisco'
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Update-GitHubUser -Hireable $true -Description 'I love programming'
         ```
 

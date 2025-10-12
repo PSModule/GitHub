@@ -12,12 +12,12 @@ function Get-GitHubSecretOwnerByName {
         the `repo` scope to use this endpoint.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubSecretOwnerByName -Owner 'octocat' -Name 'SECRET_THING' -Context (Get-GitHubContext)
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         Name                 : SECRET_THING
         Owner                : octocat
         Repository           :

@@ -7,7 +7,7 @@ function Get-GitHubEventData {
         Gets data about the event that triggered the workflow.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubEventData
         ```
 

@@ -13,7 +13,7 @@ function Get-GitHubScheduledMaintenance {
         Impact: None (black), Minor (yellow), Major (orange), or Critical (red)
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubScheduledMaintenance
         ```
 
@@ -21,14 +21,14 @@ function Get-GitHubScheduledMaintenance {
         This includes scheduled maintenances as described in the above two endpoints, as well as those in the Completed state.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubScheduledMaintenance -Active
         ```
 
         Get a list of any active maintenances.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubScheduledMaintenance -Upcoming
         ```
 

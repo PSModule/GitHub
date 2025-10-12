@@ -13,7 +13,7 @@ function New-GitHubTeam {
         "[About teams](https://docs.github.com/github/setting-up-and-managing-organizations-and-teams/about-teams)".
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         $params = @{
             Organization  = 'github'
             Name          = 'team-name'

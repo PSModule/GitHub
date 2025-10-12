@@ -8,7 +8,7 @@ filter Get-GitHubGitignoreByName {
         Use the raw [media type](https://docs.github.com/rest/overview/media-types/) to get the raw contents.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubGitignoreList
         ```
 

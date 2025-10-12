@@ -8,7 +8,7 @@ filter Get-GitHubGitignoreList {
         [creating a repository](https://docs.github.com/rest/repos/repos#create-a-repository-for-the-authenticated-user).
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubGitignoreList
         ```
 

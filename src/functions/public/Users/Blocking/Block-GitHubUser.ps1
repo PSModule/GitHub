@@ -8,7 +8,7 @@ filter Block-GitHubUser {
         If the user cannot be blocked false is returned.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Block-GitHubUser -Username 'octocat'
         ```
 
@@ -16,7 +16,7 @@ filter Block-GitHubUser {
         Returns $true if successful, $false if not.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Block-GitHubUser -Organization 'GitHub' -Username 'octocat'
         ```
 

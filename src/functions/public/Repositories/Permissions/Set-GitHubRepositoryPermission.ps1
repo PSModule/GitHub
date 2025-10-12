@@ -9,7 +9,7 @@ filter Set-GitHubRepositoryPermission {
         'None' is specified, the function removes the team's access to the repository.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Set-GitHubRepositoryPermission -Owner 'MyOrg' -Name 'MyRepo' -Team 'devs' -Permission 'push'
         ```
 

@@ -9,12 +9,12 @@ function Get-GitHubSecretOwnerList {
         endpoint. If the repository is private, the `repo` scope is also required.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubSecretOwnerList -Owner 'PSModule' -Context (Get-GitHubContext)
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         ```
 
         Retrieves all secrets from the specified organization.

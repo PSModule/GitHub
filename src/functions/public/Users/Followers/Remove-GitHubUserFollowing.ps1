@@ -7,7 +7,7 @@ filter Remove-GitHubUserFollowing {
         Unfollowing a user requires the user to be logged in and authenticated with basic auth or OAuth with the `user:follow` scope.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Unfollow-GitHubUser -Username 'octocat'
         ```
 

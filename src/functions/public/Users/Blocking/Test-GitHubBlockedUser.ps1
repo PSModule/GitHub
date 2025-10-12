@@ -8,7 +8,7 @@ filter Test-GitHubBlockedUser {
         Returns a 404 if the given user is not blocked, or if the given user account has been identified as spam by GitHub.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Test-GitHubBlockedUser -Username 'octocat'
         ```
 
@@ -16,7 +16,7 @@ filter Test-GitHubBlockedUser {
         Returns true if the user is blocked, false if not.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Test-GitHubBlockedUser -Organization 'github' -Username 'octocat'
         ```
 

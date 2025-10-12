@@ -17,7 +17,7 @@ function Connect-GitHubAccount {
         the app will be able to make API calls with a new access token.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Connect-GitHubAccount
         ```
 
@@ -25,7 +25,7 @@ function Connect-GitHubAccount {
         If the user has already logged in, the access token will be refreshed.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         $env:GH_TOKEN = '***'
         Connect-GitHubAccount
         ```
@@ -33,7 +33,7 @@ function Connect-GitHubAccount {
         Connects to GitHub using the access token from environment variable, assuming unattended mode.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Connect-GitHubAccount -UseAccessToken
         ! Enter your personal access token: *************
         ```
@@ -42,7 +42,7 @@ function Connect-GitHubAccount {
         The token is used when connecting to GitHub.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Connect-GitHubAccount -Mode 'OAuthApp' -Scope 'gist read:org repo workflow'
         ```
 

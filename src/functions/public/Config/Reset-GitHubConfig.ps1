@@ -7,7 +7,7 @@ function Reset-GitHubConfig {
         Re-initializes the GitHub module configuration.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Reset-GitHubConfig
         ```
 

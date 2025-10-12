@@ -10,28 +10,28 @@ filter Get-GitHubReleaseAsset {
         If a tag and name are provided, the specific named asset from the release with that tag is returned.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubReleaseAsset -Owner 'octocat' -Repository 'hello-world' -ID '1234567'
         ```
 
         Gets the release asset with the ID '1234567' for the repository 'octocat/hello-world'.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubReleaseAsset -Owner 'octocat' -Repository 'hello-world' -ReleaseID '7654321'
         ```
 
         Gets all release assets for the release with the ID '7654321' for the repository 'octocat/hello-world'.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubReleaseAsset -Owner 'octocat' -Repository 'hello-world' -ReleaseID '7654321' -Name 'example.zip'
         ```
 
         Gets the release asset named 'example.zip' from the release with ID '7654321' for the repository 'octocat/hello-world'.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubReleaseAsset -Owner 'octocat' -Repository 'hello-world' -Tag 'v1.0.0' -Name 'example.zip'
         ```
 

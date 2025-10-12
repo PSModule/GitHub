@@ -7,7 +7,7 @@ filter Get-GitHubUserKeyForUser {
         Lists the _verified_ public SSH keys for a user. This is accessible by anyone.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubUserKeyForUser -Username 'octocat'
         ```
 

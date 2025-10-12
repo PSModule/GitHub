@@ -8,14 +8,14 @@ filter Get-GitHubEmoji {
         If you pass the `Path` parameter, the emojis will be downloaded to the specified destination.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubEmoji
         ```
 
         Gets all the emojis available to use on GitHub.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubEmoji -Path 'C:\Users\user\Documents\GitHub\Emojis'
         ```
 

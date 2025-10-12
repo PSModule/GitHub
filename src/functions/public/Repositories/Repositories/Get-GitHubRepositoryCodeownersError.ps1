@@ -10,7 +10,7 @@ filter Get-GitHubRepositoryCodeownersError {
         see "[About code owners](https://docs.github.com/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners)."
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubRepositoryCodeownersError -Owner 'PSModule' -Name 'GitHub'
         ```
 

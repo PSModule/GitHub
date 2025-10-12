@@ -16,7 +16,7 @@ function Set-GitHubStepSummary {
         workflow run summary page. If multiple jobs generate summaries, the job summaries are ordered by job completion time.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Set-GitHubStepSummary -Summary 'Hello, World!'
         ```
 

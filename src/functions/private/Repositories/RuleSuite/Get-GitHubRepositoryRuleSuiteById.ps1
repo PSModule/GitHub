@@ -8,7 +8,7 @@ filter Get-GitHubRepositoryRuleSuiteById {
         For more information, see "[Managing rulesets for a repository](https://docs.github.com/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/managing-rulesets-for-a-repository#viewing-insights-for-rulesets)."
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubRepositoryRuleSuiteById -Owner 'octocat' -Repository 'hello-world' -RuleSuiteId 123456789
         ```
 

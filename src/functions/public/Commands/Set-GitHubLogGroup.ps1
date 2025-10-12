@@ -8,7 +8,7 @@ function Set-GitHubLogGroup {
         Allows for colapsing of code in IDE for code that belong together.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Set-GitHubLogGroup -Name 'MyGroup' -ScriptBlock {
             Write-Host 'Hello, World!'
         }
@@ -17,7 +17,7 @@ function Set-GitHubLogGroup {
         Creates a new log group named 'MyGroup' and writes 'Hello, World!' to the output.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         LogGroup 'MyGroup' {
             Write-Host 'Hello, World!'
         }

@@ -12,7 +12,7 @@ function Set-GitHubSecretOnOwner {
         the `repo` scope to use this endpoint.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Set-GitHubSecretOnOwner -Owner 'octocat' -Name 'HOST_NAME' -Value 'test_value' -Context $GitHubContext
         ```
 

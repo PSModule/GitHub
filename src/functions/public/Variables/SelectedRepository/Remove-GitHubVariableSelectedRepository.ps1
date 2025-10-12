@@ -16,7 +16,7 @@ function Remove-GitHubVariableSelectedRepository {
         'Metadata' repository permissions (read).
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Remove-GitHubVariableSelectedRepository -Owner 'my-org' -Name 'ENV_SECRET' -RepositoryID 123456
         ```
 

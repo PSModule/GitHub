@@ -9,7 +9,7 @@ function Uninstall-GitHubAppOnEnterpriseOrganization {
         The authenticated GitHub App must be installed on the enterprise and be granted the Enterprise/organization_installations (write) permission.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Uninstall-GitHubAppOnEnterpriseOrganization -Enterprise 'github' -Organization 'octokit' -ID '123456'
         ```
 

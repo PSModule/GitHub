@@ -7,7 +7,7 @@ function Get-GitHubRunnerData {
         Gets data about the runner thats running the workflow.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubRunnerData
         ```
 

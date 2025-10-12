@@ -11,12 +11,12 @@ function Get-GitHubVariable {
         `admin:org` for organizations, and collaborator access for environments.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubVariable -Owner 'octocat' -Name 'HOST_NAME'
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         Name        : HOST_NAME
         Value       : github.com
         Owner       : octocat
@@ -27,12 +27,12 @@ function Get-GitHubVariable {
         Retrieves the specified variable from the organization level.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubVariable -Owner 'octocat' -Repository 'Hello-World' -Name 'GUID'
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         Name        : GUID
         Value       : 354aa0b0-65b1-46c8-9c3e-1576f4167a41
         Owner       : octocat
@@ -43,12 +43,12 @@ function Get-GitHubVariable {
         Retrieves the specified variable from the repository level.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubVariable -Owner 'octocat' -Repository 'Hello-World' -Environment 'dev' -Name 'DB_SERVER'
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         Name        : DB_SERVER
         Value       : db.example.com
         Owner       : octocat
@@ -59,12 +59,12 @@ function Get-GitHubVariable {
         Retrieves the specified variable from the environment level within a repository.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubVariable -Owner 'octocat'
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         Name        : MAX_THREADS
         Value       : 10
         Owner       : octocat
@@ -81,12 +81,12 @@ function Get-GitHubVariable {
         Retrieves all variables available at the organization level.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubVariable -Owner 'octocat' -Repository 'Hello-World'
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         Name        : LOG_LEVEL
         Value       : INFO
         Owner       : octocat
@@ -103,12 +103,12 @@ function Get-GitHubVariable {
         Retrieves all variables available at the repository level.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubVariable -Owner 'octocat' -Repository 'Hello-World' -Environment 'staging'
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         Name        : CACHE_DURATION
         Value       : 3600
         Owner       : octocat

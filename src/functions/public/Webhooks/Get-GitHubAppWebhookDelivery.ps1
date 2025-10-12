@@ -10,14 +10,14 @@ function Get-GitHubAppWebhookDelivery {
         to access this endpoint.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubAppWebhookDelivery
         ```
 
         Returns a list of webhook deliveries for the webhook for the authenticated app.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubAppWebhookDelivery -ID 123456
         ```
 

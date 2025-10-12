@@ -10,12 +10,12 @@ function Get-GitHubArtifactFromRepository {
         By default, only the latest version of each artifact is returned unless -AllVersions is specified.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubArtifactFromRepository -Owner 'octocat' -Repository 'demo-repo' -AllVersions
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         Name        : build-output
         ID          : 4567890
         Expired     : False

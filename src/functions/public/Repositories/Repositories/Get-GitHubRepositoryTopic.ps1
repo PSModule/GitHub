@@ -7,7 +7,7 @@ filter Get-GitHubRepositoryTopic {
         Get all repository topics
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         ```
 
         .NOTES

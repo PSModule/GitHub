@@ -10,7 +10,7 @@ function Update-GitHubVariableOnEnvironment {
 
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         $params = @{
             Owner       = 'octocat'
             Repository  = 'Hello-World'

@@ -7,7 +7,7 @@ function Get-GitHubContext {
         Get the current GitHub context.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubContext
         ```
 

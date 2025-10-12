@@ -12,12 +12,12 @@ function Get-GitHubArtifact {
         - FromRepository: Retrieve artifacts from a repository, optionally by name or with all versions.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubArtifact -Owner 'octocat' -Repository 'Hello-World' -ID '123456'
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         Name        : artifact-1
         ID          : 123456
         SizeInBytes : 2048
@@ -27,12 +27,12 @@ function Get-GitHubArtifact {
         Retrieves a single GitHub Actions artifact using its unique artifact ID.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubArtifact -Owner 'octocat' -Repository 'Hello-World' -WorkflowRunID '987654321'
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         Name        : test-results
         ID          : 456789
         SizeInBytes : 4096
@@ -42,12 +42,12 @@ function Get-GitHubArtifact {
         Retrieves the latest version of all artifacts from the specified workflow run.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubArtifact -Owner 'octocat' -Repository 'Hello-World' -WorkflowRunID '987654321' -AllVersions
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         Name        : test-results
         ID          : 4564584673
         SizeInBytes : 4096
@@ -62,12 +62,12 @@ function Get-GitHubArtifact {
         Retrieves all versions of all artifacts from the specified workflow run.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubArtifact -Owner 'octocat' -Repository 'Hello-World'
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         Name        : build-artifact
         ID          : 998877
         SizeInBytes : 8192

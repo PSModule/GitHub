@@ -7,8 +7,8 @@ filter Add-GitHubUserEmail {
         This endpoint is accessible with the `user` scope.
 
         .EXAMPLE
-        ```pwsh
-        ```pwsh
+        ```powershell
+        ```powershell
         Add-GitHubUserEmail -Email 'octocat@github.com','firstname.lastname@work.com'
         ```
         ```

@@ -8,7 +8,7 @@ filter Test-GitHubUserFollowing {
         Returns a 404 if the user is not followed by a given user or the authenticated user.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Test-GitHubUserFollowing -Follows 'octocat'
         Test-GitHubUserFollowing 'octocat'
         ```
@@ -16,7 +16,7 @@ filter Test-GitHubUserFollowing {
         Checks if the authenticated user follows the user 'octocat'.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Test-GitHubUserFollowing -Username 'octocat' -Follows 'ratstallion'
         ```
 

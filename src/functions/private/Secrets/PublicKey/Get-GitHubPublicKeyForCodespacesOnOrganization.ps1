@@ -8,12 +8,12 @@ function Get-GitHubPublicKeyForCodespacesOnOrganization {
         can create or update secrets. OAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubPublicKeyForCodespacesOnOrganization -Owner 'octocat' -Context $GitHubContext
         ```
 
         Outputs:
-        ```pwsh
+        ```powershell
         ID          : 3380189982652154440
         Key         : XbfD9j2CNq6L2qq2xpYrRhRRdFgR0CzfISQqsAIInGE=                    #gitleaks:allow
         Type        : codespaces

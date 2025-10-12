@@ -14,7 +14,7 @@ filter New-GitHubRepository {
         * `repo` scope to create a private repository
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         $params = @{
             Name                     = 'Hello-World'
             Description              = 'This is your first repository'
@@ -37,7 +37,7 @@ filter New-GitHubRepository {
         Creates a new public repository named "Hello-World" owned by the authenticated user.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         $params = @{
             Organization             = 'PSModule'
             Name                     = 'Hello-World'
@@ -60,7 +60,7 @@ filter New-GitHubRepository {
         Creates a new public repository named "Hello-World" owned by the organization "PSModule".
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         $params = @{
             TemplateOwner      = 'GitHub'
             TemplateRepository = 'octocat'
@@ -76,7 +76,7 @@ filter New-GitHubRepository {
         Creates a new private repository named `MyNewRepo` from the `octocat` template repository owned by `GitHub`.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         $params = @{
             ForkOwner         = 'octocat'
             ForkRepo          = 'Hello-World'

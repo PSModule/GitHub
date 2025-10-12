@@ -9,12 +9,12 @@ function Save-GitHubArtifact {
         personal access tokens (classic) or OAuth tokens with the `repo` scope are required.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Save-GitHubArtifact -Owner 'octocat' -Repository 'Hello-World' -ID '123456' -Path 'C:\Artifacts'
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         Directory: C:\Artifacts
 
         Mode                 LastWriteTime         Length Name
@@ -25,12 +25,12 @@ function Save-GitHubArtifact {
         Downloads artifact ID '123456' from the 'Hello-World' repository owned by 'octocat' to the specified path.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Save-GitHubArtifact -Owner 'octocat' -Repository 'Hello-World' -Name 'module' -Path 'C:\Artifacts\module' -Expand -Force
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         Directory: C:\Artifacts
 
         Mode                 LastWriteTime         Length Name

@@ -7,7 +7,7 @@ function Write-GitHubError {
         Write a error message in GitHub Actions. The message will be displayed in the GitHub Actions log.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Write-GitHubError -Message 'Hello, World!'
         ```
 

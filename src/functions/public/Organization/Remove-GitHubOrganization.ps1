@@ -10,7 +10,7 @@ filter Remove-GitHubOrganization {
         regarding account deletion before using this endpoint.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Remove-GitHubOrganization -Name 'GitHub'
         ```
 

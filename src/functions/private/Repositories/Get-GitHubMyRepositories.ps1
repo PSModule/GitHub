@@ -9,14 +9,14 @@ filter Get-GitHubMyRepositories {
         they are a collaborator, and repositories that they can access through an organization membership.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubMyRepositories
         ```
 
         Gets the repositories for the authenticated user.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubMyRepositories -Visibility 'private'
         ```
 

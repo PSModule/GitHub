@@ -10,7 +10,7 @@ function Set-GitHubVariableSelectedRepository {
         OAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint. If the repository is private, the `repo` scope is also required.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         ```
 
         .LINK

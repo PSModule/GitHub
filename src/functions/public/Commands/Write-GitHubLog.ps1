@@ -9,21 +9,21 @@ function Write-GitHubLog {
         When not running in GitHub Actions, uses standard Write-Host.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Write-GitHubLog -Message 'Hello, World!'
         ```
 
         Writes 'Hello, World!' to the log.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Write-GitHubLog -Message 'Error occurred!' -ForegroundColor Red
         ```
 
         Writes 'Error occurred!' in red text.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Write-GitHubLog -Message 'Success!' -ForegroundColor Green -BackgroundColor Black
         ```
 

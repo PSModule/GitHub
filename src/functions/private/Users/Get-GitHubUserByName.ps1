@@ -18,7 +18,7 @@ filter Get-GitHubUserByName {
         For more information, see "[Emails API](https://docs.github.com/rest/users/emails)".
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubUserByName -Name 'octocat'
         ```
 

@@ -7,7 +7,7 @@ function Reset-GitHubOutput {
         Resets the GitHub output by clearing the contents of $env:GITHUB_OUTPUT.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Reset-GitHubOutput
         ```
 

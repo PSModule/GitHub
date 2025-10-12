@@ -9,7 +9,7 @@ function Remove-GitHubVariableFromRepository {
         OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Remove-GitHubVariableFromRepository -Owner 'octocat' -Repository 'Hello-World' -Name 'HOST_NAME' -Context $GitHubContext
         ```
 

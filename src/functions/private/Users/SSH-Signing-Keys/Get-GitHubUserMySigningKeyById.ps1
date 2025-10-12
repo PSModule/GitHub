@@ -10,7 +10,7 @@ filter Get-GitHubUserMySigningKeyById {
         "[Understanding scopes for OAuth apps](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/)."
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubUserMySigningKeyById -ID '1234567'
         ```
 

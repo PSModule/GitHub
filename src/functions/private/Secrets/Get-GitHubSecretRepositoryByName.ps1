@@ -8,12 +8,12 @@ function Get-GitHubSecretRepositoryByName {
         to use this endpoint. OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubSecretRepositoryByName -Owner 'octocat' -Repository 'Hello-World' -Name 'SECRET1' -Context (Get-GitHubContext)
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         Name                 : SECRET1
         Owner                : octocat
         Repository           : Hello-World

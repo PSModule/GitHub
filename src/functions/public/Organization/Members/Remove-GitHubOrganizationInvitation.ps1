@@ -9,8 +9,8 @@ function Remove-GitHubOrganizationInvitation {
         This endpoint triggers [notifications](https://docs.github.com/github/managing-subscriptions-and-notifications-on-github/about-notifications).
 
         .EXAMPLE
-        ```pwsh
-        ```pwsh
+        ```powershell
+        ```powershell
         Remove-GitHubOrganizationInvitation -Organization 'github' -InvitationID '12345678'
         ```
         ```

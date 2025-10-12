@@ -8,21 +8,21 @@ filter Get-GitHubRepositoryListByOwner {
         Note: For GitHub AE, this endpoint will list internal repositories for the specified user.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubRepositoryListByOwner -Owner 'octocat'
         ```
 
         Gets the repositories for the user 'octocat'.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubRepositoryListByOwner -Owner 'octocat' -Type 'member'
         ```
 
         Gets the repositories of organizations where the user 'octocat' is a member.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubRepositoryListByOwner -Owner 'octocat' -Sort 'created' -Direction 'asc'
         ```
 

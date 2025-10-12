@@ -8,7 +8,7 @@ function ConvertFrom-IssueForm {
         Section titles become keys and their content becomes values.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         @'
         ### Section 1
         Content 1

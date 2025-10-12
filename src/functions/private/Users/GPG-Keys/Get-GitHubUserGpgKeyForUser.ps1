@@ -7,7 +7,7 @@ filter Get-GitHubUserGpgKeyForUser {
         Lists the GPG keys for a user. This information is accessible by anyone.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubUserGpgKeyForUser -Username 'octocat'
         ```
 

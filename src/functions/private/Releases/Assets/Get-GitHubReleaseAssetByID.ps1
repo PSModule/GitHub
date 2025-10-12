@@ -10,7 +10,7 @@ filter Get-GitHubReleaseAssetByID {
         possible. API clients should handle both a `200` or `302` response.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubReleaseAssetByID -Owner 'octocat' -Repository 'hello-world' -ID '1234567'
         ```
 

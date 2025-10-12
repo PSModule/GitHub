@@ -13,7 +13,7 @@ filter Get-GitHubUserOrganization {
         API instead.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubUserOrganization -Username 'octocat'
         ```
 

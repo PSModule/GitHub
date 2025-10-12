@@ -7,7 +7,7 @@ function Get-GitHubEnterpriseOrganization {
         Use this function to retrieve the list of organizations in a GitHub Enterprise instance.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubEnterpriseOrganization -Enterprise 'msx'
         ```
 

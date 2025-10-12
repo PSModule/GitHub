@@ -10,21 +10,21 @@ filter Update-GitHubRelease {
         The function also accepts GitHubRelease objects through the pipeline.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Update-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -ID '1234567' -Notes 'Release notes'
         ```
 
         Updates the release with the ID '1234567' for the repository 'octocat/hello-world' with the note 'Release notes'.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Update-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -Tag 'v1.0' -Name 'Release v1.0' -Notes 'Stable release'
         ```
 
         Updates the release with the tag 'v1.0' for the repository 'octocat/hello-world' with a new name and notes.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -Tag 'v1.0' |
             Update-GitHubRelease -Draft:$false -Prerelease
         ```
@@ -32,7 +32,7 @@ filter Update-GitHubRelease {
         Gets a release by tag and updates it to be a prerelease (not a draft).
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Update-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -Tag 'v1.0' -Latest -GenerateReleaseNotes
         ```
 

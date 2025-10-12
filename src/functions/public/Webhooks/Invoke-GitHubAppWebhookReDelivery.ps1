@@ -10,7 +10,7 @@ function Invoke-GitHubAppWebhookReDelivery {
         to access this endpoint.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Invoke-GitHubAppWebhookReDelivery -ID 12345
         ```
 

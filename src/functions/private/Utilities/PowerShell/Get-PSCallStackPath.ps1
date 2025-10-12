@@ -10,7 +10,7 @@ function Get-PSCallStackPath {
         and the last (the current function, Get-PSCallStackPath).
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-PSCallStackPath
         First-Function\Second-Function\Third-Function
         ```
@@ -19,7 +19,7 @@ function Get-PSCallStackPath {
         and last (Get-PSCallStackPath) functions removed.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-PSCallStackPath -SkipFirst 0
         <ScriptBlock>\First-Function\Second-Function\Third-Function
         ```
@@ -27,7 +27,7 @@ function Get-PSCallStackPath {
         Shows the call stack of the last function called, Third-Function, with the first function included (typically <ScriptBlock>).
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-PSCallStackPath -SkipLatest 0
         First-Function\Second-Function\Third-Function\Get-PSCallStackPath
         ```

@@ -9,7 +9,7 @@ function Import-GitHubEventData {
         Import data from the event that triggered the workflow.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Import-GitHubEventData
         ```
     #>

@@ -7,7 +7,7 @@ function Write-GitHubNotice {
         Write a notice message in GitHub Actions. The message will be displayed in the GitHub Actions log.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Write-GitHubNotice -Message 'Hello, World!'
         ```
 

@@ -8,12 +8,12 @@ function Get-GitHubPublicKeyForCodespacesOnRepository {
         repository is private, OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubPublicKeyForCodespacesOnRepository -Owner 'octocat' -Repository 'hello-world' -Context $GitHubContext
         ```
 
         Outputs:
-        ```pwsh
+        ```powershell
         ID          : 3380189982652154440
         Key         : xPliIrAsVlPub63sB1cnvx/CKt5FGb5rjlbF7uHC+hM=                    #gitleaks:allow
         Type        : codespaces

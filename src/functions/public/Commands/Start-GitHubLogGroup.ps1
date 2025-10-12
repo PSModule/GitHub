@@ -14,8 +14,8 @@ function Start-GitHubLogGroup {
         This corresponds to the `::group::{title}` workflow command in GitHub Actions.
 
         .EXAMPLE
-        ```pwsh
-        ```pwsh
+        ```powershell
+        ```powershell
         Start-GitHubLogGroup 'MyGroup'
         ```
         ```
@@ -24,8 +24,8 @@ function Start-GitHubLogGroup {
         until Stop-GitHubLogGroup is called.
 
         .EXAMPLE
-        ```pwsh
-        ```pwsh
+        ```powershell
+        ```powershell
         Start-GitHubLogGroup 'Building application'
         Write-Host 'Step 1: Restoring packages'
         Write-Host 'Step 2: Compiling code'

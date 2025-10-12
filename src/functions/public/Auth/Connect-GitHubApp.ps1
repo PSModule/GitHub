@@ -12,28 +12,28 @@ function Connect-GitHubApp {
         - Enterprise
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Connect-GitHubApp
         ```
 
         Connects to GitHub as all available targets using the logged in GitHub App.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Connect-GitHubApp -User 'octocat'
         ```
 
         Connects to GitHub as the user 'octocat' using the logged in GitHub App.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Connect-GitHubApp -Organization 'psmodule' -Default
         ```
 
         Connects to GitHub as the organization 'psmodule' using the logged in GitHub App and sets it as the default context.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Connect-GitHubApp -Enterprise 'msx'
         ```
 

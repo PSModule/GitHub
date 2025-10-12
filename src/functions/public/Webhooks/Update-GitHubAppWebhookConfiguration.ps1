@@ -11,14 +11,14 @@ function Update-GitHubAppWebhookConfiguration {
         to access this endpoint.
 
         .EXAMPLE
-        ```pwsh
-        ```pwsh
+        ```powershell
+        ```powershell
         Update-GitHubAppWebhookConfiguration -URL 'https://example.com' -ContentType 'json' -Secret 'mysecret' -EnableSsl
         ```
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         ContentType: json
         UseSsl:      True
         Secret:      mysecret

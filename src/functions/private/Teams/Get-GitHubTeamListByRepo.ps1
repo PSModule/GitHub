@@ -10,12 +10,12 @@ filter Get-GitHubTeamListByRepo {
         and repo scope to use this endpoint with a private repository.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubTeamListByRepo -Owner 'octocat' -Repository 'Hello-World'
         ```
 
         Output:
-        ```pwsh
+        ```powershell
 
         ```
 

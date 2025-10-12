@@ -8,7 +8,7 @@ filter Get-GitHubReleaseByID {
         This key is a [hypermedia resource](https://docs.github.com/rest/overview/resources-in-the-rest-api#hypermedia).
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubReleaseById -Owner 'octocat' -Repository 'hello-world' -ID '1234567'
         ```
 

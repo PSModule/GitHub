@@ -7,7 +7,7 @@ filter Get-GitHubApiVersion {
         Get all supported GitHub API versions.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubApiVersion
         ```
 

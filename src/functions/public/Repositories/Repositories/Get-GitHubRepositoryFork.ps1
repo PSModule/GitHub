@@ -7,7 +7,7 @@ filter Get-GitHubRepositoryFork {
         List forks of a named repository.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubRepositoryFork -Owner 'octocat' -Name 'Hello-World'
         ```
 

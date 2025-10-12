@@ -7,8 +7,8 @@ filter Add-GitHubUserSocial {
         Add one or more social accounts to the authenticated user's profile. This endpoint is accessible with the `user` scope.
 
         .EXAMPLE
-        ```pwsh
-        ```pwsh
+        ```powershell
+        ```powershell
         Add-GitHubUserSocial -AccountUrls 'https://twitter.com/MyTwitterAccount', 'https://www.linkedin.com/company/MyCompany'
         ```
         ```

@@ -7,7 +7,7 @@ filter Update-GitHubReleaseAsset {
         Users with push access to the repository can edit a release asset.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Update-GitHubReleaseAsset -Owner 'octocat' -Repository 'hello-world' -ID '1234567' -Name 'new_asset_name' -Label 'new_asset_label'
         ```
 

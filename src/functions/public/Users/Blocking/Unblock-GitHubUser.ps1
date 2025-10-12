@@ -7,7 +7,7 @@ filter Unblock-GitHubUser {
         Unblocks the given user and returns true.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Unblock-GitHubUser -Username 'octocat'
         ```
 
@@ -15,7 +15,7 @@ filter Unblock-GitHubUser {
         Returns $true if successful.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Unblock-GitHubUser -Organization 'GitHub' -Username 'octocat'
         ```
 

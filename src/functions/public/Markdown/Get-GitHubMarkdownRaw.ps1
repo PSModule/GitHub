@@ -9,7 +9,7 @@ filter Get-GitHubMarkdownRaw {
         format like a README.md file. Markdown content must be 400 KB or less.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubMarkdownRaw -Text 'Hello, world!'
         "<p>Hello <strong>world</strong></p>"
         ```

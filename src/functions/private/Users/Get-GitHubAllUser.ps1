@@ -11,7 +11,7 @@ filter Get-GitHubAllUser {
         to get the URL for the next page of users.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubAllUser -Since 17722253
         ```
 

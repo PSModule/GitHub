@@ -7,7 +7,7 @@ function Get-GitHubAppWebhookDeliveryToRedeliver {
         Long description
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         An example
         ```
 

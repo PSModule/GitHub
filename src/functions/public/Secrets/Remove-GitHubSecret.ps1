@@ -8,21 +8,21 @@ function Remove-GitHubSecret {
         Supports both Actions and Codespaces secrets and requires appropriate authentication.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Remove-GitHubSecret -Owner PSModule -Repository Demo -Type actions -Name TEST
         ```
 
         Deletes the secret named 'TEST' from the 'Demo' repository in the 'PSModule' organization.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Remove-GitHubSecret -Organization MyOrg -Type actions -Name API_KEY
         ```
 
         Deletes the secret 'API_KEY' from the organization 'MyOrg'.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Remove-GitHubSecret -Owner MyUser -Repository MyRepo -Environment Production -Name DB_PASSWORD
         ```
 

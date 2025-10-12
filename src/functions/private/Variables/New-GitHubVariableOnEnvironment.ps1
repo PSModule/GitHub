@@ -9,7 +9,7 @@ function New-GitHubVariableOnEnvironment {
         OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         $params = @{
             Owner       = 'octocat'
             Repository  = 'Hello-World'

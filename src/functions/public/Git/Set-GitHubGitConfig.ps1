@@ -7,14 +7,14 @@ function Set-GitHubGitConfig {
         Sets the Git configuration for the GitHub context. This command sets the `user.name`, `user.email`, and `url.<host>.insteadOf` git configs.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Set-GitHubGitConfig
         ```
 
         Sets the Git configuration for the default GitHub context.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Set-GitHubGitConfig -Context 'MyContext'
         ```
 

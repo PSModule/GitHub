@@ -7,7 +7,7 @@ filter Unblock-GitHubUserByOrganization {
         Unblocks the given user on behalf of the specified organization.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Unblock-GitHubUserByOrganization -Organization 'github' -Username 'octocat'
         ```
 

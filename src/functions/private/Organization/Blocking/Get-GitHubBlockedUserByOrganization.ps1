@@ -7,7 +7,7 @@ filter Get-GitHubBlockedUserByOrganization {
         List the users blocked by an organization.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubBlockedUserByOrganization -Organization 'github'
         ```
 

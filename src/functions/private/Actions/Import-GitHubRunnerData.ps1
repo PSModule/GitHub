@@ -7,7 +7,7 @@ function Import-GitHubRunnerData {
         Import data about the runner that is running the workflow.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Import-GitHubRunnerData
         ```
     #>

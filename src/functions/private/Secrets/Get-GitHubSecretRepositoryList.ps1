@@ -9,12 +9,12 @@ function Get-GitHubSecretRepositoryList {
         endpoint.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubSecretRepositoryList -Owner 'octocat' -Repository 'Hello-World' -Context (Get-GitHubContext)
         ```
 
         Output:
-        ```pwsh
+        ```powershell
         Name                 : SECRET1
         Owner                : octocat
         Repository           : Hello-World

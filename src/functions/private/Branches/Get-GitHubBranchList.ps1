@@ -7,7 +7,7 @@ filter Get-GitHubBranchList {
         Lists all branches from a repository
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubBranchList -Owner 'octocat' -Repository 'Hello-World'
         ```
 

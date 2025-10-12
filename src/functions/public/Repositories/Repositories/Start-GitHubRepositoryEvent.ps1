@@ -25,7 +25,7 @@ filter Start-GitHubRepositoryEvent {
         This input example shows how you can use the `client_payload` as a test to debug your workflow.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         $params = @{
             EventType = 'on-demand-test'
             ClientPayload = @{

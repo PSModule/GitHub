@@ -7,7 +7,7 @@ function Get-GitHubTeamListByOrg {
         Lists all teams in an organization that are visible to the authenticated user.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubTeamListByOrg -Organization 'github'
         ```
 

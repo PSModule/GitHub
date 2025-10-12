@@ -9,7 +9,7 @@ filter Remove-GitHubUserGpgKey {
         [scope](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Remove-GitHubUserGpgKey -ID '1234567'
         ```
 

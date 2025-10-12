@@ -7,14 +7,14 @@ function Initialize-GitHubConfig {
         Initialize the GitHub module configuration.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Initialize-GitHubConfig
         ```
 
         Initializes the GitHub module configuration.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Initialize-GitHubConfig -Force
         ```
 

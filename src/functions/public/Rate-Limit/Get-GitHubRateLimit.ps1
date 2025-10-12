@@ -22,7 +22,7 @@ filter Get-GitHubRateLimit {
         instead of the `rate` object. The `core` object contains the same information that is present in the `rate` object.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubRateLimit
         ```
 

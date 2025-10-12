@@ -7,7 +7,7 @@ filter Start-GitHubWorkflow {
         Start a workflow run using the workflow's ID.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubWorkflow | Where-Object name -NotLike '.*' | Start-GitHubWorkflow -Inputs @{
             staticValidation = $true
             deploymentValidation = $false

@@ -8,15 +8,15 @@ filter Update-GitHubRepository {
         [Replace all repository topics](https://docs.github.com/rest/repos/repos#replace-all-repository-topics) endpoint.
 
         .EXAMPLE
-        ```pwsh
-        ```pwsh
+        ```powershell
+        ```powershell
         Update-GitHubRepository -Name 'octocat' -Description 'Hello-World' -Homepage 'https://github.com'
         ```
         ```
 
         .EXAMPLE
-        ```pwsh
-        ```pwsh
+        ```powershell
+        ```powershell
         $params = @{
             Owner       = 'octocat'
             Name        = 'Hello-World'

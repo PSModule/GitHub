@@ -7,7 +7,7 @@ function Install-GitHubApp {
         Installs the provided GitHub App on the specified target.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Install-GitHubApp -Enterprise 'msx' -Organization 'org' -ClientID '123456' -RepositorySelection 'selected' -Repositories 'repo1', 'repo2'
         ```
 
@@ -18,7 +18,7 @@ function Install-GitHubApp {
         on the organization 'org' in the enterprise 'msx'.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Install-GitHubApp -Enterprise 'msx' -Organization 'org' -ClientID '123456' -RepositorySelection 'all'
         ```
 

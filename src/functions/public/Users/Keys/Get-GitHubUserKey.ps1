@@ -10,21 +10,21 @@ filter Get-GitHubUserKey {
         Keys from a given user are accessible by anyone.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubUserKey
         ```
 
         Gets all GPG keys for the authenticated user.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubUserKey -ID '1234567'
         ```
 
         Gets the public SSH key with the ID '1234567' for the authenticated user.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubUserKey -Username 'octocat'
         ```
 

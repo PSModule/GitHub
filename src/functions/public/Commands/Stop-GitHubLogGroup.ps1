@@ -13,8 +13,8 @@ function Stop-GitHubLogGroup {
         This corresponds to the `::endgroup::` workflow command in GitHub Actions.
 
         .EXAMPLE
-        ```pwsh
-        ```pwsh
+        ```powershell
+        ```powershell
         Stop-GitHubLogGroup
         ```
         ```
@@ -22,8 +22,8 @@ function Stop-GitHubLogGroup {
         Stops the current log group in GitHub Actions.
 
         .EXAMPLE
-        ```pwsh
-        ```pwsh
+        ```powershell
+        ```powershell
         Start-GitHubLogGroup 'Deployment Steps'
         Write-Host 'Deploying to staging...'
         Write-Host 'Deployment complete'

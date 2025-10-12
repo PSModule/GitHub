@@ -7,7 +7,7 @@ function Request-GitHubDeviceCode {
         Request a GitHub Device Code.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Request-GitHubDeviceCode -ClientID $ClientID -Mode $Mode -HostName 'github.com'
         ```
 

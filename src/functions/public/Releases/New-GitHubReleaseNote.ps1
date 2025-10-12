@@ -9,7 +9,7 @@ filter New-GitHubReleaseNote {
         The generated release notes are not saved anywhere. They are intended to be generated and used when creating a new release.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         $params = @{
             Owner = 'octocat'
             Repository = 'hello-world'
@@ -23,7 +23,7 @@ filter New-GitHubReleaseNote {
         The configuration file '.github/release.yml' or '.github/release.yaml' will be used.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         $params = @{
             Owner = 'octocat'
             Repository = 'hello-world'
@@ -37,7 +37,7 @@ filter New-GitHubReleaseNote {
         In this example the tag 'v1.0.0' has to exist in the repository.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         $params = @{
             Owner = 'octocat'
             Repository = 'hello-world'

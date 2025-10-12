@@ -8,7 +8,7 @@ filter ConvertFrom-GitHubOutput {
         supporting both single-line and multi-line values, and parsing JSON values.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         $content = @'
         zen=something else
         result={"MyOutput":"Hello, World!","Status":"Success"}

@@ -11,42 +11,42 @@ filter Get-GitHubRepositoryActivity {
         see "[Viewing activity and data for your repository](https://docs.github.com/repositories/viewing-activity-and-data-for-your-repository)."
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubRepositoryActivity -Owner 'PSModule' -Name 'GitHub'
         ```
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubRepositoryActivity -Owner 'PSModule' -Name 'GitHub' -Direction 'asc'
         ```
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubRepositoryActivity -Owner 'PSModule' -Name 'GitHub' -PerPage 100
         ```
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubRepositoryActivity -Owner 'PSModule' -Name 'GitHub' -Before '2021-01-01T00:00:00Z'
         ```
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubRepositoryActivity -Owner 'PSModule' -Name 'GitHub' -After '2021-01-01T00:00:00Z'
         ```
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubRepositoryActivity -Owner 'PSModule' -Name 'GitHub' -Ref 'refs/heads/main'
         ```
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubRepositoryActivity -Owner 'PSModule' -Name 'GitHub' -Actor 'octocat'
         ```
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         $params = @{
             Owner       = 'PSModule'
             Repo        = 'GitHub'
@@ -59,7 +59,7 @@ filter Get-GitHubRepositoryActivity {
         Gets the activity for the past 24 hours and selects the actor, activity type, ref, and timestamp.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubRepositoryActivity -Owner 'PSModule' -Name 'GitHub' -ActivityType 'push','force_push'
         ```
 

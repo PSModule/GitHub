@@ -9,21 +9,21 @@ function Get-GitHubUser {
         Lists all users, in the order that they signed up on GitHub - if '-All' is provided.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubUser
         ```
 
         Get the authenticated user.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubUser -Name 'octocat'
         ```
 
         Get the 'octocat' user.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubUser -All -Since 17722253
         ```
 

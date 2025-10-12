@@ -7,7 +7,7 @@ filter Get-GitHubUserFollowingUser {
         Lists the people who the specified user follows.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubUserFollowingUser -Username 'octocat'
         ```
 

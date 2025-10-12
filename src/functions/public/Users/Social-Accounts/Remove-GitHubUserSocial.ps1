@@ -7,8 +7,8 @@ filter Remove-GitHubUserSocial {
         Deletes one or more social accounts from the authenticated user's profile. This endpoint is accessible with the `user` scope.
 
         .EXAMPLE
-        ```pwsh
-        ```pwsh
+        ```powershell
+        ```powershell
         Remove-GitHubUserSocial -AccountUrls 'https://twitter.com/MyTwitterAccount'
         ```
         ```

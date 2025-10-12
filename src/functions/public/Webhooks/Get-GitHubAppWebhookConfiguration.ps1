@@ -11,7 +11,7 @@ function Get-GitHubAppWebhookConfiguration {
         to access this endpoint.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubAppWebhookConfiguration
         ```
 

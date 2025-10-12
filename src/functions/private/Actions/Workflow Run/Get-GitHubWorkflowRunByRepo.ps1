@@ -12,14 +12,14 @@ filter Get-GitHubWorkflowRunByRepo {
         `created`, `event`, `head_sha`, `status`.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubWorkflowRunByRepo -Owner 'owner' -Repository 'repo'
         ```
 
         Lists all workflow runs for a repository.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubWorkflowRunByRepo -Owner 'owner' -Repository 'repo' -Actor 'octocat' -Branch 'main' -Event 'push' -Status 'success'
         ```
 

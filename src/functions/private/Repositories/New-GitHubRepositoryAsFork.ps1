@@ -13,7 +13,7 @@ filter New-GitHubRepositoryAsFork {
         repositories and on the source account with access to the source repository.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         New-GitHubRepositoryAsFork -ForkOwner 'github' -ForkRepository 'Hello-World'
         ```
 
@@ -21,21 +21,21 @@ filter New-GitHubRepositoryAsFork {
         Repo will be named `Hello-World`, and all branches and tags will be forked.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         New-GitHubRepositoryAsFork -ForkOwner 'github' -ForkRepository 'Hello-World' -Name 'Hello-World-2'
         ```
 
         Fork the repository `Hello-World` owned by `github` for the authenticated user, naming the resulting repository `Hello-World-2`.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         New-GitHubRepositoryAsFork -ForkOwner 'github' -ForkRepository 'Hello-World' -Owner 'octocat'
         ```
 
         Fork the repository `Hello-World` owned by `github` for the organization `octocat`, naming the resulting repository `Hello-World`.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         New-GitHubRepositoryAsFork -ForkOwner 'github' -ForkRepository 'Hello-World' -IncludeAllBranches
         ```
 

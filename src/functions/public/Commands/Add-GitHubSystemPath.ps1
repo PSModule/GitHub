@@ -9,7 +9,7 @@ function Add-GitHubSystemPath {
         echo "$env:PATH" in a step or an action.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Add-GitHubSystemPath -Path '$HOME/.local/bin'
         ```
 

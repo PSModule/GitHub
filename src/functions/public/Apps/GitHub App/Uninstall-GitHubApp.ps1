@@ -9,7 +9,7 @@ function Uninstall-GitHubApp {
         - As an enterprise installation (IAT/UAT context with Enterprise): remove an app from an organization by InstallationID or AppSlug.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Uninstall-GitHubApp -Target 'octocat'
         Uninstall-GitHubApp -Target 12345
         ```
@@ -17,21 +17,21 @@ function Uninstall-GitHubApp {
         As an App: uninstall by target name (enterprise/org/user) or by exact installation ID
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubAppInstallation | Uninstall-GitHubApp
         ```
 
         As an App: uninstall using pipeline objects
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Uninstall-GitHubApp -Organization 'org' -InstallationID 123456 -Context (Connect-GitHubApp -Enterprise 'msx' -PassThru)
         ```
 
         As an enterprise installation: uninstall by installation ID in an org
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Uninstall-GitHubApp -Organization 'org' -AppSlug 'my-app' -Context (Connect-GitHubApp -Enterprise 'msx' -PassThru)
         ```
 

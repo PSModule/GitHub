@@ -10,7 +10,7 @@ function Get-GitHubAppWebhookDeliveryByList {
         to access this endpoint.
 
         .EXAMPLE
-        ```pwsh
+        ```powershell
         Get-GitHubAppWebhookDeliveryByList
         ```
 
