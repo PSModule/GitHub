@@ -8,9 +8,7 @@
 
         .EXAMPLE
         ```powershell
-        ```powershell
         New-GitHubOrganization -Enterprise 'my-enterprise' -Name 'my-org' -Owner 'user1' -BillingEmail 'billing@example.com'
-        ```
         ```
 
         .OUTPUTS

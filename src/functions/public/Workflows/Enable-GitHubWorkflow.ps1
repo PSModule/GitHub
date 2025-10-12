@@ -11,18 +11,14 @@
 
         .EXAMPLE
         ```powershell
-        ```powershell
         Enable-GitHubWorkflow -Owner 'PSModule' -Repository 'GitHub' -ID 'main.yaml'
-        ```
         ```
 
         Enables the workflow with the filename 'main.yaml' in the PSModule/GitHub repository.
 
         .EXAMPLE
         ```powershell
-        ```powershell
         Enable-GitHubWorkflow -Owner 'PSModule' -Repository 'GitHub' -ID 161335
-        ```
         ```
 
         Enables the workflow with the ID 161335 in the PSModule/GitHub repository.

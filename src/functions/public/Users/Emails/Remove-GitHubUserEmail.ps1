@@ -8,9 +8,7 @@
 
         .EXAMPLE
         ```powershell
-        ```powershell
         Remove-GitHubUserEmail -Emails 'octocat@github.com','firstname.lastname@work.com'
-        ```
         ```
 
         Removes the email addresses `octocat@github.com` and `firstname.lastname@work.com` from the authenticated user's account.

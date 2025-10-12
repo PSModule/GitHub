@@ -12,9 +12,7 @@
 
         .EXAMPLE
         ```powershell
-        ```powershell
         Update-GitHubAppWebhookConfiguration -URL 'https://example.com' -ContentType 'json' -Secret 'mysecret' -EnableSsl
-        ```
         ```
 
         Output:

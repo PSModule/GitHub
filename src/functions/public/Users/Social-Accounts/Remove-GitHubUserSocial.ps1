@@ -8,9 +8,7 @@
 
         .EXAMPLE
         ```powershell
-        ```powershell
         Remove-GitHubUserSocial -AccountUrls 'https://twitter.com/MyTwitterAccount'
-        ```
         ```
 
         .NOTES

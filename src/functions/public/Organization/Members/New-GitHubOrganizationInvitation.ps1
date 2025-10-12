@@ -14,18 +14,14 @@
 
         .EXAMPLE
         ```powershell
-        ```powershell
         New-GitHubOrganizationInvitation -Organization 'PSModule' -InviteeID 123456789 -Role 'admin'
-        ```
         ```
 
         Invites the user with the ID `12345679` to the organization `PSModule` with the role `admin`.
 
         .EXAMPLE
         ```powershell
-        ```powershell
         New-GitHubOrganizationInvitation -Organization 'PSModule' -Email 'user@psmodule.io'
-        ```
         ```
 
         Invites the user with the email `user@psmodule.io` to the organization `PSModule`.

@@ -14,22 +14,18 @@
 
         .EXAMPLE
         ```powershell
-        ```powershell
         Stop-GitHubLogGroup
-        ```
         ```
 
         Stops the current log group in GitHub Actions.
 
         .EXAMPLE
         ```powershell
-        ```powershell
         Start-GitHubLogGroup 'Deployment Steps'
         Write-Host 'Deploying to staging...'
         Write-Host 'Deployment complete'
         Stop-GitHubLogGroup
         Write-Host 'This output is not in the group'
-        ```
         ```
 
         Creates a log group for deployment steps. The final Write-Host command outputs text outside of the group

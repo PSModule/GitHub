@@ -10,9 +10,7 @@
 
         .EXAMPLE
         ```powershell
-        ```powershell
         Remove-GitHubOrganizationInvitation -Organization 'github' -InvitationID '12345678'
-        ```
         ```
 
         Cancel the invitation with the ID '12345678' for the organization `github`.

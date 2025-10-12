@@ -8,9 +8,7 @@
 
         .EXAMPLE
         ```powershell
-        ```powershell
         Add-GitHubUserSocial -AccountUrls 'https://twitter.com/MyTwitterAccount', 'https://www.linkedin.com/company/MyCompany'
-        ```
         ```
 
         Adds the Twitter and LinkedIn accounts to the authenticated user's profile.
