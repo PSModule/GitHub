@@ -1,4 +1,4 @@
-function Get-GitHubPublicKeyForActionOnEnvironment {
+﻿function Get-GitHubPublicKeyForActionOnEnvironment {
     <#
         .SYNOPSIS
         Get an environment public key.

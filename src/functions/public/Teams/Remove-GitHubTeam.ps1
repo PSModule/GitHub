@@ -1,4 +1,4 @@
-function Remove-GitHubTeam {
+﻿function Remove-GitHubTeam {
     <#
         .SYNOPSIS
         Delete a team

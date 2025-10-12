@@ -1,4 +1,4 @@
-function Set-GitHubRepository {
+﻿function Set-GitHubRepository {
     <#
         .SYNOPSIS
         Creates or updates a repository.

@@ -1,4 +1,4 @@
-function Get-GitHubPublicKeyForCodespacesOnRepository {
+﻿function Get-GitHubPublicKeyForCodespacesOnRepository {
     <#
         .SYNOPSIS
         Get a repository public key.

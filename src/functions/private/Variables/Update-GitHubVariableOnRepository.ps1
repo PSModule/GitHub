@@ -1,4 +1,4 @@
-function Update-GitHubVariableOnRepository {
+﻿function Update-GitHubVariableOnRepository {
     <#
         .SYNOPSIS
         Update a repository variable.

@@ -1,4 +1,4 @@
-function Set-GitHubStepSummary {
+﻿function Set-GitHubStepSummary {
     <#
         .SYNOPSIS
         Set a summary for the step in GitHub Actions

@@ -1,4 +1,4 @@
-function Request-GitHubAccessToken {
+﻿function Request-GitHubAccessToken {
     <#
         .SYNOPSIS
         Request a GitHub token using the Device Flow.

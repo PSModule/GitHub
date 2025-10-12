@@ -1,4 +1,4 @@
-filter Get-GitHubLicense {
+﻿filter Get-GitHubLicense {
     <#
         .SYNOPSIS
         Get a license template, list of all popular license templates or a license for a repository

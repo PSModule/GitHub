@@ -1,4 +1,4 @@
-filter Get-GitHubWorkflow {
+﻿filter Get-GitHubWorkflow {
     <#
         .SYNOPSIS
         Lists the workflows in a repository.

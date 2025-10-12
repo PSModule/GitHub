@@ -1,4 +1,4 @@
-filter Connect-GitHubCli {
+﻿filter Connect-GitHubCli {
     <#
         .SYNOPSIS
         Authenticates to GitHub CLI using a secure token from the provided context.

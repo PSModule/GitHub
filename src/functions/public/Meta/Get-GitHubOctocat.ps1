@@ -1,4 +1,4 @@
-filter Get-GitHubOctocat {
+﻿filter Get-GitHubOctocat {
     <#
         .SYNOPSIS
         Get Octocat.

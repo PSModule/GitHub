@@ -1,4 +1,4 @@
-function Test-GitHubJWTRefreshRequired {
+﻿function Test-GitHubJWTRefreshRequired {
     <#
         .SYNOPSIS
         Test if the GitHub JWT should be refreshed.

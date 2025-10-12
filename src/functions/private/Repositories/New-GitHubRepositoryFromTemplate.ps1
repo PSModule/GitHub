@@ -1,4 +1,4 @@
-filter New-GitHubRepositoryFromTemplate {
+﻿filter New-GitHubRepositoryFromTemplate {
     <#
         .SYNOPSIS
         Create a repository using a template

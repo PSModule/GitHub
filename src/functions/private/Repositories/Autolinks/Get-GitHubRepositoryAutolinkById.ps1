@@ -1,4 +1,4 @@
-filter Get-GitHubRepositoryAutolinkById {
+﻿filter Get-GitHubRepositoryAutolinkById {
     <#
         .SYNOPSIS
         Get an autolink reference of a repository

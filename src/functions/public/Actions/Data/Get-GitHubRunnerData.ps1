@@ -1,4 +1,4 @@
-function Get-GitHubRunnerData {
+﻿function Get-GitHubRunnerData {
     <#
         .SYNOPSIS
         Gets data about the runner thats running the workflow.

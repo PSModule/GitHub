@@ -1,4 +1,4 @@
-function Get-GitHubVariableRepositoryList {
+﻿function Get-GitHubVariableRepositoryList {
     <#
         .SYNOPSIS
         List repository variables.

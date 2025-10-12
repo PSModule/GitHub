@@ -1,4 +1,4 @@
-function Add-GitHubSecretSelectedRepository {
+﻿function Add-GitHubSecretSelectedRepository {
     <#
         .SYNOPSIS
         Add selected repository to an organization secret.

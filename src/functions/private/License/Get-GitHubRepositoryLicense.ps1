@@ -1,4 +1,4 @@
-filter Get-GitHubRepositoryLicense {
+﻿filter Get-GitHubRepositoryLicense {
     <#
         .SYNOPSIS
         Get the license for a repository

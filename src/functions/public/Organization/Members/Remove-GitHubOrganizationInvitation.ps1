@@ -1,4 +1,4 @@
-function Remove-GitHubOrganizationInvitation {
+﻿function Remove-GitHubOrganizationInvitation {
     <#
         .SYNOPSIS
         Cancel an organization invitation

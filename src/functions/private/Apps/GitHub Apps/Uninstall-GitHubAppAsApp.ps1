@@ -1,4 +1,4 @@
-function Uninstall-GitHubAppAsApp {
+﻿function Uninstall-GitHubAppAsApp {
     <#
         .SYNOPSIS
         Delete an installation for the authenticated app.

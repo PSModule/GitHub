@@ -1,4 +1,4 @@
-filter Restart-GitHubWorkflowRun {
+﻿filter Restart-GitHubWorkflowRun {
     <#
         .SYNOPSIS
         Re-run a workflow

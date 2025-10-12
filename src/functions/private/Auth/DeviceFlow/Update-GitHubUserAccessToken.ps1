@@ -1,4 +1,4 @@
-function Update-GitHubUserAccessToken {
+﻿function Update-GitHubUserAccessToken {
     <#
         .SYNOPSIS
         Updates the GitHub access token.

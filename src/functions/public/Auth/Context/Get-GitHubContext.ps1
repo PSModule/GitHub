@@ -1,4 +1,4 @@
-function Get-GitHubContext {
+﻿function Get-GitHubContext {
     <#
         .SYNOPSIS
         Get the current GitHub context.

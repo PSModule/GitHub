@@ -1,4 +1,4 @@
-function Remove-GitHubVariableFromEnvironment {
+﻿function Remove-GitHubVariableFromEnvironment {
     <#
         .SYNOPSIS
         Delete an environment variable.

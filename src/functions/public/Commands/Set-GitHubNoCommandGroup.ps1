@@ -1,4 +1,4 @@
-function Set-GitHubNoCommandGroup {
+﻿function Set-GitHubNoCommandGroup {
     <#
         .SYNOPSIS
         Disables workflow commands for a block of code.

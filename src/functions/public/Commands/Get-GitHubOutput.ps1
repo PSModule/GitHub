@@ -1,4 +1,4 @@
-function Get-GitHubOutput {
+﻿function Get-GitHubOutput {
     <#
         .SYNOPSIS
         Gets the GitHub output.

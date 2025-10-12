@@ -1,4 +1,4 @@
-function Set-GitHubSecretOnOwner {
+﻿function Set-GitHubSecretOnOwner {
     <#
         .SYNOPSIS
         Create or update an organization secret.

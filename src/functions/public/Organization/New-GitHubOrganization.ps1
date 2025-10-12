@@ -1,4 +1,4 @@
-function New-GitHubOrganization {
+﻿function New-GitHubOrganization {
     <#
         .SYNOPSIS
         Creates a new GitHub organization within a specified enterprise.

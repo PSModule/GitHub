@@ -1,4 +1,4 @@
-filter Get-GitHubReleaseAssetByTag {
+﻿filter Get-GitHubReleaseAssetByTag {
     <#
         .SYNOPSIS
         Get release assets by tag name

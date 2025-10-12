@@ -1,4 +1,4 @@
-function Stop-GitHubLogGroup {
+﻿function Stop-GitHubLogGroup {
     <#
         .SYNOPSIS
         Stops the current log group in GitHub Actions

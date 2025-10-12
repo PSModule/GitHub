@@ -1,4 +1,4 @@
-function Get-PSCallStackPath {
+﻿function Get-PSCallStackPath {
     <#
         .SYNOPSIS
         Create a string representation of the current call stack.

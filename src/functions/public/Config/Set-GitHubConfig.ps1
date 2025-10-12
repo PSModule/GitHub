@@ -1,4 +1,4 @@
-function Set-GitHubConfig {
+﻿function Set-GitHubConfig {
     <#
         .SYNOPSIS
         Set a GitHub module configuration.

@@ -1,4 +1,4 @@
-function Reset-GitHubOutput {
+﻿function Reset-GitHubOutput {
     <#
         .SYNOPSIS
         Resets the GitHub output.

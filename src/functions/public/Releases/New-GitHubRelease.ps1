@@ -1,4 +1,4 @@
-filter New-GitHubRelease {
+﻿filter New-GitHubRelease {
     <#
         .SYNOPSIS
         Create a release

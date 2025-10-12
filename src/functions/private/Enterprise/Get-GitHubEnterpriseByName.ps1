@@ -1,4 +1,4 @@
-function Get-GitHubEnterpriseByName {
+﻿function Get-GitHubEnterpriseByName {
     <#
         .SYNOPSIS
         Retrieves details about a GitHub Enterprise instance by name (slug).

@@ -1,4 +1,4 @@
-function Get-GitHubPublicKeyForCodespacesOnOrganization {
+﻿function Get-GitHubPublicKeyForCodespacesOnOrganization {
     <#
         .SYNOPSIS
         Get an organization public key.

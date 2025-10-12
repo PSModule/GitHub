@@ -1,4 +1,4 @@
-filter Get-GitHubUserFollowingUser {
+﻿filter Get-GitHubUserFollowingUser {
     <#
         .SYNOPSIS
         List the people a user follows

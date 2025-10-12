@@ -1,4 +1,4 @@
-filter Add-GitHubMask {
+﻿filter Add-GitHubMask {
     <#
         .SYNOPSIS
         Masks a value in a log

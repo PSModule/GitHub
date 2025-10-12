@@ -1,4 +1,4 @@
-function Get-GitHubViewer {
+﻿function Get-GitHubViewer {
     <#
         .SYNOPSIS
         Gets the currently authenticated user.

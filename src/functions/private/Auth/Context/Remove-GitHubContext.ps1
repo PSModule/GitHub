@@ -1,4 +1,4 @@
-filter Remove-GitHubContext {
+﻿filter Remove-GitHubContext {
     <#
         .SYNOPSIS
         Removes a context from the context vault.

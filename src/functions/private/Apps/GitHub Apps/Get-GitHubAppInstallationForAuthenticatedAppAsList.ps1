@@ -1,4 +1,4 @@
-function Get-GitHubAppInstallationForAuthenticatedAppAsList {
+﻿function Get-GitHubAppInstallationForAuthenticatedAppAsList {
     <#
         .SYNOPSIS
         List installations for the authenticated app.

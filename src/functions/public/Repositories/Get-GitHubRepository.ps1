@@ -1,4 +1,4 @@
-filter Get-GitHubRepository {
+﻿filter Get-GitHubRepository {
     <#
         .SYNOPSIS
         Gets a specific repository or list of repositories.

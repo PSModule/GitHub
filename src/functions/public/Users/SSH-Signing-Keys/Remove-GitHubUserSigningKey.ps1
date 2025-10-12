@@ -1,4 +1,4 @@
-filter Remove-GitHubUserSigningKey {
+﻿filter Remove-GitHubUserSigningKey {
     <#
         .SYNOPSIS
         Delete an SSH signing key for the authenticated user

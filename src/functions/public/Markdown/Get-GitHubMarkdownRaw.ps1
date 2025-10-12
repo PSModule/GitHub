@@ -1,4 +1,4 @@
-filter Get-GitHubMarkdownRaw {
+﻿filter Get-GitHubMarkdownRaw {
     <#
         .SYNOPSIS
         Render a Markdown document in raw mode

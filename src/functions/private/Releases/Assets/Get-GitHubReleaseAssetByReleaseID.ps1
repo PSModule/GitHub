@@ -1,4 +1,4 @@
-filter Get-GitHubReleaseAssetByReleaseID {
+﻿filter Get-GitHubReleaseAssetByReleaseID {
     <#
         .SYNOPSIS
         List release assets

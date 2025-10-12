@@ -1,4 +1,4 @@
-function Get-GitHubAccessToken {
+﻿function Get-GitHubAccessToken {
     <#
         .SYNOPSIS
         Retrieves the GitHub access token from the specified context.

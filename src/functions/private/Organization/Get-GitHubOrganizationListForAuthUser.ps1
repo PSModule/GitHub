@@ -1,4 +1,4 @@
-function Get-GitHubOrganizationListForAuthUser {
+﻿function Get-GitHubOrganizationListForAuthUser {
     <#
         .SYNOPSIS
         Retrieves a list of all GitHub organizations for the authenticated user.

@@ -1,4 +1,4 @@
-function Get-GitHubVariableRepositoryByName {
+﻿function Get-GitHubVariableRepositoryByName {
     <#
         .SYNOPSIS
         Get a repository variable

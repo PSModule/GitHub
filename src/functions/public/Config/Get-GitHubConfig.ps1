@@ -1,4 +1,4 @@
-function Get-GitHubConfig {
+﻿function Get-GitHubConfig {
     <#
         .SYNOPSIS
         Get a GitHub module configuration.

@@ -1,4 +1,4 @@
-function Set-GitHubVariable {
+﻿function Set-GitHubVariable {
     <#
         .SYNOPSIS
         Creates or updates a GitHub Actions variable at the organization, repository, or environment level.

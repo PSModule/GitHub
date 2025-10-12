@@ -1,4 +1,4 @@
-function Switch-GitHubContext {
+﻿function Switch-GitHubContext {
     <#
         .SYNOPSIS
         Set the default context.

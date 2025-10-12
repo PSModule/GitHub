@@ -1,4 +1,4 @@
-filter Get-GitHubAppInstallationRequest {
+﻿filter Get-GitHubAppInstallationRequest {
     <#
         .SYNOPSIS
         List installation requests for the authenticated app.

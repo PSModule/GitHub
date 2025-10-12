@@ -1,4 +1,4 @@
-function Resolve-GitHubContextSetting {
+﻿function Resolve-GitHubContextSetting {
     <#
         .SYNOPSIS
         Resolves a GitHub context setting based on a provided name.

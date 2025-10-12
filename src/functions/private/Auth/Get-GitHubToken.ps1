@@ -1,4 +1,4 @@
-function Get-GitHubToken {
+﻿function Get-GitHubToken {
     <#
         .SYNOPSIS
         Retrieves a GitHub token from environment variables as plaintext or a secure string.

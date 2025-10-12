@@ -1,4 +1,4 @@
-function Get-GitHubEnterprise {
+﻿function Get-GitHubEnterprise {
     <#
         .SYNOPSIS
         Retrieves GitHub Enterprise instance details for the authenticated user.

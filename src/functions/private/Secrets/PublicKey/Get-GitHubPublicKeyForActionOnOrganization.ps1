@@ -1,4 +1,4 @@
-function Get-GitHubPublicKeyForActionOnOrganization {
+﻿function Get-GitHubPublicKeyForActionOnOrganization {
     <#
         .SYNOPSIS
         Get an organization public key.

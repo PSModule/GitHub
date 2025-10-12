@@ -1,4 +1,4 @@
-function New-GitHubOrganizationInvitation {
+﻿function New-GitHubOrganizationInvitation {
     <#
         .SYNOPSIS
         Create an organization invitation

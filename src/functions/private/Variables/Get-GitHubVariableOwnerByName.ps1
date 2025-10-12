@@ -1,4 +1,4 @@
-function Get-GitHubVariableOwnerByName {
+﻿function Get-GitHubVariableOwnerByName {
     <#
         .SYNOPSIS
         Get an organization variable.

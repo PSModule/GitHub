@@ -1,4 +1,4 @@
-function Add-GitHubSystemPath {
+﻿function Add-GitHubSystemPath {
     <#
         .SYNOPSIS
         Adds a system path to the GitHub Actions environment

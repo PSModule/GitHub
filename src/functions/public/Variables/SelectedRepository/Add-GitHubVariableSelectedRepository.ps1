@@ -1,4 +1,4 @@
-function Add-GitHubVariableSelectedRepository {
+﻿function Add-GitHubVariableSelectedRepository {
     <#
         .SYNOPSIS
         Add selected repository to an organization variable.

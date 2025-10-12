@@ -1,4 +1,4 @@
-function Set-GitHubEnvironmentVariable {
+﻿function Set-GitHubEnvironmentVariable {
     <#
         .SYNOPSIS
         Setting an environment variable

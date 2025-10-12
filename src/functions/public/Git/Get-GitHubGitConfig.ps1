@@ -1,4 +1,4 @@
-function Get-GitHubGitConfig {
+﻿function Get-GitHubGitConfig {
     <#
         .SYNOPSIS
         Gets the global Git configuration.

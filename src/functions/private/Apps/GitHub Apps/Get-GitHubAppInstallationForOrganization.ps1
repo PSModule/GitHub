@@ -1,4 +1,4 @@
-function Get-GitHubAppInstallationForOrganization {
+﻿function Get-GitHubAppInstallationForOrganization {
     <#
         .SYNOPSIS
         List app installations for an organization

@@ -1,4 +1,4 @@
-filter Disable-GitHubRepositorySecurityFix {
+﻿filter Disable-GitHubRepositorySecurityFix {
     <#
         .SYNOPSIS
         Disable automated security fixes

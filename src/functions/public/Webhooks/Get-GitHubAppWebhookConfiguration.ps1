@@ -1,4 +1,4 @@
-function Get-GitHubAppWebhookConfiguration {
+﻿function Get-GitHubAppWebhookConfiguration {
     <#
         .SYNOPSIS
         Get a webhook configuration for an app

@@ -1,4 +1,4 @@
-filter Get-GitHubRepositoryActivity {
+﻿filter Get-GitHubRepositoryActivity {
     <#
         .SYNOPSIS
         List repository activities

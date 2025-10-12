@@ -1,4 +1,4 @@
-function Reset-GitHubConfig {
+﻿function Reset-GitHubConfig {
     <#
         .SYNOPSIS
         Re-initializes the GitHub module configuration.

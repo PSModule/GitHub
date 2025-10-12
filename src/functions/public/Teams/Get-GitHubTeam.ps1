@@ -1,4 +1,4 @@
-function Get-GitHubTeam {
+﻿function Get-GitHubTeam {
     <#
         .SYNOPSIS
         List teams from an org or get a team by name

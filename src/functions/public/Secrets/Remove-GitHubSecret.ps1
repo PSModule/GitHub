@@ -1,4 +1,4 @@
-function Remove-GitHubSecret {
+﻿function Remove-GitHubSecret {
     <#
         .SYNOPSIS
         Deletes a secret from GitHub.

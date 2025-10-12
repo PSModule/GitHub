@@ -1,4 +1,4 @@
-filter Get-GitHubAppAsAuthenticatedApp {
+﻿filter Get-GitHubAppAsAuthenticatedApp {
     <#
         .SYNOPSIS
         Get the authenticated app

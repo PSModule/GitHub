@@ -1,4 +1,4 @@
-function Update-GitHubAppJWT {
+﻿function Update-GitHubAppJWT {
     <#
         .SYNOPSIS
         Updates a JSON Web Token (JWT) for a GitHub App context.

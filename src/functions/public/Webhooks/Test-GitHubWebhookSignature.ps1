@@ -1,4 +1,4 @@
-function Test-GitHubWebhookSignature {
+﻿function Test-GitHubWebhookSignature {
     <#
         .SYNOPSIS
         Verifies a GitHub webhook signature using a shared secret.

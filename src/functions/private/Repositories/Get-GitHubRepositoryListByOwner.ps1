@@ -1,4 +1,4 @@
-filter Get-GitHubRepositoryListByOwner {
+﻿filter Get-GitHubRepositoryListByOwner {
     <#
         .SYNOPSIS
         List repositories for a user

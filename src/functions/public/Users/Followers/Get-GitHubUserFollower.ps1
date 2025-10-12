@@ -1,4 +1,4 @@
-filter Get-GitHubUserFollower {
+﻿filter Get-GitHubUserFollower {
     <#
         .SYNOPSIS
         List followers of a given user or the authenticated user

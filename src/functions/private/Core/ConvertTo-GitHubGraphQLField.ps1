@@ -1,4 +1,4 @@
-function ConvertTo-GitHubGraphQLField {
+﻿function ConvertTo-GitHubGraphQLField {
     <#
         .SYNOPSIS
         Converts property names to their corresponding GitHub GraphQL field syntax.

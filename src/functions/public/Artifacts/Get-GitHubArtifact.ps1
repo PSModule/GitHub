@@ -1,4 +1,4 @@
-function Get-GitHubArtifact {
+﻿function Get-GitHubArtifact {
     <#
         .SYNOPSIS
         Retrieves GitHub Actions artifacts from a repository or workflow run.

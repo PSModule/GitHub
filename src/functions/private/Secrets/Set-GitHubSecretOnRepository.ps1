@@ -1,4 +1,4 @@
-function Set-GitHubSecretOnRepository {
+﻿function Set-GitHubSecretOnRepository {
     <#
         .SYNOPSIS
         Create or update a repository secret.

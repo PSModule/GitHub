@@ -1,4 +1,4 @@
-function Get-FunctionParameter {
+﻿function Get-FunctionParameter {
     <#
         .SYNOPSIS
         Get the parameters and their final value in a function.

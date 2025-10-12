@@ -1,4 +1,4 @@
-function Set-GitHubVariableSelectedRepository {
+﻿function Set-GitHubVariableSelectedRepository {
     <#
         .SYNOPSIS
         Set selected repositories for an organization variable.

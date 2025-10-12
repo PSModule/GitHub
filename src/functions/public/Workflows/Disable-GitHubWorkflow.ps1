@@ -1,4 +1,4 @@
-filter Disable-GitHubWorkflow {
+﻿filter Disable-GitHubWorkflow {
     <#
         .SYNOPSIS
         Disable a workflow.

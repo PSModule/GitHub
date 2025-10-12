@@ -1,4 +1,4 @@
-filter Stop-GitHubWorkflowRun {
+﻿filter Stop-GitHubWorkflowRun {
     <#
         .SYNOPSIS
         Cancel a workflow run

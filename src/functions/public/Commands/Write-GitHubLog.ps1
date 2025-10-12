@@ -1,4 +1,4 @@
-function Write-GitHubLog {
+﻿function Write-GitHubLog {
     <#
         .SYNOPSIS
         Write a colored message in GitHub Actions or locally

@@ -1,4 +1,4 @@
-filter Get-GitHubUserMyKey {
+﻿filter Get-GitHubUserMyKey {
     <#
         .SYNOPSIS
         List public SSH keys for the authenticated user

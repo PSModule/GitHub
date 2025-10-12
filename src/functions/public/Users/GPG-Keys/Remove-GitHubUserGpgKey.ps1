@@ -1,4 +1,4 @@
-filter Remove-GitHubUserGpgKey {
+﻿filter Remove-GitHubUserGpgKey {
     <#
         .SYNOPSIS
         Delete a GPG key for the authenticated user

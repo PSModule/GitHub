@@ -1,4 +1,4 @@
-function Get-GitHubStatusIncident {
+﻿function Get-GitHubStatusIncident {
     <#
         .SYNOPSIS
         Gets the status of GitHub incidents

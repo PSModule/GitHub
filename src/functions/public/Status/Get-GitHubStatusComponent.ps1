@@ -1,4 +1,4 @@
-function Get-GitHubStatusComponent {
+﻿function Get-GitHubStatusComponent {
     <#
         .SYNOPSIS
         Gets the status of GitHub components

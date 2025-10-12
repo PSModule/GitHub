@@ -1,4 +1,4 @@
-function Disconnect-GitHubAccount {
+﻿function Disconnect-GitHubAccount {
     <#
         .SYNOPSIS
         Disconnects from GitHub and removes the GitHub context.

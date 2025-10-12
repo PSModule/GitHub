@@ -1,4 +1,4 @@
-function Update-GitHubTeam {
+﻿function Update-GitHubTeam {
     <#
         .SYNOPSIS
         Update a team

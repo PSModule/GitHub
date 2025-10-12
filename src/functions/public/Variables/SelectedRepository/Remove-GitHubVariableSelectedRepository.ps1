@@ -1,4 +1,4 @@
-function Remove-GitHubVariableSelectedRepository {
+﻿function Remove-GitHubVariableSelectedRepository {
     <#
         .SYNOPSIS
         Remove selected repository from an organization variable.

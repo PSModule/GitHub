@@ -1,4 +1,4 @@
-function Set-GitHubContext {
+﻿function Set-GitHubContext {
     <#
         .SYNOPSIS
         Sets the GitHub context and stores it in the context vault.

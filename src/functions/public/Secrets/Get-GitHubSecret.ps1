@@ -1,4 +1,4 @@
-function Get-GitHubSecret {
+﻿function Get-GitHubSecret {
     <#
         .SYNOPSIS
         Retrieve GitHub secret(s) without revealing encrypted value(s).

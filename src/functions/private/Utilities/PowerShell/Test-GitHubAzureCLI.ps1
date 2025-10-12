@@ -1,4 +1,4 @@
-function Test-GitHubAzureCLI {
+﻿function Test-GitHubAzureCLI {
     <#
         .SYNOPSIS
         Tests if Azure CLI is installed and authenticated.

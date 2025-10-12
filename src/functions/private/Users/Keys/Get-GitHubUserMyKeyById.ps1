@@ -1,4 +1,4 @@
-filter Get-GitHubUserMyKeyById {
+﻿filter Get-GitHubUserMyKeyById {
     <#
         .SYNOPSIS
         Get a public SSH key for the authenticated user

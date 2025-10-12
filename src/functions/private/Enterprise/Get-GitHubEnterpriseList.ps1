@@ -1,4 +1,4 @@
-function Get-GitHubEnterpriseList {
+﻿function Get-GitHubEnterpriseList {
     <#
         .SYNOPSIS
         Retrieves a list of all GitHub Enterprise instances.

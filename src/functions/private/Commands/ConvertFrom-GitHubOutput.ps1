@@ -1,4 +1,4 @@
-filter ConvertFrom-GitHubOutput {
+﻿filter ConvertFrom-GitHubOutput {
     <#
         .SYNOPSIS
         Gets the GitHub output.

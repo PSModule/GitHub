@@ -1,4 +1,4 @@
-function Set-GitHubOutput {
+﻿function Set-GitHubOutput {
     <#
         .SYNOPSIS
         Sets the GitHub output for a given key and value.

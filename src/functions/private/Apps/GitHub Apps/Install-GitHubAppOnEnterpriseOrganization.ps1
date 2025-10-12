@@ -1,4 +1,4 @@
-function Install-GitHubAppOnEnterpriseOrganization {
+﻿function Install-GitHubAppOnEnterpriseOrganization {
     <#
         .SYNOPSIS
         Install an app on an Enterprise-owned organization

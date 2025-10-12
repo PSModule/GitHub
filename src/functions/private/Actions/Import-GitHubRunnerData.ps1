@@ -1,4 +1,4 @@
-function Import-GitHubRunnerData {
+﻿function Import-GitHubRunnerData {
     <#
         .SYNOPSIS
         Import data about the runner that is running the workflow.

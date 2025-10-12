@@ -1,4 +1,4 @@
-filter Get-GitHubMyUserSocials {
+﻿filter Get-GitHubMyUserSocials {
     <#
         .SYNOPSIS
         List social accounts for the authenticated user

@@ -1,4 +1,4 @@
-filter Get-GitHubReleaseByID {
+﻿filter Get-GitHubReleaseByID {
     <#
         .SYNOPSIS
         Get a release

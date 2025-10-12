@@ -1,4 +1,4 @@
-function Remove-GitHubConfig {
+﻿function Remove-GitHubConfig {
     <#
         .SYNOPSIS
         Remove a GitHub module configuration.

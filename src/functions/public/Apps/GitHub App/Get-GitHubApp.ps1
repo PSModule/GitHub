@@ -1,4 +1,4 @@
-filter Get-GitHubApp {
+﻿filter Get-GitHubApp {
     <#
         .SYNOPSIS
         Get the authenticated app or a specific app by its slug.

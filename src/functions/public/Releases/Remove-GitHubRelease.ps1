@@ -1,4 +1,4 @@
-filter Remove-GitHubRelease {
+﻿filter Remove-GitHubRelease {
     <#
         .SYNOPSIS
         Delete a release

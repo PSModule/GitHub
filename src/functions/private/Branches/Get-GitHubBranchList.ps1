@@ -1,4 +1,4 @@
-filter Get-GitHubBranchList {
+﻿filter Get-GitHubBranchList {
     <#
         .SYNOPSIS
         List branches

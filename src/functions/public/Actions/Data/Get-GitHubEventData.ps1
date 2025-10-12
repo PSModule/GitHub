@@ -1,4 +1,4 @@
-function Get-GitHubEventData {
+﻿function Get-GitHubEventData {
     <#
         .SYNOPSIS
         Gets data about the event that triggered the workflow.

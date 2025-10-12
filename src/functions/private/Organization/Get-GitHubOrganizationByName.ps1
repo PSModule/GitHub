@@ -1,4 +1,4 @@
-filter Get-GitHubOrganizationByName {
+﻿filter Get-GitHubOrganizationByName {
     <#
         .SYNOPSIS
         Get an organization

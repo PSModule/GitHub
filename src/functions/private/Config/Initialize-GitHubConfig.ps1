@@ -1,4 +1,4 @@
-function Initialize-GitHubConfig {
+﻿function Initialize-GitHubConfig {
     <#
         .SYNOPSIS
         Initialize the GitHub module configuration.

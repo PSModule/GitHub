@@ -1,4 +1,4 @@
-filter Enable-GitHubWorkflow {
+﻿filter Enable-GitHubWorkflow {
     <#
         .SYNOPSIS
         Enable a workflow

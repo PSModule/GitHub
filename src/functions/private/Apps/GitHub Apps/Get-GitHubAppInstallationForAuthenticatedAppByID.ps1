@@ -1,4 +1,4 @@
-function Get-GitHubAppInstallationForAuthenticatedAppByID {
+﻿function Get-GitHubAppInstallationForAuthenticatedAppByID {
     <#
         .SYNOPSIS
         Get an installation for the authenticated app.

@@ -1,4 +1,4 @@
-function Get-GitHubAppBySlug {
+﻿function Get-GitHubAppBySlug {
     <#
         .SYNOPSIS
         Get an app

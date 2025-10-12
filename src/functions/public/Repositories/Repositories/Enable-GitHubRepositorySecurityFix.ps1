@@ -1,4 +1,4 @@
-filter Enable-GitHubRepositorySecurityFix {
+﻿filter Enable-GitHubRepositorySecurityFix {
     <#
         .SYNOPSIS
         Enable automated security fixes

@@ -1,4 +1,4 @@
-function Test-GitHubAccessTokenRefreshRequired {
+﻿function Test-GitHubAccessTokenRefreshRequired {
     <#
         .SYNOPSIS
         Test if the GitHub access token should be refreshed.

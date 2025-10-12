@@ -1,4 +1,4 @@
-function Get-GitHubArtifactFromWorkflowRun {
+﻿function Get-GitHubArtifactFromWorkflowRun {
     <#
         .SYNOPSIS
         Retrieves artifacts from a specific GitHub Actions workflow run.

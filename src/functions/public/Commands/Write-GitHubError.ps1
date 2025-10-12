@@ -1,4 +1,4 @@
-function Write-GitHubError {
+﻿function Write-GitHubError {
     <#
         .SYNOPSIS
         Write a error message in GitHub Actions

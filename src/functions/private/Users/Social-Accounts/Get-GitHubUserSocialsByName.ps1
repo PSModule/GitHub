@@ -1,4 +1,4 @@
-filter Get-GitHubUserSocialsByName {
+﻿filter Get-GitHubUserSocialsByName {
     <#
         .SYNOPSIS
         List social accounts for a user

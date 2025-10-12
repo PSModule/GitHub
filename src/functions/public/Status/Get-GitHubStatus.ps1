@@ -1,4 +1,4 @@
-function Get-GitHubStatus {
+﻿function Get-GitHubStatus {
     <#
         .SYNOPSIS
         Gets the status of GitHub services

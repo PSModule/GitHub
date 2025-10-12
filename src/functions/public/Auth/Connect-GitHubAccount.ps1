@@ -1,4 +1,4 @@
-function Connect-GitHubAccount {
+﻿function Connect-GitHubAccount {
     <#
         .SYNOPSIS
         Connects to GitHub.

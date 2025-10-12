@@ -1,4 +1,4 @@
-function Add-GitHubKeyVaultJWTSignature {
+﻿function Add-GitHubKeyVaultJWTSignature {
     <#
         .SYNOPSIS
         Adds a JWT signature using Azure Key Vault.

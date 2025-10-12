@@ -1,4 +1,4 @@
-filter Remove-GitHubUserKey {
+﻿filter Remove-GitHubUserKey {
     <#
         .SYNOPSIS
         Delete a public SSH key for the authenticated user

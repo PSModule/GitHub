@@ -1,4 +1,4 @@
-function Wait-GitHubAccessToken {
+﻿function Wait-GitHubAccessToken {
     <#
         .SYNOPSIS
         Waits for the GitHub Device Flow to complete.

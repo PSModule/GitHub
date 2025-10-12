@@ -1,4 +1,4 @@
-function Get-GitHubSecretOwnerList {
+﻿function Get-GitHubSecretOwnerList {
     <#
         .SYNOPSIS
         List organization secrets.

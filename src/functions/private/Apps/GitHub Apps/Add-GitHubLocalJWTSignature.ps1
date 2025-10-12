@@ -1,4 +1,4 @@
-function Add-GitHubLocalJWTSignature {
+﻿function Add-GitHubLocalJWTSignature {
     <#
         .SYNOPSIS
         Signs a JSON Web Token (JWT) using a local RSA private key.

@@ -1,4 +1,4 @@
-function Request-GitHubDeviceCode {
+﻿function Request-GitHubDeviceCode {
     <#
         .SYNOPSIS
         Request a GitHub Device Code.

@@ -1,4 +1,4 @@
-function Get-GitHubSecretOwnerByName {
+﻿function Get-GitHubSecretOwnerByName {
     <#
         .SYNOPSIS
         Create or update an organization secret.

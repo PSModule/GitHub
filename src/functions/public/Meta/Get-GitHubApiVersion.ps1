@@ -1,4 +1,4 @@
-filter Get-GitHubApiVersion {
+﻿filter Get-GitHubApiVersion {
     <#
         .SYNOPSIS
         Get all API versions.

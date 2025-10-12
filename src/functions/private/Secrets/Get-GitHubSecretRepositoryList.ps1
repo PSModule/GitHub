@@ -1,4 +1,4 @@
-function Get-GitHubSecretRepositoryList {
+﻿function Get-GitHubSecretRepositoryList {
     <#
         .SYNOPSIS
         List repository secrets.

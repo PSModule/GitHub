@@ -1,4 +1,4 @@
-function Get-GitHubSecretEnvironmentList {
+﻿function Get-GitHubSecretEnvironmentList {
     <#
         .SYNOPSIS
         List environment secrets.

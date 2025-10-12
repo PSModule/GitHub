@@ -1,4 +1,4 @@
-function Get-GitHubScheduledMaintenance {
+﻿function Get-GitHubScheduledMaintenance {
     <#
         .SYNOPSIS
         Gets the status of GitHub scheduled maintenance

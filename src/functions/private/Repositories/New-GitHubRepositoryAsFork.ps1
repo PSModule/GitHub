@@ -1,4 +1,4 @@
-filter New-GitHubRepositoryAsFork {
+﻿filter New-GitHubRepositoryAsFork {
     <#
         .SYNOPSIS
         Create a fork

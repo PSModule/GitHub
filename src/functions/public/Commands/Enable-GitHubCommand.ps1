@@ -1,4 +1,4 @@
-function Enable-GitHubCommand {
+﻿function Enable-GitHubCommand {
     <#
         .SYNOPSIS
         Resumes workflow commands

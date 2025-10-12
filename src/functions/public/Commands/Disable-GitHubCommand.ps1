@@ -1,4 +1,4 @@
-function Disable-GitHubCommand {
+﻿function Disable-GitHubCommand {
     <#
         .SYNOPSIS
         Stops workflow commands

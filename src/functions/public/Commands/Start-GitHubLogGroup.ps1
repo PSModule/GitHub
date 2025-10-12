@@ -1,4 +1,4 @@
-function Start-GitHubLogGroup {
+﻿function Start-GitHubLogGroup {
     <#
         .SYNOPSIS
         Starts a log group in GitHub Actions

@@ -1,4 +1,4 @@
-function Update-GitHubAppWebhookConfiguration {
+﻿function Update-GitHubAppWebhookConfiguration {
     <#
         .SYNOPSIS
         Update a webhook configuration for an app

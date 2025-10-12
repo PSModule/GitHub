@@ -1,4 +1,4 @@
-filter Resolve-GitHubContext {
+﻿filter Resolve-GitHubContext {
     <#
         .SYNOPSIS
         Resolves the context into a GitHubContext object.

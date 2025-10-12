@@ -1,4 +1,4 @@
-function Test-GitHubToken {
+﻿function Test-GitHubToken {
     <#
         .SYNOPSIS
         Tests if the GitHub token is set in the environment variables.

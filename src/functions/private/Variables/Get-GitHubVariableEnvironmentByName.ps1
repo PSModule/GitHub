@@ -1,4 +1,4 @@
-function Get-GitHubVariableEnvironmentByName {
+﻿function Get-GitHubVariableEnvironmentByName {
     <#
         .SYNOPSIS
         Retrieves a specific variable from a GitHub repository.

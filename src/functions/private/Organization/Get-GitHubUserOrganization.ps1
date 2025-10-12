@@ -1,4 +1,4 @@
-filter Get-GitHubUserOrganization {
+﻿filter Get-GitHubUserOrganization {
     <#
         .SYNOPSIS
         List organizations for a user

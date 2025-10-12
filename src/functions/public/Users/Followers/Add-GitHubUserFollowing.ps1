@@ -1,4 +1,4 @@
-filter Add-GitHubUserFollowing {
+﻿filter Add-GitHubUserFollowing {
     <#
         .SYNOPSIS
         Follow a user

@@ -1,4 +1,4 @@
-filter Remove-GitHubWorkflowRun {
+﻿filter Remove-GitHubWorkflowRun {
     <#
         .SYNOPSIS
         Delete a workflow run

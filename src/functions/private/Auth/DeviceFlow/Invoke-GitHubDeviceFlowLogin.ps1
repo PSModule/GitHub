@@ -1,4 +1,4 @@
-function Invoke-GitHubDeviceFlowLogin {
+﻿function Invoke-GitHubDeviceFlowLogin {
     <#
         .SYNOPSIS
         Starts the GitHub Device Flow login process.

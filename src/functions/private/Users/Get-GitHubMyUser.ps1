@@ -1,4 +1,4 @@
-filter Get-GitHubMyUser {
+﻿filter Get-GitHubMyUser {
     <#
         .SYNOPSIS
         Get the authenticated user

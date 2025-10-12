@@ -1,4 +1,4 @@
-filter Get-GitHubRepositoryCodeownersError {
+﻿filter Get-GitHubRepositoryCodeownersError {
     <#
         .SYNOPSIS
         List CODEOWNERS errors

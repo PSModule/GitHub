@@ -1,4 +1,4 @@
-function New-FunctionTemplate {
+﻿function New-FunctionTemplate {
     <#
         .SYNOPSIS
         Short description

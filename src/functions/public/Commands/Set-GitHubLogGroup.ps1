@@ -1,4 +1,4 @@
-function Set-GitHubLogGroup {
+﻿function Set-GitHubLogGroup {
     <#
         .SYNOPSIS
         Encapsulates commands with a log group in GitHub Actions

@@ -1,4 +1,4 @@
-filter Get-GitHubAllUser {
+﻿filter Get-GitHubAllUser {
     <#
         .SYNOPSIS
         List users

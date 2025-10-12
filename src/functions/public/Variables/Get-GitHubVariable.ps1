@@ -1,4 +1,4 @@
-function Get-GitHubVariable {
+﻿function Get-GitHubVariable {
     <#
         .SYNOPSIS
         Retrieves a variable from GitHub based on the specified scope.

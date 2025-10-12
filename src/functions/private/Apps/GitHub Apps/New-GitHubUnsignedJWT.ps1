@@ -1,4 +1,4 @@
-function New-GitHubUnsignedJWT {
+﻿function New-GitHubUnsignedJWT {
     <#
         .SYNOPSIS
         Creates an unsigned JSON Web Token (JWT) for a GitHub App.

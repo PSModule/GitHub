@@ -1,4 +1,4 @@
-filter Set-GitHubRepositoryPermission {
+﻿filter Set-GitHubRepositoryPermission {
     <#
         .SYNOPSIS
         Set the permission level for a team on a repository

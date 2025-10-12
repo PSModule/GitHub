@@ -1,4 +1,4 @@
-function Write-GitHubNotice {
+﻿function Write-GitHubNotice {
     <#
         .SYNOPSIS
         Write a notice message in GitHub Actions

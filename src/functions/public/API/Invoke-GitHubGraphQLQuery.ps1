@@ -1,4 +1,4 @@
-function Invoke-GitHubGraphQLQuery {
+﻿function Invoke-GitHubGraphQLQuery {
     <#
         .SYNOPSIS
         Invoke a GraphQL requests against the GitHub GraphQL API

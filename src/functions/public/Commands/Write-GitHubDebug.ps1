@@ -1,4 +1,4 @@
-function Write-GitHubDebug {
+﻿function Write-GitHubDebug {
     <#
         .SYNOPSIS
         Write a debug message in GitHub Actions

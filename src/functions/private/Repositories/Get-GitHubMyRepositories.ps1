@@ -1,4 +1,4 @@
-filter Get-GitHubMyRepositories {
+﻿filter Get-GitHubMyRepositories {
     <#
         .SYNOPSIS
         List repositories for the authenticated user.

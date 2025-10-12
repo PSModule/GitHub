@@ -1,4 +1,4 @@
-function Write-GitHubWarning {
+﻿function Write-GitHubWarning {
     <#
         .SYNOPSIS
         Write a warning message in GitHub Actions

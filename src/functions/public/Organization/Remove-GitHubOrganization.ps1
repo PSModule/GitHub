@@ -1,4 +1,4 @@
-filter Remove-GitHubOrganization {
+﻿filter Remove-GitHubOrganization {
     <#
         .SYNOPSIS
         Delete an organization

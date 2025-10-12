@@ -1,4 +1,4 @@
-filter Get-GitHubUserByName {
+﻿filter Get-GitHubUserByName {
     <#
         .SYNOPSIS
         Get a user

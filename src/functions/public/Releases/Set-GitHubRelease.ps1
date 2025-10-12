@@ -1,4 +1,4 @@
-filter Set-GitHubRelease {
+﻿filter Set-GitHubRelease {
     <#
         .SYNOPSIS
         Creates or updates a release.
