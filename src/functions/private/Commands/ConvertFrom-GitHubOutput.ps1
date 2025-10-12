@@ -20,10 +20,14 @@
         Config={"Nested":{"SubSetting":"SubValue"},"Setting1":"Value1","Setting2":2}
         Numbers=12345
         '@
-        ```
 
         ConvertFrom-GitHubOutput -OutputContent $content
+        ```
 
+        This will convert the GitHub Actions output syntax to a PowerShell object.
+
+        Output:
+        ```powershell
         zen      : something else
         result   : @{MyOutput=Hello, World!; Status=Success}
         MY_VALUE : Line1
@@ -31,8 +35,7 @@
                 Line3
         Config   : {[Nested, System.Collections.Hashtable], [Setting1, Value1], [Setting2, 2]}
         Numbers  : 12345
-
-        This will convert the GitHub Actions output syntax to a PowerShell object.
+        ```
 
     #>
     [OutputType([pscustomobject])]
