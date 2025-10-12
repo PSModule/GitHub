@@ -5,7 +5,7 @@
 
         .DESCRIPTION
         Enables a workflow and sets the `state` of the workflow to `active`. You can use workflow
-        file name and ID in the `ID` parameter. For example, you could use `main.yaml`.
+        filename and ID in the `ID` parameter. For example, you could use `main.yaml`.
 
         OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
@@ -16,7 +16,7 @@
         ```
         ```
 
-        Enables the workflow with the file name 'main.yaml' in the PSModule/GitHub repository.
+        Enables the workflow with the filename 'main.yaml' in the PSModule/GitHub repository.
 
         .EXAMPLE
         ```powershell
