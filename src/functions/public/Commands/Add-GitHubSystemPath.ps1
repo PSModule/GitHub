@@ -9,7 +9,9 @@
         echo "$env:PATH" in a step or an action.
 
         .EXAMPLE
+        ```powershell
         Add-GitHubSystemPath -Path '$HOME/.local/bin'
+        ```
 
         .NOTES
         [Adding a system path](https://docs.github.com/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions#adding-a-system-path)

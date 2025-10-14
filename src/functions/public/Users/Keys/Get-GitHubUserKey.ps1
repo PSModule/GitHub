@@ -10,17 +10,23 @@
         Keys from a given user are accessible by anyone.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubUserKey
+        ```
 
         Gets all GPG keys for the authenticated user.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubUserKey -ID '1234567'
+        ```
 
         Gets the public SSH key with the ID '1234567' for the authenticated user.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubUserKey -Username 'octocat'
+        ```
 
         Gets all GPG keys for the 'octocat' user.
 

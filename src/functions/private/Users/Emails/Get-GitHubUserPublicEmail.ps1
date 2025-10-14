@@ -9,7 +9,9 @@
         endpoint. This endpoint is accessible with the `user:email` scope.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubUserPublicEmail
+        ```
 
         Gets all public email addresses for the authenticated user.
 

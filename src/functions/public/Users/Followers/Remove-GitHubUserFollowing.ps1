@@ -7,7 +7,9 @@
         Unfollowing a user requires the user to be logged in and authenticated with basic auth or OAuth with the `user:follow` scope.
 
         .EXAMPLE
+        ```powershell
         Unfollow-GitHubUser -Username 'octocat'
+        ```
 
         Unfollows the user with the username 'octocat'.
 

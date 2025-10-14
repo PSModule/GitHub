@@ -9,7 +9,9 @@
         The function returns a custom GitHubArtifact object containing metadata and download information for the artifact.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubArtifactById -Owner 'octocat' -Repository 'hello-world' -ID '123456'
+        ```
 
         Output:
         ```powershell

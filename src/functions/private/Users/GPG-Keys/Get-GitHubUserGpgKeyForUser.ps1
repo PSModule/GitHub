@@ -7,7 +7,9 @@
         Lists the GPG keys for a user. This information is accessible by anyone.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubUserGpgKeyForUser -Username 'octocat'
+        ```
 
         Gets all GPG keys for the 'octocat' user.
 

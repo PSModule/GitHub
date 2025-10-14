@@ -7,7 +7,9 @@
         Lists the people following the authenticated user.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubUserMyFollowers
+        ```
 
         Gets all followers of the authenticated user.
 

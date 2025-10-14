@@ -8,7 +8,9 @@
         create, update, or read secrets. OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubSecretEnvironmentByName -Owner 'octocat' -Repository 'Hello-World' -Environment 'dev' -Name 'SECRET1' -Context $GitHubContext
+        ```
 
         Output:
         ```powershell

@@ -12,22 +12,30 @@
         - Enterprise
 
         .EXAMPLE
+        ```powershell
         Connect-GitHubApp
+        ```
 
         Connects to GitHub as all available targets using the logged in GitHub App.
 
         .EXAMPLE
+        ```powershell
         Connect-GitHubApp -User 'octocat'
+        ```
 
         Connects to GitHub as the user 'octocat' using the logged in GitHub App.
 
         .EXAMPLE
+        ```powershell
         Connect-GitHubApp -Organization 'psmodule' -Default
+        ```
 
         Connects to GitHub as the organization 'psmodule' using the logged in GitHub App and sets it as the default context.
 
         .EXAMPLE
+        ```powershell
         Connect-GitHubApp -Enterprise 'msx'
+        ```
 
         Connects to GitHub as the enterprise 'msx' using the logged in GitHub App.
 

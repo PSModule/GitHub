@@ -7,7 +7,9 @@
         Gets the global Git configuration.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubGitConfig
+        ```
 
         Gets the global Git configuration.
 

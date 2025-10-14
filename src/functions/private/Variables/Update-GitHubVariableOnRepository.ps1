@@ -9,7 +9,9 @@
         OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        ```powershell
         Update-GitHubVariableOnRepository -Owner 'octocat' -Repository 'Hello-World' -Name 'HOST_NAME' -Value 'github.com' -Context $GitHubContext
+        ```
 
         Updates the repository variable named `HOST_NAME` with the value `github.com` in the specified repository.
 

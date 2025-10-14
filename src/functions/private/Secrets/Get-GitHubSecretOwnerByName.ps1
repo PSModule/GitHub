@@ -12,7 +12,9 @@
         the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubSecretOwnerByName -Owner 'octocat' -Name 'SECRET_THING' -Context (Get-GitHubContext)
+        ```
 
         Output:
         ```powershell

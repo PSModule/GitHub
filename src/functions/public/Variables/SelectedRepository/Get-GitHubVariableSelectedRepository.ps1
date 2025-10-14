@@ -10,7 +10,9 @@
         the `repo` scope is also required.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubVariableSelectedRepository -Owner 'PSModule' -Name 'SELECTEDVAR'
+        ```
 
         .OUTPUTS
         GitHubRepository

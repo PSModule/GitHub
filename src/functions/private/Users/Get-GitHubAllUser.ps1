@@ -11,7 +11,9 @@
         to get the URL for the next page of users.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubAllUser -Since 17722253
+        ```
 
         Get a list of users, starting with the user 'MariusStorhaug'.
 

@@ -8,12 +8,16 @@
         If the Name parameter is specified, the function will return the gitignore template for the specified name.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubGitignoreList
+        ```
 
         Get all gitignore templates
 
         .EXAMPLE
+        ```powershell
         Get-GitHubGitignore -Name 'VisualStudio'
+        ```
 
         Get a gitignore template for VisualStudio
 

@@ -9,17 +9,23 @@
         Lists all users, in the order that they signed up on GitHub - if '-All' is provided.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubUser
+        ```
 
         Get the authenticated user.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubUser -Name 'octocat'
+        ```
 
         Get the 'octocat' user.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubUser -All -Since 17722253
+        ```
 
         Get a list of users, starting with the user 'MariusStorhaug'.
 

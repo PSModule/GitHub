@@ -9,22 +9,30 @@
         Information about published releases are available to everyone. Only users with push access will receive listings for draft releases.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubRelease -Owner 'octocat' -Repository 'hello-world'
+        ```
 
         Gets the latest release for the repository 'hello-world' owned by 'octocat'.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -AllVersions
+        ```
 
         Gets all releases for the repository 'hello-world' owned by 'octocat'.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -Tag 'v1.0.0'
+        ```
 
         Gets the release with the tag 'v1.0.0' for the repository 'hello-world' owned by 'octocat'.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubRelease -Owner 'octocat' -Repository 'hello-world' -ID '1234567'
+        ```
 
         Gets the release with the ID '1234567' for the repository 'hello-world' owned by 'octocat'.
 

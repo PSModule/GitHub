@@ -8,18 +8,22 @@
         Allows for colapsing of code in IDE for code that belong together.
 
         .EXAMPLE
+        ```powershell
         Set-GitHubNoCommandGroup {
             Write-Host 'Hello, World!'
             Write-GithubError 'This is an error'
         }
+        ```
 
         Groups commands where no workflow commands are run.
 
         .EXAMPLE
+        ```powershell
         NoLogGroup 'MyGroup' {
             Write-Host 'Hello, World!'
             Write-GithubError 'This is an error'
         }
+        ```
 
         Groups commands where no workflow commands are run, using an alias and DSL approach.
 

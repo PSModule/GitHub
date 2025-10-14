@@ -11,7 +11,9 @@
         `admin:org` for organizations, and collaborator access for environments.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubVariable -Owner 'octocat' -Name 'HOST_NAME'
+        ```
 
         Output:
         ```powershell
@@ -25,7 +27,9 @@
         Retrieves the specified variable from the organization level.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubVariable -Owner 'octocat' -Repository 'Hello-World' -Name 'GUID'
+        ```
 
         Output:
         ```powershell
@@ -39,7 +43,9 @@
         Retrieves the specified variable from the repository level.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubVariable -Owner 'octocat' -Repository 'Hello-World' -Environment 'dev' -Name 'DB_SERVER'
+        ```
 
         Output:
         ```powershell
@@ -53,7 +59,9 @@
         Retrieves the specified variable from the environment level within a repository.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubVariable -Owner 'octocat'
+        ```
 
         Output:
         ```powershell
@@ -73,7 +81,9 @@
         Retrieves all variables available at the organization level.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubVariable -Owner 'octocat' -Repository 'Hello-World'
+        ```
 
         Output:
         ```powershell
@@ -93,7 +103,9 @@
         Retrieves all variables available at the repository level.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubVariable -Owner 'octocat' -Repository 'Hello-World' -Environment 'staging'
+        ```
 
         Output:
         ```powershell

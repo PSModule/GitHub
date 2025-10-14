@@ -9,17 +9,23 @@
         displayed on your public profile or via the API.
 
         .EXAMPLE
+        ```powershell
         Update-GitHubUser -Name 'octocat'
+        ```
 
         Update the authenticated user's name to 'octocat'
 
         .EXAMPLE
+        ```powershell
         Update-GitHubUser -Location 'San Francisco'
+        ```
 
         Update the authenticated user's location to 'San Francisco'
 
         .EXAMPLE
+        ```powershell
         Update-GitHubUser -Hireable $true -Description 'I love programming'
+        ```
 
         Update the authenticated user's hiring availability to 'true' and their description to 'I love programming'
 

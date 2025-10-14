@@ -11,7 +11,9 @@
         Fine-grained tokens must have 'Variables' organization permission (write) and 'Metadata' repository permission (read).
 
         .EXAMPLE
+        ```powershell
         Add-GitHubVariableSelectedRepository -Owner 'my-org' -Name 'API_KEY' -RepositoryID '654321'
+        ```
 
         Adds the repository 'test-repo' to the 'API_KEY' variable in the organization 'my-org'.
 

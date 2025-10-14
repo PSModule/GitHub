@@ -10,7 +10,9 @@
         Use this function to extract authentication tokens for subsequent API requests.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubAccessToken
+        ```
 
         Output:
         ```powershell
@@ -20,7 +22,9 @@
         Retrieves the access token from the default context as a secure string.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubAccessToken -Context $myGitHubContext -AsPlainText
+        ```
 
         Output:
         ```powershell

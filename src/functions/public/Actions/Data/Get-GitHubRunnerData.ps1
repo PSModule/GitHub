@@ -7,7 +7,9 @@
         Gets data about the runner thats running the workflow.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubRunnerData
+        ```
 
         .LINK
         https://psmodule.io/GitHub/Functions/Actions/Data/Get-GitHubRunnerData

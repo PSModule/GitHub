@@ -8,7 +8,9 @@
         You must be an organization owner with `admin:read` scope to use this endpoint.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubAppInstallationForOrganization -Organization 'github'
+        ```
 
         Gets all GitHub Apps in the organization `github`.
 

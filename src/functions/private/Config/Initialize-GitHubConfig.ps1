@@ -7,12 +7,16 @@
         Initialize the GitHub module configuration.
 
         .EXAMPLE
+        ```powershell
         Initialize-GitHubConfig
+        ```
 
         Initializes the GitHub module configuration.
 
         .EXAMPLE
+        ```powershell
         Initialize-GitHubConfig -Force
+        ```
 
         Forces the initialization of the GitHub module configuration.
     #>

@@ -7,7 +7,9 @@
         Replace all repository topics
 
         .EXAMPLE
+        ```powershell
         Set-GitHubRepositoryTopic -Owner 'octocat' -Name 'hello-world' -Topic 'octocat', 'octo', 'octocat/hello-world'
+        ```
 
         Replaces all topics for the repository 'octocat/hello-world' with the topics 'octocat', 'octo', 'octocat/hello-world'.
 

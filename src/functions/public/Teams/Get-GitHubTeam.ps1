@@ -9,17 +9,23 @@
         and replaces spaces with a - separator. For example, "My TEam Näme" would become my-team-name.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubTeam -Organization 'GitHub'
+        ```
 
         Gets all teams in the `github` organization.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubTeam -Organization 'github' -Slug 'my-team-name'
+        ```
 
         Gets the team with the slug 'my-team-name' in the `github` organization.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubTeam -Organization 'github' -Repository 'my-repo'
+        ```
 
         Lists all teams that have access to the 'my-repo' repository owned by `github`.
 

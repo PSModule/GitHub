@@ -9,7 +9,9 @@
         "[Understanding scopes for OAuth apps](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/)."
 
         .EXAMPLE
+        ```powershell
         Get-GitHubUserMySigningKey
+        ```
 
         Lists the SSH signing keys for the authenticated user's GitHub account.
 

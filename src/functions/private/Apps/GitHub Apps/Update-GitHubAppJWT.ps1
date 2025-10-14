@@ -8,17 +8,23 @@
         it will be refreshed. This function implements mutex-based locking to prevent concurrent refreshes.
 
         .EXAMPLE
+        ```powershell
         Update-GitHubAppJWT -Context $Context
+        ```
 
         Updates the JSON Web Token (JWT) for a GitHub App using the specified context.
 
         .EXAMPLE
+        ```powershell
         Update-GitHubAppJWT -Context $Context -PassThru
+        ```
 
         This will update the GitHub App JWT for the specified context and return the updated context.
 
         .EXAMPLE
+        ```powershell
         Update-GitHubAppJWT -Context $Context -Silent
+        ```
 
         This will update the GitHub App JWT for the specified context without displaying progress messages.
 

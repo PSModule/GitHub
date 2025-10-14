@@ -7,7 +7,9 @@
         Installs the provided GitHub App on the specified target.
 
         .EXAMPLE
+        ```powershell
         Install-GitHubApp -Enterprise 'msx' -Organization 'org' -ClientID '123456' -RepositorySelection 'selected' -Repositories 'repo1', 'repo2'
+        ```
 
         Install the GitHub App with
         - the client ID '123456'
@@ -16,7 +18,9 @@
         on the organization 'org' in the enterprise 'msx'.
 
         .EXAMPLE
+        ```powershell
         Install-GitHubApp -Enterprise 'msx' -Organization 'org' -ClientID '123456' -RepositorySelection 'all'
+        ```
 
         Install the GitHub App with
         - the client ID '123456'

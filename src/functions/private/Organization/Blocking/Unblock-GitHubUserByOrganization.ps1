@@ -7,7 +7,9 @@
         Unblocks the given user on behalf of the specified organization.
 
         .EXAMPLE
+        ```powershell
         Unblock-GitHubUserByOrganization -Organization 'github' -Username 'octocat'
+        ```
 
         Unblocks the user 'octocat' from the organization 'github'.
         Returns $true if successful.

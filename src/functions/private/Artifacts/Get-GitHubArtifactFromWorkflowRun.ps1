@@ -9,7 +9,9 @@
         The function can optionally filter artifacts by name or return only the latest version per artifact name.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubArtifactFromWorkflowRun -Owner 'octocat' -Repository 'demo' -ID '123456789'
+        ```
 
         Output:
         ```powershell

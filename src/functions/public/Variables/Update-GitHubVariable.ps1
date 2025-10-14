@@ -12,17 +12,23 @@
         and environment variables require collaborator access.
 
         .EXAMPLE
+        ```powershell
         Update-GitHubVariable -Owner 'octocat' -Repository 'Hello-World' -Name 'HOST_NAME' -Value 'github.com'
+        ```
 
         Updates the repository variable named `HOST_NAME` with the value `github.com` in the specified repository.
 
         .EXAMPLE
+        ```powershell
         Update-GitHubVariable -Owner 'octocat' -Name 'HOST_NAME' -Value 'github.com' -Visibility 'private'
+        ```
 
         Updates the organization variable named `HOST_NAME` with the value `github.com`, making it private.
 
         .EXAMPLE
+        ```powershell
         Update-GitHubVariable -Owner 'octocat' -Repository 'Hello-World' -Environment 'dev' -Name 'HOST_NAME' -Value 'github.com'
+        ```
 
         Updates the environment variable named `HOST_NAME` with the value `github.com` in the specified environment.
 

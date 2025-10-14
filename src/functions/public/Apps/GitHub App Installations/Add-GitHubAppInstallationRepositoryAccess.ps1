@@ -7,6 +7,7 @@
         Grant repository access to an organization installation.
 
         .EXAMPLE
+        ```powershell
         $params = @{
             Enterprise          = 'msx'
             Organization        = 'PSModule'
@@ -14,6 +15,7 @@
             Repositories        = 'repo1', 'repo2'
         }
         Add-GitHubAppInstallationRepositoryAccess @params
+        ```
 
         Grant access to the repositories 'repo1' and 'repo2' for the installation
         with the ID '12345678' on the organization 'PSModule' in the enterprise 'msx'.

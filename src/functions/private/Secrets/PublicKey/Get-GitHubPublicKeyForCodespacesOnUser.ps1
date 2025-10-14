@@ -9,7 +9,9 @@
         OAuth app tokens and personal access tokens (classic) need the `codespace` or `codespace:secrets` scope to use this endpoint.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubPublicKeyForCodespacesOnUser -Context $GitHubContext
+        ```
 
         Outputs:
         ```powershell

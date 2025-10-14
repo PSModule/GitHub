@@ -1,4 +1,4 @@
-class GitHubPermission : System.IEquatable[Object] {
+﻿class GitHubPermission : System.IEquatable[Object] {
     # The programmatic name of the permission as returned by the GitHub API
     [string] $Name
 

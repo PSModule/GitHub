@@ -9,7 +9,9 @@
         specific enterprise name is provided, details about that single instance are returned.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubEnterprise
+        ```
 
         Output:
         ```powershell
@@ -27,7 +29,9 @@
         Retrieves details about all GitHub Enterprise instances for the user.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubEnterprise -Name 'my-enterprise'
+        ```
 
         Output:
         ```powershell

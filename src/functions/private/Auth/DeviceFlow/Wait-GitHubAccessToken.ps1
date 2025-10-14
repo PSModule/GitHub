@@ -8,12 +8,16 @@
         This will poll the GitHub API until the user has entered the code.
 
         .EXAMPLE
+        ```powershell
         Wait-GitHubAccessToken -DeviceCode $deviceCode -ClientID $ClientID -Interval $interval
+        ```
 
         This will poll the GitHub API until the user has entered the code.
 
         .EXAMPLE
+        ```powershell
         Wait-GitHubAccessToken -Refresh -ClientID $ClientID
+        ```
 
         .NOTES
         For more info about the Device Flow visit:

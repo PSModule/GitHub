@@ -1,4 +1,4 @@
-filter Remove-GitHubEnvironment {
+﻿filter Remove-GitHubEnvironment {
     <#
         .SYNOPSIS
         Deletes an environment from a repository.
@@ -8,7 +8,9 @@ filter Remove-GitHubEnvironment {
         The function supports ShouldProcess for confirmation before execution.
 
         .EXAMPLE
+        ```powershell
         Remove-GitHubEnvironment -Owner 'PSModule' -Repository 'GitHub' -Name 'Production'
+        ```
 
         Deletes the 'Production' environment from the 'PSModule/GitHub' repository.
 

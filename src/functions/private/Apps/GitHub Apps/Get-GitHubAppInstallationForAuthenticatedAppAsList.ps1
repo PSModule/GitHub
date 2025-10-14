@@ -10,7 +10,9 @@
         to access this endpoint.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubAppInstallationForAuthenticatedAppAsList
+        ```
 
         List installations for the authenticated app.
 

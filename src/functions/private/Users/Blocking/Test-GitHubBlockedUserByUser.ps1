@@ -9,7 +9,9 @@
         or if the given user account has been identified as spam by GitHub.
 
         .EXAMPLE
+        ```powershell
         Test-GitHubBlockedUserByUser -Username 'octocat'
+        ```
 
         Checks if the user `octocat` is blocked by the authenticated user.
         Returns true if the user is blocked, false if not.

@@ -11,7 +11,9 @@
         OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        ```powershell
         Set-GitHubSecretOnRepository -Owner 'octocat' -Repository 'Hello-World' -Name 'SECRET1' -Value 'SECRET_VALUE' -Context $GitHubContext
+        ```
 
         Creates a new repository secret named `SECRET1` with the value `SECRET_VALUE` in the specified repository.
 

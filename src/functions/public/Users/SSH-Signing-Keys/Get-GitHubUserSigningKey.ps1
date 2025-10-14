@@ -7,17 +7,23 @@
         Lists a given user's or the current user's SSH signing keys.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubUserSigningKey
+        ```
 
         Gets all SSH signing keys for the authenticated user.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubUserSigningKey -ID '1234567'
+        ```
 
         Gets the SSH signing key with the ID '1234567' for the authenticated user.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubUserSigningKey -Username 'octocat'
+        ```
 
         Gets all SSH signing keys for the 'octocat' user.
 

@@ -8,7 +8,9 @@
         If the organization cannot block the given user a 422 is returned.
 
         .EXAMPLE
+        ```powershell
         Block-GitHubUserByOrganization -Organization 'github' -Username 'octocat'
+        ```
 
         Blocks the user 'octocat' from the organization 'github'.
         Returns $true if successful, $false if not.

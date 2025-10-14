@@ -8,7 +8,9 @@
         bytes of code written in that language.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubRepositoryLanguage -Owner 'octocat' -Name 'hello-world'
+        ```
 
         Gets the languages for the 'hello-world' repository owned by 'octocat'.
 

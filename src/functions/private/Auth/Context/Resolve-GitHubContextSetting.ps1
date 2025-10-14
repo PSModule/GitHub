@@ -9,7 +9,9 @@
         it will return the default value from the GitHub configuration. This is useful for resolving API-related settings dynamically.
 
         .EXAMPLE
+        ```powershell
         Resolve-GitHubContextSetting -Name 'Repository' -Value 'MyRepo'
+        ```
 
         Output:
         ```powershell
@@ -19,7 +21,9 @@
         Returns the provided value 'MyRepo' for the 'Repository' setting.
 
         .EXAMPLE
+        ```powershell
         Resolve-GitHubContextSetting -Name 'Repository' -Context $GitHubContext
+        ```
 
         Output:
         ```powershell
@@ -29,7 +33,9 @@
         Retrieves the 'Repository' setting from the provided GitHub context object.
 
         .EXAMPLE
+        ```powershell
         Resolve-GitHubContextSetting -Name 'ApiBaseUrl'
+        ```
 
         Output:
         ```powershell

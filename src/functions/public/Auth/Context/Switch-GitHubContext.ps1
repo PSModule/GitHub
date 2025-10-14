@@ -7,7 +7,9 @@
         Set the default context for the GitHub module.
 
         .EXAMPLE
+        ```powershell
         Switch-GitHubContext -Context 'github.com/Octocat'
+        ```
 
         .LINK
         https://psmodule.io/GitHub/Functions/Auth/Context/Switch-GitHubContext

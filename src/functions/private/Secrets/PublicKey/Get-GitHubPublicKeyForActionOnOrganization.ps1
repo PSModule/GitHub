@@ -10,7 +10,9 @@
         need the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubPublicKeyForActionOnOrganization -Owner 'octocat' -Context $GitHubContext
+        ```
 
         Outputs:
         ```powershell

@@ -9,7 +9,9 @@
         [scope](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
 
         .EXAMPLE
+        ```powershell
         Get-GitHubUserMyKeyById -ID '1234567'
+        ```
 
         Gets the public SSH key with the ID '1234567' for the authenticated user.
 

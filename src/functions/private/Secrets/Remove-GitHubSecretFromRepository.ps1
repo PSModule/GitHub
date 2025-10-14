@@ -8,7 +8,9 @@
         or read secrets. OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        ```powershell
         Remove-GitHubSecretFromRepository -Owner 'octocat' -Repository 'Hello-World' -Name 'SECRET1' -Context $GitHubContext
+        ```
 
         Deletes the specified secret from the specified repository.
 

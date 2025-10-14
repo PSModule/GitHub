@@ -7,7 +7,9 @@
         Gets the currently authenticated user.
 
         .EXAMPLE
+        ```powershell
         Get-GithubViewer
+        ```
 
         Gets the currently authenticated user.
 

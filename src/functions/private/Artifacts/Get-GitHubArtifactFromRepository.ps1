@@ -10,7 +10,9 @@
         By default, only the latest version of each artifact is returned unless -AllVersions is specified.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubArtifactFromRepository -Owner 'octocat' -Repository 'demo-repo' -AllVersions
+        ```
 
         Output:
         ```powershell

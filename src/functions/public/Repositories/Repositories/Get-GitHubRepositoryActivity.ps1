@@ -11,27 +11,42 @@
         see "[Viewing activity and data for your repository](https://docs.github.com/repositories/viewing-activity-and-data-for-your-repository)."
 
         .EXAMPLE
+        ```powershell
         Get-GitHubRepositoryActivity -Owner 'PSModule' -Name 'GitHub'
+        ```
 
         .EXAMPLE
+        ```powershell
         Get-GitHubRepositoryActivity -Owner 'PSModule' -Name 'GitHub' -Direction 'asc'
+        ```
 
         .EXAMPLE
+        ```powershell
         Get-GitHubRepositoryActivity -Owner 'PSModule' -Name 'GitHub' -PerPage 100
+        ```
 
         .EXAMPLE
+        ```powershell
         Get-GitHubRepositoryActivity -Owner 'PSModule' -Name 'GitHub' -Before '2021-01-01T00:00:00Z'
+        ```
 
         .EXAMPLE
+        ```powershell
         Get-GitHubRepositoryActivity -Owner 'PSModule' -Name 'GitHub' -After '2021-01-01T00:00:00Z'
+        ```
 
         .EXAMPLE
+        ```powershell
         Get-GitHubRepositoryActivity -Owner 'PSModule' -Name 'GitHub' -Ref 'refs/heads/main'
+        ```
 
         .EXAMPLE
+        ```powershell
         Get-GitHubRepositoryActivity -Owner 'PSModule' -Name 'GitHub' -Actor 'octocat'
+        ```
 
         .EXAMPLE
+        ```powershell
         $params = @{
             Owner       = 'PSModule'
             Repo        = 'GitHub'
@@ -39,11 +54,14 @@
         }
         Get-GitHubRepositoryActivity @params |
             Select-Object -Property @{n='actor';e={$_.actor.login}},activity_type,ref,timestamp
+        ```
 
         Gets the activity for the past 24 hours and selects the actor, activity type, ref, and timestamp.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubRepositoryActivity -Owner 'PSModule' -Name 'GitHub' -ActivityType 'push','force_push'
+        ```
 
         .NOTES
         [List repository activities](https://docs.github.com/rest/repos/repos#list-repository-activities)

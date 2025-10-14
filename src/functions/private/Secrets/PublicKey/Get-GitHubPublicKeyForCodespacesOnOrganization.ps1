@@ -8,7 +8,9 @@
         can create or update secrets. OAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubPublicKeyForCodespacesOnOrganization -Owner 'octocat' -Context $GitHubContext
+        ```
 
         Outputs:
         ```powershell

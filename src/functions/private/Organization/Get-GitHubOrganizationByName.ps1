@@ -15,7 +15,9 @@
         for details. For an example response, see 'Response with GitHub plan information' below."
 
         .EXAMPLE
+        ```powershell
         Get-GitHubOrganizationByName -Name 'github'
+        ```
 
         Get the 'GitHub' organization
 

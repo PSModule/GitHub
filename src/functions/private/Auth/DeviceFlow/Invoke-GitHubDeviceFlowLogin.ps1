@@ -7,7 +7,9 @@
         Starts the GitHub Device Flow login process. This will prompt the user to visit a URL and enter a code.
 
         .EXAMPLE
+        ```powershell
         Invoke-GitHubDeviceFlowLogin
+        ```
 
         This will start the GitHub Device Flow login process.
         The user gets prompted to visit a URL and enter a code.

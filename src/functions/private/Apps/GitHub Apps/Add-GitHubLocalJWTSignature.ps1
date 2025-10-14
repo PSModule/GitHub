@@ -8,7 +8,9 @@
         This function handles the RSA signing process and returns the complete signed JWT.
 
         .EXAMPLE
+        ```powershell
         Add-GitHubLocalJWTSignature -UnsignedJWT 'eyJ0eXAiOi...' -PrivateKey '--- BEGIN RSA PRIVATE KEY --- ... --- END RSA PRIVATE KEY ---'
+        ```
 
         Adds a signature to the unsigned JWT using the provided private key.
 

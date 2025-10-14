@@ -7,7 +7,9 @@
         Lists the people following the specified user.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubUserFollowersOfUser -Username 'octocat'
+        ```
 
         Gets all followers of user 'octocat'.
 

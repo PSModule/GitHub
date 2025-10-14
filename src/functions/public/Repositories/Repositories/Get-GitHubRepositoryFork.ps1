@@ -7,7 +7,9 @@
         List forks of a named repository.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubRepositoryFork -Owner 'octocat' -Name 'Hello-World'
+        ```
 
         List forks of the 'Hello-World' repository owned by 'octocat'.
 

@@ -1,4 +1,4 @@
-function Test-GitHubAzureCLI {
+﻿function Test-GitHubAzureCLI {
     <#
         .SYNOPSIS
         Tests if Azure CLI is installed and authenticated.
@@ -8,7 +8,9 @@ function Test-GitHubAzureCLI {
         It verifies both the availability of the CLI tool and the authentication status.
 
         .EXAMPLE
+        ```powershell
         Test-GitHubAzureCLI
+        ```
 
         Returns $true if Azure CLI is installed and authenticated, $false otherwise.
 

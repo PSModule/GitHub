@@ -9,17 +9,23 @@
         If a parameter is not provided, it will attempt to retrieve the default value.
 
         .EXAMPLE
+        ```powershell
         Get-FunctionParameter
+        ```
 
         This will return all the parameters and their final value in the current function.
 
         .EXAMPLE
+        ```powershell
         Get-FunctionParameter -IncludeCommonParameters
+        ```
 
         This will return all the parameters and their final value in the current function, including common parameters.
 
         .EXAMPLE
+        ```powershell
         Get-FunctionParameter -Scope 2
+        ```
 
         This will return all the parameters and their final value in the grandparent function.
     #>

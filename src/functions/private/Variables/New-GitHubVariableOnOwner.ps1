@@ -10,7 +10,9 @@
         OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        ```powershell
         New-GitHubVariableOnOwner -Owner 'octocat' -Name 'HOST_NAME' -Value 'github.com' -Context $GitHubContext
+        ```
 
         Creates a new organization variable named `HOST_NAME` with the value `github.com` in the specified organization.
 

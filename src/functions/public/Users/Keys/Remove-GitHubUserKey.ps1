@@ -1,4 +1,4 @@
-filter Remove-GitHubUserKey {
+﻿filter Remove-GitHubUserKey {
     <#
         .SYNOPSIS
         Delete a public SSH key for the authenticated user
@@ -9,7 +9,9 @@ filter Remove-GitHubUserKey {
         [scope](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
 
         .EXAMPLE
+        ```powershell
         Remove-GitHubUserKey -ID '1234567'
+        ```
 
         Deletes the public SSH key with ID '1234567' from the authenticated user's GitHub account.
 

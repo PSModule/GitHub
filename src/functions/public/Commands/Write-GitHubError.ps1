@@ -7,7 +7,9 @@
         Write a error message in GitHub Actions. The message will be displayed in the GitHub Actions log.
 
         .EXAMPLE
+        ```powershell
         Write-GitHubError -Message 'Hello, World!'
+        ```
 
         Writes a error message 'Hello, World!'.
 

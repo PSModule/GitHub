@@ -7,7 +7,9 @@
         List the users you've blocked on your personal account.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubBlockedUserByUser
+        ```
 
         Returns a list of users blocked by the authenticated user.
 

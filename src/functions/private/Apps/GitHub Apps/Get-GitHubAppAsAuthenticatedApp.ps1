@@ -13,7 +13,9 @@
         to access this endpoint.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubAppAsAuthenticatedApp
+        ```
 
         Get the authenticated app.
 

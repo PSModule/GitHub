@@ -12,7 +12,9 @@
         the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        ```powershell
         Set-GitHubSecretOnOwner -Owner 'octocat' -Name 'HOST_NAME' -Value 'test_value' -Context $GitHubContext
+        ```
 
         Creates a new organization secret named `HOST_NAME` with the value `test_value` in the specified organization.
 

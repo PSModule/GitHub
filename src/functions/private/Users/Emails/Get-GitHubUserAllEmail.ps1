@@ -8,7 +8,9 @@
         This endpoint is accessible with the `user:email` scope.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubUserAllEmail
+        ```
 
         Gets all email addresses for the authenticated user.
 

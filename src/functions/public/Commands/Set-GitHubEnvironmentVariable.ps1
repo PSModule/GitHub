@@ -7,7 +7,9 @@
         Set a GitHub environment variable
 
         .EXAMPLE
+        ```powershell
         Set-GitHubEnv -Name 'MyVariable' -Value 'MyValue'
+        ```
 
         .NOTES
         [Setting an environment variable](https://docs.github.com/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions#setting-an-environment-variable)

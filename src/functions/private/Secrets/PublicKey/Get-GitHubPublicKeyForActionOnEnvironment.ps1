@@ -9,7 +9,9 @@
         access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubPublicKeyForActionOnEnvironment -Owner 'octocat' -Repository 'hello-world' -Environment 'prod' -Context $GitHubContext
+        ```
 
         Outputs:
         ```powershell

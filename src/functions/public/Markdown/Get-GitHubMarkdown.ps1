@@ -7,8 +7,10 @@
         Converts Markdown to HTML
 
         .EXAMPLE
+        ```powershell
         Get-GitHubMarkdown -Text "Hello **world**"
         "<p>Hello <strong>world</strong></p>"
+        ```
 
         Renders the Markdown text "Hello **world**" to HTML.
 

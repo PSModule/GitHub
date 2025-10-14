@@ -13,7 +13,9 @@
         API instead.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubUserOrganization -Username 'octocat'
+        ```
 
         List public organizations for the user 'octocat'.
 

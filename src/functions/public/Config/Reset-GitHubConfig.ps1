@@ -7,7 +7,9 @@
         Re-initializes the GitHub module configuration.
 
         .EXAMPLE
+        ```powershell
         Reset-GitHubConfig
+        ```
 
         Re-initializes the GitHub module configuration.
 

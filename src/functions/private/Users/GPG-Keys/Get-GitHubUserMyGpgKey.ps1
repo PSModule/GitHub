@@ -9,7 +9,9 @@
         [scope](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
 
         .EXAMPLE
+        ```powershell
         Get-GitHubUserMyGpgKey
+        ```
 
         Gets all GPG keys for the authenticated user.
 

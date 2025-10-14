@@ -10,27 +10,37 @@
         Get an organization - if a organization name is provided.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubOrganization
+        ```
 
         List all organizations for the authenticated user.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubOrganization -Username 'octocat'
+        ```
 
         List public organizations for a specific user.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubOrganization -All -Since 142951047
+        ```
 
         List all organizations made after an ID.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubOrganization -Name 'PSModule'
+        ```
 
         Get a specific organization.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubOrganization -Enterprise 'msx'
+        ```
 
         Get the organizations belonging to an Enterprise.
 

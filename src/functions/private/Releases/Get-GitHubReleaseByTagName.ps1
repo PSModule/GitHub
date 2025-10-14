@@ -7,7 +7,9 @@
         Get a published release with the specified tag.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubReleaseByTagName -Owner 'octocat' -Repository 'hello-world' -Tag 'v1.0.0'
+        ```
 
         Gets the release with the tag 'v1.0.0' for the repository 'hello-world' owned by 'octocat'.
 

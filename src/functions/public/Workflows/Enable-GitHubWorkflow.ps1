@@ -1,10 +1,27 @@
 ﻿filter Enable-GitHubWorkflow {
     <#
         .SYNOPSIS
+        Enable a workflow
 
         .DESCRIPTION
+        Enables a workflow and sets the `state` of the workflow to `active`. You can use workflow
+        filename and ID in the `ID` parameter. For example, you could use `main.yaml`.
+
+        OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        ```powershell
+        Enable-GitHubWorkflow -Owner 'PSModule' -Repository 'GitHub' -ID 'main.yaml'
+        ```
+
+        Enables the workflow with the filename 'main.yaml' in the PSModule/GitHub repository.
+
+        .EXAMPLE
+        ```powershell
+        Enable-GitHubWorkflow -Owner 'PSModule' -Repository 'GitHub' -ID 161335
+        ```
+
+        Enables the workflow with the ID 161335 in the PSModule/GitHub repository.
 
         .INPUTS
         GitHubWorkflow

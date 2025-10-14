@@ -13,6 +13,7 @@
         "[About teams](https://docs.github.com/github/setting-up-and-managing-organizations-and-teams/about-teams)".
 
         .EXAMPLE
+        ```powershell
         $params = @{
             Organization  = 'github'
             Name          = 'team-name'
@@ -21,6 +22,7 @@
             Notifications = $true
         }
         New-GitHubTeam @params
+        ```
 
         .LINK
         https://psmodule.io/GitHub/Functions/Teams/New-GitHubTeam

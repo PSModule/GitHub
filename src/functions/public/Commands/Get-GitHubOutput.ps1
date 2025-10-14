@@ -7,15 +7,19 @@
         Gets the GitHub output from $env:GITHUB_OUTPUT and creates an object with key-value pairs, supporting both single-line and multi-line values
 
         .EXAMPLE
+        ```powershell
         Get-GitHubOutput
         MY_VALUE         result                       zen
         --------         ------                       ---
         qwe…             @{"MyOutput":"Hello, World!"} something else
+        ```
 
         Gets the GitHub output and returns an object with key-value pairs.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubOutput -AsHashtable
+        ```
 
         Name                           Value
         ----                           -----

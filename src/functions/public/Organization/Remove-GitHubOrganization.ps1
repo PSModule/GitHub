@@ -10,7 +10,9 @@
         regarding account deletion before using this endpoint.
 
         .EXAMPLE
+        ```powershell
         Remove-GitHubOrganization -Name 'GitHub'
+        ```
 
         Deletes the organization 'GitHub' and all its repositories.
 

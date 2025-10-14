@@ -28,13 +28,17 @@
         to access this endpoint.
 
         .EXAMPLE
+        ```powershell
         New-GitHubAppInstallationAccessToken -InstallationID 12345678
+        ```
 
         Creates an installation access token for the installation with the ID `12345678`.
 
         .EXAMPLE
+        ```powershell
         Connect-GitHub -ClientID $ClientID -PrivateKey $PrivateKey
         Get-GitHubAppInstallation | New-GitHubAppInstallationAccessToken
+        ```
 
         Gets the GitHub App installations and creates an installation access token for each installation.
 

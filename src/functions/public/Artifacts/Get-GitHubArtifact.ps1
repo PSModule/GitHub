@@ -12,7 +12,9 @@
         - FromRepository: Retrieve artifacts from a repository, optionally by name or with all versions.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubArtifact -Owner 'octocat' -Repository 'Hello-World' -ID '123456'
+        ```
 
         Output:
         ```powershell
@@ -25,7 +27,9 @@
         Retrieves a single GitHub Actions artifact using its unique artifact ID.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubArtifact -Owner 'octocat' -Repository 'Hello-World' -WorkflowRunID '987654321'
+        ```
 
         Output:
         ```powershell
@@ -38,7 +42,9 @@
         Retrieves the latest version of all artifacts from the specified workflow run.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubArtifact -Owner 'octocat' -Repository 'Hello-World' -WorkflowRunID '987654321' -AllVersions
+        ```
 
         Output:
         ```powershell
@@ -56,7 +62,9 @@
         Retrieves all versions of all artifacts from the specified workflow run.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubArtifact -Owner 'octocat' -Repository 'Hello-World'
+        ```
 
         Output:
         ```powershell

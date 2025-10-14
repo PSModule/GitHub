@@ -13,18 +13,24 @@
         - Environment-level variables require collaborator access to the repository.
 
         .EXAMPLE
+        ```powershell
         New-GitHubVariable -Owner 'octocat' -Repository 'Hello-World' -Name 'HOST_NAME' -Value 'github.com' -Context $GitHubContext
+        ```
 
         Creates a new repository variable named `HOST_NAME` with the value `github.com` in the specified repository.
 
         .EXAMPLE
+        ```powershell
         New-GitHubVariable -Owner 'octocat' -Name 'HOST_NAME' -Value 'github.com' -Visibility 'all' -Context $GitHubContext
+        ```
 
         Creates a new organization variable named `HOST_NAME` with the value `github.com` and
         makes it available to all repositories in the organization.
 
         .EXAMPLE
+        ```powershell
         New-GitHubVariable -Owner 'octocat' -Repository 'Hello-World' -Environment 'dev' -Name 'HOST_NAME' -Value 'github.com' -Context $GitHubContext
+        ```
 
         Creates a new environment variable named `HOST_NAME` with the value `github.com` in the specified environment.
 

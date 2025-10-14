@@ -9,7 +9,9 @@
         endpoint.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubSecretRepositoryList -Owner 'octocat' -Repository 'Hello-World' -Context (Get-GitHubContext)
+        ```
 
         Output:
         ```powershell

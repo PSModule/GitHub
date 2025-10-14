@@ -7,7 +7,9 @@
         Lists all the pending installation requests for the authenticated GitHub App.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubAppInstallationRequest
+        ```
 
         Lists all the pending installation requests for the authenticated GitHub App.
 

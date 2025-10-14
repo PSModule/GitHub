@@ -8,13 +8,17 @@
         If the user cannot be blocked false is returned.
 
         .EXAMPLE
+        ```powershell
         Block-GitHubUser -Username 'octocat'
+        ```
 
         Blocks the user 'octocat' for the authenticated user.
         Returns $true if successful, $false if not.
 
         .EXAMPLE
+        ```powershell
         Block-GitHubUser -Organization 'GitHub' -Username 'octocat'
+        ```
 
         Blocks the user 'octocat' from the organization 'GitHub'.
         Returns $true if successful, $false if not.

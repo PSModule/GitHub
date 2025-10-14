@@ -12,12 +12,16 @@
         Impact: None (black), Minor (yellow), Major (orange), or Critical (red)
 
         .EXAMPLE
+        ```powershell
         Get-GitHubStatusIncident
+        ```
 
         Gets the status of GitHub incidents
 
         .EXAMPLE
+        ```powershell
         Get-GitHubStatusIncident -Unresolved
+        ```
 
         Gets the status of GitHub incidents that are unresolved
 

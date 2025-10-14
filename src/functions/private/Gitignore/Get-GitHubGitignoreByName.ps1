@@ -8,7 +8,9 @@
         Use the raw [media type](https://docs.github.com/rest/overview/media-types/) to get the raw contents.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubGitignoreList
+        ```
 
         Get all gitignore templates
 

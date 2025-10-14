@@ -8,6 +8,8 @@
         For example, you could use `main.yaml`. OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        ```powershell
+        ```
 
         .INPUTS
         GitHubWorkflow

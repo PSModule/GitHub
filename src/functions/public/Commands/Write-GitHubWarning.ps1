@@ -7,7 +7,9 @@
         Write a warning message in GitHub Actions. The message will be displayed in the GitHub Actions log.
 
         .EXAMPLE
+        ```powershell
         Write-GitHubWarning -Message 'Hello, World!'
+        ```
 
         Writes a warning message 'Hello, World!'.
 

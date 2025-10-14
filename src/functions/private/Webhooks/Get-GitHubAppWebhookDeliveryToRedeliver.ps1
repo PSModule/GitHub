@@ -7,7 +7,9 @@
         Long description
 
         .EXAMPLE
+        ```powershell
         An example
+        ```
 
         .NOTES
         [Ttle](link)

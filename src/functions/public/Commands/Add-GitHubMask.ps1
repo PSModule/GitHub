@@ -10,12 +10,16 @@
         set that value as an output.
 
         .EXAMPLE
+        ```powershell
         Add-Mask $SecretValue
+        ```
 
         Masks the value of $SecretValue so that its printed like ***.
 
         .EXAMPLE
+        ```powershell
         $SecretValue1, $SecretValue2 | Mask
+        ```
 
         Masks the value of $SecretValue1 and $SecretValue2 so that its printed like ***, using the pipeline
 

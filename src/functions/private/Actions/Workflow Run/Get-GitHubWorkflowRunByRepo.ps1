@@ -12,12 +12,16 @@
         `created`, `event`, `head_sha`, `status`.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubWorkflowRunByRepo -Owner 'owner' -Repository 'repo'
+        ```
 
         Lists all workflow runs for a repository.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubWorkflowRunByRepo -Owner 'owner' -Repository 'repo' -Actor 'octocat' -Branch 'main' -Event 'push' -Status 'success'
+        ```
 
         Lists all workflow runs for a repository with the specified actor, branch, event, and status.
 

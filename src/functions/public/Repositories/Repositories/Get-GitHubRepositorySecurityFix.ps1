@@ -9,7 +9,9 @@
         "[Configuring automated security fixes](https://docs.github.com/articles/configuring-automated-security-fixes)".
 
         .EXAMPLE
+        ```powershell
         Get-GitHubRepositorySecurityFix -Owner 'PSModule' -Name 'GitHub'
+        ```
 
         Gets the automated security fixes status for the GitHub repository.
 

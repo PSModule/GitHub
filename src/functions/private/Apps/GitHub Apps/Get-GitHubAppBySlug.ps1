@@ -7,7 +7,9 @@
         Gets a single GitHub App using the app's slug.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubAppByName -AppSlug 'github-actions'
+        ```
 
         Gets the GitHub App with the slug 'github-actions'.
 

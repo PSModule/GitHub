@@ -9,7 +9,9 @@
         OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubVariableEnvironmentByName -Owner 'octocat' -Repository 'Hello-World' -Environment 'dev' -Name 'NAME' -Context $GitHubContext
+        ```
 
         Output:
         ```powershell

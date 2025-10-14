@@ -8,7 +8,9 @@
         Users with read access to the repository can use this endpoint.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubRepositoryCustomProperty -Owner 'octocat' -Repository 'hello-world'
+        ```
 
         Gets all custom property values that are set for the 'hello-world' repository.
 

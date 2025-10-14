@@ -10,7 +10,9 @@
         see "[About code owners](https://docs.github.com/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners)."
 
         .EXAMPLE
+        ```powershell
         Get-GitHubRepositoryCodeownersError -Owner 'PSModule' -Name 'GitHub'
+        ```
 
         Gets the CODEOWNERS errors for the repository.
 

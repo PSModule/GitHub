@@ -9,7 +9,9 @@
         Information about autolinks are only available to repository administrators.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubRepositoryAutolinkList -Owner 'octocat' -Repository 'Hello-World'
+        ```
 
         Gets all autolinks for the repository 'Hello-World' owned by 'octocat'.
 

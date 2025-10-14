@@ -7,7 +7,9 @@
         Unblocks the given user and returns a 204.
 
         .EXAMPLE
+        ```powershell
         Unblock-GitHubUserByUser -Username 'octocat'
+        ```
 
         Unblocks the user 'octocat' for the authenticated user.
         Returns $true if successful.

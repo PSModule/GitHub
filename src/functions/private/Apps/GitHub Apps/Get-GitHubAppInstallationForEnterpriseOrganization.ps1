@@ -9,7 +9,9 @@
         The authenticated GitHub App must be installed on the enterprise and be granted the Enterprise/organization_installations (read) permission.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubAppInstallationForEnterpriseOrganization -Enterprise 'msx' -Organization 'github'
+        ```
 
         Gets all GitHub Apps in the organization `github` in the enterprise `msx`.
 

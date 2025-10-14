@@ -10,6 +10,7 @@
 
 
         .EXAMPLE
+        ```powershell
         $params = @{
             Owner       = 'octocat'
             Repository  = 'Hello-World'
@@ -19,6 +20,7 @@
             Context     = $GitHubContext
         }
         Update-GitHubVariableOnEnvironment @params
+        ```
 
         Updates the environment variable named `HOST_NAME` with the value `github.com` in the specified environment.
 

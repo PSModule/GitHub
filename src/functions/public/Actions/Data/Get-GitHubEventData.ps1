@@ -7,7 +7,9 @@
         Gets data about the event that triggered the workflow.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubEventData
+        ```
 
         .LINK
         https://psmodule.io/GitHub/Functions/Actions/Data/Get-GitHubEventData

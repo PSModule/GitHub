@@ -7,12 +7,16 @@
         Returns a GitHub App associated with the authentication credentials used or the provided app-slug.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubApp
+        ```
 
         Get the authenticated app.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubApp -Slug 'github-actions'
+        ```
 
         Get the GitHub App with the slug 'github-actions'.
 

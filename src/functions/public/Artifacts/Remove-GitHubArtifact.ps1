@@ -1,4 +1,4 @@
-function Remove-GitHubArtifact {
+﻿function Remove-GitHubArtifact {
     <#
         .SYNOPSIS
         Deletes an artifact from a GitHub repository by its unique ID.
@@ -10,7 +10,9 @@ function Remove-GitHubArtifact {
         The function uses the GitHub REST API to perform the deletion and supports `ShouldProcess` for safe execution.
 
         .EXAMPLE
+        ```powershell
         Remove-GitHubArtifact -Owner 'octocat' -Repository 'demo-repo' -ID '123456'
+        ```
 
         Deletes the artifact with ID 123456 from the repository 'demo-repo' owned by 'octocat'.
 

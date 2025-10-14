@@ -10,7 +10,9 @@
         profile information.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubMyUser
+        ```
 
         Get the authenticated user
 

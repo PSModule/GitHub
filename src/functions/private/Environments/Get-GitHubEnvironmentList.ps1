@@ -10,10 +10,12 @@
         to use this endpoint with a private repository.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubEnvironmentList -Owner 'PSModule' -Repository 'EnvironmentTest'
+        ```
 
         Output:
-        ```pwsh
+        ```powershell
         id                       : 5944178128
         node_id                  : EN_kwDOOJqfM88AAAABYkz10A
         name                     : test

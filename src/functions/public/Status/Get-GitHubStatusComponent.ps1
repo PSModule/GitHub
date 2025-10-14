@@ -8,7 +8,9 @@
         degraded_performance, partial_outage, or major_outage.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubStatusComponent
+        ```
 
         Gets the status of GitHub components
 

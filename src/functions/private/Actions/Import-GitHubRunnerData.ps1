@@ -7,7 +7,9 @@
         Import data about the runner that is running the workflow.
 
         .EXAMPLE
+        ```powershell
         Import-GitHubRunnerData
+        ```
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSUseShouldProcessForStateChangingFunctions', '',

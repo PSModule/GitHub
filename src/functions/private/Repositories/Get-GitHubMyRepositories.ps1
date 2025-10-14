@@ -9,12 +9,16 @@
         they are a collaborator, and repositories that they can access through an organization membership.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubMyRepositories
+        ```
 
         Gets the repositories for the authenticated user.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubMyRepositories -Visibility 'private'
+        ```
 
         Gets the private repositories for the authenticated user.
 

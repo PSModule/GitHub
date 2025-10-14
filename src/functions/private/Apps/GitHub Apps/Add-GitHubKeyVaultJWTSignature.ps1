@@ -8,7 +8,9 @@
         The function supports authentication via Azure CLI or Az PowerShell module and returns the signed JWT as a secure string.
 
         .EXAMPLE
+        ```powershell
         Add-GitHubKeyVaultJWTSignature -UnsignedJWT 'header.payload' -KeyVaultKeyReference 'https://myvault.vault.azure.net/keys/mykey'
+        ```
 
         Output:
         ```powershell

@@ -10,7 +10,9 @@
         to access this endpoint.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubAppInstallationForAuthenticatedAppByID -ID 123456
+        ```
 
         Get an installation for the authenticated app with the specified ID.
 

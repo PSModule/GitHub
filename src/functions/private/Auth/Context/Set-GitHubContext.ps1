@@ -8,6 +8,7 @@
         The context is used to authenticate with the GitHub API.
 
         .EXAMPLE
+        ```powershell
         $context = @{
             ApiBaseUri = 'https://api.github.com'
             ApiVersion = '2022-11-28'
@@ -18,6 +19,7 @@
             Repository = 'Hello-World'
         }
         Set-GitHubContext -Context $context
+        ```
 
         Sets the GitHub context with the specified settings as a hashtable.
     #>

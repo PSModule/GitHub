@@ -7,7 +7,9 @@
         This function removes a team's access to a specific repository within an organization.
 
         .EXAMPLE
+        ```powershell
         Remove-GitHubRepositoryPermission -Owner 'my-org' -Name 'repo-name' -Team 'dev-team'
+        ```
 
         Removes the 'dev-team' permissions from the 'repo-name' repository under 'my-org'.
 

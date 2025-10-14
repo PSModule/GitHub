@@ -7,7 +7,9 @@
         List the users blocked by an organization.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubBlockedUserByOrganization -Organization 'github'
+        ```
 
         Lists all users blocked by the organization `github`.
 

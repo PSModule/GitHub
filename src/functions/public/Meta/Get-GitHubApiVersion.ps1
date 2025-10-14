@@ -7,7 +7,9 @@
         Get all supported GitHub API versions.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubApiVersion
+        ```
 
         Get all supported GitHub API versions.
 

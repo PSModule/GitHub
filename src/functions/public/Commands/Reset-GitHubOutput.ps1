@@ -7,7 +7,9 @@
         Resets the GitHub output by clearing the contents of $env:GITHUB_OUTPUT.
 
         .EXAMPLE
+        ```powershell
         Reset-GitHubOutput
+        ```
 
         Resets the content in the GitHub output file.
 

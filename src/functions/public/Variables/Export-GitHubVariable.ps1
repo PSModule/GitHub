@@ -12,7 +12,9 @@
         The function accepts pipeline input, allowing GitHub variables retrieved using `Get-GitHubVariable` to be exported seamlessly.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubVariable -Owner 'octocat' -Repository 'Hello-World' -Environment 'staging' | Export-GitHubVariable
+        ```
 
         Exports the variables retrieved from the GitHub API to the local environment.
 

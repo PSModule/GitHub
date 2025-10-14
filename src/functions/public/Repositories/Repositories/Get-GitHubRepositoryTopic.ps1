@@ -7,6 +7,18 @@
         Get all repository topics
 
         .EXAMPLE
+        ```powershell
+        Get-GitHubRepositoryTopic -Owner 'octocat' -Name 'Hello-World'
+        ```
+
+        Output:
+        ```powershell
+        topic1
+        topic2
+        topic3
+        ```
+
+        Retrieves all topics for the 'Hello-World' repository owned by 'octocat'.
 
         .NOTES
         [Get all repository topics](https://docs.github.com/rest/repos/repos#get-all-repository-topics)

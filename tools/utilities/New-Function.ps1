@@ -6,13 +6,11 @@
     .DESCRIPTION
     Long description
 
-    .PARAMETER Path
-    Parameter description
-
-    .PARAMETER Method
-    Parameter description
-
     .EXAMPLE
+    ```powershell
+    New-Function -Path '/user/emails' -Method 'POST'
+    ```
+
     An example
 
     .NOTES
@@ -20,9 +18,11 @@
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param(
+        # Parameter description
         [Parameter(Mandatory)]
         [string] $Path,
 
+        # Parameter description
         [Parameter(Mandatory)]
         [string] $Method
     )
@@ -35,7 +35,7 @@
 
     $response.paths.$Path.$Method
 
-    $FunctionName = "$Method-GitHub" + (($response.paths.$path.$method.operationId) -Replace '/', '-')
+    $FunctionName = "$Method-GitHub" + (($response.paths.$path.$method.operationId) -replace '/', '-')
 
     $folderName = $response.paths.$path.$method.'x-github'.category
     $subFolderName = $response.paths.$path.$method.'x-github'.subcategory

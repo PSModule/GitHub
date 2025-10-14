@@ -11,7 +11,9 @@
         If both the secret and variable are set, the value of the secret takes precedence over the variable.
 
         .EXAMPLE
+        ```powershell
         Write-GitHubDebug -Message 'Hello, World!'
+        ```
 
         Writes a debug message 'Hello, World!'.
 

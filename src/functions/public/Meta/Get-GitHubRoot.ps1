@@ -7,7 +7,9 @@
         Get Hypermedia links to resources accessible in GitHub's REST API.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubRoot
+        ```
 
         Get the root endpoint for the GitHub API.
 

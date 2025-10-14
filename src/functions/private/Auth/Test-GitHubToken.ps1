@@ -7,7 +7,9 @@
         This function checks if the GitHub token is available in the environment variables.
 
         .EXAMPLE
+        ```powershell
         Test-GitHubToken
+        ```
     #>
     [OutputType([bool])]
     [CmdletBinding()]

@@ -15,6 +15,7 @@
         OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        ```powershell
         $params = @{
             Owner                  = "my-org"
             Repository             = "my-repo"
@@ -24,6 +25,7 @@
             DeploymentBranchPolicy = 'CustomBranchPolicies'
         }
         Set-GitHubEnvironment @params
+        ```
 
         Output:
         ```powershell

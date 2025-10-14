@@ -11,7 +11,9 @@
         to access this endpoint.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubAppWebhookConfiguration
+        ```
 
         Returns the webhook configuration for the authenticated app.
 

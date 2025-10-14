@@ -10,7 +10,9 @@
         either a raw token value or a secure version for sensitive operations.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubToken
+        ```
 
         Output:
         ```powershell
@@ -20,7 +22,9 @@
         Returns the GitHub token as a secure string for safer handling in scripts or automation.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubToken -AsPlainText
+        ```
 
         Output:
         ```powershell

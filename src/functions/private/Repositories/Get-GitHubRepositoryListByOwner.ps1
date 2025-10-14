@@ -8,17 +8,23 @@
         Note: For GitHub AE, this endpoint will list internal repositories for the specified user.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubRepositoryListByOwner -Owner 'octocat'
+        ```
 
         Gets the repositories for the user 'octocat'.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubRepositoryListByOwner -Owner 'octocat' -Type 'member'
+        ```
 
         Gets the repositories of organizations where the user 'octocat' is a member.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubRepositoryListByOwner -Owner 'octocat' -Sort 'created' -Direction 'asc'
+        ```
 
         Gets the repositories for the user 'octocat' sorted by creation date in ascending order.
 

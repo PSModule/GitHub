@@ -14,17 +14,23 @@
         - `repo` for repository and environment-level variables.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubVariable -Owner 'octocat' -Repository 'Hello-World' | Remove-GitHubVariable
+        ```
 
         Removes all variables retrieved from the specified repository.
 
         .EXAMPLE
+        ```powershell
         Remove-GitHubVariable -Owner 'octocat' -Name 'HOST_NAME' -Context $GitHubContext
+        ```
 
         Deletes the specified variable from the specified organization.
 
         .EXAMPLE
+        ```powershell
         Remove-GitHubVariable -Variable $variablesArray
+        ```
 
         Removes all variables provided in the array.
 

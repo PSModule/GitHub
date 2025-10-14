@@ -10,7 +10,9 @@
         and repo scope to use this endpoint with a private repository.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubTeamListByRepo -Owner 'octocat' -Repository 'Hello-World'
+        ```
 
         Output:
         ```powershell

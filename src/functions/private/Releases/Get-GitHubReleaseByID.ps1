@@ -8,7 +8,9 @@
         This key is a [hypermedia resource](https://docs.github.com/rest/overview/resources-in-the-rest-api#hypermedia).
 
         .EXAMPLE
+        ```powershell
         Get-GitHubReleaseById -Owner 'octocat' -Repository 'hello-world' -ID '1234567'
+        ```
 
         Gets the release with the ID '1234567' for the repository 'hello-world' owned by 'octocat'.
 

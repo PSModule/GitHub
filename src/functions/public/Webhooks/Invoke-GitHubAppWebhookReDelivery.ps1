@@ -10,7 +10,9 @@
         to access this endpoint.
 
         .EXAMPLE
+        ```powershell
         Invoke-GitHubAppWebhookReDelivery -ID 12345
+        ```
 
         Redelivers the delivery with the ID `12345`.
 

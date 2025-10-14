@@ -8,7 +8,9 @@
         [creating a repository](https://docs.github.com/rest/repos/repos#create-a-repository-for-the-authenticated-user).
 
         .EXAMPLE
+        ```powershell
         Get-GitHubGitignoreList
+        ```
 
         Get all gitignore templates
 

@@ -7,12 +7,16 @@
         Get the octocat as ASCII art.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubOctocat
+        ```
 
         Get the octocat as ASCII art
 
         .EXAMPLE
+        ```powershell
         Get-GitHubOctocat -S "Hello world"
+        ```
 
         Get the octocat as ASCII art with a custom saying
 

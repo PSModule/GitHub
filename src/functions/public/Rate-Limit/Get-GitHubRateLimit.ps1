@@ -22,7 +22,9 @@
         instead of the `rate` object. The `core` object contains the same information that is present in the `rate` object.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubRateLimit
+        ```
 
         Gets the rate limit status for the authenticated user.
 

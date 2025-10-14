@@ -8,10 +8,12 @@
         Section titles become keys and their content becomes values.
 
         .EXAMPLE
+        ```powershell
         @'
         ### Section 1
         Content 1
         Content 2
+        ```
 
         ### Section 2
         - [ ] Item 1

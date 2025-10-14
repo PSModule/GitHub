@@ -8,7 +8,9 @@
         creation dates, member counts, and other metadata. It returns an array of objects of type GitHubOrganization populated with this information.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubOrganizationListForAuthUser
+        ```
 
         Output:
         ```powershell

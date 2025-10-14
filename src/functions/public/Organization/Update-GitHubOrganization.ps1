@@ -8,11 +8,14 @@
         profile and member privileges.
 
         .EXAMPLE
+        ```powershell
         Update-GitHubOrganization -Organization 'GitHub' -Description 'The official GitHub organization.'
+        ```
 
         Sets the description for the organization 'GitHub' to 'The official GitHub organization.'.
 
         .EXAMPLE
+        ```powershell
         $param = @{
             Organization                         = 'GitHub'
             MembersCanCreatePublicRepositories   = $true
@@ -20,6 +23,7 @@
             MembersCanCreateInternalRepositories = $true
         }
         Update-GitHubOrganization @param
+        ```
 
         Sets the repository creation permissions for the organization 'GitHub' to allow all members to create public, private,
         and internal repositories.

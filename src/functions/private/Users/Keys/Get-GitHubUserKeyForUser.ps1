@@ -7,7 +7,9 @@
         Lists the _verified_ public SSH keys for a user. This is accessible by anyone.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubUserKeyForUser -Username 'octocat'
+        ```
 
         Gets all public SSH keys for the 'octocat' user.
 

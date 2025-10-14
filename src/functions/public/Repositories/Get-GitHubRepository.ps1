@@ -11,27 +11,37 @@
         Can also be used with the name parameter to get a specific repository.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubRepository
+        ```
 
         Gets the repositories for the authenticated user.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubRepository -Username 'octocat'
+        ```
 
         Gets the repositories for the specified user.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubRepository -Organization 'github' -Name 'octocat'
+        ```
 
         Gets the specified repository.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubRepository -Organization 'github' -Team 'my-team'
+        ```
 
         Gets repositories that the 'my-team' team has access to in the `github` organization.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubRepository -Organization 'github' -Name 'octocat' -Team 'my-team'
+        ```
 
         Gets the repository and permission for the `my-team` team on the `octocat` repository in the `github` organization.
 

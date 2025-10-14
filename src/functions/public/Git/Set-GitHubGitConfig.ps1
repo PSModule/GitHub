@@ -7,12 +7,16 @@
         Sets the Git configuration for the GitHub context. This command sets the `user.name`, `user.email`, and `url.<host>.insteadOf` git configs.
 
         .EXAMPLE
+        ```powershell
         Set-GitHubGitConfig
+        ```
 
         Sets the Git configuration for the default GitHub context.
 
         .EXAMPLE
+        ```powershell
         Set-GitHubGitConfig -Context 'MyContext'
+        ```
 
         Sets the Git configuration for the GitHub context named 'MyContext'.
 

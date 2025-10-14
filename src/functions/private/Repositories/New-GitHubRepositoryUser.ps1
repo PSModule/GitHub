@@ -14,6 +14,7 @@
         * `repo` scope to create a private repository.
 
         .EXAMPLE
+        ```powershell
         $params = @{
             Name                     = 'Hello-World'
             Description              = 'This is your first repository'
@@ -30,6 +31,7 @@
             SquashMergeCommitMessage = 'PR_BODY'
         }
         New-GitHubRepositoryUser @params
+        ```
 
         Creates a new public repository named "Hello-World" owned by the authenticated user.
 

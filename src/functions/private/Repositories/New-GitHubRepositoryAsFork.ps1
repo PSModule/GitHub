@@ -13,23 +13,31 @@
         repositories and on the source account with access to the source repository.
 
         .EXAMPLE
+        ```powershell
         New-GitHubRepositoryAsFork -ForkOwner 'github' -ForkRepository 'Hello-World'
+        ```
 
         Fork the repository `Hello-World` owned by `github` for the authenticated user.
         Repo will be named `Hello-World`, and all branches and tags will be forked.
 
         .EXAMPLE
+        ```powershell
         New-GitHubRepositoryAsFork -ForkOwner 'github' -ForkRepository 'Hello-World' -Name 'Hello-World-2'
+        ```
 
         Fork the repository `Hello-World` owned by `github` for the authenticated user, naming the resulting repository `Hello-World-2`.
 
         .EXAMPLE
+        ```powershell
         New-GitHubRepositoryAsFork -ForkOwner 'github' -ForkRepository 'Hello-World' -Owner 'octocat'
+        ```
 
         Fork the repository `Hello-World` owned by `github` for the organization `octocat`, naming the resulting repository `Hello-World`.
 
         .EXAMPLE
+        ```powershell
         New-GitHubRepositoryAsFork -ForkOwner 'github' -ForkRepository 'Hello-World' -IncludeAllBranches
+        ```
 
         Fork the repository `Hello-World` owned by `github` for the authenticated user, including all the branches from the source.
 

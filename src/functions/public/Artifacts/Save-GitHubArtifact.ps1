@@ -9,7 +9,9 @@
         personal access tokens (classic) or OAuth tokens with the `repo` scope are required.
 
         .EXAMPLE
+        ```powershell
         Save-GitHubArtifact -Owner 'octocat' -Repository 'Hello-World' -ID '123456' -Path 'C:\Artifacts'
+        ```
 
         Output:
         ```powershell
@@ -23,7 +25,9 @@
         Downloads artifact ID '123456' from the 'Hello-World' repository owned by 'octocat' to the specified path.
 
         .EXAMPLE
+        ```powershell
         Save-GitHubArtifact -Owner 'octocat' -Repository 'Hello-World' -Name 'module' -Path 'C:\Artifacts\module' -Expand -Force
+        ```
 
         Output:
         ```powershell

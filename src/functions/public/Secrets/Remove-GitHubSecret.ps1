@@ -8,17 +8,23 @@
         Supports both Actions and Codespaces secrets and requires appropriate authentication.
 
         .EXAMPLE
+        ```powershell
         Remove-GitHubSecret -Owner PSModule -Repository Demo -Type actions -Name TEST
+        ```
 
         Deletes the secret named 'TEST' from the 'Demo' repository in the 'PSModule' organization.
 
         .EXAMPLE
+        ```powershell
         Remove-GitHubSecret -Organization MyOrg -Type actions -Name API_KEY
+        ```
 
         Deletes the secret 'API_KEY' from the organization 'MyOrg'.
 
         .EXAMPLE
+        ```powershell
         Remove-GitHubSecret -Owner MyUser -Repository MyRepo -Environment Production -Name DB_PASSWORD
+        ```
 
         Deletes the 'DB_PASSWORD' secret from the 'Production' environment in the 'MyRepo' repository.
 

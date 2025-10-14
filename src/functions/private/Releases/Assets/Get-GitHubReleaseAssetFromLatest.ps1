@@ -9,12 +9,16 @@
         The `created_at` attribute is the date of the commit used for the release, and not the date when the release was drafted or published.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubReleaseAssetFromLatest -Owner 'octocat' -Repository 'hello-world'
+        ```
 
         Gets the assets for the latest release of the repository 'hello-world' owned by 'octocat'.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubReleaseAssetFromLatest -Owner 'octocat' -Repository 'hello-world' -Name 'asset-name'
+        ```
 
         Gets the assets for the latest release of the repository 'hello-world' owned by 'octocat'.
 

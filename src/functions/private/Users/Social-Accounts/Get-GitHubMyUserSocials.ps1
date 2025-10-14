@@ -7,7 +7,9 @@
         Lists all of your social accounts.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubMyUserSocials
+        ```
 
         Lists all of your social accounts.
 

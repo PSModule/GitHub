@@ -9,7 +9,9 @@
         OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubVariableRepositoryByName -Owner 'PSModule' -Repository 'Hello-World' -Name 'EMAIL' -Context (Get-GitHubContext)
+        ```
 
         Output:
         ```powershell

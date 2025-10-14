@@ -10,21 +10,27 @@
         and the last (the current function, Get-PSCallStackPath).
 
         .EXAMPLE
+        ```powershell
         Get-PSCallStackPath
         First-Function\Second-Function\Third-Function
+        ```
 
         Shows the call stack of the last function called, Third-Function, with the first (<ScriptBlock>)
         and last (Get-PSCallStackPath) functions removed.
 
         .EXAMPLE
+        ```powershell
         Get-PSCallStackPath -SkipFirst 0
         <ScriptBlock>\First-Function\Second-Function\Third-Function
+        ```
 
         Shows the call stack of the last function called, Third-Function, with the first function included (typically <ScriptBlock>).
 
         .EXAMPLE
+        ```powershell
         Get-PSCallStackPath -SkipLatest 0
         First-Function\Second-Function\Third-Function\Get-PSCallStackPath
+        ```
 
         Shows the call stack of the last function called, Third-Function, with the last function included (Get-PSCallStackPath).
     #>

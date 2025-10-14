@@ -9,7 +9,9 @@
         they are a collaborator, and repositories that they can access through an organization membership.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubMyRepositoryByName
+        ```
 
         Gets the repositories for the authenticated user.
 

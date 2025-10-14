@@ -9,12 +9,14 @@
         The authenticated GitHub App must be installed on the enterprise and be granted the Enterprise/organization_installations (read) permission.
 
         .EXAMPLE
+        ```powershell
         $params = @{
             Enterprise          = 'msx'
             Organization        = 'PSModule'
             InstallationID      = 12345678
         }
         Get-GitHubAppInstallationRepositoryAccess @params
+        ```
 
         Get the repositories accessible to the GitHub App installation
         with the ID '12345678' on the organization 'PSModule' in the enterprise 'msx'.

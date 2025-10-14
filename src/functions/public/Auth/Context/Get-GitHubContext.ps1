@@ -7,7 +7,9 @@
         Get the current GitHub context.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubContext
+        ```
 
         Gets the current GitHub context.
 

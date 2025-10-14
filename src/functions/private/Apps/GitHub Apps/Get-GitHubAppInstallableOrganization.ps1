@@ -11,7 +11,9 @@
         - enterprise_organization_installations: read
 
         .EXAMPLE
+        ```powershell
         Get-GitHubAppInstallableOrganization -Enterprise 'msx'
+        ```
 
         .OUTPUTS
         GitHubOrganization[]

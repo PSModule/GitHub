@@ -7,7 +7,9 @@
         List repository tags
 
         .EXAMPLE
+        ```powershell
         Get-GitHubRepositoryTag -Owner 'PSModule' -Name 'GitHub'
+        ```
 
         Gets all tags of the GitHub repository.
 

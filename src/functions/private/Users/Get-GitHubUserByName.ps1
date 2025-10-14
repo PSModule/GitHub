@@ -18,7 +18,9 @@
         For more information, see "[Emails API](https://docs.github.com/rest/users/emails)".
 
         .EXAMPLE
+        ```powershell
         Get-GitHubUserByName -Name 'octocat'
+        ```
 
         Get the 'octocat' user.
 

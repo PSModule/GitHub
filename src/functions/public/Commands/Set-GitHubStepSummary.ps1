@@ -16,7 +16,9 @@
         workflow run summary page. If multiple jobs generate summaries, the job summaries are ordered by job completion time.
 
         .EXAMPLE
+        ```powershell
         Set-GitHubStepSummary -Summary 'Hello, World!'
+        ```
 
         .NOTES
         [Adding a job summary](https://docs.github.com/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions?utm_source=chatgpt.com#adding-a-job-summary)

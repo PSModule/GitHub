@@ -9,12 +9,16 @@
         GitHub Apps must have the actions:read permission to use this endpoint.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubWorkflow -Owner 'octocat' -Repository 'hello-world'
+        ```
 
         Gets all workflows in the 'octocat/hello-world' repository.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubWorkflow -Owner 'octocat' -Repository 'hello-world' -Name 'hello-world.yml'
+        ```
 
         Gets the 'hello-world.yml' workflow in the 'octocat/hello-world' repository.
 

@@ -7,12 +7,16 @@
         Sets the visibility for your primary email addresses.
 
         .EXAMPLE
+        ```powershell
         Set-GitHubUserEmailVisibility -Visibility Public
+        ```
 
         Sets the visibility for your primary email addresses to public.
 
         .EXAMPLE
+        ```powershell
         Set-GitHubUserEmailVisibility -Visibility Private
+        ```
 
         Sets the visibility for your primary email addresses to private.
 

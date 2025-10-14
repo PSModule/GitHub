@@ -7,7 +7,9 @@
         Get a GitHub module configuration.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubConfig -Name DefaultContext
+        ```
 
         Get the DefaultContext value from the GitHub module configuration.
 

@@ -10,12 +10,16 @@
         to access this endpoint.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubAppWebhookDelivery
+        ```
 
         Returns a list of webhook deliveries for the webhook for the authenticated app.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubAppWebhookDelivery -ID 123456
+        ```
 
         Returns the webhook delivery with the ID `123456` for the authenticated app.
 

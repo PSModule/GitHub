@@ -9,7 +9,9 @@
         endpoint.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubSecretEnvironmentList -Owner 'octocat' -Repository 'Hello-World' -Environment 'dev' -Context $GitHubContext
+        ```
 
         Output:
         ```powershell

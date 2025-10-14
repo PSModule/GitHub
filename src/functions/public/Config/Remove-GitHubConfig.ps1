@@ -7,7 +7,9 @@
         Remove a GitHub module configuration.
 
         .EXAMPLE
+        ```powershell
         Remove-GitHubConfig -Name DefaultUser
+        ```
 
         Removes the 'DefaultUser' item in the GitHub module configuration.
 

@@ -9,12 +9,15 @@
         provided parameters. The updated or newly created repository is returned.
 
         .EXAMPLE
+        ```powershell
         Set-GitHubRepository -Name 'Hello-World' -Description 'My repo'
+        ```
 
         Sets the repository `Hello-World` for the authenticated user if it does not exist,
         or updates it if it already exists. The repository uses GitHub's default settings.
 
         .EXAMPLE
+        ```powershell
         $params = @{
             Owner                  = 'octocat'
             Name                   = 'Hello-World'
@@ -25,6 +28,7 @@
             DeleteBranchOnMerge    = $true
         }
         Set-GitHubRepository @params
+        ```
 
         Sets a repository using splatting for the configuration.
 

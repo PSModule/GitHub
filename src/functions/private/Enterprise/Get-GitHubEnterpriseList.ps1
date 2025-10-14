@@ -8,7 +8,9 @@
         creation dates, and other metadata. It returns an array of objects of type GitHubEnterprise populated with this information.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubEnterpriseList
+        ```
 
         Output:
         ```powershell

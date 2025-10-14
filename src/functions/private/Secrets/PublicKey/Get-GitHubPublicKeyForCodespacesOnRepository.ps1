@@ -8,7 +8,9 @@
         repository is private, OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubPublicKeyForCodespacesOnRepository -Owner 'octocat' -Repository 'hello-world' -Context $GitHubContext
+        ```
 
         Outputs:
         ```powershell

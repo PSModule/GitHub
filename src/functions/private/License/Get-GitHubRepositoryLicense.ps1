@@ -10,7 +10,9 @@
         [custom media types](https://docs.github.com/rest/overview/media-types) for retrieving the raw license content or rendered license HTML.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubRepositoryLicense -Owner 'octocat' -Repository 'Hello-World'
+        ```
 
         Get the license for the Hello-World repository from the octocat account.
 

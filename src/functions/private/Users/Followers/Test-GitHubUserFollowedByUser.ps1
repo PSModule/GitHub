@@ -7,7 +7,9 @@
         Checks if a user follows another user.
 
         .EXAMPLE
+        ```powershell
         Test-GitHubUserFollowedByUser -Username 'octocat' -Follows 'ratstallion'
+        ```
 
         Checks if the user 'octocat' follows the user 'ratstallion'.
 

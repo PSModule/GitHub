@@ -9,8 +9,10 @@
         format like a README.md file. Markdown content must be 400 KB or less.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubMarkdownRaw -Text 'Hello, world!'
         "<p>Hello <strong>world</strong></p>"
+        ```
 
         Render the Markdown text 'Hello, world!' in raw mode.
 

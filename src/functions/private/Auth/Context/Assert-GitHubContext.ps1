@@ -8,7 +8,9 @@
         If the context does not meet the requirements, an error is thrown.
 
         .EXAMPLE
+        ```powershell
         Assert-GitHubContext -Context 'github.com/Octocat' -AuthType 'App'
+        ```
     #>
     [OutputType([void])]
     [CmdletBinding()]

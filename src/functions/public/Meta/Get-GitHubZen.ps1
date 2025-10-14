@@ -7,7 +7,9 @@
         Get a random sentence from the Zen of GitHub.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubZen
+        ```
 
         Get a random sentence from the Zen of GitHub.
 

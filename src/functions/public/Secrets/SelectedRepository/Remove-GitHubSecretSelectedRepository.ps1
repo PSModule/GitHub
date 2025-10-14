@@ -10,7 +10,9 @@
         tokens (classic) need the `admin:org` scope to use this endpoint. If the repository is private, the `repo` scope is also required.
 
         .EXAMPLE
+        ```powershell
         Remove-GitHubSecretSelectedRepository -Owner 'my-org' -Name 'ENV_SECRET' -RepositoryID 123456
+        ```
 
         Removes repository with ID 123456 from the organization secret 'ENV_SECRET' in 'my-org'.
 

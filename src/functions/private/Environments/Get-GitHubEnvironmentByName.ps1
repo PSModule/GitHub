@@ -13,10 +13,12 @@
         to use this function with a private repository.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubEnvironment -Owner 'PSModule' -Repository 'EnvironmentTest' -Name 'test'
+        ```
 
         Output:
-        ```pwsh
+        ```powershell
         id                       : 5944178128
         node_id                  : EN_kwDOOJqfM88AAAABYkz10A
         name                     : test

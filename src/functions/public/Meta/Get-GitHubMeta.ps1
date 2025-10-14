@@ -15,7 +15,9 @@
         documentation for each feature to determine if IPv6 is supported.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubMeta
+        ```
 
         Returns meta information about GitHub, including a list of GitHub's IP addresses.
 

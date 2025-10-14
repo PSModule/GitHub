@@ -7,17 +7,23 @@
         Lists a given user's or the current user's GPG keys.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubUserGpgKey
+        ```
 
         Gets all GPG keys for the authenticated user.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubUserGpgKey -ID '1234567'
+        ```
 
         Gets the GPG key with ID '1234567' for the authenticated user.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubUserGpgKey -Username 'octocat'
+        ```
 
         Gets all GPG keys for the 'octocat' user.
 

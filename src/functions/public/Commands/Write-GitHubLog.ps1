@@ -9,17 +9,23 @@
         When not running in GitHub Actions, uses standard Write-Host.
 
         .EXAMPLE
+        ```powershell
         Write-GitHubLog -Message 'Hello, World!'
+        ```
 
         Writes 'Hello, World!' to the log.
 
         .EXAMPLE
+        ```powershell
         Write-GitHubLog -Message 'Error occurred!' -ForegroundColor Red
+        ```
 
         Writes 'Error occurred!' in red text.
 
         .EXAMPLE
+        ```powershell
         Write-GitHubLog -Message 'Success!' -ForegroundColor Green -BackgroundColor Black
+        ```
 
         Writes 'Success!' in green text on a black background.
 

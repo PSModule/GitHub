@@ -8,16 +8,20 @@
         Allows for colapsing of code in IDE for code that belong together.
 
         .EXAMPLE
+        ```powershell
         Set-GitHubLogGroup -Name 'MyGroup' -ScriptBlock {
             Write-Host 'Hello, World!'
         }
+        ```
 
         Creates a new log group named 'MyGroup' and writes 'Hello, World!' to the output.
 
         .EXAMPLE
+        ```powershell
         LogGroup 'MyGroup' {
             Write-Host 'Hello, World!'
         }
+        ```
 
         Uses the alias 'LogGroup' to create a new log group named 'MyGroup' and writes 'Hello, World!' to the output.
 

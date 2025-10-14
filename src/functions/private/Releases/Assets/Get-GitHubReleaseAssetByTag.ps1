@@ -8,12 +8,16 @@
         Uses pagination to retrieve all assets even if there are more than the maximum per page.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubReleaseAssetByTag -Owner 'octocat' -Repository 'hello-world' -Tag 'v1.0.0'
+        ```
 
         Gets all release assets for the release with the tag 'v1.0.0' for the repository 'octocat/hello-world'.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubReleaseAssetByTag -Owner 'octocat' -Repository 'hello-world' -Tag 'v1.0.0' -Name 'app.zip'
+        ```
 
         Gets a specific release asset named 'app.zip' from the release with the tag 'v1.0.0' for the repository 'octocat/hello-world'.
 

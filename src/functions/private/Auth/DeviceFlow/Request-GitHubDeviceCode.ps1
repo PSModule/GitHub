@@ -7,7 +7,9 @@
         Request a GitHub Device Code.
 
         .EXAMPLE
+        ```powershell
         Request-GitHubDeviceCode -ClientID $ClientID -Mode $Mode -HostName 'github.com'
+        ```
 
         This will request a GitHub Device Code.
 

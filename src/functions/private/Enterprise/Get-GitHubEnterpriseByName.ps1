@@ -9,7 +9,9 @@
         information.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubEnterpriseByName -Name 'my-enterprise'
+        ```
 
         Output:
         ```powershell

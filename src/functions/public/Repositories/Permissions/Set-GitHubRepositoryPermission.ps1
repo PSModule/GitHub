@@ -9,7 +9,9 @@
         'None' is specified, the function removes the team's access to the repository.
 
         .EXAMPLE
+        ```powershell
         Set-GitHubRepositoryPermission -Owner 'MyOrg' -Name 'MyRepo' -Team 'devs' -Permission 'push'
+        ```
 
         Grants the 'push' permission to the 'devs' team for the repository 'MyRepo' owned by 'MyOrg'.
 

@@ -11,12 +11,16 @@
         If the context is a App, it will look at the available contexts and return the one that matches the scope of the command being run.
 
         .EXAMPLE
+        ```powershell
         $Context = Resolve-GitHubContext -Context 'github.com/Octocat'
+        ```
 
         This will resolve the context 'github.com/Octocat' into a GitHubContext object.
 
         .EXAMPLE
+        ```powershell
         $Context = Resolve-GitHubContext -Context $GitHubContext
+        ```
 
         This will return the GitHubContext object.
     #>

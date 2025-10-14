@@ -10,7 +10,9 @@
         the `repo` scope is also required.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubVariableOwnerList -Owner 'PSModule' -Context (Get-GitHubContext)
+        ```
 
         Output:
         ```powershell

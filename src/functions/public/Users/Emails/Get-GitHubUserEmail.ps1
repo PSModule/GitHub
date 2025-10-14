@@ -9,12 +9,16 @@
         authenticated user](https://docs.github.com/rest/users/emails#set-primary-email-visibility-for-the-authenticated-user) endpoint.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubUserEmail
+        ```
 
         Gets all email addresses for the authenticated user.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubUserEmail -Public
+        ```
 
         Gets the publicly visible email address for the authenticated user.
 

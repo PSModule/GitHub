@@ -9,6 +9,7 @@
         OAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint.
 
         .EXAMPLE
+        ```powershell
         $params = @{
             Owner       = 'octocat'
             Repository  = 'Hello-World'
@@ -18,6 +19,7 @@
             Context     = $GitHubContext
         }
         New-GitHubVariableOnEnvironment @params
+        ```
 
         Creates a new environment variable named `HOST_NAME` with the value `github.com` in the specified environment.
 

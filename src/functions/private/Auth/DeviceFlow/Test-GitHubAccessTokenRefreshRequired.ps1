@@ -7,7 +7,9 @@
         Test if the GitHub access token should be refreshed.
 
         .EXAMPLE
+        ```powershell
         Test-GitHubAccessTokenRefreshRequired
+        ```
 
         This will test if the GitHub access token should be refreshed.
     #>

@@ -7,7 +7,9 @@
         Set a GitHub module configuration.
 
         .EXAMPLE
+        ```powershell
         Set-GitHubConfig -Name DefaultUser -Value 'Octocat'
+        ```
 
         Sets the value of DefaultUser to 'Octocat' in the GitHub module configuration.
 

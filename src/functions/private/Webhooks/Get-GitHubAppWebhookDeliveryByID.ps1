@@ -11,7 +11,9 @@
 
 
         .EXAMPLE
+        ```powershell
         Get-GitHubAppWebhookDeliveryByID -ID 123456
+        ```
 
         Returns the webhook configuration for the authenticated app.
 

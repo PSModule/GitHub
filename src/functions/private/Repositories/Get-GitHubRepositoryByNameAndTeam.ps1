@@ -7,7 +7,9 @@
         Retrieves the permission level assigned to a specific team for a given GitHub repository.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubRepositoryByNameAndTeam -Owner 'octocat' -Name 'Hello-World' -Team 'core'
+        ```
 
         Output:
         ```powershell

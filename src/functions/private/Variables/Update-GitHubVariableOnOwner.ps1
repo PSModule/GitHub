@@ -10,7 +10,9 @@
         the `repo` scope is also required.
 
         .EXAMPLE
+        ```powershell
         Update-GitHubVariableOnOwner -Owner 'octocat' -Name 'HOST_NAME' -Value 'github.com' -Context $GitHubContext
+        ```
 
         Updates the organization variable named `HOST_NAME` with the value `github.com` in the specified organization.
 

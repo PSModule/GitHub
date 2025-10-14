@@ -9,17 +9,23 @@
         If the Owner and Repo parameters are specified, the function will return the license for the specified repository.
 
         .EXAMPLE
+        ```powershell
         Get-GitHubLicense
+        ```
 
         Get all license templates
 
         .EXAMPLE
+        ```powershell
         Get-GitHubLicense -Name mit
+        ```
 
         Get the mit license template
 
         .EXAMPLE
+        ```powershell
         Get-GitHubLicense -Owner 'octocat' -Repository 'Hello-World'
+        ```
 
         Get the license for the Hello-World repository from the octocat account.
 
