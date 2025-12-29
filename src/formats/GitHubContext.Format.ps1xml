@@ -55,7 +55,7 @@
                             <TableColumnItem>
                                 <ScriptBlock>
                                     if ($null -eq $_.TokenExpiresIn) {
-                                    return
+                                    return 'Unknown'
                                     }
 
                                     if ($_.TokenExpiresIn -le 0) {
