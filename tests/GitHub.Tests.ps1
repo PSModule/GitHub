@@ -45,6 +45,18 @@ Describe 'Auth' {
             $context | Should -Not -BeNullOrEmpty
         }
 
+        It 'Connect-GitHubAccount - TokenExpiresIn should be null for PAT tokens' -Skip:($AuthType -ne 'PAT') {
+            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
+            $context.TokenExpiresAt | Should -BeNullOrEmpty
+            $context.TokenExpiresIn | Should -BeNullOrEmpty
+        }
+
+        It 'Connect-GitHubAccount - TokenExpiresIn should be set for IAT tokens' -Skip:($AuthType -ne 'IAT') {
+            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
+            $context.TokenExpiresAt | Should -BeOfType [DateTime]
+            $context.TokenExpiresIn | Should -BeOfType [TimeSpan]
+        }
+
         It 'Connect-GitHubAccount - Connects using the provided credentials - Double' {
             $context = Connect-GitHubAccount @connectParams -PassThru -Silent
             $context = Connect-GitHubAccount @connectParams -PassThru -Silent
