@@ -45,12 +45,6 @@ Describe 'Auth' {
             $context | Should -Not -BeNullOrEmpty
         }
 
-        # Token expiration tests:
-        # - PAT tokens (classic and fine-grained): No expiration metadata
-        # - GITHUB_TOKEN (IAT in GitHub Actions): No expiration metadata
-        # - GitHub App Installation tokens (IAT from Connect-GitHubApp): Has expiration metadata
-        # - GitHub App tokens (JWT): Has expiration metadata
-
         It 'Connect-GitHubAccount - TokenExpiresIn should be null for PAT tokens' -Skip:($AuthType -ne 'PAT') {
             $context = Connect-GitHubAccount @connectParams -PassThru -Silent
             $context.TokenExpiresAt | Should -BeNullOrEmpty
@@ -137,7 +131,6 @@ Describe 'Auth' {
 
         It 'Connect-GitHubApp - Installation tokens (IAT) should have expiration set' -Skip:($AuthType -ne 'APP') {
             $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
-            # GitHub App Installation tokens (IAT) created by Connect-GitHubApp should have expiration metadata
             $context.AuthType | Should -Be 'IAT'
             $context.TokenExpiresAt | Should -BeOfType [DateTime]
             $context.TokenExpiresIn | Should -BeOfType [TimeSpan]
