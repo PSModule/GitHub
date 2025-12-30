@@ -47,7 +47,7 @@ Describe 'Auth' {
 
         # Token expiration tests:
         # - PAT tokens (classic and fine-grained): No expiration metadata
-        # - GITHUB_TOKEN (IAT): No expiration metadata
+        # - GITHUB_TOKEN (IAT in GitHub Actions): No expiration metadata
         # - GitHub App Installation tokens (IAT from Connect-GitHubApp): Has expiration metadata
         # - GitHub App tokens (JWT): Has expiration metadata
 
