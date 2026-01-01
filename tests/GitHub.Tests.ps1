@@ -46,13 +46,13 @@ Describe 'Auth' {
         }
 
         It 'Connect-GitHubAccount - TokenExpiresIn should be null for PAT tokens' -Skip:($AuthType -ne 'PAT') {
-            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
+            $context = Get-GitHubContext
             $context.TokenExpiresAt | Should -BeNullOrEmpty
             $context.TokenExpiresIn | Should -BeNullOrEmpty
         }
 
         It 'Connect-GitHubAccount - TokenExpiresIn should be null for GITHUB_TOKEN (IAT)' -Skip:($TokenType -ne 'GITHUB_TOKEN') {
-            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
+            $context = Get-GitHubContext
             $context.TokenExpiresAt | Should -BeNullOrEmpty
             $context.TokenExpiresIn | Should -BeNullOrEmpty
         }
@@ -130,12 +130,11 @@ Describe 'Auth' {
         }
 
         It 'Connect-GitHubApp - Installation tokens (IAT) should have expiration set' -Skip:($AuthType -ne 'APP') {
-            Connect-GitHubAccount @connectParams -Silent
-            $context = Connect-GitHubApp @connectAppParams -PassThru -Silent
-            $context.AuthType | Should -Be 'IAT'
-            $context.TokenExpiresAt | Should -BeOfType [DateTime]
-            $context.TokenExpiresIn | Should -BeOfType [TimeSpan]
-            $context.TokenExpiresIn.TotalMinutes | Should -BeGreaterThan 0
+            $appContext = Connect-GitHubApp @connectAppParams -PassThru -Silent
+            $appContext.AuthType | Should -Be 'IAT'
+            $appContext.TokenExpiresAt | Should -BeOfType [DateTime]
+            $appContext.TokenExpiresIn | Should -BeOfType [TimeSpan]
+            $appContext.TokenExpiresIn.TotalMinutes | Should -BeGreaterThan 0
         }
 
         # Tests for runners goes here
