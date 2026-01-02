@@ -130,7 +130,8 @@ Describe 'Auth' {
         }
 
         It 'Connect-GitHubApp - Installation tokens (IAT) should have expiration set' -Skip:($AuthType -ne 'APP') {
-            $appContext = Connect-GitHubApp @connectAppParams -PassThru -Silent
+            $appContextToUse = Get-GitHubContext -ListAvailable | Where-Object { $_.AuthType -eq 'App' } | Select-Object -First 1
+            $appContext = Connect-GitHubApp @connectAppParams -PassThru -Silent -Context $appContextToUse
             $appContext.AuthType | Should -Be 'IAT'
             $appContext.TokenExpiresAt | Should -BeOfType [DateTime]
             $appContext.TokenExpiresIn | Should -BeOfType [TimeSpan]
