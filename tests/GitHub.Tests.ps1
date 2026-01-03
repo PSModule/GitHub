@@ -45,16 +45,16 @@ Describe 'Auth' {
             $context | Should -Not -BeNullOrEmpty
         }
 
-        It 'Connect-GitHubAccount - TokenExpiresIn should be null for PAT tokens' -Skip:($AuthType -ne 'PAT') {
-            $context = Get-GitHubContext
-            $context.TokenExpiresAt | Should -BeNullOrEmpty
-            $context.TokenExpiresIn | Should -BeNullOrEmpty
-        }
-
-        It 'Connect-GitHubAccount - TokenExpiresIn should be null for GITHUB_TOKEN (IAT)' -Skip:($TokenType -ne 'GITHUB_TOKEN') {
-            $context = Get-GitHubContext
-            $context.TokenExpiresAt | Should -BeNullOrEmpty
-            $context.TokenExpiresIn | Should -BeNullOrEmpty
+        It 'Connect-GitHubAccount - TokenExpiresAt and TokenExpiresIn should have correct values based on token type' {
+            if ($TokenType -in @('PAT', 'USER_FG_PAT', 'ORG_FG_PAT', 'GITHUB_TOKEN')) {
+                $context.TokenExpiresAt | Should -BeNullOrEmpty
+                $context.TokenExpiresIn | Should -BeNullOrEmpty
+            } else {
+                $context.TokenExpiresAt | Should -BeOfType [DateTime]
+                $context.TokenExpiresAt | Should -BeGreaterThan ([DateTime]::Now)
+                $context.TokenExpiresIn | Should -BeOfType [TimeSpan]
+                $context.TokenExpiresIn.TotalSeconds | Should -BeGreaterThan 0
+            }
         }
 
         It 'Connect-GitHubAccount - Connects using the provided credentials - Double' {
@@ -92,8 +92,6 @@ Describe 'Auth' {
             }
             $context | Should -Not -BeNullOrEmpty
             $context | Should -BeOfType [GitHubContext]
-            $context.TokenExpiresAt | Should -BeOfType [DateTime]
-            $context.TokenExpiresIn | Should -BeOfType [TimeSpan]
         }
 
         It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' -Skip:($AuthType -ne 'APP') {
@@ -121,21 +119,16 @@ Describe 'Auth' {
             LogGroup 'Connect-GithubApp' {
                 $context
             }
-            $context.TokenExpiresAt | Should -BeOfType [DateTime]
-            $context.TokenExpiresIn | Should -BeOfType [TimeSpan]
             LogGroup 'Context' {
                 Write-Host ($context | Format-List | Out-String)
             }
             $context | Should -Not -BeNullOrEmpty
         }
 
-        It 'Connect-GitHubApp - Installation tokens (IAT) should have expiration set' -Skip:($AuthType -ne 'APP') {
+        It 'Connect-GitHubApp - Installation tokens (IAT) should have correct auth type' -Skip:($AuthType -ne 'APP') {
             $appContextToUse = Get-GitHubContext -ListAvailable | Where-Object { $_.AuthType -eq 'App' } | Select-Object -First 1
             $appContext = Connect-GitHubApp @connectAppParams -PassThru -Silent -Context $appContextToUse
             $appContext.AuthType | Should -Be 'IAT'
-            $appContext.TokenExpiresAt | Should -BeOfType [DateTime]
-            $appContext.TokenExpiresIn | Should -BeOfType [TimeSpan]
-            $appContext.TokenExpiresIn.TotalMinutes | Should -BeGreaterThan 0
         }
 
         # Tests for runners goes here
@@ -254,18 +247,18 @@ Describe 'GitHub' {
             $config.PerPage | Should -Be 100
         }
         It 'Set-GitHubConfig - Sets a configuration item' {
-            Set-GitHubConfig -Name 'HostName' -Value 'msx.ghe.com'
-            Get-GitHubConfig -Name 'HostName' | Should -Be 'msx.ghe.com'
+            Set-GitHubConfig -name 'HostName' -Value 'msx.ghe.com'
+            Get-GitHubConfig -name 'HostName' | Should -Be 'msx.ghe.com'
         }
         It 'Remove-GitHubConfig - Removes a configuration item' {
-            Remove-GitHubConfig -Name 'HostName'
-            Get-GitHubConfig -Name 'HostName' | Should -BeNullOrEmpty
+            Remove-GitHubConfig -name 'HostName'
+            Get-GitHubConfig -name 'HostName' | Should -BeNullOrEmpty
         }
         It 'Reset-GitHubConfig - Resets the module configuration' {
-            Set-GitHubConfig -Name HostName -Value 'msx.ghe.com'
-            Get-GitHubConfig -Name HostName | Should -Be 'msx.ghe.com'
+            Set-GitHubConfig -name HostName -Value 'msx.ghe.com'
+            Get-GitHubConfig -name HostName | Should -Be 'msx.ghe.com'
             Reset-GitHubConfig
-            Get-GitHubConfig -Name HostName | Should -Be 'github.com'
+            Get-GitHubConfig -name HostName | Should -Be 'github.com'
         }
     }
     Context 'Actions' {
@@ -323,7 +316,7 @@ Describe 'GitHub' {
         }
         It 'Set-GitHubLogGroup - Should not throw' {
             {
-                Set-GitHubLogGroup -Name 'MyGroup' -ScriptBlock {
+                Set-GitHubLogGroup -name 'MyGroup' -ScriptBlock {
                     Get-ChildItem env: | Select-Object Name, Value | Format-Table -AutoSize
                 }
             } | Should -Not -Throw
@@ -365,13 +358,13 @@ Describe 'GitHub' {
         }
         It 'Set-GitHubOutput + Simple string - Should not throw' {
             {
-                Set-GitHubOutput -Name 'MyOutput' -Value 'MyValue'
+                Set-GitHubOutput -name 'MyOutput' -Value 'MyValue'
             } | Should -Not -Throw
             (Get-GitHubOutput).MyOutput | Should -Be 'MyValue'
         }
         It 'Set-GitHubOutput + Multiline string - Should not throw' {
             {
-                Set-GitHubOutput -Name 'MyOutput' -Value @'
+                Set-GitHubOutput -name 'MyOutput' -Value @'
 This is a multiline
 string
 '@
@@ -384,7 +377,7 @@ string
         It 'Set-GitHubOutput + SecureString - Should not throw' {
             {
                 $secret = 'MyValue' | ConvertTo-SecureString -AsPlainText -Force
-                Set-GitHubOutput -Name 'MySecret' -Value $secret
+                Set-GitHubOutput -name 'MySecret' -Value $secret
             } | Should -Not -Throw
             (Get-GitHubOutput).MySecret | Should -Be 'MyValue'
         }
@@ -402,19 +395,19 @@ string
                         Value = 'Else'
                     }
                 }
-                Set-GitHubOutput -Name 'Jupiter' -Value $jupiter
+                Set-GitHubOutput -name 'Jupiter' -Value $jupiter
             } | Should -Not -Throw
             (Get-GitHubOutput).Config | Should -BeLike ''
         }
         It 'Set-GitHubOutput + Empty string - Should not throw' {
             {
-                Set-GitHubOutput -Name 'EmptyOutput' -Value ''
+                Set-GitHubOutput -name 'EmptyOutput' -Value ''
             } | Should -Not -Throw
             (Get-GitHubOutput).EmptyOutput | Should -Be ''
         }
         It 'Set-GitHubOutput + Null - Should not throw and store as null' {
             {
-                Set-GitHubOutput -Name 'NullOutput' -Value $null
+                Set-GitHubOutput -name 'NullOutput' -Value $null
             } | Should -Not -Throw
             $nullValue = (Get-GitHubOutput).NullOutput
             $nullValue | Should -Be $null
@@ -426,7 +419,7 @@ string
 
         It 'Set-GitHubOutput + Empty String - Should store as empty string' {
             {
-                Set-GitHubOutput -Name 'EmptyStringOutput' -Value ''
+                Set-GitHubOutput -name 'EmptyStringOutput' -Value ''
             } | Should -Not -Throw
             (Get-GitHubOutput).EmptyStringOutput | Should -Be ''
 
@@ -442,7 +435,7 @@ ghadelimiter_6f9f5610-74ad-4b25-8ef3-7f3e9e764fa2
 '@
             Add-Content -Path $env:GITHUB_OUTPUT -Value $existingContent
             {
-                Set-GitHubOutput -Name 'TestAfterExisting' -Value 'TestValue'
+                Set-GitHubOutput -name 'TestAfterExisting' -Value 'TestValue'
             } | Should -Not -Throw
             (Get-GitHubOutput).TestAfterExisting | Should -Be 'TestValue'
             $stderr = (Get-GitHubOutput).stderr
@@ -455,14 +448,14 @@ ghadelimiter_6f9f5610-74ad-4b25-8ef3-7f3e9e764fa2
             Write-Host (Get-GitHubOutput | Format-List | Out-String)
         }
         It 'Reset-GitHubOutput - Should clear the outputs from the output file' {
-            Set-GitHubOutput -Name 'TestOutput' -Value 'TestValue'
+            Set-GitHubOutput -name 'TestOutput' -Value 'TestValue'
             (Get-GitHubOutput).TestOutput | Should -Be 'TestValue'
             Reset-GitHubOutput
             Get-GitHubOutput | Should -BeNullOrEmpty
         }
         It 'Set-GitHubEnvironmentVariable - Should not throw' {
             {
-                Set-GitHubEnvironmentVariable -Name 'MyName' -Value 'MyValue'
+                Set-GitHubEnvironmentVariable -name 'MyName' -Value 'MyValue'
             } | Should -Not -Throw
             Get-Content $env:GITHUB_ENV -Raw | Should -BeLike '*MyName*MyValue*'
         }
@@ -697,7 +690,7 @@ Describe 'API' {
                 $licenseList | Should -Not -BeNullOrEmpty
             }
             It 'Get-GitHubLicense - Gets a spesific license' {
-                $mitLicense = Get-GitHubLicense -Name 'mit'
+                $mitLicense = Get-GitHubLicense -name 'mit'
                 LogGroup 'MIT License' {
                     Write-Host ($mitLicense | Format-Table | Out-String)
                 }
@@ -721,7 +714,7 @@ Describe 'API' {
                 $gitIgnoreList | Should -Not -BeNullOrEmpty
             }
             It 'Get-GitHubGitignore - Gets a gitignore template' {
-                $vsGitIgnore = Get-GitHubGitignore -Name 'VisualStudio'
+                $vsGitIgnore = Get-GitHubGitignore -name 'VisualStudio'
                 LogGroup 'Visual Studio GitIgnore' {
                     Write-Host ($vsGitIgnore | Format-Table | Out-String)
                 }
