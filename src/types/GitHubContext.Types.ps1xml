@@ -1,1 +1,50 @@
-ø
+<?xml version="1.0" encoding="utf-8"?>
+<Types>
+    <Type>
+        <Name>GitHubUserContext</Name>
+        <Members>
+            <ScriptProperty>
+                <Name>TokenExpiresIn</Name>
+                <GetScriptBlock>
+                    if ($null -ne $this.TokenExpiresAt) {
+                        return $this.TokenExpiresAt - [DateTime]::Now
+                    }
+                </GetScriptBlock>
+            </ScriptProperty>
+            <ScriptProperty>
+                <Name>RefreshTokenExpiresIn</Name>
+                <GetScriptBlock>
+                    if ($null -ne $this.RefreshTokenExpiresAt) {
+                        return $this.RefreshTokenExpiresAt - [DateTime]::Now
+                    }
+                </GetScriptBlock>
+            </ScriptProperty>
+        </Members>
+    </Type>
+    <Type>
+        <Name>GitHubAppInstallationContext</Name>
+        <Members>
+            <ScriptProperty>
+                <Name>TokenExpiresIn</Name>
+                <GetScriptBlock>
+                    if ($null -ne $this.TokenExpiresAt) {
+                        return $this.TokenExpiresAt - [DateTime]::Now
+                    }
+                </GetScriptBlock>
+            </ScriptProperty>
+        </Members>
+    </Type>
+    <Type>
+        <Name>GitHubAppContext</Name>
+        <Members>
+            <ScriptProperty>
+                <Name>TokenExpiresIn</Name>
+                <GetScriptBlock>
+                    if ($null -ne $this.TokenExpiresAt) {
+                        return $this.TokenExpiresAt - [DateTime]::Now
+                    }
+                </GetScriptBlock>
+            </ScriptProperty>
+        </Members>
+    </Type>
+</Types>
