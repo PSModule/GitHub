@@ -72,12 +72,12 @@ LogGroup 'BeforeAll - Global Test Setup' {
             try {
                 # Connect to GitHub
                 Write-Host "Connecting to GitHub as $owner..."
-                $context = Connect-GitHubAccount @($authCase.ConnectParams) -PassThru -Silent -ErrorAction Stop
+                $context = Connect-GitHubAccount @authCase.ConnectParams -PassThru -Silent -ErrorAction Stop
 
                 # For APP auth, also connect to the app installation
                 if ($authType -eq 'APP') {
                     Write-Host "Connecting to GitHub App installation..."
-                    $context = Connect-GitHubApp @($authCase.ConnectAppParams) -PassThru -Default -Silent -ErrorAction Stop
+                    $context = Connect-GitHubApp @authCase.ConnectAppParams -PassThru -Default -Silent -ErrorAction Stop
                 }
 
                 # Clean up repositories
@@ -216,7 +216,7 @@ LogGroup 'BeforeAll - Global Test Setup' {
                     try {
                         # Reconnect as the app (not installation) to manage installations
                         Disconnect-GitHubAccount -Silent
-                        $context = Connect-GitHubAccount @($authCase.ConnectParams) -PassThru -Silent -ErrorAction Stop
+                        $context = Connect-GitHubAccount @authCase.ConnectParams -PassThru -Silent -ErrorAction Stop
 
                         $installations = Get-GitHubAppInstallation -ErrorAction SilentlyContinue |
                             Where-Object {
