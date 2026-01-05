@@ -6,15 +6,17 @@
             <ScriptProperty>
                 <Name>TokenExpiresIn</Name>
                 <GetScriptBlock>
-                    if ($null -eq $this.TokenExpiresAt) { return [TimeSpan]::Zero }
-                    $this.TokenExpiresAt - [DateTime]::Now
+                    if ($null -ne $this.TokenExpiresAt) {
+                        return $this.TokenExpiresAt - [DateTime]::Now
+                    }
                 </GetScriptBlock>
             </ScriptProperty>
             <ScriptProperty>
                 <Name>RefreshTokenExpiresIn</Name>
                 <GetScriptBlock>
-                    if ($null -eq $this.RefreshTokenExpiresAt) { return [TimeSpan]::Zero }
-                    $this.RefreshTokenExpiresAt - [DateTime]::Now
+                    if ($null -ne $this.RefreshTokenExpiresAt) {
+                        return $this.RefreshTokenExpiresAt - [DateTime]::Now
+                    }
                 </GetScriptBlock>
             </ScriptProperty>
         </Members>
@@ -25,8 +27,9 @@
             <ScriptProperty>
                 <Name>TokenExpiresIn</Name>
                 <GetScriptBlock>
-                    if ($null -eq $this.TokenExpiresAt) { return [TimeSpan]::Zero }
-                    $this.TokenExpiresAt - [DateTime]::Now
+                    if ($null -ne $this.TokenExpiresAt) {
+                        return $this.TokenExpiresAt - [DateTime]::Now
+                    }
                 </GetScriptBlock>
             </ScriptProperty>
         </Members>
@@ -37,8 +40,9 @@
             <ScriptProperty>
                 <Name>TokenExpiresIn</Name>
                 <GetScriptBlock>
-                    if ($null -eq $this.TokenExpiresAt) { return [TimeSpan]::Zero }
-                    $this.TokenExpiresAt - [DateTime]::Now
+                    if ($null -ne $this.TokenExpiresAt) {
+                        return $this.TokenExpiresAt - [DateTime]::Now
+                    }
                 </GetScriptBlock>
             </ScriptProperty>
         </Members>

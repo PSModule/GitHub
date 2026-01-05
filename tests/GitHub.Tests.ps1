@@ -23,13 +23,19 @@ Describe 'Auth' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 
     Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
+        BeforeAll {
+            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
+            LogGroup 'Context' {
+                Write-Host ($context | Format-List | Out-String)
+            }
+        }
+
         AfterAll {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
             Write-Host ('-' * 60)
         }
 
         It 'Connect-GitHubAccount - Connects using the provided credentials' {
-            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
             LogGroup 'Context - Standard' {
                 Write-Host ($context | Out-String)
             }
@@ -43,6 +49,22 @@ Describe 'Auth' {
                 Write-Host ($context | Select-Object * | Out-String)
             }
             $context | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Connect-GitHubAccount - TokenExpiresAt and TokenExpiresIn validation' {
+            if ($AuthType -eq 'APP') {
+                $context.TokenExpiresAt | Should -Not -BeNullOrEmpty
+                $context.TokenExpiresAt | Should -BeOfType [DateTime]
+                $context.TokenExpiresAt | Should -BeGreaterThan ([DateTime]::Now)
+
+                $context.TokenExpiresIn | Should -Not -BeNullOrEmpty
+                $context.TokenExpiresIn | Should -BeOfType [TimeSpan]
+                $context.TokenExpiresIn.TotalMinutes | Should -BeGreaterThan 0
+                $context.TokenExpiresIn.TotalMinutes | Should -BeLessOrEqual 10
+            } else {
+                $context.TokenExpiresAt | Should -BeNullOrEmpty
+                $context.TokenExpiresIn | Should -BeNullOrEmpty
+            }
         }
 
         It 'Connect-GitHubAccount - Connects using the provided credentials - Double' {
@@ -80,8 +102,6 @@ Describe 'Auth' {
             }
             $context | Should -Not -BeNullOrEmpty
             $context | Should -BeOfType [GitHubContext]
-            $context.TokenExpiresAt | Should -BeOfType [DateTime]
-            $context.TokenExpiresIn | Should -BeOfType [TimeSpan]
         }
 
         It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' -Skip:($AuthType -ne 'APP') {
@@ -109,18 +129,18 @@ Describe 'Auth' {
             LogGroup 'Connect-GithubApp' {
                 $context
             }
-            $context.TokenExpiresAt | Should -BeOfType [DateTime]
-            $context.TokenExpiresIn | Should -BeOfType [TimeSpan]
             LogGroup 'Context' {
                 Write-Host ($context | Format-List | Out-String)
             }
             $context | Should -Not -BeNullOrEmpty
         }
 
-        # Tests for runners goes here
-        if ($Type -eq 'GitHub Actions') {}
+        It 'Connect-GitHubApp - Installation tokens (IAT) should have correct auth type' -Skip:($AuthType -ne 'APP') {
+            $appContextToUse = Get-GitHubContext -ListAvailable | Where-Object { $_.AuthType -eq 'App' } | Select-Object -First 1
+            $appContext = Connect-GitHubApp @connectAppParams -PassThru -Silent -Context $appContextToUse
+            $appContext.AuthType | Should -Be 'IAT'
+        }
 
-        # Tests for IAT UAT and PAT goes here
         It 'Connect-GitHubAccount - Connects to GitHub CLI on runners' {
             [string]::IsNullOrEmpty($(gh auth token)) | Should -Be $false
         }

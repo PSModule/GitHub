@@ -50,38 +50,54 @@
                                 <PropertyName>TokenType</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>TokenExpiresAt</PropertyName>
+                                <ScriptBlock>
+                                    if ($null -ne $_.TokenExpiresAt) {
+                                        return $_.TokenExpiresAt
+                                    }
+
+                                    $text = 'N/A'
+                                    if ($Host.UI.SupportsVirtualTerminal -and ($env:GITHUB_ACTIONS -ne 'true')) {
+                                        $gray = "`e[90m"
+                                        $reset = "`e[0m"
+                                        return "$gray$text$reset"
+                                    }
+                                    return $text
+                                </ScriptBlock>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <ScriptBlock>
-                                    if ($null -eq $_.TokenExpiresIn) {
-                                    return
+                                    if ($null -ne $_.TokenExpiresIn) {
+                                        if ($_.TokenExpiresIn -le 0) {
+                                            $text = 'Expired'
+                                        } else {
+                                            $text = $_.TokenExpiresIn.ToString('hh\:mm\:ss')
+                                        }
+
+                                        if ($Host.UI.SupportsVirtualTerminal -and ($env:GITHUB_ACTIONS -ne 'true')) {
+                                            switch ($_.AuthType) {
+                                                'UAT' {
+                                                    $maxValue = [TimeSpan]::FromHours(8)
+                                                }
+                                                'IAT' {
+                                                    $maxValue = [TimeSpan]::FromHours(1)
+                                                }
+                                                'APP' {
+                                                    $maxValue = [TimeSpan]::FromMinutes(10)
+                                                }
+                                            }
+                                            $ratio = [Math]::Min(($_.TokenExpiresIn / $maxValue), 1)
+                                            return [GitHubFormatter]::FormatColorByRatio($ratio, $text)
+                                        }
+                                        return $text
                                     }
 
-                                    if ($_.TokenExpiresIn -le 0) {
-                                    $text = 'Expired'
-                                    } else {
-                                    $text = $_.TokenExpiresIn.ToString('hh\:mm\:ss')
+                                    $text = 'N/A'
+                                    if ($Host.UI.SupportsVirtualTerminal -and ($env:GITHUB_ACTIONS -ne 'true')) {
+                                        $gray = "`e[90m"
+                                        $reset = "`e[0m"
+                                        return "$gray$text$reset"
                                     }
-
-                                    if ($Host.UI.SupportsVirtualTerminal -and
-                                    ($env:GITHUB_ACTIONS -ne 'true')) {
-                                    switch ($_.AuthType) {
-                                    'UAT' {
-                                    $maxValue = [TimeSpan]::FromHours(8)
-                                    }
-                                    'IAT' {
-                                    $maxValue = [TimeSpan]::FromHours(1)
-                                    }
-                                    'APP' {
-                                    $maxValue = [TimeSpan]::FromMinutes(10)
-                                    }
-                                    }
-                                    $ratio = [Math]::Min(($_.TokenExpiresIn / $maxValue), 1)
-                                    [GitHubFormatter]::FormatColorByRatio($ratio, $text)
-                                    } else {
-                                    $text
-                                    }
+                                    return $text
                                 </ScriptBlock>
                             </TableColumnItem>
                         </TableColumnItems>

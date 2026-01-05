@@ -230,7 +230,7 @@ Describe 'Apps' {
                     LogGroup 'Config' {
                         Write-Host "$($config | Format-List | Out-String)"
                     }
-                    LogGroup "Installation" {
+                    LogGroup 'Installation' {
                         Write-Host "$($installation | Format-List | Out-String)"
                     }
                     LogGroup 'Permissions' {
@@ -274,8 +274,11 @@ Describe 'Apps' {
                     $installationContext.Events | Should -BeOfType 'string'
                 }
 
-                It 'Connect-GitHubApp - TokenExpiresIn property should be calculated correctly' {
+                It 'Connect-GitHubApp - TokenExpiresAt and TokenExpiresIn properties should be calculated correctly' {
+                    $installationContext.TokenExpiresAt | Should -BeOfType [DateTime]
+                    $installationContext.TokenExpiresAt | Should -BeGreaterThan ([DateTime]::Now)
                     $installationContext.TokenExpiresIn | Should -BeOfType [TimeSpan]
+                    $installationContext.TokenExpiresIn.TotalSeconds | Should -BeGreaterThan 0
                     $installationContext.TokenExpiresIn.TotalMinutes | Should -BeGreaterThan 0
                     $installationContext.TokenExpiresIn.TotalMinutes | Should -BeLessOrEqual 60
                 }
