@@ -55,7 +55,7 @@ Describe 'Auth' {
             if ($AuthType -eq 'APP') {
                 $context.TokenExpiresAt | Should -Not -BeNullOrEmpty
                 $context.TokenExpiresAt | Should -BeOfType [DateTime]
-                $context.TokenExpiresAt | Should -BeGreaterThan ([DateTime]::UtcNow)
+                $context.TokenExpiresAt | Should -BeGreaterThan ([DateTime]::Now)
 
                 $context.TokenExpiresIn | Should -Not -BeNullOrEmpty
                 $context.TokenExpiresIn | Should -BeOfType [TimeSpan]
