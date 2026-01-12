@@ -36,7 +36,11 @@ LogGroup 'BeforeAll - Global Test Setup' {
         LogGroup 'Environment setup' {
             $environmentName = "$prefix-$os-$TokenType-$id"
         }
-        LogGroup 'Variables setup' {}
-        LogGroup 'Secrets setup' {}
+        LogGroup 'Variables setup' {
+
+        }
+        LogGroup 'Secrets setup' {
+            
+        }
     }
 }
