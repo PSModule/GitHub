@@ -54,7 +54,7 @@
 
         # The stamp to check status for.
         [Parameter()]
-        [ValidateSet('Public', 'Europe', 'Australia', 'US')]
+        [ValidateSet('Public', 'Europe', 'Australia', 'US', 'Japan')]
         [string] $Stamp = 'Public'
     )
 
