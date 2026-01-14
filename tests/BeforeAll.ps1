@@ -12,12 +12,11 @@ LogGroup 'BeforeAll - Global Test Setup' {
         $authCase.GetEnumerator() | ForEach-Object { Set-Variable -Name $_.Key -Value $_.Value }
 
         LogGroup "Repository setup - $AuthType-$TokenType" {
-            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
-            Write-Host ($context | Out-String)
+            $context = Connect-GitHubAccount @connectParams -PassThru -Default -Silent
             if ($AuthType -eq 'APP') {
                 $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
-                Write-Host ($context | Format-List | Out-String)
             }
+            Write-Host ($context | Format-List | Out-String)
 
             $repoPrefix = "$prefix-$os-$TokenType"
             $repoName = "$repoPrefix-$id"
