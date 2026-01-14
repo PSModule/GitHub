@@ -2,16 +2,46 @@
 param()
 
 LogGroup 'AfterAll - Global Test Teardown' {
+    $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 
+    $prefix = 'Test'
+    $os = $env:RUNNER_OS
+    $id = $env:GITHUB_RUN_ID
 
-    switch ($OwnerType) {
-        'user' {
-            Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+    foreach ($authCase in $authCases) {
+        $authCase.GetEnumerator() | ForEach-Object { Set-Variable -Name $_.Key -Value $_.Value }
+
+        if ($TokenType -eq 'GITHUB_TOKEN') {
+            Write-Host "Skipping setup for $AuthType-$TokenType (uses existing repository)"
+            continue
         }
-        'organization' {
-            Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+
+        LogGroup "Repository setup - $AuthType-$TokenType" {
+            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
+            if ($AuthType -eq 'APP') {
+                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
+            }
+            Write-Host ($context | Format-List | Out-String)
+
+            $repoPrefix = "$prefix-$os-$TokenType"
+
+            switch ($OwnerType) {
+                'user' {
+                    Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                }
+                'organization' {
+                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                }
+            }
+        }
+        LogGroup 'Environment setup' {
+            $environmentName = "$prefix-$os-$TokenType-$id"
+        }
+        LogGroup 'Variables setup' {
+
+        }
+        LogGroup 'Secrets setup' {
+
         }
     }
-    Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
-    Write-Host ('-' * 60)
 }
