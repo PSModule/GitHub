@@ -11,7 +11,7 @@ LogGroup 'BeforeAll - Global Test Setup' {
     foreach ($authCase in $authCases) {
         $authCase.GetEnumerator() | ForEach-Object { Set-Variable -Name $_.Key -Value $_.Value }
 
-        LogGroup 'Repository setup' {
+        LogGroup "Repository setup - $AuthType-$TokenType" {
             $context = Connect-GitHubAccount @connectParams -PassThru -Silent
             Write-Host ($context | Out-String)
             if ($AuthType -eq 'APP') {
@@ -40,7 +40,7 @@ LogGroup 'BeforeAll - Global Test Setup' {
 
         }
         LogGroup 'Secrets setup' {
-            
+
         }
     }
 }
