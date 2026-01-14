@@ -3,8 +3,6 @@ param()
 
 LogGroup 'BeforeAll - Global Test Setup' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
-
-    $prefix = 'Test'
     $os = $env:RUNNER_OS
     $id = $env:GITHUB_RUN_ID
 
@@ -23,7 +21,7 @@ LogGroup 'BeforeAll - Global Test Setup' {
             }
             Write-Host ($context | Format-List | Out-String)
 
-            $repoPrefix = "$prefix-$os-$TokenType"
+            $repoPrefix = "Test-$os-$TokenType"
             $repoName = "$repoPrefix-$id"
 
             switch ($OwnerType) {
@@ -36,15 +34,6 @@ LogGroup 'BeforeAll - Global Test Setup' {
                     New-GitHubRepository -Organization $Owner -Name $repoName -Confirm:$false
                 }
             }
-        }
-        LogGroup 'Environment setup' {
-            $environmentName = "$prefix-$os-$TokenType-$id"
-        }
-        LogGroup 'Variables setup' {
-
-        }
-        LogGroup 'Secrets setup' {
-
         }
     }
 }
