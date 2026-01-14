@@ -11,6 +11,11 @@ LogGroup 'BeforeAll - Global Test Setup' {
     foreach ($authCase in $authCases) {
         $authCase.GetEnumerator() | ForEach-Object { Set-Variable -Name $_.Key -Value $_.Value }
 
+        if ($TokenType -eq 'GITHUB_TOKEN') {
+            Write-Host "Skipping setup for $AuthType-$TokenType (uses existing repository)"
+            continue
+        }
+
         LogGroup "Repository setup - $AuthType-$TokenType" {
             $context = Connect-GitHubAccount @connectParams -PassThru -Silent
             if ($AuthType -eq 'APP') {
