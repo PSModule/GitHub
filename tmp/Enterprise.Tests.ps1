@@ -19,10 +19,6 @@
 [CmdletBinding()]
 param()
 
-BeforeAll {
-    # DEFAULTS ACCROSS ALL TESTS
-}
-
 Describe 'Template' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 

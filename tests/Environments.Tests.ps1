@@ -20,9 +20,8 @@
 param()
 
 BeforeAll {
-    $testName = 'EnvironmentsTests'
     $os = $env:RUNNER_OS
-    $guid = [guid]::NewGuid().ToString()
+    $id = $env:GITHUB_RUN_ID
 }
 
 Describe 'Environments' {
@@ -40,34 +39,17 @@ Describe 'Environments' {
                     Write-Host ($context | Format-List | Out-String)
                 }
             }
-            $repoPrefix = "$testName-$os-$TokenType"
-            $repoName = "$repoPrefix-$guid"
-            $environmentName = "$testName-$os-$TokenType-$guid"
+            $repoPrefix = "Test-$os-$TokenType"
+            $repoName = "$repoPrefix-$id"
+            $environmentName = "$testName-$os-$TokenType-$id"
 
-            switch ($OwnerType) {
-                'user' {
-                    Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                    $repo = New-GitHubRepository -Name $repoName -Confirm:$false
-                }
-                'organization' {
-                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                    $repo = New-GitHubRepository -Organization $owner -Name $repoName -Confirm:$false
-                }
-            }
-            LogGroup "Repository - [$repoName]" {
+            LogGroup "Using Repository - [$repoName]" {
+                $repo = Get-GitHubRepository -Owner $Owner -Repository $repoName
                 Write-Host ($repo | Select-Object * | Out-String)
             }
         }
 
         AfterAll {
-            switch ($OwnerType) {
-                'user' {
-                    Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                }
-                'organization' {
-                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                }
-            }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
             Write-Host ('-' * 60)
         }
