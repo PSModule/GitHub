@@ -49,3 +49,29 @@ Register-ArgumentCompleter -CommandName Connect-GitHubApp -ParameterName Enterpr
         [System.Management.Automation.CompletionResult]::new($_.Target.Name, $_.Target.Name, 'ParameterValue', $_.Target.Name)
     }
 }
+
+# Status functions - Stamp parameter completer
+$statusStampCompleter = {
+    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
+    $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
+    
+    if (-not $script:StatusBaseURL) {
+        return $null
+    }
+    
+    $pattern = switch (Get-GitHubConfig -Name CompletionMode) { 'Contains' { "*$wordToComplete*" } default { "$wordToComplete*" } }
+    $filteredOptions = $script:StatusBaseURL.Keys | Where-Object { $_ -like $pattern }
+    
+    if (-not $filteredOptions) {
+        return $null
+    }
+    
+    $filteredOptions | ForEach-Object {
+        [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
+    }
+}
+
+Register-ArgumentCompleter -CommandName Get-GitHubStatus -ParameterName Stamp -ScriptBlock $statusStampCompleter
+Register-ArgumentCompleter -CommandName Get-GitHubScheduledMaintenance -ParameterName Stamp -ScriptBlock $statusStampCompleter
+Register-ArgumentCompleter -CommandName Get-GitHubStatusComponent -ParameterName Stamp -ScriptBlock $statusStampCompleter
+Register-ArgumentCompleter -CommandName Get-GitHubStatusIncident -ParameterName Stamp -ScriptBlock $statusStampCompleter

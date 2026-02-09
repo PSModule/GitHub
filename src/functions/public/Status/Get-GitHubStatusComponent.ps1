@@ -26,7 +26,6 @@
     param(
         # The stamp to check status for.
         [Parameter()]
-        [ValidateSet('Public', 'Europe', 'US')]
         [string] $Stamp = 'Public'
     )
 
