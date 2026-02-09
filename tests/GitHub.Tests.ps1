@@ -283,7 +283,7 @@ Describe 'GitHub' {
             $runnerData | Should -Not -BeNullOrEmpty
         }
     }
-    Context 'Status' -ForEach @('Public', 'Europe', 'Australia', 'US') {
+    Context 'Status' -ForEach @('Public', 'Europe', 'US') {
         It 'Get-GitHubScheduledMaintenance - Gets scheduled maintenance for <_>' {
             { Get-GitHubScheduledMaintenance -Stamp $_ } | Should -Not -Throw
         }
