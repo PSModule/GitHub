@@ -102,12 +102,12 @@ class GitHubPullRequest : GitHubNode {
             $this.Repository = $Repository
             $this.Author = [GitHubUser]::new($Object.user)
             $this.HeadRef = $Object.head.ref
-            $this.HeadOwner = $Object.head.repo.owner.login
-            $this.HeadRepository = $Object.head.repo.name
+            $this.HeadOwner = if ($Object.head.repo) { $Object.head.repo.owner.login } else { $null }
+            $this.HeadRepository = if ($Object.head.repo) { $Object.head.repo.name } else { $null }
             $this.HeadSHA = $Object.head.sha
             $this.BaseRef = $Object.base.ref
-            $this.BaseOwner = $Object.base.repo.owner.login
-            $this.BaseRepository = $Object.base.repo.name
+            $this.BaseOwner = if ($Object.base.repo) { $Object.base.repo.owner.login } else { $null }
+            $this.BaseRepository = if ($Object.base.repo) { $Object.base.repo.name } else { $null }
             $this.BaseSHA = $Object.base.sha
             $this.CreatedAt = $Object.created_at
             $this.UpdatedAt = $Object.updated_at

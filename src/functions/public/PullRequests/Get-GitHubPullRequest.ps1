@@ -136,7 +136,10 @@ filter Get-GitHubPullRequest {
                 }
                 try {
                     Get-GitHubPullRequestByNumber @params
-                } catch { return }
+                } catch {
+                    Write-Error $_
+                    return
+                }
             }
         }
     }
