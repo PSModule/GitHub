@@ -50,7 +50,7 @@
     }
 
     process {
-        $baseURL = $script:StatusBaseURL[$Stamp]
+        $baseURL = $script:GitHub.Stamps[$Stamp]
 
         if ($Summary) {
             $APIURI = "$baseURL/api/v2/summary.json"

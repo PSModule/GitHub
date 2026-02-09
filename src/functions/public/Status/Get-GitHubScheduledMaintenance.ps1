@@ -63,7 +63,7 @@
     }
 
     process {
-        $baseURL = $script:StatusBaseURL[$Stamp]
+        $baseURL = $script:GitHub.Stamps[$Stamp]
 
         if ($Active) {
             $APIURI = "$baseURL/api/v2/scheduled-maintenances/active.json"

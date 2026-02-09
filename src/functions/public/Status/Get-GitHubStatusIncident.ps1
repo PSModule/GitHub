@@ -50,7 +50,7 @@
     }
 
     process {
-        $baseURL = $script:StatusBaseURL[$Stamp]
+        $baseURL = $script:GitHub.Stamps[$Stamp]
 
         if ($Unresolved) {
             $APIURI = "$baseURL/api/v2/incidents/unresolved.json"

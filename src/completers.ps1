@@ -55,12 +55,12 @@ $statusStampCompleter = {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
     
-    if (-not $script:StatusBaseURL) {
+    if (-not $script:GitHub.Stamps) {
         return $null
     }
     
     $pattern = switch (Get-GitHubConfig -Name CompletionMode) { 'Contains' { "*$wordToComplete*" } default { "$wordToComplete*" } }
-    $filteredOptions = $script:StatusBaseURL.Keys | Where-Object { $_ -like $pattern }
+    $filteredOptions = $script:GitHub.Stamps.Keys | Where-Object { $_ -like $pattern }
     
     if (-not $filteredOptions) {
         return $null

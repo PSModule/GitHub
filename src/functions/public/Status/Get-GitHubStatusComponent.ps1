@@ -35,7 +35,7 @@
     }
 
     process {
-        $baseURL = $script:StatusBaseURL[$Stamp]
+        $baseURL = $script:GitHub.Stamps[$Stamp]
 
         $APIURI = "$baseURL/api/v2/components.json"
         $response = Invoke-RestMethod -Uri $APIURI -Method Get
