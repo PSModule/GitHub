@@ -71,7 +71,9 @@ $statusStampCompleter = {
     }
 }
 
-Register-ArgumentCompleter -CommandName Get-GitHubStatus -ParameterName Stamp -ScriptBlock $statusStampCompleter
-Register-ArgumentCompleter -CommandName Get-GitHubScheduledMaintenance -ParameterName Stamp -ScriptBlock $statusStampCompleter
-Register-ArgumentCompleter -CommandName Get-GitHubStatusComponent -ParameterName Stamp -ScriptBlock $statusStampCompleter
-Register-ArgumentCompleter -CommandName Get-GitHubStatusIncident -ParameterName Stamp -ScriptBlock $statusStampCompleter
+Register-ArgumentCompleter -CommandName @(
+    'Get-GitHubStatus'
+    'Get-GitHubScheduledMaintenance'
+    'Get-GitHubStatusComponent'
+    'Get-GitHubStatusIncident'
+) -ParameterName Stamp -ScriptBlock $statusStampCompleter
