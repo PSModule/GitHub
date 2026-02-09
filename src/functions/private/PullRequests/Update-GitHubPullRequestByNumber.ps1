@@ -5,7 +5,7 @@ filter Update-GitHubPullRequestByNumber {
 
         .DESCRIPTION
         Updates a pull request in a repository. You can update the title, body, state, base branch, and maintainer_can_modify properties.
-        Draft pull requests are available in public repositories with GitHub Free and GitHub Free for organizations, GitHub Pro, and legacy per-repository billing plans, 
+        Draft pull requests are available in public repositories with GitHub Free and GitHub Free for organizations, GitHub Pro, and legacy per-repository billing plans,
         and in public and private repositories with GitHub Team and GitHub Enterprise Cloud.
 
         .EXAMPLE

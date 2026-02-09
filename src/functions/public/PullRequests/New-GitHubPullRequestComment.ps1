@@ -44,13 +44,11 @@ filter New-GitHubPullRequestComment {
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
-        [Alias('Owner')]
-        [string] $OwnerName,
+        [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
-        [Alias('Repository')]
-        [string] $RepositoryName,
+        [string] $Repository,
 
         # The number that identifies the pull request.
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
@@ -75,15 +73,15 @@ filter New-GitHubPullRequestComment {
 
     process {
         $params = @{
-            Owner      = $OwnerName
-            Repository = $RepositoryName
+            Owner      = $Owner
+            Repository = $Repository
             Number     = $Number
             Body       = $Body
             Context    = $Context
         }
 
         if ($DebugPreference -eq 'Continue') {
-            Write-Debug "Creating comment on pull request #$Number in $OwnerName/$RepositoryName"
+            Write-Debug "Creating comment on pull request #$Number in $Owner/$Repository"
             [pscustomobject]$params | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
         }
 

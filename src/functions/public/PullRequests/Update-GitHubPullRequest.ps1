@@ -4,7 +4,7 @@ filter Update-GitHubPullRequest {
         Update a pull request.
 
         .DESCRIPTION
-        Updates a pull request in a repository. You can update the title, body, state (open/closed), base branch, 
+        Updates a pull request in a repository. You can update the title, body, state (open/closed), base branch,
         and whether maintainers can modify the pull request. This is useful for automating pull request management,
         such as closing superseded pull requests or updating their descriptions.
 
@@ -44,13 +44,11 @@ filter Update-GitHubPullRequest {
     param(
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
-        [Alias('Owner')]
-        [string] $OwnerName,
+        [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
-        [Alias('Repository')]
-        [string] $RepositoryName,
+        [string] $Repository,
 
         # The number that identifies the pull request.
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
@@ -92,20 +90,20 @@ filter Update-GitHubPullRequest {
 
     process {
         $params = @{
-            Owner                = $OwnerName
-            Repository           = $RepositoryName
-            Number               = $Number
-            Title                = $Title
-            Body                 = $Body
-            State                = $State
-            Base                 = $Base
-            MaintainerCanModify  = $MaintainerCanModify
-            Context              = $Context
+            Owner               = $Owner
+            Repository          = $Repository
+            Number              = $Number
+            Title               = $Title
+            Body                = $Body
+            State               = $State
+            Base                = $Base
+            MaintainerCanModify = $MaintainerCanModify
+            Context             = $Context
         }
         $params | Remove-HashtableEntry -NullOrEmptyValues
 
         if ($DebugPreference -eq 'Continue') {
-            Write-Debug "Updating pull request #$Number in $OwnerName/$RepositoryName"
+            Write-Debug "Updating pull request #$Number in $Owner/$Repository"
             [pscustomobject]$params | Format-List | Out-String -Stream | ForEach-Object { Write-Debug $_ }
         }
 

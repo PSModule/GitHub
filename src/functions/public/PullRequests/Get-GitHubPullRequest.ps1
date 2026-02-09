@@ -58,14 +58,12 @@ filter Get-GitHubPullRequest {
         # The account owner of the repository. The name is not case sensitive.
         [Parameter(Mandatory, ParameterSetName = 'List')]
         [Parameter(Mandatory, ParameterSetName = 'ByNumber')]
-        [Alias('Owner')]
-        [string] $OwnerName,
+        [string] $Owner,
 
         # The name of the repository without the .git extension. The name is not case sensitive.
         [Parameter(Mandatory, ParameterSetName = 'List')]
         [Parameter(Mandatory, ParameterSetName = 'ByNumber')]
-        [Alias('Repository')]
-        [string] $RepositoryName,
+        [string] $Repository,
 
         # The number that identifies the pull request.
         [Parameter(Mandatory, ParameterSetName = 'ByNumber')]
@@ -116,8 +114,8 @@ filter Get-GitHubPullRequest {
         switch ($PSCmdlet.ParameterSetName) {
             'List' {
                 $params = @{
-                    Owner      = $OwnerName
-                    Repository = $RepositoryName
+                    Owner      = $Owner
+                    Repository = $Repository
                     State      = $State
                     Head       = $Head
                     Base       = $Base
@@ -131,8 +129,8 @@ filter Get-GitHubPullRequest {
             }
             'ByNumber' {
                 $params = @{
-                    Owner      = $OwnerName
-                    Repository = $RepositoryName
+                    Owner      = $Owner
+                    Repository = $Repository
                     Number     = $Number
                     Context    = $Context
                 }
