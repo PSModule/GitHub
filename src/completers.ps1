@@ -54,18 +54,18 @@ Register-ArgumentCompleter -CommandName Connect-GitHubApp -ParameterName Enterpr
 $statusStampCompleter = {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
     $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
-    
+
     if (-not $script:GitHub.Stamps) {
         return $null
     }
-    
+
     $pattern = switch (Get-GitHubConfig -Name CompletionMode) { 'Contains' { "*$wordToComplete*" } default { "$wordToComplete*" } }
     $filteredOptions = $script:GitHub.Stamps.Keys | Where-Object { $_ -like $pattern }
-    
+
     if (-not $filteredOptions) {
         return $null
     }
-    
+
     $filteredOptions | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
     }
