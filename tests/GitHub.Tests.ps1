@@ -283,30 +283,30 @@ Describe 'GitHub' {
             $runnerData | Should -Not -BeNullOrEmpty
         }
     }
-    Context 'Status' -ForEach @($script:GitHub.Stamps.Keys) {
-        It 'Get-GitHubScheduledMaintenance - Gets scheduled maintenance for <_>' {
-            { Get-GitHubScheduledMaintenance -Stamp $_ } | Should -Not -Throw
+    Context 'Status - <Name>' -ForEach (Get-GitHubStamp) {
+        It 'Get-GitHubScheduledMaintenance - Gets scheduled maintenance for <Name>' {
+            { Get-GitHubScheduledMaintenance -Name $Name } | Should -Not -Throw
         }
-        It 'Get-GitHubScheduledMaintenance - Gets active maintenance for <_>' {
-            { Get-GitHubScheduledMaintenance -Stamp $_ -Active } | Should -Not -Throw
+        It 'Get-GitHubScheduledMaintenance - Gets active maintenance for <Name>' {
+            { Get-GitHubScheduledMaintenance -Name $Name -Active } | Should -Not -Throw
         }
-        It 'Get-GitHubScheduledMaintenance - Gets upcoming maintenance for <_>' {
-            { Get-GitHubScheduledMaintenance -Stamp $_ -Upcoming } | Should -Not -Throw
+        It 'Get-GitHubScheduledMaintenance - Gets upcoming maintenance for <Name>' {
+            { Get-GitHubScheduledMaintenance -Name $Name -Upcoming } | Should -Not -Throw
         }
-        It 'Get-GitHubStatus - Gets all status for <_>' {
-            { Get-GitHubStatus -Stamp $_ } | Should -Not -Throw
+        It 'Get-GitHubStatus - Gets all status for <Name>' {
+            { Get-GitHubStatus -Name $Name } | Should -Not -Throw
         }
-        It 'Get-GitHubStatus - Gets summary status for <_>' {
-            { Get-GitHubStatus -Stamp $_ -Summary } | Should -Not -Throw
+        It 'Get-GitHubStatus - Gets summary status for <Name>' {
+            { Get-GitHubStatus -Name $Name -Summary } | Should -Not -Throw
         }
-        It 'Get-GitHubStatusComponent - Gets the status of GitHub components for <_>' {
-            { Get-GitHubStatusComponent -Stamp $_ } | Should -Not -Throw
+        It 'Get-GitHubStatusComponent - Gets the status of GitHub components for <Name>' {
+            { Get-GitHubStatusComponent -Name $Name } | Should -Not -Throw
         }
-        It 'Get-GitHubStatusIncident - Gets the status of all GitHub incidents for <_>' {
-            { Get-GitHubStatusIncident -Stamp $_ } | Should -Not -Throw
+        It 'Get-GitHubStatusIncident - Gets the status of all GitHub incidents for <Name>' {
+            { Get-GitHubStatusIncident -Name $Name } | Should -Not -Throw
         }
-        It 'Get-GitHubStatusIncident - Gets the status of unresolved GitHub incidents for <_>' {
-            { Get-GitHubStatusIncident -Stamp $_ -Unresolved } | Should -Not -Throw
+        It 'Get-GitHubStatusIncident - Gets the status of unresolved GitHub incidents for <Name>' {
+            { Get-GitHubStatusIncident -Name $Name -Unresolved } | Should -Not -Throw
         }
     }
     Context 'Commands' {

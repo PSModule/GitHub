@@ -42,7 +42,8 @@
 
         # The stamp to check status for.
         [Parameter()]
-        [string] $Stamp = 'Public'
+        [Alias('Stamp')]
+        [string] $Name = 'Public'
     )
     begin {
         $stackPath = Get-PSCallStackPath
@@ -50,7 +51,7 @@
     }
 
     process {
-        $baseURL = $script:GitHub.Stamps[$Stamp]
+        $baseURL = (Get-GitHubStamp -Name $Name).BaseUrl
 
         if ($Summary) {
             $APIURI = "$baseURL/api/v2/summary.json"

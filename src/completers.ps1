@@ -50,30 +50,28 @@ Register-ArgumentCompleter -CommandName Connect-GitHubApp -ParameterName Enterpr
     }
 }
 
-# Status functions - Stamp parameter completer
-$statusStampCompleter = {
-    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
-    $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
-    
-    if (-not $script:GitHub.Stamps) {
-        return $null
-    }
-    
-    $pattern = switch (Get-GitHubConfig -Name CompletionMode) { 'Contains' { "*$wordToComplete*" } default { "$wordToComplete*" } }
-    $filteredOptions = $script:GitHub.Stamps.Keys | Where-Object { $_ -like $pattern }
-    
-    if (-not $filteredOptions) {
-        return $null
-    }
-    
-    $filteredOptions | ForEach-Object {
-        [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
-    }
-}
-
 Register-ArgumentCompleter -CommandName @(
     'Get-GitHubStatus'
     'Get-GitHubScheduledMaintenance'
     'Get-GitHubStatusComponent'
     'Get-GitHubStatusIncident'
-) -ParameterName Stamp -ScriptBlock $statusStampCompleter
+) -ParameterName Name -ScriptBlock {
+    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
+    $null = $commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters
+
+    $stamps = Get-GitHubStamp
+    if (-not $stamps) {
+        return $null
+    }
+
+    $pattern = switch (Get-GitHubConfig -Name CompletionMode) { 'Contains' { "*$wordToComplete*" } default { "$wordToComplete*" } }
+    $filteredOptions = $stamps | Where-Object { $_.Name -like $pattern }
+
+    if (-not $filteredOptions) {
+        return $null
+    }
+
+    $filteredOptions | ForEach-Object {
+        [System.Management.Automation.CompletionResult]::new($_.Name, $_.Name, 'ParameterValue', $_.Name)
+    }
+}

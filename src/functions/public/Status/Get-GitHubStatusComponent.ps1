@@ -26,7 +26,8 @@
     param(
         # The stamp to check status for.
         [Parameter()]
-        [string] $Stamp = 'Public'
+        [Alias('Stamp')]
+        [string] $Name = 'Public'
     )
 
     begin {
@@ -35,7 +36,7 @@
     }
 
     process {
-        $baseURL = $script:GitHub.Stamps[$Stamp]
+        $baseURL = (Get-GitHubStamp -Name $Name).BaseUrl
 
         $APIURI = "$baseURL/api/v2/components.json"
         $response = Invoke-RestMethod -Uri $APIURI -Method Get
