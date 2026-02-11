@@ -283,6 +283,28 @@ Describe 'GitHub' {
             $runnerData | Should -Not -BeNullOrEmpty
         }
     }
+    Context 'Stamps' {
+        It 'Get-GitHubStamp - Gets all available stamps' {
+            $stamps = Get-GitHubStamp
+            $stamps | Should -Not -BeNullOrEmpty
+            $stamps.Count | Should -BeGreaterThan 0
+        }
+        It 'Get-GitHubStamp - Each stamp has Name and BaseUrl properties' {
+            $stamps = Get-GitHubStamp
+            $stamps | ForEach-Object {
+                $_.Name | Should -Not -BeNullOrEmpty
+                $_.BaseUrl | Should -Not -BeNullOrEmpty
+            }
+        }
+        It 'Get-GitHubStamp - Gets a specific stamp by name' {
+            $stamp = Get-GitHubStamp -Name 'Public'
+            $stamp | Should -Not -BeNullOrEmpty
+            $stamp.Name | Should -Be 'Public'
+        }
+        It 'Get-GitHubStamp - Throws for invalid stamp name' {
+            { Get-GitHubStamp -Name 'InvalidStampName' } | Should -Throw
+        }
+    }
     Context 'Status - <Name>' -ForEach (Get-GitHubStamp) {
         It 'Get-GitHubScheduledMaintenance - Gets scheduled maintenance for <Name>' {
             { Get-GitHubScheduledMaintenance -Name $Name } | Should -Not -Throw
