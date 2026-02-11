@@ -41,17 +41,17 @@
     }
 
     process {
-        if ($Name) {
-            $stamp = $script:GitHub.Stamps | Where-Object { $_.Name -eq $Name }
-            if (-not $stamp) {
-                $available = $script:GitHub.Stamps.Name -join ', '
-                throw "Stamp '$Name' not found. Available stamps: $available"
-            }
-            $stamp
+        if ([string]::IsNullOrEmpty($Name)) {
+            $script:GitHub.Stamps
             return
         }
 
-        $script:GitHub.Stamps
+        $stamp = $script:GitHub.Stamps | Where-Object { $_.Name -eq $Name }
+        if (-not $stamp) {
+            $available = $script:GitHub.Stamps.Name -join ', '
+            throw "Stamp '$Name' not found. Available stamps: $available"
+        }
+        $stamp
     }
 
     end {

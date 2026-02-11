@@ -286,18 +286,26 @@ Describe 'GitHub' {
     Context 'Stamps' {
         It 'Get-GitHubStamp - Gets all available stamps' {
             $stamps = Get-GitHubStamp
+            LogGroup 'All Stamps' {
+                Write-Host ($stamps | Format-Table -AutoSize | Out-String)
+            }
             $stamps | Should -Not -BeNullOrEmpty
             $stamps.Count | Should -BeGreaterThan 0
         }
         It 'Get-GitHubStamp - Each stamp has Name and BaseUrl properties' {
-            $stamps = Get-GitHubStamp
-            $stamps | ForEach-Object {
-                $_.Name | Should -Not -BeNullOrEmpty
-                $_.BaseUrl | Should -Not -BeNullOrEmpty
+            LogGroup "Stamps - Details" {
+                Get-GitHubStamp | ForEach-Object {
+                    Write-Host ($_ | Format-List | Out-String)
+                    $_.Name | Should -Not -BeNullOrEmpty
+                    $_.BaseUrl | Should -Not -BeNullOrEmpty
+                }
             }
         }
         It 'Get-GitHubStamp - Gets a specific stamp by name' {
             $stamp = Get-GitHubStamp -Name 'Public'
+            LogGroup 'Stamp - Public' {
+                Write-Host ($stamp | Format-List | Out-String)
+            }
             $stamp | Should -Not -BeNullOrEmpty
             $stamp.Name | Should -Be 'Public'
         }
@@ -305,7 +313,7 @@ Describe 'GitHub' {
             { Get-GitHubStamp -Name 'InvalidStampName' } | Should -Throw
         }
     }
-    Context 'Status - <Name>' -ForEach (Get-GitHubStamp) {
+    Context 'Status - <Name>' -ForEach @(Get-GitHubStamp | ForEach-Object { @{ Name = $_.Name } }) {
         It 'Get-GitHubScheduledMaintenance - Gets scheduled maintenance for <Name>' {
             { Get-GitHubScheduledMaintenance -Name $Name } | Should -Not -Throw
         }
