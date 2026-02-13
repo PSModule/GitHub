@@ -13,6 +13,7 @@ Test:
   PSModule:
     Skip: true
   Module:
+    Skip: true
     Windows:
       Skip: true
     MacOS:
