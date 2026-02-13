@@ -27,11 +27,13 @@
         .LINK
         https://psmodule.io/GitHub/Functions/Status/Get-GitHubStamp
     #>
-    [OutputType([GitHubStamp])]
+    [OutputType([GitHubStamp[]])]
     [CmdletBinding()]
     param(
         # The name of the stamp to get. If not specified, all stamps are returned.
         [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [Alias('Stamp')]
         [string] $Name
     )
 

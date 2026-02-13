@@ -5,20 +5,20 @@
 Test:
   CodeCoverage:
     PercentTarget: 50
-#   TestResults:
-#     Skip: true
-#   SourceCode:
-#     Skip: true
-#   PSModule:
-#     Skip: true
-#   Module:
-#     Windows:
-#       Skip: true
-#     MacOS:
-#       Skip: true
-# Build:
-#   Docs:
-#     Skip: true
+  TestResults:
+    Skip: true
+  SourceCode:
+    Skip: true
+  PSModule:
+    Skip: true
+  Module:
+    Windows:
+      Skip: true
+    MacOS:
+      Skip: true
+Build:
+  Docs:
+    Skip: true
 
 Linter:
   env:
