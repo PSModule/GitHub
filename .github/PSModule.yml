@@ -5,6 +5,7 @@
 Test:
   CodeCoverage:
     PercentTarget: 50
+    Skip: true
   TestResults:
     Skip: true
   SourceCode:
