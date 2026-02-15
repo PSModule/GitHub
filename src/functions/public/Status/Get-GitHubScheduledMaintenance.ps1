@@ -54,8 +54,8 @@
 
         # The stamp to check status for.
         [Parameter()]
-        [ValidateSet('Public', 'Europe', 'Australia', 'US')]
-        [string] $Stamp = 'Public'
+        [Alias('Stamp')]
+        [string] $Name = 'Public'
     )
 
     begin {
@@ -64,7 +64,8 @@
     }
 
     process {
-        $baseURL = $script:StatusBaseURL[$Stamp]
+        $stamp = Get-GitHubStamp -Name $Name
+        $baseURL = $stamp.BaseUrl
 
         if ($Active) {
             $APIURI = "$baseURL/api/v2/scheduled-maintenances/active.json"

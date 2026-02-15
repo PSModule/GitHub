@@ -41,8 +41,8 @@
 
         # The stamp to check status for.
         [Parameter()]
-        [ValidateSet('Public', 'Europe', 'Australia', 'US')]
-        [string] $Stamp = 'Public'
+        [Alias('Stamp')]
+        [string] $Name = 'Public'
     )
 
     begin {
@@ -51,7 +51,7 @@
     }
 
     process {
-        $baseURL = $script:StatusBaseURL[$Stamp]
+        $baseURL = (Get-GitHubStamp -Name $Name).BaseUrl
 
         if ($Unresolved) {
             $APIURI = "$baseURL/api/v2/incidents/unresolved.json"

@@ -23,4 +23,9 @@ $script:GitHub = [pscustomobject]@{
     Config             = $null
     Event              = $null
     Runner             = $null
+    Stamps             = @(
+        [GitHubStamp]::new('Public', 'https://www.githubstatus.com')
+        [GitHubStamp]::new('Europe', 'https://eu.githubstatus.com')
+        [GitHubStamp]::new('US', 'https://us.githubstatus.com')
+    )
 }

@@ -283,30 +283,60 @@ Describe 'GitHub' {
             $runnerData | Should -Not -BeNullOrEmpty
         }
     }
-    Context 'Status' -ForEach @('Public', 'Europe', 'Australia', 'US') {
-        It 'Get-GitHubScheduledMaintenance - Gets scheduled maintenance for <_>' {
-            { Get-GitHubScheduledMaintenance -Stamp $_ } | Should -Not -Throw
+    Context 'Stamps' {
+        It 'Get-GitHubStamp - Gets all available stamps' {
+            $stamps = Get-GitHubStamp
+            LogGroup 'All Stamps' {
+                Write-Host ($stamps | Format-Table -AutoSize | Out-String)
+            }
+            $stamps | Should -Not -BeNullOrEmpty
+            $stamps.Count | Should -BeGreaterThan 0
         }
-        It 'Get-GitHubScheduledMaintenance - Gets active maintenance for <_>' {
-            { Get-GitHubScheduledMaintenance -Stamp $_ -Active } | Should -Not -Throw
+        It 'Get-GitHubStamp - Each stamp has Name and BaseUrl properties' {
+            LogGroup "Stamps - Details" {
+                Get-GitHubStamp | ForEach-Object {
+                    Write-Host ($_ | Format-List | Out-String)
+                    $_.Name | Should -Not -BeNullOrEmpty
+                    $_.BaseUrl | Should -Not -BeNullOrEmpty
+                }
+            }
         }
-        It 'Get-GitHubScheduledMaintenance - Gets upcoming maintenance for <_>' {
-            { Get-GitHubScheduledMaintenance -Stamp $_ -Upcoming } | Should -Not -Throw
+        It 'Get-GitHubStamp - Gets a specific stamp by name' {
+            $stamp = Get-GitHubStamp -Name 'Public'
+            LogGroup 'Stamp - Public' {
+                Write-Host ($stamp | Format-List | Out-String)
+            }
+            $stamp | Should -Not -BeNullOrEmpty
+            $stamp.Name | Should -Be 'Public'
         }
-        It 'Get-GitHubStatus - Gets all status for <_>' {
-            { Get-GitHubStatus -Stamp $_ } | Should -Not -Throw
+        It 'Get-GitHubStamp - Throws for invalid stamp name' {
+            { Get-GitHubStamp -Name 'InvalidStampName' } | Should -Throw
         }
-        It 'Get-GitHubStatus - Gets summary status for <_>' {
-            { Get-GitHubStatus -Stamp $_ -Summary } | Should -Not -Throw
+    }
+    Context 'Status - <Name>' -ForEach @(Get-GitHubStamp | ForEach-Object { @{ Name = $_.Name } }) {
+        It 'Get-GitHubScheduledMaintenance - Gets scheduled maintenance for <Name>' {
+            { Get-GitHubScheduledMaintenance -Name $Name } | Should -Not -Throw
         }
-        It 'Get-GitHubStatusComponent - Gets the status of GitHub components for <_>' {
-            { Get-GitHubStatusComponent -Stamp $_ } | Should -Not -Throw
+        It 'Get-GitHubScheduledMaintenance - Gets active maintenance for <Name>' {
+            { Get-GitHubScheduledMaintenance -Name $Name -Active } | Should -Not -Throw
         }
-        It 'Get-GitHubStatusIncident - Gets the status of all GitHub incidents for <_>' {
-            { Get-GitHubStatusIncident -Stamp $_ } | Should -Not -Throw
+        It 'Get-GitHubScheduledMaintenance - Gets upcoming maintenance for <Name>' {
+            { Get-GitHubScheduledMaintenance -Name $Name -Upcoming } | Should -Not -Throw
         }
-        It 'Get-GitHubStatusIncident - Gets the status of unresolved GitHub incidents for <_>' {
-            { Get-GitHubStatusIncident -Stamp $_ -Unresolved } | Should -Not -Throw
+        It 'Get-GitHubStatus - Gets all status for <Name>' {
+            { Get-GitHubStatus -Name $Name } | Should -Not -Throw
+        }
+        It 'Get-GitHubStatus - Gets summary status for <Name>' {
+            { Get-GitHubStatus -Name $Name -Summary } | Should -Not -Throw
+        }
+        It 'Get-GitHubStatusComponent - Gets the status of GitHub components for <Name>' {
+            { Get-GitHubStatusComponent -Name $Name } | Should -Not -Throw
+        }
+        It 'Get-GitHubStatusIncident - Gets the status of all GitHub incidents for <Name>' {
+            { Get-GitHubStatusIncident -Name $Name } | Should -Not -Throw
+        }
+        It 'Get-GitHubStatusIncident - Gets the status of unresolved GitHub incidents for <Name>' {
+            { Get-GitHubStatusIncident -Name $Name -Unresolved } | Should -Not -Throw
         }
     }
     Context 'Commands' {
