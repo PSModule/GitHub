@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Types>
+    <Type>
+        <Name>GitHubLabel</Name>
+        <Members>
+            <AliasProperty>
+                <Name>Label</Name>
+                <ReferencedMemberName>Name</ReferencedMemberName>
+            </AliasProperty>
+        </Members>
+    </Type>
+</Types>
