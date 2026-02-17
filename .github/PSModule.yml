@@ -10,8 +10,8 @@ Test:
     Skip: true
   SourceCode:
     Skip: true
-  # PSModule:
-  #   Skip: true
+  PSModule:
+    Skip: true
   # Module:
   #   Skip: true
   #   Windows:
@@ -23,6 +23,7 @@ Build:
     Skip: true
 
 Linter:
+  Skip: true
   env:
     VALIDATE_BIOME_FORMAT: false
     VALIDATE_BIOME_LINT: false

@@ -17,28 +17,25 @@ LogGroup 'BeforeAll - Global Test Setup' {
             Write-Host "Skipping setup for $AuthType-$TokenType (uses existing repository)"
             continue
         }
+        $context = Connect-GitHubAccount @connectParams -PassThru -Silent
+        if ($AuthType -eq 'APP') {
+            $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
+        }
+        Write-Host ($context | Format-List | Out-String)
 
-        LogGroup "Repository setup - $AuthType-$TokenType" {
-            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
-            if ($AuthType -eq 'APP') {
-                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
-            }
-            Write-Host ($context | Format-List | Out-String)
+        foreach ($os in $osNames) {
+            $repoPrefix = "Test-$os-$TokenType"
+            $repoName = "$repoPrefix-$id"
 
-            foreach ($os in $osNames) {
-                $repoPrefix = "Test-$os-$TokenType"
-                $repoName = "$repoPrefix-$id"
-
-                LogGroup "Repository setup - $AuthType-$TokenType - $os" {
-                    switch ($OwnerType) {
-                        'user' {
-                            Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                            New-GitHubRepository -Name $repoName -Confirm:$false
-                        }
-                        'organization' {
-                            Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                            New-GitHubRepository -Organization $Owner -Name $repoName -Confirm:$false
-                        }
+            LogGroup "Repository setup - $AuthType-$TokenType - $os" {
+                switch ($OwnerType) {
+                    'user' {
+                        Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                        New-GitHubRepository -Name $repoName -Confirm:$false
+                    }
+                    'organization' {
+                        Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                        New-GitHubRepository -Organization $Owner -Name $repoName -Confirm:$false
                     }
                 }
             }
