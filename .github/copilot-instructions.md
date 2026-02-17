@@ -3,6 +3,10 @@
 Start by reading the general coding standards for [`PSModule`](https://psmodule.io/docs) which is the basis for all modules in the framework.
 Additions or adjustments to those defaults are covered in this document to ensure that the modules drive consistancy for all developers.
 
+**Folder-level README**
+- When working with files in a folder, check if a `README.md` exists in that folder. If it does, read it first to
+  gather context on how to use or write code in that folder.
+
 ## General Coding Standards
 
 1. **PowerShell Keywords**
@@ -18,7 +22,6 @@ Additions or adjustments to those defaults are covered in this document to ensur
 
 4. **Convert Filter Types**
    - Wherever filters are used, ensure they are implemented as standard PowerShell functions with `begin`, `process`, and `end` blocks.
-
 ---
 
 ## Functions

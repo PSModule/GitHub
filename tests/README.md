@@ -1,12 +1,47 @@
-# Test setup and teardown
+# Users and apps used for the testing framework
 
-This document describes how the shared test infrastructure works for the GitHub PowerShell module integration tests.
+## User
 
-## Overview
+Login: 'psmodule-user'
+Owner of:
+- [psmodule-user](https://github.com/psmodule-user) (standalone org)
+- [psmodule-test-org2](https://github.com/orgs/psmodule-test-org2) (standalone org)
 
-Tests run in parallel across multiple OS runners. To avoid secondary rate limits from excessive repository creation, shared
-infrastructure is provisioned once per workflow run using `BeforeAll.ps1` and torn down using `AfterAll.ps1`. Individual test
-files consume this shared infrastructure instead of creating their own.
+Secrets:
+- TEST_USER_PAT -> 'psmodule-user' (user)
+- TEST_USER_USER_FG_PAT -> 'psmodule-user' (user)
+- TEST_USER_ORG_FG_PAT -> 'psmodule-test-org2' (org)
+
+
+## APP_ENT - PSModule Enterprise App
+
+Homed in 'MSX'
+ClientID: 'Iv23lieHcDQDwVV3alK1'
+Installed on:
+- [psmodule-test-org3](https://github.com/orgs/psmodule-test-org3) (enterprise org)
+Permissions:
+- All
+Events:
+- Push
+
+Secrets:
+- TEST_APP_ENT_CLIENT_ID
+- TEST_APP_ENT_PRIVATE_KEY
+
+## APP_ORG - PSModule Organization App
+
+Homed in PSModule
+ClientID: 'Iv23liYDnEbKlS9IVzHf'
+Installed on:
+- [psmodule-test-org](https://github.com/orgs/psmodule-test-org) (standalone org)
+Permissions:
+- All
+Events:
+- Push
+
+Secrets:
+- TEST_APP_ORG_CLIENT_ID
+- TEST_APP_ORG_PRIVATE_KEY
 
 ## Auth cases
 
@@ -26,7 +61,13 @@ that don't apply (e.g., `repository` and `enterprise` owner types skip repo-depe
 Cases 4 (`repository`) and 7 (`enterprise`) skip repo creation. Cases 1 and 3 share the same user owner (`psmodule-user`)
 but have different `$TokenType` values, so repo names are unique.
 
-## `BeforeAll.ps1` — global setup
+## Setup and teardown
+
+Shared test infrastructure is provisioned once per workflow run using `BeforeAll.ps1` and torn down using `AfterAll.ps1`.
+For generic guidance on setup/teardown scripts, see the
+[Process-PSModule documentation](https://github.com/PSModule/Process-PSModule#setup-and-teardown-scripts).
+
+### `BeforeAll.ps1` — global setup
 
 Runs once before all parallel test files. For each auth case (except `GITHUB_TOKEN`):
 
@@ -36,9 +77,7 @@ Runs once before all parallel test files. For each auth case (except `GITHUB_TOK
    - For `user` owners: `New-GitHubRepository -Name $repoName`
    - For `organization` owners: `New-GitHubRepository -Organization $Owner -Name $repoName`
 
-The `$env:GITHUB_RUN_ID` is used as the unique identifier (stable per workflow run, shared across OS runners).
-
-## `AfterAll.ps1` — global teardown
+### `AfterAll.ps1` — global teardown
 
 Runs once after all parallel test files complete. For each auth case (except `GITHUB_TOKEN`):
 

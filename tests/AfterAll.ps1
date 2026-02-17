@@ -40,6 +40,8 @@ LogGroup 'AfterAll - Global Test Teardown' {
                     }
                 }
             }
+
+            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
         }
     }
 }

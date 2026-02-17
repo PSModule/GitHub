@@ -40,5 +40,7 @@ LogGroup 'BeforeAll - Global Test Setup' {
                 }
             }
         }
+
+        Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
     }
 }
