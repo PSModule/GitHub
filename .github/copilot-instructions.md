@@ -31,9 +31,17 @@ Additions or adjustments to those defaults are covered in this document to ensur
   - Private function name format: **`Verb-GitHubNoun`** (same style but no aliases).
   - **`Get-`** functions must **not** include `[CmdletBinding(SupportsShouldProcess)]`. You only use `SupportsShouldProcess` on commands that change or remove data (`Set-`, `Remove-`, `Add-`, etc.).
 
-- **Default Parameter Sets**
-  - Do **not** declare `DefaultParameterSetName = '__AllParameterSets'`.
-  - Only specify a `DefaultParameterSetName` if it is actually different from the first parameter set.
+- **Parameter Set Naming**
+  - When a function has only one parameter set, a name is not needed and `DefaultParameterSetName` should not be set.
+  - When a function has multiple parameter sets, **every** parameter set **must** have a descriptive name that tells
+    the user what will happen when they use it. Set `DefaultParameterSetName` in the `[CmdletBinding()]` attribute to
+    the most commonly used parameter set.
+  - Do **not** use generic names like `'__AllParameterSets'` or `'Default'`.
+  - Name parameter sets after the action or scope they represent, e.g. `'List repositories for authenticated user'`,
+    `'Get a repository'`, `'List organization repositories'`.
+  - For public functions that call private functions, use the **synopsis** of the called private function as the
+    parameter set name (e.g. if the private function's synopsis is `List repositories for a user`, the parameter set
+    name becomes `'List repositories for a user'`).
 
 - **One API Call = One Function**
   - If you find that a single function is handling multiple distinct API calls, split it into multiple functions.
