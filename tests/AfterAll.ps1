@@ -5,7 +5,11 @@ LogGroup 'AfterAll - Global Test Teardown' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 
     $prefix = 'Test'
-    $os = $env:RUNNER_OS
+
+    # Derive the list of OS names from the Settings JSON provided by Process-PSModule.
+    $settings = $env:Settings | ConvertFrom-Json
+    $osNames = @($settings.TestSuites.Module.OSName | Sort-Object -Unique)
+    Write-Host "Cleaning up test repositories for OSes: $($osNames -join ', ')"
 
     foreach ($authCase in $authCases) {
         $authCase.GetEnumerator() | ForEach-Object { Set-Variable -Name $_.Key -Value $_.Value }
@@ -22,15 +26,17 @@ LogGroup 'AfterAll - Global Test Teardown' {
             }
             Write-Host ($context | Format-List | Out-String)
 
-            $repoPrefix = "$prefix-$os-$TokenType"
+            foreach ($os in $osNames) {
+                $repoPrefix = "$prefix-$os-$TokenType"
 
-            LogGroup 'Repository cleanup' {
-                switch ($OwnerType) {
-                    'user' {
-                        Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                    }
-                    'organization' {
-                        Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                LogGroup "Repository cleanup - $AuthType-$TokenType - $os" {
+                    switch ($OwnerType) {
+                        'user' {
+                            Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                        }
+                        'organization' {
+                            Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                        }
                     }
                 }
             }

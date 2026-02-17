@@ -3,8 +3,12 @@ param()
 
 LogGroup 'BeforeAll - Global Test Setup' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
-    $os = $env:RUNNER_OS
     $id = $env:GITHUB_RUN_ID
+
+    # Derive the list of OS names from the Settings JSON provided by Process-PSModule.
+    $settings = $env:Settings | ConvertFrom-Json
+    $osNames = @($settings.TestSuites.Module.OSName | Sort-Object -Unique)
+    Write-Host "Creating test repositories for OSes: $($osNames -join ', ')"
 
     foreach ($authCase in $authCases) {
         $authCase.GetEnumerator() | ForEach-Object { Set-Variable -Name $_.Key -Value $_.Value }
@@ -21,17 +25,21 @@ LogGroup 'BeforeAll - Global Test Setup' {
             }
             Write-Host ($context | Format-List | Out-String)
 
-            $repoPrefix = "Test-$os-$TokenType"
-            $repoName = "$repoPrefix-$id"
+            foreach ($os in $osNames) {
+                $repoPrefix = "Test-$os-$TokenType"
+                $repoName = "$repoPrefix-$id"
 
-            switch ($OwnerType) {
-                'user' {
-                    Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                    New-GitHubRepository -Name $repoName -Confirm:$false
-                }
-                'organization' {
-                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                    New-GitHubRepository -Organization $Owner -Name $repoName -Confirm:$false
+                LogGroup "Repository setup - $AuthType-$TokenType - $os" {
+                    switch ($OwnerType) {
+                        'user' {
+                            Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                            New-GitHubRepository -Name $repoName -Confirm:$false
+                        }
+                        'organization' {
+                            Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                            New-GitHubRepository -Organization $Owner -Name $repoName -Confirm:$false
+                        }
+                    }
                 }
             }
         }
