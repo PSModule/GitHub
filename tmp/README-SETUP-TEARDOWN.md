@@ -27,7 +27,7 @@ The GitHub module uses Process-PSModule's BeforeAll/AfterAll support to optimize
 
 ### Before Tests Run
 
-```
+```text
 Process-PSModule Workflow
   ↓
 BeforeAll.ps1 (runs once)
@@ -117,7 +117,7 @@ Both scripts generate statistics showing:
 
 ## Example Output
 
-```
+```text
 BeforeAll - Global Test Setup
   Cleanup - psmodule-user (user) using USER_FG_PAT
     Connecting to GitHub as psmodule-user...
