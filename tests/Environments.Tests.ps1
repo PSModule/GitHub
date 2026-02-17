@@ -45,7 +45,7 @@ Describe 'Environments' {
             $environmentName = "$testName-$os-$TokenType-$id"
 
             LogGroup "Using Repository - [$repoName]" {
-                $repo = Get-GitHubRepository -Owner $Owner -Repository $repoName
+                $repo = Get-GitHubRepository -Owner $Owner -Name $repoName
                 Write-Host ($repo | Select-Object * | Out-String)
             }
         }
