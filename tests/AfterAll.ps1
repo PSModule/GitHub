@@ -6,17 +6,16 @@ LogGroup 'AfterAll - Global Test Teardown' {
 
     $prefix = 'Test'
     $os = $env:RUNNER_OS
-    $id = $env:GITHUB_RUN_ID
 
     foreach ($authCase in $authCases) {
         $authCase.GetEnumerator() | ForEach-Object { Set-Variable -Name $_.Key -Value $_.Value }
 
         if ($TokenType -eq 'GITHUB_TOKEN') {
-            Write-Host "Skipping setup for $AuthType-$TokenType (uses existing repository)"
+            Write-Host "Skipping teardown for $AuthType-$TokenType (uses existing repository)"
             continue
         }
 
-        LogGroup "Repository setup - $AuthType-$TokenType" {
+        LogGroup "Teardown - $AuthType-$TokenType" {
             $context = Connect-GitHubAccount @connectParams -PassThru -Silent
             if ($AuthType -eq 'APP') {
                 $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
@@ -25,23 +24,16 @@ LogGroup 'AfterAll - Global Test Teardown' {
 
             $repoPrefix = "$prefix-$os-$TokenType"
 
-            switch ($OwnerType) {
-                'user' {
-                    Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                }
-                'organization' {
-                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+            LogGroup 'Repository cleanup' {
+                switch ($OwnerType) {
+                    'user' {
+                        Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                    }
+                    'organization' {
+                        Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                    }
                 }
             }
-        }
-        LogGroup 'Environment setup' {
-            $environmentName = "$prefix-$os-$TokenType-$id"
-        }
-        LogGroup 'Variables setup' {
-
-        }
-        LogGroup 'Secrets setup' {
-
         }
     }
 }

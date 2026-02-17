@@ -20,6 +20,7 @@
 param()
 
 BeforeAll {
+    $testName = 'Environments'
     $os = $env:RUNNER_OS
     $id = $env:GITHUB_RUN_ID
 }
