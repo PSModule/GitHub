@@ -4,6 +4,7 @@
             Tags = @(
                 'GitHub'
                 'PSModule'
+                'API'
             )
         }
     }
