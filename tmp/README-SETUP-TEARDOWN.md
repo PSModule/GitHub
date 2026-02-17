@@ -135,7 +135,7 @@ BeforeAll - Global Test Setup
     Variables removed:         2
     App installations removed: 0
     Errors encountered:        0
-    
+
     All cleanup operations completed successfully.
 ```
 
