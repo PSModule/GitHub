@@ -78,14 +78,12 @@ Path:    $($errorItem.path -join '/')
                     foreach ($errorItem in $graphQLResponse.errors) {
                         $errorMessages += @"
 GraphQL terminating errors occurred
-Full Error:
-$($errorItem | ConvertTo-Json -Depth 10 | Out-String)
-
 Type:      $($errorItem.type)
 Message:   $($errorItem.message)
 Path:      $($errorItem.path -join '/')
-Locations:
-$($errorItem.locations | ForEach-Object { " - [$($_.line):$($_.column)] - $($queryLines[$_.line - 1])" })
+
+Full Error:
+$($errorItem | ConvertTo-Json -Depth 10 | Out-String)
 
 "@
 
