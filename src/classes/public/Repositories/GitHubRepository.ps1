@@ -298,7 +298,12 @@
             $this.SquashMergeCommitTitle = $Object.squash_merge_commit_title
             $this.MergeCommitMessage = $Object.merge_commit_message
             $this.MergeCommitTitle = $Object.merge_commit_title
-            $this.CustomProperties = $Object.custom_properties
+            $this.CustomProperties = $Object.custom_properties | ForEach-Object {
+                [PSCustomObject]@{
+                    Name  = $_.property_name
+                    Value = $_.value
+                }
+            }
             $this.TemplateRepository = $null -ne $Object.template_repository ? [GitHubRepository]::New($Object.template_repository) : $null
             $this.ForkRepository = $null -ne $Object.parent ? [GitHubRepository]::New($Object.parent) : $null
             $this.CloneUrl = $Object.clone_url
@@ -356,8 +361,8 @@
             if ($null -ne $Object.repositoryCustomPropertyValues -and $null -ne $Object.repositoryCustomPropertyValues.nodes) {
                 $this.CustomProperties = $Object.repositoryCustomPropertyValues.nodes | ForEach-Object {
                     [PSCustomObject]@{
-                        property_name = $_.propertyName
-                        value         = $_.value
+                        Name  = $_.propertyName
+                        Value = $_.value
                     }
                 }
             }
