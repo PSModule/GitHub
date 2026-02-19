@@ -64,9 +64,13 @@
                 if ($null -ne $graphQLResponse.data) {
                     foreach ($errorItem in $graphQLResponse.errors) {
                         $warningMessage = @"
+
 GraphQL partial error [$($errorItem.type)]:
 Message:  $($errorItem.message)
 Path:     $($errorItem.path -join '/')
+Locations:
+$($errorItem.locations | ForEach-Object { " - [$($_.line):$($_.column)] - $($queryLines[$_.line - 1])" })
+
 "@
                         Write-Warning $warningMessage
                     }
