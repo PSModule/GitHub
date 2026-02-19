@@ -64,12 +64,10 @@
                 if ($null -ne $graphQLResponse.data) {
                     foreach ($errorItem in $graphQLResponse.errors) {
                         $warningMessage = @"
-
-GraphQL partial error [$($errorItem.type)]:
-Message:  $($errorItem.message)
-Path:     $($errorItem.path -join '/')
-Locations:
-$($errorItem.locations | ForEach-Object { " - [$($_.line):$($_.column)] - $($queryLines[$_.line - 1])" })
+GraphQL partial errors occurred
+Type:    $($errorItem.type)
+Message: $($errorItem.message)
+Path:    $($errorItem.path -join '/')
 
 "@
                         Write-Warning $warningMessage
@@ -79,14 +77,13 @@ $($errorItem.locations | ForEach-Object { " - [$($_.line):$($_.column)] - $($que
                     $errorMessages = @()
                     foreach ($errorItem in $graphQLResponse.errors) {
                         $errorMessages += @"
-
-GraphQL errors occurred:
+GraphQL terminating errors occurred
 Full Error:
 $($errorItem | ConvertTo-Json -Depth 10 | Out-String)
 
-GraphQL Error [$($errorItem.type)]:
-Message:    $($errorItem.message)
-Path:       $($errorItem.path -join '/')
+Type:      $($errorItem.type)
+Message:   $($errorItem.message)
+Path:      $($errorItem.path -join '/')
 Locations:
 $($errorItem.locations | ForEach-Object { " - [$($_.line):$($_.column)] - $($queryLines[$_.line - 1])" })
 
