@@ -58,7 +58,6 @@
             $graphQLResponse = $apiResponse.Response
             # Handle GraphQL-specific errors (200 OK with errors in response)
             if ($graphQLResponse.errors) {
-                $queryLines = $Query -split "`n" | ForEach-Object { $_.Trim() }
                 # Partial success: data was returned alongside errors (per GraphQL spec).
                 # Emit warnings for the partial errors and return the data.
                 if ($null -ne $graphQLResponse.data) {
