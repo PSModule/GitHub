@@ -158,7 +158,7 @@ Describe 'Secrets' {
                 }
             }
 
-            It 'Set-GitHubSecret - should ensure existance of a organization secret' {
+            It 'Set-GitHubSecret - should ensure existence of a organization secret' {
                 $name = "$secretName`_TestSecret"
                 LogGroup "Secret - [$name]" {
                     $param = @{

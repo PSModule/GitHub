@@ -1,10 +1,10 @@
 ﻿function Get-GitHubRunnerData {
     <#
         .SYNOPSIS
-        Gets data about the runner thats running the workflow.
+        Gets data about the runner that's running the workflow.
 
         .DESCRIPTION
-        Gets data about the runner thats running the workflow.
+        Gets data about the runner that's running the workflow.
 
         .EXAMPLE
         ```powershell

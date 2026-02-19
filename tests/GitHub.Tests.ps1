@@ -725,7 +725,7 @@ Describe 'API' {
                 }
                 $licenseList | Should -Not -BeNullOrEmpty
             }
-            It 'Get-GitHubLicense - Gets a spesific license' {
+            It 'Get-GitHubLicense - Gets a specific license' {
                 $mitLicense = Get-GitHubLicense -Name 'mit'
                 LogGroup 'MIT License' {
                     Write-Host ($mitLicense | Format-Table | Out-String)
@@ -766,7 +766,7 @@ Describe 'API' {
                 }
                 $markdown | Should -Not -BeNullOrEmpty
             }
-            It 'Get-GitHubMarkdown - Gets the rendered markdown for provided text using GitHub Formated Markdown' {
+            It 'Get-GitHubMarkdown - Gets the rendered markdown for provided text using GitHub Formatted Markdown' {
                 $gfmMarkdown = Get-GitHubMarkdown -Text 'Hello, World!' -Mode gfm
                 LogGroup 'GFM Markdown' {
                     Write-Host ($gfmMarkdown | Format-Table | Out-String)

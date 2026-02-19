@@ -85,7 +85,7 @@
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string] $Tag,
 
-        # Specifies the commitish value that will be the target for the release's tag.
+        # Specifies the committish value that will be the target for the release's tag.
         # Required if the supplied tag_name does not reference an existing tag.
         # Ignored if the tag_name already exists.
         [Parameter()]
