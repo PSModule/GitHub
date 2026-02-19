@@ -58,10 +58,23 @@
             $graphQLResponse = $apiResponse.Response
             # Handle GraphQL-specific errors (200 OK with errors in response)
             if ($graphQLResponse.errors) {
-                $errorMessages = @()
                 $queryLines = $Query -split "`n" | ForEach-Object { $_.Trim() }
-                foreach ($errorItem in $graphQLResponse.errors) {
-                    $errorMessages += @"
+                # Partial success: data was returned alongside errors (per GraphQL spec).
+                # Emit warnings for the partial errors and return the data.
+                if ($null -ne $graphQLResponse.data) {
+                    foreach ($errorItem in $graphQLResponse.errors) {
+                        $warningMessage = @"
+GraphQL partial error [$($errorItem.type)]:
+Message:  $($errorItem.message)
+Path:     $($errorItem.path -join '/')
+"@
+                        Write-Warning $warningMessage
+                    }
+                } else {
+                    # Full failure: no data returned, only errors.
+                    $errorMessages = @()
+                    foreach ($errorItem in $graphQLResponse.errors) {
+                        $errorMessages += @"
 
 GraphQL errors occurred:
 Full Error:
@@ -75,15 +88,16 @@ $($errorItem.locations | ForEach-Object { " - [$($_.line):$($_.column)] - $($que
 
 "@
 
-                }
-                $PSCmdlet.ThrowTerminatingError(
-                    [System.Management.Automation.ErrorRecord]::new(
-                        [System.Exception]::new($errorMessages),
-                        'GraphQLError',
-                        [System.Management.Automation.ErrorCategory]::InvalidOperation,
-                        $graphQLResponse
+                    }
+                    $PSCmdlet.ThrowTerminatingError(
+                        [System.Management.Automation.ErrorRecord]::new(
+                            [System.Exception]::new($errorMessages),
+                            'GraphQLError',
+                            [System.Management.Automation.ErrorCategory]::InvalidOperation,
+                            $graphQLResponse
+                        )
                     )
-                )
+                }
             }
 
             $graphQLResponse.data
