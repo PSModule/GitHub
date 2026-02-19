@@ -134,7 +134,10 @@ $graphQLFields
         }
 
         Invoke-GitHubGraphQLQuery @apiParams | ForEach-Object {
-            [GitHubRepository]::new($_.repositoryOwner.repository)
+            $repository = $_.repositoryOwner.repository
+            if ($repository) {
+                [GitHubRepository]::new($repository)
+            }
         }
     }
 
