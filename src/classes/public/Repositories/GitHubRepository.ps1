@@ -242,7 +242,7 @@
         MergeCommitMessage       = 'mergeCommitMessage'
         TemplateRepository       = 'templateRepository { id databaseId name owner { login } }'
         ForkRepository           = 'parent { id databaseId name owner { login }  }'
-        CustomProperties         = ''
+        CustomProperties         = 'repositoryCustomPropertyValues(first: 100) { nodes { propertyName value } }'
         CloneUrl                 = 'url'
         SshUrl                   = 'sshUrl'
         GitUrl                   = 'url'
@@ -353,6 +353,14 @@
             $this.SquashMergeCommitMessage = $Object.squashMergeCommitMessage
             $this.MergeCommitTitle = $Object.mergeCommitTitle
             $this.MergeCommitMessage = $Object.mergeCommitMessage
+            if ($null -ne $Object.repositoryCustomPropertyValues -and $null -ne $Object.repositoryCustomPropertyValues.nodes) {
+                $this.CustomProperties = $Object.repositoryCustomPropertyValues.nodes | ForEach-Object {
+                    [PSCustomObject]@{
+                        property_name = $_.propertyName
+                        value         = $_.value
+                    }
+                }
+            }
             $this.TemplateRepository = $null -ne $Object.templateRepository ? [GitHubRepository]::New($Object.templateRepository) : $null
             $this.ForkRepository = $null -ne $Object.parent ? [GitHubRepository]::New($Object.parent) : $null
             $this.CloneUrl = -not [string]::IsNullOrEmpty($Object.url) ? $Object.url + '.git' : $null
