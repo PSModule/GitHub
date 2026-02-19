@@ -78,7 +78,6 @@
             'MergeCommitMessage',
             'TemplateRepository',
             'ForkRepository',
-            'CustomProperties',
             'CloneUrl',
             'SshUrl',
             'GitUrl'
