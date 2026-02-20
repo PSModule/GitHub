@@ -182,7 +182,7 @@
     [GithubRepository] $ForkRepository
 
     # Custom properties for the repository.
-    [PSCustomObject] $CustomProperties
+    [GitHubCustomProperty[]] $CustomProperties
 
     # The clone URL of the repository.
     # Example: git://github.com/octocat/Hello-World.git
@@ -299,10 +299,7 @@
             $this.MergeCommitMessage = $Object.merge_commit_message
             $this.MergeCommitTitle = $Object.merge_commit_title
             $this.CustomProperties = $Object.custom_properties | ForEach-Object {
-                [PSCustomObject]@{
-                    Name  = $_.property_name
-                    Value = $_.value
-                }
+                [GitHubCustomProperty]::new($_)
             }
             $this.TemplateRepository = $null -ne $Object.template_repository ? [GitHubRepository]::New($Object.template_repository) : $null
             $this.ForkRepository = $null -ne $Object.parent ? [GitHubRepository]::New($Object.parent) : $null
@@ -360,10 +357,7 @@
             $this.MergeCommitMessage = $Object.mergeCommitMessage
             if ($null -ne $Object.repositoryCustomPropertyValues -and $null -ne $Object.repositoryCustomPropertyValues.nodes) {
                 $this.CustomProperties = $Object.repositoryCustomPropertyValues.nodes | ForEach-Object {
-                    [PSCustomObject]@{
-                        Name  = $_.propertyName
-                        Value = $_.value
-                    }
+                    [GitHubCustomProperty]::new($_)
                 }
             }
             $this.TemplateRepository = $null -ne $Object.templateRepository ? [GitHubRepository]::New($Object.templateRepository) : $null
