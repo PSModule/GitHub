@@ -7,7 +7,7 @@ Connect-GitHub
 
 # Log on to a specific instance of GitHub (enterprise)
 Connect-GitHub -Host 'msx.ghe.com'
-Get-GitHubRepository -Context 'msx.ghe.com/MariusStorhaug' # Contexts are selectable/overrideable on any call
+Get-GitHubRepository -Context 'msx.ghe.com/MariusStorhaug' # Contexts are selectable/overridable on any call
 
 # Connect to GitHub interactively using OAuth App and Device Flow.
 Connect-GitHub -Mode 'OAuthApp' -Scope 'gist read:org repo workflow'
@@ -15,10 +15,10 @@ Connect-GitHub -Mode 'OAuthApp' -Scope 'gist read:org repo workflow'
 # Connect to GitHub interactively using less desired PAT flow, supports both fine-grained and classic PATs
 Connect-GitHub -UseAccessToken
 
-# Connect to GitHub programatically (GitHub App Installation Access Token or PAT)
+# Connect to GitHub programmatically (GitHub App Installation Access Token or PAT)
 Connect-GitHub -Token ***********
 
-# Connect to GitHub programatically (GitHub Actions)
+# Connect to GitHub programmatically (GitHub Actions)
 Connect-GitHub # Looks for the GITHUB_TOKEN variable
 
 # Connect using a GitHub App and its private key (local signing of JWT)

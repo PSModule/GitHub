@@ -78,7 +78,6 @@
             'MergeCommitMessage',
             'TemplateRepository',
             'ForkRepository',
-            'CustomProperties',
             'CloneUrl',
             'SshUrl',
             'GitUrl'
@@ -128,7 +127,10 @@ $graphQLFields
         }
 
         Invoke-GitHubGraphQLQuery @apiParams | ForEach-Object {
-            [GitHubRepository]::new($_.viewer.repository)
+            $repository = $_.viewer.repository
+            if ($repository) {
+                [GitHubRepository]::new($repository)
+            }
         }
     }
 

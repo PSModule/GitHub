@@ -31,7 +31,7 @@
     )]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSAvoidUsingConvertToSecureStringWithPlainText', '',
-        Justification = 'The tokens are recieved as clear text. Mitigating exposure by removing variables and performing garbage collection.'
+        Justification = 'The tokens are received as clear text. Mitigating exposure by removing variables and performing garbage collection.'
     )]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSAvoidLongLines', '',

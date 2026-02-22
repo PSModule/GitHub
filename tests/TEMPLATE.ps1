@@ -20,7 +20,7 @@
 param()
 
 BeforeAll {
-    # DEFAULTS ACCROSS ALL TESTS
+    # DEFAULTS ACROSS ALL TESTS
 }
 
 Describe 'Template' {

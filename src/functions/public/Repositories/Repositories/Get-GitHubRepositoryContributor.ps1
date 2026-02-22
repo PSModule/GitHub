@@ -36,7 +36,7 @@
         [Parameter(Mandatory)]
         [string] $Name,
 
-        # Wether to include anonymous contributors in results.
+        # Whether to include anonymous contributors in results.
         [Parameter()]
         [switch] $Anon,
 
