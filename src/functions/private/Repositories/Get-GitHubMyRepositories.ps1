@@ -55,7 +55,7 @@
 
         # Properties to include in the returned object.
         [Parameter()]
-        [string[]] $Property = @('Name', 'Owner', 'Url', 'Size', 'Visibility', 'CustomProperties'),
+        [string[]] $Property = @('Name', 'Owner', 'Url', 'Size', 'Visibility'),
 
         # Additional properties to include in the returned object.
         [Parameter()]

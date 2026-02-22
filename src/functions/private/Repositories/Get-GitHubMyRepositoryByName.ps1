@@ -80,8 +80,7 @@
             'ForkRepository',
             'CloneUrl',
             'SshUrl',
-            'GitUrl',
-            'CustomProperties'
+            'GitUrl'
         ),
 
         # Additional properties to include in the returned object.
