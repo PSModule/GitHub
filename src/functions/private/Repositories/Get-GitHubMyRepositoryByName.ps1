@@ -100,8 +100,10 @@
     }
 
     process {
+        # CustomProperties are only available for organization-owned repos; viewer repos are user-owned.
+        $propertyList = ($Property + $AdditionalProperty) | Where-Object { $_ -ne 'CustomProperties' }
         $graphParams = @{
-            PropertyList         = $Property + $AdditionalProperty
+            PropertyList         = $propertyList
             PropertyToGraphQLMap = [GitHubRepository]::PropertyToGraphQLMap
         }
         $graphQLFields = ConvertTo-GitHubGraphQLField @graphParams
