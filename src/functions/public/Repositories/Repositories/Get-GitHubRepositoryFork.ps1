@@ -19,6 +19,7 @@
         .LINK
         https://psmodule.io/GitHub/Functions/Repositories/Repositories/Get-GitHubRepositoryFork
     #>
+    [OutputType([GitHubRepository])]
     [CmdletBinding()]
     param(
         # The account owner of the repository. The name is not case sensitive.
@@ -68,7 +69,9 @@
         }
 
         Invoke-GitHubAPI @apiParams | ForEach-Object {
-            Write-Output $_.Response
+            foreach ($repo in $_.Response) {
+                [GitHubRepository]::new($repo)
+            }
         }
     }
 
