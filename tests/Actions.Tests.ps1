@@ -24,8 +24,8 @@ BeforeAll {
 Describe 'Actions' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 
-    Get-Context 'OIDC' {
-        Get-Context 'Get-GitHubOidcClaim' {
+    Context 'OIDC' {
+        Context 'Get-GitHubOidcClaim' {
             It 'Get-GitHubOidcClaim - No context - Returns claim keys for github.com' {
                 $result = Get-GitHubOidcClaim
                 LogGroup 'Result' {
@@ -39,7 +39,7 @@ Describe 'Actions' {
         }
     }
 
-    Get-Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
+    Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
         BeforeAll {
             $context = Connect-GitHubAccount @connectParams -PassThru -Silent
             LogGroup 'Context' {
@@ -86,7 +86,7 @@ Describe 'Actions' {
             Write-Host ('-' * 60)
         }
 
-        Get-Context 'OIDC' {
+        Context 'OIDC' {
             It 'Get-GitHubOidcClaim - With context - Returns claim keys' {
                 $result = Get-GitHubOidcClaim -Context $context
                 LogGroup 'Result' {
