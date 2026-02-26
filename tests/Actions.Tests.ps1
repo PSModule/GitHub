@@ -15,11 +15,17 @@
 [CmdletBinding()]
 param()
 
+BeforeAll {
+    $testName = 'ActionsTests'
+    $os = $env:RUNNER_OS
+    $guid = [guid]::NewGuid().ToString()
+}
+
 Describe 'Actions' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 
-    Context 'OIDC' {
-        Context 'Get-GitHubOidcClaim' {
+    Get-Context 'OIDC' {
+        Get-Context 'Get-GitHubOidcClaim' {
             It 'Get-GitHubOidcClaim - No context - Returns claim keys for github.com' {
                 $result = Get-GitHubOidcClaim
                 LogGroup 'Result' {
@@ -33,7 +39,7 @@ Describe 'Actions' {
         }
     }
 
-    Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
+    Get-Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
         BeforeAll {
             $context = Connect-GitHubAccount @connectParams -PassThru -Silent
             LogGroup 'Context' {
@@ -45,16 +51,42 @@ Describe 'Actions' {
                     Write-Host ($context | Format-List | Out-String)
                 }
             }
-            $Owner = $env:GITHUB_REPOSITORY_OWNER
-            $Repository = $env:GITHUB_REPOSITORY_NAME
+            $repoPrefix = "$testName-$os-$TokenType"
+            $repoName = "$repoPrefix-$guid"
+
+            switch ($OwnerType) {
+                'user' {
+                    Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } |
+                        Remove-GitHubRepository -Confirm:$false
+                    $repo = New-GitHubRepository -Name $repoName -Confirm:$false
+                }
+                'organization' {
+                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } |
+                        Remove-GitHubRepository -Confirm:$false
+                    $repo = New-GitHubRepository -Organization $Owner -Name $repoName -Confirm:$false
+                }
+            }
+            LogGroup "Repository - [$repoName]" {
+                Write-Host ($repo | Select-Object * | Out-String)
+            }
         }
 
         AfterAll {
+            switch ($OwnerType) {
+                'user' {
+                    Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } |
+                        Remove-GitHubRepository -Confirm:$false
+                }
+                'organization' {
+                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } |
+                        Remove-GitHubRepository -Confirm:$false
+                }
+            }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
             Write-Host ('-' * 60)
         }
 
-        Context 'OIDC' {
+        Get-Context 'OIDC' {
             It 'Get-GitHubOidcClaim - With context - Returns claim keys' {
                 $result = Get-GitHubOidcClaim -Context $context
                 LogGroup 'Result' {
@@ -65,7 +97,7 @@ Describe 'Actions' {
                 $result | Should -BeOfType [string]
             }
 
-            It 'Get-GitHubOidcSubjectClaim - Organization - Returns template' {
+            It 'Get-GitHubOidcSubjectClaim - Organization - Returns template' -Skip:($OwnerType -ne 'organization') {
                 $result = Get-GitHubOidcSubjectClaim -Owner $Owner -Context $context
                 LogGroup 'Result' {
                     Write-Host ($result | Format-List | Out-String)
@@ -74,8 +106,8 @@ Describe 'Actions' {
                 $result.include_claim_keys | Should -Not -BeNullOrEmpty
             }
 
-            It 'Get-GitHubOidcSubjectClaim - Repository - Returns template' {
-                $result = Get-GitHubOidcSubjectClaim -Owner $Owner -Repository $Repository -Context $context
+            It 'Get-GitHubOidcSubjectClaim - Repository - Returns template' -Skip:($OwnerType -in ('repository', 'enterprise')) {
+                $result = Get-GitHubOidcSubjectClaim -Owner $Owner -Repository $repoName -Context $context
                 LogGroup 'Result' {
                     Write-Host ($result | Format-List | Out-String)
                 }
@@ -88,16 +120,16 @@ Describe 'Actions' {
                 } | Should -Not -Throw
             }
 
-            It 'Set-GitHubOidcSubjectClaim - Repository - Sets template with custom keys' {
+            It 'Set-GitHubOidcSubjectClaim - Repository - Sets template with custom keys' -Skip:($OwnerType -in ('repository', 'enterprise')) {
                 {
-                    Set-GitHubOidcSubjectClaim -Owner $Owner -Repository $Repository `
+                    Set-GitHubOidcSubjectClaim -Owner $Owner -Repository $repoName `
                         -IncludeClaimKeys @('repo', 'ref') -Context $context
                 } | Should -Not -Throw
             }
 
-            It 'Set-GitHubOidcSubjectClaim - Repository - Sets template with UseDefault' {
+            It 'Set-GitHubOidcSubjectClaim - Repository - Sets template with UseDefault' -Skip:($OwnerType -in ('repository', 'enterprise')) {
                 {
-                    Set-GitHubOidcSubjectClaim -Owner $Owner -Repository $Repository `
+                    Set-GitHubOidcSubjectClaim -Owner $Owner -Repository $repoName `
                         -IncludeClaimKeys @('repo') -UseDefault -Context $context
                 } | Should -Not -Throw
             }
