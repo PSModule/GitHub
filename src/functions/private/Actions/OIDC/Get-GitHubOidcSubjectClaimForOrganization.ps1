@@ -14,7 +14,8 @@
         Gets the OIDC subject claim customization template for the 'PSModule' organization.
 
         .NOTES
-        [Get the customization template for an OIDC subject claim for an organization](https://docs.github.com/en/rest/actions/oidc?apiVersion=2022-11-28#get-the-customization-template-for-an-oidc-subject-claim-for-an-organization)
+        [Get the customization template for an OIDC subject claim for an organization]
+        (https://docs.github.com/rest/actions/oidc#get-the-customization-template-for-an-oidc-subject-claim-for-an-organization)
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]

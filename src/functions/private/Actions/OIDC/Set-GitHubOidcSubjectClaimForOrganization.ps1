@@ -14,7 +14,8 @@
         Sets the OIDC subject claim customization template for the 'PSModule' organization.
 
         .NOTES
-        [Set the customization template for an OIDC subject claim for an organization](https://docs.github.com/en/rest/actions/oidc?apiVersion=2022-11-28#set-the-customization-template-for-an-oidc-subject-claim-for-an-organization)
+        [Set the customization template for an OIDC subject claim for an organization]
+        (https://docs.github.com/rest/actions/oidc#set-the-customization-template-for-an-oidc-subject-claim-for-an-organization)
     #>
     [OutputType([void])]
     [CmdletBinding(SupportsShouldProcess)]

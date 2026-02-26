@@ -22,7 +22,8 @@
         Resets the OIDC subject claim customization for the 'GitHub' repository to use the default template.
 
         .NOTES
-        [Set the customization template for an OIDC subject claim for a repository](https://docs.github.com/en/rest/actions/oidc?apiVersion=2022-11-28#set-the-customization-template-for-an-oidc-subject-claim-for-a-repository)
+        [Set the customization template for an OIDC subject claim for a repository]
+        (https://docs.github.com/rest/actions/oidc#set-the-customization-template-for-an-oidc-subject-claim-for-a-repository)
     #>
     [OutputType([void])]
     [CmdletBinding(SupportsShouldProcess)]
