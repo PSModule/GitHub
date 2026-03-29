@@ -55,7 +55,7 @@
 
     process {
         $params = @{
-            Context   = $Context
+            Context = $Context
         }
         switch ($PSCmdlet.ParameterSetName) {
             'List' {
