@@ -56,7 +56,7 @@
 
     process {
         $body = @{
-            sort     = $Sort
+            sort = $Sort
         }
         $body | Remove-HashtableEntry -NullOrEmptyValues
 
