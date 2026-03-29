@@ -153,7 +153,7 @@
             }
             default {
                 Write-Verbose 'No target specified. Connecting to all installations.'
-                $selectedInstallations.AddRange((Get-GitHubAppInstallation -Context $Context))
+                $selectedInstallations.AddRange(@(Get-GitHubAppInstallation -Context $Context))
                 Write-Verbose "Found [$($selectedInstallations.Count)] installations."
             }
         }
