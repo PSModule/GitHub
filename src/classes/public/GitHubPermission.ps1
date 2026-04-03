@@ -500,19 +500,6 @@
                 'Fine-grained',
                 'Repository'
             ),
-            [GitHubPermission]::new(
-                'artifact_metadata',
-                'Artifact metadata',
-                'Manage artifact attestation metadata for a repository.',
-                'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
-                '#repository-permissions-for-artifact-metadata',
-                @(
-                    'read',
-                    'write'
-                ),
-                'Fine-grained',
-                'Repository'
-            ),
 
             # ------------------------------
             # Organization Fine-Grained Permission Definitions
@@ -959,19 +946,6 @@
                 'View and manage Actions self-hosted runners available to an organization.',
                 'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
                 '#organization-permissions-for-self-hosted-runners',
-                @(
-                    'read',
-                    'write'
-                ),
-                'Fine-grained',
-                'Organization'
-            ),
-            [GitHubPermission]::new(
-                'organization_runner_custom_images',
-                'Runner custom images',
-                'View and manage custom images for self-hosted runners available to an organization.',
-                'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
-                '#organization-permissions-for-runner-custom-images',
                 @(
                     'read',
                     'write'
