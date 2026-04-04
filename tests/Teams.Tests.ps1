@@ -20,9 +20,9 @@
 param()
 
 BeforeAll {
-    $testName = 'TeamsTests'
+    $testName = 'Teams'
     $os = $env:RUNNER_OS
-    $guid = [guid]::NewGuid().ToString() -replace '-', '_'
+    $id = $env:GITHUB_RUN_ID
 }
 
 Describe 'Teams' {
@@ -41,11 +41,11 @@ Describe 'Teams' {
                 }
             }
             $teamPrefix = "$testName`_$os`_$TokenType"
-            $teamName = "$teamPrefix`_$guid"
+            $teamName = "$teamPrefix`_$id"
 
             switch ($OwnerType) {
                 'organization' {
-                    Get-GitHubTeam -Organization $owner | Where-Object { $_.Name -like "$teamPrefix*" } | Remove-GitHubTeam -Confirm:$false
+                    Get-GitHubTeam -Organization $owner | Where-Object { $_.Name -like "$teamName*" } | Remove-GitHubTeam -Confirm:$false
                 }
             }
         }
@@ -53,7 +53,7 @@ Describe 'Teams' {
         AfterAll {
             switch ($OwnerType) {
                 'organization' {
-                    $teamsToRemove = Get-GitHubTeam -Organization $owner | Where-Object { $_.Name -like "$teamPrefix*" }
+                    $teamsToRemove = Get-GitHubTeam -Organization $owner | Where-Object { $_.Name -like "$teamName*" }
                     LogGroup 'Teams to remove' {
                         Write-Host "$($teamsToRemove | Format-List | Out-String)"
                     }

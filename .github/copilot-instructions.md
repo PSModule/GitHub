@@ -1,11 +1,7 @@
 # Coding Standards for `GitHub`
 
 Start by reading the general coding standards for [`PSModule`](https://psmodule.io/docs) which is the basis for all modules in the framework.
-Additions or adjustments to those defaults are covered in this document to ensure that the modules drive consistancy for all developers.
-
-**Folder-level README**
-- When working with files in a folder, check if a `README.md` exists in that folder. If it does, read it first to
-  gather context on how to use or write code in that folder.
+Additions or adjustments to those defaults are covered in this document to ensure that the modules drive consistency for all developers.
 
 ## General Coding Standards
 
@@ -22,6 +18,7 @@ Additions or adjustments to those defaults are covered in this document to ensur
 
 4. **Convert Filter Types**
    - Wherever filters are used, ensure they are implemented as standard PowerShell functions with `begin`, `process`, and `end` blocks.
+
 ---
 
 ## Functions
@@ -176,7 +173,7 @@ All function documentation follows standard PowerShell help conventions, with so
    - Remove any properties that are purely “API wrapper” fields (e.g., raw HTTP artifacts that aren’t relevant to the user).
    - Cl
 
-- Classes should have ID as the main resource ID, this is the databaseID. The node_id is spesifically in the NodeID property.
+- Classes should have ID as the main resource ID, this is the databaseID. The node_id is specifically in the NodeID property.
 - Classes that use nodeid and databaseid should extend the class called GitHubNode.
 - Objects that belong inside another scope, has the parts of the scope in properties of the class, i.e. Enterprise, Owner/Organization/Account,
   Repository, Environment, etc.

@@ -567,36 +567,27 @@ Describe 'API' {
                 Write-Host ($context | Format-List | Out-String)
             }
             $context | Should -Not -BeNullOrEmpty
+            if ($AuthType -eq 'APP') {
+                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
+                LogGroup 'Context - Installation' {
+                    Write-Host ($context | Format-List | Out-String)
+                }
+            }
         }
         AfterAll {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
             Write-Host ('-' * 60)
         }
 
-        # Tests for APP goes here
-        if ($AuthType -eq 'APP') {
-            It 'Invoke-GitHubAPI - Gets the app details' {
-                {
-                    $app = Invoke-GitHubAPI -ApiEndpoint '/app'
-                    LogGroup 'App' {
-                        Write-Host ($app | Format-List | Out-String)
-                    }
-                } | Should -Not -Throw
-            }
-
-            It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
-                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
-                LogGroup 'Context' {
-                    Write-Host ($context | Format-List | Out-String)
+        It 'Invoke-GitHubAPI - Gets the app details' -Skip:($AuthType -ne 'APP') {
+            {
+                $app = Invoke-GitHubAPI -ApiEndpoint '/app'
+                LogGroup 'App' {
+                    Write-Host ($app | Format-List | Out-String)
                 }
-                $context | Should -Not -BeNullOrEmpty
-            }
+            } | Should -Not -Throw
         }
 
-        # Tests for runners goes here
-        if ($Type -eq 'GitHub Actions') {}
-
-        # Tests for IAT UAT and PAT goes here
         Context 'API' {
             It 'Invoke-GitHubAPI - Gets the rate limits directly using APIEndpoint' {
                 {

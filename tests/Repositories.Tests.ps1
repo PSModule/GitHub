@@ -20,9 +20,9 @@
 param()
 
 BeforeAll {
-    $testName = 'RepositoriesTests'
+    $testName = 'Repositories'
     $os = $env:RUNNER_OS
-    $guid = [guid]::NewGuid().ToString()
+    $id = $env:GITHUB_RUN_ID
 }
 
 Describe 'Repositories' {
@@ -41,20 +41,20 @@ Describe 'Repositories' {
                 }
             }
             $repoPrefix = "$testName-$os-$TokenType"
-            $repoName = "$repoPrefix-$guid"
+            $repoName = "$repoPrefix-$id"
 
             switch ($OwnerType) {
                 'user' {
-                    Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                    Get-GitHubRepository | Where-Object { $_.Name -like "$repoName*" } | Remove-GitHubRepository -Confirm:$false
                 }
                 'organization' {
-                    Get-GitHubTeam -Organization $owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubTeam -Confirm:$false
+                    Get-GitHubTeam -Organization $owner | Where-Object { $_.Name -like "$repoName*" } | Remove-GitHubTeam -Confirm:$false
                     $teamAdmin = New-GitHubTeam -Organization $owner -Name "$repoName-admin"
                     $teamMaintain = New-GitHubTeam -Organization $owner -Name "$repoName-maintain"
                     $teamPush = New-GitHubTeam -Organization $owner -Name "$repoName-push"
                     $teamTriage = New-GitHubTeam -Organization $owner -Name "$repoName-triage"
                     $teamPull = New-GitHubTeam -Organization $owner -Name "$repoName-pull"
-                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoName*" } | Remove-GitHubRepository -Confirm:$false
                 }
             }
         }
@@ -62,11 +62,11 @@ Describe 'Repositories' {
         AfterAll {
             switch ($OwnerType) {
                 'user' {
-                    Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                    Get-GitHubRepository | Where-Object { $_.Name -like "$repoName*" } | Remove-GitHubRepository -Confirm:$false
                 }
                 'organization' {
-                    Get-GitHubTeam -Organization $owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubTeam -Confirm:$false
-                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                    Get-GitHubTeam -Organization $owner | Where-Object { $_.Name -like "$repoName*" } | Remove-GitHubTeam -Confirm:$false
+                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoName*" } | Remove-GitHubRepository -Confirm:$false
                 }
             }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
@@ -600,10 +600,10 @@ Describe 'Repositories' {
         It 'Remove-GitHubRepository - Removes all repositories' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             switch ($OwnerType) {
                 'user' {
-                    Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                    Get-GitHubRepository | Where-Object { $_.Name -like "$repoName*" } | Remove-GitHubRepository -Confirm:$false
                 }
                 'organization' {
-                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } |
+                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoName*" } |
                         Remove-GitHubRepository -Confirm:$false
                 }
             }

@@ -73,9 +73,11 @@ Runs once before all parallel test files. For each auth case (except `GITHUB_TOK
 
 1. Connects using the auth case credentials
 2. Cleans up stale repos from previous failed runs (matching `Test-$os-$TokenType-*`)
-3. Creates a shared repository per OS: `Test-{OS}-{TokenType}-{GITHUB_RUN_ID}`
+3. Creates a primary shared repository per OS: `Test-{OS}-{TokenType}-{GITHUB_RUN_ID}`
+   - Includes `AddReadme`, `License` (MIT), and `Gitignore` (VisualStudio) for release tests
    - For `user` owners: `New-GitHubRepository -Name $repoName`
    - For `organization` owners: `New-GitHubRepository -Organization $Owner -Name $repoName`
+4. Creates two extra repositories per OS (`-2`, `-3` suffix) for Secrets/Variables SelectedRepository tests
 
 ### `AfterAll.ps1` — global teardown
 
@@ -132,6 +134,7 @@ Describe 'TestName' {
 - **`Disconnect-GitHubAccount`** — every context disconnects all sessions in `AfterAll`.
 - Test-specific ephemeral resources (releases, secrets, variables, environments, teams) are still created and cleaned up
   within each test file. Only repositories are shared.
+- **Exception:** `Repositories.Tests.ps1` creates and deletes its own repos because it tests repository CRUD operations.
 
 ## Naming conventions
 

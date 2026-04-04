@@ -4,6 +4,7 @@ param()
 LogGroup 'AfterAll - Global Test Teardown' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 
+    $id = $env:GITHUB_RUN_ID
     $prefix = 'Test'
 
     # Derive the list of OS names from the Settings JSON provided by Process-PSModule.
@@ -28,14 +29,15 @@ LogGroup 'AfterAll - Global Test Teardown' {
 
             foreach ($os in $osNames) {
                 $repoPrefix = "$prefix-$os-$TokenType"
+                $repoName = "$repoPrefix-$id"
 
                 LogGroup "Repository cleanup - $AuthType-$TokenType - $os" {
                     switch ($OwnerType) {
                         'user' {
-                            Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                            Get-GitHubRepository | Where-Object { $_.Name -like "$repoName*" } | Remove-GitHubRepository -Confirm:$false
                         }
                         'organization' {
-                            Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
+                            Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoName*" } | Remove-GitHubRepository -Confirm:$false
                         }
                     }
                 }

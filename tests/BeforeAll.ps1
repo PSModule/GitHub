@@ -28,19 +28,39 @@ LogGroup 'BeforeAll - Global Test Setup' {
             $repoName = "$repoPrefix-$id"
 
             LogGroup "Repository setup - $AuthType-$TokenType - $os" {
+                # Clean up repos from a previous attempt of the same run (re-runs).
                 switch ($OwnerType) {
                     'user' {
-                        Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                        New-GitHubRepository -Name $repoName -Confirm:$false
+                        Get-GitHubRepository | Where-Object { $_.Name -like "$repoName*" } | Remove-GitHubRepository -Confirm:$false
                     }
                     'organization' {
-                        Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                        New-GitHubRepository -Organization $Owner -Name $repoName -Confirm:$false
+                        Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoName*" } | Remove-GitHubRepository -Confirm:$false
                     }
                 }
-            }
-        }
 
-        Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
-    }
-}
+                # Create the primary shared repository (with readme, license, gitignore for release tests).
+                $repoParams = @{
+                    Name      = $repoName
+                    AddReadme = $true
+                    License   = 'MIT'
+                    Gitignore = 'VisualStudio'
+                }
+                switch ($OwnerType) {
+                    'user' {
+                        New-GitHubRepository @repoParams
+                    }
+                    'organization' {
+                        New-GitHubRepository @repoParams -Organization $Owner
+                    }
+                }
+
+                # Create extra repositories needed by Secrets/Variables SelectedRepository tests.
+                foreach ($suffix in 2, 3) {
+                    $extraName = "$repoName-$suffix"
+                    switch ($OwnerType) {
+                        'user' {
+                            New-GitHubRepository -Name $extraName
+                        }
+                        'organization' {
+                            New-GitHubRepository -Organization $Owner -Name $extraName
+                        }
