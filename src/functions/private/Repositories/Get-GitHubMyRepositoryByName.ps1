@@ -78,7 +78,6 @@
             'MergeCommitMessage',
             'TemplateRepository',
             'ForkRepository',
-            'CustomProperties',
             'CloneUrl',
             'SshUrl',
             'GitUrl'
@@ -101,8 +100,10 @@
     }
 
     process {
+        # CustomProperties are only available for organization-owned repos; viewer repos are user-owned.
+        $propertyList = ($Property + $AdditionalProperty) | Where-Object { $_ -ne 'CustomProperties' }
         $graphParams = @{
-            PropertyList         = $Property + $AdditionalProperty
+            PropertyList         = $propertyList
             PropertyToGraphQLMap = [GitHubRepository]::PropertyToGraphQLMap
         }
         $graphQLFields = ConvertTo-GitHubGraphQLField @graphParams
@@ -128,7 +129,10 @@ $graphQLFields
         }
 
         Invoke-GitHubGraphQLQuery @apiParams | ForEach-Object {
-            [GitHubRepository]::new($_.viewer.repository)
+            $repository = $_.viewer.repository
+            if ($repository) {
+                [GitHubRepository]::new($repository)
+            }
         }
     }
 

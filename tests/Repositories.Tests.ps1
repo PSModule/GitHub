@@ -611,7 +611,7 @@ Describe 'Repositories' {
         It 'Get-GitHubRepository - Gets none repositories after removal' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             switch ($OwnerType) {
                 'user' {
-                    $repos = Get-GitHubRepository -Username $Owner | Where-Object { $_.name -like "$repoName*" }
+                    $repos = Get-GitHubRepository | Where-Object { $_.name -like "$repoName*" }
                 }
                 default {
                     $repos = Get-GitHubRepository -Organization $Owner | Where-Object { $_.name -like "$repoName*" }

@@ -115,12 +115,14 @@ query(`$owner: String!, `$repository: String!, `$tag: String!, `$perPage: Int, `
 
             Invoke-GitHubGraphQLQuery @apiParams | ForEach-Object {
                 $release = $_.repository.release
-                $assets = $release.releaseAssets
-                foreach ($asset in $assets.nodes) {
-                    [GitHubReleaseAsset]::new($asset)
+                if ($release) {
+                    $assets = $release.releaseAssets
+                    foreach ($asset in $assets.nodes) {
+                        [GitHubReleaseAsset]::new($asset)
+                    }
+                    $hasNextPage = $assets.pageInfo.hasNextPage
+                    $after = $assets.pageInfo.endCursor
                 }
-                $hasNextPage = $assets.pageInfo.hasNextPage
-                $after = $assets.pageInfo.endCursor
             }
         } while ($hasNextPage)
     }

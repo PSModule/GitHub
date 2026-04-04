@@ -81,10 +81,10 @@
             'MergeCommitMessage',
             'TemplateRepository',
             'ForkRepository',
-            'CustomProperties',
             'CloneUrl',
             'SshUrl',
-            'GitUrl'
+            'GitUrl',
+            'CustomProperties'
         ),
 
         # Additional properties to include in the returned object.
@@ -135,7 +135,10 @@ $graphQLFields
         }
 
         Invoke-GitHubGraphQLQuery @apiParams | ForEach-Object {
-            [GitHubRepository]::new($_.repositoryOwner.repository)
+            $repository = $_.repositoryOwner.repository
+            if ($repository) {
+                [GitHubRepository]::new($repository)
+            }
         }
     }
 

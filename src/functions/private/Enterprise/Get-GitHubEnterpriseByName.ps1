@@ -67,7 +67,9 @@ query(`$Slug: String!) {
             Context   = $Context
         }
         $enterpriseResult = Invoke-GitHubGraphQLQuery @enterpriseQuery
-        [GitHubEnterprise]::new($enterpriseResult.enterprise)
+        if ($enterpriseResult.enterprise) {
+            [GitHubEnterprise]::new($enterpriseResult.enterprise)
+        }
     }
 
     end {

@@ -5,7 +5,7 @@
 
         .DESCRIPTION
         DSL approach for GitHub Action commands.
-        Allows for colapsing of code in IDE for code that belong together.
+        Allows for collapsing of code in IDE for code that belong together.
 
         .EXAMPLE
         ```powershell

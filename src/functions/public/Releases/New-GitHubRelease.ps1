@@ -104,7 +104,7 @@
         [string] $DiscussionCategoryName,
 
         # Whether to automatically generate the name and body for this release. If name is specified, the specified name will be used; otherwise,
-        # a name will be automatically generated. If body is specified, the body will be pre-pended to the automatically generated notes.
+        # a name will be automatically generated. If body is specified, the body will be prepended to the automatically generated notes.
         [Parameter()]
         [switch] $GenerateReleaseNotes,
 

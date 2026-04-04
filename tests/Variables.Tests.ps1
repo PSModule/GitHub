@@ -98,7 +98,7 @@ Describe 'Variables' {
                     Owner = $owner
                 }
             }
-            It 'Set-GitHubVariable - should ensure existance of a organization variable' {
+            It 'Set-GitHubVariable - should ensure existence of a organization variable' {
                 $name = "$variableName`TestVariable"
                 LogGroup "Variable - [$name]" {
                     $param = @{

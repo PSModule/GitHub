@@ -17,7 +17,7 @@
     # Example: "## What's Changed\n### Other Changes\n* Fix: Enhance repository deletion feedback and fix typo..."
     [string] $Notes
 
-    # Specifies the commitish value that determines where the Git tag is created from
+    # Specifies the committish value that determines where the Git tag is created from
     # Example: "main"
     [string] $Target
 

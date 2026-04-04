@@ -182,7 +182,7 @@
     [GithubRepository] $ForkRepository
 
     # Custom properties for the repository.
-    [PSCustomObject] $CustomProperties
+    [GitHubCustomProperty[]] $CustomProperties
 
     # The clone URL of the repository.
     # Example: git://github.com/octocat/Hello-World.git
@@ -242,7 +242,7 @@
         MergeCommitMessage       = 'mergeCommitMessage'
         TemplateRepository       = 'templateRepository { id databaseId name owner { login } }'
         ForkRepository           = 'parent { id databaseId name owner { login }  }'
-        CustomProperties         = ''
+        CustomProperties         = 'repositoryCustomPropertyValues(first: 100) { nodes { propertyName value } }'
         CloneUrl                 = 'url'
         SshUrl                   = 'sshUrl'
         GitUrl                   = 'url'
@@ -298,7 +298,9 @@
             $this.SquashMergeCommitTitle = $Object.squash_merge_commit_title
             $this.MergeCommitMessage = $Object.merge_commit_message
             $this.MergeCommitTitle = $Object.merge_commit_title
-            $this.CustomProperties = $Object.custom_properties
+            $this.CustomProperties = $Object.custom_properties | ForEach-Object {
+                [GitHubCustomProperty]::new($_)
+            }
             $this.TemplateRepository = $null -ne $Object.template_repository ? [GitHubRepository]::New($Object.template_repository) : $null
             $this.ForkRepository = $null -ne $Object.parent ? [GitHubRepository]::New($Object.parent) : $null
             $this.CloneUrl = $Object.clone_url
@@ -353,6 +355,11 @@
             $this.SquashMergeCommitMessage = $Object.squashMergeCommitMessage
             $this.MergeCommitTitle = $Object.mergeCommitTitle
             $this.MergeCommitMessage = $Object.mergeCommitMessage
+            if ($null -ne $Object.repositoryCustomPropertyValues -and $null -ne $Object.repositoryCustomPropertyValues.nodes) {
+                $this.CustomProperties = $Object.repositoryCustomPropertyValues.nodes | ForEach-Object {
+                    [GitHubCustomProperty]::new($_)
+                }
+            }
             $this.TemplateRepository = $null -ne $Object.templateRepository ? [GitHubRepository]::New($Object.templateRepository) : $null
             $this.ForkRepository = $null -ne $Object.parent ? [GitHubRepository]::New($Object.parent) : $null
             $this.CloneUrl = -not [string]::IsNullOrEmpty($Object.url) ? $Object.url + '.git' : $null

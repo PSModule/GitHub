@@ -58,32 +58,44 @@
             $graphQLResponse = $apiResponse.Response
             # Handle GraphQL-specific errors (200 OK with errors in response)
             if ($graphQLResponse.errors) {
-                $errorMessages = @()
-                $queryLines = $Query -split "`n" | ForEach-Object { $_.Trim() }
-                foreach ($errorItem in $graphQLResponse.errors) {
-                    $errorMessages += @"
+                # Partial success: data was returned alongside errors (per GraphQL spec).
+                # Emit warnings for the partial errors and return the data.
+                if ($null -ne $graphQLResponse.data) {
+                    foreach ($errorItem in $graphQLResponse.errors) {
+                        $warningMessage = @"
+GraphQL partial errors occurred
+Type:    $($errorItem.type)
+Message: $($errorItem.message)
+Path:    $($errorItem.path -join '/')
 
-GraphQL errors occurred:
+"@
+                        Write-Warning $warningMessage
+                    }
+                } else {
+                    # Full failure: no data returned, only errors.
+                    $errorMessages = @()
+                    foreach ($errorItem in $graphQLResponse.errors) {
+                        $errorMessages += @"
+GraphQL terminating errors occurred
+Type:      $($errorItem.type)
+Message:   $($errorItem.message)
+Path:      $($errorItem.path -join '/')
+
 Full Error:
 $($errorItem | ConvertTo-Json -Depth 10 | Out-String)
 
-GraphQL Error [$($errorItem.type)]:
-Message:    $($errorItem.message)
-Path:       $($errorItem.path -join '/')
-Locations:
-$($errorItem.locations | ForEach-Object { " - [$($_.line):$($_.column)] - $($queryLines[$_.line - 1])" })
-
 "@
 
-                }
-                $PSCmdlet.ThrowTerminatingError(
-                    [System.Management.Automation.ErrorRecord]::new(
-                        [System.Exception]::new($errorMessages),
-                        'GraphQLError',
-                        [System.Management.Automation.ErrorCategory]::InvalidOperation,
-                        $graphQLResponse
+                    }
+                    $PSCmdlet.ThrowTerminatingError(
+                        [System.Management.Automation.ErrorRecord]::new(
+                            [System.Exception]::new($errorMessages),
+                            'GraphQLError',
+                            [System.Management.Automation.ErrorCategory]::InvalidOperation,
+                            $graphQLResponse
+                        )
                     )
-                )
+                }
             }
 
             $graphQLResponse.data
