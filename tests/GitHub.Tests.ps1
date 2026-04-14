@@ -19,6 +19,43 @@
 [CmdletBinding()]
 param()
 
+Describe 'GitHubCustomProperty' {
+    It 'Preserves array value for multi-select properties' {
+        $obj = [PSCustomObject]@{
+            property_name = 'SubscribeTo'
+            value         = @('Custom Instructions', 'License', 'Prompts')
+        }
+        $prop = [GitHubCustomProperty]::new($obj)
+        $prop.Name | Should -Be 'SubscribeTo'
+        $prop.Value | Should -BeOfType [string]
+        $prop.Value | Should -HaveCount 3
+        $prop.Value[0] | Should -Be 'Custom Instructions'
+        $prop.Value[1] | Should -Be 'License'
+        $prop.Value[2] | Should -Be 'Prompts'
+    }
+
+    It 'Keeps scalar string value as string' {
+        $obj = [PSCustomObject]@{
+            property_name = 'Type'
+            value         = 'Module'
+        }
+        $prop = [GitHubCustomProperty]::new($obj)
+        $prop.Name | Should -Be 'Type'
+        $prop.Value | Should -Be 'Module'
+        $prop.Value | Should -BeOfType [string]
+    }
+
+    It 'Handles GraphQL-style property names' {
+        $obj = [PSCustomObject]@{
+            propertyName = 'Environment'
+            value        = 'production'
+        }
+        $prop = [GitHubCustomProperty]::new($obj)
+        $prop.Name | Should -Be 'Environment'
+        $prop.Value | Should -Be 'production'
+    }
+}
+
 Describe 'Auth' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 
