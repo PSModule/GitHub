@@ -24,23 +24,18 @@ Describe 'Users' {
             LogGroup 'Context' {
                 Write-Host ($context | Format-List | Out-String)
             }
-        }
-        AfterAll {
-            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
-            Write-Host ('-' * 60)
-        }
-
-        # Tests for APP goes here
-        if ($AuthType -eq 'APP') {
-            It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
+            if ($AuthType -eq 'APP') {
                 $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
                 LogGroup 'Context' {
                     Write-Host ($context | Format-List | Out-String)
                 }
             }
         }
+        AfterAll {
+            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+            Write-Host ('-' * 60)
+        }
 
-        # Tests for IAT UAT and PAT goes here
         It 'Get-GitHubUser - Get the specified user' {
             { Get-GitHubUser -Name 'Octocat' } | Should -Not -Throw
         }

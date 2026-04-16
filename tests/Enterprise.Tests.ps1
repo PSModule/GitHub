@@ -19,11 +19,7 @@
 [CmdletBinding()]
 param()
 
-BeforeAll {
-    # DEFAULTS ACROSS ALL TESTS
-}
-
-Describe 'Template' {
+Describe 'Enterprise' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 
     Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
