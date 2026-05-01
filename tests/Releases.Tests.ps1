@@ -48,7 +48,7 @@ Describe 'Releases' {
 
             LogGroup "Using Repository - [$repoName]" {
                 $repo = Get-GitHubRepository -Owner $Owner -Name $repoName
-                if (-not $repo) {
+                if (($OwnerType -notin ('repository', 'enterprise')) -and (-not $repo)) {
                     throw "Expected shared test repository '$Owner/$repoName' was not found. Get-GitHubRepository returned no result, so release tests cannot continue."
                 }
                 Write-Host ($repo | Select-Object * | Out-String)
