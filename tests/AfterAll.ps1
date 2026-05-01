@@ -5,6 +5,12 @@ LogGroup 'AfterAll - Global Test Teardown' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 
     $id = $env:GITHUB_RUN_ID
+    if (-not $id) {
+        throw 'GITHUB_RUN_ID environment variable is not set. Refusing to clean up test repositories with an unscoped wildcard (would impact concurrent runs).'
+    }
+    if (-not $env:Settings) {
+        throw 'Settings environment variable is not set. Process-PSModule must populate it with the test suite configuration.'
+    }
     $prefix = 'Test'
 
     # Derive the list of OS names from the Settings JSON provided by Process-PSModule.
