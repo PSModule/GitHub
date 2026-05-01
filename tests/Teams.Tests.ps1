@@ -44,11 +44,10 @@ Describe 'Teams' {
                 }
             }
             $teamPrefix = "$testName`_$os`_$TokenType`_$id"
-            $teamName = $teamPrefix
 
             switch ($OwnerType) {
                 'organization' {
-                    Get-GitHubTeam -Organization $owner | Where-Object { $_.Name -like "$teamName*" } | Remove-GitHubTeam -Confirm:$false
+                    Get-GitHubTeam -Organization $owner | Where-Object { $_.Name -like "$teamPrefix*" } | Remove-GitHubTeam -Confirm:$false
                 }
             }
         }
@@ -56,7 +55,7 @@ Describe 'Teams' {
         AfterAll {
             switch ($OwnerType) {
                 'organization' {
-                    $teamsToRemove = Get-GitHubTeam -Organization $owner | Where-Object { $_.Name -like "$teamName*" }
+                    $teamsToRemove = Get-GitHubTeam -Organization $owner | Where-Object { $_.Name -like "$teamPrefix*" }
                     LogGroup 'Teams to remove' {
                         Write-Host "$($teamsToRemove | Format-List | Out-String)"
                     }

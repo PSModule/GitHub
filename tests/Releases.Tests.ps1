@@ -23,6 +23,9 @@ BeforeAll {
     $testName = 'Releases'
     $os = $env:RUNNER_OS
     $id = $env:GITHUB_RUN_ID
+    if (-not $id) {
+        throw 'GITHUB_RUN_ID must be set for run-scoped release tests.'
+    }
 }
 
 Describe 'Releases' {
@@ -45,6 +48,9 @@ Describe 'Releases' {
 
             LogGroup "Using Repository - [$repoName]" {
                 $repo = Get-GitHubRepository -Owner $Owner -Name $repoName
+                if (-not $repo) {
+                    throw "Expected shared test repository '$Owner/$repoName' was not found. Get-GitHubRepository returned no result, so release tests cannot continue."
+                }
                 Write-Host ($repo | Select-Object * | Out-String)
             }
         }

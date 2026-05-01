@@ -23,6 +23,9 @@ BeforeAll {
     $testName = 'Environments'
     $os = $env:RUNNER_OS
     $id = $env:GITHUB_RUN_ID
+    if (-not $id) {
+        throw 'GITHUB_RUN_ID is required for Environments tests.'
+    }
 }
 
 Describe 'Environments' {
@@ -46,6 +49,9 @@ Describe 'Environments' {
 
             LogGroup "Using Repository - [$repoName]" {
                 $repo = Get-GitHubRepository -Owner $Owner -Name $repoName
+                if (($OwnerType -notin ('repository', 'enterprise')) -and (-not $repo)) {
+                    throw "Shared test repository '$repoName' was not found for owner '$Owner'. Ensure the repository was created before running the environment tests."
+                }
                 Write-Host ($repo | Select-Object * | Out-String)
             }
         }

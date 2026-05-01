@@ -19,6 +19,9 @@ BeforeAll {
     $testName = 'Actions'
     $os = $env:RUNNER_OS
     $id = $env:GITHUB_RUN_ID
+    if (-not $id) {
+        throw 'GITHUB_RUN_ID is required for Actions tests because it is used to build repository-scoped names for OIDC operations.'
+    }
 }
 
 Describe 'Actions' {
@@ -59,6 +62,9 @@ Describe 'Actions' {
                     $repo = $null
                 } else {
                     $repo = Get-GitHubRepository -Owner $Owner -Name $repoName
+                    if (-not $repo) {
+                        throw "Shared test repository '$repoName' was not found for owner '$Owner' (OwnerType: '$OwnerType'). Ensure the repository was provisioned and the repository name is correct."
+                    }
                     Write-Host ($repo | Select-Object * | Out-String)
                 }
             }
