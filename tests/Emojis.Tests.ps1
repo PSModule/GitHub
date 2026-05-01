@@ -19,6 +19,12 @@
 [CmdletBinding()]
 param()
 
+BeforeAll {
+    $testName = 'Emojis'
+    $os = $env:RUNNER_OS
+    $id = $env:GITHUB_RUN_ID
+}
+
 Describe 'Emojis' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 

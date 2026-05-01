@@ -17,6 +17,7 @@ LogGroup 'BeforeAll - Global Test Setup' {
             Write-Host "Skipping setup for $AuthType-$TokenType (uses existing repository)"
             continue
         }
+
         $context = Connect-GitHubAccount @connectParams -PassThru -Silent
         if ($AuthType -eq 'APP') {
             $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
@@ -64,3 +65,11 @@ LogGroup 'BeforeAll - Global Test Setup' {
                         'organization' {
                             New-GitHubRepository -Organization $Owner -Name $extraName
                         }
+                    }
+                }
+            }
+        }
+
+        Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+    }
+}

@@ -15,6 +15,12 @@
 [CmdletBinding()]
 param()
 
+BeforeAll {
+    $testName = 'Users'
+    $os = $env:RUNNER_OS
+    $id = $env:GITHUB_RUN_ID
+}
+
 Describe 'Users' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 
@@ -40,12 +46,11 @@ Describe 'Users' {
             { Get-GitHubUser -Name 'Octocat' } | Should -Not -Throw
         }
 
-        if ($OwnerType -eq 'user') {
+        Context 'Authenticated user' -Skip:($OwnerType -ne 'user') {
             It 'Get-GitHubUser - Gets the authenticated user' {
                 { Get-GitHubUser } | Should -Not -Throw
             }
             It 'Update-GitHubUser - Can set configuration on a user' {
-                $guid = (New-Guid).Guid
                 $user = Get-GitHubUser
                 { Update-GitHubUser -DisplayName 'Octocat' } | Should -Not -Throw
                 { Update-GitHubUser -Blog 'https://psmodule.io' } | Should -Not -Throw
