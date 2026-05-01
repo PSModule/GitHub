@@ -20,7 +20,9 @@
 param()
 
 BeforeAll {
-    # DEFAULTS ACROSS ALL TESTS
+    $testName = 'Template'
+    $os = $env:RUNNER_OS
+    $id = $env:GITHUB_RUN_ID
 }
 
 Describe 'Template' {
@@ -32,25 +34,25 @@ Describe 'Template' {
             LogGroup 'Context' {
                 Write-Host ($context | Format-List | Out-String)
             }
+            if ($AuthType -eq 'APP') {
+                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
+                LogGroup 'Context - Installation' {
+                    Write-Host ($context | Format-List | Out-String)
+                }
+            }
+
+            # Reference the shared repo (NOT New-GitHubRepository)
+            $repoPrefix = "Test-$os-$TokenType"
+            $repoName = "$repoPrefix-$id"
+            $repo = Get-GitHubRepository -Owner $Owner -Name $repoName
         }
         AfterAll {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
             Write-Host ('-' * 60)
         }
 
-        # Tests for APP goes here
-        if ($AuthType -eq 'APP') {
-            It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
-                $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
-                LogGroup 'Context' {
-                    Write-Host ($context | Format-List | Out-String)
-                }
-            }
+        It 'Should do something' -Skip:($OwnerType -in ('repository', 'enterprise')) {
+            # Test logic using $repo, $Owner, $repoName
         }
-
-        # Tests for runners goes here
-        if ($Type -eq 'GitHub Actions') {}
-
-        # Tests for IAT UAT and PAT goes here
     }
 }

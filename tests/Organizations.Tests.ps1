@@ -20,9 +20,12 @@
 param()
 
 BeforeAll {
-    $testName = 'MsxOrgTests'
+    $testName = 'Organizations'
     $os = $env:RUNNER_OS
-    $number = Get-Random
+    $id = $env:GITHUB_RUN_ID
+    if (-not $id) {
+        throw 'GITHUB_RUN_ID is required to safely scope pre-test cleanup in Organizations.Tests.ps1.'
+    }
 }
 
 Describe 'Organizations' {
@@ -35,11 +38,11 @@ Describe 'Organizations' {
                 Write-Host ($context | Select-Object * | Out-String)
             }
             $orgPrefix = "$testName-$os-"
-            $orgName = "$orgPrefix$number"
+            $orgName = "$orgPrefix$id"
 
             if ($AuthType -eq 'APP') {
                 LogGroup 'Pre-test Cleanup - App Installations' {
-                    Get-GitHubAppInstallation -Context $context | Where-Object { $_.Target.Name -like "$orgPrefix*" } |
+                    Get-GitHubAppInstallation -Context $context | Where-Object { $_.Target.Name -like "$orgName*" } |
                         Uninstall-GitHubApp -Confirm:$false
                 }
 

@@ -19,6 +19,12 @@
 [CmdletBinding()]
 param()
 
+BeforeAll {
+    $testName = 'Emojis'
+    $os = $env:RUNNER_OS
+    $id = $env:GITHUB_RUN_ID
+}
+
 Describe 'Emojis' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 
@@ -28,26 +34,18 @@ Describe 'Emojis' {
             LogGroup 'Context' {
                 Write-Host ($context | Format-List | Out-String)
             }
-        }
-        AfterAll {
-            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
-            Write-Host ('-' * 60)
-        }
-
-        # Tests for APP goes here
-        if ($AuthType -eq 'APP') {
-            It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
+            if ($AuthType -eq 'APP') {
                 $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
                 LogGroup 'Context' {
                     Write-Host ($context | Format-List | Out-String)
                 }
             }
         }
+        AfterAll {
+            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+            Write-Host ('-' * 60)
+        }
 
-        # Tests for runners goes here
-        if ($Type -eq 'GitHub Actions') {}
-
-        # Tests for IAT UAT and PAT goes here
         It 'Get-GitHubEmoji - Gets a list of all emojis' {
             $emojis = Get-GitHubEmoji
             LogGroup 'emojis' {
