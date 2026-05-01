@@ -140,8 +140,8 @@ Describe 'TestName' {
 
 | Resource   | Pattern                                      | Example                          |
 |------------|----------------------------------------------|----------------------------------|
-| Repo       | `Test-{OS}-{TokenType}-{RunID}`              | `Test-Linux-USER_FG_PAT-1234`   |
-| Extra repo | `Test-{OS}-{TokenType}-{RunID}-{N}`          | `Test-Linux-USER_FG_PAT-1234-1` |
+| Repo       | `Test-{OS}-{TokenType}-{RunID}`              | `Test-Linux-USER_FG_PAT-1234`    |
+| Extra repo | `Test-{OS}-{TokenType}-{RunID}-{N}`          | `Test-Linux-USER_FG_PAT-1234-1`  |
 | Secret     | `{TestName}_{OS}_{TokenType}_{RunID}`        | `Secrets_Linux_PAT_1234`         |
 | Variable   | `{TestName}_{OS}_{TokenType}_{RunID}`        | `Variables_Linux_PAT_1234`       |
 | Team       | `{TestName}_{OS}_{TokenType}_{RunID}_{Name}` | `Teams_Linux_APP_ORG_1234_Pull`  |
