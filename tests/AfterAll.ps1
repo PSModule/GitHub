@@ -14,8 +14,20 @@ LogGroup 'AfterAll - Global Test Teardown' {
     $prefix = 'Test'
 
     # Derive the list of OS names from the Settings JSON provided by Process-PSModule.
-    $settings = $env:Settings | ConvertFrom-Json
+    try {
+        $settings = $env:Settings | ConvertFrom-Json
+    } catch {
+        throw "Settings environment variable contains invalid JSON. Expected TestSuites.Module.OSName to be present. $_"
+    }
+
     $osNames = @($settings.TestSuites.Module.OSName | Sort-Object -Unique)
+    if (-not $osNames) {
+        throw 'Settings JSON must include at least one non-empty TestSuites.Module.OSName value.'
+    }
+    $invalidOsNames = @($osNames | Where-Object { -not $_ -or -not $_.ToString().Trim() })
+    if ($invalidOsNames.Count -gt 0) {
+        throw 'Settings JSON contains one or more null or empty TestSuites.Module.OSName values.'
+    }
     Write-Host "Cleaning up test repositories for OSes: $($osNames -join ', ')"
 
     foreach ($authCase in $authCases) {

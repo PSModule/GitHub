@@ -12,8 +12,20 @@ LogGroup 'BeforeAll - Global Test Setup' {
     }
 
     # Derive the list of OS names from the Settings JSON provided by Process-PSModule.
-    $settings = $env:Settings | ConvertFrom-Json
+    try {
+        $settings = $env:Settings | ConvertFrom-Json
+    } catch {
+        throw "Settings environment variable does not contain valid JSON. Process-PSModule must populate it with a valid test suite configuration. $_"
+    }
+
     $osNames = @($settings.TestSuites.Module.OSName | Sort-Object -Unique)
+    if (-not $osNames) {
+        throw 'Settings JSON must contain TestSuites.Module.OSName with at least one OS name.'
+    }
+    $invalidOsNames = @($osNames | Where-Object { -not $_ -or -not $_.ToString().Trim() })
+    if ($invalidOsNames.Count -gt 0) {
+        throw 'Settings JSON contains one or more null or empty values in TestSuites.Module.OSName.'
+    }
     Write-Host "Creating test repositories for OSes: $($osNames -join ', ')"
 
     foreach ($authCase in $authCases) {
