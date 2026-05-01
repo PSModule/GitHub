@@ -50,8 +50,6 @@ Describe 'Secrets' {
             switch ($OwnerType) {
                 'user' {
                     $repo = Get-GitHubRepository -Name $repoName
-                    $repo2 = Get-GitHubRepository -Name "$repoName-2"
-                    $repo3 = Get-GitHubRepository -Name "$repoName-3"
                 }
                 'organization' {
                     Get-GitHubSecret -Owner $Owner | Where-Object { $_.Name -like "$secretName*" } | Remove-GitHubSecret -Confirm:$false
@@ -74,8 +72,10 @@ Describe 'Secrets' {
             }
             LogGroup "Repository - [$repoName]" {
                 Write-Host ($repo | Select-Object * | Out-String)
-                Write-Host ($repo2 | Select-Object * | Out-String)
-                Write-Host ($repo3 | Select-Object * | Out-String)
+                if ($OwnerType -eq 'organization') {
+                    Write-Host ($repo2 | Select-Object * | Out-String)
+                    Write-Host ($repo3 | Select-Object * | Out-String)
+                }
             }
         }
 

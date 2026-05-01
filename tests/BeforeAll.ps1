@@ -62,15 +62,11 @@ LogGroup 'BeforeAll - Global Test Setup' {
                 }
 
                 # Create extra repositories needed by Secrets/Variables SelectedRepository tests.
-                foreach ($suffix in 2, 3) {
-                    $extraName = "$repoName-$suffix"
-                    switch ($OwnerType) {
-                        'user' {
-                            New-GitHubRepository -Name $extraName
-                        }
-                        'organization' {
-                            New-GitHubRepository -Organization $Owner -Name $extraName
-                        }
+                # Only organization owners need them — those tests are skipped for user owners.
+                if ($OwnerType -eq 'organization') {
+                    foreach ($suffix in 2, 3) {
+                        $extraName = "$repoName-$suffix"
+                        New-GitHubRepository -Organization $Owner -Name $extraName
                     }
                 }
             }

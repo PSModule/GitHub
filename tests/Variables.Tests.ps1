@@ -50,8 +50,6 @@ Describe 'Variables' {
             switch ($OwnerType) {
                 'user' {
                     $repo = Get-GitHubRepository -Name $repoName
-                    $repo2 = Get-GitHubRepository -Name "$repoName-2"
-                    $repo3 = Get-GitHubRepository -Name "$repoName-3"
                 }
                 'organization' {
                     Get-GitHubVariable -Owner $Owner | Where-Object { $_.Name -like "$variableName*" } | Remove-GitHubVariable -Confirm:$false
@@ -73,8 +71,10 @@ Describe 'Variables' {
             }
             LogGroup "Repository - [$repoName]" {
                 Write-Host ($repo | Select-Object * | Out-String)
-                Write-Host ($repo2 | Select-Object * | Out-String)
-                Write-Host ($repo3 | Select-Object * | Out-String)
+                if ($OwnerType -eq 'organization') {
+                    Write-Host ($repo2 | Select-Object * | Out-String)
+                    Write-Host ($repo3 | Select-Object * | Out-String)
+                }
             }
         }
 
