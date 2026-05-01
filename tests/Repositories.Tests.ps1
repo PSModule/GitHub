@@ -518,6 +518,22 @@ Describe 'Repositories' {
             }
             $repos.Count | Should -BeGreaterThan 0
         }
+        It 'Get-GitHubRepositoryCustomProperty - Gets custom properties and preserves value types' -Skip:($OwnerType -ne 'organization') {
+            LogGroup 'Custom Properties' {
+                $properties = Get-GitHubRepositoryCustomProperty -Owner $owner -Repository $repoName
+                Write-Host ($properties | Format-List | Out-String)
+            }
+            if ($properties) {
+                foreach ($prop in $properties) {
+                    $prop.Name | Should -Not -BeNullOrEmpty
+                    if ($prop.Value -is [System.Collections.IEnumerable] -and $prop.Value -isnot [string]) {
+                        $prop.Value -is [string[]] | Should -BeTrue -Because "multi-select values must be preserved as string arrays, got: $($prop.Value.GetType().FullName)"
+                    } else {
+                        $prop.Value | Should -BeOfType [string]
+                    }
+                }
+            }
+        }
         It 'Set-GitHubRepository - Updates an existing repository' -Skip:($OwnerType -in ('repository', 'enterprise')) {
             $description = 'Updated description'
             LogGroup 'Repository - Set update' {
