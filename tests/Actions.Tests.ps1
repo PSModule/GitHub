@@ -16,9 +16,12 @@
 param()
 
 BeforeAll {
-    $testName = 'ActionsTests'
+    $testName = 'Actions'
     $os = $env:RUNNER_OS
-    $guid = [guid]::NewGuid().ToString()
+    $id = $env:GITHUB_RUN_ID
+    if (-not $id) {
+        throw 'GITHUB_RUN_ID is required for Actions tests because it is used to build repository-scoped names for OIDC operations.'
+    }
 }
 
 Describe 'Actions' {
@@ -51,37 +54,23 @@ Describe 'Actions' {
                     Write-Host ($context | Format-List | Out-String)
                 }
             }
-            $repoPrefix = "$testName-$os-$TokenType"
-            $repoName = "$repoPrefix-$guid"
+            $repoPrefix = "Test-$os-$TokenType"
+            $repoName = "$repoPrefix-$id"
 
-            switch ($OwnerType) {
-                'user' {
-                    Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } |
-                        Remove-GitHubRepository -Confirm:$false
-                    $repo = New-GitHubRepository -Name $repoName -Confirm:$false
+            LogGroup "Using Repository - [$repoName]" {
+                if ($OwnerType -in ('repository', 'enterprise')) {
+                    $repo = $null
+                } else {
+                    $repo = Get-GitHubRepository -Owner $Owner -Name $repoName
+                    if (-not $repo) {
+                        throw "Shared test repository '$repoName' was not found for owner '$Owner' (OwnerType: '$OwnerType'). Ensure the repository was provisioned and the repository name is correct."
+                    }
+                    Write-Host ($repo | Select-Object * | Out-String)
                 }
-                'organization' {
-                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } |
-                        Remove-GitHubRepository -Confirm:$false
-                    $repo = New-GitHubRepository -Organization $Owner -Name $repoName -Confirm:$false
-                }
-            }
-            LogGroup "Repository - [$repoName]" {
-                Write-Host ($repo | Select-Object * | Out-String)
             }
         }
 
         AfterAll {
-            switch ($OwnerType) {
-                'user' {
-                    Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } |
-                        Remove-GitHubRepository -Confirm:$false
-                }
-                'organization' {
-                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } |
-                        Remove-GitHubRepository -Confirm:$false
-                }
-            }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
             Write-Host ('-' * 60)
         }

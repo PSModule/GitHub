@@ -20,9 +20,12 @@
 param()
 
 BeforeAll {
-    $testName = 'EnvironmentsTests'
+    $testName = 'Environments'
     $os = $env:RUNNER_OS
-    $guid = [guid]::NewGuid().ToString()
+    $id = $env:GITHUB_RUN_ID
+    if (-not $id) {
+        throw 'GITHUB_RUN_ID is required for Environments tests.'
+    }
 }
 
 Describe 'Environments' {
@@ -40,34 +43,20 @@ Describe 'Environments' {
                     Write-Host ($context | Format-List | Out-String)
                 }
             }
-            $repoPrefix = "$testName-$os-$TokenType"
-            $repoName = "$repoPrefix-$guid"
-            $environmentName = "$testName-$os-$TokenType-$guid"
+            $repoPrefix = "Test-$os-$TokenType"
+            $repoName = "$repoPrefix-$id"
+            $environmentName = "$testName-$os-$TokenType-$id"
 
-            switch ($OwnerType) {
-                'user' {
-                    Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                    $repo = New-GitHubRepository -Name $repoName -Confirm:$false
+            LogGroup "Using Repository - [$repoName]" {
+                $repo = Get-GitHubRepository -Owner $Owner -Name $repoName
+                if (($OwnerType -notin ('repository', 'enterprise')) -and (-not $repo)) {
+                    throw "Shared test repository '$repoName' was not found for owner '$Owner'. Ensure the repository was created before running the environment tests."
                 }
-                'organization' {
-                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                    $repo = New-GitHubRepository -Organization $owner -Name $repoName -Confirm:$false
-                }
-            }
-            LogGroup "Repository - [$repoName]" {
                 Write-Host ($repo | Select-Object * | Out-String)
             }
         }
 
         AfterAll {
-            switch ($OwnerType) {
-                'user' {
-                    Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                }
-                'organization' {
-                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                }
-            }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
             Write-Host ('-' * 60)
         }

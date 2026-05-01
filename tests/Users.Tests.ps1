@@ -15,6 +15,12 @@
 [CmdletBinding()]
 param()
 
+BeforeAll {
+    $testName = 'Users'
+    $os = $env:RUNNER_OS
+    $id = $env:GITHUB_RUN_ID
+}
+
 Describe 'Users' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 
@@ -24,33 +30,27 @@ Describe 'Users' {
             LogGroup 'Context' {
                 Write-Host ($context | Format-List | Out-String)
             }
-        }
-        AfterAll {
-            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
-            Write-Host ('-' * 60)
-        }
-
-        # Tests for APP goes here
-        if ($AuthType -eq 'APP') {
-            It 'Connect-GitHubApp - Connects as a GitHub App to <Owner>' {
+            if ($AuthType -eq 'APP') {
                 $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
                 LogGroup 'Context' {
                     Write-Host ($context | Format-List | Out-String)
                 }
             }
         }
+        AfterAll {
+            Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
+            Write-Host ('-' * 60)
+        }
 
-        # Tests for IAT UAT and PAT goes here
         It 'Get-GitHubUser - Get the specified user' {
             { Get-GitHubUser -Name 'Octocat' } | Should -Not -Throw
         }
 
-        if ($OwnerType -eq 'user') {
+        Context 'Authenticated user' -Skip:($OwnerType -ne 'user') {
             It 'Get-GitHubUser - Gets the authenticated user' {
                 { Get-GitHubUser } | Should -Not -Throw
             }
             It 'Update-GitHubUser - Can set configuration on a user' {
-                $guid = (New-Guid).Guid
                 $user = Get-GitHubUser
                 { Update-GitHubUser -DisplayName 'Octocat' } | Should -Not -Throw
                 { Update-GitHubUser -Blog 'https://psmodule.io' } | Should -Not -Throw

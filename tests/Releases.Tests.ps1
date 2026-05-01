@@ -20,9 +20,12 @@
 param()
 
 BeforeAll {
-    $testName = 'ReleasesTests'
+    $testName = 'Releases'
     $os = $env:RUNNER_OS
-    $guid = [guid]::NewGuid().ToString()
+    $id = $env:GITHUB_RUN_ID
+    if (-not $id) {
+        throw 'GITHUB_RUN_ID must be set for run-scoped release tests.'
+    }
 }
 
 Describe 'Releases' {
@@ -40,40 +43,19 @@ Describe 'Releases' {
                     Write-Host ($context | Format-Table | Out-String)
                 }
             }
-            $repoPrefix = "$testName-$os-$TokenType"
-            $repoName = "$repoPrefix-$guid"
+            $repoPrefix = "Test-$os-$TokenType"
+            $repoName = "$repoPrefix-$id"
 
-            $params = @{
-                Name      = $repoName
-                Context   = $context
-                AddReadme = $true
-                License   = 'mit'
-                Gitignore = 'VisualStudio'
-            }
-            switch ($OwnerType) {
-                'user' {
-                    Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                    $repo = New-GitHubRepository @params
+            LogGroup "Using Repository - [$repoName]" {
+                $repo = Get-GitHubRepository -Owner $Owner -Name $repoName
+                if (($OwnerType -notin ('repository', 'enterprise')) -and (-not $repo)) {
+                    throw "Expected shared test repository '$Owner/$repoName' was not found. Get-GitHubRepository returned no result, so release tests cannot continue."
                 }
-                'organization' {
-                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                    $repo = New-GitHubRepository @params -Organization $owner
-                }
-            }
-            LogGroup "Repository - [$repoName]" {
                 Write-Host ($repo | Select-Object * | Out-String)
             }
         }
 
         AfterAll {
-            switch ($OwnerType) {
-                'user' {
-                    Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                }
-                'organization' {
-                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                }
-            }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
             Write-Host ('-' * 60)
         }
