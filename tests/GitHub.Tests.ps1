@@ -27,7 +27,7 @@ Describe 'GitHubCustomProperty' {
         }
         $prop = [GitHubCustomProperty]::new($obj)
         $prop.Name | Should -Be 'SubscribeTo'
-        $prop.Value | Should -BeOfType [string]
+        $prop.Value -is [string[]] | Should -BeTrue -Because 'multi-select values must be preserved as string arrays'
         $prop.Value | Should -HaveCount 3
         $prop.Value[0] | Should -Be 'Custom Instructions'
         $prop.Value[1] | Should -Be 'License'
