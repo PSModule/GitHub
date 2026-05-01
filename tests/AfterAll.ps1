@@ -38,12 +38,22 @@ LogGroup 'AfterAll - Global Test Teardown' {
                 $repoName = "$repoPrefix-$id"
 
                 LogGroup "Repository cleanup - $AuthType-$TokenType - $os" {
-                    switch ($OwnerType) {
-                        'user' {
-                            Get-GitHubRepository | Where-Object { $_.Name -like "$repoName*" } | Remove-GitHubRepository -Confirm:$false
-                        }
-                        'organization' {
-                            Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoName*" } | Remove-GitHubRepository -Confirm:$false
+                    # Use deterministic name lookups instead of listing all repos to reduce API calls.
+                    $cleanupRepoNames = @($repoName)
+                    if ($OwnerType -eq 'organization') {
+                        $cleanupRepoNames += "$repoName-2", "$repoName-3"
+                    }
+
+                    foreach ($cleanupRepoName in $cleanupRepoNames) {
+                        switch ($OwnerType) {
+                            'user' {
+                                Get-GitHubRepository -Name $cleanupRepoName -ErrorAction SilentlyContinue |
+                                    Remove-GitHubRepository -Confirm:$false
+                            }
+                            'organization' {
+                                Get-GitHubRepository -Owner $Owner -Name $cleanupRepoName -ErrorAction SilentlyContinue |
+                                    Remove-GitHubRepository -Confirm:$false
+                            }
                         }
                     }
                 }

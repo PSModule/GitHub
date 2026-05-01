@@ -53,12 +53,18 @@ Describe 'Secrets' {
             switch ($OwnerType) {
                 'user' {
                     $repo = Get-GitHubRepository -Name $repoName
+                    if (-not $repo) {
+                        throw "Shared test repository '$repoName' was not found. Ensure BeforeAll.ps1 provisioned it."
+                    }
                 }
                 'organization' {
                     Get-GitHubSecret -Owner $Owner | Where-Object { $_.Name -like "$secretName*" } | Remove-GitHubSecret -Confirm:$false
                     $repo = Get-GitHubRepository -Owner $Owner -Name $repoName
                     $repo2 = Get-GitHubRepository -Owner $Owner -Name "$repoName-2"
                     $repo3 = Get-GitHubRepository -Owner $Owner -Name "$repoName-3"
+                    if (-not $repo -or -not $repo2 -or -not $repo3) {
+                        throw "One or more shared test repositories ('$repoName', '$repoName-2', '$repoName-3') not found for owner '$Owner'. Ensure BeforeAll.ps1 provisioned them."
+                    }
                     LogGroup "Org secret - [$orgSecretName]" {
                         $params = @{
                             Owner                = $owner
