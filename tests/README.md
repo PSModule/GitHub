@@ -77,19 +77,20 @@ For generic guidance on setup/teardown scripts, see the
 Runs once before all parallel test files. For each auth case (except `GITHUB_TOKEN`):
 
 1. Connects using the auth case credentials
-2. Cleans up stale repos from previous failed runs (matching `Test-{OS}-{TokenType}-{RunID}*`)
+2. Removes any existing repositories for the deterministic names used by the run (`Test-{OS}-{TokenType}-{GITHUB_RUN_ID}` and, where applicable, the `-2`/`-3` variants)
 3. Creates a primary shared repository per OS: `Test-{OS}-{TokenType}-{GITHUB_RUN_ID}`
-   - Includes `AddReadme`, `License` (MIT), and `Gitignore` (VisualStudio) for release tests
+   - Includes `AddReadme`, `License` (`mit`), and `Gitignore` (VisualStudio) for release tests
    - For `user` owners: `New-GitHubRepository -Name $repoName`
    - For `organization` owners: `New-GitHubRepository -Organization $Owner -Name $repoName`
-4. Creates two extra repositories per OS (`-2`, `-3` suffix) for Secrets/Variables SelectedRepository tests
+4. For `organization` owners only, creates two extra repositories per OS (`-2`, `-3` suffix) for Secrets/Variables `SelectedRepository` tests
+   - These extras are not created for `user` owners because `SelectedRepository` contexts are skipped for user-owned cases
 
 ### `AfterAll.ps1` — global teardown
 
 Runs once after all parallel test files complete. For each auth case (except `GITHUB_TOKEN`):
 
 1. Connects using the auth case credentials
-2. Removes all repositories matching the `Test-{OS}-{TokenType}-{RunID}*` pattern (run-scoped)
+2. Removes the run-scoped repositories created by setup using their known names (`Test-{OS}-{TokenType}-{GITHUB_RUN_ID}` and, where applicable, the `-2`/`-3` variants)
 
 ## Test file pattern
 
