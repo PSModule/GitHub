@@ -23,6 +23,9 @@ BeforeAll {
     $testName = 'Secrets'
     $os = $env:RUNNER_OS
     $id = $env:GITHUB_RUN_ID
+    if (-not $id) {
+        throw 'GITHUB_RUN_ID is required for Secrets tests because secret cleanup uses run-scoped wildcard names.'
+    }
 }
 
 Describe 'Secrets' {

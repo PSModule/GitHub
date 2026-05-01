@@ -573,6 +573,7 @@ Describe 'API' {
                 Write-Host ($context | Format-List | Out-String)
             }
             $context | Should -Not -BeNullOrEmpty
+            $appContext = $context
             if ($AuthType -eq 'APP') {
                 $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
                 LogGroup 'Context - Installation' {
@@ -587,7 +588,7 @@ Describe 'API' {
 
         It 'Invoke-GitHubAPI - Gets the app details' -Skip:($AuthType -ne 'APP') {
             {
-                $app = Invoke-GitHubAPI -ApiEndpoint '/app'
+                $app = Invoke-GitHubAPI -ApiEndpoint '/app' -Context $appContext
                 LogGroup 'App' {
                     Write-Host ($app | Format-List | Out-String)
                 }

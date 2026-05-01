@@ -23,6 +23,9 @@ BeforeAll {
     $testName = 'Repositories'
     $os = $env:RUNNER_OS
     $id = $env:GITHUB_RUN_ID
+    if (-not $id) {
+        throw 'GITHUB_RUN_ID is required for Repositories tests because cleanup removes repositories and teams by name prefix.'
+    }
 }
 
 Describe 'Repositories' {

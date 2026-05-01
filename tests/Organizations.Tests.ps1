@@ -23,6 +23,9 @@ BeforeAll {
     $testName = 'Organizations'
     $os = $env:RUNNER_OS
     $id = $env:GITHUB_RUN_ID
+    if (-not $id) {
+        throw 'GITHUB_RUN_ID is required to safely scope pre-test cleanup in Organizations.Tests.ps1.'
+    }
 }
 
 Describe 'Organizations' {
