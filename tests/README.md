@@ -72,7 +72,7 @@ For generic guidance on setup/teardown scripts, see the
 Runs once before all parallel test files. For each auth case (except `GITHUB_TOKEN`):
 
 1. Connects using the auth case credentials
-2. Cleans up stale repos from previous failed runs (matching `Test-$os-$TokenType-*`)
+2. Cleans up stale repos from previous failed runs (matching `Test-{OS}-{TokenType}-{RunID}*`)
 3. Creates a primary shared repository per OS: `Test-{OS}-{TokenType}-{GITHUB_RUN_ID}`
    - Includes `AddReadme`, `License` (MIT), and `Gitignore` (VisualStudio) for release tests
    - For `user` owners: `New-GitHubRepository -Name $repoName`
@@ -84,7 +84,7 @@ Runs once before all parallel test files. For each auth case (except `GITHUB_TOK
 Runs once after all parallel test files complete. For each auth case (except `GITHUB_TOKEN`):
 
 1. Connects using the auth case credentials
-2. Removes all repositories matching the `Test-{OS}-{TokenType}-*` prefix
+2. Removes all repositories matching the `Test-{OS}-{TokenType}-{RunID}*` pattern (run-scoped)
 
 ## Test file pattern
 

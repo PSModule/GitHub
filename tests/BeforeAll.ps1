@@ -49,7 +49,7 @@ LogGroup 'BeforeAll - Global Test Setup' {
                 $repoParams = @{
                     Name      = $repoName
                     AddReadme = $true
-                    License   = 'MIT'
+                    License   = 'mit'
                     Gitignore = 'VisualStudio'
                 }
                 switch ($OwnerType) {

@@ -40,8 +40,8 @@ Describe 'Teams' {
                     Write-Host ($context | Format-List | Out-String)
                 }
             }
-            $teamPrefix = "$testName`_$os`_$TokenType"
-            $teamName = "$teamPrefix`_$id"
+            $teamPrefix = "$testName`_$os`_$TokenType`_$id"
+            $teamName = $teamPrefix
 
             switch ($OwnerType) {
                 'organization' {
