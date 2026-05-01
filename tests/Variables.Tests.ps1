@@ -24,7 +24,7 @@ BeforeAll {
     $os = $env:RUNNER_OS
     $id = $env:GITHUB_RUN_ID
     if (-not $id) {
-        throw 'GITHUB_RUN_ID is not set. Skipping Variables tests to avoid deleting variables from other runs.'
+        throw 'GITHUB_RUN_ID is not set. Variables tests refuse to run without a scoped run ID to avoid deleting variables from other runs.'
     }
 }
 
