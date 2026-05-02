@@ -26,7 +26,6 @@ BeforeAll {
     if (-not $id) {
         throw 'GITHUB_RUN_ID is required for Secrets tests because secret cleanup uses run-scoped wildcard names.'
     }
-    . "$PSScriptRoot/Data/SharedTestRepositories.ps1"
 }
 
 Describe 'Secrets' {
@@ -53,16 +52,13 @@ Describe 'Secrets' {
 
             switch ($OwnerType) {
                 'user' {
-                    # Declarative get-or-create so partial reruns (issue #590) can rebuild
-                    # the shared repository if AfterAll already tore it down.
-                    $repo = Initialize-SharedTestRepository -Owner $Owner -OwnerType 'user' -Name $repoName
+                    $repo = Set-GitHubRepository -Name $repoName -AddReadme -License 'mit' -Gitignore 'VisualStudio'
                 }
                 'organization' {
                     Get-GitHubSecret -Owner $Owner | Where-Object { $_.Name -like "$secretName*" } | Remove-GitHubSecret -Confirm:$false
-                    $repo = Initialize-SharedTestRepository -Owner $Owner -OwnerType 'organization' -Name $repoName
-                    $extras = Initialize-SharedTestRepositoryExtras -Owner $Owner -BaseName $repoName
-                    $repo2 = $extras[0]
-                    $repo3 = $extras[1]
+                    $repo = Set-GitHubRepository -Organization $Owner -Name $repoName -AddReadme -License 'mit' -Gitignore 'VisualStudio'
+                    $repo2 = Set-GitHubRepository -Organization $Owner -Name "$repoName-2"
+                    $repo3 = Set-GitHubRepository -Organization $Owner -Name "$repoName-3"
                     LogGroup "Org secret - [$orgSecretName]" {
                         $params = @{
                             Owner                = $owner

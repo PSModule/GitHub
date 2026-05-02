@@ -26,7 +26,6 @@ BeforeAll {
     if (-not $id) {
         throw 'GITHUB_RUN_ID must be set for run-scoped release tests.'
     }
-    . "$PSScriptRoot/Data/SharedTestRepositories.ps1"
 }
 
 Describe 'Releases' {
@@ -51,9 +50,16 @@ Describe 'Releases' {
                 if ($OwnerType -in ('repository', 'enterprise')) {
                     $repo = $null
                 } else {
-                    # Declarative get-or-create so partial reruns (issue #590) can rebuild
-                    # the shared repository if AfterAll already tore it down.
-                    $repo = Initialize-SharedTestRepository -Owner $Owner -OwnerType $OwnerType -Name $repoName
+                    $repoParams = @{
+                        Name      = $repoName
+                        AddReadme = $true
+                        License   = 'mit'
+                        Gitignore = 'VisualStudio'
+                    }
+                    $repo = switch ($OwnerType) {
+                        'user' { Set-GitHubRepository @repoParams }
+                        'organization' { Set-GitHubRepository @repoParams -Organization $Owner }
+                    }
                 }
                 Write-Host ($repo | Select-Object * | Out-String)
             }

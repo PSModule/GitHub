@@ -3,7 +3,6 @@ param()
 
 LogGroup 'BeforeAll - Global Test Setup' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
-    . "$PSScriptRoot/Data/SharedTestRepositories.ps1"
     $id = $env:GITHUB_RUN_ID
     if (-not $id) {
         throw 'GITHUB_RUN_ID environment variable is not set. Refusing to create or clean up test repositories with a non-deterministic name.'
@@ -68,15 +67,24 @@ LogGroup 'BeforeAll - Global Test Setup' {
                     }
                 }
 
-                # Provision the primary shared repository via the same idempotent helper that
-                # leaf jobs use, so the happy-path BeforeAll and the partial-rerun self-heal
-                # path (issue #590) follow the same code.
-                Initialize-SharedTestRepository -Owner $Owner -OwnerType $OwnerType -Name $repoName | Out-Null
+                # Provision the primary shared repository.
+                $repoParams = @{
+                    Name      = $repoName
+                    AddReadme = $true
+                    License   = 'mit'
+                    Gitignore = 'VisualStudio'
+                }
+                switch ($OwnerType) {
+                    'user' { Set-GitHubRepository @repoParams }
+                    'organization' { Set-GitHubRepository @repoParams -Organization $Owner }
+                }
 
                 # Provision extra repositories needed by Secrets/Variables SelectedRepository tests.
                 # Only organization owners need them — those tests are skipped for user owners.
                 if ($OwnerType -eq 'organization') {
-                    Initialize-SharedTestRepositoryExtras -Owner $Owner -BaseName $repoName | Out-Null
+                    foreach ($suffix in 2, 3) {
+                        Set-GitHubRepository -Organization $Owner -Name "$repoName-$suffix"
+                    }
                 }
             }
         }

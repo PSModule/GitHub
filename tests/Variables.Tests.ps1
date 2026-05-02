@@ -26,7 +26,6 @@ BeforeAll {
     if (-not $id) {
         throw 'GITHUB_RUN_ID is not set. Variables tests refuse to run without a scoped run ID to avoid deleting variables from other runs.'
     }
-    . "$PSScriptRoot/Data/SharedTestRepositories.ps1"
 }
 
 Describe 'Variables' {
@@ -53,16 +52,13 @@ Describe 'Variables' {
 
             switch ($OwnerType) {
                 'user' {
-                    # Declarative get-or-create so partial reruns (issue #590) can rebuild
-                    # the shared repository if AfterAll already tore it down.
-                    $repo = Initialize-SharedTestRepository -Owner $Owner -OwnerType 'user' -Name $repoName
+                    $repo = Set-GitHubRepository -Name $repoName -AddReadme -License 'mit' -Gitignore 'VisualStudio'
                 }
                 'organization' {
                     Get-GitHubVariable -Owner $Owner | Where-Object { $_.Name -like "$variableName*" } | Remove-GitHubVariable -Confirm:$false
-                    $repo = Initialize-SharedTestRepository -Owner $Owner -OwnerType 'organization' -Name $repoName
-                    $extras = Initialize-SharedTestRepositoryExtras -Owner $Owner -BaseName $repoName
-                    $repo2 = $extras[0]
-                    $repo3 = $extras[1]
+                    $repo = Set-GitHubRepository -Organization $Owner -Name $repoName -AddReadme -License 'mit' -Gitignore 'VisualStudio'
+                    $repo2 = Set-GitHubRepository -Organization $Owner -Name "$repoName-2"
+                    $repo3 = Set-GitHubRepository -Organization $Owner -Name "$repoName-3"
                     LogGroup "Org variable - [$orgVariableName]" {
                         $params = @{
                             Owner                = $owner
