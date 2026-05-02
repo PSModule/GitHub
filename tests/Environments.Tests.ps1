@@ -48,9 +48,19 @@ Describe 'Environments' {
             $environmentName = "$testName-$os-$TokenType-$id"
 
             LogGroup "Using Repository - [$repoName]" {
-                $repo = Get-GitHubRepository -Owner $Owner -Name $repoName
-                if (($OwnerType -notin ('repository', 'enterprise')) -and (-not $repo)) {
-                    throw "Shared test repository '$repoName' was not found for owner '$Owner'. Ensure the repository was created before running the environment tests."
+                if ($OwnerType -in ('repository', 'enterprise')) {
+                    $repo = $null
+                } else {
+                    $repoParams = @{
+                        Name      = $repoName
+                        AddReadme = $true
+                        License   = 'mit'
+                        Gitignore = 'VisualStudio'
+                    }
+                    $repo = switch ($OwnerType) {
+                        'user' { Set-GitHubRepository @repoParams }
+                        'organization' { Set-GitHubRepository @repoParams -Organization $Owner }
+                    }
                 }
                 Write-Host ($repo | Select-Object * | Out-String)
             }
