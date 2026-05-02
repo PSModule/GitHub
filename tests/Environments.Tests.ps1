@@ -26,6 +26,7 @@ BeforeAll {
     if (-not $id) {
         throw 'GITHUB_RUN_ID is required for Environments tests.'
     }
+    . "$PSScriptRoot/Data/SharedTestRepositories.ps1"
 }
 
 Describe 'Environments' {
@@ -48,9 +49,12 @@ Describe 'Environments' {
             $environmentName = "$testName-$os-$TokenType-$id"
 
             LogGroup "Using Repository - [$repoName]" {
-                $repo = Get-GitHubRepository -Owner $Owner -Name $repoName
-                if (($OwnerType -notin ('repository', 'enterprise')) -and (-not $repo)) {
-                    throw "Shared test repository '$repoName' was not found for owner '$Owner'. Ensure the repository was created before running the environment tests."
+                if ($OwnerType -in ('repository', 'enterprise')) {
+                    $repo = $null
+                } else {
+                    # Declarative get-or-create so partial reruns (issue #590) can rebuild
+                    # the shared repository if AfterAll already tore it down.
+                    $repo = Initialize-SharedTestRepository -Owner $Owner -OwnerType $OwnerType -Name $repoName
                 }
                 Write-Host ($repo | Select-Object * | Out-String)
             }
