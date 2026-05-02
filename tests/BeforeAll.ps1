@@ -3,6 +3,7 @@ param()
 
 LogGroup 'BeforeAll - Global Test Setup' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
+    . "$PSScriptRoot/Data/SharedTestRepositories.ps1"
     $id = $env:GITHUB_RUN_ID
     if (-not $id) {
         throw 'GITHUB_RUN_ID environment variable is not set. Refusing to create or clean up test repositories with a non-deterministic name.'
@@ -67,29 +68,15 @@ LogGroup 'BeforeAll - Global Test Setup' {
                     }
                 }
 
-                # Create the primary shared repository (with readme, license, gitignore for release tests).
-                $repoParams = @{
-                    Name      = $repoName
-                    AddReadme = $true
-                    License   = 'mit'
-                    Gitignore = 'VisualStudio'
-                }
-                switch ($OwnerType) {
-                    'user' {
-                        New-GitHubRepository @repoParams
-                    }
-                    'organization' {
-                        New-GitHubRepository @repoParams -Organization $Owner
-                    }
-                }
+                # Provision the primary shared repository via the same idempotent helper that
+                # leaf jobs use, so the happy-path BeforeAll and the partial-rerun self-heal
+                # path (issue #590) follow the same code.
+                Initialize-SharedTestRepository -Owner $Owner -OwnerType $OwnerType -Name $repoName | Out-Null
 
-                # Create extra repositories needed by Secrets/Variables SelectedRepository tests.
+                # Provision extra repositories needed by Secrets/Variables SelectedRepository tests.
                 # Only organization owners need them — those tests are skipped for user owners.
                 if ($OwnerType -eq 'organization') {
-                    foreach ($suffix in 2, 3) {
-                        $extraName = "$repoName-$suffix"
-                        New-GitHubRepository -Organization $Owner -Name $extraName
-                    }
+                    Initialize-SharedTestRepositoryExtras -Owner $Owner -BaseName $repoName | Out-Null
                 }
             }
         }
