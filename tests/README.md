@@ -78,12 +78,14 @@ Runs once before all parallel test files. For each auth case (except `GITHUB_TOK
 
 1. Connects using the auth case credentials
 2. Removes any existing repositories for the deterministic names used by the run (`Test-{OS}-{TokenType}-{GITHUB_RUN_ID}` and, where applicable, the `-2`/`-3` variants)
-3. Creates a primary shared repository per OS: `Test-{OS}-{TokenType}-{GITHUB_RUN_ID}`
-   - Includes `AddReadme`, `License` (`mit`), and `Gitignore` (VisualStudio) for release tests
-   - For `user` owners: `New-GitHubRepository -Name $repoName`
-   - For `organization` owners: `New-GitHubRepository -Organization $Owner -Name $repoName`
-4. For `organization` owners only, creates two extra repositories per OS (`-2`, `-3` suffix) for Secrets/Variables `SelectedRepository` tests
+3. Provisions a primary shared repository per OS using `Set-GitHubRepository`: `Test-{OS}-{TokenType}-{GITHUB_RUN_ID}`
+   - Includes `-AddReadme`, `-License 'mit'`, and `-Gitignore 'VisualStudio'` so release tests have a default branch with content
+   - For `user` owners: `Set-GitHubRepository -Name $repoName ...`
+   - For `organization` owners: `Set-GitHubRepository -Organization $Owner -Name $repoName ...`
+4. For `organization` owners only, provisions two extra repositories per OS (`-2`, `-3` suffix) for Secrets/Variables `SelectedRepository` tests
    - These extras are not created for `user` owners because `SelectedRepository` contexts are skipped for user-owned cases
+
+`Set-GitHubRepository` is idempotent — it returns the existing repository if it already exists, or creates it if it does not. This makes the global setup safe to re-run for the same `GITHUB_RUN_ID`.
 
 ### `AfterAll.ps1` — global teardown
 
@@ -114,10 +116,19 @@ Describe 'TestName' {
                 $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
             }
 
-            # Reference the shared repo (NOT New-GitHubRepository)
+            # Ensure the shared repo exists (idempotent — creates only if missing)
             $repoPrefix = "Test-$os-$TokenType"
             $repoName = "$repoPrefix-$id"
-            $repo = Get-GitHubRepository -Owner $Owner -Name $repoName
+            $repoParams = @{
+                Name      = $repoName
+                AddReadme = $true
+                License   = 'mit'
+                Gitignore = 'VisualStudio'
+            }
+            $repo = switch ($OwnerType) {
+                'user'         { Set-GitHubRepository @repoParams }
+                'organization' { Set-GitHubRepository @repoParams -Organization $Owner }
+            }
         }
 
         AfterAll {
@@ -135,7 +146,11 @@ Describe 'TestName' {
 
 - **`$id = $env:GITHUB_RUN_ID`** — not `[guid]::NewGuid()` or `Get-Random`. This makes the repo name deterministic
   per workflow run so shared infrastructure can be referenced by name.
-- **`Get-GitHubRepository`** — test files fetch the shared repo, they do not create repos.
+- **`Set-GitHubRepository`** — test files ensure the shared repo exists using `Set-GitHubRepository`, which is
+  idempotent (returns an existing repo or creates one). This means each test file is self-sufficient: it works both
+  on the happy path (repo already provisioned by `BeforeAll.ps1`) and on partial reruns where the infrastructure was
+  torn down between attempts. **Do not** use `Get-GitHubRepository` with a throw guard — that breaks partial reruns.
+  **Do not** use `New-GitHubRepository` — that fails if the repo already exists.
 - **`-Skip:($OwnerType -in ('repository', 'enterprise'))`** — standard skip condition for repo-dependent tests.
 - **`Disconnect-GitHubAccount`** — every context disconnects all sessions in `AfterAll`.
 - Test-specific ephemeral resources (releases, secrets, variables, environments, teams) are still created and cleaned up
