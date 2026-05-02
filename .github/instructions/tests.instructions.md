@@ -4,6 +4,83 @@ applyTo: "tests/**"
 ---
 # Integration Test Conventions
 
+## Test infrastructure accounts
+
+### User
+
+Login: `psmodule-user`
+Owner of:
+
+- [psmodule-user](https://github.com/psmodule-user) (standalone org)
+- [psmodule-test-org2](https://github.com/orgs/psmodule-test-org2) (standalone org)
+
+Secrets:
+
+- `TEST_USER_PAT` → `psmodule-user` (user)
+- `TEST_USER_USER_FG_PAT` → `psmodule-user` (user)
+- `TEST_USER_ORG_FG_PAT` → `psmodule-test-org2` (org)
+
+### APP_ENT — PSModule Enterprise App
+
+Homed in `MSX`. ClientID: `Iv23lieHcDQDwVV3alK1`.
+Installed on [psmodule-test-org3](https://github.com/orgs/psmodule-test-org3) (enterprise org) with all permissions and push events.
+
+Secrets: `TEST_APP_ENT_CLIENT_ID`, `TEST_APP_ENT_PRIVATE_KEY`
+
+### APP_ORG — PSModule Organization App
+
+Homed in `PSModule`. ClientID: `Iv23liYDnEbKlS9IVzHf`.
+Installed on [psmodule-test-org](https://github.com/orgs/psmodule-test-org) (standalone org) with all permissions and push events.
+
+Secrets: `TEST_APP_ORG_CLIENT_ID`, `TEST_APP_ORG_PRIVATE_KEY`
+
+## Auth cases
+
+`AuthCases.ps1` defines 7 auth cases. Each test file iterates over all cases, skipping those
+that don't apply (e.g., `repository` and `enterprise` owner types skip repo-dependent tests).
+
+| # | AuthType | TokenType     | Owner              | OwnerType    |
+|---|----------|---------------|--------------------|--------------|
+| 1 | PAT      | USER_FG_PAT   | psmodule-user      | user         |
+| 2 | PAT      | ORG_FG_PAT    | psmodule-test-org2 | organization |
+| 3 | PAT      | PAT           | psmodule-user      | user         |
+| 4 | IAT      | GITHUB_TOKEN  | PSModule           | repository   |
+| 5 | App      | APP_ORG       | psmodule-test-org  | organization |
+| 6 | App      | APP_ENT       | psmodule-test-org3 | organization |
+| 7 | App      | APP_ENT       | msx                | enterprise   |
+
+Cases 4 (`repository`) and 7 (`enterprise`) skip repo creation. Cases 1 and 3 share the same user owner
+(`psmodule-user`) but have different `$TokenType` values, so repo names are unique.
+
+## Setup and teardown
+
+Shared test infrastructure is provisioned once per workflow run using `BeforeAll.ps1` and torn down using `AfterAll.ps1`.
+For generic guidance on setup/teardown scripts, see the
+[Process-PSModule documentation](https://github.com/PSModule/Process-PSModule#setup-and-teardown-scripts).
+
+### `BeforeAll.ps1` — global setup
+
+Runs once before all parallel test files. For each auth case (except `GITHUB_TOKEN`):
+
+1. Connects using the auth case credentials
+2. Removes any existing repositories for the deterministic names used by the run
+3. Provisions a primary shared repository per OS using `Set-GitHubRepository`: `Test-{OS}-{TokenType}-{GITHUB_RUN_ID}`
+   - Includes `-AddReadme`, `-License 'mit'`, and `-Gitignore 'VisualStudio'` so release tests have a default branch with content
+   - For `user` owners: `Set-GitHubRepository -Name $repoName ...`
+   - For `organization` owners: `Set-GitHubRepository -Organization $Owner -Name $repoName ...`
+4. For `organization` owners only, provisions two extra repositories per OS (`-2`, `-3` suffix) for
+   Secrets/Variables `SelectedRepository` tests
+
+`Set-GitHubRepository` is idempotent — it returns the existing repository if it already exists, or creates
+it if it does not. This makes the global setup safe to re-run for the same `GITHUB_RUN_ID`.
+
+### `AfterAll.ps1` — global teardown
+
+Runs once after all parallel test files complete. For each auth case (except `GITHUB_TOKEN`):
+
+1. Connects using the auth case credentials
+2. Removes the run-scoped repositories by their known names
+
 ## Shared test repositories
 
 Each test file that depends on a GitHub repository must ensure it exists using `Set-GitHubRepository`
@@ -86,14 +163,14 @@ Describe 'TestName' {
 
 ## Naming conventions
 
-| Resource   | Pattern                                      | Example                        |
-|------------|----------------------------------------------|--------------------------------|
-| Repo       | `Test-{OS}-{TokenType}-{RunID}`              | `Test-Linux-USER_FG_PAT-1234`  |
-| Extra repo | `Test-{OS}-{TokenType}-{RunID}-{N}`          | `Test-Linux-USER_FG_PAT-1234-2`|
-| Secret     | `{TestName}_{OS}_{TokenType}_{RunID}`        | `Secrets_Linux_PAT_1234`       |
-| Variable   | `{TestName}_{OS}_{TokenType}_{RunID}`        | `Variables_Linux_PAT_1234`     |
-| Team       | `{TestName}_{OS}_{TokenType}_{RunID}_{Name}` | `Teams_Linux_APP_ORG_1234_Pull`|
-| Env        | `{TestName}-{OS}-{TokenType}-{RunID}`        | `Secrets-Linux-PAT-1234`       |
+| Resource   | Pattern                                      | Example                          |
+|------------|----------------------------------------------|----------------------------------|
+| Repo       | `Test-{OS}-{TokenType}-{RunID}`              | `Test-Linux-USER_FG_PAT-1234`    |
+| Extra repo | `Test-{OS}-{TokenType}-{RunID}-{N}`          | `Test-Linux-USER_FG_PAT-1234-2`  |
+| Secret     | `{TestName}_{OS}_{TokenType}_{RunID}`        | `Secrets_Linux_PAT_1234`         |
+| Variable   | `{TestName}_{OS}_{TokenType}_{RunID}`        | `Variables_Linux_PAT_1234`       |
+| Team       | `{TestName}_{OS}_{TokenType}_{RunID}_{Name}` | `Teams_Linux_APP_ORG_1234_Pull`  |
+| Env        | `{TestName}-{OS}-{TokenType}-{RunID}`        | `Secrets-Linux-PAT-1234`         |
 
 ## Key rules
 
