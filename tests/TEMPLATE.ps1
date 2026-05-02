@@ -44,15 +44,19 @@ Describe 'Template' {
             # Ensure the shared test repository exists. Set-GitHubRepository is idempotent.
             $repoPrefix = "Test-$os-$TokenType"
             $repoName = "$repoPrefix-$id"
-            $repoParams = @{
-                Name      = $repoName
-                AddReadme = $true
-                License   = 'mit'
-                Gitignore = 'VisualStudio'
-            }
-            $repo = switch ($OwnerType) {
-                'user' { Set-GitHubRepository @repoParams }
-                'organization' { Set-GitHubRepository @repoParams -Organization $Owner }
+            if ($OwnerType -in ('repository', 'enterprise')) {
+                $repo = $null
+            } else {
+                $repoParams = @{
+                    Name      = $repoName
+                    AddReadme = $true
+                    License   = 'mit'
+                    Gitignore = 'VisualStudio'
+                }
+                $repo = switch ($OwnerType) {
+                    'user' { Set-GitHubRepository @repoParams }
+                    'organization' { Set-GitHubRepository @repoParams -Organization $Owner }
+                }
             }
         }
         AfterAll {

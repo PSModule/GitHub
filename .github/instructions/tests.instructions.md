@@ -98,18 +98,26 @@ whether the global `BeforeAll.ps1` already provisioned the repository.
 Primary repositories use `-AddReadme`, `-License 'mit'`, and `-Gitignore 'VisualStudio'` so that
 a default branch with content is available for tests that need commits (e.g., releases, tags).
 
+Some auth cases (e.g., `repository`, `enterprise`) do not operate on a user- or org-owned repository.
+Skip provisioning for those owner types and set `$repo = $null` so that repo-dependent tests can
+be skipped cleanly:
+
 ```powershell
 $repoPrefix = "Test-$os-$TokenType"
 $repoName = "$repoPrefix-$id"
-$repoParams = @{
-    Name      = $repoName
-    AddReadme = $true
-    License   = 'mit'
-    Gitignore = 'VisualStudio'
-}
-$repo = switch ($OwnerType) {
-    'user'         { Set-GitHubRepository @repoParams }
-    'organization' { Set-GitHubRepository @repoParams -Organization $Owner }
+if ($OwnerType -in ('repository', 'enterprise')) {
+    $repo = $null
+} else {
+    $repoParams = @{
+        Name      = $repoName
+        AddReadme = $true
+        License   = 'mit'
+        Gitignore = 'VisualStudio'
+    }
+    $repo = switch ($OwnerType) {
+        'user'         { Set-GitHubRepository @repoParams }
+        'organization' { Set-GitHubRepository @repoParams -Organization $Owner }
+    }
 }
 ```
 
@@ -142,15 +150,19 @@ Describe 'TestName' {
 
             $repoPrefix = "Test-$os-$TokenType"
             $repoName = "$repoPrefix-$id"
-            $repoParams = @{
-                Name      = $repoName
-                AddReadme = $true
-                License   = 'mit'
-                Gitignore = 'VisualStudio'
-            }
-            $repo = switch ($OwnerType) {
-                'user'         { Set-GitHubRepository @repoParams }
-                'organization' { Set-GitHubRepository @repoParams -Organization $Owner }
+            if ($OwnerType -in ('repository', 'enterprise')) {
+                $repo = $null
+            } else {
+                $repoParams = @{
+                    Name      = $repoName
+                    AddReadme = $true
+                    License   = 'mit'
+                    Gitignore = 'VisualStudio'
+                }
+                $repo = switch ($OwnerType) {
+                    'user'         { Set-GitHubRepository @repoParams }
+                    'organization' { Set-GitHubRepository @repoParams -Organization $Owner }
+                }
             }
         }
 
