@@ -71,8 +71,11 @@ Runs once before all parallel test files. For each auth case (except `GITHUB_TOK
 4. For `organization` owners only, provisions two extra repositories per OS (`-2`, `-3` suffix) for
    Secrets/Variables `SelectedRepository` tests
 
-`Set-GitHubRepository` is idempotent — it returns the existing repository if it already exists, or creates
-it if it does not. This makes the global setup safe to re-run for the same `GITHUB_RUN_ID`.
+`Set-GitHubRepository` is idempotent — if the repository already exists it updates it in place (issuing a
+PATCH), and if it does not exist it creates it. Because the same parameters are passed each time, the
+end-state is identical regardless of how many times the setup runs. The extra PATCH on the happy path is
+a deliberate trade-off for simplicity: one call handles both first-run and partial-rerun scenarios without
+branching logic.
 
 ### `AfterAll.ps1` — global teardown
 
@@ -84,9 +87,10 @@ Runs once after all parallel test files complete. For each auth case (except `GI
 ## Shared test repositories
 
 Each test file that depends on a GitHub repository must ensure it exists using `Set-GitHubRepository`
-in its per-context `BeforeAll`. `Set-GitHubRepository` is idempotent — it returns the existing repository
-if it already exists, or creates it if it does not. This makes every test file self-sufficient regardless
-of whether the global `BeforeAll.ps1` already provisioned the repository.
+in its per-context `BeforeAll`. `Set-GitHubRepository` is idempotent — if the repository already exists
+it updates it in place (PATCH), and if it does not exist it creates it. When the same parameters are
+passed each time the end-state is identical. This makes every test file self-sufficient regardless of
+whether the global `BeforeAll.ps1` already provisioned the repository.
 
 **Do not** use `Get-GitHubRepository` with a throw guard — that breaks partial reruns.
 **Do not** use `New-GitHubRepository` — that fails if the repository already exists.
