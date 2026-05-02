@@ -67,7 +67,7 @@ LogGroup 'BeforeAll - Global Test Setup' {
                     }
                 }
 
-                # Create the primary shared repository (with readme, license, gitignore for release tests).
+                # Provision the primary shared repository.
                 $repoParams = @{
                     Name      = $repoName
                     AddReadme = $true
@@ -75,20 +75,15 @@ LogGroup 'BeforeAll - Global Test Setup' {
                     Gitignore = 'VisualStudio'
                 }
                 switch ($OwnerType) {
-                    'user' {
-                        New-GitHubRepository @repoParams
-                    }
-                    'organization' {
-                        New-GitHubRepository @repoParams -Organization $Owner
-                    }
+                    'user' { Set-GitHubRepository @repoParams }
+                    'organization' { Set-GitHubRepository @repoParams -Organization $Owner }
                 }
 
-                # Create extra repositories needed by Secrets/Variables SelectedRepository tests.
+                # Provision extra repositories needed by Secrets/Variables SelectedRepository tests.
                 # Only organization owners need them — those tests are skipped for user owners.
                 if ($OwnerType -eq 'organization') {
                     foreach ($suffix in 2, 3) {
-                        $extraName = "$repoName-$suffix"
-                        New-GitHubRepository -Organization $Owner -Name $extraName
+                        Set-GitHubRepository -Organization $Owner -Name "$repoName-$suffix"
                     }
                 }
             }

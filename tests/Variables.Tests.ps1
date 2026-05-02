@@ -50,31 +50,31 @@ Describe 'Variables' {
             $orgVariableName = "$variableName`_ORG"
             $environmentName = "$testName-$os-$TokenType-$id"
 
-            switch ($OwnerType) {
-                'user' {
-                    $repo = Get-GitHubRepository -Name $repoName
-                    if (-not $repo) {
-                        throw "Shared test repository '$repoName' was not found. Ensure BeforeAll.ps1 provisioned it."
+            if ($OwnerType -in ('repository', 'enterprise')) {
+                $repo = $null
+                $repo2 = $null
+                $repo3 = $null
+            } else {
+                switch ($OwnerType) {
+                    'user' {
+                        $repo = Set-GitHubRepository -Name $repoName -AddReadme -License 'mit' -Gitignore 'VisualStudio'
                     }
-                }
-                'organization' {
-                    Get-GitHubVariable -Owner $Owner | Where-Object { $_.Name -like "$variableName*" } | Remove-GitHubVariable -Confirm:$false
-                    $repo = Get-GitHubRepository -Owner $Owner -Name $repoName
-                    $repo2 = Get-GitHubRepository -Owner $Owner -Name "$repoName-2"
-                    $repo3 = Get-GitHubRepository -Owner $Owner -Name "$repoName-3"
-                    if (-not $repo -or -not $repo2 -or -not $repo3) {
-                        throw "One or more shared test repositories ('$repoName', '$repoName-2', '$repoName-3') not found for owner '$Owner'. Ensure BeforeAll.ps1 provisioned them."
-                    }
-                    LogGroup "Org variable - [$orgVariableName]" {
-                        $params = @{
-                            Owner                = $owner
-                            Name                 = $orgVariableName
-                            Value                = 'organization'
-                            Visibility           = 'selected'
-                            SelectedRepositories = $repo.id
+                    'organization' {
+                        Get-GitHubVariable -Owner $Owner | Where-Object { $_.Name -like "$variableName*" } | Remove-GitHubVariable -Confirm:$false
+                        $repo = Set-GitHubRepository -Organization $Owner -Name $repoName -AddReadme -License 'mit' -Gitignore 'VisualStudio'
+                        $repo2 = Set-GitHubRepository -Organization $Owner -Name "$repoName-2"
+                        $repo3 = Set-GitHubRepository -Organization $Owner -Name "$repoName-3"
+                        LogGroup "Org variable - [$orgVariableName]" {
+                            $params = @{
+                                Owner                = $owner
+                                Name                 = $orgVariableName
+                                Value                = 'organization'
+                                Visibility           = 'selected'
+                                SelectedRepositories = $repo.id
+                            }
+                            $orgVariable = Set-GitHubVariable @params -Debug
+                            Write-Host ($orgVariable | Select-Object * | Out-String)
                         }
-                        $orgVariable = Set-GitHubVariable @params -Debug
-                        Write-Host ($orgVariable | Select-Object * | Out-String)
                     }
                 }
             }

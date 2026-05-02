@@ -41,10 +41,23 @@ Describe 'Template' {
                 }
             }
 
-            # Reference the shared repo (NOT New-GitHubRepository)
+            # Ensure the shared test repository exists. Set-GitHubRepository is idempotent.
             $repoPrefix = "Test-$os-$TokenType"
             $repoName = "$repoPrefix-$id"
-            $repo = Get-GitHubRepository -Owner $Owner -Name $repoName
+            if ($OwnerType -in ('repository', 'enterprise')) {
+                $repo = $null
+            } else {
+                $repoParams = @{
+                    Name      = $repoName
+                    AddReadme = $true
+                    License   = 'mit'
+                    Gitignore = 'VisualStudio'
+                }
+                $repo = switch ($OwnerType) {
+                    'user' { Set-GitHubRepository @repoParams }
+                    'organization' { Set-GitHubRepository @repoParams -Organization $Owner }
+                }
+            }
         }
         AfterAll {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
