@@ -68,7 +68,9 @@ Describe 'Organizations' {
                                 Remove-GitHubOrganization -Name $orgName -Confirm:$false -Context $cleanupOrgContext
                                 Write-Host "Stale org [$orgName] removed."
                             } catch {
-                                Write-Host "WARNING: Could not remove stale org [$orgName]: $($_.Exception.Message)"
+                                # Rethrow — if the org exists but we can't remove it, New-GitHubOrganization
+                                # will fail anyway. Failing here gives a clearer root-cause message.
+                                throw "Could not remove stale org [$orgName]: $($_.Exception.Message)"
                             }
                         } else {
                             Write-Host "No stale org found for [$orgName]."

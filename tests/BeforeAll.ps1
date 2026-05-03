@@ -28,13 +28,11 @@ LogGroup 'BeforeAll - Global Test Setup' {
     }
     Write-Host "Creating test repositories for OSes: $($osNames -join ', ')"
 
-    # Test files that require their own per-test-file repository.
-    # Each test file's per-context BeforeAll also calls Set-GitHubRepository as a safety net,
-    # so this list is an optimization rather than a hard dependency.
-    $testNames = @('Environments', 'Secrets', 'Variables', 'Releases', 'Actions')
-
-    # Test files that need companion repositories (-2, -3) for org-scoped SelectedRepository tests.
-    $testNamesWithExtraRepos = @('Secrets', 'Variables')
+    # Source the single authoritative list of test-file repositories so setup and teardown
+    # always operate on the same set. See tests/Data/TestRepos.ps1.
+    $testRepos = . "$PSScriptRoot/Data/TestRepos.ps1"
+    $testNames = $testRepos.TestNames
+    $testNamesWithExtraRepos = $testRepos.TestNamesWithExtraRepos
 
     foreach ($authCase in $authCases) {
         $authCase.GetEnumerator() | ForEach-Object { Set-Variable -Name $_.Key -Value $_.Value }

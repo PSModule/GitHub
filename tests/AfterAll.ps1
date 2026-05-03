@@ -29,8 +29,11 @@ LogGroup 'AfterAll - Global Test Teardown' {
     }
     Write-Host "Cleaning up test repositories for OSes: $($osNames -join ', ')"
 
-    $testNames = @('Environments', 'Secrets', 'Variables', 'Releases', 'Actions')
-    $testNamesWithExtraRepos = @('Secrets', 'Variables')
+    # Source the single authoritative list of test-file repositories so setup and teardown
+    # always operate on the same set. See tests/Data/TestRepos.ps1.
+    $testRepos = . "$PSScriptRoot/Data/TestRepos.ps1"
+    $testNames = $testRepos.TestNames
+    $testNamesWithExtraRepos = $testRepos.TestNamesWithExtraRepos
     foreach ($authCase in $authCases) {
         $authCase.GetEnumerator() | ForEach-Object { Set-Variable -Name $_.Key -Value $_.Value }
 
