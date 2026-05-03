@@ -25,6 +25,14 @@ Secrets:
 Homed in `MSX`. ClientID: `Iv23lieHcDQDwVV3alK1`.
 Installed on [psmodule-test-org3](https://github.com/orgs/psmodule-test-org3) (enterprise org) with all permissions and push events.
 
+Required enterprise-scoped permissions (configured on the app, homed in `msx`):
+
+- `enterprise_organization_installations: write` — required by `Install-GitHubApp` on enterprise-owned organizations
+  ([docs](https://docs.github.com/rest/enterprise-admin/organization-installations#install-a-github-app-on-an-enterprise-owned-organization)).
+  The Organizations test creates an enterprise organization and then installs the app on it; the
+  endpoint returns 404 (not 403) when this permission is missing, which makes a missing
+  permission look like a missing resource. See issue #596.
+
 Secrets: `TEST_APP_ENT_CLIENT_ID`, `TEST_APP_ENT_PRIVATE_KEY`
 
 ### APP_ORG — PSModule Organization App
