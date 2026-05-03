@@ -29,10 +29,8 @@ LogGroup 'AfterAll - Global Test Teardown' {
     }
     Write-Host "Cleaning up test repositories for OSes: $($osNames -join ', ')"
 
-    # Test files that own their per-test-file repositories. Mirror BeforeAll.ps1.
     $testNames = @('Environments', 'Secrets', 'Variables', 'Releases', 'Actions')
     $testNamesWithExtraRepos = @('Secrets', 'Variables')
-
     foreach ($authCase in $authCases) {
         $authCase.GetEnumerator() | ForEach-Object { Set-Variable -Name $_.Key -Value $_.Value }
 

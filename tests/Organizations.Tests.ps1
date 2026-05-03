@@ -138,25 +138,12 @@ Describe 'Organizations' {
             { Update-GitHubOrganization -Name $orgName -Location 'New Location' } | Should -Throw
         }
 
+        It 'Remove-GitHubOrganization - Removes an organization using enterprise installation' -Skip:($OwnerType -ne 'enterprise') {
+            { Remove-GitHubOrganization -Name $orgName -Confirm:$false } | Should -Throw
+        }
+
         It 'Install-GitHubApp - Installs a GitHub App to an organization' -Skip:($OwnerType -ne 'enterprise') {
-            # The enterprise organization was just created and may not have propagated to the
-            # enterprise apps endpoint yet. Retry briefly to absorb propagation delay before
-            # failing — GitHub returns 404 (rather than 403) when the resource is not yet visible
-            # to the token, which is indistinguishable from a missing-permission failure on the
-            # first call. See issue #596.
-            $installation = $null
-            $maxAttempts = 5
-            $delaySeconds = 3
-            for ($attempt = 1; $attempt -le $maxAttempts; $attempt++) {
-                try {
-                    $installation = Install-GitHubApp -Enterprise $owner -Organization $orgName -ClientID $installationContext.ClientID -RepositorySelection 'all'
-                    break
-                } catch {
-                    if ($attempt -eq $maxAttempts) { throw }
-                    Write-Host "Install-GitHubApp attempt $attempt failed ($($_.Exception.Message)); retrying in $delaySeconds seconds..."
-                    Start-Sleep -Seconds $delaySeconds
-                }
-            }
+            $installation = Install-GitHubApp -Enterprise $owner -Organization $orgName -ClientID $installationContext.ClientID -RepositorySelection 'all'
             LogGroup 'Installed App' {
                 Write-Host ($installation | Select-Object * | Out-String)
             }
@@ -175,15 +162,6 @@ Describe 'Organizations' {
         It 'Update-GitHubOrganization - Updates the organization location using organization installation' -Skip:($OwnerType -ne 'enterprise') {
             $orgContext = Connect-GitHubApp -Organization $orgName -Context $context -PassThru -Silent
             Update-GitHubOrganization -Name $orgName -Location 'New Location' -Context $orgContext
-        }
-
-        # GitHub's DELETE /orgs/{org} endpoint requires the app to have the org-level
-        # `administration: write` permission. The enterprise IAT is enterprise-scoped and does not
-        # carry org-level permissions, so this call is expected to fail regardless of which
-        # enterprise permissions the app holds. An org-level IAT (obtained after Install-GitHubApp)
-        # is required. See issue #596.
-        It 'Remove-GitHubOrganization - Removes an organization using enterprise installation' -Skip:($OwnerType -ne 'enterprise') {
-            { Remove-GitHubOrganization -Name $orgName -Confirm:$false } | Should -Throw
         }
 
         It 'Remove-GitHubOrganization - Removes an organization using organization installation' -Skip:($OwnerType -ne 'enterprise') {
