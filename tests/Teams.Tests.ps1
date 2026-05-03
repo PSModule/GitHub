@@ -20,9 +20,12 @@
 param()
 
 BeforeAll {
-    $testName = 'TeamsTests'
+    $testName = 'Teams'
     $os = $env:RUNNER_OS
-    $guid = [guid]::NewGuid().ToString() -replace '-', '_'
+    $id = $env:GITHUB_RUN_ID
+    if (-not $id) {
+        throw 'GITHUB_RUN_ID is not set. Refusing to run Teams tests cleanup without a scoped run ID.'
+    }
 }
 
 Describe 'Teams' {
@@ -40,8 +43,7 @@ Describe 'Teams' {
                     Write-Host ($context | Format-List | Out-String)
                 }
             }
-            $teamPrefix = "$testName`_$os`_$TokenType"
-            $teamName = "$teamPrefix`_$guid"
+            $teamPrefix = "$testName`_$os`_$TokenType`_$id"
 
             switch ($OwnerType) {
                 'organization' {

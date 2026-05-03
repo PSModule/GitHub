@@ -20,9 +20,12 @@
 param()
 
 BeforeAll {
-    $testName = 'VariablesTests'
+    $testName = 'Variables'
     $os = $env:RUNNER_OS
-    $guid = [guid]::NewGuid().ToString() -replace '-', '_'
+    $id = $env:GITHUB_RUN_ID
+    if (-not $id) {
+        throw 'GITHUB_RUN_ID is not set. Variables tests refuse to run without a scoped run ID to avoid deleting variables from other runs.'
+    }
 }
 
 Describe 'Variables' {
@@ -30,78 +33,68 @@ Describe 'Variables' {
 
     Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {
         BeforeAll {
-            LogGroup 'Current Contexts' {
-                $context = Connect-GitHubAccount @connectParams -PassThru -Silent
-                Write-Host (Get-GitHubContext -ListAvailable | Format-List | Out-String)
-            }
+            $context = Connect-GitHubAccount @connectParams -PassThru -Silent
             LogGroup 'Context' {
                 Write-Host ($context | Format-List | Out-String)
             }
             if ($AuthType -eq 'APP') {
-                LogGroup 'Current Contexts' {
-                    Write-Host (Get-GitHubContext -ListAvailable | Format-List | Out-String)
-                }
                 LogGroup 'Context - Installation' {
                     $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
                     Write-Host ($context | Format-List | Out-String)
                 }
             }
-            $repoPrefix = "$testName-$os-$TokenType"
-            $repoName = "$repoPrefix-$guid"
+            $repoPrefix = "Test-$os-$TokenType"
+            $repoName = "$repoPrefix-$id"
             $variablePrefix = "$testName`_$os`_$TokenType"
-            $variableName = "$variablePrefix`_$guid"
+            $variableName = "$variablePrefix`_$id"
             $orgVariableName = "$variableName`_ORG"
-            $environmentName = "$testName-$os-$TokenType-$guid"
+            $environmentName = "$testName-$os-$TokenType-$id"
 
-            switch ($OwnerType) {
-                'user' {
-                    Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                    $repo = New-GitHubRepository -Name "$repoName-1"
-                    $repo2 = New-GitHubRepository -Name "$repoName-2"
-                    $repo3 = New-GitHubRepository -Name "$repoName-3"
-                }
-                'organization' {
-                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                    Get-GitHubVariable -Owner $Owner | Where-Object { $_.Name -like "$variablePrefix*" } | Remove-GitHubVariable -Confirm:$false
-                    $repo = New-GitHubRepository -Organization $owner -Name "$repoName-1"
-                    $repo2 = New-GitHubRepository -Organization $owner -Name "$repoName-2"
-                    $repo3 = New-GitHubRepository -Organization $owner -Name "$repoName-3"
-                    LogGroup "Org variable - [$orgVariableName]" {
-                        $params = @{
-                            Owner                = $owner
-                            Name                 = $orgVariableName
-                            Value                = 'organization'
-                            Visibility           = 'selected'
-                            SelectedRepositories = $repo.id
+            if ($OwnerType -in ('repository', 'enterprise')) {
+                $repo = $null
+                $repo2 = $null
+                $repo3 = $null
+            } else {
+                switch ($OwnerType) {
+                    'user' {
+                        $repo = Set-GitHubRepository -Name $repoName -AddReadme -License 'mit' -Gitignore 'VisualStudio'
+                    }
+                    'organization' {
+                        Get-GitHubVariable -Owner $Owner | Where-Object { $_.Name -like "$variableName*" } | Remove-GitHubVariable -Confirm:$false
+                        $repo = Set-GitHubRepository -Organization $Owner -Name $repoName -AddReadme -License 'mit' -Gitignore 'VisualStudio'
+                        $repo2 = Set-GitHubRepository -Organization $Owner -Name "$repoName-2"
+                        $repo3 = Set-GitHubRepository -Organization $Owner -Name "$repoName-3"
+                        LogGroup "Org variable - [$orgVariableName]" {
+                            $params = @{
+                                Owner                = $owner
+                                Name                 = $orgVariableName
+                                Value                = 'organization'
+                                Visibility           = 'selected'
+                                SelectedRepositories = $repo.id
+                            }
+                            $orgVariable = Set-GitHubVariable @params -Debug
+                            Write-Host ($orgVariable | Select-Object * | Out-String)
                         }
-                        $orgVariable = Set-GitHubVariable @params -Debug
-                        Write-Host ($orgVariable | Select-Object * | Out-String)
                     }
                 }
             }
             LogGroup "Repository - [$repoName]" {
                 Write-Host ($repo | Select-Object * | Out-String)
-                Write-Host ($repo2 | Select-Object * | Out-String)
-                Write-Host ($repo3 | Select-Object * | Out-String)
+                if ($OwnerType -eq 'organization') {
+                    Write-Host ($repo2 | Select-Object * | Out-String)
+                    Write-Host ($repo3 | Select-Object * | Out-String)
+                }
             }
         }
 
         AfterAll {
             switch ($OwnerType) {
-                'user' {
-                    Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                }
                 'organization' {
-                    $variablesToRemove = Get-GitHubVariable -Owner $owner | Where-Object { $_.Name -like "$variablePrefix*" }
-                    LogGroup 'Secrets to remove' {
+                    $variablesToRemove = Get-GitHubVariable -Owner $owner | Where-Object { $_.Name -like "$variableName*" }
+                    LogGroup 'Variables to remove' {
                         Write-Host "$($variablesToRemove | Format-List | Out-String)"
                     }
                     $variablesToRemove | Remove-GitHubVariable
-                    LogGroup 'Repos to remove' {
-                        $reposToRemove = Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" }
-                        Write-Host "$($reposToRemove | Format-List | Out-String)"
-                        $reposToRemove | Remove-GitHubRepository -Confirm:$false
-                    }
                 }
             }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent

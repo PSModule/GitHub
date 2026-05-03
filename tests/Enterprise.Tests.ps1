@@ -20,10 +20,12 @@
 param()
 
 BeforeAll {
-    # DEFAULTS ACROSS ALL TESTS
+    $testName = 'Enterprise'
+    $os = $env:RUNNER_OS
+    $id = $env:GITHUB_RUN_ID
 }
 
-Describe 'Template' {
+Describe 'Enterprise' {
     $authCases = . "$PSScriptRoot/Data/AuthCases.ps1"
 
     Context 'As <Type> using <Case> on <Target>' -ForEach $authCases {

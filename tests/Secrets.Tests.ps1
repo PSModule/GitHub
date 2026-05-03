@@ -20,9 +20,12 @@
 param()
 
 BeforeAll {
-    $testName = 'SecretsTests'
+    $testName = 'Secrets'
     $os = $env:RUNNER_OS
-    $guid = [guid]::NewGuid().ToString() -replace '-', '_'
+    $id = $env:GITHUB_RUN_ID
+    if (-not $id) {
+        throw 'GITHUB_RUN_ID is required for Secrets tests because secret cleanup uses run-scoped wildcard names.'
+    }
 }
 
 Describe 'Secrets' {
@@ -40,62 +43,58 @@ Describe 'Secrets' {
                     Write-Host ($context | Format-List | Out-String)
                 }
             }
-            $repoPrefix = "$testName-$os-$TokenType"
-            $repoName = "$repoPrefix-$guid"
+            $repoPrefix = "Test-$os-$TokenType"
+            $repoName = "$repoPrefix-$id"
             $secretPrefix = "$testName`_$os`_$TokenType"
-            $secretName = "$secretPrefix`_$guid"
+            $secretName = "$secretPrefix`_$id"
             $orgSecretName = "$secretName`_ORG"
-            $environmentName = "$testName-$os-$TokenType-$guid"
+            $environmentName = "$testName-$os-$TokenType-$id"
 
-            switch ($OwnerType) {
-                'user' {
-                    Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                    $repo = New-GitHubRepository -Name "$repoName-1"
-                    $repo2 = New-GitHubRepository -Name "$repoName-2"
-                    $repo3 = New-GitHubRepository -Name "$repoName-3"
-                }
-                'organization' {
-                    Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                    Get-GitHubSecret -Owner $Owner | Where-Object { $_.Name -like "$secretPrefix*" } | Remove-GitHubSecret -Confirm:$false
-                    $repo = New-GitHubRepository -Organization $owner -Name "$repoName-1"
-                    $repo2 = New-GitHubRepository -Organization $owner -Name "$repoName-2"
-                    $repo3 = New-GitHubRepository -Organization $owner -Name "$repoName-3"
-                    LogGroup "Org secret - [$orgSecretName]" {
-                        $params = @{
-                            Owner                = $owner
-                            Name                 = $orgSecretName
-                            Value                = 'organization'
-                            Visibility           = 'selected'
-                            SelectedRepositories = $repo.id
+            if ($OwnerType -in ('repository', 'enterprise')) {
+                $repo = $null
+                $repo2 = $null
+                $repo3 = $null
+            } else {
+                switch ($OwnerType) {
+                    'user' {
+                        $repo = Set-GitHubRepository -Name $repoName -AddReadme -License 'mit' -Gitignore 'VisualStudio'
+                    }
+                    'organization' {
+                        Get-GitHubSecret -Owner $Owner | Where-Object { $_.Name -like "$secretName*" } | Remove-GitHubSecret -Confirm:$false
+                        $repo = Set-GitHubRepository -Organization $Owner -Name $repoName -AddReadme -License 'mit' -Gitignore 'VisualStudio'
+                        $repo2 = Set-GitHubRepository -Organization $Owner -Name "$repoName-2"
+                        $repo3 = Set-GitHubRepository -Organization $Owner -Name "$repoName-3"
+                        LogGroup "Org secret - [$orgSecretName]" {
+                            $params = @{
+                                Owner                = $owner
+                                Name                 = $orgSecretName
+                                Value                = 'organization'
+                                Visibility           = 'selected'
+                                SelectedRepositories = $repo.id
+                            }
+
+                            $orgSecret += Set-GitHubSecret @params -Debug
+                            Write-Host ($orgSecret | Select-Object * | Out-String)
                         }
-
-                        $orgSecret += Set-GitHubSecret @params -Debug
-                        Write-Host ($orgSecret | Select-Object * | Out-String)
                     }
                 }
             }
             LogGroup "Repository - [$repoName]" {
                 Write-Host ($repo | Select-Object * | Out-String)
-                Write-Host ($repo2 | Select-Object * | Out-String)
-                Write-Host ($repo3 | Select-Object * | Out-String)
+                if ($OwnerType -eq 'organization') {
+                    Write-Host ($repo2 | Select-Object * | Out-String)
+                    Write-Host ($repo3 | Select-Object * | Out-String)
+                }
             }
         }
 
         AfterAll {
             switch ($OwnerType) {
-                'user' {
-                    Get-GitHubRepository | Where-Object { $_.Name -like "$repoPrefix*" } | Remove-GitHubRepository -Confirm:$false
-                }
                 'organization' {
                     LogGroup 'Secrets to remove' {
                         $orgSecrets = Get-GitHubSecret -Owner $owner | Where-Object { $_.Name -like "$secretName*" }
                         Write-Host "$($orgSecrets | Format-List | Out-String)"
                         $orgSecrets | Remove-GitHubSecret
-                    }
-                    LogGroup 'Repos to remove' {
-                        $reposToRemove = Get-GitHubRepository -Organization $Owner | Where-Object { $_.Name -like "$repoPrefix*" }
-                        Write-Host "$($reposToRemove | Format-List | Out-String)"
-                        $reposToRemove | Remove-GitHubRepository -Confirm:$false
                     }
                 }
             }
