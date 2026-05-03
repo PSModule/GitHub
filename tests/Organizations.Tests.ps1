@@ -41,14 +41,37 @@ Describe 'Organizations' {
             $orgName = "$orgPrefix$id"
 
             if ($AuthType -eq 'APP') {
-                LogGroup 'Pre-test Cleanup - App Installations' {
-                    Get-GitHubAppInstallation -Context $context | Where-Object { $_.Target.Name -like "$orgName*" } |
-                        Uninstall-GitHubApp -Confirm:$false
-                }
-
                 $installationContext = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
                 LogGroup 'Context - Installation' {
                     Write-Host ($installationContext | Select-Object * | Out-String)
+                }
+
+                if ($OwnerType -eq 'enterprise') {
+                    # Clean up a stale enterprise org from a previous run attempt with the same
+                    # GITHUB_RUN_ID. DELETE /orgs/{org} requires org-level administration:write,
+                    # so we install the app first to obtain an org-level IAT, then delete.
+                    LogGroup 'Pre-test Cleanup - Stale Enterprise Organization' {
+                        $staleOrg = Get-GitHubOrganization -Name $orgName -ErrorAction SilentlyContinue
+                        if ($staleOrg -and $staleOrg.Name) {
+                            Write-Host "Stale org [$orgName] found from previous run attempt. Removing..."
+                            try {
+                                $null = Install-GitHubApp -Enterprise $owner -Organization $orgName `
+                                    -ClientID $installationContext.ClientID -RepositorySelection 'all' -ErrorAction Stop
+                                $cleanupOrgContext = Connect-GitHubApp -Organization $orgName -Context $context -PassThru -Silent
+                                Remove-GitHubOrganization -Name $orgName -Confirm:$false -Context $cleanupOrgContext
+                                Write-Host "Stale org [$orgName] removed."
+                            } catch {
+                                Write-Host "WARNING: Could not remove stale org [$orgName]: $($_.Exception.Message)"
+                            }
+                        } else {
+                            Write-Host "No stale org found for [$orgName]."
+                        }
+                    }
+                }
+
+                LogGroup 'Pre-test Cleanup - App Installations' {
+                    Get-GitHubAppInstallation -Context $context | Where-Object { $_.Target.Name -like "$orgName*" } |
+                        Uninstall-GitHubApp -Confirm:$false
                 }
             }
         }
@@ -128,10 +151,13 @@ Describe 'Organizations' {
                 Owner        = 'MariusStorhaug'
                 BillingEmail = 'post@msx.no'
             }
+            $org = New-GitHubOrganization @orgParam
             LogGroup 'Organization' {
-                $org = New-GitHubOrganization @orgParam
                 Write-Host ($org | Select-Object * | Out-String)
             }
+            $org | Should -Not -BeNullOrEmpty
+            $org | Should -BeOfType 'GitHubOrganization'
+            $org.Name | Should -Be $orgName
         }
 
         It 'Update-GitHubOrganization - Updates the organization location using enterprise installation' -Skip:($OwnerType -ne 'enterprise') {
