@@ -26,6 +26,13 @@ BeforeAll {
     if (-not $id) {
         throw 'GITHUB_RUN_ID is required to safely scope pre-test cleanup in Organizations.Tests.ps1.'
     }
+    # GITHUB_RUN_ATTEMPT increments on each rerun (1, 2, 3...). Enterprise org names go on a
+    # 90-day hold after deletion, so a rerun of the same GITHUB_RUN_ID would collide if we used
+    # the run ID alone. Appending the attempt number makes each attempt produce a unique org name.
+    $attempt = $env:GITHUB_RUN_ATTEMPT
+    if ($attempt -and $attempt -ne '1') {
+        $id = "$id-$attempt"
+    }
 }
 
 Describe 'Organizations' {
