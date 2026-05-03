@@ -41,8 +41,8 @@ Describe 'Template' {
                 }
             }
 
-            # Ensure the shared test repository exists. Set-GitHubRepository is idempotent.
-            $repoPrefix = "Test-$os-$TokenType"
+            # Ensure this test file's repository exists. Set-GitHubRepository is idempotent.
+            $repoPrefix = "$testName-$os-$TokenType"
             $repoName = "$repoPrefix-$id"
             if ($OwnerType -in ('repository', 'enterprise')) {
                 $repo = $null

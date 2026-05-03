@@ -43,7 +43,7 @@ Describe 'Variables' {
                     Write-Host ($context | Format-List | Out-String)
                 }
             }
-            $repoPrefix = "Test-$os-$TokenType"
+            $repoPrefix = "$testName-$os-$TokenType"
             $repoName = "$repoPrefix-$id"
             $variablePrefix = "$testName`_$os`_$TokenType"
             $variableName = "$variablePrefix`_$id"

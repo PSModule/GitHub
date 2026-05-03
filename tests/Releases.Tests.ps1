@@ -43,7 +43,7 @@ Describe 'Releases' {
                     Write-Host ($context | Format-Table | Out-String)
                 }
             }
-            $repoPrefix = "Test-$os-$TokenType"
+            $repoPrefix = "$testName-$os-$TokenType"
             $repoName = "$repoPrefix-$id"
 
             LogGroup "Using Repository - [$repoName]" {

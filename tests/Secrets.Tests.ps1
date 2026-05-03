@@ -43,7 +43,7 @@ Describe 'Secrets' {
                     Write-Host ($context | Format-List | Out-String)
                 }
             }
-            $repoPrefix = "Test-$os-$TokenType"
+            $repoPrefix = "$testName-$os-$TokenType"
             $repoName = "$repoPrefix-$id"
             $secretPrefix = "$testName`_$os`_$TokenType"
             $secretName = "$secretPrefix`_$id"
