@@ -28,6 +28,14 @@ LogGroup 'BeforeAll - Global Test Setup' {
     }
     Write-Host "Creating test repositories for OSes: $($osNames -join ', ')"
 
+    # Test files that require their own per-test-file repository.
+    # Each test file's per-context BeforeAll also calls Set-GitHubRepository as a safety net,
+    # so this list is an optimization rather than a hard dependency.
+    $testNames = @('Environments', 'Secrets', 'Variables', 'Releases', 'Actions')
+
+    # Test files that need companion repositories (-2, -3) for org-scoped SelectedRepository tests.
+    $testNamesWithExtraRepos = @('Secrets', 'Variables')
+
     foreach ($authCase in $authCases) {
         $authCase.GetEnumerator() | ForEach-Object { Set-Variable -Name $_.Key -Value $_.Value }
 
@@ -43,47 +51,49 @@ LogGroup 'BeforeAll - Global Test Setup' {
         Write-Host ($context | Format-List | Out-String)
 
         foreach ($os in $osNames) {
-            $repoPrefix = "Test-$os-$TokenType"
-            $repoName = "$repoPrefix-$id"
+            foreach ($testName in $testNames) {
+                $repoPrefix = "$testName-$os-$TokenType"
+                $repoName = "$repoPrefix-$id"
 
-            LogGroup "Repository setup - $AuthType-$TokenType - $os" {
-                # Clean up repos from a previous attempt of the same run (re-runs).
-                # Use deterministic name lookups instead of listing all repos to reduce API calls.
-                $cleanupRepoNames = @($repoName)
-                if ($OwnerType -eq 'organization') {
-                    $cleanupRepoNames += "$repoName-2", "$repoName-3"
-                }
+                LogGroup "Repository setup - $AuthType-$TokenType - $os - $testName" {
+                    # Clean up repos from a previous attempt of the same run (re-runs).
+                    # Use deterministic name lookups instead of listing all repos to reduce API calls.
+                    $cleanupRepoNames = @($repoName)
+                    if ($OwnerType -eq 'organization' -and $testName -in $testNamesWithExtraRepos) {
+                        $cleanupRepoNames += "$repoName-2", "$repoName-3"
+                    }
 
-                foreach ($cleanupRepoName in $cleanupRepoNames) {
-                    switch ($OwnerType) {
-                        'user' {
-                            Get-GitHubRepository -Name $cleanupRepoName -ErrorAction SilentlyContinue |
-                                Remove-GitHubRepository -Confirm:$false
-                        }
-                        'organization' {
-                            Get-GitHubRepository -Owner $Owner -Name $cleanupRepoName -ErrorAction SilentlyContinue |
-                                Remove-GitHubRepository -Confirm:$false
+                    foreach ($cleanupRepoName in $cleanupRepoNames) {
+                        switch ($OwnerType) {
+                            'user' {
+                                Get-GitHubRepository -Name $cleanupRepoName -ErrorAction SilentlyContinue |
+                                    Remove-GitHubRepository -Confirm:$false
+                            }
+                            'organization' {
+                                Get-GitHubRepository -Owner $Owner -Name $cleanupRepoName -ErrorAction SilentlyContinue |
+                                    Remove-GitHubRepository -Confirm:$false
+                            }
                         }
                     }
-                }
 
-                # Provision the primary shared repository.
-                $repoParams = @{
-                    Name      = $repoName
-                    AddReadme = $true
-                    License   = 'mit'
-                    Gitignore = 'VisualStudio'
-                }
-                switch ($OwnerType) {
-                    'user' { Set-GitHubRepository @repoParams }
-                    'organization' { Set-GitHubRepository @repoParams -Organization $Owner }
-                }
+                    # Provision the primary per-test-file repository.
+                    $repoParams = @{
+                        Name      = $repoName
+                        AddReadme = $true
+                        License   = 'mit'
+                        Gitignore = 'VisualStudio'
+                    }
+                    switch ($OwnerType) {
+                        'user' { Set-GitHubRepository @repoParams }
+                        'organization' { Set-GitHubRepository @repoParams -Organization $Owner }
+                    }
 
-                # Provision extra repositories needed by Secrets/Variables SelectedRepository tests.
-                # Only organization owners need them — those tests are skipped for user owners.
-                if ($OwnerType -eq 'organization') {
-                    foreach ($suffix in 2, 3) {
-                        Set-GitHubRepository -Organization $Owner -Name "$repoName-$suffix"
+                    # Provision extra repositories needed by Secrets/Variables SelectedRepository tests.
+                    # Only organization owners need them — those tests are skipped for user owners.
+                    if ($OwnerType -eq 'organization' -and $testName -in $testNamesWithExtraRepos) {
+                        foreach ($suffix in 2, 3) {
+                            Set-GitHubRepository -Organization $Owner -Name "$repoName-$suffix"
+                        }
                     }
                 }
             }
