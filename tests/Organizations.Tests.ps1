@@ -138,10 +138,6 @@ Describe 'Organizations' {
             { Update-GitHubOrganization -Name $orgName -Location 'New Location' } | Should -Throw
         }
 
-        It 'Remove-GitHubOrganization - Removes an organization using enterprise installation' -Skip:($OwnerType -ne 'enterprise') {
-            { Remove-GitHubOrganization -Name $orgName -Confirm:$false } | Should -Throw
-        }
-
         It 'Install-GitHubApp - Installs a GitHub App to an organization' -Skip:($OwnerType -ne 'enterprise') {
             # The enterprise organization was just created and may not have propagated to the
             # enterprise apps endpoint yet. Retry briefly to absorb propagation delay before
@@ -179,6 +175,16 @@ Describe 'Organizations' {
         It 'Update-GitHubOrganization - Updates the organization location using organization installation' -Skip:($OwnerType -ne 'enterprise') {
             $orgContext = Connect-GitHubApp -Organization $orgName -Context $context -PassThru -Silent
             Update-GitHubOrganization -Name $orgName -Location 'New Location' -Context $orgContext
+        }
+
+        # This test verifies that the enterprise IAT cannot delete an org — org-level operations
+        # require an org installation (shown by the tests above). It is intentionally placed AFTER
+        # Install-GitHubApp and the org-IAT tests so that if the enterprise app unexpectedly gains
+        # organization_administration permission and this call succeeds instead of throwing, the
+        # critical install/connect/update tests have already passed and the org deletion is
+        # a no-op for those assertions. See issue #596.
+        It 'Remove-GitHubOrganization - Removes an organization using enterprise installation' -Skip:($OwnerType -ne 'enterprise') {
+            { Remove-GitHubOrganization -Name $orgName -Confirm:$false } | Should -Throw
         }
 
         It 'Remove-GitHubOrganization - Removes an organization using organization installation' -Skip:($OwnerType -ne 'enterprise') {
