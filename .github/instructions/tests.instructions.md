@@ -1,5 +1,5 @@
 ---
-description: "Use when writing, editing, or reviewing Pester test files under the tests/ folder. Covers shared repository setup, auth case iteration, naming conventions, and skip patterns for the GitHub module integration tests."
+description: "Use when writing, editing, or reviewing Pester test files under the tests/ folder. Covers per-test-file repository setup, self-contained test lifecycle, auth case iteration, naming conventions, and skip patterns for the GitHub module integration tests."
 applyTo: "tests/**"
 ---
 # Integration Test Conventions
@@ -54,9 +54,13 @@ Cases 4 (`repository`) and 7 (`enterprise`) skip repo creation. Cases 1 and 3 sh
 
 ## Setup and teardown
 
-Shared test infrastructure is provisioned once per workflow run using `BeforeAll.ps1` and torn down using `AfterAll.ps1`.
+Test infrastructure is provisioned once per workflow run using `BeforeAll.ps1` and torn down using `AfterAll.ps1`.
 For generic guidance on setup/teardown scripts, see the
 [Process-PSModule documentation](https://github.com/PSModule/Process-PSModule#setup-and-teardown-scripts).
+
+Each test file gets its own repository, scoped by test name: `{TestName}-{OS}-{TokenType}-{RunID}`. This
+eliminates cross-file resource collisions when test files run in parallel across OSes and in sequence
+across auth contexts.
 
 ### `BeforeAll.ps1` — global setup
 
@@ -64,12 +68,12 @@ Runs once before all parallel test files. For each auth case (except `GITHUB_TOK
 
 1. Connects using the auth case credentials
 2. Removes any existing repositories for the deterministic names used by the run
-3. Provisions a primary shared repository per OS using `Set-GitHubRepository`: `Test-{OS}-{TokenType}-{GITHUB_RUN_ID}`
-   - Includes `-AddReadme`, `-License 'mit'`, and `-Gitignore 'VisualStudio'` so release tests have a default branch with content
+3. Provisions a per-test-file repository per OS using `Set-GitHubRepository`: `{TestName}-{OS}-{TokenType}-{GITHUB_RUN_ID}`
+   - Includes `-AddReadme`, `-License 'mit'`, and `-Gitignore 'VisualStudio'` so tests have a default branch with content
    - For `user` owners: `Set-GitHubRepository -Name $repoName ...`
    - For `organization` owners: `Set-GitHubRepository -Organization $Owner -Name $repoName ...`
-4. For `organization` owners only, provisions two extra repositories per OS (`-2`, `-3` suffix) for
-   Secrets/Variables `SelectedRepository` tests
+4. For `organization` owners only, provisions extra repositories (`-2`, `-3` suffix) for
+   test files that need companion repos (e.g., Secrets/Variables `SelectedRepository` tests)
 
 `Set-GitHubRepository` is idempotent — if the repository already exists it updates it in place (issuing a
 PATCH), and if it does not exist it creates it. Because the same parameters are passed each time, the
@@ -82,15 +86,20 @@ branching logic.
 Runs once after all parallel test files complete. For each auth case (except `GITHUB_TOKEN`):
 
 1. Connects using the auth case credentials
-2. Removes the run-scoped repositories by their known names
+2. Removes the per-test-file repositories by their deterministic names
 
-## Shared test repositories
+## Per-test-file repositories
 
-Each test file that depends on a GitHub repository must ensure it exists using `Set-GitHubRepository`
-in its per-context `BeforeAll`. `Set-GitHubRepository` is idempotent — if the repository already exists
-it updates it in place (PATCH), and if it does not exist it creates it. When the same parameters are
-passed each time the end-state is identical. This makes every test file self-sufficient regardless of
-whether the global `BeforeAll.ps1` already provisioned the repository.
+Each test file that depends on a GitHub repository uses its own repository, scoped by test name:
+`{TestName}-{OS}-{TokenType}-{RunID}`. This prevents cross-file resource collisions — test files
+run in parallel across OSes and in sequence across auth contexts, so one test file must never
+create resources on another test file's repository.
+
+Each test file must ensure its repository exists using `Set-GitHubRepository` in its per-context
+`BeforeAll`. `Set-GitHubRepository` is idempotent — if the repository already exists it updates it
+in place (PATCH), and if it does not exist it creates it. When the same parameters are passed each
+time the end-state is identical. This makes every test file self-sufficient regardless of whether
+the global `BeforeAll.ps1` already provisioned the repository.
 
 **Do not** use `Get-GitHubRepository` with a throw guard — that breaks partial reruns.
 **Do not** use `New-GitHubRepository` — that fails if the repository already exists.
@@ -103,7 +112,7 @@ Skip provisioning for those owner types and set `$repo = $null` so that repo-dep
 be skipped cleanly:
 
 ```powershell
-$repoPrefix = "Test-$os-$TokenType"
+$repoPrefix = "$testName-$os-$TokenType"
 $repoName = "$repoPrefix-$id"
 if ($OwnerType -in ('repository', 'enterprise')) {
     $repo = $null
@@ -148,7 +157,7 @@ Describe 'TestName' {
                 $context = Connect-GitHubApp @connectAppParams -PassThru -Default -Silent
             }
 
-            $repoPrefix = "Test-$os-$TokenType"
+            $repoPrefix = "$testName-$os-$TokenType"
             $repoName = "$repoPrefix-$id"
             if ($OwnerType -in ('repository', 'enterprise')) {
                 $repo = $null
@@ -164,9 +173,14 @@ Describe 'TestName' {
                     'organization' { Set-GitHubRepository @repoParams -Organization $Owner }
                 }
             }
+
+            # Clean up stale resources from prior runs (re-runs with same GITHUB_RUN_ID)
+            # Example: remove leftover releases, environments, etc.
         }
 
         AfterAll {
+            # Remove all test-specific resources created during this context
+            # (environments, releases, secrets, etc.)
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
         }
 
@@ -179,20 +193,24 @@ Describe 'TestName' {
 
 ## Naming conventions
 
-| Resource   | Pattern                                      | Example                          |
-|------------|----------------------------------------------|----------------------------------|
-| Repo       | `Test-{OS}-{TokenType}-{RunID}`              | `Test-Linux-USER_FG_PAT-1234`    |
-| Extra repo | `Test-{OS}-{TokenType}-{RunID}-{N}`          | `Test-Linux-USER_FG_PAT-1234-2`  |
-| Secret     | `{TestName}_{OS}_{TokenType}_{RunID}`        | `Secrets_Linux_PAT_1234`         |
-| Variable   | `{TestName}_{OS}_{TokenType}_{RunID}`        | `Variables_Linux_PAT_1234`       |
-| Team       | `{TestName}_{OS}_{TokenType}_{RunID}_{Name}` | `Teams_Linux_APP_ORG_1234_Pull`  |
-| Env        | `{TestName}-{OS}-{TokenType}-{RunID}`        | `Secrets-Linux-PAT-1234`         |
+| Resource   | Pattern                                      | Example                               |
+|------------|----------------------------------------------|---------------------------------------|
+| Repo       | `{TestName}-{OS}-{TokenType}-{RunID}`        | `Releases-Linux-USER_FG_PAT-1234`     |
+| Extra repo | `{TestName}-{OS}-{TokenType}-{RunID}-{N}`    | `Secrets-Linux-ORG_FG_PAT-1234-2`     |
+| Secret     | `{TestName}_{OS}_{TokenType}_{RunID}`        | `Secrets_Linux_PAT_1234`              |
+| Variable   | `{TestName}_{OS}_{TokenType}_{RunID}`        | `Variables_Linux_PAT_1234`            |
+| Team       | `{TestName}_{OS}_{TokenType}_{RunID}_{Name}` | `Teams_Linux_APP_ORG_1234_Pull`       |
+| Env        | `{TestName}-{OS}-{TokenType}-{RunID}`        | `Secrets-Linux-PAT-1234`              |
 
 ## Key rules
 
 - `$id` must always be `$env:GITHUB_RUN_ID` — never `[guid]::NewGuid()` or `Get-Random`.
 - Skip repo-dependent tests with `-Skip:($OwnerType -in ('repository', 'enterprise'))`.
 - Disconnect all sessions in `AfterAll`: `Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent`.
-- Test-specific ephemeral resources (releases, secrets, variables, environments, teams) are created and
-  cleaned up within each test file. Only repositories are shared.
-- `Repositories.Tests.ps1` is the exception — it creates and deletes its own repos because it tests CRUD.
+- Each test file uses its own repository: `{TestName}-{OS}-{TokenType}-{RunID}`. No two test files share a repository.
+- Each test file is self-contained and responsible for its own setup and teardown:
+  - **BeforeAll (per-context):** Ensure the repository exists via `Set-GitHubRepository`. Clean up stale test-specific resources from prior runs (re-runs with the same `GITHUB_RUN_ID`).
+  - **AfterAll (per-context):** Remove all test-specific resources created during the run (environments, releases, secrets, variables, etc.).
+- Any individual test file or auth context can be re-run independently. Tests must not assume clean initial state — they must be idempotent.
+- Tests run in parallel across OSes (Linux, macOS, Windows) and in sequence across auth contexts (7 cases). Resource names must include enough dimensions to prevent collisions across all parallel and sequential axes.
+- `Repositories.Tests.ps1` is independent — it creates and deletes its own repos because it tests CRUD.
