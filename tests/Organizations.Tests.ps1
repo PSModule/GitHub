@@ -177,12 +177,11 @@ Describe 'Organizations' {
             Update-GitHubOrganization -Name $orgName -Location 'New Location' -Context $orgContext
         }
 
-        # This test verifies that the enterprise IAT cannot delete an org — org-level operations
-        # require an org installation (shown by the tests above). It is intentionally placed AFTER
-        # Install-GitHubApp and the org-IAT tests so that if the enterprise app unexpectedly gains
-        # organization_administration permission and this call succeeds instead of throwing, the
-        # critical install/connect/update tests have already passed and the org deletion is
-        # a no-op for those assertions. See issue #596.
+        # GitHub's DELETE /orgs/{org} endpoint requires the app to have the org-level
+        # `administration: write` permission. The enterprise IAT is enterprise-scoped and does not
+        # carry org-level permissions, so this call is expected to fail regardless of which
+        # enterprise permissions the app holds. An org-level IAT (obtained after Install-GitHubApp)
+        # is required. See issue #596.
         It 'Remove-GitHubOrganization - Removes an organization using enterprise installation' -Skip:($OwnerType -ne 'enterprise') {
             { Remove-GitHubOrganization -Name $orgName -Confirm:$false } | Should -Throw
         }
