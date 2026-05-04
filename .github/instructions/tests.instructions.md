@@ -22,10 +22,10 @@ Secrets:
 
 ### APP_ENT — PSModule Enterprise App
 
-Homed in `MSX`. ClientID: `Iv23lieHcDQDwVV3alK1`.
+Homed in `MSX` (enterprise slug: `msx`). ClientID: `Iv23lieHcDQDwVV3alK1`.
 Installed on [psmodule-test-org3](https://github.com/orgs/psmodule-test-org3) (enterprise org) with all permissions and push events.
 
-Required enterprise-scoped permissions (configured on the app, homed in `msx`):
+Required enterprise-scoped permissions (configured on the app):
 
 - `enterprise_organization_installations: write` — required by `Install-GitHubApp` on enterprise-owned organizations
   ([docs](https://docs.github.com/rest/enterprise-admin/organization-installations#install-a-github-app-on-an-enterprise-owned-organization)).

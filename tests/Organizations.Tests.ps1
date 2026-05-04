@@ -62,8 +62,24 @@ Describe 'Organizations' {
                         if ($staleOrg -and $staleOrg.Name) {
                             Write-Host "Stale org [$orgName] found from previous run attempt. Removing..."
                             try {
-                                $null = Install-GitHubApp -Enterprise $owner -Organization $orgName `
-                                    -ClientID $installationContext.ClientID -RepositorySelection 'all' -ErrorAction Stop
+                                # Retry Install-GitHubApp: the enterprise apps endpoint can return 404
+                                # for a short time after the org was originally created.
+                                $maxAttempts = 5
+                                $retryDelay = 3
+                                for ($retryAttempt = 1; $retryAttempt -le $maxAttempts; $retryAttempt++) {
+                                    try {
+                                        $null = Install-GitHubApp -Enterprise $owner -Organization $orgName `
+                                            -ClientID $installationContext.ClientID -RepositorySelection 'all' -ErrorAction Stop
+                                        break
+                                    } catch {
+                                        if ($retryAttempt -lt $maxAttempts) {
+                                            Write-Host "Install-GitHubApp attempt $retryAttempt/$maxAttempts failed: $($_.Exception.Message). Retrying in ${retryDelay}s..."
+                                            Start-Sleep -Seconds $retryDelay
+                                        } else {
+                                            throw
+                                        }
+                                    }
+                                }
                                 $cleanupOrgContext = Connect-GitHubApp -Organization $orgName -Context $context -PassThru -Silent
                                 Remove-GitHubOrganization -Name $orgName -Confirm:$false -Context $cleanupOrgContext
                                 Write-Host "Stale org [$orgName] removed."
@@ -178,7 +194,25 @@ Describe 'Organizations' {
         }
 
         It 'Install-GitHubApp - Installs a GitHub App to an organization' -Skip:($OwnerType -ne 'enterprise') {
-            $installation = Install-GitHubApp -Enterprise $owner -Organization $orgName -ClientID $installationContext.ClientID -RepositorySelection 'all'
+            # Retry: the enterprise apps endpoint can return 404 transiently right after
+            # New-GitHubOrganization, before the new org has propagated.
+            $maxAttempts = 5
+            $retryDelay = 3
+            $installation = $null
+            for ($retryAttempt = 1; $retryAttempt -le $maxAttempts; $retryAttempt++) {
+                try {
+                    $installation = Install-GitHubApp -Enterprise $owner -Organization $orgName `
+                        -ClientID $installationContext.ClientID -RepositorySelection 'all' -ErrorAction Stop
+                    break
+                } catch {
+                    if ($retryAttempt -lt $maxAttempts) {
+                        Write-Host "Install-GitHubApp attempt $retryAttempt/$maxAttempts failed: $($_.Exception.Message). Retrying in ${retryDelay}s..."
+                        Start-Sleep -Seconds $retryDelay
+                    } else {
+                        throw
+                    }
+                }
+            }
             LogGroup 'Installed App' {
                 Write-Host ($installation | Select-Object * | Out-String)
             }

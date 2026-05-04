@@ -94,7 +94,7 @@ Describe 'Variables' {
                     LogGroup 'Variables to remove' {
                         Write-Host "$($variablesToRemove | Format-List | Out-String)"
                     }
-                    $variablesToRemove | Remove-GitHubVariable
+                    $variablesToRemove | Remove-GitHubVariable -Confirm:$false
                 }
             }
             # Remove the test environment created on the per-test-file repository so it does

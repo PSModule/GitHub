@@ -94,7 +94,7 @@ Describe 'Secrets' {
                     LogGroup 'Secrets to remove' {
                         $orgSecrets = Get-GitHubSecret -Owner $owner | Where-Object { $_.Name -like "$secretName*" }
                         Write-Host "$($orgSecrets | Format-List | Out-String)"
-                        $orgSecrets | Remove-GitHubSecret
+                        $orgSecrets | Remove-GitHubSecret -Confirm:$false
                     }
                 }
             }
