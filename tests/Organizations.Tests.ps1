@@ -79,7 +79,7 @@ Describe 'Organizations' {
                         foreach ($candidateName in $orgNamesToCheck) {
                             if ($candidateName -ne $orgName) {
                                 # Skip the current org we're about to create
-                                $candidateOrg = Get-GitHubOrganization -Enterprise $owner -Name $candidateName -ErrorAction SilentlyContinue
+                                $candidateOrg = Get-GitHubOrganization -Name $candidateName -ErrorAction SilentlyContinue
                                 if ($candidateOrg -and $candidateOrg.Name) {
                                     $staleOrgs += $candidateOrg
                                 }
@@ -118,7 +118,7 @@ Describe 'Organizations' {
                                 }
                             }
                         } else {
-                            Write-Host "No stale orgs found matching prefix: $orgRunPrefix*"
+                            Write-Host "No stale orgs found matching prefix: $orgPrefix*"
                         }
                     }
                 }
