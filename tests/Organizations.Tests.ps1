@@ -65,7 +65,7 @@ Describe 'Organizations' {
                         # from the base run (attempt 1) and any previous rerun attempts (2, 3, etc.).
                         # Use direct lookups by name instead of enumerating all enterprise orgs to avoid
                         # API quota burn on enterprises with many organizations.
-                        
+
                         # Build deterministic list of org names to check: base run + previous attempts
                         $orgNamesToCheck = @("$testName-$os-$runId")  # Attempt 1
                         if ($attempt -and $attempt -ne '1') {
@@ -73,19 +73,20 @@ Describe 'Organizations' {
                                 $orgNamesToCheck += "$testName-$os-$runId-$attemptNum"
                             }
                         }
-                        
+
                         # Check each expected org name; collect any that exist and differ from current org
                         $staleOrgs = @()
                         foreach ($candidateName in $orgNamesToCheck) {
-                            if ($candidateName -ne $orgName) {  # Skip the current org we're about to create
+                            if ($candidateName -ne $orgName) {
+                                # Skip the current org we're about to create
                                 $candidateOrg = Get-GitHubOrganization -Enterprise $owner -Name $candidateName -ErrorAction SilentlyContinue
                                 if ($candidateOrg -and $candidateOrg.Name) {
                                     $staleOrgs += $candidateOrg
                                 }
                             }
                         }
-                        
-                        if ($staleOrgs.Count -gt 0) {
+
+                        if ($staleOrgs) {
                             foreach ($staleOrg in $staleOrgs) {
                                 Write-Host "Stale org [$($staleOrg.Name)] found from previous run. Removing..."
                                 try {

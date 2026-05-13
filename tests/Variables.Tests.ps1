@@ -97,8 +97,8 @@ Describe 'Variables' {
                     $variablesToRemove | Remove-GitHubVariable -Confirm:$false
                 }
             }
-            # Remove the test environment created on the per-test-file repository so it does
-            # not leak into other test files or subsequent reruns.
+            # Remove the test environment created on the per-test-file repository as a
+            # defense-in-depth measure to keep the repo clean across reruns.
             if ($OwnerType -notin ('repository', 'enterprise') -and $repo) {
                 LogGroup "Environment cleanup - [$environmentName] on [$repoName]" {
                     Get-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName -ErrorAction SilentlyContinue |
