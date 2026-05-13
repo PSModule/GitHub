@@ -62,15 +62,15 @@ Describe 'Organizations' {
                         # On reruns, clean up any orgs matching the base run prefix (e.g., ...-1234,
                         # ...-1234-2, etc.) before creating a new one. This prevents orphaned orgs
                         # from failed previous attempts.
-                        $orgPrefix = "$testName-$os-$runId"
-                        Write-Host "Searching for stale orgs matching prefix: $orgPrefix*"
+                        $orgRunPrefix = "$testName-$os-$runId"
+                        Write-Host "Searching for stale orgs matching prefix: $orgRunPrefix*"
                         
-                        # Collect all orgs that match the base run prefix pattern
-                        $staleOrgs = Get-GitHubOrganization -ErrorAction SilentlyContinue | 
-                            Where-Object { $_.Name -like "$orgPrefix*" -and $_.Name -ne $orgName }
+                        # Collect all orgs that match the base run prefix pattern (scoped to this enterprise)
+                        $staleOrgs = Get-GitHubOrganization -Enterprise $owner -ErrorAction SilentlyContinue | 
+                            Where-Object { $_.Name -like "$orgRunPrefix*" -and $_.Name -ne $orgName }
                         
                         # Also check for the current org name in case it exists from a failed attempt
-                        $currentOrg = Get-GitHubOrganization -Name $orgName -ErrorAction SilentlyContinue
+                        $currentOrg = Get-GitHubOrganization -Enterprise $owner -Name $orgName -ErrorAction SilentlyContinue
                         if ($currentOrg -and $currentOrg.Name) {
                             $staleOrgs += $currentOrg
                         }
@@ -107,7 +107,7 @@ Describe 'Organizations' {
                                 }
                             }
                         } else {
-                            Write-Host "No stale orgs found matching prefix: $orgPrefix*"
+                            Write-Host "No stale orgs found matching prefix: $orgRunPrefix*"
                         }
                     }
                 }
