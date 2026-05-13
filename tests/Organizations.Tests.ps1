@@ -74,15 +74,14 @@ Describe 'Organizations' {
                             }
                         }
 
-                        # Check each expected org name; collect any that exist and differ from current org
+                        # Check each expected org name; collect any that currently exist.
+                        # Include the current attempt name as well so reruns of the same
+                        # GITHUB_RUN_ATTEMPT remain idempotent.
                         $staleOrgs = @()
                         foreach ($candidateName in $orgNamesToCheck) {
-                            if ($candidateName -ne $orgName) {
-                                # Skip the current org we're about to create
-                                $candidateOrg = Get-GitHubOrganization -Name $candidateName -ErrorAction SilentlyContinue
-                                if ($candidateOrg -and $candidateOrg.Name) {
-                                    $staleOrgs += $candidateOrg
-                                }
+                            $candidateOrg = Get-GitHubOrganization -Name $candidateName -ErrorAction SilentlyContinue
+                            if ($candidateOrg -and $candidateOrg.Name) {
+                                $staleOrgs += $candidateOrg
                             }
                         }
 
@@ -100,8 +99,13 @@ Describe 'Organizations' {
                                                 -ClientID $installationContext.ClientID -RepositorySelection 'all' -ErrorAction Stop
                                             break
                                         } catch {
+                                            $message = $_.Exception.Message
+                                            if ($message -match 'already\s+installed') {
+                                                Write-Host "App is already installed on stale org [$($staleOrg.Name)]; continuing with org-level cleanup context."
+                                                break
+                                            }
                                             if ($retryAttempt -lt $maxAttempts) {
-                                                Write-Host "Install-GitHubApp attempt $retryAttempt/$maxAttempts failed: $($_.Exception.Message). Retrying in ${retryDelay}s..."
+                                                Write-Host "Install-GitHubApp attempt $retryAttempt/$maxAttempts failed: $message. Retrying in ${retryDelay}s..."
                                                 Start-Sleep -Seconds $retryDelay
                                             } else {
                                                 throw
