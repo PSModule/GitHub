@@ -59,20 +59,30 @@ Describe 'Organizations' {
                     # GITHUB_RUN_ID. DELETE /orgs/{org} requires org-level administration:write,
                     # so we install the app first to obtain an org-level IAT, then delete.
                     LogGroup 'Pre-test Cleanup - Stale Enterprise Organization' {
-                        # On reruns, clean up any orgs matching the base run prefix (e.g., ...-1234,
-                        # ...-1234-2, etc.) before creating a new one. This prevents orphaned orgs
-                        # from failed previous attempts.
-                        $orgRunPrefix = "$testName-$os-$runId"
-                        Write-Host "Searching for stale orgs matching prefix: $orgRunPrefix*"
+                        # On reruns, clean up any orgs from the current and previous attempts. Deleted
+                        # GitHub organizations are unavailable for 90 days, so rerun attempts must use
+                        # unique org names to avoid collisions. Deterministically check for stale orgs
+                        # from the base run (attempt 1) and any previous rerun attempts (2, 3, etc.).
+                        # Use direct lookups by name instead of enumerating all enterprise orgs to avoid
+                        # API quota burn on enterprises with many organizations.
                         
-                        # Collect all orgs that match the base run prefix pattern (scoped to this enterprise)
-                        $staleOrgs = Get-GitHubOrganization -Enterprise $owner -ErrorAction SilentlyContinue | 
-                            Where-Object { $_.Name -like "$orgRunPrefix*" -and $_.Name -ne $orgName }
+                        # Build deterministic list of org names to check: base run + previous attempts
+                        $orgNamesToCheck = @("$testName-$os-$runId")  # Attempt 1
+                        if ($attempt -and $attempt -ne '1') {
+                            for ($attemptNum = 2; $attemptNum -le [int]$attempt; $attemptNum++) {
+                                $orgNamesToCheck += "$testName-$os-$runId-$attemptNum"
+                            }
+                        }
                         
-                        # Also check for the current org name in case it exists from a failed attempt
-                        $currentOrg = Get-GitHubOrganization -Enterprise $owner -Name $orgName -ErrorAction SilentlyContinue
-                        if ($currentOrg -and $currentOrg.Name) {
-                            $staleOrgs += $currentOrg
+                        # Check each expected org name; collect any that exist and differ from current org
+                        $staleOrgs = @()
+                        foreach ($candidateName in $orgNamesToCheck) {
+                            if ($candidateName -ne $orgName) {  # Skip the current org we're about to create
+                                $candidateOrg = Get-GitHubOrganization -Enterprise $owner -Name $candidateName -ErrorAction SilentlyContinue
+                                if ($candidateOrg -and $candidateOrg.Name) {
+                                    $staleOrgs += $candidateOrg
+                                }
+                            }
                         }
                         
                         if ($staleOrgs.Count -gt 0) {
