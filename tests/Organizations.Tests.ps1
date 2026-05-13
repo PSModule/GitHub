@@ -22,16 +22,17 @@ param()
 BeforeAll {
     $testName = 'Organizations'
     $os = $env:RUNNER_OS
-    $id = $env:GITHUB_RUN_ID
-    if (-not $id) {
+    $runId = $env:GITHUB_RUN_ID
+    if (-not $runId) {
         throw 'GITHUB_RUN_ID is required to safely scope pre-test cleanup in Organizations.Tests.ps1.'
     }
     # GITHUB_RUN_ATTEMPT increments on each rerun (1, 2, 3...). Enterprise org names go on a
     # 90-day hold after deletion, so a rerun of the same GITHUB_RUN_ID would collide if we used
     # the run ID alone. Appending the attempt number makes each attempt produce a unique org name.
     $attempt = $env:GITHUB_RUN_ATTEMPT
+    $id = $runId
     if ($attempt -and $attempt -ne '1') {
-        $id = "$id-$attempt"
+        $id = "$runId-$attempt"
     }
 }
 
@@ -58,38 +59,55 @@ Describe 'Organizations' {
                     # GITHUB_RUN_ID. DELETE /orgs/{org} requires org-level administration:write,
                     # so we install the app first to obtain an org-level IAT, then delete.
                     LogGroup 'Pre-test Cleanup - Stale Enterprise Organization' {
-                        $staleOrg = Get-GitHubOrganization -Name $orgName -ErrorAction SilentlyContinue
-                        if ($staleOrg -and $staleOrg.Name) {
-                            Write-Host "Stale org [$orgName] found from previous run attempt. Removing..."
-                            try {
-                                # Retry Install-GitHubApp: the enterprise apps endpoint can return 404
-                                # for a short time after the org was originally created.
-                                $maxAttempts = 5
-                                $retryDelay = 3
-                                for ($retryAttempt = 1; $retryAttempt -le $maxAttempts; $retryAttempt++) {
-                                    try {
-                                        $null = Install-GitHubApp -Enterprise $owner -Organization $orgName `
-                                            -ClientID $installationContext.ClientID -RepositorySelection 'all' -ErrorAction Stop
-                                        break
-                                    } catch {
-                                        if ($retryAttempt -lt $maxAttempts) {
-                                            Write-Host "Install-GitHubApp attempt $retryAttempt/$maxAttempts failed: $($_.Exception.Message). Retrying in ${retryDelay}s..."
-                                            Start-Sleep -Seconds $retryDelay
-                                        } else {
-                                            throw
+                        # On reruns, clean up any orgs matching the base run prefix (e.g., ...-1234,
+                        # ...-1234-2, etc.) before creating a new one. This prevents orphaned orgs
+                        # from failed previous attempts.
+                        $orgPrefix = "$testName-$os-$runId"
+                        Write-Host "Searching for stale orgs matching prefix: $orgPrefix*"
+                        
+                        # Collect all orgs that match the base run prefix pattern
+                        $staleOrgs = Get-GitHubOrganization -ErrorAction SilentlyContinue | 
+                            Where-Object { $_.Name -like "$orgPrefix*" -and $_.Name -ne $orgName }
+                        
+                        # Also check for the current org name in case it exists from a failed attempt
+                        $currentOrg = Get-GitHubOrganization -Name $orgName -ErrorAction SilentlyContinue
+                        if ($currentOrg -and $currentOrg.Name) {
+                            $staleOrgs += $currentOrg
+                        }
+                        
+                        if ($staleOrgs.Count -gt 0) {
+                            foreach ($staleOrg in $staleOrgs) {
+                                Write-Host "Stale org [$($staleOrg.Name)] found from previous run. Removing..."
+                                try {
+                                    # Retry Install-GitHubApp: the enterprise apps endpoint can return 404
+                                    # for a short time after the org was originally created.
+                                    $maxAttempts = 5
+                                    $retryDelay = 3
+                                    for ($retryAttempt = 1; $retryAttempt -le $maxAttempts; $retryAttempt++) {
+                                        try {
+                                            $null = Install-GitHubApp -Enterprise $owner -Organization $staleOrg.Name `
+                                                -ClientID $installationContext.ClientID -RepositorySelection 'all' -ErrorAction Stop
+                                            break
+                                        } catch {
+                                            if ($retryAttempt -lt $maxAttempts) {
+                                                Write-Host "Install-GitHubApp attempt $retryAttempt/$maxAttempts failed: $($_.Exception.Message). Retrying in ${retryDelay}s..."
+                                                Start-Sleep -Seconds $retryDelay
+                                            } else {
+                                                throw
+                                            }
                                         }
                                     }
+                                    $cleanupOrgContext = Connect-GitHubApp -Organization $staleOrg.Name -Context $context -PassThru -Silent
+                                    Remove-GitHubOrganization -Name $staleOrg.Name -Confirm:$false -Context $cleanupOrgContext
+                                    Write-Host "Stale org [$($staleOrg.Name)] removed."
+                                } catch {
+                                    # Rethrow — if the org exists but we can't remove it, New-GitHubOrganization
+                                    # will fail anyway. Failing here gives a clearer root-cause message.
+                                    throw "Could not remove stale org [$($staleOrg.Name)]: $($_.Exception.Message)"
                                 }
-                                $cleanupOrgContext = Connect-GitHubApp -Organization $orgName -Context $context -PassThru -Silent
-                                Remove-GitHubOrganization -Name $orgName -Confirm:$false -Context $cleanupOrgContext
-                                Write-Host "Stale org [$orgName] removed."
-                            } catch {
-                                # Rethrow — if the org exists but we can't remove it, New-GitHubOrganization
-                                # will fail anyway. Failing here gives a clearer root-cause message.
-                                throw "Could not remove stale org [$orgName]: $($_.Exception.Message)"
                             }
                         } else {
-                            Write-Host "No stale org found for [$orgName]."
+                            Write-Host "No stale orgs found matching prefix: $orgPrefix*"
                         }
                     }
                 }
@@ -189,10 +207,6 @@ Describe 'Organizations' {
             { Update-GitHubOrganization -Name $orgName -Location 'New Location' } | Should -Throw
         }
 
-        It 'Remove-GitHubOrganization - Removes an organization using enterprise installation' -Skip:($OwnerType -ne 'enterprise') {
-            { Remove-GitHubOrganization -Name $orgName -Confirm:$false } | Should -Throw
-        }
-
         It 'Install-GitHubApp - Installs a GitHub App to an organization' -Skip:($OwnerType -ne 'enterprise') {
             # Retry: the enterprise apps endpoint can return 404 transiently right after
             # New-GitHubOrganization, before the new org has propagated.
@@ -231,6 +245,10 @@ Describe 'Organizations' {
         It 'Update-GitHubOrganization - Updates the organization location using organization installation' -Skip:($OwnerType -ne 'enterprise') {
             $orgContext = Connect-GitHubApp -Organization $orgName -Context $context -PassThru -Silent
             Update-GitHubOrganization -Name $orgName -Location 'New Location' -Context $orgContext
+        }
+
+        It 'Remove-GitHubOrganization - Removes an organization using enterprise installation' -Skip:($OwnerType -ne 'enterprise') {
+            { Remove-GitHubOrganization -Name $orgName -Confirm:$false } | Should -Throw
         }
 
         It 'Remove-GitHubOrganization - Removes an organization using organization installation' -Skip:($OwnerType -ne 'enterprise') {
