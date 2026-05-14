@@ -30,10 +30,13 @@ BeforeAll {
     function Get-TestRepository {
         param(
             [Parameter()]
+            [ValidateNotNullOrEmpty()]
             [string] $OwnerType,
             [Parameter()]
+            [ValidateNotNullOrEmpty()]
             [string] $Owner,
             [Parameter()]
+            [ValidateNotNullOrEmpty()]
             [string] $Name
         )
 
@@ -50,12 +53,16 @@ BeforeAll {
     function Resolve-TestForkRepository {
         param(
             [Parameter()]
+            [ValidateNotNullOrEmpty()]
             [string] $OwnerType,
             [Parameter()]
+            [ValidateNotNullOrEmpty()]
             [string] $Owner,
             [Parameter()]
+            [ValidateNotNullOrEmpty()]
             [string] $Name,
             [Parameter()]
+            [ValidateNotNullOrEmpty()]
             [scriptblock] $CreateRepository
         )
 
