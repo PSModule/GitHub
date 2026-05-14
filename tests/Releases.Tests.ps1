@@ -43,7 +43,7 @@ Describe 'Releases' {
                     Write-Host ($context | Format-Table | Out-String)
                 }
             }
-            $repoPrefix = "Test-$os-$TokenType"
+            $repoPrefix = "$testName-$os-$TokenType"
             $repoName = "$repoPrefix-$id"
 
             LogGroup "Using Repository - [$repoName]" {
@@ -62,6 +62,22 @@ Describe 'Releases' {
                     }
                 }
                 Write-Host ($repo | Select-Object * | Out-String)
+            }
+
+            # Clean up stale releases from prior runs with the same GITHUB_RUN_ID.
+            # Idempotent setup must not assume a clean repository — partial reruns can leave
+            # tags like v1.0/v1.1/v1.3 behind, which would cause New-GitHubRelease to fail
+            # with 422 (already_exists).
+            if ($repo) {
+                LogGroup "Pre-test Cleanup - Existing Releases on [$repoName]" {
+                    $existingReleases = Get-GitHubRelease -Owner $Owner -Repository $repoName -AllVersions -ErrorAction SilentlyContinue
+                    if ($existingReleases) {
+                        Write-Host ($existingReleases | Format-Table | Out-String)
+                        $existingReleases | Remove-GitHubRelease -Confirm:$false
+                    } else {
+                        Write-Host 'No existing releases to clean up.'
+                    }
+                }
             }
         }
 

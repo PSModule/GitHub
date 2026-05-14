@@ -11,7 +11,6 @@ LogGroup 'AfterAll - Global Test Teardown' {
     if (-not $env:Settings) {
         throw 'Settings environment variable is not set. Process-PSModule must populate it with the test suite configuration.'
     }
-    $prefix = 'Test'
 
     # Derive the list of OS names from the Settings JSON provided by Process-PSModule.
     try {
@@ -30,6 +29,11 @@ LogGroup 'AfterAll - Global Test Teardown' {
     }
     Write-Host "Cleaning up test repositories for OSes: $($osNames -join ', ')"
 
+    # Source the single authoritative list of test-file repositories so setup and teardown
+    # always operate on the same set. See tests/Data/TestRepos.ps1.
+    $testRepos = . "$PSScriptRoot/Data/TestRepos.ps1"
+    $testNames = $testRepos.TestNames
+    $testNamesWithExtraRepos = $testRepos.TestNamesWithExtraRepos
     foreach ($authCase in $authCases) {
         $authCase.GetEnumerator() | ForEach-Object { Set-Variable -Name $_.Key -Value $_.Value }
 
@@ -46,25 +50,27 @@ LogGroup 'AfterAll - Global Test Teardown' {
             Write-Host ($context | Format-List | Out-String)
 
             foreach ($os in $osNames) {
-                $repoPrefix = "$prefix-$os-$TokenType"
-                $repoName = "$repoPrefix-$id"
+                foreach ($testName in $testNames) {
+                    $repoPrefix = "$testName-$os-$TokenType"
+                    $repoName = "$repoPrefix-$id"
 
-                LogGroup "Repository cleanup - $AuthType-$TokenType - $os" {
-                    # Use deterministic name lookups instead of listing all repos to reduce API calls.
-                    $cleanupRepoNames = @($repoName)
-                    if ($OwnerType -eq 'organization') {
-                        $cleanupRepoNames += "$repoName-2", "$repoName-3"
-                    }
+                    LogGroup "Repository cleanup - $AuthType-$TokenType - $os - $testName" {
+                        # Use deterministic name lookups instead of listing all repos to reduce API calls.
+                        $cleanupRepoNames = @($repoName)
+                        if ($OwnerType -eq 'organization' -and $testName -in $testNamesWithExtraRepos) {
+                            $cleanupRepoNames += "$repoName-2", "$repoName-3"
+                        }
 
-                    foreach ($cleanupRepoName in $cleanupRepoNames) {
-                        switch ($OwnerType) {
-                            'user' {
-                                Get-GitHubRepository -Name $cleanupRepoName -ErrorAction SilentlyContinue |
-                                    Remove-GitHubRepository -Confirm:$false
-                            }
-                            'organization' {
-                                Get-GitHubRepository -Owner $Owner -Name $cleanupRepoName -ErrorAction SilentlyContinue |
-                                    Remove-GitHubRepository -Confirm:$false
+                        foreach ($cleanupRepoName in $cleanupRepoNames) {
+                            switch ($OwnerType) {
+                                'user' {
+                                    Get-GitHubRepository -Name $cleanupRepoName -ErrorAction SilentlyContinue |
+                                        Remove-GitHubRepository -Confirm:$false
+                                }
+                                'organization' {
+                                    Get-GitHubRepository -Owner $Owner -Name $cleanupRepoName -ErrorAction SilentlyContinue |
+                                        Remove-GitHubRepository -Confirm:$false
+                                }
                             }
                         }
                     }

@@ -43,7 +43,7 @@ Describe 'Environments' {
                     Write-Host ($context | Format-List | Out-String)
                 }
             }
-            $repoPrefix = "Test-$os-$TokenType"
+            $repoPrefix = "$testName-$os-$TokenType"
             $repoName = "$repoPrefix-$id"
             $environmentName = "$testName-$os-$TokenType-$id"
 
@@ -63,6 +63,20 @@ Describe 'Environments' {
                     }
                 }
                 Write-Host ($repo | Select-Object * | Out-String)
+            }
+
+            # Clean up stale environments from prior runs with the same GITHUB_RUN_ID.
+            # This keeps isolated reruns self-contained even when the global BeforeAll did not reset the repository.
+            if ($repo) {
+                LogGroup "Pre-test Cleanup - Existing Environments on [$repoName]" {
+                    $existingEnvironments = Get-GitHubEnvironment -Owner $owner -Repository $repoName -ErrorAction SilentlyContinue
+                    if ($existingEnvironments) {
+                        Write-Host ($existingEnvironments | Format-Table | Out-String)
+                        $existingEnvironments | Remove-GitHubEnvironment -Confirm:$false
+                    } else {
+                        Write-Host 'No existing environments to clean up.'
+                    }
+                }
             }
         }
 
