@@ -43,7 +43,7 @@ Describe 'Secrets' {
                     Write-Host ($context | Format-List | Out-String)
                 }
             }
-            $repoPrefix = "Test-$os-$TokenType"
+            $repoPrefix = "$testName-$os-$TokenType"
             $repoName = "$repoPrefix-$id"
             $secretPrefix = "$testName`_$os`_$TokenType"
             $secretName = "$secretPrefix`_$id"
@@ -94,8 +94,16 @@ Describe 'Secrets' {
                     LogGroup 'Secrets to remove' {
                         $orgSecrets = Get-GitHubSecret -Owner $owner | Where-Object { $_.Name -like "$secretName*" }
                         Write-Host "$($orgSecrets | Format-List | Out-String)"
-                        $orgSecrets | Remove-GitHubSecret
+                        $orgSecrets | Remove-GitHubSecret -Confirm:$false
                     }
+                }
+            }
+            # Remove the test environment created on the per-test-file repository as a
+            # defense-in-depth measure to keep the repo clean across reruns.
+            if ($OwnerType -notin ('repository', 'enterprise') -and $repo) {
+                LogGroup "Environment cleanup - [$environmentName] on [$repoName]" {
+                    Get-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName -ErrorAction SilentlyContinue |
+                        Remove-GitHubEnvironment -Confirm:$false
                 }
             }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent

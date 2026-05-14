@@ -43,7 +43,7 @@ Describe 'Variables' {
                     Write-Host ($context | Format-List | Out-String)
                 }
             }
-            $repoPrefix = "Test-$os-$TokenType"
+            $repoPrefix = "$testName-$os-$TokenType"
             $repoName = "$repoPrefix-$id"
             $variablePrefix = "$testName`_$os`_$TokenType"
             $variableName = "$variablePrefix`_$id"
@@ -94,7 +94,15 @@ Describe 'Variables' {
                     LogGroup 'Variables to remove' {
                         Write-Host "$($variablesToRemove | Format-List | Out-String)"
                     }
-                    $variablesToRemove | Remove-GitHubVariable
+                    $variablesToRemove | Remove-GitHubVariable -Confirm:$false
+                }
+            }
+            # Remove the test environment created on the per-test-file repository as a
+            # defense-in-depth measure to keep the repo clean across reruns.
+            if ($OwnerType -notin ('repository', 'enterprise') -and $repo) {
+                LogGroup "Environment cleanup - [$environmentName] on [$repoName]" {
+                    Get-GitHubEnvironment -Owner $owner -Repository $repoName -Name $environmentName -ErrorAction SilentlyContinue |
+                        Remove-GitHubEnvironment -Confirm:$false
                 }
             }
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
