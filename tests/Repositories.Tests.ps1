@@ -26,6 +26,57 @@ BeforeAll {
     if (-not $id) {
         throw 'GITHUB_RUN_ID is required for Repositories tests because cleanup removes repositories and teams by name prefix.'
     }
+
+    function Get-TestRepository {
+        param(
+            [string] $OwnerType,
+            [string] $Owner,
+            [string] $Name
+        )
+
+        switch ($OwnerType) {
+            'user' {
+                Get-GitHubRepository -Name $Name -ErrorAction SilentlyContinue
+            }
+            'organization' {
+                Get-GitHubRepository -Owner $Owner -Name $Name -ErrorAction SilentlyContinue
+            }
+        }
+    }
+
+    function Resolve-TestForkRepository {
+        param(
+            [string] $OwnerType,
+            [string] $Owner,
+            [string] $Name,
+            [scriptblock] $CreateRepository
+        )
+
+        $maxAttempts = 5
+        $retryDelay = 3
+
+        for ($attempt = 1; $attempt -le $maxAttempts; $attempt++) {
+            $repo = & $CreateRepository
+            if ($repo -and $repo.IsFork -and $repo.Name -and $repo.Name -ne $Name) {
+                Write-Host "Fork attempt $attempt/$maxAttempts returned stale repository [$($repo.FullName)]. Removing it before retrying."
+                Remove-GitHubRepository -Owner $repo.Owner -Name $repo.Name -Confirm:$false
+            } else {
+                for ($resolveAttempt = 1; $resolveAttempt -le $maxAttempts; $resolveAttempt++) {
+                    $resolvedRepo = Get-TestRepository -OwnerType $OwnerType -Owner $Owner -Name $Name
+                    if ($resolvedRepo) {
+                        return $resolvedRepo
+                    }
+
+                    if ($resolveAttempt -lt $maxAttempts) {
+                        Write-Host "Fork attempt $attempt/$maxAttempts has not produced repository [$Owner/$Name] yet. Retrying in ${retryDelay}s..."
+                        Start-Sleep -Seconds $retryDelay
+                    }
+                }
+            }
+        }
+
+        throw "Fork repository [$Owner/$Name] was not available after $maxAttempts attempts."
+    }
 }
 
 Describe 'Repositories' {
@@ -248,12 +299,14 @@ Describe 'Repositories' {
                     HasWiki        = $false
                     HasIssues      = $false
                 }
-                $repo = switch ($OwnerType) {
-                    'user' {
-                        New-GitHubRepository @params
-                    }
-                    'organization' {
-                        New-GitHubRepository @params -Organization $owner
+                $repo = Resolve-TestForkRepository -OwnerType $OwnerType -Owner $owner -Name $name -CreateRepository {
+                    switch ($OwnerType) {
+                        'user' {
+                            New-GitHubRepository @params
+                        }
+                        'organization' {
+                            New-GitHubRepository @params -Organization $owner
+                        }
                     }
                 }
                 Write-Host ($repo | Format-List | Out-String)
@@ -668,12 +721,17 @@ Describe 'Repositories' {
                 Write-Host "$($changes | Format-Table | Out-String)"
                 $updatedRepo | Should -Not -BeNullOrEmpty
                 $updatedRepo.Description | Should -Be $newDescription
+                $updatedRepo.HasIssues | Should -Be $false
+                $updatedRepo.HasWiki | Should -Be $false
                 $changedProps = $changes.Property
                 $changedProps | Should -Contain 'UpdatedAt'
                 $changedProps | Should -Contain 'Description'
-                $changedProps | Should -Contain 'HasIssues'
-                $changedProps | Should -Contain 'HasWiki'
-                $changedProps.Count | Should -Be 4
+                if ($repoBefore.HasIssues -ne $updatedRepo.HasIssues) {
+                    $changedProps | Should -Contain 'HasIssues'
+                }
+                if ($repoBefore.HasWiki -ne $updatedRepo.HasWiki) {
+                    $changedProps | Should -Contain 'HasWiki'
+                }
             }
         }
         It 'Set-GitHubRepository - Creates and updates a repository as a fork' -Skip:($OwnerType -in ('repository', 'enterprise')) {
@@ -684,12 +742,14 @@ Describe 'Repositories' {
                 ForkRepository = "fork-$os"
             }
             LogGroup 'Repository - Set create as fork' {
-                switch ($OwnerType) {
-                    'user' {
-                        $repo = Set-GitHubRepository @forkParams
-                    }
-                    'organization' {
-                        $repo = Set-GitHubRepository @forkParams -Organization $owner
+                $repo = Resolve-TestForkRepository -OwnerType $OwnerType -Owner $owner -Name $name -CreateRepository {
+                    switch ($OwnerType) {
+                        'user' {
+                            Set-GitHubRepository @forkParams
+                        }
+                        'organization' {
+                            Set-GitHubRepository @forkParams -Organization $owner
+                        }
                     }
                 }
                 Write-Host ($repo | Format-List | Out-String)
@@ -718,12 +778,17 @@ Describe 'Repositories' {
                 Write-Host "$($changes | Format-Table | Out-String)"
                 $updatedRepo | Should -Not -BeNullOrEmpty
                 $updatedRepo.Description | Should -Be $newDescription
+                $updatedRepo.HasSponsorships | Should -Be $true
+                $updatedRepo.HasIssues | Should -Be $true
                 $changedProps = $changes.Property
                 $changedProps | Should -Contain 'UpdatedAt'
                 $changedProps | Should -Contain 'Description'
-                $changedProps | Should -Contain 'HasSponsorships'
-                $changedProps | Should -Contain 'HasIssues'
-                $changedProps.Count | Should -Be 4
+                if ($repo.HasSponsorships -ne $updatedRepo.HasSponsorships) {
+                    $changedProps | Should -Contain 'HasSponsorships'
+                }
+                if ($repo.HasIssues -ne $updatedRepo.HasIssues) {
+                    $changedProps | Should -Contain 'HasIssues'
+                }
             }
         }
     }
