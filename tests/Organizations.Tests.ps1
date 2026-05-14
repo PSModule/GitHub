@@ -122,7 +122,7 @@ Describe 'Organizations' {
                                 }
                             }
                         } else {
-                            Write-Host "No stale orgs found matching prefix: $orgPrefix*"
+                            Write-Host "No stale orgs found among candidates: $($orgNamesToCheck -join ', ')"
                         }
                     }
                 }
