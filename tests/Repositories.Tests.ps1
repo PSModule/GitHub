@@ -29,8 +29,11 @@ BeforeAll {
 
     function Get-TestRepository {
         param(
+            [Parameter()]
             [string] $OwnerType,
+            [Parameter()]
             [string] $Owner,
+            [Parameter()]
             [string] $Name
         )
 
@@ -46,9 +49,13 @@ BeforeAll {
 
     function Resolve-TestForkRepository {
         param(
+            [Parameter()]
             [string] $OwnerType,
+            [Parameter()]
             [string] $Owner,
+            [Parameter()]
             [string] $Name,
+            [Parameter()]
             [scriptblock] $CreateRepository
         )
 
