@@ -57,7 +57,7 @@ BeforeAll {
 
         for ($attempt = 1; $attempt -le $maxAttempts; $attempt++) {
             $repo = & $CreateRepository
-            if ($repo -and $repo.IsFork -and $repo.Name -and $repo.Name -ne $Name) {
+            if ($repo -and $repo.IsFork -and $repo.Name -ne $Name) {
                 Write-Host "Fork attempt $attempt/$maxAttempts returned stale repository [$($repo.FullName)]. Removing it before retrying."
                 Remove-GitHubRepository -Owner $repo.Owner -Name $repo.Name -Confirm:$false
             } else {
@@ -75,7 +75,7 @@ BeforeAll {
             }
         }
 
-        throw "Fork repository [$Owner/$Name] was not available after $maxAttempts attempts."
+        throw "Fork repository [$Owner/$Name] could not be resolved, or all attempts returned stale forks, after $maxAttempts attempts."
     }
 }
 
