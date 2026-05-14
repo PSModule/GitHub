@@ -83,11 +83,11 @@ Runs once before all parallel test files. For each auth case (except `GITHUB_TOK
 4. For `organization` owners only, provisions extra repositories (`-2`, `-3` suffix) for
    test files that need companion repos (e.g., Secrets/Variables `SelectedRepository` tests)
 
-`Set-GitHubRepository` is idempotent — if the repository already exists it updates it in place (issuing a
-PATCH), and if it does not exist it creates it. Because the same parameters are passed each time, the
-end-state is identical regardless of how many times the setup runs. The extra PATCH on the happy path is
-a deliberate trade-off for simplicity: one call handles both first-run and partial-rerun scenarios without
-branching logic.
+Global setup deliberately removes any matching deterministic repositories before provisioning them again.
+That gives workflow reruns a clean repository state for resources such as releases, tags, environments,
+secrets, and variables. Each individual test file still calls `Set-GitHubRepository` in its per-context
+`BeforeAll` as an idempotent safety net, so a single test file or auth context can be rerun independently
+even when the global setup step did not run first.
 
 ### `AfterAll.ps1` — global teardown
 
