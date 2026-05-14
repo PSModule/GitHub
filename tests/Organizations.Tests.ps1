@@ -79,7 +79,12 @@ Describe 'Organizations' {
                         # GITHUB_RUN_ATTEMPT remain idempotent.
                         $staleOrgs = @()
                         foreach ($candidateName in $orgNamesToCheck) {
-                            $candidateOrg = Get-GitHubOrganization -Name $candidateName -ErrorAction SilentlyContinue
+                            try {
+                                $candidateOrg = Get-GitHubOrganization -Name $candidateName -ErrorAction SilentlyContinue
+                            } catch {
+                                Write-Host "Could not inspect candidate stale org [$candidateName]: $($_.Exception.Message)"
+                                continue
+                            }
                             if ($candidateOrg -and $candidateOrg.Name) {
                                 $staleOrgs += $candidateOrg
                             }
@@ -303,7 +308,24 @@ Describe 'Organizations' {
             It 'Remove-GitHubOrganizationInvitation - Removes a user invitation from an organization' {
                 {
                     $invitation = Get-GitHubOrganizationPendingInvitation -Organization $owner | Select-Object -First 1
-                    Remove-GitHubOrganizationInvitation -Organization $owner -ID $invitation.id
+                    $maxAttempts = 5
+                    $retryDelay = 3
+                    for ($retryAttempt = 1; $retryAttempt -le $maxAttempts; $retryAttempt++) {
+                        try {
+                            Remove-GitHubOrganizationInvitation -Organization $owner -ID $invitation.id -ErrorAction Stop
+                            break
+                        } catch {
+                            if (
+                                $retryAttempt -lt $maxAttempts -and
+                                $_.Exception.Message -match '502'
+                            ) {
+                                Write-Host "Remove-GitHubOrganizationInvitation attempt $retryAttempt/$maxAttempts failed: $($_.Exception.Message). Retrying in ${retryDelay}s..."
+                                Start-Sleep -Seconds $retryDelay
+                            } else {
+                                throw
+                            }
+                        }
+                    }
                 } | Should -Not -Throw
             }
         }
