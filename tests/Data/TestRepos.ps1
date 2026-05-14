@@ -4,8 +4,8 @@
 # AfterAll.ps1 both source this file so setup and teardown always operate on the same set.
 @{
     # Test files that each need a primary repository.
-    TestNames = @('Environments', 'Secrets', 'Variables', 'Releases', 'Actions')
+    TestNames                  = @('Environments', 'Secrets', 'Variables', 'Releases', 'Actions')
 
     # Subset that also need companion -2/-3 repositories for org-scoped SelectedRepository tests.
-    TestNamesWithExtraRepos = @('Secrets', 'Variables')
+    TestNamesWithExtraRepos    = @('Secrets', 'Variables')
 }
