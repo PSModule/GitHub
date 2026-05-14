@@ -222,6 +222,10 @@ Describe 'Organizations' {
             { Update-GitHubOrganization -Name $orgName -Location 'New Location' } | Should -Throw
         }
 
+        It 'Remove-GitHubOrganization - Removes an organization using enterprise installation' -Skip:($OwnerType -ne 'enterprise') {
+            { Remove-GitHubOrganization -Name $orgName -Confirm:$false } | Should -Throw
+        }
+
         It 'Install-GitHubApp - Installs a GitHub App to an organization' -Skip:($OwnerType -ne 'enterprise') {
             # Retry: the enterprise apps endpoint can return 404 transiently right after
             # New-GitHubOrganization, before the new org has propagated.
@@ -260,10 +264,6 @@ Describe 'Organizations' {
         It 'Update-GitHubOrganization - Updates the organization location using organization installation' -Skip:($OwnerType -ne 'enterprise') {
             $orgContext = Connect-GitHubApp -Organization $orgName -Context $context -PassThru -Silent
             Update-GitHubOrganization -Name $orgName -Location 'New Location' -Context $orgContext
-        }
-
-        It 'Remove-GitHubOrganization - Removes an organization using enterprise installation' -Skip:($OwnerType -ne 'enterprise') {
-            { Remove-GitHubOrganization -Name $orgName -Confirm:$false } | Should -Throw
         }
 
         It 'Remove-GitHubOrganization - Removes an organization using organization installation' -Skip:($OwnerType -ne 'enterprise') {
