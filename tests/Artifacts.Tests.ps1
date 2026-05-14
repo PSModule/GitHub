@@ -48,11 +48,7 @@ Describe 'Artifacts' {
                 throw 'No artifacts found for this workflow run.'
             }
             $ArtifactName = ($artifacts | Select-Object -First 1).Name
-            $ArtifactNameWildcard = if ($ArtifactName.Length -gt 2) {
-                "$($ArtifactName.Substring(0, 1))*$($ArtifactName.Substring($ArtifactName.Length - 1, 1))"
-            } else {
-                "$ArtifactName*"
-            }
+            $ArtifactNameWildcard = "$ArtifactName*"
         }
         AfterAll {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
