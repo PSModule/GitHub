@@ -33,7 +33,7 @@ jobs:
       TestData: >-
         {
           "secrets": {
-            "TEST_USER_USER_FG_PAT":    "${{ secrets.TEST_USER_USER_FG_PAT }}"
+            "TEST_USER_USER_FG_PAT":    "${{ secrets.TEST_USER_USER_FG_PAT }}",
             "TEST_USER_ORG_FG_PAT":     "${{ secrets.TEST_USER_ORG_FG_PAT }}",
             "TEST_USER_PAT":            "${{ secrets.TEST_USER_PAT }}",
             "TEST_APP_ORG_CLIENT_ID":   "${{ secrets.TEST_APP_ORG_CLIENT_ID }}",
