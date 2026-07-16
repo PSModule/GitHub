@@ -78,8 +78,6 @@
     }
 
     process {
-        $hasNextPage = $true
-        $after = $null
         $perPageSetting = Resolve-GitHubContextSetting -Name 'PerPage' -Value $PerPage -Context $Context
 
         # CustomProperties are only available for organization-owned repos; viewer repos are user-owned.
@@ -90,9 +88,8 @@
         }
         $graphQLFields = ConvertTo-GitHubGraphQLField @graphParams
 
-        do {
-            $apiParams = @{
-                Query     = @"
+        $apiParams = @{
+            Query          = @"
 query(
     `$PerPage: Int!,
     `$Cursor: String,
@@ -121,25 +118,21 @@ $graphQLFields
   }
 }
 "@
-                Variables = @{
-                    PerPage      = $perPageSetting
-                    Cursor       = $after
-                    Affiliations = $Affiliation | ForEach-Object { $_.ToString().ToUpper() }
-                    Visibility   = -not [string]::IsNullOrEmpty($Visibility) ? $Visibility.ToString().ToUpper() : $null
-                    IsArchived   = $IsArchived
-                    IsFork       = $IsFork
-                }
-                Context   = $Context
+            Variables      = @{
+                PerPage      = $perPageSetting
+                Cursor       = $null
+                Affiliations = $Affiliation | ForEach-Object { $_.ToString().ToUpper() }
+                Visibility   = -not [string]::IsNullOrEmpty($Visibility) ? $Visibility.ToString().ToUpper() : $null
+                IsArchived   = $IsArchived
+                IsFork       = $IsFork
             }
+            ConnectionPath = @('viewer', 'repositories')
+            Context        = $Context
+        }
 
-            Invoke-GitHubGraphQLQuery @apiParams | ForEach-Object {
-                $_.viewer.repositories.nodes | ForEach-Object {
-                    [GitHubRepository]::new($_)
-                }
-                $hasNextPage = $response.pageInfo.hasNextPage
-                $after = $response.pageInfo.endCursor
-            }
-        } while ($hasNextPage)
+        Invoke-GitHubGraphQLQuery @apiParams | ForEach-Object {
+            [GitHubRepository]::new($_)
+        }
     }
 
     end {

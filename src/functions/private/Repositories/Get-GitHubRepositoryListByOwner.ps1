@@ -89,8 +89,6 @@
     }
 
     process {
-        $hasNextPage = $true
-        $after = $null
         $perPageSetting = Resolve-GitHubContextSetting -Name 'PerPage' -Value $PerPage -Context $Context
         $graphParams = @{
             PropertyList         = $Property + $AdditionalProperty
@@ -98,9 +96,8 @@
         }
         $graphQLFields = ConvertTo-GitHubGraphQLField @graphParams
 
-        do {
-            $apiParams = @{
-                Query     = @"
+        $apiParams = @{
+            Query          = @"
 query(
     `$Owner: String!,
     `$PerPage: Int!,
@@ -134,27 +131,23 @@ query(
   }
 }
 "@
-                Variables = @{
-                    Owner             = $Owner
-                    PerPage           = $perPageSetting
-                    Cursor            = $after
-                    Affiliations      = [string]::IsNullOrEmpty($Affiliation) ? $null : $Affiliation.ToUpper()
-                    OwnerAffiliations = [string]::IsNullOrEmpty($OwnerAffiliations) ? $null : $OwnerAffiliations.ToUpper()
-                    Visibility        = [string]::IsNullOrEmpty($Visibility) ? $null : $Visibility.ToUpper()
-                    IsArchived        = $IsArchived
-                    IsFork            = $IsFork
-                }
-                Context   = $Context
+            Variables      = @{
+                Owner             = $Owner
+                PerPage           = $perPageSetting
+                Cursor            = $null
+                Affiliations      = [string]::IsNullOrEmpty($Affiliation) ? $null : $Affiliation.ToUpper()
+                OwnerAffiliations = [string]::IsNullOrEmpty($OwnerAffiliations) ? $null : $OwnerAffiliations.ToUpper()
+                Visibility        = [string]::IsNullOrEmpty($Visibility) ? $null : $Visibility.ToUpper()
+                IsArchived        = $IsArchived
+                IsFork            = $IsFork
             }
+            ConnectionPath = @('repositoryOwner', 'repositories')
+            Context        = $Context
+        }
 
-            Invoke-GitHubGraphQLQuery @apiParams | ForEach-Object {
-                foreach ($repository in $_.repositoryOwner.repositories.nodes) {
-                    [GitHubRepository]::new($repository)
-                }
-                $hasNextPage = $_.repositoryOwner.repositories.pageInfo.hasNextPage
-                $after = $_.repositoryOwner.repositories.pageInfo.endCursor
-            }
-        } while ($hasNextPage)
+        Invoke-GitHubGraphQLQuery @apiParams | ForEach-Object {
+            [GitHubRepository]::new($_)
+        }
     }
 
     end {
