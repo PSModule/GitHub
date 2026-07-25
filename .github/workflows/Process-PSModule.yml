@@ -27,7 +27,7 @@ permissions:
 
 jobs:
   Process-PSModule:
-    uses: PSModule/Process-PSModule/.github/workflows/workflow.yml@8b1a2617a0686ceaeadc6fa8e2f395edda93cc6d # v6.1.7
+    uses: PSModule/Process-PSModule/.github/workflows/workflow.yml@fb1bdb8fefd243292f779d2a856a38db6fe6daf4 # v6.1.13
     secrets:
       APIKey: ${{ secrets.APIKey }}
       TestData: >-
