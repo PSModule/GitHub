@@ -101,7 +101,7 @@
             [GitHubPermission]::new(
                 'artifact_metadata',
                 'Artifact metadata',
-                'View and manage artifact metadata.',
+                'Create and retrieve artifact metadata for a repository.',
                 'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
                 '#repository-permissions-for-artifact-metadata',
                 @(
@@ -182,7 +182,6 @@
                 'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
                 '#repository-permissions-for-codespaces-secrets',
                 @(
-                    'read',
                     'write'
                 ),
                 'Fine-grained',
@@ -494,6 +493,83 @@
                 'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
                 '#repository-permissions-for-workflows',
                 @(
+                    'write'
+                ),
+                'Fine-grained',
+                'Repository'
+            ),
+            [GitHubPermission]::new(
+                'agent_secrets',
+                'Agent secrets',
+                'Manage agent repository secrets.',
+                'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+                '#repository-permissions-for-agent-secrets',
+                @(
+                    'read',
+                    'write'
+                ),
+                'Fine-grained',
+                'Repository'
+            ),
+            [GitHubPermission]::new(
+                'agent_tasks',
+                'Agent tasks',
+                'View, create, and manage agent tasks in a repository.',
+                'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+                '#repository-permissions-for-agent-tasks',
+                @(
+                    'read',
+                    'write'
+                ),
+                'Fine-grained',
+                'Repository'
+            ),
+            [GitHubPermission]::new(
+                'agent_variables',
+                'Agent variables',
+                'Manage agent repository variables.',
+                'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+                '#repository-permissions-for-agent-variables',
+                @(
+                    'read',
+                    'write'
+                ),
+                'Fine-grained',
+                'Repository'
+            ),
+            [GitHubPermission]::new(
+                'code_quality',
+                'Code quality',
+                'Access and manage code quality data for a repository.',
+                'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+                '#repository-permissions-for-code-quality',
+                @(
+                    'read',
+                    'write'
+                ),
+                'Fine-grained',
+                'Repository'
+            ),
+            [GitHubPermission]::new(
+                'copilot_agent_settings',
+                'Copilot agent settings',
+                'View and manage Copilot cloud agent settings for a repository.',
+                'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+                '#repository-permissions-for-copilot-agent-settings',
+                @(
+                    'read',
+                    'write'
+                ),
+                'Fine-grained',
+                'Repository'
+            ),
+            [GitHubPermission]::new(
+                'license_compliance_alerts',
+                'License compliance alerts',
+                'Retrieve license compliance alerts.',
+                'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+                '#repository-permissions-for-license-compliance-alerts',
+                @(
                     'read',
                     'write'
                 ),
@@ -635,7 +711,7 @@
             [GitHubPermission]::new(
                 'organization_copilot_metrics',
                 'Organization Copilot metrics',
-                'View Copilot metrics for an organization.',
+                'View organization Copilot metrics.',
                 'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
                 '#organization-permissions-for-organization-copilot-metrics',
                 @(
@@ -813,9 +889,10 @@
             ),
             [GitHubPermission]::new(
                 'organization_dependabot_dismissal_requests',
-                'Organization Dependabot dismissal requests',
-                'Review and manage Dependabot dismissal requests for an organization.',
-                'https://docs.github.com/rest/overview/permissions-required-for-github-apps',
+                'Organization dismissal requests for Dependabot',
+                'Review and manage Dependabot alert dismissal requests.',
+                'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+                '#organization-permissions-for-organization-dismissal-requests-for-dependabot',
                 @(
                     'read',
                     'write'
@@ -852,7 +929,7 @@
             [GitHubPermission]::new(
                 'organization_runner_custom_images',
                 'Hosted runner custom images',
-                'View and manage hosted runner custom images for an organization.',
+                'View and manage hosted runner custom images available to an organization.',
                 'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
                 '#organization-permissions-for-hosted-runner-custom-images',
                 @(
@@ -992,6 +1069,84 @@
                 'Fine-grained',
                 'Organization'
             ),
+            [GitHubPermission]::new(
+                'org_copilot_content_exclusion',
+                'Copilot content exclusion',
+                'Manage Copilot content exclusion rules for the organization.',
+                'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+                '#organization-permissions-for-copilot-content-exclusion',
+                @(
+                    'read',
+                    'write'
+                ),
+                'Fine-grained',
+                'Organization'
+            ),
+            [GitHubPermission]::new(
+                'organization_agent_secrets',
+                'Agent secrets',
+                'Manage agent organization secrets.',
+                'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+                '#organization-permissions-for-agent-secrets',
+                @(
+                    'read',
+                    'write'
+                ),
+                'Fine-grained',
+                'Organization'
+            ),
+            [GitHubPermission]::new(
+                'organization_agent_variables',
+                'Agent variables',
+                'Manage agent organization variables.',
+                'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+                '#organization-permissions-for-agent-variables',
+                @(
+                    'read',
+                    'write'
+                ),
+                'Fine-grained',
+                'Organization'
+            ),
+            [GitHubPermission]::new(
+                'organization_copilot_agent_settings',
+                'Copilot agent settings',
+                'Manage Copilot cloud agent settings for an organization.',
+                'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+                '#organization-permissions-for-copilot-agent-settings',
+                @(
+                    'read',
+                    'write'
+                ),
+                'Fine-grained',
+                'Organization'
+            ),
+            [GitHubPermission]::new(
+                'organization_copilot_spaces',
+                'Copilot Spaces',
+                'View and manage Copilot Spaces for an organization.',
+                'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+                '#organization-permissions-for-copilot-spaces',
+                @(
+                    'read',
+                    'write'
+                ),
+                'Fine-grained',
+                'Organization'
+            ),
+            [GitHubPermission]::new(
+                'organization_innersource_vulnerabilities',
+                'Organization innersource vulnerabilities',
+                'View and manage innersource vulnerabilities across the organization',
+                'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
+                '#organization-permissions-for-organization-innersource-vulnerabilities',
+                @(
+                    'read',
+                    'write'
+                ),
+                'Fine-grained',
+                'Organization'
+            ),
 
             # ------------------------------
             # User (Account) Fine-Grained Permission Definitions
@@ -1107,7 +1262,6 @@
                 'https://docs.github.com/rest/overview/permissions-required-for-github-apps' +
                 '#user-permissions-for-gists',
                 @(
-                    'read',
                     'write'
                 ),
                 'Fine-grained',
@@ -1234,8 +1388,9 @@
             [GitHubPermission]::new(
                 'enterprise_ai_controls',
                 'Enterprise AI controls',
-                'View and manage AI controls for an enterprise.',
-                'https://docs.github.com/enterprise-cloud@latest/rest/overview/permissions-required-for-github-apps',
+                'Manage enterprise-wide AI controls configuration',
+                'https://docs.github.com/enterprise-cloud@latest/rest/overview/permissions-required-for-github-apps' +
+                '#enterprise-permissions-for-enterprise-ai-controls',
                 @(
                     'read',
                     'write'
@@ -1309,8 +1464,9 @@
             [GitHubPermission]::new(
                 'enterprise_custom_enterprise_roles',
                 'Enterprise custom enterprise roles',
-                'Create, edit, delete and list custom enterprise roles.',
-                'https://docs.github.com/enterprise-cloud@latest/rest/overview/permissions-required-for-github-apps',
+                'Manage enterprise custom roles and assignments.',
+                'https://docs.github.com/enterprise-cloud@latest/rest/overview/permissions-required-for-github-apps' +
+                '#enterprise-permissions-for-custom-enterprise-roles',
                 @(
                     'read',
                     'write'
@@ -1321,11 +1477,13 @@
             [GitHubPermission]::new(
                 'enterprise_custom_properties_for_organizations',
                 'Enterprise custom properties for organizations',
-                'View and manage custom properties for organizations at the enterprise level.',
-                'https://docs.github.com/enterprise-cloud@latest/rest/overview/permissions-required-for-github-apps',
+                'View organization custom properties and administer definitions at the enterprise level.',
+                'https://docs.github.com/enterprise-cloud@latest/rest/overview/permissions-required-for-github-apps' +
+                '#enterprise-permissions-for-enterprise-custom-properties-for-organizations',
                 @(
                     'read',
-                    'write'
+                    'write',
+                    'admin'
                 ),
                 'Fine-grained',
                 'Enterprise'
@@ -1397,9 +1555,34 @@
             [GitHubPermission]::new(
                 'enterprise_teams',
                 'Enterprise teams',
-                'View and manage enterprise teams.',
+                'Create, edit, remove and view enterprise teams',
                 'https://docs.github.com/enterprise-cloud@latest/rest/overview/permissions-required-for-github-apps' +
                 '#enterprise-permissions-for-enterprise-teams',
+                @(
+                    'read',
+                    'write'
+                ),
+                'Fine-grained',
+                'Enterprise'
+            ),
+            [GitHubPermission]::new(
+                'enterprise_copilot_usage',
+                'Copilot usage records',
+                'View enterprise Copilot API usage records.',
+                'https://docs.github.com/enterprise-cloud@latest/rest/overview/permissions-required-for-github-apps' +
+                '#enterprise-permissions-for-copilot-usage-records',
+                @(
+                    'read'
+                ),
+                'Fine-grained',
+                'Enterprise'
+            ),
+            [GitHubPermission]::new(
+                'enterprise_innersource_vulnerabilities',
+                'Enterprise innersource vulnerabilities',
+                'View and manage innersource vulnerabilities across the enterprise',
+                'https://docs.github.com/enterprise-cloud@latest/rest/overview/permissions-required-for-github-apps' +
+                '#enterprise-permissions-for-enterprise-innersource-vulnerabilities',
                 @(
                     'read',
                     'write'
