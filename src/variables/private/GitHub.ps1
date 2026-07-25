@@ -25,6 +25,5 @@ $script:GitHub = [pscustomobject]@{
     Runner             = $null
     Stamps             = @(
         [GitHubStamp]::new('Public', 'https://www.githubstatus.com')
-        [GitHubStamp]::new('Europe', 'https://eu.githubstatus.com')
     )
 }
