@@ -299,7 +299,7 @@ Describe 'GitHub' {
             $stamps.Count | Should -BeGreaterThan 0
         }
         It 'Get-GitHubStamp - Each stamp has Name and BaseUrl properties' {
-            LogGroup "Stamps - Details" {
+            LogGroup 'Stamps - Details' {
                 Get-GitHubStamp | ForEach-Object {
                     Write-Host ($_ | Format-List | Out-String)
                     $_.Name | Should -Not -BeNullOrEmpty
