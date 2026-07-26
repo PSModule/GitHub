@@ -27,6 +27,14 @@
         [Parameter()]
         [hashtable] $Variables,
 
+        # Connection path to stream as prefetched nodes instead of returning the raw GraphQL data object.
+        [Parameter()]
+        [string[]] $ConnectionPath,
+
+        # Maximum number of prefetched nodes to hold in memory before applying backpressure to the producer.
+        [Parameter()]
+        [int] $QueueCapacity = 500,
+
         # The context to run the command in. Used to get the details for the API call.
         # Can be either a string or a GitHubContext object.
         [Parameter()]
@@ -41,6 +49,11 @@
     }
 
     process {
+        if ($ConnectionPath) {
+            Invoke-GitHubGraphQLConnectionPrefetch -Query $Query -Variables $Variables -ConnectionPath $ConnectionPath -QueueCapacity $QueueCapacity -Context $Context
+            return
+        }
+
         $body = @{
             query     = $Query
             variables = $Variables
