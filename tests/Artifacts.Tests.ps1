@@ -43,7 +43,12 @@ Describe 'Artifacts' {
             $Owner = $env:GITHUB_REPOSITORY_OWNER
             $Repository = $env:GITHUB_REPOSITORY_NAME
             $WorkflowRunId = $env:GITHUB_RUN_ID
-            $ArtifactName = 'module'
+            $artifacts = Get-GitHubArtifact -Owner $Owner -Repository $Repository -WorkflowRunId $WorkflowRunId -AllVersions
+            if (-not $artifacts) {
+                throw 'No artifacts found for this workflow run.'
+            }
+            $ArtifactName = ($artifacts | Select-Object -First 1).Name
+            $ArtifactNameWildcard = "$ArtifactName*"
         }
         AfterAll {
             Get-GitHubContext -ListAvailable | Disconnect-GitHubAccount -Silent
@@ -247,7 +252,7 @@ Describe 'Artifacts' {
             $params = @{
                 Owner      = $Owner
                 Repository = $Repository
-                Name       = 'm*ule'
+                Name       = $ArtifactNameWildcard
             }
             LogGroup 'Artifact' {
                 $artifact = Get-GitHubArtifact @params

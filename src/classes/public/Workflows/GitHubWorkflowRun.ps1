@@ -103,34 +103,34 @@
 
     GitHubWorkflowRun([PSCustomObject] $Object) {
         # From GitHubNode
-        $this.ID = $_.id
-        $this.NodeID = $_.node_id
+        $this.ID = $Object.id
+        $this.NodeID = $Object.node_id
 
         # From GitHubWorkflowRun
-        $this.Name = $_.name
+        $this.Name = $Object.name
         $this.Owner = [GitHubOwner]::new($Object.repository.owner)
         $this.Repository = [GitHubRepository]::new($Object.repository)
-        $this.CheckSuiteID = $_.check_suite_id
-        $this.CheckSuiteNodeID = $_.check_suite_node_id
-        $this.HeadBranch = $_.head_branch
-        $this.HeadSha = $_.head_sha
-        $this.Path = $_.path
-        $this.RunNumber = $_.run_number
-        $this.RunAttempt = $_.run_attempt
-        $this.ReferencedWorkflows = $_.referenced_workflows
-        $this.Event = $_.event
-        $this.Status = $_.status
-        $this.Conclusion = $_.conclusion
-        $this.WorkflowID = $_.workflow_id
-        $this.Url = $_.html_url
-        $this.PullRequests = $_.pull_requests
-        $this.CreatedAt = $_.created_at
-        $this.UpdatedAt = $_.updated_at
-        $this.StartedAt = $_.run_started_at
-        $this.Actor = [GitHubUser]::new($_.actor)
-        $this.TriggeringActor = [GitHubUser]::new($_.triggering_actor)
-        $this.HeadCommit = $_.head_commit
-        $this.HeadRepository = [GitHubRepository]::new($_.head_repository)
-        $this.DisplayTitle = $_.display_title
+        $this.CheckSuiteID = $Object.check_suite_id
+        $this.CheckSuiteNodeID = $Object.check_suite_node_id
+        $this.HeadBranch = $Object.head_branch
+        $this.HeadSha = $Object.head_sha
+        $this.Path = $Object.path
+        $this.RunNumber = $Object.run_number
+        $this.RunAttempt = $Object.run_attempt
+        $this.ReferencedWorkflows = $Object.referenced_workflows
+        $this.Event = $Object.event
+        $this.Status = $Object.status
+        $this.Conclusion = $Object.conclusion
+        $this.WorkflowID = $Object.workflow_id
+        $this.Url = $Object.html_url
+        $this.PullRequests = $Object.pull_requests
+        $this.CreatedAt = $Object.created_at
+        $this.UpdatedAt = $Object.updated_at
+        $this.StartedAt = $Object.run_started_at
+        $this.Actor = [GitHubUser]::new($Object.actor)
+        $this.TriggeringActor = [GitHubUser]::new($Object.triggering_actor)
+        $this.HeadCommit = $Object.head_commit
+        $this.HeadRepository = [GitHubRepository]::new($Object.head_repository)
+        $this.DisplayTitle = $Object.display_title
     }
 }

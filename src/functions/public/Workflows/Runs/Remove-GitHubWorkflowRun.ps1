@@ -59,8 +59,12 @@
         }
 
         if ($PSCmdlet.ShouldProcess("$Owner/$Repository/$ID", 'Delete workflow run')) {
-            Write-Verbose "Deleted workflow run [$ID] in [$Owner/$Repository]"
-            $null = Invoke-GitHubAPI @apiParams
+            try {
+                $null = Invoke-GitHubAPI @apiParams
+                Write-Verbose "Deleted workflow run [$ID] in [$Owner/$Repository]"
+            } catch {
+                Write-Error "Failed to delete workflow run [$ID] in [$Owner/$Repository]: $_"
+            }
         }
     }
 
