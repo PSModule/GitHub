@@ -213,6 +213,10 @@ Familiarize yourself with the available cmdlets using the module's comprehensive
 Get-Command -Module GitHub
 ```
 
+## Design documentation
+
+[Pipeline prefetch](https://github.com/PSModule/GitHub/blob/main/docs/pipeline-prefetch/index.md) defines the reusable contract, design, and GitHub implementation profile for paginated fetch-ahead. These documents describe intended behavior, not a released feature.
+
 ## References
 
 ### Official GitHub Resources
