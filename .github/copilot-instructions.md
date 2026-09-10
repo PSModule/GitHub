@@ -1,6 +1,6 @@
 # Coding Standards for `GitHub`
 
-Start by reading the general coding standards for [`PSModule`](https://psmodule.io/docs) which is the basis for all modules in the framework.
+Start by reading the general coding standards for [`PSModule`](https://psmodule.io/Process-PSModule/) which is the basis for all modules in the framework.
 Additions or adjustments to those defaults are covered in this document to ensure that the modules drive consistency for all developers.
 
 ## General Coding Standards
